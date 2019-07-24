@@ -1,0 +1,31 @@
+{
+  "name": "@dahlia/public",
+  "version": "0.0.1",
+  "description": "Public-facing web app for the Dahlia affordable housing system",
+  "main": "index.js",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "export": "next export",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@dahlia/styles": "*",
+    "@dahlia/ui-components": "*",
+    "@zeit/next-sass": "^1.0.1",
+    "next": "^9.0.2",
+    "next-plugin-custom-babel-config": "^1.0.2",
+    "node-sass": "^4.12.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "@types/react": "^16.8.23",
+    "next-transpile-modules": "^2.3.1",
+    "typescript": "^3.5.3",
+    "webpack": "4.37.0"
+  }
+}

@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-100 p-6;
+}
+a {
+  @apply text-red-700;
+  &:hover {
+    @apply text-red-500;
+  }
+}
+
+h1 {
+  @apply text-2xl;
+}

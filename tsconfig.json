@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    // these are app-optimized, and we expect TS-based services to override many options
+    "target": "es5",
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  }
+}

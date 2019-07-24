@@ -1,0 +1,14 @@
+{
+  "name": "dahlia",
+  "version": "0.0.1",
+  "description": "DAHLIA is a system to manage processes for affordable housing",
+  "workspaces": [
+    "shared/ui-components",
+    "shared/styles",
+    "apps/public",
+    "services/listings"
+  ],
+  "repository": "https://github.com/Exygy/dahlia-x.git",
+  "license": "GPL-3.0",
+  "private": true
+}
