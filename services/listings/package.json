@@ -27,6 +27,7 @@
     "clean": "rimraf dist",
     "build": "yarn run clean && tsc",
     "start": "yarn run build && micro",
-    "dev": "yarn run build && concurrently \"tsc --watch\" \"micro-dev\""
+    "dev": "yarn run build && concurrently \"tsc --watch\" \"env $(cat .env | xargs) yarn micro-dev\"",
+    "micro-dev": "micro-dev -p $MICRO_DEV_PORT"
   }
 }
