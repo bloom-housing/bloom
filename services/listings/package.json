@@ -1,5 +1,5 @@
 {
-  "name": "dahlia-x",
+  "name": "@dahlia/listings-service",
   "version": "0.0.1",
   "description": "Experimental ideas for next generation Dahlia",
   "main": "dist/index.js",

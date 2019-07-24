@@ -1,0 +1,26 @@
+{
+  "name": "@dahlia/ui-components",
+  "version": "0.0.1",
+  "description": "Shared user interface components for DAHLIA applications",
+  "main": "index.js",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+    "start": "start-storybook"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@storybook/addon-info": "^5.1.9",
+    "@storybook/react": "^5.1.9",
+    "@types/storybook__react": "^4.0.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.6",
+    "react-docgen-typescript-loader": "^3.1.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.37.0"
+  },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
