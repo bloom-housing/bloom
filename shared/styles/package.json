@@ -1,0 +1,11 @@
+{
+  "name": "@dahlia/styles",
+  "version": "0.0.1",
+  "description": "Shared stylesheets for DAHLIA applications",
+  "main": "index.css",
+  "license": "GPL-3.0",
+  "private": true,
+  "dependencies": {
+    "tailwindcss": "^1.0.5"
+  }
+}

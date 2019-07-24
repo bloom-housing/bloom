@@ -4,6 +4,7 @@
   "description": "DAHLIA is a system to manage processes for affordable housing",
   "workspaces": [
     "shared/ui-components",
+    "shared/styles",
     "apps/public",
     "services/listings"
   ],

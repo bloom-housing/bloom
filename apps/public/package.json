@@ -12,9 +12,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@dahlia/styles": "*",
     "@dahlia/ui-components": "*",
+    "@zeit/next-sass": "^1.0.1",
     "next": "^9.0.2",
     "next-plugin-custom-babel-config": "^1.0.2",
+    "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
