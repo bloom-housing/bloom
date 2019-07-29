@@ -8,7 +8,7 @@ export interface Listing {
   image_url?: string;
 }
 
-interface ListingsProps {
+export interface ListingsProps {
   listings: Array<Listing>;
 }
 
