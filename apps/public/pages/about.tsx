@@ -1,6 +1,15 @@
+import React from 'react'
+import Polyglot from 'node-polyglot'
+
+var polyglot = new Polyglot({phrases: {'hello': 'This is a translation of "hello"'}});
+
+polyglot.extend({
+  "hello": "This is a translation of 'hello'"
+});
+
+
 export default () => (
-  <>
-    <h1>About</h1>
-    <p>This is the about page.</p>
-  </>
-);
+  <div>
+    <h1>{polyglot.t("hello")}</h1>
+  </div>
+)
