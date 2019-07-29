@@ -1,12 +1,13 @@
-import * as React from "react";
+import * as React from "react"
 
-import { Header } from "@dahlia/ui-components/src/header/header";
+import { Header } from "@dahlia/ui-components/src/header/header"
 
-export default () => {
+export default (props) => {
+  console.log(props)
   return (
     <>
       <Header />
-      <div>Hello World</div>
+      <div>{props.polyglot.t("hello")}</div>
     </>
-  );
-};
+  )
+}
