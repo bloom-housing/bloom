@@ -32,7 +32,7 @@ export const ListingsList = (props: ListingsProps) => {
         <PropertyTitleImage title={listing.name} imageUrl={listing.image_url} listingId={listing.id} />
       </div>
       <div className="w-full md:w-6/12 p-3">
-        <Link href="listings/[id]" as={`/listings/${listing.id}`}>
+        <Link href="listing/[id]" as={`/listing/${listing.id}`}>
           <a className={buttonClasses.join(' ')}>See Details</a>
         </Link>
       </div>
