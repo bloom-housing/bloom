@@ -11,9 +11,11 @@ class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx)
     }
 
+    const generalTranslations = await import('../static/locales/general.json')
     const sjTranslations = await import('../static/locales/sj.json')
     const smcTranslations = await import('../static/locales/smc.json')
     const translations = {
+      general: generalTranslations,
       sj: sjTranslations,
       smc: smcTranslations
     }
@@ -24,10 +26,18 @@ class MyApp extends App {
   render() {
     const { Component, pageProps, translations } = this.props
 
-    pageProps.polyglot = new Polyglot({
-      phrases: translations.sj
-      // phrases: translations.smc
+    const polyglot = new Polyglot({
+      phrases: translations.general
     })
+
+    // Using extend will overwrite any duplicate keys, so this can be
+    // used by groups to overwrite any standard translation keys, in
+    // addition to adding their own group-specific translation keys
+    polyglot.extend(translations.sj)
+    // Swap above line with below to use SMC translations instead of SJ.
+    // polyglot.extend(translations.smc)
+
+    pageProps.polyglot = polyglot
 
     return (
       <Container>

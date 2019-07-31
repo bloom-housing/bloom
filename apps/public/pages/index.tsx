@@ -6,7 +6,7 @@ export default (props) => {
   return (
     <>
       <Header />
-      <div>{props.polyglot.t('welcome')}</div>
+      <div>{props.polyglot.t('WELCOME.TITLE')}</div>
     </>
   )
 }
