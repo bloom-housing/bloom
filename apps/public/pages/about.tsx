@@ -1,5 +1,6 @@
-export default (props) => (
-  <div>
-    <h1>{props.polyglot.t("hello")}</h1>
-  </div>
+export default () => (
+  <>
+    <h1>About</h1>
+    <p>This is the about page.</p>
+  </>
 )

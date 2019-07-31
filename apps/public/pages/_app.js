@@ -5,19 +5,29 @@ import Polyglot from 'node-polyglot'
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
-    let pageProps = { }
+    let pageProps = {}
 
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx)
     }
 
-    pageProps.polyglot = new Polyglot({phrases: {'hello': 'This is a translation of "hello"'}});
+    const sjTranslations = await import('../static/locales/sj.json')
+    const smcTranslations = await import('../static/locales/smc.json')
+    const translations = {
+      sj: sjTranslations,
+      smc: smcTranslations
+    }
 
-    return { pageProps }
+    return { pageProps, translations }
   }
 
   render() {
-    const { Component, pageProps } = this.props
+    const { Component, pageProps, translations } = this.props
+
+    pageProps.polyglot = new Polyglot({
+      phrases: translations.sj
+      // phrases: translations.smc
+    })
 
     return (
       <Container>
