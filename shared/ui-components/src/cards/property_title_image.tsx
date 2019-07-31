@@ -8,7 +8,7 @@ interface PropertyTitleImageProps {
 }
 
 export const PropertyTitleImage = (props: PropertyTitleImageProps) => (
-  <Link href="listings/[id]" as={`/listings/${props.listingId}`}>
+  <Link href="listing/[id]" as={`/listing/${props.listingId}`}>
     <a>
       <figure className="relative">
         {props.imageUrl && <img src={props.imageUrl} alt={props.title} />}

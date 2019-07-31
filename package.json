@@ -10,5 +10,12 @@
   ],
   "repository": "https://github.com/Exygy/dahlia-x.git",
   "license": "GPL-3.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev:all": "concurrently \"cd services/listings && yarn dev\" \"cd apps/public && yarn dev\"",
+    "test:all": "concurrently \"cd services/listings && yarn test\" \"cd apps/public && yarn test\""
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.1"
+  }
 }

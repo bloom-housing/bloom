@@ -1,29 +1,29 @@
-import * as React from 'react';
+import { Component } from 'react';
 import Layout from '../layouts/application';
 import { PageHeader } from '@dahlia/ui-components/src/header/page_header';
-import { Listing, ListingsList } from '../components/listings_list';
+import { Listing, ListingsList, ListingsProps } from '../components/listings_list';
+import axios from 'axios';
 
-const Listings = (props: any) => {
+export default class extends Component<ListingsProps> {
+  static async getInitialProps () {
+    let listings = [];
 
-  return (
-    <Layout>
-      <PageHeader>Rent affordable housing</PageHeader>
-      <ListingsList listings={props.listings} />
-    </Layout>
-  );
-};
+    try {
+      const response = await axios.get('http://localhost:3001');
+      listings = response.data.listings;
+    } catch(error) {
+      console.log(error);
+    }
 
-Listings.getInitialProps = async function() {
-  // Messing around with different ways of adding in data
-  let listings: Array<Listing> = []
-  listings.push({id: 3, name: "The Triton", image_url: "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png"})
-  listings.push({id: 6, name: "Second Listing"})
-  let thirdListing = {id: 12, name: "Third Listing"}
-  listings.push(thirdListing)
+    return { listings }
+  }
 
-  return {
-    listings: listings
-  };
-};
-
-export default Listings;
+  render () {
+    return (
+      <Layout>
+        <PageHeader>Rent affordable housing</PageHeader>
+        <ListingsList listings={this.props.listings} />
+      </Layout>
+    )
+  }
+}

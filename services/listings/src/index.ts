@@ -1,18 +1,26 @@
-import { RequestHandler, send } from "micro";
-import { router, get } from "microrouter";
+import Application from "koa";
+import cors from "@koa/cors";
+import dotenv from "dotenv";
 
-import { IncomingMessage, ServerResponse } from "http";
+dotenv.config({ path: ".env" });
 
-const archer = require("../listings/archer.json");
-const gish = require("../listings/gish.json");
-const triton = require("../listings/triton.json");
-
-const service: RequestHandler = (req, res) => {
-  const data = {
-    status: "ok",
-    listings: [triton, gish, archer]
-  };
-  send(res, 200, data);
+const config = {
+  port: parseInt(process.env.PORT || "3001", 10)
 };
 
-module.exports = router(get("/", service));
+import archer from "../listings/archer.json";
+import gish from "../listings/gish.json";
+import triton from "../listings/triton.json";
+const data = { status: "ok", listings: [triton, gish, archer] };
+
+const app = new Application();
+
+// TODO: app.use(logger(winston));
+app.use(cors());
+
+app.use(ctx => {
+  ctx.body = data;
+});
+
+const server = app.listen(config.port);
+console.log(`Server running on port ${config.port}`);
