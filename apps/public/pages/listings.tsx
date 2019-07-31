@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import Layout from '../layouts/application';
-import { PageHeader } from '@dahlia/ui-components/src/header/page_header';
+import { PageHeader } from '@dahlia/ui-components/src/headers/page_header';
 import { Listing, ListingsList, ListingsProps } from '../components/listings_list';
 import axios from 'axios';
 

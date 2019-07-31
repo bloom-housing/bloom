@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Header } from "@dahlia/ui-components/src/header/header";
+import { SiteHeader } from "@dahlia/ui-components/src/headers/site_header";
 
 const Layout = props => (
   <>
-    <Header />
+    <SiteHeader />
     <main>
       {props.children}
     </main>
