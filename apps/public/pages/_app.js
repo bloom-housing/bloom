@@ -4,10 +4,11 @@ import "@dahlia/styles/src/index.scss"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
-    let pageProps = {}
+    let pageProps = {} // you can add custom props that pass down to all pages here
 
     if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx)
+      let compAsyncProps = await Component.getInitialProps(ctx)
+      pageProps = { ...pageProps, ...compAsyncProps}
     }
 
     return { pageProps }

@@ -1,12 +1,16 @@
 import * as React from "react";
-
-import { Header } from "@dahlia/ui-components/src/header/header";
+import Layout from '../layouts/application';
+import { Hero } from "@dahlia/ui-components/src/headers/hero";
+import { getCurrentGroup } from '../lib/config';
 
 export default () => {
+  const region = getCurrentGroup()
+  const heroTitle = <>Apply for affordable housing in <em>{region}</em></>
+
   return (
-    <>
-      <Header />
+    <Layout>
+      <Hero title={heroTitle} buttonTitle="See Rentals" buttonLink="/listings" />
       <div>Hello World</div>
-    </>
+    </Layout>
   );
 };
