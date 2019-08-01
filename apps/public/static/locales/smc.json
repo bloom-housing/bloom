@@ -1,0 +1,83 @@
+{
+  "APPLICATION": {
+    "DOWNLOAD_URL": "https://sfmohcd.org/sites/default/files/Documents/MOH/BMR%20Rental%20Paper%20Applications/English%20BMR%20Rent%20Short%20Form%20Paper%20App.pdf"
+  },
+  "DISCLAIMER": {
+    "HEADER": {
+      "TITLE": "Endorsement Disclaimers"
+    },
+    "SECTION_1": {
+      "HEADER": "External Link Policies",
+      "CONTENT": "The County of San Mateo uses link and search capabilities to point to public information posted on the Internet. The County of San Mateo does not endorse or provide preferential treatment to any third party websites or associated organizations or persons. Additionally, the County of San Mateo does not control third party sites and therefore it does not warrant that third party sites are accurate or, reliable, or that they have operational links. The privacy policies here do not necessarily apply to external websites. You may either contact the external websites or read their Privacy Policies or Statements to find out what their data collection and distribution polices are."
+    },
+    "SECTION_2": {
+      "HEADER": "Ownership",
+      "CONTENT": "In general, information presented on this web site is considered in the public domain. It may be distributed or copied as permitted by law. However, the County of San Mateo does make some use of copyrighted data such as photographs which may require additional permissions prior to your use. In order to use any information on this web site not owned or created by the County of San Mateo, you must seek permission directly from the owning (or holding) sources.  If you are unsure of whether information is in the public domain or privately owned, please contact <a href='mailto:websupport@smcgov.org'>websupport@smcgov.org</a>. The County of San Mateo shall have the right to use for any purpose, at no charge, all information submitted on the San Mateo County site.  This right may only be limited if a submission is made under separate legal contract. The County of San Mateo shall be free to use, for any purpose, any ideas, concepts, or techniques contained in information provided through this site."
+    },
+    "SECTION_3": {
+      "HEADER": "",
+      "CONTENT": ""
+    }
+  },
+  "FOOTER": {
+    "ADDITIONAL_OPPORTUNITIES": "<p class='c-iron t-small'>For additional Bay Area opportunities, please visit:<br/><a href='https://housing.sfgov.org' target='_blank' class='c-white t-small'>San Francisco Housing Portal</a></p>",
+    "CONTACT_EMAIL": "housing@smchousing.org",
+    "COPYRIGHT": "San Mateo County",
+    "DAHLIA_DESCRIPTION": "<p class='c-iron'>DAHLIA: San Mateo County Housing Portal is a project of the <br><a href='https://housing.smcgov.org/' target='_blank' class='a-white'>San Mateo County's Department of Housing</a></p><p class='t-small c-iron margin-top'>in partnership with<br><a href='https://isd.smcgov.org/' target='_blank' class='a-white'>San Mateo County's Information Services Department</a><br><a href='http://www.ssf.net/' target='_blank' class='a-white'>City of South San Francisco</a></p>",
+    "LISTING_QUESTIONS": "For general program inquiries, you may call DOH at 650-802-5050."
+  },
+  "NAV": {
+    "ASSISTANCE_URL": "https://housing.smcgov.org/find-rental-assistance",
+    "FEEDBACK_URL": "https://www.surveymonkey.com/r/2QLBYML"
+  },
+  "T": {
+    "DAHLIA_HOUSING_PORTAL": "DAHLIA<br/><span class=\"header-logo-group\">San Mateo County Housing</span>"
+  },
+  "WELCOME": {
+    "SHARED_HOUSING": "Looking for Shared Housing?",
+    "SHARED_HOUSING_BUTTON": "Learn More",
+    "SHARED_HOUSING_LINK": "https://housing.smcgov.org/home-sharing-program",
+    "TITLE": "Apply for affordable housing in <span class=\"hero-title_highlight\">San Mateo County</span>"
+  },
+  "RESOURCES": {
+    "SMC_HOUSING_SEARCH": "SMCHousingSearch",
+    "SMC_HOUSING_SEARCH_LINK": "http://www.socialserve.com/dbh/ViewUnit/663044?ch=SMC&hm=kt9oO6pN",
+    "SMC_HOUSING_TYPE": "Rental and Shared Housing Opportunities",
+    "SMC_HOUSING_AREA": "San Mateo County",
+    "HAVEN_CONNECT": "Haven Connect",
+    "HAVEN_CONNECT_LINK": "https://apply.havenconnect.com/",
+    "HAVEN_CONNECT_TYPE": "Affordable Housing",
+    "HAVEN_CONNECT_AREA": "San Mateo County, Bay Area, and Beyond",
+    "HIP_HOUSING": "HIP Housing",
+    "HIP_HOUSING_AREA": "San Mateo County",
+    "HIP_HOUSING_TYPE": "Shared Housing Opportunities",
+    "HIP_HOUSING_LINK": "https://hiphousing.org/programs/home-sharing-program/",
+    "SM_HOUSING_AUTHORITY": "Housing Authority of the County of San Mateo",
+    "SM_HOUSING_AUTHORITY_LINK": "https://www.smchousingwaitlist.org/landing",
+    "SM_HOUSING_AUTHORITY_TYPE": "Housing Choice Vouchers/ Section 8 program",
+    "SM_HOUSING_AUTHORITY_AREA": "San Mateo County",
+    "COMMUNITY_INFO_HANDBOOK": "Community Infomation Handbook",
+    "COMMUNITY_INFO_LINK": "https://hsa.smcgov.org/sites/hsa.smcgov.org/files/documents/files/CIH2019_English_020719.pdf",
+    "COMMUNITY_INFO_TYPE": "Community Services",
+    "COMMUNITY_INFO_AREA": "San Mateo County",
+    "UNITED_WAY": "211 United Way Bay Area",
+    "UNITED_WAY_LINK": "https://www.211bayarea.org/sanmateo/",
+    "UNITED_WAY_TYPE": "Health and Human Services Information, including crisis services",
+    "UNITED_WAY_AREA": "San Mateo County and Bay Area",
+    "PROJECT_SENTINEL": "Project Sentinel",
+    "PROJECT_SENTINEL_LINK": "https://www.housing.org/tenants",
+    "PROJECT_SENTINEL_TYPE": "Services for tenants experiencing housing discrimination",
+    "PROJECT_SENTINEL_AREA": "San Mateo County and Bay Area"
+  },
+  "RESOURCE_CONTACT": {
+    "SM_DEPT_HOUSING": "San Mateo County's Department of Housing",
+    "SM_DEPT_HOUSING_EMAIL": "housing@smchousing.org",
+    "SM_DEPT_HOUSING_MAILTO": "mailto:housing@smchousing.org",
+    "FOSTER_CITY": "Foster City Community Development",
+    "FOSTER_CITY_EMAIL": "housing@fostercity.org",
+    "FOSTER_CITY_MAILTO": "mailto:housing@fostercity.org",
+    "FOSTER_CITY_P1": "For general program inquiries in Foster City, you may call 650-286-3245",
+    "FOSTER_CITY_P2": "For listing and application questions, please contact the Property Agent displayed on the listing."
+  }
+
+}

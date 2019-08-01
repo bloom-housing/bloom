@@ -1,5 +1,5 @@
 import * as React from "react";
-import Layout from '../layouts/application';
+import Layout from "../layouts/application";
 
 export default () => (
   <Layout>

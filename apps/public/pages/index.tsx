@@ -1,16 +1,20 @@
 import * as React from "react";
-import Layout from '../layouts/application';
+import Layout from "../layouts/application";
 import { Hero } from "@dahlia/ui-components/src/headers/hero";
-import { getCurrentGroup } from '../lib/config';
+import { getCurrentGroup } from "../lib/config";
 
-export default () => {
-  const region = getCurrentGroup()
-  const heroTitle = <>Apply for affordable housing in <em>{region}</em></>
+export default props => {
+  const region = getCurrentGroup();
+  const heroTitle = (
+    <>
+      Apply for affordable housing in <em>{region}</em>
+    </>
+  );
 
   return (
     <Layout>
       <Hero title={heroTitle} buttonTitle="See Rentals" buttonLink="/listings" />
-      <div>Hello World</div>
+      <div>{props.polyglot.t("WELCOME.TITLE")}</div>
     </Layout>
   );
 };
