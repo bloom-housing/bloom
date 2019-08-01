@@ -5,7 +5,7 @@ const linkStyle = {
   marginRight: 15
 };
 
-export const Header = () => (
+export const SiteHeader = () => (
   <div>
     <Link href="/">
       <a style={linkStyle}>Home</a>

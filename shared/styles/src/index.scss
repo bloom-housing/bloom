@@ -2,16 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-100 p-6;
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,900,700);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+
+$primary-color: #0077da;
+$sans-font: "Open Sans", Helvetica, Arial, Verdana, sans-serif;
+$alt-sans-font: Lato, Helvetica, Arial, Verdana, sans-serif;
+$serif-font: "Droid Serif", Georgia, Times, serif;
+
+.t-sans {
+  font-family: $sans-font;
 }
+.t-alt-sans {
+  font-family: $alt-sans-font;
+}
+.t-serif {
+  font-family: $serif-font;
+}
+
+body {
+  font-family: $sans-font;
+  @apply bg-gray-100;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $serif-font;
+}
+
 a {
-  @apply text-red-700;
+  color: $primary-color;
   &:hover {
-    @apply text-red-500;
+    color: $primary-color;
   }
 }
 
-h1 {
-  @apply text-2xl;
+h1.title {
+  @apply text-4xl;
+}
+
+.text-primary {
+  color: $primary-color;
+}
+.border-primary {
+  border-color: $primary-color;
+}
+
+.custom-counter_item {
+  counter-increment: step-counter;
+  margin-bottom: 3rem;
+  margin-left: 2rem;
+  padding-left: 3rem;
+  position: relative;
+ }
+
+.custom-counter_item::before {
+  position: absolute;
+  top: 0;
+  left: -1rem;
+  content: counter(step-counter);
+  margin-right: 5px;
+  color: #333;
+  font-size: 4.375rem;
+  line-height: .85;
+  font-family: "Droid Serif", Georgia, Times, serif;
+}
+
+.custom-counter_header {
+  border-left: 2px solid #dedee0;
+  margin-bottom: 2rem;
+  margin-left: -1rem;
+  padding-left: 1rem;
 }
