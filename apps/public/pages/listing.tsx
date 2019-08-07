@@ -46,7 +46,7 @@ export default class extends Component<ListingProps> {
 
     return (
       <Layout>
-        <article className="flex flex-wrap max-w-5xl m-auto mb-12">
+        <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
           <ImageHeader
             className="w-full md:w-3/4 p-3"
             title={listing.name}
@@ -60,20 +60,20 @@ export default class extends Component<ListingProps> {
             }
           />
 
-          <aside className="w-full md:w-1/4">
-            <section className="border border-black h-20">
+          <aside className="w-full md:absolute md:right-0 md:w-1/4">
+            <section className="border border-black h-48">
               <p>Hello, I am a sidebar waiting for content</p>
             </section>
-            <section className="border border-green-600 h-20">
+            <section className="border border-green-600 h-48">
               <p>I can have multiple sections</p>
             </section>
-            <section className="border border-yellow-600 h-20">
+            <section className="border border-yellow-600 h-48">
               <p>Featuring helpful listing-related info</p>
             </section>
-            <section className="border border-blue-500 h-20">
+            <section className="border border-blue-500 h-48">
               <p>Such as application details</p>
             </section>
-            <section className="border border-red-500 h-20">
+            <section className="border border-red-500 h-48">
               <p>And leasing agent contact info</p>
             </section>
           </aside>
