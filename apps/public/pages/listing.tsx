@@ -2,7 +2,7 @@ import { Component } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Layout from '../layouts/application';
 import { Listing } from '../components/listings_list';
-import { PropertyTitleImage } from '@dahlia/ui-components/src/cards/property_title_image';
+import ImageHeader from '@dahlia/ui-components/src/headers/image_header';
 import { OneLineAddress } from '@dahlia/ui-components/src/helpers/address';
 import { ContentSection } from '@dahlia/ui-components/src/sections/content_section';
 import { ListSection } from '@dahlia/ui-components/src/sections/list_section';
@@ -46,66 +46,89 @@ export default class extends Component<ListingProps> {
 
     return (
       <Layout>
-        <article className="max-w-2xl m-auto mb-12">
-          <div className="w-full p-3">
-            <PropertyTitleImage title={listing.name} imageUrl={listing.image_url} listingId={listing.id} />
+        <article className="flex flex-wrap max-w-5xl m-auto mb-12">
+          <ImageHeader
+            className="w-full md:w-3/4 p-3"
+            title={listing.name}
+            imageUrl={listing.image_url}
+            subImageContent={
+              <>
+                <p className="t-alt-sans uppercase">{oneLineAddress}</p>
+                <p className="text-gray-700">{listing.developer}</p>
+                <p className="text-xs"><a href={googleMapsHref} target="_blank" aria-label="Opens in new window">View on Map</a></p>
+              </>
+            }
+          />
+
+          <aside className="w-full md:w-1/4">
+            <section className="border border-black h-20">
+              <p>Hello, I am a sidebar</p>
+            </section>
+            <section className="border border-green-600 h-20">
+              <p>With multiple sections</p>
+            </section>
+            <section className="border border-yellow-600 h-20">
+              <p>Featuring helpful listing-related info</p>
+            </section>
+            <section className="border border-blue-500 h-20">
+              <p>Such as application details</p>
+            </section>
+            <section className="border border-red-500 h-20">
+              <p>And leasing agent contact info</p>
+            </section>
+          </aside>
+
+          <div className="w-full md:w-3/4">
+            <ContentSection title="Eligibility" subtitle="Income, occupancy, preferences, and subsidies">
+              <ul>
+                <ListSection title="Household Maximum Income" subtitle="For income calculations, household size includes everyone (all ages) living in the unit.">
+                  <>table goes here…</>
+                </ListSection>
+                <ListSection title="Occupancy" subtitle="Occupancy limits for this building differ from household size, and do not include children under 6.">
+                  <>table goes here…</>
+                </ListSection>
+
+                <ListSection title="Rental Assistance" subtitle="Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy." />
+
+                <ListSection title="Housing Preferences" subtitle="Preference holders will be given highest ranking.">
+                  <>table goes here…</>
+                </ListSection>
+
+                <ListSection title="Additional Eligibility Rules" subtitle="Applicants must also qualify under the rules of the building.">
+                  <>
+                    <InfoCard title="Credit History">
+                      <p className="text-sm text-gray-700">{listing.credit_history}</p>
+                    </InfoCard>
+                    <InfoCard title="Rental History">
+                      <p className="text-sm text-gray-700">{listing.rental_history}</p>
+                    </InfoCard>
+                  </>
+                </ListSection>
+              </ul>
+            </ContentSection>
+
+            <ContentSection title="Features" subtitle="Amenities, unit details and additional fees">
+              <dl>
+                <Description term="Neighborhood" description={listing.neighborhood} />
+                <Description term="Built" description={listing.year_built} />
+                <Description term="Smoking Policy" description={listing.smoking_policy} />
+                <Description term="Pets Policy" description={listing.pet_policy} />
+                <Description term="Property Amenities" description={listing.amenities} />
+              </dl>
+            </ContentSection>
+
+            <ContentSection title="Neighborhood" subtitle="Location and transportation">
+              <p>Map goes here…</p>
+            </ContentSection>
+
+            <ContentSection title="Additional Information" subtitle="Required documents and selection criteria">
+              <InfoCard title="Required Documents">
+                <p className="text-sm text-gray-700">{listing.required_documents}</p>
+              </InfoCard>
+            </ContentSection>
+
+            <em>Listing Id: {listing.id}</em>
           </div>
-
-          <p className="t-alt-sans uppercase">{oneLineAddress}</p>
-          <p className="text-gray-700">{listing.developer}</p>
-          <p className="text-xs"><a href={googleMapsHref} target="_blank" aria-label="Opens in new window">View on Map</a></p>
-
-
-          <ContentSection title="Eligibility" subtitle="Income, occupancy, preferences, and subsidies">
-            <ul>
-              <ListSection title="Household Maximum Income" subtitle="For income calculations, household size includes everyone (all ages) living in the unit.">
-                <>table goes here…</>
-              </ListSection>
-              
-              <ListSection title="Occupancy" subtitle="Occupancy limits for this building differ from household size, and do not include children under 6.">
-                <>table goes here…</>
-              </ListSection>
-
-              <ListSection title="Rental Assistance" subtitle="Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy." />
-
-              <ListSection title="Housing Preferences" subtitle="Preference holders will be given highest ranking.">
-                <>table goes here…</>
-              </ListSection>
-
-              <ListSection title="Additional Eligibility Rules" subtitle="Applicants must also qualify under the rules of the building.">
-                <>
-                  <InfoCard title="Credit History">
-                    <p className="text-sm text-gray-700">{listing.credit_history}</p>
-                  </InfoCard>
-                  <InfoCard title="Rental History">
-                    <p className="text-sm text-gray-700">{listing.rental_history}</p>
-                  </InfoCard>
-                </>
-              </ListSection>
-            </ul>
-          </ContentSection>
-
-          <ContentSection title="Features" subtitle="Amenities, unit details and additional fees">
-            <dl>
-              <Description term="Neighborhood" description={listing.neighborhood} />
-              <Description term="Built" description={listing.year_built} />
-              <Description term="Smoking Policy" description={listing.smoking_policy} />
-              <Description term="Pets Policy" description={listing.pet_policy} />
-              <Description term="Property Amenities" description={listing.amenities} />
-            </dl>
-          </ContentSection>
-
-          <ContentSection title="Neighborhood" subtitle="Location and transportation">
-            <p>Map goes here…</p>
-          </ContentSection>
-
-          <ContentSection title="Additional Information" subtitle="Required documents and selection criteria">
-            <InfoCard title="Required Documents">
-              <p className="text-sm text-gray-700">{listing.required_documents}</p>
-            </InfoCard>
-          </ContentSection>
-
-          <em>Listing Id: {listing.id}</em>
         </article>
       </Layout>
 

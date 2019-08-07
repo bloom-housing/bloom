@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PropertyTitleImage } from '@dahlia/ui-components/src/cards/property_title_image';
+import ImageCard from '@dahlia/ui-components/src/cards/image_card';
 import Link from 'next/link';
 
 export interface Listing {
@@ -42,7 +42,11 @@ export const ListingsList = (props: ListingsProps) => {
   const listItems = listings.map(listing =>
     <article key={listing.id} className="flex flex-row flex-wrap max-w-5xl m-auto mb-12">
       <div className="w-full md:w-6/12 p-3">
-        <PropertyTitleImage title={listing.name} imageUrl={listing.image_url} listingId={listing.id} />
+        <ImageCard
+          title={listing.name}
+          imageUrl={listing.image_url}
+          href={`listing/id=${listing.id}`}
+          as={`/listing/${listing.id}`} />
       </div>
       <div className="w-full md:w-6/12 p-3">
         <Link href="listing/[id]" as={`/listing/${listing.id}`}>
