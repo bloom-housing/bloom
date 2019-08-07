@@ -62,10 +62,10 @@ export default class extends Component<ListingProps> {
 
           <aside className="w-full md:w-1/4">
             <section className="border border-black h-20">
-              <p>Hello, I am a sidebar</p>
+              <p>Hello, I am a sidebar waiting for content</p>
             </section>
             <section className="border border-green-600 h-20">
-              <p>With multiple sections</p>
+              <p>I can have multiple sections</p>
             </section>
             <section className="border border-yellow-600 h-20">
               <p>Featuring helpful listing-related info</p>
