@@ -1,10 +1,11 @@
 const withTM = require("next-transpile-modules");
 const withSass = require('@zeit/next-sass')
+const withMDX = require('@next/mdx')()
 const axios = require('axios');
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
-module.exports = withSass(withTM({
+module.exports = withMDX(withSass(withTM({
   transpileModules: ["@dahlia"],
   // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
   async exportPathMap () {
@@ -37,4 +38,4 @@ module.exports = withSass(withTM({
       '/listings': { page: '/listings' }
     })
   }
-}));
+})));
