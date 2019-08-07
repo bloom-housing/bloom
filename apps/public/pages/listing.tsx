@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import ReactDOMServer from 'react-dom/server';
+import { unitSummariesTable } from '../lib/unit_summaries'
 import Layout from '../layouts/application';
 import { Listing } from '../components/listings_list';
 import { PropertyTitleImage } from '@dahlia/ui-components/src/cards/property_title_image';
@@ -8,7 +9,7 @@ import { ContentSection } from '@dahlia/ui-components/src/sections/content_secti
 import { ListSection } from '@dahlia/ui-components/src/sections/list_section';
 import { InfoCard } from '@dahlia/ui-components/src/cards/info_card';
 import { Description } from '@dahlia/ui-components/src/atoms/description';
-
+import { BasicTable } from '@dahlia/ui-components/src/tables/basic_table';
 import axios from 'axios';
 
 interface ListingProps {
@@ -44,6 +45,14 @@ export default class extends Component<ListingProps> {
 
     const googleMapsHref = "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
 
+    const unitSummariesHeaders = {
+      unit_type: 'Unit Type',
+      minimum_income: 'Minimum Income',
+      rent: 'Rent',
+      availability: 'Availability'
+    }
+    const unitSummaries = unitSummariesTable(listing)
+
     return (
       <Layout>
         <article className="max-w-2xl m-auto mb-12">
@@ -55,6 +64,9 @@ export default class extends Component<ListingProps> {
           <p className="text-gray-700">{listing.developer}</p>
           <p className="text-xs"><a href={googleMapsHref} target="_blank" aria-label="Opens in new window">View on Map</a></p>
 
+          <div className="mt-12 mb-6">
+            <BasicTable headers={unitSummariesHeaders} data={unitSummaries} responsiveCollapse={true} />
+          </div>
 
           <ContentSection title="Eligibility" subtitle="Income, occupancy, preferences, and subsidies">
             <ul>
