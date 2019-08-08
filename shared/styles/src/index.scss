@@ -21,9 +21,13 @@ $serif-font: "Droid Serif", Georgia, Times, serif;
   font-family: $serif-font;
 }
 
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
 body {
   font-family: $sans-font;
-  @apply bg-gray-100;
+  @apply bg-white;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -74,3 +78,42 @@ h1.title {
   margin-left: -1rem;
   padding-left: 1rem;
 }
+
+table tr:nth-of-type(even) {
+  background: #f5f8f9;
+}
+
+
+/* Hat tip to this CSS solution:
+https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
+
+@media screen and (max-width: 639px) {
+  table.responsive-collapse {
+    thead { display: none; }
+    tr {
+      display: block;
+      margin-bottom: 1.75em;
+    }
+    tr:nth-of-type(even) {
+      background: inherit;
+    }
+    td:nth-of-type(even) {
+      background: #f5f8f9;
+    }
+  
+    td {
+      display: block;
+      text-align: right;
+    }
+  
+    td:before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+  
+    td:last-child { border-bottom: 0; }
+  } 
+}
+  
