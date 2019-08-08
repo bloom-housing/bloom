@@ -1,5 +1,5 @@
-import * as React from 'react'
-import Link from "next/link"
+import * as React from "react";
+import Link from "next/link";
 
 const SiteHeader = (props: any) => {
   const Logo = () => (
@@ -13,15 +13,13 @@ const SiteHeader = (props: any) => {
         </Link>
       </div>
     </div>
-  )
+  );
 
   const TopBar = () => (
     <div className="w-full h-8 bg-blue-600 text-right text-white">
-      <div className="max-w-5xl m-auto">
-        {props.notice}
-      </div>
+      <div className="max-w-5xl m-auto">{props.notice}</div>
     </div>
-  )
+  );
 
   const NavBar = () => (
     <div className="h-20 text-right">
@@ -31,7 +29,7 @@ const SiteHeader = (props: any) => {
         </Link>
       </nav>
     </div>
-  )
+  );
 
   return (
     <header className="w-full border-b-1 border-gray-400">
@@ -39,7 +37,7 @@ const SiteHeader = (props: any) => {
       <TopBar />
       <NavBar />
     </header>
-  )
-}
+  );
+};
 
-export default SiteHeader
+export default SiteHeader;

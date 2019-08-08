@@ -7,7 +7,8 @@ const Layout = props => (
     <SiteHeader
       logoSrc="/static/images/logo_glyph.svg"
       notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
-      title="Housing Portal" />
+      title="Housing Portal"
+    />
     <main>{props.children}</main>
     <SiteFooter />
   </div>
