@@ -70,6 +70,13 @@ export default class extends Component<ListingProps> {
                     View on Map
                   </a>
                 </p>
+                <div className="mt-12 mb-6">
+                  <BasicTable
+                    headers={unitSummariesHeaders}
+                    data={unitSummaries}
+                    responsiveCollapse={true}
+                  />
+                </div>
               </>
             }
           />
