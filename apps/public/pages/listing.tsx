@@ -3,6 +3,7 @@ import ReactDOMServer from "react-dom/server";
 import { unitSummariesTable } from "../lib/unit_summaries";
 import Layout from "../layouts/application";
 import { Listing } from "../components/listings_list";
+import { WhatToExpect } from "../components/listing_sidebar/what_to_expect";
 import ImageHeader from "@dahlia/ui-components/src/headers/image_header";
 import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address";
 import { ContentSection } from "@dahlia/ui-components/src/sections/content_section";
@@ -95,8 +96,8 @@ export default class extends Component<ListingProps> {
             <section className="border border-blue-500 h-48">
               <p>Such as application details</p>
             </section>
-            <section className="border border-red-500 h-48">
-              <p>And leasing agent contact info</p>
+            <section className="border border-red-500">
+              <WhatToExpect listing={listing} />
             </section>
           </aside>
 
