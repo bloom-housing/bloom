@@ -74,6 +74,14 @@ export default class extends Component<ListingProps> {
             }
           />
 
+          <div className="w-full md:w-3/4 mt-12 mb-6 px-3">
+            <BasicTable
+              headers={unitSummariesHeaders}
+              data={unitSummaries}
+              responsiveCollapse={true}
+            />
+          </div>
+
           <aside className="w-full md:absolute md:right-0 md:w-1/4">
             <section className="border border-black h-48">
               <p>Hello, I am a sidebar waiting for content</p>
