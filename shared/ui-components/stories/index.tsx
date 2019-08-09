@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { Button } from "../src/test-button/button";
-import { Header } from "../src/header/header";
+import { PageHeader } from "../src/headers/page_header";
 
 storiesOf("Button", module)
   .add("with text", () => <Button>Hello Button</Button>)
@@ -13,7 +13,4 @@ storiesOf("Button", module)
     </Button>
   ));
 
-storiesOf("Header", module)
-  .add("header", () => (
-    <Header />
-  ))
+storiesOf("Header", module).add("header", () => <PageHeader />);
