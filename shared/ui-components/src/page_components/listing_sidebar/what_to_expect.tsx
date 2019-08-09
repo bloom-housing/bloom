@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactDOMServer from "react-dom/server";
-import { OneLineAddress, MultiLineAddress } from "@dahlia/ui-components/src/helpers/address";
+import { OneLineAddress, MultiLineAddress } from "../../helpers/address";
 
 /*
 CONTACT LEASING AGENT
