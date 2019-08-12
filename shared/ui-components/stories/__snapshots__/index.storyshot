@@ -52,15 +52,3 @@ exports[`Storyshots Button with text 1`] = `
   </button>
 </Button>
 `;
-
-exports[`Storyshots Header header 1`] = `
-<PageHeader>
-  <header
-    className="bg-gray-300 py-10 px-5"
-  >
-    <h1
-      className="title m-auto max-w-5xl"
-    />
-  </header>
-</PageHeader>
-`;
