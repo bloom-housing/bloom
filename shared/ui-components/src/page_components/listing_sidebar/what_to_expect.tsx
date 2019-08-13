@@ -1,66 +1,21 @@
 import * as React from 'react';
-import ReactDOMServer from "react-dom/server";
-import { OneLineAddress, MultiLineAddress } from "../../helpers/address";
-
-/*
-CONTACT LEASING AGENT
-Francis Santos
-Business Manager
-
-Call 650-437-2039
-Due to high call volume you may hear a message.
-
-Email
-55 Triton Park Lane
-Foster City CA 94404
-Get Directions
-OFFICE HOURS
-
-Monday - Friday, 9:00 am - 5:00 pm
-*/
 
 export const WhatToExpect = (props: any) => {
   const listing = props.listing
 
-  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, '')}`
-
-  let leasingAddress = null
-  let googleMapsHref = null
-
-  if (listing.leasing_agent_street) {
-    const address = {
-      street_address: listing.leasing_agent_street,
-      city: listing.leasing_agent_city,
-      state: listing.leasing_agent_state,
-      zip_code: listing.leasing_agent_zip
-    }
-    const oneLineAddress = <OneLineAddress address={address} />
-    leasingAddress = <MultiLineAddress address={address} />
-
-    googleMapsHref =
-        "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
-  }
-
   return (
     <>
-      <h4 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider">Contact Leasing Agent</h4>
+      <h4 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider">What to Expect</h4>
 
-      <p className="text-xl">{listing.leasing_agent_name}</p>
-      <p className="text-gray-700">{listing.leasing_agent_title}</p>
+      <p>Applicants will be contacted by the property agent in waitlist order until vacancies are filled.</p>
 
-      <p className="mt-5"><a href={phoneNumber}>Call {listing.leasing_agent_phone}</a></p>
-      <p className="text-sm text-gray-700">Due to high call volume you may hear a message.</p>
+      <details className="disclosure">
+        <summary>read more</summary>
 
-      <p className="mt-5"><a href={`mailto:${listing.leasing_agent_email}`}>Email</a></p>
+        <p>All of the information that you have provided will be verified and your eligibility confirmed.  Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.</p>
 
-      {listing.leasing_agent_street > 0 && 
-        (<p className="mt-5 text-gray-700">{leasingAddress}<br/>
-        <a href={googleMapsHref} target="_blank">Get Directions</a></p>)
-      }
-
-      <p className="my-5 text-gray-600 uppercase"><strong>Office Hours</strong></p>
-
-      <p>{listing.leasing_agent_office_hours}</p>
+        <p>Should your application be chosen from the waitlist, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted.</p>
+      </details>
     </>
   )
 }

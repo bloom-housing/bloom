@@ -4,6 +4,7 @@ import { unitSummariesTable } from "../lib/unit_summaries";
 import Layout from "../layouts/application";
 import { Listing } from "@dahlia/ui-components/src/types";
 import { WhatToExpect } from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect";
+import { LeasingAgent } from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent";
 import ImageHeader from "@dahlia/ui-components/src/headers/image_header";
 import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address";
 import { ContentSection } from "@dahlia/ui-components/src/sections/content_section";
@@ -93,11 +94,11 @@ export default class extends Component<ListingProps> {
             <section className="border border-yellow-600 h-48">
               <p>Featuring helpful listing-related info</p>
             </section>
-            <section className="border border-blue-500 h-48">
-              <p>Such as application details</p>
+            <section className="border border-blue-500">
+              <WhatToExpect listing={listing} />
             </section>
             <section className="border border-red-500">
-              <WhatToExpect listing={listing} />
+              <LeasingAgent listing={listing} />
             </section>
           </aside>
 
