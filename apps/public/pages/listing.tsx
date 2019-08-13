@@ -3,7 +3,7 @@ import ReactDOMServer from "react-dom/server";
 import { unitSummariesTable } from "../lib/unit_summaries";
 import Layout from "../layouts/application";
 import { Listing } from "../components/listings_list";
-import ImageHeader from "@dahlia/ui-components/src/headers/image_header";
+import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header";
 import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address";
 import { ContentSection } from "@dahlia/ui-components/src/sections/content_section";
 import { ListSection } from "@dahlia/ui-components/src/sections/list_section";

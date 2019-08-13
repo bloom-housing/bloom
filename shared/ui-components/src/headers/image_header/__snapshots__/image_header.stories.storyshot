@@ -33,17 +33,3 @@ exports[`Storyshots Headers|ImageHeader with image and title 1`] = `
   </header>
 </ImageHeader>
 `;
-
-exports[`Storyshots Headers|PageHeader with text content 1`] = `
-<PageHeader>
-  <header
-    className="bg-gray-300 py-10 px-5"
-  >
-    <h1
-      className="title m-auto max-w-5xl"
-    >
-      Hello World
-    </h1>
-  </header>
-</PageHeader>
-`;
