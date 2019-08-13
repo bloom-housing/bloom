@@ -1,6 +1,6 @@
 import * as React from "react";
 import Layout from "../layouts/application";
-import { Hero } from "@dahlia/ui-components/src/headers/hero";
+import Hero from "@dahlia/ui-components/src/headers/hero";
 import { getCurrentGroup } from "../lib/config";
 
 export default props => {
