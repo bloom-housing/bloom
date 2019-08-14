@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const MarkdownSection = (props: any) => {
+const MarkdownSection = (props: any) => {
   const contentWidth = props.fullwidth ? 'markdown' : 'markdown max-w-2xl'
 
   return (
@@ -11,3 +11,5 @@ export const MarkdownSection = (props: any) => {
     </div>
   )
 }
+
+export default MarkdownSection
