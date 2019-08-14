@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-export const PageHeader = (props: any) => {
+const PageHeader = (props: any) => {
   const classNames = ["py-10", "px-5"]
   if (props.inverse) {
     classNames.push("bg-blue-700")
@@ -15,3 +15,5 @@ export const PageHeader = (props: any) => {
     </header>
   )
 }
+
+export default PageHeader;

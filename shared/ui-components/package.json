@@ -6,22 +6,60 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "start": "start-storybook"
+    "start": "start-storybook -s ./static",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
     "@storybook/addon-info": "^5.1.9",
+    "@storybook/addon-storyshots": "^5.1.10",
     "@storybook/addon-viewport": "^5.1.10",
     "@storybook/react": "^5.1.9",
+    "@types/enzyme": "^3.10.3",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.17",
+    "@types/react-test-renderer": "^16.8.6",
     "@types/storybook__react": "^4.0.2",
     "awesome-typescript-loader": "^5.2.1",
+    "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
+    "babel-plugin-require-context-hook": "^1.0.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.0",
+    "jest": "^24.8.0",
     "react-docgen-typescript-loader": "^3.1.0",
     "typescript": "^3.5.3",
     "webpack": "^4.39.1"
   },
   "dependencies": {
+    "@types/node": "^12.7.1",
+    "@types/react-dom": "^16.8.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/react",
+      "@babel/preset-typescript"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "require-context-hook"
+        ]
+      }
+    }
   }
 }
