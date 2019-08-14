@@ -2,23 +2,6 @@ import * as React from 'react';
 import ReactDOMServer from "react-dom/server";
 import { OneLineAddress, MultiLineAddress } from "../../helpers/address";
 
-/*
-CONTACT LEASING AGENT
-Francis Santos
-Business Manager
-
-Call 650-437-2039
-Due to high call volume you may hear a message.
-
-Email
-55 Triton Park Lane
-Foster City CA 94404
-Get Directions
-OFFICE HOURS
-
-Monday - Friday, 9:00 am - 5:00 pm
-*/
-
 const LeasingAgent = (props: any) => {
   const listing = props.listing
 
