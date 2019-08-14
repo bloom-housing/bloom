@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const WhatToExpect = (props: any) => {
+const WhatToExpect = (props: any) => {
   const listing = props.listing
 
   return (
@@ -19,3 +19,5 @@ export const WhatToExpect = (props: any) => {
     </>
   )
 }
+
+export default WhatToExpect

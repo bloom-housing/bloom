@@ -19,7 +19,7 @@ OFFICE HOURS
 Monday - Friday, 9:00 am - 5:00 pm
 */
 
-export const LeasingAgent = (props: any) => {
+const LeasingAgent = (props: any) => {
   const listing = props.listing
 
   const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, '')}`
@@ -64,3 +64,5 @@ export const LeasingAgent = (props: any) => {
     </>
   )
 }
+
+export default LeasingAgent
