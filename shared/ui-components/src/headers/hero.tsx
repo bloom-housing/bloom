@@ -1,13 +1,13 @@
-import * as React from "react";
-import Link from "next/link";
+import * as React from "react"
+import Link from "next/link"
 
 interface HeroProps {
-  title: JSX.Element;
-  buttonTitle: string;
-  buttonLink: string;
+  title: JSX.Element
+  buttonTitle: string
+  buttonLink: string
 }
 
-const heroClasses = ["bg-blue-700", "py-20", "px-5", "text-white", "text-center"];
+const heroClasses = ["bg-blue-700", "py-20", "px-5", "text-white", "text-center"]
 
 const buttonClasses = [
   "bg-white",
@@ -17,7 +17,7 @@ const buttonClasses = [
   "t-alt-sans",
   "px-8",
   "py-4"
-];
+]
 
 const Hero = (props: HeroProps) => (
   <div className={heroClasses.join(" ")}>
@@ -26,6 +26,6 @@ const Hero = (props: HeroProps) => (
       <a className={buttonClasses.join(" ")}>{props.buttonTitle}</a>
     </Link>
   </div>
-);
+)
 
-export default Hero;
+export default Hero

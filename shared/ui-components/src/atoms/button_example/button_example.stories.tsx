@@ -1,6 +1,6 @@
-import * as React from "react";
-import { storiesOf } from "@storybook/react";
-import { Button } from "./button_example";
+import * as React from "react"
+import { storiesOf } from "@storybook/react"
+import { Button } from "./button_example"
 
 storiesOf("Button", module)
   .add("with text", () => <Button>Hello Button</Button>)
@@ -10,4 +10,4 @@ storiesOf("Button", module)
         😀 😎 👍 💯
       </span>
     </Button>
-  ));
+  ))

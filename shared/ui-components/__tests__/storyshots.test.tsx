@@ -1,6 +1,6 @@
-import initStoryshots, { multiSnapshotWithOptions } from "@storybook/addon-storyshots";
-import { mount } from "enzyme";
-import { createSerializer } from "enzyme-to-json";
+import initStoryshots, { multiSnapshotWithOptions } from "@storybook/addon-storyshots"
+import { mount } from "enzyme"
+import { createSerializer } from "enzyme-to-json"
 
 initStoryshots({
   renderer: mount,
@@ -8,4 +8,4 @@ initStoryshots({
   test: multiSnapshotWithOptions({
     renderer: mount
   })
-});
+})

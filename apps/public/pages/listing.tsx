@@ -1,60 +1,60 @@
-import { Component } from "react";
-import ReactDOMServer from "react-dom/server";
-import { unitSummariesTable } from "../lib/unit_summaries";
-import Layout from "../layouts/application";
-import { Listing } from "@dahlia/ui-components/src/types";
-import WhatToExpect from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect";
-import LeasingAgent from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent";
-import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header";
-import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address";
-import { ContentSection } from "@dahlia/ui-components/src/sections/content_section";
-import { ListSection } from "@dahlia/ui-components/src/sections/list_section";
-import { InfoCard } from "@dahlia/ui-components/src/cards/info_card";
-import { Description } from "@dahlia/ui-components/src/atoms/description";
-import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table";
-import axios from "axios";
+import { Component } from "react"
+import ReactDOMServer from "react-dom/server"
+import { unitSummariesTable } from "../lib/unit_summaries"
+import Layout from "../layouts/application"
+import { Listing } from "@dahlia/ui-components/src/types"
+import WhatToExpect from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect"
+import LeasingAgent from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent"
+import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header"
+import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address"
+import { ContentSection } from "@dahlia/ui-components/src/sections/content_section"
+import { ListSection } from "@dahlia/ui-components/src/sections/list_section"
+import { InfoCard } from "@dahlia/ui-components/src/cards/info_card"
+import { Description } from "@dahlia/ui-components/src/atoms/description"
+import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table"
+import axios from "axios"
 
 interface ListingProps {
-  listing: Listing;
+  listing: Listing
 }
 
 export default class extends Component<ListingProps> {
   static async getInitialProps({ query }) {
-    const listing_id = query.id;
-    let listing = {};
+    const listing_id = query.id
+    let listing = {}
 
     try {
-      const response = await axios.get("http://localhost:3001");
-      listing = response.data.listings.find(l => l.id == listing_id);
+      const response = await axios.get("http://localhost:3001")
+      listing = response.data.listings.find(l => l.id == listing_id)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
 
-    return { listing };
+    return { listing }
   }
 
   render() {
-    const listing = this.props.listing;
+    const listing = this.props.listing
 
     const address = {
       street_address: listing.building_street_address,
       city: listing.building_city,
       state: listing.building_state,
       zip_code: listing.building_zip_code
-    };
+    }
 
-    const oneLineAddress = <OneLineAddress address={address} />;
+    const oneLineAddress = <OneLineAddress address={address} />
 
     const googleMapsHref =
-      "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress);
+      "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
 
     const unitSummariesHeaders = {
       unit_type: "Unit Type",
       minimum_income: "Minimum Income",
       rent: "Rent",
       availability: "Availability"
-    };
-    const unitSummaries = unitSummariesTable(listing);
+    }
+    const unitSummaries = unitSummariesTable(listing)
 
     return (
       <Layout>
@@ -72,6 +72,13 @@ export default class extends Component<ListingProps> {
                     View on Map
                   </a>
                 </p>
+                <div className="mt-12 mb-6">
+                  <BasicTable
+                    headers={unitSummariesHeaders}
+                    data={unitSummaries}
+                    responsiveCollapse={true}
+                  />
+                </div>
               </>
             }
           />
@@ -178,6 +185,6 @@ export default class extends Component<ListingProps> {
           </div>
         </article>
       </Layout>
-    );
+    )
   }
 }

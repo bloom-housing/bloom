@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from "react"
 
 const MarkdownSection = (props: any) => {
-  const contentWidth = props.fullwidth ? 'markdown' : 'markdown max-w-2xl'
+  const contentWidth = props.fullwidth ? "markdown" : "markdown max-w-2xl"
 
   return (
     <div className="px-5 mt-10 my-20">

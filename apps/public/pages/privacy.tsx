@@ -4,11 +4,7 @@ import MarkdownSection from "@dahlia/ui-components/src/sections/markdown_section
 import PageContent from "../page_content/privacy_policy.mdx"
 
 export default props => {
-  const pageTitle = (
-    <>
-      Privacy Policy
-    </>
-  )
+  const pageTitle = <>Privacy Policy</>
 
   return (
     <Layout>

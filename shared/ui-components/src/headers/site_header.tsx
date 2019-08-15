@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react"
 import Link from "next/link"
 
 const SiteHeader = (props: any) => {
@@ -17,9 +17,7 @@ const SiteHeader = (props: any) => {
 
   const TopBar = () => (
     <div className="w-full h-8 bg-blue-600 text-right text-white">
-      <div className="max-w-5xl m-auto">
-        {props.notice}
-      </div>
+      <div className="max-w-5xl m-auto">{props.notice}</div>
     </div>
   )
 

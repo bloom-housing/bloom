@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from "react"
 
 interface ListSectionProps {
-  title: String;
-  subtitle: String;
-  children?: JSX.Element;
+  title: string
+  subtitle: string
+  children?: JSX.Element
 }
 
 export const ListSection = (props: ListSectionProps) => (
@@ -17,4 +17,4 @@ export const ListSection = (props: ListSectionProps) => (
 
     {props.children}
   </li>
-);
+)

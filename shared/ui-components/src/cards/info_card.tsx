@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react"
 
 interface InfoCardProps {
-  title: String;
-  children: JSX.Element;
+  title: String
+  children: JSX.Element
 }
 
 export const InfoCard = (props: InfoCardProps) => (
@@ -11,4 +11,4 @@ export const InfoCard = (props: InfoCardProps) => (
 
     {props.children}
   </div>
-);
+)

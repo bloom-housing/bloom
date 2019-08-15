@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 
 const PageHeader = (props: any) => {
   const classNames = ["py-10", "px-5"]
@@ -16,4 +16,4 @@ const PageHeader = (props: any) => {
   )
 }
 
-export default PageHeader;
+export default PageHeader

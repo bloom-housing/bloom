@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react"
 
 interface ContentSectionProps {
-  title: String;
-  subtitle: String;
-  icon?: String;
-  children: JSX.Element;
+  title: string
+  subtitle: string
+  icon?: string
+  children: JSX.Element
 }
 
 export const ContentSection = (props: ContentSectionProps) => (
@@ -18,4 +18,4 @@ export const ContentSection = (props: ContentSectionProps) => (
 
     {props.children}
   </section>
-);
+)
