@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 
 export const unitSummariesTable = (listing): Array<Object> => {
   const unitSummaries = listing.unit_summaries.general.map(unitSummary => {
@@ -19,8 +19,8 @@ export const unitSummariesTable = (listing): Array<Object> => {
           <strong>1</strong> unit
         </>
       )
-    };
-  });
+    }
+  })
 
-  return unitSummaries;
-};
+  return unitSummaries
+}

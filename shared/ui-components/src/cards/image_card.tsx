@@ -1,15 +1,15 @@
-import * as React from "react";
-import Link from "next/link";
+import * as React from "react"
+import Link from "next/link"
 
-const Flag = (props: any) => <div>{props.text}</div>;
+const Flag = (props: any) => <div>{props.text}</div>
 
 interface ImageCardProps {
-  flag?: string;
-  imageUrl: string;
-  subtitle?: string;
-  title: string;
-  href?: string;
-  as?: string;
+  flag?: string
+  imageUrl: string
+  subtitle?: string
+  title: string
+  href?: string
+  as?: string
 }
 
 const ImageCard = (props: ImageCardProps) => {
@@ -23,19 +23,19 @@ const ImageCard = (props: ImageCardProps) => {
         <p>{props.subtitle}</p>
       </figcaption>
     </figure>
-  );
+  )
 
-  let card = image;
+  let card = image
 
   if (props.href && props.as) {
     card = (
       <Link href={props.href} as={props.as}>
         <a>{image}</a>
       </Link>
-    );
+    )
   }
 
-  return card;
-};
+  return card
+}
 
-export default ImageCard;
+export default ImageCard
