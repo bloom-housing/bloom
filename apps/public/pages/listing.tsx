@@ -2,7 +2,9 @@ import { Component } from "react";
 import ReactDOMServer from "react-dom/server";
 import { unitSummariesTable } from "../lib/unit_summaries";
 import Layout from "../layouts/application";
-import { Listing } from "../components/listings_list";
+import { Listing } from "@dahlia/ui-components/src/types";
+import WhatToExpect from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect";
+import LeasingAgent from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent";
 import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header";
 import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address";
 import { ContentSection } from "@dahlia/ui-components/src/sections/content_section";
@@ -58,7 +60,7 @@ export default class extends Component<ListingProps> {
       <Layout>
         <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
           <ImageHeader
-            className="w-full md:w-3/4 p-3"
+            className="w-full md:w-2/3 p-3"
             title={listing.name}
             imageUrl={listing.image_url}
             subImageContent={
@@ -74,7 +76,7 @@ export default class extends Component<ListingProps> {
             }
           />
 
-          <div className="w-full md:w-3/4 mt-12 mb-6 px-3">
+          <div className="w-full md:w-2/3 mt-12 mb-6 px-3">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
@@ -82,25 +84,25 @@ export default class extends Component<ListingProps> {
             />
           </div>
 
-          <aside className="w-full md:absolute md:right-0 md:w-1/4">
-            <section className="border border-black h-48">
+          <aside className="w-full md:absolute md:right-0 md:w-1/3">
+            <section className="border border-gray-400 border-b-0 p-5">
               <p>Hello, I am a sidebar waiting for content</p>
             </section>
-            <section className="border border-green-600 h-48">
+            <section className="border border-gray-400 border-b-0 p-5">
               <p>I can have multiple sections</p>
             </section>
-            <section className="border border-yellow-600 h-48">
+            <section className="border border-gray-400 border-b-0 p-5">
               <p>Featuring helpful listing-related info</p>
             </section>
-            <section className="border border-blue-500 h-48">
-              <p>Such as application details</p>
+            <section className="border border-gray-400 border-b-0 p-5">
+              <WhatToExpect listing={listing} />
             </section>
-            <section className="border border-red-500 h-48">
-              <p>And leasing agent contact info</p>
+            <section className="border border-gray-400 p-5">
+              <LeasingAgent listing={listing} />
             </section>
           </aside>
 
-          <div className="w-full md:w-3/4">
+          <div className="w-full md:w-2/3">
             <ContentSection
               title="Eligibility"
               subtitle="Income, occupancy, preferences, and subsidies"

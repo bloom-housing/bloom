@@ -1,8 +1,9 @@
-import { Component } from "react";
-import Layout from "../layouts/application";
-import PageHeader from "@dahlia/ui-components/src/headers/page_header/page_header";
-import { Listing, ListingsList, ListingsProps } from "../components/listings_list";
-import axios from "axios";
+import { Component } from 'react';
+import { Listing } from '@dahlia/ui-components/src/types';
+import Layout from '../layouts/application';
+import PageHeader from '@dahlia/ui-components/src/headers/page_header/page_header';
+import { ListingsList, ListingsProps } from '@dahlia/ui-components/src/page_components/listings_list';
+import axios from 'axios';
 
 export default class extends Component<ListingsProps> {
   static async getInitialProps() {

@@ -116,6 +116,48 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     td:last-child { border-bottom: 0; }
   } 
 }
+
+details.disclosure {
+  position: relative;
+  min-height: 3em;
+  margin-bottom: 1em;
+  &[open] {
+    margin-bottom: 4em;
+  }
   
+  & > summary {
+    padding: 0 3px 6px 0;
+    list-style: none;
+    position: absolute;
+    bottom: 0;
+    outline: none;
+    color: $primary-color;
+    cursor: pointer;
+    &:after {
+      font-size: 0.8em;
+      content: '⌃';
+      font-weight: bold;
+      margin-left: 7px;
+      transform: rotate(180deg) translateY(3px);
+      display: inline-block;
+    }
+  }
+  &[open] > summary {
+    bottom: -3em;
+    &:after {
+      transform: rotate(0deg) translateY(2px);
+    }
+  }
+  
+  & > summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+}
+
 @import "markdown.scss";
 @import "homepage.scss";
