@@ -1,9 +1,9 @@
 import * as React from "react"
 
 interface ContentSectionProps {
-  title: String
-  subtitle: String
-  icon?: String
+  title: string
+  subtitle: string
+  icon?: string
   children: JSX.Element
 }
 

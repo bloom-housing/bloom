@@ -1,8 +1,8 @@
 import * as React from "react"
 
 interface ListSectionProps {
-  title: String
-  subtitle: String
+  title: string
+  subtitle: string
   children?: JSX.Element
 }
 
