@@ -79,10 +79,10 @@ h1.title {
   padding-left: 1rem;
 }
 
+
 table tr:nth-of-type(even) {
   background: #f5f8f9;
 }
-
 
 /* Hat tip to this CSS solution:
 https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
@@ -117,3 +117,5 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
   } 
 }
   
+@import "markdown.scss";
+@import "homepage.scss";
