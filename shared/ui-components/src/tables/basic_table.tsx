@@ -19,7 +19,7 @@ export const BasicTable = (props: any) => {
 
   const headerLabels = Object.values(headers).map(col => <HeaderCell>{col}</HeaderCell>)
 
-  const body = data.map(row => {
+  const body = data.map((row: any) => {
     const cols = Object.keys(headers).map(colKey => (
       <Cell headerLabel={headers[colKey]}>{row[colKey]}</Cell>
     ))

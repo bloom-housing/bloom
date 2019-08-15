@@ -19,7 +19,7 @@ const buttonClasses = [
   "py-4"
 ]
 
-export const Hero = (props: HeroProps) => (
+const Hero = (props: HeroProps) => (
   <div className={heroClasses.join(" ")}>
     <h1 className="title mb-10">{props.title}</h1>
     <Link href={props.buttonLink}>
@@ -27,3 +27,5 @@ export const Hero = (props: HeroProps) => (
     </Link>
   </div>
 )
+
+export default Hero
