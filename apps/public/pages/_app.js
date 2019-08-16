@@ -1,7 +1,7 @@
-import React from 'react'
-import App, { Container } from 'next/app'
+import React from "react"
+import App, { Container } from "next/app"
 import "@dahlia/styles/src/index.scss"
-import Polyglot from 'node-polyglot'
+import Polyglot from "node-polyglot"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -9,12 +9,12 @@ class MyApp extends App {
 
     if (Component.getInitialProps) {
       let compAsyncProps = await Component.getInitialProps(ctx)
-      pageProps = { ...pageProps, ...compAsyncProps}
+      pageProps = { ...pageProps, ...compAsyncProps }
     }
 
-    const generalTranslations = await import('../static/locales/general.json')
-    const sjTranslations = await import('../static/locales/sj.json')
-    const smcTranslations = await import('../static/locales/smc.json')
+    const generalTranslations = await import("../static/locales/general.json")
+    const sjTranslations = await import("../static/locales/sj.json")
+    const smcTranslations = await import("../static/locales/smc.json")
     const translations = {
       general: generalTranslations,
       sj: sjTranslations,
