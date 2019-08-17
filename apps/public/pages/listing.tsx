@@ -56,6 +56,13 @@ export default class extends Component<ListingProps> {
     }
     const unitSummaries = unitSummariesTable(listing)
 
+    const unitsHeaders = {
+      number: "Unit",
+      sq_ft: "Area",
+      floor: "Floor"
+    }
+    const units = listing.units
+
     return (
       <Layout>
         <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
@@ -165,6 +172,10 @@ export default class extends Component<ListingProps> {
                 <Description term="Smoking Policy" description={listing.smoking_policy} />
                 <Description term="Pets Policy" description={listing.pet_policy} />
                 <Description term="Property Amenities" description={listing.amenities} />
+                <Description
+                  term="Unit Features"
+                  description={<BasicTable headers={unitsHeaders} data={units} />}
+                />
               </dl>
             </ContentSection>
 
