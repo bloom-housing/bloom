@@ -1,3 +1,6 @@
+const path = require("path")
+const include = path.resolve(__dirname, "../")
+
 module.exports = ({ config }) => {
   config.module.rules.push({
     test: /\.(ts|tsx)$/,
@@ -10,7 +13,12 @@ module.exports = ({ config }) => {
         loader: require.resolve("react-docgen-typescript-loader")
       }
     ]
-  });
-  config.resolve.extensions.push(".ts", ".tsx");
-  return config;
-};
+  })
+  config.module.rules.push({
+    test: /\.css$/,
+    use: ["style-loader", "css-loader"],
+    include: path.resolve(__dirname, "../")
+  })
+  config.resolve.extensions.push(".ts", ".tsx")
+  return config
+}

@@ -26,7 +26,7 @@ export const ListingsList = (props: ListingsProps) => {
       <div className="w-full md:w-6/12 p-3">
         <ImageCard
           title={listing.name}
-          imageUrl={listing.image_url}
+          imageUrl={"asdf"}
           href={`listing/id=${listing.id}`}
           as={`/listing/${listing.id}`}
         />

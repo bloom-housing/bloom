@@ -1,6 +1,6 @@
 import * as React from "react"
-import ReactDOMServer from "react-dom/server"
-import { OneLineAddress, MultiLineAddress } from "../../helpers/address"
+// import ReactDOMServer from "react-dom/server"
+import { MultiLineAddress } from "../../helpers/address"
 
 const LeasingAgent = (props: any) => {
   const listing = props.listing
@@ -8,7 +8,7 @@ const LeasingAgent = (props: any) => {
   const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, "")}`
 
   let leasingAddress = null
-  let googleMapsHref = null
+  // let googleMapsHref = null
 
   if (listing.leasing_agent_street) {
     const address = {
@@ -17,11 +17,11 @@ const LeasingAgent = (props: any) => {
       state: listing.leasing_agent_state,
       zip_code: listing.leasing_agent_zip
     }
-    const oneLineAddress = <OneLineAddress address={address} />
+    // const oneLineAddress = <OneLineAddress address={address} />
     leasingAddress = <MultiLineAddress address={address} />
 
-    googleMapsHref =
-      "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
+    // googleMapsHref =
+    //   "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
   }
 
   return (
@@ -46,7 +46,7 @@ const LeasingAgent = (props: any) => {
         <p className="mt-5 text-gray-700">
           {leasingAddress}
           <br />
-          <a href={googleMapsHref} target="_blank">
+          <a href={"asdf"} target="_blank">
             Get Directions
           </a>
         </p>
