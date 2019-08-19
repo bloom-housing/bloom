@@ -1,11 +1,5 @@
 import * as React from "react"
-import {
-  Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel
-} from "react-accessible-accordion"
+import { Accordion } from "react-accessible-accordion"
 import { ContentSection } from "../../sections/content_section"
 import { ListSection } from "../../sections/list_section"
 import { InfoCard } from "../../cards/info_card"
@@ -51,7 +45,12 @@ const ListingAccordion = (props: ListingAccordionProps) => {
               subtitle="Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be
                     considered for this property. In the case of a valid rental subsidy, the required minimum income
                     will be based on the portion of the rent that the tenant pays after use of the subsidy."
-            />
+            >
+              <a href="https://google.com" target="_blank">
+                What if there's a link in the content? Does tabbing through the accordion focus on
+                this link?
+              </a>
+            </ListSection>
 
             <ListSection
               title="Housing Preferences"
