@@ -85,7 +85,7 @@ const UnitTables = (props: any) => {
       {Object.entries(groupedByType).map(unitsGroup => (
         <div>
           <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
-            <h3 class="bg-blue-100 p-4 border-0 border-b border-blue-600">
+            <h3 className="bg-blue-100 p-4 border-0 border-b border-blue-600">
               <strong>{unitTypeLabel(unitsGroup[0])}</strong>: {unitsGroup[1].length} unit
               {unitsGroup[1].length > 1 ? "s" : ""}, {unitAreaRange(unitsGroup[1])},
               {" " + unitFloorRange(unitsGroup[1])}
