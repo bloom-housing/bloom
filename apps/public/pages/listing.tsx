@@ -12,6 +12,7 @@ import { ListSection } from "@dahlia/ui-components/src/sections/list_section"
 import { InfoCard } from "@dahlia/ui-components/src/cards/info_card"
 import { Description } from "@dahlia/ui-components/src/atoms/description"
 import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table"
+import UnitTables from "@dahlia/ui-components/src/page_components/unit_tables"
 import axios from "axios"
 
 interface ListingProps {
@@ -55,13 +56,6 @@ export default class extends Component<ListingProps> {
       availability: "Availability"
     }
     const unitSummaries = unitSummariesTable(listing)
-
-    const unitsHeaders = {
-      number: "Unit",
-      sq_ft: "Area",
-      floor: "Floor"
-    }
-    const units = listing.units
 
     return (
       <Layout>
@@ -174,7 +168,7 @@ export default class extends Component<ListingProps> {
                 <Description term="Property Amenities" description={listing.amenities} />
                 <Description
                   term="Unit Features"
-                  description={<BasicTable headers={unitsHeaders} data={units} />}
+                  description={<UnitTables units={listing.units} />}
                 />
               </dl>
             </ContentSection>

@@ -15,4 +15,5 @@ export interface Listing {
   developer: string
   credit_history: string
   rental_history: string
+  units: any
 }
