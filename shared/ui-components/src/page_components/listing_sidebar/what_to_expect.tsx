@@ -1,8 +1,6 @@
 import * as React from "react"
 
-const WhatToExpect = (props: any) => {
-  const listing = props.listing
-
+const WhatToExpect = () => {
   return (
     <>
       <h4 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider">
