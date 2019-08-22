@@ -31,11 +31,16 @@
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.0",
     "jest": "^24.8.0",
+    "node-sass": "^4.12.0",
+    "postcss-loader": "^3.0.0",
     "react-docgen-typescript-loader": "^3.1.0",
+    "sass-loader": "^7.3.1",
+    "style-loader": "^1.0.0",
     "typescript": "^3.5.3",
     "webpack": "^4.39.1"
   },
   "dependencies": {
+    "@dahlia/styles": "*",
     "@types/node": "^12.7.1",
     "@types/react-dom": "^16.8.5",
     "react": "^16.8.6",
