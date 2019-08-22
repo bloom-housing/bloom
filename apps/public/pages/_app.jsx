@@ -1,7 +1,7 @@
 import React from "react"
 import App, { Container } from "next/app"
 import "@dahlia/styles/src/index.scss"
-import Polyglot from "node-polyglot"
+import { addTranslation } from "@dahlia/ui-components/src/helpers/translator"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -27,19 +27,12 @@ class MyApp extends App {
   render() {
     const { Component, pageProps, translations } = this.props
 
-    const polyglot = new Polyglot({
-      phrases: translations.general
-    })
+    // Setup translations via Polyglot
+    addTranslation(translations.general)
 
-    // Using extend will overwrite any duplicate keys, so this can be
-    // used by groups to overwrite any standard translation keys, in
-    // addition to adding their own group-specific translation keys
-    polyglot.extend(translations.sj)
-    // Swap above line with below to use SMC translations instead of SJ.
-    // polyglot.extend(translations.smc)
-
-    pageProps.polyglot = polyglot
-
+    // Extend for different languages or organizations
+    // addTranslation(translations.sj)
+    //
     return (
       <Container>
         <Component {...pageProps} />
