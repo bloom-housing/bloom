@@ -19,13 +19,13 @@ interface ListingProps {
 }
 
 export default class extends Component<ListingProps> {
-  static async getInitialProps({ query }) {
-    const listing_id = query.id
+  public static async getInitialProps({ query }) {
+    const listingId = query.id
     let listing = {}
 
     try {
       const response = await axios.get("http://localhost:3001")
-      listing = response.data.listings.find(l => l.id == listing_id)
+      listing = response.data.listings.find(l => l.id == listingId)
     } catch (error) {
       console.log(error)
     }
@@ -33,14 +33,14 @@ export default class extends Component<ListingProps> {
     return { listing }
   }
 
-  render() {
+  public render() {
     const listing = this.props.listing
 
     const address = {
-      street_address: listing.building_street_address,
+      streetAddress: listing.building_street_address,
       city: listing.building_city,
       state: listing.building_state,
-      zip_code: listing.building_zip_code
+      zipCode: listing.building_zip_code
     }
 
     const oneLineAddress = <OneLineAddress address={address} />
@@ -49,8 +49,8 @@ export default class extends Component<ListingProps> {
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
 
     const unitSummariesHeaders = {
-      unit_type: "Unit Type",
-      minimum_income: "Minimum Income",
+      unitType: "Unit Type",
+      minimumIncome: "Minimum Income",
       rent: "Rent",
       availability: "Availability"
     }
@@ -102,7 +102,7 @@ export default class extends Component<ListingProps> {
               <p>Featuring helpful listing-related info</p>
             </section>
             <section className="border border-gray-400 border-b-0 p-5">
-              <WhatToExpect listing={listing} />
+              <WhatToExpect />
             </section>
             <section className="border border-gray-400 p-5">
               <LeasingAgent listing={listing} />
