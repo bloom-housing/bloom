@@ -3,6 +3,8 @@ import ReactDOMServer from "react-dom/server"
 import { unitSummariesTable } from "../lib/unit_summaries"
 import Layout from "../layouts/application"
 import { Listing } from "@dahlia/ui-components/src/types"
+import ApplicationDeadline from "@dahlia/ui-components/src/page_components/listing_sidebar/application_deadline"
+import Waitlist from "@dahlia/ui-components/src/page_components/listing_sidebar/waitlist"
 import WhatToExpect from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect"
 import LeasingAgent from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent"
 import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header"
@@ -92,11 +94,11 @@ export default class extends Component<ListingProps> {
           </div>
 
           <aside className="w-full md:absolute md:right-0 md:w-1/3">
-            <section className="border border-gray-400 border-b-0 p-5">
-              <p>Hello, I am a sidebar waiting for content</p>
+            <section className="border border-gray-400 border-b-0 p-5 bg-blue-100">
+              <ApplicationDeadline listing={listing} />
             </section>
-            <section className="border border-gray-400 border-b-0 p-5">
-              <p>I can have multiple sections</p>
+            <section className="border border-gray-400 border-b-0 p-5 bg-gray-100">
+              <Waitlist listing={listing} />
             </section>
             <section className="border border-gray-400 border-b-0 p-5">
               <p>Featuring helpful listing-related info</p>
