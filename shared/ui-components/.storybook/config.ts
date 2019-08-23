@@ -1,4 +1,5 @@
 import { configure } from "@storybook/react"
+import "@dahlia/styles/src/index.scss"
 
 // automatically import all files ending in *.stories.tsx
 const req = require.context("../src", true, /stories\.tsx$/)
