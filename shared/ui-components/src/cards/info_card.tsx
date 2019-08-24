@@ -1,7 +1,7 @@
 import * as React from "react"
 
 interface InfoCardProps {
-  title: String
+  title: string
   children: JSX.Element
 }
 
