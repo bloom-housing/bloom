@@ -16,4 +16,5 @@ export interface Listing {
   credit_history: string
   rental_history: string
   units: any
+  groupedUnits: any
 }

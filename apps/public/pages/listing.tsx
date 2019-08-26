@@ -168,7 +168,7 @@ export default class extends Component<ListingProps> {
                 <Description term="Property Amenities" description={listing.amenities} />
                 <Description
                   term="Unit Features"
-                  description={<UnitTables units={listing.units} />}
+                  description={<UnitTables groupedUnits={listing.groupedUnits} />}
                 />
               </dl>
             </ContentSection>
