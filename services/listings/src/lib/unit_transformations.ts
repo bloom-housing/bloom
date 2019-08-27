@@ -36,27 +36,15 @@ const getUnitTypeLabel = (unitType: string): string => {
 }
 
 const getUnitAreaRange = (units: Units) => {
-  let min = units[0].sq_ft
-  let max = units[0].sq_ft
-  units.forEach(unit => {
-    if (unit.sq_ft < min) min = unit.sq_ft
-    if (unit.sq_ft > max) max = unit.sq_ft
-  })
-  let range = `${min} square feet`
-  if (min != max) range += ` - ${max} square feet`
-  return range
+  const sq_fts = units.map(unit => unit.sq_ft)
+  const [min, max] = [Math.min(...sq_fts), Math.max(...sq_fts)]
+  return min != max ? `${min} square feet - ${max} square feet` : `${min} square feet`
 }
 
 const getUnitFloorRange = (units: Units) => {
-  let min = units[0].floor
-  let max = units[0].floor
-  units.forEach(unit => {
-    if (unit.floor < min) min = unit.floor
-    if (unit.floor > max) max = unit.floor
-  })
-  let range = `${ordinalize(min)} floor`
-  if (min != max) range = `${ordinalize(min)} - ${ordinalize(max)} floors`
-  return range
+  const floors = units.map(unit => unit.floor)
+  const [min, max] = [Math.min(...floors), Math.max(...floors)]
+  return min != max ? `${ordinalize(min)} - ${ordinalize(max)} floors` : `${ordinalize(min)} floor`
 }
 
 export const transformUnitsIntoGroups = (units: Units): GroupedUnitsWithSummarys => {
