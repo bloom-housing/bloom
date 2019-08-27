@@ -1,10 +1,14 @@
+import {
+  Unit,
+  UnitGroup,
+  GroupedUnits,
+  UnitGroupSummary,
+  UnitGroupWithSummary,
+  GroupedUnitsWithSummaries
+} from "@dahlia/ui-components/src/types"
 type StringDict = { [key: string]: string }
 type AnyDict = { [key: string]: any }
-type Units = [AnyDict]
-type UnitGroup = [string, Units]
-type GroupedUnits = UnitGroup[]
-type UnitGroupWithSummary = [string, Units, AnyDict]
-type GroupedUnitsWithSummarys = UnitGroupWithSummary[]
+type Units = [Unit]
 
 const ordinalize = (num: number): string => {
   const standardSuffix = "th"
@@ -47,7 +51,7 @@ const getUnitFloorRange = (units: Units) => {
   return min != max ? `${ordinalize(min)} - ${ordinalize(max)} floors` : `${ordinalize(min)} floor`
 }
 
-export const transformUnitsIntoGroups = (units: Units): GroupedUnitsWithSummarys => {
+export const transformUnitsIntoGroups = (units: Units): GroupedUnitsWithSummaries => {
   let groupedByType = {} as AnyDict
   units.forEach(item => {
     if (!groupedByType[item.unit_type]) {
@@ -68,7 +72,7 @@ export const transformUnitsIntoGroups = (units: Units): GroupedUnitsWithSummarys
         unit_type_label: getUnitTypeLabel(group[0]),
         area_range: getUnitAreaRange(group[1]),
         floor_range: getUnitFloorRange(group[1])
-      })
+      } as UnitGroupSummary)
       return newGroup
     }
   )

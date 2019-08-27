@@ -1,11 +1,16 @@
 import * as React from "react"
+import { GroupedUnitsWithSummaries, UnitGroupWithSummary } from "@dahlia/ui-components/src/types"
 import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table"
 
 const toggleTable = (event: any) => {
   event.currentTarget.parentElement.querySelector(".unit-table").classList.toggle("hidden")
 }
 
-const UnitTables = (props: any) => {
+interface UnitTablesProps {
+  groupedUnits: GroupedUnitsWithSummaries
+}
+
+const UnitTables = (props: UnitTablesProps) => {
   const groupedUnits = props.groupedUnits
 
   const unitsHeaders = {
@@ -17,7 +22,7 @@ const UnitTables = (props: any) => {
 
   return (
     <>
-      {groupedUnits.map((unitsGroup: any) => (
+      {groupedUnits.map((unitsGroup: UnitGroupWithSummary) => (
         <div>
           <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
             <h3 className="bg-blue-100 p-4 border-0 border-b border-blue-600">
