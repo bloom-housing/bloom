@@ -10,7 +10,7 @@ interface LeasingAgentProps {
 const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
-  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, "")}`
+  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-()]/g, "")}`
 
   let leasingAddress = null
   let googleMapsHref = undefined
@@ -22,11 +22,11 @@ const LeasingAgent = (props: LeasingAgentProps) => {
       state: listing.leasing_agent_state,
       zipCode: listing.leasing_agent_zip
     }
-    // const oneLineAddress = <OneLineAddress address={address} />
+    const oneLineAddress = <OneLineAddress address={address} />
     leasingAddress = <MultiLineAddress address={address} />
 
-    // googleMapsHref =
-    //   "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
+    googleMapsHref =
+      "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
   }
 
   return (

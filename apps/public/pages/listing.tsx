@@ -3,7 +3,6 @@ import ReactDOMServer from "react-dom/server"
 import { unitSummariesTable } from "../lib/unit_summaries"
 import Layout from "../layouts/application"
 import { Listing } from "@dahlia/ui-components/src/types"
-import ListingAccordion from "@dahlia/ui-components/src/page_components/ListingAccordion/ListingAccordion"
 import WhatToExpect from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect"
 import LeasingAgent from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent"
 import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header"
@@ -107,7 +106,6 @@ export default class extends Component<ListingProps> {
           </aside>
 
           <div className="w-full md:w-2/3">
-            <ListingAccordion listing={listing} />
             <em>Listing Id: {listing.id}</em>
           </div>
         </article>
