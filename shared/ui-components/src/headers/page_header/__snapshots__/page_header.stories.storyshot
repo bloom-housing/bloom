@@ -3,7 +3,7 @@
 exports[`Storyshots Headers|PageHeader with text content 1`] = `
 <PageHeader>
   <header
-    className="bg-gray-300 py-10 px-5"
+    className="py-10 px-5 bg-gray-300"
   >
     <h1
       className="title m-auto max-w-5xl"

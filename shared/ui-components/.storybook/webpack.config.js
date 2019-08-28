@@ -15,9 +15,18 @@ module.exports = ({ config }) => {
     ]
   })
   config.module.rules.push({
-    test: /\.css$/,
-    use: ["style-loader", "css-loader"],
-    include: path.resolve(__dirname, "../")
+    test: /\.scss$/,
+    use: [
+      "style-loader",
+      {
+        loader: "postcss-loader",
+        options: {
+          ident: "postcss",
+          plugins: [require("tailwindcss"), require("autoprefixer")]
+        }
+      },
+      "sass-loader"
+    ]
   })
   config.resolve.extensions.push(".ts", ".tsx")
   return config

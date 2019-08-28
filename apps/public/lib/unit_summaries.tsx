@@ -1,10 +1,10 @@
 import * as React from "react"
 
-export const unitSummariesTable = (listing): Array<Object> => {
+export const unitSummariesTable = (listing: Record<string, any>) => {
   const unitSummaries = listing.unit_summaries.general.map(unitSummary => {
     return {
-      unit_type: <strong>{unitSummary.unit_type}</strong>,
-      minimum_income: (
+      unitType: <strong>{unitSummary.unit_type}</strong>,
+      minimumIncome: (
         <>
           <strong>${parseInt(unitSummary.min_income_range.min, 10)}</strong>/month
         </>

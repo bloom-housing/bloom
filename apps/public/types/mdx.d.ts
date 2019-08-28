@@ -8,7 +8,7 @@ declare module "@mdx-js/react" {
   export class MDXProvider extends React.Component<MDXProps> {}
 }
 
-declare module '*.mdx' {
-  let MDXComponent: (props) => JSX.Element;
-  export default MDXComponent;
+declare module "*.mdx" {
+  let MDXComponent: (props) => JSX.Element
+  export default MDXComponent
 }

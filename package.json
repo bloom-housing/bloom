@@ -12,21 +12,24 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "dev:all": "concurrently \"cd services/listings && yarn dev\" \"cd apps/public && yarn dev\"",
+    "dev:app:public": "wait-on http://localhost:3001/ && cd apps/public && yarn dev",
+    "dev:all": "concurrently \"cd services/listings && yarn dev\" \"yarn dev:app:public\"",
     "test:all": "concurrently \"cd services/listings && yarn test\" \"cd apps/public && yarn test\""
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
-    "concurrently": "^4.1.1",
-    "eslint": "^6.1.0",
-    "eslint-config-prettier": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.1-alpha.20",
+    "concurrently": "^4.1.2",
+    "eslint": "^6.2.1",
+    "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
-    "husky": "^3.0.2",
-    "lint-staged": "^9.2.1",
+    "husky": "^3.0.4",
+    "lint-staged": "^9.2.3",
     "prettier": "^1.18.2",
-    "rimraf": "^2.6.3"
+    "rimraf": "^3.0.0",
+    "typescript": "^3.5.3",
+    "wait-on": "^3.3.0"
   },
   "prettier": {
     "singleQuote": false,
