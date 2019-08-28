@@ -7,7 +7,7 @@ interface ContentSectionProps {
   children: JSX.Element
 }
 
-export const ContentSection = (props: ContentSectionProps) => (
+const ContentSection = (props: ContentSectionProps) => (
   <section className="py-10">
     {props.title && (
       <header className="mb-5">
@@ -21,3 +21,5 @@ export const ContentSection = (props: ContentSectionProps) => (
     {props.children}
   </section>
 )
+
+export default ContentSection

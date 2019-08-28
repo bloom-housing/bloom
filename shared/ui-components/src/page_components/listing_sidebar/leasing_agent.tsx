@@ -51,7 +51,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
         <p className="mt-5 text-gray-700">
           {leasingAddress}
           <br />
-          <a href={"asdf"} target="_blank">
+          <a href={googleMapsHref} target="_blank">
             Get Directions
           </a>
         </p>
