@@ -13,12 +13,10 @@ class MyApp extends App {
     }
 
     const generalTranslations = await import("../static/locales/general.json")
-    const sjTranslations = await import("../static/locales/sj.json")
-    const smcTranslations = await import("../static/locales/smc.json")
+    const spanishTranslations = await import("../static/locales/es.json")
     const translations = {
       general: generalTranslations,
-      sj: sjTranslations,
-      smc: smcTranslations
+      es: spanishTranslations
     }
 
     return { pageProps, translations }
@@ -30,9 +28,12 @@ class MyApp extends App {
     // Setup translations via Polyglot
     addTranslation(translations.general)
 
-    // Extend for different languages or organizations
-    // addTranslation(translations.sj)
-    //
+    // Extend for different languages
+    const language = this.props.router.query.language
+    if (language) {
+      addTranslation(translations[language])
+    }
+
     return (
       <Container>
         <Component {...pageProps} />
