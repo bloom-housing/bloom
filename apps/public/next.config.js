@@ -36,8 +36,11 @@ module.exports = withMDX(
         // combine the map of post pages with the home
         return Object.assign({}, pages, {
           "/": { page: "/" },
-          "/about": { page: "/about" },
-          "/listings": { page: "/listings" }
+          "/listings": { page: "/listings" },
+          "/disclaimer": { page: "disclaimer" },
+          "/privacy": { page: "/privacy" },
+          "/es": { page: "/es" },
+          "/es/listings": { page: "/es/listings" }
         })
       }
     })

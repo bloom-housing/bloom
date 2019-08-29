@@ -14,7 +14,11 @@ export default props => {
 
   return (
     <Layout>
-      <Hero title={heroTitle} buttonTitle="See Rentals" buttonLink="/listings" />
+      <Hero
+        title={heroTitle}
+        buttonTitle={t("WELCOME.SEE_RENTAL_LISTINGS")}
+        buttonLink="/listings"
+      />
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>
           <PageContent />
