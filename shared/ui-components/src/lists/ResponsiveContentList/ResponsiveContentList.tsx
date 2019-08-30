@@ -9,7 +9,7 @@ import {
 } from "react-accessible-accordion"
 
 interface ResponsiveContentProps {
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 const ResponsiveContentList = (props: ResponsiveContentProps) => (
