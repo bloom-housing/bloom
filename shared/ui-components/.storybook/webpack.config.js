@@ -1,6 +1,3 @@
-const path = require("path")
-const include = path.resolve(__dirname, "../")
-
 module.exports = ({ config }) => {
   config.module.rules.push({
     test: /\.(ts|tsx)$/,
