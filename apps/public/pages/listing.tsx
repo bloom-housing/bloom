@@ -73,18 +73,11 @@ export default class extends Component<ListingProps> {
                     View on Map
                   </a>
                 </p>
-                <div className="mt-12 mb-6">
-                  <BasicTable
-                    headers={unitSummariesHeaders}
-                    data={unitSummaries}
-                    responsiveCollapse={true}
-                  />
-                </div>
               </>
             }
           />
 
-          <div className="w-full md:w-2/3 mt-12 mb-6 px-3">
+          <div className="w-full md:w-2/3 mt-6 mb-6 px-3">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
