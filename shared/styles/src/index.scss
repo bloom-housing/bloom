@@ -1,14 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
-@import url(https://fonts.googleapis.com/css?family=Lato:400,900,700);
-@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,900,700");
+@import url("https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic");
 
 $primary-color: #0077da;
 $sans-font: "Open Sans", Helvetica, Arial, Verdana, sans-serif;
-$alt-sans-font: Lato, Helvetica, Arial, Verdana, sans-serif;
+$alt-sans-font: "Lato", Helvetica, Arial, Verdana, sans-serif;
 $serif-font: "Droid Serif", Georgia, Times, serif;
 
 .t-sans {
@@ -30,7 +30,12 @@ body {
   @apply bg-white;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: $serif-font;
 }
 
@@ -58,7 +63,7 @@ h1.title {
   margin-left: 2rem;
   padding-left: 3rem;
   position: relative;
- }
+}
 
 .custom-counter_item::before {
   position: absolute;
@@ -68,7 +73,7 @@ h1.title {
   margin-right: 5px;
   color: #333;
   font-size: 4.375rem;
-  line-height: .85;
+  line-height: 0.85;
   font-family: "Droid Serif", Georgia, Times, serif;
 }
 
@@ -79,7 +84,6 @@ h1.title {
   padding-left: 1rem;
 }
 
-
 table tr:nth-of-type(even) {
   background: #f5f8f9;
 }
@@ -89,7 +93,9 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
 
 @media screen and (max-width: 639px) {
   table.responsive-collapse {
-    thead { display: none; }
+    thead {
+      display: none;
+    }
     tr {
       display: block;
       margin-bottom: 1.75em;
@@ -100,21 +106,23 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     td:nth-of-type(even) {
       background: #f5f8f9;
     }
-  
+
     td {
       display: block;
       text-align: right;
     }
-  
+
     td:before {
       content: attr(data-label);
       float: left;
       font-weight: bold;
       text-transform: uppercase;
     }
-  
-    td:last-child { border-bottom: 0; }
-  } 
+
+    td:last-child {
+      border-bottom: 0;
+    }
+  }
 }
 
 details.disclosure {
@@ -124,7 +132,7 @@ details.disclosure {
   &[open] {
     margin-bottom: 4em;
   }
-  
+
   & > summary {
     padding: 0 3px 6px 0;
     list-style: none;
@@ -135,7 +143,7 @@ details.disclosure {
     cursor: pointer;
     &:after {
       font-size: 0.8em;
-      content: '⌃';
+      content: "⌃";
       font-weight: bold;
       margin-left: 7px;
       transform: rotate(180deg) translateY(3px);
@@ -148,11 +156,11 @@ details.disclosure {
       transform: rotate(0deg) translateY(2px);
     }
   }
-  
+
   & > summary::-webkit-details-marker {
     display: none;
   }
-  
+
   p {
     margin-top: 1em;
     margin-bottom: 1em;

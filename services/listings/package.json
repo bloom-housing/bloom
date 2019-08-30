@@ -12,9 +12,9 @@
     "@types/koa-router": "^7.0.42",
     "@types/koa__cors": "^2.2.3",
     "@types/node": "^12.7.1",
-    "concurrently": "^4.1.1",
-    "rimraf": "^2.6.3",
-    "ts-node-dev": "^1.0.0-pre.40",
+    "concurrently": "^4.1.2",
+    "rimraf": "^3.0.0",
+    "ts-node-dev": "^1.0.0-pre.42",
     "typescript": "^3.5.3"
   },
   "dependencies": {
