@@ -1,5 +1,4 @@
 import { Component } from "react"
-import { Listing } from "@dahlia/ui-components/src/types"
 import Layout from "../layouts/application"
 import PageHeader from "@dahlia/ui-components/src/headers/page_header/page_header"
 import {

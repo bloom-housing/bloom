@@ -8,11 +8,16 @@ import {
   ResponsiveContentItem,
   ResponsiveContentItemHeader,
   ResponsiveContentItemBody
-} from "@dahlia/ui-components/src/sections/ResponsiveContentList/ResponsiveContentList"
+} from "@dahlia/ui-components/src/lists/ResponsiveContentList/ResponsiveContentList"
+import ListingDetailHeader from "@dahlia/ui-components/src/page_components/ListingDetailHeader/ListingDetailHeader"
+import ContentSection from "@dahlia/ui-components/src/sections/ContentSection"
+import ListSection from "@dahlia/ui-components/src/sections/ListSection"
+import InfoCard from "@dahlia/ui-components/src/cards/InfoCard"
 import WhatToExpect from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect"
 import LeasingAgent from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent"
 import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address"
+import { Description } from "@dahlia/ui-components/src/atoms/description"
 import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table"
 import axios from "axios"
 
@@ -115,26 +120,108 @@ export default class extends Component<ListingProps> {
             <ResponsiveContentList>
               <ResponsiveContentItem>
                 <ResponsiveContentItemHeader>
-                  <h2 className="md:text-black font-sans uppercase md:normal-case md:font-serif md:text-2xl">
-                    Item 1 Header
-                  </h2>
+                  <ListingDetailHeader
+                    imageAlt="eligibility-notebook"
+                    imageSrc="/static/images/listing-eligibility.svg"
+                    title="Eligibility"
+                    subtitle="Income, occupancy, preferences, and subsidies"
+                  />
                 </ResponsiveContentItemHeader>
                 <ResponsiveContentItemBody>
-                  <p>Item 1 Content</p>
+                  <ul>
+                    <ListSection
+                      title="Household Maximum Income"
+                      subtitle="For income calculations, household size includes everyone (all ages) living in the unit."
+                    >
+                      <>table goes here…</>
+                    </ListSection>
+                    <ListSection
+                      title="Occupancy"
+                      subtitle="Occupancy limits for this building differ from household size, and do not include children under 6."
+                    >
+                      <>table goes here…</>
+                    </ListSection>
+
+                    <ListSection
+                      title="Rental Assistance"
+                      subtitle="Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be 
+                      considered for this property. In the case of a valid rental subsidy, the required minimum income 
+                      will be based on the portion of the rent that the tenant pays after use of the subsidy."
+                    />
+
+                    <ListSection
+                      title="Housing Preferences"
+                      subtitle="Preference holders will be given highest ranking."
+                    >
+                      <>table goes here…</>
+                    </ListSection>
+
+                    <ListSection
+                      title="Additional Eligibility Rules"
+                      subtitle="Applicants must also qualify under the rules of the building."
+                    >
+                      <>
+                        <InfoCard title="Credit History">
+                          <p className="text-sm text-gray-700">{listing.credit_history}</p>
+                        </InfoCard>
+                        <InfoCard title="Rental History">
+                          <p className="text-sm text-gray-700">{listing.rental_history}</p>
+                        </InfoCard>
+                      </>
+                    </ListSection>
+                  </ul>
                 </ResponsiveContentItemBody>
               </ResponsiveContentItem>
 
               <ResponsiveContentItem>
                 <ResponsiveContentItemHeader>
-                  <h2 className="md:text-black font-sans uppercase md:normal-case md:font-serif md:text-2xl">
-                    Item 2 Header
-                  </h2>
+                  <ListingDetailHeader
+                    imageAlt="features-cards"
+                    imageSrc="/static/images/listing-features.svg"
+                    title="Features"
+                    subtitle="Amenities, unit details and additional fees"
+                  />
                 </ResponsiveContentItemHeader>
                 <ResponsiveContentItemBody>
-                  <p>Item 2 Content</p>
+                  <dl>
+                    <Description term="Neighborhood" description={listing.neighborhood} />
+                    <Description term="Built" description={listing.year_built} />
+                    <Description term="Smoking Policy" description={listing.smoking_policy} />
+                    <Description term="Pets Policy" description={listing.pet_policy} />
+                    <Description term="Property Amenities" description={listing.amenities} />
+                  </dl>
+                </ResponsiveContentItemBody>
+              </ResponsiveContentItem>
+
+              <ResponsiveContentItem>
+                <ResponsiveContentItemHeader>
+                  <ListingDetailHeader
+                    imageAlt="neighborhood-buildings"
+                    imageSrc="/static/images/listing-neighborhood.svg"
+                    title="Neighborhood"
+                    subtitle="Location and transportation"
+                  />
+                </ResponsiveContentItemHeader>
+                <ResponsiveContentItemBody>
+                  <p>Map goes here…</p>
+                </ResponsiveContentItemBody>
+              </ResponsiveContentItem>
+
+              <ResponsiveContentItem>
+                <ResponsiveContentItemHeader>
+                  <ListingDetailHeader
+                    imageAlt="additional-information-envelope"
+                    imageSrc="/static/images/listing-legal.svg"
+                    title="Additional Information"
+                    subtitle="Required documents and selection criteria"
+                  />
+                </ResponsiveContentItemHeader>
+                <ResponsiveContentItemBody>
+                  <p className="text-sm text-gray-700">{listing.required_documents}</p>
                 </ResponsiveContentItemBody>
               </ResponsiveContentItem>
             </ResponsiveContentList>
+
             <em>Listing Id: {listing.id}</em>
           </div>
         </article>
