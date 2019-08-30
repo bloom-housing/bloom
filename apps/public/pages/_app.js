@@ -8,7 +8,7 @@ class MyApp extends App {
     let pageProps = {} // you can add custom props that pass down to all pages here
 
     if (Component.getInitialProps) {
-      let compAsyncProps = await Component.getInitialProps(ctx)
+      const compAsyncProps = await Component.getInitialProps(ctx)
       pageProps = { ...pageProps, ...compAsyncProps }
     }
 

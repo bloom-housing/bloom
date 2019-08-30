@@ -1,21 +1,26 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
+import { Listing } from "../../types"
 import { OneLineAddress, MultiLineAddress } from "../../helpers/address"
 
-const LeasingAgent = (props: any) => {
+interface LeasingAgentProps {
+  listing: Listing
+}
+
+const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
   const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, "")}`
 
   let leasingAddress = null
-  let googleMapsHref = null
+  let googleMapsHref = undefined
 
   if (listing.leasing_agent_street) {
     const address = {
-      street_address: listing.leasing_agent_street,
+      streetAddress: listing.leasing_agent_street,
       city: listing.leasing_agent_city,
       state: listing.leasing_agent_state,
-      zip_code: listing.leasing_agent_zip
+      zipCode: listing.leasing_agent_zip
     }
     const oneLineAddress = <OneLineAddress address={address} />
     leasingAddress = <MultiLineAddress address={address} />
@@ -42,7 +47,7 @@ const LeasingAgent = (props: any) => {
         <a href={`mailto:${listing.leasing_agent_email}`}>Email</a>
       </p>
 
-      {listing.leasing_agent_street > 0 && (
+      {listing.leasing_agent_street && (
         <p className="mt-5 text-gray-700">
           {leasingAddress}
           <br />
