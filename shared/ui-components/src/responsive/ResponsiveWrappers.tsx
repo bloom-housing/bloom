@@ -4,7 +4,7 @@ import Media from "react-media"
 import * as tailwindConfig from "../../tailwind.config.js"
 
 interface ResponsiveWrapperProps {
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 const mdBreakpoint = parseInt(tailwindConfig.theme.screens.md.replace("px", ""))
