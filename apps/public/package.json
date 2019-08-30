@@ -32,7 +32,7 @@
     "concurrently": "^4.1.2",
     "cypress": "^3.4.0",
     "next-transpile-modules": "^2.3.1",
-    "typescript": "^3.5.3",
+    "typescript": "^3.6.2",
     "webpack": "^4.39.2"
   }
 }
