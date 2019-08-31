@@ -22,9 +22,9 @@ module.exports = withMDX(
         }
 
         // tranform the list of posts into a map of pages with the pathname `/post/:id`
-        const pages = listings.reduce(
-          (pages, listing) =>
-            Object.assign({}, pages, {
+        const listingPaths = listings.reduce(
+          (listingPaths, listing) =>
+            Object.assign({}, listingPaths, {
               [`/listing/${listing.id}`]: {
                 page: "/listing",
                 query: { id: listing.id }
@@ -33,11 +33,27 @@ module.exports = withMDX(
           {}
         )
 
-        // combine the map of post pages with the home
-        return Object.assign({}, pages, {
+        // define page paths for various available languages
+        const translatablePaths = {
           "/": { page: "/" },
-          "/about": { page: "/about" },
           "/listings": { page: "/listings" }
+        }
+        const languages = ["es"] // add new language codes here
+        const languagePaths = {}
+        Object.entries(translatablePaths).forEach(([key, value]) => {
+          languagePaths[key] = value
+          languages.forEach(language => {
+            languagePaths[`/${language}${key.replace(/^\/$/, "")}`] = {
+              ...value,
+              query: { language }
+            }
+          })
+        })
+
+        // combine the map of all various types of page paths
+        return Object.assign({}, listingPaths, languagePaths, {
+          "/disclaimer": { page: "disclaimer" },
+          "/privacy": { page: "/privacy" }
         })
       }
     })
