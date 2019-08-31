@@ -1,6 +1,6 @@
 import React from "react"
 import App, { Container } from "next/app"
-import "@dahlia/styles/src/index.scss"
+import "@bloom/styles/src/index.scss"
 import Polyglot from "node-polyglot"
 
 class MyApp extends App {
