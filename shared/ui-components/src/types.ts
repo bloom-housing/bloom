@@ -68,5 +68,5 @@ export interface UnitGroupSummary {
   area_range: string
   floor_range: string
 }
-export type UnitGroupWithSummary = [string, Units, UnitGroupSummary]
+export type UnitGroupWithSummary = [string, [Unit], UnitGroupSummary]
 export type GroupedUnitsWithSummaries = UnitGroupWithSummary[]
