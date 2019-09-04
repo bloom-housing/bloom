@@ -1,6 +1,10 @@
 import * as React from "react"
+import { Address } from "../types"
+interface AddressProps {
+  address: Address
+}
 
-export const OneLineAddress = (props: any) => (
+export const OneLineAddress = (props: AddressProps) => (
   <>
     {props.address.streetAddress},{` `}
     {props.address.city} {props.address.state},{` `}
@@ -8,7 +12,7 @@ export const OneLineAddress = (props: any) => (
   </>
 )
 
-export const MultiLineAddress = (props: any) => (
+export const MultiLineAddress = (props: AddressProps) => (
   <>
     {props.address.streetAddress}
     <br />

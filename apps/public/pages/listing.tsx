@@ -15,6 +15,7 @@ import { ListSection } from "@dahlia/ui-components/src/sections/list_section"
 import { InfoCard } from "@dahlia/ui-components/src/cards/info_card"
 import { Description } from "@dahlia/ui-components/src/atoms/description"
 import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table"
+import UnitTables from "@dahlia/ui-components/src/page_components/unit_tables"
 import axios from "axios"
 
 interface ListingProps {
@@ -22,7 +23,7 @@ interface ListingProps {
 }
 
 export default class extends Component<ListingProps> {
-  static async getInitialProps({ query }) {
+  public static async getInitialProps({ query }) {
     const listingId = query.id
     let listing = {}
 
@@ -36,7 +37,7 @@ export default class extends Component<ListingProps> {
     return { listing }
   }
 
-  render() {
+  public render() {
     const listing = this.props.listing
 
     const address = {
@@ -75,18 +76,11 @@ export default class extends Component<ListingProps> {
                     View on Map
                   </a>
                 </p>
-                <div className="mt-12 mb-6">
-                  <BasicTable
-                    headers={unitSummariesHeaders}
-                    data={unitSummaries}
-                    responsiveCollapse={true}
-                  />
-                </div>
               </>
             }
           />
 
-          <div className="w-full md:w-2/3 mt-12 mb-6 px-3">
+          <div className="w-full md:w-2/3 mt-6 mb-6 px-3">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
@@ -103,7 +97,7 @@ export default class extends Component<ListingProps> {
             </section>
             <Apply listing={listing} />
             <section className="border border-gray-400 border-b-0 p-5">
-              <WhatToExpect listing={listing} />
+              <WhatToExpect />
             </section>
             <section className="border border-gray-400 p-5">
               <LeasingAgent listing={listing} />
@@ -166,6 +160,10 @@ export default class extends Component<ListingProps> {
                 <Description term="Smoking Policy" description={listing.smoking_policy} />
                 <Description term="Pets Policy" description={listing.pet_policy} />
                 <Description term="Property Amenities" description={listing.amenities} />
+                <Description
+                  term="Unit Features"
+                  description={<UnitTables groupedUnits={listing.groupedUnits} />}
+                />
               </dl>
             </ContentSection>
 

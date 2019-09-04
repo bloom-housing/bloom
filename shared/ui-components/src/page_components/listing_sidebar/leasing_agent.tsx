@@ -1,7 +1,14 @@
 import * as React from "react"
 import Address from "./address"
+import t from "../../helpers/translator"
+import { Listing } from "../../types"
 
-const LeasingAgent = (props: any) => {
+
+interface LeasingAgentProps {
+  listing: Listing
+}
+
+const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
   const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, "")}`
@@ -24,7 +31,7 @@ const LeasingAgent = (props: any) => {
       <p className="mt-5">
         <a href={phoneNumber}>Call {listing.leasing_agent_phone}</a>
       </p>
-      <p className="text-sm text-gray-700">Due to high call volume you may hear a message.</p>
+      <p className="text-sm text-gray-700">{t("LEASING_AGENT.DUE_TO_HIGH_CALL_VOLUME")}</p>
 
       <p className="my-5">
         <a href={`mailto:${listing.leasing_agent_email}`}>Email</a>

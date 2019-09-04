@@ -76,6 +76,56 @@
       }
     ]
   },
+  "units": [
+    {
+      "id": 4,
+      "ami_percentage": "80.0",
+      "annual_income_min": "58152.0",
+      "monthly_income_min": "4858.0",
+      "floor": 2,
+      "annual_income_max": "103350.0",
+      "max_occupancy": 2,
+      "min_occupancy": 1,
+      "monthly_rent": "2429.0",
+      "num_bathrooms": 1,
+      "num_bedrooms": null,
+      "number": "265",
+      "priority_type": null,
+      "reserved_type": null,
+      "sq_ft": 750,
+      "status": "available",
+      "unit_type": "one_bdrm",
+      "created_at": "2019-06-03T17:42:43.134Z",
+      "updated_at": "2019-07-10T16:43:16.766Z",
+      "listing_id": 3,
+      "ami_chart_id": 1,
+      "monthly_rent_as_percent_of_income": null
+    },
+    {
+      "id": 3,
+      "ami_percentage": "80.0",
+      "annual_income_min": "85368.0",
+      "monthly_income_min": "5992.0",
+      "floor": 4,
+      "annual_income_max": "160150.0",
+      "max_occupancy": 7,
+      "min_occupancy": 5,
+      "monthly_rent": "2996.0",
+      "num_bathrooms": 1,
+      "num_bedrooms": null,
+      "number": "448",
+      "priority_type": null,
+      "reserved_type": null,
+      "sq_ft": 1304,
+      "status": "available",
+      "unit_type": "three_bdrm",
+      "created_at": "2019-06-03T17:42:43.134Z",
+      "updated_at": "2019-07-10T16:44:01.384Z",
+      "listing_id": 3,
+      "ami_chart_id": 1,
+      "monthly_rent_as_percent_of_income": null
+    }
+  ],
   "total_units": 2,
   "units_available": 2
 }

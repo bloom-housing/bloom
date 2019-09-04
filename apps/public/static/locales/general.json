@@ -105,12 +105,16 @@
       "APPLICATIONS_THAT_QUALIFY_FOR_PREFERENCE": "Applications that qualify for this preference will be given a higher priority in the lottery.",
       "VIEW_PREFERENCE_LIST": "View Preference List"
   },
+  "REGION": {
+    "NAME": "Local Region"
+  },
   "NAV": {
       "BROWSE_PROPERTIES": "Browse Properties",
       "GET_ASSISTANCE": "Get Assistance",
       "GET_FEEDBACK": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='{{feedbackUrl}}'>your feedback.</a>",
       "SIGN_IN": "Sign In",
-      "SIGN_OUT": "Sign Out"
+      "SIGN_OUT": "Sign Out",
+      "SITE_TITLE": "Housing Portal"
   },
   "PAGE_TITLE": {
       "ADDITIONAL_RESOURCES": "More Housing Opportunities",
@@ -134,6 +138,6 @@
   "WELCOME": {
       "ALL_APPLICATION_CLOSED": "All applications are currently closed, but you can view closed listings.",
       "SEE_RENTAL_LISTINGS": "See Rentals",
-      "TITLE": "Apply for affordable housing in <span class=\"hero-title_highlight\">the Bay Area</span>"
+      "TITLE": "Apply for affordable housing in"
   }
 }

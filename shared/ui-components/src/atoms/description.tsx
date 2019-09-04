@@ -1,7 +1,7 @@
 import * as React from "react"
 
 interface DescriptionProps {
-  term: String
+  term: string
   description: any
 }
 
