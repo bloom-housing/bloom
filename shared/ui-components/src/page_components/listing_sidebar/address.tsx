@@ -4,15 +4,12 @@ import { OneLineAddress, MultiLineAddress } from "../../helpers/address"
 
 const Address = (props: any) => {
   const address = props.address
-  const office_hours = props.office_hours
-  
-
+  const officeHours = props.officeHours
   let mainAddress = null
-  let googleMapsHref = ''
-  let hours = (<></>)
+  let googleMapsHref = ""
+  let hours = <></>
 
-
-  if (address.street_address) {
+  if (address.streetAddress) {
     const oneLineAddress = <OneLineAddress address={address} />
     mainAddress = <MultiLineAddress address={address} />
 
@@ -20,20 +17,18 @@ const Address = (props: any) => {
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
   }
 
-  if (office_hours) {
+  if (officeHours) {
     hours = (
       <>
-        <h3 className="my-4 text-gray-600 uppercase t-sans font-bold text-sm">
-          Office Hours
-        </h3>
-        <p>{office_hours}</p>
+        <h3 className="my-4 text-gray-600 uppercase t-sans font-bold text-sm">Office Hours</h3>
+        <p>{officeHours}</p>
       </>
     )
   }
 
   return (
     <>
-      {address.street_address && (
+      {address.streetAddress && (
         <p className="text-gray-700">
           {mainAddress}
           <br />

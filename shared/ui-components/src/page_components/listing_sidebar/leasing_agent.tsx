@@ -1,15 +1,15 @@
 import * as React from "react"
-import Address from "./address";
+import Address from "./address"
 
 const LeasingAgent = (props: any) => {
   const listing = props.listing
 
   const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, "")}`
-  const leasing_agent_address = {
-    street_address: listing.leasing_agent_street,
+  const leasingAgentAddress = {
+    streetAddress: listing.leasing_agent_street,
     city: listing.leasing_agent_city,
     state: listing.leasing_agent_state,
-    zip_code: listing.leasing_agent_zip
+    zipCode: listing.leasing_agent_zip
   }
 
   return (
@@ -30,7 +30,7 @@ const LeasingAgent = (props: any) => {
         <a href={`mailto:${listing.leasing_agent_email}`}>Email</a>
       </p>
 
-      <Address address={leasing_agent_address} office_hours={listing.leasing_agent_office_hours} />
+      <Address address={leasingAgentAddress} officeHours={listing.leasing_agent_office_hours} />
     </>
   )
 }
