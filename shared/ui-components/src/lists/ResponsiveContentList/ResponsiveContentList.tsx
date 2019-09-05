@@ -19,7 +19,9 @@ const ResponsiveContentList = (props: ResponsiveContentProps) => (
         {props.children}
       </Accordion>
     </Mobile>
-    <Desktop>{props.children}</Desktop>
+    <Desktop>
+      <ul>{props.children}</ul>
+    </Desktop>
   </>
 )
 
@@ -28,7 +30,9 @@ const ResponsiveContentItem = (props: ResponsiveContentProps) => (
     <Mobile>
       <AccordionItem>{props.children}</AccordionItem>
     </Mobile>
-    <Desktop>{props.children}</Desktop>
+    <Desktop>
+      <li>{props.children}</li>
+    </Desktop>
   </>
 )
 
