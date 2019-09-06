@@ -1,22 +1,11 @@
 import * as React from "react"
 import { Listing } from "../types"
 import ImageCard from "../cards/image_card"
-import Link from "next/link"
+import Button from "../atoms/Button"
 
 export interface ListingsProps {
   listings: Listing[]
 }
-
-const buttonClasses = [
-  "border",
-  "border-primary",
-  "px-8",
-  "py-4",
-  "text-lg",
-  "uppercase",
-  "t-alt-sans",
-  "inline-block"
-]
 
 export const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
@@ -35,9 +24,9 @@ export const ListingsList = (props: ListingsProps) => {
           />
         </div>
         <div className="w-full md:w-6/12 p-3">
-          <Link href="listing/[id]" as={`/listing/${listing.id}`}>
-            <a className={buttonClasses.join(" ")}>See Details</a>
-          </Link>
+          <Button href="listing/[id]" as={`/listing/${listing.id}`}>
+            See Details
+          </Button>
         </div>
       </article>
     )

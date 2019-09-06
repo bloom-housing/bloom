@@ -1,6 +1,5 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
-@import "tailwindcss/utilities";
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700");
 @import url("https://fonts.googleapis.com/css?family=Lato:400,900,700");
@@ -169,3 +168,6 @@ details.disclosure {
 
 @import "markdown.scss";
 @import "homepage.scss";
+@import "atoms.scss";
+
+@import "tailwindcss/utilities";

@@ -1,0 +1,23 @@
+// Component defined in @bloom/ui-components/src/atoms/Button.tsx
+.button {
+  @apply bg-white;
+  @apply border;
+  @apply border-primary;
+  @apply px-8;
+  @apply py-4;
+  @apply text-lg;
+  @apply uppercase;
+  @apply t-alt-sans;
+  @apply inline-block;
+
+  &.filled {
+    @apply bg-blue-700;
+    @apply text-white;
+  }
+
+  &.small {
+    @apply text-sm;
+    @apply px-4;
+    @apply py-2;
+  }
+}
