@@ -1,10 +1,11 @@
 import * as React from "react"
 
-interface ListingDetailHeaderProps {
+export interface ListingDetailHeaderProps {
   imageAlt: string
   imageSrc: string
   subtitle: string
   title: string
+  children?: React.ReactNode
 }
 
 const ListingDetailHeader = (props: ListingDetailHeaderProps) => (

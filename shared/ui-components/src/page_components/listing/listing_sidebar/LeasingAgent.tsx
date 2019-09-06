@@ -1,7 +1,7 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
-import { Listing } from "../../types"
-import { OneLineAddress, MultiLineAddress } from "../../helpers/address"
+import { Listing } from "../../../types"
+import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 
 interface LeasingAgentProps {
   listing: Listing
