@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Listing } from "../types"
 import ImageCard from "../cards/image_card"
-import Button from "../atoms/Button"
+import LinkButton from "../atoms/LinkButton"
 
 export interface ListingsProps {
   listings: Listing[]
@@ -24,9 +24,9 @@ export const ListingsList = (props: ListingsProps) => {
           />
         </div>
         <div className="w-full md:w-6/12 p-3">
-          <Button href="listing/[id]" as={`/listing/${listing.id}`}>
+          <LinkButton href="listing/[id]" as={`/listing/${listing.id}`}>
             See Details
-          </Button>
+          </LinkButton>
         </div>
       </article>
     )
