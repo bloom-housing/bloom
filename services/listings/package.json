@@ -1,7 +1,7 @@
 {
-  "name": "@dahlia/listings-service",
+  "name": "@bloom/listings-service",
   "version": "0.0.1",
-  "description": "Listings service for next generation Dahlia",
+  "description": "Listings service reference implementation for the Bloom affordable housing system",
   "main": "dist/index.js",
   "author": "Ben Kutler <ben.kutler@exygy.com>",
   "license": "GPL-3.0",

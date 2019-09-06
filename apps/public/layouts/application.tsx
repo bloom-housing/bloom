@@ -1,7 +1,7 @@
 import * as React from "react"
-import t from "@dahlia/ui-components/src/helpers/translator"
-import SiteHeader from "@dahlia/ui-components/src/headers/site_header"
-import SiteFooter from "@dahlia/ui-components/src/footers/site_footer"
+import t from "@bloom/ui-components/src/helpers/translator"
+import SiteHeader from "@bloom/ui-components/src/headers/site_header"
+import SiteFooter from "@bloom/ui-components/src/footers/site_footer"
 
 const Layout = props => (
   <div>

@@ -1,6 +1,6 @@
-# DAHLIA Public Web Interface
+# Bloom Public Web Interface
 
-This is the beginning of the public-facing DAHLIA app.
+This is the beginning of a reference implementation of the public-facing web app.
 
 ## What does this do?
 

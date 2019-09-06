@@ -11,7 +11,7 @@ interface LeasingAgentProps {
 const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
-  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, "")}`
+  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-()]/g, "")}`
 
   let leasingAddress = null
   let googleMapsHref = undefined

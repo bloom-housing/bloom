@@ -1,7 +1,7 @@
 {
-  "name": "@dahlia/ui-components",
+  "name": "@bloom/ui-components",
   "version": "0.0.1",
-  "description": "Shared user interface components for DAHLIA applications",
+  "description": "Shared user interface components for Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
   "private": true,
@@ -42,7 +42,7 @@
     "webpack": "^4.39.1"
   },
   "dependencies": {
-    "@dahlia/styles": "*",
+    "@bloom/styles": "*",
     "@types/node": "^12.7.1",
     "@types/react-dom": "^16.8.5",
     "react": "^16.8.6",

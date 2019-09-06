@@ -1,8 +1,8 @@
 import * as React from "react"
-import t from "@dahlia/ui-components/src/helpers/translator"
+import t from "@bloom/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
-import Hero from "@dahlia/ui-components/src/headers/hero"
-import MarkdownSection from "@dahlia/ui-components/src/sections/markdown_section"
+import Hero from "@bloom/ui-components/src/headers/hero"
+import MarkdownSection from "@bloom/ui-components/src/sections/markdown_section"
 import PageContent from "../page_content/homepage.mdx"
 
 export default props => {

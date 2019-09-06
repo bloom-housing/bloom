@@ -1,7 +1,7 @@
 import React from "react"
 import App, { Container } from "next/app"
-import "@dahlia/styles/src/index.scss"
-import { addTranslation } from "@dahlia/ui-components/src/helpers/translator"
+import "@bloom/styles/src/index.scss"
+import { addTranslation } from "@bloom/ui-components/src/helpers/translator"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
