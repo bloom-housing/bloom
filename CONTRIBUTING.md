@@ -11,3 +11,4 @@ We use GitHub issues to track both bugs and feature ideas.
 ## Code Style
 
 We use the automatic code formatter Prettier. If you're not using an IDE that integrates with it, you should run yarn prettier on all added or changed code before you submit a pull request.
+
