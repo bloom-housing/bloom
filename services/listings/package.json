@@ -1,7 +1,7 @@
 {
-  "name": "@dahlia/listings-service",
+  "name": "@bloom/listings-service",
   "version": "0.0.1",
-  "description": "Listings service for next generation Dahlia",
+  "description": "Listings service reference implementation for the Bloom affordable housing system",
   "main": "dist/index.js",
   "author": "Ben Kutler <ben.kutler@exygy.com>",
   "license": "GPL-3.0",
@@ -15,7 +15,7 @@
     "concurrently": "^4.1.2",
     "rimraf": "^3.0.0",
     "ts-node-dev": "^1.0.0-pre.42",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",

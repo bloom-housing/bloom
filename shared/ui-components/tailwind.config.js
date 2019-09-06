@@ -1,1 +1,1 @@
-module.exports = require("@dahlia/styles/tailwind.config.js")
+module.exports = require("@bloom/styles/tailwind.config.js")

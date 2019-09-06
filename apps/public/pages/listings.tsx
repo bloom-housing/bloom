@@ -1,13 +1,14 @@
 import { Component } from "react"
+import t from "@bloom/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
-import PageHeader from "@dahlia/ui-components/src/headers/page_header/page_header"
+import PageHeader from "@bloom/ui-components/src/headers/page_header/page_header"
 import ListingsList, {
   ListingsProps
-} from "@dahlia/ui-components/src/page_components/listing/ListingsList"
+} from "@bloom/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
 
 export default class extends Component<ListingsProps> {
-  static async getInitialProps() {
+  public static async getInitialProps() {
     let listings = []
 
     try {
@@ -20,10 +21,10 @@ export default class extends Component<ListingsProps> {
     return { listings }
   }
 
-  render() {
+  public render() {
     return (
       <Layout>
-        <PageHeader>Rent affordable housing</PageHeader>
+        <PageHeader>{t("PAGE_TITLE.RENT")}</PageHeader>
         <ListingsList listings={this.props.listings} />
       </Layout>
     )

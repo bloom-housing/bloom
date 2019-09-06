@@ -1,14 +1,14 @@
 {
-  "name": "dahlia",
+  "name": "bloom",
   "version": "0.0.1",
-  "description": "DAHLIA is a system to manage processes for affordable housing",
+  "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": [
     "shared/ui-components",
     "shared/styles",
     "apps/public",
     "services/listings"
   ],
-  "repository": "https://github.com/Exygy/dahlia-x.git",
+  "repository": "https://github.com/Exygy/bloom.git",
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
@@ -28,7 +28,7 @@
     "lint-staged": "^9.2.3",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
-    "typescript": "^3.5.3",
+    "typescript": "^3.6.2",
     "wait-on": "^3.3.0"
   },
   "prettier": {

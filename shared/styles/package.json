@@ -1,7 +1,7 @@
 {
-  "name": "@dahlia/styles",
+  "name": "@bloom/styles",
   "version": "0.0.1",
-  "description": "Shared stylesheets for DAHLIA applications",
+  "description": "Shared stylesheets for the Bloom affordable housing system",
   "main": "index.css",
   "license": "GPL-3.0",
   "private": true,

@@ -23,7 +23,7 @@
     "ADDITIONAL_OPPORTUNITIES": "<p class='c-iron t-small'>For additional Bay Area opportunities, please visit:<br/><a href='https://housing.sfgov.org' target='_blank' class='c-white t-small'>San Francisco Housing Portal</a></p>",
     "CONTACT_EMAIL": "housing@smchousing.org",
     "COPYRIGHT": "San Mateo County",
-    "DAHLIA_DESCRIPTION": "<p class='c-iron'>DAHLIA: San Mateo County Housing Portal is a project of the <br><a href='https://housing.smcgov.org/' target='_blank' class='a-white'>San Mateo County's Department of Housing</a></p><p class='t-small c-iron margin-top'>in partnership with<br><a href='https://isd.smcgov.org/' target='_blank' class='a-white'>San Mateo County's Information Services Department</a><br><a href='http://www.ssf.net/' target='_blank' class='a-white'>City of South San Francisco</a></p>",
+    "BLOOM_DESCRIPTION": "<p class='c-iron'>San Mateo County Housing Portal is a project of the <br><a href='https://housing.smcgov.org/' target='_blank' class='a-white'>San Mateo County's Department of Housing</a></p><p class='t-small c-iron margin-top'>in partnership with<br><a href='https://isd.smcgov.org/' target='_blank' class='a-white'>San Mateo County's Information Services Department</a><br><a href='http://www.ssf.net/' target='_blank' class='a-white'>City of South San Francisco</a></p>",
     "LISTING_QUESTIONS": "For general program inquiries, you may call DOH at 650-802-5050."
   },
   "NAV": {
@@ -31,7 +31,7 @@
     "FEEDBACK_URL": "https://www.surveymonkey.com/r/2QLBYML"
   },
   "T": {
-    "DAHLIA_HOUSING_PORTAL": "DAHLIA<br/><span class=\"header-logo-group\">San Mateo County Housing</span>"
+    "BLOOM_HOUSING_PORTAL": "<span class=\"header-logo-group\">San Mateo County Housing</span>"
   },
   "WELCOME": {
     "SHARED_HOUSING": "Looking for Shared Housing?",
@@ -79,5 +79,4 @@
     "FOSTER_CITY_P1": "For general program inquiries in Foster City, you may call 650-286-3245",
     "FOSTER_CITY_P2": "For listing and application questions, please contact the Property Agent displayed on the listing."
   }
-
 }
