@@ -5,7 +5,7 @@ import Hero from "@bloom/ui-components/src/headers/hero"
 import MarkdownSection from "@bloom/ui-components/src/sections/markdown_section"
 import PageContent from "../page_content/homepage.mdx"
 
-export default props => {
+export default () => {
   const heroTitle = (
     <>
       {t("WELCOME.TITLE")} <em>{t("REGION.NAME")}</em>

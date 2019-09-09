@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Listing } from "../types"
-import ImageCard from "../cards/image_card"
+import { Listing } from "../../types"
+import ImageCard from "../../cards/image_card"
 import Link from "next/link"
 
 export interface ListingsProps {
@@ -18,7 +18,7 @@ const buttonClasses = [
   "inline-block"
 ]
 
-export const ListingsList = (props: ListingsProps) => {
+const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
   const listItems = listings.map(listing => {
@@ -45,3 +45,5 @@ export const ListingsList = (props: ListingsProps) => {
 
   return <>{listItems}</>
 }
+
+export default ListingsList

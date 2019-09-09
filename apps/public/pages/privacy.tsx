@@ -3,7 +3,7 @@ import PageHeader from "@bloom/ui-components/src/headers/page_header/page_header
 import MarkdownSection from "@bloom/ui-components/src/sections/markdown_section"
 import PageContent from "../page_content/privacy_policy.mdx"
 
-export default props => {
+export default () => {
   const pageTitle = <>Privacy Policy</>
 
   return (

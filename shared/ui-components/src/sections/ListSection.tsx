@@ -6,7 +6,7 @@ interface ListSectionProps {
   children?: JSX.Element
 }
 
-export const ListSection = (props: ListSectionProps) => (
+const ListSection = (props: ListSectionProps) => (
   <li className="custom-counter_item">
     <header className="custom-counter_header mb-4">
       <hgroup>
@@ -18,3 +18,5 @@ export const ListSection = (props: ListSectionProps) => (
     {props.children}
   </li>
 )
+
+export default ListSection
