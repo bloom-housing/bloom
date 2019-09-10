@@ -1,5 +1,6 @@
 import * as React from "react"
 import t from "@bloom/ui-components/src/helpers/translator"
+import lRoute from "@bloom/ui-components/src/helpers/localeRoute"
 import Layout from "../layouts/application"
 import Hero from "@bloom/ui-components/src/headers/hero"
 import MarkdownSection from "@bloom/ui-components/src/sections/markdown_section"
@@ -17,7 +18,7 @@ export default () => {
       <Hero
         title={heroTitle}
         buttonTitle={t("WELCOME.SEE_RENTAL_LISTINGS")}
-        buttonLink="/listings"
+        buttonLink={`${lRoute("/listings")}`}
       />
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>

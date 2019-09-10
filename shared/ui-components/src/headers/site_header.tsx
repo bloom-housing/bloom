@@ -1,11 +1,12 @@
 import * as React from "react"
+import lRoute from "../helpers/localeRoute"
 import Link from "next/link"
 
 const SiteHeader = (props: any) => {
   const Logo = () => (
     <div className="max-w-5xl m-auto">
       <div className="float-left bg-white">
-        <Link href="/">
+        <Link href={`${lRoute("/")}`}>
           <a>
             <img src={props.logoSrc} />
             <span className="">{props.title}</span>
@@ -24,7 +25,7 @@ const SiteHeader = (props: any) => {
   const NavBar = () => (
     <div className="h-20 text-right">
       <nav className="max-w-5xl m-auto">
-        <Link href="/listings">
+        <Link href={`${lRoute("/listings")}`}>
           <a>Listings</a>
         </Link>
       </nav>

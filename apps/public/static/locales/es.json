@@ -1,4 +1,7 @@
 {
+  "CONFIG": {
+    "ROUTE_PREFIX": "es"
+  },
   "PAGE_TITLE": {
     "RENT": "Alquiler de viviendas asequibles"
   },
