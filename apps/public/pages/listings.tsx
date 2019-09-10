@@ -2,7 +2,9 @@ import { Component } from "react"
 import t from "@bloom/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
 import PageHeader from "@bloom/ui-components/src/headers/page_header/page_header"
-import { ListingsList, ListingsProps } from "@bloom/ui-components/src/page_components/listings_list"
+import ListingsList, {
+  ListingsProps
+} from "@bloom/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
 
 export default class extends Component<ListingsProps> {

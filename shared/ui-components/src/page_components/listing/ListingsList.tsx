@@ -1,13 +1,13 @@
 import * as React from "react"
-import { Listing } from "../types"
-import ImageCard from "../cards/image_card"
-import LinkButton from "../atoms/LinkButton"
+import { Listing } from "../../types"
+import ImageCard from "../../cards/image_card"
+import LinkButton from "../../atoms/LinkButton"
 
 export interface ListingsProps {
   listings: Listing[]
 }
 
-export const ListingsList = (props: ListingsProps) => {
+const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
   const listItems = listings.map(listing => {
@@ -34,3 +34,5 @@ export const ListingsList = (props: ListingsProps) => {
 
   return <>{listItems}</>
 }
+
+export default ListingsList

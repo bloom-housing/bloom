@@ -9,7 +9,7 @@
     "allowJs": false,
     "jsx": "react",
     "moduleResolution": "node",
-    "rootDirs": ["src", "stories"],
+    "rootDirs": ["src"],
     "baseUrl": "src",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,

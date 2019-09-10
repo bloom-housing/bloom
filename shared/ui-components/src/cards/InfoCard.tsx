@@ -5,10 +5,12 @@ interface InfoCardProps {
   children: JSX.Element
 }
 
-export const InfoCard = (props: InfoCardProps) => (
+const InfoCard = (props: InfoCardProps) => (
   <div className="p-3 bg-grey-200">
     <h4>{props.title}</h4>
 
     {props.children}
   </div>
 )
+
+export default InfoCard
