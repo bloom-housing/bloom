@@ -46,6 +46,7 @@
   "dependencies": {
     "@bloom/styles": "*",
     "@types/node": "^12.7.1",
+    "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.8.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
