@@ -1,8 +1,15 @@
 import * as React from "react"
+import t from "../helpers/translator"
 import lRoute from "../helpers/localeRoute"
 import Link from "next/link"
 
-const SiteHeader = (props: any) => {
+interface SiteHeaderProps {
+  logoSrc: string
+  title: string
+  notice: string
+}
+
+const SiteHeader = (props: SiteHeaderProps) => {
   const Logo = () => (
     <div className="max-w-5xl m-auto">
       <div className="float-left bg-white">
@@ -26,7 +33,7 @@ const SiteHeader = (props: any) => {
     <div className="h-20 text-right">
       <nav className="max-w-5xl m-auto">
         <Link href={`${lRoute("/listings")}`}>
-          <a>Listings</a>
+          <a>{t("NAV.LISTINGS")}</a>
         </Link>
       </nav>
     </div>

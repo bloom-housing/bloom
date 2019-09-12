@@ -2,6 +2,9 @@
   "CONFIG": {
     "ROUTE_PREFIX": "es"
   },
+  "NAV": {
+    "LISTINGS": "Listados"
+  },
   "PAGE_TITLE": {
     "RENT": "Alquiler de viviendas asequibles"
   },

@@ -34,24 +34,26 @@ module.exports = withMDX(
         )
 
         // define page paths for various available languages
-        const translatablePaths = {
+        const translatablePaths = Object.assign({}, listingPaths, {
           "/": { page: "/" },
           "/listings": { page: "/listings" }
-        }
+        })
         const languages = ["es"] // add new language codes here
         const languagePaths = {}
         Object.entries(translatablePaths).forEach(([key, value]) => {
           languagePaths[key] = value
           languages.forEach(language => {
+            const query = Object.assign({}, value.query)
+            query.language = language
             languagePaths[`/${language}${key.replace(/^\/$/, "")}`] = {
               ...value,
-              query: { language }
+              query: query
             }
           })
         })
 
         // combine the map of all various types of page paths
-        return Object.assign({}, listingPaths, languagePaths, {
+        return Object.assign({}, languagePaths, {
           "/disclaimer": { page: "disclaimer" },
           "/privacy": { page: "/privacy" }
         })
