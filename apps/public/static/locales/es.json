@@ -1,15 +1,15 @@
 {
-  "CONFIG": {
-    "ROUTE_PREFIX": "es"
+  "config": {
+    "route_prefix": "es"
   },
-  "NAV": {
-    "LISTINGS": "Listados"
+  "nav": {
+    "listings": "Listados"
   },
-  "PAGE_TITLE": {
-    "RENT": "Alquiler de viviendas asequibles"
+  "page_title": {
+    "rent": "Alquiler de viviendas asequibles"
   },
-  "WELCOME": {
-    "SEE_RENTAL_LISTINGS": "Ver alquileres",
-    "TITLE": "Solicite una vivienda asequible en"
+  "welcome": {
+    "see_rental_listings": "Ver alquileres",
+    "title": "Solicite una vivienda asequible en"
   }
 }

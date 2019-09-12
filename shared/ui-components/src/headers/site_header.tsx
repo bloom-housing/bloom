@@ -33,7 +33,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
     <div className="h-20 text-right">
       <nav className="max-w-5xl m-auto">
         <Link href={`${lRoute("/listings")}`}>
-          <a>{t("NAV.LISTINGS")}</a>
+          <a>{t("nav.listings")}</a>
         </Link>
       </nav>
     </div>
