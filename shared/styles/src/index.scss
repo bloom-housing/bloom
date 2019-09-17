@@ -87,18 +87,6 @@ table tr:nth-of-type(even) {
   background: #f5f8f9;
 }
 
-.btn {
-  @apply font-semibold uppercase py-4 px-8 rounded t-alt-sans text-xs;
-}
-
-.btn-blue {
-  @apply bg-blue-600 text-white;
-}
-
-.btn-blue:hover {
-  @apply bg-blue-700;
-}
-
 .-top {
   top: -0.8rem;
 }
