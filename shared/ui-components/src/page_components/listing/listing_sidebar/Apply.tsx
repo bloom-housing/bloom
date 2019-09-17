@@ -1,18 +1,19 @@
-import * as React from "react"
+import React, { useState } from "react"
+import { Listing } from "../../../types"
+import Button from "../../../atoms/Button"
 import SidebarAddress from "./SidebarAddress"
-class Apply extends React.Component<any> {
-  constructor(props: any) {
-    super(props)
-    this.state = { showDownload: false }
-    this.toggleDownload = this.toggleDownload.bind(this)
-  }
 
-  toggleDownload() {
-    this.setState({ showDownload: !this.state["showDownload"] })
-  }
+interface ApplyProps {
+  listing: Listing
+}
 
-  applicationPickupSection() {
-    const listing = this.props.listing
+const Apply = (props: ApplyProps) => {
+  const { listing } = props
+  const [showDownload, setShowDownload] = useState(false)
+
+  const toggleDownload = () => setShowDownload(!showDownload)
+
+  const applicationPickupSection = () => {
     if (!listing.blank_paper_application_can_be_picked_up) return ""
 
     const leasingAgentAddress = {
@@ -40,10 +41,9 @@ class Apply extends React.Component<any> {
     )
   }
 
-  downloadOptions() {
-    if (!this.state["showDownload"]) return ""
+  const downloadOptions = () => {
+    if (!showDownload) return ""
 
-    const listing = this.props.listing
     return (
       <>
         <p className="text-center mt-2 mb-4 text-sm">
@@ -55,8 +55,7 @@ class Apply extends React.Component<any> {
     )
   }
 
-  dropOffOrSend() {
-    const listing = this.props.listing
+  const dropOffOrSend = () => {
     const body = []
     let header
 
@@ -128,33 +127,31 @@ class Apply extends React.Component<any> {
     return [header, body]
   }
 
-  render() {
-    return (
-      <>
-        <section className="border border-gray-400 border-b-0 p-5">
-          <h2 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider inline-block">
-            How to apply
-          </h2>
-          <div className="t-serif text-xl mb-4">
-            <span className="text-blue-600 pr-1">1</span>
-            Get a Paper Application
-          </div>
-          <button className="btn btn-blue w-full mb-2" onClick={this.toggleDownload}>
-            Download application
-          </button>
-          {this.downloadOptions()}
-          {this.applicationPickupSection()}
-        </section>
-        <section className="border border-gray-400 border-b-0 p-5 bg-gray-100">
-          <div className="t-serif text-xl">
-            <span className="text-blue-600 pr-1 mb-4">2</span>
-            Submit a Paper Application
-          </div>
-          {this.dropOffOrSend()}
-        </section>
-      </>
-    )
-  }
+  return (
+    <>
+      <section className="border border-gray-400 border-b-0 p-5">
+        <h2 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider inline-block">
+          How to apply
+        </h2>
+        <div className="t-serif text-xl mb-4">
+          <span className="text-blue-600 pr-1">1</span>
+          Get a Paper Application
+        </div>
+        <Button filled className="w-full mb-2" onClick={toggleDownload}>
+          Download Application
+        </Button>
+        {downloadOptions()}
+        {applicationPickupSection()}
+      </section>
+      <section className="border border-gray-400 border-b-0 p-5 bg-gray-100">
+        <div className="t-serif text-xl">
+          <span className="text-blue-600 pr-1 mb-4">2</span>
+          Submit a Paper Application
+        </div>
+        {dropOffOrSend()}
+      </section>
+    </>
+  )
 }
 
 export default Apply
