@@ -1,7 +1,7 @@
 {
-  "name": "@dahlia/public",
+  "name": "@bloom/public",
   "version": "0.0.1",
-  "description": "Public-facing web app for the Dahlia affordable housing system",
+  "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
   "private": true,
@@ -13,8 +13,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@dahlia/styles": "*",
-    "@dahlia/ui-components": "*",
+    "@bloom/styles": "*",
+    "@bloom/ui-components": "*",
     "@mdx-js/loader": "^1.1.6",
     "@next/mdx": "^9.0.3",
     "@zeit/next-sass": "^1.0.1",

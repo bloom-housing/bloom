@@ -5,7 +5,7 @@ import {
   UnitGroupSummary,
   UnitGroupWithSummary,
   GroupedUnitsWithSummaries
-} from "@dahlia/ui-components/src/types"
+} from "@bloom/ui-components/src/types"
 type StringDict = { [key: string]: string }
 type AnyDict = { [key: string]: any }
 type Units = [Unit]
@@ -52,7 +52,7 @@ const getUnitFloorRange = (units: Units) => {
 }
 
 export const transformUnitsIntoGroups = (units: Units): GroupedUnitsWithSummaries => {
-  let groupedByType = {} as AnyDict
+  const groupedByType = {} as AnyDict
   units.forEach(item => {
     if (!groupedByType[item.unit_type]) {
       groupedByType[item.unit_type] = []
@@ -67,7 +67,7 @@ export const transformUnitsIntoGroups = (units: Units): GroupedUnitsWithSummarie
   const groupedUnits = Object.entries(groupedByType) as GroupedUnits
   return groupedUnits.map(
     (group: UnitGroup): UnitGroupWithSummary => {
-      let newGroup = Array.from(group) as UnitGroupWithSummary
+      const newGroup = Array.from(group) as UnitGroupWithSummary
       newGroup.push({
         unit_type_label: getUnitTypeLabel(group[0]),
         area_range: getUnitAreaRange(group[1]),

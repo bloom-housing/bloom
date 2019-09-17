@@ -1,7 +1,7 @@
 {
-  "name": "@dahlia/ui-components",
+  "name": "@bloom/ui-components",
   "version": "0.0.1",
-  "description": "Shared user interface components for DAHLIA applications",
+  "description": "Shared user interface components for Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
   "private": true,
@@ -34,7 +34,9 @@
     "jest": "^24.9.0",
     "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
+    "react-accessible-accordion": "^3.0.0",
     "react-docgen-typescript-loader": "^3.1.0",
+    "react-media": "^1.9.2",
     "react-test-renderer": "^16.9.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
@@ -42,8 +44,9 @@
     "webpack": "^4.39.1"
   },
   "dependencies": {
-    "@dahlia/styles": "*",
+    "@bloom/styles": "*",
     "@types/node": "^12.7.1",
+    "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.8.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"

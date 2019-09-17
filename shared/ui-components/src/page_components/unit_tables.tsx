@@ -1,6 +1,6 @@
 import * as React from "react"
-import { GroupedUnitsWithSummaries, UnitGroupWithSummary } from "@dahlia/ui-components/src/types"
-import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table"
+import { GroupedUnitsWithSummaries, UnitGroupWithSummary } from "@bloom/ui-components/src/types"
+import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
 
 const toggleTable = (event: any) => {
   event.currentTarget.parentElement.querySelector(".unit-table").classList.toggle("hidden")

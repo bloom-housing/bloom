@@ -8,7 +8,7 @@ const axios = require("axios")
 module.exports = withMDX(
   withSass(
     withTM({
-      transpileModules: ["@dahlia"],
+      transpileModules: ["@bloom"],
       // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
       async exportPathMap() {
         // we fetch our list of listings, this allow us to dynamically generate the exported pages

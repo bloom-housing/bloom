@@ -1,24 +1,13 @@
 import * as React from "react"
-import { Listing } from "../types"
-import ImageCard from "../cards/image_card"
-import Link from "next/link"
+import { Listing } from "../../types"
+import ImageCard from "../../cards/image_card"
+import LinkButton from "../../atoms/LinkButton"
 
 export interface ListingsProps {
   listings: Listing[]
 }
 
-const buttonClasses = [
-  "border",
-  "border-primary",
-  "px-8",
-  "py-4",
-  "text-lg",
-  "uppercase",
-  "t-alt-sans",
-  "inline-block"
-]
-
-export const ListingsList = (props: ListingsProps) => {
+const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
   const listItems = listings.map(listing => {
@@ -35,9 +24,9 @@ export const ListingsList = (props: ListingsProps) => {
           />
         </div>
         <div className="w-full md:w-6/12 p-3">
-          <Link href="listing/[id]" as={`/listing/${listing.id}`}>
-            <a className={buttonClasses.join(" ")}>See Details</a>
-          </Link>
+          <LinkButton href="listing/[id]" as={`/listing/${listing.id}`}>
+            See Details
+          </LinkButton>
         </div>
       </article>
     )
@@ -45,3 +34,5 @@ export const ListingsList = (props: ListingsProps) => {
 
   return <>{listItems}</>
 }
+
+export default ListingsList

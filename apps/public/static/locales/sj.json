@@ -23,7 +23,7 @@
     "ADDITIONAL_OPPORTUNITIES": "<p class='c-iron t-small'>For additional Bay Area opportunities, please visit:<br/><a href='https://housing.sfgov.org' target='_blank' class='c-white t-small'>San Francisco Housing Portal</a></p>",
     "COPYRIGHT": "City of San José",
     "CONTACT_EMAIL": "housing@sanjoseca.gov",
-    "DAHLIA_DESCRIPTION": "<p class='c-iron'>DAHLIA: San José Housing Portal is a project of the <br><a class='a-white' href='http://www.sanjoseca.gov/housing' target='_blank'>City of San José, Housing Department</a></p>",
+    "BLOOM_DESCRIPTION": "<p class='c-iron'>San José Housing Portal is a project of the <br><a class='a-white' href='http://www.sanjoseca.gov/housing' target='_blank'>City of San José, Housing Department</a></p>",
     "LISTING_QUESTIONS": "For general program inquiries, you may call the Housing Department at 408-535-3860."
   },
   "NAV": {
@@ -31,7 +31,7 @@
     "FEEDBACK_URL": "https://docs.google.com/forms/d/e/1FAIpQLScFVVvd7FDa7puUN4iH2SBl_KAWBu8dRTXNuLIt8Ff9iYF3uA/viewform?usp=sf_link"
   },
   "T": {
-    "DAHLIA_HOUSING_PORTAL": "DAHLIA<br/><span class=\"header-logo-group\">San Jose Housing Portal</span>"
+    "BLOOM_HOUSING_PORTAL": "<span class=\"header-logo-group\">San Jose Housing Portal</span>"
   },
   "WELCOME": {
     "TITLE": "Apply for affordable housing in <span class=\"hero-title_highlight\">San José</span>"

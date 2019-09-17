@@ -2,20 +2,23 @@ import { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import { unitSummariesTable } from "../lib/unit_summaries"
 import Layout from "../layouts/application"
-import { Listing } from "@dahlia/ui-components/src/types"
-import ApplicationDeadline from "@dahlia/ui-components/src/page_components/listing_sidebar/application_deadline"
-import Waitlist from "@dahlia/ui-components/src/page_components/listing_sidebar/waitlist"
-import Apply from "@dahlia/ui-components/src/page_components/listing_sidebar/apply"
-import WhatToExpect from "@dahlia/ui-components/src/page_components/listing_sidebar/what_to_expect"
-import LeasingAgent from "@dahlia/ui-components/src/page_components/listing_sidebar/leasing_agent"
-import ImageHeader from "@dahlia/ui-components/src/headers/image_header/image_header"
-import { OneLineAddress } from "@dahlia/ui-components/src/helpers/address"
-import { ContentSection } from "@dahlia/ui-components/src/sections/content_section"
-import { ListSection } from "@dahlia/ui-components/src/sections/list_section"
-import { InfoCard } from "@dahlia/ui-components/src/cards/info_card"
-import { Description } from "@dahlia/ui-components/src/atoms/description"
-import { BasicTable } from "@dahlia/ui-components/src/tables/basic_table"
-import UnitTables from "@dahlia/ui-components/src/page_components/unit_tables"
+import { Listing } from "@bloom/ui-components/src/types"
+import {
+  ListingDetails,
+  ListingDetailItem
+} from "@bloom/ui-components/src/page_components/listing/ListingDetails"
+import ListSection from "@bloom/ui-components/src/sections/ListSection"
+import InfoCard from "@bloom/ui-components/src/cards/InfoCard"
+import ApplicationDeadline from "@bloom/ui-components/src/page_components/listing/listing_sidebar/application_deadline"
+import Waitlist from "@bloom/ui-components/src/page_components/listing/listing_sidebar/waitlist"
+import Apply from "@bloom/ui-components/src/page_components/listing/listing_sidebar/apply"
+import WhatToExpect from "@bloom/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
+import LeasingAgent from "@bloom/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
+import ImageHeader from "@bloom/ui-components/src/headers/image_header/image_header"
+import { OneLineAddress } from "@bloom/ui-components/src/helpers/address"
+import { Description } from "@bloom/ui-components/src/atoms/description"
+import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
+import UnitTables from "@bloom/ui-components/src/page_components/unit_tables"
 import axios from "axios"
 
 interface ListingProps {
@@ -104,8 +107,10 @@ export default class extends Component<ListingProps> {
             </section>
           </aside>
 
-          <div className="w-full md:w-2/3">
-            <ContentSection
+          <ListingDetails>
+            <ListingDetailItem
+              imageAlt="eligibility-notebook"
+              imageSrc="/static/images/listing-eligibility.svg"
               title="Eligibility"
               subtitle="Income, occupancy, preferences, and subsidies"
             >
@@ -126,8 +131,8 @@ export default class extends Component<ListingProps> {
                 <ListSection
                   title="Rental Assistance"
                   subtitle="Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be 
-                      considered for this property. In the case of a valid rental subsidy, the required minimum income 
-                      will be based on the portion of the rent that the tenant pays after use of the subsidy."
+                    considered for this property. In the case of a valid rental subsidy, the required minimum income 
+                    will be based on the portion of the rent that the tenant pays after use of the subsidy."
                 />
 
                 <ListSection
@@ -151,9 +156,14 @@ export default class extends Component<ListingProps> {
                   </>
                 </ListSection>
               </ul>
-            </ContentSection>
+            </ListingDetailItem>
 
-            <ContentSection title="Features" subtitle="Amenities, unit details and additional fees">
+            <ListingDetailItem
+              imageAlt="features-cards"
+              imageSrc="/static/images/listing-features.svg"
+              title="Features"
+              subtitle="Amenities, unit details and additional fees"
+            >
               <dl>
                 <Description term="Neighborhood" description={listing.neighborhood} />
                 <Description term="Built" description={listing.year_built} />
@@ -165,23 +175,26 @@ export default class extends Component<ListingProps> {
                   description={<UnitTables groupedUnits={listing.groupedUnits} />}
                 />
               </dl>
-            </ContentSection>
+            </ListingDetailItem>
 
-            <ContentSection title="Neighborhood" subtitle="Location and transportation">
+            <ListingDetailItem
+              imageAlt="neighborhood-buildings"
+              imageSrc="/static/images/listing-neighborhood.svg"
+              title="Neighborhood"
+              subtitle="Location and transportation"
+            >
               <p>Map goes here…</p>
-            </ContentSection>
+            </ListingDetailItem>
 
-            <ContentSection
+            <ListingDetailItem
+              imageAlt="additional-information-envelope"
+              imageSrc="/static/images/listing-legal.svg"
               title="Additional Information"
               subtitle="Required documents and selection criteria"
             >
-              <InfoCard title="Required Documents">
-                <p className="text-sm text-gray-700">{listing.required_documents}</p>
-              </InfoCard>
-            </ContentSection>
-
-            <em>Listing Id: {listing.id}</em>
-          </div>
+              <p className="text-sm text-gray-700">{listing.required_documents}</p>
+            </ListingDetailItem>
+          </ListingDetails>
         </article>
       </Layout>
     )

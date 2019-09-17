@@ -1,8 +1,14 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
-import { OneLineAddress, MultiLineAddress } from "../../helpers/address"
+import { Address } from "../../../types"
+import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 
-const Address = (props: any) => {
+interface AddressProps {
+  address: Address
+  officeHours: string
+}
+
+const Address = (props: AddressProps) => {
   const address = props.address
   const officeHours = props.officeHours
   let mainAddress = null

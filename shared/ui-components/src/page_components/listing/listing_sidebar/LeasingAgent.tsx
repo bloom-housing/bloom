@@ -1,8 +1,7 @@
 import * as React from "react"
 import Address from "./address"
-import t from "../../helpers/translator"
-import { Listing } from "../../types"
-
+import t from "../../../helpers/translator"
+import { Listing } from "../../../types"
 
 interface LeasingAgentProps {
   listing: Listing
@@ -11,7 +10,7 @@ interface LeasingAgentProps {
 const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
-  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-\(\)]/g, "")}`
+  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-()]/g, "")}`
   const leasingAgentAddress = {
     streetAddress: listing.leasing_agent_street,
     city: listing.leasing_agent_city,

@@ -4,10 +4,10 @@ class Apply extends React.Component<any> {
   constructor(props: any) {
     super(props)
     this.state = { showDownload: false }
-    this.toogleDownload = this.toogleDownload.bind(this)
+    this.toggleDownload = this.toggleDownload.bind(this)
   }
 
-  toogleDownload() {
+  toggleDownload() {
     this.setState({ showDownload: !this.state["showDownload"] })
   }
 
@@ -136,7 +136,7 @@ class Apply extends React.Component<any> {
             <span className="text-blue-600 pr-1">1</span>
             Get a Paper Application
           </div>
-          <button className="btn btn-blue w-full mb-2" onClick={this.toogleDownload}>
+          <button className="btn btn-blue w-full mb-2" onClick={this.toggleDownload}>
             Download application
           </button>
           {this.downloadOptions()}

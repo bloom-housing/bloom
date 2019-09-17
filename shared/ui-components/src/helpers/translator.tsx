@@ -4,7 +4,7 @@ interface TranslatorConfig {
   polyglot?: any
 }
 
-let translatorConfig: TranslatorConfig = {}
+const translatorConfig: TranslatorConfig = {}
 ;(global as any).Translator = translatorConfig
 
 export const addTranslation = (translationPhrases: any) => {
