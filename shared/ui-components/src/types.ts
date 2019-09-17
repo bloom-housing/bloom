@@ -1,5 +1,6 @@
 export interface Listing {
   amenities: string
+  application_due_date: string
   building_city: string
   building_state: string
   building_street_address: string

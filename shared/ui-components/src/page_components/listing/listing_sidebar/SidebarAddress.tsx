@@ -3,14 +3,13 @@ import ReactDOMServer from "react-dom/server"
 import { Address } from "../../../types"
 import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 
-interface AddressProps {
+interface SidebarAddressProps {
   address: Address
-  officeHours: string
+  officeHours?: string
 }
 
-const Address = (props: AddressProps) => {
-  const address = props.address
-  const officeHours = props.officeHours
+const SidebarAddress = (props: SidebarAddressProps) => {
+  const { address, officeHours } = props
   let mainAddress = null
   let googleMapsHref = ""
   let hours = <></>
@@ -48,4 +47,4 @@ const Address = (props: AddressProps) => {
   )
 }
 
-export default Address
+export default SidebarAddress

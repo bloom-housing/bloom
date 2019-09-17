@@ -1,5 +1,5 @@
 import * as React from "react"
-import Address from "./address"
+import SidebarAddress from "./SidebarAddress"
 class Apply extends React.Component<any> {
   constructor(props: any) {
     super(props)
@@ -32,7 +32,10 @@ class Apply extends React.Component<any> {
         <h3 className="mb-4 text-gray-600 uppercase t-sans font-bold text-sm">
           Pick up an application
         </h3>
-        <Address address={leasingAgentAddress} officeHours={listing.leasing_agent_office_hours} />
+        <SidebarAddress
+          address={leasingAgentAddress}
+          officeHours={listing.leasing_agent_office_hours}
+        />
       </>
     )
   }
@@ -68,7 +71,7 @@ class Apply extends React.Component<any> {
       body.push(
         <>
           <p className="text-gray-700">{listing.application_organization}</p>
-          <Address address={address} />
+          <SidebarAddress address={address} />
           <p className="mt-4 text-sm text-gray-600">
             Applications must be received by the deadline and postmarks will not be considered.
           </p>
@@ -95,7 +98,7 @@ class Apply extends React.Component<any> {
         }
         body.push(
           <>
-            <Address
+            <SidebarAddress
               address={leasingAgentAddress}
               officeHours={listing.leasing_agent_office_hours}
             />

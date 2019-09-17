@@ -1,5 +1,5 @@
 import * as React from "react"
-import Address from "./address"
+import Address from "./SidebarAddress"
 import t from "../../../helpers/translator"
 import { Listing } from "../../../types"
 
