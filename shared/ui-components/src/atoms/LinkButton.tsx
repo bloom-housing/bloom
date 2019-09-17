@@ -7,7 +7,7 @@ interface LinkButtonProps {
   filled?: boolean
   normalCase?: boolean
   small?: boolean
-  children: any
+  children: React.ReactNode
 }
 
 const LinkButton = (props: LinkButtonProps) => {

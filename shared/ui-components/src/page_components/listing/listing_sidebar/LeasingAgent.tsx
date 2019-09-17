@@ -1,8 +1,7 @@
 import * as React from "react"
-import ReactDOMServer from "react-dom/server"
+import Address from "./SidebarAddress"
 import t from "../../../helpers/translator"
 import { Listing } from "../../../types"
-import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 
 interface LeasingAgentProps {
   listing: Listing
@@ -12,22 +11,11 @@ const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
   const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-()]/g, "")}`
-
-  let leasingAddress = null
-  let googleMapsHref = undefined
-
-  if (listing.leasing_agent_street) {
-    const address = {
-      streetAddress: listing.leasing_agent_street,
-      city: listing.leasing_agent_city,
-      state: listing.leasing_agent_state,
-      zipCode: listing.leasing_agent_zip
-    }
-    const oneLineAddress = <OneLineAddress address={address} />
-    leasingAddress = <MultiLineAddress address={address} />
-
-    googleMapsHref =
-      "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
+  const leasingAgentAddress = {
+    streetAddress: listing.leasing_agent_street,
+    city: listing.leasing_agent_city,
+    state: listing.leasing_agent_state,
+    zipCode: listing.leasing_agent_zip
   }
 
   return (
@@ -44,25 +32,11 @@ const LeasingAgent = (props: LeasingAgentProps) => {
       </p>
       <p className="text-sm text-gray-700">{t("LEASING_AGENT.DUE_TO_HIGH_CALL_VOLUME")}</p>
 
-      <p className="mt-5">
+      <p className="my-5">
         <a href={`mailto:${listing.leasing_agent_email}`}>Email</a>
       </p>
 
-      {listing.leasing_agent_street && (
-        <p className="mt-5 text-gray-700">
-          {leasingAddress}
-          <br />
-          <a href={googleMapsHref} target="_blank">
-            Get Directions
-          </a>
-        </p>
-      )}
-
-      <p className="my-5 text-gray-600 uppercase">
-        <strong>Office Hours</strong>
-      </p>
-
-      <p>{listing.leasing_agent_office_hours}</p>
+      <Address address={leasingAgentAddress} officeHours={listing.leasing_agent_office_hours} />
     </>
   )
 }

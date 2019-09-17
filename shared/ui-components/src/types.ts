@@ -1,11 +1,22 @@
 export interface Listing {
+  accepting_applications_at_leasing_agent: boolean
+  accepting_applications_by_po_box: boolean
   amenities: string
+  application_city: string
+  application_download_url: string
+  application_due_date: string
+  application_organization: string
+  application_postal_code: string
+  application_state: string
+  application_street_address: string
+  blank_paper_application_can_be_picked_up: boolean
   building_city: string
   building_state: string
   building_street_address: string
   building_zip_code: string
   credit_history: string
   developer: string
+  groupedUnits: GroupedUnitsWithSummaries
   id: number
   image_url?: string
   leasing_agent_city: string
@@ -21,10 +32,9 @@ export interface Listing {
   neighborhood: string
   pet_policy: string
   rental_history: string
-  units: [Unit]
-  groupedUnits: GroupedUnitsWithSummaries
   required_documents: string
   smoking_policy: string
+  units: [Unit]
   year_built: number
 }
 

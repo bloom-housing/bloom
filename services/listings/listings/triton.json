@@ -1,7 +1,7 @@
 {
   "id": 3,
   "accepting_applications_at_leasing_agent": true,
-  "accepting_applications_by_po_box": false,
+  "accepting_applications_by_po_box": true,
   "accepting_online_applications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",

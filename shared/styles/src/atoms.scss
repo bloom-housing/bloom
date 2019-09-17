@@ -11,9 +11,17 @@
   @apply t-alt-sans;
   @apply inline-block;
 
+  &:hover {
+    @apply bg-blue-700;
+    @apply text-white;
+  }
+
   &.filled {
     @apply bg-blue-700;
     @apply text-white;
+    &:hover {
+      @apply bg-blue-800;
+    }
   }
 
   &.small {
