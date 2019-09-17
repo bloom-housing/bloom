@@ -23,6 +23,7 @@ export interface Listing {
   rental_history: string
   units: [Unit]
   groupedUnits: GroupedUnitsWithSummaries
+  unit_summaries: any
   required_documents: string
   smoking_policy: string
   year_built: number
