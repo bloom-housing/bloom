@@ -1,5 +1,5 @@
 import * as React from "react"
-import Link from "next/link"
+import LocalizedLink from "./LocalizedLink"
 
 interface LinkButtonProps {
   href: string
@@ -18,16 +18,13 @@ const LinkButton = (props: LinkButtonProps) => {
   if (props.small) buttonClasses.push("small")
 
   const linkProps = {
-    href: props.href
+    href: props.href,
+    className: buttonClasses.join(" ")
   } as any
 
   if (props.as) linkProps.as = props.as
 
-  return (
-    <Link {...linkProps}>
-      <a className={buttonClasses.join(" ")}>{props.children}</a>
-    </Link>
-  )
+  return <LocalizedLink {...linkProps}>{props.children}</LocalizedLink>
 }
 
 export default LinkButton

@@ -1,7 +1,6 @@
 import * as React from "react"
 import t from "../helpers/translator"
-import lRoute from "../helpers/localeRoute"
-import Link from "next/link"
+import LocalizedLink from "../atoms/LocalizedLink"
 
 interface SiteHeaderProps {
   logoSrc: string
@@ -13,12 +12,10 @@ const SiteHeader = (props: SiteHeaderProps) => {
   const Logo = () => (
     <div className="max-w-5xl m-auto">
       <div className="float-left bg-white">
-        <Link href={`${lRoute("/")}`}>
-          <a>
-            <img src={props.logoSrc} />
-            <span className="">{props.title}</span>
-          </a>
-        </Link>
+        <LocalizedLink href="/">
+          <img src={props.logoSrc} />
+          <span className="">{props.title}</span>
+        </LocalizedLink>
       </div>
     </div>
   )
@@ -32,9 +29,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
   const NavBar = () => (
     <div className="h-20 text-right">
       <nav className="max-w-5xl m-auto">
-        <Link href={`${lRoute("/listings")}`}>
-          <a>{t("nav.listings")}</a>
-        </Link>
+        <LocalizedLink href="/listings">{t("nav.listings")}</LocalizedLink>
       </nav>
     </div>
   )
