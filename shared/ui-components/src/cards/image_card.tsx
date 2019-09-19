@@ -1,5 +1,5 @@
 import * as React from "react"
-import Link from "next/link"
+import LocalizedLink from "../atoms/LocalizedLink"
 
 const Flag = (props: any) => <div>{props.text}</div>
 
@@ -29,9 +29,9 @@ const ImageCard = (props: ImageCardProps) => {
 
   if (props.href && props.as) {
     card = (
-      <Link href={props.href} as={props.as}>
-        <a>{image}</a>
-      </Link>
+      <LocalizedLink href={props.href} as={props.as}>
+        {image}
+      </LocalizedLink>
     )
   }
 

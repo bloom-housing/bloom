@@ -24,7 +24,7 @@ const ListingsList = (props: ListingsProps) => {
           />
         </div>
         <div className="w-full md:w-6/12 p-3">
-          <LinkButton href="listing/[id]" as={`/listing/${listing.id}`}>
+          <LinkButton href={`listing/id=${listing.id}`} as={`/listing/${listing.id}`}>
             See Details
           </LinkButton>
         </div>

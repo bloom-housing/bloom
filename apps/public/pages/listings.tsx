@@ -24,7 +24,7 @@ export default class extends Component<ListingsProps> {
   public render() {
     return (
       <Layout>
-        <PageHeader>{t("PAGE_TITLE.RENT")}</PageHeader>
+        <PageHeader>{t("page_title.rent")}</PageHeader>
         <ListingsList listings={this.props.listings} />
       </Layout>
     )

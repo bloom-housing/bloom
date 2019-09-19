@@ -30,7 +30,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
       <p className="mt-5">
         <a href={phoneNumber}>Call {listing.leasing_agent_phone}</a>
       </p>
-      <p className="text-sm text-gray-700">{t("LEASING_AGENT.DUE_TO_HIGH_CALL_VOLUME")}</p>
+      <p className="text-sm text-gray-700">{t("leasing_agent.due_to_high_call_volume")}</p>
 
       <p className="my-5">
         <a href={`mailto:${listing.leasing_agent_email}`}>Email</a>
