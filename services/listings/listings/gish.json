@@ -58,17 +58,16 @@
   "leasing_agent_zip": "95112",
   "rental_history": "The applicants’ landlord references must verify a history of responsible occupancy, behavior, and conduct.  Current landlord references will be requested along with a third party unlawful detainer search.  All previous landlords during the past three years will also be contacted.  Landlord references will help to determine whether or not the applicant has a good rent paying history, whether or not there have been any disturbing behavior patterns including repeated lease violations, destruction of property, etc.  Any documented behavior which would constitute a material violation of the standard lease to be used at this location may be considered grounds for ineligibility.",
   "building_total_units": 5,
-  "unit_summaries": {
-    "general": [
-      {
-        "min_income_range": { "min": "2135.0", "max": "2135.0" },
-        "occupancy_range": { "min": 1, "max": 2 },
-        "rent_as_percent_income_range": { "min": null, "max": null },
-        "rent_range": { "min": "854.0", "max": "854.0" },
-        "unit_type": "Studio"
-      }
-    ]
-  },
+  "unit_summaries": [
+    {
+      "min_income_range": { "min": "2135.0", "max": "2135.0" },
+      "occupancy_range": { "min": 1, "max": 2 },
+      "rent_as_percent_income_range": { "min": null, "max": null },
+      "rent_range": { "min": "854.0", "max": "854.0" },
+      "unit_type": "Studio",
+      "reserved_types": []
+    }
+  ],
   "units": [
     {
       "id": 5,

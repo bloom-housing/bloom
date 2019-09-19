@@ -1,23 +1,24 @@
 import * as React from "react"
 import t from "@bloom/ui-components/src/helpers/translator"
+import { Listing } from "@bloom/ui-components/src/types"
 
-export const unitSummariesTable = (listing: Record<string, any>) => {
-  const unitSummaries = listing.unit_summaries.general.map(unitSummary => {
+export const unitSummariesTable = (listing: Listing) => {
+  const unitSummaries = listing.unit_summaries.map(unitSummary => {
     return {
       unitType: <strong>{unitSummary.unit_type}</strong>,
       minimumIncome: (
         <>
-          <strong>${parseInt(unitSummary.min_income_range.min, 10)}</strong>/month
+          <strong>${parseInt(unitSummary.min_income_range.min as string, 10)}</strong>/month
         </>
       ),
       rent: (
         <>
-          <strong>${parseInt(unitSummary.rent_range.min, 10)}</strong>/month
+          <strong>${parseInt(unitSummary.rent_range.min as string, 10)}</strong>/month
         </>
       ),
       availability: (
         <>
-          <strong>1</strong> unit
+          <strong>1</strong> unit OOOPS
         </>
       )
     }
@@ -26,22 +27,20 @@ export const unitSummariesTable = (listing: Record<string, any>) => {
   return unitSummaries
 }
 
-export const occupancyTable = (listing: Record<string, any>) => {
-  const occupancyData = listing.unit_summaries.general.map(unitSummary => {
+export const occupancyTable = (listing: Listing) => {
+  const occupancyData = listing.unit_summaries.map(unitSummary => {
     let occupancy = ""
-    if (unitSummary.occupancy_range.max == 1) {
-      occupancy = "1"
-    } else if (unitSummary.occupancy_range.max == null) {
-      occupancy = `at least ${unitSummary.occupancy_range.min}`
-    } else {
-      occupancy = `${unitSummary.occupancy_range.min}-${unitSummary.occupancy_range.max}`
-    }
 
-    const numberOfPeople = unitSummary.occupancy_range.max || unitSummary.occupancy_range.min
-    if (numberOfPeople == 1) {
-      occupancy += " " + t("listings.person")
+    if (unitSummary.occupancy_range.max == null) {
+      occupancy = `at least ${unitSummary.occupancy_range.min} ${
+        unitSummary.occupancy_range.min == 1 ? t("listings.person") : t("listings.people")
+      }`
+    } else if (unitSummary.occupancy_range.max > 1) {
+      occupancy = `${unitSummary.occupancy_range.min}-${unitSummary.occupancy_range.max} ${
+        unitSummary.occupancy_range.max == 1 ? t("listings.person") : t("listings.people")
+      }`
     } else {
-      occupancy += " " + t("listings.people")
+      occupancy = `1 ${t("listings.person")}`
     }
 
     return {

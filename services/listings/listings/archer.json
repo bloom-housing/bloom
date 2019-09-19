@@ -58,17 +58,16 @@
   "leasing_agent_zip": "95112",
   "rental_history": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   "building_total_units": 35,
-  "unit_summaries": {
-    "general": [
-      {
-        "min_income_range": { "min": "1438.0", "max": "2208.0" },
-        "occupancy_range": { "min": 1, "max": 2 },
-        "rent_as_percent_income_range": { "min": null, "max": null },
-        "rent_range": { "min": "719.0", "max": "1104.0" },
-        "unit_type": "Studio"
-      }
-    ]
-  },
+  "unit_summaries": [
+    {
+      "min_income_range": { "min": "1438.0", "max": "2208.0" },
+      "occupancy_range": { "min": 1, "max": 2 },
+      "rent_as_percent_income_range": { "min": null, "max": null },
+      "rent_range": { "min": "719.0", "max": "1104.0" },
+      "unit_type": "Studio",
+      "reserved_types": []
+    }
+  ],
   "units": [
     {
       "id": 12,

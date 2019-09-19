@@ -23,7 +23,7 @@ export interface Listing {
   rental_history: string
   units: [Unit]
   groupedUnits: GroupedUnitsWithSummaries
-  unit_summaries: any
+  unit_summaries: [UnitSummary]
   required_documents: string
   smoking_policy: string
   year_built: number
@@ -60,6 +60,19 @@ export interface Unit {
   ami_chart_id: number
   monthly_rent_as_percent_of_income: number
   sq_ft_label: string
+}
+
+interface MinMax {
+  min?: string | number
+  max?: string | number
+}
+export interface UnitSummary {
+  min_income_range: MinMax
+  occupancy_range: MinMax
+  rent_as_percent_income_range: MinMax
+  rent_range: MinMax
+  unit_type: string
+  reserved_types: [string]
 }
 
 export type UnitGroup = [string, [Unit]]
