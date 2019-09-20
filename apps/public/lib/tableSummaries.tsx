@@ -4,6 +4,8 @@ import { Listing } from "@bloom/ui-components/src/types"
 
 export const unitSummariesTable = (listing: Listing) => {
   const unitSummaries = listing.unit_summaries.map(unitSummary => {
+    const unitPluralization =
+      unitSummary.total_available == 1 ? t("listings.unit") : t("listings.units")
     return {
       unitType: <strong>{unitSummary.unit_type}</strong>,
       minimumIncome: (
@@ -18,7 +20,13 @@ export const unitSummariesTable = (listing: Listing) => {
       ),
       availability: (
         <>
-          <strong>1</strong> unit OOOPS
+          {unitSummary.total_available > 0 ? (
+            <>
+              <strong>{unitSummary.total_available}</strong> {unitPluralization}
+            </>
+          ) : (
+            <>{t("listings.waitlist")}</>
+          )}
         </>
       )
     }

@@ -65,7 +65,8 @@
       "rent_as_percent_income_range": { "min": null, "max": null },
       "rent_range": { "min": "854.0", "max": "854.0" },
       "unit_type": "Studio",
-      "reserved_types": []
+      "reserved_types": [],
+      "total_available": 0
     }
   ],
   "units": [

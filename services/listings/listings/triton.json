@@ -65,7 +65,8 @@
       "rent_as_percent_income_range": { "min": null, "max": null },
       "rent_range": { "min": "2429.0", "max": "2429.0" },
       "unit_type": "1 BR",
-      "reserved_types": []
+      "reserved_types": [],
+      "total_available": 1
     },
     {
       "min_income_range": { "min": "5992.0", "max": "5992.0" },
@@ -73,7 +74,8 @@
       "rent_as_percent_income_range": { "min": null, "max": null },
       "rent_range": { "min": "2996.0", "max": "2996.0" },
       "unit_type": "3 BR",
-      "reserved_types": []
+      "reserved_types": [],
+      "total_available": 1
     }
   ],
   "units": [

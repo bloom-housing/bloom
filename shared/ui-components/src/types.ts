@@ -83,6 +83,7 @@ export interface UnitSummary {
   rent_range: MinMax
   unit_type: string
   reserved_types: [string]
+  total_available: number
 }
 
 export type UnitGroup = [string, [Unit]]
