@@ -8,7 +8,7 @@ const Layout = props => (
     <SiteHeader
       logoSrc="/static/images/logo_glyph.svg"
       notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
-      title={t("NAV.SITE_TITLE")}
+      title={t("nav.site_title")}
     />
     <main>{props.children}</main>
     <SiteFooter />

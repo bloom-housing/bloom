@@ -8,7 +8,7 @@ import PageContent from "../page_content/homepage.mdx"
 export default () => {
   const heroTitle = (
     <>
-      {t("WELCOME.TITLE")} <em>{t("REGION.NAME")}</em>
+      {t("welcome.title")} <em>{t("region.name")}</em>
     </>
   )
 
@@ -16,7 +16,7 @@ export default () => {
     <Layout>
       <Hero
         title={heroTitle}
-        buttonTitle={t("WELCOME.SEE_RENTAL_LISTINGS")}
+        buttonTitle={t("welcome.see_rental_listings")}
         buttonLink="/listings"
       />
       <div className="homepage-extra">

@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react"
 import Button from "./Button"
 
 const handleClick = (e: React.MouseEvent) => {
-  alert("You clicked me!")
+  alert(`You clicked me! Event: ${e.type}`)
 }
 
 storiesOf("Atoms|Button", module).add("default", () => (

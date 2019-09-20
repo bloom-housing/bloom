@@ -1,16 +1,21 @@
 import * as React from "react"
-import Link from "next/link"
+import t from "../helpers/translator"
+import LocalizedLink from "../atoms/LocalizedLink"
 
-const SiteHeader = (props: any) => {
+interface SiteHeaderProps {
+  logoSrc: string
+  title: string
+  notice: string
+}
+
+const SiteHeader = (props: SiteHeaderProps) => {
   const Logo = () => (
     <div className="max-w-5xl m-auto">
       <div className="float-left bg-white">
-        <Link href="/">
-          <a>
-            <img src={props.logoSrc} />
-            <span className="">{props.title}</span>
-          </a>
-        </Link>
+        <LocalizedLink href="/">
+          <img src={props.logoSrc} />
+          <span className="">{props.title}</span>
+        </LocalizedLink>
       </div>
     </div>
   )
@@ -24,9 +29,7 @@ const SiteHeader = (props: any) => {
   const NavBar = () => (
     <div className="h-20 text-right">
       <nav className="max-w-5xl m-auto">
-        <Link href="/listings">
-          <a>Listings</a>
-        </Link>
+        <LocalizedLink href="/listings">{t("nav.listings")}</LocalizedLink>
       </nav>
     </div>
   )
