@@ -17,7 +17,7 @@ export interface Listing {
   credit_history: string
   developer: string
   groupedUnits: GroupedUnitsWithSummaries
-  id: number
+  id: string
   image_url?: string
   leasing_agent_city: string
   leasing_agent_email: string
@@ -47,7 +47,7 @@ export interface Address {
 }
 
 export interface Unit {
-  id: number
+  id: string
   ami_percentage: string
   annual_income_min: string
   monthly_income_min: string
