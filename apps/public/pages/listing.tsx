@@ -82,17 +82,21 @@ export default class extends Component<ListingProps> {
               </>
             }
           />
-          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 border-b border-gray-400">
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-blue-100 px-3 p-5 block text-center mx-3">
+            <ApplicationDeadline listing={listing} />
+          </div>
+
+          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 border-gray-400">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
               responsiveCollapse={true}
             />
           </div>
-          <div className="w-full md:w-2/3 mt-3 md:hidden">
-            <div className="bg-blue-100 px-3 p-5 block text-center">
-              <ApplicationDeadline listing={listing} />
-            </div>
+          <div className="w-full md:w-2/3 mt-3 md:hidden mx-3">
+            <section className="border-gray-400 border-b p-5 bg-gray-100">
+              <Waitlist listing={listing} />
+            </section>
             <Apply listing={listing} />
           </div>
           <ListingDetails>
