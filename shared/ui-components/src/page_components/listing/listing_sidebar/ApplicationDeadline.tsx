@@ -1,13 +1,12 @@
 import * as React from "react"
 import * as moment from "moment"
-import { Listing } from "../../../types"
 
 interface ApplicationDeadlineProps {
-  listing: Listing
+  date: string
 }
 
 const ApplicationDeadline = (props: ApplicationDeadlineProps) => {
-  const dueDate = moment(props.listing.application_due_date)
+  const dueDate = moment(props.date)
   const formattedDate = dueDate.format("MMM DD, YYYY") + " at " + dueDate.format("h:mm A")
   let bgColor, content
   // if due date is in future, listing is open

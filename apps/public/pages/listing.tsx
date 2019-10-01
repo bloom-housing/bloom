@@ -82,7 +82,7 @@ export default class extends Component<ListingProps> {
             }
           />
           <div className="w-full md:w-2/3 mt-3 md:hidden block text-center">
-            <ApplicationDeadline listing={listing} />
+            <ApplicationDeadline date={listing.application_due_date} />
           </div>
 
           <div className="w-full md:w-2/3 mt-6 mb-6 px-3 border-gray-400">
@@ -155,7 +155,7 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400">
                 <div className="hidden md:block">
                   <section className="border-gray-400 border-b">
-                    <ApplicationDeadline listing={listing} />
+                    <ApplicationDeadline date={listing.application_due_date} />
                   </section>
                   <ApplicationSection listing={listing} />
                 </div>
