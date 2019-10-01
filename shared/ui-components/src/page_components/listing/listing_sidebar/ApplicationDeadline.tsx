@@ -8,9 +8,22 @@ interface ApplicationDeadlineProps {
 
 const ApplicationDeadline = (props: ApplicationDeadlineProps) => {
   const dueDate = moment(props.listing.application_due_date)
-  const formattedDate = dueDate.format("ddd DD, YYYY") + " at " + dueDate.format("h:mm A")
+  const formattedDate = dueDate.format("MMM DD, YYYY") + " at " + dueDate.format("h:mm A")
+  let bgColor, content
+  // if due date is in future, listing is open
+  if (moment() < dueDate) {
+    bgColor = "bg-blue-100"
+    content = "Application Deadline"
+  } else {
+    bgColor = "bg-red-200"
+    content = "Applications Closed"
+  }
 
-  return <div className="text-xs text-gray-800">Application Deadline {formattedDate}</div>
+  return (
+    <div className={"text-xs text-gray-800 p-4 " + bgColor}>
+      {content} {formattedDate}
+    </div>
+  )
 }
 
 export default ApplicationDeadline
