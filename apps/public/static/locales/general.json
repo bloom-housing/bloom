@@ -39,6 +39,8 @@
     "additional_information": "Additional Information",
     "all_units": "All Units",
     "all_units_reserved_for": "All units reserved for {{type}}",
+    "application_deadline": "Application Deadline",
+    "applications_closed": "Applications Closed",
     "apply": {
       "applications_must_be_received_by_deadline": "Applications must be received by the deadline and postmarks will not be considered.",
       "drop_off_application": "Drop Off Application",

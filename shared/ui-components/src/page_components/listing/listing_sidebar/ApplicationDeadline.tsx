@@ -1,5 +1,6 @@
 import * as React from "react"
 import * as moment from "moment"
+import t from "@bloom/ui-components/src/helpers/translator"
 
 interface ApplicationDeadlineProps {
   date: any
@@ -15,10 +16,10 @@ const ApplicationDeadline = (props: ApplicationDeadlineProps) => {
   // if due date is in future, listing is open
   if (moment() < dueDate) {
     bgColor = vivid ? "bg-blue-600" : "bg-blue-100"
-    content = "Application Deadline"
+    content = t("listings.application_deadline")
   } else {
     bgColor = vivid ? "bg-red-600" : "bg-red-200"
-    content = "Applications Closed"
+    content = t("listings.applications_closed")
   }
 
   return (
