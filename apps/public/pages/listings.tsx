@@ -6,6 +6,7 @@ import ListingsList, {
   ListingsProps
 } from "@bloom/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
+import { unitSummariesTable } from "../lib/unit_summaries"
 
 export default class extends Component<ListingsProps> {
   public static async getInitialProps() {
@@ -25,7 +26,7 @@ export default class extends Component<ListingsProps> {
     return (
       <Layout>
         <PageHeader>{t("page_title.rent")}</PageHeader>
-        <ListingsList listings={this.props.listings} />
+        <ListingsList listings={this.props.listings} unitSummariesTable={unitSummariesTable} />
       </Layout>
     )
   }

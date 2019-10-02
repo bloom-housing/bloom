@@ -9,25 +9,27 @@ export const HeaderCell = (props: any) => (
 )
 
 export const Cell = (props: any) => (
-  <td data-label={props.headerLabel} className="p-5">
+  <td data-label={props.headerLabel} className={props.cellPadding || "p-5"}>
     {props.children}
   </td>
 )
 
 export const BasicTable = (props: any) => {
-  const { headers, data } = props
+  const { headers, data, cellPadding } = props
 
   const headerLabels = Object.values(headers).map(col => <HeaderCell>{col}</HeaderCell>)
 
   const body = data.map((row: any) => {
     const cols = Object.keys(headers).map(colKey => (
-      <Cell headerLabel={headers[colKey]}>{row[colKey]}</Cell>
+      <Cell headerLabel={headers[colKey]} cellPadding={cellPadding}>
+        {row[colKey]}
+      </Cell>
     ))
 
     return <Row>{cols}</Row>
   })
 
-  let tableClasses = ["w-full", "text-sm"]
+  const tableClasses = ["w-full", "text-sm"]
   if (props.responsiveCollapse) {
     tableClasses.push("responsive-collapse")
   }
