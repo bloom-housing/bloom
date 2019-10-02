@@ -49,7 +49,7 @@ const Apply = (props: ApplyProps) => {
 
   return (
     <>
-      <section className="border border-gray-400 border-b-0 p-5">
+      <section className="border-gray-400 border-b p-5">
         <h2 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider inline-block">
           How to Apply
         </h2>
@@ -76,7 +76,7 @@ const Apply = (props: ApplyProps) => {
         )}
       </section>
 
-      <section className="border border-gray-400 border-b-0 p-5 bg-gray-100">
+      <section className="border-gray-400 border-b p-5 bg-gray-100">
         <NumberedHeader num={2} text="Submit a Paper Application" />
         {listing.accepting_applications_by_po_box && (
           <>

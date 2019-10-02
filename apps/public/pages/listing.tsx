@@ -82,31 +82,23 @@ export default class extends Component<ListingProps> {
               </>
             }
           />
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-blue-100 px-3 p-5 block text-center mx-3">
+            <ApplicationDeadline listing={listing} />
+          </div>
 
-          <div className="w-full md:w-2/3 mt-6 mb-6 px-3">
+          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 border-gray-400">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
               responsiveCollapse={true}
             />
           </div>
-
-          <aside className="w-full md:absolute md:right-0 md:w-1/3">
-            <section className="border border-gray-400 border-b-0 p-5 bg-blue-100">
-              <ApplicationDeadline listing={listing} />
-            </section>
-            <section className="border border-gray-400 border-b-0 p-5 bg-gray-100">
+          <div className="w-full md:w-2/3 mt-3 md:hidden mx-3">
+            <section className="border-gray-400 border-b p-5 bg-gray-100">
               <Waitlist listing={listing} />
             </section>
             <Apply listing={listing} />
-            <section className="border border-gray-400 border-b-0 p-5">
-              <WhatToExpect />
-            </section>
-            <section className="border border-gray-400 p-5">
-              <LeasingAgent listing={listing} />
-            </section>
-          </aside>
-
+          </div>
           <ListingDetails>
             <ListingDetailItem
               imageAlt="eligibility-notebook"
@@ -156,6 +148,31 @@ export default class extends Component<ListingProps> {
                   </>
                 </ListSection>
               </ul>
+            </ListingDetailItem>
+
+            <ListingDetailItem
+              imageAlt="process-info"
+              imageSrc="/static/images/listing-process.svg"
+              title="Process"
+              subtitle="Important dates and contact information"
+            >
+              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400">
+                <div className="hidden md:block">
+                  <section className="border-gray-400 border-b p-5 bg-blue-100">
+                    <ApplicationDeadline listing={listing} />
+                  </section>
+                  <section className="border-gray-400 border-b p-5 bg-gray-100">
+                    <Waitlist listing={listing} />
+                  </section>
+                  <Apply listing={listing} />
+                </div>
+                <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
+                  <WhatToExpect />
+                </section>
+                <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
+                  <LeasingAgent listing={listing} />
+                </section>
+              </aside>
             </ListingDetailItem>
 
             <ListingDetailItem
