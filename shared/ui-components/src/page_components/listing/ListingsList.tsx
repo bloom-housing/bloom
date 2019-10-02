@@ -16,9 +16,9 @@ const ListingsList = (props: ListingsProps) => {
   const listItems = listings.map(listing => {
     const imageUrl = listing.image_url || ""
     const unitSummariesHeaders = {
-      unitType: "Unit Type",
-      minimumIncome: "Minimum Income",
-      rent: "Rent"
+      unitType: t("t.unit_type"),
+      minimumIncome: t("t.minimum_income"),
+      rent: t("t.rent")
     }
     const unitSummaries = props.unitSummariesTable(listing)
 
