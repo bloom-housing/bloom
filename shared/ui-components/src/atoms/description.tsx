@@ -7,7 +7,7 @@ interface DescriptionProps {
 
 export const Description = (props: DescriptionProps) => (
   <>
-    <dd className="t-serif text-xl">{props.term}</dd>
-    <dt className="mb-4">{props.description}</dt>
+    <dd className="description__title">{props.term}</dd>
+    <dt className="description__body">{props.description}</dt>
   </>
 )

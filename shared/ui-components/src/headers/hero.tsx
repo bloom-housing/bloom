@@ -7,7 +7,7 @@ interface HeroProps {
   buttonLink: string
 }
 
-const heroClasses = ["bg-blue-700", "py-20", "px-5", "text-white", "text-center"]
+const heroClasses = ["hero"]
 
 const Hero = (props: HeroProps) => (
   <div className={heroClasses.join(" ")}>

@@ -164,7 +164,7 @@ export default class extends Component<ListingProps> {
               title="Features"
               subtitle="Amenities, unit details and additional fees"
             >
-              <dl>
+              <dl className="column-definition-list">
                 <Description term="Neighborhood" description={listing.neighborhood} />
                 <Description term="Built" description={listing.year_built} />
                 <Description term="Smoking Policy" description={listing.smoking_policy} />
