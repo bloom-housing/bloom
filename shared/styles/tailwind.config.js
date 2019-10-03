@@ -1,18 +1,18 @@
 module.exports = {
   theme: {
     screens: {
-      "sm": "640px",
-      "md": "768px",
-      "lg": "1200px",
-      "xl": "1280px"
+      sm: "640px",
+      md: "768px",
+      lg: "1200px",
+      xl: "1280px"
     },
     fontSize: {
-      "xs": ".75rem",
-      "sm": ".8125rem",
-      "tiny": ".875rem",
-      "base": "1rem",
-      "lg": "1.1255rem",
-      "xl": "1.25rem",
+      xs: ".75rem",
+      sm: ".8125rem",
+      tiny: ".875rem",
+      base: "1rem",
+      lg: "1.1255rem",
+      xl: "1.25rem",
       "2xl": "1.625rem",
       "3xl": "2rem",
       "4xl": "2.5rem",
@@ -21,32 +21,37 @@ module.exports = {
       "7xl": "5rem"
     },
     fontFamily: {
-      "sans": ["Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif"],
-      "serif": ["Droid Serif", "Georgia", "Times", "serif"],
+      sans: ["Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif"],
+      serif: ["Droid Serif", "Georgia", "Times", "serif"],
       "alt-sans": ["Lato", "Helvetica", "Arial", "Verdana", "sans-serif"]
     },
     colors: {
-      "primary": "#2E8540",
+      primary: "#2E8540",
       "primary-dark": "#205493",
       "primary-light": "#DAEEFF",
       "primary-lighter": "#F5F8F9",
-      "secondary": "#0067be",
-      "alert": "#E41D3D",
+      secondary: "#0067be",
+      alert: "#E41D3D",
       "alert-light": "#F9D2D8",
-      "success": "#2E8540",
+      success: "#2E8540",
       "success-light": "#B4E5BE",
-      "warn": "#FDB81E",
+      warn: "#FDB81E",
       "warn-light": "#FEE8B6",
-      "attention": "#00BED5",
+      attention: "#00BED5",
       "attention-light": "#C8F1FF",
-      "royal": "#B85ED5",
+      royal: "#B85ED5",
       "royal-light": "#EED7F5",
-      "splash": "#FF6627",
+      splash: "#FF6627",
       "splash-light": "#FFD2C0",
-      "lush": "#99CD00",
+      lush: "#99CD00",
       "lush-light": "#F2FFCD",
-      "black": "#0077DA",
-      "gray": {
+      white: "#FFFFFF",
+      black: "#0077DA",
+      blue: {
+        "700": "#0077DA",
+        "800": "#0055AA"
+      },
+      gray: {
         "950": "#242C2E",
         "900": "#E41D3D",
         "850": "#333333",
