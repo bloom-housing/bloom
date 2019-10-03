@@ -1,6 +1,8 @@
 import { Component } from "react"
 import ReactDOMServer from "react-dom/server"
-import { unitSummariesTable } from "../lib/unit_summaries"
+import t from "@bloom/ui-components/src/helpers/translator"
+import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
+import getOccupancyDescription from "../lib/getOccupancyDescription"
 import Layout from "../layouts/application"
 import { Listing } from "@bloom/ui-components/src/types"
 import {
@@ -63,6 +65,13 @@ export default class extends Component<ListingProps> {
     }
     const unitSummaries = unitSummariesTable(listing)
 
+    const occupancyDescription = getOccupancyDescription(listing)
+    const occupancyHeaders = {
+      unitType: t("t.unit_type"),
+      occupancy: t("t.occupancy")
+    }
+    const occupancyData = occupancyTable(listing)
+
     return (
       <Layout>
         <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
@@ -108,16 +117,18 @@ export default class extends Component<ListingProps> {
             >
               <ul>
                 <ListSection
-                  title="Household Maximum Income"
-                  subtitle="For income calculations, household size includes everyone (all ages) living in the unit."
+                  title={t("listings.household_maximum_income")}
+                  subtitle={t("listings.for_income_calculations")}
                 >
                   <>table goes here…</>
                 </ListSection>
-                <ListSection
-                  title="Occupancy"
-                  subtitle="Occupancy limits for this building differ from household size, and do not include children under 6."
-                >
-                  <>table goes here…</>
+
+                <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
+                  <BasicTable
+                    headers={occupancyHeaders}
+                    data={occupancyData}
+                    responsiveCollapse={false}
+                  />
                 </ListSection>
 
                 <ListSection

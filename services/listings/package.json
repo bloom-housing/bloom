@@ -20,7 +20,8 @@
   "dependencies": {
     "@koa/cors": "^3.0.0",
     "dotenv": "^8.0.0",
-    "koa": "^2.7.0"
+    "koa": "^2.7.0",
+    "nanoid": "^2.1.1"
   },
   "scripts": {
     "clean": "rimraf dist",
