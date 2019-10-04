@@ -88,6 +88,8 @@
     "see_unit_information": "See Unit Information",
     "single_room_occupancy": "Single Room Occupancy",
     "single_room_occupancy_description": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
+    "unit": "unit",
+    "units": "units",
     "units_are_for": "These units are for {{type}}.",
     "units_have_accessibility_features_for": "These units have accessibility features for people with {{type}}.",
     "upcoming_lotteries": {
@@ -96,9 +98,10 @@
       "show": "Show Closed Listings",
       "title": "Closed Listings"
     },
+    "waitlist": "Waitlist",
     "waitlist_is_open": "Waitlist is open",
-    "CC&R": "Covenants, Conditions and Restrictions (CC&R's)",
-    "CC&R_DESCRIPTION": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
+    "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
+    "cc&r_description": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
     "download_pdf": "Download PDF",
     "re_pricing": "Re-Pricing",
     "view_additional_housing_opportunities_header": "See more rental and ownership housing opportunities",
