@@ -136,9 +136,11 @@
   },
   "t": {
     "menu": "Menu",
+    "minimum_income": "Minimum Income",
     "none": "None",
     "occupancy": "Occupancy",
     "or": "or",
+    "rent": "Rent",
     "skip_to_main_content": "Skip to main content",
     "unit_type": "Unit Type"
   },

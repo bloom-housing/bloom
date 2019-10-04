@@ -9,13 +9,13 @@ export const HeaderCell = (props: any) => (
 )
 
 export const Cell = (props: any) => (
-  <td data-label={props.headerLabel} className="p-5">
+  <td data-label={props.headerLabel} className={props.cellPadding || "p-5"}>
     {props.children}
   </td>
 )
 
 export const BasicTable = (props: any) => {
-  const { headers, data } = props
+  const { headers, data, cellPadding } = props
 
   const headerLabels = Object.values(headers).map(col => {
     const uniqKey = nanoid()
@@ -23,11 +23,11 @@ export const BasicTable = (props: any) => {
   })
 
   const body = data.map((row: any) => {
-    const rowKey = row["id"] || nanoid()
+    const rowKey = row["id"] || nanoid() 
     const cols = Object.keys(headers).map(colKey => {
       const uniqKey = nanoid()
       return (
-        <Cell key={uniqKey} headerLabel={headers[colKey]}>
+        <Cell key={uniqKey} headerLabel={headers[colKey]} cellPadding={cellPadding}>
           {row[colKey]}
         </Cell>
       )
