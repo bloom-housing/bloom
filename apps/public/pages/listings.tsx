@@ -6,7 +6,7 @@ import ListingsList, {
   ListingsProps
 } from "@bloom/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
-import { unitSummariesTable } from "../lib/unit_summaries"
+import { unitSummariesTable } from "../lib/tableSummaries"
 
 export default class extends Component<ListingsProps> {
   public static async getInitialProps() {
