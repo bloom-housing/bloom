@@ -26,7 +26,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
     hours = (
       <>
         <h3 className="text-caps-tiny ">Office Hours</h3>
-        <p>{officeHours}</p>
+        <p className="text-gray-800">{officeHours}</p>
       </>
     )
   }
