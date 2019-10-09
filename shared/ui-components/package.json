@@ -36,7 +36,7 @@
     "postcss-loader": "^3.0.0",
     "react-accessible-accordion": "^3.0.0",
     "react-docgen-typescript-loader": "^3.1.0",
-    "react-media": "^1.9.2",
+    "react-media": "^1.10.0",
     "react-test-renderer": "^16.9.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
@@ -45,9 +45,11 @@
   },
   "dependencies": {
     "@bloom/styles": "*",
+    "@types/nanoid": "^2.0.0",
     "@types/node": "^12.7.1",
     "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.8.5",
+    "nanoid": "^2.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

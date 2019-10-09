@@ -1,5 +1,5 @@
 {
-  "id": 3,
+  "id": "jsQvgvy6eJy56TNCFfQp8",
   "accepting_applications_at_leasing_agent": true,
   "accepting_applications_by_po_box": true,
   "accepting_online_applications": false,
@@ -58,27 +58,29 @@
   "leasing_agent_zip": "94404",
   "rental_history": "No evictions.",
   "building_total_units": 48,
-  "unit_summaries": {
-    "general": [
-      {
-        "min_income_range": { "min": "4858.0", "max": "4858.0" },
-        "occupancy_range": { "min": 1, "max": 2 },
-        "rent_as_percent_income_range": { "min": null, "max": null },
-        "rent_range": { "min": "2429.0", "max": "2429.0" },
-        "unit_type": "1 BR"
-      },
-      {
-        "min_income_range": { "min": "5992.0", "max": "5992.0" },
-        "occupancy_range": { "min": 5, "max": 7 },
-        "rent_as_percent_income_range": { "min": null, "max": null },
-        "rent_range": { "min": "2996.0", "max": "2996.0" },
-        "unit_type": "3 BR"
-      }
-    ]
-  },
+  "unit_summaries": [
+    {
+      "min_income_range": { "min": "4858.0", "max": "4858.0" },
+      "occupancy_range": { "min": 1, "max": 2 },
+      "rent_as_percent_income_range": { "min": null, "max": null },
+      "rent_range": { "min": "2429.0", "max": "2429.0" },
+      "unit_type": "1 BR",
+      "reserved_types": [],
+      "total_available": 1
+    },
+    {
+      "min_income_range": { "min": "5992.0", "max": "5992.0" },
+      "occupancy_range": { "min": 5, "max": 7 },
+      "rent_as_percent_income_range": { "min": null, "max": null },
+      "rent_range": { "min": "2996.0", "max": "2996.0" },
+      "unit_type": "3 BR",
+      "reserved_types": [],
+      "total_available": 1
+    }
+  ],
   "units": [
     {
-      "id": 4,
+      "id": "jBMnzuaeffeq_X0qrWi3j",
       "ami_percentage": "80.0",
       "annual_income_min": "58152.0",
       "monthly_income_min": "4858.0",
@@ -97,12 +99,12 @@
       "unit_type": "one_bdrm",
       "created_at": "2019-06-03T17:42:43.134Z",
       "updated_at": "2019-07-10T16:43:16.766Z",
-      "listing_id": 3,
+      "listing_id": "jsQvgvy6eJy56TNCFfQp8",
       "ami_chart_id": 1,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 3,
+      "id": "Vrfp_MFTbvyc6GG_wduj5",
       "ami_percentage": "80.0",
       "annual_income_min": "85368.0",
       "monthly_income_min": "5992.0",
@@ -121,7 +123,7 @@
       "unit_type": "three_bdrm",
       "created_at": "2019-06-03T17:42:43.134Z",
       "updated_at": "2019-07-10T16:44:01.384Z",
-      "listing_id": 3,
+      "listing_id": "jsQvgvy6eJy56TNCFfQp8",
       "ami_chart_id": 1,
       "monthly_rent_as_percent_of_income": null
     }

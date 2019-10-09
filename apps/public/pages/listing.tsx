@@ -1,6 +1,8 @@
 import { Component } from "react"
 import ReactDOMServer from "react-dom/server"
-import { unitSummariesTable } from "../lib/unit_summaries"
+import t from "@bloom/ui-components/src/helpers/translator"
+import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
+import getOccupancyDescription from "../lib/getOccupancyDescription"
 import Layout from "../layouts/application"
 import { Listing } from "@bloom/ui-components/src/types"
 import {
@@ -63,6 +65,13 @@ export default class extends Component<ListingProps> {
     }
     const unitSummaries = unitSummariesTable(listing)
 
+    const occupancyDescription = getOccupancyDescription(listing)
+    const occupancyHeaders = {
+      unitType: t("t.unit_type"),
+      occupancy: t("t.occupancy")
+    }
+    const occupancyData = occupancyTable(listing)
+
     return (
       <Layout>
         <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
@@ -82,6 +91,9 @@ export default class extends Component<ListingProps> {
               </>
             }
           />
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-blue-100 px-3 p-5 block text-center mx-3">
+            <ApplicationDeadline listing={listing} />
+          </div>
 
           <div className="w-full md:w-2/3 mt-6 mb-6 px-3 md:pr-8">
             <BasicTable
@@ -90,23 +102,12 @@ export default class extends Component<ListingProps> {
               responsiveCollapse={true}
             />
           </div>
-
-          <aside className="w-full md:absolute md:right-0 md:w-1/3">
-            <section className="border border-gray-400 border-b-0 p-5 bg-blue-100">
-              <ApplicationDeadline listing={listing} />
-            </section>
-            <section className="border border-gray-400 border-b-0 p-5 bg-gray-100">
+          <div className="w-full md:w-2/3 mt-3 md:hidden mx-3">
+            <section className="border-gray-400 border-b p-5 bg-gray-100">
               <Waitlist listing={listing} />
             </section>
             <Apply listing={listing} />
-            <section className="border border-gray-400 border-b-0 p-5">
-              <WhatToExpect />
-            </section>
-            <section className="border border-gray-400 p-5">
-              <LeasingAgent listing={listing} />
-            </section>
-          </aside>
-
+          </div>
           <ListingDetails>
             <ListingDetailItem
               imageAlt="eligibility-notebook"
@@ -116,16 +117,18 @@ export default class extends Component<ListingProps> {
             >
               <ul>
                 <ListSection
-                  title="Household Maximum Income"
-                  subtitle="For income calculations, household size includes everyone (all ages) living in the unit."
+                  title={t("listings.household_maximum_income")}
+                  subtitle={t("listings.for_income_calculations")}
                 >
                   <>table goes here…</>
                 </ListSection>
-                <ListSection
-                  title="Occupancy"
-                  subtitle="Occupancy limits for this building differ from household size, and do not include children under 6."
-                >
-                  <>table goes here…</>
+
+                <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
+                  <BasicTable
+                    headers={occupancyHeaders}
+                    data={occupancyData}
+                    responsiveCollapse={false}
+                  />
                 </ListSection>
 
                 <ListSection
@@ -156,6 +159,31 @@ export default class extends Component<ListingProps> {
                   </>
                 </ListSection>
               </ul>
+            </ListingDetailItem>
+
+            <ListingDetailItem
+              imageAlt="process-info"
+              imageSrc="/static/images/listing-process.svg"
+              title="Process"
+              subtitle="Important dates and contact information"
+            >
+              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400">
+                <div className="hidden md:block">
+                  <section className="border-gray-400 border-b p-5 bg-blue-100">
+                    <ApplicationDeadline listing={listing} />
+                  </section>
+                  <section className="border-gray-400 border-b p-5 bg-gray-100">
+                    <Waitlist listing={listing} />
+                  </section>
+                  <Apply listing={listing} />
+                </div>
+                <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
+                  <WhatToExpect />
+                </section>
+                <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
+                  <LeasingAgent listing={listing} />
+                </section>
+              </aside>
             </ListingDetailItem>
 
             <ListingDetailItem
