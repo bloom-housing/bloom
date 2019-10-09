@@ -1,4 +1,5 @@
 import * as React from "react"
+import nanoid from "nanoid"
 import { GroupedUnitsWithSummaries, UnitGroupWithSummary } from "@bloom/ui-components/src/types"
 import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
 
@@ -22,20 +23,23 @@ const UnitTables = (props: UnitTablesProps) => {
 
   return (
     <>
-      {groupedUnits.map((unitsGroup: UnitGroupWithSummary) => (
-        <div>
-          <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
-            <h3 className="bg-blue-100 p-4 border-0 border-b border-blue-600">
-              <strong>{unitsGroup[2].unit_type_label}</strong>: {unitsGroup[1].length} unit
-              {unitsGroup[1].length > 1 ? "s" : ""}, {unitsGroup[2].area_range},
-              {" " + unitsGroup[2].floor_range}
-            </h3>
-          </button>
-          <div className="unit-table hidden">
-            <BasicTable headers={unitsHeaders} data={unitsGroup[1]} />
+      {groupedUnits.map((unitsGroup: UnitGroupWithSummary) => {
+        const uniqKey = nanoid()
+        return (
+          <div key={uniqKey}>
+            <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
+              <h3 className="bg-blue-100 p-4 border-0 border-b border-blue-600">
+                <strong>{unitsGroup[2].unit_type_label}</strong>: {unitsGroup[1].length} unit
+                {unitsGroup[1].length > 1 ? "s" : ""}, {unitsGroup[2].area_range},
+                {" " + unitsGroup[2].floor_range}
+              </h3>
+            </button>
+            <div className="unit-table hidden">
+              <BasicTable headers={unitsHeaders} data={unitsGroup[1]} />
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </>
   )
 }

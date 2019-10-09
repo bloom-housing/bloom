@@ -1,5 +1,5 @@
 {
-  "id": 5,
+  "id": "Uvbk5qurpB2WI9V6WnNdH",
   "accepting_applications_at_leasing_agent": true,
   "accepting_applications_by_po_box": false,
   "accepting_online_applications": false,
@@ -58,20 +58,20 @@
   "leasing_agent_zip": "95112",
   "rental_history": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   "building_total_units": 35,
-  "unit_summaries": {
-    "general": [
-      {
-        "min_income_range": { "min": "1438.0", "max": "2208.0" },
-        "occupancy_range": { "min": 1, "max": 2 },
-        "rent_as_percent_income_range": { "min": null, "max": null },
-        "rent_range": { "min": "719.0", "max": "1104.0" },
-        "unit_type": "Studio"
-      }
-    ]
-  },
+  "unit_summaries": [
+    {
+      "min_income_range": { "min": "1438.0", "max": "2208.0" },
+      "occupancy_range": { "min": 1, "max": 2 },
+      "rent_as_percent_income_range": { "min": null, "max": null },
+      "rent_range": { "min": "719.0", "max": "1104.0" },
+      "unit_type": "Studio",
+      "reserved_types": [],
+      "total_available": 0
+    }
+  ],
   "units": [
     {
-      "id": 12,
+      "id": "sQ19KuyILEo0uuNqti2fl",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -90,12 +90,12 @@
       "unit_type": "studio",
       "created_at": "2019-07-09T21:20:05.783Z",
       "updated_at": "2019-08-14T23:05:43.913Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 13,
+      "id": "Cq870hwYXcPxCYT4_uW_3",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -114,12 +114,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.982Z",
       "updated_at": "2019-08-14T23:06:59.015Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 14,
+      "id": "9XQrfuAPOn8wtD7HlhCTR",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -138,12 +138,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.758Z",
       "updated_at": "2019-08-14T23:06:59.023Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 15,
+      "id": "bamrJpZA9JmnLSMEbTlI4",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -162,12 +162,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.766Z",
       "updated_at": "2019-08-14T23:06:59.031Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 16,
+      "id": "BCwOFAHJDpyPbKcVBjIUM",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -186,12 +186,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.771Z",
       "updated_at": "2019-08-14T23:06:59.039Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 17,
+      "id": "5t56gXJdJLZiksBuX8BtL",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -210,12 +210,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.777Z",
       "updated_at": "2019-08-14T23:06:59.046Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 18,
+      "id": "7mmAuJ0x7l_2VxJLoSzX5",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -234,12 +234,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.783Z",
       "updated_at": "2019-08-14T23:06:59.053Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 35,
+      "id": "LVsJ-_PYy8x2rn5V8Deo9",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -258,12 +258,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.976Z",
       "updated_at": "2019-08-14T23:06:59.161Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 36,
+      "id": "neDXHUzJkL2YZ2CQOZx1i",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -282,12 +282,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.976Z",
       "updated_at": "2019-08-14T23:06:59.167Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 37,
+      "id": "3_cr3dd76rGY7tDYlvfEO",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -306,12 +306,12 @@
       "unit_type": "studio",
       "created_at": "2019-07-09T21:24:14.122Z",
       "updated_at": "2019-08-14T23:06:59.173Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 38,
+      "id": "_38QsH2XMgHEzn_Sn4b2r",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -330,12 +330,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:55:22.950Z",
       "updated_at": "2019-08-14T23:06:59.179Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 39,
+      "id": "gTHXtJ37uP8R8zkOp7wOt",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -354,12 +354,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:55:22.956Z",
       "updated_at": "2019-08-14T23:06:59.186Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 40,
+      "id": "me-MRbUEn6ox-OYpzosO1",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -378,12 +378,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:55:22.961Z",
       "updated_at": "2019-08-14T23:06:59.192Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 41,
+      "id": "ZOtuFSb79LX7p6CVW3H4w",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -402,12 +402,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:55:22.967Z",
       "updated_at": "2019-08-14T23:06:59.198Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 42,
+      "id": "nISGOCiWoCzQXkMZGV5bV",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -426,12 +426,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:55:22.972Z",
       "updated_at": "2019-08-14T23:06:59.204Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 43,
+      "id": "Ppne-7ChrEht1HxwfO0gc",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -450,12 +450,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:55:22.978Z",
       "updated_at": "2019-08-14T23:06:59.210Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 44,
+      "id": "78hBgnEoHw3aW5r4Mn2Jf",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -474,12 +474,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:55:22.984Z",
       "updated_at": "2019-08-14T23:06:59.216Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 45,
+      "id": "0RtHf-Iogw3x643r46y-a",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -498,12 +498,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.563Z",
       "updated_at": "2019-08-14T23:06:59.222Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 46,
+      "id": "ENMVc3sX0kmD3G4762naM",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -522,12 +522,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.570Z",
       "updated_at": "2019-08-14T23:06:59.229Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 47,
+      "id": "O9OSAiIFTSA5SimFlCbd7",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -546,12 +546,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.575Z",
       "updated_at": "2019-08-14T23:06:59.235Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 48,
+      "id": "d_7SUFpxe1rZZ5dIgMgTG",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -570,12 +570,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.580Z",
       "updated_at": "2019-08-14T23:06:59.241Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 49,
+      "id": "bR17hir7729c22LyVbQ3m",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -594,12 +594,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.587Z",
       "updated_at": "2019-08-14T23:06:59.247Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 50,
+      "id": "B62kKSz7qwAA7aM6tzwtB",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -618,12 +618,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.593Z",
       "updated_at": "2019-08-14T23:06:59.254Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 51,
+      "id": "C3YePWy05Or9fDeVuRPTF",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -642,12 +642,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.606Z",
       "updated_at": "2019-08-14T23:06:59.260Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 52,
+      "id": "Logk3eY0iXtf3oCOctxqT",
       "ami_percentage": "30.0",
       "annual_income_min": "17256.0",
       "monthly_income_min": "1438.0",
@@ -666,12 +666,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:56:06.612Z",
       "updated_at": "2019-08-14T23:06:59.267Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 19,
+      "id": "nIYojGurvtF7xelaeT0tN",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -690,12 +690,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.790Z",
       "updated_at": "2019-08-14T23:06:59.060Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 20,
+      "id": "omzU7rRoirKXq8SQfaShf",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -714,12 +714,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.796Z",
       "updated_at": "2019-08-14T23:06:59.067Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 21,
+      "id": "IzVtblU-KMTHf3wPGzx2g",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -738,12 +738,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.802Z",
       "updated_at": "2019-08-14T23:06:59.074Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 22,
+      "id": "7g-6eFE_Q6Xi5K2xT2bE5",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -762,12 +762,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.807Z",
       "updated_at": "2019-08-14T23:06:59.080Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 23,
+      "id": "4Br-28LII41R3pINIzLwe",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -786,12 +786,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.813Z",
       "updated_at": "2019-08-14T23:06:59.086Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 24,
+      "id": "5bvjTW2ATEpxwsKppCh0l",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -810,12 +810,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:52:08.819Z",
       "updated_at": "2019-08-14T23:06:59.093Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 25,
+      "id": "BZlMmnCXwT4bChrcaNUW3",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -834,12 +834,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.921Z",
       "updated_at": "2019-08-14T23:06:59.099Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 26,
+      "id": "j2hU6Qv5ayOHMKPLQBolz",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -858,12 +858,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.927Z",
       "updated_at": "2019-08-14T23:06:59.105Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 27,
+      "id": "w2-TtBySVELMWyL1cLTkA",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -882,12 +882,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.933Z",
       "updated_at": "2019-08-14T23:06:59.111Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 28,
+      "id": "YhC6LoOIT6hxPfk4uKU3m",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -906,12 +906,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.938Z",
       "updated_at": "2019-08-14T23:06:59.118Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 29,
+      "id": "5CuSFqgGgFX245JQsnG84",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -930,12 +930,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.944Z",
       "updated_at": "2019-08-14T23:06:59.124Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 30,
+      "id": "WoD20A8q1CZm8NmGvLHUn",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -954,12 +954,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.950Z",
       "updated_at": "2019-08-14T23:06:59.130Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 31,
+      "id": "srzDhzV5HQpqR5vuyHKlQ",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -978,12 +978,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.955Z",
       "updated_at": "2019-08-14T23:06:59.136Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 32,
+      "id": "b9jo7kYEOQcATHWBjwJ6r",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -1002,12 +1002,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.960Z",
       "updated_at": "2019-08-14T23:06:59.142Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 33,
+      "id": "i5tQbXCZRrU_X3ultDSii",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -1026,12 +1026,12 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.965Z",
       "updated_at": "2019-08-14T23:06:59.148Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 34,
+      "id": "mrRtN0rArISKnE-PFomth",
       "ami_percentage": "45.0",
       "annual_income_min": "26496.0",
       "monthly_income_min": "2208.0",
@@ -1050,7 +1050,7 @@
       "unit_type": "studio",
       "created_at": "2019-08-14T22:53:09.970Z",
       "updated_at": "2019-08-14T23:06:59.155Z",
-      "listing_id": 5,
+      "listing_id": "Uvbk5qurpB2WI9V6WnNdH",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     }

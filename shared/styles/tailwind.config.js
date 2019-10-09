@@ -26,7 +26,7 @@ module.exports = {
       "alt-sans": ["Lato", "Helvetica", "Arial", "Verdana", "sans-serif"]
     },
     colors: {
-      primary: "#2E8540",
+      primary: "#0077DA",
       "primary-dark": "#205493",
       "primary-light": "#DAEEFF",
       "primary-lighter": "#F5F8F9",
@@ -53,7 +53,7 @@ module.exports = {
       },
       gray: {
         "950": "#242C2E",
-        "900": "#E41D3D",
+        "900": "#222222",
         "850": "#333333",
         "800": "#30383A",
         "750": "#555555",
@@ -67,6 +67,16 @@ module.exports = {
         "200": "#F7F7F7",
         "100": "#F9F9F9"
       }
+     },
+     letterSpacing: {
+      tightest: '-.075em',
+      tighter: '-.05em',
+      tight: '-.025em',
+      normal: '0',
+      wide: '.025em',
+      wider: '.05em',
+      widest: '.1em',
+      widest: '.2em',
     }
   }
 }

@@ -23,7 +23,7 @@ const Waitlist = (props: any) => {
 
   return (
     <>
-      <h4 className="t-alt-sans uppercase font-semibold text-gray-800 text-sm pb-3">{header}</h4>
+      <h4 className="font-alt-sans uppercase font-semibold text-gray-800 text-sm pb-3">{header}</h4>
       <div>
         {availableUnitsInfo}
         <p className="text-sm text-gray-700 pb-3">

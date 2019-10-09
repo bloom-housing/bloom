@@ -1,5 +1,5 @@
 // Listing Detail
-.deatil-header {
+.detail-header {
   @apply text-blue-800;
   @apply pr-4;
   @apply pb-8;
@@ -11,13 +11,13 @@
   }
 }
 
-.deatil-header__image {
+.detail-header__image {
   @apply float-left;
   @apply w-12;
   @apply mr-2;
 }
 
-.deatil-header__title {
+.detail-header__title {
   @apply font-sans;
   @apply uppercase;
 
@@ -29,7 +29,7 @@
   }
 }
 
-.deatil-header__subtitle {
+.detail-header__subtitle {
   @screen md {
     @apply text-gray-700;
   }

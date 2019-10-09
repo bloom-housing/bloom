@@ -1,5 +1,5 @@
 {
-  "id": 4,
+  "id": "sz0UrxnBdAxHMdfgcgha7",
   "accepting_applications_at_leasing_agent": true,
   "accepting_applications_by_po_box": false,
   "accepting_online_applications": false,
@@ -58,20 +58,20 @@
   "leasing_agent_zip": "95112",
   "rental_history": "The applicants’ landlord references must verify a history of responsible occupancy, behavior, and conduct.  Current landlord references will be requested along with a third party unlawful detainer search.  All previous landlords during the past three years will also be contacted.  Landlord references will help to determine whether or not the applicant has a good rent paying history, whether or not there have been any disturbing behavior patterns including repeated lease violations, destruction of property, etc.  Any documented behavior which would constitute a material violation of the standard lease to be used at this location may be considered grounds for ineligibility.",
   "building_total_units": 5,
-  "unit_summaries": {
-    "general": [
-      {
-        "min_income_range": { "min": "2135.0", "max": "2135.0" },
-        "occupancy_range": { "min": 1, "max": 2 },
-        "rent_as_percent_income_range": { "min": null, "max": null },
-        "rent_range": { "min": "854.0", "max": "854.0" },
-        "unit_type": "Studio"
-      }
-    ]
-  },
+  "unit_summaries": [
+    {
+      "min_income_range": { "min": "2135.0", "max": "2135.0" },
+      "occupancy_range": { "min": 1, "max": 2 },
+      "rent_as_percent_income_range": { "min": null, "max": null },
+      "rent_range": { "min": "854.0", "max": "854.0" },
+      "unit_type": "Studio",
+      "reserved_types": [],
+      "total_available": 0
+    }
+  ],
   "units": [
     {
-      "id": 5,
+      "id": "MFaowAxySJW3utZBPNxrg",
       "ami_percentage": "45.0",
       "annual_income_min": "25628.0",
       "monthly_income_min": "2135.0",
@@ -90,12 +90,12 @@
       "unit_type": "studio",
       "created_at": "2019-06-20T21:20:34.291Z",
       "updated_at": "2019-06-25T17:26:21.072Z",
-      "listing_id": 4,
+      "listing_id": "sz0UrxnBdAxHMdfgcgha7",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 8,
+      "id": "WLf6h7MeCnpB7EIE6EH_0",
       "ami_percentage": "45.0",
       "annual_income_min": "25628.0",
       "monthly_income_min": "2135.0",
@@ -114,12 +114,12 @@
       "unit_type": "studio",
       "created_at": "2019-06-25T17:26:59.698Z",
       "updated_at": "2019-06-25T17:26:59.698Z",
-      "listing_id": 4,
+      "listing_id": "sz0UrxnBdAxHMdfgcgha7",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 9,
+      "id": "J-HE0G7kWkQECyk26LM4A",
       "ami_percentage": "45.0",
       "annual_income_min": "25628.0",
       "monthly_income_min": "2135.0",
@@ -138,12 +138,12 @@
       "unit_type": "studio",
       "created_at": "2019-06-25T17:27:12.228Z",
       "updated_at": "2019-06-25T17:27:12.228Z",
-      "listing_id": 4,
+      "listing_id": "sz0UrxnBdAxHMdfgcgha7",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 10,
+      "id": "gEG3nmXEhyw33a32AV_s4",
       "ami_percentage": "45.0",
       "annual_income_min": "25628.0",
       "monthly_income_min": "2135.0",
@@ -162,12 +162,12 @@
       "unit_type": "studio",
       "created_at": "2019-06-25T17:27:23.985Z",
       "updated_at": "2019-06-25T17:27:23.985Z",
-      "listing_id": 4,
+      "listing_id": "sz0UrxnBdAxHMdfgcgha7",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     },
     {
-      "id": 11,
+      "id": "0jYaOyFTpOI8PA9UvXJOe",
       "ami_percentage": "45.0",
       "annual_income_min": "25628.0",
       "monthly_income_min": "2135.0",
@@ -186,7 +186,7 @@
       "unit_type": "studio",
       "created_at": "2019-06-25T17:27:38.397Z",
       "update_at": "2019-06-25T17:28:02.659Z",
-      "listing_id": 4,
+      "listing_id": "sz0UrxnBdAxHMdfgcgha7",
       "ami_chart_id": 4,
       "monthly_rent_as_percent_of_income": null
     }

@@ -17,7 +17,7 @@ export interface Listing {
   credit_history: string
   developer: string
   groupedUnits: GroupedUnitsWithSummaries
-  id: number
+  id: string
   image_url?: string
   leasing_agent_city: string
   leasing_agent_email: string
@@ -34,6 +34,7 @@ export interface Listing {
   rental_history: string
   required_documents: string
   smoking_policy: string
+  unit_summaries: [UnitSummary]
   units: [Unit]
   year_built: number
 }
@@ -46,7 +47,7 @@ export interface Address {
 }
 
 export interface Unit {
-  id: number
+  id: string
   ami_percentage: string
   annual_income_min: string
   monthly_income_min: string
@@ -69,6 +70,20 @@ export interface Unit {
   ami_chart_id: number
   monthly_rent_as_percent_of_income: number
   sq_ft_label: string
+}
+
+interface MinMax {
+  min?: string | number
+  max?: string | number
+}
+export interface UnitSummary {
+  min_income_range: MinMax
+  occupancy_range: MinMax
+  rent_as_percent_income_range: MinMax
+  rent_range: MinMax
+  unit_type: string
+  reserved_types: [string]
+  total_available: number
 }
 
 export type UnitGroup = [string, [Unit]]
