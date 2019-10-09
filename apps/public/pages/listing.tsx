@@ -76,7 +76,7 @@ export default class extends Component<ListingProps> {
       <Layout>
         <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
           <ImageHeader
-            className="w-full md:w-2/3 p-3"
+            className="w-full md:w-2/3 pt-8 md:pr-8"
             title={listing.name}
             imageUrl={listing.image_url}
             subImageContent={
@@ -95,7 +95,7 @@ export default class extends Component<ListingProps> {
             <ApplicationDeadline listing={listing} />
           </div>
 
-          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 border-gray-400">
+          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 md:pr-8">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
@@ -192,7 +192,7 @@ export default class extends Component<ListingProps> {
               title="Features"
               subtitle="Amenities, unit details and additional fees"
             >
-              <dl>
+              <dl className="column-definition-list">
                 <Description term="Neighborhood" description={listing.neighborhood} />
                 <Description term="Built" description={listing.year_built} />
                 <Description term="Smoking Policy" description={listing.smoking_policy} />

@@ -19,7 +19,7 @@ const ImageCard = (props: ImageCardProps) => {
       {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
       {props.flag && <Flag text={props.flag} />}
       <figcaption className="absolute inset-x-0 bottom-0">
-        <h2 className="text-white text-center text-2xl uppercase t-alt-sans mb-3">{props.title}</h2>
+        <h2 className="text-white text-center text-2xl uppercase font-alt-sans mb-3">{props.title}</h2>
         <p>{props.subtitle}</p>
       </figcaption>
     </figure>

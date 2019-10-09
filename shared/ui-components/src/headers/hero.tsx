@@ -11,7 +11,7 @@ interface HeroProps {
   listings: Listing[]
 }
 
-const heroClasses = ["bg-blue-700", "py-20", "px-5", "text-white", "text-center"]
+const heroClasses = ["hero"]
 
 const listingOpen = listing => {
   return moment() < moment(listing.application_due_date)

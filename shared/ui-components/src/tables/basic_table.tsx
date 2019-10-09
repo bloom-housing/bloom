@@ -23,7 +23,7 @@ export const BasicTable = (props: any) => {
   })
 
   const body = data.map((row: any) => {
-    const rowKey = row["id"] || nanoid() 
+    const rowKey = row["id"] || nanoid()
     const cols = Object.keys(headers).map(colKey => {
       const uniqKey = nanoid()
       return (

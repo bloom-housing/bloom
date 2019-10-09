@@ -8,7 +8,7 @@ import {
 import ListingDetailHeader, { ListingDetailHeaderProps } from "./ListingDetailHeader"
 
 export const ListingDetails = (props: any) => (
-  <div className="w-full md:w-2/3 px-3">
+  <div className="w-full md:w-2/3 md:pr-8">
     <ResponsiveContentList>{props.children}</ResponsiveContentList>
   </div>
 )
