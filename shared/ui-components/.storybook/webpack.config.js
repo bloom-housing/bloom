@@ -1,3 +1,6 @@
+const bloomTheme = require("../tailwind.config.js");
+const tailwindVars = require("@bloom/styles/tailwind.tosass.js")(bloomTheme);
+
 module.exports = ({ config }) => {
   config.module.rules.push({
     test: /\.(ts|tsx)$/,
@@ -22,7 +25,12 @@ module.exports = ({ config }) => {
           plugins: [require("tailwindcss"), require("autoprefixer")]
         }
       },
-      "sass-loader"
+      {
+        loader: "sass-loader",
+        options: {
+          prependData: tailwindVars
+        }
+      }
     ]
   })
   config.resolve.extensions.push(".ts", ".tsx")

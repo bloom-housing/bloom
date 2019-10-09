@@ -1,109 +1,36 @@
-// Set up Bulma-specific variables and mixins
-$white: white;
-$background: #eee;
-$link: $primary-color;
-$grey-dark: $primary-color;
-$white-bis: #eee;
-$black: black;
-$border: 2px solid #ccc; // not sure how this gets used -JW
-$radius-large: 8px;
-$radius: 4px;
-$desktop: 768px;
-$speed: 86ms;
-$easing: ease-out;
-
-$colors: (
-  "white": (
-    $white,
-    $black
-  ),
-  "black": (
-    $black,
-    $white
-  )
-);
-
-@mixin from($device) {
-  @media screen and (min-width: $device) {
-    @content;
-  }
-}
-
-@mixin until($device) {
-  @media screen and (max-width: $device - 1px) {
-    @content;
-  }
-}
-
-@mixin arrow($color: transparent) {
-  border: 3px solid $color;
-  border-radius: 2px;
-  border-right: 0;
-  border-top: 0;
-  content: " ";
-  display: block;
-  height: 0.625em;
-  margin-top: -0.4375em;
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  transform: rotate(-45deg);
-  transform-origin: center;
-  width: 0.625em;
-}
-
-%arrow {
-  @include arrow;
-}
-
-@mixin overflow-touch {
-  -webkit-overflow-scrolling: touch;
-}
-
-@mixin hamburger($dimensions) {
-  cursor: pointer;
-  display: block;
-  height: $dimensions;
-  position: relative;
-  width: $dimensions;
-  span {
-    background-color: currentColor;
-    display: block;
-    height: 1px;
-    left: calc(50% - 8px);
-    position: absolute;
-    transform-origin: center;
-    transition-duration: $speed;
-    transition-property: background-color, opacity, transform;
-    transition-timing-function: $easing;
-    width: 16px;
-    &:nth-child(1) {
-      top: calc(50% - 6px);
-    }
-    &:nth-child(2) {
-      top: calc(50% - 1px);
-    }
-    &:nth-child(3) {
-      top: calc(50% + 4px);
-    }
-  }
-  &:hover {
-    background-color: rgba(black, 0.05);
-  }
-  // Modifers
-  &.is-active {
-    span {
-      &:nth-child(1) {
-        transform: translateY(5px) rotate(45deg);
-      }
-      &:nth-child(2) {
-        opacity: 0;
-      }
-      &:nth-child(3) {
-        transform: translateY(-5px) rotate(-45deg);
-      }
-    }
-  }
-}
-
+@import "utilities/setup_bulma";
+@import "~bulma/sass/utilities/mixins.sass";
 @import "~bulma/sass/components/navbar.sass";
+
+// Custom Navbar Styles
+nav.navbar {
+  @apply max-w-5xl;
+  @apply m-auto;
+}
+
+.navbar-brand .logo {
+  &.navbar-item,
+  &.navbar-item:hover,
+  &.navbar-item:focus {
+    @apply bg-white;
+  }
+  @apply text-black;
+  display: block;
+  text-align: center;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  margin-top: -2.4em;
+  margin-bottom: -0.75rem;
+  padding-top: 1em;
+  margin-right: 2rem;
+
+  .logo--image {
+    display: inline-block;
+    max-height: 3rem;
+    margin-bottom: 0.5rem;
+  }
+}
+.navbar-item,
+.navbar-link {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
