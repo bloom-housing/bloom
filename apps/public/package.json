@@ -6,7 +6,7 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "dev": "next -p 3003",
+    "dev": "next",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "export": "next export",
