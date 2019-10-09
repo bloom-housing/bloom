@@ -3,7 +3,7 @@ import * as React from "react"
 const WhatToExpect = () => {
   return (
     <>
-      <h4 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider">
+      <h4 className="font-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider">
         What to Expect
       </h4>
 

@@ -21,7 +21,7 @@ exports[`Storyshots Headers|ImageHeader with image and title 1`] = `
           className="absolute inset-x-0 bottom-0"
         >
           <h2
-            className="text-white text-center text-2xl uppercase t-alt-sans mb-3"
+            className="text-white text-center text-2xl uppercase font-alt-sans mb-3"
           >
             Hello World
           </h2>
