@@ -81,8 +81,8 @@ export default class extends Component<ListingProps> {
             imageUrl={listing.image_url}
             subImageContent={
               <>
-                <p className="t-alt-sans uppercase">{oneLineAddress}</p>
-                <p className="text-gray-700">{listing.developer}</p>
+                <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">{oneLineAddress}</p>
+                <p className="text-gray-700 text-base">{listing.developer}</p>
                 <p className="text-xs">
                   <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
                     View on Map
@@ -169,7 +169,7 @@ export default class extends Component<ListingProps> {
             >
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400">
                 <div className="hidden md:block">
-                  <section className="border-gray-400 border-b p-5 bg-blue-100">
+                  <section className="border-gray-400 border-b p-5 bg-primary-light">
                     <ApplicationDeadline listing={listing} />
                   </section>
                   <section className="border-gray-400 border-b p-5 bg-gray-100">

@@ -7,18 +7,19 @@ module.exports = {
       xl: "1280px"
     },
     fontSize: {
+      "2xs": ".6875rem",
       xs: ".75rem",
       sm: ".8125rem",
       tiny: ".875rem",
       base: "1rem",
-      lg: "1.1255rem",
-      xl: "1.25rem",
-      "2xl": "1.625rem",
-      "3xl": "2rem",
-      "4xl": "2.5rem",
-      "5xl": "3rem",
-      "6xl": "4.5rem",
-      "7xl": "5rem"
+      lg: "1.25rem",
+      xl: "1.375rem",
+      "2xl": "1.5rem",
+      "3xl": "1.625rem",
+      "4xl": "2rem",
+      "5xl": "2.5rem",
+      "6xl": "3rem",
+      "7xl": "4.5rem"
     },
     fontFamily: {
       sans: ["Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif"],
@@ -46,7 +47,7 @@ module.exports = {
       lush: "#99CD00",
       "lush-light": "#F2FFCD",
       white: "#FFFFFF",
-      black: "#0077DA",
+      black: "#000000",
       blue: {
         "700": "#0077DA",
         "800": "#0055AA"
