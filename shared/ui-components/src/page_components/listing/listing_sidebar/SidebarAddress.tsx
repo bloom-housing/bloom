@@ -34,7 +34,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
   return (
     <>
       {address.streetAddress && (
-        <p className="text-gray-700">
+        <p className="text-gray-700 mb-4">
           {mainAddress}
           <br />
           <a href={googleMapsHref} target="_blank">

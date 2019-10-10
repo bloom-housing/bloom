@@ -76,7 +76,7 @@ const Apply = (props: ApplyProps) => {
         )}
       </section>
 
-      <section className="border-gray-400 border-b p-5 bg-gray-100">
+      <section className="border-gray-400 border-b border-t p-5 bg-gray-100">
         <NumberedHeader num={2} text="Submit a Paper Application" />
         {listing.accepting_applications_by_po_box && (
           <>

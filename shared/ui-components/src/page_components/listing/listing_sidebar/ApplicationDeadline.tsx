@@ -10,7 +10,7 @@ const ApplicationDeadline = (props: ApplicationDeadlineProps) => {
   const dueDate = moment(props.listing.application_due_date)
   const formattedDate = dueDate.format("ddd DD, YYYY") + " at " + dueDate.format("h:mm A")
 
-  return <div className="text-xs text-gray-800">Application Deadline {formattedDate}</div>
+  return <div className="text-sm text-gray-800">Application Deadline {formattedDate}</div>
 }
 
 export default ApplicationDeadline

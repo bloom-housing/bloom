@@ -74,7 +74,7 @@ export default class extends Component<ListingProps> {
 
     return (
       <Layout>
-        <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
+        <article className="flex flex-wrap relative max-w-5xl m-auto md:mb-12">
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
             title={listing.name}
@@ -91,18 +91,18 @@ export default class extends Component<ListingProps> {
               </>
             }
           />
-          <div className="w-full md:w-2/3 mt-3 md:hidden bg-blue-100 px-3 p-5 block text-center mx-3">
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light px-3 p-5 block text-center md:mx-3">
             <ApplicationDeadline listing={listing} />
           </div>
 
-          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 md:pr-8">
+          <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
               responsiveCollapse={true}
             />
           </div>
-          <div className="w-full md:w-2/3 mt-3 md:hidden mx-3">
+          <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
             <section className="border-gray-400 border-b p-5 bg-gray-100">
               <Waitlist listing={listing} />
             </section>
@@ -192,17 +192,19 @@ export default class extends Component<ListingProps> {
               title="Features"
               subtitle="Amenities, unit details and additional fees"
             >
-              <dl className="column-definition-list">
-                <Description term="Neighborhood" description={listing.neighborhood} />
-                <Description term="Built" description={listing.year_built} />
-                <Description term="Smoking Policy" description={listing.smoking_policy} />
-                <Description term="Pets Policy" description={listing.pet_policy} />
-                <Description term="Property Amenities" description={listing.amenities} />
-                <Description
-                  term="Unit Features"
-                  description={<UnitTables groupedUnits={listing.groupedUnits} />}
-                />
-              </dl>
+              <div className="md:ml-16 md:p-8 md:pt-0 md:pl-0">
+                <dl className="column-definition-list">
+                  <Description term="Neighborhood" description={listing.neighborhood} />
+                  <Description term="Built" description={listing.year_built} />
+                  <Description term="Smoking Policy" description={listing.smoking_policy} />
+                  <Description term="Pets Policy" description={listing.pet_policy} />
+                  <Description term="Property Amenities" description={listing.amenities} />
+                  <Description
+                    term="Unit Features"
+                    description={<UnitTables groupedUnits={listing.groupedUnits} />}
+                  />
+                </dl>
+              </div>
             </ListingDetailItem>
 
             <ListingDetailItem
@@ -211,7 +213,9 @@ export default class extends Component<ListingProps> {
               title="Neighborhood"
               subtitle="Location and transportation"
             >
-              <p>Map goes here…</p>
+              <div className="md:ml-16 md:p-8 md:pt-0 md:pl-0">
+                <p>Map goes here…</p>
+              </div>
             </ListingDetailItem>
 
             <ListingDetailItem
@@ -220,7 +224,11 @@ export default class extends Component<ListingProps> {
               title="Additional Information"
               subtitle="Required documents and selection criteria"
             >
-              <p className="text-sm text-gray-700">{listing.required_documents}</p>
+              <div className="md:ml-16 md:p-8 md:pt-0 md:pl-0">
+                <div className="info-card">
+                  <p className="text-sm text-gray-700">{listing.required_documents}</p>
+                </div>
+              </div>
             </ListingDetailItem>
           </ListingDetails>
         </article>

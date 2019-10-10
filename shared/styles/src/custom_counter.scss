@@ -1,27 +1,33 @@
 
 .custom-counter_item {
-  counter-increment: step-counter;
-  margin-bottom: 3rem;
-  margin-left: 2rem;
-  padding-left: 3rem;
-  position: relative;
+  @screen md {
+    counter-increment: step-counter;
+    margin-bottom: 3rem;
+    margin-left: 2rem;
+    padding-left: 3rem;
+    position: relative;
+  }
 }
 
 .custom-counter_item::before {
-  position: absolute;
-  top: 0;
-  left: -1rem;
-  content: counter(step-counter);
-  margin-right: 5px;
-  color: #333;
-  font-size: 4.375rem;
-  line-height: 0.85;
-  font-family: "Droid Serif", Georgia, Times, serif;
+  @screen md {
+    position: absolute;
+    top: 0;
+    left: -1rem;
+    content: counter(step-counter);
+    margin-right: 5px;
+    color: #333;
+    font-size: 4.375rem;
+    line-height: 0.85;
+    font-family: "Droid Serif", Georgia, Times, serif;
+  }
 }
 
 .custom-counter_header {
-  border-left: 2px solid #dedee0;
-  margin-bottom: 2rem;
-  margin-left: -1rem;
-  padding-left: 1rem;
+  @screen md {
+    border-left: 2px solid #dedee0;
+    margin-bottom: 2rem;
+    margin-left: -1rem;
+    padding-left: 1rem;
+  }
 }
