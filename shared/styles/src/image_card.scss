@@ -16,11 +16,17 @@
 .image-card__title {
 	@apply text-white;
 	@apply text-center;
-	@apply text-4xl;
+	@apply text-3xl;
 	@apply uppercase;
 	@apply font-alt-sans;
 	@apply mb-3;
 	@apply relative;
 	@apply z-10;
 	@apply tracking-wider;
+}
+
+.image-card--leader {
+	.image-card__title {
+		@apply text-4xl;
+	}
 }

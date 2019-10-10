@@ -74,7 +74,7 @@ export default class extends Component<ListingProps> {
 
     return (
       <Layout>
-        <article className="flex flex-wrap relative max-w-5xl m-auto">
+        <article className="image-card--leader flex flex-wrap relative max-w-5xl m-auto">
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
             title={listing.name}
