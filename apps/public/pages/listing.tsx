@@ -12,8 +12,7 @@ import {
 import ListSection from "@bloom/ui-components/src/sections/ListSection"
 import InfoCard from "@bloom/ui-components/src/cards/InfoCard"
 import ApplicationDeadline from "@bloom/ui-components/src/page_components/listing/listing_sidebar/ApplicationDeadline"
-import Waitlist from "@bloom/ui-components/src/page_components/listing/listing_sidebar/Waitlist"
-import Apply from "@bloom/ui-components/src/page_components/listing/listing_sidebar/Apply"
+import ApplicationSection from "@bloom/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
 import WhatToExpect from "@bloom/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
 import LeasingAgent from "@bloom/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
 import ImageHeader from "@bloom/ui-components/src/headers/image_header/image_header"
@@ -91,11 +90,11 @@ export default class extends Component<ListingProps> {
               </>
             }
           />
-          <div className="w-full md:w-2/3 mt-3 md:hidden bg-blue-100 px-3 p-5 block text-center mx-3">
-            <ApplicationDeadline listing={listing} />
+          <div className="w-full md:w-2/3 mt-3 md:hidden block text-center">
+            <ApplicationDeadline date={listing.application_due_date} />
           </div>
 
-          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 md:pr-8">
+          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 md:pr-8 border-gray-400">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
@@ -103,10 +102,7 @@ export default class extends Component<ListingProps> {
             />
           </div>
           <div className="w-full md:w-2/3 mt-3 md:hidden mx-3">
-            <section className="border-gray-400 border-b p-5 bg-gray-100">
-              <Waitlist listing={listing} />
-            </section>
-            <Apply listing={listing} />
+            <ApplicationSection listing={listing} />
           </div>
           <ListingDetails>
             <ListingDetailItem
@@ -169,13 +165,10 @@ export default class extends Component<ListingProps> {
             >
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400">
                 <div className="hidden md:block">
-                  <section className="border-gray-400 border-b p-5 bg-blue-100">
-                    <ApplicationDeadline listing={listing} />
+                  <section className="border-gray-400 border-b">
+                    <ApplicationDeadline date={listing.application_due_date} />
                   </section>
-                  <section className="border-gray-400 border-b p-5 bg-gray-100">
-                    <Waitlist listing={listing} />
-                  </section>
-                  <Apply listing={listing} />
+                  <ApplicationSection listing={listing} />
                 </div>
                 <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
                   <WhatToExpect />

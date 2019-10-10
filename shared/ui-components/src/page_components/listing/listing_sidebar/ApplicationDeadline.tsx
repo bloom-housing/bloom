@@ -1,16 +1,32 @@
 import * as React from "react"
 import * as moment from "moment"
-import { Listing } from "../../../types"
+import t from "@bloom/ui-components/src/helpers/translator"
 
 interface ApplicationDeadlineProps {
-  listing: Listing
+  date: any
+  vivid?: boolean
 }
 
 const ApplicationDeadline = (props: ApplicationDeadlineProps) => {
-  const dueDate = moment(props.listing.application_due_date)
-  const formattedDate = dueDate.format("ddd DD, YYYY") + " at " + dueDate.format("h:mm A")
+  const dueDate = moment(props.date)
+  const formattedDate = dueDate.format("MMM DD, YYYY") + " at " + dueDate.format("h:mm A")
+  const vivid = props.vivid || false
+  const textColor = vivid ? "text-white" : "text-gray-800"
+  let bgColor, content
+  // if due date is in future, listing is open
+  if (moment() < dueDate) {
+    bgColor = vivid ? "bg-blue-600" : "bg-blue-100"
+    content = t("listings.application_deadline")
+  } else {
+    bgColor = vivid ? "bg-red-600" : "bg-red-200"
+    content = t("listings.applications_closed")
+  }
 
-  return <div className="text-xs text-gray-800">Application Deadline {formattedDate}</div>
+  return (
+    <div className={`text-xs p-4 ${textColor} ${bgColor}`}>
+      {content}: {formattedDate}
+    </div>
+  )
 }
 
 export default ApplicationDeadline
