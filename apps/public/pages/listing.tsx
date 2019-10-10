@@ -74,7 +74,7 @@ export default class extends Component<ListingProps> {
 
     return (
       <Layout>
-        <article className="flex flex-wrap relative max-w-5xl m-auto md:mb-12">
+        <article className="flex flex-wrap relative max-w-5xl m-auto">
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
             title={listing.name}
@@ -167,7 +167,7 @@ export default class extends Component<ListingProps> {
               title="Process"
               subtitle="Important dates and contact information"
             >
-              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400">
+              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <section className="border-gray-400 border-b p-5 bg-primary-light">
                     <ApplicationDeadline listing={listing} />

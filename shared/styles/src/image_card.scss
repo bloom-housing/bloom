@@ -16,10 +16,11 @@
 .image-card__title {
 	@apply text-white;
 	@apply text-center;
-	@apply text-2xl;
+	@apply text-4xl;
 	@apply uppercase;
 	@apply font-alt-sans;
 	@apply mb-3;
 	@apply relative;
 	@apply z-10;
+	@apply tracking-wider;
 }

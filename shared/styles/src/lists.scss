@@ -1,9 +1,3 @@
-.listing-detail-list {
-  li:nth-of-type(odd) {
-    @apply bg-primary-lighter;
-  }
-}
-
 // Listing Detail
 .detail-header {
   @apply relative;
@@ -119,4 +113,31 @@
   @apply text-sm;
   @apply text-gray-700;
   @apply rounded;
+}
+
+html, body {
+  @screen md {
+    overflow-x: hidden;
+  }
+}
+
+// responsive content spacing
+.responsive-content-list {
+  .responsive-content-item {
+    @screen md {
+      @apply pt-12;
+      @apply pb-4;
+    }
+  }
+
+  .responsive-content-item:nth-of-type(odd) {
+    @screen md {
+      @apply bg-primary-lighter;
+      margin-left: -9999rem;
+      margin-right: -9999rem;
+      /* add back negative margin value */
+      padding-left: 9999rem;
+      padding-right: 9999rem;
+    }
+  }
 }

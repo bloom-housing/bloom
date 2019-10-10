@@ -4,6 +4,10 @@ table {
 	strong {
 		@apply font-semibold;
 	}
+
+  tr {
+    @apply bg-white;
+  }
 }
 
 table tr:nth-of-type(even) {

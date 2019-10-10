@@ -89,6 +89,7 @@ h1.title {
 	@apply text-gray-800;
 	@apply border-b;
 	@apply border-primary;
+	@apply mb-4;
 }
 
 .text-serif-lg {
@@ -114,7 +115,7 @@ details.disclosure {
     bottom: 0;
     outline: none;
     cursor: pointer;
-    
+
     &:after {
       font-size: 0.8em;
       content: "⌃";
