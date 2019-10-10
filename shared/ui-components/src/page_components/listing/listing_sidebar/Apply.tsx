@@ -18,7 +18,7 @@ const OrDivider = (props: { bgColor: string }) => (
 )
 
 const SubHeader = (props: { text: string }) => (
-  <h3 className="text-gray-600 uppercase t-sans font-bold text-sm mb-4">{props.text}</h3>
+  <h3 className="text-gray-600 uppercase font-alt-sans font-bold text-sm mb-4">{props.text}</h3>
 )
 
 const NumberedHeader = (props: { num: number; text: string }) => (
@@ -49,8 +49,8 @@ const Apply = (props: ApplyProps) => {
 
   return (
     <>
-      <section className="border-gray-400 border-b p-5">
-        <h2 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider inline-block">
+      <section className="border border-gray-400 border-b-0 p-5">
+        <h2 className="font-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider inline-block">
           How to Apply
         </h2>
         <NumberedHeader num={1} text="Get a Paper Application" />

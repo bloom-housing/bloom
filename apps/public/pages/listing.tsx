@@ -1,6 +1,8 @@
 import { Component } from "react"
 import ReactDOMServer from "react-dom/server"
-import { unitSummariesTable } from "../lib/unit_summaries"
+import t from "@bloom/ui-components/src/helpers/translator"
+import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
+import getOccupancyDescription from "../lib/getOccupancyDescription"
 import Layout from "../layouts/application"
 import { Listing } from "@bloom/ui-components/src/types"
 import {
@@ -62,11 +64,18 @@ export default class extends Component<ListingProps> {
     }
     const unitSummaries = unitSummariesTable(listing)
 
+    const occupancyDescription = getOccupancyDescription(listing)
+    const occupancyHeaders = {
+      unitType: t("t.unit_type"),
+      occupancy: t("t.occupancy")
+    }
+    const occupancyData = occupancyTable(listing)
+
     return (
       <Layout>
         <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
           <ImageHeader
-            className="w-full md:w-2/3 p-3"
+            className="w-full md:w-2/3 pt-8 md:pr-8"
             title={listing.name}
             imageUrl={listing.image_url}
             subImageContent={
@@ -85,7 +94,7 @@ export default class extends Component<ListingProps> {
             <ApplicationDeadline date={listing.application_due_date} />
           </div>
 
-          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 border-gray-400">
+          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 md:pr-8 border-gray-400">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
@@ -104,16 +113,18 @@ export default class extends Component<ListingProps> {
             >
               <ul>
                 <ListSection
-                  title="Household Maximum Income"
-                  subtitle="For income calculations, household size includes everyone (all ages) living in the unit."
+                  title={t("listings.household_maximum_income")}
+                  subtitle={t("listings.for_income_calculations")}
                 >
                   <>table goes here…</>
                 </ListSection>
-                <ListSection
-                  title="Occupancy"
-                  subtitle="Occupancy limits for this building differ from household size, and do not include children under 6."
-                >
-                  <>table goes here…</>
+
+                <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
+                  <BasicTable
+                    headers={occupancyHeaders}
+                    data={occupancyData}
+                    responsiveCollapse={false}
+                  />
                 </ListSection>
 
                 <ListSection
@@ -174,7 +185,7 @@ export default class extends Component<ListingProps> {
               title="Features"
               subtitle="Amenities, unit details and additional fees"
             >
-              <dl>
+              <dl className="column-definition-list">
                 <Description term="Neighborhood" description={listing.neighborhood} />
                 <Description term="Built" description={listing.year_built} />
                 <Description term="Smoking Policy" description={listing.smoking_policy} />

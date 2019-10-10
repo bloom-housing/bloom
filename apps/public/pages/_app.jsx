@@ -34,11 +34,7 @@ class MyApp extends App {
       addTranslation(translations[language])
     }
 
-    return (
-      <Container>
-        <Component {...pageProps} />
-      </Container>
-    )
+    return <Component {...pageProps} />
   }
 }
 

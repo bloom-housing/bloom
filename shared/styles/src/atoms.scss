@@ -2,14 +2,19 @@
 .button {
   @apply bg-white;
   @apply text-primary;
-  @apply border;
+  @apply border-2;
   @apply border-primary;
-  @apply px-8;
+  @apply rounded;
+  @apply px-6;
   @apply py-4;
   @apply text-lg;
   @apply uppercase;
-  @apply t-alt-sans;
+  @apply font-alt-sans;
   @apply inline-block;
+  @apply tracking-widest;
+  @apply text-sm;
+  @apply font-bold;
+  @apply leading-snug;
 
   &:hover {
     @apply bg-blue-700;

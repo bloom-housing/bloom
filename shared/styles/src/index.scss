@@ -5,27 +5,12 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,900,700");
 @import url("https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic");
 
-$primary-color: #0077da;
-$sans-font: "Open Sans", Helvetica, Arial, Verdana, sans-serif;
-$alt-sans-font: "Lato", Helvetica, Arial, Verdana, sans-serif;
-$serif-font: "Droid Serif", Georgia, Times, serif;
-
-.t-sans {
-  font-family: $sans-font;
-}
-.t-alt-sans {
-  font-family: $alt-sans-font;
-}
-.t-serif {
-  font-family: $serif-font;
-}
-
 html {
   -webkit-font-smoothing: antialiased;
 }
 
 body {
-  font-family: $sans-font;
+  @apply font-sans;
   @apply bg-white;
 }
 
@@ -35,25 +20,18 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: $serif-font;
+  @apply font-serif;
 }
 
 a {
-  color: $primary-color;
+  @apply text-primary;
   &:hover {
-    color: $primary-color;
+    @apply text-primary;
   }
 }
 
 h1.title {
   @apply text-4xl;
-}
-
-.text-primary {
-  color: $primary-color;
-}
-.border-primary {
-  border-color: $primary-color;
 }
 
 .custom-counter_item {
@@ -137,12 +115,13 @@ details.disclosure {
   }
 
   & > summary {
+    @apply text-primary;
+
     padding: 0 3px 6px 0;
     list-style: none;
     position: absolute;
     bottom: 0;
     outline: none;
-    color: $primary-color;
     cursor: pointer;
     &:after {
       font-size: 0.8em;
@@ -173,5 +152,7 @@ details.disclosure {
 @import "markdown.scss";
 @import "homepage.scss";
 @import "atoms.scss";
+@import "hero.scss";
+@import "lists.scss";
 
 @import "tailwindcss/utilities";
