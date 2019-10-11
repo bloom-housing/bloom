@@ -60,13 +60,13 @@
   "building_total_units": 35,
   "unit_summaries": [
     {
-      "min_income_range": { "min": "1438.0", "max": "2208.0" },
-      "occupancy_range": { "min": 1, "max": 2 },
-      "rent_as_percent_income_range": { "min": null, "max": null },
-      "rent_range": { "min": "719.0", "max": "1104.0" },
+      "minIncomeRange": { "min": "1438.0", "max": "2208.0" },
+      "occupancyRange": { "min": 1, "max": 2 },
+      "rentAsPercentIncomeRange": { "min": null, "max": null },
+      "rentRange": { "min": "719.0", "max": "1104.0" },
       "unit_type": "Studio",
-      "reserved_types": [],
-      "total_available": 0
+      "reservedTypes": [],
+      "totalAvailable": 0
     }
   ],
   "units": [

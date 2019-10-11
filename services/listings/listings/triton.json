@@ -60,22 +60,22 @@
   "building_total_units": 48,
   "unit_summaries": [
     {
-      "min_income_range": { "min": "4858.0", "max": "4858.0" },
-      "occupancy_range": { "min": 1, "max": 2 },
-      "rent_as_percent_income_range": { "min": null, "max": null },
-      "rent_range": { "min": "2429.0", "max": "2429.0" },
+      "minIncomeRange": { "min": "4858.0", "max": "4858.0" },
+      "occupancyRange": { "min": 1, "max": 2 },
+      "rentAsPercentIncomeRange": { "min": null, "max": null },
+      "rentRange": { "min": "2429.0", "max": "2429.0" },
       "unit_type": "1 BR",
-      "reserved_types": [],
-      "total_available": 1
+      "reservedTypes": [],
+      "totalAvailable": 1
     },
     {
-      "min_income_range": { "min": "5992.0", "max": "5992.0" },
-      "occupancy_range": { "min": 5, "max": 7 },
-      "rent_as_percent_income_range": { "min": null, "max": null },
-      "rent_range": { "min": "2996.0", "max": "2996.0" },
+      "minIncomeRange": { "min": "5992.0", "max": "5992.0" },
+      "occupancyRange": { "min": 5, "max": 7 },
+      "rentAsPercentIncomeRange": { "min": null, "max": null },
+      "rentRange": { "min": "2996.0", "max": "2996.0" },
       "unit_type": "3 BR",
-      "reserved_types": [],
-      "total_available": 1
+      "reservedTypes": [],
+      "totalAvailable": 1
     }
   ],
   "units": [
