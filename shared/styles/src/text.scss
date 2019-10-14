@@ -57,45 +57,45 @@ h1.title {
 }
 
 .text-caps-underline {
-	@apply font-alt-sans;
-	@apply uppercase;
-	@apply text-tiny;
-	@apply mb-5;
-	@apply pb-2;
-	@apply border-0;
-	@apply border-b-4;
-	@apply border-primary;
-	@apply font-semibold;
-	@apply text-gray-800;
-	@apply tracking-widest;
-	@apply inline-block;
+  @apply font-alt-sans;
+  @apply uppercase;
+  @apply text-tiny;
+  @apply mb-5;
+  @apply pb-2;
+  @apply border-0;
+  @apply border-b-4;
+  @apply border-primary;
+  @apply font-semibold;
+  @apply text-gray-800;
+  @apply tracking-widest;
+  @apply inline-block;
 }
 
 .text-caps-tiny {
-	@apply mb-4;
-	@apply text-gray-700;
-	@apply uppercase;
-	@apply font-sans;
-	@apply font-bold;
-	@apply text-tiny;
-	@apply tracking-wide;
+  @apply mb-4;
+  @apply text-gray-700;
+  @apply uppercase;
+  @apply font-sans;
+  @apply font-bold;
+  @apply text-tiny;
+  @apply tracking-wide;
 }
 
 .button-tiny-bg-light {
-	@apply font-sans;
-	@apply text-tiny;
-	@apply bg-primary-light;
-	@apply p-4;
-	@apply text-gray-800;
-	@apply border-b;
-	@apply border-primary;
-	@apply mb-4;
+  @apply font-sans;
+  @apply text-tiny;
+  @apply bg-primary-light;
+  @apply p-4;
+  @apply text-gray-800;
+  @apply border-b;
+  @apply border-primary;
+  @apply mb-4;
 }
 
 .text-serif-lg {
-	@apply font-serif;
-	@apply text-lg;
-	@apply mb-4;
+  @apply font-serif;
+  @apply text-lg;
+  @apply mb-4;
 }
 
 details.disclosure {

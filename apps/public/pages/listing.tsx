@@ -192,7 +192,7 @@ export default class extends Component<ListingProps> {
               title="Features"
               subtitle="Amenities, unit details and additional fees"
             >
-              <div className="md:ml-16 md:p-8 md:pt-0 md:pl-0">
+              <div className="listing-detail-panel">
                 <dl className="column-definition-list">
                   <Description term="Neighborhood" description={listing.neighborhood} />
                   <Description term="Built" description={listing.year_built} />
@@ -213,7 +213,7 @@ export default class extends Component<ListingProps> {
               title="Neighborhood"
               subtitle="Location and transportation"
             >
-              <div className="md:ml-16 md:p-8 md:pt-0 md:pl-0">
+              <div className="listing-detail-panel">
                 <p>Map goes here…</p>
               </div>
             </ListingDetailItem>
@@ -224,7 +224,7 @@ export default class extends Component<ListingProps> {
               title="Additional Information"
               subtitle="Required documents and selection criteria"
             >
-              <div className="md:ml-16 md:p-8 md:pt-0 md:pl-0">
+              <div className="listing-detail-panel">
                 <div className="info-card">
                   <p className="text-sm text-gray-700">{listing.required_documents}</p>
                 </div>

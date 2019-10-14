@@ -141,3 +141,12 @@ html, body {
     }
   }
 }
+
+.listing-detail-panel {
+  @screen md {
+    @apply ml-16;
+    @apply p-8;
+    @apply pt-0;
+    @apply pl-0;
+  }
+}
