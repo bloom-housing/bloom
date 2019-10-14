@@ -1,6 +1,6 @@
 import * as React from "react"
 import nanoid from "nanoid"
-import { UnitGroup, MinMax } from "@bloom/ui-components/src/types"
+import { UnitGroup, MinMax, Unit } from "@bloom/ui-components/src/types"
 import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
 import t from "@bloom/ui-components/src/helpers/translator"
 
@@ -16,6 +16,11 @@ const formatRange = (range: MinMax): string => {
   }
 }
 
+const unitsLabel = (units: Unit[]): string => {
+  const label = units.length > 1 ? t("listings.units") : t("listings.unit")
+  return `${units.length} ${label}`
+}
+
 interface UnitTablesProps {
   groupedUnits: UnitGroup[]
 }
@@ -25,7 +30,7 @@ const UnitTables = (props: UnitTablesProps) => {
 
   const unitsHeaders = {
     number: "Unit #",
-    sqFtLabel: "Area",
+    sqFt: { label: "Area", unit: t("t.sqft") },
     numBathrooms: "Baths",
     floor: "Floor"
   }
@@ -38,11 +43,9 @@ const UnitTables = (props: UnitTablesProps) => {
           <div key={uniqKey}>
             <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
               <h3 className="bg-blue-100 p-4 border-0 border-b border-blue-600">
-                <strong>{t("listings.unitTypes." + unitsGroup.type)}</strong>:
-                {unitsGroup.units.length} unit
-                {unitsGroup.units.length > 1 ? "s" : ""},
-                {formatRange(unitsGroup.unitSummary.areaRange)} square feet,
-                {" " + formatRange(unitsGroup.unitSummary.floorRange)} floors
+                <strong>{t("listings.unitTypes." + unitsGroup.type)}</strong>:&nbsp;
+                {unitsLabel(unitsGroup.units)},&nbsp;
+                {formatRange(unitsGroup.unitSummary.areaRange)} {t("listings.square_feet")}
               </h3>
             </button>
             <div className="unit-table hidden">

@@ -44,7 +44,7 @@ const summarizeUnits = (units: Units): UnitSummary => {
     )
     summary.rentRange = minMaxValue(summary.rentRange, unit.monthly_rent)
     summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
-    summary.areaRange = minMaxValue(summary.areaRange, unit.sq_ft)
+    summary.areaRange = minMaxValue(summary.areaRange, unit.sqFt)
     summary.totalAvailable += 1
 
     return summary

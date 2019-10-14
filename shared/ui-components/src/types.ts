@@ -56,12 +56,12 @@ export interface Unit {
   max_occupancy: number
   min_occupancy: number
   monthly_rent: number
-  num_bathrooms: number
-  num_bedrooms: number
+  numBathrooms: number
+  numBedrooms: number
   number: string
   priority_type: string
   reserved_type: string
-  sq_ft: number
+  sqFt: number
   status: string
   unit_type: string
   created_at: Date

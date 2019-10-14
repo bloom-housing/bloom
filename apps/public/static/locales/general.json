@@ -88,6 +88,7 @@
     "see_unit_information": "See Unit Information",
     "single_room_occupancy": "Single Room Occupancy",
     "single_room_occupancy_description": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
+    "square_feet": "square feet",
     "unit": "unit",
     "unitTypes": {
       "one_bdrm": "1 BR",
@@ -148,6 +149,7 @@
     "or": "or",
     "rent": "Rent",
     "skip_to_main_content": "Skip to main content",
+    "sqft": "sqft",
     "unit_type": "Unit Type"
   },
   "welcome": {
