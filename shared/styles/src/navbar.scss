@@ -2,6 +2,25 @@
 @import "~bulma/sass/utilities/mixins.sass";
 @import "~bulma/sass/components/navbar.sass";
 
+.navbar-notice {
+  @apply w-full;
+  @apply bg-primary;
+  @apply text-right;
+  @apply text-white;
+}
+.navbar-notice--text {
+  @apply max-w-5xl;
+  @apply m-auto;
+  @apply text-sm;
+  @apply pt-1;
+  @apply pb-1;
+  @apply pr-1;
+  padding-left: 45%;
+  @screen sm {
+    padding-left: 25%;
+  }
+}
+
 // Custom Navbar Styles
 nav.navbar {
   @apply max-w-5xl;
