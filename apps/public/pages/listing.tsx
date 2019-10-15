@@ -22,6 +22,8 @@ import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
 import UnitTables from "@bloom/ui-components/src/page_components/unit_tables"
 import axios from "axios"
 
+const DATA_SERVICE = process.env.DATA_SERVICE || "http://localhost:3001"
+
 interface ListingProps {
   listing: Listing
 }
@@ -32,7 +34,7 @@ export default class extends Component<ListingProps> {
     let listing = {}
 
     try {
-      const response = await axios.get("http://localhost:3001")
+      const response = await axios.get(DATA_SERVICE)
       listing = response.data.listings.find(l => l.id == listingId)
     } catch (error) {
       console.log(error)

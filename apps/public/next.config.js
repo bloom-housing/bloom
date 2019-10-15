@@ -2,6 +2,10 @@ const withTM = require("next-transpile-modules")
 const withSass = require("@zeit/next-sass")
 const withMDX = require("@next/mdx")()
 const axios = require("axios")
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+const DATA_SERVICE = process.env.DATA_SERVICE || "http://localhost:3001"
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
@@ -15,7 +19,7 @@ module.exports = withMDX(
         let listings = []
 
         try {
-          const response = await axios.get("http://localhost:3001")
+          const response = await axios.get(DATA_SERVICE)
           listings = response.data.listings
         } catch (error) {
           console.log(error)
