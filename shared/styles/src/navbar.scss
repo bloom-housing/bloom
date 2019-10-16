@@ -12,10 +12,10 @@
   @apply max-w-5xl;
   @apply m-auto;
   @apply text-sm;
-  @apply pt-1;
-  @apply pb-1;
+  @apply pt-2;
+  @apply pb-2;
   @apply pr-1;
-  padding-left: 45%;
+  
   @screen sm {
     padding-left: 25%;
   }
@@ -33,23 +33,54 @@ nav.navbar {
   &.navbar-item:focus {
     @apply bg-white;
   }
+
   @apply text-black;
   display: block;
   text-align: center;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-  margin-top: -2.4em;
   margin-bottom: -0.75rem;
   padding-top: 1em;
   margin-right: 2rem;
 
+  @screen md {
+    margin-top: -2.75em;
+  }
+
   .logo--image {
     display: inline-block;
-    max-height: 3rem;
+    max-height: 2rem;
     margin-bottom: 0.5rem;
+    margin-top: .75rem;
+  }
+
+  .logo--title {
+    @apply uppercase;
+    @apply font-bold;
+    @apply text-gray-900;
+    @apply font-alt-sans;
+    @apply tracking-wider;
+    font-size: 14px;
   }
 }
+
 .navbar-item,
 .navbar-link {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+a.navbar-item {
+  @apply text-sm;
+  @apply uppercase;
+  @apply text-gray-800;
+  @apply border-b-2;
+  @apply border-white;
+  padding-top: 2.5rem;
+  padding-bottom: .85rem;
+
+  &:hover {
+    @apply bg-white;
+    @apply text-gray-800;
+    @apply border-primary;
+  }
 }
