@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Address } from "../types"
+import { Address } from "@bloom/interfaces/src/general"
 interface AddressProps {
   address: Address
 }
