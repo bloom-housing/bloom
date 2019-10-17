@@ -37,7 +37,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   noticeBar() {
     return (
       <div className="navbar-notice">
-        <div className="navbar-notice--text">{this.props.notice}</div>
+        <div className="navbar-notice__text">{this.props.notice}</div>
       </div>
     )
   }
@@ -45,8 +45,10 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   logo() {
     return (
       <LocalizedLink className="navbar-item logo" href="/">
-        <img className="logo--image" src={this.props.logoSrc} />
-        <div className="logo--title">{this.props.title}</div>
+        <div className="logo__lockup">
+          <img className="logo__image" src={this.props.logoSrc} />
+          <div className="logo__title">{this.props.title}</div>
+        </div>
       </LocalizedLink>
     )
   }
