@@ -30,7 +30,7 @@ const UnitTables = (props: UnitTablesProps) => {
 
   const unitsHeaders = {
     number: "Unit #",
-    sqFt: { label: "Area", unit: t("t.sqft") },
+    sqFeet: { label: "Area", unit: t("t.sqFeet") },
     numBathrooms: "Baths",
     floor: "Floor"
   }
