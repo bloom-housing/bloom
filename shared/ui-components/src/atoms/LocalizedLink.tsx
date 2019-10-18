@@ -11,7 +11,6 @@ interface LocalizedLinkProps {
 
 const LocalizedLink = (props: LocalizedLinkProps) => {
   const localizedProps: LocalizedLinkProps = { href: "" }
-
   if (props.as) {
     localizedProps.as = lRoute(props.as)
     localizedProps.href = props.href

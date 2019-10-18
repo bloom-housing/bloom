@@ -1,0 +1,32 @@
+.image-card {
+
+}
+
+.image-card__figcaption {
+  @apply absolute;
+  @apply inset-x-0;
+  @apply bottom-0;
+
+  &:before {
+    @include overlay-image;
+    @include custom-linear-gradient(transparent, rgba(0,0,0, .8));
+  }
+}
+
+.image-card__title {
+  @apply text-white;
+  @apply text-center;
+  @apply text-3xl;
+  @apply uppercase;
+  @apply font-alt-sans;
+  @apply mb-3;
+  @apply relative;
+  @apply z-10;
+  @apply tracking-wider;
+}
+
+.image-card--leader {
+  .image-card__title {
+    @apply text-4xl;
+  }
+}

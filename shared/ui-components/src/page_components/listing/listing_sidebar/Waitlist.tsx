@@ -1,7 +1,7 @@
 import * as React from "react"
 
 const WaitlistItem = (props: any) => (
-  <li className={"uppercase text-gray-800 text-sm " + props.class_name}>
+  <li className={"uppercase text-gray-800 text-tiny " + props.class_name}>
     <span className="text-right w-12 inline-block pr-2">{props.value}</span>
     <span>{props.text}</span>
   </li>
@@ -23,10 +23,10 @@ const Waitlist = (props: any) => {
 
   return (
     <>
-      <h4 className="font-alt-sans uppercase font-semibold text-gray-800 text-sm pb-3">{header}</h4>
+      <h4 className="text-caps-tiny">{header}</h4>
       <div>
         {availableUnitsInfo}
-        <p className="text-sm text-gray-700 pb-3">
+        <p className="text-tiny text-gray-800 pb-3">
           Submit an application for an open slot on the waitlist for {listing.building_total_units}{" "}
           units.
         </p>

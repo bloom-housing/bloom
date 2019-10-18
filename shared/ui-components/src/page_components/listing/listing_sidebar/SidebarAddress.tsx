@@ -25,8 +25,8 @@ const SidebarAddress = (props: SidebarAddressProps) => {
   if (officeHours) {
     hours = (
       <>
-        <h3 className="my-4 text-gray-600 uppercase t-sans font-bold text-sm">Office Hours</h3>
-        <p>{officeHours}</p>
+        <h3 className="text-caps-tiny ">Office Hours</h3>
+        <p className="text-gray-800">{officeHours}</p>
       </>
     )
   }
@@ -34,7 +34,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
   return (
     <>
       {address.streetAddress && (
-        <p className="text-gray-700">
+        <p className="text-gray-700 mb-4">
           {mainAddress}
           <br />
           <a href={googleMapsHref} target="_blank">

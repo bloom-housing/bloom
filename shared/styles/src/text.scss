@@ -1,0 +1,145 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-serif;
+}
+
+h1 {
+  @apply text-3xl;
+
+  @screen md {
+    @apply text-4xl;
+  }
+}
+
+h2 {
+  @apply text-2xl;
+
+  @screen md {
+    @apply text-3xl;
+  }
+}
+
+h3 {
+  @apply text-xl;
+
+  @screen md {
+    @apply text-2xl;
+  }
+}
+
+h4 {
+  @apply text-xl;
+}
+
+h5 {
+  @apply text-lg;
+}
+
+h6 {
+  @apply text-base;
+}
+
+
+a {
+  @apply text-primary;
+  
+  &:hover {
+    @apply text-primary;
+  }
+}
+
+h1.title {
+  @apply text-4xl;
+}
+
+.text-caps-underline {
+  @apply font-alt-sans;
+  @apply uppercase;
+  @apply text-tiny;
+  @apply mb-5;
+  @apply pb-2;
+  @apply border-0;
+  @apply border-b-4;
+  @apply border-primary;
+  @apply font-semibold;
+  @apply text-gray-800;
+  @apply tracking-widest;
+  @apply inline-block;
+}
+
+.text-caps-tiny {
+  @apply mb-4;
+  @apply text-gray-700;
+  @apply uppercase;
+  @apply font-sans;
+  @apply font-bold;
+  @apply text-tiny;
+  @apply tracking-wide;
+}
+
+.button-tiny-bg-light {
+  @apply font-sans;
+  @apply text-tiny;
+  @apply bg-primary-light;
+  @apply p-4;
+  @apply text-gray-800;
+  @apply border-b;
+  @apply border-primary;
+  @apply mb-4;
+}
+
+.text-serif-lg {
+  @apply font-serif;
+  @apply text-lg;
+  @apply mb-4;
+}
+
+details.disclosure {
+  position: relative;
+  min-height: 3em;
+
+  &[open] {
+    margin-bottom: 4em;
+  }
+
+  & > summary {
+    @apply text-primary;
+
+    padding: 0 3px 6px 0;
+    list-style: none;
+    position: absolute;
+    bottom: 0;
+    outline: none;
+    cursor: pointer;
+
+    &:after {
+      font-size: 0.8em;
+      content: "⌃";
+      font-weight: bold;
+      margin-left: 7px;
+      transform: rotate(180deg) translateY(3px);
+      display: inline-block;
+    }
+  }
+
+  &[open] > summary {
+    bottom: -3em;
+
+    &:after {
+      transform: rotate(0deg) translateY(2px);
+    }
+  }
+
+  & > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+}

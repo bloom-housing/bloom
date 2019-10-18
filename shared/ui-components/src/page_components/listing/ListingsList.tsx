@@ -34,7 +34,7 @@ const ListingsList = (props: ListingsProps) => {
           />
         </div>
         <div className="w-full md:w-6/12 p-3">
-          <h4 className="t-alt-sans uppercase font-semibold text-gray-800 text-sm mb-2">
+          <h4 className="font-alt-sans font-semibold text-gray-900 text-base mb-2">
             {t("listings.open_waitlist")}
           </h4>
           <div className="mb-4">

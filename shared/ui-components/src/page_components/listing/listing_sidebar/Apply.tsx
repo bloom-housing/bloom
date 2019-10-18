@@ -17,13 +17,11 @@ const OrDivider = (props: { bgColor: string }) => (
   </div>
 )
 
-const SubHeader = (props: { text: string }) => (
-  <h3 className="text-gray-600 uppercase font-alt-sans font-bold text-sm mb-4">{props.text}</h3>
-)
+const SubHeader = (props: { text: string }) => <h3 className="text-caps-tiny">{props.text}</h3>
 
 const NumberedHeader = (props: { num: number; text: string }) => (
-  <div className="t-serif text-xl mb-4">
-    <span className="text-blue-600 pr-1">{props.num}</span>
+  <div className="text-serif-lg">
+    <span className="text-primary pr-1">{props.num}</span>
     {props.text}
   </div>
 )
@@ -49,8 +47,8 @@ const Apply = (props: ApplyProps) => {
 
   return (
     <>
-      <section className="border-gray-400 border-b p-5">
-        <h2 className="font-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider inline-block">
+      <section className="border border-gray-400 border-b-0 p-5">
+        <h2 className="font-alt-sans uppercase text-tiny mb-5 pb-2 border-0 border-b-4 border-primary font-semibold text-gray-800 tracking-widest inline-block">
           How to Apply
         </h2>
         <NumberedHeader num={1} text="Get a Paper Application" />
@@ -76,14 +74,14 @@ const Apply = (props: ApplyProps) => {
         )}
       </section>
 
-      <section className="border-gray-400 border-b p-5 bg-gray-100">
+      <section className="border-gray-400 border-b border-t p-5 bg-gray-100">
         <NumberedHeader num={2} text="Submit a Paper Application" />
         {listing.accepting_applications_by_po_box && (
           <>
             <SubHeader text="Send Application by US Mail" />
             <p className="text-gray-700">{listing.application_organization}</p>
             <SidebarAddress address={applicationAddress()} />
-            <p className="mt-4 text-sm text-gray-600">
+            <p className="mt-4 text-tiny text-gray-750">
               Applications must be received by the deadline and postmarks will not be considered.
             </p>
           </>
