@@ -30,6 +30,7 @@ const ListingsList = (props: ListingsProps) => {
             imageUrl={imageUrl}
             href={`listing/id=${listing.id}`}
             as={`/listing/${listing.id}`}
+            date={listing.application_due_date}
           />
         </div>
         <div className="w-full md:w-6/12 p-3">

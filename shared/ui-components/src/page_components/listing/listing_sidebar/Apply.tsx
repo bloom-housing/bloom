@@ -17,9 +17,7 @@ const OrDivider = (props: { bgColor: string }) => (
   </div>
 )
 
-const SubHeader = (props: { text: string }) => (
-  <h3 className="text-caps-tiny">{props.text}</h3>
-)
+const SubHeader = (props: { text: string }) => <h3 className="text-caps-tiny">{props.text}</h3>
 
 const NumberedHeader = (props: { num: number; text: string }) => (
   <div className="text-serif-lg">
