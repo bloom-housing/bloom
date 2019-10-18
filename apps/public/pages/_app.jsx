@@ -1,6 +1,6 @@
 import React from "react"
-import App, { Container } from "next/app"
-import "@bloom/styles/src/index.scss"
+import App from "next/app"
+import "@bloom/ui-components/styles/index.scss"
 import { addTranslation } from "@bloom/ui-components/src/helpers/translator"
 
 class MyApp extends App {

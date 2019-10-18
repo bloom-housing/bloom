@@ -1,5 +1,6 @@
 import * as React from "react"
 import LocalizedLink from "./LocalizedLink"
+import "./Button.scss"
 
 interface LinkButtonProps {
   href: string
@@ -11,7 +12,6 @@ interface LinkButtonProps {
 }
 
 const LinkButton = (props: LinkButtonProps) => {
-  // Style defined in @bloom/styles/src/atoms.scss
   const buttonClasses = ["button"]
   if (props.filled) buttonClasses.push("filled")
   if (props.normalCase) buttonClasses.push("normal-case")

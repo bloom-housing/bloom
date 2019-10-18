@@ -1,4 +1,5 @@
 import * as React from "react"
+import "./Button.scss"
 
 interface ButtonProps {
   children: React.ReactNode
@@ -10,7 +11,6 @@ interface ButtonProps {
 }
 
 const Button = (props: ButtonProps) => {
-  // Style defined in @bloom/styles/src/atoms.scss
   const buttonClasses = ["button"]
   if (props.filled) buttonClasses.push("filled")
   if (props.normalCase) buttonClasses.push("normal-case")

@@ -1,7 +1,7 @@
 import { Component } from "react"
 import t from "@bloom/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
-import Hero from "@bloom/ui-components/src/headers/hero"
+import Hero from "@bloom/ui-components/src/headers/Hero"
 import MarkdownSection from "@bloom/ui-components/src/sections/markdown_section"
 import PageContent from "../page_content/homepage.mdx"
 import { Listing } from "@bloom/ui-components/src/types"
