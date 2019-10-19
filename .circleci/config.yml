@@ -5,12 +5,6 @@ jobs:
       - image: circleci/node:current # at some point we can fix to a version if needed
     steps:
       - checkout
-      - run:
-        name: yarn-update
-        command: "yarn install"
-      - run:
-        name: test
-        command: yarn test:shared:ui
-      #- run:
-      #  name: lint
-      #  command: yarn lint:all
+      - run: yarn install
+      - run: yarn test:shared:ui
+      #- run: yarn lint:all
