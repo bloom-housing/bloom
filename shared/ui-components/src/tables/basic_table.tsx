@@ -19,16 +19,30 @@ export const BasicTable = (props: any) => {
 
   const headerLabels = Object.values(headers).map(col => {
     const uniqKey = nanoid()
-    return <HeaderCell key={uniqKey}>{col}</HeaderCell>
+    let header
+    if (typeof col == "string") {
+      header = col
+    } else {
+      header = col.label
+    }
+    return <HeaderCell key={uniqKey}>{header}</HeaderCell>
   })
 
   const body = data.map((row: any) => {
     const rowKey = row["id"] || nanoid()
     const cols = Object.keys(headers).map(colKey => {
       const uniqKey = nanoid()
+      let header, cell
+      if (typeof headers[colKey] == "string") {
+        header = headers[colKey]
+        cell = row[colKey]
+      } else {
+        header = headers[colKey].label
+        cell = `${row[colKey]} ${headers[colKey].unit}`
+      }
       return (
-        <Cell key={uniqKey} headerLabel={headers[colKey]} cellPadding={cellPadding}>
-          {row[colKey]}
+        <Cell key={uniqKey} headerLabel={header} cellPadding={cellPadding}>
+          {cell}
         </Cell>
       )
     })

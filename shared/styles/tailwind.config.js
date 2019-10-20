@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 module.exports = {
   theme: {
     screens: {
@@ -58,19 +60,19 @@ module.exports = {
       },
       red: {
         "700": "#E41D3D",
-        "300": "#F9D2D8",
+        "300": "#F9D2D8"
       },
       yellow: {
         "700": "#FDB81E",
-        "300": "#FEE8B6",
+        "300": "#FEE8B6"
       },
       green: {
         "700": "#2E8540",
-        "300": "#B4E5BE",
+        "300": "#B4E5BE"
       },
       teal: {
         "700": "#2E8540",
-        "300": "#B4E5BE",
+        "300": "#B4E5BE"
       },
       gray: {
         "950": "#242C2E",
@@ -88,16 +90,15 @@ module.exports = {
         "200": "#F7F7F7",
         "100": "#F9F9F9"
       }
-     },
-     letterSpacing: {
-      tightest: '-.075em',
-      tighter: '-.05em',
-      tight: '-.025em',
-      normal: '0',
-      wide: '.025em',
-      wider: '.05em',
-      widest: '.1em',
-      widest: '.2em',
+    },
+    letterSpacing: {
+      tightest: "-.075em",
+      tighter: "-.05em",
+      tight: "-.025em",
+      normal: "0",
+      wide: ".025em",
+      wider: ".05em",
+      widest: ".1em"
     }
   }
 }
