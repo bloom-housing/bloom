@@ -42,7 +42,7 @@ const UnitTables = (props: UnitTablesProps) => {
         return (
           <div key={uniqKey}>
             <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
-              <h3 className="bg-blue-100 p-4 border-0 border-b border-blue-600">
+              <h3 className="button-tiny-bg-light">
                 <strong>{t("listings.unitTypes." + unitsGroup.type)}</strong>:&nbsp;
                 {unitsLabel(unitsGroup.units)},&nbsp;
                 {formatRange(unitsGroup.unitSummary.areaRange)} {t("listings.square_feet")}
