@@ -1,8 +1,12 @@
 // Hero component defined in @bloom/ui-components/src/headers
 .hero {
-	@apply bg-primary-dark;
-	@apply py-20;
-	@apply px-5;
-	@apply text-white;
-	@apply text-center;
+  @apply bg-primary-darker;
+  @apply py-20;
+  @apply px-5;
+  @apply text-white;
+  @apply text-center;
+}
+
+.hero__title {
+  @apply text-5xl;
 }
