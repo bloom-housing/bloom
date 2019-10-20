@@ -3,9 +3,7 @@ import * as React from "react"
 const WhatToExpect = () => {
   return (
     <>
-      <h4 className="text-caps-underline">
-        What to Expect
-      </h4>
+      <h4 className="text-caps-underline">What to Expect</h4>
 
       <p className="text-tiny text-gray-800">
         Applicants will be contacted by the property agent in waitlist order until vacancies are

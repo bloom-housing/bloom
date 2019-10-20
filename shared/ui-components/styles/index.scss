@@ -41,6 +41,8 @@ html {
 
 @import "mixins.scss";
 @import "markdown.scss";
+@import "atoms.scss";
+@import "navbar.scss";
 @import "text.scss";
 @import "accordion.scss";
 @import "custom_counter.scss";
@@ -50,5 +52,8 @@ html {
 /* ***********/
 /* Additional stylesheets are contained within individual component folders */
 /* ***********/
+
+@import "markdown.scss";
+@import "homepage.scss";
 
 @import "tailwindcss/utilities";

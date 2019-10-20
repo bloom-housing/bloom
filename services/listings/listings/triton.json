@@ -58,26 +58,6 @@
   "leasing_agent_zip": "94404",
   "rental_history": "No evictions.",
   "building_total_units": 48,
-  "unit_summaries": [
-    {
-      "min_income_range": { "min": "4858.0", "max": "4858.0" },
-      "occupancy_range": { "min": 1, "max": 2 },
-      "rent_as_percent_income_range": { "min": null, "max": null },
-      "rent_range": { "min": "2429.0", "max": "2429.0" },
-      "unit_type": "1 BR",
-      "reserved_types": [],
-      "total_available": 1
-    },
-    {
-      "min_income_range": { "min": "5992.0", "max": "5992.0" },
-      "occupancy_range": { "min": 5, "max": 7 },
-      "rent_as_percent_income_range": { "min": null, "max": null },
-      "rent_range": { "min": "2996.0", "max": "2996.0" },
-      "unit_type": "3 BR",
-      "reserved_types": [],
-      "total_available": 1
-    }
-  ],
   "units": [
     {
       "id": "jBMnzuaeffeq_X0qrWi3j",
@@ -89,12 +69,12 @@
       "max_occupancy": 2,
       "min_occupancy": 1,
       "monthly_rent": "2429.0",
-      "num_bathrooms": 1,
-      "num_bedrooms": null,
+      "numBathrooms": 1,
+      "numBedrooms": null,
       "number": "265",
       "priority_type": null,
       "reserved_type": null,
-      "sq_ft": 750,
+      "sqFeet": 750,
       "status": "available",
       "unit_type": "one_bdrm",
       "created_at": "2019-06-03T17:42:43.134Z",
@@ -113,12 +93,12 @@
       "max_occupancy": 7,
       "min_occupancy": 5,
       "monthly_rent": "2996.0",
-      "num_bathrooms": 1,
-      "num_bedrooms": null,
+      "numBathrooms": 1,
+      "numBedrooms": null,
       "number": "448",
       "priority_type": null,
       "reserved_type": null,
-      "sq_ft": 1304,
+      "sqFeet": 1304,
       "status": "available",
       "unit_type": "three_bdrm",
       "created_at": "2019-06-03T17:42:43.134Z",

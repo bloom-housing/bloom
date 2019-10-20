@@ -3,26 +3,26 @@ import t from "@bloom/ui-components/src/helpers/translator"
 import { Listing } from "@bloom/ui-components/src/types"
 
 export const unitSummariesTable = (listing: Listing) => {
-  const unitSummaries = listing.unit_summaries.map(unitSummary => {
+  const unitSummaries = listing.unitsSummarized.grouped.map(group => {
     const unitPluralization =
-      unitSummary.total_available == 1 ? t("listings.unit") : t("listings.units")
+      group.unitSummary.totalAvailable == 1 ? t("listings.unit") : t("listings.units")
     return {
-      unitType: <strong>{unitSummary.unit_type}</strong>,
+      unitType: <strong>{t("listings.unitTypes." + group.type)}</strong>,
       minimumIncome: (
         <>
-          <strong>${parseInt(unitSummary.min_income_range.min as string, 10)}</strong>/month
+          <strong>${group.unitSummary.minIncomeRange.min}</strong>/month
         </>
       ),
       rent: (
         <>
-          <strong>${parseInt(unitSummary.rent_range.min as string, 10)}</strong>/month
+          <strong>${group.unitSummary.rentRange.min}</strong>/month
         </>
       ),
       availability: (
         <>
-          {unitSummary.total_available > 0 ? (
+          {group.unitSummary.totalAvailable > 0 ? (
             <>
-              <strong>{unitSummary.total_available}</strong> {unitPluralization}
+              <strong>{group.unitSummary.totalAvailable}</strong> {unitPluralization}
             </>
           ) : (
             <>{t("listings.waitlist")}</>
@@ -36,23 +36,23 @@ export const unitSummariesTable = (listing: Listing) => {
 }
 
 export const occupancyTable = (listing: Listing) => {
-  const occupancyData = listing.unit_summaries.map(unitSummary => {
+  const occupancyData = listing.unitsSummarized.grouped.map(group => {
     let occupancy = ""
 
-    if (unitSummary.occupancy_range.max == null) {
-      occupancy = `at least ${unitSummary.occupancy_range.min} ${
-        unitSummary.occupancy_range.min == 1 ? t("listings.person") : t("listings.people")
+    if (group.unitSummary.occupancyRange.max == null) {
+      occupancy = `at least ${group.unitSummary.occupancyRange.min} ${
+        group.unitSummary.occupancyRange.min == 1 ? t("listings.person") : t("listings.people")
       }`
-    } else if (unitSummary.occupancy_range.max > 1) {
-      occupancy = `${unitSummary.occupancy_range.min}-${unitSummary.occupancy_range.max} ${
-        unitSummary.occupancy_range.max == 1 ? t("listings.person") : t("listings.people")
-      }`
+    } else if (group.unitSummary.occupancyRange.max > 1) {
+      occupancy = `${group.unitSummary.occupancyRange.min}-${
+        group.unitSummary.occupancyRange.max
+      } ${group.unitSummary.occupancyRange.max == 1 ? t("listings.person") : t("listings.people")}`
     } else {
       occupancy = `1 ${t("listings.person")}`
     }
 
     return {
-      unitType: <strong>{unitSummary.unit_type}</strong>,
+      unitType: <strong>{t("listings.unitTypes." + group.type)}</strong>,
       occupancy: occupancy
     }
   })
