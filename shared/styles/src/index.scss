@@ -18,7 +18,6 @@ body {
   top: -0.8rem;
 }
 
-
 // Sticky footer\
 html {
   height: 100%;
@@ -43,6 +42,7 @@ html {
 @import "mixins.scss";
 @import "markdown.scss";
 @import "atoms.scss";
+@import "navbar.scss";
 @import "text.scss";
 @import "accordion.scss";
 @import "cards.scss";
@@ -51,6 +51,9 @@ html {
 @import "image_card.scss";
 @import "lists.scss";
 @import "tables.scss";
+@import "homepage.scss";
+
+@import "markdown.scss";
 @import "homepage.scss";
 
 @import "tailwindcss/utilities";
