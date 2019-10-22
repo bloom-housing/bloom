@@ -8,14 +8,14 @@ import ListingsList, {
 import axios from "axios"
 import { unitSummariesTable } from "../lib/tableSummaries"
 
-const DATA_SERVICE = process.env.DATA_SERVICE || "http://localhost:3001"
+const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3001"
 
 export default class extends Component<ListingsProps> {
   public static async getInitialProps() {
     let listings = []
 
     try {
-      const response = await axios.get(DATA_SERVICE)
+      const response = await axios.get(DATA_SERVICE_URL)
       listings = response.data.listings
     } catch (error) {
       console.log(error)

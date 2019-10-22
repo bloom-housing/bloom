@@ -12,7 +12,7 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "dev:app:public": "wait-on http://localhost:3001/ && cd apps/public && yarn dev",
+    "dev:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public && yarn dev",
     "dev:all": "concurrently \"cd services/listings && yarn dev\" \"yarn dev:app:public\"",
     "test:all": "concurrently \"cd services/listings && yarn test\" \"cd apps/public && yarn test\""
   },

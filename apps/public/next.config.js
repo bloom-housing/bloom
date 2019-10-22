@@ -1,3 +1,5 @@
+/* global require, process, module, console */
+/* eslint @typescript-eslint/no-var-requires: "off" */
 const withTM = require("next-transpile-modules")
 const withSass = require("@zeit/next-sass")
 const withMDX = require("@next/mdx")()
@@ -5,7 +7,7 @@ const axios = require("axios")
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-const DATA_SERVICE = process.env.DATA_SERVICE || "http://localhost:3001"
+const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3001"
 
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom/styles/tailwind.tosass.js")(bloomTheme)
@@ -25,7 +27,7 @@ module.exports = withMDX(
         let listings = []
 
         try {
-          const response = await axios.get(DATA_SERVICE)
+          const response = await axios.get(DATA_SERVICE_URL)
           listings = response.data.listings
         } catch (error) {
           console.log(error)
