@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 module.exports = {
   theme: {
     screens: {
@@ -7,18 +9,19 @@ module.exports = {
       xl: "1280px"
     },
     fontSize: {
+      "2xs": ".6875rem",
       xs: ".75rem",
       sm: ".8125rem",
       tiny: ".875rem",
       base: "1rem",
-      lg: "1.1255rem",
-      xl: "1.25rem",
-      "2xl": "1.625rem",
-      "3xl": "2rem",
-      "4xl": "2.5rem",
-      "5xl": "3rem",
-      "6xl": "4.5rem",
-      "7xl": "5rem"
+      lg: "1.25rem",
+      xl: "1.375rem",
+      "2xl": "1.5rem",
+      "3xl": "1.625rem",
+      "4xl": "2rem",
+      "5xl": "2.5rem",
+      "6xl": "3rem",
+      "7xl": "4.5rem"
     },
     fontFamily: {
       sans: ["Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif"],
@@ -27,7 +30,8 @@ module.exports = {
     },
     colors: {
       primary: "#0077DA",
-      "primary-dark": "#205493",
+      "primary-dark": "#0067be",
+      "primary-darker": "#205493",
       "primary-light": "#DAEEFF",
       "primary-lighter": "#F5F8F9",
       secondary: "#0067be",
@@ -46,10 +50,29 @@ module.exports = {
       lush: "#99CD00",
       "lush-light": "#F2FFCD",
       white: "#FFFFFF",
-      black: "#0077DA",
+      black: "#000000",
       blue: {
-        "700": "#0077DA",
-        "800": "#0055AA"
+        "800": "#205493",
+        "700": "#0067be",
+        "600": "#0077DA",
+        "300": "#DAEEFF",
+        "200": "#F5F8F9"
+      },
+      red: {
+        "700": "#E41D3D",
+        "300": "#F9D2D8"
+      },
+      yellow: {
+        "700": "#FDB81E",
+        "300": "#FEE8B6"
+      },
+      green: {
+        "700": "#2E8540",
+        "300": "#B4E5BE"
+      },
+      teal: {
+        "700": "#2E8540",
+        "300": "#B4E5BE"
       },
       gray: {
         "950": "#242C2E",
@@ -67,16 +90,15 @@ module.exports = {
         "200": "#F7F7F7",
         "100": "#F9F9F9"
       }
-     },
-     letterSpacing: {
-      tightest: '-.075em',
-      tighter: '-.05em',
-      tight: '-.025em',
-      normal: '0',
-      wide: '.025em',
-      wider: '.05em',
-      widest: '.1em',
-      widest: '.2em',
+    },
+    letterSpacing: {
+      tightest: "-.075em",
+      tighter: "-.05em",
+      tight: "-.025em",
+      normal: "0",
+      wide: ".025em",
+      wider: ".05em",
+      widest: ".1em"
     }
   }
 }

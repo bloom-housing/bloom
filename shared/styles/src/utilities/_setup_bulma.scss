@@ -1,0 +1,24 @@
+// Set up Bulma-specific variables and mixins
+$white: $tailwind-white;
+$background: #eee;
+$link: $tailwind-primary;
+$grey-dark: $link;
+$white-bis: #eee;
+$black: $tailwind-black;
+$border: 2px solid #ccc; // not sure how this gets used -JW
+$radius-large: 8px;
+$radius: 4px;
+$desktop: $tailwind-screens-md;
+$speed: 86ms;
+$easing: ease-out;
+
+$colors: (
+  "white": (
+    $white,
+    $black
+  ),
+  "black": (
+    $black,
+    $white
+  )
+);

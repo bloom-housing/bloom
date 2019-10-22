@@ -21,14 +21,14 @@ const Hero = (props: HeroProps) => {
   let subHeader
   if (!props.listings.some(listingOpen)) {
     subHeader = (
-      <h2 className="t-alt-sans text-gray-100 text-lg mb-4">
+      <h2 className="t-alt-sans text-gray-100 text-base mb-4">
         {t("welcome.all_application_closed")}
       </h2>
     )
   }
   return (
     <div className={heroClasses.join(" ")}>
-      <h1 className="title mb-4">{props.title}</h1>
+      <h1 className="hero__title mb-4">{props.title}</h1>
       {subHeader}
       <LinkButton href={props.buttonLink}>{props.buttonTitle}</LinkButton>
     </div>

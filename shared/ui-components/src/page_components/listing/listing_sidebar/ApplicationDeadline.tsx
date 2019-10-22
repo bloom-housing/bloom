@@ -18,7 +18,7 @@ const ApplicationDeadline = (props: ApplicationDeadlineProps) => {
     bgColor = vivid ? "bg-blue-600" : "bg-blue-100"
     content = t("listings.application_deadline")
   } else {
-    bgColor = vivid ? "bg-red-600" : "bg-red-200"
+    bgColor = vivid ? "bg-red-700" : "bg-red-200"
     content = t("listings.applications_closed")
   }
 

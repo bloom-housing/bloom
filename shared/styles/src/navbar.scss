@@ -1,0 +1,139 @@
+@import "utilities/setup_bulma";
+@import "~bulma/sass/utilities/mixins.sass";
+@import "~bulma/sass/components/navbar.sass";
+
+.navbar-notice {
+  @apply w-full;
+  @apply bg-primary;
+  @apply text-right;
+  @apply text-white;
+}
+.navbar-notice__text {
+  @apply max-w-5xl;
+  @apply m-auto;
+  @apply text-sm;
+  @apply pt-2;
+  @apply pb-2;
+  @apply pr-1;
+}
+
+// Custom Navbar Styles
+nav.navbar {
+  @apply max-w-5xl;
+  @apply m-auto;
+}
+
+.navbar-brand .logo {
+  align-items: center;
+  justify-content: center;
+
+  &.navbar-item,
+  &.navbar-item:hover,
+  &.navbar-item:focus {
+    @apply bg-white;
+    @apply border-b-0;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    display: flex;
+  }
+
+  @apply text-black;
+  display: block;
+  text-align: center;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  margin-bottom: -0.75rem;
+  padding-top: .5em;
+  margin-right: 2rem;
+  z-index: 10;
+
+  @screen md {
+    margin-top: -2.75em;
+    padding-top: 1em;
+  }
+
+  .logo__lockup {
+
+  }
+
+  .logo__image {
+    display: inline-block;
+    max-height: 1.5rem;
+    margin-bottom: 0.25rem;
+    margin-top: .25rem;
+
+    @screen md {
+      max-height: 2rem;
+      margin-bottom: 0.5rem;
+      margin-top: .75rem;
+    }
+  }
+
+  .logo__title {
+    @apply uppercase;
+    @apply font-bold;
+    @apply text-gray-900;
+    @apply font-alt-sans;
+    @apply tracking-wider;
+    font-size: 13px;
+
+    @screen md {
+      font-size: 14px;
+    }
+  }
+}
+
+.navbar-item,
+.navbar-link {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+a.navbar-item {
+  @apply text-sm;
+  @apply text-gray-800;
+  @apply border-b-0;
+  @apply border-white;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  &:hover {
+    @apply bg-primary-lighter;
+  }
+
+  @screen md {
+    @apply border-b-2;
+    @apply uppercase;
+    padding-top: 2.5rem;
+    padding-bottom: .85rem;
+
+    &:hover {
+      @apply bg-white;
+      @apply border-primary;
+      @apply text-gray-800;
+    }
+  }
+}
+
+.navbar-burger {
+  &:hover {
+    background: transparent;
+  }
+}
+
+.navbar-burger span {
+  height: 2px;
+}
+
+.navbar-menu {
+  padding: 0;
+
+  @screen md {
+    padding-top: .5;
+    padding-bottom: .5;
+  }
+}
+
+.navbar-end {
+  @apply border-t;
+  @apply border-gray-400;
+}

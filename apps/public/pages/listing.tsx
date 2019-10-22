@@ -75,15 +75,17 @@ export default class extends Component<ListingProps> {
 
     return (
       <Layout>
-        <article className="flex flex-wrap relative max-w-5xl m-auto mb-12">
+        <article className="image-card--leader flex flex-wrap relative max-w-5xl m-auto">
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
             title={listing.name}
             imageUrl={listing.image_url}
             subImageContent={
               <>
-                <p className="t-alt-sans uppercase">{oneLineAddress}</p>
-                <p className="text-gray-700">{listing.developer}</p>
+                <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
+                  {oneLineAddress}
+                </p>
+                <p className="text-gray-700 text-base">{listing.developer}</p>
                 <p className="text-xs">
                   <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
                     View on Map
@@ -92,18 +94,18 @@ export default class extends Component<ListingProps> {
               </>
             }
           />
-          <div className="w-full md:w-2/3 mt-3 md:hidden block text-center">
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light px-3 p-5 block text-center md:mx-3">
             <ApplicationDeadline date={listing.application_due_date} />
           </div>
 
-          <div className="w-full md:w-2/3 mt-6 mb-6 px-3 md:pr-8 border-gray-400">
+          <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
             <BasicTable
               headers={unitSummariesHeaders}
               data={unitSummaries}
               responsiveCollapse={true}
             />
           </div>
-          <div className="w-full md:w-2/3 mt-3 md:hidden mx-3">
+          <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
             <ApplicationSection listing={listing} />
           </div>
           <ListingDetails>
@@ -165,12 +167,11 @@ export default class extends Component<ListingProps> {
               title="Process"
               subtitle="Important dates and contact information"
             >
-              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400">
+              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
-                  <section className="border-gray-400 border-b">
+                  <section className="border-gray-400 border-b p-5 bg-primary-light">
                     <ApplicationDeadline date={listing.application_due_date} />
                   </section>
-                  <ApplicationSection listing={listing} />
                 </div>
                 <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
                   <WhatToExpect />
@@ -187,17 +188,19 @@ export default class extends Component<ListingProps> {
               title="Features"
               subtitle="Amenities, unit details and additional fees"
             >
-              <dl className="column-definition-list">
-                <Description term="Neighborhood" description={listing.neighborhood} />
-                <Description term="Built" description={listing.year_built} />
-                <Description term="Smoking Policy" description={listing.smoking_policy} />
-                <Description term="Pets Policy" description={listing.pet_policy} />
-                <Description term="Property Amenities" description={listing.amenities} />
-                <Description
-                  term="Unit Features"
-                  description={<UnitTables groupedUnits={listing.groupedUnits} />}
-                />
-              </dl>
+              <div className="listing-detail-panel">
+                <dl className="column-definition-list">
+                  <Description term="Neighborhood" description={listing.neighborhood} />
+                  <Description term="Built" description={listing.year_built} />
+                  <Description term="Smoking Policy" description={listing.smoking_policy} />
+                  <Description term="Pets Policy" description={listing.pet_policy} />
+                  <Description term="Property Amenities" description={listing.amenities} />
+                  <Description
+                    term="Unit Features"
+                    description={<UnitTables groupedUnits={listing.unitsSummarized.grouped} />}
+                  />
+                </dl>
+              </div>
             </ListingDetailItem>
 
             <ListingDetailItem
@@ -206,7 +209,9 @@ export default class extends Component<ListingProps> {
               title="Neighborhood"
               subtitle="Location and transportation"
             >
-              <p>Map goes here…</p>
+              <div className="listing-detail-panel">
+                <p>Map goes here…</p>
+              </div>
             </ListingDetailItem>
 
             <ListingDetailItem
@@ -215,7 +220,11 @@ export default class extends Component<ListingProps> {
               title="Additional Information"
               subtitle="Required documents and selection criteria"
             >
-              <p className="text-sm text-gray-700">{listing.required_documents}</p>
+              <div className="listing-detail-panel">
+                <div className="info-card">
+                  <p className="text-sm text-gray-700">{listing.required_documents}</p>
+                </div>
+              </div>
             </ListingDetailItem>
           </ListingDetails>
         </article>

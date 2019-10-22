@@ -33,8 +33,8 @@ const ImageCard = (props: ImageCardProps) => {
       {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
       {props.flag && <Flag text={props.flag} />}
       {statusLabel}
-      <figcaption className="absolute inset-x-0 bottom-0">
-        <h2 className="text-white text-center text-2xl uppercase font-alt-sans mb-3">{props.title}</h2>
+      <figcaption className="image-card__figcaption">
+        <h2 className="image-card__title">{props.title}</h2>
         <p>{props.subtitle}</p>
       </figcaption>
     </figure>

@@ -1,79 +1,84 @@
 import {
+  MinMax,
   Unit,
   UnitGroup,
-  GroupedUnits,
-  UnitGroupSummary,
-  UnitGroupWithSummary,
-  GroupedUnitsWithSummaries
+  UnitsSummarized,
+  UnitSummary
 } from "@bloom/ui-components/src/types"
-type StringDict = { [key: string]: string }
 type AnyDict = { [key: string]: any }
 type Units = [Unit]
 
-const ordinalize = (num: number): string => {
-  const standardSuffix = "th"
-  const oneToThreeSuffixes = ["st", "nd", "rd"]
-
-  const numStr = num.toString()
-  const lastTwoDigits = parseInt(numStr.slice(-2), 10)
-  const lastDigit = parseInt(numStr.slice(-1), 10)
-
-  let suffix = ""
-  if (lastDigit >= 1 && lastDigit <= 3 && !(lastTwoDigits >= 11 && lastTwoDigits <= 13)) {
-    suffix = oneToThreeSuffixes[lastDigit - 1]
+const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue: any = null): MinMax => {
+  if (!newMaxValue) {
+    newMaxValue = newValue
+  }
+  if (baseValue && baseValue.min && baseValue.max) {
+    return { min: Math.min(baseValue.min, newValue), max: Math.max(baseValue.max, newMaxValue) }
   } else {
-    suffix = standardSuffix
+    return { min: newValue, max: newMaxValue }
   }
-
-  return `${num}${suffix}`
 }
 
-const getUnitTypeLabel = (unitType: string): string => {
-  const unitTypeLabels: StringDict = {
-    studio: "Studio",
-    one_bdrm: "1 BR",
-    two_bdrm: "2 BR",
-    three_bdrm: "3 BR",
-    four_bdrm: "4 BR"
-  }
-  return unitTypeLabels[unitType]
+const summarizeUnits = (units: Units): UnitSummary => {
+  const summary = {} as UnitSummary
+  Array.from(units).reduce((summary, unit) => {
+    if (!summary.totalAvailable) {
+      summary.totalAvailable = 0
+    }
+    if (!summary.reservedTypes) {
+      summary.reservedTypes = [unit.unit_type]
+    } else {
+      if (!summary.reservedTypes.includes(unit.unit_type)) {
+        summary.reservedTypes.push(unit.unit_type)
+      }
+    }
+    summary.minIncomeRange = minMaxValue(summary.minIncomeRange, unit.monthly_income_min)
+    summary.occupancyRange = minMaxValue(
+      summary.occupancyRange,
+      unit.min_occupancy,
+      unit.max_occupancy
+    )
+    summary.rentAsPercentIncomeRange = minMaxValue(
+      summary.rentAsPercentIncomeRange,
+      unit.monthly_rent_as_percent_of_income
+    )
+    summary.rentRange = minMaxValue(summary.rentRange, unit.monthly_rent)
+    summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
+    summary.areaRange = minMaxValue(summary.areaRange, unit.sqFeet)
+    summary.totalAvailable += 1
+
+    return summary
+  }, summary)
+
+  return summary
 }
 
-const getUnitAreaRange = (units: Units) => {
-  const sq_fts = units.map(unit => unit.sq_ft)
-  const [min, max] = [Math.min(...sq_fts), Math.max(...sq_fts)]
-  return min != max ? `${min} square feet - ${max} square feet` : `${min} square feet`
-}
-
-const getUnitFloorRange = (units: Units) => {
-  const floors = units.map(unit => unit.floor)
-  const [min, max] = [Math.min(...floors), Math.max(...floors)]
-  return min != max ? `${ordinalize(min)} - ${ordinalize(max)} floors` : `${ordinalize(min)} floor`
-}
-
-export const transformUnitsIntoGroups = (units: Units): GroupedUnitsWithSummaries => {
+const groupUnits = (units: Units, type: keyof Unit = "unit_type"): UnitGroup[] => {
   const groupedByType = {} as AnyDict
-  units.forEach(item => {
-    if (!groupedByType[item.unit_type]) {
-      groupedByType[item.unit_type] = []
+  units.forEach(unit => {
+    const groupKey = unit[type] as keyof Record<string, any>
+    if (!groupedByType[groupKey]) {
+      groupedByType[groupKey] = {} as UnitGroup
+      groupedByType[groupKey].type = groupKey
+      groupedByType[groupKey].units = []
     }
 
-    const unit = Object.assign({}, item) // duplicate hash
-    unit.sq_ft_label = `${unit.sq_ft} sqft`
-
-    groupedByType[item.unit_type].push(unit)
+    groupedByType[groupKey].units.push(unit)
+  })
+  const grouped = Object.values(groupedByType)
+  grouped.forEach(group => {
+    group.unitSummary = summarizeUnits(group.units)
   })
 
-  const groupedUnits = Object.entries(groupedByType) as GroupedUnits
-  return groupedUnits.map(
-    (group: UnitGroup): UnitGroupWithSummary => {
-      const newGroup = Array.from(group) as UnitGroupWithSummary
-      newGroup.push({
-        unit_type_label: getUnitTypeLabel(group[0]),
-        area_range: getUnitAreaRange(group[1]),
-        floor_range: getUnitFloorRange(group[1])
-      } as UnitGroupSummary)
-      return newGroup
-    }
-  )
+  return grouped
+}
+
+export const transformUnits = (units: Units): UnitsSummarized => {
+  const data = {} as UnitsSummarized
+  data.grouped = groupUnits(units)
+  data.reserved = groupUnits(units, "reserved_type")
+  data.priority = groupUnits(units, "priority_type")
+  data.unitTypes = data.grouped.map(group => group.type)
+  data.unitSummary = summarizeUnits(units)
+  return data
 }

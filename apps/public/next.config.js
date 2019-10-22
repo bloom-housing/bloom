@@ -7,11 +7,17 @@ if (process.env.NODE_ENV !== "production") {
 }
 const DATA_SERVICE = process.env.DATA_SERVICE || "http://localhost:3001"
 
+const bloomTheme = require("./tailwind.config.js")
+const tailwindVars = require("@bloom/styles/tailwind.tosass.js")(bloomTheme)
+
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
 module.exports = withMDX(
   withSass(
     withTM({
+      sassLoaderOptions: {
+        prependData: tailwindVars
+      },
       transpileModules: ["@bloom"],
       // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
       async exportPathMap() {
