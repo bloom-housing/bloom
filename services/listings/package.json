@@ -18,7 +18,7 @@
     "typescript": "^3.6.2"
   },
   "dependencies": {
-    "@bloom/interfaces": "*",
+    "@bloom/core": "*",
     "@koa/cors": "^3.0.0",
     "dotenv": "^8.0.0",
     "koa": "^2.7.0",

@@ -1,7 +1,6 @@
 import * as React from "react"
-
 import ImageCard from "../../cards/ImageCard"
-import { Listing } from "@bloom/interfaces/src/listings"
+import { Listing } from "@bloom/core/src/listings"
 import LinkButton from "../../atoms/LinkButton"
 import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
 import t from "@bloom/ui-components/src/helpers/translator"

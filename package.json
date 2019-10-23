@@ -6,7 +6,7 @@
     "shared/ui-components",
     "apps/public",
     "services/listings",
-    "shared/interfaces"
+    "shared/core"
   ],
   "repository": "https://github.com/Exygy/bloom.git",
   "license": "GPL-3.0",
