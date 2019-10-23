@@ -15,7 +15,7 @@ export interface Unit {
   number: string
   priority_type: string
   reserved_type: string
-  sqFt: number
+  sqFeet: number
   status: string
   unit_type: string
   created_at: Date

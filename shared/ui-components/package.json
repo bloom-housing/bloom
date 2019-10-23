@@ -44,7 +44,6 @@
     "webpack": "^4.39.1"
   },
   "dependencies": {
-    "@bloom/styles": "*",
     "@bloom/core": "*",
     "@types/nanoid": "^2.0.0",
     "@types/node": "^12.7.1",

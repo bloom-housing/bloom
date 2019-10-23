@@ -98,11 +98,7 @@
       "number": "206",
       "priority_type": null,
       "reserved_type": null,
-<<<<<<< HEAD
       "sqFeet": 355,
-=======
-      "sqFt": 355,
->>>>>>> Add translations to units table
       "status": "occupied",
       "unit_type": "studio",
       "created_at": "2019-06-25T17:26:59.698Z",
@@ -126,11 +122,7 @@
       "number": "303",
       "priority_type": null,
       "reserved_type": null,
-<<<<<<< HEAD
       "sqFeet": 355,
-=======
-      "sqFt": 355,
->>>>>>> Add translations to units table
       "status": "occupied",
       "unit_type": "studio",
       "created_at": "2019-06-25T17:27:12.228Z",
@@ -154,11 +146,7 @@
       "number": "403",
       "priority_type": null,
       "reserved_type": null,
-<<<<<<< HEAD
       "sqFeet": 355,
-=======
-      "sqFt": 355,
->>>>>>> Add translations to units table
       "status": "occupied",
       "unit_type": "studio",
       "created_at": "2019-06-25T17:27:23.985Z",
@@ -182,11 +170,7 @@
       "number": "406",
       "priority_type": null,
       "reserved_type": null,
-<<<<<<< HEAD
       "sqFeet": 355,
-=======
-      "sqFt": 355,
->>>>>>> Add translations to units table
       "status": "occupied",
       "unit_type": "studio",
       "created_at": "2019-06-25T17:27:38.397Z",

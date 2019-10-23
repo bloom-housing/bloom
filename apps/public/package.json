@@ -13,7 +13,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@bloom/styles": "*",
     "@bloom/core": "*",
     "@bloom/ui-components": "*",
     "@mdx-js/loader": "^1.1.6",
