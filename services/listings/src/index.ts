@@ -2,8 +2,7 @@ type AnyDict = { [key: string]: any }
 import Application from "koa"
 import cors from "@koa/cors"
 import dotenv from "dotenv"
-import { transformUnitsIntoGroups } from "./lib/unit_transformations"
-
+import { transformUnits } from "./lib/unit_transformations"
 dotenv.config({ path: ".env" })
 
 const config = {
@@ -18,7 +17,7 @@ const listings = [triton as AnyDict, gish as AnyDict, archer as AnyDict]
 
 // Transform all the listings
 listings.forEach(listing => {
-  listing.groupedUnits = transformUnitsIntoGroups(listing.units)
+  listing.unitsSummarized = transformUnits(listing.units)
 })
 
 const data = { status: "ok", listings: listings }

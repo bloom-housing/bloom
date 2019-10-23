@@ -20,9 +20,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
 
   return (
     <>
-      <h4 className="text-caps-underline">
-        Contact Leasing Agent
-      </h4>
+      <h4 className="text-caps-underline">Contact Leasing Agent</h4>
 
       <p className="text-xl">{listing.leasing_agent_name}</p>
       <p className="text-gray-700">{listing.leasing_agent_title}</p>
