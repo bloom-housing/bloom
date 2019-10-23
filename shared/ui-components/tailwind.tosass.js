@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 const tailwindToSassVars = bloomTheme => {
   const bloomColorVars = Object.keys(bloomTheme.theme.colors).map(colorKey => {
     return "$tailwind-" + colorKey + ": " + bloomTheme.theme.colors[colorKey] + ";"

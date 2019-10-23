@@ -1,10 +1,13 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const withTM = require("next-transpile-modules")
 const withSass = require("@zeit/next-sass")
 const withMDX = require("@next/mdx")()
 const axios = require("axios")
 
 const bloomTheme = require("./tailwind.config.js")
-const tailwindVars = require("@bloom/styles/tailwind.tosass.js")(bloomTheme)
+const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules

@@ -1,5 +1,5 @@
 import * as React from "react"
-import ImageCard from "../../cards/image_card"
+import ImageCard from "../../cards/ImageCard"
 
 interface ImageHeaderProps {
   as?: string
