@@ -1,5 +1,5 @@
 import t from "@bloom/ui-components/src/helpers/translator"
-import { Listing } from "@bloom/ui-components/src/types"
+import { Listing } from "@bloom/core/src/listings"
 
 const getOccupancyDescription = (listing: Listing) => {
   const unitsSummarized = listing.unitsSummarized

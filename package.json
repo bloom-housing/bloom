@@ -5,7 +5,8 @@
   "workspaces": [
     "shared/ui-components",
     "apps/public",
-    "services/listings"
+    "services/listings",
+    "shared/core"
   ],
   "repository": "https://github.com/Exygy/bloom.git",
   "license": "GPL-3.0",

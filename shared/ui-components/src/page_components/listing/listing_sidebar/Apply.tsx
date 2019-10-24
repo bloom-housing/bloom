@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Listing } from "../../../types"
+import { Listing } from "@bloom/core/src/listings"
 import Button from "../../../atoms/Button"
 import SidebarAddress from "./SidebarAddress"
 

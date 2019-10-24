@@ -1,7 +1,7 @@
 import * as React from "react"
 import Address from "./SidebarAddress"
 import t from "../../../helpers/translator"
-import { Listing } from "../../../types"
+import { Listing } from "@bloom/core/src/listings"
 
 interface LeasingAgentProps {
   listing: Listing
