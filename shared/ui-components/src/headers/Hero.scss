@@ -1,0 +1,11 @@
+.hero {
+  @apply bg-primary-darker;
+  @apply py-20;
+  @apply px-5;
+  @apply text-white;
+  @apply text-center;
+}
+
+.hero__title {
+  @apply text-5xl;
+}

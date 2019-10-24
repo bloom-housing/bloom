@@ -16,8 +16,7 @@ export interface Listing {
   building_zip_code: string
   credit_history: string
   developer: string
-  groupedUnits: GroupedUnitsWithSummaries
-  id: number
+  id: string
   image_url?: string
   leasing_agent_city: string
   leasing_agent_email: string
@@ -34,7 +33,9 @@ export interface Listing {
   rental_history: string
   required_documents: string
   smoking_policy: string
+  unit_summaries: [UnitSummary]
   units: [Unit]
+  unitsSummarized: UnitsSummarized
   year_built: number
 }
 
@@ -46,21 +47,21 @@ export interface Address {
 }
 
 export interface Unit {
-  id: number
+  id: string
   ami_percentage: string
   annual_income_min: string
-  monthly_income_min: string
+  monthly_income_min: number
   floor: number
   annual_income_max: string
   max_occupancy: number
   min_occupancy: number
-  monthly_rent: string
-  num_bathrooms: number
-  num_bedrooms: number
+  monthly_rent: number
+  numBathrooms: number
+  numBedrooms: number
   number: string
   priority_type: string
   reserved_type: string
-  sq_ft: number
+  sqFeet: number
   status: string
   unit_type: string
   created_at: Date
@@ -68,7 +69,37 @@ export interface Unit {
   listing_id: number
   ami_chart_id: number
   monthly_rent_as_percent_of_income: number
-  sq_ft_label: string
+}
+
+export interface MinMax {
+  min?: number
+  max?: number
+}
+export interface UnitSummary {
+  minIncomeRange: MinMax
+  occupancyRange: MinMax
+  rentAsPercentIncomeRange: MinMax
+  rentRange: MinMax
+  reservedTypes: [string]
+  totalAvailable: number
+  areaRange: MinMax
+  floorRange: MinMax
+}
+
+export interface UnitsSummarized {
+  all: [Unit]
+  grouped: UnitGroup[]
+  reserved: UnitGroup[]
+  priority: UnitGroup[]
+  unitTypes: string[]
+  unitSummary: UnitSummary
+}
+
+export interface UnitGroup {
+  units: [Unit]
+  type: string
+  unitSummary: UnitSummary
+  unity: any
 }
 
 export interface HousingCounselor {
@@ -80,13 +111,3 @@ export interface HousingCounselor {
   phone?: string
   website?: string
 }
-
-export type UnitGroup = [string, [Unit]]
-export type GroupedUnits = UnitGroup[]
-export interface UnitGroupSummary {
-  unit_type_label: string
-  area_range: string
-  floor_range: string
-}
-export type UnitGroupWithSummary = [string, [Unit], UnitGroupSummary]
-export type GroupedUnitsWithSummaries = UnitGroupWithSummary[]

@@ -1,4 +1,5 @@
 import * as React from "react"
+import "./InfoCard.scss"
 
 interface InfoCardProps {
   title: string
@@ -6,8 +7,8 @@ interface InfoCardProps {
 }
 
 const InfoCard = (props: InfoCardProps) => (
-  <div className="p-3 bg-grey-200">
-    <h4>{props.title}</h4>
+  <div className="info-card">
+    <h4 className="info-card__title">{props.title}</h4>
 
     {props.children}
   </div>

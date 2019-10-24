@@ -1,7 +1,7 @@
 import * as React from "react"
 import Address from "./SidebarAddress"
 import t from "../../../helpers/translator"
-import { Listing } from "../../../types"
+import { Listing } from "@bloom/core/src/listings"
 
 interface LeasingAgentProps {
   listing: Listing
@@ -20,9 +20,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
 
   return (
     <>
-      <h4 className="t-alt-sans uppercase mb-5 pb-2 border-0 border-b-4 border-blue-600 font-semibold text-gray-700 tracking-wider">
-        Contact Leasing Agent
-      </h4>
+      <h4 className="text-caps-underline">Contact Leasing Agent</h4>
 
       <p className="text-xl">{listing.leasing_agent_name}</p>
       <p className="text-gray-700">{listing.leasing_agent_title}</p>

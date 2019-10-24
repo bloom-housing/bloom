@@ -1,5 +1,5 @@
 import * as React from "react"
-import ImageCard from "../../cards/image_card"
+import ImageCard from "../../cards/ImageCard"
 
 interface ImageHeaderProps {
   as?: string
@@ -13,7 +13,7 @@ interface ImageHeaderProps {
 const ImageHeader = (props: ImageHeaderProps) => (
   <header className={props.className}>
     <ImageCard title={props.title} imageUrl={props.imageUrl} href={props.href} as={props.as} />
-    <div>{props.subImageContent}</div>
+    <div className="p-3">{props.subImageContent}</div>
   </header>
 )
 

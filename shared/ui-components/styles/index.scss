@@ -1,0 +1,55 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,900,700");
+@import url("https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic");
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  @apply font-sans;
+  @apply bg-white;
+}
+
+.-top {
+  top: -0.8rem;
+}
+
+// Sticky footer\
+html {
+  height: 100%;
+
+  body {
+    display: table;
+    height: 100%;
+    width: 100%;
+  }
+
+  .site-container {
+    display: table-row;
+    height: 100%;
+  }
+
+  .footer-section {
+    display: table-row;
+    height: 1px;
+  }
+}
+
+@import "mixins.scss";
+@import "markdown.scss";
+@import "navbar.scss";
+@import "text.scss";
+@import "accordion.scss";
+@import "custom_counter.scss";
+@import "lists.scss";
+@import "tables.scss";
+@import "homepage.scss";
+/* ***********/
+/* Additional stylesheets are contained within individual component folders */
+/* ***********/
+
+@import "tailwindcss/utilities";
