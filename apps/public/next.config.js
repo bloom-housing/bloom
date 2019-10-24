@@ -63,9 +63,9 @@ module.exports = withMDX(
 
         // combine the map of all various types of page paths
         return Object.assign({}, languagePaths, {
-          "/disclaimer": { page: "disclaimer" },
+          "/disclaimer": { page: "/disclaimer" },
           "/privacy": { page: "/privacy" },
-          "/housing-counselors": { page: "/housing_counselors"}
+          "/housing-counselors": { page: "/housing_counselors" }
         })
       }
     })
