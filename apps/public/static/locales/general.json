@@ -15,6 +15,12 @@
     "give_feedback": "Give Feedback",
     "privacy_policy": "Privacy Policy"
   },
+  "housing_counselors": {
+    "subtitle": "Talk with a local housing counselor specific to your needs.",
+    "language_services": "Language Servcices:",
+    "call": "Call %{number}",
+    "visit_website": "Visit %{name}"
+  },
   "label": {
     "email_address": "Email",
     "get_directions": "Get Directions",
@@ -136,6 +142,7 @@
     "additional_resources": "More Housing Opportunities",
     "disclaimer": "Disclaimer",
     "get_assistance": "Get Assistance",
+    "housing_counselors": "Housing Counselors",
     "rental_listings": "See Rentals",
     "rent": "Rent affordable housing",
     "privacy": "Privacy Policy",

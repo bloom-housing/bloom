@@ -1,5 +1,6 @@
 import * as React from "react"
 import { HousingCounselor as Counselor } from "types"
+import t from "@bloom/ui-components/src/helpers/translator"
 
 const LanguageLabel = (language: string) => {
   return (
@@ -22,15 +23,21 @@ const HousingCounselor = (props: { counselor: Counselor }) => {
         </a>
       </h3>
       <p className="text-sm text-gray-700 pb-3">
-        {"Language Services: "}
+        {t("housing_counselors.language_services")}
         {counselor.languages.map(language => LanguageLabel(language))}
       </p>
       <p>
         {counselor.address} <br /> {counselor.citystate}
       </p>
-      {counselor.phone && <a href={`tel:+1${counselor.phone}`}>Call {counselor.phone}</a>}
+      {counselor.phone && (
+        <a href={`tel:+1${counselor.phone}`}>
+          {t("housing_counselors.call", { number: counselor.phone })}
+        </a>
+      )}
       <br />
-      <a href={counselor.website}>Visit {counselor.name}</a>
+      <a href={counselor.website}>
+        {t("housing_counselors.visit_website", { name: counselor.name })}
+      </a>
     </>
   )
 }

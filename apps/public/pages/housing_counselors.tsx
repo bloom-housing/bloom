@@ -4,6 +4,7 @@ import HousingCounselor from "@bloom/ui-components/src/page_components/housing_c
 import { HousingCounselor as Counselor } from "@bloom/ui-components/src/types"
 import { Component } from "react"
 import axios from "axios"
+import t from "@bloom/ui-components/src/helpers/translator"
 
 interface HousingCounselorsProps {
   counselors: Counselor[]
@@ -29,11 +30,8 @@ export default class extends Component<HousingCounselorsProps> {
   public render() {
     return (
       <Layout>
-        <PageHeader
-          inverse={true}
-          subtitle="Talk with a local housing counselor specific to your needs."
-        >
-          {"Housing Counselor Resources"}
+        <PageHeader inverse={true} subtitle={t("housing_counselors.subtitle")}>
+          {t("page_title.housing_counselors")}
         </PageHeader>
         {this.props.counselors.map(c => {
           return (
