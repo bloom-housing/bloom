@@ -1,7 +1,6 @@
 import * as React from "react"
 import { HousingCounselor as Counselor } from "types"
 
-// TODO: Figure out how to style this
 const LanguageLabel = (language: string) => {
   return (
     <span
@@ -12,12 +11,12 @@ const LanguageLabel = (language: string) => {
     </span>
   )
 }
-
+// TODO: Add icons for address, phone, link to better match original
 const HousingCounselor = (props: { counselor: Counselor }) => {
   const counselor = props.counselor
   return (
     <>
-      <h3 className="t-alt-sans font-semibold text-gray-800 text-sm pb-3">
+      <h3>
         <a href={counselor.website} target="_blank">
           {counselor.name}
         </a>
