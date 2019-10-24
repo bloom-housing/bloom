@@ -18,10 +18,9 @@ export default class extends Component<HousingCounselorsProps> {
       const response = await axios.get(
         "https://housing.sfgov.org/assets/housing_counselors-7b0f260dac22dfa20871edd36135b62f1a25a9dad78faf2cf8e8e2514b80cf61.json"
       )
-      counselors = JSON.parse(response.data).locations
-      console.log("test", counselors[0])
+      counselors = response.data.locations
     } catch (error) {
-      console.log(error)
+      console.log("Error loading housing counselors: ", error)
     }
 
     return { counselors }
