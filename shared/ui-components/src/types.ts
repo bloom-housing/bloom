@@ -71,6 +71,16 @@ export interface Unit {
   sq_ft_label: string
 }
 
+export interface HousingCounselor {
+  name: string
+  languages: Array<string>
+  address?: string
+  citystate?: string
+  // TBD if we want to enforce phone, address, website etc as types
+  phone?: string
+  website?: string
+}
+
 export type UnitGroup = [string, [Unit]]
 export type GroupedUnits = UnitGroup[]
 export interface UnitGroupSummary {
