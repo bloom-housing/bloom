@@ -15,7 +15,12 @@ const testCounselor: Counselor = {
 export default () => {
   return (
     <Layout>
-      <PageHeader inverse={true}>{"Housing Counselors"}</PageHeader>
+      <PageHeader
+        inverse={true}
+        subtitle="Talk with a local housing counselor specific to your needs."
+      >
+        {"Housing Counselor Resources"}
+      </PageHeader>
       <HousingCounselor counselor={testCounselor} />
     </Layout>
   )
