@@ -15,7 +15,7 @@ interface HeroProps {
 const heroClasses = ["hero"]
 
 const listingOpen = listing => {
-  return moment() < moment(listing.application_due_date)
+  return moment() < moment(listing.applicationDueDate)
 }
 
 const Hero = (props: HeroProps) => {
@@ -23,7 +23,7 @@ const Hero = (props: HeroProps) => {
   if (!props.listings.some(listingOpen)) {
     subHeader = (
       <h2 className="t-alt-sans text-gray-100 text-base mb-4">
-        {t("welcome.all_application_closed")}
+        {t("welcome.allApplicationClosed")}
       </h2>
     )
   }

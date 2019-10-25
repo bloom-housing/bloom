@@ -9,11 +9,11 @@ const WaitlistItem = (props: any) => (
 
 const Waitlist = (props: any) => {
   const listing = props.listing
-  const waitlistOpen = listing.waitlist_current_size < listing.waitlist_max_size
+  const waitlistOpen = listing.waitlistCurrentSize < listing.waitlistMaxSize
   const header = waitlistOpen ? "Waitlist open" : "Waitlist closed"
   let availableUnitsInfo
 
-  if (listing.units_available == 0) {
+  if (listing.unitsAvailable == 0) {
     availableUnitsInfo = (
       <p className="text-sm italic text-gray-700 pb-3">
         There are no available units at this time.
@@ -27,17 +27,17 @@ const Waitlist = (props: any) => {
       <div>
         {availableUnitsInfo}
         <p className="text-tiny text-gray-800 pb-3">
-          Submit an application for an open slot on the waitlist for {listing.building_total_units}{" "}
+          Submit an application for an open slot on the waitlist for {listing.buildingTotalUnits}{" "}
           units.
         </p>
         <ul>
-          <WaitlistItem value={listing.waitlist_current_size} text={"current waitlist size"} />
+          <WaitlistItem value={listing.waitlistCurrentSize} text={"current waitlist size"} />
           <WaitlistItem
-            value={listing.waitlist_max_size - listing.waitlist_current_size}
+            value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
             text={"open waitlist slots"}
             class_name={"font-semibold"}
           />
-          <WaitlistItem value={listing.waitlist_max_size} text={"final waitlist size"} />
+          <WaitlistItem value={listing.waitlistMaxSize} text={"final waitlist size"} />
         </ul>
       </div>
     </>

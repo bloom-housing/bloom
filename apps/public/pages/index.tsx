@@ -36,7 +36,7 @@ export default class extends Component<IndexProps> {
       <Layout>
         <Hero
           title={heroTitle}
-          buttonTitle={t("welcome.see_rental_listings")}
+          buttonTitle={t("welcome.seeRentalListings")}
           buttonLink="/listings"
           listings={this.props.listings}
         />

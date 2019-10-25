@@ -45,10 +45,10 @@ export default class extends Component<ListingProps> {
     const listing = this.props.listing
 
     const address = {
-      streetAddress: listing.building_street_address,
-      city: listing.building_city,
-      state: listing.building_state,
-      zipCode: listing.building_zip_code
+      streetAddress: listing.buildingStreetAddress,
+      city: listing.buildingCity,
+      state: listing.buildingState,
+      zipCode: listing.buildingZipCode
     }
 
     const oneLineAddress = <OneLineAddress address={address} />
@@ -66,7 +66,7 @@ export default class extends Component<ListingProps> {
 
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
-      unitType: t("t.unit_type"),
+      unitType: t("t.unitType"),
       occupancy: t("t.occupancy")
     }
     const occupancyData = occupancyTable(listing)
@@ -77,7 +77,7 @@ export default class extends Component<ListingProps> {
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
             title={listing.name}
-            imageUrl={listing.image_url}
+            imageUrl={listing.imageUrl}
             subImageContent={
               <>
                 <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
@@ -93,7 +93,7 @@ export default class extends Component<ListingProps> {
             }
           />
           <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light px-3 p-5 block text-center md:mx-3">
-            <ApplicationDeadline date={listing.application_due_date} />
+            <ApplicationDeadline date={listing.applicationDueDate} />
           </div>
 
           <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
@@ -115,8 +115,8 @@ export default class extends Component<ListingProps> {
             >
               <ul>
                 <ListSection
-                  title={t("listings.household_maximum_income")}
-                  subtitle={t("listings.for_income_calculations")}
+                  title={t("listings.householdMaximumIncome")}
+                  subtitle={t("listings.forIncomeCalculations")}
                 >
                   <>table goes here…</>
                 </ListSection>
@@ -149,10 +149,10 @@ export default class extends Component<ListingProps> {
                 >
                   <>
                     <InfoCard title="Credit History">
-                      <p className="text-sm text-gray-700">{listing.credit_history}</p>
+                      <p className="text-sm text-gray-700">{listing.creditHistory}</p>
                     </InfoCard>
                     <InfoCard title="Rental History">
-                      <p className="text-sm text-gray-700">{listing.rental_history}</p>
+                      <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
                     </InfoCard>
                   </>
                 </ListSection>
@@ -168,7 +168,7 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <section className="border-gray-400 border-b p-5 bg-primary-light">
-                    <ApplicationDeadline date={listing.application_due_date} />
+                    <ApplicationDeadline date={listing.applicationDueDate} />
                   </section>
                 </div>
                 <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
@@ -189,9 +189,9 @@ export default class extends Component<ListingProps> {
               <div className="listing-detail-panel">
                 <dl className="column-definition-list">
                   <Description term="Neighborhood" description={listing.neighborhood} />
-                  <Description term="Built" description={listing.year_built} />
-                  <Description term="Smoking Policy" description={listing.smoking_policy} />
-                  <Description term="Pets Policy" description={listing.pet_policy} />
+                  <Description term="Built" description={listing.yearBuilt} />
+                  <Description term="Smoking Policy" description={listing.smokingPolicy} />
+                  <Description term="Pets Policy" description={listing.petPolicy} />
                   <Description term="Property Amenities" description={listing.amenities} />
                   <Description
                     term="Unit Features"
@@ -220,7 +220,7 @@ export default class extends Component<ListingProps> {
             >
               <div className="listing-detail-panel">
                 <div className="info-card">
-                  <p className="text-sm text-gray-700">{listing.required_documents}</p>
+                  <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
                 </div>
               </div>
             </ListingDetailItem>
