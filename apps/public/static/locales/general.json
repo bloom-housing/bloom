@@ -17,7 +17,7 @@
   },
   "housing_counselors": {
     "subtitle": "Talk with a local housing counselor specific to your needs.",
-    "language_services": "Language Servcices: ",
+    "language_services": "Language Services: ",
     "call": "Call %{number}",
     "visit_website": "Visit %{name}"
   },
