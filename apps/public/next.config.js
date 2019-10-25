@@ -1,5 +1,6 @@
-/* global require, process, module, console */
-/* eslint @typescript-eslint/no-var-requires: "off" */
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const withTM = require("next-transpile-modules")
 const withSass = require("@zeit/next-sass")
 const withMDX = require("@next/mdx")()
@@ -10,7 +11,7 @@ if (process.env.NODE_ENV !== "production") {
 const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3001"
 
 const bloomTheme = require("./tailwind.config.js")
-const tailwindVars = require("@bloom/styles/tailwind.tosass.js")(bloomTheme)
+const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules

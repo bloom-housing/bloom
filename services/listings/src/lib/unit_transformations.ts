@@ -1,10 +1,5 @@
-import {
-  MinMax,
-  Unit,
-  UnitGroup,
-  UnitsSummarized,
-  UnitSummary
-} from "@bloom/ui-components/src/types"
+import { Unit, UnitGroup, UnitsSummarized, UnitSummary } from "@bloom/core/src/units"
+import { MinMax } from "@bloom/core/src/general"
 type AnyDict = { [key: string]: any }
 type Units = [Unit]
 

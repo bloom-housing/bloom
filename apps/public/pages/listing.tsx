@@ -4,7 +4,7 @@ import t from "@bloom/ui-components/src/helpers/translator"
 import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
 import getOccupancyDescription from "../lib/getOccupancyDescription"
 import Layout from "../layouts/application"
-import { Listing } from "@bloom/ui-components/src/types"
+import { Listing } from "@bloom/core/src/listings"
 import {
   ListingDetails,
   ListingDetailItem

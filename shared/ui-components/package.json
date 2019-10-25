@@ -44,14 +44,16 @@
     "webpack": "^4.39.1"
   },
   "dependencies": {
-    "@bloom/styles": "*",
+    "@bloom/core": "*",
     "@types/nanoid": "^2.0.0",
     "@types/node": "^12.7.1",
     "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.8.5",
+    "bulma": "^0.7.5",
     "nanoid": "^2.1.1",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "tailwindcss": "^1.1.2"
   },
   "babel": {
     "presets": [

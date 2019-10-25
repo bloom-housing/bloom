@@ -1,5 +1,5 @@
 import { configure } from "@storybook/react"
-import "@bloom/styles/src/index.scss"
+import "@bloom/ui-components/styles/index.scss"
 
 // automatically import all files ending in *.stories.tsx
 const req = require.context("../src", true, /stories\.tsx$/)

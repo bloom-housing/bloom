@@ -1,5 +1,5 @@
-const bloomTheme = require("../tailwind.config.js");
-const tailwindVars = require("@bloom/styles/tailwind.tosass.js")(bloomTheme);
+const bloomTheme = require("../tailwind.config.js")
+const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
 
 module.exports = ({ config }) => {
   config.module.rules.push({

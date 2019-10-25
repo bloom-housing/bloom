@@ -1,0 +1,45 @@
+{
+  "name": "@bloom/core",
+  "version": "0.0.1",
+  "description": "Shared types for Bloom affordable housing system",
+  "main": "index.js",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.6",
+    "jest": "^24.9.0",
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.1"
+  },
+  "dependencies": {
+    "@types/node": "^12.7.1",
+    "@types/node-polyglot": "^0.4.34",
+    "nanoid": "^2.1.1"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/react",
+      "@babel/preset-typescript"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "require-context-hook"
+        ]
+      }
+    }
+  }
+}

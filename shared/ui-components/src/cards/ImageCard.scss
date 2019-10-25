@@ -1,5 +1,6 @@
-.image-card {
+@import "@bloom/ui-components/styles/mixins.scss";
 
+.image-card {
 }
 
 .image-card__figcaption {
@@ -9,7 +10,7 @@
 
   &:before {
     @include overlay-image;
-    @include custom-linear-gradient(transparent, rgba(0,0,0, .8));
+    @include custom-linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   }
 }
 

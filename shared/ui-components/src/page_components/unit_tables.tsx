@@ -1,8 +1,9 @@
 import * as React from "react"
 import nanoid from "nanoid"
-import { UnitGroup, MinMax, Unit } from "@bloom/ui-components/src/types"
-import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
-import t from "@bloom/ui-components/src/helpers/translator"
+import { MinMax } from "@bloom/core/src/general"
+import { UnitGroup, Unit } from "@bloom/core/src/units"
+import { BasicTable } from "../../src/tables/basic_table"
+import t from "../../src/helpers/translator"
 
 const toggleTable = (event: any) => {
   event.currentTarget.parentElement.querySelector(".unit-table").classList.toggle("hidden")
