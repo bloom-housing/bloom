@@ -18,6 +18,9 @@ const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomThe
 module.exports = withMDX(
   withSass(
     withTM({
+      env: {
+        dataServiceUrl: DATA_SERVICE_URL
+      },
       sassLoaderOptions: {
         prependData: tailwindVars
       },

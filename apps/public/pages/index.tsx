@@ -7,8 +7,6 @@ import PageContent from "../page_content/homepage.mdx"
 import { Listing } from "@bloom/core/src/listings"
 import axios from "axios"
 
-const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3001"
-
 interface IndexProps {
   listings: Listing[]
 }
@@ -18,7 +16,7 @@ export default class extends Component<IndexProps> {
     let listings = []
 
     try {
-      const response = await axios.get(DATA_SERVICE_URL)
+      const response = await axios.get(process.env.dataServiceUrl)
       listings = response.data.listings
     } catch (error) {
       console.log(error)
