@@ -3,6 +3,7 @@ import { Unit, UnitSummary, UnitsSummarized } from "./units"
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
   acceptingApplicationsByPoBox: boolean
+  acceptsPostmarkedApplications: boolean
   amenities: string
   applicationCity: string
   applicationDownloadUrl: string
@@ -32,6 +33,7 @@ export interface Listing {
   name: string
   neighborhood: string
   petPolicy: string
+  postmarkedApplicationsReceivedByDate: string
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string

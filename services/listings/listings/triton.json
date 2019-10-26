@@ -2,7 +2,7 @@
   "id": "jsQvgvy6eJy56TNCFfQp8",
   "acceptingApplicationsAtLeasingAgent": true,
   "acceptingApplicationsByPoBox": true,
-  "acceptingAnlineApplications": false,
+  "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
   "applicationDueDate": "2019-08-19T17:00:00.000-07:00",

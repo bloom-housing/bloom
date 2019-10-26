@@ -170,6 +170,7 @@ export default class extends Component<ListingProps> {
                   <section className="border-gray-400 border-b p-5 bg-primary-light">
                     <ApplicationDeadline date={listing.applicationDueDate} />
                   </section>
+                  <ApplicationSection listing={listing} />
                 </div>
                 <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
                   <WhatToExpect />

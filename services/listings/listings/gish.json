@@ -2,7 +2,7 @@
   "id": "sz0UrxnBdAxHMdfgcgha7",
   "acceptingApplicationsAtLeasingAgent": true,
   "acceptingApplicationsByPoBox": false,
-  "acceptingAnlineApplications": false,
+  "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, Laundry",
   "applicationDueDate": "2019-08-09T12:58:21.000-07:00",
