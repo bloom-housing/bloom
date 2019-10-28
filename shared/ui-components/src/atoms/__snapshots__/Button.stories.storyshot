@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Atoms|Button default 1`] = `
+<Button
+  onClick={[Function]}
+>
+  <button
+    className="button"
+    onClick={[Function]}
+  >
+    Button Component
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Atoms|Button filled 1`] = `
+<Button
+  filled={true}
+  onClick={[Function]}
+>
+  <button
+    className="button filled"
+    onClick={[Function]}
+  >
+    Filled Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Atoms|Button regular case 1`] = `
+<Button
+  normalCase={true}
+  onClick={[Function]}
+>
+  <button
+    className="button normal-case"
+    onClick={[Function]}
+  >
+    Button (Normal Case)
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Atoms|Button small 1`] = `
+<Button
+  onClick={[Function]}
+  small={true}
+>
+  <button
+    className="button small"
+    onClick={[Function]}
+  >
+    Small Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Atoms|Button small and filled 1`] = `
+<Button
+  filled={true}
+  onClick={[Function]}
+  small={true}
+>
+  <button
+    className="button filled small"
+    onClick={[Function]}
+  >
+    Small and Filled Button
+  </button>
+</Button>
+`;

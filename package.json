@@ -13,17 +13,20 @@
   "private": true,
   "scripts": {
     "dev:app:public": "wait-on http://localhost:3001/ && cd apps/public && yarn dev",
-    "dev:all": "concurrently \"cd services/listings && yarn dev\" \"yarn dev:app:public\"",
-    "test:all": "concurrently \"cd services/listings && yarn test\" \"cd apps/public && yarn test\""
+    "test:app:public": "wait-on http://localhost:3001/ && cd apps/public && yarn test",
+    "dev:listings": "cd services/listings && yarn dev",
+    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
+    "test:shared:ui": "cd shared/ui-components && yarn test",
+    "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\""
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^2.0.1-alpha.20",
-    "concurrently": "^4.1.2",
-    "eslint": "^6.2.1",
-    "eslint-config-prettier": "^6.1.0",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
+    "concurrently": "^5.0.0",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react": "^7.16.0",
     "husky": "^3.0.4",
     "lint-staged": "^9.2.3",
     "prettier": "^1.18.2",

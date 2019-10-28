@@ -18,10 +18,10 @@ exports[`Storyshots Headers|ImageHeader with image and title 1`] = `
           src="/images/listing.jpg"
         />
         <figcaption
-          className="absolute inset-x-0 bottom-0"
+          className="image-card__figcaption"
         >
           <h2
-            className="text-white text-center text-2xl uppercase font-alt-sans mb-3"
+            className="image-card__title"
           >
             Hello World
           </h2>
@@ -29,7 +29,9 @@ exports[`Storyshots Headers|ImageHeader with image and title 1`] = `
         </figcaption>
       </figure>
     </ImageCard>
-    <div />
+    <div
+      className="p-3"
+    />
   </header>
 </ImageHeader>
 `;

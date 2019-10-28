@@ -4,11 +4,21 @@ Contributions to the core Bloom applications and services are welcomed. To help 
 
 ## Reporting an Issue
 
-We use GitHub issues to track both bugs and feature ideas.
+We use GitHub issues to track both bugs and feature ideas, and encourage all developers working with Bloom to file issues for consideration.
+
+Please note that implementation-specific issues with individual Bloom sites should be tracked in the repositories for those sites. Our issue tracker is for issues with the core software and reference implementations only.
 
 ## Pull Requests
 
+Pull requests (PRs) are the most effective way to make a contribution to Bloom, and can range from small one-line fixes to major feature additions. Here are some suggestions for having your pull requests quickly accepted:
+
+- Clearly document the issue your pull request is meant to address in the initial comment, and make sure the PR title summarizes the work in a useful way. If your PR addresses an issue in the issue tracker, make sure to link it. You do not need to have a corresponding issue before submitting a PR, but it's usually a good method of getting feedback on your approach before starting major work.
+
+- Make sure that all files touched by your PR still pass all lint and style rules (see below). If you're adding any meaningful functionality to the system, please add matching tests -- the team will be happy to provide guidance on the most time-efficient method for helping with test coverage.
+
 ## Code Style
 
-We use the automatic code formatter Prettier. If you're not using an IDE that integrates with it, you should run yarn prettier on all added or changed code before you submit a pull request.
+We use the ESlint linting system and the automatic code formatter Prettier (which the linter also enforces). **All** pull requests must pass linting to be accepted, so they don't create fix work for future contributors. If you're not using an IDE that integrates with these tools, please run eslint + prettier from the cli on all added or changed code before you submit a pull request.
+
+As much as we'll try to keep current, the linting rules can become out of date, and in this case you should file an issue with the adjustments you're looking for. We'll be looking for a resulting PR with a minimum of two commits - one to adjust the rules or tooling, and another that updates the codebase to match. If the latter changes are complex, please discuss in advance and break up the work into reasonably reviewable commits.
 
