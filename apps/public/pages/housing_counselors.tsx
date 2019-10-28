@@ -1,10 +1,12 @@
-import Layout from "../layouts/application"
-import PageHeader from "@bloom/ui-components/src/headers/page_header/page_header"
-import HousingCounselor from "@bloom/ui-components/src/page_components/housing_counselor"
-import { HousingCounselor as Counselor } from "@bloom/ui-components/src/types"
 import { Component } from "react"
 import axios from "axios"
+
+import { HousingCounselor as Counselor } from "@bloom/ui-components/src/types"
+import HousingCounselor from "@bloom/ui-components/src/page_components/housing_counselor"
+import PageHeader from "@bloom/ui-components/src/headers/page_header/page_header"
 import t from "@bloom/ui-components/src/helpers/translator"
+
+import Layout from "../layouts/application"
 
 interface HousingCounselorsProps {
   counselors: Counselor[]
@@ -12,7 +14,6 @@ interface HousingCounselorsProps {
 
 export default class extends Component<HousingCounselorsProps> {
   public static async getInitialProps() {
-    console.log("getting initial props")
     let counselors: Counselor[] = []
     try {
       //TODO: Add endpoint to DAHLIA w/ housing counselors instead of referencing asset.
