@@ -41,7 +41,7 @@ const UnitTables = (props: UnitTablesProps) => {
       {groupedUnits.map((unitsGroup: UnitGroup) => {
         const uniqKey = nanoid()
         return (
-          <div key={uniqKey}>
+          <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
               <h3 className="button-tiny-bg-light">
                 <strong>{t("listings.unitTypes." + unitsGroup.type)}</strong>:&nbsp;
