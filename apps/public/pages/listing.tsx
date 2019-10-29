@@ -32,7 +32,7 @@ export default class extends Component<ListingProps> {
     let listing = {}
 
     try {
-      const response = await axios.get("http://localhost:3001")
+      const response = await axios.get(process.env.listingServiceUrl)
       listing = response.data.listings.find(l => l.id == listingId)
     } catch (error) {
       console.log(error)

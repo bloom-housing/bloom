@@ -16,7 +16,7 @@ export default class extends Component<IndexProps> {
     let listings = []
 
     try {
-      const response = await axios.get("http://localhost:3001")
+      const response = await axios.get(process.env.listingServiceUrl)
       listings = response.data.listings
     } catch (error) {
       console.log(error)
