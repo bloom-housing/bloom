@@ -9,6 +9,9 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
 const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
+const MAPBOX_TOKEN =
+  process.env.MAPBOX_TOKEN ||
+  "pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
 
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
@@ -19,7 +22,8 @@ module.exports = withMDX(
   withSass(
     withTM({
       env: {
-        listingServiceUrl: LISTING_SERVICE_URL
+        listingServiceUrl: LISTING_SERVICE_URL,
+        mapBoxToken: MAPBOX_TOKEN
       },
       sassLoaderOptions: {
         prependData: tailwindVars

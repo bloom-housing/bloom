@@ -15,6 +15,7 @@ import ApplicationDeadline from "@bloom/ui-components/src/page_components/listin
 import ApplicationSection from "@bloom/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
 import WhatToExpect from "@bloom/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
 import LeasingAgent from "@bloom/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
+import ListingMap from "@bloom/ui-components/src/page_components/listing/ListingMap"
 import ImageHeader from "@bloom/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@bloom/ui-components/src/helpers/address"
 import { Description } from "@bloom/ui-components/src/atoms/description"
@@ -44,14 +45,7 @@ export default class extends Component<ListingProps> {
   public render() {
     const listing = this.props.listing
 
-    const address = {
-      streetAddress: listing.buildingStreetAddress,
-      city: listing.buildingCity,
-      state: listing.buildingState,
-      zipCode: listing.buildingZipCode
-    }
-
-    const oneLineAddress = <OneLineAddress address={address} />
+    const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
 
     const googleMapsHref =
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
@@ -208,7 +202,7 @@ export default class extends Component<ListingProps> {
               subtitle="Location and transportation"
             >
               <div className="listing-detail-panel">
-                <p>Map goes here…</p>
+                <ListingMap address={listing.buildingAddress} />
               </div>
             </ListingDetailItem>
 

@@ -11,12 +11,6 @@ const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
   const phoneNumber = `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`
-  const leasingAgentAddress = {
-    streetAddress: listing.leasingAgentStreet,
-    city: listing.leasingAgentCity,
-    state: listing.leasingAgentState,
-    zipCode: listing.leasingAgentZip
-  }
 
   return (
     <>
@@ -33,8 +27,10 @@ const LeasingAgent = (props: LeasingAgentProps) => {
       <p className="my-5">
         <a href={`mailto:${listing.leasingAgentEmail}`}>Email</a>
       </p>
-
-      <Address address={leasingAgentAddress} officeHours={listing.leasingAgentOfficeHours} />
+      <Address
+        address={listing.leasingAgentAddress}
+        officeHours={listing.leasingAgentOfficeHours}
+      />
     </>
   )
 }

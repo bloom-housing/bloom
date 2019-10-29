@@ -1,8 +1,11 @@
 export interface Address {
+  name: string
   city: string
   state: string
-  streetAddress: string
+  street: string
   zipCode: string
+  latitude: number
+  longitude: number
 }
 
 export interface MinMax {
