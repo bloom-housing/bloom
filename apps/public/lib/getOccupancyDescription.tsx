@@ -5,10 +5,10 @@ const getOccupancyDescription = (listing: Listing) => {
   const unitsSummarized = listing.unitsSummarized
   if (unitsSummarized.unitTypes.includes("SRO")) {
     return unitsSummarized.grouped.length == 1
-      ? t("listings.occupancy_description_all_sro")
-      : t("listings.occupancy_description_some_sro")
+      ? t("listings.occupancyDescriptionAllSro")
+      : t("listings.occupancyDescriptionSomeSro")
   } else {
-    return t("listings.occupancy_description_no_sro")
+    return t("listings.occupancyDescriptionNoSro")
   }
 }
 

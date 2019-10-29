@@ -9,7 +9,7 @@ interface ApplicationSectionProps {
 }
 
 const ApplicationSection = (props: ApplicationSectionProps) => {
-  const dueDate = moment(props.listing.application_due_date)
+  const dueDate = moment(props.listing.applicationDueDate)
   // If applications are closed, hide this section
   if (moment() > dueDate) return null
 

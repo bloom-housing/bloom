@@ -21,23 +21,23 @@ const summarizeUnits = (units: Units): UnitSummary => {
       summary.totalAvailable = 0
     }
     if (!summary.reservedTypes) {
-      summary.reservedTypes = [unit.unit_type]
+      summary.reservedTypes = [unit.unitType]
     } else {
-      if (!summary.reservedTypes.includes(unit.unit_type)) {
-        summary.reservedTypes.push(unit.unit_type)
+      if (!summary.reservedTypes.includes(unit.unitType)) {
+        summary.reservedTypes.push(unit.unitType)
       }
     }
-    summary.minIncomeRange = minMaxValue(summary.minIncomeRange, unit.monthly_income_min)
+    summary.minIncomeRange = minMaxValue(summary.minIncomeRange, unit.monthlyIncomeMin)
     summary.occupancyRange = minMaxValue(
       summary.occupancyRange,
-      unit.min_occupancy,
-      unit.max_occupancy
+      unit.minOccupancy,
+      unit.maxOccupancy
     )
     summary.rentAsPercentIncomeRange = minMaxValue(
       summary.rentAsPercentIncomeRange,
-      unit.monthly_rent_as_percent_of_income
+      unit.monthlyRentAsPercentOfIncome
     )
-    summary.rentRange = minMaxValue(summary.rentRange, unit.monthly_rent)
+    summary.rentRange = minMaxValue(summary.rentRange, unit.monthlyRent)
     summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
     summary.areaRange = minMaxValue(summary.areaRange, unit.sqFeet)
     summary.totalAvailable += 1
@@ -48,7 +48,7 @@ const summarizeUnits = (units: Units): UnitSummary => {
   return summary
 }
 
-const groupUnits = (units: Units, type: keyof Unit = "unit_type"): UnitGroup[] => {
+const groupUnits = (units: Units, type: keyof Unit = "unitType"): UnitGroup[] => {
   const groupedByType = {} as AnyDict
   units.forEach(unit => {
     const groupKey = unit[type] as keyof Record<string, any>
@@ -71,8 +71,8 @@ const groupUnits = (units: Units, type: keyof Unit = "unit_type"): UnitGroup[] =
 export const transformUnits = (units: Units): UnitsSummarized => {
   const data = {} as UnitsSummarized
   data.grouped = groupUnits(units)
-  data.reserved = groupUnits(units, "reserved_type")
-  data.priority = groupUnits(units, "priority_type")
+  data.reserved = groupUnits(units, "reservedType")
+  data.priority = groupUnits(units, "priorityType")
   data.unitTypes = data.grouped.map(group => group.type)
   data.unitSummary = summarizeUnits(units)
   return data

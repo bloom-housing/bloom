@@ -1,162 +1,162 @@
 {
   "config": {
-    "route_prefix": ""
+    "routePrefix": ""
   },
   "error": {
     "alert": {
-      "bad_request": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
-      "timeout_please_try_again": "Oops! Looks like something went wrong. Please try again."
+      "badRequest": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
+      "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
     }
   },
   "footer": {
     "contact": "Contact",
     "disclaimer": "Disclaimer",
-    "for_general_questions": "For general program inquiries, you may call MOHCD at 415-701-5500.",
-    "give_feedback": "Give Feedback",
-    "privacy_policy": "Privacy Policy"
+    "forGeneralQuestions": "For general program inquiries, you may call MOHCD at 415-701-5500.",
+    "giveFeedback": "Give Feedback",
+    "privacyPolicy": "Privacy Policy"
   },
   "label": {
-    "email_address": "Email",
-    "get_directions": "Get Directions",
-    "read_less": "read less",
-    "read_more": "read more",
-    "show_less": "show less",
-    "show_more": "show more",
-    "view_map": "View Map"
+    "emailAddress": "Email",
+    "getDirections": "Get Directions",
+    "readLess": "read less",
+    "readMore": "read more",
+    "showLess": "show less",
+    "showMore": "show more",
+    "viewMap": "View Map"
   },
-  "leasing_agent": {
+  "leasingAgent": {
     "contact": "Contact Leasing Agent",
-    "due_to_high_call_volume": "Due to high call volume you may hear a message.",
-    "office_hours": "Office Hours"
+    "dueToHighCallVolume": "Due to high call volume you may hear a message.",
+    "officeHours": "Office Hours"
   },
-  "listings_for_rent": {
+  "listingsForRent": {
     "callout": {
       "title": "See more listings from our community partners.",
       "button": "View opportunities"
     }
   },
   "listings": {
-    "additional_information": "Additional Information",
-    "all_units": "All Units",
-    "all_units_reserved_for": "All units reserved for {{type}}",
-    "application_deadline": "Application Deadline",
-    "applications_closed": "Applications Closed",
+    "additionalInformation": "Additional Information",
+    "allUnits": "All Units",
+    "allUnitsReservedFor": "All units reserved for {{type}}",
+    "applicationDeadline": "Application Deadline",
+    "applicationsClosed": "Applications Closed",
     "apply": {
-      "applications_must_be_received_by_deadline": "Applications must be received by the deadline and postmarks will not be considered.",
-      "drop_off_application": "Drop Off Application",
-      "drop_off_application_or_mail": "Drop Off Application or Send by US Mail",
-      "get_a_paper_application": "Get a Paper Application",
-      "how_to_apply": "How to Apply",
-      "paper_applications_must_be_mailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
-      "pick_up_an_application": "Pick up an application",
-      "send_by_us_mail": "Send Application by US Mail",
-      "submit_a_paper_application": "Submit a Paper Application"
+      "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
+      "dropOffApplication": "Drop Off Application",
+      "dropOffApplicationOrMail": "Drop Off Application or Send by US Mail",
+      "getAPaperApplication": "Get a Paper Application",
+      "howToApply": "How to Apply",
+      "paperApplicationsMustBeMailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
+      "pickUpAnApplication": "Pick up an application",
+      "sendByUsMail": "Send Application by US Mail",
+      "submitAPaperApplication": "Submit a Paper Application"
     },
-    "available_and_waitlist": "Available Units & Open Waitlist",
-    "available_units": "Available Units",
-    "available_units_and_waitlist": "Available units and waitlist",
-    "available_units_and_waitlist_desc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>{{number}} units</span>",
+    "availableAndWaitlist": "Available Units & Open Waitlist",
+    "availableUnits": "Available Units",
+    "availableUnitsAndWaitlist": "Available units and waitlist",
+    "availableUnitsAndWaitlistDesc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>{{number}} units</span>",
     "bath": "bath",
-    "confirmed_preference_list": "Confirmed {{preference}} List",
-    "current_waitlist_size": "Current Waitlist Size",
-    "developmental_disabilities": "Persons with developmental disabilities",
-    "developmental_disabilities_description": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
-    "enter_lottery_for_waitlist": "Submit an application for an open slot on the waitlist for <span class='t-italic'>{{number}} units</span>.",
-    "final_waitlist_size": "Final Waitlist Size",
-    "for_income_calculations": "For income calculations, household size includes everyone (all ages) living in the unit.",
-    "household_maximum_income": "Household Maximum Income",
-    "important_program_rules": "Important Program Rules",
-    "includes_priority_units": "Includes Priority Units for {{priorities}}",
-    "no_available_units": "There are no available units at this time.",
-    "no_open_listings": "No listings currently have open applications.",
-    "occupancy_description_all_sro": "Occupancy for this building is limited to 1 person per unit.",
-    "occupancy_description_no_sro": "Occupancy limits for this building differ from household size, and do not include children under 6.",
-    "occupancy_description_some_sro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
-    "open_waitlist": "Open Waitlist",
-    "open_waitlist_slots": "Open Waitlist Slots",
+    "confirmedPreferenceList": "Confirmed {{preference}} List",
+    "currentWaitlistSize": "Current Waitlist Size",
+    "developmentalDisabilities": "Persons with developmental disabilities",
+    "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
+    "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for <span class='t-italic'>{{number}} units</span>.",
+    "finalWaitlistSize": "Final Waitlist Size",
+    "forIncomeCalculations": "For income calculations, household size includes everyone (all ages) living in the unit.",
+    "householdMaximumIncome": "Household Maximum Income",
+    "importantProgramRules": "Important Program Rules",
+    "includesPriorityUnits": "Includes Priority Units for {{priorities}}",
+    "noAvailableUnits": "There are no available units at this time.",
+    "noOpenListings": "No listings currently have open applications.",
+    "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
+    "occupancyDescriptionNoSro": "Occupancy limits for this building differ from household size, and do not include children under 6.",
+    "occupancyDescriptionSomeSro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
+    "openWaitlist": "Open Waitlist",
+    "openWaitlistSlots": "Open Waitlist Slots",
     "people": "people",
     "person": "person",
-    "priority_units": "Priority Units",
-    "priority_units_description": "This building has units set aside if any of the following apply to you or someone in your household:",
-    "remaining_units_after_preference_consideration": "After all preference holders have been considered, any remaining units will be available to qualified applicants.",
-    "required_documents": "Required Documents",
-    "reserved_community_building": "{{type}} Building",
-    "reserved_for": "Reserved for {{type}}",
-    "reserved_units": "Reserved Units",
-    "reserved_units_description": "In order to qualify for these units one of the following must apply to you or someone in your household:",
-    "reserved_units_for_who_are": "Reserved for {{communityType}} who are {{reservedType}}",
-    "see_maximum_income_information": "See Maximum Income Information",
-    "see_preference_information": "See Preference Information",
-    "see_unit_information": "See Unit Information",
-    "single_room_occupancy": "Single Room Occupancy",
-    "single_room_occupancy_description": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
-    "square_feet": "square feet",
+    "priorityUnits": "Priority Units",
+    "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
+    "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to qualified applicants.",
+    "requiredDocuments": "Required Documents",
+    "reservedCommunityBuilding": "{{type}} Building",
+    "reservedFor": "Reserved for {{type}}",
+    "reservedUnits": "Reserved Units",
+    "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
+    "reservedUnitsForWhoAre": "Reserved for {{communityType}} who are {{reservedType}}",
+    "seeMaximumIncomeInformation": "See Maximum Income Information",
+    "seePreferenceInformation": "See Preference Information",
+    "seeUnitInformation": "See Unit Information",
+    "singleRoomOccupancy": "Single Room Occupancy",
+    "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
+    "squareFeet": "square feet",
     "unit": "unit",
     "unitTypes": {
-      "one_bdrm": "1 BR",
-      "two_bdrm": "2 BR",
-      "three_bdrm": "3 BR",
+      "oneBdrm": "1 BR",
+      "twoBdrm": "2 BR",
+      "threeBdrm": "3 BR",
       "studio": "Studio"
     },
     "units": "units",
-    "units_are_for": "These units are for {{type}}.",
-    "units_have_accessibility_features_for": "These units have accessibility features for people with {{type}}.",
-    "upcoming_lotteries": {
+    "unitsAreFor": "These units are for {{type}}.",
+    "unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with {{type}}.",
+    "upcomingLotteries": {
       "hide": "Hide Closed Listings",
-      "no_results": "There are no closed listings with upcoming lotteries at this time.",
+      "noResults": "There are no closed listings with upcoming lotteries at this time.",
       "show": "Show Closed Listings",
       "title": "Closed Listings"
     },
     "waitlist": "Waitlist",
-    "waitlist_is_open": "Waitlist is open",
+    "waitlistIsOpen": "Waitlist is open",
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
-    "cc&r_description": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
-    "download_pdf": "Download PDF",
-    "re_pricing": "Re-Pricing",
-    "view_additional_housing_opportunities_header": "See more rental and ownership housing opportunities",
-    "view_additional_housing_opportunities_button": "View additional housing opportunities"
+    "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
+    "downloadPdf": "Download PDF",
+    "rePricing": "Re-Pricing",
+    "viewAdditionalHousingOpportunitiesHeader": "See more rental and ownership housing opportunities",
+    "viewAdditionalHousingOpportunitiesButton": "View additional housing opportunities"
   },
   "lottery": {
-    "applications_that_qualify_for_preference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
-    "view_preference_list": "View Preference List"
+    "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
+    "viewPreferenceList": "View Preference List"
   },
   "region": {
     "name": "Local Region"
   },
   "nav": {
-    "browse_properties": "Browse Properties",
-    "get_assistance": "Get Assistance",
-    "get_feedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='{{feedbackUrl}}'>your feedback.</a>",
+    "browseProperties": "Browse Properties",
+    "getAssistance": "Get Assistance",
+    "getFeedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='{{feedbackUrl}}'>your feedback.</a>",
     "listings": "Listings",
-    "sign_in": "Sign In",
-    "sign_out": "Sign Out",
-    "site_title": "Housing Portal"
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "siteTitle": "Housing Portal"
   },
-  "page_title": {
-    "additional_resources": "More Housing Opportunities",
+  "pageTitle": {
+    "additionalResources": "More Housing Opportunities",
     "disclaimer": "Disclaimer",
-    "get_assistance": "Get Assistance",
-    "rental_listings": "See Rentals",
+    "getAssistance": "Get Assistance",
+    "rentalListings": "See Rentals",
     "rent": "Rent affordable housing",
     "privacy": "Privacy Policy",
-    "welcome_english": "Welcome",
-    "welcome_spanish": "Bienvenido",
-    "welcome_vietnamese": "Tiếng Việt"
+    "welcomeEnglish": "Welcome",
+    "welcomeSpanish": "Bienvenido",
+    "welcomeVietnamese": "Tiếng Việt"
   },
   "t": {
     "menu": "Menu",
-    "minimum_income": "Minimum Income",
+    "minimumIncome": "Minimum Income",
     "none": "None",
     "occupancy": "Occupancy",
     "or": "or",
     "rent": "Rent",
-    "skip_to_main_content": "Skip to main content",
+    "skipToMainContent": "Skip to main content",
     "sqFeet": "sqFeet",
-    "unit_type": "Unit Type"
+    "unitType": "Unit Type"
   },
   "welcome": {
-    "all_application_closed": "All applications are currently closed, but you can view closed listings.",
-    "see_rental_listings": "See Rentals",
+    "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
+    "seeRentalListings": "See Rentals",
     "title": "Apply for affordable housing in"
   }
 }

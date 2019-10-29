@@ -10,31 +10,31 @@ interface LeasingAgentProps {
 const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
 
-  const phoneNumber = `tel:${listing.leasing_agent_phone.replace(/[-()]/g, "")}`
+  const phoneNumber = `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`
   const leasingAgentAddress = {
-    streetAddress: listing.leasing_agent_street,
-    city: listing.leasing_agent_city,
-    state: listing.leasing_agent_state,
-    zipCode: listing.leasing_agent_zip
+    streetAddress: listing.leasingAgentStreet,
+    city: listing.leasingAgentCity,
+    state: listing.leasingAgentState,
+    zipCode: listing.leasingAgentZip
   }
 
   return (
     <>
       <h4 className="text-caps-underline">Contact Leasing Agent</h4>
 
-      <p className="text-xl">{listing.leasing_agent_name}</p>
-      <p className="text-gray-700">{listing.leasing_agent_title}</p>
+      <p className="text-xl">{listing.leasingAgentName}</p>
+      <p className="text-gray-700">{listing.leasingAgentTitle}</p>
 
       <p className="mt-5">
-        <a href={phoneNumber}>Call {listing.leasing_agent_phone}</a>
+        <a href={phoneNumber}>Call {listing.leasingAgentPhone}</a>
       </p>
-      <p className="text-sm text-gray-700">{t("leasing_agent.due_to_high_call_volume")}</p>
+      <p className="text-sm text-gray-700">{t("leasingAgent.dueToHighCallVolume")}</p>
 
       <p className="my-5">
-        <a href={`mailto:${listing.leasing_agent_email}`}>Email</a>
+        <a href={`mailto:${listing.leasingAgentEmail}`}>Email</a>
       </p>
 
-      <Address address={leasingAgentAddress} officeHours={listing.leasing_agent_office_hours} />
+      <Address address={leasingAgentAddress} officeHours={listing.leasingAgentOfficeHours} />
     </>
   )
 }

@@ -46,7 +46,7 @@ const UnitTables = (props: UnitTablesProps) => {
               <h3 className="button-tiny-bg-light">
                 <strong>{t("listings.unitTypes." + unitsGroup.type)}</strong>:&nbsp;
                 {unitsLabel(unitsGroup.units)},&nbsp;
-                {formatRange(unitsGroup.unitSummary.areaRange)} {t("listings.square_feet")}
+                {formatRange(unitsGroup.unitSummary.areaRange)} {t("listings.squareFeet")}
               </h3>
             </button>
             <div className="unit-table hidden">
