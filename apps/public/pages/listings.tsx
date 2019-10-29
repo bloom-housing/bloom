@@ -13,7 +13,7 @@ export default class extends Component<ListingsProps> {
     let listings = []
 
     try {
-      const response = await axios.get(process.env.dataServiceUrl)
+      const response = await axios.get(process.env.listingServiceUrl)
       listings = response.data.listings
     } catch (error) {
       console.log(error)

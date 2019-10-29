@@ -8,7 +8,7 @@ const axios = require("axios")
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3001"
+const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
 
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
@@ -19,7 +19,7 @@ module.exports = withMDX(
   withSass(
     withTM({
       env: {
-        dataServiceUrl: DATA_SERVICE_URL
+        listingServiceUrl: LISTING_SERVICE_URL
       },
       sassLoaderOptions: {
         prependData: tailwindVars
@@ -31,7 +31,7 @@ module.exports = withMDX(
         let listings = []
 
         try {
-          const response = await axios.get(DATA_SERVICE_URL)
+          const response = await axios.get(LISTING_SERVICE_URL)
           listings = response.data.listings
         } catch (error) {
           console.log(error)
