@@ -3,8 +3,7 @@ import * as React from "react"
 interface PageHeaderProps {
   inverse?: boolean
   subtitle?: string
-  // TODO: should this be locked down to string?
-  children: any
+  children: React.ReactNode
 }
 
 const PageHeader = (props: PageHeaderProps) => {
