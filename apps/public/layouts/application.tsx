@@ -14,6 +14,9 @@ const Layout = props => (
       <LocalizedLink href="/listings" className="navbar-item">
         {t("nav.listings")}
       </LocalizedLink>
+      <LocalizedLink href="/housing-counselors" className="navbar-item">
+        {t("nav.getAssistance")}
+      </LocalizedLink>
     </SiteHeader>
     <main>{props.children}</main>
     <SiteFooter />
