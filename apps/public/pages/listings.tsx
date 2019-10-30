@@ -13,7 +13,7 @@ export default class extends Component<ListingsProps> {
     let listings = []
 
     try {
-      const response = await axios.get("http://localhost:3001")
+      const response = await axios.get(process.env.listingServiceUrl)
       listings = response.data.listings
     } catch (error) {
       console.log(error)
@@ -25,7 +25,7 @@ export default class extends Component<ListingsProps> {
   public render() {
     return (
       <Layout>
-        <PageHeader>{t("page_title.rent")}</PageHeader>
+        <PageHeader>{t("pageTitle.rent")}</PageHeader>
         <ListingsList listings={this.props.listings} unitSummariesTable={unitSummariesTable} />
       </Layout>
     )

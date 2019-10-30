@@ -5,6 +5,10 @@ const withTM = require("next-transpile-modules")
 const withSass = require("@zeit/next-sass")
 const withMDX = require("@next/mdx")()
 const axios = require("axios")
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
 
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
@@ -14,6 +18,9 @@ const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomThe
 module.exports = withMDX(
   withSass(
     withTM({
+      env: {
+        listingServiceUrl: LISTING_SERVICE_URL
+      },
       sassLoaderOptions: {
         prependData: tailwindVars
       },
@@ -24,7 +31,7 @@ module.exports = withMDX(
         let listings = []
 
         try {
-          const response = await axios.get("http://localhost:3001")
+          const response = await axios.get(LISTING_SERVICE_URL)
           listings = response.data.listings
         } catch (error) {
           console.log(error)

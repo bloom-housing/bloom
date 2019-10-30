@@ -16,10 +16,10 @@ const ApplicationDeadline = (props: ApplicationDeadlineProps) => {
   // if due date is in future, listing is open
   if (moment() < dueDate) {
     bgColor = vivid ? "bg-blue-600" : "bg-blue-100"
-    content = t("listings.application_deadline")
+    content = t("listings.applicationDeadline")
   } else {
     bgColor = vivid ? "bg-red-700" : "bg-red-200"
-    content = t("listings.applications_closed")
+    content = t("listings.applicationsClosed")
   }
 
   return (

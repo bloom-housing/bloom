@@ -14,10 +14,10 @@ const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
   const listItems = listings.map(listing => {
-    const imageUrl = listing.image_url || ""
+    const imageUrl = listing.imageUrl || ""
     const unitSummariesHeaders = {
-      unitType: t("t.unit_type"),
-      minimumIncome: t("t.minimum_income"),
+      unitType: t("t.unitType"),
+      minimumIncome: t("t.minimumIncome"),
       rent: t("t.rent")
     }
     const unitSummaries = props.unitSummariesTable(listing)
@@ -30,12 +30,12 @@ const ListingsList = (props: ListingsProps) => {
             imageUrl={imageUrl}
             href={`listing/id=${listing.id}`}
             as={`/listing/${listing.id}`}
-            date={listing.application_due_date}
+            date={listing.applicationDueDate}
           />
         </div>
         <div className="w-full md:w-6/12 p-3">
           <h4 className="font-alt-sans font-semibold text-gray-900 text-base mb-2">
-            {t("listings.open_waitlist")}
+            {t("listings.openWaitlist")}
           </h4>
           <div className="mb-4">
             <BasicTable

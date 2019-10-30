@@ -9,7 +9,7 @@ const Layout = props => (
     <SiteHeader
       logoSrc="/static/images/logo_glyph.svg"
       notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
-      title={t("nav.site_title")}
+      title={t("nav.siteTitle")}
     >
       <LocalizedLink href="/listings" className="navbar-item">
         {t("nav.listings")}
