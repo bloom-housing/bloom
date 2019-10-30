@@ -15,11 +15,11 @@
     "giveFeedback": "Give Feedback",
     "privacyPolicy": "Privacy Policy"
   },
-  "housing_counselors": {
+  "housingCounselors": {
     "subtitle": "Talk with a local housing counselor specific to your needs.",
-    "language_services": "Language Services: ",
+    "languageServices": "Language Services: ",
     "call": "Call %{number}",
-    "visit_website": "Visit %{name}"
+    "visitWebsite": "Visit %{name}"
   },
   "label": {
     "emailAddress": "Email",

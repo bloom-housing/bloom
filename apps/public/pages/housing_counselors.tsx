@@ -31,8 +31,8 @@ export default class extends Component<HousingCounselorsProps> {
   public render() {
     return (
       <Layout>
-        <PageHeader inverse={true} subtitle={t("housing_counselors.subtitle")}>
-          {t("page_title.housing_counselors")}
+        <PageHeader inverse={true} subtitle={t("housingCounselors.subtitle")}>
+          {t("pageTitle.housingCounselors")}
         </PageHeader>
         {this.props.counselors.map(c => {
           return (

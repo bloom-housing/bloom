@@ -25,7 +25,7 @@ const HousingCounselor = (props: { counselor: Counselor }) => {
         </a>
       </h3>
       <p className="text-sm text-gray-700 pb-3">
-        {t("housing_counselors.language_services")}
+        {t("housingCounselors.languageServices")}
         {counselor.languages.map(language => LanguageLabel(language))}
       </p>
       <p>
@@ -33,12 +33,12 @@ const HousingCounselor = (props: { counselor: Counselor }) => {
       </p>
       {counselor.phone && (
         <a href={`tel:+1${counselor.phone}`}>
-          {t("housing_counselors.call", { number: counselor.phone })}
+          {t("housingCounselors.call", { number: counselor.phone })}
         </a>
       )}
       <br />
       <a href={counselor.website}>
-        {t("housing_counselors.visit_website", { name: counselor.name })}
+        {t("housingCounselors.visitWebsite", { name: counselor.name })}
       </a>
     </>
   )
