@@ -26,7 +26,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "yarn run clean && tsc",
-    "start": "yarn run build && micro",
+    "start": "yarn run build && node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts"
   }
 }
