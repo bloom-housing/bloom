@@ -1,8 +1,8 @@
 import * as React from "react"
-import t from "@bloom/ui-components/src/helpers/translator"
-import LocalizedLink from "@bloom/ui-components/src/atoms/LocalizedLink"
-import SiteHeader from "@bloom/ui-components/src/headers/SiteHeader/SiteHeader"
-import SiteFooter from "@bloom/ui-components/src/footers/SiteFooter/SiteFooter"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
+import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
+import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
+import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
 
 const Layout = props => (
   <div>

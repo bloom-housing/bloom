@@ -1,5 +1,5 @@
 {
-  "name": "@bloom/ui-components",
+  "name": "@bloom-housing/ui-components",
   "version": "0.0.1",
   "description": "Shared user interface components for Bloom affordable housing system",
   "main": "index.js",
@@ -45,7 +45,7 @@
     "webpack": "^4.39.1"
   },
   "dependencies": {
-    "@bloom/core": "*",
+    "@bloom-housing/core": "*",
     "@types/nanoid": "^2.0.0",
     "@types/node": "^12.7.1",
     "@types/node-polyglot": "^0.4.34",

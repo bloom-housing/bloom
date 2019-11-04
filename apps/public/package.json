@@ -1,5 +1,5 @@
 {
-  "name": "@bloom/public",
+  "name": "@bloom-housing/public",
   "version": "0.0.1",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -13,8 +13,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@bloom/core": "*",
-    "@bloom/ui-components": "*",
+    "@bloom-housing/core": "*",
+    "@bloom-housing/ui-components": "*",
     "@mdx-js/loader": "1.4.0",
     "@next/mdx": "9.0.5",
     "@zeit/next-sass": "^1.0.1",

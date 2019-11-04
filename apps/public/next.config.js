@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== "production") {
 const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
 
 const bloomTheme = require("./tailwind.config.js")
-const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
+const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
@@ -24,7 +24,7 @@ module.exports = withMDX(
       sassLoaderOptions: {
         prependData: tailwindVars
       },
-      transpileModules: ["@bloom"],
+      transpileModules: ["@bloom-housing"],
       // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
       async exportPathMap() {
         // we fetch our list of listings, this allow us to dynamically generate the exported pages

@@ -1,5 +1,5 @@
 {
-  "name": "@bloom/core",
+  "name": "@bloom-housing/core",
   "version": "0.0.1",
   "description": "Shared types for Bloom affordable housing system",
   "main": "index.js",

@@ -1,6 +1,6 @@
 import * as React from "react"
 import LocalizedLink from "../atoms/LocalizedLink"
-import ApplicationDeadline from "@bloom/ui-components/src/page_components/listing/listing_sidebar/ApplicationDeadline"
+import ApplicationDeadline from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationDeadline"
 import "./ImageCard.scss"
 
 const Flag = (props: any) => <div>{props.text}</div>
