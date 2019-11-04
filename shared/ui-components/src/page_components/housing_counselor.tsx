@@ -28,18 +28,24 @@ const HousingCounselor = (props: { counselor: Counselor }) => {
         {t("housingCounselors.languageServices")}
         {counselor.languages.map(language => LanguageLabel(language))}
       </p>
-      <p>
-        {counselor.address} <br /> {counselor.citystate}
-      </p>
+      {counselor.address && (
+        <p>
+          {counselor.address} <br /> {counselor.citystate}
+        </p>
+      )}
       {counselor.phone && (
         <a href={`tel:+1${counselor.phone}`}>
           {t("housingCounselors.call", { number: counselor.phone })}
         </a>
       )}
-      <br />
-      <a href={counselor.website}>
-        {t("housingCounselors.visitWebsite", { name: counselor.name })}
-      </a>
+      {counselor.website && (
+        <>
+          <br />
+          <a href={counselor.website}>
+            {t("housingCounselors.visitWebsite", { name: counselor.name })}
+          </a>
+        </>
+      )}
     </>
   )
 }
