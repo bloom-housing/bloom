@@ -55,7 +55,7 @@ module.exports = withMDX(
         const translatablePaths = Object.assign({}, listingPaths, {
           "/": { page: "/" },
           "/listings": { page: "/listings" },
-          "/housing-counselors": { page: "/housing_counselors" }
+          "/housing-counselors": { page: "/HousingCounselors" }
         })
         const languages = ["es"] // add new language codes here
         const languagePaths = {}
