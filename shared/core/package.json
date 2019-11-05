@@ -4,7 +4,7 @@
   "description": "Shared types for Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "test": "jest"
   },
