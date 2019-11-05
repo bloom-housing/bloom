@@ -1,12 +1,17 @@
 import { Unit, UnitSummary, UnitsSummarized } from "./units"
 
+export interface ApplicationDownloadUrl {
+  label: string
+  url: string
+}
+
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
   acceptingApplicationsByPoBox: boolean
   acceptsPostmarkedApplications: boolean
   amenities: string
   applicationCity: string
-  applicationDownloadUrl: string
+  applicationDownloadUrl: [ApplicationDownloadUrl]
   applicationDueDate: string
   applicationOrganization: string
   applicationPostalCode: string

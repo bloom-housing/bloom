@@ -5,7 +5,7 @@
   "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
-  "applicationDueDate": "2019-08-19T17:00:00.000-07:00",
+  "applicationDueDate": "2019-12-19T17:00:00.000-07:00",
   "applicationOrganization": "Triton",
   "applicationCity": "Foster City",
   "applicationPhone": "(650) 437-2039",
@@ -44,7 +44,12 @@
   "groupId": 2,
   "hideUnitFeatures": false,
   "unitAmenities": "Washer and dryer, AC and Heater, Gas Stove",
-  "applicationDownloadUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
+  "applicationDownloadUrls": [
+    {
+      "label": "English",
+      "url": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf"
+    }
+  ],
   "applicationFee": "38.0",
   "criminalBackground": null,
   "leasingAgentCity": "Foster City",
