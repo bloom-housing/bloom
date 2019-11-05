@@ -23,6 +23,10 @@
     "koa": "^2.7.0",
     "nanoid": "^2.1.1"
   },
+  "engines": {
+    "node": "12",
+    "yarn": "1.19"
+  },
   "scripts": {
     "clean": "rimraf dist",
     "build": "yarn run clean && tsc",
