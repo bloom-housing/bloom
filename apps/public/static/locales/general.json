@@ -49,13 +49,13 @@
     "applicationsClosed": "Applications Closed",
     "apply": {
       "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
-      "applicationsMustBeReceivedByPostmarkDueDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkDueDate}. Applications received after %{postmarkDueDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
       "dropOffApplication": "Drop Off Application",
       "dropOffApplicationOrMail": "Drop Off Application or Send by US Mail",
       "getAPaperApplication": "Get a Paper Application",
       "howToApply": "How to Apply",
       "paperApplicationsMustBeMailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
       "pickUpAnApplication": "Pick up an application",
+      "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
       "sendByUsMail": "Send Application by US Mail",
       "submitAPaperApplication": "Submit a Paper Application"
     },

@@ -84,13 +84,15 @@ const Apply = (props: ApplyProps) => {
             <p className="text-gray-700">{listing.applicationOrganization}</p>
             <SidebarAddress address={applicationAddress()} />
             <p className="mt-4 text-tiny text-gray-750">
-              {listing.accepts_postmark
-                ? t("listings.apply.applications_must_be_received_by_postmark_due_date", {
-                    applicationDueDate: moment(listing.application_due_date).format("MMM DD, YYYY"),
-                    postmarkDueDate: moment(listing.postmark_due_date).format("MMM DD, YYYY"),
+              {listing.acceptsPostmarkedApplications
+                ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
+                    applicationDueDate: moment(listing.applicationDueDate).format("MMM DD, YYYY"),
+                    postmarkReceivedByDate: moment(
+                      listing.postmarkedApplicationsReceivedByDate
+                    ).format("MMM DD, YYYY"),
                     developer: listing.developer
                   })
-                : t("listings.apply.applications_must_be_received_by_deadline")}
+                : t("listings.apply.applicationsMustBeReceivedByDeadline")}
             </p>
           </>
         )}
