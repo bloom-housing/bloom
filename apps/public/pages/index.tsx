@@ -1,10 +1,10 @@
 import { Component } from "react"
-import t from "@bloom/ui-components/src/helpers/translator"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
-import Hero from "@bloom/ui-components/src/headers/Hero"
-import MarkdownSection from "@bloom/ui-components/src/sections/markdown_section"
+import Hero from "@bloom-housing/ui-components/src/headers/Hero"
+import MarkdownSection from "@bloom-housing/ui-components/src/sections/markdown_section"
 import PageContent from "../page_content/homepage.mdx"
-import { Listing } from "@bloom/core/src/listings"
+import { Listing } from "@bloom-housing/core/src/listings"
 import axios from "axios"
 
 interface IndexProps {

@@ -1,8 +1,8 @@
 import * as React from "react"
-import LinkButton from "@bloom/ui-components/src/atoms/LinkButton"
-import { Listing } from "@bloom/core/src/listings"
+import LinkButton from "@bloom-housing/ui-components/src/atoms/LinkButton"
+import { Listing } from "@bloom-housing/core/src/listings"
 import * as moment from "moment"
-import t from "@bloom/ui-components/src/helpers/translator"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
 import "./Hero.scss"
 
 interface HeroProps {

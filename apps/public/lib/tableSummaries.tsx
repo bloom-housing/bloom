@@ -1,6 +1,6 @@
 import * as React from "react"
-import t from "@bloom/ui-components/src/helpers/translator"
-import { Listing } from "@bloom/core/src/listings"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
+import { Listing } from "@bloom-housing/core/src/listings"
 
 export const unitSummariesTable = (listing: Listing) => {
   const unitSummaries = listing.unitsSummarized.grouped.map(group => {

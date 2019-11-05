@@ -1,12 +1,12 @@
 {
-  "name": "bloom",
+  "name": "bloom-housing",
   "version": "0.0.1",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": [
+    "shared/core",
     "shared/ui-components",
     "apps/public",
-    "services/listings",
-    "shared/core"
+    "services/listings"
   ],
   "repository": "https://github.com/Exygy/bloom.git",
   "license": "GPL-3.0",
