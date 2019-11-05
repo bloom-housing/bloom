@@ -1,5 +1,5 @@
-import { Unit, UnitGroup, UnitsSummarized, UnitSummary } from "@bloom/core/src/units"
-import { MinMax } from "@bloom/core/src/general"
+import { Unit, UnitGroup, UnitsSummarized, UnitSummary } from "@bloom-housing/core/src/units"
+import { MinMax } from "@bloom-housing/core/src/general"
 type AnyDict = { [key: string]: any }
 type Units = [Unit]
 

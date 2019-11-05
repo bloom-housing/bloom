@@ -1,5 +1,5 @@
 {
-  "name": "@bloom/listings-service",
+  "name": "@bloom-housing/listings-service",
   "version": "0.0.1",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "main": "dist/index.js",
@@ -17,7 +17,7 @@
     "typescript": "^3.6.2"
   },
   "dependencies": {
-    "@bloom/core": "*",
+    "@bloom-housing/core": "*",
     "@koa/cors": "^3.0.0",
     "dotenv": "^8.2.0",
     "koa": "^2.7.0",

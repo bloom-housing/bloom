@@ -1,7 +1,7 @@
 import * as React from "react"
 import nanoid from "nanoid"
-import { MinMax } from "@bloom/core/src/general"
-import { UnitGroup, Unit } from "@bloom/core/src/units"
+import { MinMax } from "@bloom-housing/core/src/general"
+import { UnitGroup, Unit } from "@bloom-housing/core/src/units"
 import { BasicTable } from "../../src/tables/basic_table"
 import t from "../../src/helpers/translator"
 
