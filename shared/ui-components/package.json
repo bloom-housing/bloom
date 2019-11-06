@@ -4,7 +4,7 @@
   "description": "Shared user interface components for Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "start-storybook -s ./static",
     "test": "jest"
