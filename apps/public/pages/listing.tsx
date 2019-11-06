@@ -202,7 +202,7 @@ export default class extends Component<ListingProps> {
               subtitle="Location and transportation"
             >
               <div className="listing-detail-panel">
-                <ListingMap address={listing.buildingAddress} />
+                <ListingMap address={listing.buildingAddress} listing={listing} />
               </div>
             </ListingDetailItem>
 

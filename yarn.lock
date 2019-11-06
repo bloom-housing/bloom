@@ -1551,7 +1551,7 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@mdx-js/loader@^1.4.0":
+"@mdx-js/loader@1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@mdx-js/loader/-/loader-1.4.0.tgz#1bf4c901c4163139779aa82fc1d5bbf8efbfbba8"
   integrity sha512-9z0C7VGDw8vAD10jgdKsSwoX2j5P3md8XDYMk1dbx1eYsyp7UxHbK6DTZcKjJeN5XCUkswLN3foROGqHy/h0Pg==

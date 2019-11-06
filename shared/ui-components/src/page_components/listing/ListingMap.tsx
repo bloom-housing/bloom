@@ -3,8 +3,10 @@ import ReactMapGL, { Marker } from "react-map-gl"
 import { Address } from "@bloom/core/src/general"
 import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
+import { Listing } from "@bloom/core/src/listings"
 interface ListingMapProps {
   address: Address
+  listing: Listing
 }
 
 const ListingMap = (props: ListingMapProps) => {
@@ -21,7 +23,7 @@ const ListingMap = (props: ListingMapProps) => {
   return (
     <>
       <div className="addressPopup">
-        <h3 className="text-caps-tiny">{address.name}</h3>
+        <h3 className="text-caps-tiny">{props.listing.name}</h3>
         <MultiLineAddress address={address} />
       </div>
       <ReactMapGL
