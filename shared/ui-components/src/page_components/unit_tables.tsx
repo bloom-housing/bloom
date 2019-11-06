@@ -31,7 +31,7 @@ const UnitTables = (props: UnitTablesProps) => {
 
   const unitsHeaders = {
     number: "Unit #",
-    sqFeet: { label: "Area", unit: t("t.sqFeet") },
+    sqFeet: "Area",
     numBathrooms: "Baths",
     floor: "Floor"
   }
@@ -50,7 +50,7 @@ const UnitTables = (props: UnitTablesProps) => {
               </h3>
             </button>
             <div className="unit-table hidden">
-              <BasicTable headers={unitsHeaders} data={unitsGroup.units} />
+              <BasicTable headers={unitsHeaders} data={unitsGroup.units} unit={t("t.sqFeet")} />
             </div>
           </div>
         )
