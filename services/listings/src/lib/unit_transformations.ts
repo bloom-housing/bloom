@@ -3,7 +3,7 @@ import { MinMax } from "@bloom-housing/core/src/general"
 type AnyDict = { [key: string]: any }
 type Units = [Unit]
 
-const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue: any = null): MinMax => {
+const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number): MinMax => {
   if (!newMaxValue) {
     newMaxValue = newValue
   }

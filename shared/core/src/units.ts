@@ -49,5 +49,4 @@ export interface UnitGroup {
   units: [Unit]
   type: string
   unitSummary: UnitSummary
-  unity: any
 }
