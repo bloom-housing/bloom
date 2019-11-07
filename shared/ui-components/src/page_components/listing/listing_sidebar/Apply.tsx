@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Listing, ApplicationDownloadUrl } from "@bloom-housing/core/src/listings"
+import { Listing, Attachment, AttachmentType } from "@bloom-housing/core/src/listings"
 import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
@@ -58,13 +58,17 @@ const Apply = (props: ApplyProps) => {
           Download Application
         </Button>
         {showDownload &&
-          listing.applicationDownloadUrls.map((downloadUrl: ApplicationDownloadUrl) => (
-            <p className="text-center mt-2 mb-4 text-sm">
-              <a href={downloadUrl.url} title="Download Application" target="_blank">
-                {downloadUrl.label}
-              </a>
-            </p>
-          ))}
+          listing.attachments
+            .filter((attachment: Attachment) => {
+              return attachment.type == AttachmentType.ApplicationDownload
+            })
+            .map((attachment: Attachment) => (
+              <p className="text-center mt-2 mb-4 text-sm">
+                <a href={attachment.fileUrl} title="Download Application" target="_blank">
+                  {attachment.label}
+                </a>
+              </p>
+            ))}
         {listing.blankPaperApplicationCanBePickedUp && (
           <>
             <OrDivider bgColor="white" />

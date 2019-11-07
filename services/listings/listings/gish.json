@@ -44,10 +44,11 @@
   "groupId": 1,
   "hideUnitFeatures": false,
   "unitAmenities": "Dishwasher",
-  "applicationDownloadUrls": [
+  "attachments": [
     {
       "label": "English",
-      "url": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing"
+      "fileUrl": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing",
+      "type": 1
     }
   ],
   "applicationFee": "38.0",

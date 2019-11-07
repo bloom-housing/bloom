@@ -44,10 +44,11 @@
   "groupId": 2,
   "hideUnitFeatures": false,
   "unitAmenities": "Washer and dryer, AC and Heater, Gas Stove",
-  "applicationDownloadUrls": [
+  "attachments": [
     {
       "label": "English",
-      "url": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf"
+      "fileUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
+      "type": 1
     }
   ],
   "applicationFee": "38.0",
