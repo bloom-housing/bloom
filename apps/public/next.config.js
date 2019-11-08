@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
 const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
+const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
@@ -19,7 +20,8 @@ module.exports = withMDX(
   withSass(
     withTM({
       env: {
-        listingServiceUrl: LISTING_SERVICE_URL
+        listingServiceUrl: LISTING_SERVICE_URL,
+        housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL
       },
       sassLoaderOptions: {
         prependData: tailwindVars
@@ -52,7 +54,8 @@ module.exports = withMDX(
         // define page paths for various available languages
         const translatablePaths = Object.assign({}, listingPaths, {
           "/": { page: "/" },
-          "/listings": { page: "/listings" }
+          "/listings": { page: "/listings" },
+          "/housing-counselors": { page: "/HousingCounselors" }
         })
         const languages = ["es"] // add new language codes here
         const languagePaths = {}
@@ -70,7 +73,7 @@ module.exports = withMDX(
 
         // combine the map of all various types of page paths
         return Object.assign({}, languagePaths, {
-          "/disclaimer": { page: "disclaimer" },
+          "/disclaimer": { page: "/disclaimer" },
           "/privacy": { page: "/privacy" }
         })
       }

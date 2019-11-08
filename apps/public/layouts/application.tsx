@@ -14,6 +14,12 @@ const Layout = props => (
       <LocalizedLink href="/listings" className="navbar-item">
         {t("nav.listings")}
       </LocalizedLink>
+      {/* Only show Get Assistance if housing counselor data is available */}
+      {process.env.housingCounselorServiceUrl && (
+        <LocalizedLink href="/housing-counselors" className="navbar-item">
+          {t("nav.getAssistance")}
+        </LocalizedLink>
+      )}
     </SiteHeader>
     <main>{props.children}</main>
     <SiteFooter />

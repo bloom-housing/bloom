@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots PageComponents|HousingCounselor with all fields 1`] = `
+<HousingCounselor
+  counselor={
+    Object {
+      "address": "123 Main St",
+      "citystate": "San Francisco, CA",
+      "languages": Array [
+        "English",
+      ],
+      "name": "Counselor Name",
+      "phone": "123-456-7890",
+      "website": "www.counselor.org",
+    }
+  }
+>
+  <h3>
+    <a
+      href="www.counselor.org"
+      target="_blank"
+    >
+      Counselor Name
+    </a>
+  </h3>
+  <p
+    className="text-sm text-gray-700 pb-3"
+  >
+    {{ Missing Translation Phrases }}
+    <span
+      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      key="English"
+    >
+      English
+    </span>
+  </p>
+  <p>
+    123 Main St
+     
+    <br />
+     
+    San Francisco, CA
+  </p>
+  <a
+    href="tel:+1123-456-7890"
+  >
+    {{ Missing Translation Phrases }}
+  </a>
+  <br />
+  <a
+    href="www.counselor.org"
+  >
+    {{ Missing Translation Phrases }}
+  </a>
+</HousingCounselor>
+`;
+
+exports[`Storyshots PageComponents|HousingCounselor with multiple languages 1`] = `
+<HousingCounselor
+  counselor={
+    Object {
+      "languages": Array [
+        "English",
+        "Spanish",
+        "Chinese",
+      ],
+      "name": "Counselor Name",
+    }
+  }
+>
+  <h3>
+    <a
+      target="_blank"
+    >
+      Counselor Name
+    </a>
+  </h3>
+  <p
+    className="text-sm text-gray-700 pb-3"
+  >
+    {{ Missing Translation Phrases }}
+    <span
+      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      key="English"
+    >
+      English
+    </span>
+    <span
+      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      key="Spanish"
+    >
+      Spanish
+    </span>
+    <span
+      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      key="Chinese"
+    >
+      Chinese
+    </span>
+  </p>
+</HousingCounselor>
+`;
+
+exports[`Storyshots PageComponents|HousingCounselor with only required fields 1`] = `
+<HousingCounselor
+  counselor={
+    Object {
+      "languages": Array [
+        "English",
+      ],
+      "name": "Counselor Name",
+    }
+  }
+>
+  <h3>
+    <a
+      target="_blank"
+    >
+      Counselor Name
+    </a>
+  </h3>
+  <p
+    className="text-sm text-gray-700 pb-3"
+  >
+    {{ Missing Translation Phrases }}
+    <span
+      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      key="English"
+    >
+      English
+    </span>
+  </p>
+</HousingCounselor>
+`;

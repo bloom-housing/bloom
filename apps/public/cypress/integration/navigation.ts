@@ -40,7 +40,7 @@ describe("Navigating around the site", function() {
     cy.contains("Endorsement Disclaimers")
 
     // Click on the listings page link in the header nav
-    cy.get("header a")
+    cy.get(".navbar")
       .contains("Listings")
       .click()
 
@@ -61,8 +61,8 @@ describe("Navigating around the site", function() {
     cy.location("pathname").should("include", "/listing/")
     cy.contains("Get a Paper Application")
 
-    // Click on the header logo to go to the homepage
-    cy.get("header")
+    // Click on the navbar logo to go to the homepage
+    cy.get(".navbar")
       .first()
       .within(() => {
         cy.get("img").click()
