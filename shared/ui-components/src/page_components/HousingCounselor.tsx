@@ -1,8 +1,8 @@
 import * as React from "react"
 
-import { HousingCounselor as Counselor } from "@bloom/core/src/HousingCounselors"
+import { HousingCounselor as Counselor } from "@bloom-housing/core/src/HousingCounselors"
 
-import t from "@bloom/ui-components/src/helpers/translator"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 const LanguageLabel = (language: string) => {
   return (

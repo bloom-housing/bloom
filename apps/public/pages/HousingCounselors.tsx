@@ -1,10 +1,10 @@
 import { Component } from "react"
 import axios from "axios"
 
-import { HousingCounselor as Counselor } from "@bloom/core/src/HousingCounselors"
-import HousingCounselor from "@bloom/ui-components/src/page_components/HousingCounselor"
-import PageHeader from "@bloom/ui-components/src/headers/page_header/page_header"
-import t from "@bloom/ui-components/src/helpers/translator"
+import { HousingCounselor as Counselor } from "@bloom-housing/core/src/HousingCounselors"
+import HousingCounselor from "@bloom-housing/ui-components/src/page_components/HousingCounselor"
+import PageHeader from "@bloom-housing/ui-components/src/headers/page_header/page_header"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 import Layout from "../layouts/application"
 
