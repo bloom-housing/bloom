@@ -26,7 +26,7 @@ exports[`Storyshots PageComponents|HousingCounselor with all fields 1`] = `
   <p
     className="text-sm text-gray-700 pb-3"
   >
-    {{ Missing Translation Phrases }}
+    Language Services: 
     <span
       className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="English"
@@ -44,13 +44,13 @@ exports[`Storyshots PageComponents|HousingCounselor with all fields 1`] = `
   <a
     href="tel:+1123-456-7890"
   >
-    {{ Missing Translation Phrases }}
+    Call 123-456-7890
   </a>
   <br />
   <a
     href="www.counselor.org"
   >
-    {{ Missing Translation Phrases }}
+    Visit Counselor Name
   </a>
 </HousingCounselor>
 `;
@@ -78,7 +78,7 @@ exports[`Storyshots PageComponents|HousingCounselor with multiple languages 1`] 
   <p
     className="text-sm text-gray-700 pb-3"
   >
-    {{ Missing Translation Phrases }}
+    Language Services: 
     <span
       className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="English"
@@ -122,7 +122,7 @@ exports[`Storyshots PageComponents|HousingCounselor with only required fields 1`
   <p
     className="text-sm text-gray-700 pb-3"
   >
-    {{ Missing Translation Phrases }}
+    Language Services: 
     <span
       className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="English"
