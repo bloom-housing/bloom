@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Listing } from "@bloom-housing/core/src/listings"
-import * as moment from "moment"
+import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
 import SidebarAddress from "./SidebarAddress"

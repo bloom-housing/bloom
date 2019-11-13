@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as moment from "moment"
-import { Listing } from "../../../types"
+import { Listing } from "@bloom-housing/core/src/listings"
 import Apply from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/Apply"
 import Waitlist from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/Waitlist"
 

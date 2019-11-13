@@ -37,8 +37,8 @@ export interface Listing {
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string
-  unit_summaries: [UnitSummary]
-  units: [Unit]
-  unitsSummarized: UnitsSummarized
+  unit_summaries?: UnitSummary[]
+  units: Unit[]
+  unitsSummarized?: UnitsSummarized
   yearBuilt: number
 }

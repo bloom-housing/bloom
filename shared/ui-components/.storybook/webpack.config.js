@@ -14,6 +14,7 @@ module.exports = ({ config }) => {
       }
     ]
   })
+
   config.module.rules.push({
     test: /\.scss$/,
     use: [
