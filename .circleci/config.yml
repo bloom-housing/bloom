@@ -8,4 +8,5 @@ jobs:
       - run: yarn install
       - run: yarn test:shared:ui
       - run: yarn test:services:listings
+      - run: yarn test:apps
       #- run: yarn lint:all
