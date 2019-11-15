@@ -12,8 +12,10 @@ class MyApp extends App {
       pageProps = { ...pageProps, ...compAsyncProps }
     }
 
-    const generalTranslations = await import("../static/locales/general.json")
-    const spanishTranslations = await import("../static/locales/es.json")
+    const generalTranslations = await import(
+      "@bloom-housing/ui-components/static/locales/general.json"
+    )
+    const spanishTranslations = await import("@bloom-housing/ui-components/static/locales/es.json")
     const translations = {
       general: generalTranslations,
       es: spanishTranslations

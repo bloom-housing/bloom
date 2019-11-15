@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import { Listing } from "@bloom-housing/core/src/listings"
+import moment from "moment"
+import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
 import SidebarAddress from "./SidebarAddress"
 
@@ -82,7 +84,15 @@ const Apply = (props: ApplyProps) => {
             <p className="text-gray-700">{listing.applicationOrganization}</p>
             <SidebarAddress address={applicationAddress()} />
             <p className="mt-4 text-tiny text-gray-750">
-              Applications must be received by the deadline and postmarks will not be considered.
+              {listing.acceptsPostmarkedApplications
+                ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
+                    applicationDueDate: moment(listing.applicationDueDate).format("MMM DD, YYYY"),
+                    postmarkReceivedByDate: moment(
+                      listing.postmarkedApplicationsReceivedByDate
+                    ).format("MMM DD, YYYY"),
+                    developer: listing.developer
+                  })
+                : t("listings.apply.applicationsMustBeReceivedByDeadline")}
             </p>
           </>
         )}

@@ -14,7 +14,7 @@ interface HeroProps {
 
 const heroClasses = ["hero"]
 
-const listingOpen = listing => {
+const listingOpen = (listing: Listing) => {
   return moment() < moment(listing.applicationDueDate)
 }
 

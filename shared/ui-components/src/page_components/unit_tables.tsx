@@ -11,7 +11,7 @@ const toggleTable = (event: any) => {
 
 const formatRange = (range: MinMax): string => {
   if (range.min == range.max) {
-    return range.min.toString()
+    return "${range.min}"
   } else {
     return "${range.min} - ${range.max}"
   }

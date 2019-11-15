@@ -2,7 +2,7 @@
   // "extends": "../../../tsconfig.json"  /* TODO: is this worth connecting? */
   "compilerOptions": {
     "outDir": "build/lib",
-    "module": "commonjs",
+    "module": "es2015",
     "target": "es5",
     "lib": ["es5", "es6", "es7", "es2017", "dom"],
     "sourceMap": true,
@@ -21,7 +21,8 @@
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "build", "scripts"]

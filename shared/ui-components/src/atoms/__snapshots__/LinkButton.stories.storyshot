@@ -9,11 +9,11 @@ exports[`Storyshots Atoms|LinkButton default 1`] = `
     href="#"
   >
     <Link
-      href="/{{ Missing Translation Phrases }}#"
+      href="#"
     >
       <a
         className="button"
-        href="/{{ Missing Translation Phrases }}#"
+        href="#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -34,11 +34,11 @@ exports[`Storyshots Atoms|LinkButton filled 1`] = `
     href="#"
   >
     <Link
-      href="/{{ Missing Translation Phrases }}#"
+      href="#"
     >
       <a
         className="button filled"
-        href="/{{ Missing Translation Phrases }}#"
+        href="#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -59,11 +59,11 @@ exports[`Storyshots Atoms|LinkButton regular case 1`] = `
     href="#"
   >
     <Link
-      href="/{{ Missing Translation Phrases }}#"
+      href="#"
     >
       <a
         className="button normal-case"
-        href="/{{ Missing Translation Phrases }}#"
+        href="#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -84,11 +84,11 @@ exports[`Storyshots Atoms|LinkButton small 1`] = `
     href="#"
   >
     <Link
-      href="/{{ Missing Translation Phrases }}#"
+      href="#"
     >
       <a
         className="button small"
-        href="/{{ Missing Translation Phrases }}#"
+        href="#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -110,11 +110,11 @@ exports[`Storyshots Atoms|LinkButton small and filled 1`] = `
     href="#"
   >
     <Link
-      href="/{{ Missing Translation Phrases }}#"
+      href="#"
     >
       <a
         className="button filled small"
-        href="/{{ Missing Translation Phrases }}#"
+        href="#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
