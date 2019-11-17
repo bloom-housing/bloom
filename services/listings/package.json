@@ -7,7 +7,12 @@
   "license": "GPL-3.0",
   "private": true,
   "devDependencies": {
+    "@babel/preset-typescript": "^7.7.2",
+    "@types/jest": "^24.0.22",
+    "@types/supertest": "^2.0.8",
+    "babel-jest": "^24.9.0",
     "concurrently": "^5.0.0",
+    "supertest": "^4.0.2",
     "ts-node-dev": "^1.0.0-pre.42"
   },
   "dependencies": {
@@ -31,6 +36,28 @@
     "clean": "rimraf dist",
     "build": "yarn run clean && tsc",
     "start": "yarn run build && node dist/src/index.js",
-    "dev": "ts-node-dev src/index.ts"
+    "dev": "ts-node-dev src/index.ts",
+    "test": "jest"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/react",
+      "@babel/preset-typescript"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "require-context-hook"
+        ]
+      }
+    }
   }
 }

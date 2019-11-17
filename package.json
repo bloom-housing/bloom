@@ -17,6 +17,7 @@
     "dev:listings": "cd services/listings && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
     "test:shared:ui": "cd shared/ui-components && yarn test",
+    "test:services:listings": "cd services/listings && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\""
   },
   "devDependencies": {

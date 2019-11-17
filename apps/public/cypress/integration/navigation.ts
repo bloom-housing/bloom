@@ -65,7 +65,7 @@ describe("Navigating around the site", function() {
     cy.get(".navbar")
       .first()
       .within(() => {
-        cy.get("img").click()
+        cy.get(".logo").click()
       })
 
     // Check that the homepage banner text is present on the page

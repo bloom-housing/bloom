@@ -24,6 +24,6 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "__tests__/**/*"],
   "exclude": ["node_modules", "build", "scripts"]
 }
