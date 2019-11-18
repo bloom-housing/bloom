@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1
 jobs:
   build:
     docker:
@@ -8,5 +10,5 @@ jobs:
       - run: yarn install
       - run: yarn test:shared:ui
       - run: yarn test:services:listings
-      - run: yarn test:apps
-      #- run: yarn lint:all
+      - cypress/run:
+        start: yarn dev:listings && yarn dev:app:public 
