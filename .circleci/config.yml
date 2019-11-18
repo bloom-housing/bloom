@@ -1,15 +1,6 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1
-dependencies:
-  pre:
-    - rm -rf ~/.yarn
-    - npm i -g yarn
-    - yarn -v
-  override:
-    - yarn
-  cache_directories:
-    - ~/.cache/yarn
 executors:
   default:
     docker:
