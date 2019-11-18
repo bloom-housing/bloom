@@ -9,12 +9,12 @@ workflows:
   build:
     jobs:
       - cypress/install:
-          executor: browsers-chrome75
+          executor: cypress/browsers-chrome75
           pre-steps:
             - checkout
             - run: 'yarn install'
       - cypress/run:
-          executor: browsers-chrome75
+          executor: cypress/browsers-chrome75
           yarn: true
           requires:
             - cypress/install
