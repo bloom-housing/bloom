@@ -1,13 +1,11 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1
-executors:
-  default:
-    docker:
-      - image: circleci/node:current # at some point we can fix to a version if needed
 workflows:
   build:
     jobs:
+      - docker:
+        - image: circleci/node:current # at some point we can fix to a version if needed
       - cypress/install:
           pre-steps:
             - checkout
