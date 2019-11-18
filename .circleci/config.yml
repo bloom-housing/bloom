@@ -4,18 +4,23 @@ orbs:
 executors:
   default:
     docker:
-      - image: circleci/node:current # at some point we can fix to a version if needed
+      - image: circleci/node:current
+jobs:
+  build:
+    docker:
+      - image: circleci/node:current
+    steps:
+      - checkout
+      - run: yarn install
 workflows:
   build:
     jobs:
-      - cypress/install:
-          pre-steps:
-            - checkout
-            - run: 'yarn install'
+      # - cypress/install:
+      #     pre-steps:
+      #       - checkout
+      #       - run: 'yarn install'
       - cypress/run:
           yarn: true
-          requires:
-            - cypress/install
           start: yarn dev:listings && yarn dev:app:public  
 
 # version: 2.1
