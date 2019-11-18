@@ -13,17 +13,17 @@ dependencies:
 executors:
   default:
     docker:
-      - image: cypress/base:12.6.0 # at some point we can fix to a version if needed
+      - image: circleci/node:current # at some point we can fix to a version if needed
 workflows:
   build:
     jobs:
       - cypress/install:
-          executor: cypress/browsers-chrome75
+          executor: circleci/node:current
           pre-steps:
             - checkout
             - run: 'yarn install'
       - cypress/run:
-          executor: cypress/browsers-chrome75
+          executor: circleci/node:current
           yarn: true
           requires:
             - cypress/install
