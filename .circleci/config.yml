@@ -9,12 +9,10 @@ workflows:
   build:
     jobs:
       - cypress/install:
-          executor: circleci/node:current
           pre-steps:
             - checkout
             - run: 'yarn install'
       - cypress/run:
-          executor: circleci/node:current
           yarn: true
           requires:
             - cypress/install
