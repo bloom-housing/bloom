@@ -63,7 +63,7 @@ const Apply = (props: ApplyProps) => {
               return attachment.type == AttachmentType.ApplicationDownload
             })
             .map((attachment: Attachment) => (
-              <p className="text-center mt-2 mb-4 text-sm">
+              <p key={attachment.fileUrl} className="text-center mt-2 mb-4 text-sm">
                 <a href={attachment.fileUrl} title="Download Application" target="_blank">
                   {attachment.label}
                 </a>

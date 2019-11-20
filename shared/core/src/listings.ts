@@ -21,7 +21,7 @@ export interface Listing {
   applicationPostalCode: string
   applicationState: string
   applicationStreetAddress: string
-  attachments: [Attachment]
+  attachments: Attachment[]
   blankPaperApplicationCanBePickedUp: boolean
   buildingCity: string
   buildingState: string
