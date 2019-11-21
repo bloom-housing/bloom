@@ -8,6 +8,10 @@ jobs:
       - run: yarn install
       - run: yarn test:shared:ui
       - run: yarn test:services:listings
+executors:
+  default:
+    docker:
+      - image: circleci/node:current
 orbs:
   cypress: cypress-io/cypress@1
 workflows:
@@ -15,7 +19,7 @@ workflows:
     jobs:
       - cypress/run:
           working_directory: apps/public
-          executor: cypress/base-12-6-0
+          executor: default
           yarn: true
           start: yarn dev:all
           wait-on: "http://localhost:3000"  
