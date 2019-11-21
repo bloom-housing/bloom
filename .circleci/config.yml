@@ -21,4 +21,5 @@ workflows:
           working_directory: apps/public
           executor: cypress/base-12-6-0
           yarn: true
-          start: yarn dev:listings && yarn dev  
+          start: yarn dev:listings && yarn dev
+          wait-on: "http://localhost:3000"  
