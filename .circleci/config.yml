@@ -18,14 +18,12 @@ workflows:
   build:
     jobs:
       - cypress/install:
-          working_directory: apps/public
           yarn: true
           executor: cypress/base-12-6-0
           pre-steps:
             - checkout
             - run: 'yarn install'
       - cypress/run:
-          working_directory: apps/public
           executor: cypress/base-12-6-0
           yarn: true
           start: yarn dev:listings && yarn dev:app:public  
