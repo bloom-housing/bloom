@@ -21,4 +21,4 @@ workflows:
           working_directory: apps/public
           executor: cypress/base-12-6-0
           yarn: true
-          start: yarn dev:listings && yarn dev:app:public  
+          start: yarn dev:listings && yarn dev  
