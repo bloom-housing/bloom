@@ -14,17 +14,15 @@ version: 2.1
 #         start: yarn dev:listings && yarn dev:app:public 
 orbs:
   cypress: cypress-io/cypress@1
-executors:
-  default:
-    docker:
-      - image: cypress/base-12-6-0
 workflows:
   build:
     jobs:
       - cypress/install:
+          executor: cypress/base-12-6-0
           pre-steps:
             - checkout
             - run: 'yarn install'
       - cypress/run:
+          executor: cypress/base-12-6-0
           yarn: true
           start: yarn dev:listings && yarn dev:app:public  
