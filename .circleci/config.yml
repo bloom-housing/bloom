@@ -18,6 +18,7 @@ workflows:
   build:
     jobs:
       - cypress/install:
+          yarn: true
           executor: cypress/base-12-6-0
           pre-steps:
             - checkout
