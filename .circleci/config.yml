@@ -9,7 +9,7 @@ jobs:
       - run: yarn test:shared:ui
       - run: yarn test:services:listings
 executors:
-  default:
+  current:
     docker:
       - image: circleci/node:current
 orbs:
@@ -19,7 +19,8 @@ workflows:
     jobs:
       - cypress/run:
           working_directory: apps/public
-          executor: default
+          executor: current
+          # executor: cypress/base-12-6-0
           yarn: true
           start: yarn dev:all
           wait-on: "http://localhost:3000"  
