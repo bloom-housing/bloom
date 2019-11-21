@@ -11,7 +11,8 @@
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "export": "next export",
     "start": "next start",
-    "dev:listings": "cd ../../services/listings && yarn dev"
+    "dev:listings": "cd ../../services/listings && yarn dev",
+    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev\""
   },
   "dependencies": {
     "@bloom-housing/core": "*",
