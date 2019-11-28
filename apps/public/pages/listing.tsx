@@ -112,6 +112,7 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-eligibility.svg"
               title="Eligibility"
               subtitle="Income, occupancy, preferences, and subsidies"
+              desktopClass="bg-primary-lighter"
             >
               <ul>
                 <ListSection
@@ -158,12 +159,13 @@ export default class extends Component<ListingProps> {
                 </ListSection>
               </ul>
             </ListingDetailItem>
-
             <ListingDetailItem
               imageAlt="process-info"
               imageSrc="/static/images/listing-process.svg"
               title="Process"
               subtitle="Important dates and contact information"
+              hideHeader={true}
+              desktopClass="header-hidden"
             >
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
@@ -180,7 +182,6 @@ export default class extends Component<ListingProps> {
                 </section>
               </aside>
             </ListingDetailItem>
-
             <ListingDetailItem
               imageAlt="features-cards"
               imageSrc="/static/images/listing-features.svg"
@@ -207,6 +208,7 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-neighborhood.svg"
               title="Neighborhood"
               subtitle="Location and transportation"
+              desktopClass="bg-primary-lighter"
             >
               <div className="listing-detail-panel">
                 <p>Map goes here…</p>
