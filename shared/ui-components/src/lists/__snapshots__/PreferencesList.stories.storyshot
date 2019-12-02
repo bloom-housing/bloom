@@ -44,6 +44,7 @@ exports[`Storyshots Listing|Preferences List preferences 1`] = `
   >
     <li
       className="preferences-list_item info-card"
+      key="0"
     >
       <div
         className="preferences-list_number text-sm"
@@ -71,7 +72,9 @@ exports[`Storyshots Listing|Preferences List preferences 1`] = `
       <div
         className="preferences-list_links text-tiny mt-3"
       >
-        <span>
+        <span
+          key="0"
+        >
           <a
             href="https://domain.com"
           >
@@ -82,6 +85,7 @@ exports[`Storyshots Listing|Preferences List preferences 1`] = `
     </li>
     <li
       className="preferences-list_item info-card"
+      key="1"
     >
       <div
         className="preferences-list_number text-sm"
@@ -109,14 +113,18 @@ exports[`Storyshots Listing|Preferences List preferences 1`] = `
       <div
         className="preferences-list_links text-tiny mt-3"
       >
-        <span>
+        <span
+          key="0"
+        >
           <a
             href="https://domain.com"
           >
             Read More
           </a>
         </span>
-        <span>
+        <span
+          key="1"
+        >
           <a
             href="https://domain.com/d"
           >
@@ -127,6 +135,7 @@ exports[`Storyshots Listing|Preferences List preferences 1`] = `
     </li>
     <li
       className="preferences-list_item info-card preferences-list_item--title-only"
+      key="2"
     >
       <div
         className="preferences-list_number text-sm"

@@ -9,10 +9,11 @@
 }
 
 .preferences-list_number {
-  background-color: #fff;
+  @apply bg-white;
+  @apply border-2;
+  @apply border-primary;
+  @apply text-primary;
   border-radius: 50%;
-  border: 2px solid #0077da;
-  color: #0077da;
   float: left;
   font-weight: 700;
   padding: 0.5rem;

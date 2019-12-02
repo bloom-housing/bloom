@@ -8,7 +8,7 @@ interface PreferencesListProps {
 }
 
 const PreferencesList = (props: PreferencesListProps) => {
-  const preferences = props.preferences.map((preference: Preference) => {
+  const preferences = props.preferences.map((preference: Preference, index: number) => {
     const ordinalNumber = parseInt(preference.ordinal, 10)
     const ordinalSup = <sup>{preference.ordinal.replace(ordinalNumber.toString(), "")}</sup>
 
@@ -19,7 +19,7 @@ const PreferencesList = (props: PreferencesListProps) => {
     }
 
     return (
-      <li className={itemClasses.join(" ")}>
+      <li key={index} className={itemClasses.join(" ")}>
         <div className="preferences-list_number text-sm">
           {ordinalNumber}
           {ordinalSup}
@@ -33,8 +33,8 @@ const PreferencesList = (props: PreferencesListProps) => {
         )}
         {preference.links && (
           <div className="preferences-list_links text-tiny mt-3">
-            {preference.links.map((link: PreferenceLink) => (
-              <span>
+            {preference.links.map((link: PreferenceLink, linkIndex: number) => (
+              <span key={linkIndex}>
                 <a href={link.url}>{link.title}</a>
               </span>
             ))}
