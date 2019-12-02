@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "react": "16.8.6",
+    "react-test-renderer": "16.8.6",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "concurrently": "^5.0.0",

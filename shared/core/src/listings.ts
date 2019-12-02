@@ -1,4 +1,5 @@
 import { Unit, UnitSummary, UnitsSummarized } from "./units"
+import { Preference } from "./preferences"
 
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
@@ -32,6 +33,7 @@ export interface Listing {
   leasingAgentZip: string
   name: string
   neighborhood: string
+  preferences: Preference[]
   petPolicy: string
   postmarkedApplicationsReceivedByDate: string
   rentalHistory: string
