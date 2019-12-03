@@ -159,6 +159,7 @@ export default class extends Component<ListingProps> {
                 </ListSection>
               </ul>
             </ListingDetailItem>
+
             <ListingDetailItem
               imageAlt="process-info"
               imageSrc="/static/images/listing-process.svg"
@@ -182,6 +183,7 @@ export default class extends Component<ListingProps> {
                 </section>
               </aside>
             </ListingDetailItem>
+
             <ListingDetailItem
               imageAlt="features-cards"
               imageSrc="/static/images/listing-features.svg"
