@@ -20,6 +20,8 @@ If this is your first time working with Bloom, please be sure to check out the i
 
 ### Installing Dependencies
 
+In the repo root folder, run:
+
 ```
 yarn install
 ```
