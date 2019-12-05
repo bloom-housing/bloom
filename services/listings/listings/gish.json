@@ -5,7 +5,7 @@
   "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, Laundry",
-  "applicationDueDate": "2019-08-09T12:58:21.000-07:00",
+  "applicationDueDate": "2019-12-09T12:58:21.000-07:00",
   "applicationOrganization": "35 East Gish Road",
   "applicationCity": "San Jose",
   "applicationPhone": "(408) 436-8972",
@@ -44,7 +44,13 @@
   "groupId": 1,
   "hideUnitFeatures": false,
   "unitAmenities": "Dishwasher",
-  "applicationDownloadUrl": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing",
+  "attachments": [
+    {
+      "label": "English",
+      "fileUrl": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing",
+      "type": 1
+    }
+  ],
   "applicationFee": "38.0",
   "criminalBackground": "A check will be made of criminal conviction records for the past seven years for all adult Applicants of the household.  Reports will be obtained from local and/or state records and may also include local Police records.  If the Applicant has resided in a state other than California and has a past felony conviction, a report will be required from that state or federal organization.  Generally, public records of this sort are only available for the past seven (7) years. However, if information becomes known during the screening process regarding criminal activity that happened before the past seven year period which could impact the Applicant household’s eligibility to live at the property, the Management Agent reserves the right to consider this information as well. . Serious felony offenses and/or continued and ongoing criminal activity will be grounds for rejection if such offenses involve physical violence to persons or property, domestic violence, sexual abuse, the manufacture or sale narcotics, possession of an illegal weapon, breaking and entering, burglary or drug related criminal offenses. The nature, severity and recency of such offenses and/or ongoing criminal activity will be considered when reviewing the Applicant and only those potentially impacting the health, safety, security or right to peaceful enjoyment of the property of and by other residents, visitors or employees will be considered.    Additionally, applicants may be rejected due to:                                                                          • A history of violence or abuse (physical or verbal), in which the applicant was determined to be the antagonist.\n• A household in which any member is currently engaged in illegal use of drugs or for which the owner has reasonable cause to believe that a member’s illegal use or pattern of use of a drug may interfere with the health, safety, security, or right to peaceful enjoyment of the property of and by other residents, visitors or employees.\n• Any household member, if there is reasonable cause to believe that a member’s behavior, from abuse or pattern of abuse of alcohol, may interfere with the health, safety, security or right to peaceful enjoyment of the property of and by other residents, visitors or employees.",
   "leasingAgentCity": "San Jose",

@@ -1,17 +1,27 @@
 import { Unit, UnitSummary, UnitsSummarized } from "./units"
 
+export enum AttachmentType {
+  ApplicationDownload = 1
+}
+
+export interface Attachment {
+  label: string
+  fileUrl: string
+  type: AttachmentType
+}
+
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
   acceptingApplicationsByPoBox: boolean
   acceptsPostmarkedApplications: boolean
   amenities: string
   applicationCity: string
-  applicationDownloadUrl: string
   applicationDueDate: string
   applicationOrganization: string
   applicationPostalCode: string
   applicationState: string
   applicationStreetAddress: string
+  attachments: Attachment[]
   blankPaperApplicationCanBePickedUp: boolean
   buildingCity: string
   buildingState: string

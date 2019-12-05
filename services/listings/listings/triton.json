@@ -44,7 +44,13 @@
   "groupId": 2,
   "hideUnitFeatures": false,
   "unitAmenities": "Washer and dryer, AC and Heater, Gas Stove",
-  "applicationDownloadUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
+  "attachments": [
+    {
+      "label": "English",
+      "fileUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
+      "type": 1
+    }
+  ],
   "applicationFee": "38.0",
   "criminalBackground": null,
   "leasingAgentCity": "Foster City",
