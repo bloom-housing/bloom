@@ -63,6 +63,7 @@
   "leasingAgentTitle": "Business Manager",
   "leasingAgentZip": "94404",
   "rentalHistory": "No evictions.",
+  "preferences": [],
   "buildingTotalUnits": 48,
   "units": [
     {

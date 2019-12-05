@@ -1,4 +1,5 @@
 import { Unit, UnitSummary, UnitsSummarized } from "./units"
+import { Preference } from "./preferences"
 
 export enum AttachmentType {
   ApplicationDownload = 1
@@ -42,6 +43,7 @@ export interface Listing {
   leasingAgentZip: string
   name: string
   neighborhood: string
+  preferences: Preference[]
   petPolicy: string
   postmarkedApplicationsReceivedByDate: string
   rentalHistory: string

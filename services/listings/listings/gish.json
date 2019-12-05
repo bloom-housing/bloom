@@ -63,6 +63,40 @@
   "leasingAgentTitle": "",
   "leasingAgentZip": "95112",
   "rentalHistory": "The applicants’ landlord references must verify a history of responsible occupancy, behavior, and conduct.  Current landlord references will be requested along with a third party unlawful detainer search.  All previous landlords during the past three years will also be contacted.  Landlord references will help to determine whether or not the applicant has a good rent paying history, whether or not there have been any disturbing behavior patterns including repeated lease violations, destruction of property, etc.  Any documented behavior which would constitute a material violation of the standard lease to be used at this location may be considered grounds for ineligibility.",
+  "preferences": [
+    {
+      "ordinal": "1st",
+      "title": "Certificate of Preference (COP)",
+      "subtitle": "Up to 56 units available",
+      "description": "For households in which at least one member holds a Certificate of Preference from the former San Francisco Redevelopment Agency. COP holders were displaced by Agency action generally during the 1960s and 1970s.",
+      "links": [
+        {
+          "title": "Read More",
+          "url": "https://domain.com"
+        }
+      ]
+    },
+    {
+      "ordinal": "2nd",
+      "title": "Displaced Tenant Housing Preference (DTHP)",
+      "subtitle": "Up to 3 units available",
+      "description": "For households in which at least one member holds a Displaced Tenant Housing Preference Certificate. DTHP Certificate holders are tenants who were evicted through either an Ellis Act Eviction or an Owner Move In Eviction, or have been displaced by a fire. Once all units reserved for this preference are filled, remaining DTHP holders will receive Live/Work preference, regardless of their current residence or work location.",
+      "links": [
+        {
+          "title": "Read More",
+          "url": "https://domain.com"
+        },
+        {
+          "title": "View Document Checklist",
+          "url": "https://domain.com/d"
+        }
+      ]
+    },
+    {
+      "ordinal": "3rd",
+      "title": "Classroom teachers who are employees of the San Mateo Foster City School District and San Mateo County Community College District"
+    }
+  ],
   "buildingTotalUnits": 5,
   "units": [
     {

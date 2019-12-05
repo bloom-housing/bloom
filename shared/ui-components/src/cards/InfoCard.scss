@@ -8,7 +8,9 @@
 }
 
 .info-card__title {
-  @apply mb-4;
+  &:not([class*="mb-"]) {
+    @apply mb-4;
+  }
   @apply text-gray-800;
   @apply uppercase;
   @apply font-sans;
