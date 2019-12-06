@@ -15,6 +15,7 @@ export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
   acceptingApplicationsByPoBox: boolean
   acceptsPostmarkedApplications: boolean
+  accessibility: string
   amenities: string
   applicationCity: string
   applicationDueDate: string
@@ -49,6 +50,7 @@ export interface Listing {
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string
+  unitAmenities: string
   unit_summaries?: UnitSummary[]
   units: Unit[]
   unitsSummarized?: UnitsSummarized
