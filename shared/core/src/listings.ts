@@ -8,6 +8,7 @@ export interface Listing {
   applicationCity: string
   applicationDownloadUrl: string
   applicationDueDate: string
+  applicationFee: string
   applicationOrganization: string
   applicationPostalCode: string
   applicationState: string
@@ -17,7 +18,10 @@ export interface Listing {
   buildingState: string
   buildingStreetAddress: string
   buildingZipCode: string
+  costsNotIncluded: string
   creditHistory: string
+  depositMin: string
+  depositMax?: string
   developer: string
   id: string
   imageUrl?: string

@@ -20,6 +20,7 @@ import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
 import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
 import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
+import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
 import axios from "axios"
 
 interface ListingProps {
@@ -199,6 +200,7 @@ export default class extends Component<ListingProps> {
                     description={<UnitTables groupedUnits={listing.unitsSummarized.grouped} />}
                   />
                 </dl>
+                <AdditionalFees listing={listing} />
               </div>
             </ListingDetailItem>
 
