@@ -1,3 +1,4 @@
+import * as React from "react"
 import { storiesOf } from "@storybook/react"
 import AdditionalFees from "./AdditionalFees"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
