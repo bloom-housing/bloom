@@ -1,4 +1,6 @@
 {
   "extends": "./tsconfig.json",
+  "noEmit": false,
+  "outDir": "./dist",
   "exclude": ["**/*.test.ts", "**/*.mock.ts"]
 }
