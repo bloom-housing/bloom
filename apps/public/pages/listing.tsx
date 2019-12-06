@@ -1,4 +1,4 @@
-import { Component } from "react"
+import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
@@ -21,6 +21,7 @@ import { Description } from "@bloom-housing/ui-components/src/atoms/description"
 import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
 import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
 import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
+import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
 
 interface ListingProps {
@@ -141,7 +142,12 @@ export default class extends Component<ListingProps> {
                   title="Housing Preferences"
                   subtitle="Preference holders will be given highest ranking."
                 >
-                  <>table goes here…</>
+                  <>
+                    <PreferencesList preferences={listing.preferences} />
+                    <p className="text-gray-700 text-tiny">
+                      {t("listings.remainingUnitsAfterPreferenceConsideration")}
+                    </p>
+                  </>
                 </ListSection>
 
                 <ListSection

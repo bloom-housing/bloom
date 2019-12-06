@@ -1,0 +1,41 @@
+.preferences-list_item--title-only {
+  .preferences-list_number {
+    margin-top: -10px;
+  }
+  .info-card__title {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+}
+
+.preferences-list_number {
+  @apply bg-white;
+  @apply border-2;
+  @apply border-primary;
+  @apply text-primary;
+  border-radius: 50%;
+  float: left;
+  font-weight: 700;
+  padding: 0.5rem;
+  margin-left: -2.2rem;
+  margin-right: 0.5rem;
+  margin-top: -4px;
+  text-align: center;
+  width: 2.5rem;
+  white-space: nowrap;
+
+  @screen md {
+    margin-left: -2.65rem;
+  }
+
+  sup {
+    font-weight: 400;
+    top: -0.35em;
+  }
+}
+
+.preferences-list_links {
+  span {
+    margin-right: 1rem;
+  }
+}
