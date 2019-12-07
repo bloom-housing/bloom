@@ -5,7 +5,7 @@ import Button from "../../atoms/Button"
 
 export interface ListingsGroupProps {
   listings: Listing[]
-  unitSummariesTable: any
+  unitSummariesTable?: any
   header: string
   info?: string
   showButtonText: string

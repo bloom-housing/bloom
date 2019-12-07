@@ -12,22 +12,21 @@ import ListingsGroup from "@bloom-housing/ui-components/src/page_components/list
 export interface ListingsProps {
   openListings: Listing[]
   closedListings: Listing[]
-  unitSummariesTable: any
 }
 export default class extends Component<ListingsProps> {
   public static async getInitialProps() {
-    const openListings = []
-    const closedListings = []
+    let openListings = []
+    let closedListings = []
 
     try {
       const response = await axios.get(process.env.listingServiceUrl)
-      for (const listing of response.data.listings as Listing[]) {
-        if (moment() > moment(listing.applicationDueDate)) {
-          closedListings.push(listing)
-        } else {
-          openListings.push(listing)
-        }
-      }
+      const nowTime = moment()
+      openListings = response.data.listings.filter((listing: Listing) => {
+        return nowTime <= moment(listing.applicationDueDate)
+      })
+      closedListings = response.data.listings.filter((listing: Listing) => {
+        return nowTime > moment(listing.applicationDueDate)
+      })
     } catch (error) {
       console.log(error)
     }
@@ -35,36 +34,36 @@ export default class extends Component<ListingsProps> {
     return { openListings, closedListings }
   }
 
-  public render() {
-    let openListingsSection, closedListingsSection
-    if (this.props.openListings.length > 0) {
-      openListingsSection = (
-        <ListingsList listings={this.props.openListings} unitSummariesTable={unitSummariesTable} />
-      )
-    } else {
-      openListingsSection = (
-        <div className="flex flex-row flex-wrap max-w-5xl m-auto mt-5 mb-12 text-center p-4 bg-gray-300">
-          <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
-        </div>
-      )
-    }
-    if (this.props.closedListings.length > 0) {
-      closedListingsSection = (
+  renderOpenListings() {
+    return this.props.openListings.length > 0 ? (
+      <ListingsList listings={this.props.openListings} unitSummariesTable={unitSummariesTable} />
+    ) : (
+      <div className="flex flex-row flex-wrap max-w-5xl m-auto mt-5 mb-12 text-center p-4 bg-gray-300">
+        <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
+      </div>
+    )
+  }
+
+  renderClosedListings() {
+    return (
+      this.props.closedListings.length > 0 && (
         <ListingsGroup
           listings={this.props.closedListings}
           header={t("listings.closedListings")}
           hideButtonText={t("listings.hideClosedListings")}
           showButtonText={t("listings.showClosedListings")}
           unitSummariesTable={unitSummariesTable}
-        ></ListingsGroup>
+        />
       )
-    }
+    )
+  }
 
+  public render() {
     return (
       <Layout>
         <PageHeader>{t("pageTitle.rent")}</PageHeader>
-        {openListingsSection}
-        {closedListingsSection}
+        {this.renderOpenListings()}
+        {this.renderClosedListings()}
       </Layout>
     )
   }

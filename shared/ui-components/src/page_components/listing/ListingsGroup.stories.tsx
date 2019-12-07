@@ -4,10 +4,9 @@ import ListingsGroup from "./ListingsGroup"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import Triton from "@bloom-housing/listings-service/listings/triton.json"
 import { Listing } from "@bloom-housing/core/src/listings"
-type AnyDict = { [key: string]: any }
 
-const archer = Object.assign({}, Archer as AnyDict)
-const triton = Object.assign({}, Triton as AnyDict)
+const archer = Object.assign({}, Archer) as any
+const triton = Object.assign({}, Triton) as any
 const listings = [archer, triton] as Listing[]
 
 storiesOf("ListingsGroup", module).add("show listings group", () => {
@@ -19,7 +18,6 @@ storiesOf("ListingsGroup", module).add("show listings group", () => {
       header="Header"
       showButtonText="Show"
       hideButtonText="Hide"
-      unitSummariesTable={[]}
     />
   )
   /* eslint-enable @typescript-eslint/ban-ts-ignore */

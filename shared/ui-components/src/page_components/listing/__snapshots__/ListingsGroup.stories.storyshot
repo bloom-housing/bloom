@@ -14,14 +14,14 @@ exports[`Storyshots ListingsGroup show listings group 1`] = `
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationCity": "San Jose",
-        "applicationDownloadUrl": "",
-        "applicationDueDate": "2019-11-30T15:22:57.000-07:00",
+        "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
         "applicationFee": "30.0",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "applicationPostalCode": "95112",
         "applicationState": "",
         "applicationStreetAddress": "",
+        "attachments": Array [],
         "blankPaperApplicationCanBePickedUp": true,
         "buildingCity": "San Jose",
         "buildingName": "Archer Studios",
@@ -55,6 +55,7 @@ exports[`Storyshots ListingsGroup show listings group 1`] = `
         "neighborhood": "Rosemary Gardens Park",
         "petPolicy": "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
         "postmarkedApplicationsReceivedByDate": "2019-12-05",
+        "preferences": Array [],
         "prioritiesDescriptor": null,
         "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
         "rentalHistory": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
@@ -1064,7 +1065,6 @@ exports[`Storyshots ListingsGroup show listings group 1`] = `
         "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
         "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
         "applicationCity": "Foster City",
-        "applicationDownloadUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
         "applicationDueDate": "2019-12-19T17:00:00.000-07:00",
         "applicationFee": "38.0",
         "applicationOrganization": "Triton",
@@ -1072,6 +1072,13 @@ exports[`Storyshots ListingsGroup show listings group 1`] = `
         "applicationPostalCode": "94404",
         "applicationState": "CA",
         "applicationStreetAddress": "55 Triton Park Lane",
+        "attachments": Array [
+          Object {
+            "fileUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
+            "label": "English",
+            "type": 1,
+          },
+        ],
         "blankPaperApplicationCanBePickedUp": true,
         "buildingCity": "Foster City",
         "buildingName": "The Triton",
@@ -1104,6 +1111,7 @@ exports[`Storyshots ListingsGroup show listings group 1`] = `
         "name": "The Triton",
         "neighborhood": "Foster City",
         "petPolicy": "Pets allowed except the following; pit bull, malamute, akita, rottweiler, doberman, staffordshire terrier, presa canario, chowchow, american bull dog, karelian bear dog, st bernard, german shepherd, husky, great dane, any hybrid or mixed breed of the aforementioned breeds. 50 pound weight limit. 2 pets per household limit. $500 pet deposit per pet. $60 pet rent per pet.",
+        "preferences": Array [],
         "prioritiesDescriptor": null,
         "programRules": null,
         "rentalHistory": "No evictions.",
@@ -1173,7 +1181,6 @@ exports[`Storyshots ListingsGroup show listings group 1`] = `
     ]
   }
   showButtonText="Show"
-  unitSummariesTable={Array []}
 >
   <div
     className="border-b-2 border-gray-400 mb-5"
