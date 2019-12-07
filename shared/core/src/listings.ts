@@ -1,4 +1,15 @@
 import { Unit, UnitSummary, UnitsSummarized } from "./units"
+import { Preference } from "./preferences"
+
+export enum AttachmentType {
+  ApplicationDownload = 1
+}
+
+export interface Attachment {
+  label: string
+  fileUrl: string
+  type: AttachmentType
+}
 
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
@@ -6,12 +17,12 @@ export interface Listing {
   acceptsPostmarkedApplications: boolean
   amenities: string
   applicationCity: string
-  applicationDownloadUrl: string
   applicationDueDate: string
   applicationOrganization: string
   applicationPostalCode: string
   applicationState: string
   applicationStreetAddress: string
+  attachments: Attachment[]
   blankPaperApplicationCanBePickedUp: boolean
   buildingCity: string
   buildingState: string
@@ -32,6 +43,7 @@ export interface Listing {
   leasingAgentZip: string
   name: string
   neighborhood: string
+  preferences: Preference[]
   petPolicy: string
   postmarkedApplicationsReceivedByDate: string
   rentalHistory: string

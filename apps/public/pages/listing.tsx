@@ -1,4 +1,4 @@
-import { Component } from "react"
+import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
@@ -20,6 +20,7 @@ import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
 import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
 import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
+import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
 
 interface ListingProps {
@@ -112,6 +113,7 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-eligibility.svg"
               title="Eligibility"
               subtitle="Income, occupancy, preferences, and subsidies"
+              desktopClass="bg-primary-lighter"
             >
               <ul>
                 <ListSection
@@ -140,7 +142,12 @@ export default class extends Component<ListingProps> {
                   title="Housing Preferences"
                   subtitle="Preference holders will be given highest ranking."
                 >
-                  <>table goes here…</>
+                  <>
+                    <PreferencesList preferences={listing.preferences} />
+                    <p className="text-gray-700 text-tiny">
+                      {t("listings.remainingUnitsAfterPreferenceConsideration")}
+                    </p>
+                  </>
                 </ListSection>
 
                 <ListSection
@@ -164,6 +171,8 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-process.svg"
               title="Process"
               subtitle="Important dates and contact information"
+              hideHeader={true}
+              desktopClass="header-hidden"
             >
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
@@ -207,6 +216,7 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-neighborhood.svg"
               title="Neighborhood"
               subtitle="Location and transportation"
+              desktopClass="bg-primary-lighter"
             >
               <div className="listing-detail-panel">
                 <p>Map goes here…</p>
