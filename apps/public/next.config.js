@@ -9,6 +9,9 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
 const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
+const MAPBOX_TOKEN =
+  process.env.MAPBOX_TOKEN ||
+  "pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
 const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 
 const bloomTheme = require("./tailwind.config.js")
@@ -21,6 +24,7 @@ module.exports = withMDX(
     withTM({
       env: {
         listingServiceUrl: LISTING_SERVICE_URL,
+        mapBoxToken: MAPBOX_TOKEN,
         housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL
       },
       sassLoaderOptions: {

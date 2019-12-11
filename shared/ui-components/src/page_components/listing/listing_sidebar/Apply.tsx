@@ -31,19 +31,6 @@ const NumberedHeader = (props: { num: number; text: string }) => (
 const Apply = (props: ApplyProps) => {
   const { listing } = props
 
-  const leasingAgentAddress = () => ({
-    streetAddress: listing.leasingAgentStreet,
-    city: listing.leasingAgentCity,
-    state: listing.leasingAgentState,
-    zipCode: listing.leasingAgentZip
-  })
-  const applicationAddress = () => ({
-    streetAddress: listing.applicationStreetAddress,
-    city: listing.applicationCity,
-    state: listing.applicationState,
-    zipCode: listing.applicationPostalCode
-  })
-
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
 
@@ -74,7 +61,7 @@ const Apply = (props: ApplyProps) => {
             <OrDivider bgColor="white" />
             <SubHeader text="Pick up an application" />
             <SidebarAddress
-              address={leasingAgentAddress()}
+              address={listing.leasingAgentAddress}
               officeHours={listing.leasingAgentOfficeHours}
             />
           </>
@@ -87,7 +74,7 @@ const Apply = (props: ApplyProps) => {
           <>
             <SubHeader text="Send Application by US Mail" />
             <p className="text-gray-700">{listing.applicationOrganization}</p>
-            <SidebarAddress address={applicationAddress()} />
+            <SidebarAddress address={listing.applicationAddress} />
             <p className="mt-4 text-tiny text-gray-750">
               {listing.acceptsPostmarkedApplications
                 ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
@@ -108,7 +95,7 @@ const Apply = (props: ApplyProps) => {
           <>
             <SubHeader text="Drop Off Application" />
             <SidebarAddress
-              address={leasingAgentAddress()}
+              address={listing.leasingAgentAddress}
               officeHours={listing.leasingAgentOfficeHours}
             />
           </>

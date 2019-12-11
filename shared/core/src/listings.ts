@@ -1,4 +1,5 @@
 import { Unit, UnitSummary, UnitsSummarized } from "./units"
+import { Address } from "./general"
 import { Preference } from "./preferences"
 
 export enum AttachmentType {
@@ -16,31 +17,22 @@ export interface Listing {
   acceptingApplicationsByPoBox: boolean
   acceptsPostmarkedApplications: boolean
   amenities: string
-  applicationCity: string
   applicationDueDate: string
   applicationOrganization: string
-  applicationPostalCode: string
-  applicationState: string
-  applicationStreetAddress: string
+  applicationAddress: Address
   attachments: Attachment[]
   blankPaperApplicationCanBePickedUp: boolean
-  buildingCity: string
-  buildingState: string
-  buildingStreetAddress: string
-  buildingZipCode: string
+  buildingAddress: Address
   creditHistory: string
   developer: string
   id: string
   imageUrl?: string
-  leasingAgentCity: string
+  leasingAgentAddress: Address
   leasingAgentEmail: string
   leasingAgentName: string
   leasingAgentOfficeHours: string
   leasingAgentPhone: string
-  leasingAgentState: string
-  leasingAgentStreet: string
   leasingAgentTitle: string
-  leasingAgentZip: string
   name: string
   neighborhood: string
   preferences: Preference[]
