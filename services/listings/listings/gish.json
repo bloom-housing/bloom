@@ -10,7 +10,6 @@
     "street": "35 East Gish Road",
     "zipCode": "95112",
     "state": "CA",
-    "name": "Gish Apartments",
     "latitude": 37.36219,
     "longitude": -121.909447
   },
@@ -23,7 +22,6 @@
     "street": "35 East Gish Road",
     "zipCode": "95112",
     "state": "CA",
-    "name": "Gish Apartments",
     "latitude": 37.36219,
     "longitude": -121.909447
   },
@@ -67,7 +65,6 @@
     "street": "35 East Gish Road",
     "zipCode": "95112",
     "state": "CA",
-    "name": null,
     "latitude": 37.36219,
     "longitude": -121.909447
   },
