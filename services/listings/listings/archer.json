@@ -1,31 +1,33 @@
 {
   "id": "Uvbk5qurpB2WI9V6WnNdH",
   "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingAnlineApplications": false,
+  "acceptingApplicationsByPoBox": true,
+  "acceptingOnlineApplications": false,
+  "acceptsPostmarkedApplications": true,
+  "postmarkedApplicationsReceivedByDate": "2019-12-05",
   "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
   "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
-  "applicationAddress" : {
+  "applicationAddress": {
     "city": "San Jose",
     "street": "98 Archer Street",
     "zipCode": "95112",
     "state": "CA",
     "name": "Archer Studios",
-    "latitude": 37.365370,
-    "longitude": -121.910710
+    "latitude": 37.36537,
+    "longitude": -121.91071
   },
-  "applicationDueDate": "2019-10-31T15:22:57.000-07:00",
+  "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
   "applicationOrganization": "98 Archer Street",
   "applicationPhone": "(408) 217-8562",
   "blankPaperApplicationCanBePickedUp": true,
-  "buildingAddress" : {
+  "buildingAddress": {
     "city": "San Jose",
     "street": "98 Archer Street",
     "zipCode": "95112",
     "state": "CA",
     "name": "Archer Studios",
-    "latitude": 37.365370,
-    "longitude": -121.910710
+    "latitude": 37.36537,
+    "longitude": -121.91071
   },
   "buildingSelectionCriteria": "Tenant Selection Criteria will be available to all applicants upon request.",
   "costsNotIncluded": "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
@@ -53,24 +55,25 @@
   "groupId": 1,
   "hideUnitFeatures": false,
   "unitAmenities": "Dishwasher",
-  "applicationDownloadUrl": null,
+  "attachments": [],
   "applicationFee": "30.0",
   "criminalBackground": "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
-  "leasingAgentAddress" : {
+  "leasingAgentAddress": {
     "city": "San Jose",
     "street": "98 Archer Street",
     "zipCode": "95112",
     "state": "CA",
     "name": null,
-    "latitude": 37.365370,
-    "longitude": -121.910710
+    "latitude": 37.36537,
+    "longitude": -121.91071
   },
   "leasingAgentEmail": "mbaca@charitieshousing.org",
   "leasingAgentName": "Marisela Baca",
   "leasingAgentOfficeHours": "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
   "leasingAgentPhone": "(408) 217-8562",
-  "leasingAgentTitle": null,
+  "leasingAgentTitle": "",
   "rentalHistory": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
+  "preferences": [],
   "buildingTotalUnits": 35,
   "units": [
     {

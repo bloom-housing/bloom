@@ -1,7 +1,7 @@
 import React from "react"
 import App from "next/app"
-import "@bloom/ui-components/styles/index.scss"
-import { addTranslation } from "@bloom/ui-components/src/helpers/translator"
+import "@bloom-housing/ui-components/styles/index.scss"
+import { addTranslation } from "@bloom-housing/ui-components/src/helpers/translator"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -12,13 +12,19 @@ class MyApp extends App {
       pageProps = { ...pageProps, ...compAsyncProps }
     }
 
-    const generalTranslations = await import("../static/locales/general.json")
-    const spanishTranslations = await import("../static/locales/es.json")
+    const generalTranslations = await import(
+      "@bloom-housing/ui-components/static/locales/general.json"
+    )
+    const spanishTranslations = await import("@bloom-housing/ui-components/static/locales/es.json")
     const translations = {
       general: generalTranslations,
-      es: spanishTranslations
+      es: spanishTranslations,
+      custom: {
+        general: await import("../static/locale_overrides/general.json")
+        // Uncomment to add additional language overrides
+        // es: await import("../static/locale_overrides/es.json")
+      }
     }
-
     return { pageProps, translations }
   }
 
@@ -27,11 +33,17 @@ class MyApp extends App {
 
     // Setup translations via Polyglot
     addTranslation(translations.general)
+    if (translations.custom) {
+      addTranslation(translations.custom.general)
+    }
 
     // Extend for different languages
     const language = this.props.router.query.language
     if (language) {
       addTranslation(translations[language])
+      if (translations.custom && translations.custom[language]) {
+        addTranslation(translations.custom[language])
+      }
     }
 
     return <Component {...pageProps} />

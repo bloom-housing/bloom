@@ -1,7 +1,7 @@
 import * as React from "react"
 import nanoid from "nanoid"
-import { MinMax } from "@bloom/core/src/general"
-import { UnitGroup, Unit } from "@bloom/core/src/units"
+import { MinMax } from "@bloom-housing/core/src/general"
+import { UnitGroup, Unit } from "@bloom-housing/core/src/units"
 import { BasicTable } from "../../src/tables/basic_table"
 import t from "../../src/helpers/translator"
 
@@ -11,7 +11,7 @@ const toggleTable = (event: any) => {
 
 const formatRange = (range: MinMax): string => {
   if (range.min == range.max) {
-    return range.min.toString()
+    return "${range.min}"
   } else {
     return "${range.min} - ${range.max}"
   }
@@ -31,7 +31,7 @@ const UnitTables = (props: UnitTablesProps) => {
 
   const unitsHeaders = {
     number: "Unit #",
-    sqFeet: { label: "Area", unit: t("t.sqFeet") },
+    sqFeet: "Area",
     numBathrooms: "Baths",
     floor: "Floor"
   }
@@ -50,7 +50,7 @@ const UnitTables = (props: UnitTablesProps) => {
               </h3>
             </button>
             <div className="unit-table hidden">
-              <BasicTable headers={unitsHeaders} data={unitsGroup.units} />
+              <BasicTable headers={unitsHeaders} data={unitsGroup.units} unit={t("t.sqFeet")} />
             </div>
           </div>
         )

@@ -8,6 +8,6 @@ export interface Address {
 }
 
 export interface MinMax {
-  min?: number
-  max?: number
+  min: number
+  max: number
 }

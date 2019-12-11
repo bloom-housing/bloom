@@ -15,6 +15,12 @@
     "giveFeedback": "Give Feedback",
     "privacyPolicy": "Privacy Policy"
   },
+  "housingCounselors": {
+    "subtitle": "Talk with a local housing counselor specific to your needs.",
+    "languageServices": "Language Services: ",
+    "call": "Call %{number}",
+    "visitWebsite": "Visit %{name}"
+  },
   "label": {
     "emailAddress": "Email",
     "getDirections": "Get Directions",
@@ -49,6 +55,7 @@
       "howToApply": "How to Apply",
       "paperApplicationsMustBeMailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
       "pickUpAnApplication": "Pick up an application",
+      "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
       "sendByUsMail": "Send Application by US Mail",
       "submitAPaperApplication": "Submit a Paper Application"
     },
@@ -135,6 +142,7 @@
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
     "disclaimer": "Disclaimer",
+    "housingCounselors": "Housing Counselors",
     "getAssistance": "Get Assistance",
     "rentalListings": "See Rentals",
     "rent": "Rent affordable housing",

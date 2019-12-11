@@ -1,10 +1,10 @@
 import { Component } from "react"
-import t from "@bloom/ui-components/src/helpers/translator"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
-import PageHeader from "@bloom/ui-components/src/headers/page_header/page_header"
+import PageHeader from "@bloom-housing/ui-components/src/headers/page_header/page_header"
 import ListingsList, {
   ListingsProps
-} from "@bloom/ui-components/src/page_components/listing/ListingsList"
+} from "@bloom-housing/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
 import { unitSummariesTable } from "../lib/tableSummaries"
 

@@ -12,9 +12,10 @@ const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost
 const MAPBOX_TOKEN =
   process.env.MAPBOX_TOKEN ||
   "pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
+const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 
 const bloomTheme = require("./tailwind.config.js")
-const tailwindVars = require("@bloom/ui-components/tailwind.tosass.js")(bloomTheme)
+const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
@@ -23,12 +24,13 @@ module.exports = withMDX(
     withTM({
       env: {
         listingServiceUrl: LISTING_SERVICE_URL,
-        mapBoxToken: MAPBOX_TOKEN
+        mapBoxToken: MAPBOX_TOKEN,
+        housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL
       },
       sassLoaderOptions: {
         prependData: tailwindVars
       },
-      transpileModules: ["@bloom"],
+      transpileModules: ["@bloom-housing"],
       // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
       async exportPathMap() {
         // we fetch our list of listings, this allow us to dynamically generate the exported pages
@@ -56,7 +58,8 @@ module.exports = withMDX(
         // define page paths for various available languages
         const translatablePaths = Object.assign({}, listingPaths, {
           "/": { page: "/" },
-          "/listings": { page: "/listings" }
+          "/listings": { page: "/listings" },
+          "/housing-counselors": { page: "/HousingCounselors" }
         })
         const languages = ["es"] // add new language codes here
         const languagePaths = {}
@@ -74,7 +77,7 @@ module.exports = withMDX(
 
         // combine the map of all various types of page paths
         return Object.assign({}, languagePaths, {
-          "/disclaimer": { page: "disclaimer" },
+          "/disclaimer": { page: "/disclaimer" },
           "/privacy": { page: "/privacy" }
         })
       }

@@ -11,6 +11,12 @@ interface LinkButtonProps {
   children: React.ReactNode
 }
 
+interface LinkProps {
+  href: string
+  as?: string
+  className?: string
+}
+
 const LinkButton = (props: LinkButtonProps) => {
   const buttonClasses = ["button"]
   if (props.filled) buttonClasses.push("filled")
@@ -20,7 +26,7 @@ const LinkButton = (props: LinkButtonProps) => {
   const linkProps = {
     href: props.href,
     className: buttonClasses.join(" ")
-  } as any
+  } as LinkProps
 
   if (props.as) linkProps.as = props.as
 

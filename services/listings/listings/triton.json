@@ -2,30 +2,30 @@
   "id": "jsQvgvy6eJy56TNCFfQp8",
   "acceptingApplicationsAtLeasingAgent": true,
   "acceptingApplicationsByPoBox": true,
-  "acceptingAnlineApplications": false,
+  "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
-  "applicationAddress" : {
+  "applicationAddress": {
     "city": "Foster City",
     "street": "55 Triton Park Lane",
     "zipCode": "94404",
     "state": "CA",
     "name": "The Triton",
-    "latitude": 37.556950,
-    "longitude": -122.275210
+    "latitude": 37.55695,
+    "longitude": -122.27521
   },
-  "applicationDueDate": "2019-08-19T17:00:00.000-07:00",
+  "applicationDueDate": "2019-12-19T17:00:00.000-07:00",
   "applicationOrganization": "Triton",
   "applicationPhone": "(650) 437-2039",
   "blankPaperApplicationCanBePickedUp": true,
-  "buildingAddress" : {
+  "buildingAddress": {
     "city": "Foster City",
     "street": "55 Triton Park Lane",
     "zipCode": "94404",
     "state": "CA",
     "name": "The Triton",
-    "latitude": 37.556950,
-    "longitude": -122.275210
+    "latitude": 37.55695,
+    "longitude": -122.27521
   },
   "buildingSelectionCriteria": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/The_Triton_BMRRentalInformation.pdf",
   "costsNotIncluded": "Residents responsible for PG&E, Internet, Utilities - water, sewer, trash, admin fee. Pet Deposit is $500 with a $60 monthly pet rent. Residents required to maintain a renter's insurance policy as outlined in the lease agreement. Rent is due by the 3rd of each month. Late fee is $50.00. Resident to pay $25 for each returned check or rejected electronic payment. For additional returned checks, resident will pay a charge of $50.00.",
@@ -53,17 +53,23 @@
   "groupId": 2,
   "hideUnitFeatures": false,
   "unitAmenities": "Washer and dryer, AC and Heater, Gas Stove",
-  "applicationDownloadUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
+  "attachments": [
+    {
+      "label": "English",
+      "fileUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
+      "type": 1
+    }
+  ],
   "applicationFee": "38.0",
   "criminalBackground": null,
-  "leasingAgentAddress" : {
+  "leasingAgentAddress": {
     "city": "Foster City",
     "street": "55 Triton Park Lane",
     "zipCode": "94404",
     "state": "CA",
     "name": "The Triton",
-    "latitude": 37.556950,
-    "longitude": -122.275210
+    "latitude": 37.55695,
+    "longitude": -122.27521
   },
   "leasingAgentEmail": "thetriton@legacypartners.com",
   "leasingAgentName": "Francis Santos",
@@ -71,6 +77,7 @@
   "leasingAgentPhone": "650-437-2039",
   "leasingAgentTitle": "Business Manager",
   "rentalHistory": "No evictions.",
+  "preferences": [],
   "buildingTotalUnits": 48,
   "units": [
     {

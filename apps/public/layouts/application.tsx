@@ -1,8 +1,8 @@
 import * as React from "react"
-import t from "@bloom/ui-components/src/helpers/translator"
-import LocalizedLink from "@bloom/ui-components/src/atoms/LocalizedLink"
-import SiteHeader from "@bloom/ui-components/src/headers/SiteHeader/SiteHeader"
-import SiteFooter from "@bloom/ui-components/src/footers/SiteFooter/SiteFooter"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
+import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
+import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
+import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
 
 const Layout = props => (
   <div>
@@ -14,6 +14,12 @@ const Layout = props => (
       <LocalizedLink href="/listings" className="navbar-item">
         {t("nav.listings")}
       </LocalizedLink>
+      {/* Only show Get Assistance if housing counselor data is available */}
+      {process.env.housingCounselorServiceUrl && (
+        <LocalizedLink href="/housing-counselors" className="navbar-item">
+          {t("nav.getAssistance")}
+        </LocalizedLink>
+      )}
     </SiteHeader>
     <main>{props.children}</main>
     <SiteFooter />

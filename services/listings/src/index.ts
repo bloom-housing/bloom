@@ -31,5 +31,5 @@ app.use(ctx => {
   ctx.body = data
 })
 
-app.listen(config.port)
+export default app.listen(config.port)
 console.log(`Server running on port ${config.port}`)

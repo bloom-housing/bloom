@@ -1,26 +1,27 @@
-import { Component } from "react"
+import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
-import t from "@bloom/ui-components/src/helpers/translator"
+import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
 import getOccupancyDescription from "../lib/getOccupancyDescription"
 import Layout from "../layouts/application"
-import { Listing } from "@bloom/core/src/listings"
+import { Listing } from "@bloom-housing/core/src/listings"
 import {
   ListingDetails,
   ListingDetailItem
-} from "@bloom/ui-components/src/page_components/listing/ListingDetails"
-import ListSection from "@bloom/ui-components/src/sections/ListSection"
-import InfoCard from "@bloom/ui-components/src/cards/InfoCard"
-import ApplicationDeadline from "@bloom/ui-components/src/page_components/listing/listing_sidebar/ApplicationDeadline"
-import ApplicationSection from "@bloom/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
-import WhatToExpect from "@bloom/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
-import LeasingAgent from "@bloom/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
-import ListingMap from "@bloom/ui-components/src/page_components/listing/ListingMap"
-import ImageHeader from "@bloom/ui-components/src/headers/image_header/image_header"
-import { OneLineAddress } from "@bloom/ui-components/src/helpers/address"
-import { Description } from "@bloom/ui-components/src/atoms/description"
-import { BasicTable } from "@bloom/ui-components/src/tables/basic_table"
-import UnitTables from "@bloom/ui-components/src/page_components/unit_tables"
+} from "@bloom-housing/ui-components/src/page_components/listing/ListingDetails"
+import ListSection from "@bloom-housing/ui-components/src/sections/ListSection"
+import InfoCard from "@bloom-housing/ui-components/src/cards/InfoCard"
+import ApplicationDeadline from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationDeadline"
+import ApplicationSection from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
+import WhatToExpect from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
+import LeasingAgent from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
+import ListingMap from "@bloom-housing/ui-components/src/page_components/listing/ListingMap"
+import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
+import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
+import { Description } from "@bloom-housing/ui-components/src/atoms/description"
+import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
+import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
+import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
 
 interface ListingProps {
@@ -106,6 +107,7 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-eligibility.svg"
               title="Eligibility"
               subtitle="Income, occupancy, preferences, and subsidies"
+              desktopClass="bg-primary-lighter"
             >
               <ul>
                 <ListSection
@@ -134,7 +136,12 @@ export default class extends Component<ListingProps> {
                   title="Housing Preferences"
                   subtitle="Preference holders will be given highest ranking."
                 >
-                  <>table goes here…</>
+                  <>
+                    <PreferencesList preferences={listing.preferences} />
+                    <p className="text-gray-700 text-tiny">
+                      {t("listings.remainingUnitsAfterPreferenceConsideration")}
+                    </p>
+                  </>
                 </ListSection>
 
                 <ListSection
@@ -158,12 +165,15 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-process.svg"
               title="Process"
               subtitle="Important dates and contact information"
+              hideHeader={true}
+              desktopClass="header-hidden"
             >
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <section className="border-gray-400 border-b p-5 bg-primary-light">
                     <ApplicationDeadline date={listing.applicationDueDate} />
                   </section>
+                  <ApplicationSection listing={listing} />
                 </div>
                 <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
                   <WhatToExpect />
@@ -200,6 +210,7 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-neighborhood.svg"
               title="Neighborhood"
               subtitle="Location and transportation"
+              desktopClass="bg-primary-lighter"
             >
               <div className="listing-detail-panel">
                 <ListingMap address={listing.buildingAddress} listing={listing} />

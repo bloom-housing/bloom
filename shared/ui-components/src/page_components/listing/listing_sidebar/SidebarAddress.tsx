@@ -1,6 +1,6 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
-import { Address } from "@bloom/core/src/general"
+import { Address } from "@bloom-housing/core/src/general"
 import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 
 interface SidebarAddressProps {

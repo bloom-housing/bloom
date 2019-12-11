@@ -1,12 +1,12 @@
 {
-  "name": "bloom",
+  "name": "bloom-housing",
   "version": "0.0.1",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": [
+    "shared/core",
     "shared/ui-components",
     "apps/public",
-    "services/listings",
-    "shared/core"
+    "services/listings"
   ],
   "repository": "https://github.com/Exygy/bloom.git",
   "license": "GPL-3.0",
@@ -17,10 +17,12 @@
     "dev:listings": "cd services/listings && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
     "test:shared:ui": "cd shared/ui-components && yarn test",
+    "test:services:listings": "cd services/listings && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\""
   },
   "devDependencies": {
     "react": "16.8.6",
+    "react-test-renderer": "16.8.6",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "concurrently": "^5.0.0",
