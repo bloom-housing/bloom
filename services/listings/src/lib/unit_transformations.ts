@@ -1,7 +1,7 @@
-import { Unit, UnitGroup, UnitsSummarized, UnitSummary } from "@bloom-housing/core/src/units"
+import { Unit, UnitsSummarized, UnitSummary } from "@bloom-housing/core/src/units"
 import { MinMax } from "@bloom-housing/core/src/general"
 type AnyDict = { [key: string]: any }
-type Units = [Unit]
+type Units = Unit[]
 
 const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number): MinMax => {
   if (!newMaxValue) {
@@ -14,66 +14,92 @@ const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number):
   }
 }
 
-const summarizeUnits = (units: Units): UnitSummary => {
-  const summary = {} as UnitSummary
-  Array.from(units).reduce((summary, unit) => {
-    if (!summary.totalAvailable) {
-      summary.totalAvailable = 0
-    }
-    if (!summary.reservedTypes) {
-      summary.reservedTypes = [unit.unitType]
-    } else {
-      if (!summary.reservedTypes.includes(unit.unitType)) {
-        summary.reservedTypes.push(unit.unitType)
-      }
-    }
-    summary.minIncomeRange = minMaxValue(summary.minIncomeRange, unit.monthlyIncomeMin)
-    summary.occupancyRange = minMaxValue(
-      summary.occupancyRange,
-      unit.minOccupancy,
-      unit.maxOccupancy
-    )
-    summary.rentAsPercentIncomeRange = minMaxValue(
-      summary.rentAsPercentIncomeRange,
-      unit.monthlyRentAsPercentOfIncome
-    )
-    summary.rentRange = minMaxValue(summary.rentRange, unit.monthlyRent)
-    summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
-    summary.areaRange = minMaxValue(summary.areaRange, unit.sqFeet)
-    summary.totalAvailable += 1
+const summarizeUnits = (
+  units: Units,
+  unitTypes: string[],
+  reservedType?: string
+): UnitSummary[] => {
+  if (!reservedType) {
+    reservedType = null
+  }
+  const summaries = unitTypes.map(
+    (unitType: string): UnitSummary => {
+      const summary = {} as UnitSummary
+      const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
+      return Array.from(unitsByType).reduce((summary, unit) => {
+        summary.unitType = unitType
+        if (!summary.totalAvailable) {
+          summary.totalAvailable = 0
+        }
+        summary.minIncomeRange = minMaxValue(summary.minIncomeRange, unit.monthlyIncomeMin)
+        summary.occupancyRange = minMaxValue(
+          summary.occupancyRange,
+          unit.minOccupancy,
+          unit.maxOccupancy
+        )
+        summary.rentAsPercentIncomeRange = minMaxValue(
+          summary.rentAsPercentIncomeRange,
+          unit.monthlyRentAsPercentOfIncome
+        )
+        summary.rentRange = minMaxValue(summary.rentRange, unit.monthlyRent)
+        summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
+        summary.areaRange = minMaxValue(summary.areaRange, unit.sqFeet)
+        summary.totalAvailable += 1
 
-    return summary
-  }, summary)
+        return summary
+      }, summary)
+    }
+  )
 
-  return summary
+  return summaries
 }
 
-const groupUnits = (units: Units, type: keyof Unit = "unitType"): UnitGroup[] => {
-  const groupedByType = {} as AnyDict
-  units.forEach(unit => {
-    const groupKey = unit[type] as keyof Record<string, any>
-    if (!groupedByType[groupKey]) {
-      groupedByType[groupKey] = {} as UnitGroup
-      groupedByType[groupKey].type = groupKey
-      groupedByType[groupKey].units = []
+const summarizeReservedTypes = (units: Units, reservedTypes: string[], unitTypes: string[]) => {
+  return reservedTypes.map((reservedType: string) => {
+    const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
+    return {
+      reservedType: reservedType,
+      byUnitType: summarizeUnits(unitsByReservedType, unitTypes)
     }
-
-    groupedByType[groupKey].units.push(unit)
   })
-  const grouped = Object.values(groupedByType)
-  grouped.forEach(group => {
-    group.unitSummary = summarizeUnits(group.units)
-  })
+}
 
-  return grouped
+const summarizeByAmi = (
+  units: Units,
+  amiPercentages: string[],
+  reservedTypes: string[],
+  unitTypes: string[]
+) => {
+  return amiPercentages.map((percent: string) => {
+    const unitsByAmiPercentage = units.filter((unit: Unit) => unit.amiPercentage == percent)
+    const nonReservedUnitsByAmiPercentage = unitsByAmiPercentage.filter(
+      (unit: Unit) => unit.reservedType == null
+    )
+    return {
+      percent: percent,
+      byNonReservedUnitType: summarizeUnits(nonReservedUnitsByAmiPercentage, unitTypes),
+      byReservedType: summarizeReservedTypes(unitsByAmiPercentage, reservedTypes, unitTypes)
+    }
+  })
 }
 
 export const transformUnits = (units: Units): UnitsSummarized => {
   const data = {} as UnitsSummarized
-  data.grouped = groupUnits(units)
-  data.reserved = groupUnits(units, "reservedType")
-  data.priority = groupUnits(units, "priorityType")
-  data.unitTypes = data.grouped.map(group => group.type)
-  data.unitSummary = summarizeUnits(units)
+  data.unitTypes = Array.from(
+    new Set(units.map(unit => unit.unitType).filter(item => item != null))
+  )
+  data.reservedTypes = Array.from(
+    new Set(units.map(unit => unit.reservedType).filter(item => item != null))
+  )
+  data.priorityTypes = Array.from(
+    new Set(units.map(unit => unit.priorityType).filter(item => item != null))
+  )
+  data.amiPercentages = Array.from(
+    new Set(units.map(unit => unit.amiPercentage).filter(item => item != null))
+  )
+  const nonReservedUnits = units.filter((unit: Unit) => unit.reservedType == null)
+  data.byNonReservedUnitType = summarizeUnits(nonReservedUnits, data.unitTypes)
+  data.byReservedType = summarizeReservedTypes(units, data.reservedTypes, data.unitTypes)
+  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes, data.unitTypes)
   return data
 }
