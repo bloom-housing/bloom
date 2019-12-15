@@ -105,6 +105,9 @@
 }
 
 .description__body {
+  @screen md {
+    padding-top: 0.4em;
+  }
   @apply mb-4;
 }
 

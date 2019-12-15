@@ -197,6 +197,8 @@ export default class extends Component<ListingProps> {
                   <Description term="Smoking Policy" description={listing.smokingPolicy} />
                   <Description term="Pets Policy" description={listing.petPolicy} />
                   <Description term="Property Amenities" description={listing.amenities} />
+                  <Description term="Unit Amenities" description={listing.unitAmenities} />
+                  <Description term="Accessibility" description={listing.accessibility} />
                   <Description
                     term="Unit Features"
                     description={<UnitTables groupedUnits={listing.unitsSummarized.grouped} />}
