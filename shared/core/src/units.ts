@@ -52,7 +52,9 @@ export interface UnitsSummarized {
   reservedTypes: string[]
   priorityTypes: string[]
   amiPercentages: string[]
+  byUnitType: UnitSummary[]
   byNonReservedUnitType: UnitSummary[]
   byReservedType: UnitSummaryByReservedType[]
   byAMI: UnitSummaryByAMI[]
+  hmi: { [key: string]: any }
 }

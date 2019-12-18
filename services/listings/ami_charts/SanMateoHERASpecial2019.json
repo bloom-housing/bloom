@@ -1,82 +1,82 @@
 [
- {
-   "percent_of_ami": 50,
-   "household_size": 1,
-   "income": 56450
- },
- {
-   "percent_of_ami": 50,
-   "household_size": 2,
-   "income": 64500
- },
- {
-   "percent_of_ami": 50,
-   "household_size": 3,
-   "income": 72550
- },
- {
-   "percent_of_ami": 50,
-   "household_size": 4,
-   "income": 80600
- },
- {
-   "percent_of_ami": 50,
-   "household_size": 5,
-   "income": 87050
- },
- {
-   "percent_of_ami": 50,
-   "household_size": 6,
-   "income": 93500
- },
- {
-   "percent_of_ami": 50,
-   "household_size": 7,
-   "income": 99950
- },
- {
-   "percent_of_ami": 50,
-   "household_size": 8,
-   "income": 106400
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 1,
-   "income": 71170
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 2,
-   "income": 81340
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 3,
-   "income": 91502
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 4,
-   "income": 101630
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 5,
-   "income": 109833
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 6,
-   "income": 117924
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 7,
-   "income": 126059
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 8,
-   "income": 134219
- }
+  {
+    "percentOfAmi": 50,
+    "householdSize": 1,
+    "income": 56450
+  },
+  {
+    "percentOfAmi": 50,
+    "householdSize": 2,
+    "income": 64500
+  },
+  {
+    "percentOfAmi": 50,
+    "householdSize": 3,
+    "income": 72550
+  },
+  {
+    "percentOfAmi": 50,
+    "householdSize": 4,
+    "income": 80600
+  },
+  {
+    "percentOfAmi": 50,
+    "householdSize": 5,
+    "income": 87050
+  },
+  {
+    "percentOfAmi": 50,
+    "householdSize": 6,
+    "income": 93500
+  },
+  {
+    "percentOfAmi": 50,
+    "householdSize": 7,
+    "income": 99950
+  },
+  {
+    "percentOfAmi": 50,
+    "householdSize": 8,
+    "income": 106400
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 1,
+    "income": 71170
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 2,
+    "income": 81340
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 3,
+    "income": 91502
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 4,
+    "income": 101630
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 5,
+    "income": 109833
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 6,
+    "income": 117924
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 7,
+    "income": 126059
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 8,
+    "income": 134219
+  }
 ]

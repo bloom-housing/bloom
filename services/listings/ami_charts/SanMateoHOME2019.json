@@ -1,42 +1,42 @@
 [
- {
-   "percent_of_ami": 60,
-   "household_size": 1,
-   "income": 71170
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 2,
-   "income": 81340
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 3,
-   "income": 91500
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 4,
-   "income": 101630
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 5,
-   "income": 109830
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 6,
-   "income": 117920
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 7,
-   "income": 126060
- },
- {
-   "percent_of_ami": 60,
-   "household_size": 8,
-   "income": 134219
- }
+  {
+    "percentOfAmi": 60,
+    "householdSize": 1,
+    "income": 71170
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 2,
+    "income": 81340
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 3,
+    "income": 91500
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 4,
+    "income": 101630
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 5,
+    "income": 109830
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 6,
+    "income": 117920
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 7,
+    "income": 126060
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 8,
+    "income": 134219
+  }
 ]

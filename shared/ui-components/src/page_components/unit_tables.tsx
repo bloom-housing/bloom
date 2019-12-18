@@ -1,7 +1,7 @@
 import * as React from "react"
 import nanoid from "nanoid"
 import { MinMax } from "@bloom-housing/core/src/general"
-import { UnitGroup, Unit } from "@bloom-housing/core/src/units"
+import { UnitSummary, Unit } from "@bloom-housing/core/src/units"
 import { BasicTable } from "../../src/tables/basic_table"
 import t from "../../src/helpers/translator"
 
@@ -23,11 +23,12 @@ const unitsLabel = (units: Unit[]): string => {
 }
 
 interface UnitTablesProps {
-  groupedUnits: UnitGroup[]
+  units: Unit[]
+  unitSummaries: UnitSummary[]
 }
 
 const UnitTables = (props: UnitTablesProps) => {
-  const groupedUnits = props.groupedUnits
+  const unitSummaries = props.unitSummaries
 
   const unitsHeaders = {
     number: "Unit #",
@@ -38,19 +39,21 @@ const UnitTables = (props: UnitTablesProps) => {
 
   return (
     <>
-      {groupedUnits.map((unitsGroup: UnitGroup) => {
+      {unitSummaries.map((unitSummary: UnitSummary) => {
         const uniqKey = nanoid()
+        const units = props.units.filter((unit: Unit) => unit.unitType == unitSummary.unitType)
+
         return (
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
               <h3 className="button-tiny-bg-light">
-                <strong>{t("listings.unitTypes." + unitsGroup.type)}</strong>:&nbsp;
-                {unitsLabel(unitsGroup.units)},&nbsp;
-                {formatRange(unitsGroup.unitSummary.areaRange)} {t("listings.squareFeet")}
+                <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>:&nbsp;
+                {unitsLabel(units)},&nbsp;
+                {formatRange(unitSummary.areaRange)} {t("listings.squareFeet")}
               </h3>
             </button>
             <div className="unit-table hidden">
-              <BasicTable headers={unitsHeaders} data={unitsGroup.units} unit={t("t.sqFeet")} />
+              <BasicTable headers={unitsHeaders} data={units} unit={t("t.sqFeet")} />
             </div>
           </div>
         )

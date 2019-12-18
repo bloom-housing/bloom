@@ -18,7 +18,7 @@ import LeasingAgent from "@bloom-housing/ui-components/src/page_components/listi
 import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
-import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
+import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
 import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
 import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
@@ -64,6 +64,9 @@ export default class extends Component<ListingProps> {
       availability: "Availability"
     }
     const unitSummaries = unitSummariesTable(listing)
+
+    const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
+    const hmiData = listing.unitsSummarized.hmi.rows
 
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
@@ -120,7 +123,7 @@ export default class extends Component<ListingProps> {
                   title={t("listings.householdMaximumIncome")}
                   subtitle={t("listings.forIncomeCalculations")}
                 >
-                  <>table goes here…</>
+                  <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
 
                 <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
@@ -205,7 +208,12 @@ export default class extends Component<ListingProps> {
                   <Description term="Property Amenities" description={listing.amenities} />
                   <Description
                     term="Unit Features"
-                    description={<UnitTables groupedUnits={listing.unitsSummarized.grouped} />}
+                    description={
+                      <UnitTables
+                        units={listing.units}
+                        unitSummaries={listing.unitsSummarized.byUnitType}
+                      />
+                    }
                   />
                 </dl>
               </div>
