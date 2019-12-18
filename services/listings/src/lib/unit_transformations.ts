@@ -32,30 +32,63 @@ const hmiData = (
       return percentInt
     })
     .sort()
-  amiValues.forEach(percent => {
-    hmiHeaders["ami" + percent] = `${percent}% AMI Units`
-  })
   let maxHousehold = 0
   maxHousehold = byUnitType.reduce((maxHousehold, summary) => {
     return maxHousehold + summary.occupancyRange.max
   }, maxHousehold)
+
   const hmiRows = [] as AnyDict[]
-  new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
-    const columns = {
-      householdSize: i + 1
-    }
+
+  // There are two versions of this table:
+  // 1. If there is only one AMI level, it shows max income per month and per
+  //    year for each household size.
+  // 2. If there are multiple AMI levels, it shows each level (max income per
+  //    year) per household size.
+  if (amiValues.length > 1) {
     amiValues.forEach(percent => {
-      const amiInfo = amiChart.find(item => {
-        return item.householdSize == columns.householdSize && item.percentOfAmi == percent
-      })
-      if (amiInfo) {
-        columns["ami" + percent] = "$" + amiInfo.income
-      } else {
-        columns["ami" + percent] = "$" + "…"
-      }
+      hmiHeaders["ami" + percent] = `${percent}% AMI Units`
     })
-    hmiRows.push(columns)
-  })
+
+    new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
+      const columns = {
+        householdSize: i + 1
+      }
+      amiValues.forEach(percent => {
+        const amiInfo = amiChart.find(item => {
+          return item.householdSize == columns.householdSize && item.percentOfAmi == percent
+        })
+        if (amiInfo) {
+          columns["ami" + percent] = "$" + amiInfo.income
+        } else {
+          columns["ami" + percent] = "$" + "…"
+        }
+      })
+      hmiRows.push(columns)
+    })
+  } else {
+    hmiHeaders["maxIncomeMonth"] = "Maximum Income/Month"
+    hmiHeaders["maxIncomeYear"] = "Maximum Income/Year"
+
+    new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
+      const columns = {
+        householdSize: i + 1
+      }
+
+      const amiInfo = amiChart.find(item => {
+        return item.householdSize == columns.householdSize && item.percentOfAmi == amiValues[0]
+      })
+
+      if (amiInfo) {
+        columns["maxIncomeMonth"] = "$" + amiInfo.income / 12
+        columns["maxIncomeYear"] = "$" + amiInfo.income
+      } else {
+        columns["maxIncomeMonth"] = "$" + "…"
+        columns["maxIncomeYear"] = "$" + "…"
+      }
+
+      hmiRows.push(columns)
+    })
+  }
 
   return { columns: hmiHeaders, rows: hmiRows }
 }
