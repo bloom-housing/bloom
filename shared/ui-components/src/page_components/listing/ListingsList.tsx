@@ -20,7 +20,7 @@ const ListingsList = (props: ListingsProps) => {
       minimumIncome: t("t.minimumIncome"),
       rent: t("t.rent")
     }
-    const unitSummaries = props.unitSummariesTable(listing)
+    const unitSummaries = props.unitSummariesTable(listing.unitsSummarized.byUnitType)
 
     return (
       <article key={listing.id} className="flex flex-row flex-wrap max-w-5xl m-auto mb-12">

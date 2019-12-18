@@ -1,9 +1,10 @@
 import * as React from "react"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { Listing } from "@bloom-housing/core/src/listings"
+import { UnitSummary } from "@bloom-housing/core/src/units"
 
-export const unitSummariesTable = (listing: Listing) => {
-  const unitSummaries = listing.unitsSummarized.byUnitType.map(unitSummary => {
+export const unitSummariesTable = (summaries: UnitSummary[]) => {
+  const unitSummaries = summaries.map(unitSummary => {
     const unitPluralization =
       unitSummary.totalAvailable == 1 ? t("listings.unit") : t("listings.units")
     return {

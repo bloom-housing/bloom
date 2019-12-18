@@ -63,8 +63,14 @@ export default class extends Component<ListingProps> {
       rent: "Rent",
       availability: "Availability"
     }
-    const unitSummaries = unitSummariesTable(listing)
+    const unitSummaries = unitSummariesTable(listing.unitsSummarized.byUnitType)
 
+    const amiValues = listing.unitsSummarized.amiPercentages
+      .map(percent => {
+        const percentInt = parseInt(percent, 10)
+        return percentInt
+      })
+      .sort()
     const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
     const hmiData = listing.unitsSummarized.hmi.rows
 
@@ -101,11 +107,30 @@ export default class extends Component<ListingProps> {
           </div>
 
           <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
-            <BasicTable
-              headers={unitSummariesHeaders}
-              data={unitSummaries}
-              responsiveCollapse={true}
-            />
+            {amiValues.length > 1 &&
+              amiValues.map(percent => {
+                const byAMI = listing.unitsSummarized.byAMI.find(item => {
+                  return parseInt(item.percent, 10) == percent
+                })
+
+                return (
+                  <>
+                    <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                    <BasicTable
+                      headers={unitSummariesHeaders}
+                      data={unitSummariesTable(byAMI.byNonReservedUnitType)}
+                      responsiveCollapse={true}
+                    />
+                  </>
+                )
+              })}
+            {amiValues.length == 1 && (
+              <BasicTable
+                headers={unitSummariesHeaders}
+                data={unitSummaries}
+                responsiveCollapse={true}
+              />
+            )}
           </div>
           <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
             <ApplicationSection listing={listing} />
