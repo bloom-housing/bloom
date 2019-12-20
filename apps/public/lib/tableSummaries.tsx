@@ -11,12 +11,12 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
       unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
       minimumIncome: (
         <>
-          <strong>${unitSummary.minIncomeRange.min}</strong>/month
+          <strong>{unitSummary.minIncomeRange.min}</strong>/month
         </>
       ),
       rent: (
         <>
-          <strong>${unitSummary.rentRange.min}</strong>/month
+          <strong>{unitSummary.rentRange.min}</strong>/month
         </>
       ),
       availability: (

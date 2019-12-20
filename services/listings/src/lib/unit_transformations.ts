@@ -1,8 +1,15 @@
 import { Unit, UnitsSummarized, UnitSummary } from "@bloom-housing/core/src/units"
-import { MinMax } from "@bloom-housing/core/src/general"
+import { MinMax, MinMaxCurrency } from "@bloom-housing/core/src/general"
 import { AmiChartItem } from "@bloom-housing/core/src/ami_charts"
 type AnyDict = { [key: string]: any }
 type Units = Unit[]
+
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+})
 
 const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number): MinMax => {
   if (!newMaxValue) {
@@ -13,6 +20,10 @@ const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number):
   } else {
     return { min: newValue, max: newMaxValue }
   }
+}
+
+const minMaxInCurrency = (minMax: MinMax): MinMaxCurrency => {
+  return { min: usd.format(minMax.min), max: usd.format(minMax.max) }
 }
 
 const hmiData = (
@@ -53,17 +64,22 @@ const hmiData = (
       const columns = {
         householdSize: i + 1
       }
+      let pushRow = false // row is valid if at least one column is filled
       amiValues.forEach(percent => {
         const amiInfo = amiChart.find(item => {
           return item.householdSize == columns.householdSize && item.percentOfAmi == percent
         })
         if (amiInfo) {
-          columns["ami" + percent] = "$" + amiInfo.income
+          columns["ami" + percent] = usd.format(amiInfo.income)
+          pushRow = true
         } else {
-          columns["ami" + percent] = "$" + "…"
+          columns["ami" + percent] = ""
         }
       })
-      hmiRows.push(columns)
+
+      if (pushRow) {
+        hmiRows.push(columns)
+      }
     })
   } else {
     hmiHeaders["maxIncomeMonth"] = "Maximum Income/Month"
@@ -79,14 +95,10 @@ const hmiData = (
       })
 
       if (amiInfo) {
-        columns["maxIncomeMonth"] = "$" + amiInfo.income / 12
-        columns["maxIncomeYear"] = "$" + amiInfo.income
-      } else {
-        columns["maxIncomeMonth"] = "$" + "…"
-        columns["maxIncomeYear"] = "$" + "…"
+        columns["maxIncomeMonth"] = usd.format(amiInfo.income / 12)
+        columns["maxIncomeYear"] = usd.format(amiInfo.income)
+        hmiRows.push(columns)
       }
-
-      hmiRows.push(columns)
     })
   }
 
@@ -105,12 +117,16 @@ const summarizeUnits = (
     (unitType: string): UnitSummary => {
       const summary = {} as UnitSummary
       const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
-      return Array.from(unitsByType).reduce((summary, unit) => {
+      const finalSummary = Array.from(unitsByType).reduce((summary, unit) => {
         summary.unitType = unitType
         if (!summary.totalAvailable) {
           summary.totalAvailable = 0
         }
-        summary.minIncomeRange = minMaxValue(summary.minIncomeRange, unit.monthlyIncomeMin)
+        summary.minIncomeRange = minMaxValue(
+          summary.minIncomeRange as MinMax,
+          unit.monthlyIncomeMin
+        )
+
         summary.occupancyRange = minMaxValue(
           summary.occupancyRange,
           unit.minOccupancy,
@@ -120,13 +136,22 @@ const summarizeUnits = (
           summary.rentAsPercentIncomeRange,
           unit.monthlyRentAsPercentOfIncome
         )
-        summary.rentRange = minMaxValue(summary.rentRange, unit.monthlyRent)
+        summary.rentRange = minMaxValue(summary.rentRange as MinMax, unit.monthlyRent)
         summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
         summary.areaRange = minMaxValue(summary.areaRange, unit.sqFeet)
         summary.totalAvailable += 1
 
         return summary
       }, summary)
+
+      if (finalSummary.minIncomeRange) {
+        finalSummary.minIncomeRange = minMaxInCurrency(finalSummary.minIncomeRange as MinMax)
+      }
+      if (finalSummary.rentRange) {
+        finalSummary.rentRange = minMaxInCurrency(finalSummary.rentRange as MinMax)
+      }
+
+      return finalSummary
     }
   )
 

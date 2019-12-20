@@ -1,4 +1,4 @@
-import { MinMax } from "./general"
+import { MinMax, MinMaxCurrency } from "./general"
 
 export interface Unit {
   id: string
@@ -27,10 +27,10 @@ export interface Unit {
 
 export interface UnitSummary {
   unitType: string
-  minIncomeRange: MinMax
+  minIncomeRange: MinMax | MinMaxCurrency
   occupancyRange: MinMax
   rentAsPercentIncomeRange: MinMax
-  rentRange: MinMax
+  rentRange: MinMax | MinMaxCurrency
   totalAvailable: number
   areaRange: MinMax
   floorRange: MinMax

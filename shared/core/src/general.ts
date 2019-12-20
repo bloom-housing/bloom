@@ -9,3 +9,8 @@ export interface MinMax {
   min: number
   max: number
 }
+
+export interface MinMaxCurrency {
+  min: string
+  max: string
+}
