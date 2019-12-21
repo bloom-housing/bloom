@@ -152,6 +152,9 @@
     "welcomeVietnamese": "Tiếng Việt"
   },
   "t": {
+    "area": "area",
+    "floor": "floor",
+    "floors": "floors",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "none": "None",
@@ -159,7 +162,8 @@
     "or": "or",
     "rent": "Rent",
     "skipToMainContent": "Skip to main content",
-    "sqFeet": "sqFeet",
+    "sqFeet": "sqft",
+
     "unitType": "Unit Type"
   },
   "welcome": {

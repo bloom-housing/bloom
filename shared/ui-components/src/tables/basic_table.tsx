@@ -13,10 +13,6 @@ export const Cell = (props: any) => (
     {props.children}
   </td>
 )
-export interface UnitLabel {
-  label?: string
-  unit?: string
-}
 
 export interface Headers {
   [key: string]: string
@@ -27,7 +23,6 @@ export interface BasicTableProps {
   data: any
   cellPadding?: string
   responsiveCollapse?: boolean
-  unit?: string
 }
 
 export const BasicTable = (props: BasicTableProps) => {
@@ -43,7 +38,7 @@ export const BasicTable = (props: BasicTableProps) => {
     const cols = Object.keys(headers).map(colKey => {
       const uniqKey = nanoid()
       const header = headers[colKey]
-      const cell = unit ? `${row[colKey]} ${unit}` : row[colKey]
+      const cell = row[colKey]
       return (
         <Cell key={uniqKey} headerLabel={header} cellPadding={cellPadding}>
           {cell}

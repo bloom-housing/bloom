@@ -19,7 +19,7 @@ import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/i
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
 import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
-import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
+import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
 import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
 
