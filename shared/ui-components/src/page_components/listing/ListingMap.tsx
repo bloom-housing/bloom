@@ -1,9 +1,9 @@
 import * as React from "react"
 import ReactMapGL, { Marker } from "react-map-gl"
-import { Address } from "@bloom/core/src/general"
+import { Address } from "@bloom-housing/core/src/general"
 import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
-import { Listing } from "@bloom/core/src/listings"
+import { Listing } from "@bloom-housing/core/src/listings"
 interface ListingMapProps {
   address: Address
   listing: Listing
@@ -18,7 +18,7 @@ const ListingMap = (props: ListingMapProps) => {
     longitude: address.longitude,
     zoom: 8
   })
-  const _onViewportChange = viewport => setViewPort({ ...viewport })
+  const _onViewportChange = (viewport: any) => setViewPort({ ...viewport })
 
   return (
     <>

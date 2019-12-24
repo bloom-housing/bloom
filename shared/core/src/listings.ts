@@ -1,4 +1,4 @@
-import { Unit, UnitSummary, UnitsSummarized } from "./units"
+import { Unit, UnitsSummarized } from "./units"
 import { Address } from "./general"
 import { Preference } from "./preferences"
 

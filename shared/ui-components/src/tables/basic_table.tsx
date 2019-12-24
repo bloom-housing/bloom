@@ -26,7 +26,7 @@ export interface BasicTableProps {
 }
 
 export const BasicTable = (props: BasicTableProps) => {
-  const { headers, data, cellPadding, unit } = props
+  const { headers, data, cellPadding } = props
 
   const headerLabels = Object.values(headers).map(col => {
     const uniqKey = nanoid()

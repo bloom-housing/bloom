@@ -22,7 +22,7 @@ const ListingsList = (props: ListingsProps) => {
     }
 
     let unitSummaries = []
-    if (props.unitSummariesTable) {
+    if (props.unitSummariesTable && listing.unitsSummarized !== undefined) {
       unitSummaries = props.unitSummariesTable(listing.unitsSummarized.byUnitType)
     }
 
