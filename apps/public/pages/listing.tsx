@@ -15,6 +15,7 @@ import ApplicationDeadline from "@bloom-housing/ui-components/src/page_component
 import ApplicationSection from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
 import WhatToExpect from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
 import LeasingAgent from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
+import ListingMap from "@bloom-housing/ui-components/src/page_components/listing/ListingMap"
 import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
@@ -45,14 +46,7 @@ export default class extends Component<ListingProps> {
   public render() {
     const listing = this.props.listing
 
-    const address = {
-      streetAddress: listing.buildingStreetAddress,
-      city: listing.buildingCity,
-      state: listing.buildingState,
-      zipCode: listing.buildingZipCode
-    }
-
-    const oneLineAddress = <OneLineAddress address={address} />
+    const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
 
     const googleMapsHref =
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
@@ -231,6 +225,8 @@ export default class extends Component<ListingProps> {
                   <Description term="Smoking Policy" description={listing.smokingPolicy} />
                   <Description term="Pets Policy" description={listing.petPolicy} />
                   <Description term="Property Amenities" description={listing.amenities} />
+                  <Description term="Unit Amenities" description={listing.unitAmenities} />
+                  <Description term="Accessibility" description={listing.accessibility} />
                   <Description
                     term="Unit Features"
                     description={
@@ -252,7 +248,7 @@ export default class extends Component<ListingProps> {
               desktopClass="bg-primary-lighter"
             >
               <div className="listing-detail-panel">
-                <p>Map goes here…</p>
+                <ListingMap address={listing.buildingAddress} listing={listing} />
               </div>
             </ListingDetailItem>
 

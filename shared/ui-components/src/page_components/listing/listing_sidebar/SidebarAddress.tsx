@@ -14,7 +14,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
   let googleMapsHref = ""
   let hours = <></>
 
-  if (address.streetAddress) {
+  if (address.street) {
     const oneLineAddress = <OneLineAddress address={address} />
     mainAddress = <MultiLineAddress address={address} />
 
@@ -33,7 +33,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
 
   return (
     <>
-      {address.streetAddress && (
+      {address.street && (
         <p className="text-gray-700 mb-4">
           {mainAddress}
           <br />
