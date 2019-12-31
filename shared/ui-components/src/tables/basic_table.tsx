@@ -29,14 +29,14 @@ export const BasicTable = (props: BasicTableProps) => {
   const { headers, data, cellPadding } = props
 
   const headerLabels = Object.values(headers).map(col => {
-    const uniqKey = nanoid()
+    const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
   const body = data.map((row: any) => {
-    const rowKey = row["id"] || nanoid()
+    const rowKey = row["id"] || (process.env.NODE_ENV === "test" ? "" : nanoid())
     const cols = Object.keys(headers).map(colKey => {
-      const uniqKey = nanoid()
+      const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
       const header = headers[colKey]
       const cell = row[colKey]
       return (

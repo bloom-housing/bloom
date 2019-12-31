@@ -170,16 +170,15 @@ const amiValues = summaries.amiPercentages
 
 storiesOf("Tables|UnitSummaryTables", module).add("show units summaries", () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return (
-    <>
+    <div>
       {amiValues.map(percent => {
         const byAMI = summaries.byAMI.find(item => {
           return parseInt(item.percent, 10) == percent
         })
 
         return (
-          <>
+          <div>
             <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
             <BasicTable
               headers={unitSummariesHeaders}
@@ -187,10 +186,10 @@ storiesOf("Tables|UnitSummaryTables", module).add("show units summaries", () => 
               data={unitSummariesTable(byAMI.byNonReservedUnitType)}
               responsiveCollapse={true}
             />
-          </>
+          </div>
         )
       })}
-    </>
+    </div>
   )
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 })

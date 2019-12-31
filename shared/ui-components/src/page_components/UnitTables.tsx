@@ -54,7 +54,7 @@ const UnitTables = (props: UnitTablesProps) => {
   return (
     <>
       {unitSummaries.map((unitSummary: UnitSummary) => {
-        const uniqKey = nanoid()
+        const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
         const units = props.units.filter((unit: Unit) => unit.unitType == unitSummary.unitType)
         const unitsFormatted = [] as any
         units.forEach((unit: Unit) => {
