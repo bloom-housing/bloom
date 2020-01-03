@@ -45,7 +45,7 @@ const hmiData = (
     .sort()
   let maxHousehold = 0
   maxHousehold = byUnitType.reduce((maxHousehold, summary) => {
-    return maxHousehold + summary.occupancyRange.max
+    return Math.max(maxHousehold, summary.occupancyRange.max)
   }, maxHousehold)
 
   const hmiRows = [] as AnyDict[]
