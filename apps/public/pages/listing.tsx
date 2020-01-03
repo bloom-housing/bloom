@@ -145,15 +145,18 @@ export default class extends Component<ListingProps> {
                 </ListSection>
 
                 <ListSection
-                  title="Additional Eligibility Rules"
-                  subtitle="Applicants must also qualify under the rules of the building."
+                  title={t("listings.additionalEligibility.title")}
+                  subtitle={t("listings.additionalEligibility.subtitle")}
                 >
                   <>
-                    <InfoCard title="Credit History">
+                    <InfoCard title={t("listings.creditHistory")}>
                       <p className="text-sm text-gray-700">{listing.creditHistory}</p>
                     </InfoCard>
-                    <InfoCard title="Rental History">
+                    <InfoCard title={t("listings.rentalHistory")}>
                       <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                    </InfoCard>
+                    <InfoCard title={t("listings.criminalBackground")}>
+                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
                     </InfoCard>
                   </>
                 </ListSection>

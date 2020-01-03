@@ -25,6 +25,7 @@ export interface Listing {
   blankPaperApplicationCanBePickedUp: boolean
   buildingAddress: Address
   creditHistory: string
+  criminalBackground: string
   developer: string
   id: string
   imageUrl?: string

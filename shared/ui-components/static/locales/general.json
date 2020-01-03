@@ -42,6 +42,10 @@
     }
   },
   "listings": {
+    "additionalEligibility": {
+      "title": "Additional Eligibility Rules",
+      "subtitle": "Applicants must also qualify under the rules of the building."
+    },
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for {{type}}",
@@ -66,6 +70,8 @@
     "bath": "bath",
     "closedListings": "Closed Listings",
     "confirmedPreferenceList": "Confirmed {{preference}} List",
+    "creditHistory": "Credit History",
+    "criminalBackground": "Criminal Background",
     "currentWaitlistSize": "Current Waitlist Size",
     "developmentalDisabilities": "Persons with developmental disabilities",
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
@@ -88,6 +94,7 @@
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to qualified applicants.",
+    "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "{{type}} Building",
     "reservedFor": "Reserved for {{type}}",
