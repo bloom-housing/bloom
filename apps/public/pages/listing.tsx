@@ -227,8 +227,15 @@ export default class extends Component<ListingProps> {
             >
               <div className="listing-detail-panel">
                 <div className="info-card">
+                  <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
                   <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
                 </div>
+                {listing.programRules && (
+                  <div className="info-card">
+                    <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
+                    <p className="text-sm text-gray-700">{listing.programRules}</p>
+                  </div>
+                )}
               </div>
             </ListingDetailItem>
           </ListingDetails>

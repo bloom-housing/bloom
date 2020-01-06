@@ -39,6 +39,7 @@ export interface Listing {
   preferences: Preference[]
   petPolicy: string
   postmarkedApplicationsReceivedByDate: string
+  programRules?: string
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string
