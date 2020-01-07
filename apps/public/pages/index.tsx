@@ -1,5 +1,6 @@
 import { Component } from "react"
 import Head from "next/head"
+import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
 import Hero from "@bloom-housing/ui-components/src/headers/Hero"
@@ -41,17 +42,8 @@ export default class extends Component<IndexProps> {
       <Layout>
         <Head>
           <title>{t("nav.siteTitle")}</title>
-          <meta property="og:title" content={t("nav.siteTitle")} />
-          <meta property="og:image" content={metaImage} />
-          <meta property="og:description" content={metaDescription} />
-          <meta name="description" content={metaDescription} />
-          <meta property="og:type" content="website" />
-
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:title" content={t("nav.siteTitle")} />
-          <meta property="twitter:image" content={metaImage} />
-          <meta property="twitter:description" content={metaDescription} />
         </Head>
+        <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <Hero
           title={heroTitle}
           buttonTitle={t("welcome.seeRentalListings")}
