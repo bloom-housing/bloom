@@ -6,8 +6,8 @@
   "license": "GPL-3.0",
   "private": false,
   "scripts": {
-    "start": "start-storybook -s ./static",
-    "test": "jest"
+    "start": "export $(cat .env | xargs) && start-storybook -s ./static",
+    "test": "export $(cat .env | xargs) && jest"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

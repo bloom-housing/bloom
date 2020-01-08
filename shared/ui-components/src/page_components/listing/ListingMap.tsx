@@ -9,6 +9,14 @@ interface ListingMapProps {
   listing: Listing
 }
 
+interface Viewport {
+  width: string | number
+  height: string | number
+  latitude: number
+  longitude: number
+  zoom: number
+}
+
 const ListingMap = (props: ListingMapProps) => {
   const address = props.address
   const [viewport, setViewPort] = React.useState({
@@ -17,8 +25,8 @@ const ListingMap = (props: ListingMapProps) => {
     latitude: address.latitude,
     longitude: address.longitude,
     zoom: 8
-  })
-  const _onViewportChange = (viewport: any) => setViewPort({ ...viewport })
+  } as Viewport)
+  const _onViewportChange = (viewport: Viewport) => setViewPort({ ...viewport })
 
   return (
     <>
@@ -27,7 +35,7 @@ const ListingMap = (props: ListingMapProps) => {
         <MultiLineAddress address={address} />
       </div>
       <ReactMapGL
-        mapboxApiAccessToken={process.env.mapBoxToken}
+        mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
         onViewportChange={_onViewportChange}
         {...viewport}
       >
