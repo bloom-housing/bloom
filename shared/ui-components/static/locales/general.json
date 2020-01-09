@@ -42,6 +42,7 @@
     }
   },
   "listings": {
+    "additionalFees": "Additional Fees",
     "additionalEligibility": {
       "title": "Additional Eligibility Rules",
       "subtitle": "Applicants must also qualify under the rules of the building."
@@ -50,6 +51,9 @@
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
     "applicationDeadline": "Application Deadline",
+    "applicationFee": "Application Fee",
+    "applicationFeeDueAt": "Due at interview",
+    "applicationPerApplicantAgeDescription": "per applicant age 18 and over",
     "applicationsClosed": "Applications Closed",
     "apply": {
       "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
@@ -73,6 +77,8 @@
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
     "currentWaitlistSize": "Current Waitlist Size",
+    "depositOrMonthsRent": "or one month's rent",
+    "depositMayBeHigherForLowerCredit": "May be higher for lower credit scores",
     "developmentalDisabilities": "Persons with developmental disabilities",
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
     "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for <span class='t-italic'>%{number} units</span>.",
@@ -166,6 +172,7 @@
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
   },
   "t": {
+    "deposit": "Deposit",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "none": "None",
