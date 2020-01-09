@@ -10,6 +10,7 @@ import {
 
 interface ResponsiveContentProps {
   children: React.ReactNode
+  desktopClass?: string
 }
 
 const ResponsiveContentList = (props: ResponsiveContentProps) => (
@@ -31,7 +32,9 @@ const ResponsiveContentItem = (props: ResponsiveContentProps) => (
       <AccordionItem>{props.children}</AccordionItem>
     </Mobile>
     <Desktop>
-      <li className="responsive-content-item">{props.children}</li>
+      <li className={"responsive-content-item " + (props.desktopClass ? props.desktopClass : "")}>
+        {props.children}
+      </li>
     </Desktop>
   </>
 )

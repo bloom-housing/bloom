@@ -10,23 +10,30 @@ exports[`Storyshots Listing|Sidebar Apply accepts postmarked applications 1`] = 
       "acceptsPostmarkedApplications": true,
       "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
       "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
-      "applicationCity": "San Jose",
+      "applicationAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "applicationDueDate": "2021-11-30T15:22:57.000-07:00",
       "applicationFee": "30.0",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
-      "applicationPostalCode": "95112",
-      "applicationState": "",
-      "applicationStreetAddress": "",
       "attachments": Array [],
       "blankPaperApplicationCanBePickedUp": true,
-      "buildingCity": "San Jose",
-      "buildingName": "Archer Studios",
+      "buildingAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "buildingSelectionCriteria": "Tenant Selection Criteria will be available to all applicants upon request.",
-      "buildingState": "CA",
-      "buildingStreetAddress": "98 Archer Street",
       "buildingTotalUnits": 35,
-      "buildingZipCode": "95112",
       "costsNotIncluded": "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
       "createdAt": "2019-07-08T15:37:19.565-07:00",
       "creditHistory": "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
@@ -38,15 +45,19 @@ exports[`Storyshots Listing|Sidebar Apply accepts postmarked applications 1`] = 
       "hideUnitFeatures": false,
       "id": "Uvbk5qurpB2WI9V6WnNdH",
       "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
-      "leasingAgentCity": "San Jose",
+      "leasingAgentAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "leasingAgentEmail": "mbaca@charitieshousing.org",
       "leasingAgentName": "Marisela Baca",
       "leasingAgentOfficeHours": "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
       "leasingAgentPhone": "(408) 217-8562",
-      "leasingAgentState": "CA",
-      "leasingAgentStreet": "98 Archer Street",
       "leasingAgentTitle": "",
-      "leasingAgentZip": "95112",
       "name": "Archer Studios",
       "neighborhood": "Rosemary Gardens Park",
       "petPolicy": "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
@@ -1117,8 +1128,10 @@ exports[`Storyshots Listing|Sidebar Apply accepts postmarked applications 1`] = 
       address={
         Object {
           "city": "San Jose",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
           "state": "CA",
-          "streetAddress": "98 Archer Street",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
@@ -1131,8 +1144,10 @@ exports[`Storyshots Listing|Sidebar Apply accepts postmarked applications 1`] = 
           address={
             Object {
               "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
               "state": "CA",
-              "streetAddress": "98 Archer Street",
+              "street": "98 Archer Street",
               "zipCode": "95112",
             }
           }
@@ -1202,12 +1217,47 @@ exports[`Storyshots Listing|Sidebar Apply accepts postmarked applications 1`] = 
       address={
         Object {
           "city": "San Jose",
-          "state": "",
-          "streetAddress": "",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
+          "state": "CA",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
-    />
+    >
+      <p
+        className="text-gray-700 mb-4"
+      >
+        <MultiLineAddress
+          address={
+            Object {
+              "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
+              "state": "CA",
+              "street": "98 Archer Street",
+              "zipCode": "95112",
+            }
+          }
+        >
+          98 Archer Street
+          <br />
+          San Jose
+           
+          CA
+          ,
+           
+          95112
+        </MultiLineAddress>
+        <br />
+        <a
+          href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
+          target="_blank"
+        >
+          Get Directions
+        </a>
+      </p>
+    </SidebarAddress>
     <p
       className="mt-4 text-tiny text-gray-750"
     >
@@ -1239,8 +1289,10 @@ exports[`Storyshots Listing|Sidebar Apply accepts postmarked applications 1`] = 
       address={
         Object {
           "city": "San Jose",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
           "state": "CA",
-          "streetAddress": "98 Archer Street",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
@@ -1253,8 +1305,10 @@ exports[`Storyshots Listing|Sidebar Apply accepts postmarked applications 1`] = 
           address={
             Object {
               "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
               "state": "CA",
-              "streetAddress": "98 Archer Street",
+              "street": "98 Archer Street",
               "zipCode": "95112",
             }
           }
@@ -1301,23 +1355,30 @@ exports[`Storyshots Listing|Sidebar Apply hard application deadline 1`] = `
       "acceptsPostmarkedApplications": false,
       "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
       "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
-      "applicationCity": "San Jose",
+      "applicationAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "applicationDueDate": "2021-11-30T15:22:57.000-07:00",
       "applicationFee": "30.0",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
-      "applicationPostalCode": "95112",
-      "applicationState": "",
-      "applicationStreetAddress": "",
       "attachments": Array [],
       "blankPaperApplicationCanBePickedUp": true,
-      "buildingCity": "San Jose",
-      "buildingName": "Archer Studios",
+      "buildingAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "buildingSelectionCriteria": "Tenant Selection Criteria will be available to all applicants upon request.",
-      "buildingState": "CA",
-      "buildingStreetAddress": "98 Archer Street",
       "buildingTotalUnits": 35,
-      "buildingZipCode": "95112",
       "costsNotIncluded": "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
       "createdAt": "2019-07-08T15:37:19.565-07:00",
       "creditHistory": "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
@@ -1329,15 +1390,19 @@ exports[`Storyshots Listing|Sidebar Apply hard application deadline 1`] = `
       "hideUnitFeatures": false,
       "id": "Uvbk5qurpB2WI9V6WnNdH",
       "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
-      "leasingAgentCity": "San Jose",
+      "leasingAgentAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "leasingAgentEmail": "mbaca@charitieshousing.org",
       "leasingAgentName": "Marisela Baca",
       "leasingAgentOfficeHours": "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
       "leasingAgentPhone": "(408) 217-8562",
-      "leasingAgentState": "CA",
-      "leasingAgentStreet": "98 Archer Street",
       "leasingAgentTitle": "",
-      "leasingAgentZip": "95112",
       "name": "Archer Studios",
       "neighborhood": "Rosemary Gardens Park",
       "petPolicy": "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
@@ -2408,8 +2473,10 @@ exports[`Storyshots Listing|Sidebar Apply hard application deadline 1`] = `
       address={
         Object {
           "city": "San Jose",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
           "state": "CA",
-          "streetAddress": "98 Archer Street",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
@@ -2422,8 +2489,10 @@ exports[`Storyshots Listing|Sidebar Apply hard application deadline 1`] = `
           address={
             Object {
               "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
               "state": "CA",
-              "streetAddress": "98 Archer Street",
+              "street": "98 Archer Street",
               "zipCode": "95112",
             }
           }
@@ -2493,12 +2562,47 @@ exports[`Storyshots Listing|Sidebar Apply hard application deadline 1`] = `
       address={
         Object {
           "city": "San Jose",
-          "state": "",
-          "streetAddress": "",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
+          "state": "CA",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
-    />
+    >
+      <p
+        className="text-gray-700 mb-4"
+      >
+        <MultiLineAddress
+          address={
+            Object {
+              "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
+              "state": "CA",
+              "street": "98 Archer Street",
+              "zipCode": "95112",
+            }
+          }
+        >
+          98 Archer Street
+          <br />
+          San Jose
+           
+          CA
+          ,
+           
+          95112
+        </MultiLineAddress>
+        <br />
+        <a
+          href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
+          target="_blank"
+        >
+          Get Directions
+        </a>
+      </p>
+    </SidebarAddress>
     <p
       className="mt-4 text-tiny text-gray-750"
     >
@@ -2530,8 +2634,10 @@ exports[`Storyshots Listing|Sidebar Apply hard application deadline 1`] = `
       address={
         Object {
           "city": "San Jose",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
           "state": "CA",
-          "streetAddress": "98 Archer Street",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
@@ -2544,8 +2650,10 @@ exports[`Storyshots Listing|Sidebar Apply hard application deadline 1`] = `
           address={
             Object {
               "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
               "state": "CA",
-              "streetAddress": "98 Archer Street",
+              "street": "98 Archer Street",
               "zipCode": "95112",
             }
           }
@@ -2592,14 +2700,18 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
       "acceptsPostmarkedApplications": true,
       "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
       "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
-      "applicationCity": "San Jose",
+      "applicationAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "applicationDueDate": "2021-11-30T15:22:57.000-07:00",
       "applicationFee": "30.0",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
-      "applicationPostalCode": "95112",
-      "applicationState": "",
-      "applicationStreetAddress": "",
       "attachments": Array [
         Object {
           "fileUrl": "#english",
@@ -2613,13 +2725,16 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
         },
       ],
       "blankPaperApplicationCanBePickedUp": true,
-      "buildingCity": "San Jose",
-      "buildingName": "Archer Studios",
+      "buildingAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "buildingSelectionCriteria": "Tenant Selection Criteria will be available to all applicants upon request.",
-      "buildingState": "CA",
-      "buildingStreetAddress": "98 Archer Street",
       "buildingTotalUnits": 35,
-      "buildingZipCode": "95112",
       "costsNotIncluded": "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
       "createdAt": "2019-07-08T15:37:19.565-07:00",
       "creditHistory": "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
@@ -2631,15 +2746,19 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
       "hideUnitFeatures": false,
       "id": "Uvbk5qurpB2WI9V6WnNdH",
       "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
-      "leasingAgentCity": "San Jose",
+      "leasingAgentAddress": Object {
+        "city": "San Jose",
+        "latitude": 37.36537,
+        "longitude": -121.91071,
+        "state": "CA",
+        "street": "98 Archer Street",
+        "zipCode": "95112",
+      },
       "leasingAgentEmail": "mbaca@charitieshousing.org",
       "leasingAgentName": "Marisela Baca",
       "leasingAgentOfficeHours": "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
       "leasingAgentPhone": "(408) 217-8562",
-      "leasingAgentState": "CA",
-      "leasingAgentStreet": "98 Archer Street",
       "leasingAgentTitle": "",
-      "leasingAgentZip": "95112",
       "name": "Archer Studios",
       "neighborhood": "Rosemary Gardens Park",
       "petPolicy": "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
@@ -3710,8 +3829,10 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
       address={
         Object {
           "city": "San Jose",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
           "state": "CA",
-          "streetAddress": "98 Archer Street",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
@@ -3724,8 +3845,10 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
           address={
             Object {
               "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
               "state": "CA",
-              "streetAddress": "98 Archer Street",
+              "street": "98 Archer Street",
               "zipCode": "95112",
             }
           }
@@ -3795,12 +3918,47 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
       address={
         Object {
           "city": "San Jose",
-          "state": "",
-          "streetAddress": "",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
+          "state": "CA",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
-    />
+    >
+      <p
+        className="text-gray-700 mb-4"
+      >
+        <MultiLineAddress
+          address={
+            Object {
+              "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
+              "state": "CA",
+              "street": "98 Archer Street",
+              "zipCode": "95112",
+            }
+          }
+        >
+          98 Archer Street
+          <br />
+          San Jose
+           
+          CA
+          ,
+           
+          95112
+        </MultiLineAddress>
+        <br />
+        <a
+          href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
+          target="_blank"
+        >
+          Get Directions
+        </a>
+      </p>
+    </SidebarAddress>
     <p
       className="mt-4 text-tiny text-gray-750"
     >
@@ -3832,8 +3990,10 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
       address={
         Object {
           "city": "San Jose",
+          "latitude": 37.36537,
+          "longitude": -121.91071,
           "state": "CA",
-          "streetAddress": "98 Archer Street",
+          "street": "98 Archer Street",
           "zipCode": "95112",
         }
       }
@@ -3846,8 +4006,10 @@ exports[`Storyshots Listing|Sidebar Apply shows multiple download URLs 1`] = `
           address={
             Object {
               "city": "San Jose",
+              "latitude": 37.36537,
+              "longitude": -121.91071,
               "state": "CA",
-              "streetAddress": "98 Archer Street",
+              "street": "98 Archer Street",
               "zipCode": "95112",
             }
           }

@@ -34,7 +34,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "yarn run clean && tsc",
+    "build": "yarn run clean && tsc -p tsconfig.prod.json",
     "start": "yarn run build && node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts",
     "test": "jest"

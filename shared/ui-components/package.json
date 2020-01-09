@@ -55,6 +55,7 @@
     "nanoid": "^2.1.1",
     "react": "16.8.6",
     "react-dom": "16.8.6",
+    "react-map-gl": "^5.0.12",
     "tailwindcss": "^1.1.3"
   }
 }

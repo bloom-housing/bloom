@@ -6,7 +6,7 @@ interface AddressProps {
 
 export const OneLineAddress = (props: AddressProps) => (
   <>
-    {props.address.streetAddress},{` `}
+    {props.address.street},{` `}
     {props.address.city} {props.address.state},{` `}
     {props.address.zipCode}
   </>
@@ -14,7 +14,7 @@ export const OneLineAddress = (props: AddressProps) => (
 
 export const MultiLineAddress = (props: AddressProps) => (
   <>
-    {props.address.streetAddress}
+    {props.address.street}
     <br />
     {props.address.city} {props.address.state},{` `}
     {props.address.zipCode}
