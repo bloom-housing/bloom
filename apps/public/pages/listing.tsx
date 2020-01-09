@@ -158,15 +158,18 @@ export default class extends Component<ListingProps> {
                 </ListSection>
 
                 <ListSection
-                  title="Additional Eligibility Rules"
-                  subtitle="Applicants must also qualify under the rules of the building."
+                  title={t("listings.additionalEligibility.title")}
+                  subtitle={t("listings.additionalEligibility.subtitle")}
                 >
                   <>
-                    <InfoCard title="Credit History">
+                    <InfoCard title={t("listings.creditHistory")}>
                       <p className="text-sm text-gray-700">{listing.creditHistory}</p>
                     </InfoCard>
-                    <InfoCard title="Rental History">
+                    <InfoCard title={t("listings.rentalHistory")}>
                       <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                    </InfoCard>
+                    <InfoCard title={t("listings.criminalBackground")}>
+                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
                     </InfoCard>
                   </>
                 </ListSection>
@@ -240,8 +243,15 @@ export default class extends Component<ListingProps> {
             >
               <div className="listing-detail-panel">
                 <div className="info-card">
+                  <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
                   <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
                 </div>
+                {listing.programRules && (
+                  <div className="info-card">
+                    <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
+                    <p className="text-sm text-gray-700">{listing.programRules}</p>
+                  </div>
+                )}
               </div>
             </ListingDetailItem>
           </ListingDetails>

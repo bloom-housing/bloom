@@ -25,6 +25,7 @@ export interface Listing {
   blankPaperApplicationCanBePickedUp: boolean
   buildingAddress: Address
   creditHistory: string
+  criminalBackground: string
   developer: string
   id: string
   imageUrl?: string
@@ -39,6 +40,7 @@ export interface Listing {
   preferences: Preference[]
   petPolicy: string
   postmarkedApplicationsReceivedByDate: string
+  programRules?: string
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string
