@@ -19,12 +19,17 @@ export interface Listing {
   accessibility: string
   amenities: string
   applicationDueDate: string
+  applicationFee: string
   applicationOrganization: string
   applicationAddress: Address
   attachments: Attachment[]
   blankPaperApplicationCanBePickedUp: boolean
   buildingAddress: Address
+  costsNotIncluded: string
   creditHistory: string
+  criminalBackground: string
+  depositMin: string
+  depositMax?: string
   developer: string
   id: string
   imageUrl?: string
@@ -39,6 +44,7 @@ export interface Listing {
   preferences: Preference[]
   petPolicy: string
   postmarkedApplicationsReceivedByDate: string
+  programRules?: string
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string

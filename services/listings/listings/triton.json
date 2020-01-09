@@ -59,7 +59,7 @@
     }
   ],
   "applicationFee": "38.0",
-  "criminalBackground": null,
+  "criminalBackground": "A criminal background investigation will be obtained on each applicant. As criminal background checks are done county by county and will be ran for all counties in which the applicant lived, Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   "leasingAgentAddress": {
     "city": "Foster City",
     "street": "55 Triton Park Lane",

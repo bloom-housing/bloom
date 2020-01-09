@@ -1,4 +1,6 @@
 import { Component } from "react"
+import Head from "next/head"
+import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
 import Hero from "@bloom-housing/ui-components/src/headers/Hero"
@@ -32,8 +34,16 @@ export default class extends Component<IndexProps> {
       </>
     )
 
+    //    const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
+    const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+    const metaImage = "" // TODO: replace with hero image
+
     return (
       <Layout>
+        <Head>
+          <title>{t("nav.siteTitle")}</title>
+        </Head>
+        <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <Hero
           title={heroTitle}
           buttonTitle={t("welcome.seeRentalListings")}

@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
+import Head from "next/head"
+import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
 import getOccupancyDescription from "../lib/getOccupancyDescription"
@@ -21,6 +23,7 @@ import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
 import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
 import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
+import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
 import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
 
@@ -75,8 +78,19 @@ export default class extends Component<ListingProps> {
     }
     const occupancyData = occupancyTable(listing)
 
+    const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
+    const metaDescription = t("pageDescription.listing", {
+      regionName: t("region.name"),
+      listingName: listing.name
+    })
+    const metaImage = listing.imageUrl
+
     return (
       <Layout>
+        <Head>
+          <title>{pageTitle}</title>
+        </Head>
+        <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
         <article className="image-card--leader flex flex-wrap relative max-w-5xl m-auto">
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
@@ -173,15 +187,18 @@ export default class extends Component<ListingProps> {
                 </ListSection>
 
                 <ListSection
-                  title="Additional Eligibility Rules"
-                  subtitle="Applicants must also qualify under the rules of the building."
+                  title={t("listings.additionalEligibility.title")}
+                  subtitle={t("listings.additionalEligibility.subtitle")}
                 >
                   <>
-                    <InfoCard title="Credit History">
+                    <InfoCard title={t("listings.creditHistory")}>
                       <p className="text-sm text-gray-700">{listing.creditHistory}</p>
                     </InfoCard>
-                    <InfoCard title="Rental History">
+                    <InfoCard title={t("listings.rentalHistory")}>
                       <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                    </InfoCard>
+                    <InfoCard title={t("listings.criminalBackground")}>
+                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
                     </InfoCard>
                   </>
                 </ListSection>
@@ -237,6 +254,7 @@ export default class extends Component<ListingProps> {
                     }
                   />
                 </dl>
+                <AdditionalFees listing={listing} />
               </div>
             </ListingDetailItem>
 
@@ -260,8 +278,15 @@ export default class extends Component<ListingProps> {
             >
               <div className="listing-detail-panel">
                 <div className="info-card">
+                  <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
                   <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
                 </div>
+                {listing.programRules && (
+                  <div className="info-card">
+                    <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
+                    <p className="text-sm text-gray-700">{listing.programRules}</p>
+                  </div>
+                )}
               </div>
             </ListingDetailItem>
           </ListingDetails>
