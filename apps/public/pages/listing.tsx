@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
+import Head from "next/head"
+import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
 import getOccupancyDescription from "../lib/getOccupancyDescription"
@@ -66,8 +68,19 @@ export default class extends Component<ListingProps> {
     }
     const occupancyData = occupancyTable(listing)
 
+    const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
+    const metaDescription = t("pageDescription.listing", {
+      regionName: t("region.name"),
+      listingName: listing.name
+    })
+    const metaImage = listing.imageUrl
+
     return (
       <Layout>
+        <Head>
+          <title>{pageTitle}</title>
+        </Head>
+        <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
         <article className="image-card--leader flex flex-wrap relative max-w-5xl m-auto">
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
