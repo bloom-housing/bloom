@@ -1,12 +1,20 @@
 import * as React from "react"
 import ReactMapGL, { Marker } from "react-map-gl"
-import { Address } from "@bloom/core/src/general"
+import { Address } from "@bloom-housing/core/src/general"
 import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
-import { Listing } from "@bloom/core/src/listings"
+import { Listing } from "@bloom-housing/core/src/listings"
 interface ListingMapProps {
   address: Address
   listing: Listing
+}
+
+interface Viewport {
+  width: string | number
+  height: string | number
+  latitude: number
+  longitude: number
+  zoom: number
 }
 
 const ListingMap = (props: ListingMapProps) => {
@@ -17,8 +25,8 @@ const ListingMap = (props: ListingMapProps) => {
     latitude: address.latitude,
     longitude: address.longitude,
     zoom: 8
-  })
-  const _onViewportChange = viewport => setViewPort({ ...viewport })
+  } as Viewport)
+  const _onViewportChange = (viewport: Viewport) => setViewPort({ ...viewport })
 
   return (
     <>
@@ -27,7 +35,7 @@ const ListingMap = (props: ListingMapProps) => {
         <MultiLineAddress address={address} />
       </div>
       <ReactMapGL
-        mapboxApiAccessToken={process.env.mapBoxToken}
+        mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
         onViewportChange={_onViewportChange}
         {...viewport}
       >

@@ -710,7 +710,7 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
+      "reservedType": "senior",
       "sqFeet": 285,
       "status": "occupied",
       "unitType": "studio",

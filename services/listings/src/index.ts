@@ -3,6 +3,8 @@ import Application from "koa"
 import cors from "@koa/cors"
 import dotenv from "dotenv"
 import { transformUnits } from "./lib/unit_transformations"
+import { amiCharts } from "./lib/ami_charts"
+
 dotenv.config({ path: ".env" })
 
 const config = {
@@ -17,10 +19,14 @@ const listings = [triton as AnyDict, gish as AnyDict, archer as AnyDict]
 
 // Transform all the listings
 listings.forEach(listing => {
-  listing.unitsSummarized = transformUnits(listing.units)
+  listing.unitsSummarized = transformUnits(listing.units, amiCharts)
 })
 
-const data = { status: "ok", listings: listings }
+const data = {
+  status: "ok",
+  listings: listings,
+  amiCharts: amiCharts
+}
 
 const app = new Application()
 

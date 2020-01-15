@@ -1,4 +1,4 @@
-import { Unit, UnitSummary, UnitsSummarized } from "./units"
+import { Unit, UnitsSummarized } from "./units"
 import { Address } from "./general"
 import { Preference } from "./preferences"
 
@@ -48,9 +48,8 @@ export interface Listing {
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string
-  unitAmenities: string
-  unit_summaries?: UnitSummary[]
   units: Unit[]
+  unitAmenities: string
   unitsSummarized?: UnitsSummarized
   yearBuilt: number
 }

@@ -21,8 +21,8 @@ import ListingMap from "@bloom-housing/ui-components/src/page_components/listing
 import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
-import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
-import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
+import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
+import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
 import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
 import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
@@ -60,7 +60,16 @@ export default class extends Component<ListingProps> {
       rent: "Rent",
       availability: "Availability"
     }
-    const unitSummaries = unitSummariesTable(listing)
+    const unitSummaries = unitSummariesTable(listing.unitsSummarized.byUnitType)
+
+    const amiValues = listing.unitsSummarized.amiPercentages
+      .map(percent => {
+        const percentInt = parseInt(percent, 10)
+        return percentInt
+      })
+      .sort()
+    const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
+    const hmiData = listing.unitsSummarized.hmi.rows
 
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
@@ -106,11 +115,30 @@ export default class extends Component<ListingProps> {
           </div>
 
           <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
-            <BasicTable
-              headers={unitSummariesHeaders}
-              data={unitSummaries}
-              responsiveCollapse={true}
-            />
+            {amiValues.length > 1 &&
+              amiValues.map(percent => {
+                const byAMI = listing.unitsSummarized.byAMI.find(item => {
+                  return parseInt(item.percent, 10) == percent
+                })
+
+                return (
+                  <>
+                    <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                    <BasicTable
+                      headers={unitSummariesHeaders}
+                      data={unitSummariesTable(byAMI.byNonReservedUnitType)}
+                      responsiveCollapse={true}
+                    />
+                  </>
+                )
+              })}
+            {amiValues.length == 1 && (
+              <BasicTable
+                headers={unitSummariesHeaders}
+                data={unitSummaries}
+                responsiveCollapse={true}
+              />
+            )}
           </div>
           <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
             <ApplicationSection listing={listing} />
@@ -128,7 +156,7 @@ export default class extends Component<ListingProps> {
                   title={t("listings.householdMaximumIncome")}
                   subtitle={t("listings.forIncomeCalculations")}
                 >
-                  <>table goes here…</>
+                  <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
 
                 <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
@@ -218,7 +246,12 @@ export default class extends Component<ListingProps> {
                   <Description term="Accessibility" description={listing.accessibility} />
                   <Description
                     term="Unit Features"
-                    description={<UnitTables groupedUnits={listing.unitsSummarized.grouped} />}
+                    description={
+                      <UnitTables
+                        units={listing.units}
+                        unitSummaries={listing.unitsSummarized.byUnitType}
+                      />
+                    }
                   />
                 </dl>
                 <AdditionalFees listing={listing} />

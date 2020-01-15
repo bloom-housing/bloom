@@ -1,4 +1,4 @@
-import { MinMax } from "./general"
+import { MinMax, MinMaxCurrency } from "./general"
 
 export interface Unit {
   id: string
@@ -26,27 +26,35 @@ export interface Unit {
 }
 
 export interface UnitSummary {
-  minIncomeRange: MinMax
+  unitType: string
+  minIncomeRange: MinMax | MinMaxCurrency
   occupancyRange: MinMax
   rentAsPercentIncomeRange: MinMax
-  rentRange: MinMax
-  reservedTypes: [string]
+  rentRange: MinMax | MinMaxCurrency
   totalAvailable: number
   areaRange: MinMax
   floorRange: MinMax
 }
 
-export interface UnitsSummarized {
-  all: [Unit]
-  grouped: UnitGroup[]
-  reserved: UnitGroup[]
-  priority: UnitGroup[]
-  unitTypes: string[]
-  unitSummary: UnitSummary
+export interface UnitSummaryByReservedType {
+  reservedType: string
+  byUnitType: UnitSummary[]
 }
 
-export interface UnitGroup {
-  units: [Unit]
-  type: string
-  unitSummary: UnitSummary
+export interface UnitSummaryByAMI {
+  percent: string
+  byNonReservedUnitType: UnitSummary[]
+  byReservedType: UnitSummaryByReservedType[]
+}
+
+export interface UnitsSummarized {
+  unitTypes: string[]
+  reservedTypes: string[]
+  priorityTypes: string[]
+  amiPercentages: string[]
+  byUnitType: UnitSummary[]
+  byNonReservedUnitType: UnitSummary[]
+  byReservedType: UnitSummaryByReservedType[]
+  byAMI: UnitSummaryByAMI[]
+  hmi: { [key: string]: any }
 }

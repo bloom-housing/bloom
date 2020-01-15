@@ -20,9 +20,10 @@ const ListingsList = (props: ListingsProps) => {
       minimumIncome: t("t.minimumIncome"),
       rent: t("t.rent")
     }
+
     let unitSummaries = []
-    if (props.unitSummariesTable) {
-      unitSummaries = props.unitSummariesTable(listing)
+    if (props.unitSummariesTable && listing.unitsSummarized !== undefined) {
+      unitSummaries = props.unitSummariesTable(listing.unitsSummarized.byUnitType)
     }
 
     return (
