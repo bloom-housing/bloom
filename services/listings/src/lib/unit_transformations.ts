@@ -155,7 +155,7 @@ const summarizeUnits = (
     }
   )
 
-  return summaries
+  return summaries.filter(item => Object.keys(item).length > 0)
 }
 
 const summarizeReservedTypes = (units: Units, reservedTypes: string[], unitTypes: string[]) => {

@@ -1,7 +1,7 @@
 import * as React from "react"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { Listing } from "@bloom-housing/core/src/listings"
-import { UnitSummary } from "@bloom-housing/core/src/units"
+import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core/src/units"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
   const unitSummaries = summaries.map(unitSummary => {
@@ -34,6 +34,41 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
   })
 
   return unitSummaries
+}
+
+export const groupNonReservedAndReservedSummaries = (
+  nonReservedSummaries: UnitSummary[],
+  reservedTypeSummaries: UnitSummaryByReservedType[]
+) => {
+  let groupedUnits = []
+
+  if (nonReservedSummaries.length > 0) {
+    const unitSummaries = unitSummariesTable(nonReservedSummaries)
+    groupedUnits = [
+      {
+        header: null,
+        className: null,
+        data: unitSummaries
+      }
+    ]
+  }
+
+  if (reservedTypeSummaries.length > 0) {
+    reservedTypeSummaries.forEach((item: UnitSummaryByReservedType) => {
+      groupedUnits.push({
+        header: (
+          <>
+            <span style={{ color: "orange" }}>★</span>{" "}
+            {t("listings.reservedFor", { type: item.reservedType + "s" })}
+          </>
+        ),
+        className: "reserved",
+        data: unitSummariesTable(item.byUnitType)
+      })
+    })
+  }
+
+  return groupedUnits
 }
 
 export const occupancyTable = (listing: Listing) => {

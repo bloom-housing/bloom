@@ -2,7 +2,7 @@ import * as React from "react"
 import ImageCard from "../../cards/ImageCard"
 import { Listing } from "@bloom-housing/core/src/listings"
 import LinkButton from "../../atoms/LinkButton"
-import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
+import { GroupedTable } from "@bloom-housing/ui-components/src/tables/GroupedTable"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 export interface ListingsProps {
@@ -23,7 +23,10 @@ const ListingsList = (props: ListingsProps) => {
 
     let unitSummaries = []
     if (props.unitSummariesTable && listing.unitsSummarized !== undefined) {
-      unitSummaries = props.unitSummariesTable(listing.unitsSummarized.byUnitType)
+      unitSummaries = props.unitSummariesTable(
+        listing.unitsSummarized.byNonReservedUnitType,
+        listing.unitsSummarized.byReservedType
+      )
     }
 
     return (
@@ -43,11 +46,11 @@ const ListingsList = (props: ListingsProps) => {
           </h4>
           <div className="mb-4">
             {unitSummaries && (
-              <BasicTable
+              <GroupedTable
                 headers={unitSummariesHeaders}
                 data={unitSummaries}
                 responsiveCollapse={true}
-                cellPadding="p-3"
+                cellClassName="p-3"
               />
             )}
           </div>
