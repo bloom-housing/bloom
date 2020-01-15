@@ -13,10 +13,6 @@ export const Cell = (props: any) => (
     {props.children}
   </td>
 )
-export interface UnitLabel {
-  label?: string
-  unit?: string
-}
 
 export interface Headers {
   [key: string]: string
@@ -27,23 +23,22 @@ export interface BasicTableProps {
   data: any
   cellPadding?: string
   responsiveCollapse?: boolean
-  unit?: string
 }
 
 export const BasicTable = (props: BasicTableProps) => {
-  const { headers, data, cellPadding, unit } = props
+  const { headers, data, cellPadding } = props
 
   const headerLabels = Object.values(headers).map(col => {
-    const uniqKey = nanoid()
+    const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
   const body = data.map((row: any) => {
-    const rowKey = row["id"] || nanoid()
+    const rowKey = row["id"] || (process.env.NODE_ENV === "test" ? "" : nanoid())
     const cols = Object.keys(headers).map(colKey => {
-      const uniqKey = nanoid()
+      const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
       const header = headers[colKey]
-      const cell = unit ? `${row[colKey]} ${unit}` : row[colKey]
+      const cell = row[colKey]
       return (
         <Cell key={uniqKey} headerLabel={header} cellPadding={cellPadding}>
           {cell}

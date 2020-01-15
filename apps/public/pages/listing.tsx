@@ -1,5 +1,7 @@
-import { Component } from "react"
+import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
+import Head from "next/head"
+import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
 import getOccupancyDescription from "../lib/getOccupancyDescription"
@@ -15,11 +17,14 @@ import ApplicationDeadline from "@bloom-housing/ui-components/src/page_component
 import ApplicationSection from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
 import WhatToExpect from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
 import LeasingAgent from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
+import ListingMap from "@bloom-housing/ui-components/src/page_components/listing/ListingMap"
 import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
-import { BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
-import UnitTables from "@bloom-housing/ui-components/src/page_components/unit_tables"
+import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
+import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
+import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
+import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
 
 interface ListingProps {
@@ -44,14 +49,7 @@ export default class extends Component<ListingProps> {
   public render() {
     const listing = this.props.listing
 
-    const address = {
-      streetAddress: listing.buildingStreetAddress,
-      city: listing.buildingCity,
-      state: listing.buildingState,
-      zipCode: listing.buildingZipCode
-    }
-
-    const oneLineAddress = <OneLineAddress address={address} />
+    const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
 
     const googleMapsHref =
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
@@ -62,7 +60,16 @@ export default class extends Component<ListingProps> {
       rent: "Rent",
       availability: "Availability"
     }
-    const unitSummaries = unitSummariesTable(listing)
+    const unitSummaries = unitSummariesTable(listing.unitsSummarized.byUnitType)
+
+    const amiValues = listing.unitsSummarized.amiPercentages
+      .map(percent => {
+        const percentInt = parseInt(percent, 10)
+        return percentInt
+      })
+      .sort()
+    const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
+    const hmiData = listing.unitsSummarized.hmi.rows
 
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
@@ -71,8 +78,19 @@ export default class extends Component<ListingProps> {
     }
     const occupancyData = occupancyTable(listing)
 
+    const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
+    const metaDescription = t("pageDescription.listing", {
+      regionName: t("region.name"),
+      listingName: listing.name
+    })
+    const metaImage = listing.imageUrl
+
     return (
       <Layout>
+        <Head>
+          <title>{pageTitle}</title>
+        </Head>
+        <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
         <article className="image-card--leader flex flex-wrap relative max-w-5xl m-auto">
           <ImageHeader
             className="w-full md:w-2/3 pt-8 md:pr-8"
@@ -97,11 +115,30 @@ export default class extends Component<ListingProps> {
           </div>
 
           <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
-            <BasicTable
-              headers={unitSummariesHeaders}
-              data={unitSummaries}
-              responsiveCollapse={true}
-            />
+            {amiValues.length > 1 &&
+              amiValues.map(percent => {
+                const byAMI = listing.unitsSummarized.byAMI.find(item => {
+                  return parseInt(item.percent, 10) == percent
+                })
+
+                return (
+                  <>
+                    <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                    <BasicTable
+                      headers={unitSummariesHeaders}
+                      data={unitSummariesTable(byAMI.byNonReservedUnitType)}
+                      responsiveCollapse={true}
+                    />
+                  </>
+                )
+              })}
+            {amiValues.length == 1 && (
+              <BasicTable
+                headers={unitSummariesHeaders}
+                data={unitSummaries}
+                responsiveCollapse={true}
+              />
+            )}
           </div>
           <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
             <ApplicationSection listing={listing} />
@@ -112,13 +149,14 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-eligibility.svg"
               title="Eligibility"
               subtitle="Income, occupancy, preferences, and subsidies"
+              desktopClass="bg-primary-lighter"
             >
               <ul>
                 <ListSection
                   title={t("listings.householdMaximumIncome")}
                   subtitle={t("listings.forIncomeCalculations")}
                 >
-                  <>table goes here…</>
+                  <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
 
                 <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
@@ -140,19 +178,27 @@ export default class extends Component<ListingProps> {
                   title="Housing Preferences"
                   subtitle="Preference holders will be given highest ranking."
                 >
-                  <>table goes here…</>
+                  <>
+                    <PreferencesList preferences={listing.preferences} />
+                    <p className="text-gray-700 text-tiny">
+                      {t("listings.remainingUnitsAfterPreferenceConsideration")}
+                    </p>
+                  </>
                 </ListSection>
 
                 <ListSection
-                  title="Additional Eligibility Rules"
-                  subtitle="Applicants must also qualify under the rules of the building."
+                  title={t("listings.additionalEligibility.title")}
+                  subtitle={t("listings.additionalEligibility.subtitle")}
                 >
                   <>
-                    <InfoCard title="Credit History">
+                    <InfoCard title={t("listings.creditHistory")}>
                       <p className="text-sm text-gray-700">{listing.creditHistory}</p>
                     </InfoCard>
-                    <InfoCard title="Rental History">
+                    <InfoCard title={t("listings.rentalHistory")}>
                       <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                    </InfoCard>
+                    <InfoCard title={t("listings.criminalBackground")}>
+                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
                     </InfoCard>
                   </>
                 </ListSection>
@@ -164,6 +210,8 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-process.svg"
               title="Process"
               subtitle="Important dates and contact information"
+              hideHeader={true}
+              desktopClass="header-hidden"
             >
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
@@ -194,11 +242,19 @@ export default class extends Component<ListingProps> {
                   <Description term="Smoking Policy" description={listing.smokingPolicy} />
                   <Description term="Pets Policy" description={listing.petPolicy} />
                   <Description term="Property Amenities" description={listing.amenities} />
+                  <Description term="Unit Amenities" description={listing.unitAmenities} />
+                  <Description term="Accessibility" description={listing.accessibility} />
                   <Description
                     term="Unit Features"
-                    description={<UnitTables groupedUnits={listing.unitsSummarized.grouped} />}
+                    description={
+                      <UnitTables
+                        units={listing.units}
+                        unitSummaries={listing.unitsSummarized.byUnitType}
+                      />
+                    }
                   />
                 </dl>
+                <AdditionalFees listing={listing} />
               </div>
             </ListingDetailItem>
 
@@ -207,9 +263,10 @@ export default class extends Component<ListingProps> {
               imageSrc="/static/images/listing-neighborhood.svg"
               title="Neighborhood"
               subtitle="Location and transportation"
+              desktopClass="bg-primary-lighter"
             >
               <div className="listing-detail-panel">
-                <p>Map goes here…</p>
+                <ListingMap address={listing.buildingAddress} listing={listing} />
               </div>
             </ListingDetailItem>
 
@@ -221,8 +278,15 @@ export default class extends Component<ListingProps> {
             >
               <div className="listing-detail-panel">
                 <div className="info-card">
+                  <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
                   <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
                 </div>
+                {listing.programRules && (
+                  <div className="info-card">
+                    <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
+                    <p className="text-sm text-gray-700">{listing.programRules}</p>
+                  </div>
+                )}
               </div>
             </ListingDetailItem>
           </ListingDetails>

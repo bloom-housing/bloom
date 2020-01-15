@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing, Attachment, AttachmentType } from "@bloom-housing/core/src/listings"
 import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
@@ -31,19 +31,6 @@ const NumberedHeader = (props: { num: number; text: string }) => (
 const Apply = (props: ApplyProps) => {
   const { listing } = props
 
-  const leasingAgentAddress = () => ({
-    streetAddress: listing.leasingAgentStreet,
-    city: listing.leasingAgentCity,
-    state: listing.leasingAgentState,
-    zipCode: listing.leasingAgentZip
-  })
-  const applicationAddress = () => ({
-    streetAddress: listing.applicationStreetAddress,
-    city: listing.applicationCity,
-    state: listing.applicationState,
-    zipCode: listing.applicationPostalCode
-  })
-
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
 
@@ -57,19 +44,24 @@ const Apply = (props: ApplyProps) => {
         <Button filled className="w-full mb-2" onClick={toggleDownload}>
           Download Application
         </Button>
-        {showDownload && (
-          <p className="text-center mt-2 mb-4 text-sm">
-            <a href={listing.applicationDownloadUrl} title="Download Application" target="_blank">
-              English
-            </a>
-          </p>
-        )}
+        {showDownload &&
+          listing.attachments
+            .filter((attachment: Attachment) => {
+              return attachment.type == AttachmentType.ApplicationDownload
+            })
+            .map((attachment: Attachment) => (
+              <p key={attachment.fileUrl} className="text-center mt-2 mb-4 text-sm">
+                <a href={attachment.fileUrl} title="Download Application" target="_blank">
+                  {attachment.label}
+                </a>
+              </p>
+            ))}
         {listing.blankPaperApplicationCanBePickedUp && (
           <>
             <OrDivider bgColor="white" />
             <SubHeader text="Pick up an application" />
             <SidebarAddress
-              address={leasingAgentAddress()}
+              address={listing.leasingAgentAddress}
               officeHours={listing.leasingAgentOfficeHours}
             />
           </>
@@ -82,7 +74,7 @@ const Apply = (props: ApplyProps) => {
           <>
             <SubHeader text="Send Application by US Mail" />
             <p className="text-gray-700">{listing.applicationOrganization}</p>
-            <SidebarAddress address={applicationAddress()} />
+            <SidebarAddress address={listing.applicationAddress} />
             <p className="mt-4 text-tiny text-gray-750">
               {listing.acceptsPostmarkedApplications
                 ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
@@ -103,7 +95,7 @@ const Apply = (props: ApplyProps) => {
           <>
             <SubHeader text="Drop Off Application" />
             <SidebarAddress
-              address={leasingAgentAddress()}
+              address={listing.leasingAgentAddress}
               officeHours={listing.leasingAgentOfficeHours}
             />
           </>

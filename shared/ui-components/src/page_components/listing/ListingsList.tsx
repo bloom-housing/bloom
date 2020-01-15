@@ -7,20 +7,24 @@ import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 export interface ListingsProps {
   listings: Listing[]
-  unitSummariesTable: any
+  unitSummariesTable?: any
 }
 
 const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
-  const listItems = listings.map(listing => {
+  const listItems = listings.map((listing: Listing) => {
     const imageUrl = listing.imageUrl || ""
     const unitSummariesHeaders = {
       unitType: t("t.unitType"),
       minimumIncome: t("t.minimumIncome"),
       rent: t("t.rent")
     }
-    const unitSummaries = props.unitSummariesTable(listing)
+
+    let unitSummaries = []
+    if (props.unitSummariesTable && listing.unitsSummarized !== undefined) {
+      unitSummaries = props.unitSummariesTable(listing.unitsSummarized.byUnitType)
+    }
 
     return (
       <article key={listing.id} className="flex flex-row flex-wrap max-w-5xl m-auto mb-12">
@@ -38,12 +42,14 @@ const ListingsList = (props: ListingsProps) => {
             {t("listings.openWaitlist")}
           </h4>
           <div className="mb-4">
-            <BasicTable
-              headers={unitSummariesHeaders}
-              data={unitSummaries}
-              responsiveCollapse={true}
-              cellPadding="p-3"
-            />
+            {unitSummaries && (
+              <BasicTable
+                headers={unitSummariesHeaders}
+                data={unitSummaries}
+                responsiveCollapse={true}
+                cellPadding="p-3"
+              />
+            )}
           </div>
           <LinkButton href={`listing/id=${listing.id}`} as={`/listing/${listing.id}`}>
             See Details

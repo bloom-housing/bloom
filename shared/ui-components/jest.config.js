@@ -6,5 +6,6 @@ module.exports = {
   transform: { "^.+\\.[t|j]sx?$": "babel-jest" },
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy"
-  }
+  },
+  testPathIgnorePatterns: ["storyshots.d.ts"]
 }

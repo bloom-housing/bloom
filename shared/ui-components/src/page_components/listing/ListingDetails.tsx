@@ -14,13 +14,14 @@ export const ListingDetails = (props: any) => (
 )
 
 export const ListingDetailItem = (props: ListingDetailHeaderProps) => (
-  <ResponsiveContentItem>
+  <ResponsiveContentItem desktopClass={props.desktopClass}>
     <ResponsiveContentItemHeader>
       <ListingDetailHeader
         title={props.title}
         subtitle={props.subtitle}
         imageSrc={props.imageSrc}
         imageAlt={props.imageAlt}
+        hideHeader={props.hideHeader}
       />
     </ResponsiveContentItemHeader>
     <ResponsiveContentItemBody>{props.children}</ResponsiveContentItemBody>
