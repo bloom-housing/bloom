@@ -16,6 +16,7 @@ workflows:
   build:
     jobs:
       - cypress/run:
+          executor: cypress/base:12.14.0
           working_directory: apps/public
           yarn: true
           start: yarn dev:all
