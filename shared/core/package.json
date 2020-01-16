@@ -9,15 +9,16 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.3",
     "@types/jest": "^24.0.18",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "jest": "^24.9.0",
-    "typescript": "^3.6.2",
+    "typescript": "^3.7.4",
     "webpack": "^4.39.1"
   },
   "dependencies": {
-    "@types/node": "^12.7.1",
+    "@types/node": "^12.12.24",
     "@types/node-polyglot": "^0.4.34",
     "nanoid": "^2.1.1"
   },
