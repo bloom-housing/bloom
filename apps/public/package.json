@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/node": "^12.7.1",
     "@types/react": "^16.9.9",
-    "concurrently": "^5.0.0",
+    "concurrently": "^5.0.2",
     "cypress": "^3.8.1",
     "next-transpile-modules": "^2.3.1",
     "typescript": "^3.6.2",
