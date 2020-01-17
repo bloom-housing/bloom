@@ -18,13 +18,13 @@
   "dependencies": {
     "@bloom-housing/core": "*",
     "@koa/cors": "^3.0.0",
-    "@types/koa": "^2.0.49",
-    "@types/koa-router": "^7.0.42",
-    "@types/koa__cors": "^2.2.3",
+    "@types/koa": "^2.11.0",
+    "@types/koa-router": "^7.4.0",
+    "@types/koa__cors": "^3.0.1",
     "@types/node": "^12.12.24",
     "dotenv": "^8.2.0",
-    "koa": "^2.7.0",
-    "nanoid": "^2.1.1",
+    "koa": "^2.11.0",
+    "nanoid": "^2.1.9",
     "rimraf": "^3.0.0",
     "typescript": "^3.7.4"
   },
