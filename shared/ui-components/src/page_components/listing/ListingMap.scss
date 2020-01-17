@@ -12,11 +12,11 @@
   animation-fill-mode: both;
   animation-duration: 1s;
   &:after {
-    content: '';
+    content: "";
     width: 14px;
     height: 14px;
     margin: 8px 0 0 8px;
-    background: #2F2F2F;
+    background: #2f2f2f;
     position: absolute;
     border-radius: 50%;
   }

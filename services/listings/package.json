@@ -7,30 +7,30 @@
   "license": "GPL-3.0",
   "private": true,
   "devDependencies": {
-    "@babel/preset-typescript": "^7.7.2",
-    "@types/jest": "^24.0.22",
+    "@babel/preset-typescript": "^7.8.3",
+    "@types/jest": "^24.9.0",
     "@types/supertest": "^2.0.8",
     "babel-jest": "^24.9.0",
-    "concurrently": "^5.0.0",
+    "concurrently": "^5.0.2",
     "supertest": "^4.0.2",
-    "ts-node-dev": "^1.0.0-pre.42"
+    "ts-node-dev": "^1.0.0-pre.44"
   },
   "dependencies": {
     "@bloom-housing/core": "*",
     "@koa/cors": "^3.0.0",
-    "@types/koa": "^2.0.49",
-    "@types/koa-router": "^7.0.42",
-    "@types/koa__cors": "^2.2.3",
-    "@types/node": "^12.7.1",
+    "@types/koa": "^2.11.0",
+    "@types/koa-router": "^7.4.0",
+    "@types/koa__cors": "^3.0.1",
+    "@types/node": "^12.12.25",
     "dotenv": "^8.2.0",
-    "koa": "^2.7.0",
-    "nanoid": "^2.1.1",
+    "koa": "^2.11.0",
+    "nanoid": "^2.1.9",
     "rimraf": "^3.0.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.7.4"
   },
   "engines": {
     "node": "12",
-    "yarn": "1.19"
+    "yarn": "^1.19"
   },
   "scripts": {
     "clean": "rimraf dist",
