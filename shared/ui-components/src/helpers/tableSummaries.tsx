@@ -1,6 +1,5 @@
 import * as React from "react"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import { Listing } from "@bloom-housing/core/src/listings"
+import t from "./translator"
 import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core/src/units"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
@@ -69,29 +68,4 @@ export const groupNonReservedAndReservedSummaries = (
   }
 
   return groupedUnits
-}
-
-export const occupancyTable = (listing: Listing) => {
-  const occupancyData = listing.unitsSummarized.byUnitType.map(unitSummary => {
-    let occupancy = ""
-
-    if (unitSummary.occupancyRange.max == null) {
-      occupancy = `at least ${unitSummary.occupancyRange.min} ${
-        unitSummary.occupancyRange.min == 1 ? t("listings.person") : t("listings.people")
-      }`
-    } else if (unitSummary.occupancyRange.max > 1) {
-      occupancy = `${unitSummary.occupancyRange.min}-${unitSummary.occupancyRange.max} ${
-        unitSummary.occupancyRange.max == 1 ? t("listings.person") : t("listings.people")
-      }`
-    } else {
-      occupancy = `1 ${t("listings.person")}`
-    }
-
-    return {
-      unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
-      occupancy: occupancy
-    }
-  })
-
-  return occupancyData
 }

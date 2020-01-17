@@ -2,12 +2,12 @@ import * as React from "react"
 import ImageCard from "../../cards/ImageCard"
 import { Listing } from "@bloom-housing/core/src/listings"
 import LinkButton from "../../atoms/LinkButton"
+import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
 import { GroupedTable } from "@bloom-housing/ui-components/src/tables/GroupedTable"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 export interface ListingsProps {
   listings: Listing[]
-  unitSummariesTable?: any
 }
 
 const ListingsList = (props: ListingsProps) => {
@@ -22,8 +22,8 @@ const ListingsList = (props: ListingsProps) => {
     }
 
     let unitSummaries = []
-    if (props.unitSummariesTable && listing.unitsSummarized !== undefined) {
-      unitSummaries = props.unitSummariesTable(
+    if (listing.unitsSummarized !== undefined) {
+      unitSummaries = groupNonReservedAndReservedSummaries(
         listing.unitsSummarized.byNonReservedUnitType,
         listing.unitsSummarized.byReservedType
       )

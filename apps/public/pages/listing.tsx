@@ -3,8 +3,11 @@ import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
-import { groupNonReservedAndReservedSummaries, occupancyTable } from "../lib/tableSummaries"
-import getOccupancyDescription from "../lib/getOccupancyDescription"
+import {
+  occupancyTable,
+  getOccupancyDescription
+} from "@bloom-housing/ui-components/src/helpers/occupancyFormatting"
+import { groupNonReservedAndReservedSummaries } from "@bloom-housing/ui-components/src/helpers/tableSummaries"
 import Layout from "../layouts/application"
 import { Listing } from "@bloom-housing/core/src/listings"
 import {
