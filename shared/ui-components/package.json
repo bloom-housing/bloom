@@ -45,12 +45,12 @@
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
     "typescript": "^3.7.4",
-    "webpack": "^4.39.1"
+    "webpack": "^4.41.5"
   },
   "dependencies": {
     "@bloom-housing/core": "*",
     "@types/nanoid": "^2.0.0",
-    "@types/node": "^12.12.24",
+    "@types/node": "^12.12.25",
     "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.8.5",
     "bulma": "^0.7.5",

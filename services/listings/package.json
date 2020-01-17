@@ -21,7 +21,7 @@
     "@types/koa": "^2.11.0",
     "@types/koa-router": "^7.4.0",
     "@types/koa__cors": "^3.0.1",
-    "@types/node": "^12.12.24",
+    "@types/node": "^12.12.25",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "nanoid": "^2.1.9",
