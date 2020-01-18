@@ -2,8 +2,16 @@
 /*eslint-env node*/
 
 module.exports = {
-  setupFiles: ["<rootDir>/.jest/setup-tests.js"],
-  transform: { "^.+\\.[t|j]sx?$": "babel-jest" },
+  preset: "ts-jest",
+  globals: {
+    "ts-jest": {
+      tsConfig: "tsconfig.json"
+    }
+  },
+  rootDir: "../..",
+  roots: ["<rootDir>/shared/ui-components"],
+  transform: { "^.+\\.[t|j]sx?$": "ts-jest" },
+  setupFilesAfterEnv: ["<rootDir>/shared/ui-components/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy"
   },
