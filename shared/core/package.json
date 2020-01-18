@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Shared types for Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
