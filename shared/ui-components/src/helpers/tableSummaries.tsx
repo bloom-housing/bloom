@@ -39,7 +39,7 @@ export const groupNonReservedAndReservedSummaries = (
   nonReservedSummaries: UnitSummary[],
   reservedTypeSummaries: UnitSummaryByReservedType[]
 ) => {
-  let groupedUnits = []
+  let groupedUnits = [] as any
 
   if (nonReservedSummaries.length > 0) {
     const unitSummaries = unitSummariesTable(nonReservedSummaries)

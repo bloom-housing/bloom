@@ -10,7 +10,7 @@ export const GroupedTable = (props: BasicTableProps) => {
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
-  const body = []
+  const body: Array<JSX.Element> = []
 
   data.forEach((group: any) => {
     const colSpan = Object.keys(headers).length
