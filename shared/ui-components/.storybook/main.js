@@ -17,9 +17,9 @@ module.exports = {
         }
       }
     },
-    "@storybook/addon-docs/register",
-    "@storybook/addon-a11y/register",
-    "@storybook/addon-viewport/register"
+    "@storybook/addon-docs",
+    "@storybook/addon-a11y",
+    "@storybook/addon-viewport"
   ],
   // In trouble? try https://storybook.js.org/docs/configurations/custom-webpack-config/#debug-the-default-webpack-config
   webpackFinal: async (config, { configType }) => {
