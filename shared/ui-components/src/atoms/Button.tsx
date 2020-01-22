@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./Button.scss"
 
-interface ButtonProps {
+export interface ButtonProps {
   children: React.ReactNode
   className?: string
   filled?: boolean

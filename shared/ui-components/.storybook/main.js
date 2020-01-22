@@ -18,8 +18,10 @@ module.exports = {
       }
     },
     "@storybook/addon-docs/register",
+    "@storybook/addon-a11y/register",
     "@storybook/addon-viewport/register"
   ],
+  // In trouble? try https://storybook.js.org/docs/configurations/custom-webpack-config/#debug-the-default-webpack-config
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
     // You can change the configuration based on that.
