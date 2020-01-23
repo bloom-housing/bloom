@@ -11,6 +11,9 @@ yarn-error.log*
 # Storybook build output
 storybook-static
 
+# Cypress test output videos
+apps/public/cypress/videos
+
 # Complied Typescript
 dist
 
