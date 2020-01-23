@@ -4,7 +4,7 @@ import Button, { ButtonProps } from "./Button"
 
 export default {
   component: Button,
-  title: "CSF Button",
+  title: "Atoms|Button",
   decorators: [withA11y]
 }
 

@@ -33,4 +33,8 @@
     @apply px-4;
     @apply py-2;
   }
+
+  &.normal-case {
+    @apply normal-case;
+  }
 }
