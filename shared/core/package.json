@@ -20,7 +20,7 @@
   "dependencies": {
     "@types/node": "^12.12.25",
     "@types/node-polyglot": "^0.4.34",
-    "nanoid": "^2.1.9"
+    "nanoid": "^2.1.10"
   },
   "babel": {
     "presets": [

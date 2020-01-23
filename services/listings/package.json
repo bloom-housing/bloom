@@ -8,6 +8,7 @@
   "private": true,
   "devDependencies": {
     "@babel/preset-typescript": "^7.8.3",
+    "@babel/core": "^7.8.3",
     "@types/jest": "^24.9.0",
     "@types/supertest": "^2.0.8",
     "babel-jest": "^24.9.0",
@@ -24,7 +25,7 @@
     "@types/node": "^12.12.25",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
-    "nanoid": "^2.1.9",
+    "nanoid": "^2.1.10",
     "rimraf": "^3.0.0",
     "typescript": "^3.7.4"
   },

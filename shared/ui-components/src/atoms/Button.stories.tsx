@@ -1,35 +1,44 @@
 import * as React from "react"
-import { storiesOf } from "@storybook/react"
-import Button from "./Button"
+import { withA11y } from "@storybook/addon-a11y"
+import Button, { ButtonProps } from "./Button"
+
+export default {
+  component: Button,
+  title: "Atoms|Button",
+  decorators: [withA11y]
+}
 
 const handleClick = (e: React.MouseEvent) => {
   alert(`You clicked me! Event: ${e.type}`)
 }
 
-storiesOf("Atoms|Button", module).add("default", () => (
-  <Button onClick={handleClick}>Button Component</Button>
-))
+export const standard = () => <Button onClick={handleClick}>Button Component</Button>
 
-storiesOf("Atoms|Button", module).add("small", () => (
+export const small = () => (
   <Button small={true} onClick={handleClick}>
     Small Button
   </Button>
-))
+)
 
-storiesOf("Atoms|Button", module).add("filled", () => (
+export const filled = () => (
   <Button filled={true} onClick={handleClick}>
     Filled Button
   </Button>
-))
+)
 
-storiesOf("Atoms|Button", module).add("small and filled", () => (
+export const SmallAndFilled = () => (
   <Button small={true} filled={true} onClick={handleClick}>
     Small and Filled Button
   </Button>
-))
+)
 
-storiesOf("Atoms|Button", module).add("regular case", () => (
+export const RegularCase = () => (
   <Button normalCase={true} onClick={handleClick}>
     Button (Normal Case)
   </Button>
-))
+)
+
+// TODO: replace with tailwind markup, if it matters
+export const inaccessible = () => (
+  <button style={{ backgroundColor: "red", color: "darkRed" }}>Inaccessible button</button>
+)

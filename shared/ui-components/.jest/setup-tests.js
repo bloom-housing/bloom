@@ -3,7 +3,7 @@ import registerRequireContextHook from "babel-plugin-require-context-hook/regist
 import { configure } from "enzyme"
 import Adapter from "enzyme-adapter-react-16"
 
-registerRequireContextHook()
+// registerRequireContextHook()
 
 configure({ adapter: new Adapter() })
 

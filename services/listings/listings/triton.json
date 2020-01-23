@@ -13,7 +13,7 @@
     "latitude": 37.55695,
     "longitude": -122.27521
   },
-  "applicationDueDate": "2019-12-19T17:00:00.000-07:00",
+  "applicationDueDate": "2037-12-19T17:00:00.000-07:00",
   "applicationOrganization": "Triton",
   "applicationPhone": "(650) 437-2039",
   "blankPaperApplicationCanBePickedUp": true,
@@ -47,7 +47,7 @@
   "smokingPolicy": "Non-Smoking",
   "yearBuilt": 2018,
   "createdAt": "2019-06-03T10:30:41.039-07:00",
-  "updatedAt": "2019-06-14T11:54:15.443-07:00",
+  "updatedAt": "2020-01-23T01:54:15.443-07:00",
   "groupId": 2,
   "hideUnitFeatures": false,
   "unitAmenities": "Washer and dryer, AC and Heater, Gas Stove",

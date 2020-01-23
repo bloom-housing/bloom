@@ -1,7 +1,7 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const withTM = require("next-transpile-modules")
+const withTM = require("next-transpile-modules")(["@bloom-housing"])
 const withSass = require("@zeit/next-sass")
 const withMDX = require("@next/mdx")()
 const axios = require("axios")
@@ -30,7 +30,6 @@ module.exports = withMDX(
       sassLoaderOptions: {
         prependData: tailwindVars
       },
-      transpileModules: ["@bloom-housing"],
       // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
       async exportPathMap() {
         // we fetch our list of listings, this allow us to dynamically generate the exported pages
