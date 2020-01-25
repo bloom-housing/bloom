@@ -1,6 +1,6 @@
 import * as React from "react"
 import nanoid from "nanoid"
-import { HeaderCell, Row, Cell, BasicTableProps } from "./basic_table"
+import { HeaderCell, Row, Cell, BasicTableProps } from "./BasicTable"
 
 export const GroupedTable = (props: BasicTableProps) => {
   const { headers, data, cellClassName } = props

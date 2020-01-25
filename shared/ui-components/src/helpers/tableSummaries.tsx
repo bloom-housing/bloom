@@ -57,7 +57,7 @@ export const groupNonReservedAndReservedSummaries = (
       groupedUnits.push({
         header: (
           <>
-            <span style={{ color: "orange" }}>★</span>{" "}
+            <span className="reserved-icon">★</span>{" "}
             {t("listings.reservedFor", { type: item.reservedType + "s" })}
           </>
         ),

@@ -17,8 +17,8 @@ table tr:nth-of-type(even) {
 td.reserved {
   padding-top: 9px;
   padding-bottom: 9px;
-  border-bottom: 1px solid #ff6627;
-  background-color: #fff7f3;
+  border-bottom: 1px solid $tailwind-splash;
+  background-color: $tailwind-splash-bg;
   font-size: 0.6875rem;
   line-height: 1.25;
   color: #555;
@@ -26,12 +26,17 @@ td.reserved {
   font-weight: 700;
   letter-spacing: 0.1rem;
   text-transform: uppercase;
-  border-top: 1px solid #ff6627;
-  border-left: 0.4rem solid #ff6627;
+  border-top: 1px solid $tailwind-splash;
+  border-left: 0.4rem solid $tailwind-splash;
   padding-left: 1em;
+
+  .reserved-icon {
+    color: $tailwind-splash;
+    font-size: 0.9rem;
+  }
 }
 tr.group-reserved td:first-of-type {
-  border-left: 0.4rem solid #ff6627;
+  border-left: 0.4rem solid $tailwind-splash;
 }
 
 /* Hat tip to this CSS solution:
