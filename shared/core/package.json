@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Shared types for Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@types/node": "^12.12.25",
     "@types/node-polyglot": "^0.4.34",
-    "nanoid": "^2.1.9"
+    "nanoid": "^2.1.10"
   },
   "babel": {
     "presets": [

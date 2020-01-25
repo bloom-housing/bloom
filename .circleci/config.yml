@@ -1,12 +1,29 @@
 version: 2.1
-jobs:
-  build:
+orbs:
+  cypress: cypress-io/cypress@1
+
+executors:
+  cypress-node-12:
     docker:
-      - image: circleci/node:current # at some point we can fix to a version if needed
+      - image: "cypress/base:12.14.0"
+
+jobs:
+  jest-tests:
+    docker:
+      - image: circleci/node:12
     steps:
       - checkout
       - run: yarn install
       - run: yarn test:shared:ui
       - run: yarn test:services:listings
-      - run: yarn test:apps
-      #- run: yarn lint:all
+
+workflows:
+  build:
+    jobs:
+      - cypress/run:
+          executor: cypress-node-12
+          working_directory: apps/public
+          yarn: true
+          start: yarn dev:all
+          wait-on: "http://localhost:3000"
+      - jest-tests

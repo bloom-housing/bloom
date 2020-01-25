@@ -8,6 +8,12 @@ yarn-error.log*
 # Next.js cache and compiled artifacts
 .next/
 
+# Storybook build output
+storybook-static
+
+# Cypress test output videos
+apps/public/cypress/videos
+
 # Complied Typescript
 dist
 

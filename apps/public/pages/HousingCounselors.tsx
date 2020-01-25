@@ -15,11 +15,14 @@ interface HousingCounselorsProps {
 export default class extends Component<HousingCounselorsProps> {
   public static async getInitialProps() {
     let counselors: Counselor[] = []
-    try {
-      const response = await axios.get(process.env.housingCounselorServiceUrl)
-      counselors = response.data.locations
-    } catch (error) {
-      console.log("Error loading housing counselors: ", error)
+
+    if (process.env.housingCounselorServiceUrl) {
+      try {
+        const response = await axios.get(process.env.housingCounselorServiceUrl)
+        counselors = response.data.locations
+      } catch (error) {
+        console.log("Error loading housing counselors: ", error)
+      }
     }
 
     return { counselors }

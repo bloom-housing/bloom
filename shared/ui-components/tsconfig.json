@@ -1,12 +1,14 @@
 {
-  // "extends": "../../../tsconfig.json"  /* TODO: is this worth connecting? */
+  "extends": "../../tsconfig.json" /* TODO: is this worth connecting? */,
   "compilerOptions": {
     "outDir": "build/lib",
-    "module": "es2015",
+    // "module": "es2015",
+    "module": "esnext",
+    "esModuleInterop": true,
     "target": "es5",
     "lib": ["es5", "es6", "es7", "es2017", "dom"],
     "sourceMap": true,
-    "allowJs": false,
+    "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDirs": ["src"],
@@ -24,6 +26,6 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "__tests__/**/*"],
-  "exclude": ["node_modules", "build", "scripts"]
+  "include": ["src/**/*", "__tests__/**/*"]
+  // "exclude": ["../../node_modules", "node_modules", "build", "scripts"]
 }
