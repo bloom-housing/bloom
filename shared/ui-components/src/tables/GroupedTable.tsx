@@ -2,7 +2,17 @@ import * as React from "react"
 import nanoid from "nanoid"
 import { HeaderCell, Row, Cell, BasicTableProps } from "./BasicTable"
 
-export const GroupedTable = (props: BasicTableProps) => {
+export interface GroupedTableGroup {
+  header?: string | JSX.Element
+  className?: string
+  data: Array<Record<string, any>>
+}
+
+export interface GroupedTableProps extends BasicTableProps {
+  data: GroupedTableGroup[]
+}
+
+export const GroupedTable = (props: GroupedTableProps) => {
   const { headers, data, cellClassName } = props
 
   const headerLabels = Object.values(headers).map(col => {

@@ -25,7 +25,7 @@ export interface Headers {
 
 export interface BasicTableProps {
   headers: Headers
-  data: any
+  data: Array<Record<string, any>>
   cellClassName?: string
   responsiveCollapse?: boolean
 }

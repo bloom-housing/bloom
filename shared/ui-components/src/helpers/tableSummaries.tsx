@@ -1,6 +1,7 @@
 import * as React from "react"
 import t from "./translator"
 import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core/src/units"
+import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
   const unitSummaries = summaries.map(unitSummary => {
@@ -39,14 +40,12 @@ export const groupNonReservedAndReservedSummaries = (
   nonReservedSummaries: UnitSummary[],
   reservedTypeSummaries: UnitSummaryByReservedType[]
 ) => {
-  let groupedUnits = [] as any
+  let groupedUnits = [] as Array<GroupedTableGroup>
 
   if (nonReservedSummaries.length > 0) {
     const unitSummaries = unitSummariesTable(nonReservedSummaries)
     groupedUnits = [
       {
-        header: null,
-        className: null,
         data: unitSummaries
       }
     ]

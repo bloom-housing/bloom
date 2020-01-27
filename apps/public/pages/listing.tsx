@@ -24,8 +24,11 @@ import ListingMap from "@bloom-housing/ui-components/src/page_components/listing
 import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
-import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
-import { GroupedTable } from "@bloom-housing/ui-components/src/tables/GroupedTable"
+import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/BasicTable"
+import {
+  GroupedTable,
+  GroupedTableGroup
+} from "@bloom-housing/ui-components/src/tables/GroupedTable"
 import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
 import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
 import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
@@ -73,14 +76,14 @@ export default class extends Component<ListingProps> {
       .sort()
     const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
     const hmiData = listing.unitsSummarized.hmi.rows
-    let groupedUnits = null
+    let groupedUnits: GroupedTableGroup[] = null
 
     if (amiValues.length == 1) {
       groupedUnits = groupNonReservedAndReservedSummaries(
         listing.unitsSummarized.byNonReservedUnitType,
         listing.unitsSummarized.byReservedType
       )
-    }
+    } // else condition is handled inline below
 
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
