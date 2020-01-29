@@ -8,16 +8,13 @@ const axios = require("axios")
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-console.log("Testing the webhook from Heroku!")
-console.log(process.env.INCOMING_HOOK_BODY)
-console.log("----")
 
 let LISTING_SERVICE_URL = "http://localhost:3001"
-if (process.env.LISTING_SERVICE_URL) {
-  LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL
-}
-else if (process.env.INCOMING_HOOK_BODY) {
+if (process.env.INCOMING_HOOK_BODY) {
   LISTING_SERVICE_URL = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
+}
+else if (process.env.LISTING_SERVICE_URL) {
+  LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL
 }
 console.log(`Using ${LISTING_SERVICE_URL} for the listing service.`)
 
