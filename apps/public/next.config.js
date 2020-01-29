@@ -12,7 +12,15 @@ console.log("Testing the webhook from Heroku!")
 console.log(process.env.INCOMING_HOOK_BODY)
 console.log("----")
 
-const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
+let LISTING_SERVICE_URL = "http://localhost:3001"
+if (process.env.LISTING_SERVICE_URL) {
+  LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL
+}
+else if (process.env.INCOMING_HOOK_BODY) {
+  LISTING_SERVICE_URL = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
+}
+console.log(`Using ${LISTING_SERVICE_URL} for the listing service.`)
+
 const MAPBOX_TOKEN =
   process.env.MAPBOX_TOKEN ||
   "pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
