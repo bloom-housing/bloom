@@ -8,6 +8,10 @@ const axios = require("axios")
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
+console.log("Testing the webhook from Heroku!")
+console.log(process.env.INCOMING_HOOK_BODY)
+console.log("----")
+
 const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
 const MAPBOX_TOKEN =
   process.env.MAPBOX_TOKEN ||
