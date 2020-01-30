@@ -1,4 +1,4 @@
-# Bloom Affordable Housing System — TEST
+# Bloom Affordable Housing System
 
 This is the repository for the Bloom affordable housing system.
 
@@ -7,8 +7,11 @@ This is the repository for the Bloom affordable housing system.
 An overview of the system will go here.
 
 ### Applications
+
 ### Services
+
 ### Shared Libraries
+
 - UI Components
 - Styles
 
@@ -29,11 +32,13 @@ yarn install
 N/A for the time being.
 
 ### Running a Local Test Server
+
 ```
 yarn dev:all
 ```
 
 ### Running Tests
+
 ```
 yarn test:all
 ```
