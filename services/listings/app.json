@@ -1,0 +1,16 @@
+{
+  "name": "Bloom Listing Service",
+  "repository": "https://github.com/bloom-housing/bloom",
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "Hobby"
+    }
+  },
+  "image": "heroku/ruby",
+  "buildpacks": [
+    {
+      "url": "https://github.com/stomita/heroku-buildpack-phantomjs"
+    }
+  ]
+}
