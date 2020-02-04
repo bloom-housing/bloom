@@ -1,0 +1,12 @@
+{
+  "name": "Bloom Listing Service",
+  "repository": "https://github.com/bloom-housing/bloom",
+  "buildpacks": [
+    {
+      "url": "https://github.com/lstoll/heroku-buildpack-monorepo.git"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
