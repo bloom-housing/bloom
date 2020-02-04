@@ -4,7 +4,7 @@
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "Hobby"
+      "size": "hobby"
     }
   },
   "buildpacks": [
