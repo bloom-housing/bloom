@@ -7,10 +7,12 @@
       "size": "Hobby"
     }
   },
-  "image": "heroku/ruby",
   "buildpacks": [
     {
-      "url": "https://github.com/stomita/heroku-buildpack-phantomjs"
+      "url": "https://github.com/lstoll/heroku-buildpack-monorepo.git"
+    },
+    {
+      "url": "heroku/nodejs"
     }
   ]
 }
