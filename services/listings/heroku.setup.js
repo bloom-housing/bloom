@@ -37,10 +37,11 @@ async function pingNetlify(buildHook) {
 
   //  const currentBranch = statusSummary.current
   const currentBranch = process.env.HEROKU_BRANCH
+  const prNumber = process.env.HEROKU_PR_NUMBER
 
   await httpsPost({
     hostname: "api.netlify.com",
-    path: `/build_hooks/${buildHook}?trigger_branch=${currentBranch}&trigger_title=Heroku+Review+App+Trigger`,
+    path: `/build_hooks/${buildHook}?trigger_branch=${currentBranch}&trigger_title=Heroku+Review+App+Trigger+for+PR+%23${prNumber}`,
     body: `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   })
 
