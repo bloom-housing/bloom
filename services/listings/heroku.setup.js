@@ -32,10 +32,11 @@ function httpsPost({ body, ...options }) {
 }
 
 async function pingNetlify(buildHook) {
-  const git = require("simple-git/promise")
-  const statusSummary = await git(__dirname).status()
+  //  const git = require("simple-git/promise")
+  //  const statusSummary = await git(__dirname).status()
 
-  const currentBranch = statusSummary.current
+  //  const currentBranch = statusSummary.current
+  const currentBranch = process.env.HEROKU_BRANCH
 
   await httpsPost({
     hostname: "api.netlify.com",
