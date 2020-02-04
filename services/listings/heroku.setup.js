@@ -31,29 +31,37 @@ function httpsPost({ body, ...options }) {
   })
 }
 
-async function pingNetlify(buildHook) {
-  //  const git = require("simple-git/promise")
-  //  const statusSummary = await git(__dirname).status()
+// Currently not used in the Heroku Review App process
+// …but it might come in handy later
+async function getBranchNameFromGit() {
+  const git = require("simple-git/promise")
+  const statusSummary = await git(__dirname).status()
 
-  //  const currentBranch = statusSummary.current
-  const currentBranch = process.env.HEROKU_BRANCH
-  const prNumber = process.env.HEROKU_PR_NUMBER
+  return statusSummary.current
+}
 
+function getBranchNameFromHerokuEnvVar() {
+  return process.env.HEROKU_BRANCH
+}
+
+// Heroku Review app subdomains are randomized, so we need to
+// extrapolate it from the env var provided
+function determineHerokuListingServiceUrl() {
+  return `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
+}
+
+// Run the build hook on Netlify to generate a review app for the branch
+async function pingNetlify(buildHook, currentBranch) {
   await httpsPost({
     hostname: "api.netlify.com",
-    path: `/build_hooks/${buildHook}?trigger_branch=${currentBranch}&trigger_title=Heroku+Review+App+Trigger+for+PR+%23${prNumber}`,
-    body: `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
+    path: `/build_hooks/${buildHook}?trigger_branch=${currentBranch}&trigger_title=Heroku+Review+App+Trigger`,
+    body: determineHerokuListingServiceUrl()
   })
 
   console.log("Netlify ping completed.")
 }
 
-/*
-HEROKU_APP_NAME: The name of the review app
-HEROKU_BRANCH: The name of the remote branch the review app is tracking
-HEROKU_PR_NUMBER: The GitHub Pull Request number if the review app is created automatically
-*/
-
+// ** Main Process **
 if (process.env.NETLIFY_BUILD_HOOK) {
-  pingNetlify(process.env.NETLIFY_BUILD_HOOK)
+  pingNetlify(process.env.NETLIFY_BUILD_HOOK, getBranchNameFromHerokuEnvVar())
 }
