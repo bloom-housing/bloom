@@ -13,16 +13,16 @@ class MyApp extends App {
     }
 
     const generalTranslations = await import(
-      "@bloom-housing/ui-components/static/locales/general.json"
+      "@bloom-housing/ui-components/src/locales/general.json"
     )
-    const spanishTranslations = await import("@bloom-housing/ui-components/static/locales/es.json")
+    const spanishTranslations = await import("@bloom-housing/ui-components/src/locales/es.json")
     const translations = {
       general: generalTranslations,
       es: spanishTranslations,
       custom: {
-        general: await import("../static/locale_overrides/general.json")
+        general: await import("../page_content/locale_overrides/general.json")
         // Uncomment to add additional language overrides
-        // es: await import("../static/locale_overrides/es.json")
+        // es: await import("../page_content/locale_overrides/es.json")
       }
     }
     return { pageProps, translations }
