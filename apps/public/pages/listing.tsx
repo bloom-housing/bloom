@@ -165,7 +165,7 @@ export default class extends Component<ListingProps> {
           <ListingDetails>
             <ListingDetailItem
               imageAlt="eligibility-notebook"
-              imageSrc="/static/images/listing-eligibility.svg"
+              imageSrc="/images/listing-eligibility.svg"
               title="Eligibility"
               subtitle="Income, occupancy, preferences, and subsidies"
               desktopClass="bg-primary-lighter"
@@ -226,7 +226,7 @@ export default class extends Component<ListingProps> {
 
             <ListingDetailItem
               imageAlt="process-info"
-              imageSrc="/static/images/listing-process.svg"
+              imageSrc="/images/listing-process.svg"
               title="Process"
               subtitle="Important dates and contact information"
               hideHeader={true}
@@ -250,7 +250,7 @@ export default class extends Component<ListingProps> {
 
             <ListingDetailItem
               imageAlt="features-cards"
-              imageSrc="/static/images/listing-features.svg"
+              imageSrc="/images/listing-features.svg"
               title="Features"
               subtitle="Amenities, unit details and additional fees"
             >
@@ -279,7 +279,7 @@ export default class extends Component<ListingProps> {
 
             <ListingDetailItem
               imageAlt="neighborhood-buildings"
-              imageSrc="/static/images/listing-neighborhood.svg"
+              imageSrc="/images/listing-neighborhood.svg"
               title="Neighborhood"
               subtitle="Location and transportation"
               desktopClass="bg-primary-lighter"
@@ -291,7 +291,7 @@ export default class extends Component<ListingProps> {
 
             <ListingDetailItem
               imageAlt="additional-information-envelope"
-              imageSrc="/static/images/listing-legal.svg"
+              imageSrc="/images/listing-legal.svg"
               title="Additional Information"
               subtitle="Required documents and selection criteria"
             >

@@ -7,7 +7,7 @@
   "private": false,
   "scripts": {
     "build-storybook": "build-storybook -c .storybook",
-    "start": "export $(cat .env | xargs) && start-storybook -s ./static",
+    "start": "export $(cat .env | xargs) && start-storybook -s ./public",
     "test": "export $(cat .env | xargs) && jest"
   },
   "devDependencies": {
