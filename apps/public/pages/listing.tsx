@@ -3,8 +3,11 @@ import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
-import { unitSummariesTable, occupancyTable } from "../lib/tableSummaries"
-import getOccupancyDescription from "../lib/getOccupancyDescription"
+import {
+  occupancyTable,
+  getOccupancyDescription
+} from "@bloom-housing/ui-components/src/helpers/occupancyFormatting"
+import { groupNonReservedAndReservedSummaries } from "@bloom-housing/ui-components/src/helpers/tableSummaries"
 import Layout from "../layouts/application"
 import { Listing } from "@bloom-housing/core/src/listings"
 import {
@@ -21,7 +24,11 @@ import ListingMap from "@bloom-housing/ui-components/src/page_components/listing
 import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
-import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/basic_table"
+import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/BasicTable"
+import {
+  GroupedTable,
+  GroupedTableGroup
+} from "@bloom-housing/ui-components/src/tables/GroupedTable"
 import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
 import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
 import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
@@ -60,7 +67,6 @@ export default class extends Component<ListingProps> {
       rent: "Rent",
       availability: "Availability"
     }
-    const unitSummaries = unitSummariesTable(listing.unitsSummarized.byUnitType)
 
     const amiValues = listing.unitsSummarized.amiPercentages
       .map(percent => {
@@ -70,6 +76,14 @@ export default class extends Component<ListingProps> {
       .sort()
     const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
     const hmiData = listing.unitsSummarized.hmi.rows
+    let groupedUnits: GroupedTableGroup[] = null
+
+    if (amiValues.length == 1) {
+      groupedUnits = groupNonReservedAndReservedSummaries(
+        listing.unitsSummarized.byNonReservedUnitType,
+        listing.unitsSummarized.byReservedType
+      )
+    } // else condition is handled inline below
 
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
@@ -121,21 +135,26 @@ export default class extends Component<ListingProps> {
                   return parseInt(item.percent, 10) == percent
                 })
 
+                groupedUnits = groupNonReservedAndReservedSummaries(
+                  byAMI.byNonReservedUnitType,
+                  byAMI.byReservedType
+                )
+
                 return (
                   <>
                     <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
-                    <BasicTable
+                    <GroupedTable
                       headers={unitSummariesHeaders}
-                      data={unitSummariesTable(byAMI.byNonReservedUnitType)}
+                      data={groupedUnits}
                       responsiveCollapse={true}
                     />
                   </>
                 )
               })}
             {amiValues.length == 1 && (
-              <BasicTable
+              <GroupedTable
                 headers={unitSummariesHeaders}
-                data={unitSummaries}
+                data={groupedUnits}
                 responsiveCollapse={true}
               />
             )}

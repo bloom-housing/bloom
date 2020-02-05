@@ -47,6 +47,7 @@ module.exports = {
       "royal-light": "#EED7F5",
       splash: "#FF6627",
       "splash-light": "#FFD2C0",
+      "splash-bg": "#FFF7F3",
       lush: "#99CD00",
       "lush-light": "#F2FFCD",
       white: "#FFFFFF",

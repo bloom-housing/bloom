@@ -1,10 +1,10 @@
 import * as React from "react"
 import { storiesOf } from "@storybook/react"
 import UnitTables from "./UnitTables"
-import { BasicTable } from "../tables/basic_table"
+import { BasicTable } from "../tables/BasicTable"
+import { GroupedTable, GroupedTableGroup } from "../tables/GroupedTable"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import { UnitSummary } from "@bloom-housing/core/src/units"
-import t from "../helpers/translator"
+import { unitSummariesTable, groupNonReservedAndReservedSummaries } from "../helpers/tableSummaries"
 
 const archer = Object.assign({}, Archer) as any
 
@@ -102,7 +102,7 @@ const summaries = {
           areaRange: { min: 285, max: 285 }
         }
       ],
-      byReservedType: [{ reservedType: "senior", byUnitType: [{}] }]
+      byReservedType: []
     }
   ],
   hmi: {
@@ -120,39 +120,6 @@ storiesOf("Tables|UnitTables", module).add("show units list", () => {
   return <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 })
-
-const unitSummariesTable = (summaries: UnitSummary[]) => {
-  const unitSummaries = summaries.map(unitSummary => {
-    const unitPluralization =
-      unitSummary.totalAvailable == 1 ? t("listings.unit") : t("listings.units")
-    return {
-      unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
-      minimumIncome: (
-        <>
-          <strong>{unitSummary.minIncomeRange.min}</strong>/month
-        </>
-      ),
-      rent: (
-        <>
-          <strong>{unitSummary.rentRange.min}</strong>/month
-        </>
-      ),
-      availability: (
-        <>
-          {unitSummary.totalAvailable > 0 ? (
-            <>
-              <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
-            </>
-          ) : (
-            <>{t("listings.waitlist")}</>
-          )}
-        </>
-      )
-    }
-  })
-
-  return unitSummaries
-}
 
 const unitSummariesHeaders = {
   unitType: "Unit Type",
@@ -193,3 +160,41 @@ storiesOf("Tables|UnitSummaryTables", module).add("show units summaries", () => 
   )
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 })
+
+storiesOf("Tables|UnitSummaryTables", module).add(
+  "show units summaries grouped by reserved types",
+  () => {
+    /* eslint-disable @typescript-eslint/ban-ts-ignore */
+    return (
+      <div>
+        {amiValues.map(percent => {
+          const byAMI = summaries.byAMI.find(item => {
+            return parseInt(item.percent, 10) == percent
+          })
+
+          if (byAMI) {
+            const groupedUnits = groupNonReservedAndReservedSummaries(
+              // @ts-ignore
+              byAMI.byNonReservedUnitType,
+              byAMI.byReservedType
+            )
+
+            return (
+              <div>
+                <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                <GroupedTable
+                  headers={unitSummariesHeaders}
+                  data={groupedUnits}
+                  responsiveCollapse={true}
+                />
+              </div>
+            )
+          } else {
+            return null
+          }
+        })}
+      </div>
+    )
+    /* eslint-enable @typescript-eslint/ban-ts-ignore */
+  }
+)
