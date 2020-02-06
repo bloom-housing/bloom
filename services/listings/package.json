@@ -27,6 +27,7 @@
     "koa": "^2.11.0",
     "nanoid": "^2.1.10",
     "rimraf": "^3.0.0",
+    "simple-git": "^1.131.0",
     "typescript": "^3.7.4"
   },
   "engines": {
@@ -38,7 +39,8 @@
     "build": "yarn run clean && tsc -p tsconfig.prod.json",
     "start": "yarn install && yarn run build && node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "herokusetup": "node heroku.setup.js"
   },
   "babel": {
     "presets": [
