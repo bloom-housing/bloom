@@ -2,6 +2,7 @@ import Application from "koa"
 import cors from "@koa/cors"
 import dotenv from "dotenv"
 import jp from "jsonpath"
+import { Listing } from "@bloom-housing/core/src/listings"
 import listingsLoader from "./lib/listings_loader"
 import { transformUnits } from "./lib/unit_transformations"
 import { amiCharts } from "./lib/ami_charts"
@@ -18,7 +19,7 @@ const app = new Application()
 app.use(cors())
 
 app.use(async ctx => {
-  let listings = (await listingsLoader("listings")) as Record<string, any>[]
+  let listings = (await listingsLoader("listings")) as Listing[]
 
   if (ctx.request.query.jsonpath) {
     // e.g. http://localhost:3001/?jsonpath=%24%5B%3F(%40.applicationAddress.city%3D%3D%22San+Jose%22)%5D
