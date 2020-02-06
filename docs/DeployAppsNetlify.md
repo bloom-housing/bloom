@@ -6,7 +6,7 @@ The Bloom front-end applications are designed to be stateless, and thus can be d
 
 Because Bloom uses a monorepo style of organization, there are likely multiple apps (e.g. public and partners) that will each need their own deployment configuration. Each build configuation should make sure to work from the correct code base directory, for example the public app build command might be:
 
-    cd apps/public; yarn run build ; yarn run export
+    cd apps/public-reference; yarn run build ; yarn run export
 
 ## Server-side Rendering
 
