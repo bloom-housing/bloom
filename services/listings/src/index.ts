@@ -1,10 +1,10 @@
 import Application from "koa"
 import cors from "@koa/cors"
 import dotenv from "dotenv"
+import jp from "jsonpath"
+import listingsLoader from "./lib/listings_loader"
 import { transformUnits } from "./lib/unit_transformations"
 import { amiCharts } from "./lib/ami_charts"
-import listingsLoader from "./lib/listings_loader"
-import jp from "jsonpath"
 
 dotenv.config({ path: ".env" })
 
