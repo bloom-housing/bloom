@@ -5,7 +5,6 @@ import Button from "../../atoms/Button"
 
 export interface ListingsGroupProps {
   listings: Listing[]
-  unitSummariesTable?: any
   header: string
   info?: string
   showButtonText: string
@@ -18,9 +17,7 @@ const ListingsGroup = (props: ListingsGroupProps) => {
 
   let listingsSection, buttonText
   if (showListings) {
-    listingsSection = (
-      <ListingsList listings={props.listings} unitSummariesTable={props.unitSummariesTable} />
-    )
+    listingsSection = <ListingsList listings={props.listings} />
   }
   const listingsCount = ` (${props.listings.length})`
   if (showListings) {

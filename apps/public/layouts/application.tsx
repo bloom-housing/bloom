@@ -11,7 +11,7 @@ const Layout = props => (
       <title>{t("nav.siteTitle")}</title>
     </Head>
     <SiteHeader
-      logoSrc="/static/images/logo_glyph.svg"
+      logoSrc="/images/logo_glyph.svg"
       notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
       title={t("nav.siteTitle")}
     >

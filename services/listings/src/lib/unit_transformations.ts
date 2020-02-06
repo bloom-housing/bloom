@@ -155,17 +155,19 @@ const summarizeUnits = (
     }
   )
 
-  return summaries
+  return summaries.filter(item => Object.keys(item).length > 0)
 }
 
 const summarizeReservedTypes = (units: Units, reservedTypes: string[], unitTypes: string[]) => {
-  return reservedTypes.map((reservedType: string) => {
-    const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
-    return {
-      reservedType: reservedType,
-      byUnitType: summarizeUnits(unitsByReservedType, unitTypes)
-    }
-  })
+  return reservedTypes
+    .map((reservedType: string) => {
+      const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
+      return {
+        reservedType: reservedType,
+        byUnitType: summarizeUnits(unitsByReservedType, unitTypes)
+      }
+    })
+    .filter(item => item.byUnitType.length > 0)
 }
 
 const summarizeByAmi = (

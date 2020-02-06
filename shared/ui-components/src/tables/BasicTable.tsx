@@ -1,6 +1,11 @@
 import * as React from "react"
 import nanoid from "nanoid"
-export const Row = (props: any) => <tr id={props.id}>{props.children}</tr>
+
+export const Row = (props: any) => (
+  <tr id={props.id} className={props.className}>
+    {props.children}
+  </tr>
+)
 
 export const HeaderCell = (props: any) => (
   <th className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600">
@@ -9,7 +14,7 @@ export const HeaderCell = (props: any) => (
 )
 
 export const Cell = (props: any) => (
-  <td data-label={props.headerLabel} className={props.cellPadding || "p-5"}>
+  <td data-label={props.headerLabel} className={props.className || "p-5"} colSpan={props.colSpan}>
     {props.children}
   </td>
 )
@@ -20,13 +25,13 @@ export interface Headers {
 
 export interface BasicTableProps {
   headers: Headers
-  data: any
-  cellPadding?: string
+  data: Array<Record<string, any>>
+  cellClassName?: string
   responsiveCollapse?: boolean
 }
 
 export const BasicTable = (props: BasicTableProps) => {
-  const { headers, data, cellPadding } = props
+  const { headers, data, cellClassName } = props
 
   const headerLabels = Object.values(headers).map(col => {
     const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
@@ -40,7 +45,7 @@ export const BasicTable = (props: BasicTableProps) => {
       const header = headers[colKey]
       const cell = row[colKey]
       return (
-        <Cell key={uniqKey} headerLabel={header} cellPadding={cellPadding}>
+        <Cell key={uniqKey} headerLabel={header} className={cellClassName}>
           {cell}
         </Cell>
       )

@@ -8,12 +8,23 @@ const axios = require("axios")
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-const LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL || "http://localhost:3001"
+
+// Set up app-wide constants
+let LISTING_SERVICE_URL = "http://localhost:3001"
+if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
+  // This is a value that can get set via a Netlify webhook for branch deploys
+  LISTING_SERVICE_URL = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
+} else if (process.env.LISTING_SERVICE_URL) {
+  LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL
+}
+console.log(`Using ${LISTING_SERVICE_URL} for the listing service.`)
+
 const MAPBOX_TOKEN =
   process.env.MAPBOX_TOKEN ||
   "pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
 const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 
+// Load the Tailwind theme and set up SASS vars
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
