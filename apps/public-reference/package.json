@@ -1,5 +1,5 @@
 {
-  "name": "@bloom-housing/public",
+  "name": "@bloom-housing/public-reference",
   "version": "0.0.1",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",

@@ -22,7 +22,7 @@ workflows:
     jobs:
       - cypress/run:
           executor: cypress-node-12
-          working_directory: apps/public
+          working_directory: apps/public-reference
           yarn: true
           start: yarn dev:all
           wait-on: "http://localhost:3000"

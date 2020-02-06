@@ -5,15 +5,15 @@
   "workspaces": [
     "shared/core",
     "shared/ui-components",
-    "apps/public",
+    "apps/public-reference",
     "services/listings"
   ],
   "repository": "https://github.com/Exygy/bloom.git",
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "dev:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public && yarn dev",
-    "test:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public && yarn test",
+    "dev:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn dev",
+    "test:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn test",
     "dev:listings": "cd services/listings && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
     "test:shared:ui": "cd shared/ui-components && yarn test",
