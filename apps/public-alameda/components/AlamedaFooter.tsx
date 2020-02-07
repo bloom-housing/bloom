@@ -3,7 +3,10 @@ import Link from "next/link"
 
 const AlamedaFooter = () => (
   <footer className="site-footer w-full bg-gray-800 text-white text-center pt-12">
-    <div className="max-w-5xl m-auto pb-8">
+    <div>
+      <img src="/images/Alameda-County-seal.png" alt="Alameda County" />
+    </div>
+    <div className="max-w-5xl m-auto pt-5 pb-8">
       <p>
         Alameda County Housing Portal is a project of the
         <br />
