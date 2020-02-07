@@ -1,0 +1,16 @@
+.navbar-brand .logo {
+  width: 16em;
+}
+.navbar .navbar-burger {
+  top: 0.4em;
+}
+
+footer.site-footer {
+  @apply text-gray-500;
+  a {
+    @apply text-white;
+  }
+  p {
+    @apply mb-5;
+  }
+}
