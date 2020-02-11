@@ -1,4 +1,7 @@
 {
+  "region": {
+    "name": "San Mateo County"
+  },
   "welcome": {
     "seeRentalListings": "Browse Rentals"
   }

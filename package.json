@@ -20,8 +20,8 @@
     "test:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn test",
     "dev:listings": "cd services/listings && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
-    "dev:sj": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
-    "dev:smc": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
+    "dev:sj": "concurrently \"yarn dev:listings\" \"yarn dev:app:sj\"",
+    "dev:smc": "concurrently \"yarn dev:listings\" \"yarn dev:app:smc\"",
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\""
