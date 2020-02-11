@@ -2,11 +2,11 @@ import * as React from "react"
 import Link from "next/link"
 
 const AlamedaFooter = () => (
-  <footer className="site-footer w-full bg-gray-800 text-white text-center pt-12">
+  <footer className="site-footer">
     <div>
       <img src="/images/Alameda-County-seal.png" alt="Alameda County" />
     </div>
-    <div className="max-w-5xl m-auto pt-5 pb-8">
+    <div className="footer-credits">
       <p>
         Alameda County Housing Portal is a project of the
         <br />
@@ -24,7 +24,7 @@ const AlamedaFooter = () => (
         For general program inquiries, you may call the Alameda County HCD at 510-670-5404.
       </p>
 
-      <p className="text-sm">
+      <p className="mt-10 text-sm">
         For additional Bay Area opportunities, please visit:
         <br />
         <a href="https://housing.sfgov.org" target="_blank">
@@ -33,20 +33,20 @@ const AlamedaFooter = () => (
       </p>
     </div>
 
-    <section className="bg-gray-950 py-8">
-      <p>Alameda County © 2020 • All Rights Reserved</p>
+    <section className="footer-sock">
+      <div className="footer-sock-inner">
+        <p className="footer-copyright">Alameda County © 2020 • All Rights Reserved</p>
 
-      <nav className="mt-5">
-        <Link href="/disclaimer">
-          <a className="ml-5 text-white">Disclaimer</a>
-        </Link>
-        <Link href="/privacy">
-          <a className="ml-5 text-white">Privacy Policy</a>
-        </Link>
-      </nav>
+        <nav className="footer-nav">
+          <a href="#">Give Feedback</a>
+          <a href="#">Contact</a>
+          <Link href="/disclaimer">Disclaimer</Link>
+          <Link href="/privacy">Privacy Policy</Link>
+        </nav>
+      </div>
     </section>
 
-    <section className="footer-sole bg-black py-5 text-sm">
+    <section className="footer-sole">
       <span>
         made with ❤️ by{" "}
         <a href="http://exygy.com" target="_blank" aria-label="Opens in new window">

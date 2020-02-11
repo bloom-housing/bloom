@@ -16,8 +16,11 @@ const Layout = props => (
       title={t("nav.siteTitle")}
     >
       <LocalizedLink href="/listings" className="navbar-item">
-        {t("nav.listings")}
+        {t("nav.browseProperties")}
       </LocalizedLink>
+      <a href="http://domain.com" target="_blank" className="navbar-item">
+        {t("nav.getAssistance")}
+      </a>
       {/* Only show Get Assistance if housing counselor data is available */}
       {process.env.housingCounselorServiceUrl && (
         <LocalizedLink href="/housing-counselors" className="navbar-item">
