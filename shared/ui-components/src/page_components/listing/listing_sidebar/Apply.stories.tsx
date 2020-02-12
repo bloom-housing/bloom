@@ -48,3 +48,24 @@ storiesOf("Listing|Sidebar Apply", module).add("shows multiple download URLs", (
   return <Apply listing={listingWithAttachments} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 })
+
+storiesOf("Listing|Sidebar Apply", module).add("link directly to external application", () => {
+  const listingWithAttachments = Object.assign({}, listing)
+
+  listingWithAttachments.acceptingOnlineApplications = true
+  listingWithAttachments.acceptingApplicationsByPoBox = false
+  listingWithAttachments.acceptingApplicationsAtLeasingAgent = false
+
+  const externalAttachment: Attachment = {
+    label: "External",
+    fileUrl: "https://icann.org",
+    type: 2
+  }
+
+  listingWithAttachments.attachments = [externalAttachment]
+
+  /* eslint-disable @typescript-eslint/ban-ts-ignore */
+  // @ts-ignore
+  return <Apply listing={listingWithAttachments} />
+  /* eslint-enable @typescript-eslint/ban-ts-ignore */
+})

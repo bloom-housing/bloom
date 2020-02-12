@@ -49,19 +49,23 @@ const Apply = (props: ApplyProps) => {
     <>
       <section className="border border-gray-400 border-b-0 p-5">
         <h2 className="font-alt-sans uppercase text-tiny mb-5 pb-2 border-0 border-b-4 border-primary font-semibold text-gray-800 tracking-widest inline-block">
-          How to Apply
+          {t("listings.apply.howToApply")}
         </h2>
-        <NumberedHeader num={1} text="Get a Paper Application" />
 
         {listing.acceptingOnlineApplications && (
-          <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
-            Download Application
-          </LinkButton>
+          <>
+            <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
+              {t("listings.apply.applyOnline")}
+            </LinkButton>
+          </>
         )}
         {!listing.acceptingOnlineApplications && (
-          <Button filled className="w-full mb-2" onClick={toggleDownload}>
-            Download Application
-          </Button>
+          <>
+            <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
+            <Button filled className="w-full mb-2" onClick={toggleDownload}>
+              {t("listings.apply.downloadApplication")}
+            </Button>
+          </>
         )}
 
         {showDownload &&
@@ -71,7 +75,11 @@ const Apply = (props: ApplyProps) => {
             })
             .map((attachment: Attachment) => (
               <p key={attachment.fileUrl} className="text-center mt-2 mb-4 text-sm">
-                <a href={attachment.fileUrl} title="Download Application" target="_blank">
+                <a
+                  href={attachment.fileUrl}
+                  title={t("listings.apply.downloadApplication")}
+                  target="_blank"
+                >
                   {attachment.label}
                 </a>
               </p>
@@ -80,7 +88,7 @@ const Apply = (props: ApplyProps) => {
         {listing.blankPaperApplicationCanBePickedUp && (
           <>
             <OrDivider bgColor="white" />
-            <SubHeader text="Pick up an application" />
+            <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
               address={listing.leasingAgentAddress}
               officeHours={listing.leasingAgentOfficeHours}
@@ -89,39 +97,41 @@ const Apply = (props: ApplyProps) => {
         )}
       </section>
 
-      <section className="border-gray-400 border-b border-t p-5 bg-gray-100">
-        <NumberedHeader num={2} text="Submit a Paper Application" />
-        {listing.acceptingApplicationsByPoBox && (
-          <>
-            <SubHeader text="Send Application by US Mail" />
-            <p className="text-gray-700">{listing.applicationOrganization}</p>
-            <SidebarAddress address={listing.applicationAddress} />
-            <p className="mt-4 text-tiny text-gray-750">
-              {listing.acceptsPostmarkedApplications
-                ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
-                    applicationDueDate: moment(listing.applicationDueDate).format("MMM DD, YYYY"),
-                    postmarkReceivedByDate: moment(
-                      listing.postmarkedApplicationsReceivedByDate
-                    ).format("MMM DD, YYYY"),
-                    developer: listing.developer
-                  })
-                : t("listings.apply.applicationsMustBeReceivedByDeadline")}
-            </p>
-          </>
-        )}
-        {listing.acceptingApplicationsByPoBox && listing.acceptingApplicationsAtLeasingAgent && (
-          <OrDivider bgColor="gray-100" />
-        )}
-        {listing.acceptingApplicationsAtLeasingAgent && (
-          <>
-            <SubHeader text="Drop Off Application" />
-            <SidebarAddress
-              address={listing.leasingAgentAddress}
-              officeHours={listing.leasingAgentOfficeHours}
-            />
-          </>
-        )}
-      </section>
+      {(listing.acceptingApplicationsByPoBox || listing.acceptingApplicationsAtLeasingAgent) && (
+        <section className="border-gray-400 border-b border-t p-5 bg-gray-100">
+          <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
+          {listing.acceptingApplicationsByPoBox && (
+            <>
+              <SubHeader text={t("listings.apply.sendByUsMail")} />
+              <p className="text-gray-700">{listing.applicationOrganization}</p>
+              <SidebarAddress address={listing.applicationAddress} />
+              <p className="mt-4 text-tiny text-gray-750">
+                {listing.acceptsPostmarkedApplications
+                  ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
+                      applicationDueDate: moment(listing.applicationDueDate).format("MMM DD, YYYY"),
+                      postmarkReceivedByDate: moment(
+                        listing.postmarkedApplicationsReceivedByDate
+                      ).format("MMM DD, YYYY"),
+                      developer: listing.developer
+                    })
+                  : t("listings.apply.applicationsMustBeReceivedByDeadline")}
+              </p>
+            </>
+          )}
+          {listing.acceptingApplicationsByPoBox && listing.acceptingApplicationsAtLeasingAgent && (
+            <OrDivider bgColor="gray-100" />
+          )}
+          {listing.acceptingApplicationsAtLeasingAgent && (
+            <>
+              <SubHeader text={t("listings.apply.dropOffApplication")} />
+              <SidebarAddress
+                address={listing.leasingAgentAddress}
+                officeHours={listing.leasingAgentOfficeHours}
+              />
+            </>
+          )}
+        </section>
+      )}
     </>
   )
 }

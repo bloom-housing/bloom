@@ -57,6 +57,8 @@
     "applicationsClosed": "Applications Closed",
     "apply": {
       "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
+      "applyOnline": "Apply Online",
+      "downloadApplication": "Download Application",
       "dropOffApplication": "Drop Off Application",
       "dropOffApplicationOrMail": "Drop Off Application or Send by US Mail",
       "getAPaperApplication": "Get a Paper Application",
