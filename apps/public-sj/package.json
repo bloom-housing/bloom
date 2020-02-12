@@ -1,0 +1,45 @@
+{
+  "name": "@housingbayarea/public-sj",
+  "version": "0.0.1",
+  "description": "Public web app for the City of San Jose using the Bloom affordable housing system",
+  "main": "index.js",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+    "dev": "export $(cat .env | xargs) && next -p ${NEXTJS_PORT:-3000}",
+    "build": "next build",
+    "test": "concurrently \"yarn dev\" \"cypress open\"",
+    "export": "next export",
+    "start": "next start",
+    "dev:listings": "cd ../../services/listings && yarn dev",
+    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev\""
+  },
+  "dependencies": {
+    "@bloom-housing/core": "*",
+    "@bloom-housing/ui-components": "*",
+    "@mdx-js/loader": "1.5.5",
+    "@next/mdx": "9.2.0",
+    "@zeit/next-sass": "^1.0.1",
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "moment": "^2.24.0",
+    "nanoid": "^2.1.10",
+    "next": "9.2.0",
+    "next-plugin-custom-babel-config": "^1.0.2",
+    "node-polyglot": "^2.4.0",
+    "node-sass": "^4.12.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.25",
+    "@types/react": "^16.9.19",
+    "concurrently": "^5.0.2",
+    "cypress": "^3.8.2",
+    "js-levenshtein": "^1.1.6",
+    "next-transpile-modules": "^3.0.1",
+    "sass-loader": "^8.0.2",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5"
+  }
+}
