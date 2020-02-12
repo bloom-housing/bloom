@@ -3,6 +3,7 @@ import { Listing, Attachment, AttachmentType } from "@bloom-housing/core/src/lis
 import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
+import LinkButton from "../../../atoms/LinkButton"
 import SidebarAddress from "./SidebarAddress"
 
 interface ApplyProps {
@@ -30,9 +31,19 @@ const NumberedHeader = (props: { num: number; text: string }) => (
 
 const Apply = (props: ApplyProps) => {
   const { listing } = props
+  let onlineApplicationUrl = ""
 
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
+
+  if (listing.acceptingOnlineApplications) {
+    const onlineApplicationAttachment = listing.attachments.filter((attachment: Attachment) => {
+      return attachment.type == AttachmentType.ExternalApplication
+    })[0]
+    if (onlineApplicationAttachment) {
+      onlineApplicationUrl = onlineApplicationAttachment.fileUrl
+    }
+  }
 
   return (
     <>
@@ -41,9 +52,18 @@ const Apply = (props: ApplyProps) => {
           How to Apply
         </h2>
         <NumberedHeader num={1} text="Get a Paper Application" />
-        <Button filled className="w-full mb-2" onClick={toggleDownload}>
-          Download Application
-        </Button>
+
+        {listing.acceptingOnlineApplications && (
+          <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
+            Download Application
+          </LinkButton>
+        )}
+        {!listing.acceptingOnlineApplications && (
+          <Button filled className="w-full mb-2" onClick={toggleDownload}>
+            Download Application
+          </Button>
+        )}
+
         {showDownload &&
           listing.attachments
             .filter((attachment: Attachment) => {
@@ -56,6 +76,7 @@ const Apply = (props: ApplyProps) => {
                 </a>
               </p>
             ))}
+
         {listing.blankPaperApplicationCanBePickedUp && (
           <>
             <OrDivider bgColor="white" />
