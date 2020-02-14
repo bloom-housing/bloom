@@ -1,5 +1,6 @@
 export interface Address {
   city: string
+  county: string
   state: string
   street: string
   zipCode: string

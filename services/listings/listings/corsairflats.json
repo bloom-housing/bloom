@@ -1,0 +1,188 @@
+{
+  "id": "sz0UrxnBdAxHMdfgcgha8",
+  "acceptingApplicationsAtLeasingAgent": false,
+  "acceptingApplicationsByPoBox": false,
+  "acceptingOnlineApplications": true,
+  "accessibility": "All units are fully adaptable for people with disabilities. All common areas are fully acccessible, and the building has elevator service to all floors.",
+  "amenities": "Community Room, Courtyard",
+  "applicationAddress": {
+    "city": "",
+    "street": "",
+    "zipCode": "",
+    "state": "",
+    "latitude": null,
+    "longitude": null
+  },
+  "applicationDueDate": "2020-03-31T15:22:57.000-07:00",
+  "applicationOrganization": "",
+  "applicationPhone": "",
+  "blankPaperApplicationCanBePickedUp": false,
+  "buildingAddress": {
+    "city": "Alameda",
+    "county": "Alameda",
+    "street": "171 W Atlantic Avenue",
+    "zipCode": "94501",
+    "state": "CA",
+    "latitude": 37.779850,
+    "longitude": -122.293150
+  },
+  "buildingSelectionCriteria": null,
+  "costsNotIncluded": "",
+  "creditHistory": "",
+  "depositMax": "",
+  "depositMin": "500",
+  "developer": "Eden Housing",
+  "imageUrl": "https://ucb17c11c06b67df19be90695660.previews.dropboxusercontent.com/p/thumb/AAtjMJhNU-svfTxbCgC2bDO28Dn6bsXboMLz1m92v6807nTH16aOYu-OEiC5YAc4dsJw-oKXkzsgobDidpEPr0XSftEt6JMA8OwaH8U3ciQcLWZ6FXXEQXEeOK6Drc27eU0opBpopR3XEugc18UZoyW_ttQ8ZBiPnT4ITj5W69hVm798wlY8Pr-tfAuGwSHlwdDZZcAe1JhREr2mLGQLfUogSepdd2uZ_Jjen71TKj_zYdEK3yKvhzE9FT8PtX-ZJdyLiNkUoP-JVHyJMmtGJ-kuWXInz4Fr2uFblEDbKQAWFwH-Q9iJufIOO2DRiMLsx1v-b1vXoFLr0RKWK7wAiQ_bLpbuxyGBXCy9z_mir6__EKbnCKMiutUH1-67SBtjGFGQnwKXDKBxnBEvjXHgqcfL1SwzRS45ADlwOyuyBJuagGinCWBWgj2N47fbTeQy3S5HGjtPy_pnN2I1-PdiN_prAbKmfAeWN8yCTKxwmRRXcc1oR5M1wdA2xFKWD5FGtZ9o1x7Ea_x0kIew4njZxvG2/p.jpeg?fv_content=true&size_mode=5",
+  "programRules": null,
+  "externalId": null,
+  "waitlistMaxSize": null,
+  "name": "Corsair Flats",
+  "neighborhood": "Alameda Point",
+  "waitlistCurrentSize": null,
+  "petPolicy": null,
+  "prioritiesDescriptor": null,
+  "requiredDocuments": null,
+  "reservedCommunityMaximumAge": null,
+  "reservedCommunityMinimumAge": 62,
+  "reservedDescriptor": "Senior",
+  "smokingPolicy": null,
+  "yearBuilt": 2020,
+  "createdAt": "2020-02-14T15:11:26.446-07:00",
+  "updatedAt": "2020-02-15T11:47:47.150-07:00",
+  "groupId": 1,
+  "hideUnitFeatures": false,
+  "unitAmenities": null,
+  "attachments": [
+    {
+      "fileUrl": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing",
+      "type": 2
+    }
+  ],
+  "applicationFee": "35.0",
+  "criminalBackground": null,
+  "leasingAgentAddress": {
+    "city": "",
+    "street": "",
+    "zipCode": "",
+    "state": "CA",
+    "latitude": null,
+    "longitude": null
+  },
+  "leasingAgentEmail": "",
+  "leasingAgentName": "Eden Housing Lease-Up Team",
+  "leasingAgentOfficeHours": "",
+  "leasingAgentPhone": "510-499-2491",
+  "leasingAgentTitle": "",
+  "rentalHistory": null,
+  "preferences": [
+    {
+      "ordinal": "1st",
+      "title": "Certificate of Preference (COP)",
+      "subtitle": "Up to 56 units available",
+      "description": "For households in which at least one member holds a Certificate of Preference from the former San Francisco Redevelopment Agency. COP holders were displaced by Agency action generally during the 1960s and 1970s.",
+      "links": [
+        {
+          "title": "Read More",
+          "url": "https://domain.com"
+        }
+      ]
+    },
+    {
+      "ordinal": "2nd",
+      "title": "Displaced Tenant Housing Preference (DTHP)",
+      "subtitle": "Up to 3 units available",
+      "description": "For households in which at least one member holds a Displaced Tenant Housing Preference Certificate. DTHP Certificate holders are tenants who were evicted through either an Ellis Act Eviction or an Owner Move In Eviction, or have been displaced by a fire. Once all units reserved for this preference are filled, remaining DTHP holders will receive Live/Work preference, regardless of their current residence or work location.",
+      "links": [
+        {
+          "title": "Read More",
+          "url": "https://domain.com"
+        },
+        {
+          "title": "View Document Checklist",
+          "url": "https://domain.com/d"
+        }
+      ]
+    },
+    {
+      "ordinal": "3rd",
+      "title": "Classroom teachers who are employees of the San Mateo Foster City School District and San Mateo County Community College District"
+    }
+  ],
+  "buildingTotalUnits": 50,
+  "units": [
+    {
+      "id": "MFaowAxySJW3utZBPNxr1",
+      "amiPercentage": "60.0",
+      "annualIncomeMin": "58152.0",
+      "monthlyIncomeMin": "4858.0",
+      "floor": 3,
+      "annualIncomeMax": "52080",
+      "maxOccupancy": 1,
+      "minOccupancy": 1,
+      "monthlyRent": "1337",
+      "numBathrooms": null,
+      "numBedrooms": 1,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": 355,
+      "status": "available",
+      "unitType": "oneBdrm",
+      "createdAt": "2020-02-14T21:20:34.291Z",
+      "updatedAt": "2020-02-14T21:20:34.291Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha8",
+      "amiChartId": 5,
+      "monthlyRentAsPercentOfIncome": null
+    },
+    {
+      "id": "WLf6h7MeCnpB7EIE6EH_2",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "65368.0",
+      "monthlyIncomeMin": "4992.0",
+      "floor": 4,
+      "annualIncomeMax": "29760",
+      "maxOccupancy": 2,
+      "minOccupancy": 2,
+      "monthlyRent": "764",
+      "numBathrooms": null,
+      "numBedrooms": 2,
+      "number": null,
+      "priorityType": null,
+      "reservedType": "senior",
+      "sqFeet": 455,
+      "status": "available",
+      "unitType": "twoBdrm",
+      "createdAt": "2020-02-14T21:20:34.291Z",
+      "updatedAt": "2020-02-14T21:20:34.291Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha8",
+      "amiChartId": 5,
+      "monthlyRentAsPercentOfIncome": null
+    },
+    {
+      "id": "0jYaOyFTpOI8PA9UvXJO3",
+      "amiPercentage": "60.0",
+      "annualIncomeMin": "65368.0",
+      "monthlyIncomeMin": "4992.0",
+      "floor": 5,
+      "annualIncomeMax": "59520",
+      "maxOccupancy": 2,
+      "minOccupancy": 2,
+      "monthlyRent": "767",
+      "numBathrooms": null,
+      "numBedrooms": 2,
+      "number": null,
+      "priorityType": null,
+      "reservedType": "senior",
+      "sqFeet": 455,
+      "status": "available",
+      "unitType": "twoBdrm",
+      "createdAt": "2020-02-14T21:20:34.291Z",
+      "updateAt": "2020-02-14T21:20:34.291Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha8",
+      "amiChartId": 5,
+      "monthlyRentAsPercentOfIncome": null
+    }
+  ],
+  "totalUnits": 50,
+  "unitsAvailable": 25
+}
