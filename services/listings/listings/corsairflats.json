@@ -54,7 +54,7 @@
   "unitAmenities": null,
   "attachments": [
     {
-      "fileUrl": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing",
+      "fileUrl": "https://ala.bloom.exygy.dev/listing/sz0urxnbdaxhmdfgcgha8",
       "type": 2
     }
   ],
@@ -75,39 +75,7 @@
   "leasingAgentTitle": "",
   "rentalHistory": null,
   "preferences": [
-    {
-      "ordinal": "1st",
-      "title": "Certificate of Preference (COP)",
-      "subtitle": "Up to 56 units available",
-      "description": "For households in which at least one member holds a Certificate of Preference from the former San Francisco Redevelopment Agency. COP holders were displaced by Agency action generally during the 1960s and 1970s.",
-      "links": [
-        {
-          "title": "Read More",
-          "url": "https://domain.com"
-        }
-      ]
-    },
-    {
-      "ordinal": "2nd",
-      "title": "Displaced Tenant Housing Preference (DTHP)",
-      "subtitle": "Up to 3 units available",
-      "description": "For households in which at least one member holds a Displaced Tenant Housing Preference Certificate. DTHP Certificate holders are tenants who were evicted through either an Ellis Act Eviction or an Owner Move In Eviction, or have been displaced by a fire. Once all units reserved for this preference are filled, remaining DTHP holders will receive Live/Work preference, regardless of their current residence or work location.",
-      "links": [
-        {
-          "title": "Read More",
-          "url": "https://domain.com"
-        },
-        {
-          "title": "View Document Checklist",
-          "url": "https://domain.com/d"
-        }
-      ]
-    },
-    {
-      "ordinal": "3rd",
-      "title": "Classroom teachers who are employees of the San Mateo Foster City School District and San Mateo County Community College District"
-    }
-  ],
+    ],
   "buildingTotalUnits": 50,
   "units": [
     {
@@ -117,14 +85,14 @@
       "monthlyIncomeMin": "4858.0",
       "floor": 3,
       "annualIncomeMax": "52080",
-      "maxOccupancy": 1,
+      "maxOccupancy": 2,
       "minOccupancy": 1,
       "monthlyRent": "1337",
       "numBathrooms": null,
       "numBedrooms": 1,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
+      "reservedType": "senior",
       "sqFeet": 355,
       "status": "available",
       "unitType": "oneBdrm",
@@ -141,7 +109,7 @@
       "monthlyIncomeMin": "4992.0",
       "floor": 4,
       "annualIncomeMax": "29760",
-      "maxOccupancy": 2,
+      "maxOccupancy": 3,
       "minOccupancy": 2,
       "monthlyRent": "764",
       "numBathrooms": null,
@@ -165,7 +133,7 @@
       "monthlyIncomeMin": "4992.0",
       "floor": 5,
       "annualIncomeMax": "59520",
-      "maxOccupancy": 2,
+      "maxOccupancy": 3,
       "minOccupancy": 2,
       "monthlyRent": "767",
       "numBathrooms": null,
