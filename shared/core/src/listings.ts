@@ -19,6 +19,7 @@ export interface Listing {
   accessibility: string
   amenities: string
   applicationDueDate: string
+  applicationOpenDate?: string
   applicationFee: string
   applicationOrganization: string
   applicationAddress: Address

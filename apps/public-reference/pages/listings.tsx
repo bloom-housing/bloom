@@ -9,6 +9,7 @@ import axios from "axios"
 import moment from "moment"
 import { Listing } from "@bloom-housing/core/src/listings"
 import ListingsGroup from "@bloom-housing/ui-components/src/page_components/listing/ListingsGroup"
+import { openDateState } from "@bloom-housing/ui-components/src/helpers/state"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -23,7 +24,7 @@ export default class extends Component<ListingsProps> {
       const response = await axios.get(process.env.listingServiceUrl)
       const nowTime = moment()
       openListings = response.data.listings.filter((listing: Listing) => {
-        return nowTime <= moment(listing.applicationDueDate)
+        return openDateState(listing) || nowTime <= moment(listing.applicationDueDate)
       })
       closedListings = response.data.listings.filter((listing: Listing) => {
         return nowTime > moment(listing.applicationDueDate)

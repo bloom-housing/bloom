@@ -53,6 +53,7 @@
     "applicationDeadline": "Application Deadline",
     "applicationFee": "Application Fee",
     "applicationFeeDueAt": "Due at interview",
+    "applicationOpenPeriod": "Application Open Period",
     "applicationPerApplicantAgeDescription": "per applicant age 18 and over",
     "applicationsClosed": "Applications Closed",
     "apply": {
@@ -73,6 +74,7 @@
     "availableUnitsAndWaitlistDesc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>%{number} units</span>",
     "bath": "bath",
     "closedListings": "Closed Listings",
+    "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
@@ -181,6 +183,7 @@
     "none": "None",
     "occupancy": "Occupancy",
     "or": "or",
+    "range": "%{from} to %{to}",
     "rent": "Rent",
     "skipToMainContent": "Skip to main content",
     "sqFeet": "sqft",

@@ -3,7 +3,10 @@ import ImageCard from "../../cards/ImageCard"
 import { Listing } from "@bloom-housing/core/src/listings"
 import LinkButton from "../../atoms/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
-import { GroupedTable } from "@bloom-housing/ui-components/src/tables/GroupedTable"
+import {
+  GroupedTable,
+  GroupedTableGroup
+} from "@bloom-housing/ui-components/src/tables/GroupedTable"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 export interface ListingsProps {
@@ -21,7 +24,7 @@ const ListingsList = (props: ListingsProps) => {
       rent: t("t.rent")
     }
 
-    let unitSummaries = []
+    let unitSummaries = [] as GroupedTableGroup[]
     if (listing.unitsSummarized !== undefined) {
       unitSummaries = groupNonReservedAndReservedSummaries(
         listing.unitsSummarized.byNonReservedUnitType,
@@ -37,7 +40,7 @@ const ListingsList = (props: ListingsProps) => {
             imageUrl={imageUrl}
             href={`listing/id=${listing.id}`}
             as={`/listing/${listing.id}`}
-            date={listing.applicationDueDate}
+            listing={listing}
           />
         </div>
         <div className="w-full md:w-6/12 p-3">
