@@ -8,6 +8,7 @@ interface LinkButtonProps {
   filled?: boolean
   normalCase?: boolean
   small?: boolean
+  className?: string
   children: React.ReactNode
 }
 
@@ -22,6 +23,7 @@ const LinkButton = (props: LinkButtonProps) => {
   if (props.filled) buttonClasses.push("filled")
   if (props.normalCase) buttonClasses.push("normal-case")
   if (props.small) buttonClasses.push("small")
+  if (props.className) buttonClasses.push(props.className)
 
   const linkProps = {
     href: props.href,

@@ -3,7 +3,8 @@ import { Address } from "./general"
 import { Preference } from "./preferences"
 
 export enum AttachmentType {
-  ApplicationDownload = 1
+  ApplicationDownload = 1,
+  ExternalApplication = 2
 }
 
 export interface Attachment {
@@ -15,6 +16,7 @@ export interface Attachment {
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
   acceptingApplicationsByPoBox: boolean
+  acceptingOnlineApplications: boolean
   acceptsPostmarkedApplications: boolean
   accessibility: string
   amenities: string

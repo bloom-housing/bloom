@@ -7,8 +7,8 @@
   "license": "GPL-3.0",
   "private": true,
   "devDependencies": {
-    "@babel/preset-typescript": "^7.8.3",
     "@babel/core": "^7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
     "@types/jest": "^24.9.0",
     "@types/supertest": "^2.0.8",
     "babel-jest": "^24.9.0",
@@ -24,6 +24,7 @@
     "@types/koa__cors": "^3.0.1",
     "@types/node": "^12.12.25",
     "dotenv": "^8.2.0",
+    "jsonpath": "^1.0.2",
     "koa": "^2.11.0",
     "nanoid": "^2.1.10",
     "rimraf": "^3.0.0",
@@ -36,7 +37,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "yarn run clean && tsc -p tsconfig.prod.json",
+    "build": "yarn run clean && tsc -p tsconfig.prod.json && cp -r listings dist",
     "start": "yarn install && yarn run build && node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts",
     "test": "jest",
