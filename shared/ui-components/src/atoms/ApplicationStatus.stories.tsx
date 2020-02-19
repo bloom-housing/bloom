@@ -1,13 +1,13 @@
 import * as React from "react"
 import moment from "moment"
-import ApplicationSection from "./ApplicationSection"
+import ApplicationStatus from "./ApplicationStatus"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 // @ts-ignore
 export default {
-  component: ApplicationSection,
-  title: "Listing Sidebar|Application Section"
+  component: ApplicationStatus,
+  title: "Listing Sidebar|Application Status"
 }
 /* eslint-enable @typescript-eslint/ban-ts-ignore */
 
@@ -16,7 +16,7 @@ listing.applicationOpenDate = ""
 listing.applicationDueDate = moment()
   .add(10, "days")
   .format()
-export const dueSoon = () => <ApplicationSection listing={listing} />
+export const dueSoon = () => <ApplicationStatus listing={listing} />
 
 const listing2 = Object.assign({}, Archer) as any
 listing2.applicationOpenDate = moment()
@@ -25,7 +25,7 @@ listing2.applicationOpenDate = moment()
 listing2.applicationDueDate = moment()
   .add(10, "days")
   .format()
-export const openSoon = () => <ApplicationSection listing={listing2} />
+export const openSoon = () => <ApplicationStatus listing={listing2} />
 
 const listing3 = Object.assign({}, Archer) as any
 listing3.applicationOpenDate = moment()
@@ -34,11 +34,11 @@ listing3.applicationOpenDate = moment()
 listing3.applicationDueDate = moment()
   .add(10, "days")
   .format()
-export const openedAlready = () => <ApplicationSection listing={listing3} />
+export const openedAlready = () => <ApplicationStatus listing={listing3} />
 
 const listing4 = Object.assign({}, Archer) as any
 listing4.applicationOpenDate = moment()
   .subtract(15, "days")
   .format()
 listing4.applicationDueDate = ""
-export const openedWithNoDue = () => <ApplicationSection listing={listing4} />
+export const openedWithNoDue = () => <ApplicationStatus listing={listing4} />
