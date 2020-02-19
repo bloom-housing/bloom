@@ -237,12 +237,8 @@ export default class extends Component<ListingProps> {
                   <ApplicationStatus listing={listing} />
                   <ApplicationSection listing={listing} />
                 </div>
-                <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
-                  <WhatToExpect />
-                </section>
-                <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
-                  <LeasingAgent listing={listing} />
-                </section>
+                <WhatToExpect />
+                <LeasingAgent listing={listing} />
               </aside>
             </ListingDetailItem>
 

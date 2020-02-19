@@ -4,6 +4,7 @@ import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
 import SidebarAddress from "./SidebarAddress"
+import { openDateState } from "../../../helpers/state"
 
 interface ApplyProps {
   listing: Listing
@@ -34,6 +35,8 @@ const Apply = (props: ApplyProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
 
+  const openDate = moment(listing.applicationOpenDate).format("MMMM DD, YYYY")
+
   return (
     <>
       <section className="border border-gray-400 border-b-0 p-5">
@@ -41,9 +44,17 @@ const Apply = (props: ApplyProps) => {
           How to Apply
         </h2>
         <NumberedHeader num={1} text="Get a Paper Application" />
-        <Button filled className="w-full mb-2" onClick={toggleDownload}>
-          Download Application
-        </Button>
+        {openDateState(listing) && (
+          <p class="mb-5 text-gray-700">
+            Application will be available for download and pick up on {openDate}
+          </p>
+        )}
+        {!openDateState(listing) && (
+          <Button filled className="w-full mb-2" onClick={toggleDownload}>
+            Download Application
+          </Button>
+        )}
+
         {showDownload &&
           listing.attachments
             .filter((attachment: Attachment) => {
@@ -58,7 +69,7 @@ const Apply = (props: ApplyProps) => {
             ))}
         {listing.blankPaperApplicationCanBePickedUp && (
           <>
-            <OrDivider bgColor="white" />
+            {!openDateState(listing) && <OrDivider bgColor="white" />}
             <SubHeader text="Pick up an application" />
             <SidebarAddress
               address={listing.leasingAgentAddress}
