@@ -26,11 +26,11 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
     //  from [Application Open Date] to [Application Due Date]
     if (!vivid && listing.applicationDueDate != "") {
       formattedDate = t("t.range", {
-        from: openDate.format("MMMM DD, YYYY"),
-        to: moment(listing.applicationDueDate).format("MMMM DD, YYYY")
+        from: openDate.format("MMMM D, YYYY"),
+        to: moment(listing.applicationDueDate).format("MMMM D, YYYY")
       })
     } else {
-      formattedDate = openDate.format("MMMM DD, YYYY")
+      formattedDate = openDate.format("MMMM D, YYYY")
     }
 
     bgColor = vivid ? "bg-primary" : "bg-primary-light"

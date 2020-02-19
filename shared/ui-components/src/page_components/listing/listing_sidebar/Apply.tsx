@@ -35,7 +35,7 @@ const Apply = (props: ApplyProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
 
-  const openDate = moment(listing.applicationOpenDate).format("MMMM DD, YYYY")
+  const openDate = moment(listing.applicationOpenDate).format("MMMM D, YYYY")
 
   return (
     <>
