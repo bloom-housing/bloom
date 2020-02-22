@@ -5,7 +5,7 @@ import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
 const listing = Object.assign({}, Archer) as any
 
-storiesOf("PageComponents|ListingMap", module).add("show B&W map with pin", () => {
+storiesOf("Listing|Map", module).add("show B&W map with pin", () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   // @ts-ignore
   return <ListingMap address={listing.buildingAddress} listing={listing} />
