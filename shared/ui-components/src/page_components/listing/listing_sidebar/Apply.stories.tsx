@@ -6,7 +6,7 @@ import { Attachment } from "@bloom-housing/core/src/listings"
 
 const listing = Object.assign({}, Archer) as any
 
-storiesOf("Listing|Sidebar Apply", module).add("hard application deadline", () => {
+storiesOf("Listing Sidebar|Apply", module).add("hard application deadline", () => {
   listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
   listing.acceptsPostmarkedApplications = false
 
@@ -16,7 +16,7 @@ storiesOf("Listing|Sidebar Apply", module).add("hard application deadline", () =
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 })
 
-storiesOf("Listing|Sidebar Apply", module).add("accepts postmarked applications", () => {
+storiesOf("Listing Sidebar|Apply", module).add("accepts postmarked applications", () => {
   listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
   listing.acceptsPostmarkedApplications = true
   listing.postmarkedApplicationsReceivedByDate = "2021-12-05"
@@ -27,7 +27,7 @@ storiesOf("Listing|Sidebar Apply", module).add("accepts postmarked applications"
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 })
 
-storiesOf("Listing|Sidebar Apply", module).add("shows multiple download URLs", () => {
+storiesOf("Listing Sidebar|Apply", module).add("shows multiple download URLs", () => {
   const listingWithAttachments = Object.assign({}, listing)
 
   const testAttachment1: Attachment = {

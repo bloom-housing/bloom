@@ -1,7 +1,8 @@
 import * as React from "react"
 import LocalizedLink from "../atoms/LocalizedLink"
-import ApplicationDeadline from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationDeadline"
+import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
 import "./ImageCard.scss"
+import { Listing } from "@bloom-housing/core/src/listings"
 
 const Flag = (props: any) => <div>{props.text}</div>
 
@@ -12,17 +13,17 @@ interface ImageCardProps {
   title: string
   href?: string
   as?: string
-  date?: string
+  listing?: Listing
 }
 
 const ImageCard = (props: ImageCardProps) => {
   let statusLabel
 
-  if (props.date) {
+  if (props.listing) {
     statusLabel = (
       <figcaption className="absolute inset-x-0 top-0 mt-2">
         <span className="inline-block">
-          <ApplicationDeadline date={props.date} vivid />
+          <ApplicationStatus listing={props.listing} vivid />
         </span>
       </figcaption>
     )
