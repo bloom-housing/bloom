@@ -4,7 +4,7 @@ import LocalizedLink from "../../atoms/LocalizedLink"
 interface SiteHeaderProps {
   logoSrc: string
   title: string
-  notice: string
+  notice: string | React.ReactNode
   children: React.ReactNode
 }
 
