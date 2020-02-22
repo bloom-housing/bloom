@@ -4,6 +4,7 @@ import t from "@bloom-housing/ui-components/src/helpers/translator"
 import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
 import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
 import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
+import SVG from "react-inlinesvg"
 
 const Layout = props => (
   <div>
@@ -27,6 +28,7 @@ const Layout = props => (
     </SiteHeader>
     <main>{props.children}</main>
     <SiteFooter />
+    <SVG src="/images/icons.svg" />
   </div>
 )
 
