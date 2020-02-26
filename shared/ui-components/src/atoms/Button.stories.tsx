@@ -1,6 +1,6 @@
 import * as React from "react"
 import { withA11y } from "@storybook/addon-a11y"
-import Button, { ButtonProps } from "./Button"
+import Button from "./Button"
 
 export default {
   component: Button,

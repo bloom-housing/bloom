@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Site Footer Footer 1`] = `
+<SiteFooter>
+  <footer
+    className="w-full bg-gray-800 text-white h-64 text-center pt-4"
+  >
+    <div
+      className="max-w-5xl m-auto"
+    >
+      <nav
+        className="mb-5"
+      >
+        <Link
+          href="/disclaimer"
+        >
+          <a
+            className="ml-5 text-white"
+            href="/disclaimer"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Disclaimer
+          </a>
+        </Link>
+        <Link
+          href="/privacy"
+        >
+          <a
+            className="ml-5 text-white"
+            href="/privacy"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Privacy Policy
+          </a>
+        </Link>
+      </nav>
+      This is a blank footer component, waiting to be implemented.
+    </div>
+  </footer>
+</SiteFooter>
+`;

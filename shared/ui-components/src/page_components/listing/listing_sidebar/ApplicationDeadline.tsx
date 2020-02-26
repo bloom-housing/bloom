@@ -1,5 +1,5 @@
 import * as React from "react"
-import * as moment from "moment"
+import moment from "moment"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 interface ApplicationDeadlineProps {

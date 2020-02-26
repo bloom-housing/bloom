@@ -1,19 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Atoms|Button default 1`] = `
-<Button
-  onClick={[Function]}
->
-  <button
-    className="button"
-    onClick={[Function]}
-  >
-    Button Component
-  </button>
-</Button>
-`;
-
-exports[`Storyshots Atoms|Button filled 1`] = `
+exports[`Storyshots Atoms|Button Filled 1`] = `
 <Button
   filled={true}
   onClick={[Function]}
@@ -27,7 +14,20 @@ exports[`Storyshots Atoms|Button filled 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button regular case 1`] = `
+exports[`Storyshots Atoms|Button Inaccessible 1`] = `
+<button
+  style={
+    Object {
+      "backgroundColor": "red",
+      "color": "darkRed",
+    }
+  }
+>
+  Inaccessible button
+</button>
+`;
+
+exports[`Storyshots Atoms|Button Regular Case 1`] = `
 <Button
   normalCase={true}
   onClick={[Function]}
@@ -41,7 +41,7 @@ exports[`Storyshots Atoms|Button regular case 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button small 1`] = `
+exports[`Storyshots Atoms|Button Small 1`] = `
 <Button
   onClick={[Function]}
   small={true}
@@ -55,7 +55,7 @@ exports[`Storyshots Atoms|Button small 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button small and filled 1`] = `
+exports[`Storyshots Atoms|Button Small And Filled 1`] = `
 <Button
   filled={true}
   onClick={[Function]}
@@ -66,6 +66,19 @@ exports[`Storyshots Atoms|Button small and filled 1`] = `
     onClick={[Function]}
   >
     Small and Filled Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Atoms|Button Standard 1`] = `
+<Button
+  onClick={[Function]}
+>
+  <button
+    className="button"
+    onClick={[Function]}
+  >
+    Button Component
   </button>
 </Button>
 `;
