@@ -1,7 +1,7 @@
 /*eslint no-undef: "error"*/
 /*eslint-env node*/
 
-process.env.TZ = "America/Los_Angeles"
+process.env.TZ = "UTC"
 
 module.exports = {
   preset: "ts-jest",
