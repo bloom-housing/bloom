@@ -49,7 +49,7 @@ storiesOf("Listing Sidebar|Apply", module).add("shows multiple download URLs", (
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 })
 
-storiesOf("Listing|Sidebar Apply", module).add("link directly to external application", () => {
+storiesOf("Listing Sidebar|Apply", module).add("link directly to external application", () => {
   const listingWithAttachments = Object.assign({}, listing)
 
   listingWithAttachments.acceptingOnlineApplications = true
