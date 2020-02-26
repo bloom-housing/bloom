@@ -18,7 +18,7 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
         "street": "98 Archer Street",
         "zipCode": "95112",
       },
-      "applicationDueDate": "2030-04-10T17:00:00-08:00",
+      "applicationDueDate": "2030-04-11T09:00:00-08:00",
       "applicationFee": "30.0",
       "applicationOpenDate": "",
       "applicationOrganization": "98 Archer Street",
@@ -1089,7 +1089,7 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
               "street": "98 Archer Street",
               "zipCode": "95112",
             },
-            "applicationDueDate": "2030-04-10T17:00:00-08:00",
+            "applicationDueDate": "2030-04-11T09:00:00-08:00",
             "applicationFee": "30.0",
             "applicationOpenDate": "",
             "applicationOrganization": "98 Archer Street",
@@ -2232,7 +2232,7 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
             "street": "98 Archer Street",
             "zipCode": "95112",
           },
-          "applicationDueDate": "2030-04-10T17:00:00-08:00",
+          "applicationDueDate": "2030-04-11T09:00:00-08:00",
           "applicationFee": "30.0",
           "applicationOpenDate": "",
           "applicationOrganization": "98 Archer Street",
@@ -3476,7 +3476,7 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
         <p
           className="mt-4 text-tiny text-gray-750"
         >
-          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr 10, 2030 and received by mail no later than Dec 05, 2019. Applications received after Dec 05, 2019 via mail will not be accepted even if they are postmarked by Apr 10, 2030. Charities Housing  is not responsible for lost or delayed mail.
+          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr 11, 2030 and received by mail no later than Dec 05, 2019. Applications received after Dec 05, 2019 via mail will not be accepted even if they are postmarked by Apr 11, 2030. Charities Housing  is not responsible for lost or delayed mail.
         </p>
         <OrDivider
           bgColor="gray-100"
@@ -3580,9 +3580,9 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
         "street": "98 Archer Street",
         "zipCode": "95112",
       },
-      "applicationDueDate": "2030-04-10T17:00:00-08:00",
+      "applicationDueDate": "2030-04-11T09:00:00-08:00",
       "applicationFee": "30.0",
-      "applicationOpenDate": "2030-04-05T17:00:00-08:00",
+      "applicationOpenDate": "2030-04-06T09:00:00-08:00",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
       "attachments": Array [],
@@ -4648,9 +4648,9 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
             "street": "98 Archer Street",
             "zipCode": "95112",
           },
-          "applicationDueDate": "2030-04-10T17:00:00-08:00",
+          "applicationDueDate": "2030-04-11T09:00:00-08:00",
           "applicationFee": "30.0",
-          "applicationOpenDate": "2030-04-05T17:00:00-08:00",
+          "applicationOpenDate": "2030-04-06T09:00:00-08:00",
           "applicationOrganization": "98 Archer Street",
           "applicationPhone": "(408) 217-8562",
           "attachments": Array [],
@@ -5710,7 +5710,7 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
           className="mb-5 text-gray-700"
         >
           Application will be available for download and pick up on 
-          April 5, 2030
+          April 6, 2030
         </p>
         <SubHeader
           text="Pick up an application"
@@ -5858,7 +5858,7 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
         <p
           className="mt-4 text-tiny text-gray-750"
         >
-          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr 10, 2030 and received by mail no later than Dec 05, 2019. Applications received after Dec 05, 2019 via mail will not be accepted even if they are postmarked by Apr 10, 2030. Charities Housing  is not responsible for lost or delayed mail.
+          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr 11, 2030 and received by mail no later than Dec 05, 2019. Applications received after Dec 05, 2019 via mail will not be accepted even if they are postmarked by Apr 11, 2030. Charities Housing  is not responsible for lost or delayed mail.
         </p>
         <OrDivider
           bgColor="gray-100"
@@ -5962,9 +5962,9 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
         "street": "98 Archer Street",
         "zipCode": "95112",
       },
-      "applicationDueDate": "2030-04-10T17:00:00-08:00",
+      "applicationDueDate": "2030-04-11T09:00:00-08:00",
       "applicationFee": "30.0",
-      "applicationOpenDate": "2030-03-26T17:00:00-08:00",
+      "applicationOpenDate": "2030-03-27T09:00:00-08:00",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
       "attachments": Array [],
@@ -7033,9 +7033,9 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
               "street": "98 Archer Street",
               "zipCode": "95112",
             },
-            "applicationDueDate": "2030-04-10T17:00:00-08:00",
+            "applicationDueDate": "2030-04-11T09:00:00-08:00",
             "applicationFee": "30.0",
-            "applicationOpenDate": "2030-03-26T17:00:00-08:00",
+            "applicationOpenDate": "2030-03-27T09:00:00-08:00",
             "applicationOrganization": "98 Archer Street",
             "applicationPhone": "(408) 217-8562",
             "attachments": Array [],
@@ -8176,9 +8176,9 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
             "street": "98 Archer Street",
             "zipCode": "95112",
           },
-          "applicationDueDate": "2030-04-10T17:00:00-08:00",
+          "applicationDueDate": "2030-04-11T09:00:00-08:00",
           "applicationFee": "30.0",
-          "applicationOpenDate": "2030-03-26T17:00:00-08:00",
+          "applicationOpenDate": "2030-03-27T09:00:00-08:00",
           "applicationOrganization": "98 Archer Street",
           "applicationPhone": "(408) 217-8562",
           "attachments": Array [],
@@ -9420,7 +9420,7 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
         <p
           className="mt-4 text-tiny text-gray-750"
         >
-          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr 10, 2030 and received by mail no later than Dec 05, 2019. Applications received after Dec 05, 2019 via mail will not be accepted even if they are postmarked by Apr 10, 2030. Charities Housing  is not responsible for lost or delayed mail.
+          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr 11, 2030 and received by mail no later than Dec 05, 2019. Applications received after Dec 05, 2019 via mail will not be accepted even if they are postmarked by Apr 11, 2030. Charities Housing  is not responsible for lost or delayed mail.
         </p>
         <OrDivider
           bgColor="gray-100"
@@ -9526,7 +9526,7 @@ exports[`Storyshots Listing Sidebar|Application Section Opened With No Due 1`] =
       },
       "applicationDueDate": "",
       "applicationFee": "30.0",
-      "applicationOpenDate": "2030-03-16T17:00:00-08:00",
+      "applicationOpenDate": "2030-03-17T09:00:00-08:00",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
       "attachments": Array [],
@@ -10594,7 +10594,7 @@ exports[`Storyshots Listing Sidebar|Application Section Opened With No Due 1`] =
           },
           "applicationDueDate": "",
           "applicationFee": "30.0",
-          "applicationOpenDate": "2030-03-16T17:00:00-08:00",
+          "applicationOpenDate": "2030-03-17T09:00:00-08:00",
           "applicationOrganization": "98 Archer Street",
           "applicationPhone": "(408) 217-8562",
           "attachments": Array [],
@@ -11654,7 +11654,7 @@ exports[`Storyshots Listing Sidebar|Application Section Opened With No Due 1`] =
           className="mb-5 text-gray-700"
         >
           Application will be available for download and pick up on 
-          March 16, 2030
+          March 17, 2030
         </p>
         <SubHeader
           text="Pick up an application"
