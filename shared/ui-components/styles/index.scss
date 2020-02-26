@@ -18,6 +18,11 @@ body {
   top: -0.8rem;
 }
 
+main {
+  @apply border-gray-450;
+  @apply border-t;
+}
+
 // Sticky footer\
 html {
   height: 100%;
