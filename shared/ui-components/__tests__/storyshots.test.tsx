@@ -4,8 +4,8 @@ import { createSerializer } from "enzyme-to-json"
 import MockDate from "mockdate"
 
 // Force all tests to use dates far in the future, so the storyshot files
-// remain consistent between runs
-MockDate.set("2030-04-01")
+// remain consistent between runs. 480 timezone offset = Pacific Time
+MockDate.set("2030-04-01", 480)
 
 initStoryshots({
   renderer: mount,

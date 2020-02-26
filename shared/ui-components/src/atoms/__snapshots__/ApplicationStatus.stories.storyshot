@@ -18,7 +18,7 @@ exports[`Storyshots Listing Sidebar|Application Status Due Soon 1`] = `
         "street": "98 Archer Street",
         "zipCode": "95112",
       },
-      "applicationDueDate": "2030-04-10T17:00:00-07:00",
+      "applicationDueDate": "2030-04-10T17:00:00-08:00",
       "applicationFee": "30.0",
       "applicationOpenDate": "",
       "applicationOrganization": "98 Archer Street",
@@ -1073,7 +1073,7 @@ exports[`Storyshots Listing Sidebar|Application Status Due Soon 1`] = `
   >
     Application Deadline
     : 
-    Apr 10, 2030 at 5:00 PM
+    Apr 10, 2030 at 6:00 PM
   </div>
 </ApplicationStatus>
 `;
@@ -1096,9 +1096,9 @@ exports[`Storyshots Listing Sidebar|Application Status Open Soon 1`] = `
         "street": "98 Archer Street",
         "zipCode": "95112",
       },
-      "applicationDueDate": "2030-04-10T17:00:00-07:00",
+      "applicationDueDate": "2030-04-10T17:00:00-08:00",
       "applicationFee": "30.0",
-      "applicationOpenDate": "2030-04-05T17:00:00-07:00",
+      "applicationOpenDate": "2030-04-05T17:00:00-08:00",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
       "attachments": Array [],
@@ -2174,9 +2174,9 @@ exports[`Storyshots Listing Sidebar|Application Status Opened Already 1`] = `
         "street": "98 Archer Street",
         "zipCode": "95112",
       },
-      "applicationDueDate": "2030-04-10T17:00:00-07:00",
+      "applicationDueDate": "2030-04-10T17:00:00-08:00",
       "applicationFee": "30.0",
-      "applicationOpenDate": "2030-03-26T17:00:00-07:00",
+      "applicationOpenDate": "2030-03-26T17:00:00-08:00",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
       "attachments": Array [],
@@ -3229,7 +3229,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened Already 1`] = `
   >
     Application Deadline
     : 
-    Apr 10, 2030 at 5:00 PM
+    Apr 10, 2030 at 6:00 PM
   </div>
 </ApplicationStatus>
 `;
@@ -3254,7 +3254,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened With No Due 1`] = 
       },
       "applicationDueDate": "",
       "applicationFee": "30.0",
-      "applicationOpenDate": "2030-03-16T17:00:00-07:00",
+      "applicationOpenDate": "2030-03-16T17:00:00-08:00",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",
       "attachments": Array [],
