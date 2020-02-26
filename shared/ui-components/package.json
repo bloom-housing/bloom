@@ -35,6 +35,7 @@
     "fork-ts-checker-webpack-plugin": "^4.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.1.0",
+    "mockdate": "^2.0.5",
     "next": "9.2.0  ",
     "node-sass": "^4.13.1",
     "postcss-loader": "^3.0.0",
