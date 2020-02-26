@@ -1,6 +1,8 @@
 /*eslint no-undef: "error"*/
 /*eslint-env node*/
 
+process.env.TZ = "America/Los_Angeles"
+
 module.exports = {
   preset: "ts-jest",
   globals: {

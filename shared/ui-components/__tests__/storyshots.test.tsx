@@ -5,7 +5,7 @@ import MockDate from "mockdate"
 
 // Force all tests to use dates far in the future, so the storyshot files
 // remain consistent between runs. 480 timezone offset = Pacific Time
-MockDate.set("2030-04-01T16:00:00.000Z", 480)
+MockDate.set("2030-04-01T16:00:00.000Z")
 
 initStoryshots({
   renderer: mount,
