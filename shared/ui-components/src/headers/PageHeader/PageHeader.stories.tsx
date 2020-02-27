@@ -1,11 +1,12 @@
 import * as React from "react"
-import { storiesOf } from "@storybook/react"
+import { withA11y } from "@storybook/addon-a11y"
 import PageHeader from "./PageHeader"
 
-storiesOf("Headers|PageHeader", module).add("with text content", () => (
-  <PageHeader>Hello World</PageHeader>
-))
+export default {
+  title: "Headers|PageHeader",
+  decorators: [withA11y]
+}
 
-storiesOf("Headers|PageHeader", module).add("with subtitle", () => (
-  <PageHeader subtitle="Here is a subtitle">Hello World</PageHeader>
-))
+export const withTextContent = () => <PageHeader>Hello World</PageHeader>
+
+export const withSubtitle = () => <PageHeader subtitle="Here is a subtitle">Hello World</PageHeader>
