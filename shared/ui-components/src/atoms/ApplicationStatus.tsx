@@ -51,7 +51,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   }
 
   return (
-    <div className={`${textSize} p-4 ${textColor} ${bgColor}`}>
+    <div className={`application-status ${textSize} p-4 ${textColor} ${bgColor}`}>
       {content}: {formattedDate}
     </div>
   )

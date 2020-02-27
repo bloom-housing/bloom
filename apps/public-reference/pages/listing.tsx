@@ -21,7 +21,7 @@ import ApplicationSection from "@bloom-housing/ui-components/src/page_components
 import WhatToExpect from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
 import LeasingAgent from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
 import ListingMap from "@bloom-housing/ui-components/src/page_components/listing/ListingMap"
-import ImageHeader from "@bloom-housing/ui-components/src/headers/image_header/image_header"
+import ImageCard from "@bloom-housing/ui-components/src/cards/ImageCard"
 import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
 import { Description } from "@bloom-housing/ui-components/src/atoms/description"
 import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/BasicTable"
@@ -105,25 +105,23 @@ export default class extends Component<ListingProps> {
           <title>{pageTitle}</title>
         </Head>
         <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
-        <article className="image-card--leader flex flex-wrap relative max-w-5xl m-auto">
-          <ImageHeader
-            className="w-full md:w-2/3 pt-8 md:pr-8"
-            title={listing.name}
-            imageUrl={listing.imageUrl}
-            subImageContent={
-              <>
-                <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
-                  {oneLineAddress}
-                </p>
-                <p className="text-gray-700 text-base">{listing.developer}</p>
-                <p className="text-xs">
-                  <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
-                    View on Map
-                  </a>
-                </p>
-              </>
-            }
-          />
+
+        <article className="flex flex-wrap relative max-w-5xl m-auto">
+          <header className="image-card--leader">
+            <ImageCard title={listing.name} imageUrl={listing.imageUrl} />
+            <div className="p-3">
+              <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
+                {oneLineAddress}
+              </p>
+              <p className="text-gray-700 text-base">{listing.developer}</p>
+              <p className="text-xs">
+                <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
+                  View on Map
+                </a>
+              </p>
+            </div>
+          </header>
+
           <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light px-3 p-5 block text-center md:mx-3">
             <ApplicationStatus listing={listing} />
           </div>
