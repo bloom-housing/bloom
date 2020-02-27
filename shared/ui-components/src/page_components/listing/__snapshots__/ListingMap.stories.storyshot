@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots PageComponents|ListingMap show B&W map with pin 1`] = `
+exports[`Storyshots Listing|Map show B&W map with pin 1`] = `
 <ListingMap
   address={
     Object {
@@ -1085,7 +1085,7 @@ exports[`Storyshots PageComponents|ListingMap show B&W map with pin 1`] = `
     >
       Archer Studios
     </h3>
-    <MultiLineAddress
+    <Component
       address={
         Object {
           "city": "San Jose",
@@ -1105,7 +1105,7 @@ exports[`Storyshots PageComponents|ListingMap show B&W map with pin 1`] = `
       ,
        
       95112
-    </MultiLineAddress>
+    </Component>
   </div>
   <InteractiveMap
     altitude={1.5}

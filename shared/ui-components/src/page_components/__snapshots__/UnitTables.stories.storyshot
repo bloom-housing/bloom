@@ -9,7 +9,7 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
       30
       % AMI Unit
     </h2>
-    <BasicTable
+    <Component
       data={
         Array [
           Object {
@@ -61,9 +61,9 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
           className="w-full text-sm responsive-collapse"
         >
           <thead>
-            <Row>
+            <Component>
               <tr>
-                <HeaderCell
+                <Component
                   key=""
                 >
                   <th
@@ -71,8 +71,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Unit Type
                   </th>
-                </HeaderCell>
-                <HeaderCell
+                </Component>
+                <Component
                   key=""
                 >
                   <th
@@ -80,8 +80,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Minimum Income
                   </th>
-                </HeaderCell>
-                <HeaderCell
+                </Component>
+                <Component
                   key=""
                 >
                   <th
@@ -89,8 +89,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Rent
                   </th>
-                </HeaderCell>
-                <HeaderCell
+                </Component>
+                <Component
                   key=""
                 >
                   <th
@@ -98,19 +98,19 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Availability
                   </th>
-                </HeaderCell>
+                </Component>
               </tr>
-            </Row>
+            </Component>
           </thead>
           <tbody>
-            <Row
+            <Component
               id="row-"
               key=""
             >
               <tr
                 id="row-"
               >
-                <Cell
+                <Component
                   headerLabel="Unit Type"
                   key=""
                 >
@@ -122,8 +122,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                       Studio
                     </strong>
                   </td>
-                </Cell>
-                <Cell
+                </Component>
+                <Component
                   headerLabel="Minimum Income"
                   key=""
                 >
@@ -136,8 +136,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                     </strong>
                     /month
                   </td>
-                </Cell>
-                <Cell
+                </Component>
+                <Component
                   headerLabel="Rent"
                   key=""
                 >
@@ -150,8 +150,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                     </strong>
                     /month
                   </td>
-                </Cell>
-                <Cell
+                </Component>
+                <Component
                   headerLabel="Availability"
                   key=""
                 >
@@ -165,13 +165,13 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                      
                     units
                   </td>
-                </Cell>
+                </Component>
               </tr>
-            </Row>
+            </Component>
           </tbody>
         </table>
       </div>
-    </BasicTable>
+    </Component>
   </div>
   <div>
     <h2
@@ -180,7 +180,7 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
       45
       % AMI Unit
     </h2>
-    <BasicTable
+    <Component
       data={
         Array [
           Object {
@@ -232,9 +232,9 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
           className="w-full text-sm responsive-collapse"
         >
           <thead>
-            <Row>
+            <Component>
               <tr>
-                <HeaderCell
+                <Component
                   key=""
                 >
                   <th
@@ -242,8 +242,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Unit Type
                   </th>
-                </HeaderCell>
-                <HeaderCell
+                </Component>
+                <Component
                   key=""
                 >
                   <th
@@ -251,8 +251,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Minimum Income
                   </th>
-                </HeaderCell>
-                <HeaderCell
+                </Component>
+                <Component
                   key=""
                 >
                   <th
@@ -260,8 +260,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Rent
                   </th>
-                </HeaderCell>
-                <HeaderCell
+                </Component>
+                <Component
                   key=""
                 >
                   <th
@@ -269,19 +269,19 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                   >
                     Availability
                   </th>
-                </HeaderCell>
+                </Component>
               </tr>
-            </Row>
+            </Component>
           </thead>
           <tbody>
-            <Row
+            <Component
               id="row-"
               key=""
             >
               <tr
                 id="row-"
               >
-                <Cell
+                <Component
                   headerLabel="Unit Type"
                   key=""
                 >
@@ -293,8 +293,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                       Studio
                     </strong>
                   </td>
-                </Cell>
-                <Cell
+                </Component>
+                <Component
                   headerLabel="Minimum Income"
                   key=""
                 >
@@ -307,8 +307,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                     </strong>
                     /month
                   </td>
-                </Cell>
-                <Cell
+                </Component>
+                <Component
                   headerLabel="Rent"
                   key=""
                 >
@@ -321,8 +321,8 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                     </strong>
                     /month
                   </td>
-                </Cell>
-                <Cell
+                </Component>
+                <Component
                   headerLabel="Availability"
                   key=""
                 >
@@ -336,13 +336,503 @@ exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
                      
                     units
                   </td>
-                </Cell>
+                </Component>
               </tr>
-            </Row>
+            </Component>
           </tbody>
         </table>
       </div>
-    </BasicTable>
+    </Component>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Tables|UnitSummaryTables show units summaries grouped by reserved types 1`] = `
+<div>
+  <div>
+    <h2
+      className="mt-4 mb-2"
+    >
+      30
+      % AMI Unit
+    </h2>
+    <Component
+      data={
+        Array [
+          Object {
+            "data": Array [
+              Object {
+                "availability": <React.Fragment>
+                  <React.Fragment>
+                    <strong>
+                      16
+                    </strong>
+                     
+                    units
+                  </React.Fragment>
+                </React.Fragment>,
+                "minimumIncome": <React.Fragment>
+                  <strong>
+                    $1,438
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "rent": <React.Fragment>
+                  <strong>
+                    $719
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "unitType": <strong>
+                  Studio
+                </strong>,
+              },
+            ],
+          },
+        ]
+      }
+      headers={
+        Object {
+          "availability": "Availability",
+          "minimumIncome": "Minimum Income",
+          "rent": "Rent",
+          "unitType": "Unit Type",
+        }
+      }
+      responsiveCollapse={true}
+    >
+      <div
+        style={
+          Object {
+            "overflowX": "auto",
+          }
+        }
+      >
+        <table
+          className="w-full text-sm responsive-collapse"
+        >
+          <thead>
+            <Component>
+              <tr>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Unit Type
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Minimum Income
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Rent
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Availability
+                  </th>
+                </Component>
+              </tr>
+            </Component>
+          </thead>
+          <tbody>
+            <Component
+              className="group-undefined"
+              id="row-"
+              key=""
+            >
+              <tr
+                className="group-undefined"
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $1,438
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $719
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      16
+                    </strong>
+                     
+                    units
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+          </tbody>
+        </table>
+      </div>
+    </Component>
+  </div>
+  <div>
+    <h2
+      className="mt-4 mb-2"
+    >
+      45
+      % AMI Unit
+    </h2>
+    <Component
+      data={
+        Array [
+          Object {
+            "data": Array [
+              Object {
+                "availability": <React.Fragment>
+                  <React.Fragment>
+                    <strong>
+                      24
+                    </strong>
+                     
+                    units
+                  </React.Fragment>
+                </React.Fragment>,
+                "minimumIncome": <React.Fragment>
+                  <strong>
+                    $2,208
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "rent": <React.Fragment>
+                  <strong>
+                    $1,104
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "unitType": <strong>
+                  Studio
+                </strong>,
+              },
+            ],
+          },
+          Object {
+            "className": "reserved",
+            "data": Array [
+              Object {
+                "availability": <React.Fragment>
+                  <React.Fragment>
+                    <strong>
+                      1
+                    </strong>
+                     
+                    unit
+                  </React.Fragment>
+                </React.Fragment>,
+                "minimumIncome": <React.Fragment>
+                  <strong>
+                    $2,208
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "rent": <React.Fragment>
+                  <strong>
+                    $1,104
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "unitType": <strong>
+                  Studio
+                </strong>,
+              },
+            ],
+            "header": <React.Fragment>
+              <span
+                className="reserved-icon"
+              >
+                ★
+              </span>
+               
+              Reserved for seniors
+            </React.Fragment>,
+          },
+        ]
+      }
+      headers={
+        Object {
+          "availability": "Availability",
+          "minimumIncome": "Minimum Income",
+          "rent": "Rent",
+          "unitType": "Unit Type",
+        }
+      }
+      responsiveCollapse={true}
+    >
+      <div
+        style={
+          Object {
+            "overflowX": "auto",
+          }
+        }
+      >
+        <table
+          className="w-full text-sm responsive-collapse"
+        >
+          <thead>
+            <Component>
+              <tr>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Unit Type
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Minimum Income
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Rent
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                  >
+                    Availability
+                  </th>
+                </Component>
+              </tr>
+            </Component>
+          </thead>
+          <tbody>
+            <Component
+              className="group-undefined"
+              id="row-"
+              key=""
+            >
+              <tr
+                className="group-undefined"
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $2,208
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $1,104
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      24
+                    </strong>
+                     
+                    units
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+            <Component
+              key=""
+            >
+              <tr>
+                <Component
+                  className="reserved"
+                  colSpan={4}
+                  key=""
+                >
+                  <td
+                    className="reserved"
+                    colSpan={4}
+                  >
+                    <span
+                      className="reserved-icon"
+                    >
+                      ★
+                    </span>
+                     
+                    Reserved for seniors
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+            <Component
+              className="group-reserved"
+              id="row-"
+              key=""
+            >
+              <tr
+                className="group-reserved"
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $2,208
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $1,104
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      1
+                    </strong>
+                     
+                    unit
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+          </tbody>
+        </table>
+      </div>
+    </Component>
   </div>
 </div>
 `;
@@ -1406,7 +1896,7 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
     <div
       className="unit-table hidden"
     >
-      <BasicTable
+      <Component
         data={
           Array [
             Object {
@@ -2005,9 +2495,9 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
             className="w-full text-sm"
           >
             <thead>
-              <Row>
+              <Component>
                 <tr>
-                  <HeaderCell
+                  <Component
                     key=""
                   >
                     <th
@@ -2015,8 +2505,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       Unit #
                     </th>
-                  </HeaderCell>
-                  <HeaderCell
+                  </Component>
+                  <Component
                     key=""
                   >
                     <th
@@ -2024,8 +2514,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       Area
                     </th>
-                  </HeaderCell>
-                  <HeaderCell
+                  </Component>
+                  <Component
                     key=""
                   >
                     <th
@@ -2033,8 +2523,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       Baths
                     </th>
-                  </HeaderCell>
-                  <HeaderCell
+                  </Component>
+                  <Component
                     key=""
                   >
                     <th
@@ -2042,19 +2532,19 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       Floor
                     </th>
-                  </HeaderCell>
+                  </Component>
                 </tr>
-              </Row>
+              </Component>
             </thead>
             <tbody>
-              <Row
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2062,8 +2552,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2077,8 +2567,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2088,8 +2578,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2101,17 +2591,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2119,8 +2609,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2134,8 +2624,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2145,8 +2635,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2158,17 +2648,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2176,8 +2666,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2191,8 +2681,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2202,8 +2692,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2215,17 +2705,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2233,8 +2723,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2248,8 +2738,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2259,8 +2749,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2272,17 +2762,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2290,8 +2780,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2305,8 +2795,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2316,8 +2806,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2329,17 +2819,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2347,8 +2837,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2362,8 +2852,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2373,8 +2863,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2386,17 +2876,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2404,8 +2894,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2419,8 +2909,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2430,8 +2920,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2443,17 +2933,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2461,8 +2951,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2476,8 +2966,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2487,8 +2977,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2500,17 +2990,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2518,8 +3008,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2533,8 +3023,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2544,8 +3034,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2557,17 +3047,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2575,8 +3065,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2590,8 +3080,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2601,8 +3091,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2614,17 +3104,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2632,8 +3122,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2647,8 +3137,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2658,8 +3148,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2671,17 +3161,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2689,8 +3179,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2704,8 +3194,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2715,8 +3205,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2728,17 +3218,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2746,8 +3236,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2761,8 +3251,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2772,8 +3262,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2785,17 +3275,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2803,8 +3293,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2818,8 +3308,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2829,8 +3319,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2842,17 +3332,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2860,8 +3350,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2875,8 +3365,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2886,8 +3376,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2899,17 +3389,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2917,8 +3407,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2932,8 +3422,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -2943,8 +3433,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -2956,17 +3446,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -2974,8 +3464,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -2989,8 +3479,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3000,8 +3490,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3013,17 +3503,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3031,8 +3521,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3046,8 +3536,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3057,8 +3547,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3070,17 +3560,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3088,8 +3578,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3103,8 +3593,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3114,8 +3604,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3127,17 +3617,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3145,8 +3635,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3160,8 +3650,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3171,8 +3661,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3184,17 +3674,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3202,8 +3692,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3217,8 +3707,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3228,8 +3718,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3241,17 +3731,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3259,8 +3749,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3274,8 +3764,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3285,8 +3775,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3298,17 +3788,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3316,8 +3806,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3331,8 +3821,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3342,8 +3832,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3355,17 +3845,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3373,8 +3863,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3388,8 +3878,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3399,8 +3889,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3412,17 +3902,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3430,8 +3920,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3445,8 +3935,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3456,8 +3946,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3469,17 +3959,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3487,8 +3977,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3502,8 +3992,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3513,8 +4003,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3526,17 +4016,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3544,8 +4034,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3559,8 +4049,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3570,8 +4060,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3583,17 +4073,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3601,8 +4091,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3616,8 +4106,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3627,8 +4117,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3640,17 +4130,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3658,8 +4148,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3673,8 +4163,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3684,8 +4174,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3697,17 +4187,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3715,8 +4205,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3730,8 +4220,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3741,8 +4231,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3754,17 +4244,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3772,8 +4262,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3787,8 +4277,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3798,8 +4288,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3811,17 +4301,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         2
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3829,8 +4319,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3844,8 +4334,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3855,8 +4345,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3868,17 +4358,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3886,8 +4376,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3901,8 +4391,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3912,8 +4402,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3925,17 +4415,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -3943,8 +4433,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -3958,8 +4448,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -3969,8 +4459,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -3982,17 +4472,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -4000,8 +4490,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -4015,8 +4505,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -4026,8 +4516,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -4039,17 +4529,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -4057,8 +4547,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -4072,8 +4562,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -4083,8 +4573,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -4096,17 +4586,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -4114,8 +4604,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -4129,8 +4619,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -4140,8 +4630,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -4153,17 +4643,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -4171,8 +4661,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -4186,8 +4676,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -4197,8 +4687,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -4210,17 +4700,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -4228,8 +4718,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -4243,8 +4733,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -4254,8 +4744,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -4267,17 +4757,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -4285,8 +4775,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -4300,8 +4790,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -4311,8 +4801,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -4324,17 +4814,17 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
-              <Row
+              </Component>
+              <Component
                 id="row-"
                 key=""
               >
                 <tr
                   id="row-"
                 >
-                  <Cell
+                  <Component
                     headerLabel="Unit #"
                     key=""
                   >
@@ -4342,8 +4832,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                       className="p-5"
                       data-label="Unit #"
                     />
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Area"
                     key=""
                   >
@@ -4357,8 +4847,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                        
                       sqft
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Baths"
                     key=""
                   >
@@ -4368,8 +4858,8 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     >
                       <strong />
                     </td>
-                  </Cell>
-                  <Cell
+                  </Component>
+                  <Component
                     headerLabel="Floor"
                     key=""
                   >
@@ -4381,13 +4871,13 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                         3
                       </strong>
                     </td>
-                  </Cell>
+                  </Component>
                 </tr>
-              </Row>
+              </Component>
             </tbody>
           </table>
         </div>
-      </BasicTable>
+      </Component>
     </div>
   </div>
 </UnitTables>
