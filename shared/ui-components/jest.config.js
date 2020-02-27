@@ -1,6 +1,8 @@
 /*eslint no-undef: "error"*/
 /*eslint-env node*/
 
+process.env.TZ = "UTC"
+
 module.exports = {
   preset: "ts-jest",
   globals: {
@@ -10,7 +12,10 @@ module.exports = {
   },
   rootDir: "../..",
   roots: ["<rootDir>/shared/ui-components"],
-  transform: { "^.+\\.[t|j]sx?$": "ts-jest" },
+  transform: {
+    "^.+\\.stories\\.[t|j]sx$": "@storybook/addon-storyshots/injectFileName",
+    "^.+\\.[t|j]sx?$": "ts-jest"
+  },
   setupFilesAfterEnv: ["<rootDir>/shared/ui-components/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy"

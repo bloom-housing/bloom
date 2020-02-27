@@ -174,7 +174,7 @@ exports[`Storyshots Headers|SiteHeader with dropdown and button 1`] = `
         >
           Hello World
         </a>
-        <NavbarDropdown
+        <Component
           menuTitle="Testing Menu"
         >
           <div
@@ -211,7 +211,7 @@ exports[`Storyshots Headers|SiteHeader with dropdown and button 1`] = `
               </a>
             </div>
           </div>
-        </NavbarDropdown>
+        </Component>
         <div
           className="navbar-item"
         >

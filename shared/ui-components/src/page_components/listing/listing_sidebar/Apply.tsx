@@ -56,7 +56,7 @@ const Apply = (props: ApplyProps) => {
         </h2>
 
         {openDateState(listing) && (
-          <p class="mb-5 text-gray-700">
+          <p className="mb-5 text-gray-700">
             Application will be available for download and pick up on {openDate}
           </p>
         )}
