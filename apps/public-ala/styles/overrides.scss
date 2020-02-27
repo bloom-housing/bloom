@@ -6,7 +6,7 @@
 }
 
 footer.site-footer {
-  @apply text-gray-500;
+  @apply text-gray-550;
   @apply w-full;
   @apply bg-gray-800;
   @apply text-center;
@@ -33,6 +33,7 @@ footer.site-footer {
   }
 
   .footer-sock {
+    @apply text-gray-600;
     @apply bg-gray-950;
     @apply py-8;
     @apply px-2;

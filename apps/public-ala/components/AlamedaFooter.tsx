@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import moment from "moment"
 
 const AlamedaFooter = () => (
   <footer className="site-footer">
@@ -30,22 +31,37 @@ const AlamedaFooter = () => (
         <a href="https://housing.sfgov.org" target="_blank">
           San Francisco Housing Portal
         </a>
+        <br />
+        <a href="https://smc.housingbayarea.org/" target="_blank">
+          San Mateo County Housing Portal
+        </a>
+        <br />
+        <a href="https://housing.sanjoseca.gov/" target="_blank">
+          City of San José Housing Portal
+        </a>
       </p>
     </div>
 
     <section className="footer-sock">
       <div className="footer-sock-inner">
-        <p className="footer-copyright">Alameda County © 2020 • All Rights Reserved</p>
+        <p className="footer-copyright">
+          Alameda County © {moment().format("YYYY")} • All Rights Reserved
+        </p>
 
         <nav className="footer-nav">
-          <a href="#">Give Feedback</a>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScr7JuVwiNW8q-ifFUWTFSWqEyV5ndA08jAhJQSlQ4ETrnl9w/viewform?usp=sf_link"
+            target="_blank"
+          >
+            Give Feedback
+          </a>
           <a href="#">Contact</a>
-          <Link href="/disclaimer">
-            <a>Disclaimer</a>
-          </Link>
-          <Link href="/privacy">
-            <a>Privacy Policy</a>
-          </Link>
+          <a href="https://www.acgov.org/government/legal.htm" target="_blank">
+            Disclaimer
+          </a>
+          <a href="https://www.acgov.org/government/legal.htm" target="_blank">
+            Privacy Policy
+          </a>
         </nav>
       </div>
     </section>
