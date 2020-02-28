@@ -1,43 +1,264 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Site Footer Footer 1`] = `
-<SiteFooter>
+<SiteFooter
+  copyright="Alameda County © 2020 • All Rights Reserved"
+  links={
+    Array [
+      Object {
+        "href": "#",
+        "title": "Policy",
+      },
+    ]
+  }
+>
   <footer
-    className="w-full bg-gray-800 text-white h-64 text-center pt-4"
+    className="site-footer"
+  >
+    <section
+      className="footer-sock"
+    >
+      <div
+        className="footer-sock-inner"
+      >
+        <p
+          className="footer-copyright"
+        >
+          Alameda County © 2020 • All Rights Reserved
+        </p>
+        <nav
+          className="footer-nav"
+        >
+          <LocalizedLink
+            href="#"
+            key="0"
+          >
+            <Link
+              href="#"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+                onMouseEnter={[Function]}
+              >
+                Policy
+              </a>
+            </Link>
+          </LocalizedLink>
+        </nav>
+      </div>
+    </section>
+    <section
+      className="footer-sole"
+    >
+      <ExygyFooter>
+        <span>
+          made with ❤️ by
+           
+          <a
+            aria-label="Opens in new window"
+            href="http://exygy.com"
+            target="_blank"
+          >
+            exygy
+          </a>
+        </span>
+      </ExygyFooter>
+    </section>
+  </footer>
+</SiteFooter>
+`;
+
+exports[`Storyshots Site Footer With Logo 1`] = `
+<SiteFooter
+  copyright="Alameda County © 2020 • All Rights Reserved"
+  links={
+    Array [
+      Object {
+        "href": "#",
+        "title": "Policy",
+      },
+    ]
+  }
+  logo={
+    <img
+      alt="Alameda Logo"
+      src="/images/logo_glyph.svg"
+    />
+  }
+>
+  <footer
+    className="site-footer"
   >
     <div
-      className="max-w-5xl m-auto"
+      className="footer-logo"
     >
-      <nav
-        className="mb-5"
-      >
-        <Link
-          href="/disclaimer"
-        >
-          <a
-            className="ml-5 text-white"
-            href="/disclaimer"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            Disclaimer
-          </a>
-        </Link>
-        <Link
-          href="/privacy"
-        >
-          <a
-            className="ml-5 text-white"
-            href="/privacy"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            Privacy Policy
-          </a>
-        </Link>
-      </nav>
-      This is a blank footer component, waiting to be implemented.
+      <img
+        alt="Alameda Logo"
+        src="/images/logo_glyph.svg"
+      />
     </div>
+    <section
+      className="footer-sock"
+    >
+      <div
+        className="footer-sock-inner"
+      >
+        <p
+          className="footer-copyright"
+        >
+          Alameda County © 2020 • All Rights Reserved
+        </p>
+        <nav
+          className="footer-nav"
+        >
+          <LocalizedLink
+            href="#"
+            key="0"
+          >
+            <Link
+              href="#"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+                onMouseEnter={[Function]}
+              >
+                Policy
+              </a>
+            </Link>
+          </LocalizedLink>
+        </nav>
+      </div>
+    </section>
+    <section
+      className="footer-sole"
+    >
+      <ExygyFooter>
+        <span>
+          made with ❤️ by
+           
+          <a
+            aria-label="Opens in new window"
+            href="http://exygy.com"
+            target="_blank"
+          >
+            exygy
+          </a>
+        </span>
+      </ExygyFooter>
+    </section>
+  </footer>
+</SiteFooter>
+`;
+
+exports[`Storyshots Site Footer With Logo And Credits 1`] = `
+<SiteFooter
+  copyright="Alameda County © 2020 • All Rights Reserved"
+  credits={
+    <React.Fragment>
+      <p>
+        Alameda County Housing Portal is a project of the
+        <br />
+        <a
+          href="https://www.acgov.org/cda/hcd/"
+          target="_blank"
+        >
+          Alameda County - Housing and Community Development (HCD) Department
+        </a>
+      </p>
+    </React.Fragment>
+  }
+  links={
+    Array [
+      Object {
+        "href": "#",
+        "title": "Policy",
+      },
+    ]
+  }
+  logo={
+    <img
+      alt="Alameda Logo"
+      src="/images/logo_glyph.svg"
+    />
+  }
+>
+  <footer
+    className="site-footer"
+  >
+    <div
+      className="footer-logo"
+    >
+      <img
+        alt="Alameda Logo"
+        src="/images/logo_glyph.svg"
+      />
+    </div>
+    <div
+      className="footer-credits"
+    >
+      <p>
+        Alameda County Housing Portal is a project of the
+        <br />
+        <a
+          href="https://www.acgov.org/cda/hcd/"
+          target="_blank"
+        >
+          Alameda County - Housing and Community Development (HCD) Department
+        </a>
+      </p>
+    </div>
+    <section
+      className="footer-sock"
+    >
+      <div
+        className="footer-sock-inner"
+      >
+        <p
+          className="footer-copyright"
+        >
+          Alameda County © 2020 • All Rights Reserved
+        </p>
+        <nav
+          className="footer-nav"
+        >
+          <LocalizedLink
+            href="#"
+            key="0"
+          >
+            <Link
+              href="#"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+                onMouseEnter={[Function]}
+              >
+                Policy
+              </a>
+            </Link>
+          </LocalizedLink>
+        </nav>
+      </div>
+    </section>
+    <section
+      className="footer-sole"
+    >
+      <ExygyFooter>
+        <span>
+          made with ❤️ by
+           
+          <a
+            aria-label="Opens in new window"
+            href="http://exygy.com"
+            target="_blank"
+          >
+            exygy
+          </a>
+        </span>
+      </ExygyFooter>
+    </section>
   </footer>
 </SiteFooter>
 `;
