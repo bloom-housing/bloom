@@ -6,6 +6,10 @@ import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/Site
 import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
 import SVG from "react-inlinesvg"
 
+const links = [
+  { href: "#", title: "Policy" },
+  { href: "/disclaimer", title: "Disclaimer" }
+]
 const Layout = props => (
   <div>
     <Head>
@@ -27,7 +31,7 @@ const Layout = props => (
       )}
     </SiteHeader>
     <main>{props.children}</main>
-    <SiteFooter />
+    <SiteFooter links={links} copyright="Exygy © 2020 • All Rights Reserved" />
     <SVG src="/images/icons.svg" />
   </div>
 )
