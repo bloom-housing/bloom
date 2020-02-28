@@ -33,7 +33,7 @@ export default class extends Component<IndexProps> {
 
     //    const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
     const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-    const metaImage = "" // TODO: replace with hero image
+    const metaImage = ""
 
     return (
       <Layout>

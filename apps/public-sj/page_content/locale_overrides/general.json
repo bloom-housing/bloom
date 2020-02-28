@@ -1,8 +1,12 @@
 {
+  "nav": {
+    "siteTitle": "San Jose Housing Portal",
+    "listings": "Browse Properties"
+  },
   "region": {
     "name": "San José"
   },
   "welcome": {
-    "seeRentalListings": "Browse Rentals"
+    "seeRentalListings": "See Rentals"
   }
 }

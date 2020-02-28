@@ -1,0 +1,16 @@
+{
+  "config": {
+    "routePrefix": "es"
+  },
+  "nav": {
+    "listings": "Listados"
+  },
+  "pageTitle": {
+    "housingCounselors": "Consejeros de Vivienda",
+    "rent": "Alquiler de viviendas asequibles"
+  },
+  "welcome": {
+    "seeRentalListings": "Ver alquileres",
+    "title": "Solicite una vivienda asequible en"
+  }
+}

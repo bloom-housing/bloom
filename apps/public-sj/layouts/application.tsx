@@ -5,12 +5,14 @@ import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
 import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
 import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
 import SVG from "react-inlinesvg"
+import WelcomeHeader from "../components/WelcomeHeader"
 
 const Layout = props => (
   <div>
     <Head>
       <title>{t("nav.siteTitle")}</title>
     </Head>
+    <WelcomeHeader />
     <SiteHeader
       logoSrc="/images/logo_glyph.svg"
       notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
@@ -19,9 +21,8 @@ const Layout = props => (
       <LocalizedLink href="/listings" className="navbar-item">
         {t("nav.listings")}
       </LocalizedLink>
-      {/* Only show Get Assistance if housing counselor data is available */}
       {process.env.housingCounselorServiceUrl && (
-        <LocalizedLink href="/housing-counselors" className="navbar-item">
+        <LocalizedLink href={process.env.housingCounselorServiceUrl} className="navbar-item">
           {t("nav.getAssistance")}
         </LocalizedLink>
       )}
