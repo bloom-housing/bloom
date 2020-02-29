@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Listing|Map show B&W map with pin 1`] = `
+exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
 <ListingMap
   address={
     Object {

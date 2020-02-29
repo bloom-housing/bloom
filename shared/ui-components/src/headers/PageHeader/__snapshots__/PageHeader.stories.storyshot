@@ -35,39 +35,3 @@ exports[`Storyshots Headers|PageHeader With Text Content 1`] = `
   </header>
 </PageHeader>
 `;
-
-exports[`Storyshots Headers|PageHeader with subtitle 1`] = `
-<PageHeader
-  subtitle="Here is a subtitle"
->
-  <header
-    className="page-header py-10 px-5 bg-gray-300"
-  >
-    <h1
-      className="title m-auto max-w-5xl"
-    >
-      Hello World
-    </h1>
-    <p
-      className="m-auto max-w-5xl"
-    >
-       
-      Here is a subtitle
-    </p>
-  </header>
-</PageHeader>
-`;
-
-exports[`Storyshots Headers|PageHeader with text content 1`] = `
-<PageHeader>
-  <header
-    className="page-header py-10 px-5 bg-gray-300"
-  >
-    <h1
-      className="title m-auto max-w-5xl"
-    >
-      Hello World
-    </h1>
-  </header>
-</PageHeader>
-`;

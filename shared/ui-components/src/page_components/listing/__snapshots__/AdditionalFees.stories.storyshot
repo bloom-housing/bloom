@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Listing|Additional Fees shows application fee and deposit 1`] = `
+exports[`Storyshots Listing|Additional Fees Shows Application Fee And Deposit 1`] = `
 <AdditionalFees
   listing={
     Object {
