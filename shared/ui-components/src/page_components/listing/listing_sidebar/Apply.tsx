@@ -14,7 +14,7 @@ interface ApplyProps {
 const OrDivider = (props: { bgColor: string }) => (
   <div className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center">
     <span
-      className={`bg-${props.bgColor} relative -top px-1 uppercase text-blue-700 font-semibold`}
+      className={`bg-${props.bgColor} relative -top px-1 uppercase text-primary-dark font-semibold`}
     >
       or
     </span>

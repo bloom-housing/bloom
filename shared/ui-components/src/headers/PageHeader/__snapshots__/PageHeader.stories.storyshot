@@ -5,7 +5,7 @@ exports[`Storyshots Headers|PageHeader With Subtitle 1`] = `
   subtitle="Here is a subtitle"
 >
   <header
-    className="page-header py-10 px-5 bg-gray-300"
+    className="page-header py-10 px-5 bg-primary-lighter"
   >
     <h1
       className="title m-auto max-w-5xl"
@@ -25,7 +25,7 @@ exports[`Storyshots Headers|PageHeader With Subtitle 1`] = `
 exports[`Storyshots Headers|PageHeader With Text Content 1`] = `
 <PageHeader>
   <header
-    className="page-header py-10 px-5 bg-gray-300"
+    className="page-header py-10 px-5 bg-primary-lighter"
   >
     <h1
       className="title m-auto max-w-5xl"
