@@ -51,7 +51,7 @@ exports[`Storyshots Headers|Hero Hero 1`] = `
 
 exports[`Storyshots Headers|Hero With Background 1`] = `
 <Hero
-  backgroundImg="/images/banner.png"
+  backgroundImage="/images/banner.png"
   buttonLink="/listings"
   buttonTitle="Rental Listings"
   listings={Array []}

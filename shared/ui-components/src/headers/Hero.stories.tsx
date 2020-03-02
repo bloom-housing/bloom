@@ -23,6 +23,6 @@ export const withBackground = () => (
     buttonTitle="Rental Listings"
     buttonLink="/listings"
     listings={[]}
-    backgroundImg="/images/banner.png"
+    backgroundImage="/images/banner.png"
   />
 )

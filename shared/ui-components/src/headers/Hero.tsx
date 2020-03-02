@@ -7,7 +7,7 @@ import "./Hero.scss"
 
 export interface HeroProps {
   title: JSX.Element
-  backgroundImg?: string
+  backgroundImage?: string
   buttonTitle: string
   buttonLink: string
   listings: Listing[]
@@ -28,8 +28,8 @@ const Hero = (props: HeroProps) => {
       </h2>
     )
   }
-  if (props.backgroundImg) {
-    styles = { backgroundImage: `url(${props.backgroundImg})` }
+  if (props.backgroundImage) {
+    styles = { backgroundImage: `url(${props.backgroundImage})` }
   }
   return (
     <div className={heroClasses.join(" ")} style={styles}>
