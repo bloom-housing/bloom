@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Headers|Hero Hero 1`] = `
+<Hero
+  buttonLink="/listings"
+  buttonTitle="Rental Listings"
+  listings={Array []}
+  title={
+    <React.Fragment>
+      Welcome
+    </React.Fragment>
+  }
+>
+  <div
+    className="hero"
+  >
+    <h1
+      className="hero__title mb-4"
+    >
+      Welcome
+    </h1>
+    <h2
+      className="t-alt-sans text-gray-100 text-base mb-4"
+    >
+      All applications are currently closed, but you can view closed listings.
+    </h2>
+    <LinkButton
+      href="/listings"
+    >
+      <LocalizedLink
+        className="button"
+        href="/listings"
+      >
+        <Link
+          href="/listings"
+        >
+          <a
+            className="button"
+            href="/listings"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Rental Listings
+          </a>
+        </Link>
+      </LocalizedLink>
+    </LinkButton>
+  </div>
+</Hero>
+`;
+
+exports[`Storyshots Headers|Hero With Background 1`] = `
+<Hero
+  backgroundImage="/images/banner.png"
+  buttonLink="/listings"
+  buttonTitle="Rental Listings"
+  listings={Array []}
+  title={
+    <React.Fragment>
+      Welcome
+    </React.Fragment>
+  }
+>
+  <div
+    className="hero"
+    style={
+      Object {
+        "backgroundImage": "url(/images/banner.png)",
+      }
+    }
+  >
+    <h1
+      className="hero__title mb-4"
+    >
+      Welcome
+    </h1>
+    <h2
+      className="t-alt-sans text-gray-100 text-base mb-4"
+    >
+      All applications are currently closed, but you can view closed listings.
+    </h2>
+    <LinkButton
+      href="/listings"
+    >
+      <LocalizedLink
+        className="button"
+        href="/listings"
+      >
+        <Link
+          href="/listings"
+        >
+          <a
+            className="button"
+            href="/listings"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Rental Listings
+          </a>
+        </Link>
+      </LocalizedLink>
+    </LinkButton>
+  </div>
+</Hero>
+`;
