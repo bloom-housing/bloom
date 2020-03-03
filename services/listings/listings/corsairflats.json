@@ -13,7 +13,6 @@
     "latitude": null,
     "longitude": null
   },
-  "applicationOpenDate": "2020-03-30T17:00:00.000-07:00",
   "applicationDueDate": "2020-04-10T23:00:00.000-07:00",
   "applicationOrganization": "",
   "applicationPhone": "",
@@ -640,7 +639,7 @@
       "annualIncomeMax": "80340",
       "maxOccupancy": 5,
       "minOccupancy": 2,
-      "monthlyRent": "1674",
+      "monthlyRent": "837",
       "numBathrooms": 1,
       "numBedrooms": 2,
       "number": null,
