@@ -1,6 +1,10 @@
 import * as React from "react"
 import { withA11y } from "@storybook/addon-a11y"
 import SiteFooter from "./SiteFooter"
+import FooterNav from "../FooterNav/FooterNav"
+import LocalizedLink from "../../atoms/LocalizedLink"
+import ExygyFooter from "../ExygyFooter"
+import FooterSection from "../FooterSection/FooterSection"
 
 export default {
   title: "Site Footer",
@@ -10,7 +14,7 @@ export default {
   component: SiteFooter,
   decorators: [withA11y]
 }
-const links = [{ href: "#", title: "Policy" }]
+
 const credits = (
   <>
     <p>
@@ -25,18 +29,31 @@ const credits = (
 const logo = <img src="/images/logo_glyph.svg" alt="Alameda Logo" />
 
 export const footer = () => (
-  <SiteFooter links={links} copyright="Alameda County © 2020 • All Rights Reserved" />
+  <SiteFooter>
+    <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
+      <LocalizedLink href="#">Policy</LocalizedLink>
+    </FooterNav>
+  </SiteFooter>
 )
 
 export const withLogo = () => (
-  <SiteFooter links={links} copyright="Alameda County © 2020 • All Rights Reserved" logo={logo} />
+  <SiteFooter>
+    <FooterSection>{logo}</FooterSection>
+    <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
+      <LocalizedLink href="#">Policy</LocalizedLink>
+    </FooterNav>
+  </SiteFooter>
 )
 
 export const withLogoAndCredits = () => (
-  <SiteFooter
-    links={links}
-    copyright="Alameda County © 2020 • All Rights Reserved"
-    logo={logo}
-    credits={credits}
-  />
+  <SiteFooter>
+    <FooterSection>{logo}</FooterSection>
+    <FooterSection>{credits}</FooterSection>
+    <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
+      <LocalizedLink href="#">Policy</LocalizedLink>
+    </FooterNav>
+    <FooterSection className="bg-black" small>
+      <ExygyFooter />
+    </FooterSection>
+  </SiteFooter>
 )

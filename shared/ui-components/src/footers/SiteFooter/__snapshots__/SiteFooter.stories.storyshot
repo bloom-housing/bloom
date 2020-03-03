@@ -1,264 +1,210 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Site Footer Footer 1`] = `
-<SiteFooter
-  copyright="Alameda County © 2020 • All Rights Reserved"
-  links={
-    Array [
-      Object {
-        "href": "#",
-        "title": "Policy",
-      },
-    ]
-  }
->
+<SiteFooter>
   <footer
     className="site-footer"
   >
-    <section
-      className="footer-sock"
+    <FooterNav
+      copyright="Alameda County © 2020 • All Rights Reserved"
     >
-      <div
-        className="footer-sock-inner"
+      <section
+        className="footer-sock"
       >
-        <p
-          className="footer-copyright"
+        <div
+          className="footer-sock-inner"
         >
-          Alameda County © 2020 • All Rights Reserved
-        </p>
-        <nav
-          className="footer-nav"
-        >
-          <LocalizedLink
-            href="#"
-            key="0"
+          <p
+            className="footer-copyright"
           >
-            <Link
+            Alameda County © 2020 • All Rights Reserved
+          </p>
+          <nav
+            className="footer-nav"
+          >
+            <LocalizedLink
               href="#"
             >
-              <a
+              <Link
                 href="#"
-                onClick={[Function]}
-                onMouseEnter={[Function]}
               >
-                Policy
-              </a>
-            </Link>
-          </LocalizedLink>
-        </nav>
-      </div>
-    </section>
-    <section
-      className="footer-sole"
-    >
-      <ExygyFooter>
-        <span>
-          made with ❤️ by
-           
-          <a
-            aria-label="Opens in new window"
-            href="http://exygy.com"
-            target="_blank"
-          >
-            exygy
-          </a>
-        </span>
-      </ExygyFooter>
-    </section>
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Policy
+                </a>
+              </Link>
+            </LocalizedLink>
+          </nav>
+        </div>
+      </section>
+    </FooterNav>
   </footer>
 </SiteFooter>
 `;
 
 exports[`Storyshots Site Footer With Logo 1`] = `
-<SiteFooter
-  copyright="Alameda County © 2020 • All Rights Reserved"
-  links={
-    Array [
-      Object {
-        "href": "#",
-        "title": "Policy",
-      },
-    ]
-  }
-  logo={
-    <img
-      alt="Alameda Logo"
-      src="/images/logo_glyph.svg"
-    />
-  }
->
+<SiteFooter>
   <footer
     className="site-footer"
   >
-    <div
-      className="footer-logo"
-    >
-      <img
-        alt="Alameda Logo"
-        src="/images/logo_glyph.svg"
-      />
-    </div>
-    <section
-      className="footer-sock"
-    >
+    <FooterSection>
       <div
-        className="footer-sock-inner"
+        className="footer-row "
       >
-        <p
-          className="footer-copyright"
+        <div
+          className="footer-row__section pb-8"
         >
-          Alameda County © 2020 • All Rights Reserved
-        </p>
-        <nav
-          className="footer-nav"
+          <img
+            alt="Alameda Logo"
+            src="/images/logo_glyph.svg"
+          />
+        </div>
+      </div>
+    </FooterSection>
+    <FooterNav
+      copyright="Alameda County © 2020 • All Rights Reserved"
+    >
+      <section
+        className="footer-sock"
+      >
+        <div
+          className="footer-sock-inner"
         >
-          <LocalizedLink
-            href="#"
-            key="0"
+          <p
+            className="footer-copyright"
           >
-            <Link
+            Alameda County © 2020 • All Rights Reserved
+          </p>
+          <nav
+            className="footer-nav"
+          >
+            <LocalizedLink
               href="#"
             >
-              <a
+              <Link
                 href="#"
-                onClick={[Function]}
-                onMouseEnter={[Function]}
               >
-                Policy
-              </a>
-            </Link>
-          </LocalizedLink>
-        </nav>
-      </div>
-    </section>
-    <section
-      className="footer-sole"
-    >
-      <ExygyFooter>
-        <span>
-          made with ❤️ by
-           
-          <a
-            aria-label="Opens in new window"
-            href="http://exygy.com"
-            target="_blank"
-          >
-            exygy
-          </a>
-        </span>
-      </ExygyFooter>
-    </section>
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Policy
+                </a>
+              </Link>
+            </LocalizedLink>
+          </nav>
+        </div>
+      </section>
+    </FooterNav>
   </footer>
 </SiteFooter>
 `;
 
 exports[`Storyshots Site Footer With Logo And Credits 1`] = `
-<SiteFooter
-  copyright="Alameda County © 2020 • All Rights Reserved"
-  credits={
-    <React.Fragment>
-      <p>
-        Alameda County Housing Portal is a project of the
-        <br />
-        <a
-          href="https://www.acgov.org/cda/hcd/"
-          target="_blank"
-        >
-          Alameda County - Housing and Community Development (HCD) Department
-        </a>
-      </p>
-    </React.Fragment>
-  }
-  links={
-    Array [
-      Object {
-        "href": "#",
-        "title": "Policy",
-      },
-    ]
-  }
-  logo={
-    <img
-      alt="Alameda Logo"
-      src="/images/logo_glyph.svg"
-    />
-  }
->
+<SiteFooter>
   <footer
     className="site-footer"
   >
-    <div
-      className="footer-logo"
-    >
-      <img
-        alt="Alameda Logo"
-        src="/images/logo_glyph.svg"
-      />
-    </div>
-    <div
-      className="footer-credits"
-    >
-      <p>
-        Alameda County Housing Portal is a project of the
-        <br />
-        <a
-          href="https://www.acgov.org/cda/hcd/"
-          target="_blank"
-        >
-          Alameda County - Housing and Community Development (HCD) Department
-        </a>
-      </p>
-    </div>
-    <section
-      className="footer-sock"
-    >
+    <FooterSection>
       <div
-        className="footer-sock-inner"
+        className="footer-row "
       >
-        <p
-          className="footer-copyright"
+        <div
+          className="footer-row__section pb-8"
         >
-          Alameda County © 2020 • All Rights Reserved
-        </p>
-        <nav
-          className="footer-nav"
+          <img
+            alt="Alameda Logo"
+            src="/images/logo_glyph.svg"
+          />
+        </div>
+      </div>
+    </FooterSection>
+    <FooterSection>
+      <div
+        className="footer-row "
+      >
+        <div
+          className="footer-row__section pb-8"
         >
-          <LocalizedLink
-            href="#"
-            key="0"
+          <p>
+            Alameda County Housing Portal is a project of the
+            <br />
+            <a
+              href="https://www.acgov.org/cda/hcd/"
+              target="_blank"
+            >
+              Alameda County - Housing and Community Development (HCD) Department
+            </a>
+          </p>
+        </div>
+      </div>
+    </FooterSection>
+    <FooterNav
+      copyright="Alameda County © 2020 • All Rights Reserved"
+    >
+      <section
+        className="footer-sock"
+      >
+        <div
+          className="footer-sock-inner"
+        >
+          <p
+            className="footer-copyright"
           >
-            <Link
+            Alameda County © 2020 • All Rights Reserved
+          </p>
+          <nav
+            className="footer-nav"
+          >
+            <LocalizedLink
               href="#"
             >
-              <a
+              <Link
                 href="#"
-                onClick={[Function]}
-                onMouseEnter={[Function]}
               >
-                Policy
-              </a>
-            </Link>
-          </LocalizedLink>
-        </nav>
-      </div>
-    </section>
-    <section
-      className="footer-sole"
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Policy
+                </a>
+              </Link>
+            </LocalizedLink>
+          </nav>
+        </div>
+      </section>
+    </FooterNav>
+    <FooterSection
+      className="bg-black"
+      small={true}
     >
-      <ExygyFooter>
-        <span>
-          made with ❤️ by
-           
-          <a
-            aria-label="Opens in new window"
-            href="http://exygy.com"
-            target="_blank"
-          >
-            exygy
-          </a>
-        </span>
-      </ExygyFooter>
-    </section>
+      <div
+        className="footer-row bg-black"
+      >
+        <div
+          className="footer-row__section py-2"
+        >
+          <ExygyFooter>
+            <span>
+              made with ❤️ by
+               
+              <a
+                aria-label="Opens in new window"
+                href="http://exygy.com"
+                target="_blank"
+              >
+                exygy
+              </a>
+            </span>
+          </ExygyFooter>
+        </div>
+      </div>
+    </FooterSection>
   </footer>
 </SiteFooter>
 `;
