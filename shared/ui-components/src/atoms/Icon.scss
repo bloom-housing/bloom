@@ -37,3 +37,7 @@
 .ui-white svg use {
   fill: #fff !important;
 }
+
+.bg-alert-light svg use {
+  fill: $tailwind-alert;
+}

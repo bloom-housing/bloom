@@ -43,6 +43,7 @@
     "react-accessible-accordion": "^3.0.0",
     "react-docgen-typescript-loader": "^3.6.0",
     "react-dom": "^16.12.0",
+    "react-inlinesvg": "^1.2.0",
     "react-is": "^16.12.0",
     "react-media": "^1.10.0",
     "react-test-renderer": "^16.12.0",
