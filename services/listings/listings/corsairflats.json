@@ -35,10 +35,10 @@
   "imageUrl": "/images/cosairflats.jpg",
   "programRules": "Rent shown is based on 2019 guidelines from the California Tax Credit Allocation Committee. These figures may change during lease up in Spring when the new 2020 rates go into effect.",
   "externalId": null,
-  "waitlistMaxSize": null,
+  "waitlistMaxSize": 500,
   "name": "Corsair Flats",
   "neighborhood": "Alameda Point",
-  "waitlistCurrentSize": null,
+  "waitlistCurrentSize": 0,
   "petPolicy": null,
   "prioritiesDescriptor": null,
   "requiredDocuments": "Listed on FAQ & interview letter if selected from the lottery for interview.",
@@ -76,7 +76,7 @@
   "rentalHistory": "Will be reviewed for eviction history.",
   "preferences": [
     ],
-  "buildingTotalUnits": 50,
+  "buildingTotalUnits": 29,
   "units": [
     {
       "id": "MFaowAxySJW3utZBPNxr1",
@@ -775,6 +775,5 @@
       "monthlyRentAsPercentOfIncome": null
     }
   ],
-  "totalUnits": 50,
-  "unitsAvailable": 25
+  "unitsAvailable": 29
 }
