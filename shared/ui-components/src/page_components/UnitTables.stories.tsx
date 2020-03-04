@@ -1,10 +1,15 @@
 import * as React from "react"
-import { storiesOf } from "@storybook/react"
+import { withA11y } from "@storybook/addon-a11y"
 import UnitTables from "./UnitTables"
 import { BasicTable } from "../tables/BasicTable"
 import { GroupedTable } from "../tables/GroupedTable"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import { unitSummariesTable, groupNonReservedAndReservedSummaries } from "../helpers/tableSummaries"
+
+export default {
+  title: "Tables|UnitSummaryTables",
+  decorators: [withA11y]
+}
 
 const archer = Object.assign({}, Archer) as any
 
@@ -114,12 +119,12 @@ const summaries = {
   }
 }
 
-storiesOf("Tables|UnitTables", module).add("show units list", () => {
+export const showUnitsList = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   // @ts-ignore
   return <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
-})
+}
 
 const unitSummariesHeaders = {
   unitType: "Unit Type",
@@ -135,7 +140,7 @@ const amiValues = summaries.amiPercentages
   })
   .sort()
 
-storiesOf("Tables|UnitSummaryTables", module).add("show units summaries", () => {
+export const showUnitsSummaries = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
     <div>
@@ -159,42 +164,39 @@ storiesOf("Tables|UnitSummaryTables", module).add("show units summaries", () => 
     </div>
   )
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
-})
+}
 
-storiesOf("Tables|UnitSummaryTables", module).add(
-  "show units summaries grouped by reserved types",
-  () => {
-    /* eslint-disable @typescript-eslint/ban-ts-ignore */
-    return (
-      <div>
-        {amiValues.map(percent => {
-          const byAMI = summaries.byAMI.find(item => {
-            return parseInt(item.percent, 10) == percent
-          })
+export const showUnitsSummariesGroupedByReservedTypes = () => {
+  /* eslint-disable @typescript-eslint/ban-ts-ignore */
+  return (
+    <div>
+      {amiValues.map(percent => {
+        const byAMI = summaries.byAMI.find(item => {
+          return parseInt(item.percent, 10) == percent
+        })
 
-          if (byAMI) {
-            const groupedUnits = groupNonReservedAndReservedSummaries(
-              // @ts-ignore
-              byAMI.byNonReservedUnitType,
-              byAMI.byReservedType
-            )
+        if (byAMI) {
+          const groupedUnits = groupNonReservedAndReservedSummaries(
+            // @ts-ignore
+            byAMI.byNonReservedUnitType,
+            byAMI.byReservedType
+          )
 
-            return (
-              <div>
-                <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
-                <GroupedTable
-                  headers={unitSummariesHeaders}
-                  data={groupedUnits}
-                  responsiveCollapse={true}
-                />
-              </div>
-            )
-          } else {
-            return null
-          }
-        })}
-      </div>
-    )
-    /* eslint-enable @typescript-eslint/ban-ts-ignore */
-  }
-)
+          return (
+            <div>
+              <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+              <GroupedTable
+                headers={unitSummariesHeaders}
+                data={groupedUnits}
+                responsiveCollapse={true}
+              />
+            </div>
+          )
+        } else {
+          return null
+        }
+      })}
+    </div>
+  )
+  /* eslint-enable @typescript-eslint/ban-ts-ignore */
+}

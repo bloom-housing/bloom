@@ -1,5 +1,15 @@
-.preferences-list_item--title-only {
-  .preferences-list_number {
+.preferences-list__item {
+  .info-card__title {
+    @apply mb-0;
+    @apply ml-4;
+    @screen md {
+      @apply ml-2;
+    }
+  }
+}
+
+.preferences-list__item--title-only {
+  .preferences-list__number {
     margin-top: -10px;
   }
   .info-card__title {
@@ -8,11 +18,12 @@
   }
 }
 
-.preferences-list_number {
+.preferences-list__number {
   @apply bg-white;
   @apply border-2;
   @apply border-primary;
   @apply text-primary;
+  @apply text-sm;
   border-radius: 50%;
   float: left;
   font-weight: 700;
@@ -34,7 +45,26 @@
   }
 }
 
-.preferences-list_links {
+.preferences-list__subtitle {
+  @apply text-gray-700;
+  @apply text-tiny;
+  @apply ml-4;
+
+  @screen md {
+    @apply ml-2;
+  }
+}
+
+.preferences-list__description {
+  @apply text-gray-700;
+  @apply text-sm;
+  @apply mt-3;
+}
+
+.preferences-list__links {
+  @apply text-tiny;
+  @apply mt-3;
+
   span {
     margin-right: 1rem;
   }

@@ -1,843 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Tables|UnitSummaryTables show units summaries 1`] = `
-<div>
-  <div>
-    <h2
-      className="mt-4 mb-2"
-    >
-      30
-      % AMI Unit
-    </h2>
-    <Component
-      data={
-        Array [
-          Object {
-            "availability": <React.Fragment>
-              <React.Fragment>
-                <strong>
-                  16
-                </strong>
-                 
-                units
-              </React.Fragment>
-            </React.Fragment>,
-            "minimumIncome": <React.Fragment>
-              <strong>
-                $1,438
-              </strong>
-              /month
-            </React.Fragment>,
-            "rent": <React.Fragment>
-              <strong>
-                $719
-              </strong>
-              /month
-            </React.Fragment>,
-            "unitType": <strong>
-              Studio
-            </strong>,
-          },
-        ]
-      }
-      headers={
-        Object {
-          "availability": "Availability",
-          "minimumIncome": "Minimum Income",
-          "rent": "Rent",
-          "unitType": "Unit Type",
-        }
-      }
-      responsiveCollapse={true}
-    >
-      <div
-        style={
-          Object {
-            "overflowX": "auto",
-          }
-        }
-      >
-        <table
-          className="w-full text-sm responsive-collapse"
-        >
-          <thead>
-            <Component>
-              <tr>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Unit Type
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Minimum Income
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Rent
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Availability
-                  </th>
-                </Component>
-              </tr>
-            </Component>
-          </thead>
-          <tbody>
-            <Component
-              id="row-"
-              key=""
-            >
-              <tr
-                id="row-"
-              >
-                <Component
-                  headerLabel="Unit Type"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Unit Type"
-                  >
-                    <strong>
-                      Studio
-                    </strong>
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Minimum Income"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Minimum Income"
-                  >
-                    <strong>
-                      $1,438
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Rent"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Rent"
-                  >
-                    <strong>
-                      $719
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Availability"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Availability"
-                  >
-                    <strong>
-                      16
-                    </strong>
-                     
-                    units
-                  </td>
-                </Component>
-              </tr>
-            </Component>
-          </tbody>
-        </table>
-      </div>
-    </Component>
-  </div>
-  <div>
-    <h2
-      className="mt-4 mb-2"
-    >
-      45
-      % AMI Unit
-    </h2>
-    <Component
-      data={
-        Array [
-          Object {
-            "availability": <React.Fragment>
-              <React.Fragment>
-                <strong>
-                  24
-                </strong>
-                 
-                units
-              </React.Fragment>
-            </React.Fragment>,
-            "minimumIncome": <React.Fragment>
-              <strong>
-                $2,208
-              </strong>
-              /month
-            </React.Fragment>,
-            "rent": <React.Fragment>
-              <strong>
-                $1,104
-              </strong>
-              /month
-            </React.Fragment>,
-            "unitType": <strong>
-              Studio
-            </strong>,
-          },
-        ]
-      }
-      headers={
-        Object {
-          "availability": "Availability",
-          "minimumIncome": "Minimum Income",
-          "rent": "Rent",
-          "unitType": "Unit Type",
-        }
-      }
-      responsiveCollapse={true}
-    >
-      <div
-        style={
-          Object {
-            "overflowX": "auto",
-          }
-        }
-      >
-        <table
-          className="w-full text-sm responsive-collapse"
-        >
-          <thead>
-            <Component>
-              <tr>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Unit Type
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Minimum Income
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Rent
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Availability
-                  </th>
-                </Component>
-              </tr>
-            </Component>
-          </thead>
-          <tbody>
-            <Component
-              id="row-"
-              key=""
-            >
-              <tr
-                id="row-"
-              >
-                <Component
-                  headerLabel="Unit Type"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Unit Type"
-                  >
-                    <strong>
-                      Studio
-                    </strong>
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Minimum Income"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Minimum Income"
-                  >
-                    <strong>
-                      $2,208
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Rent"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Rent"
-                  >
-                    <strong>
-                      $1,104
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Availability"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Availability"
-                  >
-                    <strong>
-                      24
-                    </strong>
-                     
-                    units
-                  </td>
-                </Component>
-              </tr>
-            </Component>
-          </tbody>
-        </table>
-      </div>
-    </Component>
-  </div>
-</div>
-`;
-
-exports[`Storyshots Tables|UnitSummaryTables show units summaries grouped by reserved types 1`] = `
-<div>
-  <div>
-    <h2
-      className="mt-4 mb-2"
-    >
-      30
-      % AMI Unit
-    </h2>
-    <Component
-      data={
-        Array [
-          Object {
-            "data": Array [
-              Object {
-                "availability": <React.Fragment>
-                  <React.Fragment>
-                    <strong>
-                      16
-                    </strong>
-                     
-                    units
-                  </React.Fragment>
-                </React.Fragment>,
-                "minimumIncome": <React.Fragment>
-                  <strong>
-                    $1,438
-                  </strong>
-                  /month
-                </React.Fragment>,
-                "rent": <React.Fragment>
-                  <strong>
-                    $719
-                  </strong>
-                  /month
-                </React.Fragment>,
-                "unitType": <strong>
-                  Studio
-                </strong>,
-              },
-            ],
-          },
-        ]
-      }
-      headers={
-        Object {
-          "availability": "Availability",
-          "minimumIncome": "Minimum Income",
-          "rent": "Rent",
-          "unitType": "Unit Type",
-        }
-      }
-      responsiveCollapse={true}
-    >
-      <div
-        style={
-          Object {
-            "overflowX": "auto",
-          }
-        }
-      >
-        <table
-          className="w-full text-sm responsive-collapse"
-        >
-          <thead>
-            <Component>
-              <tr>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Unit Type
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Minimum Income
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Rent
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Availability
-                  </th>
-                </Component>
-              </tr>
-            </Component>
-          </thead>
-          <tbody>
-            <Component
-              className="group-undefined"
-              id="row-"
-              key=""
-            >
-              <tr
-                className="group-undefined"
-                id="row-"
-              >
-                <Component
-                  headerLabel="Unit Type"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Unit Type"
-                  >
-                    <strong>
-                      Studio
-                    </strong>
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Minimum Income"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Minimum Income"
-                  >
-                    <strong>
-                      $1,438
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Rent"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Rent"
-                  >
-                    <strong>
-                      $719
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Availability"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Availability"
-                  >
-                    <strong>
-                      16
-                    </strong>
-                     
-                    units
-                  </td>
-                </Component>
-              </tr>
-            </Component>
-          </tbody>
-        </table>
-      </div>
-    </Component>
-  </div>
-  <div>
-    <h2
-      className="mt-4 mb-2"
-    >
-      45
-      % AMI Unit
-    </h2>
-    <Component
-      data={
-        Array [
-          Object {
-            "data": Array [
-              Object {
-                "availability": <React.Fragment>
-                  <React.Fragment>
-                    <strong>
-                      24
-                    </strong>
-                     
-                    units
-                  </React.Fragment>
-                </React.Fragment>,
-                "minimumIncome": <React.Fragment>
-                  <strong>
-                    $2,208
-                  </strong>
-                  /month
-                </React.Fragment>,
-                "rent": <React.Fragment>
-                  <strong>
-                    $1,104
-                  </strong>
-                  /month
-                </React.Fragment>,
-                "unitType": <strong>
-                  Studio
-                </strong>,
-              },
-            ],
-          },
-          Object {
-            "className": "reserved",
-            "data": Array [
-              Object {
-                "availability": <React.Fragment>
-                  <React.Fragment>
-                    <strong>
-                      1
-                    </strong>
-                     
-                    unit
-                  </React.Fragment>
-                </React.Fragment>,
-                "minimumIncome": <React.Fragment>
-                  <strong>
-                    $2,208
-                  </strong>
-                  /month
-                </React.Fragment>,
-                "rent": <React.Fragment>
-                  <strong>
-                    $1,104
-                  </strong>
-                  /month
-                </React.Fragment>,
-                "unitType": <strong>
-                  Studio
-                </strong>,
-              },
-            ],
-            "header": <React.Fragment>
-              <span
-                className="reserved-icon"
-              >
-                ★
-              </span>
-               
-              Reserved for seniors
-            </React.Fragment>,
-          },
-        ]
-      }
-      headers={
-        Object {
-          "availability": "Availability",
-          "minimumIncome": "Minimum Income",
-          "rent": "Rent",
-          "unitType": "Unit Type",
-        }
-      }
-      responsiveCollapse={true}
-    >
-      <div
-        style={
-          Object {
-            "overflowX": "auto",
-          }
-        }
-      >
-        <table
-          className="w-full text-sm responsive-collapse"
-        >
-          <thead>
-            <Component>
-              <tr>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Unit Type
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Minimum Income
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Rent
-                  </th>
-                </Component>
-                <Component
-                  key=""
-                >
-                  <th
-                    className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
-                  >
-                    Availability
-                  </th>
-                </Component>
-              </tr>
-            </Component>
-          </thead>
-          <tbody>
-            <Component
-              className="group-undefined"
-              id="row-"
-              key=""
-            >
-              <tr
-                className="group-undefined"
-                id="row-"
-              >
-                <Component
-                  headerLabel="Unit Type"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Unit Type"
-                  >
-                    <strong>
-                      Studio
-                    </strong>
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Minimum Income"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Minimum Income"
-                  >
-                    <strong>
-                      $2,208
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Rent"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Rent"
-                  >
-                    <strong>
-                      $1,104
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Availability"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Availability"
-                  >
-                    <strong>
-                      24
-                    </strong>
-                     
-                    units
-                  </td>
-                </Component>
-              </tr>
-            </Component>
-            <Component
-              key=""
-            >
-              <tr>
-                <Component
-                  className="reserved"
-                  colSpan={4}
-                  key=""
-                >
-                  <td
-                    className="reserved"
-                    colSpan={4}
-                  >
-                    <span
-                      className="reserved-icon"
-                    >
-                      ★
-                    </span>
-                     
-                    Reserved for seniors
-                  </td>
-                </Component>
-              </tr>
-            </Component>
-            <Component
-              className="group-reserved"
-              id="row-"
-              key=""
-            >
-              <tr
-                className="group-reserved"
-                id="row-"
-              >
-                <Component
-                  headerLabel="Unit Type"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Unit Type"
-                  >
-                    <strong>
-                      Studio
-                    </strong>
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Minimum Income"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Minimum Income"
-                  >
-                    <strong>
-                      $2,208
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Rent"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Rent"
-                  >
-                    <strong>
-                      $1,104
-                    </strong>
-                    /month
-                  </td>
-                </Component>
-                <Component
-                  headerLabel="Availability"
-                  key=""
-                >
-                  <td
-                    className="p-5"
-                    data-label="Availability"
-                  >
-                    <strong>
-                      1
-                    </strong>
-                     
-                    unit
-                  </td>
-                </Component>
-              </tr>
-            </Component>
-          </tbody>
-        </table>
-      </div>
-    </Component>
-  </div>
-</div>
-`;
-
-exports[`Storyshots Tables|UnitTables show units list 1`] = `
+exports[`Storyshots Tables|UnitSummaryTables Show Units List 1`] = `
 <UnitTables
   unitSummaries={
     Array [
@@ -2501,7 +1664,7 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     key=""
                   >
                     <th
-                      className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
                     >
                       Unit #
                     </th>
@@ -2510,7 +1673,7 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     key=""
                   >
                     <th
-                      className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
                     >
                       Area
                     </th>
@@ -2519,7 +1682,7 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     key=""
                   >
                     <th
-                      className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
                     >
                       Baths
                     </th>
@@ -2528,7 +1691,7 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
                     key=""
                   >
                     <th
-                      className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600"
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
                     >
                       Floor
                     </th>
@@ -4881,4 +4044,841 @@ exports[`Storyshots Tables|UnitTables show units list 1`] = `
     </div>
   </div>
 </UnitTables>
+`;
+
+exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
+<div>
+  <div>
+    <h2
+      className="mt-4 mb-2"
+    >
+      30
+      % AMI Unit
+    </h2>
+    <Component
+      data={
+        Array [
+          Object {
+            "availability": <React.Fragment>
+              <React.Fragment>
+                <strong>
+                  16
+                </strong>
+                 
+                units
+              </React.Fragment>
+            </React.Fragment>,
+            "minimumIncome": <React.Fragment>
+              <strong>
+                $1,438
+              </strong>
+              /month
+            </React.Fragment>,
+            "rent": <React.Fragment>
+              <strong>
+                $719
+              </strong>
+              /month
+            </React.Fragment>,
+            "unitType": <strong>
+              Studio
+            </strong>,
+          },
+        ]
+      }
+      headers={
+        Object {
+          "availability": "Availability",
+          "minimumIncome": "Minimum Income",
+          "rent": "Rent",
+          "unitType": "Unit Type",
+        }
+      }
+      responsiveCollapse={true}
+    >
+      <div
+        style={
+          Object {
+            "overflowX": "auto",
+          }
+        }
+      >
+        <table
+          className="w-full text-sm responsive-collapse"
+        >
+          <thead>
+            <Component>
+              <tr>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Unit Type
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Minimum Income
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Rent
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Availability
+                  </th>
+                </Component>
+              </tr>
+            </Component>
+          </thead>
+          <tbody>
+            <Component
+              id="row-"
+              key=""
+            >
+              <tr
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $1,438
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $719
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      16
+                    </strong>
+                     
+                    units
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+          </tbody>
+        </table>
+      </div>
+    </Component>
+  </div>
+  <div>
+    <h2
+      className="mt-4 mb-2"
+    >
+      45
+      % AMI Unit
+    </h2>
+    <Component
+      data={
+        Array [
+          Object {
+            "availability": <React.Fragment>
+              <React.Fragment>
+                <strong>
+                  24
+                </strong>
+                 
+                units
+              </React.Fragment>
+            </React.Fragment>,
+            "minimumIncome": <React.Fragment>
+              <strong>
+                $2,208
+              </strong>
+              /month
+            </React.Fragment>,
+            "rent": <React.Fragment>
+              <strong>
+                $1,104
+              </strong>
+              /month
+            </React.Fragment>,
+            "unitType": <strong>
+              Studio
+            </strong>,
+          },
+        ]
+      }
+      headers={
+        Object {
+          "availability": "Availability",
+          "minimumIncome": "Minimum Income",
+          "rent": "Rent",
+          "unitType": "Unit Type",
+        }
+      }
+      responsiveCollapse={true}
+    >
+      <div
+        style={
+          Object {
+            "overflowX": "auto",
+          }
+        }
+      >
+        <table
+          className="w-full text-sm responsive-collapse"
+        >
+          <thead>
+            <Component>
+              <tr>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Unit Type
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Minimum Income
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Rent
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Availability
+                  </th>
+                </Component>
+              </tr>
+            </Component>
+          </thead>
+          <tbody>
+            <Component
+              id="row-"
+              key=""
+            >
+              <tr
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $2,208
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $1,104
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      24
+                    </strong>
+                     
+                    units
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+          </tbody>
+        </table>
+      </div>
+    </Component>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Reserved Types 1`] = `
+<div>
+  <div>
+    <h2
+      className="mt-4 mb-2"
+    >
+      30
+      % AMI Unit
+    </h2>
+    <Component
+      data={
+        Array [
+          Object {
+            "data": Array [
+              Object {
+                "availability": <React.Fragment>
+                  <React.Fragment>
+                    <strong>
+                      16
+                    </strong>
+                     
+                    units
+                  </React.Fragment>
+                </React.Fragment>,
+                "minimumIncome": <React.Fragment>
+                  <strong>
+                    $1,438
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "rent": <React.Fragment>
+                  <strong>
+                    $719
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "unitType": <strong>
+                  Studio
+                </strong>,
+              },
+            ],
+          },
+        ]
+      }
+      headers={
+        Object {
+          "availability": "Availability",
+          "minimumIncome": "Minimum Income",
+          "rent": "Rent",
+          "unitType": "Unit Type",
+        }
+      }
+      responsiveCollapse={true}
+    >
+      <div
+        style={
+          Object {
+            "overflowX": "auto",
+          }
+        }
+      >
+        <table
+          className="w-full text-sm responsive-collapse"
+        >
+          <thead>
+            <Component>
+              <tr>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Unit Type
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Minimum Income
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Rent
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Availability
+                  </th>
+                </Component>
+              </tr>
+            </Component>
+          </thead>
+          <tbody>
+            <Component
+              className="group-undefined"
+              id="row-"
+              key=""
+            >
+              <tr
+                className="group-undefined"
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $1,438
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $719
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      16
+                    </strong>
+                     
+                    units
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+          </tbody>
+        </table>
+      </div>
+    </Component>
+  </div>
+  <div>
+    <h2
+      className="mt-4 mb-2"
+    >
+      45
+      % AMI Unit
+    </h2>
+    <Component
+      data={
+        Array [
+          Object {
+            "data": Array [
+              Object {
+                "availability": <React.Fragment>
+                  <React.Fragment>
+                    <strong>
+                      24
+                    </strong>
+                     
+                    units
+                  </React.Fragment>
+                </React.Fragment>,
+                "minimumIncome": <React.Fragment>
+                  <strong>
+                    $2,208
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "rent": <React.Fragment>
+                  <strong>
+                    $1,104
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "unitType": <strong>
+                  Studio
+                </strong>,
+              },
+            ],
+          },
+          Object {
+            "className": "reserved",
+            "data": Array [
+              Object {
+                "availability": <React.Fragment>
+                  <React.Fragment>
+                    <strong>
+                      1
+                    </strong>
+                     
+                    unit
+                  </React.Fragment>
+                </React.Fragment>,
+                "minimumIncome": <React.Fragment>
+                  <strong>
+                    $2,208
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "rent": <React.Fragment>
+                  <strong>
+                    $1,104
+                  </strong>
+                  /month
+                </React.Fragment>,
+                "unitType": <strong>
+                  Studio
+                </strong>,
+              },
+            ],
+            "header": <React.Fragment>
+              <span
+                className="reserved-icon"
+              >
+                ★
+              </span>
+               
+              Reserved for seniors
+            </React.Fragment>,
+          },
+        ]
+      }
+      headers={
+        Object {
+          "availability": "Availability",
+          "minimumIncome": "Minimum Income",
+          "rent": "Rent",
+          "unitType": "Unit Type",
+        }
+      }
+      responsiveCollapse={true}
+    >
+      <div
+        style={
+          Object {
+            "overflowX": "auto",
+          }
+        }
+      >
+        <table
+          className="w-full text-sm responsive-collapse"
+        >
+          <thead>
+            <Component>
+              <tr>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Unit Type
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Minimum Income
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Rent
+                  </th>
+                </Component>
+                <Component
+                  key=""
+                >
+                  <th
+                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                  >
+                    Availability
+                  </th>
+                </Component>
+              </tr>
+            </Component>
+          </thead>
+          <tbody>
+            <Component
+              className="group-undefined"
+              id="row-"
+              key=""
+            >
+              <tr
+                className="group-undefined"
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $2,208
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $1,104
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      24
+                    </strong>
+                     
+                    units
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+            <Component
+              key=""
+            >
+              <tr>
+                <Component
+                  className="reserved"
+                  colSpan={4}
+                  key=""
+                >
+                  <td
+                    className="reserved"
+                    colSpan={4}
+                  >
+                    <span
+                      className="reserved-icon"
+                    >
+                      ★
+                    </span>
+                     
+                    Reserved for seniors
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+            <Component
+              className="group-reserved"
+              id="row-"
+              key=""
+            >
+              <tr
+                className="group-reserved"
+                id="row-"
+              >
+                <Component
+                  headerLabel="Unit Type"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Unit Type"
+                  >
+                    <strong>
+                      Studio
+                    </strong>
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Minimum Income"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Minimum Income"
+                  >
+                    <strong>
+                      $2,208
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Rent"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Rent"
+                  >
+                    <strong>
+                      $1,104
+                    </strong>
+                    /month
+                  </td>
+                </Component>
+                <Component
+                  headerLabel="Availability"
+                  key=""
+                >
+                  <td
+                    className="p-5"
+                    data-label="Availability"
+                  >
+                    <strong>
+                      1
+                    </strong>
+                     
+                    unit
+                  </td>
+                </Component>
+              </tr>
+            </Component>
+          </tbody>
+        </table>
+      </div>
+    </Component>
+  </div>
+</div>
 `;

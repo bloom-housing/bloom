@@ -1,8 +1,9 @@
 import * as React from "react"
-import LinkButton from "@bloom-housing/ui-components/src/atoms/LinkButton"
+import LinkButton from "../../atoms/LinkButton"
 import { Listing } from "@bloom-housing/core/src/listings"
 import moment from "moment"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
+import t from "../../helpers/translator"
+import { openDateState } from "../../helpers/state"
 import "./Hero.scss"
 
 export interface HeroProps {
@@ -13,27 +14,21 @@ export interface HeroProps {
   listings: Listing[]
 }
 
-const heroClasses = ["hero"]
-
 const listingOpen = (listing: Listing) => {
   return moment() < moment(listing.applicationDueDate)
 }
 
 const Hero = (props: HeroProps) => {
   let subHeader, styles
-  if (!props.listings.some(listingOpen)) {
-    subHeader = (
-      <h2 className="t-alt-sans text-gray-100 text-base mb-4">
-        {t("welcome.allApplicationClosed")}
-      </h2>
-    )
+  if (!props.listings.some(listingOpen) && !props.listings.some(openDateState)) {
+    subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
   }
   if (props.backgroundImage) {
     styles = { backgroundImage: `url(${props.backgroundImage})` }
   }
   return (
-    <div className={heroClasses.join(" ")} style={styles}>
-      <h1 className="hero__title mb-4">{props.title}</h1>
+    <div className="hero" style={styles}>
+      <h1 className="hero__title">{props.title}</h1>
       {subHeader}
       <LinkButton href={props.buttonLink}>{props.buttonTitle}</LinkButton>
     </div>

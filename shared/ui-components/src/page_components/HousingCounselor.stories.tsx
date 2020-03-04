@@ -1,21 +1,26 @@
 import * as React from "react"
-import { storiesOf } from "@storybook/react"
+import { withA11y } from "@storybook/addon-a11y"
 import HousingCounselor from "./HousingCounselor"
 
-storiesOf("PageComponents|HousingCounselor", module).add("with only required fields", () => (
-  <HousingCounselor counselor={{ name: "Counselor Name", languages: ["English"] }} />
-))
+export default {
+  title: "PageComponents|HousingCounselor",
+  decorators: [withA11y]
+}
 
-storiesOf("PageComponents|HousingCounselor", module).add("with multiple languages", () => (
+export const withOnlyRequiredFields = () => (
+  <HousingCounselor counselor={{ name: "Counselor Name", languages: ["English"] }} />
+)
+
+export const withMultipleLanguages = () => (
   <HousingCounselor
     counselor={{
       name: "Counselor Name",
       languages: ["English", "Spanish", "Chinese"]
     }}
   />
-))
+)
 
-storiesOf("PageComponents|HousingCounselor", module).add("with all fields", () => (
+export const withAllFields = () => (
   <HousingCounselor
     counselor={{
       name: "Counselor Name",
@@ -26,4 +31,4 @@ storiesOf("PageComponents|HousingCounselor", module).add("with all fields", () =
       phone: "123-456-7890"
     }}
   />
-))
+)

@@ -1069,7 +1069,7 @@ exports[`Storyshots Listing Sidebar|Application Status Due Soon 1`] = `
   }
 >
   <div
-    className="text-sm p-4 text-gray-800 bg-primary-light"
+    className="application-status text-sm p-4 text-gray-800 bg-primary-light"
   >
     Application Deadline
     : 
@@ -2147,7 +2147,7 @@ exports[`Storyshots Listing Sidebar|Application Status Open Soon 1`] = `
   }
 >
   <div
-    className="text-sm p-4 text-gray-800 bg-primary-light"
+    className="application-status text-sm p-4 text-gray-800 bg-primary-light"
   >
     Application Open Period
     : 
@@ -3225,7 +3225,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened Already 1`] = `
   }
 >
   <div
-    className="text-sm p-4 text-gray-800 bg-primary-light"
+    className="application-status text-sm p-4 text-gray-800 bg-primary-light"
   >
     Application Deadline
     : 
@@ -4303,7 +4303,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened With No Due 1`] = 
   }
 >
   <div
-    className="text-sm p-4 text-gray-800 bg-primary-light"
+    className="application-status text-sm p-4 text-gray-800 bg-primary-light"
   >
     Application Open Period
     : 

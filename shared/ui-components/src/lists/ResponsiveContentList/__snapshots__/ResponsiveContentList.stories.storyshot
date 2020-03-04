@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Sections|ResponsiveContentList with content items 1`] = `
+exports[`Storyshots Sections|ResponsiveContentList With Content Items 1`] = `
 <ResponsiveContentList>
   <Mobile>
     <Media

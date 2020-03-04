@@ -1,12 +1,17 @@
 import * as React from "react"
-import { storiesOf } from "@storybook/react"
+import { withA11y } from "@storybook/addon-a11y"
 import Apply from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import { Attachment } from "@bloom-housing/core/src/listings"
 
+export default {
+  title: "Listing Sidebar|Apply",
+  decorators: [withA11y]
+}
+
 const listing = Object.assign({}, Archer) as any
 
-storiesOf("Listing Sidebar|Apply", module).add("hard application deadline", () => {
+export const hardApplicationDeadline = () => {
   listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
   listing.acceptsPostmarkedApplications = false
 
@@ -14,9 +19,9 @@ storiesOf("Listing Sidebar|Apply", module).add("hard application deadline", () =
   // @ts-ignore
   return <Apply listing={listing} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
-})
+}
 
-storiesOf("Listing Sidebar|Apply", module).add("accepts postmarked applications", () => {
+export const acceptsPostmarkedApplications = () => {
   listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
   listing.acceptsPostmarkedApplications = true
   listing.postmarkedApplicationsReceivedByDate = "2021-12-05"
@@ -25,9 +30,9 @@ storiesOf("Listing Sidebar|Apply", module).add("accepts postmarked applications"
   // @ts-ignore
   return <Apply listing={listing} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
-})
+}
 
-storiesOf("Listing Sidebar|Apply", module).add("shows multiple download URLs", () => {
+export const showsMultipleDownloadURLs = () => {
   const listingWithAttachments = Object.assign({}, listing)
 
   const testAttachment1: Attachment = {
@@ -47,9 +52,9 @@ storiesOf("Listing Sidebar|Apply", module).add("shows multiple download URLs", (
   // @ts-ignore
   return <Apply listing={listingWithAttachments} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
-})
+}
 
-storiesOf("Listing Sidebar|Apply", module).add("link directly to external application", () => {
+export const linkDirectlyToExternalApplication = () => {
   const listingWithAttachments = Object.assign({}, listing)
 
   listingWithAttachments.acceptingOnlineApplications = true
@@ -68,4 +73,4 @@ storiesOf("Listing Sidebar|Apply", module).add("link directly to external applic
   // @ts-ignore
   return <Apply listing={listingWithAttachments} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
-})
+}

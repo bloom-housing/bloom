@@ -4,10 +4,7 @@ import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/Applicatio
 import "./ImageCard.scss"
 import { Listing } from "@bloom-housing/core/src/listings"
 
-const Flag = (props: any) => <div>{props.text}</div>
-
 interface ImageCardProps {
-  flag?: string
   imageUrl: string
   subtitle?: string
   title: string
@@ -21,19 +18,16 @@ const ImageCard = (props: ImageCardProps) => {
 
   if (props.listing) {
     statusLabel = (
-      <figcaption className="absolute inset-x-0 top-0 mt-2">
-        <span className="inline-block">
-          <ApplicationStatus listing={props.listing} vivid />
-        </span>
-      </figcaption>
+      <aside className="image-card__status">
+        <ApplicationStatus listing={props.listing} vivid />
+      </aside>
     )
   }
 
   const image = (
-    <figure className="relative">
+    <figure className="image-card">
       {props.imageUrl && <img src={props.imageUrl} alt={props.title} />}
       {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
-      {props.flag && <Flag text={props.flag} />}
       {statusLabel}
       <figcaption className="image-card__figcaption">
         <h2 className="image-card__title">{props.title}</h2>

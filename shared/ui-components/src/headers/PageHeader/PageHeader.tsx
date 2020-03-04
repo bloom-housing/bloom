@@ -7,12 +7,12 @@ interface PageHeaderProps {
 }
 
 const PageHeader = (props: PageHeaderProps) => {
-  const classNames = ["py-10", "px-5"]
+  const classNames = ["page-header", "py-10", "px-5"]
   if (props.inverse) {
-    classNames.push("bg-blue-700")
+    classNames.push("bg-primary-dark")
     classNames.push("text-white")
   } else {
-    classNames.push("bg-gray-300")
+    classNames.push("bg-primary-lighter")
   }
 
   return (

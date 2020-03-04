@@ -4,8 +4,17 @@
   @apply px-5;
   @apply text-white;
   @apply text-center;
+  background-size: cover;
 }
 
 .hero__title {
   @apply text-5xl;
+  @apply mb-4;
+}
+
+.hero__subtitle {
+  @apply font-alt-sans;
+  @apply text-gray-100;
+  @apply text-base;
+  @apply mb-4;
 }

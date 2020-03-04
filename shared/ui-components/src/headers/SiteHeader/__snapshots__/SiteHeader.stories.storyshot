@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Headers|SiteHeader standard 1`] = `
+exports[`Storyshots Headers|SiteHeader Standard 1`] = `
 <SiteHeader
   logoSrc="/images/logo_glyph.svg"
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
@@ -90,7 +90,7 @@ exports[`Storyshots Headers|SiteHeader standard 1`] = `
 </SiteHeader>
 `;
 
-exports[`Storyshots Headers|SiteHeader with dropdown and button 1`] = `
+exports[`Storyshots Headers|SiteHeader With Dropdown And Button 1`] = `
 <SiteHeader
   logoSrc="/images/logo_glyph.svg"
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."

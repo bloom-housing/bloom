@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Listing Sidebar|Apply accepts postmarked applications 1`] = `
+exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = `
 <Apply
   listing={
     Object {
@@ -1109,7 +1109,7 @@ exports[`Storyshots Listing Sidebar|Apply accepts postmarked applications 1`] = 
         className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-blue-700 font-semibold"
+          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
         >
           or
         </span>
@@ -1270,7 +1270,7 @@ exports[`Storyshots Listing Sidebar|Apply accepts postmarked applications 1`] = 
         className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
       >
         <span
-          className="bg-gray-100 relative -top px-1 uppercase text-blue-700 font-semibold"
+          className="bg-gray-100 relative -top px-1 uppercase text-primary-dark font-semibold"
         >
           or
         </span>
@@ -1345,7 +1345,7 @@ exports[`Storyshots Listing Sidebar|Apply accepts postmarked applications 1`] = 
 </Apply>
 `;
 
-exports[`Storyshots Listing Sidebar|Apply hard application deadline 1`] = `
+exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
 <Apply
   listing={
     Object {
@@ -2454,7 +2454,7 @@ exports[`Storyshots Listing Sidebar|Apply hard application deadline 1`] = `
         className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-blue-700 font-semibold"
+          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
         >
           or
         </span>
@@ -2615,7 +2615,7 @@ exports[`Storyshots Listing Sidebar|Apply hard application deadline 1`] = `
         className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
       >
         <span
-          className="bg-gray-100 relative -top px-1 uppercase text-blue-700 font-semibold"
+          className="bg-gray-100 relative -top px-1 uppercase text-primary-dark font-semibold"
         >
           or
         </span>
@@ -2690,7 +2690,7 @@ exports[`Storyshots Listing Sidebar|Apply hard application deadline 1`] = `
 </Apply>
 `;
 
-exports[`Storyshots Listing Sidebar|Apply link directly to external application 1`] = `
+exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 1`] = `
 <Apply
   listing={
     Object {
@@ -3801,7 +3801,7 @@ exports[`Storyshots Listing Sidebar|Apply link directly to external application 
         className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-blue-700 font-semibold"
+          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
         >
           or
         </span>
@@ -3876,7 +3876,7 @@ exports[`Storyshots Listing Sidebar|Apply link directly to external application 
 </Apply>
 `;
 
-exports[`Storyshots Listing Sidebar|Apply shows multiple download URLs 1`] = `
+exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
 <Apply
   listing={
     Object {
@@ -4996,7 +4996,7 @@ exports[`Storyshots Listing Sidebar|Apply shows multiple download URLs 1`] = `
         className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-blue-700 font-semibold"
+          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
         >
           or
         </span>
@@ -5157,7 +5157,7 @@ exports[`Storyshots Listing Sidebar|Apply shows multiple download URLs 1`] = `
         className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
       >
         <span
-          className="bg-gray-100 relative -top px-1 uppercase text-blue-700 font-semibold"
+          className="bg-gray-100 relative -top px-1 uppercase text-primary-dark font-semibold"
         >
           or
         </span>

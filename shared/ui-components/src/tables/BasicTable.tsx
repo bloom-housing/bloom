@@ -8,7 +8,7 @@ export const Row = (props: any) => (
 )
 
 export const HeaderCell = (props: any) => (
-  <th className="text-left uppercase bg-gray-200 p-5 font-semibold tracking-wider border-0 border-b border-blue-600">
+  <th className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary">
     {props.children}
   </th>
 )

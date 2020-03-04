@@ -3,7 +3,6 @@ import { withA11y } from "@storybook/addon-a11y"
 import Button from "./Button"
 
 export default {
-  component: Button,
   title: "Atoms|Button",
   decorators: [withA11y]
 }

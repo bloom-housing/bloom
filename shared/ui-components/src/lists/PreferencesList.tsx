@@ -12,27 +12,27 @@ const PreferencesList = (props: PreferencesListProps) => {
     const ordinalNumber = parseInt(preference.ordinal, 10)
     const ordinalSup = <sup>{preference.ordinal.replace(ordinalNumber.toString(), "")}</sup>
 
-    const itemClasses = ["preferences-list_item", "info-card"]
+    const itemClasses = ["preferences-list__item", "info-card"]
 
     if (!preference.subtitle && !preference.description && !preference.links) {
-      itemClasses.push("preferences-list_item--title-only")
+      itemClasses.push("preferences-list__item--title-only")
     }
 
     return (
       <li key={index} className={itemClasses.join(" ")}>
-        <div className="preferences-list_number text-sm">
+        <div className="preferences-list__number">
           {ordinalNumber}
           {ordinalSup}
         </div>
-        <h4 className="info-card__title mb-0 ml-4 md:ml-2">{preference.title}</h4>
+        <h4 className="info-card__title">{preference.title}</h4>
         {preference.subtitle && (
-          <div className="text-gray-700 text-tiny ml-4 md:ml-2">{preference.subtitle}</div>
+          <div className="preferences-list__subtitle">{preference.subtitle}</div>
         )}
         {preference.description && (
-          <div className="text-gray-700 text-sm mt-3">{preference.description}</div>
+          <div className="preferences-list__description">{preference.description}</div>
         )}
         {preference.links && (
-          <div className="preferences-list_links text-tiny mt-3">
+          <div className="preferences-list__links">
             {preference.links.map((link: PreferenceLink, linkIndex: number) => (
               <span key={linkIndex}>
                 <a href={link.url}>{link.title}</a>

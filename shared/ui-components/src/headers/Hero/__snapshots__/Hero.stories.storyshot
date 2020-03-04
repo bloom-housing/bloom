@@ -1,9 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots ListingGroup Show Listings Group 1`] = `
-<ListingsGroup
-  header="Header"
-  hideButtonText="Hide"
+exports[`Storyshots Headers|Hero With Background 1`] = `
+<Hero
+  backgroundImage="/images/banner.png"
+  buttonLink="/listings"
+  buttonTitle="Rental Listings"
+  listings={Array []}
+  title={
+    <React.Fragment>
+      Say Hello to Your Hero
+    </React.Fragment>
+  }
+>
+  <div
+    className="hero"
+    style={
+      Object {
+        "backgroundImage": "url(/images/banner.png)",
+      }
+    }
+  >
+    <h1
+      className="hero__title"
+    >
+      Say Hello to Your Hero
+    </h1>
+    <h2
+      className="hero__subtitle"
+    >
+      All applications are currently closed, but you can view closed listings.
+    </h2>
+    <LinkButton
+      href="/listings"
+    >
+      <LocalizedLink
+        className="button"
+        href="/listings"
+      >
+        <Link
+          href="/listings"
+        >
+          <a
+            className="button"
+            href="/listings"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Rental Listings
+          </a>
+        </Link>
+      </LocalizedLink>
+    </LinkButton>
+  </div>
+</Hero>
+`;
+
+exports[`Storyshots Headers|Hero With Listings 1`] = `
+<Hero
+  buttonLink="/listings"
+  buttonTitle="I am a Button"
   listings={
     Array [
       Object {
@@ -1201,61 +1256,90 @@ exports[`Storyshots ListingGroup Show Listings Group 1`] = `
       },
     ]
   }
-  showButtonText="Show"
+  title={
+    <React.Fragment>
+      Say Hello to Your Hero
+    </React.Fragment>
+  }
 >
   <div
-    className="border-t border-gray-450 mb-5"
+    className="hero"
   >
-    <div
-      className="flex flex-row flex-wrap max-w-5xl m-auto mt-6 mb-8 p-3"
+    <h1
+      className="hero__title"
     >
-      <div
-        className="hidden md:inline-block pt-2 pr-5"
+      Say Hello to Your Hero
+    </h1>
+    <LinkButton
+      href="/listings"
+    >
+      <LocalizedLink
+        className="button"
+        href="/listings"
       >
-        <Icon
-          size="xlarge"
-          symbol="clock"
+        <Link
+          href="/listings"
         >
-          <span
-            className="ui-icon ui-xlarge"
-          >
-            <svg>
-              <use
-                xlinkHref="#i-clock"
-              />
-            </svg>
-          </span>
-        </Icon>
-      </div>
-      <div
-        className="w-full md:w-7/12 flex items-center mb-4 md:mb-0"
-      >
-        <div
-          className="border-b-4 md:border-b-0 md:border-l-4 border-gray-600"
-        >
-          <h2
-            className="md:px-4 uppercase font-alt-sans font-black my-1 tracking-wider"
-          >
-            Header
-          </h2>
-        </div>
-      </div>
-      <div
-        className="w-full md:w-4/12 flex items-center"
-      >
-        <Button
-          className="w-full"
-          onClick={[Function]}
-        >
-          <button
-            className="button w-full"
+          <a
+            className="button"
+            href="/listings"
             onClick={[Function]}
+            onMouseEnter={[Function]}
           >
-            Show (2)
-          </button>
-        </Button>
-      </div>
-    </div>
+            I am a Button
+          </a>
+        </Link>
+      </LocalizedLink>
+    </LinkButton>
   </div>
-</ListingsGroup>
+</Hero>
+`;
+
+exports[`Storyshots Headers|Hero With No Listings 1`] = `
+<Hero
+  buttonLink="/listings"
+  buttonTitle="I am a Button"
+  listings={Array []}
+  title={
+    <React.Fragment>
+      Say Hello to Your Hero
+    </React.Fragment>
+  }
+>
+  <div
+    className="hero"
+  >
+    <h1
+      className="hero__title"
+    >
+      Say Hello to Your Hero
+    </h1>
+    <h2
+      className="hero__subtitle"
+    >
+      All applications are currently closed, but you can view closed listings.
+    </h2>
+    <LinkButton
+      href="/listings"
+    >
+      <LocalizedLink
+        className="button"
+        href="/listings"
+      >
+        <Link
+          href="/listings"
+        >
+          <a
+            className="button"
+            href="/listings"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            I am a Button
+          </a>
+        </Link>
+      </LocalizedLink>
+    </LinkButton>
+  </div>
+</Hero>
 `;

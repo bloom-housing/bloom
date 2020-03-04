@@ -1,5 +1,5 @@
 import Layout from "../layouts/application"
-import PageHeader from "@bloom-housing/ui-components/src/headers/page_header/page_header"
+import PageHeader from "@bloom-housing/ui-components/src/headers/PageHeader/PageHeader"
 import MarkdownSection from "@bloom-housing/ui-components/src/sections/markdown_section"
 import PageContent from "../page_content/disclaimer.mdx"
 

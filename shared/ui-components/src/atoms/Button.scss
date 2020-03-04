@@ -17,15 +17,15 @@
   @apply leading-snug;
 
   &:hover {
-    @apply bg-blue-700;
+    @apply bg-primary-dark;
     @apply text-white;
   }
 
   &.filled {
-    @apply bg-blue-700;
+    @apply bg-primary-dark;
     @apply text-white;
     &:hover {
-      @apply bg-blue-800;
+      @apply bg-primary-darker;
     }
   }
 
