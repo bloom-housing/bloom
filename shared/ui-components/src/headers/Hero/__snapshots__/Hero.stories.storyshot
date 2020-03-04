@@ -1,8 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Headers|Hero With Background 1`] = `
+<Hero
+  backgroundImage="/images/banner.png"
+  buttonLink="/listings"
+  buttonTitle="Rental Listings"
+  listings={Array []}
+  title={
+    <React.Fragment>
+      Say Hello to Your Hero
+    </React.Fragment>
+  }
+>
+  <div
+    className="hero"
+    style={
+      Object {
+        "backgroundImage": "url(/images/banner.png)",
+      }
+    }
+  >
+    <h1
+      className="hero__title"
+    >
+      Say Hello to Your Hero
+    </h1>
+    <h2
+      className="hero__subtitle"
+    >
+      All applications are currently closed, but you can view closed listings.
+    </h2>
+    <LinkButton
+      href="/listings"
+    >
+      <LocalizedLink
+        className="button"
+        href="/listings"
+      >
+        <Link
+          href="/listings"
+        >
+          <a
+            className="button"
+            href="/listings"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Rental Listings
+          </a>
+        </Link>
+      </LocalizedLink>
+    </LinkButton>
+  </div>
+</Hero>
+`;
+
 exports[`Storyshots Headers|Hero With Listings 1`] = `
 <Hero
-  buttonLink="/images/listing.jpg"
+  buttonLink="/listings"
   buttonTitle="I am a Button"
   listings={
     Array [
@@ -1216,18 +1271,18 @@ exports[`Storyshots Headers|Hero With Listings 1`] = `
       Say Hello to Your Hero
     </h1>
     <LinkButton
-      href="/images/listing.jpg"
+      href="/listings"
     >
       <LocalizedLink
         className="button"
-        href="/images/listing.jpg"
+        href="/listings"
       >
         <Link
-          href="/images/listing.jpg"
+          href="/listings"
         >
           <a
             className="button"
-            href="/images/listing.jpg"
+            href="/listings"
             onClick={[Function]}
             onMouseEnter={[Function]}
           >
@@ -1242,7 +1297,7 @@ exports[`Storyshots Headers|Hero With Listings 1`] = `
 
 exports[`Storyshots Headers|Hero With No Listings 1`] = `
 <Hero
-  buttonLink="/images/listing.jpg"
+  buttonLink="/listings"
   buttonTitle="I am a Button"
   listings={Array []}
   title={
@@ -1265,18 +1320,18 @@ exports[`Storyshots Headers|Hero With No Listings 1`] = `
       All applications are currently closed, but you can view closed listings.
     </h2>
     <LinkButton
-      href="/images/listing.jpg"
+      href="/listings"
     >
       <LocalizedLink
         className="button"
-        href="/images/listing.jpg"
+        href="/listings"
       >
         <Link
-          href="/images/listing.jpg"
+          href="/listings"
         >
           <a
             className="button"
-            href="/images/listing.jpg"
+            href="/listings"
             onClick={[Function]}
             onMouseEnter={[Function]}
           >

@@ -3,41 +3,208 @@
 exports[`Storyshots Site Footer Footer 1`] = `
 <SiteFooter>
   <footer
-    className="w-full bg-gray-800 text-white h-64 text-center pt-4"
+    className="site-footer"
   >
-    <div
-      className="max-w-5xl m-auto"
+    <FooterNav
+      copyright="Alameda County © 2020 • All Rights Reserved"
     >
-      <nav
-        className="mb-5"
+      <section
+        className="footer-sock"
       >
-        <Link
-          href="/disclaimer"
+        <div
+          className="footer-sock-inner"
         >
-          <a
-            className="ml-5 text-white"
-            href="/disclaimer"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
+          <p
+            className="footer-copyright"
           >
-            Disclaimer
-          </a>
-        </Link>
-        <Link
-          href="/privacy"
+            Alameda County © 2020 • All Rights Reserved
+          </p>
+          <nav
+            className="footer-nav"
+          >
+            <LocalizedLink
+              href="#"
+            >
+              <Link
+                href="#"
+              >
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Policy
+                </a>
+              </Link>
+            </LocalizedLink>
+          </nav>
+        </div>
+      </section>
+    </FooterNav>
+  </footer>
+</SiteFooter>
+`;
+
+exports[`Storyshots Site Footer With Logo 1`] = `
+<SiteFooter>
+  <footer
+    className="site-footer"
+  >
+    <FooterSection>
+      <div
+        className="footer-row "
+      >
+        <div
+          className="footer-row__section pb-8"
         >
-          <a
-            className="ml-5 text-white"
-            href="/privacy"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
+          <img
+            alt="Alameda Logo"
+            src="/images/logo_glyph.svg"
+          />
+        </div>
+      </div>
+    </FooterSection>
+    <FooterNav
+      copyright="Alameda County © 2020 • All Rights Reserved"
+    >
+      <section
+        className="footer-sock"
+      >
+        <div
+          className="footer-sock-inner"
+        >
+          <p
+            className="footer-copyright"
           >
-            Privacy Policy
-          </a>
-        </Link>
-      </nav>
-      This is a blank footer component, waiting to be implemented.
-    </div>
+            Alameda County © 2020 • All Rights Reserved
+          </p>
+          <nav
+            className="footer-nav"
+          >
+            <LocalizedLink
+              href="#"
+            >
+              <Link
+                href="#"
+              >
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Policy
+                </a>
+              </Link>
+            </LocalizedLink>
+          </nav>
+        </div>
+      </section>
+    </FooterNav>
+  </footer>
+</SiteFooter>
+`;
+
+exports[`Storyshots Site Footer With Logo And Credits 1`] = `
+<SiteFooter>
+  <footer
+    className="site-footer"
+  >
+    <FooterSection>
+      <div
+        className="footer-row "
+      >
+        <div
+          className="footer-row__section pb-8"
+        >
+          <img
+            alt="Alameda Logo"
+            src="/images/logo_glyph.svg"
+          />
+        </div>
+      </div>
+    </FooterSection>
+    <FooterSection>
+      <div
+        className="footer-row "
+      >
+        <div
+          className="footer-row__section pb-8"
+        >
+          <p>
+            Alameda County Housing Portal is a project of the
+            <br />
+            <a
+              href="https://www.acgov.org/cda/hcd/"
+              target="_blank"
+            >
+              Alameda County - Housing and Community Development (HCD) Department
+            </a>
+          </p>
+        </div>
+      </div>
+    </FooterSection>
+    <FooterNav
+      copyright="Alameda County © 2020 • All Rights Reserved"
+    >
+      <section
+        className="footer-sock"
+      >
+        <div
+          className="footer-sock-inner"
+        >
+          <p
+            className="footer-copyright"
+          >
+            Alameda County © 2020 • All Rights Reserved
+          </p>
+          <nav
+            className="footer-nav"
+          >
+            <LocalizedLink
+              href="#"
+            >
+              <Link
+                href="#"
+              >
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Policy
+                </a>
+              </Link>
+            </LocalizedLink>
+          </nav>
+        </div>
+      </section>
+    </FooterNav>
+    <FooterSection
+      className="bg-black"
+      small={true}
+    >
+      <div
+        className="footer-row bg-black"
+      >
+        <div
+          className="footer-row__section py-2"
+        >
+          <ExygyFooter>
+            <span>
+              made with ❤️ by
+               
+              <a
+                aria-label="Opens in new window"
+                href="http://exygy.com"
+                target="_blank"
+              >
+                exygy
+              </a>
+            </span>
+          </ExygyFooter>
+        </div>
+      </div>
+    </FooterSection>
   </footer>
 </SiteFooter>
 `;

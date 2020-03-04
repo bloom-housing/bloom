@@ -5,7 +5,14 @@ import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
 import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
 import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
 import SVG from "react-inlinesvg"
+import FooterNav from "@bloom-housing/ui-components/src/footers/FooterNav/FooterNav"
+import FooterSection from "@bloom-housing/ui-components/src/footers/FooterSection/FooterSection"
+import ExygyFooter from "@bloom-housing/ui-components/src/footers/ExygyFooter"
 
+const links = [
+  { href: "#", title: "Policy" },
+  { href: "/disclaimer", title: "Disclaimer" }
+]
 const Layout = props => (
   <div>
     <Head>
@@ -27,7 +34,16 @@ const Layout = props => (
       )}
     </SiteHeader>
     <main>{props.children}</main>
-    <SiteFooter />
+
+    <SiteFooter>
+      <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
+        <LocalizedLink href="#">Policy</LocalizedLink>
+        <LocalizedLink href="/disclaimer">Disclaimer</LocalizedLink>
+      </FooterNav>
+      <FooterSection className="bg-black" small>
+        <ExygyFooter />
+      </FooterSection>
+    </SiteFooter>
     <SVG src="/images/icons.svg" />
   </div>
 )

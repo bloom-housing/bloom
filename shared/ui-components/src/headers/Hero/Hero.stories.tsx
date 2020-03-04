@@ -18,7 +18,7 @@ export const withListings = () => (
   <Hero
     title={<>Say Hello to Your Hero</>}
     buttonTitle="I am a Button"
-    buttonLink="/images/listing.jpg"
+    buttonLink="/listings"
     listings={listings}
   />
 )
@@ -27,7 +27,17 @@ export const withNoListings = () => (
   <Hero
     title={<>Say Hello to Your Hero</>}
     buttonTitle="I am a Button"
-    buttonLink="/images/listing.jpg"
+    buttonLink="/listings"
     listings={[]}
+  />
+)
+
+export const withBackground = () => (
+  <Hero
+    title={<>Say Hello to Your Hero</>}
+    buttonTitle="Rental Listings"
+    buttonLink="/listings"
+    listings={[]}
+    backgroundImage="/images/banner.png"
   />
 )

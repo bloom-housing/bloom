@@ -6,8 +6,9 @@ import t from "../../helpers/translator"
 import { openDateState } from "../../helpers/state"
 import "./Hero.scss"
 
-interface HeroProps {
+export interface HeroProps {
   title: JSX.Element
+  backgroundImage?: string
   buttonTitle: string
   buttonLink: string
   listings: Listing[]
@@ -18,12 +19,15 @@ const listingOpen = (listing: Listing) => {
 }
 
 const Hero = (props: HeroProps) => {
-  let subHeader
+  let subHeader, styles
   if (!props.listings.some(listingOpen) && !props.listings.some(openDateState)) {
     subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
   }
+  if (props.backgroundImage) {
+    styles = { backgroundImage: `url(${props.backgroundImage})` }
+  }
   return (
-    <div className="hero">
+    <div className="hero" style={styles}>
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
       <LinkButton href={props.buttonLink}>{props.buttonTitle}</LinkButton>
