@@ -38,6 +38,10 @@
   fill: #fff !important;
 }
 
+a svg use {
+  fill: $tailwind-primary;
+}
+
 .bg-alert-light svg use {
   fill: $tailwind-alert;
 }

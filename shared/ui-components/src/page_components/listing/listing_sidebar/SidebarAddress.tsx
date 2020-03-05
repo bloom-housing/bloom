@@ -1,5 +1,6 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
+import Icon from "../../../atoms/Icon"
 import { Address } from "@bloom-housing/core/src/general"
 import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 
@@ -38,7 +39,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
           {mainAddress}
           <br />
           <a href={googleMapsHref} target="_blank">
-            Get Directions
+            <Icon symbol="map" size="medium" /> Get Directions
           </a>
         </p>
       )}
