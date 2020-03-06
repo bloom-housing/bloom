@@ -4072,13 +4072,13 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
               <strong>
                 $1,438
               </strong>
-              /month
+               per month
             </React.Fragment>,
             "rent": <React.Fragment>
               <strong>
                 $719
               </strong>
-              /month
+               per month
             </React.Fragment>,
             "unitType": <strong>
               Studio
@@ -4180,7 +4180,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
                     <strong>
                       $1,438
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4194,7 +4194,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
                     <strong>
                       $719
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4243,13 +4243,13 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
               <strong>
                 $2,208
               </strong>
-              /month
+               per month
             </React.Fragment>,
             "rent": <React.Fragment>
               <strong>
                 $1,104
               </strong>
-              /month
+               per month
             </React.Fragment>,
             "unitType": <strong>
               Studio
@@ -4351,7 +4351,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
                     <strong>
                       $2,208
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4365,7 +4365,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
                     <strong>
                       $1,104
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4421,13 +4421,13 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                   <strong>
                     $1,438
                   </strong>
-                  /month
+                   per month
                 </React.Fragment>,
                 "rent": <React.Fragment>
                   <strong>
                     $719
                   </strong>
-                  /month
+                   per month
                 </React.Fragment>,
                 "unitType": <strong>
                   Studio
@@ -4533,7 +4533,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                     <strong>
                       $1,438
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4547,7 +4547,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                     <strong>
                       $719
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4598,13 +4598,13 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                   <strong>
                     $2,208
                   </strong>
-                  /month
+                   per month
                 </React.Fragment>,
                 "rent": <React.Fragment>
                   <strong>
                     $1,104
                   </strong>
-                  /month
+                   per month
                 </React.Fragment>,
                 "unitType": <strong>
                   Studio
@@ -4629,13 +4629,13 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                   <strong>
                     $2,208
                   </strong>
-                  /month
+                   per month
                 </React.Fragment>,
                 "rent": <React.Fragment>
                   <strong>
                     $1,104
                   </strong>
-                  /month
+                   per month
                 </React.Fragment>,
                 "unitType": <strong>
                   Studio
@@ -4750,7 +4750,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                     <strong>
                       $2,208
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4764,7 +4764,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                     <strong>
                       $1,104
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4841,7 +4841,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                     <strong>
                       $2,208
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
@@ -4855,7 +4855,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Res
                     <strong>
                       $1,104
                     </strong>
-                    /month
+                     per month
                   </td>
                 </Component>
                 <Component
