@@ -7,18 +7,28 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
   const unitSummaries = summaries.map(unitSummary => {
     const unitPluralization =
       unitSummary.totalAvailable == 1 ? t("listings.unit") : t("listings.units")
+    const minIncome =
+      unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
+        <strong>{unitSummary.minIncomeRange.min}</strong>
+      ) : (
+        <>
+          <strong>{unitSummary.minIncomeRange.min}</strong> to{" "}
+          <strong>{unitSummary.minIncomeRange.max}</strong>
+        </>
+      )
+    const rent =
+      unitSummary.rentRange.min == unitSummary.rentRange.max ? (
+        <strong>{unitSummary.rentRange.min}</strong>
+      ) : (
+        <>
+          <strong>{unitSummary.rentRange.min}</strong> to{" "}
+          <strong>{unitSummary.rentRange.max}</strong>
+        </>
+      )
     return {
       unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
-      minimumIncome: (
-        <>
-          <strong>{unitSummary.minIncomeRange.min}</strong>/month
-        </>
-      ),
-      rent: (
-        <>
-          <strong>{unitSummary.rentRange.min}</strong>/month
-        </>
-      ),
+      minimumIncome: <>{minIncome} per month</>,
+      rent: <>{rent} per month</>,
       availability: (
         <>
           {unitSummary.totalAvailable > 0 ? (
