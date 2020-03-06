@@ -1,9 +1,14 @@
 import * as React from "react"
-import { storiesOf } from "@storybook/react"
+import { withA11y } from "@storybook/addon-a11y"
 import SiteHeader, { NavbarDropdown } from "./SiteHeader"
 import Button from "../../atoms/Button"
 
-storiesOf("Headers|SiteHeader", module).add("standard", () => (
+export default {
+  title: "Headers|SiteHeader",
+  decorators: [withA11y]
+}
+
+export const standard = () => (
   <SiteHeader
     logoSrc="/images/logo_glyph.svg"
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
@@ -13,9 +18,9 @@ storiesOf("Headers|SiteHeader", module).add("standard", () => (
       Hello World
     </a>
   </SiteHeader>
-))
+)
 
-storiesOf("Headers|SiteHeader", module).add("with dropdown and button", () => (
+export const withDropdownAndButton = () => (
   <SiteHeader
     logoSrc="/images/logo_glyph.svg"
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
@@ -49,4 +54,4 @@ storiesOf("Headers|SiteHeader", module).add("with dropdown and button", () => (
       </div>
     </div>
   </SiteHeader>
-))
+)

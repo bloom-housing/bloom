@@ -54,9 +54,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   }
 
   handleMenuToggle = () => {
-    this.setState((state: SiteHeaderState, props: SiteHeaderProps) => ({
-      active: !state.active
-    }))
+    this.setState({ active: !this.state.active })
   }
 
   hamburgerMenu() {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots PageComponents|HousingCounselor with all fields 1`] = `
+exports[`Storyshots PageComponents|HousingCounselor With All Fields 1`] = `
 <HousingCounselor
   counselor={
     Object {
@@ -28,7 +28,7 @@ exports[`Storyshots PageComponents|HousingCounselor with all fields 1`] = `
   >
     Language Services: 
     <span
-      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      className="inline-block bg-primary-lighter rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="English"
     >
       English
@@ -55,7 +55,7 @@ exports[`Storyshots PageComponents|HousingCounselor with all fields 1`] = `
 </HousingCounselor>
 `;
 
-exports[`Storyshots PageComponents|HousingCounselor with multiple languages 1`] = `
+exports[`Storyshots PageComponents|HousingCounselor With Multiple Languages 1`] = `
 <HousingCounselor
   counselor={
     Object {
@@ -80,19 +80,19 @@ exports[`Storyshots PageComponents|HousingCounselor with multiple languages 1`] 
   >
     Language Services: 
     <span
-      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      className="inline-block bg-primary-lighter rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="English"
     >
       English
     </span>
     <span
-      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      className="inline-block bg-primary-lighter rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="Spanish"
     >
       Spanish
     </span>
     <span
-      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      className="inline-block bg-primary-lighter rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="Chinese"
     >
       Chinese
@@ -101,7 +101,7 @@ exports[`Storyshots PageComponents|HousingCounselor with multiple languages 1`] 
 </HousingCounselor>
 `;
 
-exports[`Storyshots PageComponents|HousingCounselor with only required fields 1`] = `
+exports[`Storyshots PageComponents|HousingCounselor With Only Required Fields 1`] = `
 <HousingCounselor
   counselor={
     Object {
@@ -124,7 +124,7 @@ exports[`Storyshots PageComponents|HousingCounselor with only required fields 1`
   >
     Language Services: 
     <span
-      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+      className="inline-block bg-primary-lighter rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       key="English"
     >
       English

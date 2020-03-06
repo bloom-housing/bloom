@@ -1,31 +1,34 @@
 import * as React from "react"
-import { storiesOf } from "@storybook/react"
+import { withA11y } from "@storybook/addon-a11y"
 import LinkButton from "./LinkButton"
 
-storiesOf("Atoms|LinkButton", module).add("default", () => (
-  <LinkButton href="#">LinkButton w/Link</LinkButton>
-))
+export default {
+  title: "Atoms|LinkButton",
+  decorators: [withA11y]
+}
 
-storiesOf("Atoms|LinkButton", module).add("small", () => (
+export const standard = () => <LinkButton href="#">LinkButton w/Link</LinkButton>
+
+export const small = () => (
   <LinkButton small={true} href="#">
     Small LinkButton
   </LinkButton>
-))
+)
 
-storiesOf("Atoms|LinkButton", module).add("filled", () => (
+export const filled = () => (
   <LinkButton filled={true} href="#">
     Filled LinkButton
   </LinkButton>
-))
+)
 
-storiesOf("Atoms|LinkButton", module).add("small and filled", () => (
+export const SmallAndFilled = () => (
   <LinkButton small={true} filled={true} href="#">
     Small and Filled LinkButton
   </LinkButton>
-))
+)
 
-storiesOf("Atoms|LinkButton", module).add("regular case", () => (
+export const RegularCase = () => (
   <LinkButton normalCase={true} href="#">
     LinkButton (Normal Case)
   </LinkButton>
-))
+)

@@ -1,6 +1,14 @@
 @import "@bloom-housing/ui-components/styles/mixins.scss";
 
 .image-card {
+  @apply relative;
+}
+
+.image-card__status {
+  @apply absolute;
+  @apply left-0;
+  @apply top-0;
+  @apply mt-2;
 }
 
 .image-card__figcaption {
@@ -27,6 +35,14 @@
 }
 
 .image-card--leader {
+  @apply w-full;
+  @apply pt-8;
+
+  @screen md {
+    @apply w-2/3;
+    @apply pr-8;
+  }
+
   .image-card__title {
     @apply text-4xl;
   }
