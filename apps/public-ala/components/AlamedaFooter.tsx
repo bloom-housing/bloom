@@ -55,7 +55,7 @@ const AlamedaFooter = () => (
           >
             Give Feedback
           </a>
-          <a href="#">Contact</a>
+          <a href="mailto:achousingportal@acgov.org">Contact</a>
           <a href="https://www.acgov.org/government/legal.htm" target="_blank">
             Disclaimer
           </a>

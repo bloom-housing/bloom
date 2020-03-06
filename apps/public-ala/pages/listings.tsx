@@ -3,7 +3,7 @@ import Head from "next/head"
 import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import Layout from "../layouts/application"
-import PageHeader from "@bloom-housing/ui-components/src/headers/page_header/page_header"
+import PageHeader from "@bloom-housing/ui-components/src/headers/PageHeader/PageHeader"
 import ListingsList from "@bloom-housing/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
 import moment from "moment"
@@ -40,7 +40,7 @@ export default class extends Component<ListingsProps> {
     return this.props.openListings.length > 0 ? (
       <ListingsList listings={this.props.openListings} />
     ) : (
-      <div className="flex flex-row flex-wrap max-w-5xl m-auto mt-5 mb-12 text-center p-4 bg-gray-300">
+      <div className="flex flex-row flex-wrap max-w-5xl m-auto mt-5 mb-12 text-center p-4 bg-primary-lighter">
         <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
       </div>
     )
