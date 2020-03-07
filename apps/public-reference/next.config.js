@@ -36,7 +36,8 @@ module.exports = withMDX(
       env: {
         listingServiceUrl: LISTING_SERVICE_URL,
         mapBoxToken: MAPBOX_TOKEN,
-        housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL
+        housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
+        gaAnalytics: process.env.GA_ANALYTICS
       },
       sassLoaderOptions: {
         prependData: tailwindVars

@@ -8,10 +8,14 @@ import SVG from "react-inlinesvg"
 import FooterNav from "@bloom-housing/ui-components/src/footers/FooterNav/FooterNav"
 import FooterSection from "@bloom-housing/ui-components/src/footers/FooterSection/FooterSection"
 import ExygyFooter from "@bloom-housing/ui-components/src/footers/ExygyFooter"
+import ReactGA from "react-ga"
 
 export default class extends Component {
   public componentDidMount() {
-    //    console.log("DOING A THING!")
+    if (process.env.gaAnalytics) {
+      ReactGA.initialize(process.env.gaAnalytics)
+      ReactGA.pageview(window.location.pathname + window.location.search)
+    }
   }
 
   public render() {
