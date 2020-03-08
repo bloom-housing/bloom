@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Listing, Attachment, AttachmentType } from "@bloom-housing/core/src/listings"
+import { Listing, Attachment, AttachmentType } from "@bloom-housing/core"
 import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"

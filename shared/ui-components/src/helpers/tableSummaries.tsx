@@ -1,6 +1,6 @@
 import * as React from "react"
 import t from "./translator"
-import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core/src/units"
+import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core"
 import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {

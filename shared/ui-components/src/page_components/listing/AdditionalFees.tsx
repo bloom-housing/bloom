@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 export interface AdditionalFeesProps {

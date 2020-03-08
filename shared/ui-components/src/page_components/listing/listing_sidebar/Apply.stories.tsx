@@ -2,7 +2,7 @@ import * as React from "react"
 import { withA11y } from "@storybook/addon-a11y"
 import Apply from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import { Attachment } from "@bloom-housing/core/src/listings"
+import { Attachment } from "@bloom-housing/core"
 
 export default {
   title: "Listing Sidebar|Apply",

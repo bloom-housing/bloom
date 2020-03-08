@@ -1,5 +1,5 @@
 import moment from "moment"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 
 export const openDateState = (listing: Listing) => {
   const nowTime = moment()

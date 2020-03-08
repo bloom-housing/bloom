@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { HousingCounselor as Counselor } from "@bloom-housing/core/src/HousingCounselors"
+import { HousingCounselor as Counselor } from "@bloom-housing/core"
 
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 

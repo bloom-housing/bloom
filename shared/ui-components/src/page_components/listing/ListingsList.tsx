@@ -1,6 +1,6 @@
 import * as React from "react"
 import ImageCard from "../../cards/ImageCard"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import LinkButton from "../../atoms/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
 import {

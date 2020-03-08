@@ -1,9 +1,9 @@
 import * as React from "react"
 import ReactMapGL, { Marker } from "react-map-gl"
-import { Address } from "@bloom-housing/core/src/general"
+import { Address } from "@bloom-housing/core"
 import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 interface ListingMapProps {
   address: Address
   listing: Listing

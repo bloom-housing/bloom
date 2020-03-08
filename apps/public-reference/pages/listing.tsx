@@ -9,7 +9,7 @@ import {
 } from "@bloom-housing/ui-components/src/helpers/occupancyFormatting"
 import { groupNonReservedAndReservedSummaries } from "@bloom-housing/ui-components/src/helpers/tableSummaries"
 import Layout from "../layouts/application"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import {
   ListingDetails,
   ListingDetailItem

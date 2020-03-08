@@ -1,6 +1,6 @@
 import * as React from "react"
 import t from "./translator"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 
 export const occupancyTable = (listing: Listing) => {
   let occupancyData = [] as any

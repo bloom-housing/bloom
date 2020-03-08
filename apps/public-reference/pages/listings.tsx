@@ -7,7 +7,7 @@ import PageHeader from "@bloom-housing/ui-components/src/headers/PageHeader/Page
 import ListingsList from "@bloom-housing/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
 import moment from "moment"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import ListingsGroup from "@bloom-housing/ui-components/src/page_components/listing/ListingsGroup"
 import { openDateState } from "@bloom-housing/ui-components/src/helpers/state"
 
