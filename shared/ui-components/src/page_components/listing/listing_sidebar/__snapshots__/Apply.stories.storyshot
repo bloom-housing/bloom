@@ -1166,7 +1166,21 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
       <h3
@@ -1254,7 +1268,21 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
     </SidebarAddress>
@@ -1327,7 +1355,21 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
       <h3
@@ -2511,7 +2553,21 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
       <h3
@@ -2599,7 +2655,21 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
     </SidebarAddress>
@@ -2672,7 +2742,21 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
       <h3
@@ -3858,7 +3942,21 @@ exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
       <h3
@@ -5053,7 +5151,21 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
       <h3
@@ -5141,7 +5253,21 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
     </SidebarAddress>
@@ -5214,7 +5340,21 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
           href="https://www.google.com/maps/place/98 Archer Street, San Jose CA, 95112"
           target="_blank"
         >
-          Get Directions
+          <Icon
+            size="medium"
+            symbol="map"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-map"
+                />
+              </svg>
+            </span>
+          </Icon>
+           Get Directions
         </a>
       </p>
       <h3
