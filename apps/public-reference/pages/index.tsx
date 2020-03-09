@@ -6,7 +6,7 @@ import Layout from "../layouts/application"
 import Hero from "@bloom-housing/ui-components/src/headers/Hero/Hero"
 import MarkdownSection from "@bloom-housing/ui-components/src/sections/markdown_section"
 import PageContent from "../page_content/homepage.mdx"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import axios from "axios"
 
 interface IndexProps {

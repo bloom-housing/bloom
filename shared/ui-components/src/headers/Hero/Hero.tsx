@@ -1,6 +1,6 @@
 import * as React from "react"
 import LinkButton from "../../atoms/LinkButton"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import moment from "moment"
 import t from "../../helpers/translator"
 import { openDateState } from "../../helpers/state"

@@ -2,7 +2,7 @@ import * as React from "react"
 import SidebarAddress from "./SidebarAddress"
 import t from "../../../helpers/translator"
 import Icon from "../../../atoms/Icon"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import { openDateState } from "../../../helpers/state"
 
 interface LeasingAgentProps {

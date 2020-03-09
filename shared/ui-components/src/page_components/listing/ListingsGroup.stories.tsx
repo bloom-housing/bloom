@@ -3,7 +3,7 @@ import { withA11y } from "@storybook/addon-a11y"
 import ListingsGroup from "./ListingsGroup"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import Triton from "@bloom-housing/listings-service/listings/triton.json"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 
 export default {
   title: "ListingGroup",
