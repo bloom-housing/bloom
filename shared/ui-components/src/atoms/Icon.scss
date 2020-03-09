@@ -33,3 +33,15 @@
   width: 2.5rem;
   height: 2.5rem;
 }
+
+.ui-white svg use {
+  fill: #fff !important;
+}
+
+a svg use {
+  fill: $tailwind-primary;
+}
+
+.bg-alert-light svg use {
+  fill: $tailwind-alert;
+}

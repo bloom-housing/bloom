@@ -1,6 +1,7 @@
 import * as React from "react"
-import Address from "./SidebarAddress"
+import SidebarAddress from "./SidebarAddress"
 import t from "../../../helpers/translator"
+import Icon from "../../../atoms/Icon"
 import { Listing } from "@bloom-housing/core/src/listings"
 import { openDateState } from "../../../helpers/state"
 
@@ -25,14 +26,18 @@ const LeasingAgent = (props: LeasingAgentProps) => {
       <p className="text-gray-700">{listing.leasingAgentTitle}</p>
 
       <p className="mt-5">
-        <a href={phoneNumber}>Call {listing.leasingAgentPhone}</a>
+        <a href={phoneNumber}>
+          <Icon symbol="phone" size="medium" /> Call {listing.leasingAgentPhone}
+        </a>
       </p>
       <p className="text-sm text-gray-700">{t("leasingAgent.dueToHighCallVolume")}</p>
 
       <p className="my-5">
-        <a href={`mailto:${listing.leasingAgentEmail}`}>Email</a>
+        <a href={`mailto:${listing.leasingAgentEmail}`}>
+          <Icon symbol="mail" size="medium" /> Email
+        </a>
       </p>
-      <Address
+      <SidebarAddress
         address={listing.leasingAgentAddress}
         officeHours={listing.leasingAgentOfficeHours}
       />

@@ -1,13 +1,24 @@
 import * as React from "react"
+import { withA11y } from "@storybook/addon-a11y"
 import moment from "moment"
 import ApplicationStatus from "./ApplicationStatus"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
+import SVG from "react-inlinesvg"
 
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 // @ts-ignore
 export default {
   component: ApplicationStatus,
-  title: "Listing Sidebar|Application Status"
+  title: "Listing Sidebar|Application Status",
+  decorators: [
+    withA11y,
+    (storyFn: any) => (
+      <div>
+        {storyFn()}
+        <SVG src="/images/icons.svg" />
+      </div>
+    )
+  ]
 }
 /* eslint-enable @typescript-eslint/ban-ts-ignore */
 
@@ -16,7 +27,16 @@ listing.applicationOpenDate = ""
 listing.applicationDueDate = moment()
   .add(10, "days")
   .format()
-export const dueSoon = () => <ApplicationStatus listing={listing} />
+export const dueSoonAndVivid = () => <ApplicationStatus listing={listing} vivid={true} />
+
+const listingPast = Object.assign({}, Archer) as any
+listingPast.applicationOpenDate = ""
+listingPast.applicationDueDate = moment()
+  .subtract(10, "days")
+  .format()
+export const pastDueAndVivid = () => <ApplicationStatus listing={listingPast} vivid={true} />
+
+export const pastDue = () => <ApplicationStatus listing={listingPast} vivid={false} />
 
 const listing2 = Object.assign({}, Archer) as any
 listing2.applicationOpenDate = moment()
