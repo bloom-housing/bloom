@@ -20,4 +20,4 @@ const ListingDetailHeader = (props: ListingDetailHeaderProps) => (
   </header>
 )
 
-export default ListingDetailHeader
+export { ListingDetailHeader as default, ListingDetailHeader }

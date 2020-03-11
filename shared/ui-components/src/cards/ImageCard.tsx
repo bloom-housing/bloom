@@ -4,7 +4,7 @@ import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/Applicatio
 import "./ImageCard.scss"
 import { Listing } from "@bloom-housing/core"
 
-interface ImageCardProps {
+export interface ImageCardProps {
   imageUrl: string
   subtitle?: string
   title: string
@@ -49,4 +49,4 @@ const ImageCard = (props: ImageCardProps) => {
   return card
 }
 
-export default ImageCard
+export { ImageCard as default, ImageCard }

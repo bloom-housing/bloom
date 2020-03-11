@@ -31,4 +31,4 @@ const WhatToExpect = () => {
   )
 }
 
-export default WhatToExpect
+export { WhatToExpect as default, WhatToExpect }

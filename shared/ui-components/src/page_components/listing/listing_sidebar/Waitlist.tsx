@@ -44,4 +44,4 @@ const Waitlist = (props: any) => {
   )
 }
 
-export default Waitlist
+export { Waitlist as default, Waitlist }

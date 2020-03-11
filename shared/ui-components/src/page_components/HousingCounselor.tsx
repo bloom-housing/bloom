@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { HousingCounselor as Counselor } from "@bloom-housing/core"
 
-import t from "@bloom-housing/ui-components/src/helpers/translator"
+import t from "../helpers/translator"
 
 const LanguageLabel = (language: string) => {
   return (
@@ -50,4 +50,4 @@ const HousingCounselor = (props: { counselor: Counselor }) => {
   )
 }
 
-export default HousingCounselor
+export { HousingCounselor as default, HousingCounselor }

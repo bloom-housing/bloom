@@ -7,7 +7,7 @@ import ExygyFooter from "../ExygyFooter"
 import FooterSection from "../FooterSection/FooterSection"
 
 export default {
-  title: "Site Footer",
+  title: "Footers|Site Footer",
   parameters: {
     componentSubtitle: "Site-wide footer, shown on every page."
   },

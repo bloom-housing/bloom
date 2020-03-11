@@ -1,6 +1,6 @@
 import * as React from "react"
 
-interface ListSectionProps {
+export interface ListSectionProps {
   title: string
   subtitle: string
   children?: JSX.Element
@@ -19,4 +19,4 @@ const ListSection = (props: ListSectionProps) => (
   </li>
 )
 
-export default ListSection
+export { ListSection as default, ListSection }

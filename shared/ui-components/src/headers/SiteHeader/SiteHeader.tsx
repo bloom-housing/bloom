@@ -1,18 +1,18 @@
 import * as React from "react"
 import LocalizedLink from "../../atoms/LocalizedLink"
 
-interface SiteHeaderProps {
+export interface SiteHeaderProps {
   logoSrc: string
   title: string
   notice: string | React.ReactNode
   children: React.ReactNode
 }
 
-interface SiteHeaderState {
+export interface SiteHeaderState {
   active: boolean
 }
 
-interface NavbarDropdownProps {
+export interface NavbarDropdownProps {
   menuTitle: string
   children: React.ReactNode
 }
@@ -97,4 +97,4 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   }
 }
 
-export default SiteHeader
+export { SiteHeader as default, SiteHeader }

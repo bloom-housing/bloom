@@ -16,4 +16,4 @@ const FooterNav = (props: FooterNavProps) => (
   </section>
 )
 
-export default FooterNav
+export { FooterNav as default, FooterNav }

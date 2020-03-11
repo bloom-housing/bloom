@@ -12,7 +12,7 @@ interface LinkButtonProps {
   children: React.ReactNode
 }
 
-interface LinkProps {
+export interface LinkProps {
   href: string
   as?: string
   className?: string
@@ -35,4 +35,4 @@ const LinkButton = (props: LinkButtonProps) => {
   return <LocalizedLink {...linkProps}>{props.children}</LocalizedLink>
 }
 
-export default LinkButton
+export { LinkButton as default, LinkButton }

@@ -7,7 +7,7 @@ import LinkButton from "../../../atoms/LinkButton"
 import SidebarAddress from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 
-interface ApplyProps {
+export interface ApplyProps {
   listing: Listing
 }
 
@@ -145,4 +145,4 @@ const Apply = (props: ApplyProps) => {
   )
 }
 
-export default Apply
+export { Apply as default, Apply }

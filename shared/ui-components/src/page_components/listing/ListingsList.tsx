@@ -68,4 +68,4 @@ const ListingsList = (props: ListingsProps) => {
   return <>{listItems}</>
 }
 
-export default ListingsList
+export { ListingsList as default, ListingsList }

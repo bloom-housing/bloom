@@ -6,7 +6,7 @@ import Triton from "@bloom-housing/listings-service/listings/triton.json"
 import { Listing } from "@bloom-housing/core"
 
 export default {
-  title: "ListingGroup",
+  title: "PageComponents|ListingGroup",
   decorators: [withA11y]
 }
 

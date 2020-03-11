@@ -35,4 +35,4 @@ const Hero = (props: HeroProps) => {
   )
 }
 
-export default Hero
+export { Hero as default, Hero }
