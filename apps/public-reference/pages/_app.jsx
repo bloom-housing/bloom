@@ -1,7 +1,7 @@
 import React from "react"
 import App from "next/app"
 import "@bloom-housing/ui-components/styles/index.scss"
-import { addTranslation } from "@bloom-housing/ui-components/src/helpers/translator"
+import { addTranslation } from "@bloom-housing/ui-components"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
