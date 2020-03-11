@@ -61,12 +61,12 @@
   "applicationFee": "35.0",
   "criminalBackground": null,
   "leasingAgentAddress": {
-    "city": "",
-    "street": "",
-    "zipCode": "",
+    "city": "Alameda",
+    "street": "1041 W Midway Ave",
+    "zipCode": "94501",
     "state": "CA",
-    "latitude": null,
-    "longitude": null
+    "latitude": 37.785860,
+    "longitude": -122.304180
   },
   "leasingAgentEmail": "",
   "leasingAgentName": "Eden Housing Lease-Up Team",
