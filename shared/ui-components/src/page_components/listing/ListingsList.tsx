@@ -58,7 +58,7 @@ const ListingsList = (props: ListingsProps) => {
             )}
           </div>
           <LinkButton href={`listing/id=${listing.id}`} as={`/listing/${listing.id}`}>
-            See Details
+            {t("label.seeDetails")}
           </LinkButton>
         </div>
       </article>

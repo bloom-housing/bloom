@@ -57,7 +57,7 @@ const Apply = (props: ApplyProps) => {
 
         {openDateState(listing) && (
           <p className="mb-5 text-gray-700">
-            Application will be available for download and pick up on {openDate}
+            {t("listings.apply.applicationWillBeAvailableOn", { openDate: openDate })}
           </p>
         )}
         {!openDateState(listing) &&

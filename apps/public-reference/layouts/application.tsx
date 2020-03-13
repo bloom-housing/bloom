@@ -35,8 +35,8 @@ const Layout = props => (
 
     <SiteFooter>
       <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
-        <LocalizedLink href="#">Policy</LocalizedLink>
-        <LocalizedLink href="/disclaimer">Disclaimer</LocalizedLink>
+        <LocalizedLink href="/privacy">{t("pageTitle.privacy")}</LocalizedLink>
+        <LocalizedLink href="/disclaimer">{t("pageTitle.disclaimer")}</LocalizedLink>
       </FooterNav>
       <FooterSection className="bg-black" small>
         <ExygyFooter />
