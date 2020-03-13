@@ -1,5 +1,5 @@
 import * as React from "react"
-import t from "helpers/translator"
+import t from "../../../helpers/translator"
 
 const WhatToExpect = () => {
   return (
