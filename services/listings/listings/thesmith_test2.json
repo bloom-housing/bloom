@@ -1,7 +1,7 @@
 {
   "id": "Uvbk5qurpB2WI9V6WnNdH2",
   "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": false,
+  "acceptingApplicationsByPoBox": true,
   "acceptingOnlineApplications": false,
   "acceptsPostmarkedApplications": false,
   "postmarkedApplicationsReceivedByDate": "2020-12-31",
