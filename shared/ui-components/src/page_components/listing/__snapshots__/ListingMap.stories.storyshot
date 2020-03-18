@@ -1120,7 +1120,7 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
     dragPan={true}
     dragRotate={true}
     getCursor={[Function]}
-    height={0}
+    height={400}
     keyboard={true}
     latitude={37.36537}
     longitude={-121.91071}
@@ -1178,7 +1178,7 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
       }
     }
     visible={true}
-    width={0}
+    width="100%"
     zoom={8}
   >
     <div
@@ -1186,9 +1186,9 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
       style={
         Object {
           "cursor": "grab",
-          "height": 0,
+          "height": 400,
           "position": "relative",
-          "width": 0,
+          "width": "100%",
         }
       }
     >

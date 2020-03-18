@@ -20,13 +20,17 @@ interface Viewport {
 const ListingMap = (props: ListingMapProps) => {
   const address = props.address
   const [viewport, setViewPort] = React.useState({
-    width: "100%",
-    height: 400,
     latitude: address.latitude,
     longitude: address.longitude,
     zoom: 8
   } as Viewport)
-  const _onViewportChange = (viewport: Viewport) => setViewPort({ ...viewport })
+  const _onViewportChange = (viewport: Viewport) => {
+    // width and height need to be set here to work properly with
+    // the responsive wrappers
+    viewport.width = "100%"
+    viewport.height = 400
+    setViewPort({ ...viewport })
+  }
 
   return (
     <>
