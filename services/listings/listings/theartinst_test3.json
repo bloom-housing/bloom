@@ -119,8 +119,8 @@
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
-    }, 
-     {
+    },
+    {
       "id": "art9KuyILEo0uuNqti2s3",
       "amiPercentage": "40.0",
       "annualIncomeMin": "35130",
@@ -144,7 +144,7 @@
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti2s4",
       "amiPercentage": "40.0",
       "annualIncomeMin": "35130",
@@ -168,7 +168,7 @@
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti2s5",
       "amiPercentage": "40.0",
       "annualIncomeMin": "35130",
@@ -192,7 +192,7 @@
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti211",
       "amiPercentage": "50.0",
       "annualIncomeMin": "43912",
@@ -209,14 +209,14 @@
       "reservedType": null,
       "sqFeet": 550,
       "status": "available",
-      "unitType": "1bdrm",
+      "unitType": "oneBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti212",
       "amiPercentage": "50.0",
       "annualIncomeMin": "43912",
@@ -233,14 +233,14 @@
       "reservedType": null,
       "sqFeet": 550,
       "status": "waitlist",
-      "unitType": "1bdrm",
+      "unitType": "oneBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti213",
       "amiPercentage": "50.0",
       "annualIncomeMin": "43912",
@@ -257,14 +257,14 @@
       "reservedType": null,
       "sqFeet": 550,
       "status": "waitlist",
-      "unitType": "1bdrm",
+      "unitType": "oneBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti221",
       "amiPercentage": "60.0",
       "annualIncomeMin": "51000",
@@ -281,14 +281,14 @@
       "reservedType": null,
       "sqFeet": 550,
       "status": "waitlist",
-      "unitType": "1bdrm",
+      "unitType": "oneBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti222",
       "amiPercentage": "60.0",
       "annualIncomeMin": "51000",
@@ -305,14 +305,14 @@
       "reservedType": null,
       "sqFeet": 550,
       "status": "waitlist",
-      "unitType": "1bdrm",
+      "unitType": "oneBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 4,
       "monthlyRentAsPercentOfIncome": null
     },
-      {
+    {
       "id": "art9KuyILEo0uuNqti231",
       "amiPercentage": "60.0",
       "annualIncomeMin": "57190",
@@ -329,14 +329,14 @@
       "reservedType": null,
       "sqFeet": 750,
       "status": "avaliable",
-      "unitType": "2bdrm",
+      "unitType": "twoBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 3,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti232",
       "amiPercentage": "50.0",
       "annualIncomeMin": "51000",
@@ -353,14 +353,14 @@
       "reservedType": "development disability",
       "sqFeet": 750,
       "status": "waitlist",
-      "unitType": "2bdrm",
+      "unitType": "twoBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
       "amiChartId": 3,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": "art9KuyILEo0uuNqti233",
       "amiPercentage": "50.0",
       "annualIncomeMin": "51000",
@@ -377,7 +377,7 @@
       "reservedType": "development disability",
       "sqFeet": 750,
       "status": "waitlist",
-      "unitType": "2bdrm",
+      "unitType": "twoBdrm",
       "createdAt": "2020-01-21T21:20:05.783Z",
       "updatedAt": "2020-01-21T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH3",
