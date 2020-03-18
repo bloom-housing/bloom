@@ -8,13 +8,27 @@
 }
 
 .hero__title {
-  @apply text-5xl;
-  @apply mb-4;
+  @apply text-6xl;
+  @apply mb-8;
+  @apply mx-auto;
+  letter-spacing: -0.04em;
+  max-width: 41rem;
+
+  em {
+    font-style: normal;
+    text-decoration: underline;
+    -webkit-text-decoration-color: $tailwind-warn;
+    -moz-text-decoration-color: $tailwind-warn;
+    text-decoration-color: $tailwind-warn;
+  }
 }
 
-.hero__subtitle {
-  @apply font-alt-sans;
+h2.hero__subtitle {
+  @apply font-sans;
+  @apply text-lg;
   @apply text-gray-100;
-  @apply text-base;
-  @apply mb-4;
+  @apply mb-8;
+  @apply mx-auto;
+  max-width: 41rem;
+  text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
 }
