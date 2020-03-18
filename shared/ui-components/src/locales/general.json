@@ -6,6 +6,10 @@
     "alert": {
       "badRequest": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
       "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "message": "Uh oh, we can’t seem to find the page you’re looking for. Try going back to the previous page or click below to browse listings."
     }
   },
   "footer": {
