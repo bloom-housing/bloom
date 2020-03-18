@@ -12,7 +12,7 @@
     "street": "111 S Michigan Ave",
     "zipCode": "60603",
     "state": "IL",
-    "latitude": 41.879539
+    "latitude": 41.879539,
     "longitude": -87.624039
   },
   "applicationDueDate": "2020-12-31T15:22:57.000-07:00",
@@ -24,7 +24,7 @@
     "street": "111 S Michigan Ave",
     "zipCode": "60603",
     "state": "IL",
-    "latitude": 41.879539
+    "latitude": 41.879539,
     "longitude": -87.624039
   },
   "buildingSelectionCriteria": "Tenant Selection Criteria will be available to all applicants upon request.",
@@ -60,7 +60,7 @@
     "street": "111 S Michigan Ave",
     "zipCode": "60603",
     "state": "IL",
-    "latitude": 41.879539
+    "latitude": 41.879539,
     "longitude": -87.624039
   },
   "leasingAgentEmail": "smith@test.com",
