@@ -11,7 +11,8 @@ export interface HeroProps {
   backgroundImage?: string
   buttonTitle: string
   buttonLink: string
-  listings: Listing[]
+  listings?: Listing[]
+  children?: JSX.Element
 }
 
 const listingOpen = (listing: Listing) => {
@@ -20,8 +21,12 @@ const listingOpen = (listing: Listing) => {
 
 const Hero = (props: HeroProps) => {
   let subHeader, styles
-  if (!props.listings.some(listingOpen) && !props.listings.some(openDateState)) {
-    subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
+  if (props.listings) {
+    if (!props.listings.some(listingOpen) && !props.listings.some(openDateState)) {
+      subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
+    }
+  } else if (props.children) {
+    subHeader = <h2 className="hero__subtitle">{props.children}</h2>
   }
   if (props.backgroundImage) {
     styles = { backgroundImage: `url(${props.backgroundImage})` }
