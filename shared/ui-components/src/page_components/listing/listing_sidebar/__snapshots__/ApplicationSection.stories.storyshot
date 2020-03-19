@@ -2153,14 +2153,11 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
           <p
             className="text-tiny text-gray-800 pb-3"
           >
-            Submit an application for an open slot on the waitlist for 
-            35
-             
-            units.
+            Submit an application for an open slot on the waitlist for 48 units.
           </p>
           <ul>
             <WaitlistItem
-              text="current waitlist size"
+              text="Current Waitlist Size"
               value={300}
             >
               <li
@@ -2172,13 +2169,13 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
                   300
                 </span>
                 <span>
-                  current waitlist size
+                  Current Waitlist Size
                 </span>
               </li>
             </WaitlistItem>
             <WaitlistItem
-              class_name="font-semibold"
-              text="open waitlist slots"
+              className="font-semibold"
+              text="Open Waitlist Slots"
               value={0}
             >
               <li
@@ -2190,12 +2187,12 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
                   0
                 </span>
                 <span>
-                  open waitlist slots
+                  Open Waitlist Slots
                 </span>
               </li>
             </WaitlistItem>
             <WaitlistItem
-              text="final waitlist size"
+              text="Final Waitlist Size"
               value={300}
             >
               <li
@@ -2207,7 +2204,7 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
                   300
                 </span>
                 <span>
-                  final waitlist size
+                  Final Waitlist Size
                 </span>
               </li>
             </WaitlistItem>
@@ -3395,7 +3392,8 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
@@ -3497,7 +3495,8 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
         </SidebarAddress>
@@ -3584,7 +3583,8 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
@@ -5751,8 +5751,7 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
         <p
           className="mb-5 text-gray-700"
         >
-          Application will be available for download and pick up on 
-          April 6, 2030
+          Application will be available for download and pick up on April 6, 2030
         </p>
         <SubHeader
           text="Pick up an application"
@@ -5819,7 +5818,8 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
@@ -5921,7 +5921,8 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
         </SidebarAddress>
@@ -6008,7 +6009,8 @@ exports[`Storyshots Listing Sidebar|Application Section Open Soon 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
@@ -8181,14 +8183,11 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
           <p
             className="text-tiny text-gray-800 pb-3"
           >
-            Submit an application for an open slot on the waitlist for 
-            35
-             
-            units.
+            Submit an application for an open slot on the waitlist for 48 units.
           </p>
           <ul>
             <WaitlistItem
-              text="current waitlist size"
+              text="Current Waitlist Size"
               value={300}
             >
               <li
@@ -8200,13 +8199,13 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
                   300
                 </span>
                 <span>
-                  current waitlist size
+                  Current Waitlist Size
                 </span>
               </li>
             </WaitlistItem>
             <WaitlistItem
-              class_name="font-semibold"
-              text="open waitlist slots"
+              className="font-semibold"
+              text="Open Waitlist Slots"
               value={0}
             >
               <li
@@ -8218,12 +8217,12 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
                   0
                 </span>
                 <span>
-                  open waitlist slots
+                  Open Waitlist Slots
                 </span>
               </li>
             </WaitlistItem>
             <WaitlistItem
-              text="final waitlist size"
+              text="Final Waitlist Size"
               value={300}
             >
               <li
@@ -8235,7 +8234,7 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
                   300
                 </span>
                 <span>
-                  final waitlist size
+                  Final Waitlist Size
                 </span>
               </li>
             </WaitlistItem>
@@ -9423,7 +9422,8 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
@@ -9525,7 +9525,8 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
         </SidebarAddress>
@@ -9612,7 +9613,8 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
@@ -11779,8 +11781,7 @@ exports[`Storyshots Listing Sidebar|Application Section Opened With No Due 1`] =
         <p
           className="mb-5 text-gray-700"
         >
-          Application will be available for download and pick up on 
-          March 17, 2030
+          Application will be available for download and pick up on March 17, 2030
         </p>
         <SubHeader
           text="Pick up an application"
@@ -11847,7 +11848,8 @@ exports[`Storyshots Listing Sidebar|Application Section Opened With No Due 1`] =
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
@@ -11949,7 +11951,8 @@ exports[`Storyshots Listing Sidebar|Application Section Opened With No Due 1`] =
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
         </SidebarAddress>
@@ -12036,7 +12039,8 @@ exports[`Storyshots Listing Sidebar|Application Section Opened With No Due 1`] =
                   </svg>
                 </span>
               </Icon>
-               Get Directions
+               
+              Get Directions
             </a>
           </p>
           <h3
