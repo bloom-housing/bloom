@@ -1,8 +1,8 @@
 import * as React from "react"
 import Link from "next/link"
-import lRoute from "../helpers/localeRoute"
+import { lRoute } from "../helpers/localeRoute"
 
-interface LocalizedLinkProps {
+export interface LocalizedLinkProps {
   href: string
   as?: string
   className?: string
@@ -25,4 +25,4 @@ const LocalizedLink = (props: LocalizedLinkProps) => {
   )
 }
 
-export default LocalizedLink
+export { LocalizedLink as default, LocalizedLink }

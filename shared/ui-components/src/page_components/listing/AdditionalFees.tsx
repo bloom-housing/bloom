@@ -33,4 +33,4 @@ const AdditionalFees = (props: AdditionalFeesProps) => (
   </div>
 )
 
-export default AdditionalFees
+export { AdditionalFees as default, AdditionalFees }

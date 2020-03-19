@@ -8,7 +8,7 @@ import {
   AccordionItemPanel
 } from "react-accessible-accordion"
 
-interface ResponsiveContentProps {
+export interface ResponsiveContentProps {
   children: React.ReactNode
   desktopClass?: string
 }

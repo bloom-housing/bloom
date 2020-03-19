@@ -1,15 +1,17 @@
 import { Component } from "react"
 import Head from "next/head"
-import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import Layout from "../layouts/application"
-import PageHeader from "@bloom-housing/ui-components/src/headers/PageHeader/PageHeader"
-import ListingsList from "@bloom-housing/ui-components/src/page_components/listing/ListingsList"
 import axios from "axios"
 import moment from "moment"
+import {
+  ListingsGroup,
+  ListingsList,
+  MetaTags,
+  PageHeader,
+  openDateState,
+  t
+} from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/core"
-import ListingsGroup from "@bloom-housing/ui-components/src/page_components/listing/ListingsGroup"
-import { openDateState } from "@bloom-housing/ui-components/src/helpers/state"
+import Layout from "../layouts/application"
 
 export interface ListingsProps {
   openListings: Listing[]

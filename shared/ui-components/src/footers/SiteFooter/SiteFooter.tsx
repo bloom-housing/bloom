@@ -7,4 +7,4 @@ export interface FooterProps {
 
 const SiteFooter = (props: FooterProps) => <footer className="site-footer">{props.children}</footer>
 
-export default SiteFooter
+export { SiteFooter as default, SiteFooter }

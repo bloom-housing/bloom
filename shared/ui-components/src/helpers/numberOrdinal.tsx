@@ -1,4 +1,4 @@
-const numberOrdinal = (num: number): string => {
+export const numberOrdinal = (num: number): string => {
   const standardSuffix = "th"
   const oneToThreeSuffixes = ["st", "nd", "rd"]
 
@@ -15,5 +15,3 @@ const numberOrdinal = (num: number): string => {
 
   return `${num}${suffix}`
 }
-
-export default numberOrdinal

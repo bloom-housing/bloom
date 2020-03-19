@@ -52,4 +52,4 @@ const ListingsGroup = (props: ListingsGroupProps) => {
   )
 }
 
-export default ListingsGroup
+export { ListingsGroup as default, ListingsGroup }

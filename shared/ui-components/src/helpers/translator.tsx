@@ -26,4 +26,4 @@ const t = (phrase: string, options?: any): string => {
   return "{{ Missing Translation Phrases }}"
 }
 
-export default t
+export { t as default, t }

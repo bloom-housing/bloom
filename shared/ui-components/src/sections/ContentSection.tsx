@@ -1,6 +1,6 @@
 import * as React from "react"
 
-interface ContentSectionProps {
+export interface ContentSectionProps {
   title?: string
   subtitle?: string
   icon?: string
@@ -22,4 +22,4 @@ const ContentSection = (props: ContentSectionProps) => (
   </section>
 )
 
-export default ContentSection
+export { ContentSection as default, ContentSection }

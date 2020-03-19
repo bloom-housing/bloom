@@ -1,12 +1,9 @@
 import { Component } from "react"
 import Head from "next/head"
-import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import Layout from "../layouts/application"
-import Hero from "@bloom-housing/ui-components/src/headers/Hero/Hero"
-import MarkdownSection from "@bloom-housing/ui-components/src/sections/markdown_section"
-import PageContent from "../page_content/homepage.mdx"
 import { Listing } from "@bloom-housing/core"
+import { Hero, MarkdownSection, MetaTags, t } from "@bloom-housing/ui-components"
+import Layout from "../layouts/application"
+import PageContent from "../page_content/homepage.mdx"
 import axios from "axios"
 
 interface IndexProps {

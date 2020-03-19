@@ -3,7 +3,7 @@ import { Preference, PreferenceLink } from "@bloom-housing/core"
 //import t from "@bloom-housing/ui-components/src/helpers/translator"
 import "./PreferencesList.scss"
 
-interface PreferencesListProps {
+export interface PreferencesListProps {
   preferences: Preference[]
 }
 
@@ -47,4 +47,4 @@ const PreferencesList = (props: PreferencesListProps) => {
   return <ol className="preferences-list">{preferences}</ol>
 }
 
-export default PreferencesList
+export { PreferencesList as default, PreferencesList }

@@ -1,38 +1,35 @@
 import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
-import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import {
-  occupancyTable,
-  getOccupancyDescription
-} from "@bloom-housing/ui-components/src/helpers/occupancyFormatting"
-import { groupNonReservedAndReservedSummaries } from "@bloom-housing/ui-components/src/helpers/tableSummaries"
-import Layout from "../layouts/application"
+import axios from "axios"
 import { Listing } from "@bloom-housing/core"
 import {
-  ListingDetails,
-  ListingDetailItem
-} from "@bloom-housing/ui-components/src/page_components/listing/ListingDetails"
-import ListSection from "@bloom-housing/ui-components/src/sections/ListSection"
-import InfoCard from "@bloom-housing/ui-components/src/cards/InfoCard"
-import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
-import ApplicationSection from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
-import WhatToExpect from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
-import LeasingAgent from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
-import ListingMap from "@bloom-housing/ui-components/src/page_components/listing/ListingMap"
-import ImageCard from "@bloom-housing/ui-components/src/cards/ImageCard"
-import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
-import { Description } from "@bloom-housing/ui-components/src/atoms/description"
-import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/BasicTable"
-import {
+  AdditionalFees,
+  ApplicationSection,
+  ApplicationStatus,
+  BasicTable,
+  Description,
   GroupedTable,
-  GroupedTableGroup
-} from "@bloom-housing/ui-components/src/tables/GroupedTable"
-import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
-import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
-import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
-import axios from "axios"
+  GroupedTableGroup,
+  Headers,
+  InfoCard,
+  ImageCard,
+  LeasingAgent,
+  ListingDetails,
+  ListingDetailItem,
+  ListingMap,
+  ListSection,
+  MetaTags,
+  OneLineAddress,
+  PreferencesList,
+  UnitTables,
+  WhatToExpect,
+  getOccupancyDescription,
+  groupNonReservedAndReservedSummaries,
+  occupancyTable,
+  t
+} from "@bloom-housing/ui-components"
+import Layout from "../layouts/application"
 
 interface ListingProps {
   listing: Listing

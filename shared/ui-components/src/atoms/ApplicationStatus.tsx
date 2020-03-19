@@ -5,7 +5,7 @@ import { Listing } from "@bloom-housing/core"
 import { openDateState } from "../helpers/state"
 import Icon from "../atoms/Icon"
 
-interface ApplicationStatusProps {
+export interface ApplicationStatusProps {
   listing: Listing
   vivid?: boolean
 }
@@ -59,4 +59,4 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   )
 }
 
-export default ApplicationStatus
+export { ApplicationStatus as default, ApplicationStatus }

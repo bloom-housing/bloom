@@ -4,7 +4,7 @@ import Icon from "../../../atoms/Icon"
 import { Address } from "@bloom-housing/core"
 import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 
-interface SidebarAddressProps {
+export interface SidebarAddressProps {
   address: Address
   officeHours?: string
 }
@@ -48,4 +48,4 @@ const SidebarAddress = (props: SidebarAddressProps) => {
   )
 }
 
-export default SidebarAddress
+export { SidebarAddress as default, SidebarAddress }

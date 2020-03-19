@@ -9,4 +9,4 @@ const ExygyFooter = () => (
   </span>
 )
 
-export default ExygyFooter
+export { ExygyFooter as default, ExygyFooter }

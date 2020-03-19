@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./InfoCard.scss"
 
-interface InfoCardProps {
+export interface InfoCardProps {
   title: string
   children: JSX.Element
 }
@@ -14,4 +14,4 @@ const InfoCard = (props: InfoCardProps) => (
   </div>
 )
 
-export default InfoCard
+export { InfoCard as default, InfoCard }

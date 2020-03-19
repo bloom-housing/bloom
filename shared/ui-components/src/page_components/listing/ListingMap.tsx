@@ -4,12 +4,12 @@ import { Address } from "@bloom-housing/core"
 import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
 import { Listing } from "@bloom-housing/core"
-interface ListingMapProps {
+export interface ListingMapProps {
   address: Address
   listing: Listing
 }
 
-interface Viewport {
+export interface Viewport {
   width: string | number
   height: string | number
   latitude: number
@@ -54,4 +54,4 @@ const ListingMap = (props: ListingMapProps) => {
     </>
   )
 }
-export default ListingMap
+export { ListingMap as default, ListingMap }

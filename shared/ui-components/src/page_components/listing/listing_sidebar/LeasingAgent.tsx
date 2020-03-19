@@ -45,4 +45,4 @@ const LeasingAgent = (props: LeasingAgentProps) => {
   )
 }
 
-export default LeasingAgent
+export { LeasingAgent as default, LeasingAgent }
