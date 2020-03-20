@@ -5,11 +5,9 @@ interface DescriptionProps {
   description: any
 }
 
-const Description = (props: DescriptionProps) => (
+export const Description = (props: DescriptionProps) => (
   <>
     <dd className="description__title">{props.term}</dd>
     <dt className="description__body">{props.description}</dt>
   </>
 )
-
-export { Description }
