@@ -33,7 +33,7 @@
   "depositMin": "1140.0",
   "developer": "James Renwick, Jr.",
   "imageUrl": "/images/thesmith.jpg",
-  "programRules": "The multi-family property has 3 1bedroom units and 3 2 bedroom units. The property manager is looking to open the waitlist for this property. All the units in the property uses the HERA special AMI Chart. The 3 1bedroom units have a maximum income of 60% AMI and the 3 2bedroom units have a maximum income of 50% AMI. Applications are accepted by mail only.",
+  "programRules": "The multi-family property has 3 1bedroom units and 3 2 bedroom units. The property manager is looking to open the waitlist for this property. All the units in the property uses the HERA special AMI Chart. The 3 1bedroom units have a maximum income of 60% AMI and the 3 2bedroom units have a maximum income of 50% AMI. Applications are accepted by mail only and postmark will not be considered.",
   "externalId": null,
   "waitlistMaxSize": 500,
   "name": "The Smithsonian Institution",
