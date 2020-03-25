@@ -45,7 +45,7 @@ const ListingsList = (props: ListingsProps) => {
         </div>
         <div className="w-full md:w-6/12 p-3">
           <h4 className="font-alt-sans font-semibold text-gray-900 text-base mb-2">
-            {t("listings.openWaitlist")}
+            {t("listings.waitlist.open")}
           </h4>
           <div className="mb-4">
             {unitSummaries && (
@@ -58,7 +58,7 @@ const ListingsList = (props: ListingsProps) => {
             )}
           </div>
           <LinkButton href={`listing/id=${listing.id}`} as={`/listing/${listing.id}`}>
-            See Details
+            {t("label.seeDetails")}
           </LinkButton>
         </div>
       </article>

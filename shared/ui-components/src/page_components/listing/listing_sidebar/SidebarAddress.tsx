@@ -3,6 +3,7 @@ import ReactDOMServer from "react-dom/server"
 import Icon from "../../../atoms/Icon"
 import { Address } from "@bloom-housing/core"
 import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
+import t from "../../../helpers/translator"
 
 export interface SidebarAddressProps {
   address: Address
@@ -26,7 +27,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
   if (officeHours) {
     hours = (
       <>
-        <h3 className="text-caps-tiny ">Office Hours</h3>
+        <h3 className="text-caps-tiny ">{t("leasingAgent.officeHours")}</h3>
         <p className="text-gray-800">{officeHours}</p>
       </>
     )
@@ -39,7 +40,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
           {mainAddress}
           <br />
           <a href={googleMapsHref} target="_blank">
-            <Icon symbol="map" size="medium" /> Get Directions
+            <Icon symbol="map" size="medium" /> {t("label.getDirections")}
           </a>
         </p>
       )}

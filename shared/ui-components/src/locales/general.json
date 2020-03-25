@@ -26,10 +26,12 @@
     "visitWebsite": "Visit %{name}"
   },
   "label": {
-    "emailAddress": "Email",
+    "call": "Call",
+    "email": "Email",
     "getDirections": "Get Directions",
     "readLess": "read less",
     "readMore": "read more",
+    "seeDetails": "See Details",
     "showLess": "show less",
     "showMore": "show more",
     "viewMap": "View Map"
@@ -47,10 +49,6 @@
   },
   "listings": {
     "additionalFees": "Additional Fees",
-    "additionalEligibility": {
-      "title": "Additional Eligibility Rules",
-      "subtitle": "Applicants must also qualify under the rules of the building."
-    },
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
@@ -62,6 +60,7 @@
     "applicationsClosed": "Applications Closed",
     "apply": {
       "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
+      "applicationWillBeAvailableOn": "Application will be available for download and pick up on %{openDate}",
       "applyOnline": "Apply Online",
       "downloadApplication": "Download Application",
       "dropOffApplication": "Drop Off Application",
@@ -84,13 +83,11 @@
     "confirmedPreferenceList": "Confirmed %{preference} List",
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
-    "currentWaitlistSize": "Current Waitlist Size",
     "depositOrMonthsRent": "or one month's rent",
     "depositMayBeHigherForLowerCredit": "May be higher for lower credit scores",
     "developmentalDisabilities": "Persons with developmental disabilities",
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
-    "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for <span class='t-italic'>%{number} units</span>.",
-    "finalWaitlistSize": "Final Waitlist Size",
+    "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for %{units} units.",
     "forIncomeCalculations": "For income calculations, household size includes everyone (all ages) living in the unit.",
     "hideClosedListings": "Hide Closed Listings",
     "householdMaximumIncome": "Household Maximum Income",
@@ -101,8 +98,6 @@
     "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
     "occupancyDescriptionNoSro": "Occupancy limits for this building differ from household size, and do not include children under 6.",
     "occupancyDescriptionSomeSro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
-    "openWaitlist": "Open Waitlist",
-    "openWaitlistSlots": "Open Waitlist Slots",
     "people": "people",
     "person": "person",
     "priorityUnits": "Priority Units",
@@ -115,6 +110,24 @@
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
     "reservedUnitsForWhoAre": "Reserved for %{communityType} who are %{reservedType}",
+    "sections": {
+      "eligibilityTitle": "Eligibility",
+      "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
+      "rentalAssistanceTitle": "Rental Assistance",
+      "rentalAssistanceSubtitle": "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+      "housingPreferencesTitle": "Housing Preferences",
+      "housingPreferencesSubtitle": "Preference holders will be given highest ranking.",
+      "additionalEligibilityTitle": "Additional Eligibility Rules",
+      "additionalEligibilitySubtitle": "Applicants must also qualify under the rules of the building.",
+      "processTitle": "Process",
+      "processSubtitle": "Important dates and contact information",
+      "featuresTitle": "Features",
+      "featuresSubtitle": "Amenities, unit details and additional fees",
+      "neighborhoodTitle": "Neighborhood",
+      "neighborhoodSubtitle": "Location and transportation",
+      "additionalInformationTitle": "Additional Information",
+      "additionalInformationSubtitle": "Required documents and selection criteria"
+    },
     "seeMaximumIncomeInformation": "See Maximum Income Information",
     "seePreferenceInformation": "See Preference Information",
     "seeUnitInformation": "See Unit Information",
@@ -138,8 +151,15 @@
       "show": "Show Closed Listings",
       "title": "Closed Listings"
     },
-    "waitlist": "Waitlist",
-    "waitlistIsOpen": "Waitlist is open",
+    "waitlist": {
+      "label": "Waitlist",
+      "isOpen": "Waitlist is open",
+      "currentSize": "Current Waitlist Size",
+      "finalSize": "Final Waitlist Size",
+      "open": "Open Waitlist",
+      "openSlots": "Open Waitlist Slots",
+      "submitAnApplication": "Submit an application for an open slot on the waitlist for 48 units."
+    },
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
     "downloadPdf": "Download PDF",
@@ -181,23 +201,38 @@
   },
   "t": {
     "area": "area",
+    "accessibility": "Accessibility",
+    "availability": "Availability",
+    "built": "Built",
     "deposit": "Deposit",
     "floor": "floor",
     "floors": "floors",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
+    "neighborhood": "Neighborhood",
     "none": "None",
     "occupancy": "Occupancy",
     "or": "or",
+    "petsPolicy": "Pets Policy",
+    "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
     "skipToMainContent": "Skip to main content",
+    "smokingPolicy": "Smoking Policy",
     "sqFeet": "sqft",
+    "unitAmenities": "Unit Amenities",
+    "unitFeatures": "Unit Features",
     "unitType": "Unit Type"
   },
   "welcome": {
     "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
     "seeRentalListings": "See Rentals",
     "title": "Apply for affordable housing in"
+  },
+  "whatToExpect": {
+    "label": "What to Expect",
+    "applicantsWillBeContacted": "Applicants will be contacted by the property agent in waitlist order until vacancies are filled.",
+    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
+    "bePreparedIfChosen": "Should your application be chosen from the waitlist, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted."
   }
 }

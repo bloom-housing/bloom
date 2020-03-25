@@ -1,8 +1,6 @@
 import Layout from "../layouts/application"
 import Head from "next/head"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import Hero from "@bloom-housing/ui-components/src/headers/Hero/Hero"
-import MarkdownSection from "@bloom-housing/ui-components/src/sections/markdown_section"
+import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/homepage.mdx"
 
 export default () => {
