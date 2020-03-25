@@ -33,7 +33,7 @@
   "depositMin": "1140.0",
   "developer": "James Renwick, Jr.",
   "imageUrl": "/images/thesmith.jpg",
-  "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
+  "programRules": "The multi-family property has 3 1bedroom units and 3 2 bedroom units. The property manager is looking to open the waitlist for this property. All the units in the property uses the HERA special AMI Chart. The 3 1bedroom units have a maximum income of 60% AMI and the 3 2bedroom units have a maximum income of 50% AMI. Applications are accepted by mail only.",
   "externalId": null,
   "waitlistMaxSize": 500,
   "name": "The Smithsonian Institution",
@@ -52,7 +52,13 @@
   "groupId": 1,
   "hideUnitFeatures": false,
   "unitAmenities": "Dishwasher",
-  "attachments": [],
+  "attachments": [
+     {
+      "label": "English",
+      "fileUrl": "https://drive.google.com/file/d/16JMnA4Z2kaaqlF0-jZFU_OIs6vEMQJds/view?usp=sharing",
+      "type": 1
+    }
+  ],
   "applicationFee": "30.0",
   "criminalBackground": "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   "leasingAgentAddress": {
