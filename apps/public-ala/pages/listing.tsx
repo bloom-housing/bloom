@@ -1,38 +1,35 @@
 import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
-import MetaTags from "@bloom-housing/ui-components/src/atoms/MetaTags"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import {
-  occupancyTable,
-  getOccupancyDescription
-} from "@bloom-housing/ui-components/src/helpers/occupancyFormatting"
-import { groupNonReservedAndReservedSummaries } from "@bloom-housing/ui-components/src/helpers/tableSummaries"
-import Layout from "../layouts/application"
-import { Listing } from "@bloom-housing/core/src/listings"
-import {
-  ListingDetails,
-  ListingDetailItem
-} from "@bloom-housing/ui-components/src/page_components/listing/ListingDetails"
-import ListSection from "@bloom-housing/ui-components/src/sections/ListSection"
-import InfoCard from "@bloom-housing/ui-components/src/cards/InfoCard"
-import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
-import ApplicationSection from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/ApplicationSection"
-import WhatToExpect from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/WhatToExpect"
-import LeasingAgent from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/LeasingAgent"
-import ListingMap from "@bloom-housing/ui-components/src/page_components/listing/ListingMap"
-import ImageCard from "@bloom-housing/ui-components/src/cards/ImageCard"
-import { OneLineAddress } from "@bloom-housing/ui-components/src/helpers/address"
-import { Description } from "@bloom-housing/ui-components/src/atoms/description"
-import { Headers, BasicTable } from "@bloom-housing/ui-components/src/tables/BasicTable"
-import {
-  GroupedTable,
-  GroupedTableGroup
-} from "@bloom-housing/ui-components/src/tables/GroupedTable"
-import UnitTables from "@bloom-housing/ui-components/src/page_components/UnitTables"
-import AdditionalFees from "@bloom-housing/ui-components/src/page_components/listing/AdditionalFees"
-import PreferencesList from "@bloom-housing/ui-components/src/lists/PreferencesList"
 import axios from "axios"
+import { Listing } from "@bloom-housing/core"
+import {
+  AdditionalFees,
+  ApplicationSection,
+  ApplicationStatus,
+  BasicTable,
+  Description,
+  GroupedTable,
+  GroupedTableGroup,
+  Headers,
+  InfoCard,
+  ImageCard,
+  LeasingAgent,
+  ListingDetails,
+  ListingDetailItem,
+  ListingMap,
+  ListSection,
+  MetaTags,
+  OneLineAddress,
+  PreferencesList,
+  UnitTables,
+  WhatToExpect,
+  getOccupancyDescription,
+  groupNonReservedAndReservedSummaries,
+  occupancyTable,
+  t
+} from "@bloom-housing/ui-components"
+import Layout from "../layouts/application"
 
 interface ListingProps {
   listing: Listing
@@ -62,10 +59,10 @@ export default class extends Component<ListingProps> {
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
 
     const unitSummariesHeaders = {
-      unitType: "Unit Type",
-      minimumIncome: "Minimum Income",
-      rent: "Rent",
-      availability: "Availability"
+      unitType: t("t.unitType"),
+      minimumIncome: t("t.minimumIncome"),
+      rent: t("t.rent"),
+      availability: t("t.availability")
     }
 
     const amiValues = listing.unitsSummarized.amiPercentages
@@ -164,8 +161,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="eligibility-notebook"
               imageSrc="/images/listing-eligibility.svg"
-              title="Eligibility"
-              subtitle="Income, occupancy, preferences, and subsidies"
+              title={t("listings.sections.eligibilityTitle")}
+              subtitle={t("listings.sections.eligibilitySubtitle")}
               desktopClass="bg-primary-lighter"
             >
               <ul>
@@ -185,15 +182,13 @@ export default class extends Component<ListingProps> {
                 </ListSection>
 
                 <ListSection
-                  title="Rental Assistance"
-                  subtitle="Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be 
-                    considered for this property. In the case of a valid rental subsidy, the required minimum income 
-                    will be based on the portion of the rent that the tenant pays after use of the subsidy."
+                  title={t("listings.sections.rentalAssistanceTitle")}
+                  subtitle={t("listings.sections.rentalAssistanceSubtitle")}
                 />
 
                 <ListSection
-                  title="Housing Preferences"
-                  subtitle="Preference holders will be given highest ranking."
+                  title={t("listings.sections.housingPreferencesTitle")}
+                  subtitle={t("listings.sections.housingPreferencesSubtitle")}
                 >
                   <>
                     <PreferencesList preferences={listing.preferences} />
@@ -204,8 +199,8 @@ export default class extends Component<ListingProps> {
                 </ListSection>
 
                 <ListSection
-                  title={t("listings.additionalEligibility.title")}
-                  subtitle={t("listings.additionalEligibility.subtitle")}
+                  title={t("listings.sections.additionalEligibilityTitle")}
+                  subtitle={t("listings.sections.additionalEligibilitySubtitle")}
                 >
                   <>
                     <InfoCard title={t("listings.creditHistory")}>
@@ -225,8 +220,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="process-info"
               imageSrc="/images/listing-process.svg"
-              title="Process"
-              subtitle="Important dates and contact information"
+              title={t("listings.sections.processTitle")}
+              subtitle={t("listings.sections.processSubtitle")}
               hideHeader={true}
               desktopClass="header-hidden"
             >
@@ -243,20 +238,20 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="features-cards"
               imageSrc="/images/listing-features.svg"
-              title="Features"
-              subtitle="Amenities, unit details and additional fees"
+              title={t("listings.sections.featuresTitle")}
+              subtitle={t("listings.sections.featuresSubtitle")}
             >
               <div className="listing-detail-panel">
                 <dl className="column-definition-list">
-                  <Description term="Neighborhood" description={listing.neighborhood} />
-                  <Description term="Built" description={listing.yearBuilt} />
-                  <Description term="Smoking Policy" description={listing.smokingPolicy} />
-                  <Description term="Pets Policy" description={listing.petPolicy} />
-                  <Description term="Property Amenities" description={listing.amenities} />
-                  <Description term="Unit Amenities" description={listing.unitAmenities} />
-                  <Description term="Accessibility" description={listing.accessibility} />
+                  <Description term={t("t.neighborhood")} description={listing.neighborhood} />
+                  <Description term={t("t.built")} description={listing.yearBuilt} />
+                  <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
+                  <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
+                  <Description term={t("t.propertyAmenities")} description={listing.amenities} />
+                  <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
+                  <Description term={t("t.accessibility")} description={listing.accessibility} />
                   <Description
-                    term="Unit Features"
+                    term={t("t.unitFeatures")}
                     description={
                       <UnitTables
                         units={listing.units}
@@ -272,8 +267,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="neighborhood-buildings"
               imageSrc="/images/listing-neighborhood.svg"
-              title="Neighborhood"
-              subtitle="Location and transportation"
+              title={t("listings.sections.neighborhoodTitle")}
+              subtitle={t("listings.sections.neighborhoodSubtitle")}
               desktopClass="bg-primary-lighter"
             >
               <div className="listing-detail-panel">
@@ -284,8 +279,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="additional-information-envelope"
               imageSrc="/images/listing-legal.svg"
-              title="Additional Information"
-              subtitle="Required documents and selection criteria"
+              title={t("listings.sections.additionalInformationTitle")}
+              subtitle={t("listings.sections.additionalInformationSubtitle")}
             >
               <div className="listing-detail-panel">
                 <div className="info-card">

@@ -1,8 +1,6 @@
 import * as React from "react"
 import Head from "next/head"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
-import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
+import { t, LocalizedLink, SiteHeader } from "@bloom-housing/ui-components"
 import AlamedaFooter from "../components/AlamedaFooter"
 import SVG from "react-inlinesvg"
 
