@@ -1,6 +1,6 @@
 import * as React from "react"
 
-interface DescriptionProps {
+export interface DescriptionProps {
   term: string
   description: any
 }
