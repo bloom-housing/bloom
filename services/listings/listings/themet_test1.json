@@ -4,7 +4,7 @@
   "acceptingApplicationsByPoBox": true,
   "acceptingOnlineApplications": false,
   "acceptsPostmarkedApplications": true,
-  "postmarkedApplicationsReceivedByDate": "2020-12-31",
+  "postmarkedApplicationsReceivedByDate": "2021-01-15",
   "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
   "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
   "applicationAddress": {
@@ -33,7 +33,7 @@
   "depositMin": "1140.0",
   "developer": "Richard Morris Hunt and Richard Howland Hunt",
   "imageUrl": "/images/themet.jpg",
-  "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
+  "programRules": "The property manager is looking to list out three BMR studio units that are vacant. All three units are using the TCAC AMI Chart and have the maximum income of 30% AMI. Applications are accepted at leasing agent and by mail with postmark.",
   "externalId": null,
   "waitlistMaxSize": 300,
   "name": "The Metropolitan Museum of Art",
