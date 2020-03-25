@@ -33,7 +33,7 @@
   "depositMin": "1140.0",
   "developer": "Louis Sullivan and Renzo Piano",
   "imageUrl": "/images/theartinst.jpg",
-  "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
+  "programRules": "The multi-family property has the following units: 5 studio units, 5 1 bedroom units, and 3 2 bedroom units. The property manager is listing three vacancies, one for each unit type, as well as opening the waitlist for the entire property. The studio and 1 bedroom units use the TCAC AMI chart and the 2 bedroom units use the HERA AMI chart. The 5 studio units have a maximum AMI of 40%. For the 1 bedroom unit type, 3 of the units (including the vacant one) have a maximum AMI of 50% while the other 2 units have a maximum AMI of 60%. For the 2 bedroom unit type, 1 of the units (including the vacant one) have a maximum AMI of 60% while the other 2 units have a maximum AMI of 50%. The 2 2bedroom units with 50% AMI are reserved for development disabilities. Applications are available for download in English and Spanish. Applications are accepted in the leasing office only.",
   "externalId": null,
   "waitlistMaxSize": 500,
   "name": "The Art Institute of Chicago",
@@ -52,7 +52,18 @@
   "groupId": 1,
   "hideUnitFeatures": false,
   "unitAmenities": "Dishwasher",
-  "attachments": [],
+  "attachments": [
+     {
+      "label": "English",
+      "fileUrl": "https://drive.google.com/file/d/16JMnA4Z2kaaqlF0-jZFU_OIs6vEMQJds/view?usp=sharing",
+      "type": 1
+    },
+    {
+      "label": "Spanish",
+      "fileUrl": "https://drive.google.com/file/d/16JMnA4Z2kaaqlF0-jZFU_OIs6vEMQJds/view?usp=sharing",
+      "type": 1
+    }
+  ],
   "applicationFee": "30.0",
   "criminalBackground": "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   "leasingAgentAddress": {
