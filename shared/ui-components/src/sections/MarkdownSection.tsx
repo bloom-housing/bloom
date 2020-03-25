@@ -1,6 +1,11 @@
 import * as React from "react"
 
-const MarkdownSection = (props: any) => {
+export interface MarkdownSectionProps {
+  fullwidth?: boolean
+  children: JSX.Element
+}
+
+export const MarkdownSection = (props: MarkdownSectionProps) => {
   const contentWidth = props.fullwidth ? "markdown" : "markdown max-w-2xl"
 
   return (

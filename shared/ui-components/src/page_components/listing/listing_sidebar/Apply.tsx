@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Listing, Attachment, AttachmentType } from "@bloom-housing/core/src/listings"
+import { Listing, Attachment, AttachmentType } from "@bloom-housing/core"
 import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
@@ -7,7 +7,7 @@ import LinkButton from "../../../atoms/LinkButton"
 import SidebarAddress from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 
-interface ApplyProps {
+export interface ApplyProps {
   listing: Listing
 }
 
@@ -57,7 +57,7 @@ const Apply = (props: ApplyProps) => {
 
         {openDateState(listing) && (
           <p className="mb-5 text-gray-700">
-            Application will be available for download and pick up on {openDate}
+            {t("listings.apply.applicationWillBeAvailableOn", { openDate: openDate })}
           </p>
         )}
         {!openDateState(listing) &&
@@ -145,4 +145,4 @@ const Apply = (props: ApplyProps) => {
   )
 }
 
-export default Apply
+export { Apply as default, Apply }

@@ -1,6 +1,6 @@
 import * as React from "react"
 import LinkButton from "../../atoms/LinkButton"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import moment from "moment"
 import t from "../../helpers/translator"
 import { openDateState } from "../../helpers/state"
@@ -11,7 +11,8 @@ export interface HeroProps {
   backgroundImage?: string
   buttonTitle: string
   buttonLink: string
-  listings: Listing[]
+  listings?: Listing[]
+  children?: JSX.Element
 }
 
 const listingOpen = (listing: Listing) => {
@@ -20,8 +21,12 @@ const listingOpen = (listing: Listing) => {
 
 const Hero = (props: HeroProps) => {
   let subHeader, styles
-  if (!props.listings.some(listingOpen) && !props.listings.some(openDateState)) {
-    subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
+  if (props.listings) {
+    if (!props.listings.some(listingOpen) && !props.listings.some(openDateState)) {
+      subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
+    }
+  } else if (props.children) {
+    subHeader = <h2 className="hero__subtitle">{props.children}</h2>
   }
   if (props.backgroundImage) {
     styles = { backgroundImage: `url(${props.backgroundImage})` }
@@ -35,4 +40,4 @@ const Hero = (props: HeroProps) => {
   )
 }
 
-export default Hero
+export { Hero as default, Hero }

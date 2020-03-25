@@ -1,6 +1,6 @@
 import * as React from "react"
 
-interface PageHeaderProps {
+export interface PageHeaderProps {
   inverse?: boolean
   subtitle?: string
   children: React.ReactNode
@@ -23,4 +23,4 @@ const PageHeader = (props: PageHeaderProps) => {
   )
 }
 
-export default PageHeader
+export { PageHeader as default, PageHeader }

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import ListingsList from "./ListingsList"
 import Button from "../../atoms/Button"
 import Icon from "../../atoms/Icon"
@@ -52,4 +52,4 @@ const ListingsGroup = (props: ListingsGroupProps) => {
   )
 }
 
-export default ListingsGroup
+export { ListingsGroup as default, ListingsGroup }

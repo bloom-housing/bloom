@@ -2,9 +2,9 @@ import * as React from "react"
 import LocalizedLink from "../atoms/LocalizedLink"
 import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
 import "./ImageCard.scss"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 
-interface ImageCardProps {
+export interface ImageCardProps {
   imageUrl: string
   subtitle?: string
   title: string
@@ -49,4 +49,4 @@ const ImageCard = (props: ImageCardProps) => {
   return card
 }
 
-export default ImageCard
+export { ImageCard as default, ImageCard }

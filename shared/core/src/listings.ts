@@ -28,6 +28,7 @@ export interface Listing {
   attachments: Attachment[]
   blankPaperApplicationCanBePickedUp: boolean
   buildingAddress: Address
+  buildingTotalUnits: number
   costsNotIncluded: string
   creditHistory: string
   criminalBackground: string
@@ -52,7 +53,10 @@ export interface Listing {
   requiredDocuments: string
   smokingPolicy: string
   units: Unit[]
+  unitsAvailable: number
   unitAmenities: string
   unitsSummarized?: UnitsSummarized
+  waitlistCurrentSize: number
+  waitlistMaxSize: number
   yearBuilt: number
 }

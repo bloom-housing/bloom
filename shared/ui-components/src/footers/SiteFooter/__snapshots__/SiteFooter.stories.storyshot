@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Site Footer Footer 1`] = `
+exports[`Storyshots Footers|Site Footer Footer 1`] = `
 <SiteFooter>
   <footer
     className="site-footer"
@@ -45,7 +45,7 @@ exports[`Storyshots Site Footer Footer 1`] = `
 </SiteFooter>
 `;
 
-exports[`Storyshots Site Footer With Logo 1`] = `
+exports[`Storyshots Footers|Site Footer With Logo 1`] = `
 <SiteFooter>
   <footer
     className="site-footer"
@@ -104,7 +104,7 @@ exports[`Storyshots Site Footer With Logo 1`] = `
 </SiteFooter>
 `;
 
-exports[`Storyshots Site Footer With Logo And Credits 1`] = `
+exports[`Storyshots Footers|Site Footer With Logo And Credits 1`] = `
 <SiteFooter>
   <footer
     className="site-footer"

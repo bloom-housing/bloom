@@ -1,18 +1,16 @@
 import * as React from "react"
 import Head from "next/head"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
-import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
-import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
-import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
+import {
+  LocalizedLink,
+  SiteHeader,
+  SiteFooter,
+  FooterNav,
+  FooterSection,
+  ExygyFooter
+} from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
-import FooterNav from "@bloom-housing/ui-components/src/footers/FooterNav/FooterNav"
-import FooterSection from "@bloom-housing/ui-components/src/footers/FooterSection/FooterSection"
-import ExygyFooter from "@bloom-housing/ui-components/src/footers/ExygyFooter"
 
-const links = [
-  { href: "#", title: "Policy" },
-  { href: "/disclaimer", title: "Disclaimer" }
-]
 const Layout = props => (
   <div>
     <Head>
@@ -37,8 +35,8 @@ const Layout = props => (
 
     <SiteFooter>
       <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
-        <LocalizedLink href="#">Policy</LocalizedLink>
-        <LocalizedLink href="/disclaimer">Disclaimer</LocalizedLink>
+        <LocalizedLink href="/privacy">{t("pageTitle.privacy")}</LocalizedLink>
+        <LocalizedLink href="/disclaimer">{t("pageTitle.disclaimer")}</LocalizedLink>
       </FooterNav>
       <FooterSection className="bg-black" small>
         <ExygyFooter />

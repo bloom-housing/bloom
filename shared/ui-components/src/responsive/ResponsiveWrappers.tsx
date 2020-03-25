@@ -1,9 +1,11 @@
 import * as React from "react"
 import Media from "react-media"
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 // @ts-ignore
 import * as tailwindConfig from "../../tailwind.config.js"
+/* eslint-enable @typescript-eslint/ban-ts-ignore */
 
-interface ResponsiveWrapperProps {
+export interface ResponsiveWrapperProps {
   children: React.ReactNode
 }
 

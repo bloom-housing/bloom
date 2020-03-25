@@ -1,11 +1,11 @@
 import * as React from "react"
 import nanoid from "nanoid"
-import { MinMax } from "@bloom-housing/core/src/general"
-import { UnitSummary, Unit } from "@bloom-housing/core/src/units"
+import { MinMax } from "@bloom-housing/core"
+import { UnitSummary, Unit } from "@bloom-housing/core"
 import { BasicTable } from "../tables/BasicTable"
 import t from "../../src/helpers/translator"
-import numberOrdinal from "../../src/helpers/numberOrdinal"
-import capitalize from "../../src/helpers/capitalize"
+import { numberOrdinal } from "../../src/helpers/numberOrdinal"
+import { capitalize } from "../../src/helpers/capitalize"
 
 const toggleTable = (event: any) => {
   event.currentTarget.parentElement.querySelector(".unit-table").classList.toggle("hidden")
@@ -93,4 +93,4 @@ const UnitTables = (props: UnitTablesProps) => {
   )
 }
 
-export default UnitTables
+export { UnitTables as default, UnitTables }

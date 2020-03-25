@@ -1,7 +1,7 @@
 import application from "../src/index"
 import request from "supertest"
 import listingsLoader from "../src/lib/listings_loader"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 
 describe("GET /", () => {
   it("should return all listings", async () => {

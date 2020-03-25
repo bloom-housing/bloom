@@ -1,7 +1,7 @@
 import * as React from "react"
 import Head from "next/head"
 
-interface MetaTagsProps {
+export interface MetaTagsProps {
   title: string
   image?: string
   description: string
@@ -25,4 +25,4 @@ const MetaTags = (props: MetaTagsProps) => {
   )
 }
 
-export default MetaTags
+export { MetaTags as default, MetaTags }

@@ -1,11 +1,11 @@
 import * as React from "react"
 import moment from "moment"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import Apply from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/Apply"
 import Waitlist from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/Waitlist"
 import { openDateState } from "../../../helpers/state"
 
-interface ApplicationSectionProps {
+export interface ApplicationSectionProps {
   listing: Listing
 }
 
@@ -29,4 +29,4 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
   )
 }
 
-export default ApplicationSection
+export { ApplicationSection as default, ApplicationSection }
