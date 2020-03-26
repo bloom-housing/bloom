@@ -14,11 +14,11 @@
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "jest": "^25.1.0",
-    "typescript": "^3.7.4",
-    "webpack": "^4.41.5"
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1"
   },
   "dependencies": {
-    "@types/node": "^12.12.25",
+    "@types/node": "^12.12.31",
     "@types/node-polyglot": "^0.4.34",
     "nanoid": "^2.1.10"
   },
