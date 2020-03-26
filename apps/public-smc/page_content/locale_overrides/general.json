@@ -3,6 +3,10 @@
     "name": "San Mateo County"
   },
   "welcome": {
-    "seeRentalListings": "Browse Rentals"
+    "seeRentalListings": "See Rentals"
+  },
+  "nav": {
+    "siteTitle": "SAN MATEO COUNTY HOUSING",
+    "listings": "Browse Properties"
   }
 }
