@@ -202,8 +202,8 @@ export default class extends Component<ListingProps> {
                 </ListSection>
 
                 <ListSection
-                  title={t("listings.additionalEligibility.title")}
-                  subtitle={t("listings.additionalEligibility.subtitle")}
+                  title={t("listings.sections.additionalEligibilityTitle")}
+                  subtitle={t("listings.sections.additionalEligibilitySubtitle")}
                 >
                   <>
                     <InfoCard title={t("listings.creditHistory")}>
