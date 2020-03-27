@@ -39,11 +39,15 @@ class MyApp extends App {
 
       const headScriptTag = document.createElement("script")
       headScriptTag.textContent = headScript()
-      document.head.append(headScriptTag)
+      if (headScriptTag.textContent != "") {
+        document.head.append(headScriptTag)
+      }
 
       const bodyTopTagTmpl = document.createElement("template")
       bodyTopTagTmpl.innerHTML = bodyTopTag()
-      document.body.prepend(bodyTopTagTmpl.content.cloneNode(true))
+      if (bodyTopTagTmpl.innerHTML != "") {
+        document.body.prepend(bodyTopTagTmpl.content.cloneNode(true))
+      }
 
       document.body.customScriptsLoaded = true
     }

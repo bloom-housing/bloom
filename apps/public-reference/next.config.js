@@ -37,7 +37,7 @@ module.exports = withMDX(
         listingServiceUrl: LISTING_SERVICE_URL,
         mapBoxToken: MAPBOX_TOKEN,
         housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
-        gtmKey: process.env.GTM_KEY
+        gtmKey: process.env.GTM_KEY || null
       },
       sassLoaderOptions: {
         prependData: tailwindVars
