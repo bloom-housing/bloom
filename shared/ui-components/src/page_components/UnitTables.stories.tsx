@@ -119,10 +119,19 @@ const summaries = {
   }
 }
 
-export const showUnitsList = () => {
+export const unitsList = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   // @ts-ignore
   return <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
+  /* eslint-enable @typescript-eslint/ban-ts-ignore */
+}
+
+export const unitsListWithDisabledAccordion = () => {
+  /* eslint-disable @typescript-eslint/ban-ts-ignore */
+  return (
+    // @ts-ignore
+    <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} disableAccordion={true} />
+  )
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
@@ -140,7 +149,7 @@ const amiValues = summaries.amiPercentages
   })
   .sort()
 
-export const showUnitsSummaries = () => {
+export const unitsSummaries = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
     <div>
@@ -166,7 +175,7 @@ export const showUnitsSummaries = () => {
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
-export const showUnitsSummariesGroupedByReservedTypes = () => {
+export const unitsSummariesGroupedByReservedTypes = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
     <div>
