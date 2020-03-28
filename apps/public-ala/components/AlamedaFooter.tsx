@@ -1,13 +1,18 @@
 import * as React from "react"
-import Link from "next/link"
-import moment from "moment"
+import {
+  LocalizedLink,
+  SiteFooter,
+  ExygyFooter,
+  FooterNav,
+  FooterSection
+} from "@bloom-housing/ui-components"
 
 const AlamedaFooter = () => (
-  <footer className="site-footer">
-    <div>
+  <SiteFooter>
+    <FooterSection>
       <img src="/images/Alameda-County-seal.png" alt="Alameda County" />
-    </div>
-    <div className="footer-credits">
+    </FooterSection>
+    <FooterSection>
       <p>
         Alameda County Housing Portal is a project of the
         <br />
@@ -40,41 +45,14 @@ const AlamedaFooter = () => (
           City of San José Housing Portal
         </a>
       </p>
-    </div>
-
-    <section className="footer-sock">
-      <div className="footer-sock-inner">
-        <p className="footer-copyright">
-          Alameda County © {moment().format("YYYY")} • All Rights Reserved
-        </p>
-
-        <nav className="footer-nav">
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLScr7JuVwiNW8q-ifFUWTFSWqEyV5ndA08jAhJQSlQ4ETrnl9w/viewform?usp=sf_link"
-            target="_blank"
-          >
-            Give Feedback
-          </a>
-          <a href="mailto:achousingportal@acgov.org">Contact</a>
-          <a href="https://www.acgov.org/government/legal.htm" target="_blank">
-            Disclaimer
-          </a>
-          <a href="https://www.acgov.org/government/legal.htm" target="_blank">
-            Privacy Policy
-          </a>
-        </nav>
-      </div>
-    </section>
-
-    <section className="footer-sole">
-      <span>
-        made with ❤️ by{" "}
-        <a href="http://exygy.com" target="_blank" aria-label="Opens in new window">
-          exygy
-        </a>
-      </span>
-    </section>
-  </footer>
+    </FooterSection>
+    <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
+      <LocalizedLink href="#">Policy</LocalizedLink>
+    </FooterNav>
+    <FooterSection className="bg-black" small>
+      <ExygyFooter />
+    </FooterSection>
+  </SiteFooter>
 )
 
 export default AlamedaFooter
