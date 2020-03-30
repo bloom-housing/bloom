@@ -1,6 +1,5 @@
 import Layout from "../layouts/application"
-import PageHeader from "@bloom-housing/ui-components/src/headers/page_header/page_header"
-import MarkdownSection from "@bloom-housing/ui-components/src/sections/markdown_section"
+import { MarkdownSection, PageHeader } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/welcome-es.mdx"
 
 export default () => {
