@@ -33,14 +33,14 @@
     "react-inlinesvg": "^1.2.0"
   },
   "devDependencies": {
-    "@types/node": "^12.12.25",
+    "@types/node": "^12.12.31",
     "@types/react": "^16.9.19",
-    "concurrently": "^5.0.2",
-    "cypress": "^3.8.2",
+    "concurrently": "^5.1.0",
+    "cypress": "^4.2.0",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^3.0.1",
     "sass-loader": "^8.0.2",
-    "typescript": "^3.7.4",
-    "webpack": "^4.41.5"
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1"
   }
 }
