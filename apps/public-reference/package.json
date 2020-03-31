@@ -24,7 +24,7 @@
     "dotenv": "^8.2.0",
     "moment": "^2.24.0",
     "nanoid": "^2.1.10",
-    "next": "9.2.0",
+    "next": "9.3.3",
     "next-plugin-custom-babel-config": "^1.0.2",
     "node-polyglot": "^2.4.0",
     "node-sass": "^4.12.0",
