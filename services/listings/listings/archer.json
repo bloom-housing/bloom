@@ -9,6 +9,7 @@
   "applicationOrganization": "98 Archer Street",
   "applicationAddress": {
     "city": "San Jose",
+    "county": "San Jose",
     "zipCode": "95112",
     "state": "CA",
     "street": "98 Archer Street",
@@ -19,6 +20,7 @@
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "San Jose",
+    "county": "San Jose",
     "state": "CA",
     "street": "98 Archer Street",
     "zipCode": "95112",

@@ -9,6 +9,7 @@
   "applicationOrganization": "2122 Monterey Road",
   "applicationAddress": {
     "city": "San Jose",
+    "county": "San Jose",
     "zipCode": "95112",
     "state": "CA",
     "street": "2122 Monterey Road",
@@ -19,6 +20,7 @@
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "San Jose",
+    "county": "San Jose",
     "state": "CA",
     "street": "2122 Monterey Road",
     "zipCode": "95112",
@@ -63,6 +65,7 @@
   "criminalBackground": "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be denied for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   "leasingAgentAddress": {
     "city": "San Jose",
+    "county": "San Jose",
     "state": "CA",
     "street": "2122 Monterey Road",
     "zipCode": "95112",

@@ -2,11 +2,9 @@ import { Component } from "react"
 import axios from "axios"
 
 import { HousingCounselor as Counselor } from "@bloom-housing/core/src/HousingCounselors"
-import HousingCounselor from "@bloom-housing/ui-components/src/page_components/HousingCounselor"
-import PageHeader from "@bloom-housing/ui-components/src/headers/PageHeader/PageHeader"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
 
 import Layout from "../layouts/application"
+import { HousingCounselor, PageHeader, t } from "@bloom-housing/ui-components"
 
 interface HousingCounselorsProps {
   counselors: Counselor[]
