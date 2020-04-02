@@ -15,8 +15,8 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev\""
   },
   "dependencies": {
-    "@bloom-housing/core": "*",
-    "@bloom-housing/ui-components": "*",
+    "@bloom-housing/core": "^0.0.3",
+    "@bloom-housing/ui-components": "^0.0.4",
     "@mdx-js/loader": "1.5.5",
     "@next/mdx": "9.2.0",
     "@zeit/next-sass": "^1.0.1",
