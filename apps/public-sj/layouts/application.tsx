@@ -64,7 +64,7 @@ const Layout = props => (
           {t("footer.giveFeedback")}
         </a>
         <a href="mailto:housing@sanjoseca.gov">{t("footer.contact")}</a>
-        <LocalizedLink href="/disclaimer">{t("footer.disclamer")}</LocalizedLink>
+        <LocalizedLink href="/disclaimer">{t("footer.disclaimer")}</LocalizedLink>
         <a href="https://www.sanjoseca.gov/your-government/departments/housing/renters-apartment-owners">
           {t("footer.getAssistance")}
         </a>
