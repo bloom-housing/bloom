@@ -4,3 +4,28 @@
 .navbar .navbar-burger {
   top: 0.4em;
 }
+
+main > .hero {
+  background-position: center center;
+}
+
+article.markdown {
+  h4 {
+    margin-bottom: 1.5rem;
+  }
+  p + .info-card {
+    margin-top: 1.5rem;
+  }
+  .info-card {
+    .info-card__title {
+      font-size: 1rem;
+      text-transform: none;
+    }
+
+    @apply bg-gray-100;
+    word-break: break-word;
+    p {
+      font-size: 0.9em;
+    }
+  }
+}
