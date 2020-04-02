@@ -1,11 +1,6 @@
 import * as React from "react"
-import {
-  LocalizedLink,
-  SiteFooter,
-  ExygyFooter,
-  FooterNav,
-  FooterSection
-} from "@bloom-housing/ui-components"
+import moment from "moment"
+import { SiteFooter, ExygyFooter, FooterNav, FooterSection } from "@bloom-housing/ui-components"
 
 const AlamedaFooter = () => (
   <SiteFooter>
@@ -22,8 +17,8 @@ const AlamedaFooter = () => (
       </p>
 
       <p className="mt-10 text-sm">
-        For listing and application questions, please contact the Property Agent displayed on the
-        LISTING
+        For listing and application questions, please contact the Property Agent displayed on each
+        listing.
       </p>
 
       <p className="text-sm">
@@ -46,8 +41,20 @@ const AlamedaFooter = () => (
         </a>
       </p>
     </FooterSection>
-    <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
-      <LocalizedLink href="#">Policy</LocalizedLink>
+    <FooterNav copyright={`Alameda County © ${moment().format("YYYY")} • All Rights Reserved`}>
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLScr7JuVwiNW8q-ifFUWTFSWqEyV5ndA08jAhJQSlQ4ETrnl9w/viewform?usp=sf_link"
+        target="_blank"
+      >
+        Give Feedback
+      </a>
+      <a href="mailto:achousingportal@acgov.org">Contact</a>
+      <a href="https://www.acgov.org/government/legal.htm" target="_blank">
+        Disclaimer
+      </a>
+      <a href="https://www.acgov.org/government/legal.htm" target="_blank">
+        Privacy Policy
+      </a>
     </FooterNav>
     <FooterSection className="bg-black" small>
       <ExygyFooter />
