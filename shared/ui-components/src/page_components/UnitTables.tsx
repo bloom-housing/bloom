@@ -7,13 +7,9 @@ import t from "../../src/helpers/translator"
 import { numberOrdinal } from "../../src/helpers/numberOrdinal"
 import { capitalize } from "../../src/helpers/capitalize"
 
-const toggleTable = (event: any) => {
-  event.currentTarget.parentElement.querySelector(".unit-table").classList.toggle("hidden")
-}
-
 const formatRange = (range: MinMax, ordinalize?: boolean) => {
-  let min = range.min as any
-  let max = range.max as any
+  let min: string | number = range.min
+  let max: string | number = range.max
 
   if (ordinalize) {
     min = numberOrdinal(min)
@@ -39,6 +35,7 @@ const unitsLabel = (units: Unit[]): string => {
 interface UnitTablesProps {
   units: Unit[]
   unitSummaries: UnitSummary[]
+  disableAccordion?: boolean
 }
 
 const UnitTables = (props: UnitTablesProps) => {
@@ -51,12 +48,21 @@ const UnitTables = (props: UnitTablesProps) => {
     floor: capitalize(t("t.floor"))
   }
 
+  const toggleTable = (event: React.MouseEvent) => {
+    if (!props.disableAccordion) {
+      event.currentTarget.parentElement?.querySelector(".unit-table")?.classList?.toggle("hidden")
+    }
+  }
+
+  const buttonClasses = ["w-full", "text-left"]
+  if (props.disableAccordion) buttonClasses.push("cursor-default")
+
   return (
     <>
       {unitSummaries.map((unitSummary: UnitSummary) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
         const units = props.units.filter((unit: Unit) => unit.unitType == unitSummary.unitType)
-        const unitsFormatted = [] as any
+        const unitsFormatted = [] as Array<Record<string, string | JSX.Element>>
         units.forEach((unit: Unit) => {
           unitsFormatted.push({
             number: unit.number,
@@ -72,7 +78,7 @@ const UnitTables = (props: UnitTablesProps) => {
 
         return (
           <div key={uniqKey} className="mb-4">
-            <button onClick={toggleTable} style={{ width: "100%", textAlign: "left" }}>
+            <button onClick={toggleTable} className={buttonClasses.join(" ")}>
               <h3 className="button-tiny-bg-light">
                 <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>:&nbsp;
                 {unitsLabel(units)},&nbsp;
