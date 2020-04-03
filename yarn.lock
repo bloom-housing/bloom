@@ -1190,6 +1190,15 @@
     "@types/node-polyglot" "^0.4.34"
     nanoid "^2.1.10"
 
+"@bloom-housing/core@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.0.5.tgz#0f7ae1520942ec82356066977f19e479a30b3526"
+  integrity sha512-S5YRWZEFeBCHGYEPPsJQThpG+DR7tkDpHcYJCReOZz1M0PMz9LtTW9wtm6JQqh0PZ6RjJAJIdFQv99fC0vnNOg==
+  dependencies:
+    "@types/node" "^12.12.31"
+    "@types/node-polyglot" "^0.4.34"
+    nanoid "^2.1.10"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
