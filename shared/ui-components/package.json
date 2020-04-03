@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/ui-components",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Shared user interface components for Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
