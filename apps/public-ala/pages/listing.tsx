@@ -256,6 +256,7 @@ export default class extends Component<ListingProps> {
                       <UnitTables
                         units={listing.units}
                         unitSummaries={listing.unitsSummarized.byUnitType}
+                        disableAccordion={listing.disableUnitsAccordion}
                       />
                     }
                   />
