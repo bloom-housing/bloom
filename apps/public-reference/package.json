@@ -30,6 +30,7 @@
     "node-sass": "^4.12.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
+    "react-hook-form": "^5.2.0",
     "react-inlinesvg": "^1.2.0"
   },
   "devDependencies": {
