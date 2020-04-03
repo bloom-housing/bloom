@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Tables|UnitSummaryTables Show Units List 1`] = `
+exports[`Storyshots Tables|UnitSummaryTables Units List 1`] = `
 <UnitTables
   unitSummaries={
     Array [
@@ -1028,13 +1028,8 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units List 1`] = `
     key=""
   >
     <button
+      className="w-full text-left"
       onClick={[Function]}
-      style={
-        Object {
-          "textAlign": "left",
-          "width": "100%",
-        }
-      }
     >
       <h3
         className="button-tiny-bg-light"
@@ -4046,7 +4041,4049 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units List 1`] = `
 </UnitTables>
 `;
 
-exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
+exports[`Storyshots Tables|UnitSummaryTables Units List With Disabled Accordion 1`] = `
+<UnitTables
+  disableAccordion={true}
+  unitSummaries={
+    Array [
+      Object {
+        "areaRange": Object {
+          "max": 285,
+          "min": 285,
+        },
+        "floorRange": Object {
+          "max": 3,
+          "min": 2,
+        },
+        "minIncomeRange": Object {
+          "max": "$2,208",
+          "min": "$1,438",
+        },
+        "occupancyRange": Object {
+          "max": 2,
+          "min": 1,
+        },
+        "rentAsPercentIncomeRange": Object {
+          "max": null,
+          "min": null,
+        },
+        "rentRange": Object {
+          "max": "$1,104",
+          "min": "$719",
+        },
+        "totalAvailable": 41,
+        "unitType": "studio",
+      },
+    ]
+  }
+  units={
+    Array [
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-07-09T21:20:05.783Z",
+        "floor": 2,
+        "id": "sQ19KuyILEo0uuNqti2fl",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:05:43.913Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.982Z",
+        "floor": 3,
+        "id": "Cq870hwYXcPxCYT4_uW_3",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.015Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.758Z",
+        "floor": 2,
+        "id": "9XQrfuAPOn8wtD7HlhCTR",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.023Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.766Z",
+        "floor": 2,
+        "id": "bamrJpZA9JmnLSMEbTlI4",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.031Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.771Z",
+        "floor": 2,
+        "id": "BCwOFAHJDpyPbKcVBjIUM",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.039Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.777Z",
+        "floor": 2,
+        "id": "5t56gXJdJLZiksBuX8BtL",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.046Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.783Z",
+        "floor": 2,
+        "id": "7mmAuJ0x7l_2VxJLoSzX5",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.053Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.976Z",
+        "floor": 3,
+        "id": "LVsJ-_PYy8x2rn5V8Deo9",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.161Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.976Z",
+        "floor": 3,
+        "id": "neDXHUzJkL2YZ2CQOZx1i",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.167Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-07-09T21:24:14.122Z",
+        "floor": 2,
+        "id": "3_cr3dd76rGY7tDYlvfEO",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.173Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:55:22.950Z",
+        "floor": 2,
+        "id": "_38QsH2XMgHEzn_Sn4b2r",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.179Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:55:22.956Z",
+        "floor": 2,
+        "id": "gTHXtJ37uP8R8zkOp7wOt",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.186Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:55:22.961Z",
+        "floor": 2,
+        "id": "me-MRbUEn6ox-OYpzosO1",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.192Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:55:22.967Z",
+        "floor": 2,
+        "id": "ZOtuFSb79LX7p6CVW3H4w",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.198Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:55:22.972Z",
+        "floor": 2,
+        "id": "nISGOCiWoCzQXkMZGV5bV",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.204Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:55:22.978Z",
+        "floor": 2,
+        "id": "Ppne-7ChrEht1HxwfO0gc",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.210Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:55:22.984Z",
+        "floor": 2,
+        "id": "78hBgnEoHw3aW5r4Mn2Jf",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.216Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.563Z",
+        "floor": 3,
+        "id": "0RtHf-Iogw3x643r46y-a",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.222Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.570Z",
+        "floor": 3,
+        "id": "ENMVc3sX0kmD3G4762naM",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.229Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.575Z",
+        "floor": 3,
+        "id": "O9OSAiIFTSA5SimFlCbd7",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.235Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.580Z",
+        "floor": 3,
+        "id": "d_7SUFpxe1rZZ5dIgMgTG",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.241Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.587Z",
+        "floor": 3,
+        "id": "bR17hir7729c22LyVbQ3m",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.247Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.593Z",
+        "floor": 3,
+        "id": "B62kKSz7qwAA7aM6tzwtB",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.254Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.606Z",
+        "floor": 3,
+        "id": "C3YePWy05Or9fDeVuRPTF",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.260Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "30.0",
+        "annualIncomeMax": "30750.0",
+        "annualIncomeMin": "17256.0",
+        "createdAt": "2019-08-14T22:56:06.612Z",
+        "floor": 3,
+        "id": "Logk3eY0iXtf3oCOctxqT",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "1438.0",
+        "monthlyRent": "719.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.267Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.790Z",
+        "floor": 2,
+        "id": "nIYojGurvtF7xelaeT0tN",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.060Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.796Z",
+        "floor": 2,
+        "id": "omzU7rRoirKXq8SQfaShf",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": "senior",
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.067Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.802Z",
+        "floor": 2,
+        "id": "IzVtblU-KMTHf3wPGzx2g",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.074Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.807Z",
+        "floor": 2,
+        "id": "7g-6eFE_Q6Xi5K2xT2bE5",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.080Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.813Z",
+        "floor": 2,
+        "id": "4Br-28LII41R3pINIzLwe",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.086Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:52:08.819Z",
+        "floor": 2,
+        "id": "5bvjTW2ATEpxwsKppCh0l",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.093Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.921Z",
+        "floor": 3,
+        "id": "BZlMmnCXwT4bChrcaNUW3",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.099Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.927Z",
+        "floor": 3,
+        "id": "j2hU6Qv5ayOHMKPLQBolz",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.105Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.933Z",
+        "floor": 3,
+        "id": "w2-TtBySVELMWyL1cLTkA",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.111Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.938Z",
+        "floor": 3,
+        "id": "YhC6LoOIT6hxPfk4uKU3m",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.118Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.944Z",
+        "floor": 3,
+        "id": "5CuSFqgGgFX245JQsnG84",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.124Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.950Z",
+        "floor": 3,
+        "id": "WoD20A8q1CZm8NmGvLHUn",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.130Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.955Z",
+        "floor": 3,
+        "id": "srzDhzV5HQpqR5vuyHKlQ",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.136Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.960Z",
+        "floor": 3,
+        "id": "b9jo7kYEOQcATHWBjwJ6r",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.142Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.965Z",
+        "floor": 3,
+        "id": "i5tQbXCZRrU_X3ultDSii",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.148Z",
+      },
+      Object {
+        "amiChartId": 4,
+        "amiPercentage": "45.0",
+        "annualIncomeMax": "46125.0",
+        "annualIncomeMin": "26496.0",
+        "createdAt": "2019-08-14T22:53:09.970Z",
+        "floor": 3,
+        "id": "mrRtN0rArISKnE-PFomth",
+        "listingId": "Uvbk5qurpB2WI9V6WnNdH",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyIncomeMin": "2208.0",
+        "monthlyRent": "1104.0",
+        "monthlyRentAsPercentOfIncome": null,
+        "numBathrooms": null,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": 285,
+        "status": "occupied",
+        "unitType": "studio",
+        "updatedAt": "2019-08-14T23:06:59.155Z",
+      },
+    ]
+  }
+>
+  <div
+    className="mb-4"
+    key=""
+  >
+    <button
+      className="w-full text-left cursor-default"
+      onClick={[Function]}
+    >
+      <h3
+        className="button-tiny-bg-light"
+      >
+        <strong>
+          Studio
+        </strong>
+        : 
+        41 units
+        , 
+        285
+         
+        square feet
+        , 
+        2nd
+         - 
+        3rd
+         
+        floors
+      </h3>
+    </button>
+    <div
+      className="unit-table hidden"
+    >
+      <Component
+        data={
+          Array [
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                2
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+            Object {
+              "floor": <strong>
+                3
+              </strong>,
+              "numBathrooms": <strong />,
+              "number": null,
+              "sqFeet": <React.Fragment>
+                <strong>
+                  285
+                </strong>
+                 
+                sqft
+              </React.Fragment>,
+            },
+          ]
+        }
+        headers={
+          Object {
+            "floor": "Floor",
+            "numBathrooms": "Baths",
+            "number": "Unit #",
+            "sqFeet": "Area",
+          }
+        }
+      >
+        <div
+          style={
+            Object {
+              "overflowX": "auto",
+            }
+          }
+        >
+          <table
+            className="w-full text-sm"
+          >
+            <thead>
+              <Component>
+                <tr>
+                  <Component
+                    key=""
+                  >
+                    <th
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                    >
+                      Unit #
+                    </th>
+                  </Component>
+                  <Component
+                    key=""
+                  >
+                    <th
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                    >
+                      Area
+                    </th>
+                  </Component>
+                  <Component
+                    key=""
+                  >
+                    <th
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                    >
+                      Baths
+                    </th>
+                  </Component>
+                  <Component
+                    key=""
+                  >
+                    <th
+                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
+                    >
+                      Floor
+                    </th>
+                  </Component>
+                </tr>
+              </Component>
+            </thead>
+            <tbody>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        2
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+              <Component
+                id="row-"
+                key=""
+              >
+                <tr
+                  id="row-"
+                >
+                  <Component
+                    headerLabel="Unit #"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Unit #"
+                    />
+                  </Component>
+                  <Component
+                    headerLabel="Area"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Area"
+                    >
+                      <strong>
+                        285
+                      </strong>
+                       
+                      sqft
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Baths"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Baths"
+                    >
+                      <strong />
+                    </td>
+                  </Component>
+                  <Component
+                    headerLabel="Floor"
+                    key=""
+                  >
+                    <td
+                      className="p-5"
+                      data-label="Floor"
+                    >
+                      <strong>
+                        3
+                      </strong>
+                    </td>
+                  </Component>
+                </tr>
+              </Component>
+            </tbody>
+          </table>
+        </div>
+      </Component>
+    </div>
+  </div>
+</UnitTables>
+`;
+
+exports[`Storyshots Tables|UnitSummaryTables Units Summaries 1`] = `
 <div>
   <div>
     <h2
@@ -4393,7 +8430,7 @@ exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries 1`] = `
 </div>
 `;
 
-exports[`Storyshots Tables|UnitSummaryTables Show Units Summaries Grouped By Reserved Types 1`] = `
+exports[`Storyshots Tables|UnitSummaryTables Units Summaries Grouped By Reserved Types 1`] = `
 <div>
   <div>
     <h2

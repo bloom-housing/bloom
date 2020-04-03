@@ -35,6 +35,7 @@ export interface Listing {
   depositMin: string
   depositMax?: string
   developer: string
+  disableUnitsAccordion?: boolean
   id: string
   imageUrl?: string
   leasingAgentAddress: Address
