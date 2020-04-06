@@ -15,6 +15,7 @@ export interface WaitlistProps {
 
 const Waitlist = (props: WaitlistProps) => {
   const listing = props.listing
+  const showWaitlistValues = listing.waitlistCurrentSize != null && listing.waitlistMaxSize != null
   const waitlistOpen = listing.waitlistCurrentSize < listing.waitlistMaxSize
   const header = waitlistOpen ? "Waitlist open" : "Waitlist closed"
   let availableUnitsInfo
@@ -33,18 +34,20 @@ const Waitlist = (props: WaitlistProps) => {
         <p className="text-tiny text-gray-800 pb-3">
           {t("listings.waitlist.submitAnApplication", { units: listing.buildingTotalUnits })}
         </p>
-        <ul>
-          <WaitlistItem
-            value={listing.waitlistCurrentSize}
-            text={t("listings.waitlist.currentSize")}
-          />
-          <WaitlistItem
-            value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
-            text={t("listings.waitlist.openSlots")}
-            className={"font-semibold"}
-          />
-          <WaitlistItem value={listing.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
-        </ul>
+        {showWaitlistValues && (
+          <ul>
+            <WaitlistItem
+              value={listing.waitlistCurrentSize}
+              text={t("listings.waitlist.currentSize")}
+            />
+            <WaitlistItem
+              value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+              text={t("listings.waitlist.openSlots")}
+              className={"font-semibold"}
+            />
+            <WaitlistItem value={listing.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
+          </ul>
+        )}
       </div>
     </>
   )

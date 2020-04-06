@@ -158,7 +158,7 @@
       "finalSize": "Final Waitlist Size",
       "open": "Open Waitlist",
       "openSlots": "Open Waitlist Slots",
-      "submitAnApplication": "Submit an application for an open slot on the waitlist for 48 units."
+      "submitAnApplication": "Submit an application for an open slot on the waitlist for %{units} units."
     },
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
