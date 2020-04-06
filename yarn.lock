@@ -1199,6 +1199,32 @@
     "@types/node-polyglot" "^0.4.34"
     nanoid "^2.1.10"
 
+"@bloom-housing/core@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.0.6.tgz#8beb4b5766befe7897fe2cb9af9d99c226432916"
+  integrity sha512-eHW9VeWrzs05rTobEPPJ1Bp4WP0Xb90jxByBYDGLAXQko1S/l2fzPTLFB5EBVgBa5OoayLofnmskNVEuH4CG9w==
+  dependencies:
+    "@types/node" "^12.12.31"
+    "@types/node-polyglot" "^0.4.34"
+    nanoid "^2.1.10"
+
+"@bloom-housing/ui-components@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.0.6.tgz#0379ffa18e33a729a83f4873439dffe4a645cabe"
+  integrity sha512-pRC4dSkIpugPKIf7yTuzNDJilZ+gbeCJVuphK0qe/nY4VE1/KHH9HVNtJqx4IzCLPOcn6cyGUtKQcR/4ecWFUA==
+  dependencies:
+    "@bloom-housing/core" "^0.0.5"
+    "@types/nanoid" "^2.0.0"
+    "@types/node" "^12.12.31"
+    "@types/node-polyglot" "^0.4.34"
+    "@types/react-dom" "^16.9.5"
+    bulma "^0.7.5"
+    nanoid "^2.1.10"
+    react "^16.12.0"
+    react-dom "^16.12.0"
+    react-map-gl "^5.2"
+    tailwindcss "^1.1.4"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
