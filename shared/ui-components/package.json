@@ -57,7 +57,7 @@
     "webpack": "^4.42.1"
   },
   "dependencies": {
-    "@bloom-housing/core": "^0.0.5",
+    "@bloom-housing/core": "^0.0.6",
     "@types/nanoid": "^2.0.0",
     "@types/node": "^12.12.31",
     "@types/node-polyglot": "^0.4.34",
