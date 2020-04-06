@@ -2,6 +2,12 @@
   "nav": {
     "siteTitle": "Alameda County Housing Portal"
   },
+  "pageTitle": {
+    "additionalResources": "Additional Housing Opportunities"
+  },
+  "pageDescription": {
+    "additionalResources": "We encourage you to browse other affordable housing resources."
+  },
   "region": {
     "name": "Alameda County"
   }
