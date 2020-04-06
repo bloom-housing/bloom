@@ -1,6 +1,7 @@
 import React from "react"
 import App from "next/app"
 import "@bloom-housing/ui-components/styles/index.scss"
+import "../styles/overrides.scss"
 import { addTranslation } from "@bloom-housing/ui-components/src/helpers/translator"
 
 class MyApp extends App {

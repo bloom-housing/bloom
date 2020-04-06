@@ -10,12 +10,15 @@
     "forAdditionalOpportunities": "For additional Bay Area opportunities, please visit:",
     "forGeneralInquiries": "For general program inquiries, you may call the Housing Department at 408-535-3860.",
     "forListingQuestions": "For listing and application questions, please contact the Property Agent displayed on the listing.",
+    "privacyPolicy": "Privacy Policy",
     "SFHousingPortal": "San Francisco Housing Portal",
     "SFHousingUrl": "https://housing.sfgov.org"
   },
   "nav": {
     "siteTitle": "San Jose Housing Portal",
-    "listings": "Browse Properties"
+    "listings": "Browse Properties",
+    "disclaimer": "Disclaimer",
+    "policy": "My San Jose Privacy Policy"
   },
   "region": {
     "name": "San José"

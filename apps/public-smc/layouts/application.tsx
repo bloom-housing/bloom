@@ -1,13 +1,15 @@
 import * as React from "react"
 import Head from "next/head"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-import LocalizedLink from "@bloom-housing/ui-components/src/atoms/LocalizedLink"
-import SiteHeader from "@bloom-housing/ui-components/src/headers/SiteHeader/SiteHeader"
-import SiteFooter from "@bloom-housing/ui-components/src/footers/SiteFooter/SiteFooter"
-import FooterNav from "@bloom-housing/ui-components/src/footers/FooterNav/FooterNav"
-import FooterSection from "@bloom-housing/ui-components/src/footers/FooterSection/FooterSection"
-import ExygyFooter from "@bloom-housing/ui-components/src/footers/ExygyFooter"
 import SVG from "react-inlinesvg"
+import {
+  ExygyFooter,
+  FooterNav,
+  FooterSection,
+  LocalizedLink,
+  SiteFooter,
+  SiteHeader,
+  t
+} from "@bloom-housing/ui-components"
 
 const notice = <a href="https://www.surveymonkey.com/r/2QLBYML">We love to get your feedback</a>
 const Layout = props => (
