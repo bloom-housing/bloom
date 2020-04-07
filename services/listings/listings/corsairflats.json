@@ -35,7 +35,7 @@
   "imageUrl": "/images/cosairflats.jpg",
   "programRules": "Rent shown is based on 2019 guidelines from the California Tax Credit Allocation Committee. These figures may change during lease up in Spring when the new 2020 rates go into effect. One two-bedroom unit at 30% AMI will have a preference for people who live or work in Alameda County.",
   "externalId": null,
-  "waitlistMaxSize": null,
+  "waitlistMaxSize": 500,
   "name": "Corsair Flats",
   "neighborhood": "Alameda Point",
   "waitlistCurrentSize": null,
