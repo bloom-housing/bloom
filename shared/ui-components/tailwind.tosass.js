@@ -16,7 +16,7 @@ const tailwindToSassVars = bloomTheme => {
       return "$tailwind-" + colorKey + ": " + bloomTheme.theme.colors[colorKey] + ";"
     }
   })
-  const bloomScreenVars = Object.keys(bloomTheme.theme.screens).map(screenKey => {
+  const bloomScreenVars = Object.keys(bloomTheme.theme.screens).map((screenKey) => {
     return "$tailwind-screens-" + screenKey + ": " + bloomTheme.theme.screens[screenKey] + ";"
   })
 

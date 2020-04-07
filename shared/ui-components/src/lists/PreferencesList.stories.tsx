@@ -6,7 +6,7 @@ import Gish from "@bloom-housing/listings-service/listings/gish.json"
 
 export default {
   title: "Listing|Preferences List",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const listing = Object.assign({}, Gish) as any

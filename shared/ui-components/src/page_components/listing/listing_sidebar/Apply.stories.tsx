@@ -6,7 +6,7 @@ import { Attachment } from "@bloom-housing/core"
 
 export default {
   title: "Listing Sidebar|Apply",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const listing = Object.assign({}, Archer) as any
@@ -38,12 +38,12 @@ export const showsMultipleDownloadURLs = () => {
   const testAttachment1: Attachment = {
     label: "English",
     fileUrl: "#english",
-    type: 1
+    type: 1,
   }
   const testAttachment2: Attachment = {
     label: "Spanish",
     fileUrl: "#spanish",
-    type: 1
+    type: 1,
   }
 
   listingWithAttachments.attachments = [testAttachment1, testAttachment2]
@@ -64,7 +64,7 @@ export const linkDirectlyToExternalApplication = () => {
   const externalAttachment: Attachment = {
     label: "External",
     fileUrl: "https://icann.org",
-    type: 2
+    type: 2,
   }
 
   listingWithAttachments.attachments = [externalAttachment]

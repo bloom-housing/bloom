@@ -11,6 +11,6 @@ initStoryshots({
   renderer: mount,
   snapshotSerializers: [createSerializer()],
   test: multiSnapshotWithOptions({
-    renderer: mount
-  })
+    renderer: mount,
+  }),
 })

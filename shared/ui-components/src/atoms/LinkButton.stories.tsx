@@ -4,7 +4,7 @@ import LinkButton from "./LinkButton"
 
 export default {
   title: "Atoms|LinkButton",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 export const standard = () => <LinkButton href="#">LinkButton w/Link</LinkButton>

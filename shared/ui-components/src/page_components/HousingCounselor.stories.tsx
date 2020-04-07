@@ -4,7 +4,7 @@ import HousingCounselor from "./HousingCounselor"
 
 export default {
   title: "PageComponents|HousingCounselor",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 export const withOnlyRequiredFields = () => (
@@ -15,7 +15,7 @@ export const withMultipleLanguages = () => (
   <HousingCounselor
     counselor={{
       name: "Counselor Name",
-      languages: ["English", "Spanish", "Chinese"]
+      languages: ["English", "Spanish", "Chinese"],
     }}
   />
 )
@@ -28,7 +28,7 @@ export const withAllFields = () => (
       address: "123 Main St",
       citystate: "San Francisco, CA",
       website: "www.counselor.org",
-      phone: "123-456-7890"
+      phone: "123-456-7890",
     }}
   />
 )

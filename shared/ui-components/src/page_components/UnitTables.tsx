@@ -45,11 +45,12 @@ const UnitTables = (props: UnitTablesProps) => {
     number: capitalize(t("listings.unit") + " #"),
     sqFeet: capitalize(t("t.area")),
     numBathrooms: capitalize(t("listings.bath") + "s"),
-    floor: capitalize(t("t.floor"))
+    floor: capitalize(t("t.floor")),
   }
 
   const toggleTable = (event: React.MouseEvent) => {
     if (!props.disableAccordion) {
+      // eslint-disable-next-line mdx/no-unused-expressions
       event.currentTarget.parentElement?.querySelector(".unit-table")?.classList?.toggle("hidden")
     }
   }
@@ -73,7 +74,7 @@ const UnitTables = (props: UnitTablesProps) => {
               </>
             ),
             numBathrooms: <strong>{unit.numBathrooms}</strong>,
-            floor: <strong>{unit.floor}</strong>
+            floor: <strong>{unit.floor}</strong>,
           })
         })
 

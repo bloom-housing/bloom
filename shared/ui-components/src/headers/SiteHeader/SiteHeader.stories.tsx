@@ -5,7 +5,7 @@ import Button from "../../atoms/Button"
 
 export default {
   title: "Headers|SiteHeader",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 export const standard = () => (

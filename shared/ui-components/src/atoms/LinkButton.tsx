@@ -27,7 +27,7 @@ const LinkButton = (props: LinkButtonProps) => {
 
   const linkProps = {
     href: props.href,
-    className: buttonClasses.join(" ")
+    className: buttonClasses.join(" "),
   } as LinkProps
 
   if (props.as) linkProps.as = props.as
