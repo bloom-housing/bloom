@@ -1,5 +1,5 @@
 import * as React from "react"
-import nanoid from "nanoid"
+import { nanoid } from "nanoid"
 
 export const Row = (props: any) => (
   <tr id={props.id} className={props.className}>
