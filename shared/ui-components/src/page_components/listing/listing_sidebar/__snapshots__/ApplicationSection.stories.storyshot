@@ -2153,7 +2153,7 @@ exports[`Storyshots Listing Sidebar|Application Section Due Soon 1`] = `
           <p
             className="text-tiny text-gray-800 pb-3"
           >
-            Submit an application for an open slot on the waitlist for 48 units.
+            Submit an application for an open slot on the waitlist for 35 units.
           </p>
           <ul>
             <WaitlistItem
@@ -8183,7 +8183,7 @@ exports[`Storyshots Listing Sidebar|Application Section Opened Already 1`] = `
           <p
             className="text-tiny text-gray-800 pb-3"
           >
-            Submit an application for an open slot on the waitlist for 48 units.
+            Submit an application for an open slot on the waitlist for 35 units.
           </p>
           <ul>
             <WaitlistItem
