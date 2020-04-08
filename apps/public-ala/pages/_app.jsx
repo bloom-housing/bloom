@@ -2,7 +2,7 @@ import React from "react"
 import App from "next/app"
 import "@bloom-housing/ui-components/styles/index.scss"
 import "../styles/overrides.scss"
-import { addTranslation } from "@bloom-housing/ui-components/src/helpers/translator"
+import { addTranslation } from "@bloom-housing/ui-components"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -22,8 +22,7 @@ class MyApp extends App {
       es: spanishTranslations,
       custom: {
         general: await import("../page_content/locale_overrides/general.json"),
-        // Uncomment to add additional language overrides
-        // es: await import("../page_content/locale_overrides/es.json")
+        es: await import("../page_content/locale_overrides/es.json")
       }
     }
     return { pageProps, translations }

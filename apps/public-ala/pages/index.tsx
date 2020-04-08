@@ -42,6 +42,7 @@ export default class extends Component<IndexProps> {
         </Head>
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <Hero
+          backgroundImage="/images/hero-background.jpg"
           title={heroTitle}
           buttonTitle={t("welcome.seeRentalListings")}
           buttonLink="/listings"

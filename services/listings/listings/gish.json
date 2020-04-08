@@ -112,6 +112,7 @@
     }
   ],
   "buildingTotalUnits": 5,
+  "disableUnitsAccordion": true,
   "units": [
     {
       "id": "MFaowAxySJW3utZBPNxrg",

@@ -28,7 +28,7 @@ const Layout = props => (
       <LocalizedLink href="/listings" className="navbar-item">
         {t("nav.browseProperties")}
       </LocalizedLink>
-      <a href="http://domain.com" target="_blank" className="navbar-item">
+      <a href="https://www.acgov.org/cda/hcd/index.htm" target="_blank" className="navbar-item">
         {t("nav.getAssistance")}
       </a>
       {/* Only show Get Assistance if housing counselor data is available */}
