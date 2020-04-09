@@ -1,0 +1,21 @@
+.welcome {
+  @apply w-full;
+  @apply bg-gray-800;
+  @apply py-2;
+
+  &__list {
+    @apply max-w-5xl;
+    @apply m-auto;
+    @apply text-right;
+    
+    li {
+      @apply mr-6;
+      @apply inline-block;
+    }
+
+    a {
+      @apply text-gray-500;
+      @apply font-semibold;
+    }
+  }
+}

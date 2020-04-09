@@ -1,9 +1,9 @@
 import Layout from "../layouts/application"
-import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
-import PageContent from "../page_content/disclaimer.mdx"
+import { MarkdownSection, PageHeader } from "@bloom-housing/ui-components"
+import PageContent from "../page_content/welcome-es.mdx"
 
 export default () => {
-  const pageTitle = <>{t("nav.disclaimer")}</>
+  const pageTitle = <>Bienvenido al sitio web Portal de la Vivienda de San José</>
 
   return (
     <Layout>

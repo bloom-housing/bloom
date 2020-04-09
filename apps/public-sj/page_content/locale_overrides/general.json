@@ -1,8 +1,29 @@
 {
+  "footer": {
+    "copyRight": "© City of San José",
+    "disclaimer": "Disclaimer",
+    "getAssistance": "Get Assistance",
+    "giveFeedback": "Give Feedback",
+    "header": "San José Housing Portal is a project of the",
+    "headerUrl": "http://www.sanjoseca.gov/housing",
+    "headerLink": "City of San José - Housing Department",
+    "forAdditionalOpportunities": "For additional Bay Area opportunities, please visit:",
+    "forGeneralInquiries": "For general program inquiries, you may call the Housing Department at 408-535-3860.",
+    "forListingQuestions": "For listing and application questions, please contact the Property Agent displayed on the listing.",
+    "privacyPolicy": "Privacy Policy",
+    "SFHousingPortal": "San Francisco Housing Portal",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
+  "nav": {
+    "siteTitle": "San Jose Housing Portal",
+    "listings": "Browse Properties",
+    "disclaimer": "Disclaimer",
+    "policy": "My San Jose Privacy Policy"
+  },
   "region": {
     "name": "San José"
   },
   "welcome": {
-    "seeRentalListings": "Browse Rentals"
+    "seeRentalListings": "See Rentals"
   }
 }
