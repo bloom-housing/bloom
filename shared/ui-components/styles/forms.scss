@@ -3,10 +3,11 @@
   * > &:last-child {
     margin-bottom: 0;
   }
-  .label {
+  label, .label {
     @apply text-gray-750;
+    font-size: 0.95rem;
   }
-  .label + .control {
+  label + .control {
     @apply mt-2;
   }
   .control {
@@ -20,6 +21,9 @@
       @apply px-3;
       @apply text-gray-900;
       @apply leading-tight;
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: normal;
     }
   }
 
@@ -33,7 +37,7 @@
       text-decoration: none;
       // Appears to be for the case of no label
       outline: none;
-      box-shadow: 0 0 0 2px #ffffff, 0 0 3px 4px green;
+      box-shadow: 0 0 0 2px #ffffff, 0 0 3px 4px $tailwind-primary;
     }
   }
 
@@ -50,7 +54,7 @@
   input[type="radio"] + label::before {
     background: white;
     border-radius: 4px;
-    box-shadow: 0 0 0 1px white, 0 0 0 2px orange;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px map-get($tailwind-gray, 550);
     content: "\a0";
     display: inline-block;
     height: 1.25rem;
@@ -69,34 +73,78 @@
 
   input[type="checkbox"]:checked + label::before,
   input[type="radio"]:checked + label::before {
-    background-color: red;
-    box-shadow: 0 0 0 1px red;
+    background-color: $tailwind-primary;
+    box-shadow: 0 0 0 1px $tailwind-primary;
   }
 
   input[type="radio"]:checked + label::before {
-    box-shadow: 0 0 0 1px white, 0 0 0 2px red;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary;
   }
 
   input[type="checkbox"]:checked + label::before {
-    background-image: url("../images/check.png");
-    background-image: url("../images/check.svg");
+    background-image: url("/images/check.png");
+    background-image: url("/images/check.svg");
     background-position: 50%;
     background-repeat: no-repeat;
   }
 
   input[type="radio"]:focus + label::before,
   input[type="checkbox"]:focus + label::before {
-    box-shadow: 0 0 0 1px white, 0 0 0 2px red, 0 0 3px 4px green;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary, 0 0 3px 4px $tailwind-primary;
   }
 
   input[type="checkbox"]:disabled + label {
-    color: #999 !important;
+    color: map-get($tailwind-gray, 600) !important;
   }
 
   input[type="checkbox"]:disabled + label::before,
   input[type="radio"]:disabled + label::before {
-    background: #ccc;
-    box-shadow: 0 0 0 1px #999;
+    background: map-get($tailwind-gray, 550);
+    box-shadow: 0 0 0 1px map-get($tailwind-gray, 600);
     cursor: not-allowed;
+  }
+
+  select {
+    @apply text-gray-900;
+    @apply rounded;
+    @apply border;
+    @apply border-gray-450;
+    @apply bg-gray-200;
+    @apply text-gray-900;
+    @apply leading-tight;
+    @apply py-2;
+    @apply px-3;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: normal;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("/images/arrow-down.png");
+    background-image: url("/images/arrow-down.svg");
+    background-position: right .75rem center;
+    background-repeat: no-repeat;
+    background-size: .75rem;
+    padding-right: 2.25rem;
+  }
+}
+
+.field--inline {
+  display: inline-block;
+}
+.field--inline + .field--inline {
+  margin-left: 1.5rem;
+}
+
+.flex > .field {
+  @apply flex-auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  &:first-child {
+    padding-left: 0;
+  }
+  &:last-child {
+    padding-right: 0;
   }
 }
