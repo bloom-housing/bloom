@@ -1,4 +1,5 @@
 import * as React from "react"
+import "mapbox-gl/dist/mapbox-gl.css"
 import ReactMapGL, { Marker } from "react-map-gl"
 import { Address } from "@bloom-housing/core"
 import "./ListingMap.scss"
