@@ -1,5 +1,5 @@
 import * as React from "react"
-import nanoid from "nanoid"
+import { nanoid } from "nanoid"
 import { MinMax } from "@bloom-housing/core"
 import { UnitSummary, Unit } from "@bloom-housing/core"
 import { BasicTable } from "../tables/BasicTable"
