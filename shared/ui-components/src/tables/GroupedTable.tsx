@@ -1,5 +1,5 @@
 import * as React from "react"
-import nanoid from "nanoid"
+import { nanoid } from "nanoid"
 import { HeaderCell, Row, Cell, BasicTableProps } from "./BasicTable"
 
 export interface GroupedTableGroup {
