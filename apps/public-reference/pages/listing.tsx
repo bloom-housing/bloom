@@ -51,6 +51,7 @@ export default class extends Component<ListingProps> {
   }
 
   public render() {
+    let buildingSelectionCriteria, preferencesSection
     const listing = this.props.listing
 
     const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
@@ -95,6 +96,32 @@ export default class extends Component<ListingProps> {
       listingName: listing.name
     })
     const metaImage = listing.imageUrl
+
+    if (listing.buildingSelectionCriteria) {
+      buildingSelectionCriteria = (
+        <p>
+          <a href={listing.buildingSelectionCriteria}>
+            {t("listings.moreBuildingSelectionCriteria")}
+          </a>
+        </p>
+      )
+    }
+
+    if (listing.preferences) {
+      preferencesSection = (
+        <ListSection
+          title={t("listings.sections.housingPreferencesTitle")}
+          subtitle={t("listings.sections.housingPreferencesSubtitle")}
+        >
+          <>
+            <PreferencesList preferences={listing.preferences} />
+            <p className="text-gray-700 text-tiny">
+              {t("listings.remainingUnitsAfterPreferenceConsideration")}
+            </p>
+          </>
+        </ListSection>
+      )
+    }
 
     return (
       <Layout>
@@ -186,17 +213,7 @@ export default class extends Component<ListingProps> {
                   subtitle={t("listings.sections.rentalAssistanceSubtitle")}
                 />
 
-                <ListSection
-                  title={t("listings.sections.housingPreferencesTitle")}
-                  subtitle={t("listings.sections.housingPreferencesSubtitle")}
-                >
-                  <>
-                    <PreferencesList preferences={listing.preferences} />
-                    <p className="text-gray-700 text-tiny">
-                      {t("listings.remainingUnitsAfterPreferenceConsideration")}
-                    </p>
-                  </>
-                </ListSection>
+                {preferencesSection}
 
                 <ListSection
                   title={t("listings.sections.additionalEligibilityTitle")}
@@ -212,6 +229,7 @@ export default class extends Component<ListingProps> {
                     <InfoCard title={t("listings.criminalBackground")}>
                       <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
                     </InfoCard>
+                    {buildingSelectionCriteria}
                   </>
                 </ListSection>
               </ul>
