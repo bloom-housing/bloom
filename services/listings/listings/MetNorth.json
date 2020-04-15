@@ -5,7 +5,7 @@
   "acceptingOnlineApplications": true,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, laundry room, playground, bbq outside area, resident services",
-  "applicationDueDate": "2019-11-14T15:00:00.000Z",
+  "applicationDueDate": "2019-11-14T15:00:00.000-07:00",
   "applicationOrganization": "2122 Monterey Road",
   "applicationAddress": {
     "city": "San Jose",
@@ -53,6 +53,7 @@
   "updatedAt": "2019-10-24T17:00:00.000Z",
   "groupId": 1,
   "hideUnitFeatures": false,
+  "disableUnitsAccordion": true,
   "unitAmenities": "Dishwasher, microwave, balcony/patio, central heating & A/C",
   "attachments": [
     {
