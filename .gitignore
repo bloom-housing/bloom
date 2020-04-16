@@ -12,7 +12,7 @@ yarn-error.log*
 storybook-static
 
 # Cypress test output videos
-apps/public-reference/cypress/videos
+apps/**/cypress/videos
 
 # Complied Typescript
 dist

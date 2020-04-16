@@ -29,6 +29,7 @@ export interface Listing {
   blankPaperApplicationCanBePickedUp: boolean
   buildingAddress: Address
   buildingTotalUnits: number
+  buildingSelectionCriteria: string
   costsNotIncluded: string
   creditHistory: string
   criminalBackground: string
