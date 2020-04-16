@@ -27,7 +27,7 @@ export default class extends Component<IndexProps> {
   public render() {
     const heroTitle = (
       <>
-        {t("welcome.title")} <em>{t("region.name")}</em>
+        {t("welcome.title")} <em>{t("region.short")}</em>
       </>
     )
 
@@ -46,6 +46,7 @@ export default class extends Component<IndexProps> {
           buttonTitle={t("welcome.seeRentalListings")}
           buttonLink="/listings"
           listings={this.props.listings}
+          backgroundImage="/images/hero.jpg"
         />
         <div className="homepage-extra">
           <MarkdownSection fullwidth={true}>

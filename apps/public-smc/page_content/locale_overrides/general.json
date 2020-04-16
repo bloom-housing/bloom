@@ -1,12 +1,42 @@
 {
+  "footer": {
+    "cityOfSouthSF": "City of South San Francisco",
+    "cityOfSouthSFurl": "http://www.ssf.net/",
+    "contact": "Contact",
+    "copyRight": "© San Mateo County",
+    "disclaimer": "Disclaimer",
+    "getAssistance": "Get Assistance",
+    "giveFeedback": "Give Feedback",
+    "header": "San Mateo County Housing Portal is a project of the",
+    "headerUrl": "https://housing.smcgov.org/",
+    "headerLink": "San Mateo County's Department of Housing",
+    "forAdditionalOpportunities": "For additional Bay Area opportunities, please visit:",
+    "forGeneralInquiries": "For general program inquiries, you may call DOH at 650-802-5050.",
+    "forListingQuestions": "For listing and application questions, please contact the Property Agent displayed on the listing.",
+    "inPartnershipWith": "in partnership with",
+    "privacyPolicy": "Privacy Policy",
+    "sanMateoISD": "San Mateo County's Information Services Department",
+    "sanMateoISDurl": "https://isd.smcgov.org/",
+    "SFHousingPortal": "San Francisco Housing Portal",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
+  "homepage": {
+    "seeMoreOpportunities": "See more rental and ownership housing opportunities",
+    "viewAdditionalOpportunities": "View Additional Housing Opportunities"
+  },
   "region": {
-    "name": "San Mateo County"
+    "name": "San Mateo County Housing Portal",
+    "short": "San Mateo County"
   },
   "welcome": {
     "seeRentalListings": "See Rentals"
   },
+  "pageTitle": {
+    "rent": "See Rentals",
+    "privacyPolicy": "Privacy Policy"
+  },
   "nav": {
-    "siteTitle": "SAN MATEO COUNTY HOUSING",
+    "siteTitle": "San Mateo County Housing Portal",
     "listings": "Browse Properties"
   }
 }

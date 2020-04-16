@@ -35,38 +35,40 @@ const Layout = props => (
       </FooterSection>
       <FooterSection>
         <p>
-          San Mateo County Housing Portal is a project of the
+          {t("footer.header")}
           <br />
-          <a href="https://housing.smcgov.org/" target="_blank">
-            San Mateo County's Department of Housing
+          <a href={t("footer.headerUrl")} target="_blank">
+            {t("footer.headerLink")}
           </a>
           <br />
-          in partnership with
+          {t("footer.inPartnershipWith")}
           <br />
-          <a href="https://isd.smcgov.org/" target="_blank">
-            San Mateo County's Information Services Department
+          <a href={t("footer.sanMateoISDurl")} target="_blank">
+            {t("footer.sanMateoISD")}
           </a>
           <br />
-          <a href="http://www.ssf.net/" target="_blank">
-            City of South San Francisco
+          <a href={t("footer.cityOfSouthSFurl")} target="_blank">
+            {t("footer.cityOfSouthSF")}
           </a>
         </p>
+        <p className="mt-10 text-sm">{t("footer.forListingQuestions")}</p>
+        <p className="text-sm">{t("footer.forGeneralInquiries")}</p>
+
         <p className="mt-10 text-sm">
-          For listing and application questions, please contact the Property Agent displayed on the
-          LISTING
-        </p>
-        <p className="text-sm">For general program inquiries, you may call DOH at 650-802-5050</p>
-        <p className="mt-10 text-sm">
-          For additional Bay Area opportunities, please visit:
+          {t("footer.forAdditionalOpportunities")}
           <br />
-          <a href="https://housing.sfgov.org" target="_blank">
-            San Francisco Housing Portal
+          <a href={t("footer.SFHousingUrl")} target="_blank">
+            {t("footer.SFHousingPortal")}
           </a>
         </p>
       </FooterSection>
-      <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
-        <LocalizedLink href="#">Policy</LocalizedLink>
-        <LocalizedLink href="/disclaimer">Disclaimer</LocalizedLink>
+      <FooterNav copyright={t("footer.copyRight")}>
+        <a href="https://www.surveymonkey.com/r/2QLBYML" target="_blank">
+          {t("footer.giveFeedback")}
+        </a>
+        <a href="mailto:housing@smchousing.org">{t("footer.contact")}</a>
+        <LocalizedLink href="/disclaimer">{t("footer.disclaimer")}</LocalizedLink>
+        <LocalizedLink href="/privacy">{t("footer.privacyPolicy")}</LocalizedLink>
       </FooterNav>
       <FooterSection className="bg-black" small>
         <ExygyFooter />

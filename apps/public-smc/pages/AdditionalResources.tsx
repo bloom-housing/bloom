@@ -1,5 +1,5 @@
 import Layout from "../layouts/application"
-import PageHeader from "@bloom-housing/ui-components/src/headers/PageHeader/PageHeader"
+import { PageHeader } from "@bloom-housing/ui-components"
 import "./AdditionalResources.scss"
 
 const Card = props => {
@@ -31,7 +31,7 @@ export default () => {
           <div className="flex-1">
             <div className="content">
               <section>
-                <h2>Rentals</h2>
+                <h2 className="primary">Rentals</h2>
                 <h3>Lists developed each month by community nonprofit agencies.</h3>
                 <ul className="flex-none md:flex">
                   <li className="flex-1">
@@ -52,7 +52,7 @@ export default () => {
                 </ul>
               </section>
               <section>
-                <h2>Shared Housing</h2>
+                <h2 className="primary">Shared Housing</h2>
                 <h3>Home Sharing is a living arrangement among two or more unrelated people.</h3>
                 <ul className="flex-none md:flex">
                   <li className="flex-1 md:w-1/2 md:flex-none">
@@ -67,7 +67,7 @@ export default () => {
                 </ul>
               </section>
               <section>
-                <h2>Other Resources</h2>
+                <h2 className="primary">Other Resources</h2>
                 <h3>Tenant Resources, Crisis and Health Services, and Legal Assistance</h3>
                 <h3>Support with rent payments.</h3>
                 <ul className="flex-none md:flex">
@@ -110,8 +110,9 @@ export default () => {
               </section>
             </div>
           </div>
-          <aside>
+          <aside className="sidebar">
             <div>
+              <h2 className="primary">Contact</h2>
               <h3>San Mateo County's Department of Housing</h3>
               <a href="mailto:housing@smchousing.org">housing@smchousing.org</a>
               <h3 className="mt-2">Foster City Community Development</h3>

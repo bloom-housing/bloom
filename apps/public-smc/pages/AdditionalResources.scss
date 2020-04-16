@@ -1,4 +1,4 @@
-aside {
+.sidebar {
   box-shadow: -3px 0px 3px -1px rgba(0,0,0,0.1);
   @apply w-full;
   @apply flex;
@@ -6,8 +6,9 @@ aside {
   @apply p-8;
 }
 
+
 @screen md {
-  aside {
+  .sidebar {
     @apply w-1/3;
   }
 }
@@ -15,15 +16,15 @@ section {
   @apply mb-8;
 }
 
-h2 {
+.primary {
+  @apply border-0;
+  @apply border-b-4;
+  @apply border-primary;
   @apply font-alt-sans;
   @apply uppercase;
   @apply text-tiny;
   @apply mb-5;
   @apply pb-2;
-  @apply border-0;
-  @apply border-b-4;
-  @apply border-primary;
   @apply font-semibold;
   @apply text-gray-800;
   @apply tracking-widest;

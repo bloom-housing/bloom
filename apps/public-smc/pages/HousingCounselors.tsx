@@ -1,12 +1,8 @@
 import { Component } from "react"
 import axios from "axios"
-
-import { HousingCounselor as Counselor } from "@bloom-housing/core/src/HousingCounselors"
-import HousingCounselor from "@bloom-housing/ui-components/src/page_components/HousingCounselor"
-import PageHeader from "@bloom-housing/ui-components/src/headers/PageHeader/PageHeader"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
-
 import Layout from "../layouts/application"
+import { HousingCounselor as Counselor } from "@bloom-housing/core/src/HousingCounselors"
+import { HousingCounselor, PageHeader, t } from "@bloom-housing/ui-components"
 
 interface HousingCounselorsProps {
   counselors: Counselor[]
@@ -22,6 +18,7 @@ export default class extends Component<HousingCounselorsProps> {
         counselors = response.data.locations
       } catch (error) {
         console.log("Error loading housing counselors: ", error)
+        counselors = []
       }
     }
 
@@ -34,13 +31,14 @@ export default class extends Component<HousingCounselorsProps> {
         <PageHeader inverse={true} subtitle={t("housingCounselors.subtitle")}>
           {t("pageTitle.housingCounselors")}
         </PageHeader>
-        {this.props.counselors.map(c => {
-          return (
-            <article key={c.name} className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
-              <HousingCounselor counselor={c} />
-            </article>
-          )
-        })}
+        {this.props.counselors &&
+          this.props.counselors.map(c => {
+            return (
+              <article key={c.name} className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
+                <HousingCounselor counselor={c} />
+              </article>
+            )
+          })}
       </Layout>
     )
   }

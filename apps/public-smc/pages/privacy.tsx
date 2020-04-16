@@ -1,9 +1,9 @@
 import Layout from "../layouts/application"
-import { PageHeader, MarkdownSection } from "@bloom-housing/ui-components"
+import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/privacy_policy.mdx"
 
 export default () => {
-  const pageTitle = <>Privacy Policy</>
+  const pageTitle = <>{t("pageTitle.privacyPolicy")}</>
 
   return (
     <Layout>
