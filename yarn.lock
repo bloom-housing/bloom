@@ -1181,50 +1181,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/core@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.0.3.tgz#d2cdd012a47092a82e73b93507b0ad37e294dd95"
-  integrity sha512-DxcqenZHBcbohRmgfBPVtbfL/VzhW1hT6+SswMwomWJYLyjMcv+kC7+q9xyGN0MAR+yWrzbt2K9tIwyAoCcTOw==
-  dependencies:
-    "@types/node" "^12.12.25"
-    "@types/node-polyglot" "^0.4.34"
-    nanoid "^2.1.10"
-
-"@bloom-housing/core@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.0.5.tgz#0f7ae1520942ec82356066977f19e479a30b3526"
-  integrity sha512-S5YRWZEFeBCHGYEPPsJQThpG+DR7tkDpHcYJCReOZz1M0PMz9LtTW9wtm6JQqh0PZ6RjJAJIdFQv99fC0vnNOg==
-  dependencies:
-    "@types/node" "^12.12.31"
-    "@types/node-polyglot" "^0.4.34"
-    nanoid "^2.1.10"
-
-"@bloom-housing/core@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.0.6.tgz#8beb4b5766befe7897fe2cb9af9d99c226432916"
-  integrity sha512-eHW9VeWrzs05rTobEPPJ1Bp4WP0Xb90jxByBYDGLAXQko1S/l2fzPTLFB5EBVgBa5OoayLofnmskNVEuH4CG9w==
-  dependencies:
-    "@types/node" "^12.12.31"
-    "@types/node-polyglot" "^0.4.34"
-    nanoid "^2.1.10"
-
-"@bloom-housing/ui-components@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.0.6.tgz#0379ffa18e33a729a83f4873439dffe4a645cabe"
-  integrity sha512-pRC4dSkIpugPKIf7yTuzNDJilZ+gbeCJVuphK0qe/nY4VE1/KHH9HVNtJqx4IzCLPOcn6cyGUtKQcR/4ecWFUA==
-  dependencies:
-    "@bloom-housing/core" "^0.0.5"
-    "@types/nanoid" "^2.0.0"
-    "@types/node" "^12.12.31"
-    "@types/node-polyglot" "^0.4.34"
-    "@types/react-dom" "^16.9.5"
-    bulma "^0.7.5"
-    nanoid "^2.1.10"
-    react "^16.12.0"
-    react-dom "^16.12.0"
-    react-map-gl "^5.2"
-    tailwindcss "^1.1.4"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -3522,7 +3478,7 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zeit/next-css@1.0.1":
+"@zeit/next-css@1.0.1", "@zeit/next-css@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@zeit/next-css/-/next-css-1.0.1.tgz#4f784e841e7ca1b21b3468a902e2c1fa95a3e75c"
   integrity sha512-yfHPRy/ne/5SddVClsoy+fpU7e0Cs1gkWA67/wm2uIu+9rznF45yQLxHEt5dPGF3h6IiIh7ZtIgA8VV8YKq87A==
@@ -10884,11 +10840,6 @@ nan@^2.12.1, nan@^2.13.2:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
-
-nanoid@^3.0.0:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.0.2.tgz#37e91e6f5277ce22335be473e2a5db1bd96dd026"
-  integrity sha512-WOjyy/xu3199NlQiQWlx7VbspSFlGtOxa1bRX9ebmXOnp1fje4bJfjPs1wLQ8jZbJUfD+yceJmw879ZSaVJkdQ==
 
 nanoid@^3.0.0:
   version "3.1.3"
