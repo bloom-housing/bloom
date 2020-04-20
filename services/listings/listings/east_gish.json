@@ -1,11 +1,11 @@
 {
-  "id": 4,
+  "id": "t1SQK9_vwDsXRxxgV3J7j",
   "acceptingApplicationsAtLeasingAgent": true,
   "acceptingApplicationsByPoBox": false,
   "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, Laundry",
-  "applicationDueDate": "2020-03-13T15:00:00.000Z",
+  "applicationDueDate": "2020-03-13T15:00:00.000-07:00",
   "applicationOrganization": "35 East Gish Road",
   "applicationAddress": {
     "city": "San Jose",
@@ -57,6 +57,7 @@
   "updatedAt": "2019-02-19T10:47:47.150Z",
   "groupId": 1,
   "hideUnitFeatures": false,
+  "disableUnitsAccordion": true,
   "unitAmenities": "Dishwasher",
   "attachments": [
     {

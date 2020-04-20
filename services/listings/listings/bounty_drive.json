@@ -1,5 +1,5 @@
 {
-  "id": 7,
+  "id": "9S_YS18IRr7fu9YAmT8Tk",
   "acceptingApplicationsAtLeasingAgent": true,
   "acceptingApplicationsByPoBox": false,
   "acceptingOnlineApplications": false,
@@ -19,6 +19,7 @@
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "Foster City",
+    "county": "San Mateo",
     "state": "CA",
     "street": "700 Bounty Drive",
     "zipCode": "94404",

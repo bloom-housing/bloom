@@ -1,5 +1,5 @@
 {
-  "id": 8,
+  "id": "1CaO_xLQlWi-YV0i1Vt8v",
   "acceptingApplicationsAtLeasingAgent": false,
   "acceptingApplicationsByPoBox": false,
   "acceptingOnlineApplications": false,
@@ -17,6 +17,7 @@
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "Daly City",
+    "county": "San Mateo",
     "state": "CA",
     "street": "4619 Brunswick St",
     "zipCode": "94014",

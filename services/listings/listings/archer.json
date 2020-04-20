@@ -1,5 +1,5 @@
 {
-  "id": 5,
+  "id": "vWgL5K1EUG8q0SX-Dv5BA",
   "acceptingApplicationsAtLeasingAgent": true,
   "acceptingApplicationsByPoBox": false,
   "acceptingOnlineApplications": false,
@@ -14,7 +14,7 @@
     "latitude": 37.365687,
     "longitude": -121.910608
   },
-  "applicationDueDate": "2019-11-01T16:00:00.000Z",
+  "applicationDueDate": "2019-11-01T09:00:00.000-07:00",
   "applicationOrganization": "98 Archer Street",
   "applicationPhone": "(408) 217-8562",
   "blankPaperApplicationCanBePickedUp": true,
@@ -53,6 +53,7 @@
   "updatedAt": "2019-10-18T16:21:37.024Z",
   "groupId": 1,
   "hideUnitFeatures": false,
+  "disableUnitsAccordion": true,
   "unitAmenities": "Dishwasher",
   "attachments": [
     {
