@@ -11,6 +11,7 @@
     @apply text-white;
     @apply block;
     @apply mt-2;
+    
     @screen lg {
       @apply inline;
       @apply mt-0;
@@ -21,6 +22,7 @@
   .footer-sock-inner {
     @apply max-w-5xl;
     @apply m-auto;
+
     @screen lg {
       @apply flex;
     }
@@ -35,6 +37,7 @@
 
   .footer-nav {
     @apply mt-5;
+
     @screen lg {
       @apply mt-0;
       @apply w-6/12;

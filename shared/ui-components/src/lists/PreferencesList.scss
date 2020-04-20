@@ -2,6 +2,7 @@
   .info-card__title {
     @apply mb-0;
     @apply ml-4;
+    
     @screen md {
       @apply ml-2;
     }
@@ -13,8 +14,8 @@
     margin-top: -10px;
   }
   .info-card__title {
-    text-transform: none;
-    letter-spacing: 0;
+    @apply normal-case;
+    @apply tracking-normal;
   }
 }
 
@@ -24,23 +25,23 @@
   @apply border-primary;
   @apply text-primary;
   @apply text-sm;
-  border-radius: 50%;
-  float: left;
-  font-weight: 700;
-  padding: 0.5rem;
+  @apply rounded-full;
+  @apply float-left;
+  @apply p-2;
+  @apply mr-2;
+  @apply text-center;
+  @apply whitespace-no-wrap;
+  @apply font-bold;
   margin-left: -2.2rem;
-  margin-right: 0.5rem;
   margin-top: -4px;
-  text-align: center;
   width: 2.5rem;
-  white-space: nowrap;
 
   @screen md {
     margin-left: -2.65rem;
   }
 
   sup {
-    font-weight: 400;
+    @apply font-normal;
     top: -0.35em;
   }
 }
@@ -66,6 +67,6 @@
   @apply mt-3;
 
   span {
-    margin-right: 1rem;
+    @apply mr-4;
   }
 }
