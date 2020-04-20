@@ -2,6 +2,9 @@
 
 .image-card {
   @apply relative;
+  img {
+    @apply w-full;
+  }
 }
 
 .image-card__status {

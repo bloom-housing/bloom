@@ -139,7 +139,9 @@ const summarizeUnits = (
         summary.rentRange = minMaxValue(summary.rentRange as MinMax, unit.monthlyRent)
         summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
         summary.areaRange = minMaxValue(summary.areaRange, unit.sqFeet)
-        summary.totalAvailable += 1
+        if (unit.status == "available") {
+          summary.totalAvailable += 1
+        }
 
         return summary
       }, summary)
