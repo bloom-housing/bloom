@@ -38,7 +38,8 @@ module.exports = withCSS(
         env: {
           listingServiceUrl: LISTING_SERVICE_URL,
           mapBoxToken: MAPBOX_TOKEN,
-          housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL
+          housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
+          gtmKey: process.env.GTM_KEY || null
         },
         sassLoaderOptions: {
           prependData: tailwindVars
@@ -47,7 +48,6 @@ module.exports = withCSS(
         async exportPathMap() {
           // we fetch our list of listings, this allow us to dynamically generate the exported pages
           let listings = []
-
           try {
             const response = await axios.get(LISTING_SERVICE_URL)
             listings = response.data.listings
