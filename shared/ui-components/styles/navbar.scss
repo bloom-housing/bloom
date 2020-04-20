@@ -8,6 +8,7 @@
   @apply text-right;
   @apply text-white;
 }
+
 .navbar-notice__text {
   @apply max-w-5xl;
   @apply m-auto;
@@ -15,10 +16,16 @@
   @apply pt-2;
   @apply pb-2;
   @apply pr-1;
+
   a, a:hover {
+    @apply underline;
     color: inherit;
-    text-decoration: underline;
   }
+}
+
+.navbar__wrapper {
+  @apply border-b;
+  @apply border-gray-400;
 }
 
 // Custom Navbar Styles
@@ -28,27 +35,26 @@ nav.navbar {
 }
 
 .navbar-brand .logo {
-  align-items: center;
-  justify-content: center;
+  @apply text-black;
+  @apply block;
+  @apply text-center;
+  @apply z-10;
+  @apply items-center;
+  @apply justify-center;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  margin-bottom: -0.75rem;
 
   &.navbar-item,
   &.navbar-item:hover,
   &.navbar-item:focus {
     @apply bg-white;
     @apply border-b-0;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    display: flex;
+    @apply pt-1;
+    @apply pb-1;
+    @apply pl-4;
+    @apply pr-4;
+    @apply flex;
   }
-
-  @apply text-black;
-  display: block;
-  text-align: center;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-  margin-bottom: -0.75rem;
-  padding-top: .5em;
-  margin-right: 2rem;
-  z-index: 10;
 
   @screen md {
     margin-top: -2.75em;
@@ -60,15 +66,15 @@ nav.navbar {
   }
 
   .logo__image {
-    display: inline-block;
+    @apply inline-block;
+    @apply mt-1;
+    @apply mb-1;
     max-height: 1.5rem;
-    margin-bottom: 0.25rem;
-    margin-top: .25rem;
 
     @screen md {
+      @apply mt-3;
+      @apply mb-2;
       max-height: 2rem;
-      margin-bottom: 0.5rem;
-      margin-top: .75rem;
     }
   }
 
@@ -88,27 +94,29 @@ nav.navbar {
 
 .navbar-item,
 .navbar-link {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  @apply pt-1;
+  @apply pb-1;
 }
 
 a.navbar-item {
-  @apply text-sm;
+  @apply text-base;
   @apply text-gray-800;
-  @apply border-b-0;
-  @apply border-white;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  @apply pt-4;
+  @apply pb-4;
+  @apply border-b;
+  @apply border-gray-400;
 
   &:hover {
     @apply bg-primary-lighter;
   }
 
   @screen md {
+    @apply text-sm;
     @apply border-b-2;
     @apply uppercase;
-    padding-top: 2.5rem;
-    padding-bottom: .85rem;
+    @apply pt-10;
+    @apply pb-3;
+    border-color: transparent;
 
     &:hover {
       @apply bg-white;
@@ -129,12 +137,7 @@ a.navbar-item {
 }
 
 .navbar-menu {
-  padding: 0;
-
-  @screen md {
-    padding-top: .5;
-    padding-bottom: .5;
-  }
+  @apply p-0;
 }
 
 .navbar-end {
