@@ -1,10 +1,10 @@
 {
   "packages": [
-    "shared/*",
+    "apps/public-reference",
     "services/listings",
-    "apps/public-reference"
+    "shared/*"
   ],
-  "version": "0.0.7",
+  "version": "0.0.9",
   "npmClient": "yarn",
-  "useWrokspaces": true 
+  "useWrokspaces": true
 }

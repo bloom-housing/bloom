@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public-reference",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -15,8 +15,8 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev\""
   },
   "dependencies": {
-    "@bloom-housing/core": "^0.0.8",
-    "@bloom-housing/ui-components": "^0.0.8",
+    "@bloom-housing/core": "^0.0.9",
+    "@bloom-housing/ui-components": "^0.0.9",
     "@mdx-js/loader": "1.5.5",
     "@next/mdx": "9.2.0",
     "@zeit/next-sass": "^1.0.1",
