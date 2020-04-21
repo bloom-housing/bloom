@@ -16,6 +16,7 @@
     "test:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn test",
     "dev:listings": "cd services/listings && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
+    "new-version": "lerna version --conventional-commits --yes",
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\""
@@ -32,6 +33,7 @@
     "eslint-plugin-react": "^7.19.0",
     "husky": "^4.2.3",
     "jest": "^25.2.3",
+    "lerna": "^3.20.2",
     "lint-staged": "^10.0.9",
     "prettier": "^1.19.1",
     "react": "16.12.0",
