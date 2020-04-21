@@ -31,6 +31,17 @@ const summaries = {
       areaRange: { min: 285, max: 285 }
     }
   ],
+  byUnitTypeWithoutFloor: [
+    {
+      unitType: "studio",
+      totalAvailable: 41,
+      minIncomeRange: { min: "$1,438", max: "$2,208" },
+      occupancyRange: { min: 1, max: 2 },
+      rentAsPercentIncomeRange: { min: null, max: null },
+      rentRange: { min: "$719", max: "$1,104" },
+      areaRange: { min: 285, max: 285 }
+    }
+  ],
   byNonReservedUnitType: [
     {
       unitType: "studio",
@@ -123,6 +134,13 @@ export const unitsList = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   // @ts-ignore
   return <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
+  /* eslint-enable @typescript-eslint/ban-ts-ignore */
+}
+
+export const unitsListWithoutFloor = () => {
+  /* eslint-disable @typescript-eslint/ban-ts-ignore */
+  // @ts-ignore
+  return <UnitTables units={archer.units} unitSummaries={summaries.byUnitTypeWithoutFloor} />
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 

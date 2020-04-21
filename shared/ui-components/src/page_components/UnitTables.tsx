@@ -63,6 +63,7 @@ const UnitTables = (props: UnitTablesProps) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
         const units = props.units.filter((unit: Unit) => unit.unitType == unitSummary.unitType)
         const unitsFormatted = [] as Array<Record<string, string | JSX.Element>>
+        let floorSection
         units.forEach((unit: Unit) => {
           unitsFormatted.push({
             number: unit.number,
@@ -76,17 +77,25 @@ const UnitTables = (props: UnitTablesProps) => {
           })
         })
 
+        if (unitSummary.floorRange) {
+          floorSection = (
+            <>
+              ,&nbsp;{formatRange(unitSummary.floorRange, true)}{" "}
+              {unitSummary.floorRange.max > unitSummary.floorRange.min
+                ? t("t.floors")
+                : t("t.floor")}
+            </>
+          )
+        }
+
         return (
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
               <h3 className="button-tiny-bg-light">
                 <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>:&nbsp;
                 {unitsLabel(units)},&nbsp;
-                {formatRange(unitSummary.areaRange)} {t("listings.squareFeet")},&nbsp;
-                {formatRange(unitSummary.floorRange, true)}{" "}
-                {unitSummary.floorRange.max > unitSummary.floorRange.min
-                  ? t("t.floors")
-                  : t("t.floor")}
+                {formatRange(unitSummary.areaRange)} {t("listings.squareFeet")}
+                {floorSection}
               </h3>
             </button>
             <div className="unit-table hidden">
