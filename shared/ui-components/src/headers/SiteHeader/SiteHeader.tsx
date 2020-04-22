@@ -78,20 +78,21 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     return (
       <>
         {this.noticeBar()}
+        <div className="navbar__wrapper">
+          <nav className="navbar" role="navigation" aria-label="main navigation">
+            <div className="navbar-brand">
+              {this.logo()}
+              {this.hamburgerMenu()}
+            </div>
 
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-brand">
-            {this.logo()}
-            {this.hamburgerMenu()}
-          </div>
-
-          <div
-            id="navbarMenuLinks"
-            className={"navbar-menu mt-3 md:mt-0" + (this.state.active ? " is-active" : "")}
-          >
-            <div className="navbar-end">{this.props.children}</div>
-          </div>
-        </nav>
+            <div
+              id="navbarMenuLinks"
+              className={"navbar-menu mt-3 md:mt-0" + (this.state.active ? " is-active" : "")}
+            >
+              <div className="navbar-end">{this.props.children}</div>
+            </div>
+          </nav>
+        </div>
       </>
     )
   }

@@ -36,6 +36,21 @@
     @apply border-l-2;
     @apply border-primary;
   }
+
+  .ui-icon {
+    @apply absolute;
+    top: 1rem;
+    right: 1rem;
+
+    @screen md {
+      @apply hidden;
+    }
+
+    svg {
+      @apply w-3;
+      @apply h-3;
+    }
+  }
 }
 
 .detail-header__title {

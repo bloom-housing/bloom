@@ -25,15 +25,17 @@ const ImageCard = (props: ImageCardProps) => {
   }
 
   const image = (
-    <figure className="image-card">
-      {props.imageUrl && <img src={props.imageUrl} alt={props.title} />}
-      {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
+    <div className="image-card__wrapper">
+      <figure className="image-card">
+        {props.imageUrl && <img src={props.imageUrl} alt={props.title} />}
+        {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
+        <figcaption className="image-card__figcaption">
+          <h2 className="image-card__title">{props.title}</h2>
+          <p>{props.subtitle}</p>
+        </figcaption>
+      </figure>
       {statusLabel}
-      <figcaption className="image-card__figcaption">
-        <h2 className="image-card__title">{props.title}</h2>
-        <p>{props.subtitle}</p>
-      </figcaption>
-    </figure>
+    </div>
   )
 
   let card = image
