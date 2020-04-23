@@ -98,7 +98,7 @@ h1.title {
 }
 
 details.disclosure {
-  position: relative;
+  @apply relative;
   min-height: 3em;
 
   &[open] {
@@ -107,21 +107,20 @@ details.disclosure {
 
   & > summary {
     @apply text-primary;
-
-    padding: 0 3px 6px 0;
-    list-style: none;
-    position: absolute;
+    @apply absolute;
+    @apply list-none;
+    @apply outline-none;
+    @apply cursor-pointer;
     bottom: 0;
-    outline: none;
-    cursor: pointer;
+    padding: 0 3px 6px 0;
 
     &:after {
+      @apply font-bold;
+      @apply inline-block;
       font-size: 0.8em;
       content: "⌃";
-      font-weight: bold;
       margin-left: 7px;
       transform: rotate(180deg) translateY(3px);
-      display: inline-block;
     }
   }
 
@@ -134,7 +133,7 @@ details.disclosure {
   }
 
   & > summary::-webkit-details-marker {
-    display: none;
+    @apply hidden;
   }
 
   p {

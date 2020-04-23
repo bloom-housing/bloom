@@ -2,16 +2,10 @@
 
 .image-card {
   @apply relative;
+  
   img {
     @apply w-full;
   }
-}
-
-.image-card__status {
-  @apply absolute;
-  @apply left-0;
-  @apply top-0;
-  @apply mt-2;
 }
 
 .image-card__figcaption {
@@ -27,26 +21,28 @@
 
 .image-card__title {
   @apply text-white;
-  @apply text-center;
+  @apply text-left;
   @apply text-3xl;
   @apply uppercase;
   @apply font-alt-sans;
-  @apply mb-3;
   @apply relative;
   @apply z-10;
   @apply tracking-wider;
+  @apply py-3;
+  @apply px-5;
 }
 
 .image-card--leader {
   @apply w-full;
-  @apply pt-8;
-
+  
   @screen md {
     @apply w-2/3;
     @apply pr-8;
+    @apply pt-8;
   }
 
   .image-card__title {
     @apply text-4xl;
+    @apply text-center;
   }
 }

@@ -1,17 +1,17 @@
-
 .custom-counter_item {
   @screen md {
+    @apply mb-12;
+    @apply ml-8;
+    @apply pl-12;
+    @apply relative;
     counter-increment: step-counter;
-    margin-bottom: 3rem;
-    margin-left: 2rem;
-    padding-left: 3rem;
-    position: relative;
   }
 }
 
 .custom-counter_item::before {
   @screen md {
-    position: absolute;
+    @apply absolute;
+    @apply font-serif;
     top: 0;
     left: -1rem;
     content: counter(step-counter);
@@ -19,15 +19,14 @@
     color: #333;
     font-size: 4.375rem;
     line-height: 0.85;
-    font-family: "Droid Serif", Georgia, Times, serif;
   }
 }
 
 .custom-counter_header {
   @screen md {
+    @apply mb-8;
+    @apply -ml-4;
+    @apply pl-4;
     border-left: 2px solid #dedee0;
-    margin-bottom: 2rem;
-    margin-left: -1rem;
-    padding-left: 1rem;
   }
 }

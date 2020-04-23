@@ -15,17 +15,17 @@ table tr:nth-of-type(even) {
 }
 
 td.reserved {
+  @apply font-sans;
+  @apply font-bold;
+  @apply uppercase;
+  @apply text-2xs;
+  @apply leading-tight;
   padding-top: 9px;
   padding-bottom: 9px;
   border-bottom: 1px solid $tailwind-splash;
   background-color: $tailwind-splash-bg;
-  font-size: 0.6875rem;
-  line-height: 1.25;
   color: #555;
-  font-family: "Open Sans", Helvetica, Arial, Verdana, sans-serif;
-  font-weight: 700;
   letter-spacing: 0.1rem;
-  text-transform: uppercase;
   border-top: 1px solid $tailwind-splash;
   border-left: 0.4rem solid $tailwind-splash;
   padding-left: 1em;
@@ -35,6 +35,7 @@ td.reserved {
     font-size: 0.9rem;
   }
 }
+
 tr.group-reserved td:first-of-type {
   border-left: 0.4rem solid $tailwind-splash;
 }
@@ -45,10 +46,10 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
 @media screen and (max-width: 639px) {
   table.responsive-collapse {
     thead {
-      display: none;
+      @apply hidden;
     }
     tr {
-      display: block;
+      @apply block;
       margin-bottom: 1.75em;
     }
     tr:nth-of-type(even) {
@@ -59,15 +60,15 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     }
 
     td {
-      display: block;
-      text-align: right;
+      @apply block;
+      @apply text-right;
     }
 
     td:before {
+      @apply font-bold;
+      @apply uppercase;
+      @apply float-left;
       content: attr(data-label);
-      float: left;
-      font-weight: bold;
-      text-transform: uppercase;
     }
 
     td:last-child {

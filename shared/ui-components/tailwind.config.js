@@ -99,7 +99,7 @@ module.exports = {
       normal: "0",
       wide: ".025em",
       wider: ".05em",
-      widest: ".2em"
+      widest: ".12em"
     }
   }
 }

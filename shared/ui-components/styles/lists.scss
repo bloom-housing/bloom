@@ -36,6 +36,21 @@
     @apply border-l-2;
     @apply border-primary;
   }
+
+  .ui-icon {
+    @apply absolute;
+    top: 1rem;
+    right: 1rem;
+
+    @screen md {
+      @apply hidden;
+    }
+
+    svg {
+      @apply w-3;
+      @apply h-3;
+    }
+  }
 }
 
 .detail-header__title {
@@ -74,13 +89,13 @@
     clear: left;
 
     @screen md {
-      margin-top: 0.15rem;
       @apply pl-4;
       @apply border-l-2;
       @apply border-gray-450;
       @apply float-left;
       @apply w-1/3;
       @apply pr-3;
+      margin-top: 0.15rem;
     }
   }
 
@@ -100,6 +115,7 @@
   }
 
   @screen md {
+
   }
 }
 
@@ -110,10 +126,11 @@
 }
 
 .description__body {
+  @apply mb-4;
+
   @screen md {
     padding-top: 0.4em;
   }
-  @apply mb-4;
 }
 
 // Box
@@ -126,7 +143,7 @@
 html,
 body {
   @screen md {
-    overflow-x: hidden;
+    @apply overflow-x-hidden;
   }
 }
 
