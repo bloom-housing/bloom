@@ -5,6 +5,5 @@
     "shared/*"
   ],
   "version": "0.0.9",
-  "npmClient": "yarn",
-  "useWrokspaces": true
+  "npmClient": "yarn"
 }
