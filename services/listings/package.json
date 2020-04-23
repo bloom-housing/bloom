@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/listings-service",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "main": "dist/index.js",
   "author": "Ben Kutler <ben.kutler@exygy.com>",
