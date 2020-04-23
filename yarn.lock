@@ -1181,6 +1181,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bloom-housing/core@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.0.8.tgz#90cf7eaee7a5e379487a180cf2a41f808206eaea"
+  integrity sha512-qMC6bB8datARTMSO1OEJEgSoWEvpuvLgWqXWUfGloiODQyMLBJzrhpf3YMZwrO+8YvCtI2dTNslIcC5cpshb4w==
+  dependencies:
+    "@types/node" "^12.12.31"
+    "@types/node-polyglot" "^0.4.34"
+    nanoid "^3.0.0"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -10840,11 +10849,6 @@ nan@^2.12.1, nan@^2.13.2:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
-
-nanoid@^3.0.0:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.0.2.tgz#37e91e6f5277ce22335be473e2a5db1bd96dd026"
-  integrity sha512-WOjyy/xu3199NlQiQWlx7VbspSFlGtOxa1bRX9ebmXOnp1fje4bJfjPs1wLQ8jZbJUfD+yceJmw879ZSaVJkdQ==
 
 nanoid@^3.0.0:
   version "3.1.3"
