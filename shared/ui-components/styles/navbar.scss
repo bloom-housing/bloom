@@ -84,10 +84,10 @@ nav.navbar {
     @apply text-gray-900;
     @apply font-alt-sans;
     @apply tracking-wider;
-    font-size: 13px;
+    @apply text-sm;
 
     @screen md {
-      font-size: 14px;
+      @apply text-tiny;
     }
   }
 }
