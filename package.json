@@ -53,5 +53,8 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint"
+  },
+  "dependencies": {
+    "tailwindcss": "^1.3"
   }
 }
