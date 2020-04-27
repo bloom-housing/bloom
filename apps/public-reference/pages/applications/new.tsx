@@ -1,7 +1,7 @@
 import Router from "next/router"
-import { Button, MarkdownSection, PageHeader } from "@bloom-housing/ui-components"
-import Layout from "../../layouts/application"
-import PageContent from "../../page_content/new_application.mdx"
+import { Button, ErrorMessage } from "@bloom-housing/ui-components"
+import FormsLayout from "../../layouts/forms"
+import PageContent from "../../page_content/applications/new.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../lib/ApplicationConductor"
@@ -10,7 +10,6 @@ import { useContext } from "react"
 import { MultistepProgress } from "@bloom-housing/ui-components"
 
 export default () => {
-  const pageTitle = <>Submit an Application</>
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
@@ -24,26 +23,35 @@ export default () => {
     const submission = new AppSubmissionStep1a(conductor)
     submission.save(data)
 
-    Router.push("/applications/step2")
+    Router.push("/applications/step2").then(() => window.scrollTo(0, 0))
   }
 
-  return (
-    <Layout>
-      <PageHeader inverse={true}>{pageTitle}</PageHeader>
-      <MarkdownSection>
-        <PageContent />
-      </MarkdownSection>
+  const cardClasses = ["p-10", "bg-white", "mb-10", "border", "border-gray-450", "rounded-lg"].join(
+    " "
+  )
 
-      <article className="max-w-5xl m-auto mb-12">
+  return (
+    <FormsLayout>
+      <article className={cardClasses}>
+        <h5 className="font-alt-sans text-center mb-5">
+          55 TRITON PARK LANE UNITS 510 516 APPLICATION
+        </h5>
+
         <MultistepProgress
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
           totalNumberOfSteps={conductor.totalNumberOfSteps()}
         />
+      </article>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <article className={cardClasses}>
+        <div className="markdown">
+          <PageContent />
+        </div>
+
+        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex">
-            <div className="field">
+            <div className={"field " + (errors.firstname ? "error" : "")}>
               <label htmlFor="firstname">First Name</label>
               <div className="control">
                 <input
@@ -52,12 +60,13 @@ export default () => {
                   id="firstname"
                   name="firstname"
                   defaultValue={context.application.name?.split(" ")[0]}
-                  ref={register}
+                  ref={register({ required: true })}
                 />
               </div>
+              <ErrorMessage error={errors.firstname}>Please enter a First Name</ErrorMessage>
             </div>
 
-            <div className="field">
+            <div className={"field " + (errors.lastname ? "error" : "")}>
               <label htmlFor="lastname">Last Name</label>
               <div className="control">
                 <input
@@ -69,26 +78,26 @@ export default () => {
                   ref={register({ required: true })}
                 />
               </div>
+              <ErrorMessage error={errors.lastname}>Please enter a Last Name</ErrorMessage>
             </div>
-            {errors.lastname && "Last name is required."}
           </div>
 
-          <div className="field max-w-xs">
+          <div className={"field " + (errors.age ? "error" : "")}>
             <label className="label" htmlFor="age">
               Age
             </label>
-            <div className="control">
+            <div className="control" style={{ maxWidth: "8rem" }}>
               <input
                 className="input"
                 type="text"
                 id="age"
                 name="age"
                 defaultValue={context.application.age}
-                ref={register({ pattern: /\d+/ })}
+                ref={register({ required: true, pattern: /\d+/ })}
               />
             </div>
+            <ErrorMessage error={errors.age}>Please enter number for Age</ErrorMessage>
           </div>
-          {errors.age && "Please enter number for age."}
 
           <div className="field">
             <input
@@ -124,17 +133,18 @@ export default () => {
             <label htmlFor="housingStatus2">Temporary Housing</label>
           </div>
 
-          <div className="mt-6">
+          <div className="text-center mt-6">
             <Button
+              filled={true}
               onClick={() => {
                 console.info("button has been clicked!")
               }}
             >
-              Save Form
+              Next
             </Button>
           </div>
         </form>
       </article>
-    </Layout>
+    </FormsLayout>
   )
 }

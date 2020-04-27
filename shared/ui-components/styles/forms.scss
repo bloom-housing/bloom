@@ -3,7 +3,8 @@
   * > &:last-child {
     margin-bottom: 0;
   }
-  label, .label {
+  label,
+  .label {
     @apply text-gray-750;
     font-size: 0.95rem;
   }
@@ -20,10 +21,24 @@
       @apply py-2;
       @apply px-3;
       @apply text-gray-900;
-      @apply leading-tight;
       font-family: inherit;
       font-size: 1rem;
       line-height: normal;
+    }
+  }
+  &.error {
+    label {
+      @apply text-red-700;
+    }
+    .control {
+      .input,
+      select {
+        @apply border-red-700;
+      }
+    }
+    .error-message {
+      @apply text-sm;
+      @apply text-red-700;
     }
   }
 
@@ -122,9 +137,9 @@
     appearance: none;
     background-image: url("/images/arrow-down.png");
     background-image: url("/images/arrow-down.svg");
-    background-position: right .75rem center;
+    background-position: right 0.75rem center;
     background-repeat: no-repeat;
-    background-size: .75rem;
+    background-size: 0.75rem;
     padding-right: 2.25rem;
   }
 }

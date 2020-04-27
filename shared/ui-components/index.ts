@@ -19,6 +19,7 @@ export * from "./src/footers/FooterSection/FooterSection"
 export * from "./src/footers/SiteFooter/SiteFooter"
 
 /* Forms */
+export * from "./src/forms/ErrorMessage"
 export * from "./src/forms/MultistepProgress"
 
 /* Headers */

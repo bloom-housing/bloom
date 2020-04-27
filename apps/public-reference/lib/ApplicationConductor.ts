@@ -23,7 +23,7 @@ export default class ApplicationConductor {
   }
 
   totalNumberOfSteps() {
-    return 7
+    return 2
   }
 
   advanceToNextStep() {
