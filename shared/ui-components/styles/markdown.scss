@@ -1,21 +1,27 @@
 .markdown {
   h3 {
-    font-size: 1.8rem;
-    margin-top: 2rem;
-    margin-bottom: 1.2rem;
-    @media (max-width: 767px) {
-      font-size: 1.4rem;
+    @apply mt-8;
+    @apply mb-5;
+    @apply text-3xl;
+
+    @screen md {
+      @apply text-xl;
     }
   }
+
   h3:first-child {
-    margin-top: 0;
+    @apply mt-0;
   }
+
   hr {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #ddd;
+    @apply mt-8;
+    @apply mb-8;
+    @apply border-b;
+    @apply border-solid;
+    @apply border-gray-450;
   }
+
   p {
-    margin-bottom: 1rem;
+    @apply mb-4;
   }
 }

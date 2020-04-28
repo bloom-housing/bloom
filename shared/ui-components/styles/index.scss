@@ -6,7 +6,7 @@
 @import url("https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic");
 
 html {
-  -webkit-font-smoothing: antialiased;
+  @apply antialiased;
 }
 
 body {
@@ -24,21 +24,21 @@ main {
 
 // Sticky footer\
 html {
-  height: 100%;
+  @apply h-full;
 
   body {
-    display: table;
-    height: 100%;
-    width: 100%;
+    @apply table;
+    @apply h-full;
+    @apply w-full;
   }
 
   .site-container {
-    display: table-row;
-    height: 100%;
+    @apply table-row;
+    @apply h-full;
   }
 
   .footer-section {
-    display: table-row;
+    @apply table-row;
     height: 1px;
   }
 }

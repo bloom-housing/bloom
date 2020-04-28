@@ -102,7 +102,7 @@ details.disclosure {
   min-height: 3em;
 
   &[open] {
-    margin-bottom: 4em;
+    @apply mb-16;
   }
 
   & > summary {
@@ -111,15 +111,16 @@ details.disclosure {
     @apply list-none;
     @apply outline-none;
     @apply cursor-pointer;
-    bottom: 0;
-    padding: 0 3px 6px 0;
+    @apply bottom-0;
+    @apply pr-1;
+    @apply pb-2;
 
     &:after {
       @apply font-bold;
       @apply inline-block;
-      font-size: 0.8em;
+      @apply ml-2;
+      @apply text-sm;
       content: "⌃";
-      margin-left: 7px;
       transform: rotate(180deg) translateY(3px);
     }
   }
@@ -137,7 +138,6 @@ details.disclosure {
   }
 
   p {
-    margin-top: 1em;
-    margin-bottom: 1em;
+    @apply my-4;
   }
 }

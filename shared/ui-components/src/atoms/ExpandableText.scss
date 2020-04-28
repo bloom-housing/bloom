@@ -1,6 +1,6 @@
 .btn-link {
   @apply text-primary;
-  cursor: pointer;
+  @apply cursor-pointer;
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
