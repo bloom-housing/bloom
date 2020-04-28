@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 module.exports = {
+
   theme: {
     screens: {
       sm: "640px",
