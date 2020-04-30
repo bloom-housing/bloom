@@ -1,0 +1,48 @@
+{
+  "name": "@bloom-housing/authentication-service",
+  "version": "0.0.1",
+  "description": "Authentication service for Bloom affordable housing system",
+  "main": "dist/index.js",
+  "author": "Ben Peters <bencpeters@gmail.com>",
+  "license": "GPL-3.0",
+  "private": true,
+  "dependencies": {
+    "@types/node": "^13.13.4",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/jest": "^25.2.1",
+    "babel-jest": "^25.5.1",
+    "dotenv": "^8.2.0",
+    "jest": "^25.5.2",
+    "ts-node-dev": "^1.0.0-pre.44"
+  },
+  "engines": {
+    "node": "12",
+    "yarn": "^1.22"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "yarn run clean && tsc -p tsconfig.prod.json",
+    "start": "yarn install && yarn run build && node dist/src/index.js",
+    "dev": "ts-node-dev src/index.ts",
+    "test": "jest"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/react",
+      "@babel/preset-typescript"
+    ]
+  }
+}
