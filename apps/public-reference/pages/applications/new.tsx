@@ -1,5 +1,5 @@
 import Router from "next/router"
-import { Button, ErrorMessage } from "@bloom-housing/ui-components"
+import { Button, Field, MultistepProgress } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import PageContent from "../../page_content/applications/new.mdx"
 import { useForm } from "react-hook-form"
@@ -7,7 +7,6 @@ import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../lib/ApplicationConductor"
 import AppSubmissionStep1a from "../../lib/app_submission_steps/AppSubmissionStep1a"
 import { useContext } from "react"
-import { MultistepProgress } from "@bloom-housing/ui-components"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -51,53 +50,37 @@ export default () => {
 
         <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex">
-            <div className={"field " + (errors.firstname ? "error" : "")}>
-              <label htmlFor="firstname">First Name</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  id="firstname"
-                  name="firstname"
-                  defaultValue={context.application.name?.split(" ")[0]}
-                  ref={register({ required: true })}
-                />
-              </div>
-              <ErrorMessage error={errors.firstname}>Please enter a First Name</ErrorMessage>
-            </div>
+            <Field
+              name="firstname"
+              label="First Name"
+              defaultValue={context.application.name?.split(" ")[0]}
+              validation={{ required: true }}
+              error={errors.firstname}
+              errorMessage="Please enter a First Name"
+              register={register}
+            />
 
-            <div className={"field " + (errors.lastname ? "error" : "")}>
-              <label htmlFor="lastname">Last Name</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  id="lastname"
-                  name="lastname"
-                  defaultValue={context.application.name?.split(" ")[1]}
-                  ref={register({ required: true })}
-                />
-              </div>
-              <ErrorMessage error={errors.lastname}>Please enter a Last Name</ErrorMessage>
-            </div>
+            <Field
+              name="lastname"
+              label="Last Name"
+              defaultValue={context.application.name?.split(" ")[1]}
+              validation={{ required: true }}
+              error={errors.lastname}
+              errorMessage="Please enter a Last Name"
+              register={register}
+            />
           </div>
 
-          <div className={"field " + (errors.age ? "error" : "")}>
-            <label className="label" htmlFor="age">
-              Age
-            </label>
-            <div className="control" style={{ maxWidth: "8rem" }}>
-              <input
-                className="input"
-                type="text"
-                id="age"
-                name="age"
-                defaultValue={context.application.age}
-                ref={register({ required: true, pattern: /\d+/ })}
-              />
-            </div>
-            <ErrorMessage error={errors.age}>Please enter number for Age</ErrorMessage>
-          </div>
+          <Field
+            name="age"
+            label="Age"
+            defaultValue={context.application.age}
+            validation={{ required: true, pattern: /\d+/ }}
+            error={errors.age}
+            errorMessage="Please enter number for Age"
+            register={register}
+            controlClassName="control-narrower"
+          />
 
           <div className="field">
             <input
@@ -109,7 +92,6 @@ export default () => {
             />
             <label htmlFor="liveInSF">Live and Work in San Francisco</label>
           </div>
-
           <div className="field field--inline">
             <input
               type="radio"
@@ -132,7 +114,6 @@ export default () => {
             />
             <label htmlFor="housingStatus2">Temporary Housing</label>
           </div>
-
           <div className="text-center mt-6">
             <Button
               filled={true}
