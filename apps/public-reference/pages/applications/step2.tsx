@@ -49,7 +49,7 @@ export default () => {
           <PageContent />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form id="applications-step2" onSubmit={handleSubmit(onSubmit)}>
           <div className={"field " + (errors.state ? "error" : "")}>
             <label htmlFor="stuff">State</label>
             <div className="control">

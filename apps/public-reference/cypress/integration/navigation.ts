@@ -1,34 +1,34 @@
 describe("Navigating around the site", function() {
   it("Loads the homepage directly", function() {
-    cy.visit("http://localhost:3000")
+    cy.visit("/")
 
     // Check that the homepage banner text is present on the page
     cy.contains("Apply for affordable housing")
   })
 
   it("Loads the listings page directly", function() {
-    cy.visit("http://localhost:3000/listings")
+    cy.visit("/listings")
 
     // Check that the listings page banner text is present on the page
     cy.contains("Rent affordable housing")
   })
 
   it("Loads a listing page directly", function() {
-    cy.visit("http://localhost:3000/listing/Uvbk5qurpB2WI9V6WnNdH")
+    cy.visit("/listing/Uvbk5qurpB2WI9V6WnNdH")
 
     // Check that the listing page sidebar apply section text is present on the page
     cy.contains("Get a Paper Application")
   })
 
   it("Loads a non-listing-related page directly", function() {
-    cy.visit("http://localhost:3000/disclaimer")
+    cy.visit("/disclaimer")
 
     // Check that the Disclaimer page banner text is present on the page
     cy.contains("Endorsement Disclaimers")
   })
 
   it("Can navigate to all page types after initial site load", function() {
-    cy.visit("http://localhost:3000")
+    cy.visit("/")
 
     // Click on the Disclaimer page link in the footer
     cy.get("footer a")
@@ -69,7 +69,7 @@ describe("Navigating around the site", function() {
       })
 
     // Check that the homepage banner text is present on the page
-    cy.url().should("eq", "http://localhost:3000/")
+    cy.url().should("eq", `${Cypress.config("baseUrl")}/`)
     cy.contains("Apply for affordable housing")
   })
 })

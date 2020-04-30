@@ -48,7 +48,7 @@ export default () => {
           <PageContent />
         </div>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+        <form id="applications-new" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex">
             <Field
               name="firstname"
