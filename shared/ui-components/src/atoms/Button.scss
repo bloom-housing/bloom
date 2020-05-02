@@ -24,6 +24,7 @@
   &.filled {
     @apply bg-primary-dark;
     @apply text-white;
+    
     &:hover {
       @apply bg-primary-darker;
     }
@@ -37,5 +38,21 @@
 
   &.normal-case {
     @apply normal-case;
+  }
+
+  &.button-link {
+    @apply normal-case;
+    @apply border-0;
+    @apply p-0;
+    @apply font-sans;
+    @apply tracking-normal;
+    @apply font-normal;
+    @apply underline;
+    @apply m-4;
+
+    &:hover {
+      @apply text-primary;
+      background: transparent;
+    }
   }
 }

@@ -67,7 +67,7 @@
       @apply h-3;
       @apply w-3;
       @apply bg-primary;
-      top: 0;
+      @apply top-0;
     }
       
     a {
@@ -81,7 +81,7 @@
       @apply h-3;
       @apply w-3;
       @apply bg-gray-450;
-      top: 0;
+      @apply top-0;
     }
 
     a {

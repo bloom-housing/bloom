@@ -50,6 +50,14 @@ a {
   &:hover {
     @apply text-primary;
   }
+
+  &.lined {
+    @apply underline;
+  }
+
+  &.alert {
+    @apply text-alert;
+  }
 }
 
 h1.title {

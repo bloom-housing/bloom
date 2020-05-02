@@ -4,7 +4,7 @@
   @apply border-solid;
   @apply border;
   @apply border-gray-450;
-  text-align: center;
+  @apply text-center;
 
   @screen md {
     @apply rounded-lg;
@@ -19,8 +19,8 @@
   @apply text-lg;
   @apply font-alt-sans;
   @apply font-bold;
-  text-transform: uppercase;
-  margin-bottom: 0;
+  @apply uppercase;
+  @apply mb-0;
 }
 
 .app-header_nav {

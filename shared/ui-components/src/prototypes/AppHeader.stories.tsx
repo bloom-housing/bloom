@@ -8,7 +8,7 @@ export default {
   decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>]
 }
 
-export const appheader = () => (
+export const AppHeader = () => (
   <div className="app-header">
     <header className="app-header_group">
       <h1 className="app-header_title">Application: 123 Main St.</h1>
