@@ -134,6 +134,7 @@
   @apply text-sm;
 }
 
-.feed-item-address {
-
+.feed-item-address,
+.feed-item-number {
+  @apply mb-4;
 }

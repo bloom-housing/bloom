@@ -21,7 +21,8 @@
     @apply text-white;
   }
 
-  &.filled {
+  &.filled,
+  &.primary {
     @apply bg-primary-dark;
     @apply text-white;
     
@@ -31,9 +32,9 @@
   }
 
   &.small {
-    @apply text-sm;
-    @apply px-4;
-    @apply py-2;
+    @apply text-xs;
+    @apply px-6;
+    @apply py-3;
   }
 
   &.normal-case {
