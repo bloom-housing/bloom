@@ -7,16 +7,16 @@ const ProgressNav = () => (
       <li className="progress-nav_item">
         <a href="#">You</a>
       </li>
-      <li className="progress-nav_item active">
+      <li className="progress-nav__item is-active">
         <a href="#">Household</a>
       </li>
-      <li className="progress-nav_item disabled">
+      <li className="progress-nav__item is-disabled">
         <a href="#">Income</a>
       </li>
-      <li className="progress-nav_item disabled">
+      <li className="progress-nav__item is-disabled">
         <a href="#">Preferences</a>
       </li>
-      <li className="progress-nav_item disabled">
+      <li className="progress-nav__item is-disabled">
         <a href="#">Review</a>
       </li>
     </ol>

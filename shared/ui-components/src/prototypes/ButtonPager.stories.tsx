@@ -10,10 +10,10 @@ export default {
 
 export const ButtonPager = () => (
   <div class="button-pager">
-    <div class="button-pager_row primary">
+    <div class="button-pager__row primary">
       <button class="button filled">Next</button>
     </div>
-    <div class="button-pager_row">
+    <div class="button-pager__row">
       <button class="button button button-link">Save and Finish Later</button>
     </div>
   </div>

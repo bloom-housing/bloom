@@ -9,34 +9,34 @@ export default {
 }
 
 export const AppStatusItem = () => (
-    <article className="feed-item is-editable animated-fade">
-        <div className="feed-item-inner">
-            <header className="feed-item-header">
-                <h3 className="feed-item-title">Potrero 1010</h3>
-                <p className="feed-item-due">Application Deadline: January 12th 2016</p>
+    <article className="status-item is-editable animated-fade">
+        <div className="status-item__inner">
+            <header className="status-item__header">
+                <h3 className="status-item__title">Potrero 1010</h3>
+                <p className="status-item__due">Application Deadline: January 12th 2016</p>
             </header>
 
-            <section className="feed-item-content">
-                <div className="feed-item-details">
-                   <p className="feed-item-address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
+            <section className="status-item__content">
+                <div className="status-item__details">
+                   <p className="status-item__address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
                 </div>
 
-                <div className="feed-item-action">
-                    <p className="feed-item-status">
-                        <span className="feed-item-label">Status: In Progress</span>
+                <div className="status-item__action">
+                    <p className="status-item__status">
+                        <span className="status-item__label">Status: In Progress</span>
                     </p>
                     <a href="#" className="button small primary">Continue Application</a>
                 </div>
             </section>
 
-            <footer className="feed-item-footer">
-                <div className="feed-item-links">
-                    <a href="#" className="feed-item-link lined">See Listing</a>
-                    <a className="feed-item-link alert lined">Delete</a>
+            <footer className="status-item__footer">
+                <div className="status-item_links">
+                    <a href="#" className="status-item__link lined">See Listing</a>
+                    <a className="status-item__link alert lined">Delete</a>
                 </div>
 
-                <div className="feed-item-meta">
-                    <p className="feed-item-date">Edited: January 12th 2016</p>
+                <div className="status-item__meta">
+                    <p className="status-item__date">Edited: January 12th 2016</p>
                 </div>
             </footer>
         </div>
@@ -44,35 +44,35 @@ export const AppStatusItem = () => (
 )
 
 export const AppStatusItemSubmitted = () => (
-    <article className="feed-item is-submitted animated-fade">
-        <div className="feed-item-inner">
-            <header className="feed-item-header">
-                <h3 className="feed-item-title">Potrero 1010</h3>
-                <p className="feed-item-due">Application Deadline: January 12th 2016</p>
+    <article className="status-item is-submitted animated-fade">
+        <div className="status-item__inner">
+            <header className="status-item__header">
+                <h3 className="status-item__title">Potrero 1010</h3>
+                <p className="status-item__due">Application Deadline: January 12th 2016</p>
             </header>
 
-            <section className="feed-item-content">
-                <div className="feed-item-details">
-                   <p className="feed-item-address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
-                   <p class="feed-item-number">Your lottery number is #98AU18</p>
+            <section className="status-item__content">
+                <div className="status-item__details">
+                   <p className="status-item__address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
+                   <p class="status-item__number">Your lottery number is #98AU18</p>
                 </div>
 
-                <div className="feed-item-action">
-                    <p className="feed-item-status">
-                        <span className="feed-item-label is-submitted">Status: Submitted</span>
+                <div className="status-item__action">
+                    <p className="status-item__status">
+                        <span className="status-item__label is-submitted">Status: Submitted</span>
                     </p>
                     <a href="#" className="button small">View Application</a>
                 </div>
             </section>
 
-            <footer className="feed-item-footer">
-                <div className="feed-item-links">
-                    <a href="#" className="feed-item-link lined">See Listing</a>
-                    <a className="feed-item-link alert lined">Delete</a>
+            <footer className="status-item__footer">
+                <div className="status-item__links">
+                    <a href="#" className="status-item__link lined">See Listing</a>
+                    <a className="status-item__link alert lined">Delete</a>
                 </div>
 
-                <div className="feed-item-meta">
-                    <p className="feed-item-date">Edited: January 12th 2016</p>
+                <div className="status-item__meta">
+                    <p className="status-item__date">Edited: January 12th 2016</p>
                 </div>
             </footer>
         </div>
@@ -80,34 +80,34 @@ export const AppStatusItemSubmitted = () => (
 )
 
 export const AppStatusItemPastDue = () => (
-    <article className="feed-item is-past-due animated-fade">
-        <div className="feed-item-inner">
-            <header className="feed-item-header">
-                <h3 className="feed-item-title">Potrero 1010</h3>
-                <p className="feed-item-due">Application Deadline: January 12th 2016</p>
+    <article className="status-item is-past-due animated-fade">
+        <div className="status-item__inner">
+            <header className="status-item__header">
+                <h3 className="status-item__title">Potrero 1010</h3>
+                <p className="status-item__due">Application Deadline: January 12th 2016</p>
             </header>
 
-            <section className="feed-item-content">
-                <div className="feed-item-details">
-                   <p className="feed-item-address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
-                   <p class="feed-item-number">Your application was never submitted</p>
+            <section className="status-item__content">
+                <div className="status-ite__details">
+                   <p className="status-item__address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
+                   <p class="status-item__number">Your application was never submitted</p>
                 </div>
 
-                <div className="feed-item-action">
-                    <p className="feed-item-status">
-                        <span className="feed-item-label is-past-due">Status: Never Submitted</span>
+                <div className="status-item__action">
+                    <p className="status-item__status">
+                        <span className="status-item__label is-past-due">Status: Never Submitted</span>
                     </p>
                 </div>
             </section>
 
-            <footer className="feed-item-footer">
-                <div className="feed-item-links">
-                    <a href="#" className="feed-item-link lined">See Listing</a>
-                    <a className="feed-item-link alert lined">Delete</a>
+            <footer className="status-item__footer">
+                <div className="status-item__links">
+                    <a href="#" className="status-item__link lined">See Listing</a>
+                    <a className="status-item__link alert lined">Delete</a>
                 </div>
 
-                <div className="feed-item-meta">
-                    <p className="feed-item-date">Edited: January 12th 2016</p>
+                <div className="status-item__meta">
+                    <p className="status-item__date">Edited: January 12th 2016</p>
                 </div>
             </footer>
         </div>

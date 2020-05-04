@@ -1,4 +1,4 @@
-.feed-item {
+.status-item {
   @apply relative;
   @apply text-sm;
   @apply text-gray-800;
@@ -15,11 +15,11 @@
   }
 }
 
-.feed-item-inner {
+.status-item__inner {
   @apply p-4;
 }
 
-.feed-item-header {
+.status-item__header {
   @apply py-2;
 
   @screen md {
@@ -32,7 +32,7 @@
   }  
 }  
 
-.feed-item-title {
+.status-item__title {
   @apply text-xl;
   @apply font-alt-sans;
   @apply tracking-wider;
@@ -40,26 +40,25 @@
   @apply uppercase;
 } 
 
-.feed-item-due {
-
+.status-item__due {
   @screen md {
    @apply text-right;
    @apply self-center;
   }
 }
 
-.feed-item-content {
+.status-item__content {
   @screen md {
     @apply flex;
     @apply justify-between;
   }
 }
 
-.feed-item-details {
+.status-item__details {
 
 }
 
-.feed-item-action {
+.status-item__action {
   @apply text-center;
   @apply pt-4;
   @apply mb-4;
@@ -70,7 +69,7 @@
   }
 }
 
-.feed-item-footer {
+.status-item__footer {
   @apply text-center;
 
   @screen md {
@@ -80,7 +79,7 @@
   }
 }
 
-.feed-item-links {
+.status-item__links {
   @apply pb-4;
 
   @screen md {
@@ -88,17 +87,17 @@
   }
 }
 
-.feed-item-meta {
+.status-item__meta {
   @screen md {
     @apply text-right;
   }
 }
 
-.feed-item-status {
+.status-item__status {
   @apply mb-4;
 }
 
-.feed-item-label {
+.status-item__label {
   @apply relative;
 
   &.is-submitted,
@@ -126,15 +125,15 @@
   }  
 }
 
-.feed-item-link {
+.status-item__link {
   @apply mr-4;
 }
 
-.feed-item-date {
+.status-item__date {
   @apply text-sm;
 }
 
-.feed-item-address,
-.feed-item-number {
+.status-item__address,
+.status-item__number {
   @apply mb-4;
 }

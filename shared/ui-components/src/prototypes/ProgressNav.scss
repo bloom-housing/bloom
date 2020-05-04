@@ -7,7 +7,7 @@
   @apply w-full;
 }
 
-.progress-nav_item {
+.progress-nav__item {
   @apply text-xs;
   @apply p-3;
   @apply relative;
@@ -62,7 +62,7 @@
     }  
   }
 
-  &.active {
+  &.is-active {
     &:before {
       @apply h-3;
       @apply w-3;
@@ -76,7 +76,7 @@
     }
   }
 
-  &.disabled {
+  &.is-disabled {
     &:before {
       @apply h-3;
       @apply w-3;
