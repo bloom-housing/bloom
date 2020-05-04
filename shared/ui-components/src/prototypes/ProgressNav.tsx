@@ -4,10 +4,10 @@ import "./ProgressNav.scss"
 const ProgressNav = () => (
   <div className="progress">
     <ol className="progress-nav">
-      <li className="progress-nav__item">
+      <li className="progress-nav__item is-disabled">
         <a href="#">You</a>
       </li>
-      <li className="progress-nav__item is-active">
+      <li className="progress-nav__item is-disabled">
         <a href="#">Household</a>
       </li>
       <li className="progress-nav__item is-disabled">
