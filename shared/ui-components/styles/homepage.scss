@@ -1,4 +1,8 @@
 .homepage-extra {
-  font-size: 1.1rem;
-  text-align: center;
+  @apply text-center;
+  @apply text-base;
+
+  @screen md {
+    @apply text-lg;
+  }
 }

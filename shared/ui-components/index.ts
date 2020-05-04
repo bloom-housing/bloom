@@ -2,6 +2,7 @@
 export * from "./src/atoms/ApplicationStatus"
 export * from "./src/atoms/Button"
 export * from "./src/atoms/Description"
+export * from "./src/atoms/ExpandableText"
 export * from "./src/atoms/Icon"
 export * from "./src/atoms/LinkButton"
 export * from "./src/atoms/LocalizedLink"

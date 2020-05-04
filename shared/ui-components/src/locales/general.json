@@ -29,6 +29,8 @@
     "call": "Call",
     "email": "Email",
     "getDirections": "Get Directions",
+    "less": "Less",
+    "more": "More",
     "readLess": "read less",
     "readMore": "read more",
     "seeDetails": "See Details",

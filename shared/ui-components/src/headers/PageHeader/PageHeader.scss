@@ -1,0 +1,28 @@
+.page-header {
+  @apply py-8;
+  @apply px-5;
+
+  @screen md {
+    @apply py-10;
+  }
+
+  &.bg-primary-dark {
+    @apply text-white;
+  }
+}
+
+.page-header__title {
+  @apply m-auto;
+  @apply max-w-5xl;
+  @apply text-center;
+
+  @screen md {
+    @apply text-5xl;
+    @apply text-left;
+  }
+}
+
+.page-header__lead {
+  @apply m-auto;
+  @apply max-w-5xl;
+}

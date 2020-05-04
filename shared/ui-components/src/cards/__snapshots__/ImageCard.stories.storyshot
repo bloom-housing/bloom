@@ -12,24 +12,28 @@ exports[`Storyshots Cards|ImageCard Image And Title 1`] = `
     imageUrl="/images/listing.jpg"
     title="Hello World"
   >
-    <figure
-      className="image-card"
+    <div
+      className="image-card__wrapper"
     >
-      <img
-        alt="Hello World"
-        src="/images/listing.jpg"
-      />
-      <figcaption
-        className="image-card__figcaption"
+      <figure
+        className="image-card"
       >
-        <h2
-          className="image-card__title"
+        <img
+          alt="Hello World"
+          src="/images/listing.jpg"
+        />
+        <figcaption
+          className="image-card__figcaption"
         >
-          Hello World
-        </h2>
-        <p />
-      </figcaption>
-    </figure>
+          <h2
+            className="image-card__title"
+          >
+            Hello World
+          </h2>
+          <p />
+        </figcaption>
+      </figure>
+    </div>
   </ImageCard>
 </div>
 `;
@@ -61,24 +65,28 @@ exports[`Storyshots Cards|ImageCard With Link 1`] = `
           onClick={[Function]}
           onMouseEnter={[Function]}
         >
-          <figure
-            className="image-card"
+          <div
+            className="image-card__wrapper"
           >
-            <img
-              alt="Hello World"
-              src="/images/listing.jpg"
-            />
-            <figcaption
-              className="image-card__figcaption"
+            <figure
+              className="image-card"
             >
-              <h2
-                className="image-card__title"
+              <img
+                alt="Hello World"
+                src="/images/listing.jpg"
+              />
+              <figcaption
+                className="image-card__figcaption"
               >
-                Hello World
-              </h2>
-              <p />
-            </figcaption>
-          </figure>
+                <h2
+                  className="image-card__title"
+                >
+                  Hello World
+                </h2>
+                <p />
+              </figcaption>
+            </figure>
+          </div>
         </a>
       </Link>
     </LocalizedLink>

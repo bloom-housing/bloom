@@ -9,6 +9,7 @@ import {
   ApplicationStatus,
   BasicTable,
   Description,
+  ExpandableText,
   GroupedTable,
   GroupedTableGroup,
   Headers,
@@ -146,7 +147,7 @@ export default class extends Component<ListingProps> {
             </div>
           </header>
 
-          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light px-3 p-5 block text-center md:mx-3">
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light block text-center md:mx-3">
             <ApplicationStatus listing={listing} />
           </div>
 
@@ -221,13 +222,19 @@ export default class extends Component<ListingProps> {
                 >
                   <>
                     <InfoCard title={t("listings.creditHistory")}>
-                      <p className="text-sm text-gray-700">{listing.creditHistory}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.creditHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.rentalHistory")}>
-                      <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.rentalHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.criminalBackground")}>
-                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.criminalBackground}
+                      </ExpandableText>
                     </InfoCard>
                     {buildingSelectionCriteria}
                   </>

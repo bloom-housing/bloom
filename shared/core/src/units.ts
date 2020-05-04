@@ -33,7 +33,7 @@ export interface UnitSummary {
   rentRange: MinMax | MinMaxCurrency
   totalAvailable: number
   areaRange: MinMax
-  floorRange: MinMax
+  floorRange?: MinMax
 }
 
 export interface UnitSummaryByReservedType {

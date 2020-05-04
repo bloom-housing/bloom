@@ -1,9 +1,9 @@
 .pin {
+  @apply absolute;
   width: 30px;
   height: 30px;
   border-radius: 50% 50% 50% 0;
   background: #89849b;
-  position: absolute;
   transform: rotate(-45deg);
   left: 50%;
   top: 50%;
@@ -11,14 +11,15 @@
   animation-name: bounce;
   animation-fill-mode: both;
   animation-duration: 1s;
+  
   &:after {
+    @apply absolute;
+    @apply rounded-full;
     content: "";
     width: 14px;
     height: 14px;
     margin: 8px 0 0 8px;
     background: #2f2f2f;
-    position: absolute;
-    border-radius: 50%;
   }
 }
 
@@ -26,10 +27,10 @@
   @apply bg-white;
   @apply p-4;
   @apply shadow-md;
-  display: inline-block;
-  float: left;
+  @apply inline-block;
+  @apply float-left;
+  @apply relative;
   left: 15px;
-  position: relative;
   top: 15px;
   z-index: 1;
 }

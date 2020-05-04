@@ -8,6 +8,7 @@ import {
   GroupedTableGroup
 } from "@bloom-housing/ui-components/src/tables/GroupedTable"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
+import "./ListingsList.scss"
 
 export interface ListingsProps {
   listings: Listing[]
@@ -33,8 +34,8 @@ const ListingsList = (props: ListingsProps) => {
     }
 
     return (
-      <article key={listing.id} className="flex flex-row flex-wrap max-w-5xl m-auto mb-12">
-        <div className="w-full md:w-6/12 p-3">
+      <article key={listing.id} className="listings-row">
+        <div className="listings-row_figure">
           <ImageCard
             title={listing.name}
             imageUrl={imageUrl}
@@ -43,11 +44,9 @@ const ListingsList = (props: ListingsProps) => {
             listing={listing}
           />
         </div>
-        <div className="w-full md:w-6/12 p-3">
-          <h4 className="font-alt-sans font-semibold text-gray-900 text-base mb-2">
-            {t("listings.waitlist.open")}
-          </h4>
-          <div className="mb-4">
+        <div className="listings-row_content">
+          <h4 className="listings-row_title">{t("listings.waitlist.open")}</h4>
+          <div className="listings-row_table">
             {unitSummaries && (
               <GroupedTable
                 headers={unitSummariesHeaders}
