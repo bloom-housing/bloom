@@ -20,7 +20,7 @@ createConnection()
           l[key] = listing[key]
         }
       }
-      return await connection.manager.save(l)
+      await connection.manager.save(l)
     }
   })
   .catch(error => console.log("TypeORM connection error: ", error))
