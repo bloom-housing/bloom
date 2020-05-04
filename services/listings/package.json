@@ -16,6 +16,7 @@
     "concurrently": "^5.2.0",
     "jest": "^25.5.4",
     "supertest": "^4.0.2",
+    "ts-node": "^8.9.0",
     "ts-node-dev": "^1.0.0-pre.44"
   },
   "dependencies": {
@@ -29,8 +30,11 @@
     "jsonpath": "^1.0.2",
     "koa": "^2.11.0",
     "nanoid": "^3.1.7",
+    "pg": "^8.0.3",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "simple-git": "^1.132.0",
+    "typeorm": "^0.2.24",
     "typescript": "^3.8.3"
   },
   "engines": {
@@ -43,7 +47,7 @@
     "start": "yarn install && yarn run build && node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts",
     "test": "jest",
-    "herokusetup": "node heroku.setup.js"
+    "typeorm": "ts-node ./node_modules/.bin/typeorm"
   },
   "babel": {
     "presets": [
