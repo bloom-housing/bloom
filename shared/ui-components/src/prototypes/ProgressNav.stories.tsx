@@ -7,6 +7,6 @@ export default {
   decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>]
 }
 
-export const withName = () => (
+export const Default = () => (
   <ProgressNav />
 )
