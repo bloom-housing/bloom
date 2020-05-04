@@ -4,7 +4,7 @@ import "./ProgressNav.scss"
 const ProgressNav = () => (
   <div className="progress">
     <ol className="progress-nav">
-      <li className="progress-nav_item">
+      <li className="progress-nav__item">
         <a href="#">You</a>
       </li>
       <li className="progress-nav__item is-active">
