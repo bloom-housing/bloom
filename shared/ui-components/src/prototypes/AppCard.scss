@@ -38,7 +38,7 @@
 .app-card__question {
   @apply text-2xl;
   @apply mb-2;
-  text-align: center;
+  @apply text-center;
 }
 
 .app-card__note {
