@@ -1,7 +1,5 @@
 import React from "react"
 
-//export const initialApplicationState
-
 export const blankApplication = () => {
   return {
     loaded: false,
