@@ -1,6 +1,6 @@
-import ApplicationConductor from "../ApplicationConductor"
+import ApplicationConductor from "../../../lib/ApplicationConductor"
 
-export default class AppSubmissionStep1b {
+export default class {
   conductor = null as ApplicationConductor
   application = {} as Record<string, any>
 

@@ -5,7 +5,7 @@ import PageContent from "../../page_content/applications/step2.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../lib/ApplicationConductor"
-import AppSubmissionStep1b from "../../lib/app_submission_steps/AppSubmissionStep1b"
+import Step2 from "../../src/forms/applications/step2"
 import { useContext } from "react"
 import { MultistepProgress } from "@bloom-housing/ui-components"
 
@@ -20,7 +20,7 @@ export default () => {
   const onSubmit = data => {
     console.log(data)
 
-    const submission = new AppSubmissionStep1b(conductor)
+    const submission = new Step2(conductor)
     submission.save(data)
 
     Router.push("/applications/complete").then(() => window.scrollTo(0, 0))

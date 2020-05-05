@@ -5,7 +5,7 @@ import PageContent from "../../page_content/applications/new.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../lib/ApplicationConductor"
-import AppSubmissionStep1a from "../../lib/app_submission_steps/AppSubmissionStep1a"
+import Step1 from "../../src/forms/applications/step1"
 import { useContext } from "react"
 
 export default () => {
@@ -19,7 +19,7 @@ export default () => {
   const onSubmit = data => {
     console.log(data)
 
-    const submission = new AppSubmissionStep1a(conductor)
+    const submission = new Step1(conductor)
     submission.save(data)
 
     Router.push("/applications/step2").then(() => window.scrollTo(0, 0))
