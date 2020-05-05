@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { Unit } from "./Unit"
 import { Preference } from "./Preference"
 import { Attachment } from "./Attachment"
-import { Address } from "@bloom-housing/core"
+import { Address, UnitsSummarized } from "@bloom-housing/core"
 
 @Entity()
 export class Listing {
@@ -109,4 +109,6 @@ export class Listing {
   waitlistMaxSize: number
   @Column({ nullable: true })
   yearBuilt: number
+
+  unitsSummarized?: UnitsSummarized
 }

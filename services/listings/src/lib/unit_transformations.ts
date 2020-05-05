@@ -1,11 +1,11 @@
 import {
-  Unit,
   UnitsSummarized,
   UnitSummary,
   MinMax,
   MinMaxCurrency,
   AmiChartItem,
 } from "@bloom-housing/core"
+import { Unit } from "../entity/Unit"
 
 type AnyDict = { [key: string]: any }
 type Units = Unit[]
@@ -199,7 +199,7 @@ const summarizeByAmi = (
   })
 }
 
-export const transformUnits = (units: Units, amiCharts: any): UnitsSummarized => {
+export const transformUnits = (units: Unit[], amiCharts: any): UnitsSummarized => {
   const data = {} as UnitsSummarized
   data.unitTypes = Array.from(
     new Set(units.map((unit) => unit.unitType).filter((item) => item != null))

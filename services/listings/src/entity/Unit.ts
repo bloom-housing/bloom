@@ -9,7 +9,7 @@ export class Unit {
   amiPercentage: string
   @Column({ nullable: true })
   annualIncomeMin: string
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyIncomeMin: number
   @Column({ nullable: true })
   floor: number
@@ -19,7 +19,7 @@ export class Unit {
   maxOccupancy: number
   @Column({ nullable: true })
   minOccupancy: number
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyRent: number
   @Column({ nullable: true })
   numBathrooms: number
@@ -31,7 +31,7 @@ export class Unit {
   priorityType: string
   @Column({ nullable: true })
   reservedType: string
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   sqFeet: number
   @Column({ nullable: true })
   status: string
@@ -42,10 +42,8 @@ export class Unit {
   @Column({ nullable: true })
   updatedAt: Date
   @Column({ nullable: true })
-  listingId: number
-  @Column({ nullable: true })
   amiChartId: number
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyRentAsPercentOfIncome: number
   @ManyToOne(
     type => Listing,
