@@ -75,3 +75,6 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# VS code debugger config
+launch.json
