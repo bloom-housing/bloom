@@ -20,24 +20,27 @@ td.reserved {
   @apply uppercase;
   @apply text-2xs;
   @apply leading-tight;
-  padding-top: 9px;
-  padding-bottom: 9px;
-  border-bottom: 1px solid $tailwind-splash;
-  background-color: $tailwind-splash-bg;
-  color: #555;
-  letter-spacing: 0.1rem;
-  border-top: 1px solid $tailwind-splash;
-  border-left: 0.4rem solid $tailwind-splash;
-  padding-left: 1em;
+  @apply py-2;
+  @apply text-gray-750;
+  @apply bg-splash-bg;
+  @apply tracking-widest;
+  @apply pl-2;
+  @apply border-l-8;
+  @apply border-b;
+  @apply border-t;
+  @apply border-solid;
+  @apply border-splash;
 
   .reserved-icon {
-    color: $tailwind-splash;
-    font-size: 0.9rem;
+    @apply text-splash;
+    @apply text-sm;
   }
 }
 
 tr.group-reserved td:first-of-type {
-  border-left: 0.4rem solid $tailwind-splash;
+  @apply border-l-8;
+  @apply border-solid;
+  @apply border-splash;
 }
 
 /* Hat tip to this CSS solution:
@@ -45,16 +48,21 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
 
 @media screen and (max-width: 639px) {
   table.responsive-collapse {
+    
     thead {
       @apply hidden;
     }
+
     tr {
       @apply block;
-      margin-bottom: 1.75em;
+      @apply mb-6;
     }
+
+    
     tr:nth-of-type(even) {
       background: inherit;
     }
+    
     td:nth-of-type(even) {
       @apply bg-primary-lighter;
     }
@@ -72,11 +80,13 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     }
 
     td:last-child {
-      border-bottom: 0;
+      @apply border-b-0;
     }
   }
 
   tr.group-reserved td {
-    border-left: 0.4rem solid #ff6627;
+    @apply border-l-8;
+    @apply border-solid;
+    @apply border-splash;
   }
 }

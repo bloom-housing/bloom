@@ -5,6 +5,7 @@ import jp from "jsonpath"
 import { Listing } from "@bloom-housing/core"
 import listingsLoader from "./lib/listings_loader"
 import { transformUnits } from "./lib/unit_transformations"
+import { listingUrlSlug } from "./lib/url_helper"
 import { amiCharts } from "./lib/ami_charts"
 
 dotenv.config({ path: ".env" })
@@ -29,6 +30,7 @@ app.use(async ctx => {
   // Transform all the listings
   listings.forEach(listing => {
     listing.unitsSummarized = transformUnits(listing.units, amiCharts)
+    listing.urlSlug = listingUrlSlug(listing)
   })
 
   const data = {

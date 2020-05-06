@@ -59,9 +59,14 @@ module.exports = withCSS(
           const listingPaths = listings.reduce(
             (listingPaths, listing) =>
               Object.assign({}, listingPaths, {
-                [`/listing/${listing.id}`]: {
+                [`/listing/${listing.id}/${listing.urlSlug}`]: {
                   page: "/listing",
                   query: { id: listing.id }
+                },
+                // Create a redirect so that the base ID redirects to the ID with URL slug
+                [`/listing/${listing.id}`]: {
+                  page: "/redirect",
+                  query: { to: `/listing/${listing.id}/${listing.urlSlug}` }
                 }
               }),
             {}

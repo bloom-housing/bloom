@@ -12,11 +12,11 @@
   @screen md {
     @apply absolute;
     @apply font-serif;
-    top: 0;
+    @apply text-gray-850;
+    @apply top-0;
     left: -1rem;
     content: counter(step-counter);
     margin-right: 5px;
-    color: #333;
     font-size: 4.375rem;
     line-height: 0.85;
   }
@@ -27,6 +27,8 @@
     @apply mb-8;
     @apply -ml-4;
     @apply pl-4;
-    border-left: 2px solid #dedee0;
+    @apply border-solid;
+    @apply border-l-2;
+    @apply border-gray-450;
   }
 }
