@@ -2,7 +2,7 @@ import * as React from "react"
 import "./HeaderBadge.scss"
 
 const HeaderBadge = () => (
-  <span class="header-badge">
+  <span className="header-badge">
     <svg id="i-application" viewBox="0 0 24 32">
       <title>application</title>
       <path fill="#edebda" d="M24.51 7.626l-7.626-7.626h-16.885v31.592h24.51v-23.966z"></path>

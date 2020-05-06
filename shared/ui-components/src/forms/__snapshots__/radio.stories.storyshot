@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Forms|Radio Standard 1`] = `
+<div
+  style={
+    Object {
+      "padding": "30px",
+    }
+  }
+>
+  <div
+    className="field field--inline"
+  >
+    <input
+      id="radio1"
+      name="radio"
+      type="radio"
+    />
+    <label
+      htmlFor="radio1"
+    >
+      Radio Button 1
+    </label>
+  </div>
+  <div
+    className="field field--inline"
+  >
+    <input
+      id="radio2"
+      name="radio"
+      type="radio"
+    />
+    <label
+      htmlFor="radio2"
+    >
+      Radio Button 2
+    </label>
+  </div>
+</div>
+`;

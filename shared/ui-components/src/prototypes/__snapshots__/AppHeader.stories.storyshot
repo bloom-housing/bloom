@@ -1,0 +1,246 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes|AppHeader App Header 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="app-header"
+  >
+    <header
+      className="app-header_group"
+    >
+      <h1
+        className="app-header_title"
+      >
+        Application: 123 Main St.
+      </h1>
+    </header>
+    <div
+      className="app-header_nav"
+    >
+      <ProgressNav>
+        <div
+          className="progress"
+        >
+          <ol
+            className="progress-nav"
+          >
+            <li
+              className="progress-nav__item is-disabled"
+            >
+              <a
+                href="#"
+              >
+                You
+              </a>
+            </li>
+            <li
+              className="progress-nav__item is-disabled"
+            >
+              <a
+                href="#"
+              >
+                Household
+              </a>
+            </li>
+            <li
+              className="progress-nav__item is-disabled"
+            >
+              <a
+                href="#"
+              >
+                Income
+              </a>
+            </li>
+            <li
+              className="progress-nav__item is-disabled"
+            >
+              <a
+                href="#"
+              >
+                Preferences
+              </a>
+            </li>
+            <li
+              className="progress-nav__item is-disabled"
+            >
+              <a
+                href="#"
+              >
+                Review
+              </a>
+            </li>
+          </ol>
+        </div>
+      </ProgressNav>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes|AppHeader App Header Complete 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="app-header"
+  >
+    <header
+      className="app-header_group"
+    >
+      <h1
+        className="app-header_title"
+      >
+        Application: 123 Main St.
+      </h1>
+    </header>
+    <div
+      className="app-header_nav"
+    >
+      <div
+        className="progress"
+      >
+        <ol
+          className="progress-nav"
+        >
+          <li
+            className="progress-nav__item"
+          >
+            <a
+              href="#"
+            >
+              You
+            </a>
+          </li>
+          <li
+            className="progress-nav__item"
+          >
+            <a
+              href="#"
+            >
+              Household
+            </a>
+          </li>
+          <li
+            className="progress-nav__item"
+          >
+            <a
+              href="#"
+            >
+              Income
+            </a>
+          </li>
+          <li
+            className="progress-nav__item"
+          >
+            <a
+              href="#"
+            >
+              Preferences
+            </a>
+          </li>
+          <li
+            className="progress-nav__item"
+          >
+            <a
+              href="#"
+            >
+              Review
+            </a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes|AppHeader App Header Progress 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="app-header"
+  >
+    <header
+      className="app-header_group"
+    >
+      <h1
+        className="app-header_title"
+      >
+        Application: 123 Main St.
+      </h1>
+    </header>
+    <div
+      className="app-header_nav"
+    >
+      <div
+        className="progress"
+      >
+        <ol
+          className="progress-nav"
+        >
+          <li
+            className="progress-nav__item"
+          >
+            <a
+              href="#"
+            >
+              You
+            </a>
+          </li>
+          <li
+            className="progress-nav__item is-active"
+          >
+            <a
+              href="#"
+            >
+              Household
+            </a>
+          </li>
+          <li
+            className="progress-nav__item is-disabled"
+          >
+            <a
+              href="#"
+            >
+              Income
+            </a>
+          </li>
+          <li
+            className="progress-nav__item is-disabled"
+          >
+            <a
+              href="#"
+            >
+              Preferences
+            </a>
+          </li>
+          <li
+            className="progress-nav__item is-disabled"
+          >
+            <a
+              href="#"
+            >
+              Review
+            </a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+`;

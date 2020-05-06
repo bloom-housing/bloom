@@ -1,0 +1,259 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes|AlertBox Alert Box Alert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="alert-box alert"
+  >
+    <span
+      className="alert-box__icon"
+    >
+      <Icon
+        size="medium"
+        symbol="clock"
+      >
+        <span
+          className="ui-icon ui-medium"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-clock"
+            />
+          </svg>
+        </span>
+      </Icon>
+    </span>
+    <p
+      className="alert-box__body"
+    >
+      Some warning
+    </p>
+    <button
+      className="alert-box__close"
+    >
+      ×
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes|AlertBox Alert Box Alert Invert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="alert-box alert invert"
+  >
+    <span
+      className="alert-box__icon"
+    >
+      <Icon
+        size="medium"
+        symbol="clock"
+      >
+        <span
+          className="ui-icon ui-medium"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-clock"
+            />
+          </svg>
+        </span>
+      </Icon>
+    </span>
+    <p
+      className="alert-box__body"
+    >
+      Some warning
+    </p>
+    <button
+      className="alert-box__close"
+    >
+      ×
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes|AlertBox Alert Box Notice 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="alert-box primary"
+  >
+    <span
+      className="alert-box__icon"
+    >
+      <Icon
+        size="medium"
+        symbol="clock"
+      >
+        <span
+          className="ui-icon ui-medium"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-clock"
+            />
+          </svg>
+        </span>
+      </Icon>
+    </span>
+    <p
+      className="alert-box__body"
+    >
+      Some warning
+    </p>
+    <button
+      className="alert-box__close"
+    >
+      ×
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes|AlertBox Alert Box Notice Invert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="alert-box primary invert"
+  >
+    <span
+      className="alert-box__icon"
+    >
+      <Icon
+        size="medium"
+        symbol="clock"
+      >
+        <span
+          className="ui-icon ui-medium"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-clock"
+            />
+          </svg>
+        </span>
+      </Icon>
+    </span>
+    <p
+      className="alert-box__body"
+    >
+      Some warning
+    </p>
+    <button
+      className="alert-box__close"
+    >
+      ×
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes|AlertBox Alert Box Sucucess 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="alert-box success"
+  >
+    <span
+      className="alert-box__icon"
+    >
+      <Icon
+        size="medium"
+        symbol="clock"
+      >
+        <span
+          className="ui-icon ui-medium"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-clock"
+            />
+          </svg>
+        </span>
+      </Icon>
+    </span>
+    <p
+      className="alert-box__body"
+    >
+      Some warning
+    </p>
+    <button
+      className="alert-box__close"
+    >
+      ×
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes|AlertBox Alert Box Sucucess Invert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="alert-box success invert"
+  >
+    <span
+      className="alert-box__icon"
+    >
+      <Icon
+        size="medium"
+        symbol="clock"
+      >
+        <span
+          className="ui-icon ui-medium"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-clock"
+            />
+          </svg>
+        </span>
+      </Icon>
+    </span>
+    <p
+      className="alert-box__body"
+    >
+      Some warning
+    </p>
+    <button
+      className="alert-box__close"
+    >
+      ×
+    </button>
+  </div>
+</div>
+`;

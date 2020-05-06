@@ -1,7 +1,6 @@
 import React from "react"
 import { withA11y } from "@storybook/addon-a11y"
 import "./AppStatusItem.scss"
-import AppStatusItem from "./AppStatusItem"
 
 export default {
   title: "Prototypes|AppStatusItem",
@@ -54,7 +53,7 @@ export const AppStatusItemSubmitted = () => (
     <section className="status-item__content">
       <div className="status-item__details">
         <p className="status-item__address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
-        <p class="status-item__number">Your lottery number is #98AU18</p>
+        <p className="status-item__number">Your lottery number is #98AU18</p>
       </div>
 
       <div className="status-item__action">
@@ -90,7 +89,7 @@ export const AppStatusItemPastDue = () => (
     <section className="status-item__content">
       <div className="status-ite__details">
         <p className="status-item__address">1010 16th Street<br /> Studio: 22 units, 1 Bedroom: 33 units 2 Bedroom: 38 units</p>
-        <p class="status-item__number">Your application was never submitted</p>
+        <p className="status-item__number">Your application was never submitted</p>
       </div>
 
       <div className="status-item__action">
