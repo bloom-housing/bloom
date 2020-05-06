@@ -16,3 +16,5 @@ In addition to those environment variables defined in .env.template for the rele
 
 - NODE_VERSION
 - YARN_VERSION
+
+Note that there is a `netlify.toml` file in each reference app directory so that settings can be specified in a version controlled manner. If there are any environment variables that should not be publically accessible as part of the source, they can be set direcly in the Netlify console so long as they're not in the toml file.
