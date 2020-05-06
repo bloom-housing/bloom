@@ -27,9 +27,10 @@
     "next": "9.2.0",
     "next-plugin-custom-babel-config": "^1.0.2",
     "node-polyglot": "^2.4.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "react": "16.12.0",
     "react-dom": "16.12.0",
+    "react-hook-form": "^5.2.0",
     "react-inlinesvg": "^1.2.0"
   },
   "devDependencies": {

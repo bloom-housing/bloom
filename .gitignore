@@ -13,6 +13,7 @@ storybook-static
 
 # Cypress test output videos
 apps/**/cypress/videos
+apps/**/cypress/screenshots
 
 # Complied Typescript
 dist

@@ -95,7 +95,10 @@ module.exports = withCSS(
           // combine the map of all various types of page paths
           return Object.assign({}, languagePaths, {
             "/disclaimer": { page: "/disclaimer" },
-            "/privacy": { page: "/privacy" }
+            "/privacy": { page: "/privacy" },
+            "/applications/new": { page: "/applications/new" },
+            "/applications/step2": { page: "/applications/step2" },
+            "/applications/complete": { page: "/applications/complete" }
           })
         }
       })

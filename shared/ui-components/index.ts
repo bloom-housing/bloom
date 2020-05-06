@@ -18,6 +18,11 @@ export * from "./src/footers/FooterNav/FooterNav"
 export * from "./src/footers/FooterSection/FooterSection"
 export * from "./src/footers/SiteFooter/SiteFooter"
 
+/* Forms */
+export * from "./src/forms/ErrorMessage"
+export * from "./src/forms/Field"
+export * from "./src/forms/MultistepProgress"
+
 /* Headers */
 export * from "./src/headers/Hero/Hero"
 export * from "./src/headers/PageHeader/PageHeader"
@@ -27,6 +32,7 @@ export * from "./src/headers/SiteHeader/SiteHeader"
 export * from "./src/helpers/address"
 export * from "./src/helpers/capitalize"
 export * from "./src/helpers/localeRoute"
+export * from "./src/helpers/nextjs"
 export * from "./src/helpers/numberOrdinal"
 export * from "./src/helpers/occupancyFormatting"
 export * from "./src/helpers/state"

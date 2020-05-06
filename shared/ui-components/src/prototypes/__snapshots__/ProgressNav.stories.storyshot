@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes|ProgressNav Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <ProgressNav>
+    <div
+      className="progress"
+    >
+      <ol
+        className="progress-nav"
+      >
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            You
+          </a>
+        </li>
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            Household
+          </a>
+        </li>
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            Income
+          </a>
+        </li>
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            Preferences
+          </a>
+        </li>
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            Review
+          </a>
+        </li>
+      </ol>
+    </div>
+  </ProgressNav>
+</div>
+`;

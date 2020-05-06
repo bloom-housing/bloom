@@ -21,21 +21,39 @@
     @apply text-white;
   }
 
-  &.filled {
+  &.filled,
+  &.primary {
     @apply bg-primary-dark;
     @apply text-white;
+    
     &:hover {
       @apply bg-primary-darker;
     }
   }
 
   &.small {
-    @apply text-sm;
-    @apply px-4;
-    @apply py-2;
+    @apply text-xs;
+    @apply px-6;
+    @apply py-3;
   }
 
   &.normal-case {
     @apply normal-case;
+  }
+
+  &.button-link {
+    @apply normal-case;
+    @apply border-0;
+    @apply p-0;
+    @apply font-sans;
+    @apply tracking-normal;
+    @apply font-normal;
+    @apply underline;
+    @apply m-4;
+
+    &:hover {
+      @apply text-primary;
+      background: transparent;
+    }
   }
 }

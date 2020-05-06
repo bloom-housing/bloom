@@ -12,6 +12,7 @@ const Redirect: NextPage<RedirectProps> = ({ to }) => (
   </Head>
 )
 
+/* eslint-disable @typescript-eslint/unbound-method */
 Redirect.getInitialProps = ({ query: { to } }) => Promise.resolve({ to: to as string })
 
 export default Redirect

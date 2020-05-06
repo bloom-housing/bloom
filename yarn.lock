@@ -11175,7 +11175,7 @@ node-releases@^1.1.29, node-releases@^1.1.44, node-releases@^1.1.46:
   dependencies:
     semver "^6.3.0"
 
-node-sass@^4.12.0, node-sass@^4.13.1:
+node-sass@^4.13.1:
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.13.1.tgz#9db5689696bb2eec2c32b98bfea4c7a2e992d0a3"
   integrity sha512-TTWFx+ZhyDx1Biiez2nB0L3YrCZ/8oHagaDalbuBSlqXgUPsdkUSzJsVxeDO9LtPB49+Fh3WQl3slABo6AotNw==
@@ -12992,6 +12992,11 @@ react-helmet-async@^1.0.2:
     prop-types "^15.7.2"
     react-fast-compare "^2.0.4"
     shallowequal "^1.1.0"
+
+react-hook-form@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-5.2.0.tgz#b5b654516ee03d55d78b7b9e194c7f4632885426"
+  integrity sha512-EqGCSl3DxSUBtL/9lFvrFQLJ7ICdVKrfjcMHay2SvmU4trR8aqrd7YuiLSojBKmZBRdBnCcxG+LzLWF9z474NA==
 
 react-hotkeys@2.0.0:
   version "2.0.0"
