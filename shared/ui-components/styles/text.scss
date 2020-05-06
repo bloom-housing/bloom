@@ -149,3 +149,21 @@ details.disclosure {
     margin-bottom: 1em;
   }
 }
+
+.info-item {
+  @apply relative;
+  @apply text-sm;
+}
+
+.info-item__name {
+  @apply text-gray-800;
+  @apply font-sans;
+  @apply text-sm;
+}
+
+.info-item__value {
+  @apply uppercase;
+  @apply font-alt-sans;
+  @apply font-bold;
+  @apply tracking-wide;
+}
