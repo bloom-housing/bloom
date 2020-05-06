@@ -58,6 +58,7 @@ export interface Listing {
   unitsAvailable: number
   unitAmenities: string
   unitsSummarized?: UnitsSummarized
+  urlSlug?: string
   waitlistCurrentSize: number
   waitlistMaxSize: number
   yearBuilt: number
