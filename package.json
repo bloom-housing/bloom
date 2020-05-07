@@ -19,7 +19,8 @@
     "new-version": "lerna version --conventional-commits --yes",
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
-    "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\""
+    "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\"",
+    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js' --ignore-pattern 'node_modules' --ignore-pattern 'storybook-static/' --ignore-pattern '.next/' --ignore-pattern 'dist/'"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.14",
@@ -29,6 +30,7 @@
     "concurrently": "^5.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "husky": "^4.2.3",
