@@ -1,6 +1,10 @@
 {
-  "packages": ["apps/public-reference", "services/listings", "shared/*"],
-  "version": "0.0.10",
+  "packages": [
+    "apps/public-reference",
+    "services/listings",
+    "shared/*"
+  ],
+  "version": "0.1.0",
   "npmClient": "yarn",
   "useWorkspaces": true
 }
