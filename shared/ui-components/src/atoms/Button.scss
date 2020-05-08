@@ -31,6 +31,16 @@
     }
   }
 
+  &.alert {
+    @apply bg-alert;
+    @apply border-alert;
+    @apply text-white;
+    
+    &:hover {
+      @apply bg-alert;
+    }
+  }
+
   &.small {
     @apply text-xs;
     @apply px-6;
@@ -42,6 +52,7 @@
   }
 
   &.no-border {
+    @apply text-primary-darker;
     border-color: transparent;
     background: transparent;
 

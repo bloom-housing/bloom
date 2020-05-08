@@ -1,3 +1,7 @@
+.modal {
+  @apply relative;
+}
+
 // Content containers
 .modal__header,
 .modal__inner,
@@ -41,6 +45,15 @@
     @apply mb-1;
     @apply mx-auto;
   }
+}
+
+.modal__close {
+  @apply absolute;
+  @apply h-8;
+  @apply w-8;
+  top: 2rem;
+  right: 2rem;
+  fill: $tailwind-primary;
 }
 
 // Loading container for modal
