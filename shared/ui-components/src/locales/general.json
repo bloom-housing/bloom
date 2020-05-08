@@ -93,6 +93,7 @@
     "householdMaximumIncome": "Household Maximum Income",
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
+    "moreBuildingSelectionCriteria": "Find out more about Building Selection Criteria",
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
     "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
@@ -140,7 +141,8 @@
       "oneBdrm": "1 BR",
       "twoBdrm": "2 BR",
       "threeBdrm": "3 BR",
-      "studio": "Studio"
+      "studio": "Studio",
+      "SRO": "Single Room Occupancy"
     },
     "units": "units",
     "unitsAreFor": "These units are for %{type}.",

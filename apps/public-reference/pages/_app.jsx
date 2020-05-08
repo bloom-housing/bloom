@@ -1,7 +1,9 @@
 import React from "react"
 import App from "next/app"
+import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
 import { addTranslation } from "@bloom-housing/ui-components"
+import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -27,6 +29,30 @@ class MyApp extends App {
     }
     return { pageProps, translations }
   }
+
+  /* eslint-disable no-undef */
+  componentDidMount() {
+    // NOTE: this may get called without a full page reload,
+    // so we need to enforce idempotency
+    if (!document.body.customScriptsLoaded) {
+      Router.events.on("routeChangeComplete", pageChangeHandler)
+
+      const headScriptTag = document.createElement("script")
+      headScriptTag.textContent = headScript()
+      if (headScriptTag.textContent != "") {
+        document.head.append(headScriptTag)
+      }
+
+      const bodyTopTagTmpl = document.createElement("template")
+      bodyTopTagTmpl.innerHTML = bodyTopTag()
+      if (bodyTopTagTmpl.innerHTML != "") {
+        document.body.prepend(bodyTopTagTmpl.content.cloneNode(true))
+      }
+
+      document.body.customScriptsLoaded = true
+    }
+  }
+  /* eslint-enable no-undef */
 
   render() {
     const { Component, pageProps, translations } = this.props

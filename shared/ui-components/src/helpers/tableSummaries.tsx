@@ -36,7 +36,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
               <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
             </>
           ) : (
-            <>{t("listings.waitlist")}</>
+            <span className="uppercase">{t("listings.waitlist.label")}</span>
           )}
         </>
       )
