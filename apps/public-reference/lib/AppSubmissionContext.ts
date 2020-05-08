@@ -13,8 +13,8 @@ export const blankApplication = () => {
       street2: "",
       city: "",
       state: "",
-      zipcode: ""
-    }
+      zipcode: "",
+    },
   }
 }
 

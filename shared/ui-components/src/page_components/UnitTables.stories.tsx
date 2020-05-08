@@ -39,8 +39,8 @@ const summaries = {
       occupancyRange: { min: 1, max: 2 },
       rentAsPercentIncomeRange: { min: null, max: null },
       rentRange: { min: "$719", max: "$1,104" },
-      areaRange: { min: 285, max: 285 }
-    }
+      areaRange: { min: 285, max: 285 },
+    },
   ],
   byNonReservedUnitType: [
     {

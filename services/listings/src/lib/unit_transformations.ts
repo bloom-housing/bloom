@@ -1,6 +1,12 @@
-import { Unit, UnitsSummarized, UnitSummary } from "@bloom-housing/core"
-import { MinMax, MinMaxCurrency } from "@bloom-housing/core"
-import { AmiChartItem } from "@bloom-housing/core"
+import {
+  Unit,
+  UnitsSummarized,
+  UnitSummary,
+  MinMax,
+  MinMaxCurrency,
+  AmiChartItem,
+} from "@bloom-housing/core"
+
 type AnyDict = { [key: string]: any }
 type Units = Unit[]
 

@@ -1,5 +1,5 @@
 import Router from "next/router"
-import { Button, ErrorMessage } from "@bloom-housing/ui-components"
+import { Button, ErrorMessage, MultistepProgress } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import PageContent from "../../page_content/applications/step2.mdx"
 import { useForm } from "react-hook-form"
@@ -7,7 +7,6 @@ import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../lib/ApplicationConductor"
 import Step2 from "../../src/forms/applications/step2"
 import { useContext } from "react"
-import { MultistepProgress } from "@bloom-housing/ui-components"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -17,7 +16,7 @@ export default () => {
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     console.log(data)
 
     const submission = new Step2(conductor)

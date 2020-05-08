@@ -1,10 +1,10 @@
 import * as React from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import ReactMapGL, { Marker } from "react-map-gl"
-import { Address } from "@bloom-housing/core"
+import { Address, Listing } from "@bloom-housing/core"
 import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
-import { Listing } from "@bloom-housing/core"
+
 export interface ListingMapProps {
   address: Address
   listing: Listing

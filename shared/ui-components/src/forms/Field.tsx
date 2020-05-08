@@ -1,7 +1,7 @@
 import React from "react"
 import ErrorMessage from "./ErrorMessage"
 
-const Field = props => {
+const Field = (props) => {
   const classes = ["field"]
   if (props.error) {
     classes.push("error")

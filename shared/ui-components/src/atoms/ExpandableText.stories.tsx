@@ -4,7 +4,7 @@ import ExpandableText from "./ExpandableText"
 
 export default {
   title: "Atoms|ExpandableText",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const longText =

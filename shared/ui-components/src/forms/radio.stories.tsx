@@ -2,7 +2,7 @@ import * as React from "react"
 
 export default {
   title: "Forms|Radio",
-  decorators: [(storyFn: () => JSX.Element) => <div style={{ padding: "30px" }}>{storyFn()}</div>]
+  decorators: [(storyFn: () => JSX.Element) => <div style={{ padding: "30px" }}>{storyFn()}</div>],
 }
 
 export const standard = () => (

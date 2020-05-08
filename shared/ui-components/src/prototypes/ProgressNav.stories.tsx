@@ -4,9 +4,7 @@ import ProgressNav from "./ProgressNav"
 
 export default {
   title: "Prototypes|ProgressNav",
-  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>]
+  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
-export const Default = () => (
-  <ProgressNav />
-)
+export const Default = () => <ProgressNav />

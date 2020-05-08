@@ -1,7 +1,7 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { MinMax } from "@bloom-housing/core"
-import { UnitSummary, Unit } from "@bloom-housing/core"
+import { MinMax, UnitSummary, Unit } from "@bloom-housing/core"
+
 import { BasicTable } from "../tables/BasicTable"
 import t from "../../src/helpers/translator"
 import { numberOrdinal } from "../../src/helpers/numberOrdinal"
@@ -50,7 +50,6 @@ const UnitTables = (props: UnitTablesProps) => {
 
   const toggleTable = (event: React.MouseEvent) => {
     if (!props.disableAccordion) {
-      // eslint-disable-next-line mdx/no-unused-expressions
       event.currentTarget.parentElement?.querySelector(".unit-table")?.classList?.toggle("hidden")
     }
   }

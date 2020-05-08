@@ -4,7 +4,7 @@ describe("Housing counselors page", () => {
     cy.contains("Housing Counselors")
     cy.get("article").should("have.length.of.at.least", 1)
 
-    cy.get("article").then(val => {
+    cy.get("article").then((val) => {
       if (val.attr("data-counselor")) {
         cy.get("article").contains("Language Services: ")
       } else {
