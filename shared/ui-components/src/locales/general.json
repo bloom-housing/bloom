@@ -410,7 +410,8 @@
       "oneBdrm": "1 BR",
       "twoBdrm": "2 BR",
       "threeBdrm": "3 BR",
-      "studio": "Studio"
+      "studio": "Studio",
+      "SRO": "Single Room Occupancy"
     },
     "units": "units",
     "unitsAreFor": "These units are for %{type}.",
