@@ -1,0 +1,473 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "acceptingApplicationsAtLeasingAgent",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "acceptingApplicationsByPoBox",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "acceptingOnlineApplications",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "acceptsPostmarkedApplications",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "accessibility",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "amenities",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "applicationDueDate",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "applicationOpenDate",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "applicationFee",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "applicationOrganization",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "applicationAddress",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "applicationAddressId",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "blankPaperApplicationCanBePickedUp",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "buildingAddress",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "buildingAddressId",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "buildingTotalUnits",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "buildingSelectionCriteria",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "costsNotIncluded",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "creditHistory",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "criminalBackground",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "depositMin",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "depositMax",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "developer",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "disableUnitsAccordion",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "imageUrl",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "leasingAgentAddress",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "leasingAgentAddressId",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "leasingAgentEmail",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "leasingAgentName",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "leasingAgentOfficeHours",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "leasingAgentPhone",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "leasingAgentTitle",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "name",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "neighborhood",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "petPolicy",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "postmarkedApplicationsReceivedByDate",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "programRules",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "rentalHistory",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "requiredDocuments",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "smokingPolicy",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "unitsAvailable",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "unitAmenities",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "urlSlug",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "waitlistCurrentSize",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "waitlistMaxSize",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Listing",
+      "field": "yearBuilt",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "amiPercentage",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "annualIncomeMin",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "monthlyIncomeMin",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "floor",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "annualIncomeMax",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "maxOccupancy",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "minOccupancy",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "monthlyRent",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "numBathrooms",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "numBedrooms",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "number",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "priorityType",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "reservedType",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "sqFeet",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "status",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "unitType",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "amiChartId",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "monthlyRentAsPercentOfIncome",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Attachment",
+      "field": "label",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Attachment",
+      "field": "fileUrl",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Address",
+      "field": "city",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Address",
+      "field": "county",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Address",
+      "field": "state",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Address",
+      "field": "street",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Address",
+      "field": "zipCode",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Address",
+      "field": "latitude",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Address",
+      "field": "longitude",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Preference",
+      "field": "ordinal",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Preference",
+      "field": "title",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Preference",
+      "field": "subtitle",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Preference",
+      "field": "description",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Preference",
+      "field": "links",
+      "arity": "Optional"
+    }
+  ]
+}

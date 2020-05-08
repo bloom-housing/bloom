@@ -1,0 +1,17 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "monthlyIncomeMin",
+      "type": "String"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Unit",
+      "field": "monthlyRent",
+      "type": "String"
+    }
+  ]
+}

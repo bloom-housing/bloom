@@ -1,0 +1,19 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "Listing",
+      "field": "groupId",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Listing",
+      "field": "totalUnits",
+      "type": "Int",
+      "arity": "Optional"
+    }
+  ]
+}

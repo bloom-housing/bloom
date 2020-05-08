@@ -1,0 +1,10 @@
+# IF THERE'S A GIT CONFLICT IN THIS FILE, DON'T SOLVE IT MANUALLY!
+# INSTEAD EXECUTE `prisma migrate fix`
+# Prisma Migrate lockfile v1
+# Read more about conflict resolution here: TODO
+
+20200508225838-initial
+20200509005703-change-fields-to-nullable
+20200509011233-add-missing-fields
+20200509011603-more-missing-fields
+20200509012503-change-floats-to-strings

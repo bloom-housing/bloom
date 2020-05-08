@@ -1,0 +1,127 @@
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Listing {
+  id                                   String       @default(uuid()) @id
+  acceptingApplicationsAtLeasingAgent  Boolean
+  acceptingApplicationsByPoBox         Boolean
+  acceptingOnlineApplications          Boolean
+  acceptsPostmarkedApplications        Boolean
+  accessibility                        String
+  amenities                            String
+  applicationDueDate                   String
+  applicationOpenDate                  String
+  applicationFee                       String
+  applicationOrganization              String
+  applicationAddress                   Address      @relation("applicationAddress", fields: [applicationAddressId], references: [id])
+  applicationAddressId                 String
+  attachments                          Attachment[]
+  blankPaperApplicationCanBePickedUp   Boolean
+  buildingAddress                      Address      @relation("buildingAddress", fields: [buildingAddressId], references: [id])
+  buildingAddressId                    String
+  buildingTotalUnits                   Int
+  buildingSelectionCriteria            String
+  costsNotIncluded                     String
+  creditHistory                        String
+  criminalBackground                   String
+  depositMin                           String
+  depositMax                           String
+  developer                            String
+  disableUnitsAccordion                Boolean
+  imageUrl                             String
+  leasingAgentAddress                  Address      @relation("leasingAgentAddress", fields: [leasingAgentAddressId], references: [id])
+  leasingAgentAddressId                String
+  leasingAgentEmail                    String
+  leasingAgentName                     String
+  leasingAgentOfficeHours              String
+  leasingAgentPhone                    String
+  leasingAgentTitle                    String
+  name                                 String
+  neighborhood                         String
+  preferences                          Preference[]
+  petPolicy                            String
+  postmarkedApplicationsReceivedByDate String
+  programRules                         String
+  rentalHistory                        String
+  requiredDocuments                    String
+  smokingPolicy                        String
+  units                                Unit[]
+  unitsAvailable                       Int
+  unitAmenities                        String
+  // unitsSummarized                       UnitsSummarized
+  urlSlug                              String
+  waitlistCurrentSize                  Int
+  waitlistMaxSize                      Int
+  yearBuilt                            Int
+}
+
+model Unit {
+  id                           String   @default(uuid()) @id
+  amiPercentage                String
+  annualIncomeMin              String
+  monthlyIncomeMin             Float
+  floor                        Int
+  annualIncomeMax              String
+  maxOccupancy                 Int
+  minOccupancy                 Int
+  monthlyRent                  Float
+  numBathrooms                 Int
+  numBedrooms                  Int
+  number                       String
+  priorityType                 String
+  reservedType                 String
+  sqFeet                       Float
+  status                       String
+  unitType                     String
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+  amiChartId                   Int
+  monthlyRentAsPercentOfIncome Int
+  listing                      Listing  @relation(fields: [listingId], references: [id])
+  listingId                    String
+}
+
+model Attachment {
+  id        String         @default(uuid()) @id
+  label     String
+  fileUrl   String
+  type      AttachmentType
+  listing   Listing        @relation(fields: [listingId], references: [id])
+  listingId String
+}
+
+model Address {
+  id                  String   @default(uuid()) @id
+  city                String
+  county              String
+  state               String
+  street              String
+  zipCode             String
+  latitude            Float
+  longitude           Float
+  leasingAgentAddress Listing? @relation("leasingAgentAddress")
+  buildingAddress     Listing? @relation("buildingAddress")
+  applicationAddress  Listing? @relation("applicationAddress")
+}
+
+model Preference {
+  id          String  @default(uuid()) @id
+  ordinal     String
+  title       String
+  subtitle    String
+  description String
+  links       Json
+  listing     Listing @relation(fields: [listingId], references: [id])
+  listingId   String
+}
+
+enum AttachmentType {
+  ApplicationDownload
+  ExternalApplication
+}
