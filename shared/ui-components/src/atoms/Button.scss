@@ -41,6 +41,15 @@
     @apply normal-case;
   }
 
+  &.no-border {
+    border-color: transparent;
+    background: transparent;
+
+    &:hover {
+      @apply text-primary-darker;
+    }
+  }
+
   &.button-link {
     @apply normal-case;
     @apply border-0;
