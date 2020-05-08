@@ -8,6 +8,9 @@
   "private": true,
   "dependencies": {
     "@types/node": "^13.13.4",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "oidc-provider": "^6.24.0",
     "rimraf": "^3.0.2",
     "typescript": "^3.8.3"
   },
@@ -28,7 +31,7 @@
     "clean": "rimraf dist",
     "build": "yarn run clean && tsc -p tsconfig.prod.json",
     "start": "yarn install && yarn run build && node dist/src/index.js",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "NODE_ENV=development ts-node-dev src/index.ts",
     "test": "jest"
   },
   "babel": {
