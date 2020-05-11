@@ -4,7 +4,7 @@ import { Preference } from "./preferences"
 
 export enum AttachmentType {
   ApplicationDownload = 1,
-  ExternalApplication = 2
+  ExternalApplication = 2,
 }
 
 export interface Attachment {

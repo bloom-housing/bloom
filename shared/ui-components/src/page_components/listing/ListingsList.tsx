@@ -5,7 +5,7 @@ import LinkButton from "../../atoms/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
 import {
   GroupedTable,
-  GroupedTableGroup
+  GroupedTableGroup,
 } from "@bloom-housing/ui-components/src/tables/GroupedTable"
 import t from "@bloom-housing/ui-components/src/helpers/translator"
 import "./ListingsList.scss"
@@ -22,7 +22,7 @@ const ListingsList = (props: ListingsProps) => {
     const unitSummariesHeaders = {
       unitType: t("t.unitType"),
       minimumIncome: t("t.minimumIncome"),
-      rent: t("t.rent")
+      rent: t("t.rent"),
     }
 
     let unitSummaries = [] as GroupedTableGroup[]

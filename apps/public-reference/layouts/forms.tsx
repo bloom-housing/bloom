@@ -1,6 +1,6 @@
 import Layout from "./application"
 
-export default props => {
+export default (props) => {
   return (
     <Layout>
       <section style={{ padding: "1px", background: "#f6f6f6" }}>

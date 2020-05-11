@@ -7,5 +7,5 @@ export const amiCharts = {
   1: sanMateoHUD2019,
   2: sanMateoHOME2019,
   3: sanMateoHERASpecial2019,
-  4: sanJoseTCAC2019
+  4: sanJoseTCAC2019,
 }

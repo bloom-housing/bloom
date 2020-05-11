@@ -4,7 +4,7 @@ import Button from "./Button"
 
 export default {
   title: "Atoms|Button",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const handleClick = (e: React.MouseEvent) => {

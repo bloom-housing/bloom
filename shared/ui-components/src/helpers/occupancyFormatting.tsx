@@ -6,7 +6,7 @@ export const occupancyTable = (listing: Listing) => {
   let occupancyData = [] as any
 
   if (listing.unitsSummarized) {
-    occupancyData = listing.unitsSummarized.byUnitType.map(unitSummary => {
+    occupancyData = listing.unitsSummarized.byUnitType.map((unitSummary) => {
       let occupancy = ""
 
       if (unitSummary.occupancyRange.max == null) {
@@ -23,7 +23,7 @@ export const occupancyTable = (listing: Listing) => {
 
       return {
         unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
-        occupancy: occupancy
+        occupancy: occupancy,
       }
     })
   }

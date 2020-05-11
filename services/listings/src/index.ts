@@ -11,7 +11,7 @@ import { amiCharts } from "./lib/ami_charts"
 dotenv.config({ path: ".env" })
 
 const config = {
-  port: parseInt(process.env.PORT || "3001", 10)
+  port: parseInt(process.env.PORT || "3001", 10),
 }
 
 const app = new Application()
@@ -19,7 +19,7 @@ const app = new Application()
 // TODO: app.use(logger(winston));
 app.use(cors())
 
-app.use(async ctx => {
+app.use(async (ctx) => {
   let listings = (await listingsLoader("listings")) as Listing[]
 
   if (ctx.request.query.jsonpath) {
@@ -28,7 +28,7 @@ app.use(async ctx => {
   }
 
   // Transform all the listings
-  listings.forEach(listing => {
+  listings.forEach((listing) => {
     listing.unitsSummarized = transformUnits(listing.units, amiCharts)
     listing.urlSlug = listingUrlSlug(listing)
   })
@@ -36,7 +36,7 @@ app.use(async ctx => {
   const data = {
     status: "ok",
     listings: listings,
-    amiCharts: amiCharts
+    amiCharts: amiCharts,
   }
 
   ctx.body = data

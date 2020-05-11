@@ -5,7 +5,7 @@ import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
 export default {
   title: "Listing|Additional Fees",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const listing = Object.assign({}, Archer) as any

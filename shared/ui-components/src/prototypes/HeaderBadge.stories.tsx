@@ -4,9 +4,7 @@ import HeaderBadge from "./HeaderBadge"
 
 export default {
   title: "Prototypes|HeaderBadge",
-  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>]
+  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
-export const withIcon = () => (
-  <HeaderBadge />
-)
+export const withIcon = () => <HeaderBadge />

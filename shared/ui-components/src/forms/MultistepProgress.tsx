@@ -21,7 +21,7 @@ const ProcessStepIndicator = (props: {
     width: "15px",
     height: "15px",
     marginRight: "10px",
-    borderRadius: "15px"
+    borderRadius: "15px",
   }
 
   return <span style={styles}></span>

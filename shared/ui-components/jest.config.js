@@ -7,18 +7,18 @@ module.exports = {
   preset: "ts-jest",
   globals: {
     "ts-jest": {
-      tsConfig: "tsconfig.json"
-    }
+      tsConfig: "tsconfig.json",
+    },
   },
   rootDir: "../..",
   roots: ["<rootDir>/shared/ui-components"],
   transform: {
     "^.+\\.stories\\.[t|j]sx$": "@storybook/addon-storyshots/injectFileName",
-    "^.+\\.[t|j]sx?$": "ts-jest"
+    "^.+\\.[t|j]sx?$": "ts-jest",
   },
   setupFilesAfterEnv: ["<rootDir>/shared/ui-components/.jest/setup-tests.js"],
   moduleNameMapper: {
-    "\\.(scss|css|less)$": "identity-obj-proxy"
+    "\\.(scss|css|less)$": "identity-obj-proxy",
   },
-  testPathIgnorePatterns: ["storyshots.d.ts"]
+  testPathIgnorePatterns: ["storyshots.d.ts"],
 }

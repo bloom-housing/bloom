@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionItemHeading,
   AccordionItemButton,
-  AccordionItemPanel
+  AccordionItemPanel,
 } from "react-accessible-accordion"
 
 export interface ResponsiveContentProps {
@@ -63,5 +63,5 @@ export {
   ResponsiveContentList,
   ResponsiveContentItem,
   ResponsiveContentItemHeader,
-  ResponsiveContentItemBody
+  ResponsiveContentItemBody,
 }

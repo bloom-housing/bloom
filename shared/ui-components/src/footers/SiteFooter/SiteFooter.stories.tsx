@@ -9,10 +9,10 @@ import FooterSection from "../FooterSection/FooterSection"
 export default {
   title: "Footers|Site Footer",
   parameters: {
-    componentSubtitle: "Site-wide footer, shown on every page."
+    componentSubtitle: "Site-wide footer, shown on every page.",
   },
   component: SiteFooter,
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const credits = (

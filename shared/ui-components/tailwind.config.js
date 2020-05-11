@@ -6,7 +6,7 @@ module.exports = {
       sm: "640px",
       md: "768px",
       lg: "1200px",
-      xl: "1280px"
+      xl: "1280px",
     },
     fontSize: {
       "2xs": ".6875rem",
@@ -21,12 +21,12 @@ module.exports = {
       "4xl": "2rem",
       "5xl": "2.5rem",
       "6xl": "3rem",
-      "7xl": "4.5rem"
+      "7xl": "4.5rem",
     },
     fontFamily: {
       sans: ["Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif"],
       serif: ["Droid Serif", "Georgia", "Times", "serif"],
-      "alt-sans": ["Lato", "Helvetica", "Arial", "Verdana", "sans-serif"]
+      "alt-sans": ["Lato", "Helvetica", "Arial", "Verdana", "sans-serif"],
     },
     colors: {
       primary: "#0077DA",
@@ -57,23 +57,23 @@ module.exports = {
         "700": "#0067be",
         "600": "#0077DA",
         "300": "#DAEEFF",
-        "200": "#F5F8F9"
+        "200": "#F5F8F9",
       },
       red: {
         "700": "#E41D3D",
-        "300": "#F9D2D8"
+        "300": "#F9D2D8",
       },
       yellow: {
         "700": "#FDB81E",
-        "300": "#FEE8B6"
+        "300": "#FEE8B6",
       },
       green: {
         "700": "#2E8540",
-        "300": "#B4E5BE"
+        "300": "#B4E5BE",
       },
       teal: {
         "700": "#2E8540",
-        "300": "#B4E5BE"
+        "300": "#B4E5BE",
       },
       gray: {
         "950": "#242C2E",
@@ -89,8 +89,8 @@ module.exports = {
         "400": "#EFEFEF",
         "300": "#F6F6F6",
         "200": "#F7F7F7",
-        "100": "#F9F9F9"
-      }
+        "100": "#F9F9F9",
+      },
     },
     letterSpacing: {
       tightest: "-.075em",
@@ -99,7 +99,7 @@ module.exports = {
       normal: "0",
       wide: ".025em",
       wider: ".05em",
-      widest: ".12em"
-    }
-  }
+      widest: ".12em",
+    },
+  },
 }

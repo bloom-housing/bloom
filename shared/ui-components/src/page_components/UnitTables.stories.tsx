@@ -8,7 +8,7 @@ import { unitSummariesTable, groupNonReservedAndReservedSummaries } from "../hel
 
 export default {
   title: "Tables|UnitSummaryTables",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const archer = Object.assign({}, Archer) as any
@@ -28,8 +28,8 @@ const summaries = {
       rentAsPercentIncomeRange: { min: null, max: null },
       rentRange: { min: "$719", max: "$1,104" },
       floorRange: { min: 2, max: 3 },
-      areaRange: { min: 285, max: 285 }
-    }
+      areaRange: { min: 285, max: 285 },
+    },
   ],
   byUnitTypeWithoutFloor: [
     {
@@ -39,8 +39,8 @@ const summaries = {
       occupancyRange: { min: 1, max: 2 },
       rentAsPercentIncomeRange: { min: null, max: null },
       rentRange: { min: "$719", max: "$1,104" },
-      areaRange: { min: 285, max: 285 }
-    }
+      areaRange: { min: 285, max: 285 },
+    },
   ],
   byNonReservedUnitType: [
     {
@@ -51,8 +51,8 @@ const summaries = {
       rentAsPercentIncomeRange: { min: null, max: null },
       rentRange: { min: "$719", max: "$1,104" },
       floorRange: { min: 2, max: 3 },
-      areaRange: { min: 285, max: 285 }
-    }
+      areaRange: { min: 285, max: 285 },
+    },
   ],
   byReservedType: [
     {
@@ -66,10 +66,10 @@ const summaries = {
           rentAsPercentIncomeRange: { min: null, max: null },
           rentRange: { min: "$1,104", max: "$1,104" },
           floorRange: { min: 2, max: 2 },
-          areaRange: { min: 285, max: 285 }
-        }
-      ]
-    }
+          areaRange: { min: 285, max: 285 },
+        },
+      ],
+    },
   ],
   byAMI: [
     {
@@ -83,8 +83,8 @@ const summaries = {
           rentAsPercentIncomeRange: { min: null, max: null },
           rentRange: { min: "$1,104", max: "$1,104" },
           floorRange: { min: 2, max: 3 },
-          areaRange: { min: 285, max: 285 }
-        }
+          areaRange: { min: 285, max: 285 },
+        },
       ],
       byReservedType: [
         {
@@ -98,11 +98,11 @@ const summaries = {
               rentAsPercentIncomeRange: { min: null, max: null },
               rentRange: { min: "$1,104", max: "$1,104" },
               floorRange: { min: 2, max: 2 },
-              areaRange: { min: 285, max: 285 }
-            }
-          ]
-        }
-      ]
+              areaRange: { min: 285, max: 285 },
+            },
+          ],
+        },
+      ],
     },
     {
       percent: "30.0",
@@ -115,19 +115,19 @@ const summaries = {
           rentAsPercentIncomeRange: { min: null, max: null },
           rentRange: { min: "$719", max: "$719" },
           floorRange: { min: 2, max: 3 },
-          areaRange: { min: 285, max: 285 }
-        }
+          areaRange: { min: 285, max: 285 },
+        },
       ],
-      byReservedType: []
-    }
+      byReservedType: [],
+    },
   ],
   hmi: {
     columns: { householdSize: "Household Size", ami30: "30% AMI Units", ami45: "45% AMI Units" },
     rows: [
       { householdSize: 1, ami30: "$30,750", ami45: "$46,125" },
-      { householdSize: 2, ami30: "$35,130", ami45: "$52,695" }
-    ]
-  }
+      { householdSize: 2, ami30: "$35,130", ami45: "$52,695" },
+    ],
+  },
 }
 
 export const unitsList = () => {
@@ -157,11 +157,11 @@ const unitSummariesHeaders = {
   unitType: "Unit Type",
   minimumIncome: "Minimum Income",
   rent: "Rent",
-  availability: "Availability"
+  availability: "Availability",
 }
 
 const amiValues = summaries.amiPercentages
-  .map(percent => {
+  .map((percent) => {
     const percentInt = parseInt(percent, 10)
     return percentInt
   })
@@ -171,8 +171,8 @@ export const unitsSummaries = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
     <div>
-      {amiValues.map(percent => {
-        const byAMI = summaries.byAMI.find(item => {
+      {amiValues.map((percent) => {
+        const byAMI = summaries.byAMI.find((item) => {
           return parseInt(item.percent, 10) == percent
         })
 
@@ -197,8 +197,8 @@ export const unitsSummariesGroupedByReservedTypes = () => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
     <div>
-      {amiValues.map(percent => {
-        const byAMI = summaries.byAMI.find(item => {
+      {amiValues.map((percent) => {
+        const byAMI = summaries.byAMI.find((item) => {
           return parseInt(item.percent, 10) == percent
         })
 

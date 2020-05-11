@@ -7,7 +7,7 @@ import { Listing } from "@bloom-housing/core"
 
 export default {
   title: "Headers|Hero",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 const archer = Object.assign({}, Archer) as any

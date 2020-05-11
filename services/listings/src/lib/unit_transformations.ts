@@ -1,6 +1,12 @@
-import { Unit, UnitsSummarized, UnitSummary } from "@bloom-housing/core"
-import { MinMax, MinMaxCurrency } from "@bloom-housing/core"
-import { AmiChartItem } from "@bloom-housing/core"
+import {
+  Unit,
+  UnitsSummarized,
+  UnitSummary,
+  MinMax,
+  MinMaxCurrency,
+  AmiChartItem,
+} from "@bloom-housing/core"
+
 type AnyDict = { [key: string]: any }
 type Units = Unit[]
 
@@ -8,7 +14,7 @@ const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
   minimumFractionDigits: 0,
-  maximumFractionDigits: 0
+  maximumFractionDigits: 0,
 })
 
 const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number): MinMax => {
@@ -35,10 +41,10 @@ const hmiData = (
   const amiChartId = units[0].amiChartId
   const amiChart = amiCharts[amiChartId] as AmiChartItem[]
   const hmiHeaders = {
-    householdSize: "Household Size"
+    householdSize: "Household Size",
   } as AnyDict
   const amiValues = amiPercentages
-    .map(percent => {
+    .map((percent) => {
       const percentInt = parseInt(percent, 10)
       return percentInt
     })
@@ -56,17 +62,17 @@ const hmiData = (
   // 2. If there are multiple AMI levels, it shows each level (max income per
   //    year) per household size.
   if (amiValues.length > 1) {
-    amiValues.forEach(percent => {
+    amiValues.forEach((percent) => {
       hmiHeaders["ami" + percent] = `${percent}% AMI Units`
     })
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
       const columns = {
-        householdSize: i + 1
+        householdSize: i + 1,
       }
       let pushRow = false // row is valid if at least one column is filled
-      amiValues.forEach(percent => {
-        const amiInfo = amiChart.find(item => {
+      amiValues.forEach((percent) => {
+        const amiInfo = amiChart.find((item) => {
           return item.householdSize == columns.householdSize && item.percentOfAmi == percent
         })
         if (amiInfo) {
@@ -87,10 +93,10 @@ const hmiData = (
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
       const columns = {
-        householdSize: i + 1
+        householdSize: i + 1,
       }
 
-      const amiInfo = amiChart.find(item => {
+      const amiInfo = amiChart.find((item) => {
         return item.householdSize == columns.householdSize && item.percentOfAmi == amiValues[0]
       })
 
@@ -159,7 +165,7 @@ const summarizeUnits = (
     }
   )
 
-  return summaries.filter(item => Object.keys(item).length > 0)
+  return summaries.filter((item) => Object.keys(item).length > 0)
 }
 
 const summarizeReservedTypes = (units: Units, reservedTypes: string[], unitTypes: string[]) => {
@@ -168,10 +174,10 @@ const summarizeReservedTypes = (units: Units, reservedTypes: string[], unitTypes
       const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
       return {
         reservedType: reservedType,
-        byUnitType: summarizeUnits(unitsByReservedType, unitTypes)
+        byUnitType: summarizeUnits(unitsByReservedType, unitTypes),
       }
     })
-    .filter(item => item.byUnitType.length > 0)
+    .filter((item) => item.byUnitType.length > 0)
 }
 
 const summarizeByAmi = (
@@ -188,7 +194,7 @@ const summarizeByAmi = (
     return {
       percent: percent,
       byNonReservedUnitType: summarizeUnits(nonReservedUnitsByAmiPercentage, unitTypes),
-      byReservedType: summarizeReservedTypes(unitsByAmiPercentage, reservedTypes, unitTypes)
+      byReservedType: summarizeReservedTypes(unitsByAmiPercentage, reservedTypes, unitTypes),
     }
   })
 }
@@ -196,16 +202,16 @@ const summarizeByAmi = (
 export const transformUnits = (units: Units, amiCharts: any): UnitsSummarized => {
   const data = {} as UnitsSummarized
   data.unitTypes = Array.from(
-    new Set(units.map(unit => unit.unitType).filter(item => item != null))
+    new Set(units.map((unit) => unit.unitType).filter((item) => item != null))
   )
   data.reservedTypes = Array.from(
-    new Set(units.map(unit => unit.reservedType).filter(item => item != null))
+    new Set(units.map((unit) => unit.reservedType).filter((item) => item != null))
   )
   data.priorityTypes = Array.from(
-    new Set(units.map(unit => unit.priorityType).filter(item => item != null))
+    new Set(units.map((unit) => unit.priorityType).filter((item) => item != null))
   )
   data.amiPercentages = Array.from(
-    new Set(units.map(unit => unit.amiPercentage).filter(item => item != null))
+    new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
   const nonReservedUnits = units.filter((unit: Unit) => unit.reservedType == null)
   data.byUnitType = summarizeUnits(units, data.unitTypes)

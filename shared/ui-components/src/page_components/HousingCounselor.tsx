@@ -26,7 +26,7 @@ const HousingCounselor = (props: { counselor: Counselor }) => {
       </h3>
       <p className="text-sm text-gray-700 pb-3">
         {t("housingCounselors.languageServices")}
-        {counselor.languages.map(language => LanguageLabel(language))}
+        {counselor.languages.map((language) => LanguageLabel(language))}
       </p>
       {counselor.address && (
         <p>

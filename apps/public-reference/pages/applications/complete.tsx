@@ -1,11 +1,10 @@
 import Router from "next/router"
-import { Button, onClientSide } from "@bloom-housing/ui-components"
+import { Button, onClientSide, MultistepProgress } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import PageContent from "../../page_content/applications/complete.mdx"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../lib/ApplicationConductor"
 import { useContext } from "react"
-import { MultistepProgress } from "@bloom-housing/ui-components"
 
 export default () => {
   const context = useContext(AppSubmissionContext)

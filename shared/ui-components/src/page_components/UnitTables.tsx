@@ -1,7 +1,7 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { MinMax } from "@bloom-housing/core"
-import { UnitSummary, Unit } from "@bloom-housing/core"
+import { MinMax, UnitSummary, Unit } from "@bloom-housing/core"
+
 import { BasicTable } from "../tables/BasicTable"
 import t from "../../src/helpers/translator"
 import { numberOrdinal } from "../../src/helpers/numberOrdinal"
@@ -45,7 +45,7 @@ const UnitTables = (props: UnitTablesProps) => {
     number: capitalize(t("listings.unit") + " #"),
     sqFeet: capitalize(t("t.area")),
     numBathrooms: capitalize(t("listings.bath") + "s"),
-    floor: capitalize(t("t.floor"))
+    floor: capitalize(t("t.floor")),
   }
 
   const toggleTable = (event: React.MouseEvent) => {
@@ -73,7 +73,7 @@ const UnitTables = (props: UnitTablesProps) => {
               </>
             ),
             numBathrooms: <strong>{unit.numBathrooms}</strong>,
-            floor: <strong>{unit.floor}</strong>
+            floor: <strong>{unit.floor}</strong>,
           })
         })
 

@@ -39,10 +39,10 @@ module.exports = withCSS(
           listingServiceUrl: LISTING_SERVICE_URL,
           mapBoxToken: MAPBOX_TOKEN,
           housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
-          gtmKey: process.env.GTM_KEY || null
+          gtmKey: process.env.GTM_KEY || null,
         },
         sassLoaderOptions: {
-          prependData: tailwindVars
+          prependData: tailwindVars,
         },
         // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
         async exportPathMap() {
@@ -61,13 +61,13 @@ module.exports = withCSS(
               Object.assign({}, listingPaths, {
                 [`/listing/${listing.id}/${listing.urlSlug}`]: {
                   page: "/listing",
-                  query: { id: listing.id }
+                  query: { id: listing.id },
                 },
                 // Create a redirect so that the base ID redirects to the ID with URL slug
                 [`/listing/${listing.id}`]: {
                   page: "/redirect",
-                  query: { to: `/listing/${listing.id}/${listing.urlSlug}` }
-                }
+                  query: { to: `/listing/${listing.id}/${listing.urlSlug}` },
+                },
               }),
             {}
           )
@@ -76,18 +76,18 @@ module.exports = withCSS(
           const translatablePaths = Object.assign({}, listingPaths, {
             "/": { page: "/" },
             "/listings": { page: "/listings" },
-            "/housing-counselors": { page: "/HousingCounselors" }
+            "/housing-counselors": { page: "/HousingCounselors" },
           })
           const languages = ["es"] // add new language codes here
           const languagePaths = {}
           Object.entries(translatablePaths).forEach(([key, value]) => {
             languagePaths[key] = value
-            languages.forEach(language => {
+            languages.forEach((language) => {
               const query = Object.assign({}, value.query)
               query.language = language
               languagePaths[`/${language}${key.replace(/^\/$/, "")}`] = {
                 ...value,
-                query: query
+                query: query,
               }
             })
           })
@@ -98,9 +98,9 @@ module.exports = withCSS(
             "/privacy": { page: "/privacy" },
             "/applications/new": { page: "/applications/new" },
             "/applications/step2": { page: "/applications/step2" },
-            "/applications/complete": { page: "/applications/complete" }
+            "/applications/complete": { page: "/applications/complete" },
           })
-        }
+        },
       })
     )
   )

@@ -10,7 +10,7 @@ describe("GET /", () => {
     expect(req.body.listings.length).toEqual(allListings.length)
   })
 
-  afterAll(async done => {
+  afterAll(async (done) => {
     application.close()
     await done()
   })
@@ -21,7 +21,7 @@ describe("JSONPath queries", () => {
     const query = "/?jsonpath=%24%5B%3F(%40.applicationAddress.city%3D%3D%22San+Jose%22)%5D"
     const req = await request(application).get(query)
     let sjListings = (await listingsLoader("listings")) as Listing[]
-    sjListings = sjListings.filter(item => {
+    sjListings = sjListings.filter((item) => {
       return item.applicationAddress.city == "San Jose"
     })
     expect(req.body.listings.length).toEqual(sjListings.length)
@@ -33,7 +33,7 @@ describe("JSONPath queries", () => {
     expect(req.body.listings.length).toEqual(0)
   })
 
-  afterAll(async done => {
+  afterAll(async (done) => {
     application.close()
     await done()
   })
