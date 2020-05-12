@@ -1,5 +1,5 @@
 import path from "path"
-import fs from "fs"
+import * as fs from 'fs'
 
 const parseJsonFile = (filePath: string) => {
   const data = fs.readFileSync(filePath)
