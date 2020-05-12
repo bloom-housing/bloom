@@ -1,7 +1,17 @@
 {
   "compilerOptions": {
     // these are app-optimized, and we expect TS-based services to override many options
-    "target": "es6",
+    "types": [
+      "reflect-metadata"
+    ],
+    "lib": [
+      "es2015"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "declaration": false,
+    "target": "es2015",
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
@@ -10,6 +20,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "baseUrl": "./../../",
+    }
   }
-}
+
