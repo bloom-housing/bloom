@@ -4,6 +4,7 @@ import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
 import { addTranslation } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
+import AuthProvider from "../src/auth/AuthProvider"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -72,7 +73,11 @@ class MyApp extends App {
       }
     }
 
-    return <Component {...pageProps} />
+    return (
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
+    )
   }
 }
 

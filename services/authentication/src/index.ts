@@ -23,7 +23,7 @@ const oidc = new Provider(config.url, {
     {
       /* eslint-disable @typescript-eslint/camelcase */
       client_id: "bloom-housing-internal",
-      redirect_uris: [...(config.isDev ? ["http://localhost:3000"] : [])],
+      redirect_uris: [...(config.isDev ? ["http://localhost:3000/auth/callback"] : [])],
       response_types: ["code"],
       grant_types: ["authorization_code", "refresh_token"],
       token_endpoint_auth_method: "none"

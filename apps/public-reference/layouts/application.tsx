@@ -10,6 +10,7 @@ import {
   ExygyFooter
 } from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
+import { LoginButton } from "../src/auth/LoginButton"
 
 const Layout = props => (
   <div>
@@ -30,6 +31,7 @@ const Layout = props => (
           {t("nav.getAssistance")}
         </LocalizedLink>
       )}
+      <LoginButton />
     </SiteHeader>
     <main>{props.children}</main>
 
