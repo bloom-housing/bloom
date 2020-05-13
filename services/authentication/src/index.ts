@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 import bodyParser from "body-parser"
 import Provider from "oidc-provider"
 import express from "express"
+import helmet from "helmet"
 
 const loadConfig = () => {
   dotenv.config()
@@ -65,6 +66,7 @@ oidc.on("server_error", (ctx, err) => {
 
 const app = express()
 app.use(bodyParser.json())
+app.use(helmet())
 
 app.use(oidc.callback)
 
