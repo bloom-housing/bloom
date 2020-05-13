@@ -23,9 +23,16 @@ const oidc = new Provider(config.url, {
     {
       /* eslint-disable @typescript-eslint/camelcase */
       client_id: "bloom-housing-internal",
-      redirect_uris: [...(config.isDev ? ["http://localhost:3000/auth/callback"] : [])],
+      redirect_uris: [
+        ...(config.isDev
+          ? [
+              "http://localhost:3000/auth/callback",
+              "http://localhost:3000/auth/iframe_callback.html"
+            ]
+          : [])
+      ],
       response_types: ["code"],
-      grant_types: ["authorization_code", "refresh_token"],
+      grant_types: ["authorization_code"],
       token_endpoint_auth_method: "none"
       /* eslint-enable @typescript-eslint/camelcase */
     }
@@ -50,6 +57,11 @@ if (config.isDev) {
 }
 
 oidc.proxy = true
+
+oidc.on("server_error", (ctx, err) => {
+  console.error(`Server Error:`)
+  console.error(err)
+})
 
 const app = express()
 app.use(bodyParser.json())

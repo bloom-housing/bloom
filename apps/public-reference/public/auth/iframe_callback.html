@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>user-manager iframe</title>
+</head>
+
+<body>
+<script src='oidc-client.rsa256.slim.min.js'></script>
+<script>
+  Oidc.Log.logger = console;
+  Oidc.Log.level = Oidc.Log.ERROR;
+  new Oidc.UserManager().signinSilentCallback();
+</script>
+</body>
+
+</html>

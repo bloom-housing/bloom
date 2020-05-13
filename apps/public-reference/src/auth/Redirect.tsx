@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { AuthContext, RequestState } from "./AuthProvider"
+import { AuthContext } from "./AuthProvider"
 
 export interface RedirectProps {
   onLogin: (RequestState) => void
@@ -21,7 +21,7 @@ const Redirect = ({ onLogin }: RedirectProps) => {
       }
     }
     handleAuthCode()
-  }, [])
+  }, [getTokens])
 
   // TODO: add translations
 
