@@ -6,25 +6,16 @@ const ProcessStepIndicator = (props: {
   currentPageStep: number
   completedSteps: number
 }) => {
-  let indicatorColor = "#CCC"
+  let bgColor = "is-disabled"
   if (onClientSide()) {
     if (props.step == props.currentPageStep) {
-      indicatorColor = "#0077da"
+      bgColor = "is-active"
     } else if (props.completedSteps >= props.step) {
-      indicatorColor = "#0D0"
+      bgColor = ""
     }
   }
 
-  const styles = {
-    backgroundColor: indicatorColor,
-    display: "inline-block",
-    width: "15px",
-    height: "15px",
-    marginRight: "10px",
-    borderRadius: "15px",
-  }
-
-  return <span style={styles}></span>
+  return <li className={`progress-nav__item ${bgColor}`}></li>
 }
 
 const MultistepProgress = (props: {
@@ -45,7 +36,7 @@ const MultistepProgress = (props: {
     )
   }
 
-  return <div className={!onClientSide() ? "invisible" : "text-center"}>{stepIndicators}</div>
+  return <ul className={!onClientSide() ? "invisible" : "progress-nav"}>{stepIndicators}</ul>
 }
 
 export { MultistepProgress as default, MultistepProgress }
