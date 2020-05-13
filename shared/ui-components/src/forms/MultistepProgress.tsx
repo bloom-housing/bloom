@@ -34,7 +34,7 @@ const MultistepProgress = (props: {
         step={i}
         currentPageStep={props.currentPageStep}
         completedSteps={props.completedSteps}
-        label= {props.label}
+        label={props.label}
       />
     )
   }
