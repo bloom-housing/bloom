@@ -3,6 +3,8 @@ import bodyParser from "body-parser"
 import Provider from "oidc-provider"
 import express from "express"
 import helmet from "helmet"
+import routes from "./routes"
+import path from "path"
 
 const loadConfig = () => {
   dotenv.config()
@@ -40,7 +42,8 @@ const oidc = new Provider(config.url, {
   ],
   features: {
     introspection: { enabled: true },
-    revocation: { enabled: true }
+    revocation: { enabled: true },
+    devInteractions: { enabled: false }
   }
 })
 
@@ -68,6 +71,10 @@ const app = express()
 app.use(bodyParser.json())
 app.use(helmet())
 
+app.set("views", path.join(__dirname, "views"))
+app.set("view engine", "ejs")
+
+routes(app, oidc)
 app.use(oidc.callback)
 
 export default app.listen(config.port)
