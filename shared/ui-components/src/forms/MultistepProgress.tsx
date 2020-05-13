@@ -5,6 +5,7 @@ const ProcessStepIndicator = (props: {
   step: number
   currentPageStep: number
   completedSteps: number
+  label: string
 }) => {
   let bgColor = "is-disabled"
   if (onClientSide()) {
@@ -15,13 +16,14 @@ const ProcessStepIndicator = (props: {
     }
   }
 
-  return <li className={`progress-nav__item ${bgColor}`}></li>
+  return <li className={`progress-nav__item ${bgColor}`}><a href="#">{props.label}</a></li>
 }
 
 const MultistepProgress = (props: {
   currentPageStep: number
   completedSteps: number
   totalNumberOfSteps: number
+  label: string
 }) => {
   let i = 0
   const stepIndicators = []
@@ -32,6 +34,7 @@ const MultistepProgress = (props: {
         step={i}
         currentPageStep={props.currentPageStep}
         completedSteps={props.completedSteps}
+        label= {props.label}
       />
     )
   }

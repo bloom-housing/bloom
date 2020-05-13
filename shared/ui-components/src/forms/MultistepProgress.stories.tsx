@@ -8,5 +8,5 @@ export default {
 }
 
 export const Default = () => (
-  <MultistepProgress currentPageStep={2} completedSteps={1} totalNumberOfSteps={5} />
+  <MultistepProgress currentPageStep={2} completedSteps={1} totalNumberOfSteps={5} label={}/>
 )
