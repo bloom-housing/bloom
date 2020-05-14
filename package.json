@@ -6,6 +6,7 @@
     "shared/core",
     "shared/ui-components",
     "apps/public-reference",
+    "services/authentication",
     "services/listings"
   ],
   "repository": "https://github.com/Exygy/bloom.git",
@@ -14,8 +15,9 @@
   "scripts": {
     "dev:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn dev",
     "test:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn test",
+    "dev:auth": "cd services/authentication && yarn dev",
     "dev:listings": "cd services/listings && yarn dev",
-    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
+    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:auth\" \"yarn dev:app:public\"",
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\""
