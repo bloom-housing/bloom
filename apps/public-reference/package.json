@@ -23,25 +23,25 @@
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "moment": "^2.24.0",
-    "nanoid": "^3.0.0",
+    "nanoid": "^3.1.7",
     "next": "9.2.0",
     "next-plugin-custom-babel-config": "^1.0.2",
     "node-polyglot": "^2.4.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-hook-form": "^5.2.0",
     "react-inlinesvg": "^1.2.0"
   },
   "devDependencies": {
-    "@types/node": "^12.12.31",
+    "@types/node": "^12.12.39",
     "@types/react": "^16.9.19",
-    "concurrently": "^5.1.0",
-    "cypress": "^4.2.0",
+    "concurrently": "^5.2.0",
+    "cypress": "^4.5.0",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^3.0.1",
     "sass-loader": "^8.0.2",
     "typescript": "^3.8.3",
-    "webpack": "^4.42.1"
+    "webpack": "^4.43.0"
   }
 }
