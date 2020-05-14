@@ -1,12 +1,12 @@
 import React from "react"
 import { withA11y } from "@storybook/addon-a11y"
-import MultistepProgress from "./MultistepProgress"
+import ProgressNav from "./ProgressNav"
 
 export default {
-  title: "Prototypes|MultistepProgress",
+  title: "Forms|ProgressNav",
   decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>]
 }
 
 export const Default = () => (
-  <MultistepProgress currentPageStep={2} completedSteps={1} totalNumberOfSteps={5} />
+  <ProgressNav currentPageStep={2} completedSteps={1} totalNumberOfSteps={5} labels={["You", "Household", "Income", "Preferences", "Review"]}/>
 )

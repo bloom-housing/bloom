@@ -1,7 +1,8 @@
 import React from "react"
 import { onClientSide } from "../helpers/nextjs"
+import "./ProgressNav.scss"
 
-const ProcessStepIndicator = (props: {
+const ProgressNavItem = (props: {
   step: number
   currentPageStep: number
   completedSteps: number
@@ -19,22 +20,22 @@ const ProcessStepIndicator = (props: {
   return <li className={`progress-nav__item ${bgColor}`}><a href="#">{props.label}</a></li>
 }
 
-const MultistepProgress = (props: {
+const ProgressNav = (props: {
   currentPageStep: number
   completedSteps: number
   totalNumberOfSteps: number
-  label: string
+  labels: string[]
 }) => {
   let i = 0
   const stepIndicators = []
   while (i < props.totalNumberOfSteps) {
     i++
     stepIndicators.push(
-      <ProcessStepIndicator
+      <ProgressNavItem
         step={i}
         currentPageStep={props.currentPageStep}
         completedSteps={props.completedSteps}
-        label={props.label}
+        label={props.labels[i-1]}
       />
     )
   }
@@ -42,4 +43,4 @@ const MultistepProgress = (props: {
   return <ul className={!onClientSide() ? "invisible" : "progress-nav"}>{stepIndicators}</ul>
 }
 
-export { MultistepProgress as default, MultistepProgress }
+export { ProgressNav as default, ProgressNav }
