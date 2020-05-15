@@ -3,7 +3,7 @@ import * as React from "react"
 import "./WelcomeHeader.scss"
 import { LocalizedLink } from "@bloom-housing/ui-components"
 
-const WelcomeHeader = props => (
+const WelcomeHeader = (props) => (
   <div className="welcome">
     <ul className="welcome__list">
       <li>

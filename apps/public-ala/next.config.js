@@ -38,16 +38,16 @@ module.exports = withCSS(
         env: {
           listingServiceUrl: LISTING_SERVICE_URL,
           mapBoxToken: MAPBOX_TOKEN,
-          housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL
+          housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
+          gtmKey: process.env.GTM_KEY || null,
         },
         sassLoaderOptions: {
-          prependData: tailwindVars
+          prependData: tailwindVars,
         },
         // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
         async exportPathMap() {
           // we fetch our list of listings, this allow us to dynamically generate the exported pages
           let listings = []
-
           try {
             const response = await axios.get(LISTING_SERVICE_URL)
             listings = response.data.listings
@@ -59,10 +59,15 @@ module.exports = withCSS(
           const listingPaths = listings.reduce(
             (listingPaths, listing) =>
               Object.assign({}, listingPaths, {
-                [`/listing/${listing.id}`]: {
+                [`/listing/${listing.id}/${listing.urlSlug}`]: {
                   page: "/listing",
-                  query: { id: listing.id }
-                }
+                  query: { id: listing.id },
+                },
+                // Create a redirect so that the base ID redirects to the ID with URL slug
+                [`/listing/${listing.id}`]: {
+                  page: "/redirect",
+                  query: { to: `/listing/${listing.id}/${listing.urlSlug}` },
+                },
               }),
             {}
           )
@@ -72,18 +77,18 @@ module.exports = withCSS(
             "/": { page: "/" },
             "/listings": { page: "/listings" },
             "/housing-counselors": { page: "/HousingCounselors" },
-            "/additional-resources": { page: "/AdditionalResources" }
+            "/additional-resources": { page: "/AdditionalResources" },
           })
           const languages = ["es"] // add new language codes here
           const languagePaths = {}
           Object.entries(translatablePaths).forEach(([key, value]) => {
             languagePaths[key] = value
-            languages.forEach(language => {
+            languages.forEach((language) => {
               const query = Object.assign({}, value.query)
               query.language = language
               languagePaths[`/${language}${key.replace(/^\/$/, "")}`] = {
                 ...value,
-                query: query
+                query: query,
               }
             })
           })
@@ -91,9 +96,9 @@ module.exports = withCSS(
           // combine the map of all various types of page paths
           return Object.assign({}, languagePaths, {
             "/disclaimer": { page: "/disclaimer" },
-            "/privacy": { page: "/privacy" }
+            "/privacy": { page: "/privacy" },
           })
-        }
+        },
       })
     )
   )

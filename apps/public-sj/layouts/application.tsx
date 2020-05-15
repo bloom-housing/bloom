@@ -9,7 +9,7 @@ import {
   LocalizedLink,
   SiteFooter,
   SiteHeader,
-  t
+  t,
 } from "@bloom-housing/ui-components"
 
 const notice = (
@@ -18,7 +18,7 @@ const notice = (
   </LocalizedLink>
 )
 
-const Layout = props => (
+const Layout = (props) => (
   <div>
     <Head>
       <title>{t("nav.siteTitle")}</title>

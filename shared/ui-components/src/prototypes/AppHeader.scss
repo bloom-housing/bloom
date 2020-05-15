@@ -1,0 +1,30 @@
+.app-header {
+  @apply bg-primary;
+  @apply text-white;
+  @apply border-solid;
+  @apply border;
+  @apply border-gray-450;
+  @apply text-center;
+
+  @screen md {
+    @apply rounded-lg;
+  }
+}
+
+.app-header_group {
+  @apply p-4;
+}
+
+.app-header_title {
+  @apply text-lg;
+  @apply font-alt-sans;
+  @apply font-bold;
+  @apply uppercase;
+  @apply mb-0;
+}
+
+.app-header_nav {
+  @apply p-4;
+  @apply bg-white;
+  @apply rounded-b-lg;
+}

@@ -1,11 +1,10 @@
 .sidebar {
-  box-shadow: -3px 0px 3px -1px rgba(0,0,0,0.1);
+  box-shadow: -3px 0px 3px -1px rgba(0, 0, 0, 0.1);
   @apply w-full;
   @apply flex;
   @apply flex-col;
   @apply p-8;
 }
-
 
 @screen md {
   .sidebar {
@@ -58,7 +57,7 @@ h3 {
     @apply mb-2;
   }
 
-  p{
+  p {
     @apply text-sm;
     @apply text-gray-800;
   }

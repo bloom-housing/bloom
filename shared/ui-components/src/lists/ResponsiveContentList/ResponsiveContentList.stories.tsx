@@ -4,12 +4,12 @@ import {
   ResponsiveContentList,
   ResponsiveContentItem,
   ResponsiveContentItemHeader,
-  ResponsiveContentItemBody
+  ResponsiveContentItemBody,
 } from "./ResponsiveContentList"
 
 export default {
   title: "Sections|ResponsiveContentList",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 export const withContentItems = () => (

@@ -4,8 +4,23 @@ import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
 import { addTranslation } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
+import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
+import { loadApplicationFromAutosave } from "../lib/ApplicationConductor"
 
 class MyApp extends App {
+  constructor(props) {
+    super(props)
+
+    // Load autosaved listing application, if any
+    const autosavedApplication = loadApplicationFromAutosave()
+    this.state = { application: autosavedApplication || blankApplication() }
+  }
+
+  // This gets passed along through the context
+  syncApplication = (data) => {
+    this.setState({ application: data })
+  }
+
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {} // you can add custom props that pass down to all pages here
 
@@ -22,10 +37,10 @@ class MyApp extends App {
       general: generalTranslations,
       es: spanishTranslations,
       custom: {
-        general: await import("../page_content/locale_overrides/general.json")
+        general: await import("../page_content/locale_overrides/general.json"),
         // Uncomment to add additional language overrides
         // es: await import("../page_content/locale_overrides/es.json")
-      }
+      },
     }
     return { pageProps, translations }
   }
@@ -72,7 +87,16 @@ class MyApp extends App {
       }
     }
 
-    return <Component {...pageProps} />
+    return (
+      <AppSubmissionContext.Provider
+        value={{
+          application: this.state.application,
+          syncApplication: this.syncApplication,
+        }}
+      >
+        <Component {...pageProps} />
+      </AppSubmissionContext.Provider>
+    )
   }
 }
 

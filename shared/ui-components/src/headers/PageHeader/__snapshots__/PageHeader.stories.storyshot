@@ -5,15 +5,15 @@ exports[`Storyshots Headers|PageHeader With Subtitle 1`] = `
   subtitle="Here is a subtitle"
 >
   <header
-    className="page-header py-10 px-5 bg-primary-lighter"
+    className="page-header bg-primary-lighter"
   >
     <h1
-      className="title m-auto max-w-5xl"
+      className="page-header__title"
     >
       Hello World
     </h1>
     <p
-      className="m-auto max-w-5xl"
+      className="page-header__lead"
     >
        
       Here is a subtitle
@@ -25,10 +25,10 @@ exports[`Storyshots Headers|PageHeader With Subtitle 1`] = `
 exports[`Storyshots Headers|PageHeader With Text Content 1`] = `
 <PageHeader>
   <header
-    className="page-header py-10 px-5 bg-primary-lighter"
+    className="page-header bg-primary-lighter"
   >
     <h1
-      className="title m-auto max-w-5xl"
+      className="page-header__title"
     >
       Hello World
     </h1>

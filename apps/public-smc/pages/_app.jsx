@@ -20,10 +20,10 @@ class MyApp extends App {
       general: generalTranslations,
       es: spanishTranslations,
       custom: {
-        general: await import("../page_content/locale_overrides/general.json")
+        general: await import("../page_content/locale_overrides/general.json"),
         // Uncomment to add additional language overrides
         // es: await import("../page_content/locale_overrides/es.json")
-      }
+      },
     }
     return { pageProps, translations }
   }

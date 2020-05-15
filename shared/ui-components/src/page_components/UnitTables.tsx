@@ -1,7 +1,7 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { MinMax } from "@bloom-housing/core"
-import { UnitSummary, Unit } from "@bloom-housing/core"
+import { MinMax, UnitSummary, Unit } from "@bloom-housing/core"
+
 import { BasicTable } from "../tables/BasicTable"
 import t from "../../src/helpers/translator"
 import { numberOrdinal } from "../../src/helpers/numberOrdinal"
@@ -45,7 +45,7 @@ const UnitTables = (props: UnitTablesProps) => {
     number: capitalize(t("listings.unit") + " #"),
     sqFeet: capitalize(t("t.area")),
     numBathrooms: capitalize(t("listings.bath") + "s"),
-    floor: capitalize(t("t.floor"))
+    floor: capitalize(t("t.floor")),
   }
 
   const toggleTable = (event: React.MouseEvent) => {
@@ -63,6 +63,7 @@ const UnitTables = (props: UnitTablesProps) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
         const units = props.units.filter((unit: Unit) => unit.unitType == unitSummary.unitType)
         const unitsFormatted = [] as Array<Record<string, string | JSX.Element>>
+        let floorSection
         units.forEach((unit: Unit) => {
           unitsFormatted.push({
             number: unit.number,
@@ -72,9 +73,20 @@ const UnitTables = (props: UnitTablesProps) => {
               </>
             ),
             numBathrooms: <strong>{unit.numBathrooms}</strong>,
-            floor: <strong>{unit.floor}</strong>
+            floor: <strong>{unit.floor}</strong>,
           })
         })
+
+        if (unitSummary.floorRange) {
+          floorSection = (
+            <>
+              ,&nbsp;{formatRange(unitSummary.floorRange, true)}{" "}
+              {unitSummary.floorRange.max > unitSummary.floorRange.min
+                ? t("t.floors")
+                : t("t.floor")}
+            </>
+          )
+        }
 
         return (
           <div key={uniqKey} className="mb-4">
@@ -82,11 +94,8 @@ const UnitTables = (props: UnitTablesProps) => {
               <h3 className="button-tiny-bg-light">
                 <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>:&nbsp;
                 {unitsLabel(units)},&nbsp;
-                {formatRange(unitSummary.areaRange)} {t("listings.squareFeet")},&nbsp;
-                {formatRange(unitSummary.floorRange, true)}{" "}
-                {unitSummary.floorRange.max > unitSummary.floorRange.min
-                  ? t("t.floors")
-                  : t("t.floor")}
+                {formatRange(unitSummary.areaRange)} {t("listings.squareFeet")}
+                {floorSection}
               </h3>
             </button>
             <div className="unit-table hidden">

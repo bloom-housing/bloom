@@ -1,8 +1,8 @@
 .ui-icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  display: inline-block;
-  vertical-align: middle;
+  @apply inline-block;
+  @apply align-middle;
+  @apply w-6;
+  @apply h-6;
 }
 
 .ui-icon svg {
@@ -10,28 +10,28 @@
 }
 
 .ui-tiny svg {
-  width: 0.5rem;
-  height: 0.5rem;
+  @apply w-2;
+  @apply h-2;
 }
 
 .ui-small svg {
-  width: 0.75rem;
-  height: 0.75rem;
+  @apply w-3;
+  @apply h-3;
 }
 
 .ui-medium svg {
-  width: 1rem;
-  height: 1rem;
+  @apply w-4;
+  @apply h-4;
 }
 
 .ui-large svg {
-  width: 2rem;
-  height: 2rem;
+  @apply w-8;
+  @apply h-8;
 }
 
 .ui-xlarge svg {
-  width: 2.5rem;
-  height: 2.5rem;
+  @apply w-10;
+  @apply h-10;
 }
 
 .ui-white svg use {

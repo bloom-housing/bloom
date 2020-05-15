@@ -13,11 +13,11 @@ function httpsPost({ body, ...options }) {
     const req = https.request(
       {
         method: "POST",
-        ...options
+        ...options,
       },
-      res => {
+      (res) => {
         const chunks = []
-        res.on("data", data => chunks.push(data))
+        res.on("data", (data) => chunks.push(data))
         res.on("end", () => {
           // resolve the promise
           resolve(Buffer.concat(chunks))
@@ -55,7 +55,7 @@ async function pingNetlify(buildHook, currentBranch) {
   await httpsPost({
     hostname: "api.netlify.com",
     path: `/build_hooks/${buildHook}?trigger_branch=${currentBranch}&trigger_title=Heroku+Review+App+Trigger`,
-    body: determineHerokuListingServiceUrl()
+    body: determineHerokuListingServiceUrl(),
   })
 
   console.log("Netlify ping completed.")

@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Forms|Checkbox Standard 1`] = `
+<div
+  style={
+    Object {
+      "padding": "30px",
+    }
+  }
+>
+  <div
+    className="field"
+  >
+    <input
+      id="remember"
+      name="remember"
+      type="checkbox"
+    />
+    <label
+      htmlFor="remember"
+    >
+      Remember me
+    </label>
+  </div>
+</div>
+`;

@@ -33,14 +33,14 @@ export interface BasicTableProps {
 export const BasicTable = (props: BasicTableProps) => {
   const { headers, data, cellClassName } = props
 
-  const headerLabels = Object.values(headers).map(col => {
+  const headerLabels = Object.values(headers).map((col) => {
     const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
   const body = data.map((row: any) => {
     const rowKey = row["id"] || (process.env.NODE_ENV === "test" ? "" : nanoid())
-    const cols = Object.keys(headers).map(colKey => {
+    const cols = Object.keys(headers).map((colKey) => {
       const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
       const header = headers[colKey]
       const cell = row[colKey]

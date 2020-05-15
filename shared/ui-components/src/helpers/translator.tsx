@@ -11,7 +11,7 @@ export const addTranslation = (translationPhrases: any) => {
   if (!translatorConfig.polyglot) {
     // Set up the initial Polyglot instance and phrases
     translatorConfig.polyglot = new Polyglot({
-      phrases: translationPhrases
+      phrases: translationPhrases,
     })
   } else {
     // Extend the Polyglot instance with new phrases

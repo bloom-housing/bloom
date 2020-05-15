@@ -15,7 +15,7 @@ export interface GroupedTableProps extends BasicTableProps {
 export const GroupedTable = (props: GroupedTableProps) => {
   const { headers, data, cellClassName } = props
 
-  const headerLabels = Object.values(headers).map(col => {
+  const headerLabels = Object.values(headers).map((col) => {
     const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
@@ -45,7 +45,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
 
     groupData.forEach((row: any) => {
       const rowKey = row["id"] || (process.env.NODE_ENV === "test" ? "" : nanoid())
-      const cols = Object.keys(headers).map(colKey => {
+      const cols = Object.keys(headers).map((colKey) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
         const header = headers[colKey]
         const cell = row[colKey]

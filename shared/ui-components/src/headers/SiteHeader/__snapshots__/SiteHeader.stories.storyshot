@@ -15,78 +15,82 @@ exports[`Storyshots Headers|SiteHeader Standard 1`] = `
       This is a preview of our new website. We're just getting started. We'd love to get your feedback.
     </div>
   </div>
-  <nav
-    aria-label="main navigation"
-    className="navbar"
-    role="navigation"
+  <div
+    className="navbar__wrapper"
   >
-    <div
-      className="navbar-brand"
-    >
-      <LocalizedLink
-        className="navbar-item logo"
-        href="/"
-      >
-        <Link
-          href="/"
-        >
-          <a
-            className="navbar-item logo"
-            href="/"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            <div
-              className="logo__lockup"
-            >
-              <img
-                className="logo__image"
-                src="/images/logo_glyph.svg"
-              />
-              <div
-                className="logo__title"
-              >
-                Site Title Here
-              </div>
-            </div>
-          </a>
-        </Link>
-      </LocalizedLink>
-      <a
-        aria-expanded="false"
-        aria-label="menu"
-        className="navbar-burger burger"
-        data-target="navbarMenuLinks"
-        onClick={[Function]}
-        role="button"
-      >
-        <span
-          aria-hidden="true"
-        />
-        <span
-          aria-hidden="true"
-        />
-        <span
-          aria-hidden="true"
-        />
-      </a>
-    </div>
-    <div
-      className="navbar-menu mt-3 md:mt-0"
-      id="navbarMenuLinks"
+    <nav
+      aria-label="main navigation"
+      className="navbar"
+      role="navigation"
     >
       <div
-        className="navbar-end"
+        className="navbar-brand"
       >
-        <a
-          className="navbar-item"
-          href="#"
+        <LocalizedLink
+          className="navbar-item logo"
+          href="/"
         >
-          Hello World
+          <Link
+            href="/"
+          >
+            <a
+              className="navbar-item logo"
+              href="/"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              <div
+                className="logo__lockup"
+              >
+                <img
+                  className="logo__image"
+                  src="/images/logo_glyph.svg"
+                />
+                <div
+                  className="logo__title"
+                >
+                  Site Title Here
+                </div>
+              </div>
+            </a>
+          </Link>
+        </LocalizedLink>
+        <a
+          aria-expanded="false"
+          aria-label="menu"
+          className="navbar-burger burger"
+          data-target="navbarMenuLinks"
+          onClick={[Function]}
+          role="button"
+        >
+          <span
+            aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+          />
         </a>
       </div>
-    </div>
-  </nav>
+      <div
+        className="navbar-menu mt-3 md:mt-0"
+        id="navbarMenuLinks"
+      >
+        <div
+          className="navbar-end"
+        >
+          <a
+            className="navbar-item"
+            href="#"
+          >
+            Hello World
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
 </SiteHeader>
 `;
 
@@ -105,134 +109,138 @@ exports[`Storyshots Headers|SiteHeader With Dropdown And Button 1`] = `
       This is a preview of our new website. We're just getting started. We'd love to get your feedback.
     </div>
   </div>
-  <nav
-    aria-label="main navigation"
-    className="navbar"
-    role="navigation"
+  <div
+    className="navbar__wrapper"
   >
-    <div
-      className="navbar-brand"
-    >
-      <LocalizedLink
-        className="navbar-item logo"
-        href="/"
-      >
-        <Link
-          href="/"
-        >
-          <a
-            className="navbar-item logo"
-            href="/"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            <div
-              className="logo__lockup"
-            >
-              <img
-                className="logo__image"
-                src="/images/logo_glyph.svg"
-              />
-              <div
-                className="logo__title"
-              >
-                Site Title Here
-              </div>
-            </div>
-          </a>
-        </Link>
-      </LocalizedLink>
-      <a
-        aria-expanded="false"
-        aria-label="menu"
-        className="navbar-burger burger"
-        data-target="navbarMenuLinks"
-        onClick={[Function]}
-        role="button"
-      >
-        <span
-          aria-hidden="true"
-        />
-        <span
-          aria-hidden="true"
-        />
-        <span
-          aria-hidden="true"
-        />
-      </a>
-    </div>
-    <div
-      className="navbar-menu mt-3 md:mt-0"
-      id="navbarMenuLinks"
+    <nav
+      aria-label="main navigation"
+      className="navbar"
+      role="navigation"
     >
       <div
-        className="navbar-end"
+        className="navbar-brand"
       >
-        <a
-          className="navbar-item"
-          href="#"
+        <LocalizedLink
+          className="navbar-item logo"
+          href="/"
         >
-          Hello World
-        </a>
-        <Component
-          menuTitle="Testing Menu"
-        >
-          <div
-            className="navbar-item has-dropdown is-hoverable"
+          <Link
+            href="/"
           >
             <a
-              className="navbar-link"
-            >
-              Testing Menu
-            </a>
-            <div
-              className="navbar-dropdown"
-            >
-              <a
-                className="navbar-item"
-                href="#"
-              >
-                My Favorites
-              </a>
-              <a
-                className="navbar-item"
-                href="#"
-              >
-                Get Assistance
-              </a>
-              <hr
-                className="navbar-divider"
-              />
-              <a
-                className="navbar-item"
-                href="#"
-              >
-                Sign In
-              </a>
-            </div>
-          </div>
-        </Component>
-        <div
-          className="navbar-item"
-        >
-          <div
-            className="buttons"
-          >
-            <Button
+              className="navbar-item logo"
+              href="/"
               onClick={[Function]}
-              small={true}
+              onMouseEnter={[Function]}
             >
-              <button
-                className="button small"
-                onClick={[Function]}
+              <div
+                className="logo__lockup"
               >
-                Example Button
-              </button>
-            </Button>
+                <img
+                  className="logo__image"
+                  src="/images/logo_glyph.svg"
+                />
+                <div
+                  className="logo__title"
+                >
+                  Site Title Here
+                </div>
+              </div>
+            </a>
+          </Link>
+        </LocalizedLink>
+        <a
+          aria-expanded="false"
+          aria-label="menu"
+          className="navbar-burger burger"
+          data-target="navbarMenuLinks"
+          onClick={[Function]}
+          role="button"
+        >
+          <span
+            aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+          />
+        </a>
+      </div>
+      <div
+        className="navbar-menu mt-3 md:mt-0"
+        id="navbarMenuLinks"
+      >
+        <div
+          className="navbar-end"
+        >
+          <a
+            className="navbar-item"
+            href="#"
+          >
+            Hello World
+          </a>
+          <Component
+            menuTitle="Testing Menu"
+          >
+            <div
+              className="navbar-item has-dropdown is-hoverable"
+            >
+              <a
+                className="navbar-link"
+              >
+                Testing Menu
+              </a>
+              <div
+                className="navbar-dropdown"
+              >
+                <a
+                  className="navbar-item"
+                  href="#"
+                >
+                  My Favorites
+                </a>
+                <a
+                  className="navbar-item"
+                  href="#"
+                >
+                  Get Assistance
+                </a>
+                <hr
+                  className="navbar-divider"
+                />
+                <a
+                  className="navbar-item"
+                  href="#"
+                >
+                  Sign In
+                </a>
+              </div>
+            </div>
+          </Component>
+          <div
+            className="navbar-item"
+          >
+            <div
+              className="buttons"
+            >
+              <Button
+                onClick={[Function]}
+                small={true}
+              >
+                <button
+                  className="button small"
+                  onClick={[Function]}
+                >
+                  Example Button
+                </button>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </div>
 </SiteHeader>
 `;

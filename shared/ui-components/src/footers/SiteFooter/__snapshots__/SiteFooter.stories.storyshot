@@ -190,7 +190,9 @@ exports[`Storyshots Footers|Site Footer With Logo And Credits 1`] = `
           className="footer-row__section py-2"
         >
           <ExygyFooter>
-            <span>
+            <span
+              className="text-sm tracking-wider"
+            >
               made with ❤️ by
                
               <a

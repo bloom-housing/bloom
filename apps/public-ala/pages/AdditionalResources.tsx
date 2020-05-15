@@ -9,12 +9,12 @@ export default () => {
   const pageTitle = t("pageTitle.additionalResources")
   const subTitle = t("pageDescription.additionalResources")
 
-  const LinedH4 = props => <h4 className="text-caps-underline" {...props} />
-  const serifEm = props => <span className="font-serif" {...props} />
+  const LinedH4 = (props) => <h4 className="text-caps-underline" {...props} />
+  const serifEm = (props) => <span className="font-serif" {...props} />
 
   const components = {
     h4: LinedH4,
-    em: serifEm
+    em: serifEm,
   }
 
   return (

@@ -8,11 +8,11 @@ import {
   LocalizedLink,
   SiteFooter,
   SiteHeader,
-  t
+  t,
 } from "@bloom-housing/ui-components"
 
 const notice = <a href="https://www.surveymonkey.com/r/2QLBYML">We love to get your feedback</a>
-const Layout = props => (
+const Layout = (props) => (
   <div>
     <Head>
       <title>{t("nav.siteTitle")}</title>

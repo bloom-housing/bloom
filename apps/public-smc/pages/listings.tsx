@@ -10,7 +10,7 @@ import {
   MetaTags,
   PageHeader,
   openDateState,
-  t
+  t,
 } from "@bloom-housing/ui-components"
 
 export interface ListingsProps {

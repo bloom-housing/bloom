@@ -4,7 +4,7 @@ import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core"
 import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
-  const unitSummaries = summaries.map(unitSummary => {
+  const unitSummaries = summaries.map((unitSummary) => {
     const unitPluralization =
       unitSummary.totalAvailable == 1 ? t("listings.unit") : t("listings.units")
     const minIncome =
@@ -39,7 +39,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
             <span className="uppercase">{t("listings.waitlist.label")}</span>
           )}
         </>
-      )
+      ),
     }
   })
 
@@ -56,8 +56,8 @@ export const groupNonReservedAndReservedSummaries = (
     const unitSummaries = unitSummariesTable(nonReservedSummaries)
     groupedUnits = [
       {
-        data: unitSummaries
-      }
+        data: unitSummaries,
+      },
     ]
   }
 
@@ -71,7 +71,7 @@ export const groupNonReservedAndReservedSummaries = (
           </>
         ),
         className: "reserved",
-        data: unitSummariesTable(item.byUnitType)
+        data: unitSummariesTable(item.byUnitType),
       })
     })
   }

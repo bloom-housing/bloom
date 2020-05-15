@@ -2,7 +2,7 @@ import Layout from "../layouts/application"
 import { PageHeader } from "@bloom-housing/ui-components"
 import "./AdditionalResources.scss"
 
-const Card = props => {
+const Card = (props) => {
   return (
     <div className="info-card">
       <h4 className="info-card__title">

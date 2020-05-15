@@ -7,11 +7,11 @@ import {
   SiteFooter,
   FooterNav,
   FooterSection,
-  ExygyFooter
+  ExygyFooter,
 } from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
 
-const Layout = props => (
+const Layout = (props) => (
   <div>
     <Head>
       <title>{t("nav.siteTitle")}</title>

@@ -1,22 +1,31 @@
 .hero {
   @apply bg-primary-darker;
-  @apply py-20;
+  @apply py-10;
   @apply px-5;
   @apply text-white;
   @apply text-center;
-  background-size: cover;
+  @apply bg-cover;
+
+  @screen md {
+    @apply py-20;
+  }
 }
 
 .hero__title {
-  @apply text-6xl;
-  @apply mb-8;
+  @apply text-4xl;
+  @apply mb-5;
   @apply mx-auto;
   letter-spacing: -0.04em;
   max-width: 41rem;
 
+  @screen md {
+    @apply text-6xl;
+    @apply mb-8;
+  }
+
   em {
-    font-style: normal;
-    text-decoration: underline;
+    @apply not-italic;
+    @apply underline;
     -webkit-text-decoration-color: $tailwind-warn;
     -moz-text-decoration-color: $tailwind-warn;
     text-decoration-color: $tailwind-warn;
@@ -25,10 +34,14 @@
 
 h2.hero__subtitle {
   @apply font-sans;
-  @apply text-lg;
+  @apply text-base;
   @apply text-gray-100;
   @apply mb-8;
   @apply mx-auto;
   max-width: 41rem;
   text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+
+  @screen md {
+    @apply text-lg;
+  }
 }

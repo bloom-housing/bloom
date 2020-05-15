@@ -9,6 +9,7 @@ import {
   ApplicationStatus,
   BasicTable,
   Description,
+  ExpandableText,
   GroupedTable,
   GroupedTableGroup,
   Headers,
@@ -27,7 +28,7 @@ import {
   getOccupancyDescription,
   groupNonReservedAndReservedSummaries,
   occupancyTable,
-  t
+  t,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 
@@ -42,7 +43,7 @@ export default class extends Component<ListingProps> {
 
     try {
       const response = await axios.get(process.env.listingServiceUrl)
-      listing = response.data.listings.find(l => l.id == listingId)
+      listing = response.data.listings.find((l) => l.id == listingId)
     } catch (error) {
       console.log(error)
     }
@@ -63,11 +64,11 @@ export default class extends Component<ListingProps> {
       unitType: t("t.unitType"),
       minimumIncome: t("t.minimumIncome"),
       rent: t("t.rent"),
-      availability: t("t.availability")
+      availability: t("t.availability"),
     }
 
     const amiValues = listing.unitsSummarized.amiPercentages
-      .map(percent => {
+      .map((percent) => {
         const percentInt = parseInt(percent, 10)
         return percentInt
       })
@@ -86,14 +87,14 @@ export default class extends Component<ListingProps> {
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
       unitType: t("t.unitType"),
-      occupancy: t("t.occupancy")
+      occupancy: t("t.occupancy"),
     }
     const occupancyData = occupancyTable(listing)
 
     const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
     const metaDescription = t("pageDescription.listing", {
       regionName: t("region.name"),
-      listingName: listing.name
+      listingName: listing.name,
     })
     const metaImage = listing.imageUrl
 
@@ -146,14 +147,14 @@ export default class extends Component<ListingProps> {
             </div>
           </header>
 
-          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light px-3 p-5 block text-center md:mx-3">
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light block text-center md:mx-3">
             <ApplicationStatus listing={listing} />
           </div>
 
           <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
             {amiValues.length > 1 &&
-              amiValues.map(percent => {
-                const byAMI = listing.unitsSummarized.byAMI.find(item => {
+              amiValues.map((percent) => {
+                const byAMI = listing.unitsSummarized.byAMI.find((item) => {
                   return parseInt(item.percent, 10) == percent
                 })
 
@@ -221,13 +222,19 @@ export default class extends Component<ListingProps> {
                 >
                   <>
                     <InfoCard title={t("listings.creditHistory")}>
-                      <p className="text-sm text-gray-700">{listing.creditHistory}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.creditHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.rentalHistory")}>
-                      <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.rentalHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.criminalBackground")}>
-                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.criminalBackground}
+                      </ExpandableText>
                     </InfoCard>
                     {buildingSelectionCriteria}
                   </>

@@ -9,16 +9,16 @@ describe("transformUnits", () => {
   test("returns non-reserved summaries", () => {
     const result = transformUnits(listing.units, amiCharts)
     expect(result.unitTypes.length).toEqual(2)
-    expect(result.byNonReservedUnitType[0].unitType).toEqual("threeBdrm")
-    expect(result.byNonReservedUnitType[0].occupancyRange).toEqual({ min: 5, max: 7 })
+    expect(result.byNonReservedUnitType[0].unitType).toEqual("oneBdrm")
+    expect(result.byNonReservedUnitType[0].occupancyRange).toEqual({ min: 1, max: 2 })
   })
 
   test("returns summaries by AMI", () => {
     const result = transformUnits(listing.units, amiCharts)
     expect(result.amiPercentages.length).toEqual(1)
     expect(result.byAMI[0].percent).toEqual(result.amiPercentages[0])
-    expect(result.byAMI[0].byNonReservedUnitType[1].unitType).toEqual("oneBdrm")
-    expect(result.byAMI[0].byNonReservedUnitType[1].occupancyRange).toEqual({ min: 1, max: 2 })
+    expect(result.byAMI[0].byNonReservedUnitType[1].unitType).toEqual("threeBdrm")
+    expect(result.byAMI[0].byNonReservedUnitType[1].occupancyRange).toEqual({ min: 5, max: 7 })
   })
 
   /*test("creates units summary", () => {

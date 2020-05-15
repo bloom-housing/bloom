@@ -4,7 +4,7 @@ import PageHeader from "./PageHeader"
 
 export default {
   title: "Headers|PageHeader",
-  decorators: [withA11y]
+  decorators: [withA11y],
 }
 
 export const withTextContent = () => <PageHeader>Hello World</PageHeader>

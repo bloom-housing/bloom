@@ -3,7 +3,7 @@ import {
   ResponsiveContentList,
   ResponsiveContentItem,
   ResponsiveContentItemHeader,
-  ResponsiveContentItemBody
+  ResponsiveContentItemBody,
 } from "../../lists/ResponsiveContentList/ResponsiveContentList"
 import ListingDetailHeader, { ListingDetailHeaderProps } from "./ListingDetailHeader"
 

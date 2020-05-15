@@ -1,10 +1,10 @@
 import * as React from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import ReactMapGL, { Marker } from "react-map-gl"
-import { Address } from "@bloom-housing/core"
+import { Address, Listing } from "@bloom-housing/core"
 import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
-import { Listing } from "@bloom-housing/core"
+
 export interface ListingMapProps {
   address: Address
   listing: Listing
@@ -23,7 +23,7 @@ const ListingMap = (props: ListingMapProps) => {
   const [viewport, setViewPort] = React.useState({
     latitude: address.latitude,
     longitude: address.longitude,
-    zoom: 8
+    zoom: 8,
   } as Viewport)
   const _onViewportChange = (viewport: Viewport) => {
     // width and height need to be set here to work properly with

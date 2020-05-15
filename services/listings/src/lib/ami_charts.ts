@@ -11,5 +11,5 @@ export const amiCharts = {
   3: sanMateoHERASpecial2019,
   4: sanJoseTCAC2019,
   5: AlamedaCountyTCAC2019,
-  6: SanMateoCountyTCAC2019
+  6: SanMateoCountyTCAC2019,
 }

@@ -1,0 +1,168 @@
+.field {
+  margin-bottom: 1.25rem;
+  * > &:last-child {
+    margin-bottom: 0;
+  }
+  label,
+  .label {
+    @apply text-gray-750;
+    font-size: 0.95rem;
+  }
+  label + .control {
+    @apply mt-2;
+  }
+  .control {
+    .input {
+      @apply border;
+      @apply border-gray-450;
+      @apply bg-gray-200;
+      @apply rounded;
+      @apply w-full;
+      @apply py-2;
+      @apply px-3;
+      @apply text-gray-900;
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: normal;
+    }
+    &.control-narrower {
+      max-width: 8rem;
+    }
+  }
+  &.error {
+    label {
+      @apply text-red-700;
+    }
+    .control {
+      .input,
+      select {
+        @apply border-red-700;
+      }
+    }
+    .error-message {
+      @apply text-sm;
+      @apply text-red-700;
+    }
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    margin-left: -20px;
+
+    &:focus {
+      text-decoration: none;
+      // Appears to be for the case of no label
+      outline: none;
+      box-shadow: 0 0 0 2px #ffffff, 0 0 3px 4px $tailwind-primary;
+    }
+  }
+
+  input[type="checkbox"] + label,
+  input[type="radio"] + label {
+    cursor: pointer;
+    font-weight: 400;
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    display: block;
+  }
+
+  input[type="checkbox"] + label::before,
+  input[type="radio"] + label::before {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px map-get($tailwind-gray, 550);
+    content: "\a0";
+    display: inline-block;
+    height: 1.25rem;
+    line-height: 0.8;
+    margin-right: 0.6em;
+    text-indent: 0.15em;
+    vertical-align: 0.2em;
+    width: 1.25rem;
+  }
+
+  input[type="radio"] + label::before {
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 100%;
+  }
+
+  input[type="checkbox"]:checked + label::before,
+  input[type="radio"]:checked + label::before {
+    background-color: $tailwind-primary;
+    box-shadow: 0 0 0 1px $tailwind-primary;
+  }
+
+  input[type="radio"]:checked + label::before {
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary;
+  }
+
+  input[type="checkbox"]:checked + label::before {
+    background-image: url("/images/check.png");
+    background-image: url("/images/check.svg");
+    background-position: 50%;
+    background-repeat: no-repeat;
+  }
+
+  input[type="radio"]:focus + label::before,
+  input[type="checkbox"]:focus + label::before {
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary, 0 0 3px 4px $tailwind-primary;
+  }
+
+  input[type="checkbox"]:disabled + label {
+    color: map-get($tailwind-gray, 600) !important;
+  }
+
+  input[type="checkbox"]:disabled + label::before,
+  input[type="radio"]:disabled + label::before {
+    background: map-get($tailwind-gray, 550);
+    box-shadow: 0 0 0 1px map-get($tailwind-gray, 600);
+    cursor: not-allowed;
+  }
+
+  select {
+    @apply text-gray-900;
+    @apply rounded;
+    @apply border;
+    @apply border-gray-450;
+    @apply bg-gray-200;
+    @apply text-gray-900;
+    @apply leading-tight;
+    @apply py-2;
+    @apply px-3;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: normal;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("/images/arrow-down.png");
+    background-image: url("/images/arrow-down.svg");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75rem;
+    padding-right: 2.25rem;
+  }
+}
+
+.field--inline {
+  display: inline-block;
+}
+.field--inline + .field--inline {
+  margin-left: 1.5rem;
+}
+
+.flex > .field {
+  @apply flex-auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  &:first-child {
+    padding-left: 0;
+  }
+  &:last-child {
+    padding-right: 0;
+  }
+}
