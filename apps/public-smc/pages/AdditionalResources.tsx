@@ -1,5 +1,5 @@
 import Layout from "../layouts/application"
-import { PageHeader } from "@bloom-housing/ui-components"
+import { PageHeader, t } from "@bloom-housing/ui-components"
 import "./AdditionalResources.scss"
 
 const Card = (props) => {
@@ -16,14 +16,11 @@ const Card = (props) => {
 }
 
 export default () => {
-  const pageTitle = <>Additional Housing Opportunities</>
+  const pageTitle = <>{t("pageTitle.additionalResources")}</>
 
   return (
     <Layout>
-      <PageHeader
-        inverse={true}
-        subtitle="We encourage you to browse other affordable housing resources."
-      >
+      <PageHeader inverse={true} subtitle={t("pageDescription.additionalResources")}>
         {pageTitle}
       </PageHeader>
       <div className="max-w-5xl mx-auto">
@@ -31,79 +28,85 @@ export default () => {
           <div className="flex-1">
             <div className="content">
               <section>
-                <h2 className="primary">Rentals</h2>
-                <h3>Lists developed each month by community nonprofit agencies.</h3>
+                <h2 className="primary">{t("additionalResources.rentals")}</h2>
+                <h3>{t("additionalResources.rentalsDescription")}</h3>
                 <ul className="flex-none md:flex">
                   <li className="flex-1">
                     <Card
-                      title="SMCHousingSearch"
-                      link="http://www.socialserve.com/dbh/ViewUnit/663044?ch=SMC&hm=kt9oO6pN"
+                      title={t("additionalResources.card.SMCHousingSearch.title")}
+                      link={t("additionalResources.card.SMCHousingSearch.link")}
                     >
-                      <p>Rental and Shared Housing Opportunities</p>
-                      <p>San Mateo County</p>
+                      <p>{t("additionalResources.card.SMCHousingSearch.description")}</p>
+                      <p>{t("additionalResources.card.SMCHousingSearch.region")}</p>
                     </Card>
                   </li>
                   <li className="flex-1">
-                    <Card title="Haven Connect" link="https://apply.havenconnect.com/">
-                      <p>Affordable Housing</p>
-                      <p>San Mateo County, Bay Area, and Beyond</p>
+                    <Card
+                      title={t("additionalResources.card.HavenConnect.title")}
+                      link={t("additionalResources.card.HavenConnect.link")}
+                    >
+                      <p>{t("additionalResources.card.HavenConnect.description")}</p>
+                      <p>{t("additionalResources.card.HavenConnect.region")}</p>
                     </Card>
                   </li>
                 </ul>
               </section>
               <section>
-                <h2 className="primary">Shared Housing</h2>
-                <h3>Home Sharing is a living arrangement among two or more unrelated people.</h3>
+                <h2 className="primary">{t("additionalResources.sharedHousing")}</h2>
+                <h3>{t("additionalResources.sharedHousingDescription")}</h3>
                 <ul className="flex-none md:flex">
                   <li className="flex-1 md:w-1/2 md:flex-none">
                     <Card
-                      title="HIP Housing"
-                      link="https://hiphousing.org/programs/home-sharing-program/"
+                      title={t("additionalResources.card.HIPHousing.title")}
+                      link={t("additionalResources.card.HIPHousing.link")}
                     >
-                      <p>Shared Housing Opportunities</p>
-                      <p>San Mateo County</p>
+                      <p>{t("additionalResources.card.HIPHousing.description")}</p>
+                      <p>{t("additionalResources.card.HIPHousing.region")}</p>
                     </Card>
                   </li>
                 </ul>
               </section>
               <section>
-                <h2 className="primary">Other Resources</h2>
-                <h3>Tenant Resources, Crisis and Health Services, and Legal Assistance</h3>
-                <h3>Support with rent payments.</h3>
+                <h2 className="primary">{t("additionalResources.otherResources")}</h2>
+                <h3>{t("additionalResources.otherResourcesDescription1")}</h3>
+                <h3>{t("additionalResources.otherResourcesDescription2")}</h3>
                 <ul className="flex-none md:flex">
                   <li className="flex-1">
                     <Card
-                      title="Housing Authority of the County of San Mateo"
-                      link="https://www.smchousingwaitlist.org/landing"
+                      title={t("additionalResources.card.HAotCoSM.title")}
+                      link={t("additionalResources.card.HAotCoSM.link")}
                     >
-                      <p>Housing Choice Vouchers/ Section 8 program</p>
-                      <p>San Mateo County</p>
+                      <p>{t("additionalResources.card.HAotCoSM.description")}</p>
+                      <p>{t("additionalResources.card.HAotCoSM.region")}</p>
                     </Card>
                   </li>
                   <li className="flex-1">
                     <Card
-                      title="Community Infomation Handbook"
-                      link="https://hsa.smcgov.org/sites/hsa.smcgov.org/files/documents/files/CIH2019_English_020719.pdf"
+                      title={t("additionalResources.card.CIH.title")}
+                      link={t("additionalResources.card.CIH.link")}
                     >
-                      <p>Community Services</p>
-                      <p>San Mateo County</p>
+                      <p>{t("additionalResources.card.CIH.description")}</p>
+                      <p>{t("additionalResources.card.CIH.region")}</p>
                     </Card>
                   </li>
                 </ul>
                 <ul className="flex-none md:flex">
                   <li className="flex-1">
                     <Card
-                      title="211 United Way Bay Area"
-                      link="https://www.211bayarea.org/sanmateo/"
+                      title={t("additionalResources.card.211bayarea.title")}
+                      link={t("additionalResources.card.211bayarea.link")}
                     >
-                      <p>Health and Human Services Information, including crisis services</p>
-                      <p>San Mateo County and Bay Area</p>
+                      <p>{t("additionalResources.card.211bayarea.description")}</p>
+                      <p>{t("additionalResources.card.211bayarea.region")}</p>
                     </Card>
                   </li>
                   <li className="flex-1">
-                    <Card title="Project Sentinel" link="https://www.housing.org/tenants">
-                      <p>Services for tenants experiencing housing discrimination</p>
-                      <p>San Mateo County and Bay Area</p>
+                    <Card
+                      title={t("additionalResources.card.ProjectSentinel.title")}
+                      link={t("additionalResources.card.ProjectSentinel.link")}
+                    >
+                      <p>{t("additionalResources.card.ProjectSentinel.description")}</p>
+                      <p>{t("additionalResources.card.ProjectSentinel.region")}</p>
                     </Card>
                   </li>
                 </ul>
@@ -112,18 +115,17 @@ export default () => {
           </div>
           <aside className="sidebar">
             <div>
-              <h2 className="primary">Contact</h2>
-              <h3>San Mateo County's Department of Housing</h3>
-              <a href="mailto:housing@smchousing.org">housing@smchousing.org</a>
-              <h3 className="mt-2">Foster City Community Development</h3>
-              <a href="mailto:planning@fostercity.org">planning@fostercity.org</a>
-              <p className="mt-2">
-                For general program inquiries in Foster City, you may call 650-286-3227
-              </p>
-              <p className="mt-2">
-                For listing and application questions, please contact the Property Agent displayed
-                on the listing.
-              </p>
+              <h2 className="primary">{t("additionalResources.contact")}</h2>
+              <h3 className="mb-4 font-bold">{t("additionalResources.forQuestions")}</h3>
+              <h3>{t("additionalResources.SMCDOH")}</h3>
+              <a href={"mailto:" + t("additionalResources.smchousingEmail")}>
+                {t("additionalResources.smchousingEmail")}
+              </a>
+              <h3 className="mt-4">{t("additionalResources.FCCD")}</h3>
+              <a href={"mailto:" + t("additionalResources.FCCDEmail")}>
+                {t("additionalResources.FCCDEmail")}
+              </a>
+              <p className="text-sm">{t("additionalResources.forGeneralInquiries")}</p>
             </div>
           </aside>
         </div>

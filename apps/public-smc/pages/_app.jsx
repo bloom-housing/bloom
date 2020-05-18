@@ -2,6 +2,7 @@ import React from "react"
 import App from "next/app"
 import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
+import "../styles/overrides.scss"
 import { addTranslation } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 

@@ -5,7 +5,7 @@
   "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
-  "applicationDueDate": "2020-03-28T17:00:00.000Z",
+  "applicationDueDate": "2020-05-28T00:00:00.000Z",
   "applicationOrganization": "Triton",
   "applicationAddress": {
     "city": "Foster City",
@@ -49,7 +49,7 @@
   "smokingPolicy": "Non-Smoking",
   "yearBuilt": 2018,
   "createdAt": "2019-06-03T10:30:41.039Z",
-  "updatedAt": "2020-03-27T11:54:15.443Z",
+  "updatedAt": "2020-05-12T22:15:15.443Z",
   "hideUnitFeatures": false,
   "unitAmenities": "Washer and dryer, AC and Heater, Gas Stove",
   "attachments": [
@@ -90,7 +90,7 @@
       "annualIncomeMax": "177300.0",
       "maxOccupancy": 5,
       "minOccupancy": 2,
-      "monthlyRent": "3529.0",
+      "monthlyRent": "3340.0",
       "numBathrooms": null,
       "numBedrooms": 2,
       "number": null,
@@ -102,7 +102,7 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:44:01.384Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     },
     {
@@ -114,7 +114,7 @@
       "annualIncomeMax": "103350.0",
       "maxOccupancy": 2,
       "minOccupancy": 1,
-      "monthlyRent": "2429.0",
+      "monthlyRent": "2624.0",
       "numBathrooms": null,
       "numBedrooms": 1,
       "number": null,
@@ -126,7 +126,7 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:44:01.384Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     },
     {
@@ -138,7 +138,7 @@
       "annualIncomeMax": "103350.0",
       "maxOccupancy": 2,
       "minOccupancy": 1,
-      "monthlyRent": "2429.0",
+      "monthlyRent": "2624.0",
       "numBathrooms": null,
       "numBedrooms": 1,
       "number": null,
@@ -150,10 +150,10 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:44:01.384Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     },
-     {
+    {
       "id": 6,
       "amiPercentage": "80.0",
       "annualIncomeMin": "58152.0",
@@ -162,7 +162,7 @@
       "annualIncomeMax": "103350.0",
       "maxOccupancy": 2,
       "minOccupancy": 1,
-      "monthlyRent": "2429.0",
+      "monthlyRent": "2624.0",
       "numBathrooms": null,
       "numBedrooms": 1,
       "number": null,
@@ -174,7 +174,7 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:44:01.384Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     },
     {
@@ -186,7 +186,7 @@
       "annualIncomeMax": "103350.0",
       "maxOccupancy": 2,
       "minOccupancy": 1,
-      "monthlyRent": "1623.0",
+      "monthlyRent": "1575.0",
       "numBathrooms": null,
       "numBedrooms": 1,
       "number": null,
@@ -198,13 +198,13 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:43:16.766Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     }
   ],
   "preferences": [
     {
-      "ordinal": "1st", 
+      "ordinal": "1st",
       "title": "Live or Work Tiered Preference",
       "subtitle": "Up to 5 units available",
       "description": "Live in a Below Market Rate deed restricted unit in Foster City for a minimum of twelve (12) months that is subject to termination of affordability restrictions within three (3) years, Live and Work in Foster City, Live in Foster City, Employees of the City of Foster City, Classtudioom teachers who are employees of the San Mateo Foster City School District, Union High School District, and San Mateo County Community College District, Work in Foster City, All other qualified applicants.",

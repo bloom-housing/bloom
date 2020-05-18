@@ -4,6 +4,7 @@ import sanMateoHERASpecial2019 from "../../ami_charts/SanMateoHERASpecial2019.js
 import sanJoseTCAC2019 from "../../ami_charts/SanJoseTCAC2019.json"
 import AlamedaCountyTCAC2019 from "../../ami_charts/AlamedaCountyTCAC2019.json"
 import SanMateoCountyTCAC2019 from "../../ami_charts/SanMateoCountyTCAC2019.json"
+import sanMateoHUD2020 from "../../ami_charts/SanMateoHUD2020.json"
 
 export const amiCharts = {
   1: sanMateoHUD2019,
@@ -12,4 +13,5 @@ export const amiCharts = {
   4: sanJoseTCAC2019,
   5: AlamedaCountyTCAC2019,
   6: SanMateoCountyTCAC2019,
+  7: sanMateoHUD2020
 }
