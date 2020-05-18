@@ -23,91 +23,91 @@ export class Listing {
   attachments: Attachment[]
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column({ nullable: true })
+  @Column({ type: "boolean", nullable: true })
   acceptingApplicationsAtLeasingAgent: boolean
-  @Column({ nullable: true })
+  @Column({ type: "boolean", nullable: true })
   acceptingApplicationsByPoBox: boolean
-  @Column({ nullable: true })
+  @Column({ type: "boolean", nullable: true })
   acceptingOnlineApplications: boolean
-  @Column({ nullable: true })
+  @Column({ type: "boolean", nullable: true })
   acceptsPostmarkedApplications: boolean
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   accessibility: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   amenities: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   applicationDueDate: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   applicationOpenDate?: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   applicationFee: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   applicationOrganization: string
   @Column({ type: "jsonb", nullable: true })
   applicationAddress: Address
-  @Column({ nullable: true })
+  @Column({ type: "boolean", nullable: true })
   blankPaperApplicationCanBePickedUp: boolean
   @Column({ type: "jsonb", nullable: true })
   buildingAddress: Address
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   buildingTotalUnits: number
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   buildingSelectionCriteria: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   costsNotIncluded: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   creditHistory: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   criminalBackground: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   depositMin: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   depositMax?: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   developer: string
-  @Column({ nullable: true })
+  @Column({ type: "boolean", nullable: true })
   disableUnitsAccordion?: boolean
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   imageUrl?: string
   @Column({ type: "jsonb", nullable: true })
   leasingAgentAddress: Address
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   leasingAgentEmail: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   leasingAgentName: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   leasingAgentOfficeHours: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   leasingAgentPhone: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   leasingAgentTitle: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   name: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   neighborhood: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   petPolicy: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   postmarkedApplicationsReceivedByDate: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   programRules?: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   rentalHistory: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   requiredDocuments: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   smokingPolicy: string
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   unitsAvailable: number
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   unitAmenities: string
   // @Column({ nullable: true })
   // unitsSummarized?: UnitsSummarized
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   waitlistCurrentSize: number
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   waitlistMaxSize: number
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   yearBuilt: number
 
   unitsSummarized?: UnitsSummarized

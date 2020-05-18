@@ -15,6 +15,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev\""
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.8.3",
     "@bloom-housing/core": "^0.1.0",
     "@bloom-housing/ui-components": "^0.1.0",
     "@mdx-js/loader": "1.5.5",
@@ -31,7 +32,8 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-hook-form": "^5.2.0",
-    "react-inlinesvg": "^1.2.0"
+    "react-inlinesvg": "^1.2.0",
+    "react-native-sqlite-storage": "file:./src/dummy"
   },
   "devDependencies": {
     "@types/node": "^12.12.39",

@@ -6,13 +6,13 @@ import { PreferenceLink } from "@bloom-housing/core"
 export class Preference {
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   ordinal: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   title: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   subtitle?: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   description?: string
   @Column({ type: "jsonb", nullable: true })
   links?: PreferenceLink[]

@@ -5,43 +5,43 @@ import { Listing } from "./Listing"
 export class Unit {
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   amiPercentage: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   annualIncomeMin: string
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyIncomeMin: number
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   floor: number
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   annualIncomeMax: string
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   maxOccupancy: number
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   minOccupancy: number
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyRent: number
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   numBathrooms: number
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   numBedrooms: number
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   number: string
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   priorityType: string
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   reservedType: string
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   sqFeet: number
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   status: string
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   unitType: string
-  @Column({ nullable: true })
+  @Column({ type: "date", nullable: true })
   createdAt: Date
-  @Column({ nullable: true })
+  @Column({ type: "date", nullable: true })
   updatedAt: Date
-  @Column({ nullable: true })
+  @Column({ type: "number", nullable: true })
   amiChartId: number
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyRentAsPercentOfIncome: number

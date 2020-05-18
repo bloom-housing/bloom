@@ -10,9 +10,9 @@ enum AttachmentType {
 export class Attachment {
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   label: string
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   fileUrl: string
   @Column({
     type: "enum",
