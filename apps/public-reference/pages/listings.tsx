@@ -8,7 +8,7 @@ import {
   MetaTags,
   PageHeader,
   openDateState,
-  t
+  t,
 } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/core"
 import Layout from "../layouts/application"
