@@ -3,7 +3,7 @@ import t from "../../../helpers/translator"
 
 const WhatToExpect = () => {
   return (
-    <section className="aside-block -mx-4 md:mx-0 pt-0 md:pt-4">
+    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
       <h4 className="text-caps-underline">{t("whatToExpect.label")}</h4>
 
       <p className="text-tiny text-gray-800">{t("whatToExpect.applicantsWillBeContacted")}</p>
