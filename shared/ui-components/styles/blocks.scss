@@ -83,3 +83,16 @@ details.disclosure {
   @apply text-primary-dark;
   @apply font-semibold ;
 }
+
+.notice-block {
+  @apply flex;
+  @apply flex-row;
+  @apply flex-wrap;
+  @apply max-w-5xl;
+  @apply m-auto;
+  @apply mt-5;
+  @apply mb-12;
+  @apply text-center;
+  @apply p-4;
+  @apply bg-primary-lighter;
+}
