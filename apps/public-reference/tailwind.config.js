@@ -8,4 +8,6 @@ const bloomTheme = cloneDeep(require("@bloom-housing/ui-components/tailwind.conf
 // For example:
 // bloomTheme.theme.colors.white = "#f0f0e9"
 
+bloomTheme.purge = ["./pages/**/*.tsx"]
+
 module.exports = bloomTheme
