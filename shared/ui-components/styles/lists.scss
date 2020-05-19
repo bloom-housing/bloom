@@ -81,7 +81,7 @@
 // Data lists
 .column-definition-list {
   @include clearfix;
-  
+
   .description__title {
     @apply text-lg;
     @apply text-gray-800;
@@ -115,7 +115,6 @@
   }
 
   @screen md {
-
   }
 }
 
@@ -166,14 +165,5 @@ body {
       @apply pt-0;
       @apply pb-0;
     }
-  }
-}
-
-.listing-detail-panel {
-  @screen md {
-    @apply ml-16;
-    @apply p-8;
-    @apply pt-0;
-    @apply pl-0;
   }
 }

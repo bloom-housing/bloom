@@ -43,10 +43,9 @@ h6 {
   @apply text-base;
 }
 
-
 a {
   @apply text-primary;
-  
+
   &:hover {
     @apply text-primary;
   }
@@ -91,16 +90,6 @@ h1.title {
   @apply font-bold;
   @apply text-tiny;
   @apply tracking-wide;
-}
-
-.button-tiny-bg-light {
-  @apply font-sans;
-  @apply text-tiny;
-  @apply bg-primary-light;
-  @apply p-4;
-  @apply text-gray-800;
-  @apply border-b;
-  @apply border-primary;
 }
 
 .text-serif-lg {
@@ -182,4 +171,20 @@ details.disclosure {
   @apply uppercase;
   @apply text-sm;
   @apply underline;
+}
+
+.pill {
+  @apply inline-block;
+  @apply bg-primary-lighter;
+  @apply rounded-full;
+  @apply px-3;
+  @apply py-1;
+  @apply text-sm;
+  @apply font-semibold;
+  @apply text-gray-700;
+  @apply mr-2;
+}
+
+.icon-item {
+  @apply block;
 }

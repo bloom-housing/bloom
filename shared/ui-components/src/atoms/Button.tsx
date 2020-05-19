@@ -12,9 +12,9 @@ export interface ButtonProps {
 
 const Button = (props: ButtonProps) => {
   const buttonClasses = ["button"]
-  if (props.filled) buttonClasses.push("filled")
-  if (props.normalCase) buttonClasses.push("normal-case")
-  if (props.small) buttonClasses.push("small")
+  if (props.filled) buttonClasses.push("is-filled")
+  if (props.normalCase) buttonClasses.push("is-normal-case")
+  if (props.small) buttonClasses.push("is-small")
   if (props.className) buttonClasses.push(props.className)
 
   return (
