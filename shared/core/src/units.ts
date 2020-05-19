@@ -1,30 +1,5 @@
 import { MinMax, MinMaxCurrency } from "./general"
 
-export interface Unit {
-  id: string
-  amiPercentage: string
-  annualIncomeMin: string
-  monthlyIncomeMin: number
-  floor: number
-  annualIncomeMax: string
-  maxOccupancy: number
-  minOccupancy: number
-  monthlyRent: number
-  numBathrooms: number
-  numBedrooms: number
-  number: string
-  priorityType: string
-  reservedType: string
-  sqFeet: number
-  status: string
-  unitType: string
-  createdAt: Date
-  updatedAt: Date
-  listingId: number
-  amiChartId: number
-  monthlyRentAsPercentOfIncome: number
-}
-
 export interface UnitSummary {
   unitType: string
   minIncomeRange: MinMax | MinMaxCurrency
