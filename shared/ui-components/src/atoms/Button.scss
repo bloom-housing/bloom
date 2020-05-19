@@ -21,8 +21,8 @@
     @apply text-white;
   }
 
-  &.filled,
-  &.primary {
+  &.is-filled,
+  &.is-primary {
     @apply bg-primary-dark;
     @apply text-white;
     
@@ -31,17 +31,17 @@
     }
   }
 
-  &.small {
+  &.is-small {
     @apply text-xs;
     @apply px-6;
     @apply py-3;
   }
 
-  &.normal-case {
+  &.is-normal-case {
     @apply normal-case;
   }
 
-  &.button-link {
+  &.is-unstyled {
     @apply normal-case;
     @apply border-0;
     @apply p-0;

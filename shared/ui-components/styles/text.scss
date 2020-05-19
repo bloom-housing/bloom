@@ -89,16 +89,6 @@ h1.title {
   @apply tracking-wide;
 }
 
-.button-tiny-bg-light {
-  @apply font-sans;
-  @apply text-tiny;
-  @apply bg-primary-light;
-  @apply p-4;
-  @apply text-gray-800;
-  @apply border-b;
-  @apply border-primary;
-}
-
 .text-serif-lg {
   @apply font-serif;
   @apply text-lg;
@@ -166,4 +156,20 @@ details.disclosure {
   @apply font-alt-sans;
   @apply font-bold;
   @apply tracking-wide;
+}
+
+.pill {
+  @apply inline-block;
+  @apply bg-primary-lighter;
+  @apply rounded-full;
+  @apply px-3;
+  @apply py-1;
+  @apply text-sm;
+  @apply font-semibold;
+  @apply text-gray-700;
+  @apply mr-2;
+}
+
+.icon-item {
+  @apply block;
 }

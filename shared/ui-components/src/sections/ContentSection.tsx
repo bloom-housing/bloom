@@ -1,4 +1,5 @@
 import * as React from "react"
+import "./ContentSection.scss"
 
 export interface ContentSectionProps {
   title?: string
@@ -8,12 +9,12 @@ export interface ContentSectionProps {
 }
 
 const ContentSection = (props: ContentSectionProps) => (
-  <section className="py-10">
+  <section className="content-section">
     {props.title && (
-      <header className="mb-5">
+      <header className="content-section__header">
         <hgroup>
-          <h3 className="text-2xl">{props.title}</h3>
-          <span className="text-gray-700">{props.subtitle}</span>
+          <h3 className="content-section__title">{props.title}</h3>
+          <span className="content-section__subtitle">{props.subtitle}</span>
         </hgroup>
       </header>
     )}

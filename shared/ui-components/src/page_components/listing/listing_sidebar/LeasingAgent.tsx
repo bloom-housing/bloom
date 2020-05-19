@@ -19,7 +19,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
   const phoneNumber = `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`
 
   return (
-    <section className="border-b border-gray-400 py-3 my-2 md:py-5 md:my-0 md:px-5 mx-5 md:mx-0">
+    <section className="aside-block border-b-0 -mx-4 -mb-4 md:mx-0 md:mb-0 md:border-b">
       <h4 className="text-caps-underline">{t("leasingAgent.contact")}</h4>
 
       <p className="text-xl">{listing.leasingAgentName}</p>
