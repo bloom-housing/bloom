@@ -141,7 +141,7 @@ export default class extends Component<ListingProps> {
               <p className="text-gray-700 text-base">{listing.developer}</p>
               <p className="text-xs">
                 <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
-                  View on Map
+                  {t("t.viewOnMap")}
                 </a>
               </p>
             </div>
@@ -165,7 +165,9 @@ export default class extends Component<ListingProps> {
 
                 return (
                   <>
-                    <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                    <h2 className="mt-4 mb-2">
+                      {t("listings.percentAMIUnit", { percent: percent })}
+                    </h2>
                     <GroupedTable
                       headers={unitSummariesHeaders}
                       data={groupedUnits}
