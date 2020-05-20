@@ -6,7 +6,8 @@
  * - snake_case
  * @param input
  */
-import { Listing } from "@bloom-housing/core"
+import { Listing } from '../entity/Listing';
+
 
 export const formatUrlSlug = (input: string): string => {
   return (

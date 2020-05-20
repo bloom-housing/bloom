@@ -5,6 +5,10 @@ export class InitialDB1588694149283 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
+      `CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`,
+      undefined
+    )
+    await queryRunner.query(
       `CREATE TABLE "unit" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "amiPercentage" character varying, "annualIncomeMin" character varying, "monthlyIncomeMin" numeric(8,2), "floor" integer, "annualIncomeMax" character varying, "maxOccupancy" integer, "minOccupancy" integer, "monthlyRent" numeric(8,2), "numBathrooms" integer, "numBedrooms" integer, "number" character varying, "priorityType" character varying, "reservedType" character varying, "sqFeet" numeric(8,2), "status" character varying, "unitType" character varying, "createdAt" TIMESTAMP, "updatedAt" TIMESTAMP, "amiChartId" integer, "monthlyRentAsPercentOfIncome" numeric(8,2), "listingId" uuid, CONSTRAINT "PK_4252c4be609041e559f0c80f58a" PRIMARY KEY ("id"))`,
       undefined
     )

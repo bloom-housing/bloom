@@ -7,13 +7,16 @@
    "username": "martin",
    "logging": false,
    "entities": [
-      "entity/**/*.js"
+      "dist/entity/**/*.ts",
+      "src/entity/**/*.ts"
    ],
    "migrations": [
-      "dist/migration/**/*.ts"
+      "dist/migration/**/*.ts",
+      "src/migration/**/*.ts"
    ],
    "subscribers": [
-      "dist/subscriber/**/*.ts"
+      "dist/subscriber/**/*.ts",
+      "src/subscriber/**/*.ts"
    ],
    "cli": {
       "entitiesDir": "src/entity",

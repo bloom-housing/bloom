@@ -111,4 +111,5 @@ export class Listing {
   yearBuilt: number
 
   unitsSummarized?: UnitsSummarized
+  urlSlug?: string
 }
