@@ -4,18 +4,14 @@
    "port": 5432,
    "database": "bloom",
    "synchronize": true,
-   "username": "martin",
    "logging": false,
    "entities": [
-      "dist/entity/**/*.ts",
       "src/entity/**/*.ts"
    ],
    "migrations": [
-      "dist/migration/**/*.ts",
       "src/migration/**/*.ts"
    ],
    "subscribers": [
-      "dist/subscriber/**/*.ts",
       "src/subscriber/**/*.ts"
    ],
    "cli": {
