@@ -55,7 +55,7 @@ export default () => {
         <div className="text-center">
           <h2 className="mb-6">Don't have an account?</h2>
 
-          <LinkButton href="/">Create Account</LinkButton>
+          <LinkButton href="/create-account">Create Account</LinkButton>
         </div>
       </FormCard>
     </FormsLayout>

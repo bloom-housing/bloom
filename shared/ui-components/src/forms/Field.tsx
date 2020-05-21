@@ -21,6 +21,7 @@ const Field = (props) => {
           id={props.id || props.name}
           name={props.name}
           defaultValue={props.defaultValue}
+          placeholder={props.placeholder}
           ref={props.register(props.validation)}
         />
       </div>
