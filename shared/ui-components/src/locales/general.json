@@ -103,6 +103,7 @@
     "occupancyDescriptionSomeSro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
     "people": "people",
     "person": "person",
+    "percentAMIUnit": "%{percent}% AMI Unit",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to qualified applicants.",
@@ -188,7 +189,7 @@
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
-    "disclaimer": "Disclaimer",
+    "disclaimer": "Endorsement Disclaimers",
     "housingCounselors": "Housing Counselors",
     "getAssistance": "Get Assistance",
     "rentalListings": "See Rentals",
@@ -214,6 +215,7 @@
     "minimumIncome": "Minimum Income",
     "neighborhood": "Neighborhood",
     "none": "None",
+    "noneFound": "None found.",
     "occupancy": "Occupancy",
     "or": "or",
     "petsPolicy": "Pets Policy",
@@ -225,7 +227,8 @@
     "sqFeet": "sqft",
     "unitAmenities": "Unit Amenities",
     "unitFeatures": "Unit Features",
-    "unitType": "Unit Type"
+    "unitType": "Unit Type",
+    "viewOnMap": "View on Map"
   },
   "welcome": {
     "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
