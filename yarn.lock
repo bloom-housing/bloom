@@ -1230,6 +1230,31 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bloom-housing/core@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.1.1.tgz#177449d1a916820d2034c2a40ec82343a4842538"
+  integrity sha512-dfM83AiqHHypHxbWd0jS7ao/d70DEKXQnwUbjtM3uz2ED8gNdw0uaGF0NLo575Jzdxyvwk/lEyXp3iov9JD88A==
+  dependencies:
+    "@types/node" "^12.12.39"
+    "@types/node-polyglot" "^0.4.34"
+    nanoid "^3.1.7"
+
+"@bloom-housing/ui-components@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.1.1.tgz#ff98d848121a5af0f8d052f3024d133baf12f16b"
+  integrity sha512-FPg0Cqs6u0CFK231glcsKFiv7dIfrI7DXxeLW3vuSavKm2qqGihxvH6OnDUlnM/qM0RGd1l+ubtI6f+SxJN4Dg==
+  dependencies:
+    "@bloom-housing/core" "^0.1.1"
+    "@types/node" "^12.12.39"
+    "@types/node-polyglot" "^0.4.34"
+    "@types/react-dom" "^16.9.5"
+    bulma "^0.7.5"
+    nanoid "^3.1.7"
+    react "^16.12.0"
+    react-dom "^16.12.0"
+    react-map-gl "^5.2"
+    tailwindcss "^1.3"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
