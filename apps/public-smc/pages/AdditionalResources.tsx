@@ -32,7 +32,7 @@ export default () => {
                   {t("additionalResources.rentalsDescription")}
                 </h3>
                 <ul className="flex-none md:flex mb-6">
-                  <li className="flex-1 pr-4">
+                  <li className="flex-1 md:pr-4">
                     <Card
                       title={t("additionalResources.card.SMCHousingSearch.title")}
                       link={t("additionalResources.card.SMCHousingSearch.link")}
@@ -58,7 +58,7 @@ export default () => {
                   {t("additionalResources.sharedHousingDescription")}
                 </h3>
                 <ul className="flex-none md:flex mb-6">
-                  <li className="flex-1 md:w-1/2 md:flex-none">
+                  <li className="flex-1 md:w-1/2 md:pr-4 md:flex-none">
                     <Card
                       title={t("additionalResources.card.HIPHousing.title")}
                       link={t("additionalResources.card.HIPHousing.link")}
@@ -76,7 +76,7 @@ export default () => {
                   {t("additionalResources.otherResourcesDescription2")}
                 </h3>
                 <ul className="flex-none md:flex">
-                  <li className="flex-1">
+                  <li className="flex-1 md:pr-4">
                     <Card
                       title={t("additionalResources.card.HAotCoSM.title")}
                       link={t("additionalResources.card.HAotCoSM.link")}
@@ -96,7 +96,7 @@ export default () => {
                   </li>
                 </ul>
                 <ul className="flex-none md:flex">
-                  <li className="flex-1">
+                  <li className="flex-1 md:pr-4">
                     <Card
                       title={t("additionalResources.card.211bayarea.title")}
                       link={t("additionalResources.card.211bayarea.link")}
