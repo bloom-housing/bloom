@@ -26,11 +26,13 @@ export default () => {
         <div className="flex flex-col md:flex-row">
           <div className="flex-1">
             <div className="content py-8 px-4">
-              <section>
-                <h2 className="text-caps-underline">{t("additionalResources.rentals")}</h2>
-                <h3 className="text-base font-serif font-normal mb-6">
-                  {t("additionalResources.rentalsDescription")}
-                </h3>
+              <section className="info-card-grid">
+                <header className="info-card-grid__header">
+                  <h2 className="text-caps-underline">{t("additionalResources.rentals")}</h2>
+                  <h3 className="text-base font-serif font-normal mb-6">
+                    {t("additionalResources.rentalsDescription")}
+                  </h3>
+                 </header>
                 <ul className="flex-none md:flex mb-6">
                   <li className="flex-1 md:pr-4">
                     <Card
@@ -52,11 +54,13 @@ export default () => {
                   </li>
                 </ul>
               </section>
-              <section>
-                <h2 className="text-caps-underline">{t("additionalResources.sharedHousing")}</h2>
-                <h3 className="text-base font-serif font-normal mb-6">
-                  {t("additionalResources.sharedHousingDescription")}
-                </h3>
+              <section className="info-card-grid">
+                <header className="info-card-grid__header">
+                  <h2 className="text-caps-underline">{t("additionalResources.sharedHousing")}</h2>
+                  <h3 className="text-base font-serif font-normal mb-6">
+                    {t("additionalResources.sharedHousingDescription")}
+                  </h3>
+                </header>
                 <ul className="flex-none md:flex mb-6">
                   <li className="flex-1 md:w-1/2 md:pr-4 md:flex-none">
                     <Card
@@ -69,12 +73,14 @@ export default () => {
                   </li>
                 </ul>
               </section>
-              <section>
-                <h2 className="text-caps-underline">{t("additionalResources.otherResources")}</h2>
-                <h3 className="text-base font-serif font-normal mb-6">
-                  {t("additionalResources.otherResourcesDescription1")}.
-                  {t("additionalResources.otherResourcesDescription2")}
-                </h3>
+              <section className="info-card-grid">
+                <header className="info-card-grid__header">
+                  <h2 className="text-caps-underline">{t("additionalResources.otherResources")}</h2>
+                  <h3 className="text-base font-serif font-normal mb-6">
+                    {t("additionalResources.otherResourcesDescription1")}
+                    {t("additionalResources.otherResourcesDescription2")}
+                  </h3>
+                </header>
                 <ul className="flex-none md:flex">
                   <li className="flex-1 md:pr-4">
                     <Card
@@ -118,7 +124,7 @@ export default () => {
               </section>
             </div>
           </div>
-          <aside className="sidebar flex flex-col w-full p-8 md:w-1/3">
+          <aside className="flex flex-col w-full p-8 md:w-1/3 shadow-left">
             <div>
               <h2 className="text-caps-underline">{t("additionalResources.contact")}</h2>
               <h3 className="text-base font-sans mb-4 font-bold">
