@@ -13,7 +13,11 @@
   },
   "listings" : {
     "depositOrMonthsRent": "",
-    "occupancyDescriptionNoSro": "Minimum and maximum occupancy standards for this building differ according to unit type."
+    "occupancyDescriptionNoSro": "Minimum and maximum occupancy standards for this building differ according to unit type.",
+    "waitlist": {
+      "finalSize": "Minimum Waitlist Size",
+      "submitAnApplication": "Apply now to be placed in the lottery for one of 45 Below Market Rate units. Lottery applicants who are not selected will be placed on the waitlist."
+    }
   },
   "whatToExpect": {
     "applicantsWillBeContacted": "Applicants will be contacted in lottery rank order until vacancies are filled.",
