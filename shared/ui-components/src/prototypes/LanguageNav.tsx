@@ -2,7 +2,7 @@ import * as React from "react"
 import "./LanguageNav.scss"
 
 export interface LanguageNavProps {
-  children: React.ReactNode
+  children: React.ReactNode[]
 }
 
 const LanguageNav = (props: LanguageNavProps) => (
