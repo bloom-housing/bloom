@@ -1,0 +1,35 @@
+.info-cards__header {
+  @apply mb-4;
+}
+
+.info-cards__title {
+  @apply font-alt-sans;
+  @apply uppercase;
+  @apply text-tiny;
+  @apply mb-5;
+  @apply pb-2;
+  @apply border-0;
+  @apply border-b-4;
+  @apply border-primary;
+  @apply font-semibold;
+  @apply text-gray-800;
+  @apply tracking-widest;
+  @apply inline-block;
+}
+
+.info-cards__subtitle {
+  @apply font-serif;
+}
+
+.info-cards__grid {
+  @screen md {
+    @apply flex;
+  }
+
+  .info-card {
+    @screen md {
+      width: calc(50% - 1rem);
+      margin-right: 1rem;
+    }
+  }
+}
