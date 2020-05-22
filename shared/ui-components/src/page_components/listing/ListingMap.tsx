@@ -23,7 +23,7 @@ const ListingMap = (props: ListingMapProps) => {
   const [viewport, setViewPort] = React.useState({
     latitude: address.latitude,
     longitude: address.longitude,
-    zoom: 8,
+    zoom: 12,
   } as Viewport)
   const _onViewportChange = (viewport: Viewport) => {
     // width and height need to be set here to work properly with
