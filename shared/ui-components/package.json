@@ -37,7 +37,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.5.4",
     "mockdate": "^2.0.5",
-    "next": "9.2.0  ",
+    "next": "9.4.2  ",
     "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
     "react": "^16.12.0",

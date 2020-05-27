@@ -17,8 +17,8 @@
   "dependencies": {
     "@bloom-housing/core": "^0.1.1",
     "@bloom-housing/ui-components": "^0.1.1",
-    "@mdx-js/loader": "1.5.5",
-    "@next/mdx": "9.2.0",
+    "@mdx-js/loader": "1.6.4",
+    "@next/mdx": "9.4.2",
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
