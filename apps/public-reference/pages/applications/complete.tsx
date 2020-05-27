@@ -1,5 +1,5 @@
 import Router from "next/router"
-import { Button, onClientSide, MultistepProgress } from "@bloom-housing/ui-components"
+import { Button, onClientSide, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import PageContent from "../../page_content/applications/complete.mdx"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
@@ -23,10 +23,11 @@ export default () => {
           55 TRITON PARK LANE UNITS 510 516 APPLICATION
         </h5>
 
-        <MultistepProgress
+        <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
           totalNumberOfSteps={conductor.totalNumberOfSteps()}
+          labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </article>
 

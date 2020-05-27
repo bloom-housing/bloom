@@ -17,7 +17,11 @@ const ProgressNavItem = (props: {
     }
   }
 
-  return <li className={`progress-nav__item ${bgColor}`}><a href="#">{props.label}</a></li>
+  return (
+    <li className={`progress-nav__item ${bgColor}`}>
+      <a href="#">{props.label}</a>
+    </li>
+  )
 }
 
 const ProgressNav = (props: {
@@ -35,7 +39,7 @@ const ProgressNav = (props: {
         step={i}
         currentPageStep={props.currentPageStep}
         completedSteps={props.completedSteps}
-        label={props.labels[i-1]}
+        label={props.labels[i - 1]}
       />
     )
   }
