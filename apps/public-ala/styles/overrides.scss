@@ -44,3 +44,18 @@ article.markdown {
 .preferences-list__number {
   margin-top: -12px !important;
 }
+
+.application-status + div ul li:nth-child(2) {
+  content: "";
+  display: none;
+}
+.application-status + div ul li:nth-child(3) {
+  font-weight: 600;
+}
+.application-status + div h4 {
+  font-size: 0;
+  &:after {
+    font-size: initial;
+    content: "Available Units and Waitlist"
+  }
+}
