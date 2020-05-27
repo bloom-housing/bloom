@@ -86,7 +86,7 @@
     @apply text-lg;
     @apply text-gray-800;
     @apply mb-3;
-    @apply clear-left;
+    clear: left;
 
     @screen md {
       @apply pl-4;
