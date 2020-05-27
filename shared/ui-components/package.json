@@ -12,7 +12,7 @@
     "test": "export $(cat .env | xargs) && jest shared/ui-components"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
+    "@babel/core": "^7.10.0",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "10.0.27",
     "@storybook/addon-a11y": "^5.3.13",
