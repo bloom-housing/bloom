@@ -11,6 +11,7 @@ export * from "./src/atoms/MetaTags"
 /* Cards */
 export * from "./src/cards/ImageCard"
 export * from "./src/cards/InfoCard"
+export * from "./src/cards/InfoCardGrid"
 
 /* Footers */
 export * from "./src/footers/ExygyFooter"
