@@ -31,6 +31,16 @@
     }
   }
 
+  &.alert {
+    @apply bg-alert;
+    @apply border-alert;
+    @apply text-white;
+    
+    &:hover {
+      @apply bg-alert;
+    }
+  }
+
   &.small {
     @apply text-xs;
     @apply px-6;
@@ -39,6 +49,16 @@
 
   &.normal-case {
     @apply normal-case;
+  }
+
+  &.no-border {
+    @apply text-primary-darker;
+    border-color: transparent;
+    background: transparent;
+
+    &:hover {
+      @apply text-primary-darker;
+    }
   }
 
   &.button-link {

@@ -52,10 +52,11 @@
   @apply py-4;
   @apply px-8;
   @apply bg-gray-300;
-  @apply relative;
+  @apply flex;
+  @apply justify-between;
 
   .edit-link {
-    right: 2rem;
+    @apply self-center;
   }
 }
 

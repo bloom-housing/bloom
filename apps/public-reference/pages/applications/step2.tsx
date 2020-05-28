@@ -1,5 +1,5 @@
 import Router from "next/router"
-import { Button, ErrorMessage, MultistepProgress } from "@bloom-housing/ui-components"
+import { Button, ErrorMessage, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import PageContent from "../../page_content/applications/step2.mdx"
 import { useForm } from "react-hook-form"
@@ -36,10 +36,11 @@ export default () => {
           55 TRITON PARK LANE UNITS 510 516 APPLICATION
         </h5>
 
-        <MultistepProgress
+        <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
           totalNumberOfSteps={conductor.totalNumberOfSteps()}
+          labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </article>
 
