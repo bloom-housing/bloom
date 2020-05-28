@@ -4,13 +4,15 @@ import "./InfoCard.scss"
 export interface InfoCardProps {
   title: string
   externalHref?: string
-  style: string
+  style?: string
   children: JSX.Element
 }
 
 const InfoCard = (props: InfoCardProps) => {
   const wrapperClasses = ["info-card"]
-  wrapperClasses.push(props.style)
+  if (props.style) {
+    wrapperClasses.push(props.style)
+  }
 
   return (
     <div className={wrapperClasses.join(" ")}>
