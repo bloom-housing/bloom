@@ -1,6 +1,4 @@
 .custom-counter__item {
-  @apply pt-6;
-
   @screen md {
     @apply mb-12;
     @apply ml-8;
@@ -15,7 +13,7 @@
     @apply absolute;
     @apply font-serif;
     @apply text-gray-850;
-    @apply top-0;
+    top: 0;
     left: -1rem;
     content: counter(step-counter);
     margin-right: 5px;
@@ -25,16 +23,14 @@
 }
 
 .custom-counter__header {
-  @apply pb-4;
+  @apply mb-4;
 
   @screen md {
-    @apply mb-8;
     @apply -ml-4;
     @apply pl-4;
     @apply border-solid;
     @apply border-l-2;
     @apply border-gray-450;
-    @apply mb-4;
     @apply mt-4;
   }
 }
