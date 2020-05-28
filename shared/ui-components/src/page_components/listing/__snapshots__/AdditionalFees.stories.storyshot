@@ -1068,18 +1068,18 @@ exports[`Storyshots Listing|Additional Fees Shows Application Fee And Deposit 1`
   }
 >
   <div
-    className="bg-gray-100 p-6"
+    className="info-card bg-gray-100 border-0"
   >
     <p
-      className="mb-3 uppercase font-semibold tracking-wider"
+      className="info-card__title"
     >
       Additional Fees
     </p>
     <div
-      className="flex text-sm"
+      className="info-card__columns text-sm"
     >
       <div
-        className="flex-1"
+        className="info-card__column"
       >
         <div
           className="text-base"
@@ -1100,7 +1100,7 @@ exports[`Storyshots Listing|Additional Fees Shows Application Fee And Deposit 1`
         </div>
       </div>
       <div
-        className="flex-1"
+        className="info-card__column"
       >
         <div
           className="text-base"

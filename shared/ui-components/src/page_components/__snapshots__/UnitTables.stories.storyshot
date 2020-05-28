@@ -1032,7 +1032,7 @@ exports[`Storyshots Tables|UnitSummaryTables Units List 1`] = `
       onClick={[Function]}
     >
       <h3
-        className="button-tiny-bg-light"
+        className="toggle-header"
       >
         <strong>
           Studio
@@ -1658,36 +1658,28 @@ exports[`Storyshots Tables|UnitSummaryTables Units List 1`] = `
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Unit #
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Area
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Baths
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Floor
                     </th>
                   </Component>
@@ -5074,7 +5066,7 @@ exports[`Storyshots Tables|UnitSummaryTables Units List With Disabled Accordion 
       onClick={[Function]}
     >
       <h3
-        className="button-tiny-bg-light"
+        className="toggle-header"
       >
         <strong>
           Studio
@@ -5700,36 +5692,28 @@ exports[`Storyshots Tables|UnitSummaryTables Units List With Disabled Accordion 
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Unit #
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Area
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Baths
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Floor
                     </th>
                   </Component>
@@ -9111,7 +9095,7 @@ exports[`Storyshots Tables|UnitSummaryTables Units List Without Floor 1`] = `
       onClick={[Function]}
     >
       <h3
-        className="button-tiny-bg-light"
+        className="toggle-header"
       >
         <strong>
           Studio
@@ -9731,36 +9715,28 @@ exports[`Storyshots Tables|UnitSummaryTables Units List Without Floor 1`] = `
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Unit #
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Area
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Baths
                     </th>
                   </Component>
                   <Component
                     key=""
                   >
-                    <th
-                      className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                    >
+                    <th>
                       Floor
                     </th>
                   </Component>
@@ -12180,36 +12156,28 @@ exports[`Storyshots Tables|UnitSummaryTables Units Summaries 1`] = `
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Unit Type
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Minimum Income
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Rent
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Availability
                   </th>
                 </Component>
@@ -12351,36 +12319,28 @@ exports[`Storyshots Tables|UnitSummaryTables Units Summaries 1`] = `
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Unit Type
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Minimum Income
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Rent
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Availability
                   </th>
                 </Component>
@@ -12531,36 +12491,28 @@ exports[`Storyshots Tables|UnitSummaryTables Units Summaries Grouped By Reserved
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Unit Type
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Minimum Income
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Rent
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Availability
                   </th>
                 </Component>
@@ -12748,36 +12700,28 @@ exports[`Storyshots Tables|UnitSummaryTables Units Summaries Grouped By Reserved
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Unit Type
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Minimum Income
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Rent
                   </th>
                 </Component>
                 <Component
                   key=""
                 >
-                  <th
-                    className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary"
-                  >
+                  <th>
                     Availability
                   </th>
                 </Component>
