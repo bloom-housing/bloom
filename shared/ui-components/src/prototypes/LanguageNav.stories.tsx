@@ -9,9 +9,17 @@ export default {
 
 export const Default = () => (
   <LanguageNav>
-   <li><a href="">English</a></li>
-   <li><a href="">Spanish</a></li>
-   <li><a href="">Chinese</a></li>
-   <li><a href="">Vietnamese</a></li>
+    <li>
+      <a href="">English</a>
+    </li>
+    <li>
+      <a href="">Spanish</a>
+    </li>
+    <li>
+      <a href="">Chinese</a>
+    </li>
+    <li>
+      <a href="">Vietnamese</a>
+    </li>
   </LanguageNav>
 )

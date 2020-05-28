@@ -13,11 +13,7 @@ export interface ApplyProps {
 
 const OrDivider = (props: { bgColor: string }) => (
   <div className="aside-block__divider">
-    <span
-      className={`bg-${props.bgColor} aside-block__conjunction`}
-    >
-      or
-    </span>
+    <span className={`bg-${props.bgColor} aside-block__conjunction`}>or</span>
   </div>
 )
 
@@ -51,9 +47,7 @@ const Apply = (props: ApplyProps) => {
   return (
     <>
       <section className="aside-block">
-        <h2 className="text-caps-underline">
-          {t("listings.apply.howToApply")}
-        </h2>
+        <h2 className="text-caps-underline">{t("listings.apply.howToApply")}</h2>
 
         {openDateState(listing) && (
           <p className="mb-5 text-gray-700">

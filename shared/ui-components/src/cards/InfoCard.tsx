@@ -12,7 +12,7 @@ const InfoCard = (props: InfoCardProps) => {
   const wrapperClasses = ["info-card"]
   wrapperClasses.push(props.style)
 
-  return ( 
+  return (
     <div className={wrapperClasses.join(" ")}>
       {props.externalHref ? (
         <h4 className="info-card__title">
