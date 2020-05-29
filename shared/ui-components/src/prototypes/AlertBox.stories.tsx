@@ -6,7 +6,15 @@ import Icon from "../atoms/Icon"
 
 export default {
   title: "Prototypes|AlertBox",
-  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}<SVG src="/images/icons.svg" /></div>],
+  decorators: [
+    withA11y,
+    (storyFn: any) => (
+      <div style={{ padding: "1rem" }}>
+        {storyFn()}
+        <SVG src="/images/icons.svg" />
+      </div>
+    ),
+  ],
 }
 
 export const AlertBoxAlert = () => (

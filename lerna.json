@@ -1,6 +1,7 @@
 {
   "packages": [
     "apps/public-reference",
+    "backend/core",
     "services/listings",
     "shared/*"
   ],

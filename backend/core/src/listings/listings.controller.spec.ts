@@ -16,7 +16,7 @@ describe('ListingsController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(listingsController.findAll()).toBe('Hello World!');
+      expect(listingsController.getAll()).toBe('Hello World!');
     });
   });
 });
