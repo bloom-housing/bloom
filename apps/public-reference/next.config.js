@@ -4,6 +4,7 @@
 const withTM = require("next-transpile-modules")(["@bloom-housing"])
 const withSass = require("@zeit/next-sass")
 const withCSS = require("@zeit/next-css")
+const withPurgeCss = require('next-purgecss')
 const withMDX = require("@next/mdx")()
 const axios = require("axios")
 if (process.env.NODE_ENV !== "production") {
@@ -34,7 +35,13 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 module.exports = withCSS(
   withMDX(
     withSass(
+      withPurgeCss(
       withTM({
+      purgeCssPaths: [
+        'pages/**/*',
+        'components/**/*',
+        '../../shared/ui-components/**/*' // also scan other-components folder
+        ],
         env: {
           listingServiceUrl: LISTING_SERVICE_URL,
           mapBoxToken: MAPBOX_TOKEN,
@@ -102,6 +109,7 @@ module.exports = withCSS(
           })
         },
       })
+      )
     )
   )
 )

@@ -39,6 +39,7 @@
     "concurrently": "^5.2.0",
     "cypress": "^4.5.0",
     "js-levenshtein": "^1.1.6",
+    "next-purgecss": "^4.0.0",
     "next-transpile-modules": "^3.0.1",
     "sass-loader": "^8.0.2",
     "typescript": "^3.8.3",
