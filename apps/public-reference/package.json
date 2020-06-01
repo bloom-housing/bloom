@@ -17,14 +17,14 @@
   "dependencies": {
     "@bloom-housing/core": "^0.1.1",
     "@bloom-housing/ui-components": "^0.1.1",
-    "@mdx-js/loader": "1.6.4",
-    "@next/mdx": "9.4.2",
+    "@mdx-js/loader": "1.6.5",
+    "@next/mdx": "9.4.4",
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "moment": "^2.24.0",
     "nanoid": "^3.1.7",
-    "next": "9.4.2",
+    "next": "9.4.4",
     "next-plugin-custom-babel-config": "^1.0.2",
     "node-polyglot": "^2.4.0",
     "node-sass": "^4.14.1",
@@ -34,7 +34,7 @@
     "react-inlinesvg": "^1.2.0"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "9.2.0",
+    "@next/bundle-analyzer": "9.4.4",
     "@types/node": "^12.12.39",
     "@types/react": "^16.9.19",
     "concurrently": "^5.2.0",
