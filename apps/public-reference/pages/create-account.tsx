@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form"
 import { Button, Field, FormCard, Icon, LinkButton } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
+import { emailRegex } from "../lib/emailRegex"
 
 export default () => {
   /* Form Handler */
@@ -77,16 +78,18 @@ export default () => {
           <hr />
 
           <Field
+            type="email"
             name="email"
             label="Email"
             placeholder="example@web.com"
-            validation={{ required: true }}
+            validation={{ required: true, pattern: emailRegex }}
             error={errors.email}
             errorMessage="Please enter an email address"
             register={register}
           />
 
           <Field
+            type="password"
             name="password"
             label="Password"
             placeholder="Must be 8 characters"
