@@ -6,10 +6,7 @@ import t from "../helpers/translator"
 
 const LanguageLabel = (language: string) => {
   return (
-    <span
-      className="pill"
-      key={language}
-    >
+    <span className="pill" key={language}>
       {language}
     </span>
   )
