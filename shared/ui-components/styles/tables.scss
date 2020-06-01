@@ -8,6 +8,18 @@ table {
   tr {
     @apply bg-white;
   }
+
+  thead tr th {
+    @apply text-left;
+    @apply uppercase;
+    @apply bg-primary-lighter;
+    @apply p-5;
+    @apply font-semibold;
+    @apply tracking-wider;
+    @apply border-0;
+    @apply border-b;
+    @apply border-primary;
+  }
 }
 
 table tr:nth-of-type(even) {

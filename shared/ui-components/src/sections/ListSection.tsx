@@ -1,4 +1,5 @@
 import * as React from "react"
+import "./ListSection.scss"
 
 export interface ListSectionProps {
   title: string
@@ -7,11 +8,11 @@ export interface ListSectionProps {
 }
 
 const ListSection = (props: ListSectionProps) => (
-  <li className="custom-counter_item">
-    <header className="custom-counter_header mb-4 mt-4">
+  <li className="list-section custom-counter__item">
+    <header className="list-section__header custom-counter__header">
       <hgroup>
-        <h4 className="text-1xl">{props.title}</h4>
-        <span className="text-gray-700 text-tiny">{props.subtitle}</span>
+        <h4 className="custom-counter__title">{props.title}</h4>
+        <span className="custom-counter__subtitle">{props.subtitle}</span>
       </hgroup>
     </header>
 

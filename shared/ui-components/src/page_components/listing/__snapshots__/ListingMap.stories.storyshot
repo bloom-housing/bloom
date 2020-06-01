@@ -1078,237 +1078,241 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
   }
 >
   <div
-    className="addressPopup"
-  >
-    <h3
-      className="text-caps-tiny"
-    >
-      Archer Studios
-    </h3>
-    <Component
-      address={
-        Object {
-          "city": "San Jose",
-          "latitude": 37.36537,
-          "longitude": -121.91071,
-          "state": "CA",
-          "street": "98 Archer Street",
-          "zipCode": "95112",
-        }
-      }
-    >
-      98 Archer Street
-      <br />
-      San Jose
-       
-      CA
-      ,
-       
-      95112
-    </Component>
-  </div>
-  <InteractiveMap
-    altitude={1.5}
-    asyncRender={false}
-    attributionControl={true}
-    bearing={0}
-    className=""
-    clickRadius={0}
-    container={<body />}
-    disableTokenWarning={false}
-    doubleClickZoom={true}
-    dragPan={true}
-    dragRotate={true}
-    getCursor={[Function]}
-    height={400}
-    keyboard={true}
-    latitude={37.36537}
-    longitude={-121.91071}
-    mapOptions={Object {}}
-    mapStyle="mapbox://styles/mapbox/streets-v11"
-    mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
-    mapboxApiUrl="https://api.mapbox.com"
-    maxPitch={60}
-    maxZoom={24}
-    minPitch={0}
-    minZoom={0}
-    onClick={null}
-    onContextMenu={[Function]}
-    onError={[Function]}
-    onHover={null}
-    onLoad={[Function]}
-    onNativeClick={null}
-    onResize={[Function]}
-    onStateChange={[Function]}
-    onTransitionEnd={[Function]}
-    onTransitionInterrupt={[Function]}
-    onTransitionStart={[Function]}
-    onViewStateChange={null}
-    onViewportChange={[Function]}
-    pitch={0}
-    preserveDrawingBuffer={false}
-    preventStyleDiffing={false}
-    reuseMaps={false}
-    scrollZoom={true}
-    style={null}
-    touchAction="none"
-    touchRotate={false}
-    touchZoom={true}
-    transitionDuration={0}
-    transitionEasing={[Function]}
-    transitionInterpolator={
-      LinearInterpolator {
-        "around": undefined,
-        "propNames": Array [
-          "longitude",
-          "latitude",
-          "zoom",
-          "bearing",
-          "pitch",
-        ],
-      }
-    }
-    transitionInterruption={1}
-    visibilityConstraints={
-      Object {
-        "maxPitch": 60,
-        "maxZoom": 24,
-        "minPitch": 0,
-        "minZoom": 0,
-      }
-    }
-    visible={true}
-    width="100%"
-    zoom={13}
+    className="listing-map"
   >
     <div
-      key="event-canvas"
-      style={
-        Object {
-          "cursor": "grab",
-          "height": 400,
-          "position": "relative",
-          "width": "100%",
+      className="addressPopup"
+    >
+      <h3
+        className="text-caps-tiny"
+      >
+        Archer Studios
+      </h3>
+      <Component
+        address={
+          Object {
+            "city": "San Jose",
+            "latitude": 37.36537,
+            "longitude": -121.91071,
+            "state": "CA",
+            "street": "98 Archer Street",
+            "zipCode": "95112",
+          }
+        }
+      >
+        98 Archer Street
+        <br />
+        San Jose
+         
+        CA
+        ,
+         
+        95112
+      </Component>
+    </div>
+    <InteractiveMap
+      altitude={1.5}
+      asyncRender={false}
+      attributionControl={true}
+      bearing={0}
+      className=""
+      clickRadius={0}
+      container={<body />}
+      disableTokenWarning={false}
+      doubleClickZoom={true}
+      dragPan={true}
+      dragRotate={true}
+      getCursor={[Function]}
+      height={400}
+      keyboard={true}
+      latitude={37.36537}
+      longitude={-121.91071}
+      mapOptions={Object {}}
+      mapStyle="mapbox://styles/mapbox/streets-v11"
+      mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
+      mapboxApiUrl="https://api.mapbox.com"
+      maxPitch={60}
+      maxZoom={24}
+      minPitch={0}
+      minZoom={0}
+      onClick={null}
+      onContextMenu={[Function]}
+      onError={[Function]}
+      onHover={null}
+      onLoad={[Function]}
+      onNativeClick={null}
+      onResize={[Function]}
+      onStateChange={[Function]}
+      onTransitionEnd={[Function]}
+      onTransitionInterrupt={[Function]}
+      onTransitionStart={[Function]}
+      onViewStateChange={null}
+      onViewportChange={[Function]}
+      pitch={0}
+      preserveDrawingBuffer={false}
+      preventStyleDiffing={false}
+      reuseMaps={false}
+      scrollZoom={true}
+      style={null}
+      touchAction="none"
+      touchRotate={false}
+      touchZoom={true}
+      transitionDuration={0}
+      transitionEasing={[Function]}
+      transitionInterpolator={
+        LinearInterpolator {
+          "around": undefined,
+          "propNames": Array [
+            "longitude",
+            "latitude",
+            "zoom",
+            "bearing",
+            "pitch",
+          ],
         }
       }
+      transitionInterruption={1}
+      visibilityConstraints={
+        Object {
+          "maxPitch": 60,
+          "maxZoom": 24,
+          "minPitch": 0,
+          "minZoom": 0,
+        }
+      }
+      visible={true}
+      width="100%"
+      zoom={13}
     >
-      <StaticMap
-        altitude={1.5}
-        asyncRender={false}
-        attributionControl={true}
-        bearing={0}
-        className=""
-        clickRadius={0}
-        container={<body />}
-        disableTokenWarning={false}
-        doubleClickZoom={true}
-        dragPan={true}
-        dragRotate={true}
-        getCursor={[Function]}
-        height="100%"
-        keyboard={true}
-        latitude={37.36537}
-        longitude={-121.91071}
-        mapOptions={Object {}}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
-        mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
-        mapboxApiUrl="https://api.mapbox.com"
-        maxPitch={60}
-        maxZoom={24}
-        minPitch={0}
-        minZoom={0}
-        onClick={null}
-        onContextMenu={[Function]}
-        onError={[Function]}
-        onHover={null}
-        onLoad={[Function]}
-        onNativeClick={null}
-        onResize={[Function]}
-        onStateChange={[Function]}
-        onTransitionEnd={[Function]}
-        onTransitionInterrupt={[Function]}
-        onTransitionStart={[Function]}
-        onViewStateChange={null}
-        onViewportChange={[Function]}
-        pitch={0}
-        preserveDrawingBuffer={false}
-        preventStyleDiffing={false}
-        reuseMaps={false}
-        scrollZoom={true}
-        style={null}
-        touchAction="none"
-        touchRotate={false}
-        touchZoom={true}
-        transitionDuration={0}
-        transitionEasing={[Function]}
-        transitionInterpolator={
-          LinearInterpolator {
-            "around": undefined,
-            "propNames": Array [
-              "longitude",
-              "latitude",
-              "zoom",
-              "bearing",
-              "pitch",
-            ],
-          }
-        }
-        transitionInterruption={1}
-        visibilityConstraints={
+      <div
+        key="event-canvas"
+        style={
           Object {
-            "maxPitch": 60,
-            "maxZoom": 24,
-            "minPitch": 0,
-            "minZoom": 0,
+            "cursor": "grab",
+            "height": 400,
+            "position": "relative",
+            "width": "100%",
           }
         }
-        visible={true}
-        width="100%"
-        zoom={13}
       >
-        <div
-          key="map-container"
-          style={
-            Object {
-              "height": "100%",
-              "position": "relative",
-              "width": "100%",
+        <StaticMap
+          altitude={1.5}
+          asyncRender={false}
+          attributionControl={true}
+          bearing={0}
+          className=""
+          clickRadius={0}
+          container={<body />}
+          disableTokenWarning={false}
+          doubleClickZoom={true}
+          dragPan={true}
+          dragRotate={true}
+          getCursor={[Function]}
+          height="100%"
+          keyboard={true}
+          latitude={37.36537}
+          longitude={-121.91071}
+          mapOptions={Object {}}
+          mapStyle="mapbox://styles/mapbox/streets-v11"
+          mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
+          mapboxApiUrl="https://api.mapbox.com"
+          maxPitch={60}
+          maxZoom={24}
+          minPitch={0}
+          minZoom={0}
+          onClick={null}
+          onContextMenu={[Function]}
+          onError={[Function]}
+          onHover={null}
+          onLoad={[Function]}
+          onNativeClick={null}
+          onResize={[Function]}
+          onStateChange={[Function]}
+          onTransitionEnd={[Function]}
+          onTransitionInterrupt={[Function]}
+          onTransitionStart={[Function]}
+          onViewStateChange={null}
+          onViewportChange={[Function]}
+          pitch={0}
+          preserveDrawingBuffer={false}
+          preventStyleDiffing={false}
+          reuseMaps={false}
+          scrollZoom={true}
+          style={null}
+          touchAction="none"
+          touchRotate={false}
+          touchZoom={true}
+          transitionDuration={0}
+          transitionEasing={[Function]}
+          transitionInterpolator={
+            LinearInterpolator {
+              "around": undefined,
+              "propNames": Array [
+                "longitude",
+                "latitude",
+                "zoom",
+                "bearing",
+                "pitch",
+              ],
             }
           }
+          transitionInterruption={1}
+          visibilityConstraints={
+            Object {
+              "maxPitch": 60,
+              "maxZoom": 24,
+              "minPitch": 0,
+              "minZoom": 0,
+            }
+          }
+          visible={true}
+          width="100%"
+          zoom={13}
         >
           <div
-            className=""
-            key="map-mapbox"
+            key="map-container"
             style={
               Object {
                 "height": "100%",
-                "overflow": "hidden",
-                "position": "absolute",
-                "visibility": "inherit",
+                "position": "relative",
                 "width": "100%",
               }
             }
-          />
-          <AutoSizer
-            disableHeight={false}
-            disableWidth={false}
-            key="autosizer"
-            onResize={[Function]}
-            style={Object {}}
           >
             <div
+              className=""
+              key="map-mapbox"
               style={
                 Object {
-                  "height": 0,
-                  "overflow": "visible",
-                  "width": 0,
+                  "height": "100%",
+                  "overflow": "hidden",
+                  "position": "absolute",
+                  "visibility": "inherit",
+                  "width": "100%",
                 }
               }
             />
-          </AutoSizer>
-        </div>
-      </StaticMap>
-    </div>
-  </InteractiveMap>
+            <AutoSizer
+              disableHeight={false}
+              disableWidth={false}
+              key="autosizer"
+              onResize={[Function]}
+              style={Object {}}
+            >
+              <div
+                style={
+                  Object {
+                    "height": 0,
+                    "overflow": "visible",
+                    "width": 0,
+                  }
+                }
+              />
+            </AutoSizer>
+          </div>
+        </StaticMap>
+      </div>
+    </InteractiveMap>
+  </div>
 </ListingMap>
 `;
