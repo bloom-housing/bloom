@@ -1,0 +1,67 @@
+.modal {
+  @apply relative;
+}
+
+// Content containers
+.modal__header,
+.modal__inner,
+.modal__footer {
+  @apply py-4;
+  @apply px-8;
+}
+
+.modal__header {
+  @apply pt-8;
+}
+
+.modal__inner {
+  &:last-of-type {
+    @apply rounded-b;
+  }
+}
+
+.modal__footer {
+  @apply rounded-b;
+}
+
+// Buttons stack with no column classes
+.modal__button-group {
+  @screen md {
+    @apply flex;
+    @apply justify-end;
+  }
+
+  .modal__button_item {
+    @screen md {
+      @apply ml-4;
+    }
+  }
+
+  button,
+  .button {
+    @apply block;
+    @apply w-full;
+    @apply mt-0;
+    @apply mb-1;
+    @apply mx-auto;
+  }
+}
+
+.modal__close {
+  @apply absolute;
+  @apply h-8;
+  @apply w-8;
+  top: 2rem;
+  right: 2rem;
+  fill: $tailwind-primary;
+}
+
+// Loading container for modal
+.modal__loading {
+  @apply w-full;
+  @apply flex;
+  @apply text-center;
+  @apply items-center;
+  @apply justify-center;
+  min-height: 12rem;
+}

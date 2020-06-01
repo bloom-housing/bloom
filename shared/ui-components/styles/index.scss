@@ -12,6 +12,7 @@ html {
 body {
   @apply font-sans;
   @apply bg-white;
+  @apply text-gray-900;
 }
 
 .-top {
@@ -43,10 +44,19 @@ html {
   }
 }
 
+html,
+body {
+  @screen md {
+    @apply overflow-x-hidden;
+  }
+}
+
 @import "mixins.scss";
 @import "markdown.scss";
 @import "navbar.scss";
 @import "text.scss";
+@import "headers.scss";
+@import "blocks.scss";
 @import "accordion.scss";
 @import "custom_counter.scss";
 @import "forms.scss";

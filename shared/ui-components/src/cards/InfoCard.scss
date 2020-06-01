@@ -11,10 +11,19 @@
   &:not([class*="mb-"]) {
     @apply mb-4;
   }
+
   @apply text-gray-800;
   @apply uppercase;
   @apply font-sans;
   @apply font-bold;
   @apply text-sm;
   @apply tracking-wide;
+}
+
+.info-card__columns {
+  @apply flex;
+}
+
+.info-card__column {
+  @apply flex-1;
 }

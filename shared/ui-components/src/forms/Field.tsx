@@ -1,7 +1,21 @@
 import React from "react"
-import ErrorMessage from "./ErrorMessage"
+import { ErrorMessage } from "./ErrorMessage"
 
-const Field = (props) => {
+export interface FieldProps {
+  error?: boolean
+  errorMessage?: string
+  controlClassName?: string
+  type?: string
+  id?: string
+  name: string
+  label?: string
+  defaultValue?: string
+  placeholder?: string
+  register: any // comes from React Hook Form
+  validation?: Record<string, any>
+}
+
+const Field = (props: FieldProps) => {
   const classes = ["field"]
   if (props.error) {
     classes.push("error")
@@ -13,7 +27,7 @@ const Field = (props) => {
 
   return (
     <div className={classes.join(" ")}>
-      <label htmlFor={props.name}>{props.label}</label>
+      {props.label && <label htmlFor={props.name}>{props.label}</label>}
       <div className={controlClasses.join(" ")}>
         <input
           className="input"
@@ -21,6 +35,7 @@ const Field = (props) => {
           id={props.id || props.name}
           name={props.name}
           defaultValue={props.defaultValue}
+          placeholder={props.placeholder}
           ref={props.register(props.validation)}
         />
       </div>

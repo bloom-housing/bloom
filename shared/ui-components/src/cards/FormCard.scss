@@ -1,0 +1,29 @@
+.form-card {
+  @apply py-10;
+  @apply px-2;
+  @apply bg-white;
+  @apply mb-10;
+  @apply border;
+  @apply border-gray-450;
+  @apply rounded-lg;
+
+  hr {
+    @apply my-6;
+    @apply border-gray-450;
+  }
+
+  @screen md {
+    @apply px-10;
+  }
+}
+
+.form-card__title {
+  @apply text-center;
+  width: fit-content;
+  @apply mx-auto;
+  @apply mt-4;
+  @apply pt-4;
+  @apply px-3;
+  @apply border-t-4;
+  @apply border-primary;
+}

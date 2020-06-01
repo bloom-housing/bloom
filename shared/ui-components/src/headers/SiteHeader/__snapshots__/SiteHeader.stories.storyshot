@@ -230,7 +230,7 @@ exports[`Storyshots Headers|SiteHeader With Dropdown And Button 1`] = `
                 small={true}
               >
                 <button
-                  className="button small"
+                  className="button is-small"
                   onClick={[Function]}
                 >
                   Example Button

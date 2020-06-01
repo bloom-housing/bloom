@@ -34,6 +34,7 @@
     "react-inlinesvg": "^1.2.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "9.2.0",
     "@types/node": "^12.12.39",
     "@types/react": "^16.9.19",
     "concurrently": "^5.2.0",

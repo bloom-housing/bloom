@@ -91,7 +91,7 @@ const UnitTables = (props: UnitTablesProps) => {
         return (
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
-              <h3 className="button-tiny-bg-light">
+              <h3 className="toggle-header">
                 <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>:&nbsp;
                 {unitsLabel(units)},&nbsp;
                 {formatRange(unitSummary.areaRange)} {t("listings.squareFeet")}

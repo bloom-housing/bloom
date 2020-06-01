@@ -12,7 +12,7 @@ exports[`Storyshots Footers|Site Footer Footer 1`] = `
         className="footer-sock"
       >
         <div
-          className="footer-sock-inner"
+          className="footer-sock__inner"
         >
           <p
             className="footer-copyright"
@@ -71,7 +71,7 @@ exports[`Storyshots Footers|Site Footer With Logo 1`] = `
         className="footer-sock"
       >
         <div
-          className="footer-sock-inner"
+          className="footer-sock__inner"
         >
           <p
             className="footer-copyright"
@@ -150,7 +150,7 @@ exports[`Storyshots Footers|Site Footer With Logo And Credits 1`] = `
         className="footer-sock"
       >
         <div
-          className="footer-sock-inner"
+          className="footer-sock__inner"
         >
           <p
             className="footer-copyright"

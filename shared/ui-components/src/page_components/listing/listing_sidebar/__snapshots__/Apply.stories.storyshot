@@ -1068,10 +1068,10 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
   }
 >
   <section
-    className="border border-gray-400 border-b-0 p-5"
+    className="aside-block"
   >
     <h2
-      className="font-alt-sans uppercase text-tiny mb-5 pb-2 border-0 border-b-4 border-primary font-semibold text-gray-800 tracking-widest inline-block"
+      className="text-caps-underline"
     >
       How to Apply
     </h2>
@@ -1096,7 +1096,7 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
       onClick={[Function]}
     >
       <button
-        className="button filled w-full mb-2"
+        className="button is-filled w-full mb-2"
         onClick={[Function]}
       >
         Download Application
@@ -1106,10 +1106,10 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
       bgColor="white"
     >
       <div
-        className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
+        className="aside-block__divider"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
+          className="bg-white aside-block__conjunction"
         >
           or
         </span>
@@ -1197,7 +1197,7 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
     </SidebarAddress>
   </section>
   <section
-    className="border-gray-400 border-b border-t p-5 bg-gray-100"
+    className="aside-block bg-gray-100"
   >
     <NumberedHeader
       num={2}
@@ -1297,10 +1297,10 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
       bgColor="gray-100"
     >
       <div
-        className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
+        className="aside-block__divider"
       >
         <span
-          className="bg-gray-100 relative -top px-1 uppercase text-primary-dark font-semibold"
+          className="bg-gray-100 aside-block__conjunction"
         >
           or
         </span>
@@ -2458,10 +2458,10 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
   }
 >
   <section
-    className="border border-gray-400 border-b-0 p-5"
+    className="aside-block"
   >
     <h2
-      className="font-alt-sans uppercase text-tiny mb-5 pb-2 border-0 border-b-4 border-primary font-semibold text-gray-800 tracking-widest inline-block"
+      className="text-caps-underline"
     >
       How to Apply
     </h2>
@@ -2486,7 +2486,7 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
       onClick={[Function]}
     >
       <button
-        className="button filled w-full mb-2"
+        className="button is-filled w-full mb-2"
         onClick={[Function]}
       >
         Download Application
@@ -2496,10 +2496,10 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
       bgColor="white"
     >
       <div
-        className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
+        className="aside-block__divider"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
+          className="bg-white aside-block__conjunction"
         >
           or
         </span>
@@ -2587,7 +2587,7 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
     </SidebarAddress>
   </section>
   <section
-    className="border-gray-400 border-b border-t p-5 bg-gray-100"
+    className="aside-block bg-gray-100"
   >
     <NumberedHeader
       num={2}
@@ -2687,10 +2687,10 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
       bgColor="gray-100"
     >
       <div
-        className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
+        className="aside-block__divider"
       >
         <span
-          className="bg-gray-100 relative -top px-1 uppercase text-primary-dark font-semibold"
+          className="bg-gray-100 aside-block__conjunction"
         >
           or
         </span>
@@ -3854,10 +3854,10 @@ exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 
   }
 >
   <section
-    className="border border-gray-400 border-b-0 p-5"
+    className="aside-block"
   >
     <h2
-      className="font-alt-sans uppercase text-tiny mb-5 pb-2 border-0 border-b-4 border-primary font-semibold text-gray-800 tracking-widest inline-block"
+      className="text-caps-underline"
     >
       How to Apply
     </h2>
@@ -3867,14 +3867,14 @@ exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 
       href="https://icann.org"
     >
       <LocalizedLink
-        className="button filled w-full mb-2"
+        className="button is-filled w-full mb-2"
         href="https://icann.org"
       >
         <Link
           href="https://icann.org"
         >
           <a
-            className="button filled w-full mb-2"
+            className="button is-filled w-full mb-2"
             href="https://icann.org"
             onClick={[Function]}
             onMouseEnter={[Function]}
@@ -3888,10 +3888,10 @@ exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 
       bgColor="white"
     >
       <div
-        className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
+        className="aside-block__divider"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
+          className="bg-white aside-block__conjunction"
         >
           or
         </span>
@@ -5060,10 +5060,10 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
   }
 >
   <section
-    className="border border-gray-400 border-b-0 p-5"
+    className="aside-block"
   >
     <h2
-      className="font-alt-sans uppercase text-tiny mb-5 pb-2 border-0 border-b-4 border-primary font-semibold text-gray-800 tracking-widest inline-block"
+      className="text-caps-underline"
     >
       How to Apply
     </h2>
@@ -5088,7 +5088,7 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
       onClick={[Function]}
     >
       <button
-        className="button filled w-full mb-2"
+        className="button is-filled w-full mb-2"
         onClick={[Function]}
       >
         Download Application
@@ -5098,10 +5098,10 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
       bgColor="white"
     >
       <div
-        className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
+        className="aside-block__divider"
       >
         <span
-          className="bg-white relative -top px-1 uppercase text-primary-dark font-semibold"
+          className="bg-white aside-block__conjunction"
         >
           or
         </span>
@@ -5189,7 +5189,7 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
     </SidebarAddress>
   </section>
   <section
-    className="border-gray-400 border-b border-t p-5 bg-gray-100"
+    className="aside-block bg-gray-100"
   >
     <NumberedHeader
       num={2}
@@ -5289,10 +5289,10 @@ exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
       bgColor="gray-100"
     >
       <div
-        className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center"
+        className="aside-block__divider"
       >
         <span
-          className="bg-gray-100 relative -top px-1 uppercase text-primary-dark font-semibold"
+          className="bg-gray-100 aside-block__conjunction"
         >
           or
         </span>

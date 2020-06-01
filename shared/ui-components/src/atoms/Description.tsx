@@ -1,4 +1,5 @@
 import * as React from "react"
+import "./Description.scss"
 
 export interface DescriptionProps {
   term: string
