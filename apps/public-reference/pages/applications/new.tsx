@@ -27,7 +27,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <article className="p-10 bg-white mb-10 border border-gray-450 rounded-lg">
+      <FormCard>
         <h5 className="font-alt-sans text-center mb-5">
           55 TRITON PARK LANE UNITS 510 516 APPLICATION
         </h5>
@@ -38,7 +38,7 @@ export default () => {
           totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
-      </article>
+      </FormCard>
 
       <FormCard>
         <div className="markdown">

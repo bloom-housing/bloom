@@ -5,8 +5,9 @@ import FormsLayout from "../layouts/forms"
 export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     console.log(data)
+    alert("Hi " + data.email + "! To be continued...")
   }
 
   return (
