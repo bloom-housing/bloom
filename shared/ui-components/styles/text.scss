@@ -43,10 +43,9 @@ h6 {
   @apply text-base;
 }
 
-
 a {
   @apply text-primary;
-  
+
   &:hover {
     @apply text-primary;
   }
@@ -93,65 +92,10 @@ h1.title {
   @apply tracking-wide;
 }
 
-.button-tiny-bg-light {
-  @apply font-sans;
-  @apply text-tiny;
-  @apply bg-primary-light;
-  @apply p-4;
-  @apply text-gray-800;
-  @apply border-b;
-  @apply border-primary;
-}
-
 .text-serif-lg {
   @apply font-serif;
   @apply text-lg;
   @apply mb-4;
-}
-
-details.disclosure {
-  @apply relative;
-  min-height: 3em;
-
-  &[open] {
-    @apply mb-16;
-  }
-
-  & > summary {
-    @apply text-primary;
-    @apply absolute;
-    @apply list-none;
-    @apply outline-none;
-    @apply cursor-pointer;
-    @apply bottom-0;
-    @apply pr-1;
-    @apply pb-2;
-
-    &:after {
-      @apply font-bold;
-      @apply inline-block;
-      @apply ml-2;
-      @apply text-sm;
-      content: "⌃";
-      transform: rotate(180deg) translateY(3px);
-    }
-  }
-
-  &[open] > summary {
-    bottom: -3em;
-
-    &:after {
-      transform: rotate(0deg) translateY(2px);
-    }
-  }
-
-  & > summary::-webkit-details-marker {
-    @apply hidden;
-  }
-
-  p {
-    @apply my-4;
-  }
 }
 
 .info-item {
@@ -182,4 +126,20 @@ details.disclosure {
   @apply uppercase;
   @apply text-sm;
   @apply underline;
+}
+
+.pill {
+  @apply inline-block;
+  @apply bg-primary-lighter;
+  @apply rounded-full;
+  @apply px-3;
+  @apply py-1;
+  @apply text-sm;
+  @apply font-semibold;
+  @apply text-gray-700;
+  @apply mr-2;
+}
+
+.icon-item {
+  @apply block;
 }

@@ -20,7 +20,7 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
   return (
     <div>
       {!openDateState(listing) && (
-        <section className="border-gray-400 border-b p-5 bg-gray-100">
+        <section className="aside-block bg-primary-lighter border-t">
           <Waitlist listing={listing} />
         </section>
       )}

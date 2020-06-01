@@ -1,16 +1,20 @@
 .field {
   margin-bottom: 1.25rem;
+  
   * > &:last-child {
     margin-bottom: 0;
   }
+
   label,
   .label {
     @apply text-gray-750;
     font-size: 0.95rem;
   }
+
   label + .control {
     @apply mt-2;
   }
+
   .control {
     .input {
       @apply border;
@@ -25,20 +29,25 @@
       font-size: 1rem;
       line-height: normal;
     }
+
     &.control-narrower {
       max-width: 8rem;
     }
   }
+
   &.error {
+
     label {
       @apply text-red-700;
     }
+
     .control {
       .input,
       select {
         @apply border-red-700;
       }
     }
+
     .error-message {
       @apply text-sm;
       @apply text-red-700;
@@ -150,6 +159,7 @@
 .field--inline {
   display: inline-block;
 }
+
 .field--inline + .field--inline {
   margin-left: 1.5rem;
 }

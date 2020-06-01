@@ -21,10 +21,10 @@ export const Modal = () => (
     <footer className="modal__footer bg-primary-lighter">
       <div className="modal__button-group">
         <div className="modal__button_item md:order-last">
-          <button className="button filled">Submit</button>
+          <button className="button is-filled">Submit</button>
         </div>
         <div className="modal__button_item">
-          <button className="button no-border">Cancel</button>
+          <button className="button is-borderless">Cancel</button>
         </div>
       </div>
     </footer>
@@ -55,10 +55,10 @@ export const ModalWarning = () => (
     <footer className="modal__footer bg-primary-lighter">
       <div className="modal__button-group">
         <div className="modal__button_item md:order-last">
-          <button className="button alert filled">Submit</button>
+          <button className="button alert is-filled">Submit</button>
         </div>
         <div className="modal__button_item">
-          <button className="button no-border">Cancel</button>
+          <button className="button is-borderless">Cancel</button>
         </div>
       </div>
     </footer>

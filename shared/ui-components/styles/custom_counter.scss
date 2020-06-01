@@ -1,4 +1,4 @@
-.custom-counter_item {
+.custom-counter__item {
   @screen md {
     @apply mb-12;
     @apply ml-8;
@@ -8,12 +8,12 @@
   }
 }
 
-.custom-counter_item::before {
+.custom-counter__item::before {
   @screen md {
     @apply absolute;
     @apply font-serif;
     @apply text-gray-850;
-    @apply top-0;
+    top: 0;
     left: -1rem;
     content: counter(step-counter);
     margin-right: 5px;
@@ -22,13 +22,28 @@
   }
 }
 
-.custom-counter_header {
+.custom-counter__header {
+  @apply mb-4;
+
   @screen md {
-    @apply mb-8;
     @apply -ml-4;
     @apply pl-4;
     @apply border-solid;
     @apply border-l-2;
     @apply border-gray-450;
+    @apply mt-4;
   }
+}
+
+.custom-counter__title {
+  @apply text-lg;
+
+  @screen md {
+    @apply text-xl;
+  }
+}
+
+.custom-counter__subtitle {
+  @apply text-gray-700;
+  @apply text-tiny;
 }

@@ -8,7 +8,7 @@ export interface FooterNavProps {
 
 const FooterNav = (props: FooterNavProps) => (
   <section className="footer-sock">
-    <div className="footer-sock-inner">
+    <div className="footer-sock__inner">
       <p className="footer-copyright">{props.copyright}</p>
 
       <nav className="footer-nav">{props.children}</nav>
