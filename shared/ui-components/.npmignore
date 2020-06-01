@@ -8,16 +8,25 @@ yarn-error.log*
 # Next.js cache and compiled artifacts
 .next/**
 
-# Storybook build output
+# Storybook and storybook build output
+.storybook/**
 storybook-static
 
 # Storyshots and other tests
 __tests__/**
+*.stories.tsx
 *.storyshot
+# Temporary test images -- TODO: refactor
+public/images/banner.png
+public/images/listing.jpg
 
 # Cypress test output videos
 apps/**/cypress/videos
 apps/**/cypress/screenshots
+
+# Environment vars for dev/test
+.env
+.env.template
 
 # Complied Typescript
 dist
