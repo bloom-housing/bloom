@@ -96,3 +96,7 @@ details.disclosure {
   @apply p-4;
   @apply bg-primary-lighter;
 }
+
+.shadow-left {
+ box-shadow: -3px 0px 3px -1px rgba(0, 0, 0, 0.1);
+}
