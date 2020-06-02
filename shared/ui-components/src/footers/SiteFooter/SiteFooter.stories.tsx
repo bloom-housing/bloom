@@ -49,6 +49,9 @@ export const withLogoAndCredits = () => (
   <SiteFooter>
     <FooterSection>{logo}</FooterSection>
     <FooterSection>{credits}</FooterSection>
+    <FooterSection>
+      <img className="h-16 w-16" src="/images/eho-logo-white.svg" alt="Equal Housing Opportunity Logo" />
+     </FooterSection>
     <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
       <LocalizedLink href="#">Policy</LocalizedLink>
     </FooterNav>
