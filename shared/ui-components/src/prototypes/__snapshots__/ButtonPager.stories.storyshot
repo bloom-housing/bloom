@@ -15,7 +15,7 @@ exports[`Storyshots Prototypes|ButtonPager Button Pager 1`] = `
       className="button-pager__row primary"
     >
       <button
-        className="button filled"
+        className="button is-filled"
       >
         Next
       </button>
@@ -24,7 +24,7 @@ exports[`Storyshots Prototypes|ButtonPager Button Pager 1`] = `
       className="button-pager__row"
     >
       <button
-        className="button button button-link"
+        className="button is-unstyled"
       >
         Save and Finish Later
       </button>

@@ -34,6 +34,11 @@
   @apply h-10;
 }
 
+.ui-2xl svg {
+  @apply w-12;
+  @apply h-12;
+}
+
 .ui-white svg use {
   fill: #fff !important;
 }

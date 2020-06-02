@@ -10,16 +10,16 @@ module.exports = {
       name: "@storybook/preset-typescript",
       options: {
         tsLoaderOptions: {
-          configFile: path.resolve(__dirname, "../tsconfig.json")
+          configFile: path.resolve(__dirname, "../tsconfig.json"),
         },
         tsDocgenLoaderOptions: {
-          tsconfigPath: path.resolve(__dirname, "../tsconfig.json")
-        }
-      }
+          tsconfigPath: path.resolve(__dirname, "../tsconfig.json"),
+        },
+      },
     },
     "@storybook/addon-docs",
     "@storybook/addon-a11y",
-    "@storybook/addon-viewport"
+    "@storybook/addon-viewport",
   ],
   // In trouble? try https://storybook.js.org/docs/configurations/custom-webpack-config/#debug-the-default-webpack-config
   webpackFinal: async (config, { configType }) => {
@@ -36,17 +36,17 @@ module.exports = {
           loader: "postcss-loader",
           options: {
             ident: "postcss",
-            plugins: [require("tailwindcss"), require("autoprefixer")]
-          }
+            plugins: [require("tailwindcss"), require("autoprefixer")],
+          },
         },
         {
           loader: "sass-loader",
           options: {
-            prependData: tailwindVars
-          }
-        }
+            prependData: tailwindVars,
+          },
+        },
       ],
-      include: path.resolve(__dirname, "../")
+      include: path.resolve(__dirname, "../"),
     })
 
     config.module.rules.push({
@@ -55,17 +55,13 @@ module.exports = {
         {
           loader: "ts-loader",
           options: {
-            transpileOnly: true
-          }
+            transpileOnly: true,
+          },
         },
-        // Optional
-        {
-          loader: require.resolve("react-docgen-typescript-loader")
-        }
-      ]
+      ],
     })
 
     config.resolve.extensions.push(".ts", ".tsx")
     return config
-  }
+  },
 }

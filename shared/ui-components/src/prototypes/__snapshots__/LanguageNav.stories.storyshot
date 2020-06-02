@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes|LanguageNav Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <LanguageNav>
+    <div
+      className="language-bar"
+    >
+      <div
+        className="language-bar__inner"
+      >
+        <nav
+          className="language-nav"
+        >
+          <ul
+            className="language-nav__list"
+          >
+            <li>
+              <a
+                href=""
+              >
+                English
+              </a>
+            </li>
+            <li>
+              <a
+                href=""
+              >
+                Spanish
+              </a>
+            </li>
+            <li>
+              <a
+                href=""
+              >
+                Chinese
+              </a>
+            </li>
+            <li>
+              <a
+                href=""
+              >
+                Vietnamese
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </LanguageNav>
+</div>
+`;

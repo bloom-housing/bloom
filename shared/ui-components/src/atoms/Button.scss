@@ -25,9 +25,19 @@
   &.is-primary {
     @apply bg-primary-dark;
     @apply text-white;
-    
+
     &:hover {
       @apply bg-primary-darker;
+    }
+  }
+
+  &.is-alert {
+    @apply bg-alert;
+    @apply border-alert;
+    @apply text-white;
+
+    &:hover {
+      @apply bg-alert;
     }
   }
 
@@ -39,6 +49,16 @@
 
   &.is-normal-case {
     @apply normal-case;
+  }
+
+  &.is-borderless {
+    @apply text-primary-darker;
+    border-color: transparent;
+    background: transparent;
+
+    &:hover {
+      @apply text-primary-darker;
+    }
   }
 
   &.is-unstyled {

@@ -44,6 +44,7 @@
 
 .alert-box__body {
   @apply text-tiny;
+  @apply ml-2;
 }
 
 .alert-box__close {

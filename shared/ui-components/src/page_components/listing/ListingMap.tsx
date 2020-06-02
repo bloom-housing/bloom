@@ -23,7 +23,7 @@ const ListingMap = (props: ListingMapProps) => {
   const [viewport, setViewPort] = React.useState({
     latitude: address.latitude,
     longitude: address.longitude,
-    zoom: 12,
+    zoom: 13,
   } as Viewport)
   const _onViewportChange = (viewport: Viewport) => {
     // width and height need to be set here to work properly with
@@ -42,6 +42,7 @@ const ListingMap = (props: ListingMapProps) => {
       <ReactMapGL
         mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
         onViewportChange={_onViewportChange}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
         {...viewport}
       >
         <Marker
