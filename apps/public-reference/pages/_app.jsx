@@ -17,7 +17,7 @@ class MyApp extends App {
   }
 
   // This gets passed along through the context
-  syncApplication = data => {
+  syncApplication = (data) => {
     this.setState({ application: data })
   }
 
@@ -37,10 +37,10 @@ class MyApp extends App {
       general: generalTranslations,
       es: spanishTranslations,
       custom: {
-        general: await import("../page_content/locale_overrides/general.json")
+        general: await import("../page_content/locale_overrides/general.json"),
         // Uncomment to add additional language overrides
         // es: await import("../page_content/locale_overrides/es.json")
-      }
+      },
     }
     return { pageProps, translations }
   }
@@ -91,7 +91,7 @@ class MyApp extends App {
       <AppSubmissionContext.Provider
         value={{
           application: this.state.application,
-          syncApplication: this.syncApplication
+          syncApplication: this.syncApplication,
         }}
       >
         <Component {...pageProps} />
