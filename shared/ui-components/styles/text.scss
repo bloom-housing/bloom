@@ -43,10 +43,9 @@ h6 {
   @apply text-base;
 }
 
-
 a {
   @apply text-primary;
-  
+
   &:hover {
     @apply text-primary;
   }
@@ -57,6 +56,10 @@ a {
 
   &.alert {
     @apply text-alert;
+  }
+
+  &.darker {
+    @apply text-primary-darker;
   }
 }
 
@@ -111,6 +114,18 @@ h1.title {
   @apply font-alt-sans;
   @apply font-bold;
   @apply tracking-wide;
+}
+
+.info-item__link {
+  @apply absolute;
+  right: 0;
+  top: 0;
+}
+
+.edit-link {
+  @apply uppercase;
+  @apply text-sm;
+  @apply underline;
 }
 
 .pill {

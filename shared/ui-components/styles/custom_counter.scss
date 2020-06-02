@@ -15,7 +15,7 @@
     @apply absolute;
     @apply font-serif;
     @apply text-gray-850;
-    @apply top-0;
+    top: 0;
     left: -1rem;
     content: counter(step-counter);
     margin-right: 5px;
@@ -28,7 +28,6 @@
   @apply pb-4;
 
   @screen md {
-    @apply mb-8;
     @apply -ml-4;
     @apply pl-4;
     @apply border-solid;

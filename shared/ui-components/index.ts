@@ -9,6 +9,7 @@ export * from "./src/atoms/LocalizedLink"
 export * from "./src/atoms/MetaTags"
 
 /* Cards */
+export * from "./src/cards/FormCard"
 export * from "./src/cards/ImageCard"
 export * from "./src/cards/InfoCard"
 export * from "./src/cards/InfoCardGrid"
@@ -22,7 +23,7 @@ export * from "./src/footers/SiteFooter/SiteFooter"
 /* Forms */
 export * from "./src/forms/ErrorMessage"
 export * from "./src/forms/Field"
-export * from "./src/forms/MultistepProgress"
+export * from "./src/forms/ProgressNav"
 
 /* Headers */
 export * from "./src/headers/Hero/Hero"

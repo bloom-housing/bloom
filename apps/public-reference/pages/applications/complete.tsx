@@ -1,5 +1,5 @@
 import Router from "next/router"
-import { Button, onClientSide, MultistepProgress } from "@bloom-housing/ui-components"
+import { Button, FormCard, onClientSide, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import PageContent from "../../page_content/applications/complete.mdx"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
@@ -12,25 +12,22 @@ export default () => {
   const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 3 // The End
 
-  const cardClasses = ["p-10", "bg-white", "mb-10", "border", "border-gray-450", "rounded-lg"].join(
-    " "
-  )
-
   return (
     <FormsLayout>
-      <article className={cardClasses}>
+      <FormCard>
         <h5 className="font-alt-sans text-center mb-5">
           55 TRITON PARK LANE UNITS 510 516 APPLICATION
         </h5>
 
-        <MultistepProgress
+        <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
           totalNumberOfSteps={conductor.totalNumberOfSteps()}
+          labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
-      </article>
+      </FormCard>
 
-      <article className={cardClasses}>
+      <FormCard>
         <div className="markdown">
           <PageContent />
         </div>
@@ -69,7 +66,7 @@ export default () => {
             Return to Start
           </Button>
         </div>
-      </article>
+      </FormCard>
     </FormsLayout>
   )
 }

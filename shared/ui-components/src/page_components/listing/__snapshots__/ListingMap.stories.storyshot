@@ -1128,7 +1128,7 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
       latitude={37.36537}
       longitude={-121.91071}
       mapOptions={Object {}}
-      mapStyle="mapbox://styles/mapbox/light-v8"
+      mapStyle="mapbox://styles/mapbox/streets-v11"
       mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
       mapboxApiUrl="https://api.mapbox.com"
       maxPitch={60}
@@ -1182,7 +1182,7 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
       }
       visible={true}
       width="100%"
-      zoom={12}
+      zoom={13}
     >
       <div
         key="event-canvas"
@@ -1213,7 +1213,7 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
           latitude={37.36537}
           longitude={-121.91071}
           mapOptions={Object {}}
-          mapStyle="mapbox://styles/mapbox/light-v8"
+          mapStyle="mapbox://styles/mapbox/streets-v11"
           mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
           mapboxApiUrl="https://api.mapbox.com"
           maxPitch={60}
@@ -1267,7 +1267,7 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
           }
           visible={true}
           width="100%"
-          zoom={12}
+          zoom={13}
         >
           <div
             key="map-container"
