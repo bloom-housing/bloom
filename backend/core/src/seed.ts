@@ -7,11 +7,12 @@ import listingsLoader from "./lib/listings_loader"
 import { Unit } from "./entity/Unit"
 import { Attachment } from "./entity/Attachment"
 import { Preference } from "./entity/Preference"
+import config from "../ormconfig"
 
 const skipped = ["id", "units", "attachments", "preferences"]
 const types = { units: Unit, attachments: Attachment, preferences: Preference }
 
-createConnection()
+createConnection(config)
   // eslint-disable-next-line @typescript-eslint/require-await
   .then(async (connection) => {
     dotenv.config({ path: ".env" })
