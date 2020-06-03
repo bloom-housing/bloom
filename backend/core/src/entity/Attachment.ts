@@ -7,7 +7,7 @@ enum AttachmentType {
 }
 
 @Entity()
-export class Attachment {
+class Attachment {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ nullable: true })
@@ -26,3 +26,5 @@ export class Attachment {
   )
   listing: Listing
 }
+
+export { Attachment as default, Attachment }

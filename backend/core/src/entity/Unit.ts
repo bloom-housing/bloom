@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
 import { Listing } from "./Listing"
 
 @Entity()
-export class Unit {
+class Unit {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ nullable: true })
@@ -51,3 +51,5 @@ export class Unit {
   )
   listing: Listing
 }
+
+export { Unit as default, Unit }

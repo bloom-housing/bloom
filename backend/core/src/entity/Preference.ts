@@ -3,7 +3,7 @@ import { Listing } from "./Listing"
 import { PreferenceLink } from "@bloom-housing/core"
 
 @Entity()
-export class Preference {
+class Preference {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ nullable: true })
@@ -22,3 +22,5 @@ export class Preference {
   )
   listing: Listing
 }
+
+export { Preference as default, Preference }

@@ -6,17 +6,14 @@ import { Listing } from './entity/Listing';
 import { Attachment } from './entity/Attachment';
 import { Unit } from './entity/Unit';
 import { Preference } from './entity/Preference';
+import dbOptions from '../ormconfig';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
-    type: "postgres",
-    host: "localhost",
-    port: 5432,
-    database: "bloom",
-    synchronize: true,
-    logging: false,
-    entities: [Listing, Attachment, Unit, Preference],
-  }), TypeOrmModule.forFeature([Listing])],
+    ...dbOptions,
+    autoLoadEntities: true,
+  }),
+  TypeOrmModule.forFeature([Listing, Attachment, Preference, Unit])],
   controllers: [ListingsController],
   providers: [ListingsService],
 })

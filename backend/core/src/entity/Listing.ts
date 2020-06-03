@@ -5,7 +5,7 @@ import { Attachment } from "./Attachment"
 import { Address, UnitsSummarized } from "@bloom-housing/core"
 
 @Entity()
-export class Listing {
+class Listing {
   @OneToMany(
     type => Preference,
     preference => preference.listing
@@ -113,3 +113,5 @@ export class Listing {
   unitsSummarized?: UnitsSummarized
   urlSlug?: string
 }
+
+export { Listing as default, Listing }
