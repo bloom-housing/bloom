@@ -13,10 +13,18 @@ export const TwoColumns = () => (
     title="Rentals"
     subtitle="Other rental housing funded by the City, as well as lists developed each month by community nonprofit agencies."
   >
-    <InfoCard title="My Card" externalHref="http://google.com" style="is-normal-primary-lighter">
+    <InfoCard
+      title="My Card"
+      externalHref="http://google.com"
+      className="is-normal-primary-lighter"
+    >
       <p>My content</p>
     </InfoCard>
-    <InfoCard title="My Card" externalHref="http://google.com" style="is-normal-primary-lighter">
+    <InfoCard
+      title="My Card"
+      externalHref="http://google.com"
+      className="is-normal-primary-lighter"
+    >
       <p>My content</p>
     </InfoCard>
   </InfoCardGrid>
