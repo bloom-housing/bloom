@@ -12,12 +12,23 @@ export class UserService {
     return this.repo.findOne({ email })
   }
 
+  // passwordHash is a hidden field - we need to build a query to get it directly
+  public async getUserWithPassword(user: User) {
+    return await this.repo
+      .createQueryBuilder()
+      .addSelect("user.passwordHash")
+      .from(User, "user")
+      .where("user.id = :id", { id: user.id })
+      .getOne()
+  }
+
   public async storeUserPassword(user: User, password: string) {
     const passwordHash = await hash(password, 10)
     await this.repo.update({ passwordHash }, user)
   }
 
-  public verifyUserPassword(user: User, password: string) {
-    return compare(password, user.passwordHash)
+  public async verifyUserPassword(user: User, password: string) {
+    const userWithPassword = await this.getUserWithPassword(user)
+    return compare(password, userWithPassword.passwordHash)
   }
 }

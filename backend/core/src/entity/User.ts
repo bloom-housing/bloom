@@ -4,7 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 class User {
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column()
+  @Column({ select: false })
   passwordHash: string
   @Column()
   email: string
