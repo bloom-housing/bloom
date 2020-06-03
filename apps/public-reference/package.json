@@ -6,7 +6,7 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "dev": "export $(cat .env | xargs) && next -p ${NEXTJS_PORT:-3000}",
+    "dev": "export $(cat .env | xargs) && NODE_OPTIONS='--inspect' next -p ${NEXTJS_PORT:-3000}",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "export": "next export",

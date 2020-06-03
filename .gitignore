@@ -80,3 +80,6 @@ yarn-error.log
 # IDE configs
 .idea
 .vscode
+
+# VS code debugger config
+launch.json
