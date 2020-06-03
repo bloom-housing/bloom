@@ -18,13 +18,14 @@ const defaultConnectionForEnv = {
 
 const env = process.env.NODE_ENV || "development"
 
-console.log(join(__dirname, "src/entity/**", "*.ts"))
 // If we have a DATABASE_URL, use that
 const connectionInfo = process.env.DATABASE_URL
   ? { url: process.env.DATABASE_URL }
   : defaultConnectionForEnv[env]
 
-const config = {
+// Unfortunately, we need to use CommonJS/AMD style exports rather than ES6-style modules for this due to how
+// TypeORM expects the config to be available.
+export = {
   type: "postgres",
   ...connectionInfo,
   // We don't want to auto-synchronize production data - we should deliberately run migrations.
@@ -45,4 +46,3 @@ const config = {
     subscribersDir: "src/subscriber",
   },
 }
-export { config as default, config }
