@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "rimraf dist && nest build",
-    "start": "yarn run build && node dist/main",
+    "start": "yarn run build && node dist/src/main",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "test": "jest",
