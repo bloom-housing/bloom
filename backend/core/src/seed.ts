@@ -1,4 +1,3 @@
-import dotenv from "dotenv"
 import "reflect-metadata"
 import { createConnection } from "typeorm"
 import { Listing } from "./entity/Listing"
@@ -13,9 +12,7 @@ const skipped = ["id", "units", "attachments", "preferences"]
 const types = { units: Unit, attachments: Attachment, preferences: Preference }
 
 createConnection(config)
-  // eslint-disable-next-line @typescript-eslint/require-await
   .then(async (connection) => {
-    dotenv.config({ path: ".env" })
     const listings = (await listingsLoader("listings")) as OldListing[]
 
     for await (const listing of listings) {
