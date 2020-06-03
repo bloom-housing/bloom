@@ -45,7 +45,10 @@ class Unit {
   amiChartId: number
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyRentAsPercentOfIncome: number
-  @ManyToOne((type) => Listing, (listing) => listing.units)
+  @ManyToOne((type) => Listing, (listing) => listing.units, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   listing: Listing
 }
 

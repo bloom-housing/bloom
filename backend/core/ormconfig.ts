@@ -24,7 +24,7 @@ const connectionInfo = process.env.DATABASE_URL
   ? { url: process.env.DATABASE_URL }
   : defaultConnectionForEnv[env]
 
-export = {
+const config = {
   type: "postgres",
   ...connectionInfo,
   // We don't want to auto-synchronize production data - we should deliberately run migrations.
@@ -45,3 +45,4 @@ export = {
     subscribersDir: "src/subscriber",
   },
 }
+export { config as default, config }

@@ -16,7 +16,10 @@ class Preference {
   description?: string
   @Column({ type: "jsonb", nullable: true })
   links?: PreferenceLink[]
-  @ManyToOne((type) => Listing, (listing) => listing.preferences)
+  @ManyToOne((type) => Listing, (listing) => listing.preferences, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   listing: Listing
 }
 

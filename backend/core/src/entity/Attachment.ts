@@ -20,7 +20,10 @@ class Attachment {
     nullable: true,
   })
   type: AttachmentType
-  @ManyToOne((type) => Listing, (listing) => listing.attachments)
+  @ManyToOne((type) => Listing, (listing) => listing.attachments, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   listing: Listing
 }
 
