@@ -1,5 +1,5 @@
 import Router from "next/router"
-import { Button, ErrorMessage, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, ErrorMessage, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import PageContent from "../../page_content/applications/step2.mdx"
 import { useForm } from "react-hook-form"
@@ -25,13 +25,9 @@ export default () => {
     Router.push("/applications/complete").then(() => window.scrollTo(0, 0))
   }
 
-  const cardClasses = ["p-10", "bg-white", "mb-10", "border", "border-gray-450", "rounded-lg"].join(
-    " "
-  )
-
   return (
     <FormsLayout>
-      <article className={cardClasses}>
+      <FormCard>
         <h5 className="font-alt-sans text-center mb-5">
           55 TRITON PARK LANE UNITS 510 516 APPLICATION
         </h5>
@@ -42,9 +38,9 @@ export default () => {
           totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
-      </article>
+      </FormCard>
 
-      <article className={cardClasses}>
+      <FormCard>
         <div className="markdown">
           <PageContent />
         </div>
@@ -142,7 +138,7 @@ export default () => {
             </Button>
           </div>
         </form>
-      </article>
+      </FormCard>
     </FormsLayout>
   )
 }

@@ -9,6 +9,7 @@ export * from "./src/atoms/LocalizedLink"
 export * from "./src/atoms/MetaTags"
 
 /* Cards */
+export * from "./src/cards/FormCard"
 export * from "./src/cards/ImageCard"
 export * from "./src/cards/InfoCard"
 

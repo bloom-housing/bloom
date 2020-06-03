@@ -42,7 +42,7 @@ export default class extends Component<ListingsProps> {
     return this.props.openListings.length > 0 ? (
       <ListingsList listings={this.props.openListings} />
     ) : (
-      <div className="flex flex-row flex-wrap max-w-5xl m-auto mt-5 mb-12 text-center p-4 bg-primary-lighter">
+      <div className="notice-block">
         <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
       </div>
     )

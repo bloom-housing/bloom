@@ -25,7 +25,7 @@ const moreLessButton = (expanded: boolean, setExpanded: Function) => {
   return (
     <>
       {expanded ? " " : " ... "}
-      <span className="btn-link" onClick={() => setExpanded(!expanded)}>
+      <span className="button-toggle" onClick={() => setExpanded(!expanded)}>
         {expanded ? t("label.less") : t("label.more")}
       </span>
     </>

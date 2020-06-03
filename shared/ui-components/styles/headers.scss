@@ -1,0 +1,89 @@
+// Listing Detail
+.detail-header {
+  @apply relative;
+  @apply pr-4;
+  @apply pb-6;
+  @apply pl-4;
+  @apply pt-4;
+  @apply border-b;
+  @apply border-gray-400;
+  @apply text-primary-darker;
+
+  @screen md {
+    @apply pt-0;
+    @apply pb-8;
+    @apply text-sm;
+    @apply border-none;
+    @apply text-gray-800;
+  }
+}
+
+.detail-header__image {
+  @apply absolute;
+  @apply w-12;
+  @apply mr-2;
+
+  @screen md {
+    @apply left-0;
+  }
+}
+
+.detail-header__hgroup {
+  @apply ml-12;
+  @apply pl-4;
+
+  @screen md {
+    @apply border-l-2;
+    @apply border-primary;
+  }
+
+  .ui-icon {
+    @apply absolute;
+    top: 1rem;
+    right: 1rem;
+
+    @screen md {
+      @apply hidden;
+    }
+
+    svg {
+      @apply w-3;
+      @apply h-3;
+    }
+  }
+}
+
+.detail-header__title {
+  @apply font-alt-sans;
+  @apply uppercase;
+  @apply text-tiny;
+  @apply tracking-widest;
+  @apply text-primary-darker;
+
+  @screen md {
+    @apply text-black;
+    @apply font-serif;
+    @apply text-3xl;
+    @apply normal-case;
+    @apply tracking-normal;
+    @apply text-gray-900;
+  }
+}
+
+.detail-header__subtitle {
+  @apply text-tiny;
+
+  @screen md {
+    @apply text-gray-700;
+  }
+}
+
+.toggle-header {
+  @apply font-sans;
+  @apply text-tiny;
+  @apply bg-primary-light;
+  @apply p-4;
+  @apply text-gray-800;
+  @apply border-b;
+  @apply border-primary;
+}
