@@ -1,19 +1,18 @@
 import "reflect-metadata"
 import { createConnection } from "typeorm"
 import { Listing } from "./entity/Listing"
-import { Listing as OldListing } from "@bloom-housing/core"
-import listingsLoader from "./lib/listings_loader"
 import { Unit } from "./entity/Unit"
 import { Attachment } from "./entity/Attachment"
 import { Preference } from "./entity/Preference"
-import config from "../ormconfig"
+import dbOptions = require("../ormconfig")
+import listingsSeeds from "../seeds.json"
 
 const skipped = ["id", "units", "attachments", "preferences"]
 const types = { units: Unit, attachments: Attachment, preferences: Preference }
 
-createConnection(config)
+createConnection(dbOptions)
   .then(async (connection) => {
-    const listings = (await listingsLoader("listings")) as OldListing[]
+    const listings = listingsSeeds as any[]
 
     for await (const listing of listings) {
       const l = new Listing()
