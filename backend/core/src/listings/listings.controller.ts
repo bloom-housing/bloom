@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { ListingsService } from './listings.service';
+import { Controller, Get } from "@nestjs/common"
+import { ListingsService } from "./listings.service"
 
 @Controller()
 export class ListingsController {
@@ -7,6 +7,6 @@ export class ListingsController {
 
   @Get()
   public async getAll() {
-    return await this.listingsService.findAll();
+    return await this.listingsService.findAll()
   }
 }

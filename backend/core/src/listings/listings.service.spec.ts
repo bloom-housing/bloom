@@ -1,13 +1,12 @@
 import { Repository } from "typeorm"
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from "@nestjs/testing"
 import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { Listing } from "../entity/Listing"
 
-
-describe('ListingsService', () => {
-  let service: ListingsService;
-  let repo: Repository<Listing>;
+describe("ListingsService", () => {
+  let service: ListingsService
+  let repo: Repository<Listing>
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,14 +19,14 @@ describe('ListingsService', () => {
           useClass: Repository,
         },
       ],
-    }).compile();
+    }).compile()
 
-    service = module.get<ListingsService>(ListingsService);
+    service = module.get<ListingsService>(ListingsService)
     // Save the instance of the repository and set the correct generics
-    repo = module.get<Repository<Listing>>(getRepositoryToken(Listing));
-  });
+    repo = module.get<Repository<Listing>>(getRepositoryToken(Listing))
+  })
 
-  it('Find all', async () => {
+  it("Find all", async () => {
     const testListing: Listing = {
       depositMin: "",
       acceptingApplicationsAtLeasingAgent: false,
@@ -76,10 +75,10 @@ describe('ListingsService', () => {
       urlSlug: "",
       waitlistCurrentSize: 0,
       waitlistMaxSize: 0,
-      yearBuilt: 0
-    };
-    jest.spyOn(repo, 'find').mockResolvedValueOnce([testListing]);
-    const results = await service.findAll();
-    expect(results).toBe([testListing]);
-  });
-});
+      yearBuilt: 0,
+    }
+    jest.spyOn(repo, "find").mockResolvedValueOnce([testListing])
+    const results = await service.findAll()
+    expect(results).toBe([testListing])
+  })
+})

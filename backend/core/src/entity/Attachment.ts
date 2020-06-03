@@ -3,27 +3,24 @@ import { Listing } from "./Listing"
 
 enum AttachmentType {
   ApplicationDownload = 1,
-  ExternalApplication = 2
+  ExternalApplication = 2,
 }
 
 @Entity()
 class Attachment {
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   label: string
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   fileUrl: string
   @Column({
     type: "enum",
     enum: AttachmentType,
-    nullable: true
+    nullable: true,
   })
   type: AttachmentType
-  @ManyToOne(
-    type => Listing,
-    listing => listing.attachments
-  )
+  @ManyToOne((type) => Listing, (listing) => listing.attachments)
   listing: Listing
 }
 

@@ -6,20 +6,17 @@ import { PreferenceLink } from "@bloom-housing/core"
 class Preference {
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   ordinal: string
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   title: string
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   subtitle?: string
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   description?: string
   @Column({ type: "jsonb", nullable: true })
   links?: PreferenceLink[]
-  @ManyToOne(
-    type => Listing,
-    listing => listing.preferences
-  )
+  @ManyToOne((type) => Listing, (listing) => listing.preferences)
   listing: Listing
 }
 

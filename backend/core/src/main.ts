@@ -1,12 +1,12 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory } from "@nestjs/core"
+import { AppModule } from "./app.module"
 
 let app
 async function bootstrap() {
-  app = await NestFactory.create(AppModule);
-  app.enableCors();
-  await app.listen(3001);
+  app = await NestFactory.create(AppModule)
+  app.enableCors()
+  await app.listen(3001)
 }
-bootstrap();
+bootstrap()
 
 export default app

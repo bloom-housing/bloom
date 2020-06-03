@@ -4,10 +4,7 @@ export class InitialDB1588694149283 implements MigrationInterface {
   name = "InitialDB1588694149283"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`,
-      undefined
-    )
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`, undefined)
     await queryRunner.query(
       `CREATE TABLE "unit" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "amiPercentage" character varying, "annualIncomeMin" character varying, "monthlyIncomeMin" numeric(8,2), "floor" integer, "annualIncomeMax" character varying, "maxOccupancy" integer, "minOccupancy" integer, "monthlyRent" numeric(8,2), "numBathrooms" integer, "numBedrooms" integer, "number" character varying, "priorityType" character varying, "reservedType" character varying, "sqFeet" numeric(8,2), "status" character varying, "unitType" character varying, "createdAt" TIMESTAMP, "updatedAt" TIMESTAMP, "amiChartId" integer, "monthlyRentAsPercentOfIncome" numeric(8,2), "listingId" uuid, CONSTRAINT "PK_4252c4be609041e559f0c80f58a" PRIMARY KEY ("id"))`,
       undefined
@@ -26,15 +23,15 @@ export class InitialDB1588694149283 implements MigrationInterface {
       undefined
     )
     await queryRunner.query(
-      `ALTER TABLE "unit" ADD CONSTRAINT "FK_72719e0518e726a1de304c6738e" FOREIGN KEY ("listingId") REFERENCES "listing"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "unit" ADD CONSTRAINT "FK_72719e0518e726a1de304c6738e" FOREIGN KEY ("listingId") REFERENCES "listing"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
       undefined
     )
     await queryRunner.query(
-      `ALTER TABLE "preference" ADD CONSTRAINT "FK_51fe73ffef034575b41bc43ffea" FOREIGN KEY ("listingId") REFERENCES "listing"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "preference" ADD CONSTRAINT "FK_51fe73ffef034575b41bc43ffea" FOREIGN KEY ("listingId") REFERENCES "listing"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
       undefined
     )
     await queryRunner.query(
-      `ALTER TABLE "attachment" ADD CONSTRAINT "FK_1bf458ab86356614a560142a345" FOREIGN KEY ("listingId") REFERENCES "listing"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "attachment" ADD CONSTRAINT "FK_1bf458ab86356614a560142a345" FOREIGN KEY ("listingId") REFERENCES "listing"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
       undefined
     )
   }

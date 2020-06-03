@@ -10,23 +10,21 @@ import { Preference } from "./entity/Preference"
 
 const skipped = ["id", "units", "attachments", "preferences"]
 const types = { units: Unit, attachments: Attachment, preferences: Preference }
-let l
+
 createConnection()
   // eslint-disable-next-line @typescript-eslint/require-await
-  .then(async connection => {
+  .then(async (connection) => {
     dotenv.config({ path: ".env" })
     const listings = (await listingsLoader("listings")) as OldListing[]
 
     for await (const listing of listings) {
-      l = new Listing()
+      const l = new Listing()
       const entities = {}
       for await (const key of Object.keys(listing)) {
         if (!skipped.includes(key)) {
           l[key] = listing[key]
-        } else {
-          if (key != "id") {
-            entities[key] = listing[key]
-          }
+        } else if (key !== "id") {
+          entities[key] = listing[key]
         }
       }
       await connection.manager.save(l)
@@ -35,7 +33,7 @@ createConnection()
         for await (let value of entities[key]) {
           if (value) {
             if (value instanceof Array) {
-              value = (value as any).map(obj => {
+              value = (value as any).map((obj) => {
                 delete obj["id"]
                 obj["listing"] = l.id
                 return obj
@@ -45,15 +43,10 @@ createConnection()
               value["listing"] = l.id
             }
 
-            await connection
-              .createQueryBuilder()
-              .insert()
-              .into(types[key])
-              .values(value)
-              .execute()
+            await connection.createQueryBuilder().insert().into(types[key]).values(value).execute()
           }
         }
       }
     }
   })
-  .catch(error => console.log("TypeORM connection error: ", error))
+  .catch((error) => console.log("TypeORM connection error: ", error))

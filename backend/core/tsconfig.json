@@ -12,6 +12,10 @@
     "incremental": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": false
   },
   "exclude": ["node_modules", "dist"]
 }
