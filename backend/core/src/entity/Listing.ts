@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "typeorm"
 import { Unit } from "./Unit"
 import { Preference } from "./Preference"
 import { Attachment } from "./Attachment"
 import { Address, UnitsSummarized } from "@bloom-housing/core"
 
 @Entity()
-class Listing {
+class Listing extends BaseEntity {
   @OneToMany((type) => Preference, (preference) => preference.listing)
   preferences: Preference[]
   @OneToMany((type) => Unit, (unit) => unit.listing)
