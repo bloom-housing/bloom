@@ -59,6 +59,13 @@ const Layout = (props) => (
           </a>
         </p>
       </FooterSection>
+      <FooterSection>
+        <img
+          className="h-16 w-16"
+          src="/images/eho-logo-white.svg"
+          alt="Equal Housing Opportunity Logo"
+        />
+      </FooterSection>
       <FooterNav copyright={t("footer.copyRight")}>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScFVVvd7FDa7puUN4iH2SBl_KAWBu8dRTXNuLIt8Ff9iYF3uA/viewform?usp=sf_link">
           {t("footer.giveFeedback")}

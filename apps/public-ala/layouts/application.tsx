@@ -48,7 +48,7 @@ const Layout = (props) => (
     <main>{props.children}</main>
     <SiteFooter>
       <FooterSection>
-        <img src="/images/Alameda-County-seal.png" alt="Alameda County" />
+        <img src="/images/alameda-logo-white.svg" alt="Alameda County" />
       </FooterSection>
       <FooterSection>
         <p>
@@ -78,6 +78,13 @@ const Layout = (props) => (
             City of San José Housing Portal
           </a>
         </p>
+      </FooterSection>
+      <FooterSection>
+        <img
+          className="h-16 w-16"
+          src="/images/eho-logo-white.svg"
+          alt="Equal Housing Opportunity Logo"
+        />
       </FooterSection>
       <FooterNav copyright={t("footer.copyRight")}>
         <a

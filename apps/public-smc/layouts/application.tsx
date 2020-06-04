@@ -81,6 +81,13 @@ const Layout = (props) => {
             </a>
           </p>
         </FooterSection>
+        <FooterSection>
+          <img
+            className="h-16 w-16"
+            src="/images/eho-logo-white.svg"
+            alt="Equal Housing Opportunity Logo"
+          />
+        </FooterSection>
         <FooterNav copyright={t("footer.copyRight")}>
           <a href="https://www.surveymonkey.com/r/2QLBYML" target="_blank">
             {t("footer.giveFeedback")}
