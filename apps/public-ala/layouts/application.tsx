@@ -1,8 +1,15 @@
 import * as React from "react"
 import Head from "next/head"
-import { t, LocalizedLink, SiteHeader } from "@bloom-housing/ui-components"
-import AlamedaFooter from "../components/AlamedaFooter"
 import SVG from "react-inlinesvg"
+import {
+  ExygyFooter,
+  FooterNav,
+  FooterSection,
+  LocalizedLink,
+  SiteFooter,
+  SiteHeader,
+  t,
+} from "@bloom-housing/ui-components"
 
 const Layout = (props) => (
   <div>
@@ -39,7 +46,58 @@ const Layout = (props) => (
       )}
     </SiteHeader>
     <main>{props.children}</main>
-    <AlamedaFooter />
+    <SiteFooter>
+      <FooterSection>
+        <img src="/images/Alameda-County-seal.png" alt="Alameda County" />
+      </FooterSection>
+      <FooterSection>
+        <p>
+          {t("footer.header")}
+          <br />
+          <a href={t("footer.headerUrl")} target="_blank">
+            {t("footer.headerLink")}
+          </a>
+        </p>
+
+        <p className="mt-10 text-sm">{t("footer.forListingQuestions")}</p>
+
+        <p className="text-sm">{t("footer.forGeneralInquiries")}</p>
+
+        <p className="mt-10 text-sm">
+          {t("footer.forAdditionalOpportunities")}
+          <br />
+          <a href={t("footer.SFHousingUrl")} target="_blank">
+            {t("footer.SFHousingPortal")}
+          </a>
+          <br />
+          <a href="https://smc.housingbayarea.org/" target="_blank">
+            San Mateo County Housing Portal
+          </a>
+          <br />
+          <a href="https://housing.sanjoseca.gov/" target="_blank">
+            City of San José Housing Portal
+          </a>
+        </p>
+      </FooterSection>
+      <FooterNav copyright={t("footer.copyRight")}>
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLScr7JuVwiNW8q-ifFUWTFSWqEyV5ndA08jAhJQSlQ4ETrnl9w/viewform?usp=sf_link"
+          target="_blank"
+        >
+          {t("footer.giveFeedback")}
+        </a>
+        <a href="mailto:achousingportal@acgov.org">{t("footer.contact")}</a>
+        <a href="https://www.acgov.org/government/legal.htm" target="_blank">
+          {t("footer.disclaimer")}
+        </a>
+        <a href="https://www.acgov.org/government/legal.htm" target="_blank">
+          {t("footer.privacyPolicy")}
+        </a>
+      </FooterNav>
+      <FooterSection className="bg-black" small>
+        <ExygyFooter />
+      </FooterSection>
+    </SiteFooter>
     <SVG src="/images/icons.svg" />
   </div>
 )

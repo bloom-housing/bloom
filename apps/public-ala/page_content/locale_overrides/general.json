@@ -1,4 +1,19 @@
 {
+  "footer": {
+    "copyRight": "Alameda County © 2020 • All Rights Reserved",
+    "disclaimer": "Disclaimer",
+    "getAssistance": "Get Assistance",
+    "giveFeedback": "Give Feedback",
+    "header": "Alameda County Housing Portal is a project of the",
+    "headerUrl": "https://www.acgov.org/cda/hcd/",
+    "headerLink": "Alameda County - Housing and Community Development (HCD) Department",
+    "forAdditionalOpportunities": "For additional Bay Area opportunities, please visit:",
+    "forGeneralInquiries": "For general program inquiries, you may call the Alameda County HCD at 510-670-5404.",
+    "forListingQuestions": "For listing and application questions, please contact the Property Agent displayed on each listing.",
+    "privacyPolicy": "Privacy Policy",
+    "SFHousingPortal": "San Francisco Housing Portal",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
   "nav": {
     "siteTitle": "Alameda County Housing Portal"
   },
