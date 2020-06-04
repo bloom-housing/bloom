@@ -13,11 +13,13 @@ A basic setup can be accomplished by:
 3. Creating a GA tag in the new GTM container that is linked to the GA property with the correct GA tag
 
 4. Setting up triggers on the GA tag in GTM for both Page Views and History Changes.
-    * NOTE: without the History Change trigger set up, only some pages will be captured, since react / next.js do not do a full page load to trigger the GTM page view event in all cases.
+
+   - NOTE: without the History Change trigger set up, only some pages will be captured, since react / next.js do not do a full page load to trigger the GTM page view event in all cases.
 
 5. Setting up GTM and GA events for any external links that need to be tracked, e.g. the download of a PDF application or referral to an external website.
+   - See [this GTM/GA support article](https://support.google.com/tagmanager/answer/6106716) for details on setting up external click events.
 
-## GTM Tag Setup in Environment Variables / Code 
+## GTM Tag Setup in Environment Variables / Code
 
 Once all of the GTM and GA provisioning and configuration has been completed, the code-side changes should be as simple as setting the GTM_KEY environment variable to the key from the container created above. This should be set in .env for a local dev environment (see `.env.template`), or in netlify.toml for those apps being deployed via Netlify.
 
