@@ -1,6 +1,7 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+const path = require("path")
 const withTM = require("next-transpile-modules")(["@bloom-housing"])
 const withSass = require("@zeit/next-sass")
 const withCSS = require("@zeit/next-css")
@@ -47,6 +48,10 @@ module.exports = withCSS(
           },
           sassLoaderOptions: {
             prependData: tailwindVars,
+          },
+          webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+            config.resolve.alias.typeorm = path.resolve(__dirname, "src/typeorm-model-shim")
+            return config
           },
           // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
           async exportPathMap() {
