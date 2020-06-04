@@ -2,8 +2,9 @@
 1.3 - Contact
 Primary applicant contact information
 */
+import Link from "next/link"
 import Router from "next/router"
-import { Button, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import PageContent from "./name.mdx"
 import { useForm } from "react-hook-form"
@@ -23,19 +24,15 @@ export default () => {
   const onSubmit = (data) => {
     console.log(data)
 
-    const submission = new Step1(conductor)
-    submission.save(data)
+    //    const submission = new Step1(conductor)
+    //    submission.save(data)
 
     Router.push("/applications/contact/alternate").then(() => window.scrollTo(0, 0))
   }
 
-  const cardClasses = ["p-10", "bg-white", "mb-10", "border", "border-gray-450", "rounded-lg"].join(
-    " "
-  )
-
   return (
     <FormsLayout>
-      <article className={cardClasses}>
+      <FormCard>
         <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
 
         <ProgressNav
@@ -44,15 +41,23 @@ export default () => {
           totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
-      </article>
+      </FormCard>
 
-      <article className={cardClasses}>
-        <div className="markdown">
+      <FormCard>
+        <p className="text-bold">
+          <strong>
+            <Link href="/applications/contact/name">Back</Link>
+          </strong>
+        </p>
+
+        <h2 className="form-card__title is-borderless">Contact Info</h2>
+
+        <div className="markdown mt-6">
           <PageContent />
         </div>
 
-        <form id="applications-new" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (BUTTONS)
+        <form id="applications-address" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+          (FORM)
           <div className="text-center mt-6">
             <Button
               filled={true}
@@ -64,7 +69,7 @@ export default () => {
             </Button>
           </div>
         </form>
-      </article>
+      </FormCard>
     </FormsLayout>
   )
 }

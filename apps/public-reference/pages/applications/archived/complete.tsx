@@ -1,9 +1,9 @@
 import Router from "next/router"
 import { Button, FormCard, onClientSide, ProgressNav } from "@bloom-housing/ui-components"
-import FormsLayout from "../../layouts/forms"
-import PageContent from "../../page_content/applications/complete.mdx"
-import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../lib/ApplicationConductor"
+import FormsLayout from "../../../layouts/forms"
+import PageContent from "../../../page_content/applications/complete.mdx"
+import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
+import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext } from "react"
 
 export default () => {
@@ -60,7 +60,7 @@ export default () => {
           <Button
             onClick={() => {
               conductor.reset()
-              Router.push("/applications/new")
+              Router.push("/applications/archived/new")
             }}
           >
             Return to Start
