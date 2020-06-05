@@ -2,7 +2,17 @@ import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "../entity/User"
 import { Repository } from "typeorm"
-import { compare, hash } from "bcrypt"
+import { scrypt, randomBytes } from "crypto"
+
+// Length of hashed key, in bytes
+const SCRYPT_KEYLEN = 64
+
+const hashPassword = (password: string, salt: Buffer) =>
+  new Promise((resolve, reject) =>
+    scrypt(password, salt, SCRYPT_KEYLEN, (err, key) =>
+      err ? reject(err) : resolve(key.toString("hex"))
+    )
+  )
 
 @Injectable()
 export class UserService {
@@ -23,12 +33,15 @@ export class UserService {
   }
 
   public async storeUserPassword(user: User, password: string) {
-    const passwordHash = await hash(password, 10)
-    await this.repo.update({ passwordHash }, user)
+    const salt = randomBytes(16)
+    const passwordHash = await hashPassword(password, salt)
+    await this.repo.update({ passwordHash: `${salt.toString("hex")}#${passwordHash}` }, user)
   }
 
   public async verifyUserPassword(user: User, password: string) {
     const userWithPassword = await this.getUserWithPassword(user)
-    return compare(password, userWithPassword.passwordHash)
+    const [salt, savedPasswordHash] = userWithPassword.passwordHash.split("#")
+    const verifyPasswordHash = await hashPassword(password, Buffer.from(salt, "hex"))
+    return savedPasswordHash === verifyPasswordHash
   }
 }
