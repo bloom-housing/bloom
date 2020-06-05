@@ -30,6 +30,7 @@
     "node-polyglot": "^2.4.0",
     "node-sass": "^4.14.1",
     "react": "16.13.1",
+    "react-accessible-accordion": "3.0.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^5.2.0",
     "react-inlinesvg": "^1.2.0"
