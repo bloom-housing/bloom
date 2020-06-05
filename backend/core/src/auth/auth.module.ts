@@ -7,6 +7,8 @@ import { AuthController } from "./auth.controller"
 import { PassportModule } from "@nestjs/passport"
 import { secretKey } from "./constants"
 import { AuthService } from "./auth.service"
+import { TypeOrmModule } from "@nestjs/typeorm"
+import { RevokedToken } from "../entity/RevokedToken"
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { AuthService } from "./auth.service"
         expiresIn: "10m",
       },
     }),
+    TypeOrmModule.forFeature([RevokedToken]),
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService],
   controllers: [AuthController],

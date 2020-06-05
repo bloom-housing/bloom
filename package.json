@@ -30,7 +30,7 @@
     "test:services:listings": "cd services/listings && yarn test",
     "test:backend:core": "cd backend/core && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\"",
-    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js' --ignore-pattern 'node_modules' --ignore-pattern 'storybook-static/' --ignore-pattern '.next/' --ignore-pattern 'dist/'"
+    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.14",
