@@ -1230,28 +1230,28 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/core@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.1.1.tgz#177449d1a916820d2034c2a40ec82343a4842538"
-  integrity sha512-dfM83AiqHHypHxbWd0jS7ao/d70DEKXQnwUbjtM3uz2ED8gNdw0uaGF0NLo575Jzdxyvwk/lEyXp3iov9JD88A==
+"@bloom-housing/core@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/core/-/core-0.2.0.tgz#bbf2672d8fa63fe536956112bcd77d220cd9e7f6"
+  integrity sha512-Q1DVpfWLq2gZtWlHigkzDP5Or1AzVAsp6nJ0YfY/tAw2T+/z/uHSRDBxFmx3dRf8Ydcmn1KrN06Zgf5jri6T2g==
   dependencies:
     "@types/node" "^12.12.39"
     "@types/node-polyglot" "^0.4.34"
     nanoid "^3.1.7"
 
-"@bloom-housing/ui-components@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.1.1.tgz#ff98d848121a5af0f8d052f3024d133baf12f16b"
-  integrity sha512-FPg0Cqs6u0CFK231glcsKFiv7dIfrI7DXxeLW3vuSavKm2qqGihxvH6OnDUlnM/qM0RGd1l+ubtI6f+SxJN4Dg==
+"@bloom-housing/ui-components@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.2.1.tgz#1134ac79bd2bf8df33c493219265acdfa492e1e3"
+  integrity sha512-rE5xf2PXbRzr7P0xvzvMMVpVCviueHi3kR68N0aAqy26oYF6Dx45pBI5H4wQOhzNCZb+6RWSXVNXbiMYduFEuA==
   dependencies:
-    "@bloom-housing/core" "^0.1.1"
+    "@bloom-housing/core" "^0.2.0"
     "@types/node" "^12.12.39"
     "@types/node-polyglot" "^0.4.34"
     "@types/react-dom" "^16.9.5"
     bulma "^0.7.5"
     nanoid "^3.1.7"
-    react "^16.12.0"
-    react-dom "^16.12.0"
+    react "^16.13.1"
+    react-dom "^16.13.1"
     react-map-gl "^5.2"
     tailwindcss "^1.3"
 
@@ -15109,6 +15109,16 @@ react-dom@16.12.0, react-dom@^16.12.0, react-dom@^16.8.3:
     prop-types "^15.6.2"
     scheduler "^0.18.0"
 
+react-dom@^16.13.1:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
+  integrity sha512-81PIMmVLnCNLO/fFOQxdQkvEq/+Hfpv24XNJfpyZhTRfO0QcmQIF/PgCa1zCOj2w1hrn12MFLyaJ/G0+Mxtfag==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
+
 react-draggable@^4.0.3:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-4.2.0.tgz#40cc5209082ca7d613104bf6daf31372cc0e1114"
@@ -15306,6 +15316,15 @@ react@16.12.0, react@^16.12.0, react@^16.8.3:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.12.0.tgz#0c0a9c6a142429e3614834d5a778e18aa78a0b83"
   integrity sha512-fglqy3k5E+81pA8s+7K0/T3DBCF0ZDOher1elBFzF7O6arXJgzyu/FW+COxFvAWXJoJN9KIZbT2LXlukwphYTA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+
+react@^16.13.1:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
+  integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -16163,6 +16182,14 @@ scheduler@^0.18.0:
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.18.0.tgz#5901ad6659bc1d8f3fdaf36eb7a67b0d6746b1c4"
   integrity sha512-agTSHR1Nbfi6ulI0kYNK0203joW2Y5W4po4l+v03tOoiJKpTBbxpNhWDvqc/4IcOw+KLmSiQLTasZ4cab2/UWQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.19.1:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
+  integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
