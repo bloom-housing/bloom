@@ -2693,6 +2693,11 @@
     tslib "2.0.0"
     uuid "8.0.0"
 
+"@nestjs/mapped-types@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-0.0.5.tgz#0c3462de4125eea0e85e3a520f0de4e7e8dcfa40"
+  integrity sha512-QjZCSMHHy8IW4UUTS49QJQ0NrA8MHv6XevNrPLJwh4n3lN7wY9aSRwd1+cBIUDBXEHRKngcYdPtC4oG0fimw+A==
+
 "@nestjs/platform-express@^7.1.0":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-7.1.3.tgz#0af9399082995ce8eae409593b9f1aa649e16ca1"
@@ -2712,6 +2717,15 @@
     "@angular-devkit/core" "9.1.7"
     "@angular-devkit/schematics" "9.1.7"
     fs-extra "9.0.0"
+
+"@nestjs/swagger@^4.5.9":
+  version "4.5.9"
+  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-4.5.9.tgz#b837dc1321d10d3e47ee45955c8158033b0bd4ee"
+  integrity sha512-pozVi8ClZdjbxAISlvSq3X2KPTawsgxd46XN2GrtEe1PIImRs0WBYEHxL9IBo+7KjipazJjFI4mt/xwVj/895A==
+  dependencies:
+    "@nestjs/mapped-types" "0.0.5"
+    lodash "4.17.15"
+    path-to-regexp "3.2.0"
 
 "@nestjs/testing@^7.1.0":
   version "7.1.3"
@@ -17092,6 +17106,18 @@ svgo@^1.0.0, svgo@^1.2.2:
     stable "^0.1.8"
     unquote "~1.1.1"
     util.promisify "~1.0.0"
+
+swagger-ui-dist@^3.18.1:
+  version "3.26.0"
+  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.26.0.tgz#6dccd492bf9c97fe508d8438c754991277a6164f"
+  integrity sha512-z58RlRUk//dTg6jwgFBVv0JNyfDpoRNUgEyoA9cRheNvUuklMTKMY3hgDfXSZpmnGgZEG8iA/SAZGE56hvRuug==
+
+swagger-ui-express@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-4.1.4.tgz#8b814ad998b850a1cf90e71808d6d0a8a8daf742"
+  integrity sha512-Ea96ecpC+Iq9GUqkeD/LFR32xSs8gYqmTW1gXCuKg81c26WV6ZC2FsBSPVExQP6WkyUuz5HEiR0sEv/HCC343g==
+  dependencies:
+    swagger-ui-dist "^3.18.1"
 
 symbol-observable@1.2.0, symbol-observable@^1.1.0, symbol-observable@^1.2.0:
   version "1.2.0"
