@@ -1255,6 +1255,25 @@
     react-map-gl "^5.2"
     tailwindcss "^1.3"
 
+"@bloom-housing/ui-components@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.2.2.tgz#53286362436f082a59ca06e81247aa1fd84135b1"
+  integrity sha512-yWa1xwCCGhqn4IG45xOC3mGHI9WYyuzEfrk2zgmMdl8t/Dv2FasI9b2JXbCLnmysNhV/gbccTtMuGFyTqAp/Ng==
+  dependencies:
+    "@bloom-housing/core" "^0.2.0"
+    "@types/node" "^12.12.39"
+    "@types/node-polyglot" "^0.4.34"
+    "@types/react-dom" "^16.9.5"
+    bulma "^0.7.5"
+    nanoid "^3.1.7"
+    react "^16.13.1"
+    react-accessible-accordion "^3.0.0"
+    react-dom "^16.13.1"
+    react-inlinesvg "^1.2.0"
+    react-map-gl "^5.2"
+    react-media "^1.10.0"
+    tailwindcss "^1.3"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -15028,7 +15047,7 @@ raw-loader@^3.1.0:
     loader-utils "^1.1.0"
     schema-utils "^2.0.1"
 
-react-accessible-accordion@3.0.1, react-accessible-accordion@^3.0.0:
+react-accessible-accordion@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-accessible-accordion/-/react-accessible-accordion-3.0.1.tgz#8f3b08c712f4d5e526fad4c55c3d70fc3b68cbd5"
   integrity sha512-2OZY6PWVOTYjVRQ5vnzVfvSRvapH1fYHNE6rG0S64cCatf+IOovokZEa4Xzmdl69ebrYO2HU3h8yLlEk9LqwPA==
