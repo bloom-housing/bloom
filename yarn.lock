@@ -1889,22 +1889,6 @@
     "@types/node-polyglot" "^0.4.34"
     nanoid "^3.1.7"
 
-"@bloom-housing/ui-components@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.2.1.tgz#1134ac79bd2bf8df33c493219265acdfa492e1e3"
-  integrity sha512-rE5xf2PXbRzr7P0xvzvMMVpVCviueHi3kR68N0aAqy26oYF6Dx45pBI5H4wQOhzNCZb+6RWSXVNXbiMYduFEuA==
-  dependencies:
-    "@bloom-housing/core" "^0.2.0"
-    "@types/node" "^12.12.39"
-    "@types/node-polyglot" "^0.4.34"
-    "@types/react-dom" "^16.9.5"
-    bulma "^0.7.5"
-    nanoid "^3.1.7"
-    react "^16.13.1"
-    react-dom "^16.13.1"
-    react-map-gl "^5.2"
-    tailwindcss "^1.3"
-
 "@bloom-housing/ui-components@^0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-0.2.2.tgz#53286362436f082a59ca06e81247aa1fd84135b1"
@@ -5308,7 +5292,7 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zeit/next-css@1.0.1", "@zeit/next-css@^1.0.1":
+"@zeit/next-css@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@zeit/next-css/-/next-css-1.0.1.tgz#4f784e841e7ca1b21b3468a902e2c1fa95a3e75c"
   integrity sha512-yfHPRy/ne/5SddVClsoy+fpU7e0Cs1gkWA67/wm2uIu+9rznF45yQLxHEt5dPGF3h6IiIh7ZtIgA8VV8YKq87A==
