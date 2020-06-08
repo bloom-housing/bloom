@@ -1,16 +1,15 @@
 import Layout from "../layouts/application"
 import { PageHeader, t } from "@bloom-housing/ui-components"
-import "./AdditionalResources.scss"
 
 const Card = (props) => {
   return (
-    <div className="info-card">
-      <h4 className="info-card__title">
+    <div className="info-card bg-primary-lighter">
+      <h4 className="info-card__title normal-case text-base tracking-normal">
         <a href={props.link} target="_blank">
           {props.title}
         </a>
       </h4>
-      {props.children}
+      <div className="text-sm">{props.children}</div>
     </div>
   )
 }
@@ -26,12 +25,16 @@ export default () => {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row">
           <div className="flex-1">
-            <div className="content">
-              <section>
-                <h2 className="primary">{t("additionalResources.rentals")}</h2>
-                <h3>{t("additionalResources.rentalsDescription")}</h3>
-                <ul className="flex-none md:flex">
-                  <li className="flex-1">
+            <div className="content py-8 px-4">
+              <section className="info-card-grid">
+                <header className="info-card-grid__header">
+                  <h2 className="text-caps-underline">{t("additionalResources.rentals")}</h2>
+                  <h3 className="text-base font-serif font-normal mb-6">
+                    {t("additionalResources.rentalsDescription")}
+                  </h3>
+                 </header>
+                <ul className="flex-none md:flex mb-6">
+                  <li className="flex-1 md:pr-4">
                     <Card
                       title={t("additionalResources.card.SMCHousingSearch.title")}
                       link={t("additionalResources.card.SMCHousingSearch.link")}
@@ -51,11 +54,15 @@ export default () => {
                   </li>
                 </ul>
               </section>
-              <section>
-                <h2 className="primary">{t("additionalResources.sharedHousing")}</h2>
-                <h3>{t("additionalResources.sharedHousingDescription")}</h3>
-                <ul className="flex-none md:flex">
-                  <li className="flex-1 md:w-1/2 md:flex-none">
+              <section className="info-card-grid">
+                <header className="info-card-grid__header">
+                  <h2 className="text-caps-underline">{t("additionalResources.sharedHousing")}</h2>
+                  <h3 className="text-base font-serif font-normal mb-6">
+                    {t("additionalResources.sharedHousingDescription")}
+                  </h3>
+                </header>
+                <ul className="flex-none md:flex mb-6">
+                  <li className="flex-1 md:w-1/2 md:pr-4 md:flex-none">
                     <Card
                       title={t("additionalResources.card.HIPHousing.title")}
                       link={t("additionalResources.card.HIPHousing.link")}
@@ -66,12 +73,16 @@ export default () => {
                   </li>
                 </ul>
               </section>
-              <section>
-                <h2 className="primary">{t("additionalResources.otherResources")}</h2>
-                <h3>{t("additionalResources.otherResourcesDescription1")}</h3>
-                <h3>{t("additionalResources.otherResourcesDescription2")}</h3>
+              <section className="info-card-grid">
+                <header className="info-card-grid__header">
+                  <h2 className="text-caps-underline">{t("additionalResources.otherResources")}</h2>
+                  <h3 className="text-base font-serif font-normal mb-6">
+                    {t("additionalResources.otherResourcesDescription1")}
+                    {t("additionalResources.otherResourcesDescription2")}
+                  </h3>
+                </header>
                 <ul className="flex-none md:flex">
-                  <li className="flex-1">
+                  <li className="flex-1 md:pr-4">
                     <Card
                       title={t("additionalResources.card.HAotCoSM.title")}
                       link={t("additionalResources.card.HAotCoSM.link")}
@@ -91,7 +102,7 @@ export default () => {
                   </li>
                 </ul>
                 <ul className="flex-none md:flex">
-                  <li className="flex-1">
+                  <li className="flex-1 md:pr-4">
                     <Card
                       title={t("additionalResources.card.211bayarea.title")}
                       link={t("additionalResources.card.211bayarea.link")}
@@ -113,15 +124,17 @@ export default () => {
               </section>
             </div>
           </div>
-          <aside className="sidebar">
+          <aside className="flex flex-col w-full p-8 md:w-1/3 shadow-left">
             <div>
-              <h2 className="primary">{t("additionalResources.contact")}</h2>
-              <h3 className="mb-4 font-bold">{t("additionalResources.forQuestions")}</h3>
-              <h3>{t("additionalResources.SMCDOH")}</h3>
+              <h2 className="text-caps-underline">{t("additionalResources.contact")}</h2>
+              <h3 className="text-base font-sans mb-4 font-bold">
+                {t("additionalResources.forQuestions")}
+              </h3>
+              <h3 className="text-base font-sans">{t("additionalResources.SMCDOH")}</h3>
               <a href={"mailto:" + t("additionalResources.smchousingEmail")}>
                 {t("additionalResources.smchousingEmail")}
               </a>
-              <h3 className="mt-4">{t("additionalResources.FCCD")}</h3>
+              <h3 className="text-base font-sans mt-4">{t("additionalResources.FCCD")}</h3>
               <a href={"mailto:" + t("additionalResources.FCCDEmail")}>
                 {t("additionalResources.FCCDEmail")}
               </a>
