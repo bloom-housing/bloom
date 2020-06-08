@@ -64,7 +64,6 @@ const Layout = (props) => {
           </p>
           <p className="mt-8 text-tiny">{t("footer.forListingQuestions")}</p>
           <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
-
           <p className="mt-8 text-tiny">
             {t("footer.forAdditionalOpportunities")}
             <br />

@@ -58,12 +58,9 @@ const Layout = (props) => (
             {t("footer.headerLink")}
           </a>
         </p>
-
-        <p className="mt-10 text-sm">{t("footer.forListingQuestions")}</p>
-
-        <p className="text-sm">{t("footer.forGeneralInquiries")}</p>
-
-        <p className="mt-10 text-sm">
+        <p className="mt-10 text-tiny">{t("footer.forListingQuestions")}</p>
+        <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
+        <p className="mt-10 text-tiny">
           {t("footer.forAdditionalOpportunities")}
           <br />
           <a href={t("footer.SFHousingUrl")} target="_blank">
