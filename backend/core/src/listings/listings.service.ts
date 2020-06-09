@@ -1,38 +1,22 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { ListingEntity } from "../entity/listing.entity"
 import { amiCharts } from "../lib/ami_charts"
 import { transformUnits } from "../lib/unit_transformations"
 import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
-import { ApiProperty } from "@nestjs/swagger"
-
-export class ListingsQueryParams {
-  @ApiProperty({ required: false })
-  jsonpath?: string
-}
+import { ListingsFindAllQueryParams, ListingsFindAllResponse } from "./listings.dto"
+import { ListingEntity } from "../entity/listing.entity"
 
 export enum ListingsResponseStatus {
   ok = "ok",
-}
-
-export class ListingsFindAllResponse {
-  @ApiProperty({ enum: ListingsResponseStatus })
-  status: ListingsResponseStatus
-
-  @ApiProperty({ isArray: true, type: ListingEntity })
-  listings: ListingEntity[]
-
-  @ApiProperty({ isArray: true })
-  amiCharts: any
 }
 
 @Injectable()
 export class ListingsService {
   constructor(@InjectRepository(ListingEntity) private readonly repo: Repository<ListingEntity>) {}
 
-  public async findAll(options?: ListingsQueryParams): Promise<ListingsFindAllResponse> {
+  public async findAll(options?: ListingsFindAllQueryParams): Promise<ListingsFindAllResponse> {
     let listings = await this.repo.find({ relations: ["units", "attachments", "preferences"] })
 
     if (options?.jsonpath) {
