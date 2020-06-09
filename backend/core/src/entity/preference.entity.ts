@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity } from "typeorm"
 import { ListingEntity } from "./listing.entity"
-import { PreferenceLink } from "@bloom-housing/core"
+import { Preference, PreferenceLink } from "@bloom-housing/core"
 
 @Entity()
-class PreferenceEntity {
+class PreferenceEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ type: "text", nullable: true })

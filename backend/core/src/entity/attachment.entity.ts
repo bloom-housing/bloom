@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity } from "typeorm"
 import { ListingEntity } from "./listing.entity"
+import { Attachment } from "@bloom-housing/core"
 
 enum AttachmentType {
   ApplicationDownload = 1,
@@ -7,7 +8,7 @@ enum AttachmentType {
 }
 
 @Entity()
-class AttachmentEntity {
+class AttachmentEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ type: "text", nullable: true })

@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity } from "typeorm"
 import { ListingEntity } from "./listing.entity"
+import { Unit } from "@bloom-housing/core"
 
 @Entity()
-class UnitEntity {
+class UnitEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ nullable: true, type: "text" })
@@ -50,6 +51,8 @@ class UnitEntity {
     onUpdate: "CASCADE",
   })
   listing: ListingEntity
+  @Column({ nullable: false })
+  listingId: number
 }
 
 export { UnitEntity as default, UnitEntity }
