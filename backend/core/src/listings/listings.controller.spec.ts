@@ -2,14 +2,14 @@ import "reflect-metadata"
 import { Test, TestingModule } from "@nestjs/testing"
 import { ListingsController } from "./listings.controller"
 import { ListingsService } from "./listings.service"
-import { Listing } from "../entity/Listing"
-import { Unit } from "../entity/Unit"
+import { ListingEntity } from "../entity/listing.entity"
+import { UnitEntity } from "../entity/unit.entity"
 import { TypeOrmModule, getRepositoryToken } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 
 describe("ListingsController", () => {
   let listingsController: ListingsController
-  let repo: Repository<Listing>
+  let repo: Repository<ListingEntity>
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -17,7 +17,7 @@ describe("ListingsController", () => {
         ListingsService,
         {
           // how you provide the injection token in a test instance
-          provide: getRepositoryToken(Listing),
+          provide: getRepositoryToken(ListingEntity),
           // as a class value, Repository needs no generics
           useClass: Repository,
         },
@@ -26,12 +26,12 @@ describe("ListingsController", () => {
     }).compile()
 
     listingsController = app.get<ListingsController>(ListingsController)
-    repo = app.get<Repository<Listing>>(getRepositoryToken(Listing))
+    repo = app.get<Repository<ListingEntity>>(getRepositoryToken(ListingEntity))
   })
 
   describe("root", () => {
     it('should return "Hello World!"', async () => {
-      const testListing: Listing = {
+      const testListing: ListingEntity = {
         depositMin: "",
         acceptingApplicationsAtLeasingAgent: false,
         acceptingApplicationsByPoBox: false,

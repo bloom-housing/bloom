@@ -5,10 +5,10 @@ import {
   MinMaxCurrency,
   AmiChartItem,
 } from "@bloom-housing/core"
-import { Unit } from "../entity/Unit"
+import { UnitEntity } from "../entity/unit.entity"
 
 type AnyDict = { [key: string]: any }
-type Units = Unit[]
+type Units = UnitEntity[]
 
 const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -122,7 +122,7 @@ const summarizeUnits = (
   const summaries = unitTypes.map(
     (unitType: string): UnitSummary => {
       const summary = {} as UnitSummary
-      const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
+      const unitsByType = units.filter((unit: UnitEntity) => unit.unitType == unitType)
       const finalSummary = Array.from(unitsByType).reduce((summary, unit) => {
         summary.unitType = unitType
         if (!summary.totalAvailable) {
@@ -171,7 +171,9 @@ const summarizeUnits = (
 const summarizeReservedTypes = (units: Units, reservedTypes: string[], unitTypes: string[]) => {
   return reservedTypes
     .map((reservedType: string) => {
-      const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
+      const unitsByReservedType = units.filter(
+        (unit: UnitEntity) => unit.reservedType == reservedType
+      )
       return {
         reservedType: reservedType,
         byUnitType: summarizeUnits(unitsByReservedType, unitTypes),
@@ -187,9 +189,9 @@ const summarizeByAmi = (
   unitTypes: string[]
 ) => {
   return amiPercentages.map((percent: string) => {
-    const unitsByAmiPercentage = units.filter((unit: Unit) => unit.amiPercentage == percent)
+    const unitsByAmiPercentage = units.filter((unit: UnitEntity) => unit.amiPercentage == percent)
     const nonReservedUnitsByAmiPercentage = unitsByAmiPercentage.filter(
-      (unit: Unit) => unit.reservedType == null
+      (unit: UnitEntity) => unit.reservedType == null
     )
     return {
       percent: percent,
@@ -199,7 +201,7 @@ const summarizeByAmi = (
   })
 }
 
-export const transformUnits = (units: Unit[], amiCharts: any): UnitsSummarized => {
+export const transformUnits = (units: UnitEntity[], amiCharts: any): UnitsSummarized => {
   const data = {} as UnitsSummarized
   data.unitTypes = Array.from(
     new Set(units.map((unit) => unit.unitType).filter((item) => item != null))
@@ -213,7 +215,7 @@ export const transformUnits = (units: Unit[], amiCharts: any): UnitsSummarized =
   data.amiPercentages = Array.from(
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
-  const nonReservedUnits = units.filter((unit: Unit) => unit.reservedType == null)
+  const nonReservedUnits = units.filter((unit: UnitEntity) => unit.reservedType == null)
   data.byUnitType = summarizeUnits(units, data.unitTypes)
   data.byNonReservedUnitType = summarizeUnits(nonReservedUnits, data.unitTypes)
   data.byReservedType = summarizeReservedTypes(units, data.reservedTypes, data.unitTypes)

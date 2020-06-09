@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { Listing } from "../entity/Listing"
+import { ListingEntity } from "../entity/listing.entity"
 import { amiCharts } from "../lib/ami_charts"
 import { transformUnits } from "../lib/unit_transformations"
 import { listingUrlSlug } from "../lib/url_helper"
@@ -21,8 +21,8 @@ export class ListingsFindAllResponse {
   @ApiProperty({ enum: ListingsResponseStatus })
   status: ListingsResponseStatus
 
-  @ApiProperty({ isArray: true, type: Listing })
-  listings: Listing[]
+  @ApiProperty({ isArray: true, type: ListingEntity })
+  listings: ListingEntity[]
 
   @ApiProperty({ isArray: true })
   amiCharts: any
@@ -30,7 +30,7 @@ export class ListingsFindAllResponse {
 
 @Injectable()
 export class ListingsService {
-  constructor(@InjectRepository(Listing) private readonly repo: Repository<Listing>) {}
+  constructor(@InjectRepository(ListingEntity) private readonly repo: Repository<ListingEntity>) {}
 
   public async findAll(options?: ListingsQueryParams): Promise<ListingsFindAllResponse> {
     let listings = await this.repo.find({ relations: ["units", "attachments", "preferences"] })

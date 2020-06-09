@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Listing } from "./Listing"
+import { ListingEntity } from "./listing.entity"
 import { PreferenceLink } from "@bloom-housing/core"
 
 @Entity()
-class Preference {
+class PreferenceEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ type: "text", nullable: true })
@@ -16,11 +16,11 @@ class Preference {
   description?: string
   @Column({ type: "jsonb", nullable: true })
   links?: PreferenceLink[]
-  @ManyToOne((type) => Listing, (listing) => listing.preferences, {
+  @ManyToOne((type) => ListingEntity, (listing) => listing.preferences, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  listing: Listing
+  listing: ListingEntity
 }
 
-export { Preference as default, Preference }
+export { PreferenceEntity as default, PreferenceEntity }

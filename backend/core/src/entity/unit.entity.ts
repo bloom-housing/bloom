@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Listing } from "./Listing"
+import { ListingEntity } from "./listing.entity"
 
 @Entity()
-class Unit {
+class UnitEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ nullable: true, type: "text" })
@@ -45,11 +45,11 @@ class Unit {
   amiChartId: number
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   monthlyRentAsPercentOfIncome: number
-  @ManyToOne((type) => Listing, (listing) => listing.units, {
+  @ManyToOne((type) => ListingEntity, (listing) => listing.units, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  listing: Listing
+  listing: ListingEntity
 }
 
-export { Unit as default, Unit }
+export { UnitEntity as default, UnitEntity }

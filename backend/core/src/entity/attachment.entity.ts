@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Listing } from "./Listing"
+import { ListingEntity } from "./listing.entity"
 
 enum AttachmentType {
   ApplicationDownload = 1,
@@ -7,7 +7,7 @@ enum AttachmentType {
 }
 
 @Entity()
-class Attachment {
+class AttachmentEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ type: "text", nullable: true })
@@ -20,11 +20,11 @@ class Attachment {
     nullable: true,
   })
   type: AttachmentType
-  @ManyToOne((type) => Listing, (listing) => listing.attachments, {
+  @ManyToOne((type) => ListingEntity, (listing) => listing.attachments, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  listing: Listing
+  listing: ListingEntity
 }
 
-export { Attachment as default, Attachment }
+export { AttachmentEntity as default, AttachmentEntity }

@@ -1,21 +1,21 @@
 import "reflect-metadata"
 import { createConnection } from "typeorm"
-import { Listing } from "./entity/Listing"
-import { Unit } from "./entity/Unit"
-import { Attachment } from "./entity/Attachment"
-import { Preference } from "./entity/Preference"
+import { ListingEntity } from "./entity/listing.entity"
+import { UnitEntity } from "./entity/unit.entity"
+import { AttachmentEntity } from "./entity/attachment.entity"
+import { PreferenceEntity } from "./entity/preference.entity"
 import dbOptions = require("../ormconfig")
 import listingsSeeds from "../seeds.json"
 
 const skipped = ["id", "units", "attachments", "preferences"]
-const types = { units: Unit, attachments: Attachment, preferences: Preference }
+const types = { units: UnitEntity, attachments: AttachmentEntity, preferences: PreferenceEntity }
 
 createConnection(dbOptions)
   .then(async (connection) => {
     const listings = listingsSeeds as any[]
 
     for await (const listing of listings) {
-      const l = new Listing()
+      const l = new ListingEntity()
       const entities = {}
       for await (const key of Object.keys(listing)) {
         if (!skipped.includes(key)) {

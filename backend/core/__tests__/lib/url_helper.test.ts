@@ -1,7 +1,7 @@
 import { formatUrlSlug, listingUrlSlug } from "../../src/lib/url_helper"
 
 import triton from "../../listings/triton.json"
-import { Listing } from "../../src/entity/Listing"
+import { ListingEntity } from "../../src/entity/listing.entity"
 
 describe("formatUrlSlug", () => {
   test("reformats strings properly", () => {
@@ -20,7 +20,7 @@ describe("formatUrlSlug", () => {
 
 describe("listingUrlSlug", () => {
   // Force cast to listing - should we add a dependency to `listingsLoader` instead?
-  const listing = (triton as unknown) as Listing
+  const listing = (triton as unknown) as ListingEntity
 
   test("Generates a URL slug for a Listing", () => {
     const slug = listingUrlSlug(listing)

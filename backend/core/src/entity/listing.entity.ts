@@ -1,17 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
-import { Unit } from "./Unit"
-import { Preference } from "./Preference"
-import { Attachment } from "./Attachment"
+import { UnitEntity } from "./unit.entity"
+import { PreferenceEntity } from "./preference.entity"
+import { AttachmentEntity } from "./attachment.entity"
 import { Address, UnitsSummarized } from "@bloom-housing/core"
 
 @Entity()
-class Listing {
-  @OneToMany((type) => Preference, (preference) => preference.listing)
-  preferences: Preference[]
-  @OneToMany((type) => Unit, (unit) => unit.listing)
-  units: Unit[]
-  @OneToMany((type) => Attachment, (attachment) => attachment.listing)
-  attachments: Attachment[]
+class ListingEntity {
+  @OneToMany((type) => PreferenceEntity, (preference) => preference.listing)
+  preferences: PreferenceEntity[]
+  @OneToMany((type) => UnitEntity, (unit) => unit.listing)
+  units: UnitEntity[]
+  @OneToMany((type) => AttachmentEntity, (attachment) => attachment.listing)
+  attachments: AttachmentEntity[]
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ type: "boolean", nullable: true })
@@ -105,4 +105,4 @@ class Listing {
   urlSlug?: string
 }
 
-export { Listing as default, Listing }
+export { ListingEntity as default, ListingEntity }

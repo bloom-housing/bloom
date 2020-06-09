@@ -2,11 +2,11 @@ import { Repository } from "typeorm"
 import { Test, TestingModule } from "@nestjs/testing"
 import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { Listing } from "../entity/Listing"
+import { ListingEntity } from "../entity/listing.entity"
 
 describe("ListingsService", () => {
   let service: ListingsService
-  let repo: Repository<Listing>
+  let repo: Repository<ListingEntity>
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -14,7 +14,7 @@ describe("ListingsService", () => {
         ListingsService,
         {
           // how you provide the injection token in a test instance
-          provide: getRepositoryToken(Listing),
+          provide: getRepositoryToken(ListingEntity),
           // as a class value, Repository needs no generics
           useClass: Repository,
         },
@@ -23,11 +23,11 @@ describe("ListingsService", () => {
 
     service = module.get<ListingsService>(ListingsService)
     // Save the instance of the repository and set the correct generics
-    repo = module.get<Repository<Listing>>(getRepositoryToken(Listing))
+    repo = module.get<Repository<ListingEntity>>(getRepositoryToken(ListingEntity))
   })
 
   it("Find all", async () => {
-    const testListing: Listing = {
+    const testListing: ListingEntity = {
       depositMin: "",
       acceptingApplicationsAtLeasingAgent: false,
       acceptingApplicationsByPoBox: false,

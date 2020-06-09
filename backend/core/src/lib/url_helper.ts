@@ -6,7 +6,7 @@
  * - snake_case
  * @param input
  */
-import { Listing } from "../entity/Listing"
+import { ListingEntity } from "../entity/listing.entity"
 
 export const formatUrlSlug = (input: string): string => {
   return (
@@ -21,7 +21,7 @@ export const formatUrlSlug = (input: string): string => {
   )
 }
 
-export const listingUrlSlug = (listing: Listing): string => {
+export const listingUrlSlug = (listing: ListingEntity): string => {
   const {
     name,
     buildingAddress: { city, street, state },
