@@ -1,6 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+} from "typeorm"
 
 @Entity()
+@Index("user_email_lower", { synchronize: false })
 class User {
   @PrimaryGeneratedColumn("uuid")
   id: string
@@ -8,6 +16,14 @@ class User {
   passwordHash: string
   @Column()
   email: string
+  @Column()
+  firstName: string
+  @Column({ nullable: true })
+  middleName?: string
+  @Column()
+  lastName: string
+  @Column()
+  dob: Date
   @CreateDateColumn()
   createdAt: Date
   @UpdateDateColumn()

@@ -1,11 +1,15 @@
-import { Injectable } from "@nestjs/common"
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "../entity/User"
+import { CreateUserDto } from "./createUser.dto"
 import { FindConditions, Repository } from "typeorm"
 import { scrypt, randomBytes } from "crypto"
 
 // Length of hashed key, in bytes
 const SCRYPT_KEYLEN = 64
+const SALT_SIZE = SCRYPT_KEYLEN
+
+const generateSalt = (size = SALT_SIZE) => randomBytes(size)
 
 const hashPassword = (password: string, salt: Buffer) =>
   new Promise((resolve, reject) =>
@@ -13,6 +17,12 @@ const hashPassword = (password: string, salt: Buffer) =>
       err ? reject(err) : resolve(key.toString("hex"))
     )
   )
+
+const passwordToHash = async (password: string) => {
+  const salt = generateSalt()
+  const hash = await hashPassword(password, salt)
+  return `${salt.toString("hex")}#${hash}`
+}
 
 @Injectable()
 export class UserService {
@@ -37,9 +47,8 @@ export class UserService {
   }
 
   public async storeUserPassword(user: User, password: string) {
-    const salt = randomBytes(16)
-    const passwordHash = await hashPassword(password, salt)
-    await this.repo.update({ passwordHash: `${salt.toString("hex")}#${passwordHash}` }, user)
+    const passwordHash = await passwordToHash(password)
+    await this.repo.update({ passwordHash }, user)
   }
 
   public async verifyUserPassword(user: User, password: string) {
@@ -47,5 +56,22 @@ export class UserService {
     const [salt, savedPasswordHash] = userWithPassword.passwordHash.split("#")
     const verifyPasswordHash = await hashPassword(password, Buffer.from(salt, "hex"))
     return savedPasswordHash === verifyPasswordHash
+  }
+
+  public async createUser(params: CreateUserDto) {
+    const { password } = params
+    const user = new User()
+    user.firstName = params.firstName
+    user.middleName = params.middleName
+    user.lastName = params.lastName
+    user.dob = params.dob
+    user.email = params.email
+    try {
+      user.passwordHash = await passwordToHash(password)
+      await this.repo.save(user)
+      return user
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
   }
 }
