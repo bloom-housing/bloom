@@ -1,12 +1,12 @@
 /*
-2.1 - Live Alone
-Asks whether the applicant will be adding any additional household members
+2.6.c Reserved Unit Conditionals
+Unlike Reserved Community Buildings which are 100% reserved, in the event that there a mix of reserved and non reserved units ask a question after collecting household information.
 */
 import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import PageContent from "./live-alone.mdx"
+import PageContent from "./units.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
@@ -27,7 +27,10 @@ export default () => {
     //    const submission = new Step1(conductor)
     //    submission.save(data)
 
-    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    application.completedStep = 2
+    conductor.sync()
+
+    Router.push("/applications/financial/vouchers").then(() => window.scrollTo(0, 0))
   }
 
   return (
@@ -46,11 +49,11 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/contact/alternate">Back</Link>
+            <Link href="/applications/household/ada">Back</Link>
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless">Live Alone?</h2>
+        <h2 className="form-card__title is-borderless">Reserved Unit Conditionals</h2>
 
         <div className="markdown mt-6">
           <PageContent />

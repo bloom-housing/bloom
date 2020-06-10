@@ -1,5 +1,5 @@
 /*
-1.3 - Alternate Contact
+1.4 - Alternate Contact
 Type of alternate contact
 */
 import Link from "next/link"
@@ -26,6 +26,9 @@ export default () => {
 
     //    const submission = new Step1(conductor)
     //    submission.save(data)
+
+    application.completedStep = 1
+    conductor.sync()
 
     Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
   }

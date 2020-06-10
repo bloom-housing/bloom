@@ -1,12 +1,12 @@
 /*
-2.1 - Live Alone
-Asks whether the applicant will be adding any additional household members
+4.2.4 Live or Work Housing Preference
+Preference offered based on addresses and answer to work address question provided on the application
 */
 import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import PageContent from "./live-alone.mdx"
+import PageContent from "./live-or-work.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
@@ -17,7 +17,7 @@ export default () => {
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
-  const currentPageStep = 2
+  const currentPageStep = 4
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
@@ -27,7 +27,7 @@ export default () => {
     //    const submission = new Step1(conductor)
     //    submission.save(data)
 
-    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/preferences/general").then(() => window.scrollTo(0, 0))
   }
 
   return (
@@ -46,11 +46,11 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/contact/alternate">Back</Link>
+            <Link href="/applications/preferences/intro">Back</Link>
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless">Live Alone?</h2>
+        <h2 className="form-card__title is-borderless">Live or Work Housing Preference</h2>
 
         <div className="markdown mt-6">
           <PageContent />

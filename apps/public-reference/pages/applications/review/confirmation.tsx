@@ -1,12 +1,12 @@
 /*
-2.1 - Live Alone
-Asks whether the applicant will be adding any additional household members
+5.4 Confirmation
+Application confirmation with lottery number (confirmation number) 
 */
 import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import PageContent from "./live-alone.mdx"
+import PageContent from "./confirmation.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
@@ -17,7 +17,7 @@ export default () => {
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
-  const currentPageStep = 2
+  const currentPageStep = 6
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
@@ -27,7 +27,7 @@ export default () => {
     //    const submission = new Step1(conductor)
     //    submission.save(data)
 
-    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    //Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
   }
 
   return (
@@ -44,20 +44,13 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="text-bold">
-          <strong>
-            <Link href="/applications/contact/alternate">Back</Link>
-          </strong>
-        </p>
-
-        <h2 className="form-card__title is-borderless">Live Alone?</h2>
+        <h2 className="form-card__title is-borderless">Confirmation</h2>
 
         <div className="markdown mt-6">
           <PageContent />
         </div>
 
         <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (FORM)
           <div className="text-center mt-6">
             <Button
               filled={true}
@@ -65,7 +58,7 @@ export default () => {
                 //
               }}
             >
-              Next
+              Create Account
             </Button>
           </div>
         </form>

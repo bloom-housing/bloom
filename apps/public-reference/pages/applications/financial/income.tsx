@@ -1,12 +1,12 @@
 /*
-2.1 - Live Alone
-Asks whether the applicant will be adding any additional household members
+3.2 Income
+Total pre-tax household income from all sources
 */
 import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import PageContent from "./live-alone.mdx"
+import PageContent from "./income.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
@@ -17,7 +17,7 @@ export default () => {
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
-  const currentPageStep = 2
+  const currentPageStep = 3
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
@@ -27,7 +27,10 @@ export default () => {
     //    const submission = new Step1(conductor)
     //    submission.save(data)
 
-    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    application.completedStep = 3
+    conductor.sync()
+
+    Router.push("/applications/preferences/intro").then(() => window.scrollTo(0, 0))
   }
 
   return (
@@ -46,11 +49,11 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/contact/alternate">Back</Link>
+            <Link href="/applications/financial/vouchers">Back</Link>
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless">Live Alone?</h2>
+        <h2 className="form-card__title is-borderless">Income</h2>
 
         <div className="markdown mt-6">
           <PageContent />
