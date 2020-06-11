@@ -66,11 +66,11 @@ const Layout = (props) => (
           <a href={t("footer.SFHousingUrl")} target="_blank">
             {t("footer.SFHousingPortal")}
           </a>
-          <br />
+          |
           <a href="https://smc.housingbayarea.org/" target="_blank">
             San Mateo County Housing Portal
           </a>
-          <br />
+          |
           <a href="https://housing.sanjoseca.gov/" target="_blank">
             City of San José Housing Portal
           </a>
