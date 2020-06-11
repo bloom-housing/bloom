@@ -48,16 +48,22 @@ const Layout = (props) => (
             {t("footer.headerLink")}
           </a>
         </p>
-        <p className="mt-10 text-sm">{t("footer.forListingQuestions")}</p>
-        <p className="text-sm">{t("footer.forGeneralInquiries")}</p>
-
-        <p className="mt-10 text-sm">
+        <p className="mt-10 text-tiny">{t("footer.forListingQuestions")}</p>
+        <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
+        <p className="mt-10 text-tiny">
           {t("footer.forAdditionalOpportunities")}
           <br />
           <a href={t("footer.SFHousingUrl")} target="_blank">
             {t("footer.SFHousingPortal")}
           </a>
         </p>
+      </FooterSection>
+      <FooterSection>
+        <img
+          className="h-16 w-16"
+          src="/images/eho-logo-white.svg"
+          alt="Equal Housing Opportunity Logo"
+        />
       </FooterSection>
       <FooterNav copyright={t("footer.copyRight")}>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScFVVvd7FDa7puUN4iH2SBl_KAWBu8dRTXNuLIt8Ff9iYF3uA/viewform?usp=sf_link">
