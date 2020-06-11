@@ -3,13 +3,13 @@
 Primary applicant details. Name, DOB and Email Address
 */
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, Field, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import PageContent from "./name.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import Step1 from "../../../src/forms/applications/step1"
+import ContactNameStep from "../../../src/forms/applications/archived/step1"
 import { useContext } from "react"
 
 export default () => {
@@ -23,8 +23,7 @@ export default () => {
   const onSubmit = (data) => {
     console.log(data)
 
-    //    const submission = new Step1(conductor)
-    //    submission.save(data)
+    new ContactNameStep(conductor).save(data)
 
     Router.push("/applications/contact/address").then(() => window.scrollTo(0, 0))
   }
@@ -50,7 +49,28 @@ export default () => {
         </div>
 
         <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (FORM)
+          <div className="flex">
+            <Field
+              name="firstname"
+              label="First Name"
+              defaultValue={context.application.name?.split(" ")[0]}
+              validation={{ required: true }}
+              error={errors.firstname}
+              errorMessage="Please enter a First Name"
+              register={register}
+            />
+
+            <Field
+              name="lastname"
+              label="Last Name"
+              defaultValue={context.application.name?.split(" ")[1]}
+              validation={{ required: true }}
+              error={errors.lastname}
+              errorMessage="Please enter a Last Name"
+              register={register}
+            />
+          </div>
+
           <div className="text-center mt-6">
             <Button
               filled={true}

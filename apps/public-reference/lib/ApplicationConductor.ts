@@ -38,9 +38,11 @@ export default class ApplicationConductor {
     }, 800)
   }
 
-  reset() {
+  reset(shouldSync = true) {
     this.application = blankApplication()
-    this.context.syncApplication(this.application)
+    if (shouldSync) {
+      this.context.syncApplication(this.application)
+    }
     if (typeof window != "undefined") {
       window.localStorage.removeItem("bloom-app-autosave")
     }

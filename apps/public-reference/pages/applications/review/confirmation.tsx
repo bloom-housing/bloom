@@ -10,7 +10,6 @@ import PageContent from "./confirmation.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import Step1 from "../../../src/forms/applications/step1"
 import { useContext } from "react"
 
 export default () => {
@@ -55,7 +54,7 @@ export default () => {
             <Button
               filled={true}
               onClick={() => {
-                //
+                Router.push("/create-account").then(() => window.scrollTo(0, 0))
               }}
             >
               Create Account

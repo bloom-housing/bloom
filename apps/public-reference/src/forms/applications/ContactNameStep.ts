@@ -10,8 +10,7 @@ export default class {
   }
 
   save(formData) {
-    this.application.address = formData
-    this.conductor.advanceToNextStep()
+    this.application.name = `${formData.firstname} ${formData.lastname}`
     this.conductor.sync()
   }
 }

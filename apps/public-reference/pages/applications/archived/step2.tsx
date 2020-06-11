@@ -5,7 +5,7 @@ import PageContent from "../../../page_content/applications/step2.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import Step2 from "../../../src/forms/applications/step2"
+import Step2 from "../../../src/forms/applications/archived/step2"
 import { useContext } from "react"
 
 export default () => {

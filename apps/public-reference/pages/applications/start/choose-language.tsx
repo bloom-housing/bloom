@@ -9,13 +9,13 @@ import PageContent from "./choose-language.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import Step1 from "../../../src/forms/applications/step1"
 import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
+  conductor.reset(false)
   const currentPageStep = 1
 
   /* Form Handler */

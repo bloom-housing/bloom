@@ -10,7 +10,6 @@ import PageContent from "./demographics.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import Step1 from "../../../src/forms/applications/step1"
 import { useContext } from "react"
 
 export default () => {

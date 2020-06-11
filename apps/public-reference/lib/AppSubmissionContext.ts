@@ -15,11 +15,18 @@ export const blankApplication = () => {
       state: "",
       zipcode: "",
     },
+    alternateAddress: {
+      street: "",
+      street2: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    },
   }
 }
 
 export const AppSubmissionContext = React.createContext({
   application: blankApplication(),
   /* eslint-disable */
-  syncApplication: data => {}
+  syncApplication: (data) => {},
 })
