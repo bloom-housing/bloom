@@ -6,15 +6,15 @@
   "accessibility": "Accessiblity features in common areas like lobby, wheelchair ramps, accessible bathrooms and elevators.",
   "amenities": "Gym, theater room, clubhouse, pool, playground, business center, spa",
   "applicationDueDate": "",
-  "applicationOpenDate": "2020-06-10T00:00:00.000Z",
+  "applicationOpenDate": "2020-06-09T00:00:00.000Z",
   "applicationOrganization": "Bridgepointe",
   "applicationAddress": {
     "city": "San Mateo",
     "zipCode": "94404",
     "state": "CA",
     "street": "1927 Bridgepointe Circle",
-    "latitude": 37.5658152,
-    "longitude": -122.2704286
+    "latitude": 37.562992,
+    "longitude": -122.284063
   },
   "applicationPhone": "650-358-8511",
   "blankPaperApplicationCanBePickedUp": true,
@@ -24,8 +24,8 @@
     "state": "CA",
     "street": "1927 Bridgepointe Circle",
     "zipCode": "94404",
-    "latitude": 37.5658152,
-    "longitude": -122.2704286
+    "latitude": 37.562992,
+    "longitude": -122.284063
   },
   "buildingName": "Bridgepointe Rental Condominiums",
   "buildingSelectionCriteria": null,
@@ -67,8 +67,8 @@
     "state": "CA",
     "street": "1927 Bridgepointe Circle",
     "zipCode": "94404",
-    "latitude": 37.5658152,
-    "longitude": -122.2704286
+    "latitude": 37.562992,
+    "longitude": -122.284063
   },
   "leasingAgentEmail": "barajas@allresco.com",
   "leasingAgentName": "Vanessa Barajas",

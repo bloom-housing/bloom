@@ -110,6 +110,11 @@
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",
     "reservedFor": "Reserved for %{type}",
+    "reservedTypePlural": {
+      "family": "families",
+      "senior": "seniors",
+      "veteran": "veterans"
+    },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
     "reservedUnitsForWhoAre": "Reserved for %{communityType} who are %{reservedType}",
