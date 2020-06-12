@@ -1090,8 +1090,7 @@ exports[`Storyshots Listing Sidebar|Application Status Due Soon And Vivid 1`] = 
       </Icon>
         
       Application Deadline
-      : 
-      Apr 11, 2030 at 4:00 PM
+      : Apr 11, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -2191,8 +2190,7 @@ exports[`Storyshots Listing Sidebar|Application Status Open Soon 1`] = `
       </Icon>
         
       Application Open Period
-      : 
-      April 6, 2030 to April 11, 2030
+      : April 6, 2030 to April 11, 2030
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -3292,8 +3290,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened Already 1`] = `
       </Icon>
         
       Application Deadline
-      : 
-      Apr 11, 2030 at 4:00 PM
+      : Apr 11, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -4393,8 +4390,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened With No Due 1`] = 
       </Icon>
         
       Application Open Period
-      : 
-      March 17, 2030
+      : March 17, 2030
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -5495,8 +5491,7 @@ exports[`Storyshots Listing Sidebar|Application Status Past Due 1`] = `
       </Icon>
         
       Applications Closed
-      : 
-      Mar 22, 2030 at 4:00 PM
+      : Mar 22, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -6597,8 +6592,7 @@ exports[`Storyshots Listing Sidebar|Application Status Past Due And Vivid 1`] = 
       </Icon>
         
       Applications Closed
-      : 
-      Mar 22, 2030 at 4:00 PM
+      : Mar 22, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG

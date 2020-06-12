@@ -21,7 +21,7 @@ exports[`Storyshots PageComponents|ListingGroup Show Listings Group 1`] = `
           "street": "98 Archer Street",
           "zipCode": "95112",
         },
-        "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
+        "applicationDueDate": null,
         "applicationFee": "30.0",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",

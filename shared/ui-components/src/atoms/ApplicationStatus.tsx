@@ -38,23 +38,29 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
     content = vivid ? t("listings.comingSoon") : t("listings.applicationOpenPeriod")
   } else {
     const date = listing.applicationDueDate
-    const dueDate = moment(date)
-    formattedDate = dueDate.format("MMM DD, YYYY") + " at " + dueDate.format("h:mm A")
+    if (listing.applicationDueDate) {
+      const dueDate = moment(date)
+      formattedDate = dueDate.format("MMM DD, YYYY") + " at " + dueDate.format("h:mm A")
 
-    // if due date is in future, listing is open
-    if (moment() < dueDate) {
-      bgColor = vivid ? "bg-primary" : "bg-primary-light"
-      content = t("listings.applicationDeadline")
+      // if due date is in future, listing is open
+      if (moment() < dueDate) {
+        bgColor = vivid ? "bg-primary" : "bg-primary-light"
+        content = t("listings.applicationDeadline")
+      } else {
+        bgColor = vivid ? "bg-alert" : "bg-alert-light"
+        content = t("listings.applicationsClosed")
+      }
     } else {
-      bgColor = vivid ? "bg-alert" : "bg-alert-light"
-      content = t("listings.applicationsClosed")
+      bgColor = vivid ? "bg-primary" : "bg-primary-light"
+      content = t("listings.applicationFCFS")
     }
   }
 
   return (
     <div className={`application-status ${textSize} p-4 ${textColor} ${bgColor}`}>
       <Icon size="medium" symbol="clock" white={vivid} /> &nbsp;
-      {content}: {formattedDate}
+      {content}
+      {formattedDate != "" ? `: ${formattedDate}` : ""}
     </div>
   )
 }
