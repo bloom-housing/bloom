@@ -39,12 +39,13 @@ const ExpandableText = (props: ExpandableTextProps) => {
     button = moreLessButton(expanded, setExpanded)
   }
   return (
-    <span className="expandable-text">
-      <p className={props.className}>
-        <Markdown children={getText(props.children, expanded, maxLength)} />
-        {button}
-      </p>
-    </span>
+    <div className={`expandable-text ${props.className}`}>
+      <Markdown
+        children={getText(props.children, expanded, maxLength)}
+        options={{ disableParsingRawHTML: true }}
+      />
+      {button}
+    </div>
   )
 }
 
