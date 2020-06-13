@@ -1,3 +1,14 @@
+.expandable-text {
+  p:not(:last-child),
+  ul:not(:last-child) {
+    margin-bottom: 0.9em;
+  }
+  ul {
+    list-style: disc;
+    margin-left: 1.4em;
+  }
+}
+
 .button-toggle {
   @apply text-primary;
   @apply cursor-pointer;
