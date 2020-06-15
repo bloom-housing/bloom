@@ -24,9 +24,12 @@ const credits = (
         Alameda County - Housing and Community Development (HCD) Department
       </a>
     </p>
+    <p>
+      <img className="h-16 w-16" src="/images/eho-logo-white.svg" alt="Equal Housing Opportunity Logo" />
+    </p>
   </>
 )
-const logo = <img src="/images/logo_glyph.svg" alt="Alameda Logo" />
+const logo = <img src="/images/alameda-logo-white.svg" alt="Alameda Logo" />
 
 export const footer = () => (
   <SiteFooter>
