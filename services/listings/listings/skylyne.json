@@ -13,7 +13,7 @@
     "latitude": null,
     "longitude": null
   },
-  "applicationDueDate": "2020-06-15T17:00:00.000-07:00",
+  "applicationDueDate": "2020-06-22T17:00:00.000-07:00",
   "applicationOrganization": "",
   "applicationPhone": "510-747-5817",
   "blankPaperApplicationCanBePickedUp": true,
@@ -48,7 +48,7 @@
   "smokingPolicy": "Non-Smoking",
   "yearBuilt": 2020,
   "createdAt": "2020-05-12T15:00:00-07:00",
-  "updatedAt": "2020-02-12T15:00:00-07:00",
+  "updatedAt": "2020-06-15T11:00:00-07:00",
   "groupId": 1,
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
@@ -78,12 +78,12 @@
   "rentalHistory": "Applicant must be able to provide sufficient residential information for at least the past two years to enable the Property Manager to adequately evaluate rental history and/or place of residence. If two years of prior residential information proves insufficient for obtaining adequate references, additional residential history may be requested. Negative rental history will be grounds for denial, including: Any evictions with an outstanding judgement, 4 or more evictions filings, 4 or more late payments being reported on the rental history report",
   "preferences": [
     {
-      "ordinal": "1st", 
+      "ordinal": "1st",
       "title": "Displaced Preference",
       "description": "Households who have been displaced as a result of the City of Oakland’s public projects or the City’s code enforcement activities."
     },
     {
-      "ordinal": "2nd", 
+      "ordinal": "2nd",
       "title": "Live or Work Preference",
       "description": "1. Oakland Resident - Households who are current residents of the City of Oakland. 2. Oakland Worker - Households with at least one member who is currently employed in the city of Oakland, have been notified that they are hired to work in the city of Oakland, or are active participants in an educational or job training program located in the city of Oakland."
     }
