@@ -7,8 +7,8 @@ import {
   Index,
 } from "typeorm"
 
-@Entity()
-@Index("user_email_lower", { synchronize: false })
+@Entity({ name: "user_accounts" })
+@Index("user_accounts_email_lower", { synchronize: false })
 class User {
   @PrimaryGeneratedColumn("uuid")
   id: string
