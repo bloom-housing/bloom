@@ -57,9 +57,9 @@ const Apply = (props: ApplyProps) => {
         {!openDateState(listing) &&
           ((listing.acceptingOnlineApplications && (
             <>
-              <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
+              <a className="button is-filled w-full mb-2" href={onlineApplicationUrl}>
                 {t("listings.apply.applyOnline")}
-              </LinkButton>
+              </a>
             </>
           )) ||
             (!listing.acceptingOnlineApplications && (
