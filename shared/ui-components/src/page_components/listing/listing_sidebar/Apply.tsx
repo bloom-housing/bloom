@@ -3,7 +3,6 @@ import { Listing, Attachment, AttachmentType } from "@bloom-housing/core"
 import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
-import LinkButton from "../../../atoms/LinkButton"
 import SidebarAddress from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 
