@@ -30,7 +30,10 @@ export default () => {
       if (status === 401) {
         setRequestError(`Error signing you in: ${err.message}`)
       } else {
-        throw err
+        console.error(err)
+        setRequestError(
+          "There was an error signing you in. Please try again, or contact support for help."
+        )
       }
     }
   }
