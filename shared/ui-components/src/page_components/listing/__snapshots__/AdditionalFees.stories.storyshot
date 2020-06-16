@@ -18,7 +18,7 @@ exports[`Storyshots Listing|Additional Fees Shows Application Fee And Deposit 1`
         "street": "98 Archer Street",
         "zipCode": "95112",
       },
-      "applicationDueDate": null,
+      "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
       "applicationFee": "30.0",
       "applicationOrganization": "98 Archer Street",
       "applicationPhone": "(408) 217-8562",

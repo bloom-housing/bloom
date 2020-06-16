@@ -48,3 +48,8 @@ const listing4 = Object.assign({}, Archer) as any
 listing4.applicationOpenDate = moment().subtract(15, "days").format()
 listing4.applicationDueDate = ""
 export const openedWithNoDue = () => <ApplicationStatus listing={listing4} />
+
+const listing5 = Object.assign({}, Archer) as any
+listing5.applicationOpenDate = moment().subtract(15, "days").format()
+listing5.applicationDueDate = null
+export const openedWithFCFS = () => <ApplicationStatus listing={listing5} />
