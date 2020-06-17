@@ -59,7 +59,7 @@ exports[`Storyshots Footers|Site Footer With Logo 1`] = `
         >
           <img
             alt="Alameda Logo"
-            src="/images/logo_glyph.svg"
+            src="/images/alameda-logo-white.svg"
           />
         </div>
       </div>
@@ -118,7 +118,7 @@ exports[`Storyshots Footers|Site Footer With Logo And Credits 1`] = `
         >
           <img
             alt="Alameda Logo"
-            src="/images/logo_glyph.svg"
+            src="/images/alameda-logo-white.svg"
           />
         </div>
       </div>
@@ -139,6 +139,13 @@ exports[`Storyshots Footers|Site Footer With Logo And Credits 1`] = `
             >
               Alameda County - Housing and Community Development (HCD) Department
             </a>
+          </p>
+          <p>
+            <img
+              alt="Equal Housing Opportunity Logo"
+              className="h-16 w-16"
+              src="/images/eho-logo-white.svg"
+            />
           </p>
         </div>
       </div>

@@ -1,13 +1,41 @@
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Button, Field, FormCard, Icon, LinkButton } from "@bloom-housing/ui-components"
+import axios from "axios"
+import {
+  Button,
+  Field,
+  FormCard,
+  Icon,
+  LinkButton,
+  ErrorMessage,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
+
+const apiBase = process.env.listingServiceUrl
 
 export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-    alert("Hi " + data.email + "! To be continued...")
+  const [requestError, setRequestError] = useState<string>()
+
+  const onSubmit = async (data: { email: string; password: string }) => {
+    const { email, password } = data
+
+    try {
+      const res = await axios.post(`${apiBase}/auth/login`, { username: email, password })
+      const { accessToken } = res.data
+      console.log(`Got access token '${accessToken}'`)
+    } catch (err) {
+      const { status } = err.response
+      if (status === 401) {
+        setRequestError(`Error signing you in: ${err.message}`)
+      } else {
+        console.error(err)
+        setRequestError(
+          "There was an error signing you in. Please try again, or contact support for help."
+        )
+      }
+    }
   }
 
   return (
@@ -19,6 +47,8 @@ export default () => {
         <h2 className="form-card__title">Sign In</h2>
 
         <hr />
+
+        <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
 
         <form id="sign-in" className="px-8 mt-10" onSubmit={handleSubmit(onSubmit)}>
           <Field
@@ -37,17 +67,11 @@ export default () => {
             error={errors.password}
             errorMessage="Please enter your login password"
             register={register}
+            type="password"
           />
 
           <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                console.info("button has been clicked!")
-              }}
-            >
-              Sign In
-            </Button>
+            <Button filled={true}>Sign In</Button>
           </div>
         </form>
 
