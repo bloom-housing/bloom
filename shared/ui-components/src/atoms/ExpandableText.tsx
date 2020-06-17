@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import Markdown from "markdown-to-jsx"
 import t from "../helpers/translator"
 import "./ExpandableText.scss"
 
@@ -18,17 +19,14 @@ const getText = (text: string, expanded: boolean, maxLength: number) => {
   while (text[position] != " " && position > 0) {
     position -= 1
   }
-  return position > 0 ? text.substring(0, position) : text.substring(0, maxLength)
+  return position > 0 ? text.substring(0, position) + "..." : text.substring(0, maxLength) + "..."
 }
 
 const moreLessButton = (expanded: boolean, setExpanded: Function) => {
   return (
-    <>
-      {expanded ? " " : " ... "}
-      <span className="button-toggle" onClick={() => setExpanded(!expanded)}>
-        {expanded ? t("label.less") : t("label.more")}
-      </span>
-    </>
+    <span className="button-toggle" onClick={() => setExpanded(!expanded)}>
+      {expanded ? t("label.less") : t("label.more")}
+    </span>
   )
 }
 
@@ -41,12 +39,13 @@ const ExpandableText = (props: ExpandableTextProps) => {
     button = moreLessButton(expanded, setExpanded)
   }
   return (
-    <>
-      <p className={props.className}>
-        {getText(props.children, expanded, maxLength)}
-        {button}
-      </p>
-    </>
+    <div className={`expandable-text ${props.className}`}>
+      <Markdown
+        children={getText(props.children, expanded, maxLength)}
+        options={{ disableParsingRawHTML: true }}
+      />
+      {button}
+    </div>
   )
 }
 

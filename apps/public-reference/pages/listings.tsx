@@ -26,7 +26,11 @@ export default class extends Component<ListingsProps> {
       const response = await axios.get(process.env.listingServiceUrl)
       const nowTime = moment()
       openListings = response.data.listings.filter((listing: Listing) => {
-        return openDateState(listing) || nowTime <= moment(listing.applicationDueDate)
+        return (
+          openDateState(listing) ||
+          nowTime <= moment(listing.applicationDueDate) ||
+          listing.applicationDueDate == null
+        )
       })
       closedListings = response.data.listings.filter((listing: Listing) => {
         return nowTime > moment(listing.applicationDueDate)

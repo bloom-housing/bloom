@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/ui-components",
-  "version": "0.1.1",
+  "version": "0.2.2",
   "description": "Shared user interface components for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared/ui-components",
   "main": "index.js",
@@ -41,11 +41,8 @@
     "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
     "react": "^16.13.1",
-    "react-accessible-accordion": "^3.0.0",
     "react-dom": "^16.13.1",
-    "react-inlinesvg": "^1.2.0",
     "react-is": "^16.13.1",
-    "react-media": "^1.10.0",
     "react-test-renderer": "^16.13.1",
     "regenerator-runtime": "^0.13.3",
     "sass-loader": "^8.0.2",
@@ -56,15 +53,19 @@
     "webpack": "^4.43.0"
   },
   "dependencies": {
-    "@bloom-housing/core": "^0.1.1",
+    "@bloom-housing/core": "^0.2.0",
     "@types/node": "^12.12.39",
     "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.9.5",
     "bulma": "^0.7.5",
+    "markdown-to-jsx": "^6.11.4",
     "nanoid": "^3.1.7",
     "react": "^16.13.1",
+    "react-accessible-accordion": "^3.0.0",
     "react-dom": "^16.13.1",
+    "react-inlinesvg": "^1.2.0",
     "react-map-gl": "^5.2",
+    "react-media": "^1.10.0",
     "tailwindcss": "^1.3"
   }
 }
