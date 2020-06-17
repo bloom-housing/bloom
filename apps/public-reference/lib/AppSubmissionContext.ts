@@ -4,7 +4,12 @@ export const blankApplication = () => {
   return {
     loaded: false,
     completedStep: 0,
-    name: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    birthMonth: 0,
+    birthDay: 0,
+    birthYear: 0,
     age: null,
     liveInSF: null,
     housingStatus: "",
