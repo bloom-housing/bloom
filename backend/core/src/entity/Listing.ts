@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "t
 import { Unit } from "./Unit"
 import { Preference } from "./Preference"
 import { Attachment } from "./Attachment"
-import { Address, UnitsSummarized } from "@bloom-housing/core"
+import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 
 @Entity()
 class Listing extends BaseEntity {
@@ -98,6 +98,8 @@ class Listing extends BaseEntity {
   waitlistCurrentSize: number
   @Column({ type: "numeric", nullable: true })
   waitlistMaxSize: number
+  @Column({ type: "jsonb", nullable: true })
+  whatToExpect?: WhatToExpect
   @Column({ type: "numeric", nullable: true })
   yearBuilt: number
 

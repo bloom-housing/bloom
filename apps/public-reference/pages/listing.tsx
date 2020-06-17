@@ -257,7 +257,7 @@ export default class extends Component<ListingProps> {
                   <ApplicationStatus listing={listing} />
                   <ApplicationSection listing={listing} />
                 </div>
-                <WhatToExpect />
+                <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
               </aside>
             </ListingDetailItem>
