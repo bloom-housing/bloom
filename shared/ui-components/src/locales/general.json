@@ -55,6 +55,7 @@
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
     "applicationDeadline": "Application Deadline",
+    "applicationFCFS": "First Come First Serve",
     "applicationFee": "Application Fee",
     "applicationFeeDueAt": "Due at interview",
     "applicationOpenPeriod": "Application Open Period",
