@@ -3861,12 +3861,18 @@ exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 
     >
       How to Apply
     </h2>
-    <a
-      className="button is-filled w-full mb-2"
+    <LinkButton
+      className="w-full mb-2"
+      filled={true}
       href="https://icann.org"
     >
-      Apply Online
-    </a>
+      <a
+        className="button is-filled w-full mb-2"
+        href="https://icann.org"
+      >
+        Apply Online
+      </a>
+    </LinkButton>
     <OrDivider
       bgColor="white"
     >

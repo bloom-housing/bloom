@@ -3,6 +3,7 @@ import { Listing, Attachment, AttachmentType } from "@bloom-housing/core"
 import moment from "moment"
 import t from "../../../helpers/translator"
 import Button from "../../../atoms/Button"
+import LinkButton from "../../../atoms/LinkButton"
 import SidebarAddress from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 
@@ -56,9 +57,9 @@ const Apply = (props: ApplyProps) => {
         {!openDateState(listing) &&
           ((listing.acceptingOnlineApplications && (
             <>
-              <a className="button is-filled w-full mb-2" href={onlineApplicationUrl}>
+              <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
                 {t("listings.apply.applyOnline")}
-              </a>
+              </LinkButton>
             </>
           )) ||
             (!listing.acceptingOnlineApplications && (
