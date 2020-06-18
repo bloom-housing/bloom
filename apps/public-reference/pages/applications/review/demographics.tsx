@@ -6,7 +6,6 @@ import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import PageContent from "./demographics.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
@@ -22,9 +21,6 @@ export default () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     console.log(data)
-
-    //    const submission = new Step1(conductor)
-    //    submission.save(data)
 
     Router.push("/applications/review/summary").then(() => window.scrollTo(0, 0))
   }
@@ -51,9 +47,7 @@ export default () => {
 
         <h2 className="form-card__title is-borderless">Demographics</h2>
 
-        <div className="markdown mt-6">
-          <PageContent />
-        </div>
+        <hr />
 
         <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           (FORM)

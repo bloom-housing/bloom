@@ -6,11 +6,9 @@ import Link from "next/link"
 import Router from "next/router"
 import { Button, ErrorMessage, Field, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import PageContent from "./name.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import ContactAddressStep from "../../../src/forms/applications/ContactAddressStep"
 import { useContext } from "react"
 
 export default () => {
@@ -22,9 +20,8 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
-
-    new ContactAddressStep(conductor).save(data)
+    application.address = data
+    conductor.sync()
 
     Router.push("/applications/contact/alternate").then(() => window.scrollTo(0, 0))
   }
@@ -51,9 +48,7 @@ export default () => {
 
         <h2 className="form-card__title is-borderless">Contact Info</h2>
 
-        <div className="markdown mt-6">
-          <PageContent />
-        </div>
+        <hr />
 
         <form id="applications-address" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           <div className={"field " + (errors.state ? "error" : "")}>

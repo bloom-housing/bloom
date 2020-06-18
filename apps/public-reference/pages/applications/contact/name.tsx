@@ -8,7 +8,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import ContactNameStep from "../../../src/forms/applications/archived/step1"
+import FormStep from "../../../src/forms/applications/FormStep"
 import { useContext } from "react"
 import { emailRegex } from "../../../lib/emailRegex"
 
@@ -21,9 +21,7 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
-
-    new ContactNameStep(conductor).save(data)
+    new FormStep(conductor).save(data)
 
     Router.push("/applications/contact/address").then(() => window.scrollTo(0, 0))
   }
@@ -84,7 +82,9 @@ export default () => {
             <Field
               name="birthMonth"
               placeholder="MM"
-              defaultValue={"" + context.application.birthMonth}
+              defaultValue={
+                "" + (context.application.birthMonth > 0 ? context.application.birthMonth : "")
+              }
               error={errors.birthMonth}
               validation={{ required: true }}
               register={register}
@@ -92,7 +92,9 @@ export default () => {
             <Field
               name="birthDay"
               placeholder="DD"
-              defaultValue={"" + context.application.birthDay}
+              defaultValue={
+                "" + (context.application.birthDay > 0 ? context.application.birthDay : "")
+              }
               error={errors.birthDay}
               validation={{ required: true }}
               register={register}
@@ -100,7 +102,9 @@ export default () => {
             <Field
               name="birthYear"
               placeholder="YYYY"
-              defaultValue={"" + context.application.birthYear}
+              defaultValue={
+                "" + (context.application.birthYear > 0 ? context.application.birthYear : "")
+              }
               error={errors.birthYear}
               validation={{ required: true }}
               register={register}

@@ -10,7 +10,12 @@ export default class {
   }
 
   save(formData) {
-    this.application.name = `${formData.firstname} ${formData.lastname}`
+    // Pull in all the form values that match application fields
+    for (const [key, value] of Object.entries(formData)) {
+      if (typeof this.application[key] != "undefined") {
+        this.application[key] = value
+      }
+    }
     this.conductor.sync()
   }
 }

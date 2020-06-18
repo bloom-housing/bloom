@@ -6,11 +6,9 @@ import Link from "next/link"
 import Router from "next/router"
 import { Button, ErrorMessage, Field, FormCard, ProgressNav } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import PageContent from "./alternate.mdx"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import ContactAlternateStep from "../../../src/forms/applications/ContactAlternateStep"
 import { useContext } from "react"
 
 export default () => {
@@ -24,7 +22,7 @@ export default () => {
   const onSubmit = (data) => {
     console.log(data)
 
-    new ContactAlternateStep(conductor).save(data)
+    application.alternateAddress = data
     application.completedStep = 1
     conductor.sync()
 
@@ -53,9 +51,7 @@ export default () => {
 
         <h2 className="form-card__title is-borderless">Alternate Contact</h2>
 
-        <div className="markdown mt-6">
-          <PageContent />
-        </div>
+        <hr />
 
         <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           <div className={"field " + (errors.state ? "error" : "")}>
