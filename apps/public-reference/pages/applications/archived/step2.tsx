@@ -1,11 +1,11 @@
 import Router from "next/router"
 import { Button, ErrorMessage, FormCard, ProgressNav } from "@bloom-housing/ui-components"
-import FormsLayout from "../../layouts/forms"
-import PageContent from "../../page_content/applications/step2.mdx"
+import FormsLayout from "../../../layouts/forms"
+import PageContent from "../../../page_content/applications/step2.mdx"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../lib/ApplicationConductor"
-import Step2 from "../../src/forms/applications/step2"
+import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
+import ApplicationConductor from "../../../lib/ApplicationConductor"
+import Step2 from "../../../src/forms/applications/archived/step2"
 import { useContext } from "react"
 
 export default () => {
@@ -22,7 +22,7 @@ export default () => {
     const submission = new Step2(conductor)
     submission.save(data)
 
-    Router.push("/applications/complete").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/archived/complete").then(() => window.scrollTo(0, 0))
   }
 
   return (
