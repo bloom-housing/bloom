@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form"
+import axios from "axios"
 import { Button, Field, FormCard, Icon, LinkButton } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { emailRegex } from "../lib/emailRegex"
@@ -6,9 +7,20 @@ import { emailRegex } from "../lib/emailRegex"
 export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-    alert("Hi " + data.firstname + "! To be continued...")
+
+  const onSubmit = async (data) => {
+    try {
+      const { birthDay, birthMonth, birthYear, ...rest } = data
+      const res = await axios.post(`${process.env.listingServiceUrl}/auth/register`, {
+        ...rest,
+        dob: `${birthYear}-${birthMonth}-${birthDay}`,
+      })
+      console.log("Created user: %o", res.data)
+    } catch (err) {
+      // TODO: better error handling
+      const messages = err.response && err.response.data && err.response.data.message
+      console.error(messages)
+    }
   }
 
   return (
@@ -29,21 +41,21 @@ export default () => {
           <label>Your Name</label>
 
           <Field
-            name="firstname"
+            name="firstName"
             placeholder="First Name"
             validation={{ required: true }}
-            error={errors.firstname}
+            error={errors.firstName}
             errorMessage="Please enter a First Name"
             register={register}
           />
 
-          <Field name="middlename" placeholder="Middle Name (optional)" register={register} />
+          <Field name="middleName" placeholder="Middle Name (optional)" register={register} />
 
           <Field
-            name="lastname"
+            name="lastName"
             placeholder="Last Name"
             validation={{ required: true }}
-            error={errors.lastname}
+            error={errors.lastName}
             errorMessage="Please enter a Last Name"
             register={register}
           />
@@ -53,23 +65,23 @@ export default () => {
           <label>Your Date of Birth</label>
           <div className="flex">
             <Field
-              name="birthmonth"
+              name="birthMonth"
               placeholder="MM"
-              error={errors.birthmonth}
+              error={errors.birthMonth}
               validation={{ required: true }}
               register={register}
             />
             <Field
-              name="birthday"
+              name="birthDay"
               placeholder="DD"
-              error={errors.birthday}
+              error={errors.birthDay}
               validation={{ required: true }}
               register={register}
             />
             <Field
-              name="birthyear"
+              name="birthYear"
               placeholder="YYYY"
-              error={errors.birthyear}
+              error={errors.birthYear}
               validation={{ required: true }}
               register={register}
             />

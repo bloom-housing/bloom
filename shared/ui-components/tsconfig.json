@@ -24,7 +24,8 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "typeRoots": ["./types"]
   },
   "include": ["src/**/*", "__tests__/**/*"]
   // "exclude": ["../../node_modules", "node_modules", "build", "scripts"]

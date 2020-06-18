@@ -58,6 +58,7 @@
     "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.9.5",
     "bulma": "^0.7.5",
+    "markdown-to-jsx": "^6.11.4",
     "nanoid": "^3.1.7",
     "react": "^16.13.1",
     "react-accessible-accordion": "^3.0.0",

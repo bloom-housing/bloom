@@ -16,11 +16,6 @@ export default class {
         this.application[key] = value
       }
     }
-
-    // Custom data transformations
-    this.application.name = `${formData.firstname} ${formData.lastname}`
-
-    this.conductor.advanceToNextStep()
     this.conductor.sync()
   }
 }

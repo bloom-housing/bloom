@@ -1,4 +1,4 @@
-import ApplicationConductor from "../../../lib/ApplicationConductor"
+import ApplicationConductor from "../../../../lib/ApplicationConductor"
 
 export default class {
   conductor = null as ApplicationConductor

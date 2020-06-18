@@ -6,6 +6,7 @@ import { Listing } from "../entity/Listing"
 import { Unit } from "../entity/Unit"
 import { TypeOrmModule, getRepositoryToken } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
+import { factories } from "../../test/factories/index"
 
 describe("ListingsController", () => {
   let listingsController: ListingsController
@@ -30,60 +31,12 @@ describe("ListingsController", () => {
   })
 
   describe("root", () => {
-    it('should return "Hello World!"', async () => {
-      const testListing: Listing = {
-        depositMin: "",
-        acceptingApplicationsAtLeasingAgent: false,
-        acceptingApplicationsByPoBox: false,
-        acceptingOnlineApplications: false,
-        acceptsPostmarkedApplications: false,
-        accessibility: "",
-        amenities: "",
-        applicationAddress: undefined,
-        applicationDueDate: "",
-        applicationFee: "",
-        applicationOpenDate: "",
-        applicationOrganization: "",
-        attachments: [],
-        blankPaperApplicationCanBePickedUp: false,
-        buildingAddress: undefined,
-        buildingSelectionCriteria: "",
-        buildingTotalUnits: 0,
-        costsNotIncluded: "",
-        creditHistory: "",
-        criminalBackground: "",
-        depositMax: "",
-        developer: "",
-        disableUnitsAccordion: false,
-        id: "",
-        imageUrl: "",
-        leasingAgentAddress: undefined,
-        leasingAgentEmail: "",
-        leasingAgentName: "",
-        leasingAgentOfficeHours: "",
-        leasingAgentPhone: "",
-        leasingAgentTitle: "",
-        name: "",
-        neighborhood: "",
-        petPolicy: "",
-        postmarkedApplicationsReceivedByDate: "",
-        preferences: [],
-        programRules: "",
-        rentalHistory: "",
-        requiredDocuments: "",
-        smokingPolicy: "",
-        unitAmenities: "",
-        units: [],
-        unitsAvailable: 0,
-        unitsSummarized: undefined,
-        urlSlug: "",
-        waitlistCurrentSize: 0,
-        waitlistMaxSize: 0,
-        yearBuilt: 0,
-      }
+    it("should return listings", async () => {
+      const testListing = factories.listing.build()
       jest.spyOn(repo, "find").mockResolvedValueOnce([testListing])
       const response = await listingsController.getAll()
-      expect(response).toBe([testListing])
+      expect(response.status).toBe("ok")
+      expect(response.listings).toMatchObject([testListing])
     })
   })
 })

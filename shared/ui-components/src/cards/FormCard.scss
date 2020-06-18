@@ -26,4 +26,10 @@
   @apply px-3;
   @apply border-t-4;
   @apply border-primary;
+
+  &.is-borderless {
+    @apply pt-0;
+    @apply mt-0;
+    @apply border-t-0;
+  }
 }
