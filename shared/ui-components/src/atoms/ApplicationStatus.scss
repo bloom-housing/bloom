@@ -1,0 +1,6 @@
+.application-status {
+  @apply p-4;
+  @screen lg {
+    @apply whitespace-no-wrap;
+  }
+}
