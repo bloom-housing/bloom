@@ -4,6 +4,7 @@ import t from "@bloom-housing/ui-components/src/helpers/translator"
 import { Listing } from "@bloom-housing/core"
 import { openDateState } from "../helpers/state"
 import Icon from "../atoms/Icon"
+import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
   listing: Listing
@@ -57,7 +58,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   }
 
   return (
-    <div className={`application-status ${textSize} p-4 ${textColor} ${bgColor}`}>
+    <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
       <Icon size="medium" symbol="clock" white={vivid} /> &nbsp;
       {content}
       {formattedDate != "" ? `: ${formattedDate}` : ""}

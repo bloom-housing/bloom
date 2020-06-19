@@ -1071,7 +1071,7 @@ exports[`Storyshots Listing Sidebar|Application Status Due Soon And Vivid 1`] = 
     vivid={true}
   >
     <div
-      className="application-status text-xs p-4 text-white bg-primary"
+      className="application-status text-xs text-white bg-primary"
     >
       <Icon
         size="medium"
@@ -2171,7 +2171,7 @@ exports[`Storyshots Listing Sidebar|Application Status Open Soon 1`] = `
     }
   >
     <div
-      className="application-status text-sm p-4 text-gray-800 bg-primary-light"
+      className="application-status text-sm text-gray-800 bg-primary-light"
     >
       <Icon
         size="medium"
@@ -3271,7 +3271,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened Already 1`] = `
     }
   >
     <div
-      className="application-status text-sm p-4 text-gray-800 bg-primary-light"
+      className="application-status text-sm text-gray-800 bg-primary-light"
     >
       <Icon
         size="medium"
@@ -4371,7 +4371,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened With FCFS 1`] = `
     }
   >
     <div
-      className="application-status text-sm p-4 text-gray-800 bg-primary-light"
+      className="application-status text-sm text-gray-800 bg-primary-light"
     >
       <Icon
         size="medium"
@@ -5470,7 +5470,7 @@ exports[`Storyshots Listing Sidebar|Application Status Opened With No Due 1`] = 
     }
   >
     <div
-      className="application-status text-sm p-4 text-gray-800 bg-primary-light"
+      className="application-status text-sm text-gray-800 bg-primary-light"
     >
       <Icon
         size="medium"
@@ -6571,7 +6571,7 @@ exports[`Storyshots Listing Sidebar|Application Status Past Due 1`] = `
     vivid={false}
   >
     <div
-      className="application-status text-sm p-4 text-gray-800 bg-alert-light"
+      className="application-status text-sm text-gray-800 bg-alert-light"
     >
       <Icon
         size="medium"
@@ -7672,7 +7672,7 @@ exports[`Storyshots Listing Sidebar|Application Status Past Due And Vivid 1`] = 
     vivid={true}
   >
     <div
-      className="application-status text-xs p-4 text-white bg-alert"
+      className="application-status text-xs text-white bg-alert"
     >
       <Icon
         size="medium"
