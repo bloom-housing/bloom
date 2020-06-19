@@ -8,6 +8,7 @@ declare module "jwt-decode"
 
 type UserState = {
   loading: boolean
+  storageType: string
   accessToken?: string
   profile?: User
   client?: AxiosInstance
@@ -15,6 +16,8 @@ type UserState = {
 }
 
 const ACCESS_TOKEN_LOCAL_STORAGE_KEY = "@bht"
+
+const getStorage = (type: string) => (type === "local" ? localStorage : sessionStorage)
 
 const renewToken = async (client: AxiosInstance) => {
   const res = await client.post<{ accessToken: string }>("auth/token")
@@ -90,7 +93,7 @@ const scheduleRefresh = (
   }
 }
 
-const reducer = createReducer({ loading: false } as UserState, {
+const reducer = createReducer({ loading: false, storageType: "session" } as UserState, {
   SAVE_TOKEN: (state, { payload }) => {
     const { refreshTimer: oldRefresh, ...rest } = state
     const { accessToken, apiUrl, dispatch } = payload
@@ -100,7 +103,7 @@ const reducer = createReducer({ loading: false } as UserState, {
     }
 
     // Save off the token in local storage for persistence across reloads.
-    localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, accessToken)
+    getStorage(state.storageType).setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, accessToken)
 
     const client = createAxiosInstance(apiUrl, accessToken)
     const refreshTimer = scheduleRefresh(client, accessToken, dispatch)
@@ -115,9 +118,9 @@ const reducer = createReducer({ loading: false } as UserState, {
   START_LOADING: (state) => ({ ...state, loading: true }),
   END_LOADING: (state) => ({ ...state, loading: false }),
   SAVE_PROFILE: (state, { payload: user }) => ({ ...state, profile: user }),
-  SIGN_OUT: () => {
-    localStorage.removeItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY)
-    return { loading: false }
+  SIGN_OUT: ({ storageType }) => {
+    getStorage(storageType).removeItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY)
+    return { loading: false, storageType }
   },
 })
 
@@ -131,8 +134,15 @@ type ContextProps = {
 
 export const UserContext = createContext<Partial<ContextProps>>({})
 
-export const UserProvider: FunctionComponent<{ apiUrl: string }> = ({ apiUrl, children }) => {
-  const [state, dispatch] = useReducer(reducer, { loading: false })
+export const UserProvider: FunctionComponent<{ apiUrl: string; storageType?: string }> = ({
+  apiUrl,
+  storageType,
+  children,
+}) => {
+  const [state, dispatch] = useReducer(reducer, {
+    loading: false,
+    storageType: storageType || "session",
+  })
 
   // Load our profile as soon as we have an authenticated client available
   useEffect(() => {
@@ -153,7 +163,7 @@ export const UserProvider: FunctionComponent<{ apiUrl: string }> = ({ apiUrl, ch
 
   // On initial load/reload, check localStorage to see if we have a token available
   useEffect(() => {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY)
+    const accessToken = getStorage(state.storageType).getItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY)
     if (accessToken) {
       dispatch(saveToken({ accessToken, apiUrl, dispatch }))
     }
