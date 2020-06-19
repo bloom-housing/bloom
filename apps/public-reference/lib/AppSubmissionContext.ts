@@ -10,6 +10,8 @@ export const blankApplication = () => {
     birthMonth: 0,
     birthDay: 0,
     birthYear: 0,
+    emailAddress: "",
+    noEmail: false,
     age: null,
     liveInSF: null,
     housingStatus: "",

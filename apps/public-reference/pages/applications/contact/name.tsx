@@ -19,12 +19,14 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, setValue, watch, errors } = useForm()
   const onSubmit = (data) => {
     new FormStep(conductor).save(data)
 
     Router.push("/applications/contact/address").then(() => window.scrollTo(0, 0))
   }
+
+  const noEmail = watch("noEmail")
 
   return (
     <FormsLayout>
@@ -45,7 +47,7 @@ export default () => {
         <hr />
 
         <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          <label>Your Name</label>
+          <label className="label-for-section">Your Name</label>
 
           <Field
             name="firstName"
@@ -77,7 +79,8 @@ export default () => {
 
           <hr />
 
-          <label>Your Date of Birth</label>
+          <label className="label-for-section">Your Date of Birth</label>
+
           <div className="flex mt-4">
             <Field
               name="birthMonth"
@@ -113,7 +116,7 @@ export default () => {
 
           <hr />
 
-          <label>Your Email Address</label>
+          <label className="label-for-section">Your Email Address</label>
 
           <p className="my-4">
             We will only use your email address to contact you about your application.
@@ -121,13 +124,33 @@ export default () => {
 
           <Field
             type="email"
-            name="email"
-            placeholder="example@web.com"
+            name="emailAddress"
+            placeholder={noEmail ? "None" : "example@web.com"}
+            defaultValue={context.application.emailAddress}
             validation={{ pattern: emailRegex }}
-            error={errors.email}
+            error={errors.emailAddress}
             errorMessage="Please enter an email address"
             register={register}
+            disabled={noEmail}
           />
+
+          <div className="field">
+            <input
+              type="checkbox"
+              id="noEmail"
+              name="noEmail"
+              defaultChecked={context.application.noEmail}
+              ref={register}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setValue("emailAddress", "")
+                }
+              }}
+            />
+            <label htmlFor="noEmail" className="text-primary font-semibold">
+              I don't have an email address
+            </label>
+          </div>
 
           <div className="text-center mt-6">
             <Button

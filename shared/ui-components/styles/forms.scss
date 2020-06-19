@@ -1,6 +1,6 @@
 .field {
   margin-bottom: 1.25rem;
-  
+
   * > &:last-child {
     margin-bottom: 0;
   }
@@ -36,7 +36,6 @@
   }
 
   &.error {
-
     label {
       @apply text-red-700;
     }
@@ -154,6 +153,13 @@
     background-size: 0.75rem;
     padding-right: 2.25rem;
   }
+}
+
+.label-for-section {
+  @apply uppercase;
+  @apply text-gray-750;
+  @apply tracking-wide;
+  @apply font-semibold;
 }
 
 .field--inline {
