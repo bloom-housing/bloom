@@ -4,7 +4,7 @@ import { Preference } from "./Preference"
 import { Attachment } from "./Attachment"
 import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 
-@Entity()
+@Entity({ name: "listings" })
 class Listing extends BaseEntity {
   @OneToMany((type) => Preference, (preference) => preference.listing)
   preferences: Preference[]
