@@ -2,7 +2,7 @@ import { Repository } from "typeorm"
 import { Test, TestingModule } from "@nestjs/testing"
 import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { Listing } from "../entity/Listing"
+import { Listing } from "../entity/listing.entity"
 import { factories } from "../../test/factories/index"
 
 describe("ListingsService", () => {

@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "typeorm"
-import { Unit } from "./Unit"
-import { Preference } from "./Preference"
-import { Attachment } from "./Attachment"
+import { Unit } from "./unit.entity"
+import { Preference } from "./preference.entity"
+import { Attachment } from "./attachment.entity"
 import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
+import { Application } from "./application.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -105,6 +106,8 @@ class Listing extends BaseEntity {
 
   unitsSummarized?: UnitsSummarized
   urlSlug?: string
+  @OneToMany(type => Application, application => application.listing)
+  applications: Application[]
 }
 
 export { Listing as default, Listing }

@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core"
 import { AppModule } from "./app.module"
 import { logger } from "./middleware/logger.middleware"
 import { ValidationPipe } from "@nestjs/common"
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 
 let app
 async function bootstrap() {
@@ -16,6 +17,9 @@ async function bootstrap() {
       transform: true,
     })
   )
+  const options = new DocumentBuilder().setTitle("Bloom API").setVersion("1.0").build()
+  const document = SwaggerModule.createDocument(app, options)
+  SwaggerModule.setup("docs", app, document)
   await app.listen(process.env.PORT || 3001)
 }
 bootstrap()

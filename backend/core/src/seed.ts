@@ -1,9 +1,9 @@
 import "reflect-metadata"
 import { createConnection } from "typeorm"
-import { Listing } from "./entity/Listing"
-import { Unit } from "./entity/Unit"
-import { Attachment } from "./entity/Attachment"
-import { Preference } from "./entity/Preference"
+import { Listing } from "./entity/listing.entity"
+import { Unit } from "./entity/unit.entity"
+import { Attachment } from "./entity/attachment.entity"
+import { Preference } from "./entity/preference.entity"
 import dbOptions = require("../ormconfig")
 import listingsSeeds from "../seeds.json"
 

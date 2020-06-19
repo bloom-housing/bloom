@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common"
-import { Listing } from "../entity/Listing"
+import { Listing } from "../entity/listing.entity"
 import { amiCharts } from "../lib/ami_charts"
 import { transformUnits } from "../lib/unit_transformations"
 import { listingUrlSlug } from "../lib/url_helper"

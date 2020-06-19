@@ -4,8 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  Index,
+  Index, OneToMany
 } from "typeorm"
+import { Application } from "./application.entity"
 
 @Entity({ name: "user_accounts" })
 @Index("user_accounts_email_lower", { synchronize: false })
@@ -28,6 +29,8 @@ class User {
   createdAt: Date
   @UpdateDateColumn()
   updatedAt: Date
+  @OneToMany(type => Application, application => application.user)
+  applications: Application[];
 }
 
 export { User as default, User }
