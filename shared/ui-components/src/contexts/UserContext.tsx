@@ -1,23 +1,20 @@
-import { createContext, createElement, useReducer, FunctionComponent } from "react"
+import { createContext, createElement, useReducer, FunctionComponent, useEffect } from "react"
 import axios, { AxiosInstance } from "axios"
 import { createAction, createReducer } from "typesafe-actions"
+import jwtDecode from "jwt-decode"
+import { User, CreateUserDto } from "@bloom-housing/backend-core"
+
+declare module "jwt-decode"
 
 type UserState = {
   loading: boolean
   accessToken?: string
   profile?: User
   client?: AxiosInstance
+  refreshTimer?: number
 }
 
-// TODO: load actual DTO from backend/core
-type CreateUserDto = {
-  [key: string]: any
-}
-
-// TODO: load actual User from backend/core
-type User = {
-  [key: string]: any
-}
+const ACCESS_TOKEN_LOCAL_STORAGE_KEY = "@bht"
 
 const renewToken = async (client: AxiosInstance) => {
   const res = await client.post<{ accessToken: string }>("auth/token")
@@ -54,24 +51,78 @@ const createAxiosInstance = (apiUrl: string, accessToken: string) =>
     },
   })
 
-const saveToken = createAction("SAVE_TOKEN")<{ apiUrl: string; accessToken: string }>()
+type DispatchType = (...arg: [unknown]) => void
+
+const saveToken = createAction("SAVE_TOKEN")<{
+  apiUrl: string
+  accessToken: string
+  dispatch: DispatchType
+}>()
 const startLoading = createAction("START_LOADING")()
 const stopLoading = createAction("STOP_LOADING")()
 const saveProfile = createAction("SAVE_PROFILE")<User>()
+const signOut = createAction("SIGN_OUT")()
+
+const scheduleRefresh = (
+  client: AxiosInstance,
+  accessToken: string,
+  dispatch: (...arg: [unknown]) => void
+) => {
+  const { exp = 0 } = jwtDecode(accessToken) as { exp?: number }
+  const ttl = new Date(exp * 1000).valueOf() - new Date().valueOf()
+
+  if (ttl < 0) {
+    // If ttl is negative, then our token is already expired, we'll have to re-login to get a new token.
+    dispatch(signOut())
+    return null
+  } else {
+    // Queue up a refresh for ~1 minute before the token expires
+    return (setTimeout(() => {
+      const run = async () => {
+        const accessToken = await renewToken(client)
+        const apiUrl = client.defaults.baseURL
+        if (apiUrl && accessToken) {
+          dispatch(saveToken({ apiUrl, accessToken, dispatch }))
+        }
+      }
+      run()
+    }, Math.max(ttl - 60000, 0)) as unknown) as number
+  }
+}
 
 const reducer = createReducer({ loading: false } as UserState, {
-  SAVE_TOKEN: (state, { payload }) => ({
-    ...state,
-    client: createAxiosInstance(payload.apiUrl, payload.accessToken),
-    accessToken: payload.accessToken,
-  }),
+  SAVE_TOKEN: (state, { payload }) => {
+    const { refreshTimer: oldRefresh, ...rest } = state
+    const { accessToken, apiUrl, dispatch } = payload
+    // If an existing refresh timer has been defined, remove it as the access token has changed
+    if (oldRefresh) {
+      clearTimeout(oldRefresh)
+    }
+
+    // Save off the token in local storage for persistence across reloads.
+    localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, accessToken)
+
+    const client = createAxiosInstance(apiUrl, accessToken)
+    const refreshTimer = scheduleRefresh(client, accessToken, dispatch)
+
+    return {
+      ...rest,
+      ...(refreshTimer && { refreshTimer }),
+      client,
+      accessToken: accessToken,
+    }
+  },
   START_LOADING: (state) => ({ ...state, loading: true }),
   END_LOADING: (state) => ({ ...state, loading: false }),
   SAVE_PROFILE: (state, { payload: user }) => ({ ...state, profile: user }),
+  SIGN_OUT: () => {
+    localStorage.removeItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY)
+    return { loading: false }
+  },
 })
 
 type ContextProps = {
-  login: (email: string, password: string) => Promise<User>
+  login: (email: string, password: string) => Promise<void>
   register: (user: CreateUserDto) => Promise<User>
   loading: boolean
   profile?: User
@@ -83,13 +134,30 @@ export const UserContext = createContext<Partial<ContextProps>>({})
 export const UserProvider: FunctionComponent<{ apiUrl: string }> = ({ apiUrl, children }) => {
   const [state, dispatch] = useReducer(reducer, { loading: false })
 
-  const refreshToken = async () => {
-    // We can only refresh our token if we have an existing token
-    if (state.accessToken && state.client) {
-      const accessToken = await renewToken(state.client)
-      dispatch(saveToken({ accessToken, apiUrl }))
+  // Load our profile as soon as we have an authenticated client available
+  useEffect(() => {
+    if (!state.profile && state.client) {
+      const loadProfile = async (client: AxiosInstance) => {
+        dispatch(startLoading())
+        try {
+          const profile = await getProfile(client)
+          dispatch(saveProfile(profile))
+          return profile
+        } finally {
+          dispatch(stopLoading())
+        }
+      }
+      loadProfile(state.client)
     }
-  }
+  }, [state.profile, state.client])
+
+  // On initial load/reload, check localStorage to see if we have a token available
+  useEffect(() => {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY)
+    if (accessToken) {
+      dispatch(saveToken({ accessToken, apiUrl, dispatch }))
+    }
+  }, [apiUrl])
 
   const contextValues: ContextProps = {
     loading: state.loading,
@@ -99,10 +167,7 @@ export const UserProvider: FunctionComponent<{ apiUrl: string }> = ({ apiUrl, ch
       dispatch(startLoading())
       try {
         const accessToken = await login(apiUrl, email, password)
-        dispatch(saveToken({ accessToken, apiUrl }))
-        const profile = await getProfile(createAxiosInstance(apiUrl, accessToken))
-        dispatch(saveProfile(profile))
-        return profile
+        dispatch(saveToken({ accessToken, apiUrl, dispatch }))
       } finally {
         dispatch(stopLoading())
       }
@@ -111,7 +176,7 @@ export const UserProvider: FunctionComponent<{ apiUrl: string }> = ({ apiUrl, ch
       dispatch(startLoading())
       try {
         const { accessToken, user: profile } = await register(apiUrl, user)
-        dispatch(saveToken({ accessToken, apiUrl }))
+        dispatch(saveToken({ accessToken, apiUrl, dispatch }))
         dispatch(saveProfile(profile))
         return profile
       } finally {
