@@ -136,12 +136,12 @@ export const UserContext = createContext<Partial<ContextProps>>({})
 
 export const UserProvider: FunctionComponent<{ apiUrl: string; storageType?: string }> = ({
   apiUrl,
-  storageType,
+  storageType = "session",
   children,
 }) => {
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
-    storageType: storageType || "session",
+    storageType,
   })
 
   // Load our profile as soon as we have an authenticated client available
