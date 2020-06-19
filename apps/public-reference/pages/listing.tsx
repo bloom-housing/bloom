@@ -141,7 +141,7 @@ export default class extends Component<ListingProps> {
               <p className="text-gray-700 text-base">{listing.developer}</p>
               <p className="text-xs">
                 <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
-                  View on Map
+                  {t("t.viewOnMap")}
                 </a>
               </p>
             </div>
@@ -165,7 +165,9 @@ export default class extends Component<ListingProps> {
 
                 return (
                   <>
-                    <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                    <h2 className="mt-4 mb-2">
+                      {t("listings.percentAMIUnit", { percent: percent })}
+                    </h2>
                     <GroupedTable
                       headers={unitSummariesHeaders}
                       data={groupedUnits}
@@ -250,12 +252,12 @@ export default class extends Component<ListingProps> {
               hideHeader={true}
               desktopClass="header-hidden"
             >
-              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
+              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
                   <ApplicationSection listing={listing} />
                 </div>
-                <WhatToExpect />
+                <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
               </aside>
             </ListingDetailItem>

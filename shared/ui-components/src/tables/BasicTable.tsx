@@ -7,11 +7,7 @@ export const Row = (props: any) => (
   </tr>
 )
 
-export const HeaderCell = (props: any) => (
-  <th className="text-left uppercase bg-primary-lighter p-5 font-semibold tracking-wider border-0 border-b border-primary">
-    {props.children}
-  </th>
-)
+export const HeaderCell = (props: any) => <th>{props.children}</th>
 
 export const Cell = (props: any) => (
   <td data-label={props.headerLabel} className={props.className || "p-5"} colSpan={props.colSpan}>

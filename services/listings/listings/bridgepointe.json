@@ -5,7 +5,7 @@
   "acceptingOnlineApplications": false,
   "accessibility": "Accessiblity features in common areas like lobby, wheelchair ramps, accessible bathrooms and elevators.",
   "amenities": "Gym, theater room, clubhouse, pool, playground, business center, spa",
-  "applicationDueDate": "",
+  "applicationDueDate": null,
   "applicationOpenDate": "2020-06-09T00:00:00.000Z",
   "applicationOrganization": "Bridgepointe",
   "applicationAddress": {
@@ -96,7 +96,7 @@
       "numBedrooms": 2,
       "number": "L-119",
       "priorityType": null,
-      "reservedType": "family",
+      "reservedType": null,
       "sqFeet": 690,
       "status": "available",
       "unitType": "oneBdrm",
@@ -120,7 +120,7 @@
       "numBedrooms": 1,
       "number": "N-201",
       "priorityType": null,
-      "reservedType": "family",
+      "reservedType": null,
       "sqFeet": 848,
       "status": "available",
       "unitType": "oneBdrm",
@@ -144,7 +144,7 @@
       "numBedrooms": 1,
       "number": "I-235",
       "priorityType": null,
-      "reservedType": "family",
+      "reservedType": null,
       "sqFeet": 750,
       "status": "available",
       "unitType": "oneBdrm",
@@ -163,5 +163,10 @@
       "description": "1. Live or work in San Mateo 2. Others",
       "links": null
     }
-  ]
+  ],
+  "whatToExpect": {
+    "applicantsWillBeContacted": "Applicants will be contacted by the City of San Mateo on a first come first serve basis until vacancies are filled.",
+    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
+    "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted."
+  }
 }

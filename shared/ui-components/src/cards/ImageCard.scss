@@ -2,7 +2,7 @@
 
 .image-card {
   @apply relative;
-
+  
   img {
     @apply w-full;
   }
@@ -34,7 +34,7 @@
 
 .image-card--leader {
   @apply w-full;
-
+  
   @screen md {
     @apply w-2/3;
     @apply pr-8;

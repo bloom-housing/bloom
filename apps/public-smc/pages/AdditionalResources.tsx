@@ -32,7 +32,7 @@ export default () => {
                   <h3 className="text-base font-serif font-normal mb-6">
                     {t("additionalResources.rentalsDescription")}
                   </h3>
-                 </header>
+                </header>
                 <ul className="flex-none md:flex mb-6">
                   <li className="flex-1 md:pr-4">
                     <Card

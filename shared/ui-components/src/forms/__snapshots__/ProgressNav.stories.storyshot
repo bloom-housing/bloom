@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Forms|ProgressNav Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <ProgressNav
+    completedSteps={1}
+    currentPageStep={2}
+    labels={
+      Array [
+        "You",
+        "Household",
+        "Income",
+        "Preferences",
+        "Review",
+      ]
+    }
+    totalNumberOfSteps={5}
+  >
+    <ul
+      className="progress-nav"
+    >
+      <ProgressNavItem
+        completedSteps={1}
+        currentPageStep={2}
+        label="You"
+        step={1}
+      >
+        <li
+          className="progress-nav__item "
+        >
+          <a
+            href="#"
+          >
+            You
+          </a>
+        </li>
+      </ProgressNavItem>
+      <ProgressNavItem
+        completedSteps={1}
+        currentPageStep={2}
+        label="Household"
+        step={2}
+      >
+        <li
+          className="progress-nav__item is-active"
+        >
+          <a
+            href="#"
+          >
+            Household
+          </a>
+        </li>
+      </ProgressNavItem>
+      <ProgressNavItem
+        completedSteps={1}
+        currentPageStep={2}
+        label="Income"
+        step={3}
+      >
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            Income
+          </a>
+        </li>
+      </ProgressNavItem>
+      <ProgressNavItem
+        completedSteps={1}
+        currentPageStep={2}
+        label="Preferences"
+        step={4}
+      >
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            Preferences
+          </a>
+        </li>
+      </ProgressNavItem>
+      <ProgressNavItem
+        completedSteps={1}
+        currentPageStep={2}
+        label="Review"
+        step={5}
+      >
+        <li
+          className="progress-nav__item is-disabled"
+        >
+          <a
+            href="#"
+          >
+            Review
+          </a>
+        </li>
+      </ProgressNavItem>
+    </ul>
+  </ProgressNav>
+</div>
+`;

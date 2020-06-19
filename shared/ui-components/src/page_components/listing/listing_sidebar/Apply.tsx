@@ -12,12 +12,8 @@ export interface ApplyProps {
 }
 
 const OrDivider = (props: { bgColor: string }) => (
-  <div className="-mx-5 mt-6 mb-2 border-t border-gray-400 text-center">
-    <span
-      className={`bg-${props.bgColor} relative -top px-1 uppercase text-primary-dark font-semibold`}
-    >
-      or
-    </span>
+  <div className="aside-block__divider">
+    <span className={`bg-${props.bgColor} aside-block__conjunction`}>or</span>
   </div>
 )
 
@@ -50,10 +46,8 @@ const Apply = (props: ApplyProps) => {
 
   return (
     <>
-      <section className="border border-gray-400 border-b-0 p-5">
-        <h2 className="font-alt-sans uppercase text-tiny mb-5 pb-2 border-0 border-b-4 border-primary font-semibold text-gray-800 tracking-widest inline-block">
-          {t("listings.apply.howToApply")}
-        </h2>
+      <section className="aside-block">
+        <h2 className="text-caps-underline">{t("listings.apply.howToApply")}</h2>
 
         {openDateState(listing) && (
           <p className="mb-5 text-gray-700">
@@ -107,7 +101,7 @@ const Apply = (props: ApplyProps) => {
       </section>
 
       {(listing.acceptingApplicationsByPoBox || listing.acceptingApplicationsAtLeasingAgent) && (
-        <section className="border-gray-400 border-b border-t p-5 bg-gray-100">
+        <section className="aside-block bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
           {listing.acceptingApplicationsByPoBox && (
             <>

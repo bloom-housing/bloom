@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes|InfoCardGrid Two Columns 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <section
+    className="info-cards"
+  >
+    <header
+      className="info-cards__header"
+    >
+      <h2
+        className="info-cards__title"
+      >
+        Rentals
+      </h2>
+      <p
+        className="info-cards__subtitle"
+      >
+        Other rental housing funded by the City, as well as lists developed each month by community nonprofit agencies.
+      </p>
+    </header>
+    <div
+      className="info-cards__grid"
+    >
+      <InfoCard
+        externalHref="http//google.com"
+        style="is-normal-primary-lighter"
+        title="My Card"
+      >
+        <div
+          className="info-card is-normal-primary-lighter"
+        >
+          <h4
+            className="info-card__title"
+          >
+            <a
+              href="http//google.com"
+              target="_blank"
+            >
+              My Card
+            </a>
+          </h4>
+          <p>
+            My content
+          </p>
+        </div>
+      </InfoCard>
+      <InfoCard
+        externalHref="http//google.com"
+        style="is-normal-primary-lighter"
+        title="My Card"
+      >
+        <div
+          className="info-card is-normal-primary-lighter"
+        >
+          <h4
+            className="info-card__title"
+          >
+            <a
+              href="http//google.com"
+              target="_blank"
+            >
+              My Card
+            </a>
+          </h4>
+          <p>
+            My content
+          </p>
+        </div>
+      </InfoCard>
+    </div>
+  </section>
+</div>
+`;

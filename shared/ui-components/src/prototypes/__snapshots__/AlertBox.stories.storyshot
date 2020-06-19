@@ -17,6 +17,7 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Alert 1`] = `
       <Icon
         size="medium"
         symbol="clock"
+        white={false}
       >
         <span
           className="ui-icon ui-medium"
@@ -40,6 +41,11 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Alert 1`] = `
       ×
     </button>
   </div>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
 </div>
 `;
 
@@ -60,9 +66,10 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Alert Invert 1`] = `
       <Icon
         size="medium"
         symbol="clock"
+        white={true}
       >
         <span
-          className="ui-icon ui-medium"
+          className="ui-icon ui-medium ui-white"
         >
           <svg>
             <use
@@ -83,6 +90,11 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Alert Invert 1`] = `
       ×
     </button>
   </div>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
 </div>
 `;
 
@@ -103,6 +115,7 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Notice 1`] = `
       <Icon
         size="medium"
         symbol="clock"
+        white={false}
       >
         <span
           className="ui-icon ui-medium"
@@ -126,6 +139,11 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Notice 1`] = `
       ×
     </button>
   </div>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
 </div>
 `;
 
@@ -146,9 +164,10 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Notice Invert 1`] = `
       <Icon
         size="medium"
         symbol="clock"
+        white={true}
       >
         <span
-          className="ui-icon ui-medium"
+          className="ui-icon ui-medium ui-white"
         >
           <svg>
             <use
@@ -169,6 +188,11 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Notice Invert 1`] = `
       ×
     </button>
   </div>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
 </div>
 `;
 
@@ -189,6 +213,7 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Sucucess 1`] = `
       <Icon
         size="medium"
         symbol="clock"
+        white={false}
       >
         <span
           className="ui-icon ui-medium"
@@ -212,6 +237,11 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Sucucess 1`] = `
       ×
     </button>
   </div>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
 </div>
 `;
 
@@ -232,9 +262,10 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Sucucess Invert 1`] = `
       <Icon
         size="medium"
         symbol="clock"
+        white={true}
       >
         <span
-          className="ui-icon ui-medium"
+          className="ui-icon ui-medium ui-white"
         >
           <svg>
             <use
@@ -255,5 +286,10 @@ exports[`Storyshots Prototypes|AlertBox Alert Box Sucucess Invert 1`] = `
       ×
     </button>
   </div>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
 </div>
 `;

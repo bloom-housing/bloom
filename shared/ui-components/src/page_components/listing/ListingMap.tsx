@@ -23,7 +23,7 @@ const ListingMap = (props: ListingMapProps) => {
   const [viewport, setViewPort] = React.useState({
     latitude: address.latitude,
     longitude: address.longitude,
-    zoom: 8,
+    zoom: 13,
   } as Viewport)
   const _onViewportChange = (viewport: Viewport) => {
     // width and height need to be set here to work properly with
@@ -34,7 +34,7 @@ const ListingMap = (props: ListingMapProps) => {
   }
 
   return (
-    <>
+    <div className="listing-map">
       <div className="addressPopup">
         <h3 className="text-caps-tiny">{props.listing.name}</h3>
         <MultiLineAddress address={address} />
@@ -42,6 +42,7 @@ const ListingMap = (props: ListingMapProps) => {
       <ReactMapGL
         mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
         onViewportChange={_onViewportChange}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
         {...viewport}
       >
         <Marker
@@ -52,7 +53,7 @@ const ListingMap = (props: ListingMapProps) => {
           <div className="pin"></div>
         </Marker>
       </ReactMapGL>
-    </>
+    </div>
   )
 }
 export { ListingMap as default, ListingMap }

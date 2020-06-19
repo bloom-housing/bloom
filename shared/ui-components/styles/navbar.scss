@@ -8,6 +8,7 @@
   @apply text-right;
   @apply text-white;
 }
+
 .navbar-notice__text {
   @apply max-w-5xl;
   @apply m-auto;
@@ -16,8 +17,7 @@
   @apply pb-2;
   @apply pr-1;
 
-  a,
-  a:hover {
+  a, a:hover {
     @apply underline;
     color: inherit;
   }

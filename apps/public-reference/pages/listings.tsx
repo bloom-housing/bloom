@@ -26,7 +26,11 @@ export default class extends Component<ListingsProps> {
       const response = await axios.get(process.env.listingServiceUrl)
       const nowTime = moment()
       openListings = response.data.listings.filter((listing: Listing) => {
-        return openDateState(listing) || nowTime <= moment(listing.applicationDueDate)
+        return (
+          openDateState(listing) ||
+          nowTime <= moment(listing.applicationDueDate) ||
+          listing.applicationDueDate == null
+        )
       })
       closedListings = response.data.listings.filter((listing: Listing) => {
         return nowTime > moment(listing.applicationDueDate)
@@ -42,7 +46,7 @@ export default class extends Component<ListingsProps> {
     return this.props.openListings.length > 0 ? (
       <ListingsList listings={this.props.openListings} />
     ) : (
-      <div className="flex flex-row flex-wrap max-w-5xl m-auto mt-5 mb-12 text-center p-4 bg-primary-lighter">
+      <div className="notice-block">
         <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
       </div>
     )
