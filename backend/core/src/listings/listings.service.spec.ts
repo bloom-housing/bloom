@@ -30,7 +30,7 @@ describe("ListingsService", () => {
   it("Find all", async () => {
     const testListing = factories.listing.build()
     jest.spyOn(repo, "find").mockResolvedValueOnce([testListing])
-    const results = await service.findAll()
+    const results = await service.list()
     expect(results.listings).toMatchObject([testListing])
   })
 })
