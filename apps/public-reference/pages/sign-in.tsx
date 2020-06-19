@@ -71,7 +71,14 @@ export default () => {
           />
 
           <div className="text-center mt-6">
-            <Button filled={true}>Sign In</Button>
+            <Button
+              filled={true}
+              onClick={() => {
+                //
+              }}
+            >
+              Sign In
+            </Button>
           </div>
         </form>
 
