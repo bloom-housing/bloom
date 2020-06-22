@@ -4,6 +4,7 @@ module.exports = {
     project: [
       "./tsconfig.json",
       "./apps/public-reference/tsconfig.json",
+      "./apps/partners-reference/tsconfig.json",
       "./services/**/tsconfig.json"
     ],
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features

@@ -7,6 +7,7 @@
       "shared/core",
       "shared/ui-components",
       "apps/public-reference",
+      "apps/partners-reference",
       "services/listings",
       "backend/core"
     ],
@@ -22,9 +23,12 @@
   "scripts": {
     "dev:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn dev",
     "test:app:public": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-reference && yarn test",
+    "dev:app:partners": "export $(cat backend/core/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/partners-reference && yarn dev",
+    "test:app:partners": "export $(cat backend/core/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/partners-reference && yarn test",
     "dev:listings": "cd services/listings && yarn dev",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
+    "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "new-version": "lerna version --conventional-commits --yes",
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
