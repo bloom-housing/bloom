@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
 import { Listing } from "./Listing"
 import { PreferenceLink } from "@bloom-housing/core"
 
-@Entity()
+@Entity({ name: "preferences" })
 class Preference {
   @PrimaryGeneratedColumn("uuid")
   id: string
