@@ -21,11 +21,7 @@
   @apply text-center;
   width: fit-content;
   @apply mx-auto;
-  @apply mt-4;
-  @apply pt-4;
   @apply px-3;
-  @apply border-t-4;
-  @apply border-primary;
 
   &.is-borderless {
     @apply pt-0;

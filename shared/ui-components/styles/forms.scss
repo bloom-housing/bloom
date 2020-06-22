@@ -7,8 +7,11 @@
 
   label,
   .label {
-    @apply text-gray-750;
-    font-size: 0.95rem;
+    @apply text-gray-900;
+    @apply uppercase;
+    @apply text-tiny;
+    @apply font-semibold;
+    letter-spacing: .1rem;
   }
 
   label + .control {
@@ -22,7 +25,7 @@
       @apply bg-gray-200;
       @apply rounded;
       @apply w-full;
-      @apply py-2;
+      @apply py-3;
       @apply px-3;
       @apply text-gray-900;
       font-family: inherit;
@@ -175,4 +178,14 @@
   &:last-child {
     padding-right: 0;
   }
+}
+
+.field__label {
+  @apply text-gray-900;
+  @apply uppercase;
+  @apply text-tiny;
+  @apply font-semibold;
+  @apply mb-2;
+  @apply block;
+  letter-spacing: .1rem;
 }

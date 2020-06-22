@@ -41,8 +41,10 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard>
-        <div className="text-center">
-          <Icon size="2xl" symbol="profile" />
+        <div class="text-center">
+          <div className="header-badge">
+            <Icon size="2xl" symbol="profile" />
+          </div>
         </div>
         <h2 className="form-card__title">Sign In</h2>
 

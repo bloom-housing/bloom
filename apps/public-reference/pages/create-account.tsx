@@ -27,7 +27,9 @@ export default () => {
     <FormsLayout>
       <FormCard>
         <div className="text-center">
-          <Icon size="2xl" symbol="profile" />
+          <div className="header-badge">
+            <Icon size="2xl" symbol="profile" />
+          </div>
         </div>
         <h2 className="form-card__title">Create Account</h2>
 
@@ -38,7 +40,7 @@ export default () => {
         <hr />
 
         <form id="create-account" className="px-8 mt-10" onSubmit={handleSubmit(onSubmit)}>
-          <label>Your Name</label>
+          <label className="field__label">Your Name</label>
 
           <Field
             name="firstName"
@@ -62,7 +64,7 @@ export default () => {
 
           <hr />
 
-          <label>Your Date of Birth</label>
+          <label className="field__label">Your Date of Birth</label>
           <div className="flex">
             <Field
               name="birthMonth"
