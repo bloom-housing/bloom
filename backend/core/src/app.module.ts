@@ -11,8 +11,8 @@ import { UserModule } from "./user/user.module"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../ormconfig")
 import { AuthModule } from "./auth/auth.module"
-import { ApplicationController } from "./application/application.controller"
-import { ApplicationService } from "./application/application.service"
+import { ApplicationsController } from "./applications/applications.controller"
+import { ApplicationsService } from "./applications/applications.service"
 import { Application } from "./entity/application.entity"
 
 @Module({
@@ -25,7 +25,7 @@ import { Application } from "./entity/application.entity"
     UserModule,
     AuthModule,
   ],
-  controllers: [ListingsController, ApplicationController],
-  providers: [ListingsService, ApplicationService],
+  controllers: [ListingsController, ApplicationsController],
+  providers: [ListingsService, ApplicationsService],
 })
 export class AppModule {}
