@@ -89,7 +89,12 @@ export default () => {
                 "" + (context.application.birthMonth > 0 ? context.application.birthMonth : "")
               }
               error={errors.birthMonth}
-              validation={{ required: true }}
+              validation={{
+                required: true,
+                validate: {
+                  monthRange: (value) => parseInt(value) > 0 && parseInt(value) <= 12,
+                },
+              }}
               register={register}
             />
             <Field
@@ -99,7 +104,12 @@ export default () => {
                 "" + (context.application.birthDay > 0 ? context.application.birthDay : "")
               }
               error={errors.birthDay}
-              validation={{ required: true }}
+              validation={{
+                required: true,
+                validate: {
+                  dayRange: (value) => parseInt(value) > 0 && parseInt(value) <= 31,
+                },
+              }}
               register={register}
             />
             <Field
@@ -109,10 +119,22 @@ export default () => {
                 "" + (context.application.birthYear > 0 ? context.application.birthYear : "")
               }
               error={errors.birthYear}
-              validation={{ required: true }}
+              validation={{
+                required: true,
+                validate: {
+                  yearRange: (value) =>
+                    parseInt(value) > 1900 && parseInt(value) <= new Date().getFullYear() - 18,
+                },
+              }}
               register={register}
             />
           </div>
+
+          {(errors.birthMonth || errors.birthDay || errors.birthYear) && (
+            <div className="field error">
+              <span className="error-message">Please enter a valid Date of Birth</span>
+            </div>
+          )}
 
           <hr />
 
