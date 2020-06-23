@@ -6,15 +6,19 @@ import {
   Get,
   Param,
   Post,
-  Put,
-  UseInterceptors,
+  Put, UseGuards,
+  UseInterceptors
 } from "@nestjs/common"
 import { UserApplicationsService } from "./user-applications.service"
 import { ApplicationCreateDto } from "./application.create.dto"
 import { ApplicationUpdateDto } from "./application.update.dto"
 import { ApplicationDto } from "../applications/applications.dto"
+import { JwtAuthGuard } from "../auth/jwt.guard"
+import { OwnerGuard } from "../guards/owner.guard"
 
 @Controller("user")
+@UseGuards(JwtAuthGuard)
+@UseGuards(OwnerGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserApplicationsController {
   constructor(private readonly userApplicationsService: UserApplicationsService) {}
