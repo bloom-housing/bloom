@@ -14,6 +14,8 @@ import { AuthModule } from "./auth/auth.module"
 import { ApplicationsController } from "./applications/applications.controller"
 import { ApplicationsService } from "./applications/applications.service"
 import { Application } from "./entity/application.entity"
+import { UserApplicationsController } from "./user-applications/user-applications.controller"
+import { UserApplicationsService } from "./user-applications/user-applications.service"
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { Application } from "./entity/application.entity"
     UserModule,
     AuthModule,
   ],
-  controllers: [ListingsController, ApplicationsController],
-  providers: [ListingsService, ApplicationsService],
+  controllers: [ListingsController, ApplicationsController, UserApplicationsController],
+  providers: [ListingsService, ApplicationsService, UserApplicationsService],
 })
 export class AppModule {}
