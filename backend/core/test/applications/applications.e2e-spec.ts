@@ -10,8 +10,6 @@ import supertest from "supertest"
 import { AppModule } from "../../src/app.module"
 import { clearDb } from "../utils/clearDb"
 
-
-
 describe("Applications", () => {
   let app: INestApplication
 
@@ -31,9 +29,7 @@ describe("Applications", () => {
   })
 
   it(`/GET `, async () => {
-    const res = await supertest(app.getHttpServer())
-      .get("/applications")
-      .expect(200)
+    const res = await supertest(app.getHttpServer()).get("/applications").expect(200)
     expect(Array.isArray(res.body)).toBe(true)
   })
 
