@@ -4,7 +4,7 @@ Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
 import Router from "next/router"
-import { Button, Field, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -31,63 +31,55 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-      <div className="form-card__header">
-        <header className="form-card__header_group">
-          <h5 className="form-card__header_title">LISTING</h5>
-        </header>
-      
-        <div className="form-card__header_nav">
-          <ProgressNav
-            currentPageStep={currentPageStep}
-            completedSteps={application.completedStep}
-            totalNumberOfSteps={conductor.totalNumberOfSteps()}
-            labels={["You", "Household", "Income", "Preferences", "Review"]}
-          />
-        </div>
-      </div>
+      <FormCard header="LISTING">
+        <ProgressNav
+          currentPageStep={currentPageStep}
+          completedSteps={application.completedStep}
+          totalNumberOfSteps={conductor.totalNumberOfSteps()}
+          labels={["You", "Household", "Income", "Preferences", "Review"]}
+        />
       </FormCard>
 
       <FormCard>
         <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">What's your name?</h2>
+          <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
         </div>
 
         <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps">Your Name</label>
+            <label className="field-label--caps">{t("application.name.yourName")}</label>
 
             <Field
               name="firstName"
-              placeholder="First Name"
+              placeholder={t("application.name.firstName")}
               controlClassName="mt-2"
               defaultValue={context.application.firstName}
               validation={{ required: true }}
               error={errors.firstName}
-              errorMessage="Please enter a First Name"
+              errorMessage={t("application.name.firstNameError")}
               register={register}
             />
 
             <Field
               name="middleName"
-              placeholder="Middle Name (optional)"
+              placeholder={t("application.name.middleName")}
               defaultValue={context.application.middleName}
               register={register}
             />
 
             <Field
               name="lastName"
-              placeholder="Last Name"
+              placeholder={t("application.name.lastName")}
               defaultValue={context.application.lastName}
               validation={{ required: true }}
               error={errors.lastName}
-              errorMessage="Please enter a Last Name"
+              errorMessage={t("application.name.lastNameError")}
               register={register}
             />
           </div>
-          
+
           <div className="form-card__group border-b">
-            <label className="field-label--caps">Your Date of Birth</label>
+            <label className="field-label--caps">{t("application.name.yourDateOfBirth")}</label>
 
             <div className="field-group--dob mt-2">
               <Field
@@ -140,26 +132,24 @@ export default () => {
 
             {(errors.birthMonth || errors.birthDay || errors.birthYear) && (
               <div className="field error">
-                <span className="error-message">Please enter a valid Date of Birth</span>
+                <span className="error-message">{t("application.name.dateOfBirthError")}</span>
               </div>
             )}
           </div>
 
           <div className="form-card__group">
-            <label className="field-label--caps">Your Email Address</label>
+            <label className="field-label--caps">{t("application.name.yourEmailAddress")}</label>
 
-            <p className="field-note my-2">
-              We will only use your email address to contact you about your application.
-            </p>
+            <p className="field-note my-2">{t("application.name.emailPrivacy")}</p>
 
             <Field
               type="email"
               name="emailAddress"
-              placeholder={noEmail ? "None" : "example@web.com"}
+              placeholder={noEmail ? t("t.none") : "example@web.com"}
               defaultValue={context.application.emailAddress}
               validation={{ pattern: emailRegex }}
               error={errors.emailAddress}
-              errorMessage="Please enter an email address"
+              errorMessage={t("application.name.emailAddressError")}
               register={register}
               disabled={noEmail}
             />
@@ -178,7 +168,7 @@ export default () => {
                 }}
               />
               <label htmlFor="noEmail" className="text-primary font-semibold">
-                I don't have an email address
+                {t("application.name.noEmailAddress")}
               </label>
             </div>
           </div>
@@ -191,7 +181,7 @@ export default () => {
                   //
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
           </div>
