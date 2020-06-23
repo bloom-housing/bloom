@@ -7,7 +7,6 @@ import { plainToClass } from "class-transformer"
 @Injectable()
 export class UserApplicationsService {
   async list(userId: string) {
-    console.log(userId)
     return Application.find({ userId: userId })
   }
 
