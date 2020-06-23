@@ -1,5 +1,5 @@
 .app-header {
-  @apply bg-red;
+  @apply bg-primary;
   @apply text-white;
   @apply border-solid;
   @apply border;
@@ -7,7 +7,7 @@
   @apply text-center;
 
   @screen md {
-    @apply rounded-sm;
+    @apply rounded-lg;
   }
 }
 

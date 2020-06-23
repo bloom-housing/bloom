@@ -174,14 +174,14 @@
 .flex > .field,
 .field-group--dob .field {
   @apply flex-auto;
-  padding-left: .5rem;
-  padding-right: .5rem;
+  margin-left: .5rem;
+  margin-right: .5rem;
 
   &:first-child {
-    padding-left: 0;
+    margin-left: 0;
   }
   &:last-child {
-    padding-right: 0;
+    margin-right: 0;
   }
 }
 
@@ -189,8 +189,12 @@
   @apply flex;
 
   .field {
-    max-width: 4rem;
+    max-width: 3.5rem;
     margin-bottom: 0;
+
+    &:last-child {
+      max-width: 4rem;
+    }
   }
 }
 
