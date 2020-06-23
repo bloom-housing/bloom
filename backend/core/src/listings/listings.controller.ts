@@ -1,6 +1,5 @@
 import { Controller, Get, Query } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import { ApiOkResponse } from "@nestjs/swagger"
 import { ListingsListQueryParams, ListingsListResponse } from "./listings.dto"
 
 @Controller()
