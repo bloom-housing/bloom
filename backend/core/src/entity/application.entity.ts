@@ -4,13 +4,13 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
+  ManyToOne, BaseEntity
 } from "typeorm"
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
 
 @Entity({ name: "applications" })
-export class Application {
+export class Application extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @CreateDateColumn()

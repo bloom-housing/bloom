@@ -1,14 +1,9 @@
 import { Injectable } from "@nestjs/common"
-import { InjectRepository } from "@nestjs/typeorm"
 import { Application } from "../entity/application.entity"
-import { Repository } from "typeorm"
 
 @Injectable()
 export class ApplicationsService {
-  constructor(
-    @InjectRepository(Application) private readonly applicationRepo: Repository<Application>
-  ) {}
   async find(userId?: string, listingId?: string): Promise<Application[]> {
-    return await this.applicationRepo.find({ userId, listingId })
+    return await Application.find({ userId, listingId })
   }
 }

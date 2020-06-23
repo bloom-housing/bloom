@@ -8,7 +8,6 @@ import { Application } from "../entity/application.entity"
 export class ApplicationsController {
   constructor(private readonly applicationService: ApplicationsService) {}
   @Get()
-  @UseInterceptors(ClassSerializerInterceptor)
   async list(@Query() params?: ApplicationsListQueryParams): Promise<Application[]> {
     return plainToClass(
       Application,
