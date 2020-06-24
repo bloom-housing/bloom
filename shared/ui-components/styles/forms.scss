@@ -116,7 +116,7 @@
 
   input[type="radio"]:focus + label::before,
   input[type="checkbox"]:focus + label::before {
-    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary, 0 0 3px 4px $tailwind-primary;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-attention, 0 0 3px 4px $tailwind-attention;
   }
 
   input[type="checkbox"]:disabled + label {
@@ -152,6 +152,17 @@
     background-repeat: no-repeat;
     background-size: 0.75rem;
     padding-right: 2.25rem;
+  }
+}
+
+input[type],
+textarea,
+select {
+  @apply rounded;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
   }
 }
 
