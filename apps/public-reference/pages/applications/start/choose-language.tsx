@@ -27,9 +27,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -39,21 +37,24 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <h2 className="form-card__title is-borderless">Choose your language</h2>
+        <div className="form-card__lead border-b">
+          <h2 className="form-card__title is-borderless">Choose your language</h2>
+        </div>
 
-        <hr />
+        <form className="" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__group">(BUTTONS)</div>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (BUTTONS)
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+          <div className="form-card__pager">
+            <div className="form-card__pager-row primary">
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </form>
       </FormCard>

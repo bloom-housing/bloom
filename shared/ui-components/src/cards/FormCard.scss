@@ -8,7 +8,7 @@
     @apply rounded-lg;
   }
 
-  hr, 
+  hr,
   .border-b {
     @apply border-gray-450;
   }
@@ -33,6 +33,12 @@
     @apply mt-0;
     @apply border-t-0;
   }
+}
+
+.form-card__back {
+  @apply float-left;
+  @apply m-8;
+  @apply mt-5;
 }
 
 .form-card__lead {
@@ -89,7 +95,7 @@
   button,
   .button {
     @apply mb-0;
-  }  
+  }
 }
 
 .form-card__pager-row {
