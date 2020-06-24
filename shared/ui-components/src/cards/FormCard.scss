@@ -1,19 +1,20 @@
 .form-card {
-  @apply py-10;
-  @apply px-2;
   @apply bg-white;
-  @apply mb-10;
-  @apply border;
-  @apply border-gray-450;
-  @apply rounded-lg;
 
-  hr {
-    @apply my-6;
+  @screen md {
+    @apply mb-6;
+    @apply border;
+    @apply border-gray-450;
+    @apply rounded-lg;
+  }
+
+  hr,
+  .border-b {
     @apply border-gray-450;
   }
 
-  @screen md {
-    @apply px-10;
+  .hr {
+    @apply my-6;
   }
 }
 
@@ -31,5 +32,79 @@
     @apply pt-0;
     @apply mt-0;
     @apply border-t-0;
+  }
+}
+
+.form-card__back {
+  @apply float-left;
+  @apply m-8;
+  @apply mt-5;
+}
+
+.form-card__lead {
+  @apply pt-10;
+  @apply pb-8;
+}
+
+.form-card__lead,
+.form-card__group {
+  @apply px-6;
+  @apply py-8;
+
+  @screen md {
+    @apply px-8;
+    @apply mx-8;
+  }
+}
+
+.form-card__header {
+  @apply text-white;
+  @apply text-center;
+
+  @screen md {
+    @apply rounded-b-lg;
+  }
+}
+
+.form-card__header_group {
+  @apply bg-primary;
+  @apply p-4;
+
+  @screen md {
+    @apply rounded-t-lg;
+  }
+}
+
+.form-card__header_title {
+  @apply text-lg;
+  @apply font-alt-sans;
+  @apply font-bold;
+  @apply uppercase;
+  @apply mb-0;
+}
+
+.form-card__header_nav {
+  @apply p-4;
+  @apply bg-white;
+  @apply rounded-b-lg;
+}
+
+.form-card__pager {
+  @apply text-center;
+
+  button,
+  .button {
+    @apply mb-0;
+  }
+}
+
+.form-card__pager-row {
+  @apply py-2;
+  @apply px-8;
+  @apply py-4;
+
+  &.primary {
+    @apply bg-primary-lighter;
+    @apply pb-8;
   }
 }

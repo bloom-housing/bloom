@@ -4,7 +4,9 @@ export default (props) => {
   return (
     <Layout>
       <section style={{ padding: "1px", background: "#f6f6f6" }}>
-        <div style={{ maxWidth: "550px", margin: "3rem auto 5rem" }}>{props.children}</div>
+        <div className="md:mb-20 md:mt-12 mx-auto" style={{ maxWidth: "32rem" }}>
+          {props.children}
+        </div>
       </section>
     </Layout>
   )

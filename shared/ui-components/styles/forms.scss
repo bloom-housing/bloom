@@ -1,6 +1,6 @@
 .field {
   margin-bottom: 1.25rem;
-  
+
   * > &:last-child {
     margin-bottom: 0;
   }
@@ -22,7 +22,7 @@
       @apply bg-gray-200;
       @apply rounded;
       @apply w-full;
-      @apply py-2;
+      @apply py-3;
       @apply px-3;
       @apply text-gray-900;
       font-family: inherit;
@@ -36,7 +36,6 @@
   }
 
   &.error {
-
     label {
       @apply text-red-700;
     }
@@ -156,6 +155,14 @@
   }
 }
 
+.field-label--caps {
+  @apply uppercase;
+  @apply text-gray-750;
+  @apply tracking-widest;
+  @apply font-semibold;
+  @apply text-tiny;
+}
+
 .field--inline {
   display: inline-block;
 }
@@ -164,15 +171,35 @@
   margin-left: 1.5rem;
 }
 
-.flex > .field {
+.flex > .field,
+.field-group--dob .field {
   @apply flex-auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  margin-left: .5rem;
+  margin-right: .5rem;
 
   &:first-child {
-    padding-left: 0;
+    margin-left: 0;
   }
   &:last-child {
-    padding-right: 0;
+    margin-right: 0;
   }
+}
+
+.field-group--dob {
+  @apply flex;
+
+  .field {
+    max-width: 3.5rem;
+    margin-bottom: 0;
+
+    &:last-child {
+      max-width: 4rem;
+    }
+  }
+}
+
+.field-note {
+  @apply text-tiny;
+  @apply text-gray-700;
+  @apply font-semibold;
 }
