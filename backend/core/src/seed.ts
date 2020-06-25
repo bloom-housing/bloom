@@ -1,49 +1,26 @@
-import "reflect-metadata"
-import { createConnection } from "typeorm"
-import { Listing } from "./entity/listing.entity"
-import { Unit } from "./entity/unit.entity"
-import { Attachment } from "./entity/attachment.entity"
-import { Preference } from "./entity/preference.entity"
-import dbOptions = require("../ormconfig")
-import listingsSeeds from "../seeds.json"
+import { NestFactory } from "@nestjs/core"
+import { SeederModule } from "./seeder/seeder.module"
+import { ListingsSeederService } from "./seeder/listings-seeder/listings-seeder.service"
+import { UserService } from "./user/user.service"
+import { CreateUserDto } from "./user/createUser.dto"
+import { plainToClass } from "class-transformer"
 
-const skipped = ["id", "units", "attachments", "preferences"]
-const types = { units: Unit, attachments: Attachment, preferences: Preference }
+async function bootstrap() {
+  const app = await NestFactory.createApplicationContext(SeederModule)
+  const listingsSeederService = app.get<ListingsSeederService>(ListingsSeederService)
+  await listingsSeederService.seed()
 
-createConnection(dbOptions)
-  .then(async (connection) => {
-    const listings = listingsSeeds as any[]
-
-    for await (const listing of listings) {
-      const l = new Listing()
-      const entities = {}
-      for await (const key of Object.keys(listing)) {
-        if (!skipped.includes(key)) {
-          l[key] = listing[key]
-        } else if (key !== "id") {
-          entities[key] = listing[key]
-        }
-      }
-      await connection.manager.save(l)
-
-      for await (const key of Object.keys(entities)) {
-        for await (let value of entities[key]) {
-          if (value) {
-            if (value instanceof Array) {
-              value = (value as any).map((obj) => {
-                delete obj["id"]
-                obj["listing"] = l.id
-                return obj
-              })
-            } else {
-              delete value["id"]
-              value["listing"] = l.id
-            }
-
-            await connection.createQueryBuilder().insert().into(types[key]).values(value).execute()
-          }
-        }
-      }
-    }
-  })
-  .catch((error) => console.log("TypeORM connection error: ", error))
+  const userService = app.get<UserService>(UserService)
+  await userService.createUser(
+    plainToClass(CreateUserDto, {
+      email: "test@example.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      password: "abcdef",
+    })
+  )
+  await app.close()
+}
+bootstrap()
