@@ -19,6 +19,7 @@ export const blankApplication = () => {
     additionalPhoneNumber: "",
     additionalPhoneNumberType: "",
     workInRegion: null,
+    householdSize: 0,
     housingStatus: "",
     address: {
       street: "",
