@@ -1,7 +1,6 @@
 import Layout from "../layouts/application"
 import Head from "next/head"
 import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
-import PageContent from "../page_content/homepage.mdx"
 
 export default () => {
   const pageTitle = <>{t("error.notFound.title")}</>
@@ -15,9 +14,7 @@ export default () => {
         {t("error.notFound.message")}
       </Hero>
       <div className="homepage-extra">
-        <MarkdownSection fullwidth={true}>
-          <PageContent />
-        </MarkdownSection>
+        <MarkdownSection fullwidth={true}>An error has occurred.</MarkdownSection>
       </div>
     </Layout>
   )
