@@ -145,7 +145,7 @@ export default class extends Component<ListingProps> {
             </div>
           </header>
 
-          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light px-3 p-5 block text-center md:mx-3">
+          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light block text-center md:mx-3">
             <ApplicationStatus listing={listing} />
           </div>
 
@@ -249,7 +249,7 @@ export default class extends Component<ListingProps> {
                   <ApplicationStatus listing={listing} />
                   <ApplicationSection listing={listing} />
                 </div>
-                <WhatToExpect />
+                <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
               </aside>
             </ListingDetailItem>

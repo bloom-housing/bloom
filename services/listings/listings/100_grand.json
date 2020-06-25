@@ -5,7 +5,7 @@
   "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spafitness center, clubhouse, business center, heated pool & spa, outdoor BBQ’s, courtyard w/ fireplace",
-  "applicationDueDate": "2020-08-10T17:00:00.000Z",
+  "applicationDueDate": null,
   "applicationOrganization": "One Hundred Grand",
   "applicationAddress": {
     "city": "Foster City",
@@ -28,11 +28,11 @@
     "longitude": -122.268743
   },
   "buildingName": "One Hundred Grand",
-  "buildingSelectionCriteria": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/The_Triton_BMR_rental_information.pdf",
+  "buildingSelectionCriteria": null,
   "costsNotIncluded": "Residents responsible for utilities: electric, gas, cable/internet, water, sewer, trash, admin fee. Residents required to maintain a renter's insurance policy as outlined in the lease agreement. Rent is due by the 3rd of each month and rent is considered late on the 4th of each month. Late fee is $150.00. Resident to pay $35 for each returned check or rejected electronic payment. Pet Deposit is $500 per pet. $50 monthly pet rent per pet.",
   "creditHistory": "No collections, no bankruptcy, income is twice monthly rent. A credit report will be completed on all applicants to verify credit ratings. Income plus verified credit history will be entered into a credit scoring model to determine rental eligibility and security deposit levels. All decisions for residency are based on a system which considers credit history, rent history, income qualifications, and employment history. An approved decision based on the system does not automatically constittute an approval of residency. Applicant(s) and occupant(s) aged 18 years or older MUST also pass the criminal background check based on the criteria contained herein to be approved for residency.  Credit recommendations other than an accept decision, will require a rental verification. Applications for residency will automatically be denied for the following reasons: a. An outstanding debt to a previous landlord or an outstanding NSF check must be paid in full b. An unsatisfied breach of a prior lease or a prior eviction of any applicant or occupant c. More than four (4) late pays and two (2) NSF's in the last twenty-four (24) months",
-  "depositMax": "2946.0",
-  "depositMin": "600.0",
+  "depositMax": "2946",
+  "depositMin": "600",
   "developer": "CV Triton, LLC",
   "imageUrl": "/images/100_grand.jpg",
   "programRules": null,
@@ -55,7 +55,7 @@
   "unitAmenities": "Refrigerator, washer/dryer, gas stoves, microwave, dishwasher, central AC/Heat, quartz countertops, wood flooring, patio/balcony",
   "attachments": [
     {
-      "fileUrl": "https://100grandapts.com/img/Application.pdf",
+      "fileUrl": "https://100grandapts.com/bmr.php",
       "label": "English",
       "type": 1
     }
@@ -112,7 +112,7 @@
     {
       "ordinal": "1st",
       "title": "Preference 1a",
-      "subtitle": "Up to 5 units available",
+      "subtitle": null,
       "description": "Persons who are living in a Below Market Rate deed restricted unit in Foster City for a minimum of twelve (12) months that is subject to termination of affordability restrictions within three (3) years.",
       "links": []
     },
@@ -134,7 +134,7 @@
       "ordinal": "4th",
       "title": "Preference 3",
       "subtitle": null,
-      "description": "Persons who are living in a Below Market Rate deed restricted unit in Foster City for a minimum of twelve (12) months that is subject to termination of affordability restrictions within three (3) years.",
+      "description": "Employees of the City of Foster City.",
       "links": []
     },
     {

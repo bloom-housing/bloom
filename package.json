@@ -1,16 +1,24 @@
 {
   "name": "bloom-housing",
-  "version": "0.0.10",
+  "version": "0.2.3",
   "description": "Bloom is a system to manage processes for affordable housing",
-  "workspaces": [
-    "shared/core",
-    "shared/ui-components",
-    "apps/public-reference",
-    "apps/public-ala",
-    "apps/public-sj",
-    "apps/public-smc",
-    "services/listings"
-  ],
+  "workspaces": {
+    "packages": [
+      "shared/core",
+      "shared/ui-components",
+      "apps/public-reference",
+      "apps/public-ala",
+      "apps/public-sj",
+      "apps/public-smc",
+      "services/listings",
+      "backend/core"
+    ],
+    "nohoist": [
+      "**/@types/mocha",
+      "**/@types/jest",
+      "**/@types/gl-matrix"
+    ]
+  },
   "repository": "https://github.com/housingbayarea/bloom.git",
   "license": "GPL-3.0",
   "private": true,
@@ -24,12 +32,12 @@
     "dev:ala": "concurrently \"yarn dev:listings\" \"yarn dev:app:ala\"",
     "dev:sj": "concurrently \"yarn dev:listings\" \"yarn dev:app:sj\"",
     "dev:smc": "concurrently \"yarn dev:listings\" \"yarn dev:app:smc\"",
+    "dev:backend": "cd backend/core && yarn dev",
     "new-version": "lerna version --conventional-commits --yes",
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\"",
-    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js' --ignore-pattern 'node_modules' --ignore-pattern 'storybook-static/' --ignore-pattern '.next/' --ignore-pattern 'dist/'",
-    "debug": "ts-node-dev --inspect --respawn --transpileOnly services/listings/src/index.ts"
+    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js' --ignore-pattern 'node_modules' --ignore-pattern 'storybook-static/' --ignore-pattern '.next/' --ignore-pattern 'dist/'"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.14",

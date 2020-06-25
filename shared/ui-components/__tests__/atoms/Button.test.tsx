@@ -12,5 +12,5 @@ test("shows small button", () => {
       Small Button
     </Button>
   )
-  expect(wrapper.html()).toEqual('<button class="button small">Small Button</button>')
+  expect(wrapper.html()).toEqual('<button class="button is-small">Small Button</button>')
 })

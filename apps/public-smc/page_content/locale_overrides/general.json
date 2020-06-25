@@ -108,5 +108,8 @@
         "region": "San Mateo County and Bay Area"
       }
     }
+  },
+  "listings": {
+    "occupancyDescriptionNoSro": "Occupancy limits for this building differ from household size."
   }
 }

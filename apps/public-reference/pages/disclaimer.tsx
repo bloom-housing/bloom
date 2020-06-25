@@ -1,9 +1,9 @@
 import Layout from "../layouts/application"
-import { PageHeader, MarkdownSection } from "@bloom-housing/ui-components"
+import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/disclaimer.mdx"
 
 export default () => {
-  const pageTitle = <>Endorsement Disclaimers</>
+  const pageTitle = <>{t("pageTitle.disclaimer")}</>
 
   return (
     <Layout>

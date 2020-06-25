@@ -14,7 +14,7 @@ describe("Navigating around the site", function () {
   })
 
   it("Loads a listing page directly", function () {
-    cy.visit("http://localhost:3000/listing/Uvbk5qurpB2WI9V6WnNdH")
+    cy.visit("http://localhost:3000/listing/vWgL5K1EUG8q0SX-Dv5BA")
 
     // Check that the listing page sidebar apply section text is present on the page
     cy.contains("Get a Paper Application")

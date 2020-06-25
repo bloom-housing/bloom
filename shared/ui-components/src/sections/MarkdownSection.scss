@@ -1,0 +1,13 @@
+.markdown-section {
+  @apply px-5;
+  @apply my-6;
+
+  @screen md {
+    @apply my-12;
+  }
+}
+
+.markdown-section__inner {
+  @apply max-w-5xl;
+  @apply m-auto;
+}

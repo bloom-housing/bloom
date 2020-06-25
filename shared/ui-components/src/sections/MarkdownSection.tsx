@@ -1,4 +1,5 @@
 import * as React from "react"
+import "./MarkdownSection.scss"
 
 export interface MarkdownSectionProps {
   fullwidth?: boolean
@@ -9,8 +10,8 @@ export const MarkdownSection = (props: MarkdownSectionProps) => {
   const contentWidth = props.fullwidth ? "markdown" : "markdown max-w-2xl"
 
   return (
-    <div className="px-5 my-6 md:my-12">
-      <div className="max-w-5xl m-auto">
+    <div className="markdown-section">
+      <div className="markdown-section__inner">
         <article className={contentWidth}>{props.children}</article>
       </div>
     </div>
