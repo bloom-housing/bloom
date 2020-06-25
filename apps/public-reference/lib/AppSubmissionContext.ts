@@ -14,6 +14,7 @@ export const blankApplication = () => {
     noEmail: false,
     age: null,
     liveInSF: null,
+    householdSize: 0,
     housingStatus: "",
     address: {
       street: "",
