@@ -13,6 +13,7 @@ export class UserApplicationsService {
   async create(userId: string, applicationCreateDto: ApplicationCreateDto) {
     const application = plainToClass(Application, applicationCreateDto)
     await application.save()
+    return application
   }
 
   async findOne(userId: string, applicationId: string) {
@@ -25,6 +26,6 @@ export class UserApplicationsService {
   }
 
   async delete(userId: string, applicationId: string) {
-    return Application.findOne({ userId: userId, id: applicationId })
+    return Application.delete({ userId: userId, id: applicationId })
   }
 }

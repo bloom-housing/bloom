@@ -4,6 +4,8 @@ import { AuthService } from "./auth.service"
 import { UserService } from "../user/user.service"
 import { CreateUserDto } from "../user/createUser.dto"
 import { DefaultAuthGuard } from "./default.guard"
+import { ApiBody } from "@nestjs/swagger"
+import { LoginDto, LoginResponseDto } from "./login.dto"
 
 @Controller("auth")
 export class AuthController {
@@ -11,7 +13,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post("login")
-  login(@Request() req) {
+  @ApiBody({ type: LoginDto })
+  login(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
     return { accessToken }
   }

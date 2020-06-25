@@ -11,6 +11,8 @@ import dbOptions = require("../../ormconfig")
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserService } from "../user/user.service"
 import { User } from "../entity/user.entity"
+import { ListingsService } from "../listings/listings.service"
+import { UserApplicationsService } from "../user-applications/user-applications.service"
 
 @Module({
   imports: [
@@ -21,6 +23,6 @@ import { User } from "../entity/user.entity"
     }),
     TypeOrmModule.forFeature([Listing, Attachment, Preference, Unit, Application, User]),
   ],
-  providers: [ListingsSeederService, UserService],
+  providers: [ListingsSeederService, UserService, ListingsService, UserApplicationsService],
 })
 export class SeederModule {}

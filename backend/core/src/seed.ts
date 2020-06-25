@@ -4,6 +4,9 @@ import { ListingsSeederService } from "./seeder/listings-seeder/listings-seeder.
 import { UserService } from "./user/user.service"
 import { CreateUserDto } from "./user/createUser.dto"
 import { plainToClass } from "class-transformer"
+import { UserApplicationsService } from "./user-applications/user-applications.service"
+import { Application } from "./entity/application.entity"
+import { ListingsService } from "./listings/listings.service"
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule)
@@ -11,7 +14,7 @@ async function bootstrap() {
   await listingsSeederService.seed()
 
   const userService = app.get<UserService>(UserService)
-  await userService.createUser(
+  const user = await userService.createUser(
     plainToClass(CreateUserDto, {
       email: "test@example.com",
       firstName: "First",
@@ -21,6 +24,21 @@ async function bootstrap() {
       password: "abcdef",
     })
   )
+
+  const listingsService = app.get<ListingsService>(ListingsService)
+  const listing = (await listingsService.list()).listings[0]
+
+  const userApplicationsService = app.get<UserApplicationsService>(UserApplicationsService)
+
+  await userApplicationsService.create(
+    user.id,
+    plainToClass(Application, {
+      userId: user.id,
+      listingId: listing.id,
+      application: { foo: "bar" },
+    })
+  )
+
   await app.close()
 }
 bootstrap()
