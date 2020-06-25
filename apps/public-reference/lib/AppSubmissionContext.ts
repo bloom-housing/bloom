@@ -41,6 +41,7 @@ export const blankApplication = () => {
     additionalPhone: false,
     additionalPhoneNumber: "",
     additionalPhoneNumberType: "",
+    householdSize: 0,
     housingStatus: "",
     sendMailToMailingAddress: false,
     mailingAddress: {
@@ -57,7 +58,6 @@ export const blankApplication = () => {
       state: "",
       zipCode: "",
     },
-    householdSize: 0,
     alternateContact: {
       type: "",
       otherType: "",
