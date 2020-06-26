@@ -110,6 +110,6 @@
     }
   },
   "listings": {
-    "occupancyDescriptionNoSro": "Occupancy limits for this building differ from household size."
+    "occupancyDescriptionNoSro": "Minimum and maximum occupancy standards for this building differ according to unit type."
   }
 }
