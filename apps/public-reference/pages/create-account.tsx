@@ -12,14 +12,14 @@ import FormsLayout from "../layouts/forms"
 import { emailRegex } from "../lib/emailRegex"
 
 export default () => {
-  const { register: registerUser } = useContext(UserContext)
+  const { createUser } = useContext(UserContext)
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
 
   const onSubmit = async (data) => {
     try {
       const { birthDay, birthMonth, birthYear, ...rest } = data
-      const user = await registerUser({
+      const user = await createUser({
         ...rest,
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })

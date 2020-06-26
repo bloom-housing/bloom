@@ -74,4 +74,5 @@ export * from "./src/tables/BasicTable"
 export * from "./src/tables/GroupedTable"
 
 /* Contexts */
-export * from "./src/contexts/UserContext"
+export * from "./src/authentication"
+export * from "./src/config"
