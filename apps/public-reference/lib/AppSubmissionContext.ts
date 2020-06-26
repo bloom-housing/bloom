@@ -49,6 +49,7 @@ export const blankApplication = () => {
       state: "",
       zipcode: "",
     },
+    householdSize: 0,
   }
 }
 

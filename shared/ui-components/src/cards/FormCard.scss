@@ -27,6 +27,7 @@
   @apply px-3;
   @apply border-t-4;
   @apply border-primary;
+  @apply leading-tight;
 
   &.is-borderless {
     @apply pt-0;
@@ -36,12 +37,21 @@
 }
 
 .form-card__back {
-  @apply m-8;
+  @apply ml-8;
   @apply mt-5;
-  margin-bottom: -1.2rem;
+  @apply -mb-5;
 
   a {
     @apply underline;
+  }
+}
+
+.form-card__lead,
+.form-card__group {
+  @apply py-8;
+
+  @screen md {
+    @apply mx-8;
   }
 }
 
@@ -50,14 +60,11 @@
   @apply pb-8;
 }
 
-.form-card__lead,
 .form-card__group {
   @apply px-6;
-  @apply py-8;
 
   @screen md {
     @apply px-8;
-    @apply mx-8;
   }
 }
 

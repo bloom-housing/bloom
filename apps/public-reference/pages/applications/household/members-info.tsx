@@ -20,13 +20,8 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    conductor.sync()
-
-    if (application.householdSize == 1) {
-      Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
-    } else {
-      Router.push("/applications/household/members-info").then(() => window.scrollTo(0, 0))
-    }
+    console.log(data)
+    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
   }
 
   return (
@@ -43,37 +38,28 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/alternate">{t("t.back")}</Link>
+            <Link href="/applications/household/live-alone">{t("t.back")}</Link>
           </strong>
         </p>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.household.liveAlone.title")}
+        <div className="form-card__lead">
+          <h2 className="form-card__title is-borderless mt-4">
+            {t("application.household.membersInfo.title")}
+          </h2>
+          <h2 className="form-card__title is-borderless mt-4">
+            {t("application.household.membersInfo.subTitle")}
           </h2>
         </div>
 
-        <form className="my-4" onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
-            <div className="form-card__pager-row">
+            <div className="form-card__pager-row primary">
               <Button
-                big={true}
-                className="w-full md:w-3/4"
+                filled={true}
                 onClick={() => {
-                  application.householdSize = 1
+                  //
                 }}
               >
-                {t("application.household.liveAlone.willLiveAlone")}
-              </Button>
-            </div>
-            <div className="form-card__pager-row">
-              <Button
-                big={true}
-                className="w-full md:w-3/4"
-                onClick={() => {
-                  application.householdSize = 0
-                }}
-              >
-                {t("application.household.liveAlone.liveWithOtherPeople")}
+                {t("t.next")}
               </Button>
             </div>
           </div>

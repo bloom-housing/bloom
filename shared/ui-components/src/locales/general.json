@@ -40,6 +40,17 @@
       "doYouWorkIn": "Do you work in <REGION>?",
       "doYouWorkInDescription": "TBD",
       "workAddress": "Work Address"
+    },
+    "household": {
+      "liveAlone": {
+        "title": "Next we would like to know about the others who will live with you in the unit",
+        "willLiveAlone": "I will live alone",
+        "liveWithOtherPeople": "Other people will live with me"
+      },
+      "membersInfo": {
+        "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
+        "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
+      }
     }
   },
   "config": {
@@ -251,6 +262,7 @@
     "area": "area",
     "accessibility": "Accessibility",
     "availability": "Availability",
+    "back": "Back",
     "built": "Built",
     "deposit": "Deposit",
     "floor": "floor",
