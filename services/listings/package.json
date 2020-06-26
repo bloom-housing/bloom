@@ -7,7 +7,7 @@
   "license": "GPL-3.0",
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.10.2",
+    "@babel/core": "^7.10.3",
     "@babel/preset-typescript": "^7.10.1",
     "@types/jest": "^25.2.2",
     "@types/jsonpath": "^0.2.0",
@@ -24,14 +24,14 @@
     "@types/koa": "^2.11.3",
     "@types/koa-router": "^7.4.0",
     "@types/koa__cors": "^3.0.1",
-    "@types/node": "^12.12.39",
+    "@types/node": "^12.12.47",
     "dotenv": "^8.2.0",
     "jsonpath": "^1.0.2",
-    "koa": "^2.11.0",
-    "nanoid": "^3.1.7",
+    "koa": "^2.13.0",
+    "nanoid": "^3.1.10",
     "rimraf": "^3.0.2",
     "simple-git": "^1.132.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   },
   "engines": {
     "node": "12",
