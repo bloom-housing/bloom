@@ -20,7 +20,11 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors } = useForm()
+  const { register, handleSubmit, setValue, watch, errors } = useForm({
+    defaultValues: {
+      noEmail: application.noEmail,
+    },
+  })
   const onSubmit = (data) => {
     new FormStep(conductor).save(data)
 

@@ -9,8 +9,9 @@ import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-ho
 import FormsLayout from "../../../layouts/forms"
 import { useForm, Controller } from "react-hook-form"
 import MaskedInput from "react-input-mask"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
+import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
+import FormStep from "../../../src/forms/applications/FormStep"
 import { useContext } from "react"
 
 const PhoneMask = (props) => {
@@ -42,10 +43,31 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { control, register, handleSubmit, setValue, triggerValidation, watch, errors } = useForm()
+  const { control, register, handleSubmit, setValue, triggerValidation, watch, errors } = useForm({
+    defaultValues: {
+      noPhone: application.noPhone,
+      additionalPhone: application.additionalPhone,
+      sendMailToMailingAddress: application.sendMailToMailingAddress,
+      workInRegion: application.workInRegion,
+    },
+  })
   const onSubmit = (data) => {
-    application.address = data
-    conductor.sync()
+    if (data.noPhone) {
+      data.phoneNumber = ""
+      data.phoneNumberType = ""
+    }
+    if (!data.additionalPhone) {
+      data.additionalPhoneNumber = ""
+      data.additionalPhoneNumberType = ""
+    }
+    if (!data.sendMailToMailingAddress) {
+      data.mailingAddress = blankApplication().mailingAddress
+    }
+    if (!data.workInRegion) {
+      data.workAddress = blankApplication().workAddress
+    }
+
+    new FormStep(conductor).save(data)
 
     Router.push("/applications/contact/alternate").then(() => window.scrollTo(0, 0))
   }
@@ -359,7 +381,7 @@ export default () => {
             </div>
           </div>
 
-          {sendMailToMailingAddress && (
+          {(sendMailToMailingAddress || application.sendMailToMailingAddress) && (
             <div className="form-card__group border-b">
               <label className="field-label--caps" htmlFor="street">
                 {t("application.contact.mailingAddress")}
@@ -371,7 +393,7 @@ export default () => {
                 id="mailingAddressStreet"
                 name="mailingAddress.street"
                 placeholder={t("application.contact.streetAddress")}
-                defaultValue={context.application.address.street}
+                defaultValue={context.application.mailingAddress.street}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.street}
                 errorMessage={t("application.contact.streetError")}
@@ -383,7 +405,7 @@ export default () => {
                 name="mailingAddress.street2"
                 label={t("application.contact.apt")}
                 placeholder={t("application.contact.apt")}
-                defaultValue={context.application.address.street2}
+                defaultValue={context.application.mailingAddress.street2}
                 register={register}
               />
 
@@ -393,7 +415,7 @@ export default () => {
                   name="mailingAddress.city"
                   label={t("application.contact.cityName")}
                   placeholder={t("application.contact.cityName")}
-                  defaultValue={context.application.address.city}
+                  defaultValue={context.application.mailingAddress.city}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.city}
                   errorMessage={t("application.contact.cityError")}
@@ -406,7 +428,7 @@ export default () => {
                     <select
                       id="mailingAddressState"
                       name="mailingAddress.state"
-                      defaultValue={context.application.address.state}
+                      defaultValue={context.application.mailingAddress.state}
                       ref={register({ required: true })}
                     >
                       <option value="">Select One</option>
@@ -474,7 +496,7 @@ export default () => {
                 name="mailingAddress.zipcode"
                 label="Zip"
                 placeholder="Zipcode"
-                defaultValue={context.application.address.zipcode}
+                defaultValue={context.application.mailingAddress.zipcode}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.zipcode}
                 errorMessage="Please enter your Zipcode"
@@ -496,6 +518,7 @@ export default () => {
                 id="workInRegionYes"
                 name="workInRegion"
                 value="yes"
+                defaultChecked={application.workInRegion == "yes"}
                 ref={register({ required: true })}
               />
               <label className="font-semibold" htmlFor="workInRegionYes">
@@ -507,7 +530,7 @@ export default () => {
                 type="radio"
                 id="workInRegionNo"
                 name="workInRegion"
-                value="no"
+                defaultChecked={application.workInRegion == "no"}
                 ref={register({ required: true })}
               />
               <label className="font-semibold" htmlFor="workInRegionNo">
@@ -517,7 +540,7 @@ export default () => {
               <ErrorMessage error={errors.workInRegion}>Please select an option</ErrorMessage>
             </div>
 
-            {workInRegion == "yes" && (
+            {(workInRegion == "yes" || application.workInRegion == "yes") && (
               <>
                 <div className="mt-8 mb-3">
                   <label className="field-label--caps" htmlFor="street">
