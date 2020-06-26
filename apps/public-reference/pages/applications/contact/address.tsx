@@ -43,7 +43,9 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { control, register, handleSubmit, setValue, triggerValidation, watch, errors } = useForm({
+  const { control, register, handleSubmit, setValue, triggerValidation, watch, errors } = useForm<
+    Record<string, any>
+  >({
     defaultValues: {
       noPhone: application.noPhone,
       additionalPhone: application.additionalPhone,
@@ -235,7 +237,7 @@ export default () => {
                       <option>Home</option>
                       <option>Cell</option>
                     </select>
-                    <ErrorMessage error={errors.additionalPhoneNumberType}>
+                    <ErrorMessage error={errors?.additionalPhoneNumberType}>
                       {t("application.contact.phoneNumberTypeError")}
                     </ErrorMessage>
                   </div>

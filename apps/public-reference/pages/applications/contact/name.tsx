@@ -20,7 +20,7 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors } = useForm({
+  const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({
     defaultValues: {
       noEmail: application.noEmail,
     },
