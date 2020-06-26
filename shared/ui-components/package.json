@@ -64,6 +64,7 @@
     "react-accessible-accordion": "^3.0.0",
     "react-dom": "^16.13.1",
     "react-inlinesvg": "^1.2.0",
+    "react-input-mask": "^2.0.4",
     "react-map-gl": "^5.2",
     "react-media": "^1.10.0",
     "tailwindcss": "^1.3"

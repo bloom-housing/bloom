@@ -140,6 +140,7 @@
     @apply leading-tight;
     @apply py-2;
     @apply px-3;
+    height: 3em;
     font-family: inherit;
     font-size: 1rem;
     line-height: normal;
@@ -152,6 +153,14 @@
     background-repeat: no-repeat;
     background-size: 0.75rem;
     padding-right: 2.25rem;
+  }
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    @apply bg-gray-400;
+    cursor: not-allowed;
+    @apply text-gray-700;
   }
 }
 
@@ -185,8 +194,8 @@ select {
 .flex > .field,
 .field-group--dob .field {
   @apply flex-auto;
-  margin-left: .5rem;
-  margin-right: .5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 
   &:first-child {
     margin-left: 0;
