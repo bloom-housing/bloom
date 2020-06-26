@@ -47,6 +47,11 @@
     @apply py-3;
   }
 
+  &.is-big {
+    @apply px-6;
+    @apply py-6;
+  }
+
   &.is-normal-case {
     @apply normal-case;
   }
