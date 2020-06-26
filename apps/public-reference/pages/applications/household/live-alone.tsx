@@ -20,7 +20,7 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
+    conductor.sync()
 
     if (application.householdSize == 1) {
       Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
