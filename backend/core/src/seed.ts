@@ -9,7 +9,8 @@ import { Application } from "./entity/application.entity"
 import { ListingsService } from "./listings/listings.service"
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(SeederModule)
+  const argv = require("yargs").argv
+  const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
   const listingsSeederService = app.get<ListingsSeederService>(ListingsSeederService)
   await listingsSeederService.seed()
 

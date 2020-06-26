@@ -32,8 +32,8 @@ export class UserApplicationsController {
 
   @Post(":userId/applications")
   @UseGuards(OwnerGuard)
-  async create(@Param("userId") userId, @Body() applicationCreateDto: ApplicationCreateDto) {
-    await this.userApplicationsService.create(userId, applicationCreateDto)
+  async create(@Param("userId") userId, @Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
+    return await this.userApplicationsService.create(userId, applicationCreateDto)
   }
 
   @Get(":userId/applications/:applicationId")
@@ -51,8 +51,8 @@ export class UserApplicationsController {
     @Param("userId") userId: string,
     @Param("applicationId") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
-  ) {
-    await this.userApplicationsService.update(applicationUpdateDto)
+  ): Promise<ApplicationDto> {
+    return await this.userApplicationsService.update(applicationUpdateDto)
   }
 
   @Delete(`:userId/applications/:applicationId`)

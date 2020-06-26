@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common"
-import { ListingsController } from "./listings/listings.controller"
-import { ListingsService } from "./listings/listings.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Listing } from "./entity/listing.entity"
 import { Attachment } from "./entity/attachment.entity"
@@ -11,11 +9,10 @@ import { UserModule } from "./user/user.module"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../ormconfig")
 import { AuthModule } from "./auth/auth.module"
-import { ApplicationsController } from "./applications/applications.controller"
-import { ApplicationsService } from "./applications/applications.service"
 import { Application } from "./entity/application.entity"
-import { UserApplicationsController } from "./user-applications/user-applications.controller"
-import { UserApplicationsService } from "./user-applications/user-applications.service"
+import { UserApplicationsModule } from "./user-applications/user-applications.module"
+import { ListingsModule } from "./listings/listings.module"
+import { ApplicationsModule } from "./applications/applications.module"
 
 @Module({
   imports: [
@@ -25,9 +22,10 @@ import { UserApplicationsService } from "./user-applications/user-applications.s
     }),
     TypeOrmModule.forFeature([Listing, Attachment, Preference, Unit, Application]),
     UserModule,
+    UserApplicationsModule,
     AuthModule,
+    ListingsModule,
+    ApplicationsModule,
   ],
-  controllers: [ListingsController, ApplicationsController, UserApplicationsController],
-  providers: [ListingsService, ApplicationsService, UserApplicationsService],
 })
 export class AppModule {}

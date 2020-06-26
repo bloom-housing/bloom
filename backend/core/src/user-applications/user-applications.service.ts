@@ -17,12 +17,13 @@ export class UserApplicationsService {
   }
 
   async findOne(userId: string, applicationId: string) {
-    return Application.findOne({ userId: userId, id: applicationId })
+    return Application.findOneOrFail({ userId: userId, id: applicationId })
   }
 
   async update(applicationUpdateDto: ApplicationUpdateDto) {
     const application = plainToClass(Application, applicationUpdateDto)
     await application.save()
+    return application
   }
 
   async delete(userId: string, applicationId: string) {
