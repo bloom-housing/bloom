@@ -116,7 +116,7 @@
 
   input[type="radio"]:focus + label::before,
   input[type="checkbox"]:focus + label::before {
-    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary, 0 0 3px 4px $tailwind-primary;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-attention, 0 0 3px 4px $tailwind-attention;
   }
 
   input[type="checkbox"]:disabled + label {
@@ -140,6 +140,7 @@
     @apply leading-tight;
     @apply py-2;
     @apply px-3;
+    height: 3em;
     font-family: inherit;
     font-size: 1rem;
     line-height: normal;
@@ -152,6 +153,25 @@
     background-repeat: no-repeat;
     background-size: 0.75rem;
     padding-right: 2.25rem;
+  }
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    @apply bg-gray-400;
+    cursor: not-allowed;
+    @apply text-gray-700;
+  }
+}
+
+input[type],
+textarea,
+select {
+  @apply rounded;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
   }
 }
 
@@ -174,8 +194,8 @@
 .flex > .field,
 .field-group--dob .field {
   @apply flex-auto;
-  margin-left: .5rem;
-  margin-right: .5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 
   &:first-child {
     margin-left: 0;

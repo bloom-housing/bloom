@@ -20,7 +20,11 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors } = useForm()
+  const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({
+    defaultValues: {
+      noEmail: application.noEmail,
+    },
+  })
   const onSubmit = (data) => {
     new FormStep(conductor).save(data)
 
@@ -47,13 +51,15 @@ export default () => {
 
         <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps">{t("application.name.yourName")}</label>
+            <label className="field-label--caps" htmlFor="firstName">
+              {t("application.name.yourName")}
+            </label>
 
             <Field
               name="firstName"
               placeholder={t("application.name.firstName")}
               controlClassName="mt-2"
-              defaultValue={context.application.firstName}
+              defaultValue={application.firstName}
               validation={{ required: true }}
               error={errors.firstName}
               errorMessage={t("application.name.firstNameError")}
@@ -63,14 +69,14 @@ export default () => {
             <Field
               name="middleName"
               placeholder={t("application.name.middleName")}
-              defaultValue={context.application.middleName}
+              defaultValue={application.middleName}
               register={register}
             />
 
             <Field
               name="lastName"
               placeholder={t("application.name.lastName")}
-              defaultValue={context.application.lastName}
+              defaultValue={application.lastName}
               validation={{ required: true }}
               error={errors.lastName}
               errorMessage={t("application.name.lastNameError")}
@@ -79,15 +85,15 @@ export default () => {
           </div>
 
           <div className="form-card__group border-b">
-            <label className="field-label--caps">{t("application.name.yourDateOfBirth")}</label>
+            <label className="field-label--caps" htmlFor="birthMonth">
+              {t("application.name.yourDateOfBirth")}
+            </label>
 
             <div className="field-group--dob mt-2">
               <Field
                 name="birthMonth"
                 placeholder="MM"
-                defaultValue={
-                  "" + (context.application.birthMonth > 0 ? context.application.birthMonth : "")
-                }
+                defaultValue={"" + (application.birthMonth > 0 ? application.birthMonth : "")}
                 error={errors.birthMonth}
                 validation={{
                   required: true,
@@ -100,9 +106,7 @@ export default () => {
               <Field
                 name="birthDay"
                 placeholder="DD"
-                defaultValue={
-                  "" + (context.application.birthDay > 0 ? context.application.birthDay : "")
-                }
+                defaultValue={"" + (application.birthDay > 0 ? application.birthDay : "")}
                 error={errors.birthDay}
                 validation={{
                   required: true,
@@ -115,9 +119,7 @@ export default () => {
               <Field
                 name="birthYear"
                 placeholder="YYYY"
-                defaultValue={
-                  "" + (context.application.birthYear > 0 ? context.application.birthYear : "")
-                }
+                defaultValue={"" + (application.birthYear > 0 ? application.birthYear : "")}
                 error={errors.birthYear}
                 validation={{
                   required: true,
@@ -138,7 +140,9 @@ export default () => {
           </div>
 
           <div className="form-card__group">
-            <label className="field-label--caps">{t("application.name.yourEmailAddress")}</label>
+            <label className="field-label--caps" htmlFor="emailAddress">
+              {t("application.name.yourEmailAddress")}
+            </label>
 
             <p className="field-note my-2">{t("application.name.emailPrivacy")}</p>
 
@@ -146,7 +150,7 @@ export default () => {
               type="email"
               name="emailAddress"
               placeholder={noEmail ? t("t.none") : "example@web.com"}
-              defaultValue={context.application.emailAddress}
+              defaultValue={application.emailAddress}
               validation={{ pattern: emailRegex }}
               error={errors.emailAddress}
               errorMessage={t("application.name.emailAddressError")}
@@ -159,7 +163,7 @@ export default () => {
                 type="checkbox"
                 id="noEmail"
                 name="noEmail"
-                defaultChecked={context.application.noEmail}
+                defaultChecked={application.noEmail}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {

@@ -12,11 +12,30 @@ export const blankApplication = () => {
     birthYear: 0,
     emailAddress: "",
     noEmail: false,
-    age: null,
-    liveInSF: null,
-    householdSize: 0,
+    phoneNumber: "",
+    phoneNumberType: "",
+    noPhone: false,
+    additionalPhone: false,
+    additionalPhoneNumber: "",
+    additionalPhoneNumberType: "",
+    workInRegion: null,
     housingStatus: "",
     address: {
+      street: "",
+      street2: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    },
+    sendMailToMailingAddress: false,
+    mailingAddress: {
+      street: "",
+      street2: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    },
+    workAddress: {
       street: "",
       street2: "",
       city: "",
@@ -30,6 +49,7 @@ export const blankApplication = () => {
       state: "",
       zipcode: "",
     },
+    householdSize: 0,
   }
 }
 
