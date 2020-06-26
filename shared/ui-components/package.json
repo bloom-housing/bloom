@@ -33,7 +33,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.4.4",
-    "fork-ts-checker-webpack-plugin": "^4.0.4",
+    "fork-ts-checker-webpack-plugin": "^5.0.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.5.4",
     "mockdate": "^3.0.2",
