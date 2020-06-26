@@ -36,9 +36,13 @@
 }
 
 .form-card__back {
-  @apply float-left;
   @apply m-8;
   @apply mt-5;
+  margin-bottom: -1.2rem;
+
+  a {
+    @apply underline;
+  }
 }
 
 .form-card__lead {
