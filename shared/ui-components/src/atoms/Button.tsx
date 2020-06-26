@@ -4,6 +4,7 @@ import "./Button.scss"
 export interface ButtonProps {
   children: React.ReactNode
   className?: string
+  big?: boolean
   filled?: boolean
   normalCase?: boolean
   onClick: (e: React.MouseEvent) => void
