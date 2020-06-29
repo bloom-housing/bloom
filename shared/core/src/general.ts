@@ -1,4 +1,5 @@
 export interface Address {
+  placeName: string
   city: string
   county: string
   state: string
