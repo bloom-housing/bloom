@@ -10,18 +10,18 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
+    "@babel/core": "^7.10.3",
     "@types/jest": "^25.2.2",
     "babel-jest": "^25.5.1",
     "babel-loader": "^8.1.0",
     "jest": "^25.5.4",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.5",
     "webpack": "^4.43.0"
   },
   "dependencies": {
-    "@types/node": "^12.12.39",
+    "@types/node": "^12.12.47",
     "@types/node-polyglot": "^0.4.34",
-    "nanoid": "^3.1.7"
+    "nanoid": "^3.1.10"
   },
   "babel": {
     "presets": [

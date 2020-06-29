@@ -17,13 +17,13 @@
   "dependencies": {
     "@bloom-housing/core": "^0.2.3",
     "@bloom-housing/ui-components": "^0.2.3",
-    "@mdx-js/loader": "1.6.5",
+    "@mdx-js/loader": "1.6.6",
     "@next/mdx": "9.4.4",
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
-    "moment": "^2.24.0",
-    "nanoid": "^3.1.7",
+    "moment": "^2.27.0",
+    "nanoid": "^3.1.10",
     "next": "9.4.4",
     "next-plugin-custom-babel-config": "^1.0.2",
     "node-polyglot": "^2.4.0",
@@ -31,18 +31,18 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^5.2.0",
-    "react-inlinesvg": "^1.2.0"
+    "react-inlinesvg": "^2.0.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "9.4.4",
-    "@types/node": "^12.12.39",
-    "@types/react": "^16.9.19",
+    "@types/node": "^12.12.47",
+    "@types/react": "^16.9.41",
     "concurrently": "^5.2.0",
-    "cypress": "^4.5.0",
+    "cypress": "^4.9.0",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^3.0.1",
     "sass-loader": "^8.0.2",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.5",
     "webpack": "^4.43.0"
   }
 }
