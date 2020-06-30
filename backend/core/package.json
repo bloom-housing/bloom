@@ -3,7 +3,7 @@
   "version": "0.2.6",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Marcin Jedras <marcin.jedras@exygy.com>",
-  "private": true,
+  "private": false,
   "license": "GPL-3.0",
   "main": "index.js",
   "scripts": {
