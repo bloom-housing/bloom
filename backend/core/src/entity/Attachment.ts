@@ -6,7 +6,7 @@ enum AttachmentType {
   ExternalApplication = 2,
 }
 
-@Entity()
+@Entity({ name: "attachments" })
 class Attachment {
   @PrimaryGeneratedColumn("uuid")
   id: string

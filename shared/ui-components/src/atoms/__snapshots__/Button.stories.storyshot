@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Atoms|Button Big 1`] = `
+<Button
+  big={true}
+  onClick={[Function]}
+>
+  <button
+    className="button is-big"
+    onClick={[Function]}
+  >
+    Big Button
+  </button>
+</Button>
+`;
+
 exports[`Storyshots Atoms|Button Filled 1`] = `
 <Button
   filled={true}

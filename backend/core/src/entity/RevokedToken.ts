@@ -1,6 +1,6 @@
 import { PrimaryColumn, CreateDateColumn, Entity } from "typeorm"
 
-@Entity()
+@Entity({ name: "revoked_tokens" })
 class RevokedToken {
   @PrimaryColumn()
   token: string

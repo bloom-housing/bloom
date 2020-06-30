@@ -45,15 +45,15 @@
     "eslint-plugin-react": "^7.19.0",
     "husky": "^4.2.5",
     "jest": "^25.5.4",
-    "lerna": "^3.21.0",
-    "lint-staged": "^10.2.2",
+    "lerna": "^3.22.1",
+    "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "react": "16.13.1",
     "react-test-renderer": "16.13.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^25.5.1",
-    "typescript": "^3.8.3",
-    "wait-on": "^5.0.0"
+    "typescript": "^3.9.5",
+    "wait-on": "^5.0.1"
   },
   "prettier": {
     "singleQuote": false,

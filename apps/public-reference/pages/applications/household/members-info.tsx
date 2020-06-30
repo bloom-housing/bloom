@@ -1,9 +1,10 @@
 /*
-0.1 - Choose Language
-Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
+2.1 - Live Alone
+Asks whether the applicant will be adding any additional household members
 */
+import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -14,15 +15,13 @@ export default () => {
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
-  conductor.reset(false)
-  const currentPageStep = 1
+  const currentPageStep = 2
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     console.log(data)
-
-    Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
   }
 
   return (
@@ -37,13 +36,21 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">Choose your language</h2>
+        <p className="form-card__back">
+          <strong>
+            <Link href="/applications/household/live-alone">{t("t.back")}</Link>
+          </strong>
+        </p>
+        <div className="form-card__lead">
+          <h2 className="form-card__title is-borderless mt-4">
+            {t("application.household.membersInfo.title")}
+          </h2>
+          <h2 className="form-card__title is-borderless mt-4">
+            {t("application.household.membersInfo.subTitle")}
+          </h2>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group">(BUTTONS)</div>
-
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
@@ -52,7 +59,7 @@ export default () => {
                   //
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
           </div>

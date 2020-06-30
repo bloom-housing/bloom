@@ -4,7 +4,7 @@ Asks whether the applicant will be adding any additional household members
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -20,16 +20,18 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
+    conductor.sync()
 
-    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    if (application.householdSize == 1) {
+      Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    } else {
+      Router.push("/applications/household/members-info").then(() => window.scrollTo(0, 0))
+    }
   }
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -39,27 +41,41 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="text-bold">
+        <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/alternate">Back</Link>
+            <Link href="/applications/contact/alternate">{t("t.back")}</Link>
           </strong>
         </p>
+        <div className="form-card__lead border-b">
+          <h2 className="form-card__title is-borderless">
+            {t("application.household.liveAlone.title")}
+          </h2>
+        </div>
 
-        <h2 className="form-card__title is-borderless">Live Alone?</h2>
-
-        <hr />
-
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (FORM)
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+        <form className="my-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__pager">
+            <div className="form-card__pager-row">
+              <Button
+                big={true}
+                className="w-full md:w-3/4"
+                onClick={() => {
+                  application.householdSize = 1
+                }}
+              >
+                {t("application.household.liveAlone.willLiveAlone")}
+              </Button>
+            </div>
+            <div className="form-card__pager-row">
+              <Button
+                big={true}
+                className="w-full md:w-3/4"
+                onClick={() => {
+                  application.householdSize = 0
+                }}
+              >
+                {t("application.household.liveAlone.liveWithOtherPeople")}
+              </Button>
+            </div>
           </div>
         </form>
       </FormCard>
