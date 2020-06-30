@@ -1,6 +1,4 @@
 import { Injectable } from "@nestjs/common"
-import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
 import { amiCharts } from "../lib/ami_charts"
 import { transformUnits } from "../lib/unit_transformations"
 import { listingUrlSlug } from "../lib/url_helper"
@@ -14,10 +12,8 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  constructor(@InjectRepository(Listing) private readonly repo: Repository<Listing>) {}
-
   public async list(options?: ListingsListQueryParams): Promise<ListingsListResponse> {
-    let listings = await this.repo.find({ relations: ["units", "attachments", "preferences"] })
+    let listings = await Listing.find({ relations: ["units", "attachments", "preferences"] })
 
     if (options?.jsonpath) {
       listings = jp.query(listings, options.jsonpath)
