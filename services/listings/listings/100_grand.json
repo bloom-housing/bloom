@@ -20,7 +20,7 @@
   "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "city": "Foster City",
-    "county": "San Mateo",
+    "county": "San Mateo Preview",
     "zipCode": "94404",
     "state": "CA",
     "street": "100 Grand Lane",

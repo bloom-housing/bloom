@@ -5,7 +5,6 @@ import axios from "axios"
 import { Listing } from "@bloom-housing/core"
 import {
   AdditionalFees,
-  ApplicationSection,
   ApplicationStatus,
   BasicTable,
   Description,
@@ -29,7 +28,9 @@ import {
   occupancyTable,
   t,
 } from "@bloom-housing/ui-components"
+import { ApplicationSection } from "../src/page_components/listing/listing_sidebar/ApplicationSection"
 import Layout from "../layouts/application"
+import Markdown from "markdown-to-jsx"
 interface ListingProps {
   listing: Listing
 }
@@ -220,13 +221,19 @@ export default class extends Component<ListingProps> {
                 >
                   <>
                     <InfoCard title={t("listings.creditHistory")}>
-                      <p className="text-sm text-gray-700">{listing.creditHistory}</p>
+                      <p className="text-sm text-gray-700">
+                        <Markdown children={listing.creditHistory} />
+                      </p>
                     </InfoCard>
                     <InfoCard title={t("listings.rentalHistory")}>
-                      <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                      <p className="text-sm text-gray-700">
+                        <Markdown children={listing.rentalHistory} />
+                      </p>
                     </InfoCard>
                     <InfoCard title={t("listings.criminalBackground")}>
-                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
+                      <p className="text-sm text-gray-700">
+                        <Markdown children={listing.criminalBackground} />
+                      </p>
                     </InfoCard>
                     {buildingSelectionCriteria}
                   </>
@@ -266,7 +273,7 @@ export default class extends Component<ListingProps> {
                   <Description term="Pets Policy" description={listing.petPolicy} />
                   <Description term="Property Amenities" description={listing.amenities} />
                   <Description term="Unit Amenities" description={listing.unitAmenities} />
-                  <Description term="Accessibility" description={listing.accessibility} />
+                  <Description markdown term="Accessibility" description={listing.accessibility} />
                   <Description
                     term="Unit Features"
                     description={

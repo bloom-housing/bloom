@@ -60,7 +60,7 @@
     }
   ],
   "applicationFee": "38.0",
-  "criminalBackground": null,
+  "criminalBackground": "",
   "leasingAgentAddress": {
     "city": "Foster City",
     "state": "CA",

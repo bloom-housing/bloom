@@ -3,7 +3,7 @@
   "acceptingApplicationsAtLeasingAgent": true,
   "acceptingApplicationsByPoBox": false,
   "acceptingOnlineApplications": false,
-  "accessibility": null,
+  "accessibility": "",
   "amenities": "Fitness center, three pools and spas, basketball courts, tennis courts and playground",
   "applicationDueDate": "2019-12-31T17:00:00.000Z",
   "applicationOrganization": "700 Bounty Drive",
@@ -27,7 +27,7 @@
     "longitude": -122.26385910564855
   },
   "buildingName": "Foster's Landing",
-  "buildingSelectionCriteria": null,
+  "buildingSelectionCriteria": "",
   "costsNotIncluded": "Residents are responsible for PGE, Water/Sewer/Trash. Residents are given an allowance to offset the Water/Sewer/Trash. Late Fee is $85 and NSF is $25. ",
   "creditHistory": "Background/Credit will be processed by a 3rd party",
   "depositMax": "800.0",
@@ -227,7 +227,5 @@
       "monthlyRentAsPercentOfIncome": 30
     }
   ],
-  "preferences": [
-
-  ]
+  "preferences": []
 }

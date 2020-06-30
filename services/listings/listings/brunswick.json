@@ -8,7 +8,7 @@
   "applicationDueDate": "2020-01-10T17:00:00.000Z",
   "applicationOrganization": "Brunswick Street Apartments",
   "applicationAddress": {
-    "city": "Daly CIty",
+    "city": "Daly City",
     "zipCode": "94914",
     "state": "CA",
     "street": "6674 Mission Street"
@@ -25,7 +25,7 @@
     "longitude": -122.4581286
   },
   "buildingName": "Brunswick Street Apartments",
-  "buildingSelectionCriteria": null,
+  "buildingSelectionCriteria": "",
   "costsNotIncluded": null,
   "creditHistory": "Credit and Criminal checks; three months of pay stubs and bank statements are required; if self-employed, we will need the current two years of tax returns; ",
   "depositMax": null,
@@ -38,8 +38,8 @@
   "name": "Brunswick Street Apartments",
   "neighborhood": "Daly City",
   "waitlistCurrentSize": 0,
-  "petPolicy": null,
-  "prioritiesDescriptor": null,
+  "petPolicy": "",
+  "prioritiesDescriptor": "",
   "requiredDocuments": "Paystubs, 3 months’ bank statements, recent tax returns or non-tax affidavit, recent retirement statement.",
   "reservedCommunityMaximumAge": null,
   "reservedCommunityMinimumAge": 55,
@@ -63,7 +63,7 @@
     }
   ],
   "applicationFee": "35.0",
-  "criminalBackground": null,
+  "criminalBackground": "",
   "leasingAgentAddress": {
     "city": "Daly City",
     "state": "CA",
@@ -75,7 +75,7 @@
   "leasingAgentOfficeHours": null,
   "leasingAgentPhone": "(650) 731-5724",
   "leasingAgentTitle": "Leasing Agent",
-  "rentalHistory": null,
+  "rentalHistory": "",
   "buildingTotalUnits": 204,
   "acceptsPostmarkedApplications": false,
   "postmarkedApplicationsReceivedByDate": null,
@@ -4979,7 +4979,5 @@
       "monthlyRentAsPercentOfIncome": null
     }
   ],
-  "preferences": [
-
-  ]
+  "preferences": []
 }

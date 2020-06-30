@@ -20,7 +20,7 @@
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "San Mateo",
-    "county": "San Mateo",
+    "county": "San Mateo Preview",
     "state": "CA",
     "street": "1927 Bridgepointe Circle",
     "zipCode": "94404",
