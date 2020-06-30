@@ -5,7 +5,7 @@
     "services/listings",
     "shared/*"
   ],
-  "version": "0.2.5",
+  "version": "0.2.6",
   "npmClient": "yarn",
   "useWorkspaces": true
 }
