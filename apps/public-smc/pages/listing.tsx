@@ -5,9 +5,11 @@ import axios from "axios"
 import { Listing } from "@bloom-housing/core"
 import {
   AdditionalFees,
+  // ApplicationSection, -- Local override below
   ApplicationStatus,
   BasicTable,
   Description,
+  ExpandableText,
   GroupedTable,
   GroupedTableGroup,
   Headers,
@@ -30,7 +32,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { ApplicationSection } from "../src/page_components/listing/listing_sidebar/ApplicationSection"
 import Layout from "../layouts/application"
-import Markdown from "markdown-to-jsx"
+
 interface ListingProps {
   listing: Listing
 }
@@ -60,10 +62,10 @@ export default class extends Component<ListingProps> {
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
 
     const unitSummariesHeaders = {
-      unitType: "Unit Type",
-      minimumIncome: "Minimum Income",
-      rent: "Rent",
-      availability: "Availability",
+      unitType: t("t.unitType"),
+      minimumIncome: t("t.minimumIncome"),
+      rent: t("t.rent"),
+      availability: t("t.availability"),
     }
 
     const amiValues = listing.unitsSummarized.amiPercentages
@@ -129,6 +131,7 @@ export default class extends Component<ListingProps> {
           <title>{pageTitle}</title>
         </Head>
         <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
+
         <article className="flex flex-wrap relative max-w-5xl m-auto">
           <header className="image-card--leader">
             <ImageCard title={listing.name} imageUrl={listing.imageUrl} />
@@ -139,11 +142,12 @@ export default class extends Component<ListingProps> {
               <p className="text-gray-700 text-base">{listing.developer}</p>
               <p className="text-xs">
                 <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
-                  View on Map
+                  {t("t.viewOnMap")}
                 </a>
               </p>
             </div>
           </header>
+
           <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light block text-center md:mx-3">
             <ApplicationStatus listing={listing} />
           </div>
@@ -162,7 +166,9 @@ export default class extends Component<ListingProps> {
 
                 return (
                   <>
-                    <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                    <h2 className="mt-4 mb-2">
+                      {t("listings.percentAMIUnit", { percent: percent })}
+                    </h2>
                     <GroupedTable
                       headers={unitSummariesHeaders}
                       data={groupedUnits}
@@ -186,8 +192,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="eligibility-notebook"
               imageSrc="/images/listing-eligibility.svg"
-              title="Eligibility"
-              subtitle="Income, occupancy, preferences, and subsidies"
+              title={t("listings.sections.eligibilityTitle")}
+              subtitle={t("listings.sections.eligibilitySubtitle")}
               desktopClass="bg-primary-lighter"
             >
               <ul>
@@ -207,10 +213,8 @@ export default class extends Component<ListingProps> {
                 </ListSection>
 
                 <ListSection
-                  title="Rental Assistance"
-                  subtitle="Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be 
-                    considered for this property. In the case of a valid rental subsidy, the required minimum income 
-                    will be based on the portion of the rent that the tenant pays after use of the subsidy."
+                  title={t("listings.sections.rentalAssistanceTitle")}
+                  subtitle={t("listings.sections.rentalAssistanceSubtitle")}
                 />
 
                 {preferencesSection}
@@ -221,19 +225,19 @@ export default class extends Component<ListingProps> {
                 >
                   <>
                     <InfoCard title={t("listings.creditHistory")}>
-                      <p className="text-sm text-gray-700">
-                        <Markdown children={listing.creditHistory} />
-                      </p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.creditHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.rentalHistory")}>
-                      <p className="text-sm text-gray-700">
-                        <Markdown children={listing.rentalHistory} />
-                      </p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.rentalHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.criminalBackground")}>
-                      <p className="text-sm text-gray-700">
-                        <Markdown children={listing.criminalBackground} />
-                      </p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.criminalBackground}
+                      </ExpandableText>
                     </InfoCard>
                     {buildingSelectionCriteria}
                   </>
@@ -244,8 +248,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="process-info"
               imageSrc="/images/listing-process.svg"
-              title="Process"
-              subtitle="Important dates and contact information"
+              title={t("listings.sections.processTitle")}
+              subtitle={t("listings.sections.processSubtitle")}
               hideHeader={true}
               desktopClass="header-hidden"
             >
@@ -262,24 +266,29 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="features-cards"
               imageSrc="/images/listing-features.svg"
-              title="Features"
-              subtitle="Amenities, unit details and additional fees"
+              title={t("listings.sections.featuresTitle")}
+              subtitle={t("listings.sections.featuresSubtitle")}
             >
               <div className="listing-detail-panel">
                 <dl className="column-definition-list">
-                  <Description term="Neighborhood" description={listing.neighborhood} />
-                  <Description term="Built" description={listing.yearBuilt} />
-                  <Description term="Smoking Policy" description={listing.smokingPolicy} />
-                  <Description term="Pets Policy" description={listing.petPolicy} />
-                  <Description term="Property Amenities" description={listing.amenities} />
-                  <Description term="Unit Amenities" description={listing.unitAmenities} />
-                  <Description markdown term="Accessibility" description={listing.accessibility} />
+                  <Description term={t("t.neighborhood")} description={listing.neighborhood} />
+                  <Description term={t("t.built")} description={listing.yearBuilt} />
+                  <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
+                  <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
+                  <Description term={t("t.propertyAmenities")} description={listing.amenities} />
+                  <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
                   <Description
-                    term="Unit Features"
+                    markdown
+                    term={t("t.accessibility")}
+                    description={listing.accessibility}
+                  />
+                  <Description
+                    term={t("t.unitFeatures")}
                     description={
                       <UnitTables
                         units={listing.units}
                         unitSummaries={listing.unitsSummarized.byUnitType}
+                        disableAccordion={listing.disableUnitsAccordion}
                       />
                     }
                   />
@@ -291,8 +300,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="neighborhood-buildings"
               imageSrc="/images/listing-neighborhood.svg"
-              title="Neighborhood"
-              subtitle="Location and transportation"
+              title={t("listings.sections.neighborhoodTitle")}
+              subtitle={t("listings.sections.neighborhoodSubtitle")}
               desktopClass="bg-primary-lighter"
             >
               <div className="listing-detail-panel">
@@ -303,8 +312,8 @@ export default class extends Component<ListingProps> {
             <ListingDetailItem
               imageAlt="additional-information-envelope"
               imageSrc="/images/listing-legal.svg"
-              title="Additional Information"
-              subtitle="Required documents and selection criteria"
+              title={t("listings.sections.additionalInformationTitle")}
+              subtitle={t("listings.sections.additionalInformationSubtitle")}
             >
               <div className="listing-detail-panel">
                 <div className="info-card">
