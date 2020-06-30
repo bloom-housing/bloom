@@ -1,21 +1,29 @@
+import { useContext } from "react"
 import { useForm } from "react-hook-form"
-import axios from "axios"
-import { Button, Field, FormCard, Icon, LinkButton } from "@bloom-housing/ui-components"
+import {
+  Button,
+  Field,
+  FormCard,
+  Icon,
+  LinkButton,
+  UserContext,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { emailRegex } from "../lib/emailRegex"
 
 export default () => {
+  const { createUser } = useContext(UserContext)
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
 
   const onSubmit = async (data) => {
     try {
       const { birthDay, birthMonth, birthYear, ...rest } = data
-      const res = await axios.post(`${process.env.listingServiceUrl}/auth/register`, {
+      const user = await createUser({
         ...rest,
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })
-      console.log("Created user: %o", res.data)
+      console.log("Created user: %o", user)
     } catch (err) {
       // TODO: better error handling
       const messages = err.response && err.response.data && err.response.data.message

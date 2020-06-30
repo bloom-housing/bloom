@@ -1,6 +1,5 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
-import axios from "axios"
 import {
   Button,
   Field,
@@ -8,12 +7,12 @@ import {
   Icon,
   LinkButton,
   ErrorMessage,
+  UserContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 
-const apiBase = process.env.listingServiceUrl
-
 export default () => {
+  const { login } = useContext(UserContext)
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
@@ -22,9 +21,8 @@ export default () => {
     const { email, password } = data
 
     try {
-      const res = await axios.post(`${apiBase}/auth/login`, { username: email, password })
-      const { accessToken } = res.data
-      console.log(`Got access token '${accessToken}'`)
+      await login(email, password)
+      console.log("Login success!")
     } catch (err) {
       const { status } = err.response
       if (status === 401) {

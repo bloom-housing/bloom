@@ -2,7 +2,7 @@ import React from "react"
 import App from "next/app"
 import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
-import { addTranslation } from "@bloom-housing/ui-components"
+import { addTranslation, UserProvider, ConfigProvider } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
 import { loadApplicationFromAutosave } from "../lib/ApplicationConductor"
@@ -94,7 +94,11 @@ class MyApp extends App {
           syncApplication: this.syncApplication,
         }}
       >
-        <Component {...pageProps} />
+        <ConfigProvider apiUrl={process.env.listingServiceUrl}>
+          <UserProvider>
+            <Component {...pageProps} />
+          </UserProvider>
+        </ConfigProvider>
       </AppSubmissionContext.Provider>
     )
   }

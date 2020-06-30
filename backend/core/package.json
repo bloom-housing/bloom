@@ -5,6 +5,7 @@
   "author": "Marcin Jedras <marcin.jedras@exygy.com>",
   "private": true,
   "license": "GPL-3.0",
+  "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
     "build": "rimraf dist && nest build",
