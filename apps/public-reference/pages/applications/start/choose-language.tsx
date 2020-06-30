@@ -26,7 +26,6 @@ const loadListing = async (stateFunction) => {
 
 export default () => {
   const [listing, setListing] = useState(null)
-
   useEffect(() => {
     loadListing(setListing)
   })
