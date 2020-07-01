@@ -1,5 +1,11 @@
 {
   "application": {
+    "chooseLanguage": {
+      "letsGetStarted": "Let’s get started on your application",
+      "chooseYourLanguage": "Choose Your Language",
+      "haveAnAccount": "Already have an account?",
+      "signInSaveTime": "Signing in could save you time by starting with details of your last application, and allow you to check the status of this application at any time."
+    },
     "name": {
       "title": "What's your name?",
       "yourName": "Your Name",

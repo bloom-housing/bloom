@@ -57,7 +57,9 @@ export default () => {
 
       <FormCard>
         <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">Let’s get started on your application</h2>
+          <h2 className="form-card__title is-borderless">
+            {t("application.chooseLanguage.letsGetStarted")}
+          </h2>
 
           {listing && (
             <div className="mt-5">
@@ -76,11 +78,10 @@ export default () => {
           <form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__pager-row primary px-4">
               <h3 className="my-4 font-alt-sans field-label--caps text-base text-black">
-                Choose Your Language
+                {t("application.chooseLanguage.chooseYourLanguage")}
               </h3>
 
               <Button
-                big={true}
                 className="mx-1"
                 onClick={() => {
                   // Set the language in the context here...
@@ -90,7 +91,6 @@ export default () => {
               </Button>
 
               <Button
-                big={true}
                 className="mx-1"
                 onClick={() => {
                   //
@@ -100,7 +100,6 @@ export default () => {
               </Button>
 
               <Button
-                big={true}
                 className="mx-1"
                 onClick={() => {
                   //
@@ -113,18 +112,13 @@ export default () => {
 
           <div className="form-card__pager-row primary px-4">
             <h2 className="border-t border-gray-450 form-card__title pt-10 w-full">
-              Already have an account?
+              {t("application.chooseLanguage.haveAnAccount")}
             </h2>
 
-            <p className="my-6">
-              Signing in could save you time by starting with details of your last application, and
-              allow you to check the status of this application at any time.
-            </p>
+            <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
 
             <div>
-              <LinkButton href="/sign-in" big={true}>
-                Sign In
-              </LinkButton>
+              <LinkButton href="/sign-in">{t("nav.signIn")}</LinkButton>
             </div>
           </div>
         </div>
