@@ -24,6 +24,8 @@ export interface Listing {
   acceptingApplicationsByPoBox: boolean
   acceptingOnlineApplications: boolean
   acceptsPostmarkedApplications: boolean
+  applicationPickUpAddress?: Address
+  applicationPickUpAddressOfficeHours?: string
   accessibility: string
   amenities: string
   applicationDueDate: string
@@ -41,6 +43,7 @@ export interface Listing {
   criminalBackground: string
   depositMin: string
   depositMax?: string
+  depositMaxExtraText?: string
   developer: string
   disableUnitsAccordion?: boolean
   id: string
