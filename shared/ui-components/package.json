@@ -25,7 +25,6 @@
     "@types/enzyme": "^3.10.5",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^25.2.2",
-    "@types/jwt-decode": "^2.2.1",
     "@types/react-map-gl": "^5.0.4",
     "@types/react-test-renderer": "^16.9.2",
     "@types/webpack": "^4.41.18",
@@ -56,6 +55,7 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^0.2.8",
     "@bloom-housing/core": "^0.2.8",
+    "@types/jwt-decode": "^2.2.1",
     "@types/node": "^12.12.47",
     "@types/node-polyglot": "^0.4.34",
     "@types/react-dom": "^16.9.5",
