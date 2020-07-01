@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from "axios"
-import { CreateUserDto } from "@bloom-housing/backend-core/dist/src/user/createUser.dto"
-import { User } from "@bloom-housing/backend-core/dist/src/entity/User"
+import { CreateUserDto, User } from "@bloom-housing/backend-core/"
 import { getTokenTtl } from "./token"
 
 export const renewToken = async (client: AxiosInstance) => {
