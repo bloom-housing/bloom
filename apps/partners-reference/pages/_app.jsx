@@ -1,8 +1,7 @@
 import React from "react"
 import App from "next/app"
-import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
-import { addTranslation } from "@bloom-housing/ui-components"
+import { addTranslation, ConfigProvider, UserProvider } from "@bloom-housing/ui-components"
 
 class MyApp extends App {
   constructor(props) {
@@ -54,7 +53,13 @@ class MyApp extends App {
       }
     }
 
-    return <Component {...pageProps} />
+    return (
+      <ConfigProvider apiUrl={process.env.listingServiceUrl}>
+        <UserProvider>
+          <Component {...pageProps} />
+        </UserProvider>
+      </ConfigProvider>
+    )
   }
 }
 
