@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "typeorm"
 import { Unit } from "./Unit"
 import { Preference } from "./Preference"
 import { Attachment } from "./Attachment"
-import { Address, UnitsSummarized } from "@bloom-housing/core"
+import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 
-@Entity()
-class Listing {
+@Entity({ name: "listings" })
+class Listing extends BaseEntity {
   @OneToMany((type) => Preference, (preference) => preference.listing)
   preferences: Preference[]
   @OneToMany((type) => Unit, (unit) => unit.listing)
@@ -98,6 +98,8 @@ class Listing {
   waitlistCurrentSize: number
   @Column({ type: "numeric", nullable: true })
   waitlistMaxSize: number
+  @Column({ type: "jsonb", nullable: true })
+  whatToExpect?: WhatToExpect
   @Column({ type: "numeric", nullable: true })
   yearBuilt: number
 

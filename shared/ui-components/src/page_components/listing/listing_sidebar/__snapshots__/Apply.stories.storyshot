@@ -3866,23 +3866,12 @@ exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 
       filled={true}
       href="https://icann.org"
     >
-      <LocalizedLink
+      <a
         className="button is-filled w-full mb-2"
         href="https://icann.org"
       >
-        <Link
-          href="https://icann.org"
-        >
-          <a
-            className="button is-filled w-full mb-2"
-            href="https://icann.org"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            Apply Online
-          </a>
-        </Link>
-      </LocalizedLink>
+        Apply Online
+      </a>
     </LinkButton>
     <OrDivider
       bgColor="white"

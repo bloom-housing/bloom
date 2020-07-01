@@ -4,9 +4,21 @@ export const blankApplication = () => {
   return {
     loaded: false,
     completedStep: 0,
-    name: "",
-    age: null,
-    liveInSF: null,
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    birthMonth: 0,
+    birthDay: 0,
+    birthYear: 0,
+    emailAddress: "",
+    noEmail: false,
+    phoneNumber: "",
+    phoneNumberType: "",
+    noPhone: false,
+    additionalPhone: false,
+    additionalPhoneNumber: "",
+    additionalPhoneNumberType: "",
+    workInRegion: null,
     housingStatus: "",
     address: {
       street: "",
@@ -15,11 +27,34 @@ export const blankApplication = () => {
       state: "",
       zipcode: "",
     },
+    sendMailToMailingAddress: false,
+    mailingAddress: {
+      street: "",
+      street2: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    },
+    workAddress: {
+      street: "",
+      street2: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    },
+    alternateAddress: {
+      street: "",
+      street2: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    },
+    householdSize: 0,
   }
 }
 
 export const AppSubmissionContext = React.createContext({
   application: blankApplication(),
   /* eslint-disable */
-  syncApplication: data => {}
+  syncApplication: (data) => {},
 })

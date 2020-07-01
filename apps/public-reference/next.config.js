@@ -100,9 +100,9 @@ module.exports = withCSS(
             return Object.assign({}, languagePaths, {
               "/disclaimer": { page: "/disclaimer" },
               "/privacy": { page: "/privacy" },
-              "/applications/new": { page: "/applications/new" },
-              "/applications/step2": { page: "/applications/step2" },
-              "/applications/complete": { page: "/applications/complete" },
+              "/applications/start/choose-language": {
+                page: "/applications/start/choose-language",
+              },
               "/sign-in": { page: "/sign-in" },
               "/create-account": { page: "/create-account" },
             })

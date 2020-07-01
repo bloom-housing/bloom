@@ -25,7 +25,11 @@ const credits = (
       </a>
     </p>
     <p>
-      <img className="h-16 w-16" src="/images/eho-logo-white.svg" alt="Equal Housing Opportunity Logo" />
+      <img
+        className="h-16 w-16"
+        src="/images/eho-logo-white.svg"
+        alt="Equal Housing Opportunity Logo"
+      />
     </p>
   </>
 )

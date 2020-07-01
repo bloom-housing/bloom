@@ -2,7 +2,7 @@ import { blankApplication } from "../lib/AppSubmissionContext"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
-    const autosavedApplication = window.localStorage.getItem("bloom-app-autosave")
+    const autosavedApplication = window.sessionStorage.getItem("bloom-app-autosave")
     if (autosavedApplication) {
       const application = JSON.parse(autosavedApplication)
       application.loaded = true
@@ -23,7 +23,7 @@ export default class ApplicationConductor {
   }
 
   totalNumberOfSteps() {
-    return 2
+    return 5
   }
 
   advanceToNextStep() {
@@ -33,16 +33,18 @@ export default class ApplicationConductor {
   sync() {
     setTimeout(() => {
       if (typeof window != "undefined") {
-        window.localStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
+        window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
       }
     }, 800)
   }
 
-  reset() {
+  reset(shouldSync = true) {
     this.application = blankApplication()
-    this.context.syncApplication(this.application)
+    if (shouldSync) {
+      this.context.syncApplication(this.application)
+    }
     if (typeof window != "undefined") {
-      window.localStorage.removeItem("bloom-app-autosave")
+      window.sessionStorage.removeItem("bloom-app-autosave")
     }
   }
 }

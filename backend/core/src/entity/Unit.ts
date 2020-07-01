@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
 import { Listing } from "./Listing"
 
-@Entity()
+@Entity({ name: "units" })
 class Unit {
   @PrimaryGeneratedColumn("uuid")
   id: string

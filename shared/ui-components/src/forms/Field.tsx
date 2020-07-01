@@ -13,6 +13,7 @@ export interface FieldProps {
   placeholder?: string
   register: any // comes from React Hook Form
   validation?: Record<string, any>
+  disabled?: boolean
 }
 
 const Field = (props: FieldProps) => {
@@ -37,6 +38,7 @@ const Field = (props: FieldProps) => {
           defaultValue={props.defaultValue}
           placeholder={props.placeholder}
           ref={props.register(props.validation)}
+          disabled={props.disabled}
         />
       </div>
       <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>

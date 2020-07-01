@@ -19,6 +19,12 @@ export const small = () => (
   </Button>
 )
 
+export const big = () => (
+  <Button big={true} onClick={handleClick}>
+    Big Button
+  </Button>
+)
+
 export const filled = () => (
   <Button filled={true} onClick={handleClick}>
     Filled Button

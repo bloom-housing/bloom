@@ -14,6 +14,12 @@ export const OneLineAddress = (props: AddressProps) => (
 
 export const MultiLineAddress = (props: AddressProps) => (
   <>
+    {props.address.placeName && (
+      <>
+        {props.address.placeName}
+        <br />
+      </>
+    )}
     {props.address.street}
     <br />
     {props.address.city} {props.address.state},{` `}

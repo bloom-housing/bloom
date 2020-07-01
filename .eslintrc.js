@@ -29,5 +29,12 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": "warn",
     "react/jsx-uses-vars": "warn",
     "react/jsx-uses-react": "warn"
-  }
+  },
+  ignorePatterns: [
+    "node_modules",
+    "storybook-static",
+    ".next",
+    "dist",
+    "migration/",
+  ],
 }

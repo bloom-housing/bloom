@@ -13,6 +13,12 @@ export interface Attachment {
   type: AttachmentType
 }
 
+export interface WhatToExpect {
+  applicantsWillBeContacted: string
+  allInfoWillBeVerified: string
+  bePreparedIfChosen: string
+}
+
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
   acceptingApplicationsByPoBox: boolean
@@ -61,5 +67,6 @@ export interface Listing {
   urlSlug?: string
   waitlistCurrentSize: number
   waitlistMaxSize: number
+  whatToExpect?: WhatToExpect
   yearBuilt: number
 }
