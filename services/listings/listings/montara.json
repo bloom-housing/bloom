@@ -31,7 +31,7 @@
   "leasingAgentName": "Leopoldo Batlle",
   "leasingAgentTitle": "Director of Property Management",
   "leasingAgentEmail": "montara.leasing@bridgehousing.com",
-  "depositMaxExtraText": "or tenant portion if applicant has a Section 8 Voucher",
+  "depositMaxExtraText": "Lesser of tenant portion or flat rate (if applicant has housing choice Section 8 Voucher).",
   "leasingAgentPhone": "415-748-3984",
   "leasingAgentAddress": {
     "street": "",
