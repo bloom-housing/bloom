@@ -1,16 +1,35 @@
 /*
 0.1 - Choose Language
 Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
+https://github.com/bloom-housing/bloom/issues/277
 */
+import axios from "axios"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import {
+  Button,
+  ImageCard,
+  LinkButton,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
+
+const loadListing = async (stateFunction) => {
+  const response = await axios.get(process.env.listingServiceUrl)
+  stateFunction(response.data.listings[2])
+}
 
 export default () => {
+  const [listing, setListing] = useState(null)
+  useEffect(() => {
+    loadListing(setListing)
+  })
+
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
@@ -37,26 +56,66 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">Choose your language</h2>
+        <div className="form-card__lead">
+          <h2 className="form-card__title is-borderless">
+            {t("application.chooseLanguage.letsGetStarted")}
+          </h2>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group">(BUTTONS)</div>
+        {listing && (
+          <div className="form-card__group p-0 m-0">
+            <ImageCard title={listing.name} imageUrl={listing.imageUrl || ""} listing={listing} />
+          </div>
+        )}
 
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
+        <div className="form-card__pager">
+          <form className="" onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-card__pager-row primary px-4">
+              <h3 className="mb-4 font-alt-sans field-label--caps text-base text-black">
+                {t("application.chooseLanguage.chooseYourLanguage")}
+              </h3>
+
               <Button
-                filled={true}
+                className="mx-1"
+                onClick={() => {
+                  // Set the language in the context here...
+                }}
+              >
+                Begin
+              </Button>
+
+              <Button
+                className="mx-1"
                 onClick={() => {
                   //
                 }}
               >
-                Next
+                Empezar
+              </Button>
+
+              <Button
+                className="mx-1"
+                onClick={() => {
+                  //
+                }}
+              >
+                開始
               </Button>
             </div>
+          </form>
+
+          <div className="form-card__pager-row primary px-4 border-t border-gray-450">
+            <h2 className="form-card__title w-full border-none pt-0 mt-0">
+              {t("application.chooseLanguage.haveAnAccount")}
+            </h2>
+
+            <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
+
+            <div>
+              <LinkButton href="/sign-in">{t("nav.signIn")}</LinkButton>
+            </div>
           </div>
-        </form>
+        </div>
       </FormCard>
     </FormsLayout>
   )

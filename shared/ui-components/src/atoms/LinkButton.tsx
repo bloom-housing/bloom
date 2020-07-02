@@ -5,6 +5,7 @@ import "./Button.scss"
 interface LinkButtonProps {
   href: string
   as?: string
+  big?: boolean
   filled?: boolean
   normalCase?: boolean
   small?: boolean
@@ -27,6 +28,7 @@ const LinkButton = (props: LinkButtonProps) => {
   if (props.filled) buttonClasses.push("is-filled")
   if (props.normalCase) buttonClasses.push("is-normal-case")
   if (props.small) buttonClasses.push("is-small")
+  if (props.big) buttonClasses.push("is-big")
   if (props.className) buttonClasses.push(props.className)
 
   const linkProps = {

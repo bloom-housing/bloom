@@ -670,8 +670,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                big={true}
-                className="w-full md:w-3/4"
+                filled={true}
                 onClick={() => {
                   //
                 }}
