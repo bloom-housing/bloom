@@ -110,12 +110,11 @@
 }
 
 .form-card__pager-row {
-  @apply py-2;
   @apply px-8;
   @apply py-4;
 
   &.primary {
     @apply bg-primary-lighter;
-    @apply pb-8;
+    @apply py-8;
   }
 }

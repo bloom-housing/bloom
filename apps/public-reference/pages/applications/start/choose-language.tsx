@@ -60,24 +60,24 @@ export default () => {
           <h2 className="form-card__title is-borderless">
             {t("application.chooseLanguage.letsGetStarted")}
           </h2>
-
-          {listing && (
-            <div className="mt-5">
-              <ImageCard
-                title={listing.name}
-                imageUrl={listing.imageUrl || ""}
-                href={`listing/id=${listing.id}`}
-                as={`/listing/${listing.id}`}
-                listing={listing}
-              />
-            </div>
-          )}
         </div>
+
+        {listing && (
+          <div className="form-card__group p-0 m-0">
+            <ImageCard
+              title={listing.name}
+              imageUrl={listing.imageUrl || ""}
+              href={`listing/id=${listing.id}`}
+              as={`/listing/${listing.id}`}
+              listing={listing}
+            />
+          </div>
+        )}
 
         <div className="form-card__pager">
           <form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__pager-row primary px-4">
-              <h3 className="my-4 font-alt-sans field-label--caps text-base text-black">
+              <h3 className="mb-4 font-alt-sans field-label--caps text-base text-black">
                 {t("application.chooseLanguage.chooseYourLanguage")}
               </h3>
 
@@ -110,8 +110,8 @@ export default () => {
             </div>
           </form>
 
-          <div className="form-card__pager-row primary px-4">
-            <h2 className="border-t border-gray-450 form-card__title pt-10 w-full">
+          <div className="form-card__pager-row primary px-4 border-t border-gray-450">
+            <h2 className="form-card__title w-full border-none pt-0 mt-0">
               {t("application.chooseLanguage.haveAnAccount")}
             </h2>
 
