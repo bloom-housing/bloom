@@ -64,13 +64,7 @@ export default () => {
 
         {listing && (
           <div className="form-card__group p-0 m-0">
-            <ImageCard
-              title={listing.name}
-              imageUrl={listing.imageUrl || ""}
-              href={`listing/id=${listing.id}`}
-              as={`/listing/${listing.id}`}
-              listing={listing}
-            />
+            <ImageCard title={listing.name} imageUrl={listing.imageUrl || ""} listing={listing} />
           </div>
         )}
 
