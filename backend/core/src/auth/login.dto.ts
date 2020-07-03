@@ -9,6 +9,6 @@ export class LoginDto {
 }
 
 export class LoginResponseDto {
-  @IsEmail()
+  @IsString()
   accessToken: string
 }
