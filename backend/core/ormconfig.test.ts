@@ -11,9 +11,7 @@ try {
 
 export = {
   type: "postgres",
-  host: "localhost",
-  port: 5432,
-  database: "bloom_test",
+  url: process.env.TEST_DATABASE_URL || "postgres://localhost:5432/bloom_test",
   synchronize: true,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
