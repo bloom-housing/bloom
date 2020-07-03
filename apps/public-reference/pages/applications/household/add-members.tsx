@@ -76,7 +76,7 @@ export default () => {
             />
             {membersSection}
           </form>
-          <div className="text-center py-4">
+          <div className="text-center">
             <Button onClick={onAddMember}>
               {t("application.household.addMembers.addHouseholdMember")}
             </Button>
@@ -84,7 +84,7 @@ export default () => {
         </div>
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
-            <Button filled={true} className="" onClick={onSubmit}>
+            <Button filled={true} className="w-full md:w-3/4" onClick={onSubmit}>
               {t("application.household.addMembers.done")}
             </Button>
           </div>
