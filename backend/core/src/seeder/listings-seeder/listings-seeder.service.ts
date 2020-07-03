@@ -18,7 +18,7 @@ export class ListingsSeederService {
     for await (const listing of listings) {
       const l = new Listing()
       const entities = {}
-      for await (const key of Object.keys(listing)) {
+      for (const key in listing) {
         if (!skipped.includes(key)) {
           l[key] = listing[key]
         } else if (key !== "id") {
@@ -27,8 +27,8 @@ export class ListingsSeederService {
       }
       await connection.manager.save(l)
 
-      for await (const key of Object.keys(entities)) {
-        for await (let value of entities[key]) {
+      for (const key in entities) {
+        for (let value of entities[key]) {
           if (value) {
             if (value instanceof Array) {
               value = (value as any).map((obj) => {
