@@ -5,7 +5,15 @@ https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  Button,
+  ErrorMessage,
+  Field,
+  FormCard,
+  ProgressNav,
+  t,
+  mergeDeep,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm, Controller } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
@@ -26,37 +34,37 @@ export default () => {
     Record<string, any>
   >({
     defaultValues: {
-      noPhone: application.noPhone,
+      noPhone: application.applicant.noPhone,
       additionalPhone: application.additionalPhone,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
-      workInRegion: application.workInRegion,
+      workInRegion: application.applicant.workInRegion,
     },
   })
   const onSubmit = (data) => {
-    if (data.noPhone) {
-      data.phoneNumber = ""
-      data.phoneNumberType = ""
+    mergeDeep(application, data)
+    if (application.applicant.noPhone) {
+      application.applicant.phoneNumber = ""
+      application.applicant.phoneNumberType = ""
     }
-    if (!data.additionalPhone) {
-      data.additionalPhoneNumber = ""
-      data.additionalPhoneNumberType = ""
+    if (!application.additionalPhone) {
+      application.additionalPhoneNumber = ""
+      application.additionalPhoneNumberType = ""
     }
-    if (!data.sendMailToMailingAddress) {
-      data.mailingAddress = blankApplication().mailingAddress
+    if (!application.sendMailToMailingAddress) {
+      application.mailingAddress = blankApplication().mailingAddress
     }
-    if (!data.workInRegion) {
-      data.workAddress = blankApplication().workAddress
+    if (!application.applicant.workInRegion) {
+      application.workAddress = blankApplication().workAddress
     }
-
-    new FormStep(conductor).save(data)
+    conductor.sync()
 
     Router.push("/applications/contact/alternate-contact-type").then(() => window.scrollTo(0, 0))
   }
 
-  const noPhone = watch("noPhone")
+  const noPhone = watch("applicant.noPhone")
   const additionalPhone = watch("additionalPhone")
   const sendMailToMailingAddress = watch("sendMailToMailingAddress")
-  const workInRegion = watch("workInRegion")
+  const workInRegion = watch("applicant.workInRegion")
 
   return (
     <FormsLayout>
@@ -78,7 +86,7 @@ export default () => {
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
-            {t("application.contact.title", { firstName: application.firstName })}
+            {t("application.contact.title", { firstName: application.applicant.firstName })}
           </h2>
         </div>
 
@@ -94,23 +102,23 @@ export default () => {
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
               control={control}
-              defaultValue={application.phoneNumber}
+              defaultValue={application.applicant.phoneNumber}
               disabled={noPhone}
             />
 
-            <div className={"field " + (errors.phoneNumberType ? "error" : "")}>
+            <div className={"field " + (errors.applicant?.phoneNumberType ? "error" : "")}>
               <div className="control">
                 <select
-                  id="phoneNumberType"
-                  name="phoneNumberType"
+                  id="applicant.phoneNumberType"
+                  name="applicant.phoneNumberType"
                   className="w-full"
-                  defaultValue={application.phoneNumberType}
+                  defaultValue={application.applicant.phoneNumberType}
                   disabled={noPhone}
                   ref={register({
                     validate: {
                       selectionMade: (v) => {
                         const dropdown = document.querySelector<HTMLSelectElement>(
-                          "#phoneNumberType"
+                          "#applicant\\.phoneNumberType"
                         )
                         if (dropdown.disabled) return true
                         return v != ""
@@ -123,7 +131,7 @@ export default () => {
                   <option>Home</option>
                   <option>Cell</option>
                 </select>
-                <ErrorMessage error={errors.phoneNumberType}>
+                <ErrorMessage error={errors.applicant?.phoneNumberType}>
                   {t("application.contact.phoneNumberTypeError")}
                 </ErrorMessage>
               </div>
@@ -133,8 +141,8 @@ export default () => {
               <input
                 type="checkbox"
                 id="noPhone"
-                name="noPhone"
-                defaultChecked={application.noPhone}
+                name="applicant.noPhone"
+                defaultChecked={application.applicant.noPhone}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
@@ -184,9 +192,9 @@ export default () => {
                       ref={register({ required: true })}
                     >
                       <option value="">What type of number is this?</option>
-                      <option>Work</option>
-                      <option>Home</option>
-                      <option>Cell</option>
+                      <option value="Work">Work</option>
+                      <option value="Home">Home</option>
+                      <option value="Cell">Cell</option>
                     </select>
                     <ErrorMessage error={errors?.additionalPhoneNumberType}>
                       {t("application.contact.phoneNumberTypeError")}
@@ -208,31 +216,31 @@ export default () => {
 
             <Field
               id="addressStreet"
-              name="address.street"
+              name="applicant.address.street"
               placeholder={t("application.contact.streetAddress")}
-              defaultValue={context.application.address.street}
+              defaultValue={context.application.applicant.address.street}
               validation={{ required: true }}
-              error={errors.address?.street}
+              error={errors.applicant?.address?.street}
               errorMessage={t("application.contact.streetError")}
               register={register}
             />
 
             <Field
               id="addressStreet2"
-              name="address.street2"
+              name="applicant.address.street2"
               label={t("application.contact.apt")}
               placeholder={t("application.contact.apt")}
-              defaultValue={context.application.address.street2}
+              defaultValue={context.application.applicant.address.street2}
               register={register}
             />
 
             <div className="flex max-w-2xl">
               <Field
                 id="addressCity"
-                name="address.city"
+                name="applicant.address.city"
                 label={t("application.contact.cityName")}
                 placeholder={t("application.contact.cityName")}
-                defaultValue={context.application.address.city}
+                defaultValue={context.application.applicant.address.city}
                 validation={{ required: true }}
                 error={errors.address?.city}
                 errorMessage={t("application.contact.cityError")}
@@ -243,23 +251,23 @@ export default () => {
                 id="addressState"
                 name="address.state"
                 label="State"
-                defaultValue={context.application.address.state}
+                defaultValue={context.application.applicant.address.state}
                 validation={{ required: true }}
-                error={errors.address?.state}
+                error={errors.applicant?.address?.state}
                 errorMessage={t("application.contact.stateError")}
                 register={register}
                 controlClassName="control"
               />
             </div>
             <Field
-              id="addressZipcode"
-              name="address.zipcode"
+              id="addressZipCode"
+              name="applicant.address.zipCode"
               label="Zip"
-              placeholder="Zipcode"
-              defaultValue={context.application.address.zipcode}
+              placeholder="ZipCode"
+              defaultValue={context.application.applicant.address.zipCode}
               validation={{ required: true }}
-              error={errors.address?.zipcode}
-              errorMessage="Please enter your Zipcode"
+              error={errors.applicant?.address?.zipCode}
+              errorMessage="Please enter your ZipCode"
               register={register}
             />
 
@@ -332,14 +340,14 @@ export default () => {
               </div>
 
               <Field
-                id="mailingAddressZipcode"
-                name="mailingAddress.zipcode"
+                id="mailingAddressZipCode"
+                name="mailingAddress.zipCode"
                 label="Zip"
-                placeholder="Zipcode"
-                defaultValue={context.application.mailingAddress.zipcode}
+                placeholder="ZipCode"
+                defaultValue={context.application.mailingAddress.zipCode}
                 validation={{ required: true }}
-                error={errors.mailingAddress?.zipcode}
-                errorMessage="Please enter your Zipcode"
+                error={errors.mailingAddress?.zipCode}
+                errorMessage="Please enter your ZipCode"
                 register={register}
               />
             </div>
@@ -352,35 +360,38 @@ export default () => {
 
             <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
-            <div className={"field " + (errors.workInRegion ? "error" : "")}>
+            <div className={"field " + (errors.applicant?.workInRegion ? "error" : "")}>
               <input
                 type="radio"
                 id="workInRegionYes"
-                name="workInRegion"
+                name="applicant.workInRegion"
                 value="yes"
-                defaultChecked={application.workInRegion == "yes"}
+                defaultChecked={application.applicant.workInRegion == "yes"}
                 ref={register({ required: true })}
               />
               <label className="font-semibold" htmlFor="workInRegionYes">
                 Yes
               </label>
             </div>
-            <div className={"field " + (errors.workInRegion ? "error" : "")}>
+            <div className={"field " + (errors.applicant?.workInRegion ? "error" : "")}>
               <input
                 type="radio"
                 id="workInRegionNo"
-                name="workInRegion"
-                defaultChecked={application.workInRegion == "no"}
+                name="applicant.workInRegion"
+                value="no"
+                defaultChecked={application.applicant.workInRegion == "no"}
                 ref={register({ required: true })}
               />
               <label className="font-semibold" htmlFor="workInRegionNo">
                 No
               </label>
 
-              <ErrorMessage error={errors.workInRegion}>Please select an option</ErrorMessage>
+              <ErrorMessage error={errors.applicant?.workInRegion}>
+                Please select an option
+              </ErrorMessage>
             </div>
 
-            {(workInRegion == "yes" || application.workInRegion == "yes") && (
+            {(workInRegion == "yes" || application.applicant.workInRegion == "yes") && (
               <>
                 <div className="mt-8 mb-3">
                   <label className="field-label--caps" htmlFor="street">
@@ -491,14 +502,14 @@ export default () => {
                 </div>
 
                 <Field
-                  id="workAddressZipcode"
-                  name="workAddress.zipcode"
+                  id="workAddressZipCode"
+                  name="workAddress.zipCode"
                   label="Zip"
-                  placeholder="Zipcode"
-                  defaultValue={context.application.workAddress.zipcode}
+                  placeholder="ZipCode"
+                  defaultValue={context.application.workAddress.zipCode}
                   validation={{ required: true }}
-                  error={errors.workAddress?.zipcode}
-                  errorMessage="Please enter your Zipcode"
+                  error={errors.workAddress?.zipCode}
+                  errorMessage="Please enter your ZipCode"
                   register={register}
                 />
               </>

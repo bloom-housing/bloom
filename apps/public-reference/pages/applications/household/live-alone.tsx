@@ -71,6 +71,7 @@ export default () => {
                 className="w-full md:w-3/4"
                 onClick={() => {
                   application.householdSize = 0
+                  application.householdMembers = []
                 }}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}

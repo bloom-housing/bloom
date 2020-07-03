@@ -1,6 +1,6 @@
 import { formatUrlSlug, listingUrlSlug } from "../../src/lib/url_helper"
 
-import triton from "../../listings/triton.json"
+import triton from "../../../../services/listings/listings/triton.json"
 import { Listing } from "../../src/entity/listing.entity"
 
 describe("formatUrlSlug", () => {
