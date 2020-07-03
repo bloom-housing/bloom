@@ -28,7 +28,6 @@ const PhoneMask = (props) => {
       maskPlaceholder={"_"}
       onChange={(e) => {
         e.persist()
-        console.log("huh?", e.target.value)
         onChange(e.target.value)
       }}
       disabled={disabled}
@@ -71,7 +70,7 @@ export default () => {
 
     new FormStep(conductor).save(data)
 
-    Router.push("/applications/contact/alternate").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/contact/alternate-contact-type").then(() => window.scrollTo(0, 0))
   }
 
   const noPhone = watch("noPhone")
