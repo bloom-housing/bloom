@@ -20,7 +20,7 @@
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "typeorm-test": "ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts",
     "herokusetup": "node heroku.setup.js",
-    "test:seed": "ts-node src/seed.ts --test",
+    "seed:test": "ts-node src/seed.ts --test",
     "seed": "ts-node src/seed.ts"
   },
   "dependencies": {
