@@ -16,7 +16,7 @@ export class RolesGuard implements CanActivate {
       return false
     }
     for (const role of roles) {
-      if (user.roles.findIndex(role) != -1) {
+      if (user.roles.findIndex(role) !== -1) {
         return true
       }
     }
