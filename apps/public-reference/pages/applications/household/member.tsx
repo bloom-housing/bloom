@@ -63,7 +63,7 @@ export default () => {
           <h2 className="form-card__title is-borderless">
             {t("application.household.member.title")}
           </h2>
-          <p className="mt-4 text-center text-tiny font-semibold">
+          <p className="mt-4 field-note">
             {t("application.household.member.subTitle")}
           </p>
         </div>
@@ -309,7 +309,7 @@ export default () => {
               </div>
             </div>
 
-            <div className="form-card__group border-b">
+            <div className="form-card__group">
               <div className={"field " + (errors.relationship ? "error" : "")}>
                 <label className="field-label--caps" htmlFor="relationship">
                   {t("application.household.member.whatIsTheirRelationship")}
@@ -337,9 +337,9 @@ export default () => {
             <div className="form-card__pager">
               <div className="form-card__pager-row primary">
                 <Button
-                  big={true}
+                  big={false}
                   filled={true}
-                  className="w-full md:w-3/4"
+                  className=""
                   onClick={() => {
                     //
                   }}
@@ -347,8 +347,8 @@ export default () => {
                   {t("application.household.member.save")}
                 </Button>
               </div>
-              <div className="form-card__pager-row">
-                <a href="#" className="lined" onClick={deleteMember}>
+              <div className="form-card__pager-row py-8">
+                <a href="#" className="lined text-tiny" onClick={deleteMember}>
                   {t("application.household.member.cancel")}
                 </a>
               </div>
