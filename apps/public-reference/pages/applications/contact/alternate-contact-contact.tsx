@@ -116,10 +116,10 @@ export default () => {
                 controlClassName="control"
               />
             </div>
-            <label>{t("application.alternateContact.contact.zipcodeFormLabel")}</label>
             <Field
               id="mailingAddress.zipcode"
               name="mailingAddress.zipcode"
+              label={t("application.alternateContact.contact.zipcodeFormLabel")}
               placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
               defaultValue={application.alternateContact.mailingAddress.zipcode}
               register={register}
