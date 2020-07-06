@@ -9,8 +9,9 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import React, { useContext } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -18,7 +19,7 @@ export default () => {
   const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 1
   /* Form Handler */
-  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
+  const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
   const onSubmit = (data) => {
     application.alternateContact.phoneNumber = data.phoneNumber
     application.alternateContact.emailAddress = data.emailAddress
@@ -55,16 +56,17 @@ export default () => {
         </div>
         <form id="applications-contact-alternate-contact" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps">
+            <label className="field-label--caps" htmlFor="phoneNumber">
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
             </label>
-            <Field
-              controlClassName="mt-2"
-              id="phoneNumber"
+            <PhoneField
               name="phoneNumber"
-              placeholder={t("application.alternateContact.contact.phoneNumberFormPlaceHolder")}
+              label={t("application.alternateContact.contact.phoneNumberFormLabel")}
+              error={errors.phoneNumber}
+              errorMessage={t("application.contact.phoneNumberError")}
+              controlClassName="control mt-2"
+              control={control}
               defaultValue={application.alternateContact.phoneNumber}
-              register={register}
             />
           </div>
           <div className="form-card__group border-b">

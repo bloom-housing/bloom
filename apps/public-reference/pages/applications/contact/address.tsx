@@ -8,33 +8,12 @@ import Router from "next/router"
 import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm, Controller } from "react-hook-form"
-import MaskedInput from "react-input-mask"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
 import React, { useContext } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
-
-const PhoneMask = (props) => {
-  const { value, onChange, name, disabled } = props
-  return (
-    <MaskedInput
-      id={name}
-      name={name}
-      value={value}
-      type="text"
-      className="input"
-      placeholder="(555) 555-5555"
-      mask="(999) 999-9999"
-      maskPlaceholder={"_"}
-      onChange={(e) => {
-        e.persist()
-        onChange(e.target.value)
-      }}
-      disabled={disabled}
-    />
-  )
-}
+import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -109,30 +88,15 @@ export default () => {
               {t("application.contact.yourPhoneNumber")}
             </label>
 
-            <div className={"field " + (errors.phoneNumber ? "error" : "")}>
-              <div className="control mt-2">
-                <Controller
-                  name="phoneNumber"
-                  as={PhoneMask}
-                  control={control}
-                  defaultValue={application.phoneNumber}
-                  rules={{
-                    validate: {
-                      inputTel: (v) => {
-                        const dropdown = document.querySelector<HTMLInputElement>("#phoneNumber")
-                        if (dropdown.disabled) return true
-
-                        return v?.match(/\d/g)?.length == 10 ? true : false
-                      },
-                    },
-                  }}
-                  disabled={noPhone}
-                />
-                <ErrorMessage error={errors.phoneNumber}>
-                  {t("application.contact.phoneNumberError")}
-                </ErrorMessage>
-              </div>
-            </div>
+            <PhoneField
+              name="phoneNumber"
+              error={errors.phoneNumber}
+              errorMessage={t("application.contact.phoneNumberError")}
+              controlClassName="control mt-2"
+              control={control}
+              defaultValue={application.phoneNumber}
+              disabled={noPhone}
+            />
 
             <div className={"field " + (errors.phoneNumberType ? "error" : "")}>
               <div className="control">
@@ -202,27 +166,14 @@ export default () => {
 
             {additionalPhone && (
               <>
-                <div className={"field " + (errors.additionalPhoneNumber ? "error" : "")}>
-                  <div className="control">
-                    <Controller
-                      name="additionalPhoneNumber"
-                      as={PhoneMask}
-                      control={control}
-                      defaultValue={application.additionalPhoneNumber}
-                      rules={{
-                        validate: {
-                          inputAdditionalTel: (v) => {
-                            return v?.match(/\d/g)?.length == 10 ? true : false
-                          },
-                        },
-                      }}
-                    />
-                    <ErrorMessage error={errors.additionalPhoneNumber}>
-                      {t("application.contact.phoneNumberError")}
-                    </ErrorMessage>
-                  </div>
-                </div>
-
+                <PhoneField
+                  name="additionalPhoneNumber"
+                  error={errors.additionalPhoneNumber}
+                  errorMessage={t("application.contact.phoneNumberError")}
+                  control={control}
+                  defaultValue={application.additionalPhoneNumber}
+                  controlClassName="control mt-2"
+                />
                 <div className={"field " + (errors.additionalPhoneNumberType ? "error" : "")}>
                   <div className="control">
                     <select
