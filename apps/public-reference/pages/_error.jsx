@@ -4,7 +4,7 @@ import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/homepage.mdx"
 
 export default () => {
-  const pageTitle = <>{t("error.notFound.title")}</>
+  const pageTitle = t("error.notFound.title")
 
   return (
     <Layout>
