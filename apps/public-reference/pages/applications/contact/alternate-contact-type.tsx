@@ -52,7 +52,7 @@ export default () => {
         </div>
         <form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="street">
+            <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
             </label>
             <p className="field-note my-2">{t("application.alternateContact.type.helperText")}</p>

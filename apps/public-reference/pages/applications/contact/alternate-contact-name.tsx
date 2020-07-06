@@ -51,7 +51,7 @@ export default () => {
         </div>
         <form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="street">
+            <label className="field-label--caps" htmlFor="firstName">
               {t("application.alternateContact.name.alternateContactFormLabel")}
             </label>
             <Field
@@ -77,7 +77,7 @@ export default () => {
             />
             {application.alternateContact.type === "caseManager" && (
               <>
-                <label className="field-label--caps" htmlFor="street">
+                <label className="field-label--caps" htmlFor="agency">
                   {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
                 </label>
                 <Field
