@@ -55,6 +55,7 @@ export default () => {
               {t("application.alternateContact.name.alternateContactFormLabel")}
             </label>
             <Field
+              controlClassName="mt-2"
               id="firstName"
               name="firstName"
               placeholder={t("application.alternateContact.name.firstNameFormPlaceholder")}

@@ -58,6 +58,7 @@ export default () => {
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
             </label>
             <Field
+              controlClassName="mt-2"
               id="phoneNumber"
               name="phoneNumber"
               placeholder={t("application.alternateContact.contact.phoneNumberFormPlaceHolder")}
@@ -70,6 +71,7 @@ export default () => {
               {t("application.alternateContact.contact.emailAddressFormLabel")}
             </label>
             <Field
+              controlClassName="mt-2"
               id="emailAddress"
               name="emailAddress"
               placeholder={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
