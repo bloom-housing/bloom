@@ -65,6 +65,12 @@ export const blankApplication = () => {
         zipcode: "",
       },
     },
+    accessibility: {
+      mobility: false,
+      vision: false,
+      hearing: false,
+      none: false,
+    },
   }
 }
 
