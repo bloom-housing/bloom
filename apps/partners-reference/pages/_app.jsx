@@ -1,7 +1,12 @@
 import React from "react"
 import App from "next/app"
 import "@bloom-housing/ui-components/styles/index.scss"
-import { addTranslation, ConfigProvider, UserProvider } from "@bloom-housing/ui-components"
+import {
+  addTranslation,
+  ConfigProvider,
+  UserProvider,
+  RequireLogin,
+} from "@bloom-housing/ui-components"
 
 class MyApp extends App {
   constructor(props) {
@@ -53,10 +58,14 @@ class MyApp extends App {
       }
     }
 
+    const signInMessage = "Login is required to view this page."
+
     return (
       <ConfigProvider apiUrl={process.env.listingServiceUrl}>
         <UserProvider>
-          <Component {...pageProps} />
+          <RequireLogin signInPath={`/sign-in?message=${encodeURIComponent(signInMessage)}`}>
+            <Component {...pageProps} />
+          </RequireLogin>
         </UserProvider>
       </ConfigProvider>
     )
