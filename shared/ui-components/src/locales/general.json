@@ -84,7 +84,6 @@
         "emailAddressFormPlaceHolder": "you@myemail.com",
         "contactMailingAddressLabel": "Contact mailing address",
         "contactMailingAddressHelperText": "Choose an address where they can receive updates and materials about your application",
-        "streetFormLabel": "Street",
         "streetFormPlaceholder": "Street Address",
         "cityFormLabel": "City Name",
         "cityFormPlaceholder": "City Name",

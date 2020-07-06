@@ -86,7 +86,6 @@ export default () => {
             <p className="field-note my-2">
               {t("application.alternateContact.contact.contactMailingAddressHelperText")}
             </p>
-            <label>{t("application.alternateContact.contact.streetFormLabel")}</label>
             <Field
               id="mailingAddress.street"
               name="mailingAddress.street"
