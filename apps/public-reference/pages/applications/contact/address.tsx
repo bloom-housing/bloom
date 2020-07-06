@@ -12,7 +12,8 @@ import MaskedInput from "react-input-mask"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
+import React, { useContext } from "react"
+import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 
 const PhoneMask = (props) => {
   const { value, onChange, name, disabled } = props
@@ -287,75 +288,18 @@ export default () => {
                 register={register}
               />
 
-              <div className={"field " + (errors.address?.state ? "error" : "")}>
-                <label htmlFor="stuff">State</label>
-                <div className="control">
-                  <select
-                    id="addressState"
-                    name="address.state"
-                    defaultValue={context.application.address.state}
-                    ref={register({ required: true })}
-                  >
-                    <option value="">Select One</option>
-                    <option value="AL">Alabama</option>
-                    <option value="AK">Alaska</option>
-                    <option value="AZ">Arizona</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="CA">California</option>
-                    <option value="CO">Colorado</option>
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="DC">District Of Columbia</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="HI">Hawaii</option>
-                    <option value="ID">Idaho</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IN">Indiana</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NV">Nevada</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="OH">Ohio</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="OR">Oregon</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="TX">Texas</option>
-                    <option value="UT">Utah</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WA">Washington</option>
-                    <option value="WV">West Virginia</option>
-                    <option value="WI">Wisconsin</option>
-                    <option value="WY">Wyoming</option>
-                  </select>
-                </div>
-                <ErrorMessage error={errors.address?.state}>
-                  {t("application.contact.stateError")}
-                </ErrorMessage>
-              </div>
+              <StateSelect
+                id="addressState"
+                name="address.state"
+                label="State"
+                defaultValue={context.application.address.state}
+                validation={{ required: true }}
+                error={errors.address?.state}
+                errorMessage={t("application.contact.stateError")}
+                register={register}
+                controlClassName="control"
+              />
             </div>
-
             <Field
               id="addressZipcode"
               name="address.zipcode"
@@ -423,73 +367,17 @@ export default () => {
                   register={register}
                 />
 
-                <div className={"field " + (errors.mailingAddress?.state ? "error" : "")}>
-                  <label htmlFor="stuff">State</label>
-                  <div className="control">
-                    <select
-                      id="mailingAddressState"
-                      name="mailingAddress.state"
-                      defaultValue={context.application.mailingAddress.state}
-                      ref={register({ required: true })}
-                    >
-                      <option value="">Select One</option>
-                      <option value="AL">Alabama</option>
-                      <option value="AK">Alaska</option>
-                      <option value="AZ">Arizona</option>
-                      <option value="AR">Arkansas</option>
-                      <option value="CA">California</option>
-                      <option value="CO">Colorado</option>
-                      <option value="CT">Connecticut</option>
-                      <option value="DE">Delaware</option>
-                      <option value="DC">District Of Columbia</option>
-                      <option value="FL">Florida</option>
-                      <option value="GA">Georgia</option>
-                      <option value="HI">Hawaii</option>
-                      <option value="ID">Idaho</option>
-                      <option value="IL">Illinois</option>
-                      <option value="IN">Indiana</option>
-                      <option value="IA">Iowa</option>
-                      <option value="KS">Kansas</option>
-                      <option value="KY">Kentucky</option>
-                      <option value="LA">Louisiana</option>
-                      <option value="ME">Maine</option>
-                      <option value="MD">Maryland</option>
-                      <option value="MA">Massachusetts</option>
-                      <option value="MI">Michigan</option>
-                      <option value="MN">Minnesota</option>
-                      <option value="MS">Mississippi</option>
-                      <option value="MO">Missouri</option>
-                      <option value="MT">Montana</option>
-                      <option value="NE">Nebraska</option>
-                      <option value="NV">Nevada</option>
-                      <option value="NH">New Hampshire</option>
-                      <option value="NJ">New Jersey</option>
-                      <option value="NM">New Mexico</option>
-                      <option value="NY">New York</option>
-                      <option value="NC">North Carolina</option>
-                      <option value="ND">North Dakota</option>
-                      <option value="OH">Ohio</option>
-                      <option value="OK">Oklahoma</option>
-                      <option value="OR">Oregon</option>
-                      <option value="PA">Pennsylvania</option>
-                      <option value="RI">Rhode Island</option>
-                      <option value="SC">South Carolina</option>
-                      <option value="SD">South Dakota</option>
-                      <option value="TN">Tennessee</option>
-                      <option value="TX">Texas</option>
-                      <option value="UT">Utah</option>
-                      <option value="VT">Vermont</option>
-                      <option value="VA">Virginia</option>
-                      <option value="WA">Washington</option>
-                      <option value="WV">West Virginia</option>
-                      <option value="WI">Wisconsin</option>
-                      <option value="WY">Wyoming</option>
-                    </select>
-                  </div>
-                  <ErrorMessage error={errors.mailingAddress?.state}>
-                    {t("application.contact.stateError")}
-                  </ErrorMessage>
-                </div>
+                <StateSelect
+                  id="mailingAddressState"
+                  name="mailingAddress.state"
+                  label="State"
+                  defaultValue={context.application.mailingAddress.state}
+                  validation={{ required: true }}
+                  error={errors.mailingAddress?.state}
+                  errorMessage={t("application.contact.stateError")}
+                  register={register}
+                  controlClassName="control"
+                />
               </div>
 
               <Field
