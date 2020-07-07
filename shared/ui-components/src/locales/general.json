@@ -116,6 +116,27 @@
       "mobility": "For Mobility Impairments",
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
+    },
+    "financial": {
+      "vouchers": {
+        "title": "Do you or anyone on this application receive any of the following?",
+        "housingVouchers": {
+          "strong": "Housing vouchers",
+          "text": "like Section 8"
+        },
+        "nonTaxableIncome": {
+          "strong": "Non-taxable income",
+          "text": "like SSI, SSDI, child support payments, or worker's compensation benefits"
+        },
+        "rentalSubsidies": {
+          "strong": "Rental subsidies",
+          "text": "like VASH, HSA, HOPWA, Catholic Charities, AIDS Foundation, etc."
+        },
+        "prompt": "Please select one.",
+        "yes": "Yes",
+        "no": "No",
+        "error": "Please select an option."
+      }
     }
   },
   "config": {

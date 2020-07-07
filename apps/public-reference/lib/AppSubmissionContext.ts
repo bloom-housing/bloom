@@ -70,6 +70,7 @@ export const blankApplication = () => {
       vision: null,
       hearing: null,
     },
+    incomeVouchers: null,
   }
 }
 
