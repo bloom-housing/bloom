@@ -118,6 +118,17 @@
       "hearing": "For Hearing Impairments"
     },
     "financial": {
+      "income": {
+        "title": "Let's move to income.",
+        "instruction1": "Add up your total gross (pre-tax) household income from wages, benefits and other sources from all household members.",
+        "instruction2": "You only need to provide an estimated total right now. The actual total will be calculated if you are selected in the lottery.",
+        "prompt": "What is your household total pre-tax income?",
+        "placeholder": "Total all of your income sources",
+        "incomeError": "Please enter a valid number greater than 0.",
+        "perMonth": "per month",
+        "perYear": "per year",
+        "periodError": "Please select one of the options above."
+      },
       "vouchers": {
         "title": "Do you or anyone on this application receive any of the following?",
         "housingVouchers": {

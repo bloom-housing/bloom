@@ -71,6 +71,8 @@ export const blankApplication = () => {
       hearing: null,
     },
     incomeVouchers: null,
+    income: null,
+    incomePeriod: null,
   }
 }
 
