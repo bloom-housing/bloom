@@ -16,6 +16,11 @@
   }
 
   .control {
+    @apply flex;
+    & :nth-child {
+      @apply flex-1;
+    }
+
     .input {
       @apply border;
       @apply border-gray-450;
@@ -30,6 +35,26 @@
       line-height: normal;
     }
 
+    .prepend {
+      @apply flex;
+      @apply px-2;
+      @apply items-center;
+      @apply border;
+      @apply border-gray-450;
+      @apply rounded;
+      @apply text-lg;
+    }
+
+    & :not(:first-child) {
+      border-left: 0;
+      @apply rounded-l-none;
+    }
+
+    & :not(:last-child) {
+      border-right: 0;
+      @apply rounded-r-none;
+    }
+
     &.control-narrower {
       max-width: 8rem;
     }
@@ -42,8 +67,13 @@
 
     .control {
       .input,
+      .prepend,
       select {
         @apply border-red-700;
+      }
+
+      .prepend {
+        @apply text-red-700;
       }
     }
 
