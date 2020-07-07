@@ -102,7 +102,7 @@ export default () => {
             </div>
 
             <ErrorMessage error={errors.incomeVouchers}>
-              <p className="text-sm">{t("application.financial.vouchers.error")}</p>
+              {t("application.financial.vouchers.error")}
             </ErrorMessage>
           </div>
 
