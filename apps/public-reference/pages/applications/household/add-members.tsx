@@ -5,45 +5,11 @@ Add household members
 import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, HouseholdMemberForm, ProgressNav, t } from "@bloom-housing/ui-components"
-import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext } from "react"
-
-class Member implements HouseholdMember {
-  id: number
-  firstName = ""
-  middleName = ""
-  lastName = ""
-  birthMonth = null
-  birthDay = null
-  birthYear = null
-  emailAddress = ""
-  noEmail = null
-  phoneNumber = ""
-  phoneNumberType = ""
-  noPhone = null
-
-  constructor(id) {
-    this.id = id
-  }
-  address = {
-    placeName: null,
-    city: "",
-    county: "",
-    state: "string",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: null,
-    longitude: null,
-  }
-  sameAddress?: boolean
-  relationship?: string
-  workInRegion?: boolean
-}
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -61,13 +27,13 @@ export default () => {
   }
 
   const onAddMember = () => {
-    const memberId = application.householdMembers.length
-    const newMember = new Member(memberId)
-    application.householdMembers.push(newMember)
-    conductor.sync()
+    // const memberId = application.householdMembers.length
+    // const newMember = new Member(memberId)
+    // application.householdMembers.push(newMember)
+    // conductor.sync()
     Router.push({
       pathname: "/applications/household/member",
-      query: { memberId: memberId },
+      query: { memberId: null },
     }).then(() => window.scrollTo(0, 0))
   }
 

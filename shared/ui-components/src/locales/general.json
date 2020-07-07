@@ -2,7 +2,7 @@
   "application": {
     "form": {
       "errors": {
-        "pleaseEnterZipcode": "Please enter your Zipcode",
+        "pleaseEnterZipCode": "Please enter your Zipcode",
         "selectOption": "Please select one of the options above."
       },
       "radio": {
@@ -188,14 +188,16 @@
         "liveWithOtherPeople": "Other people will live with me"
       },
       "member": {
-        "cancel": "Cancel adding this person",
+        "cancelAddingThisPerson": "Cancel adding this person",
+        "deleteThisPerson": "Delete this person",
         "dateOfBirth": "Date of Birth",
         "name": "Household member's name",
         "haveSameAddress": "Do they have same address as you?",
         "whatIsTheirRelationship": "What is their relationship to you?",
-        "save": "Save household member",
+        "saveHouseholdMember": "Save household member",
         "subTitle": "You will have an opportunity to add more household members on the next screen",
         "title": "Tell us about this person",
+        "updateHouseholdMember": "Update Household Member",
         "whatReletionship": "What is their relationship to you",
         "workInRegion": "Do they work in <REGION>?",
         "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."

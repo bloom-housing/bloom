@@ -36,6 +36,7 @@ export interface HouseholdMember {
   sameAddress?: boolean
   relationship?: string
   workInRegion?: boolean
+  workAddress?: Address
 }
 
 export interface Listing {

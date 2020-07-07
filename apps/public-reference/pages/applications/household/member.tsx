@@ -21,14 +21,58 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext } from "react"
 
+class Member implements HouseholdMember {
+  id: number
+  firstName = ""
+  middleName = ""
+  lastName = ""
+  birthMonth = null
+  birthDay = null
+  birthYear = null
+  emailAddress = ""
+  noEmail = null
+  phoneNumber = ""
+  phoneNumberType = ""
+  noPhone = null
+
+  constructor(id) {
+    this.id = id
+  }
+  address = {
+    placeName: null,
+    city: "",
+    county: "",
+    state: "string",
+    street: "",
+    street2: "",
+    zipCode: "",
+    latitude: null,
+    longitude: null,
+  }
+  sameAddress?: boolean
+  relationship?: string
+  workInRegion?: boolean
+}
+
 export default () => {
   const router = useRouter()
-  const memberId = parseInt(router.query.memberId.toString())
+  let memberId, member, saveText, cancelText
   const context = useContext(AppSubmissionContext)
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 2
-  const member = memberId >= 0 ? application.householdMembers[memberId] : application.applicant
+
+  if (router.query.memberId) {
+    memberId = parseInt(router.query.memberId.toString())
+    member = application.householdMembers[memberId]
+    saveText = t("application.household.member.updateHouseholdMember")
+    cancelText = t("application.household.member.deleteThisPerson")
+  } else {
+    memberId = application.householdMembers.length
+    member = new Member(memberId)
+    saveText = t("application.household.member.saveHouseholdMember")
+    cancelText = t("application.household.member.cancelAddingThisPerson")
+  }
 
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm()
@@ -38,7 +82,7 @@ export default () => {
     Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
   const deleteMember = () => {
-    if (memberId >= 0) {
+    if (member.id != undefined) {
       application.householdMembers.splice(member.id, 1)
       conductor.sync()
     }
@@ -46,6 +90,7 @@ export default () => {
   }
 
   const sameAddress = watch("sameAddress")
+  const workInRegion = watch("workInRegion")
 
   return (
     <FormsLayout>
@@ -63,9 +108,7 @@ export default () => {
           <h2 className="form-card__title is-borderless">
             {t("application.household.member.title")}
           </h2>
-          <p className="mt-4 field-note">
-            {t("application.household.member.subTitle")}
-          </p>
+          <p className="mt-4 field-note">{t("application.household.member.subTitle")}</p>
         </div>
 
         {member && (
@@ -307,6 +350,79 @@ export default () => {
                   {t("application.form.errors.selectOption")}
                 </ErrorMessage>
               </div>
+              {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
+                <>
+                  <label className="field-label--caps" htmlFor="street">
+                    {t("application.contact.address")}
+                  </label>
+
+                  <Field
+                    id="addressStreet"
+                    name="address.street"
+                    placeholder={t("application.contact.streetAddress")}
+                    defaultValue={member.address.street}
+                    validation={{ required: true }}
+                    error={errors.address?.street}
+                    errorMessage={t("application.contact.streetError")}
+                    register={register}
+                  />
+
+                  <Field
+                    id="addressStreet2"
+                    name="address.street2"
+                    label={t("application.contact.apt")}
+                    placeholder={t("application.contact.apt")}
+                    defaultValue={member.address.street2}
+                    register={register}
+                  />
+
+                  <div className="flex max-w-2xl">
+                    <Field
+                      id="addressCity"
+                      name="address.city"
+                      label={t("application.contact.cityName")}
+                      placeholder={t("application.contact.cityName")}
+                      defaultValue={member.address.city}
+                      validation={{ required: true }}
+                      error={errors.address?.city}
+                      errorMessage={t("application.contact.cityError")}
+                      register={register}
+                    />
+
+                    <div className={"field " + (errors.address?.state ? "error" : "")}>
+                      <label htmlFor="addressState">State</label>
+                      <div className="control">
+                        <select
+                          id="addressState"
+                          name="address.state"
+                          defaultValue={member.address.state}
+                          ref={register({ required: true })}
+                        >
+                          <FormOptions
+                            options={stateKeys}
+                            keyPrefix="application.form.options.states"
+                          />
+                        </select>
+                      </div>
+                      <ErrorMessage error={errors.address?.state}>
+                        {t("application.contact.stateError")}
+                      </ErrorMessage>
+                    </div>
+                  </div>
+
+                  <Field
+                    id="addressZipCode"
+                    name="address.zipCode"
+                    label="Zip"
+                    placeholder="Zipcode"
+                    defaultValue={member.address.zipCode}
+                    validation={{ required: true }}
+                    error={errors.address?.zipCode}
+                    errorMessage={t("application.form.errors.pleaseEnterZipCode")}
+                    register={register}
+                  />
+                </>
+              )}
             </div>
 
             <div className="form-card__group">
@@ -344,12 +460,12 @@ export default () => {
                     //
                   }}
                 >
-                  {t("application.household.member.save")}
+                  {saveText}
                 </Button>
               </div>
               <div className="form-card__pager-row py-8">
                 <a href="#" className="lined text-tiny" onClick={deleteMember}>
-                  {t("application.household.member.cancel")}
+                  {cancelText}
                 </a>
               </div>
             </div>

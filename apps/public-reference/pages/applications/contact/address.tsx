@@ -12,7 +12,7 @@ import {
   FormCard,
   ProgressNav,
   t,
-  mergeDeep,
+  mergeDeep
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm, Controller } from "react-hook-form"
@@ -54,7 +54,7 @@ export default () => {
       application.mailingAddress = blankApplication().mailingAddress
     }
     if (!application.applicant.workInRegion) {
-      application.workAddress = blankApplication().workAddress
+      application.applicant.workAddress = blankApplication().applicant.workAddress
     }
     conductor.sync()
 
@@ -249,7 +249,7 @@ export default () => {
 
               <StateSelect
                 id="addressState"
-                name="address.state"
+                name="applicant.address.state"
                 label="State"
                 defaultValue={context.application.applicant.address.state}
                 validation={{ required: true }}
@@ -401,114 +401,58 @@ export default () => {
 
                 <Field
                   id="workAddressStreet"
-                  name="workAddress.street"
+                  name="applicant.workAddress.street"
                   placeholder={t("application.contact.streetAddress")}
-                  defaultValue={context.application.workAddress.street}
+                  defaultValue={context.application.applicant.workAddress.street}
                   validation={{ required: true }}
-                  error={errors.workAddress?.street}
+                  error={errors.applicant?.workAddress?.street}
                   errorMessage={t("application.contact.streetError")}
                   register={register}
                 />
 
                 <Field
                   id="workAddressStreet2"
-                  name="workAddress.street2"
+                  name="applicant.workAddress.street2"
                   label={t("application.contact.apt")}
                   placeholder={t("application.contact.apt")}
-                  defaultValue={context.application.workAddress.street2}
+                  defaultValue={context.application.applicant.workAddress.street2}
                   register={register}
                 />
 
                 <div className="flex max-w-2xl">
                   <Field
                     id="workAddressCity"
-                    name="workAddress.city"
+                    name="applicant.workAddress.city"
                     label={t("application.contact.cityName")}
                     placeholder={t("application.contact.cityName")}
-                    defaultValue={context.application.workAddress.city}
+                    defaultValue={context.application.applicant.workAddress.city}
                     validation={{ required: true }}
-                    error={errors.workAddress?.city}
+                    error={errors.applicant?.workAddress?.city}
                     errorMessage={t("application.contact.cityError")}
                     register={register}
                   />
 
-                  <div className={"field " + (errors.workAddress?.state ? "error" : "")}>
-                    <label htmlFor="stuff">State</label>
-                    <div className="control">
-                      <select
-                        id="workAddressState"
-                        name="workAddress.state"
-                        defaultValue={context.application.workAddress.state}
-                        ref={register({ required: true })}
-                      >
-                        <option value="">Select One</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
-                        <option value="CO">Colorado</option>
-                        <option value="CT">Connecticut</option>
-                        <option value="DE">Delaware</option>
-                        <option value="DC">District Of Columbia</option>
-                        <option value="FL">Florida</option>
-                        <option value="GA">Georgia</option>
-                        <option value="HI">Hawaii</option>
-                        <option value="ID">Idaho</option>
-                        <option value="IL">Illinois</option>
-                        <option value="IN">Indiana</option>
-                        <option value="IA">Iowa</option>
-                        <option value="KS">Kansas</option>
-                        <option value="KY">Kentucky</option>
-                        <option value="LA">Louisiana</option>
-                        <option value="ME">Maine</option>
-                        <option value="MD">Maryland</option>
-                        <option value="MA">Massachusetts</option>
-                        <option value="MI">Michigan</option>
-                        <option value="MN">Minnesota</option>
-                        <option value="MS">Mississippi</option>
-                        <option value="MO">Missouri</option>
-                        <option value="MT">Montana</option>
-                        <option value="NE">Nebraska</option>
-                        <option value="NV">Nevada</option>
-                        <option value="NH">New Hampshire</option>
-                        <option value="NJ">New Jersey</option>
-                        <option value="NM">New Mexico</option>
-                        <option value="NY">New York</option>
-                        <option value="NC">North Carolina</option>
-                        <option value="ND">North Dakota</option>
-                        <option value="OH">Ohio</option>
-                        <option value="OK">Oklahoma</option>
-                        <option value="OR">Oregon</option>
-                        <option value="PA">Pennsylvania</option>
-                        <option value="RI">Rhode Island</option>
-                        <option value="SC">South Carolina</option>
-                        <option value="SD">South Dakota</option>
-                        <option value="TN">Tennessee</option>
-                        <option value="TX">Texas</option>
-                        <option value="UT">Utah</option>
-                        <option value="VT">Vermont</option>
-                        <option value="VA">Virginia</option>
-                        <option value="WA">Washington</option>
-                        <option value="WV">West Virginia</option>
-                        <option value="WI">Wisconsin</option>
-                        <option value="WY">Wyoming</option>
-                      </select>
-                    </div>
-                    <ErrorMessage error={errors.workAddress?.state}>
-                      {t("application.contact.stateError")}
-                    </ErrorMessage>
-                  </div>
+                  <StateSelect
+                    id="workAddressState"
+                    name="applicant.workAddress.state"
+                    label="State"
+                    defaultValue={context.application.applicant.workAddress.state}
+                    validation={{ required: true }}
+                    error={errors.applicant?.workAddress?.state}
+                    errorMessage={t("application.contact.stateError")}
+                    register={register}
+                    controlClassName="control"
+                  />
                 </div>
 
                 <Field
                   id="workAddressZipCode"
-                  name="workAddress.zipCode"
+                  name="applicant.workAddress.zipCode"
                   label="Zip"
                   placeholder="ZipCode"
-                  defaultValue={context.application.workAddress.zipCode}
+                  defaultValue={context.application.applicant.workAddress.zipCode}
                   validation={{ required: true }}
-                  error={errors.workAddress?.zipCode}
+                  error={errors.applicant?.workAddress?.zipCode}
                   errorMessage="Please enter your ZipCode"
                   register={register}
                 />
