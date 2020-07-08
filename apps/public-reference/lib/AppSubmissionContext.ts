@@ -66,10 +66,9 @@ export const blankApplication = () => {
       },
     },
     accessibility: {
-      mobility: false,
-      vision: false,
-      hearing: false,
-      none: false,
+      mobility: null,
+      vision: null,
+      hearing: null,
     },
   }
 }

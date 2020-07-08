@@ -24,7 +24,10 @@ export default () => {
     Record<string, any>
   >({
     defaultValues: {
-      none: application.accessibility.none,
+      none:
+        application.accessibility.mobility === false &&
+        application.accessibility.vision === false &&
+        application.accessibility.hearing === false,
     },
   })
   const onSubmit = (data) => {
@@ -33,7 +36,6 @@ export default () => {
         mobility: data.mobility,
         vision: data.vision,
         hearing: data.hearing,
-        none: data.none,
       },
     })
 
@@ -76,9 +78,9 @@ export default () => {
               name="mobility"
               defaultChecked={application.accessibility.mobility}
               ref={register}
-              disabled={adaNone}
               onChange={() => {
                 setTimeout(() => {
+                  setValue("none", false)
                   triggerValidation("none")
                 }, 1)
               }}
@@ -95,9 +97,9 @@ export default () => {
               name="vision"
               defaultChecked={application.accessibility.vision}
               ref={register}
-              disabled={adaNone}
               onChange={() => {
                 setTimeout(() => {
+                  setValue("none", false)
                   triggerValidation("none")
                 }, 1)
               }}
@@ -114,9 +116,9 @@ export default () => {
               name="hearing"
               defaultChecked={application.accessibility.hearing}
               ref={register}
-              disabled={adaNone}
               onChange={() => {
                 setTimeout(() => {
+                  setValue("none", false)
                   triggerValidation("none")
                 }, 1)
               }}
@@ -131,7 +133,6 @@ export default () => {
               type="checkbox"
               id="none"
               name="none"
-              defaultChecked={application.accessibility.none}
               ref={register({
                 validate: {
                   somethingIsChecked: (value) =>
