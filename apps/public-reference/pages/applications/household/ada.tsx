@@ -1,14 +1,16 @@
 /*
 2.4.c ADA Household Members
 If any, the applicant can select the type of ADA needed in the household.
+https://github.com/bloom-housing/bloom/issues/266
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
+import FormStep from "../../../src/forms/applications/FormStep"
 import { useContext } from "react"
 
 export default () => {
@@ -18,18 +20,33 @@ export default () => {
   const currentPageStep = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, getValues, setValue, triggerValidation, watch, errors } = useForm<
+    Record<string, any>
+  >({
+    defaultValues: {
+      none:
+        application.accessibility.mobility === false &&
+        application.accessibility.vision === false &&
+        application.accessibility.hearing === false,
+    },
+  })
   const onSubmit = (data) => {
-    console.log(data)
+    new FormStep(conductor).save({
+      accessibility: {
+        mobility: data.mobility,
+        vision: data.vision,
+        hearing: data.hearing,
+      },
+    })
 
     Router.push("/applications/reserved/units").then(() => window.scrollTo(0, 0))
   }
 
+  const adaNone = watch("none")
+
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -39,27 +56,121 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="text-bold">
+        <p className="form-card__back">
           <strong>
             <Link href="/applications/household/current">Back</Link>
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless">ADA Household Members</h2>
+        <div className="form-card__lead border-b">
+          <h2 className="form-card__title is-borderless">{t("application.ada.title")}</h2>
 
-        <hr />
+          <p className="field-note mt-5">{t("application.ada.subTitle")}</p>
+        </div>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (FORM)
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
+        <div className="form-card__group">
+          <p className="field-note mb-4">{t("t.selectAllThatApply")}</p>
+
+          <div className="field">
+            <input
+              type="checkbox"
+              id="mobility"
+              name="mobility"
+              defaultChecked={application.accessibility.mobility}
+              ref={register}
+              onChange={() => {
+                setTimeout(() => {
+                  setValue("none", false)
+                  triggerValidation("none")
+                }, 1)
               }}
-            >
-              Next
-            </Button>
+            />
+            <label htmlFor="mobility" className="font-semibold">
+              For Mobility Impairments
+            </label>
+          </div>
+
+          <div className="field">
+            <input
+              type="checkbox"
+              id="vision"
+              name="vision"
+              defaultChecked={application.accessibility.vision}
+              ref={register}
+              onChange={() => {
+                setTimeout(() => {
+                  setValue("none", false)
+                  triggerValidation("none")
+                }, 1)
+              }}
+            />
+            <label htmlFor="vision" className="font-semibold">
+              For Vision Impairments
+            </label>
+          </div>
+
+          <div className="field">
+            <input
+              type="checkbox"
+              id="hearing"
+              name="hearing"
+              defaultChecked={application.accessibility.hearing}
+              ref={register}
+              onChange={() => {
+                setTimeout(() => {
+                  setValue("none", false)
+                  triggerValidation("none")
+                }, 1)
+              }}
+            />
+            <label htmlFor="hearing" className="font-semibold">
+              For Hearing Impairments
+            </label>
+          </div>
+
+          <div className={"field " + (errors.none ? "error" : "")}>
+            <input
+              type="checkbox"
+              id="none"
+              name="none"
+              ref={register({
+                validate: {
+                  somethingIsChecked: (value) =>
+                    value || getValues("mobility") || getValues("vision") || getValues("hearing"),
+                },
+              })}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setValue("none", true)
+                  setValue("mobility", false)
+                  setValue("vision", false)
+                  setValue("hearing", false)
+                  triggerValidation("none")
+                }
+              }}
+            />
+            <label htmlFor="none" className="font-semibold">
+              {t("t.no")}
+            </label>
+
+            <ErrorMessage error={errors.none}>
+              {t("application.form.errors.selectOption")}
+            </ErrorMessage>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__pager">
+            <div className="form-card__pager-row primary">
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </form>
       </FormCard>

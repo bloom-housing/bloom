@@ -1,5 +1,11 @@
 {
   "application": {
+    "form": {
+      "errors": {
+        "pleaseEnterZipcode": "Please enter your Zipcode",
+        "selectOption": "Please select one of the options above."
+      }
+    },
     "chooseLanguage": {
       "letsGetStarted": "Let’s get started on your application",
       "chooseYourLanguage": "Choose Your Language",
@@ -103,6 +109,13 @@
         "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
         "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
       }
+    },
+    "ada": {
+      "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
+      "subTitle": "If you are selected for a unit, the property will work to accommodate your need to the best of their ability. Should your application be chosen, be prepared to provide supporting documentation from your physician.",
+      "mobility": "For Mobility Impairments",
+      "vision": "For Vision Impairments",
+      "hearing": "For Hearing Impairments"
     }
   },
   "config": {
@@ -323,6 +336,7 @@
     "minimumIncome": "Minimum Income",
     "neighborhood": "Neighborhood",
     "next": "Next",
+    "no": "No",
     "none": "None",
     "noneFound": "None found.",
     "occupancy": "Occupancy",
@@ -332,6 +346,7 @@
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "selectAllThatApply": "Please select all that apply.",
     "skipToMainContent": "Skip to main content",
     "smokingPolicy": "Smoking Policy",
     "sqFeet": "sqft",
