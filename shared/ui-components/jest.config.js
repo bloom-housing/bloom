@@ -16,6 +16,7 @@ module.exports = {
     "^.+\\.stories\\.[t|j]sx$": "@storybook/addon-storyshots/injectFileName",
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
+  setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["<rootDir>/shared/ui-components/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
