@@ -25,15 +25,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   if (openDateState(listing)) {
     const date = listing.applicationOpenDate
     const openDate = moment(date)
-    //  from [Application Open Date] to [Application Due Date]
-    if (!vivid && listing.applicationDueDate != "") {
-      formattedDate = t("t.range", {
-        from: openDate.format("MMMM D, YYYY"),
-        to: moment(listing.applicationDueDate).format("MMMM D, YYYY"),
-      })
-    } else {
-      formattedDate = openDate.format("MMMM D, YYYY")
-    }
+    formattedDate = openDate.format("MMMM D, YYYY")
 
     bgColor = vivid ? "bg-primary" : "bg-primary-light"
     content = vivid ? t("listings.comingSoon") : t("listings.applicationOpenPeriod")

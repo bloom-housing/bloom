@@ -3,7 +3,6 @@ import moment from "moment"
 import { Listing } from "@bloom-housing/core"
 import Apply from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/Apply"
 import Waitlist from "@bloom-housing/ui-components/src/page_components/listing/listing_sidebar/Waitlist"
-import { openDateState } from "../../../helpers/state"
 
 export interface ApplicationSectionProps {
   listing: Listing
@@ -19,7 +18,7 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
 
   return (
     <div>
-      {!openDateState(listing) && (
+      {listing.applicationDueDate != null && (
         <section className="aside-block bg-primary-lighter border-t">
           <Waitlist listing={listing} />
         </section>
