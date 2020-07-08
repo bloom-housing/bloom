@@ -92,7 +92,7 @@ export default () => {
               name="phoneNumber"
               error={errors.phoneNumber}
               errorMessage={t("application.contact.phoneNumberError")}
-              controlClassName="control mt-2"
+              controlClassName="control"
               control={control}
               defaultValue={application.phoneNumber}
               disabled={noPhone}
@@ -202,7 +202,7 @@ export default () => {
               {t("application.contact.address")}
             </label>
 
-            <p className="field-note my-2">
+            <p className="field-note mb-4">
               {t("application.contact.addressWhereYouCurrentlyLive")}
             </p>
 
@@ -283,7 +283,7 @@ export default () => {
                 {t("application.contact.mailingAddress")}
               </label>
 
-              <p className="field-note my-2">{t("application.contact.provideAMailingAddress")}</p>
+              <p className="field-note mb-4">{t("application.contact.provideAMailingAddress")}</p>
 
               <Field
                 id="mailingAddressStreet"
@@ -350,9 +350,9 @@ export default () => {
               {t("application.contact.doYouWorkIn")}
             </label>
 
-            <p className="field-note my-2">{t("application.contact.doYouWorkInDescription")}</p>
+            <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
-            <div className={"field mt-4 " + (errors.workInRegion ? "error" : "")}>
+            <div className={"field " + (errors.workInRegion ? "error" : "")}>
               <input
                 type="radio"
                 id="workInRegionYes"

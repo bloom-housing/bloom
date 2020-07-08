@@ -48,18 +48,18 @@ export default () => {
           <h2 className="form-card__title is-borderless">
             {t("application.alternateContact.type.title")}
           </h2>
-          <p className="field-note my-4">{t("application.alternateContact.type.description")}</p>
+          <p className="field-note mt-4">{t("application.alternateContact.type.description")}</p>
         </div>
         <form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
             </label>
-            <p className="field-note my-2">{t("application.alternateContact.type.helperText")}</p>
+            <p className="field-note mt-2 mb-4">{t("application.alternateContact.type.helperText")}</p>
             {options.map((option, i) => {
               return (
                 <>
-                  <div className={"field mt-4 " + (errors.type ? "error" : "")}>
+                  <div className={"field " + (errors.type ? "error" : "")}>
                     <input
                       key={option}
                       type="radio"
@@ -74,6 +74,7 @@ export default () => {
                     </label>
                     {option === "other" && type === "other" && (
                       <Field
+                        controlClassName="mt-4"
                         id="otherType"
                         name="otherType"
                         placeholder={t(

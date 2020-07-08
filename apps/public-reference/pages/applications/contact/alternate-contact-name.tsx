@@ -55,7 +55,6 @@ export default () => {
               {t("application.alternateContact.name.alternateContactFormLabel")}
             </label>
             <Field
-              controlClassName="mt-2"
               id="firstName"
               name="firstName"
               placeholder={t("application.alternateContact.name.firstNameFormPlaceholder")}
@@ -77,7 +76,7 @@ export default () => {
             />
             {application.alternateContact.type === "caseManager" && (
               <>
-                <label className="field-label--caps" htmlFor="agency">
+                <label className="field-label--caps mt-4" htmlFor="agency">
                   {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
                 </label>
                 <Field
