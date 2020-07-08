@@ -47,6 +47,52 @@
       "doYouWorkInDescription": "TBD",
       "workAddress": "Work Address"
     },
+    "alternateContact": {
+      "type": {
+        "title": "Is there someone else you'd like to authorize us to contact if we can't reach you?",
+        "description": "By providing alternate contact, you are allowing us to discuss information on your application with them.",
+        "label": "Alternate contact",
+        "helperText": "Please select one.",
+        "options": {
+          "familyMember": "Family member",
+          "friend": "Friend",
+          "caseManager": "Case manager or housing counselor",
+          "other": "Other",
+          "noContact": "I don't have an alternate contact"
+        },
+        "otherTypeFormPlaceholder": "What is your relationship?",
+        "otherTypeValidationErrorMessage": "Please enter relationship type",
+        "validationErrorMessage": "Please select an alternate contact"
+      },
+      "name": {
+        "title": "Who is your alternate contact?",
+        "alternateContactFormLabel": "Name of alternate contact",
+        "firstNameFormPlaceholder": "First Name",
+        "firstNameValidationErrorMessage": "Please enter a First Name",
+        "lastNameFormPlaceholder": "Last Name",
+        "lastNameValidationErrorMessage": "Please enter a Last Name",
+        "caseManagerAgencyFormLabel": "Where does your case manager or housing counselor work?",
+        "caseManagerAgencyFormPlaceHolder": "Agency",
+        "caseManagerAgencyValidationErrorMessage": "Please enter an agency"
+      },
+      "contact": {
+        "title": "Let us know how to reach your alternate contact",
+        "description": "We'll only use this information to contact them about your application.",
+        "phoneNumberFormLabel": "Contact phone number",
+        "phoneNumberFormPlaceHolder": "(555) 555-5555",
+        "emailAddressFormLabel": "Contact email address",
+        "emailAddressFormPlaceHolder": "you@myemail.com",
+        "contactMailingAddressLabel": "Contact mailing address",
+        "contactMailingAddressHelperText": "Choose an address where they can receive updates and materials about your application",
+        "streetFormPlaceholder": "Street Address",
+        "cityFormLabel": "City Name",
+        "cityFormPlaceholder": "City Name",
+        "stateFormLabel": "State",
+        "stateFormPlaceholder": "Select One",
+        "zipcodeFormLabel": "Zip",
+        "zipcodeFormPlaceholder": "Zip Code"
+      }
+    },
     "household": {
       "liveAlone": {
         "title": "Next we would like to know about the others who will live with you in the unit",

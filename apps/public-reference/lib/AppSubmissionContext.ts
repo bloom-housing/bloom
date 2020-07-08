@@ -50,6 +50,21 @@ export const blankApplication = () => {
       zipcode: "",
     },
     householdSize: 0,
+    alternateContact: {
+      type: "",
+      otherType: "",
+      firstName: "",
+      lastName: "",
+      agency: "",
+      phoneNumber: "",
+      emailAddress: "",
+      mailingAddress: {
+        street: "",
+        city: "",
+        state: "",
+        zipcode: "",
+      },
+    },
   }
 }
 

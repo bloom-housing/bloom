@@ -58,7 +58,6 @@ export default () => {
             <Field
               name="firstName"
               placeholder={t("application.name.firstName")}
-              controlClassName="mt-2"
               defaultValue={application.firstName}
               validation={{ required: true }}
               error={errors.firstName}
@@ -89,7 +88,7 @@ export default () => {
               {t("application.name.yourDateOfBirth")}
             </label>
 
-            <div className="field-group--dob mt-2">
+            <div className="field-group--dob">
               <Field
                 name="birthMonth"
                 placeholder="MM"
@@ -144,7 +143,7 @@ export default () => {
               {t("application.name.yourEmailAddress")}
             </label>
 
-            <p className="field-note my-2">{t("application.name.emailPrivacy")}</p>
+            <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 
             <Field
               type="email"

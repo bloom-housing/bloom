@@ -8,33 +8,12 @@ import Router from "next/router"
 import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm, Controller } from "react-hook-form"
-import MaskedInput from "react-input-mask"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
-
-const PhoneMask = (props) => {
-  const { value, onChange, name, disabled } = props
-  return (
-    <MaskedInput
-      id={name}
-      name={name}
-      value={value}
-      type="text"
-      className="input"
-      placeholder="(555) 555-5555"
-      mask="(999) 999-9999"
-      maskPlaceholder={"_"}
-      onChange={(e) => {
-        e.persist()
-        console.log("huh?", e.target.value)
-        onChange(e.target.value)
-      }}
-      disabled={disabled}
-    />
-  )
-}
+import React, { useContext } from "react"
+import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -71,7 +50,7 @@ export default () => {
 
     new FormStep(conductor).save(data)
 
-    Router.push("/applications/contact/alternate").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/contact/alternate-contact-type").then(() => window.scrollTo(0, 0))
   }
 
   const noPhone = watch("noPhone")
@@ -109,30 +88,15 @@ export default () => {
               {t("application.contact.yourPhoneNumber")}
             </label>
 
-            <div className={"field " + (errors.phoneNumber ? "error" : "")}>
-              <div className="control mt-2">
-                <Controller
-                  name="phoneNumber"
-                  as={PhoneMask}
-                  control={control}
-                  defaultValue={application.phoneNumber}
-                  rules={{
-                    validate: {
-                      inputTel: (v) => {
-                        const dropdown = document.querySelector<HTMLInputElement>("#phoneNumber")
-                        if (dropdown.disabled) return true
-
-                        return v?.match(/\d/g)?.length == 10 ? true : false
-                      },
-                    },
-                  }}
-                  disabled={noPhone}
-                />
-                <ErrorMessage error={errors.phoneNumber}>
-                  {t("application.contact.phoneNumberError")}
-                </ErrorMessage>
-              </div>
-            </div>
+            <PhoneField
+              name="phoneNumber"
+              error={errors.phoneNumber}
+              errorMessage={t("application.contact.phoneNumberError")}
+              controlClassName="control"
+              control={control}
+              defaultValue={application.phoneNumber}
+              disabled={noPhone}
+            />
 
             <div className={"field " + (errors.phoneNumberType ? "error" : "")}>
               <div className="control">
@@ -202,27 +166,14 @@ export default () => {
 
             {additionalPhone && (
               <>
-                <div className={"field " + (errors.additionalPhoneNumber ? "error" : "")}>
-                  <div className="control">
-                    <Controller
-                      name="additionalPhoneNumber"
-                      as={PhoneMask}
-                      control={control}
-                      defaultValue={application.additionalPhoneNumber}
-                      rules={{
-                        validate: {
-                          inputAdditionalTel: (v) => {
-                            return v?.match(/\d/g)?.length == 10 ? true : false
-                          },
-                        },
-                      }}
-                    />
-                    <ErrorMessage error={errors.additionalPhoneNumber}>
-                      {t("application.contact.phoneNumberError")}
-                    </ErrorMessage>
-                  </div>
-                </div>
-
+                <PhoneField
+                  name="additionalPhoneNumber"
+                  error={errors.additionalPhoneNumber}
+                  errorMessage={t("application.contact.phoneNumberError")}
+                  control={control}
+                  defaultValue={application.additionalPhoneNumber}
+                  controlClassName="control mt-2"
+                />
                 <div className={"field " + (errors.additionalPhoneNumberType ? "error" : "")}>
                   <div className="control">
                     <select
@@ -251,7 +202,7 @@ export default () => {
               {t("application.contact.address")}
             </label>
 
-            <p className="field-note my-2">
+            <p className="field-note mb-4">
               {t("application.contact.addressWhereYouCurrentlyLive")}
             </p>
 
@@ -288,75 +239,18 @@ export default () => {
                 register={register}
               />
 
-              <div className={"field " + (errors.address?.state ? "error" : "")}>
-                <label htmlFor="stuff">State</label>
-                <div className="control">
-                  <select
-                    id="addressState"
-                    name="address.state"
-                    defaultValue={context.application.address.state}
-                    ref={register({ required: true })}
-                  >
-                    <option value="">Select One</option>
-                    <option value="AL">Alabama</option>
-                    <option value="AK">Alaska</option>
-                    <option value="AZ">Arizona</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="CA">California</option>
-                    <option value="CO">Colorado</option>
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="DC">District Of Columbia</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="HI">Hawaii</option>
-                    <option value="ID">Idaho</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IN">Indiana</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NV">Nevada</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="OH">Ohio</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="OR">Oregon</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="TX">Texas</option>
-                    <option value="UT">Utah</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WA">Washington</option>
-                    <option value="WV">West Virginia</option>
-                    <option value="WI">Wisconsin</option>
-                    <option value="WY">Wyoming</option>
-                  </select>
-                </div>
-                <ErrorMessage error={errors.address?.state}>
-                  {t("application.contact.stateError")}
-                </ErrorMessage>
-              </div>
+              <StateSelect
+                id="addressState"
+                name="address.state"
+                label="State"
+                defaultValue={context.application.address.state}
+                validation={{ required: true }}
+                error={errors.address?.state}
+                errorMessage={t("application.contact.stateError")}
+                register={register}
+                controlClassName="control"
+              />
             </div>
-
             <Field
               id="addressZipcode"
               name="address.zipcode"
@@ -389,7 +283,7 @@ export default () => {
                 {t("application.contact.mailingAddress")}
               </label>
 
-              <p className="field-note my-2">{t("application.contact.provideAMailingAddress")}</p>
+              <p className="field-note mb-4">{t("application.contact.provideAMailingAddress")}</p>
 
               <Field
                 id="mailingAddressStreet"
@@ -424,73 +318,17 @@ export default () => {
                   register={register}
                 />
 
-                <div className={"field " + (errors.mailingAddress?.state ? "error" : "")}>
-                  <label htmlFor="stuff">State</label>
-                  <div className="control">
-                    <select
-                      id="mailingAddressState"
-                      name="mailingAddress.state"
-                      defaultValue={context.application.mailingAddress.state}
-                      ref={register({ required: true })}
-                    >
-                      <option value="">Select One</option>
-                      <option value="AL">Alabama</option>
-                      <option value="AK">Alaska</option>
-                      <option value="AZ">Arizona</option>
-                      <option value="AR">Arkansas</option>
-                      <option value="CA">California</option>
-                      <option value="CO">Colorado</option>
-                      <option value="CT">Connecticut</option>
-                      <option value="DE">Delaware</option>
-                      <option value="DC">District Of Columbia</option>
-                      <option value="FL">Florida</option>
-                      <option value="GA">Georgia</option>
-                      <option value="HI">Hawaii</option>
-                      <option value="ID">Idaho</option>
-                      <option value="IL">Illinois</option>
-                      <option value="IN">Indiana</option>
-                      <option value="IA">Iowa</option>
-                      <option value="KS">Kansas</option>
-                      <option value="KY">Kentucky</option>
-                      <option value="LA">Louisiana</option>
-                      <option value="ME">Maine</option>
-                      <option value="MD">Maryland</option>
-                      <option value="MA">Massachusetts</option>
-                      <option value="MI">Michigan</option>
-                      <option value="MN">Minnesota</option>
-                      <option value="MS">Mississippi</option>
-                      <option value="MO">Missouri</option>
-                      <option value="MT">Montana</option>
-                      <option value="NE">Nebraska</option>
-                      <option value="NV">Nevada</option>
-                      <option value="NH">New Hampshire</option>
-                      <option value="NJ">New Jersey</option>
-                      <option value="NM">New Mexico</option>
-                      <option value="NY">New York</option>
-                      <option value="NC">North Carolina</option>
-                      <option value="ND">North Dakota</option>
-                      <option value="OH">Ohio</option>
-                      <option value="OK">Oklahoma</option>
-                      <option value="OR">Oregon</option>
-                      <option value="PA">Pennsylvania</option>
-                      <option value="RI">Rhode Island</option>
-                      <option value="SC">South Carolina</option>
-                      <option value="SD">South Dakota</option>
-                      <option value="TN">Tennessee</option>
-                      <option value="TX">Texas</option>
-                      <option value="UT">Utah</option>
-                      <option value="VT">Vermont</option>
-                      <option value="VA">Virginia</option>
-                      <option value="WA">Washington</option>
-                      <option value="WV">West Virginia</option>
-                      <option value="WI">Wisconsin</option>
-                      <option value="WY">Wyoming</option>
-                    </select>
-                  </div>
-                  <ErrorMessage error={errors.mailingAddress?.state}>
-                    {t("application.contact.stateError")}
-                  </ErrorMessage>
-                </div>
+                <StateSelect
+                  id="mailingAddressState"
+                  name="mailingAddress.state"
+                  label="State"
+                  defaultValue={context.application.mailingAddress.state}
+                  validation={{ required: true }}
+                  error={errors.mailingAddress?.state}
+                  errorMessage={t("application.contact.stateError")}
+                  register={register}
+                  controlClassName="control"
+                />
               </div>
 
               <Field
@@ -512,9 +350,9 @@ export default () => {
               {t("application.contact.doYouWorkIn")}
             </label>
 
-            <p className="field-note my-2">{t("application.contact.doYouWorkInDescription")}</p>
+            <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
-            <div className={"field mt-4 " + (errors.workInRegion ? "error" : "")}>
+            <div className={"field " + (errors.workInRegion ? "error" : "")}>
               <input
                 type="radio"
                 id="workInRegionYes"

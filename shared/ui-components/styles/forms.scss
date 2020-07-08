@@ -181,6 +181,8 @@ select {
   @apply tracking-widest;
   @apply font-semibold;
   @apply text-tiny;
+  @apply mb-2;
+  @apply inline-block;
 }
 
 .field--inline {
