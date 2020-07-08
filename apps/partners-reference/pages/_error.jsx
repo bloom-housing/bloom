@@ -3,7 +3,7 @@ import Head from "next/head"
 import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
 
 export default () => {
-  const pageTitle = <>{t("error.notFound.title")}</>
+  const pageTitle = t("error.notFound.title")
 
   return (
     <Layout>
