@@ -127,7 +127,17 @@
         "incomeError": "Please enter a valid number greater than 0.",
         "perMonth": "per month",
         "perYear": "per year",
-        "periodError": "Please select one of the options above."
+        "periodError": "Please select one of the options above.",
+        "validationError": {
+          "title": "Unfortunately it appears you do not qualify for this listing.",
+          "reason": {
+            "low": "Your household income is too low.",
+            "high": "Your household income is too high."
+          },
+          "instruction1": "Please make changes if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.",
+          "instruction2": "If the information you entered is accurate, we encourage you to check back in the future as more properties become available.",
+          "assistance": "Get Assistance"
+        }
       },
       "vouchers": {
         "title": "Do you or anyone on this application receive any of the following?",

@@ -50,6 +50,7 @@
 
 .alert-box__close {
   @apply absolute;
-  top: 1rem;
-  right: 1.5rem;
+  @apply text-3xl;
+  top: -8px;
+  right: 5px;
 }
