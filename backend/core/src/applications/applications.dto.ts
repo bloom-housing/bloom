@@ -1,19 +1,22 @@
 import { IsOptional, IsString } from "class-validator"
-import { PickType } from "@nestjs/swagger"
-import { Application } from "../entity/application.entity"
+import { IdDto } from "../lib/id.dto"
+import { Expose, Type } from "class-transformer"
 
 export class ApplicationsListQueryParams {
-  @IsOptional()
-  @IsString()
-  userId?: string
   @IsOptional()
   @IsString()
   listingId?: string
 }
 
-export class ApplicationDto extends PickType(Application, [
-  "id",
-  "listingId",
-  "userId",
-  "application",
-]) {}
+export class ApplicationDto {
+  @Expose()
+  id: string
+  @Expose()
+  application: any
+  @Type(() => IdDto)
+  @Expose()
+  user: IdDto
+  @Type(() => IdDto)
+  @Expose()
+  listing: IdDto
+}

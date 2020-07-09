@@ -7,6 +7,8 @@ import {
   Index, OneToMany
 } from "typeorm"
 import { Application } from "./application.entity"
+import { Exclude } from "class-transformer"
+import { ApiHideProperty } from "@nestjs/swagger"
 
 @Entity({ name: "user_accounts" })
 @Index("user_accounts_email_lower", { synchronize: false })

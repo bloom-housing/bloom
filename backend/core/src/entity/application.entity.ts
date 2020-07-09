@@ -4,7 +4,8 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne, BaseEntity
+  ManyToOne,
+  BaseEntity,
 } from "typeorm"
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
@@ -26,16 +27,8 @@ export class Application extends BaseEntity {
   @ManyToOne((type) => User, (user) => user.applications)
   user: User
 
-  @Column()
-  @IsString()
-  userId: string
-
   @ManyToOne((type) => Listing, (listing) => listing.applications)
   listing: Listing
-
-  @Column()
-  @IsString()
-  listingId: string
 
   @Column({ type: "jsonb", nullable: true })
   @IsJSON()

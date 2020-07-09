@@ -5,7 +5,6 @@ import { UserModule } from "./user/user.module"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../ormconfig")
 import { AuthModule } from "./auth/auth.module"
-import { UserApplicationsModule } from "./user-applications/user-applications.module"
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
 
@@ -16,7 +15,6 @@ import { ApplicationsModule } from "./applications/applications.module"
       autoLoadEntities: true,
     }),
     UserModule,
-    UserApplicationsModule,
     AuthModule,
     ListingsModule,
     ApplicationsModule,
