@@ -18,8 +18,8 @@ export default () => {
   const currentPageStep = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
+  const { handleSubmit } = useForm()
+  const onSubmit = () => {
     conductor.sync()
 
     if (application.householdSize == 1) {
@@ -28,6 +28,11 @@ export default () => {
       Router.push("/applications/household/members-info").then(() => window.scrollTo(0, 0))
     }
   }
+
+  const backUrl =
+    application.alternateContact.type == "noContact"
+      ? "/applications/contact/alternate-contact-type"
+      : "/applications/contact/alternate-contact-contact"
 
   return (
     <FormsLayout>
@@ -43,7 +48,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/alternate">{t("t.back")}</Link>
+            <Link href={backUrl}>{t("t.back")}</Link>
           </strong>
         </p>
         <div className="form-card__lead border-b">

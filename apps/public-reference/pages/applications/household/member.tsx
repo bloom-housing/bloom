@@ -12,7 +12,6 @@ import {
   ErrorMessage,
   FormOptions,
   relotionshipKeys,
-  stateKeys,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
@@ -20,6 +19,7 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext } from "react"
+import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 
 class Member implements HouseholdMember {
   id: number
@@ -39,6 +39,17 @@ class Member implements HouseholdMember {
     this.id = id
   }
   address = {
+    placeName: null,
+    city: "",
+    county: "",
+    state: "string",
+    street: "",
+    street2: "",
+    zipCode: "",
+    latitude: null,
+    longitude: null,
+  }
+  workAddress = {
     placeName: null,
     city: "",
     county: "",
@@ -276,25 +287,17 @@ export default () => {
                       register={register}
                     />
 
-                    <div className={"field " + (errors.address?.state ? "error" : "")}>
-                      <label htmlFor="addressState">State</label>
-                      <div className="control">
-                        <select
-                          id="addressState"
-                          name="address.state"
-                          defaultValue={member.address.state}
-                          ref={register({ required: true })}
-                        >
-                          <FormOptions
-                            options={stateKeys}
-                            keyPrefix="application.form.options.states"
-                          />
-                        </select>
-                      </div>
-                      <ErrorMessage error={errors.address?.state}>
-                        {t("application.contact.stateError")}
-                      </ErrorMessage>
-                    </div>
+                    <StateSelect
+                      id="addressState"
+                      name="address.state"
+                      label="State"
+                      defaultValue={member.address.state}
+                      validation={{ required: true }}
+                      error={errors.address?.state}
+                      errorMessage={t("application.contact.stateError")}
+                      register={register}
+                      controlClassName="control"
+                    />
                   </div>
 
                   <Field
@@ -358,66 +361,58 @@ export default () => {
 
                   <Field
                     id="addressStreet"
-                    name="address.street"
+                    name="workAddress.street"
                     placeholder={t("application.contact.streetAddress")}
-                    defaultValue={member.address.street}
+                    defaultValue={member.workAddress.street}
                     validation={{ required: true }}
-                    error={errors.address?.street}
+                    error={errors.workAddress?.street}
                     errorMessage={t("application.contact.streetError")}
                     register={register}
                   />
 
                   <Field
                     id="addressStreet2"
-                    name="address.street2"
+                    name="workAddress.street2"
                     label={t("application.contact.apt")}
                     placeholder={t("application.contact.apt")}
-                    defaultValue={member.address.street2}
+                    defaultValue={member.workAddress.street2}
                     register={register}
                   />
 
                   <div className="flex max-w-2xl">
                     <Field
                       id="addressCity"
-                      name="address.city"
+                      name="workAddress.city"
                       label={t("application.contact.cityName")}
                       placeholder={t("application.contact.cityName")}
-                      defaultValue={member.address.city}
+                      defaultValue={member.workAddress.city}
                       validation={{ required: true }}
-                      error={errors.address?.city}
+                      error={errors.workAddress?.city}
                       errorMessage={t("application.contact.cityError")}
                       register={register}
                     />
 
-                    <div className={"field " + (errors.address?.state ? "error" : "")}>
-                      <label htmlFor="addressState">State</label>
-                      <div className="control">
-                        <select
-                          id="addressState"
-                          name="address.state"
-                          defaultValue={member.address.state}
-                          ref={register({ required: true })}
-                        >
-                          <FormOptions
-                            options={stateKeys}
-                            keyPrefix="application.form.options.states"
-                          />
-                        </select>
-                      </div>
-                      <ErrorMessage error={errors.address?.state}>
-                        {t("application.contact.stateError")}
-                      </ErrorMessage>
-                    </div>
+                    <StateSelect
+                      id="addressState"
+                      name="workAddress.state"
+                      label="State"
+                      defaultValue={member.workAddress.state}
+                      validation={{ required: true }}
+                      error={errors.workAddress?.state}
+                      errorMessage={t("application.contact.stateError")}
+                      register={register}
+                      controlClassName="control"
+                    />
                   </div>
 
                   <Field
                     id="addressZipCode"
-                    name="address.zipCode"
+                    name="workAddress.zipCode"
                     label="Zip"
                     placeholder="Zipcode"
-                    defaultValue={member.address.zipCode}
+                    defaultValue={member.workAddress.zipCode}
                     validation={{ required: true }}
-                    error={errors.address?.zipCode}
+                    error={errors.workAddress?.zipCode}
                     errorMessage={t("application.form.errors.pleaseEnterZipCode")}
                     register={register}
                   />

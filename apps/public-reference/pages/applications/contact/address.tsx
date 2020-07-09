@@ -12,13 +12,12 @@ import {
   FormCard,
   ProgressNav,
   t,
-  mergeDeep
+  mergeDeep,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import FormStep from "../../../src/forms/applications/FormStep"
 import React, { useContext } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
@@ -391,7 +390,8 @@ export default () => {
               </ErrorMessage>
             </div>
 
-            {(workInRegion == "yes" || application.applicant.workInRegion == "yes") && (
+            {(workInRegion == "yes" ||
+              (!workInRegion && application.applicant.workInRegion == "yes")) && (
               <>
                 <div className="mt-8 mb-3">
                   <label className="field-label--caps" htmlFor="street">
