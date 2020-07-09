@@ -13,12 +13,12 @@ import { UserApplicationsService } from "./user-applications.service"
 import { ApplicationCreateDto } from "./application.create.dto"
 import { ApplicationUpdateDto } from "./application.update.dto"
 import { ApplicationDto } from "../applications/applications.dto"
-import { JwtAuthGuard } from "../auth/jwt.guard"
 import { OwnerGuard } from "../auth/owner.guard"
 import { ApiBearerAuth } from "@nestjs/swagger"
+import { DefaultAuthGuard } from "../auth/default.guard"
 
 @Controller("user")
-@UseGuards(JwtAuthGuard)
+@UseGuards(DefaultAuthGuard)
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserApplicationsController {

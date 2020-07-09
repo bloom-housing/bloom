@@ -9,13 +9,13 @@ import {
 import { ApplicationsListQueryParams } from "./applications.dto"
 import { ApplicationsService } from "./applications.service"
 import { Application } from "../entity/application.entity"
-import { JwtAuthGuard } from "../auth/jwt.guard"
 import { ApiBearerAuth } from "@nestjs/swagger"
 import { RolesGuard } from "../auth/roles.guard"
 import { Roles } from "../auth/roles.decorator"
+import { DefaultAuthGuard } from "../auth/default.guard"
 
 @Controller("applications")
-@UseGuards(JwtAuthGuard)
+@UseGuards(DefaultAuthGuard)
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class ApplicationsController {
@@ -25,6 +25,6 @@ export class ApplicationsController {
   @Roles("admin")
   @UseGuards(RolesGuard)
   async list(@Query() params?: ApplicationsListQueryParams): Promise<Application[]> {
-    return this.applicationService.find(params.listingId, params.userId)
+    return await this.applicationService.find(params.listingId, params.userId)
   }
 }
