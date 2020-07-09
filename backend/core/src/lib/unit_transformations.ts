@@ -5,7 +5,7 @@ import {
   MinMaxCurrency,
   AmiChartItem,
 } from "@bloom-housing/core"
-import { Unit } from "../entity/Unit"
+import { Unit } from "../entity/unit.entity"
 
 type AnyDict = { [key: string]: any }
 type Units = Unit[]

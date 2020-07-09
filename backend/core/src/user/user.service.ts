@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { User } from "../entity/User"
+import { User } from "../entity/user.entity"
 import { CreateUserDto } from "./createUser.dto"
 import { FindConditions, Repository } from "typeorm"
 import { scrypt, randomBytes } from "crypto"

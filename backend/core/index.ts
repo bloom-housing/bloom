@@ -1,7 +1,7 @@
 /* Models */
-export * from "./src/entity/User"
-export * from "./src/entity/Listing"
-export * from "./src/entity/Unit"
+export * from "./src/entity/user.entity"
+export * from "./src/entity/listing.entity"
+export * from "./src/entity/unit.entity"
 
 /* DTOs */
 export * from "./src/user/createUser.dto"
