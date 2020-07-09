@@ -68,7 +68,8 @@ export default () => {
     const { income, incomePeriod } = data
 
     // TODO: Figure out where this listing info comes from?
-    // const error = verifyIncome(listing, income, incomePeriod)
+    // Skip validation of total income if the applicant has income vouchers.
+    // const error = application.incomeVouchers ? null : verifyIncome(listing, income, incomePeriod)
     // Change this line to "low" or "high" to demo validation failure display
     const error = null
     setIncomeError(error)
