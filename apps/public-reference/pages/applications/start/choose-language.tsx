@@ -71,7 +71,7 @@ export default () => {
         <div className="form-card__pager">
           <form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__pager-row primary px-4">
-              <h3 className="mb-4 font-alt-sans field-label--caps text-base text-black">
+              <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
                 {t("application.chooseLanguage.chooseYourLanguage")}
               </h3>
 
