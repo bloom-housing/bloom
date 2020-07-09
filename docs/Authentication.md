@@ -81,7 +81,7 @@ type ContextProps = {
 The context is provided to a React App using `UserProvider`, which in turn requires a `ConfigProvider` to function
 properly:
 
-```typescript
+```tsx
 import { UserProvider, ConfigProvider } from "@bloom-housing/ui-components"
 
 <ConfigProvider apiUrl={...}>
@@ -102,7 +102,7 @@ while the user remains signed in.
 This is a convenience hook that allows a component to access a protected route on the API using an Axios client that
 has been pre-configured to send an auth token to the API. It will return `undefined` if the user is not logged in.
 
-```typescript
+```tsx
 const authClient = useAuthenticatedClient();
 if (authClient) {
   authClient.get('/protected-route')
@@ -120,7 +120,7 @@ to require login for all paths other than `signInPath` (default), with a "whitel
 (`requireForRoutes`) or a "blacklist" of paths to skip authentication checks for (`skipForRoutes`). These props are
 both lists of strings, and may contain RegEx strings.
 
-```typescript
+```tsx
 <RequireLogin signInPath="/sign-in">
   {/* will only render if logged in */}
 </RequireLogin>
