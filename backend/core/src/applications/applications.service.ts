@@ -37,8 +37,8 @@ export class ApplicationsService {
       where: {
         id: applicationId,
         user: { id: this.request.user.id },
-        relations: ["listing", "user"],
       },
+      relations: ["listing", "user"],
     })
   }
 
