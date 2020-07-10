@@ -58,7 +58,7 @@ export default () => {
   const currentPageStep = 3
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors, getValues, setValue } = useForm({
     defaultValues: {
       income: application.income,
       incomePeriod: application.incomePeriod,
@@ -82,6 +82,14 @@ export default () => {
       conductor.sync()
 
       Router.push("/applications/preferences/intro").then(() => window.scrollTo(0, 0))
+    }
+  }
+
+  const formatValue = () => {
+    const { income } = getValues()
+    const numericIncome = parseFloat(income)
+    if (!isNaN(numericIncome)) {
+      setValue("income", numericIncome.toFixed(2))
     }
   }
 
@@ -150,34 +158,34 @@ export default () => {
               register={register}
               prepend="$"
               errorMessage={t("application.financial.income.incomeError")}
-              inputProps={{ step: 0.01 }}
+              inputProps={{ step: 0.01, onBlur: formatValue }}
             />
 
             <div className={`field-group ${errors.incomePeriod ? "error" : ""}`}>
               <div className="field">
-              <input
-                type="radio"
-                id="incomePeriodMonthly"
-                name="incomePeriod"
-                value="perMonth"
-                ref={register({ required: true })}
-              />
-              <label htmlFor="incomePeriodMonthly" className="font-semibold">
-                {t("application.financial.income.perMonth")}
-              </label>
+                <input
+                  type="radio"
+                  id="incomePeriodMonthly"
+                  name="incomePeriod"
+                  value="perMonth"
+                  ref={register({ required: true })}
+                />
+                <label htmlFor="incomePeriodMonthly" className="font-semibold">
+                  {t("application.financial.income.perMonth")}
+                </label>
               </div>
 
               <div className="field">
-              <input
-                type="radio"
-                id="incomePeriodYearly"
-                name="incomePeriod"
-                value="perYear"
-                ref={register({ required: true })}
-              />
-              <label htmlFor="incomePeriodYearly" className="font-semibold">
-                {t("application.financial.income.perYear")}
-              </label>
+                <input
+                  type="radio"
+                  id="incomePeriodYearly"
+                  name="incomePeriod"
+                  value="perYear"
+                  ref={register({ required: true })}
+                />
+                <label htmlFor="incomePeriodYearly" className="font-semibold">
+                  {t("application.financial.income.perYear")}
+                </label>
               </div>
 
               <ErrorMessage error={errors.incomePeriod}>
@@ -188,14 +196,14 @@ export default () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                Next
+              </Button>
             </div>
           </div>
         </form>
