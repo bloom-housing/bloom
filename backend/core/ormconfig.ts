@@ -15,7 +15,6 @@ const defaultConnectionForEnv = {
     database: "bloom",
   },
 }
-
 const env = process.env.NODE_ENV || "development"
 
 // If we have a DATABASE_URL, use that

@@ -9,7 +9,7 @@ import { UserApplicationsModule } from "../../src/user-applications/user-applica
 import { UserModule } from "../../src/user/user.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EntityNotFoundExceptionFilter } from "../../src/filters/entity-not-found-exception.filter"
+import { applicationSetup } from "../../src/app.module"
 
 describe("Applications", () => {
   let app: INestApplication
@@ -28,8 +28,7 @@ describe("Applications", () => {
       ],
     }).compile()
     app = moduleRef.createNestApplication()
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
-    app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+    app = applicationSetup(app)
     await app.init()
     let res = await supertest(app.getHttpServer())
       .post("/auth/login")

@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { INestApplication, Module, ValidationPipe } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
@@ -8,6 +8,23 @@ import { AuthModule } from "./auth/auth.module"
 import { UserApplicationsModule } from "./user-applications/user-applications.module"
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
+import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
+import { logger } from "./middleware/logger.middleware"
+
+export function applicationSetup(app: INestApplication) {
+  app.enableCors()
+  app.use(logger)
+  app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // Only allow props through that have been specified in the appropriate DTO
+      whitelist: true,
+      // Automatically transform validated prop values into their specified types
+      transform: true,
+    })
+  )
+  return app
+}
 
 @Module({
   imports: [

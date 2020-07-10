@@ -7,7 +7,7 @@ import { Application } from "../../src/entity/application.entity"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
-import { AppModule } from "../../src/app.module"
+import { AppModule, applicationSetup } from "../../src/app.module"
 import { clearDb } from "../utils/clearDb"
 
 describe("Applications", () => {
@@ -24,7 +24,7 @@ describe("Applications", () => {
     await clearDb(getConnection())
 
     app = moduleRef.createNestApplication()
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
+    app = applicationSetup(app)
     await app.init()
   })
 

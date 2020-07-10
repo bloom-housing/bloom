@@ -30,7 +30,7 @@ class User {
   @UpdateDateColumn()
   updatedAt: Date
   @OneToMany(type => Application, application => application.user)
-  applications: Application[];
+  applications: Application[]
 }
 
 export { User as default, User }
