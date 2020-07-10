@@ -87,9 +87,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -99,25 +97,21 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="text-bold">
+        <p className="form-card__back">
           <strong>
             <Link href="/applications/financial/vouchers">Back</Link>
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless">
-          {t("application.financial.income.title")}
-        </h2>
+        <div className="form-card__lead border-b">
+          <h2 className="form-card__title is-borderless">
+            {t("application.financial.income.title")}
+          </h2>
 
-        <div className="text-gray-700">
-          <p className="py-4">{t("application.financial.income.instruction1")}</p>
+          <p className="field-note mt-5 mb-4">{t("application.financial.income.instruction1")}</p>
+
+          <p className="field-note">{t("application.financial.income.instruction2")}</p>
         </div>
-
-        <div className="text-gray-700">
-          <p className="py-4">{t("application.financial.income.instruction2")}</p>
-        </div>
-
-        <hr />
 
         {incomeError && (
           <>
@@ -142,9 +136,9 @@ export default () => {
           </>
         )}
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+        <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
-            <p className="mb-2">{t("application.financial.income.prompt")}</p>
+            <p className="field-label mb-2">{t("application.financial.income.prompt")}</p>
 
             <Field
               id="income"
@@ -159,7 +153,8 @@ export default () => {
               inputProps={{ step: 0.01 }}
             />
 
-            <div className={`field ${errors.incomePeriod ? "error" : ""}`}>
+            <div className={`field-group ${errors.incomePeriod ? "error" : ""}`}>
+              <div className="field">
               <input
                 type="radio"
                 id="incomePeriodMonthly"
@@ -167,10 +162,12 @@ export default () => {
                 value="perMonth"
                 ref={register({ required: true })}
               />
-              <label htmlFor="incomePeriodMonthly">
+              <label htmlFor="incomePeriodMonthly" className="font-semibold">
                 {t("application.financial.income.perMonth")}
               </label>
+              </div>
 
+              <div className="field">
               <input
                 type="radio"
                 id="incomePeriodYearly"
@@ -178,9 +175,10 @@ export default () => {
                 value="perYear"
                 ref={register({ required: true })}
               />
-              <label htmlFor="incomePeriodYearly">
+              <label htmlFor="incomePeriodYearly" className="font-semibold">
                 {t("application.financial.income.perYear")}
               </label>
+              </div>
 
               <ErrorMessage error={errors.incomePeriod}>
                 {t("application.financial.income.periodError")}
@@ -188,7 +186,8 @@ export default () => {
             </div>
           </div>
 
-          <div className="text-center mt-6">
+          <div className="form-card__pager">
+            <div className="form-card__pager-row primary">
             <Button
               filled={true}
               onClick={() => {
@@ -197,6 +196,7 @@ export default () => {
             >
               Next
             </Button>
+            </div>
           </div>
         </form>
       </FormCard>

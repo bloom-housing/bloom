@@ -36,23 +36,16 @@
     }
 
     .prepend {
-      @apply flex;
-      @apply px-2;
+      @apply absolute;
+      @apply px-3;
+      @apply py-2;
       @apply items-center;
-      @apply border;
-      @apply border-gray-450;
-      @apply rounded;
       @apply text-lg;
+      background: transparent;
     }
 
     & :not(:first-child) {
-      border-left: 0;
-      @apply rounded-l-none;
-    }
-
-    & :not(:last-child) {
-      border-right: 0;
-      @apply rounded-r-none;
+      @apply pl-8;
     }
 
     &.control-narrower {
@@ -203,6 +196,12 @@ select {
     outline: none;
     box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
   }
+}
+
+.field-label {
+  @apply text-gray-750;
+  @apply text-tiny;
+  @apply font-semibold;
 }
 
 .field-label--caps {

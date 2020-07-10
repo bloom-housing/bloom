@@ -46,11 +46,11 @@
 .alert-box__body {
   @apply ml-2;
   @apply font-bold;
+  @apply text-tiny;
 }
 
 .alert-box__close {
   @apply absolute;
   @apply text-3xl;
-  top: -8px;
-  right: 5px;
+  right: 1rem;
 }

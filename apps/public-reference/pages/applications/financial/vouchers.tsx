@@ -34,9 +34,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -46,38 +44,39 @@ export default () => {
       </FormCard>
 
       <FormCard className="text-gray-700">
-        <p className="text-bold">
+        <p className="form-card__back">
           <strong>
             <Link href="/applications/reserved/units">Back</Link>
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless text-black">
-          {t("application.financial.vouchers.title")}
-        </h2>
+        <div className="form-card__lead border-b">
+          <h2 className="form-card__title is-borderless">
+            {t("application.financial.vouchers.title")}
+          </h2>
 
-        <p className="py-4">
-          <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
-          {` ${t("application.financial.vouchers.housingVouchers.text")}`}
-        </p>
+          <p className="field-note mb-4 mt-5">
+            <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
+            {` ${t("application.financial.vouchers.housingVouchers.text")}`}
+          </p>
 
-        <p className="py-4">
-          <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
-          {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
-        </p>
+          <p className="field-note mb-4">
+            <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
+            {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
+          </p>
 
-        <p className="py-4">
-          <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
-          {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
-        </p>
+          <p className="field-note">
+            <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
+            {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
+          </p>
+        </div>
 
-        <hr />
-
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+        <form className="" onSubmit={handleSubmit(onSubmit)}>
+          
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
-            <p className="mb-2">{t("application.financial.vouchers.prompt")}</p>
+            <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
 
-            <div>
+            <div className="field">
               <input
                 type="radio"
                 id="incomeVouchersYes"
@@ -86,10 +85,10 @@ export default () => {
                 ref={register({ required: true })}
               />
 
-              <label htmlFor="incomeVouchersYes">{t("application.financial.vouchers.yes")}</label>
+              <label htmlFor="incomeVouchersYes" className="font-semibold">{t("application.financial.vouchers.yes")}</label>
             </div>
 
-            <div>
+            <div className="field">
               <input
                 type="radio"
                 id="incomeVouchersNo"
@@ -98,7 +97,7 @@ export default () => {
                 ref={register({ required: true })}
               />
 
-              <label htmlFor="incomeVouchersNo">{t("application.financial.vouchers.no")}</label>
+              <label htmlFor="incomeVouchersNo" className="font-semibold">{t("application.financial.vouchers.no")}</label>
             </div>
 
             <ErrorMessage error={errors.incomeVouchers}>
@@ -106,7 +105,8 @@ export default () => {
             </ErrorMessage>
           </div>
 
-          <div className="text-center mt-6">
+          <div className="form-card__pager">
+            <div className="form-card__pager-row primary">
             <Button
               filled={true}
               onClick={() => {
@@ -115,6 +115,7 @@ export default () => {
             >
               Next
             </Button>
+            </div>
           </div>
         </form>
       </FormCard>

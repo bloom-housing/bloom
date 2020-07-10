@@ -30,7 +30,7 @@ const AlertBox = (props: AlertBoxProps) => {
   return (
     <div className={classNames}>
       <span className="alert-box__icon">
-        <Icon size="large" symbol={icons[props.type || "alert"]} white={props.inverted} />
+        <Icon size="medium" symbol={icons[props.type || "alert"]} white={props.inverted} />
       </span>
       <span className="alert-box__body">
         {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
