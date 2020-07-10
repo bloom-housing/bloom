@@ -16,10 +16,6 @@
   }
 
   .control {
-    @apply flex;
-    & :nth-child {
-      @apply flex-1;
-    }
 
     .input {
       @apply border;
@@ -44,7 +40,8 @@
       background: transparent;
     }
 
-    & :not(:first-child) {
+    // & input:not(:first-child)
+    .prepend + input {
       @apply pl-8;
     }
 
@@ -196,6 +193,15 @@ select {
     outline: none;
     box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
 }
 
 .field-label {

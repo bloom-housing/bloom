@@ -43,7 +43,7 @@ export default () => {
         />
       </FormCard>
 
-      <FormCard className="text-gray-700">
+      <FormCard>
         <p className="form-card__back">
           <strong>
             <Link href="/applications/reserved/units">Back</Link>

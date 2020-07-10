@@ -82,7 +82,7 @@ export default () => {
               register={register}
             />
           </div>
-          <div className="form-card__group border-b">
+          <div className="form-card__group">
             <label className="field-label--caps">
               {t("application.alternateContact.contact.contactMailingAddressLabel")}
             </label>
