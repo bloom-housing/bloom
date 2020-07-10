@@ -1,4 +1,5 @@
 import { blankApplication } from "../lib/AppSubmissionContext"
+import Router from "next/router"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -30,6 +31,10 @@ export default class ApplicationConductor {
     this.application.completedStep += 1
   }
 
+  shouldJumpForwardToReview() {
+    return this.application.completedStep == 4
+  }
+
   sync() {
     setTimeout(() => {
       if (typeof window != "undefined") {
@@ -45,6 +50,22 @@ export default class ApplicationConductor {
     }
     if (typeof window != "undefined") {
       window.sessionStorage.removeItem("bloom-app-autosave")
+    }
+  }
+
+  routeTo(url: string) {
+    Router.push(url).then(() => window.scrollTo(0, 0))
+  }
+
+  routeToNextOrReturnUrl(url: string) {
+    Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
+  }
+
+  nextOrReturnUrl(url: string) {
+    if (this.shouldJumpForwardToReview()) {
+      return "/applications/review/summary"
+    } else {
+      return url
     }
   }
 }

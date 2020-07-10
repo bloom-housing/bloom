@@ -50,7 +50,7 @@ export default () => {
 
     new FormStep(conductor).save(data)
 
-    Router.push("/applications/contact/alternate-contact-type").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
   }
 
   const noPhone = watch("noPhone")
@@ -253,7 +253,7 @@ export default () => {
             </div>
             <Field
               id="addressZipcode"
-              name="address.zipcode"
+              name="address.zipCode"
               label="Zip"
               placeholder="Zipcode"
               defaultValue={context.application.address.zipcode}
@@ -513,7 +513,7 @@ export default () => {
                   //
                 }}
               >
-                Next
+                {conductor.shouldJumpForwardToReview() ? "Return to Review" : "Next"}
               </Button>
             </div>
           </div>

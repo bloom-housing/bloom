@@ -3,7 +3,6 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import Router from "next/router"
 import { Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -27,8 +26,7 @@ export default () => {
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save(data)
-
-    Router.push("/applications/contact/address").then(() => window.scrollTo(0, 0))
+    conductor.routeTo("/applications/contact/address")
   }
 
   const noEmail = watch("noEmail")
