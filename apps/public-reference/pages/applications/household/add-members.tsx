@@ -18,7 +18,7 @@ export default () => {
   const currentPageStep = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
+  const { handleSubmit } = useForm()
   const onSubmit = (data) => {
     application.householdSize = application.householdMembers.length
     conductor.sync()
@@ -27,10 +27,6 @@ export default () => {
   }
 
   const onAddMember = () => {
-    // const memberId = application.householdMembers.length
-    // const newMember = new Member(memberId)
-    // application.householdMembers.push(newMember)
-    // conductor.sync()
     Router.push({
       pathname: "/applications/household/member",
       query: { memberId: null },
