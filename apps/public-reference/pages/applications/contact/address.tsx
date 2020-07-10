@@ -256,10 +256,10 @@ export default () => {
               name="address.zipCode"
               label="Zip"
               placeholder="Zipcode"
-              defaultValue={context.application.address.zipcode}
+              defaultValue={context.application.address.zipCode}
               validation={{ required: true }}
-              error={errors.address?.zipcode}
-              errorMessage="Please enter your Zipcode"
+              error={errors.address?.zipCode}
+              errorMessage={t("application.contact.zipcodeError")}
               register={register}
             />
 

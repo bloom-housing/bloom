@@ -25,7 +25,7 @@ export const blankApplication = () => {
       street2: "",
       city: "",
       state: "",
-      zipcode: "",
+      zipCode: "",
     },
     sendMailToMailingAddress: false,
     mailingAddress: {
