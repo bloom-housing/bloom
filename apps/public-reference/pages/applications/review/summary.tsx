@@ -4,6 +4,7 @@ Display a summary of application fields with edit links per section
 */
 import Link from "next/link"
 import Router from "next/router"
+import { Address } from "@bloom-housing/core"
 import { Button, FormCard, ProgressNav, MultiLineAddress, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -34,6 +35,22 @@ const ReviewItem = (props: { label: string; sublabel?: string; children: any }) 
     )}
   </p>
 )
+
+const reformatAddress = (address: any) => {
+  const { street, street2, city, state, zipCode } = address
+  const newAddress = {
+    placeName: street,
+    street: street2,
+    city,
+    state,
+    zipCode,
+  } as Address
+  if (newAddress.street == null || newAddress.street == "") {
+    newAddress.street = newAddress.placeName
+    delete newAddress.placeName
+  }
+  return newAddress
+}
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -86,24 +103,44 @@ export default () => {
 
         <div className="form-card__group mx-0">
           <ReviewItem label={"Name"}>
-            {application.firstName} {application.lastName}
+            {application.firstName} {application.middleName} {application.lastName}
           </ReviewItem>
 
           <ReviewItem label={"Date of Birth"}>
             {application.birthMonth}/{application.birthDay}/{application.birthYear}
           </ReviewItem>
 
-          <ReviewItem label={"Phone"} sublabel={application.phoneNumberType}>
-            {application.phoneNumber}
-          </ReviewItem>
+          {application.phoneNumber && (
+            <ReviewItem label={"Phone"} sublabel={application.phoneNumberType}>
+              {application.phoneNumber}
+            </ReviewItem>
+          )}
+
+          {application.additionalPhoneNumber && (
+            <ReviewItem label={"Additional Phone"} sublabel={application.additionalPhoneNumberType}>
+              {application.additionalPhoneNumber}
+            </ReviewItem>
+          )}
 
           {application.emailAddress && (
             <ReviewItem label={"Email"}>{application.emailAddress}</ReviewItem>
           )}
 
           <ReviewItem label={"Address"}>
-            <MultiLineAddress address={application.address} />
+            <MultiLineAddress address={reformatAddress(application.address)} />
           </ReviewItem>
+
+          {application.sendMailToMailingAddress && (
+            <ReviewItem label={"Mailing Address"}>
+              <MultiLineAddress address={reformatAddress(application.mailingAddress)} />
+            </ReviewItem>
+          )}
+
+          {application.workInRegion == "yes" && (
+            <ReviewItem label={"Work Address"}>
+              <MultiLineAddress address={reformatAddress(application.workAddress)} />
+            </ReviewItem>
+          )}
         </div>
 
         <h3 className="px-8 py-4 bg-gray-200">Household Members</h3>
