@@ -52,6 +52,16 @@ const reformatAddress = (address: any) => {
   return newAddress
 }
 
+const accessibilityLabels = (accessibility) => {
+  const labels = []
+  if (accessibility.mobility) labels.push(t("application.ada.mobility"))
+  if (accessibility.vision) labels.push(t("application.ada.vision"))
+  if (accessibility.hearing) labels.push(t("application.ada.hearing"))
+  if (labels.length == 0) labels.push(t("t.no"))
+
+  return labels
+}
+
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application } = context
@@ -65,12 +75,6 @@ export default () => {
 
     Router.push("/applications/review/terms").then(() => window.scrollTo(0, 0))
   }
-
-  const accessibilityEntries = []
-  if (application.accessibility.mobility) accessibilityEntries.push(t("application.ada.mobility"))
-  if (application.accessibility.vision) accessibilityEntries.push(t("application.ada.vision"))
-  if (application.accessibility.hearing) accessibilityEntries.push(t("application.ada.hearing"))
-  if (accessibilityEntries.length == 0) accessibilityEntries.push(t("t.no"))
 
   return (
     <FormsLayout>
@@ -143,6 +147,29 @@ export default () => {
           )}
         </div>
 
+        {application.alternateContact.type != "" &&
+          application.alternateContact.type != "noContact" && (
+            <>
+              <h3 className="px-8 py-4 bg-gray-200">
+                Alternate Contact
+                <EditLink href="/applications/contact/alternate-contact-type" />
+              </h3>
+              <div className="form-card__group mx-0">
+                <ReviewItem
+                  label={t(
+                    "application.alternateContact.type.options." + application.alternateContact.type
+                  )}
+                >
+                  {application.alternateContact.firstName} {application.alternateContact.lastName}
+                  <br />
+                  {application.alternateContact.phoneNumber}
+                  <br />
+                  {application.alternateContact.emailAddress}
+                </ReviewItem>
+              </div>
+            </>
+          )}
+
         <h3 className="px-8 py-4 bg-gray-200">Household Members</h3>
 
         <div className="form-card__group mx-0">
@@ -156,7 +183,7 @@ export default () => {
 
         <div className="form-card__group mx-0">
           <ReviewItem label={"ADA Accessible Units"}>
-            {accessibilityEntries.map((item) => (
+            {accessibilityLabels(application.accessibility).map((item) => (
               <>
                 {item}
                 <br />

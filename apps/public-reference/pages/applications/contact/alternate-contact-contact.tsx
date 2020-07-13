@@ -3,7 +3,6 @@
 Type of alternate contact
 */
 import Link from "next/link"
-import Router from "next/router"
 import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -28,7 +27,7 @@ export default () => {
     application.alternateContact.mailingAddress.zipcode = data.mailingAddress.zipcode
     application.alternateContact.mailingAddress.city = data.mailingAddress.city
     conductor.sync()
-    Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/household/live-alone")
   }
   return (
     <FormsLayout>
@@ -128,7 +127,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button filled={true} onClick={() => {}}>
-                Next
+                {conductor.shouldJumpForwardToReview() ? "Return to Review" : "Next"}
               </Button>
             </div>
           </div>
