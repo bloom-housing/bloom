@@ -10,7 +10,7 @@ import {
   ProgressNav,
   t,
   ConfigContext,
-  Client,
+  UserContext
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -18,10 +18,12 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext } from "react"
 import Markdown from "markdown-to-jsx"
+import * as ApiClient from "@bloom-housing/backend-core/client"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { apiUrl } = useContext(ConfigContext)
+  const { accessToken, profile } = useContext(UserContext)
 
   const { application, listing } = context
   const conductor = new ApplicationConductor(application, listing, context)
@@ -29,9 +31,28 @@ export default () => {
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = data => {
     application.completedStep = 5
+    ApiClient.ApplicationsService.create(
+      {
+        body: {
+          application,
+          listing: {
+            // TODO determine where does the listing data come from
+            id: "listingId"
+          },
+          user: {
+            //  TODO How to handle undefined profile
+            id: "profileId"
+          }
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    )
     conductor.sync()
     Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
   }
