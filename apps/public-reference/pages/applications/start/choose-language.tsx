@@ -19,10 +19,11 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useEffect, useState } from "react"
 
-const loadListing = async (stateFunction, conductor) => {
+const loadListing = async (stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
   conductor.listing = response.data.listings[2]
-  stateFunction(response.data.listings[2])
+  stateFunction(conductor.listing)
+  context.syncListing(conductor.listing)
 }
 
 export default () => {
@@ -31,8 +32,7 @@ export default () => {
   const { application } = context
   const conductor = new ApplicationConductor(application, listing, context)
   useEffect(() => {
-    conductor.reset(true)
-    loadListing(setListing, conductor)
+    loadListing(setListing, conductor, context)
   }, [])
 
   const currentPageStep = 1

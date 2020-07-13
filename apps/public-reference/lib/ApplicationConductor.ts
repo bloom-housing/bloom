@@ -51,13 +51,13 @@ export default class ApplicationConductor {
   }
 
   sync() {
-    // setTimeout(() => {
-    if (typeof window != "undefined") {
-      window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
-      console.log("Sync setting to:" + this.listing.id)
-      window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
-    }
-    // }, 800)
+    setTimeout(() => {
+      if (typeof window != "undefined") {
+        window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
+        console.log("Sync setting to:" + this.listing.id)
+        window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
+      }
+    }, 800)
   }
 
   reset(shouldSync = true) {
