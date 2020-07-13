@@ -15,9 +15,12 @@ import { emailRegex } from "../../../lib/emailRegex"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  console.log("Name pre constr: " + (listing && listing.id ? listing.id : "null"))
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 1
+
+  console.log("Name post load: " + (listing && listing.id ? listing.id : "null"))
 
   /* Form Handler */
   const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({

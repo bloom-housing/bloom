@@ -13,8 +13,8 @@ import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 1
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
@@ -59,7 +59,9 @@ export default () => {
             <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
             </label>
-            <p className="field-note mt-2 mb-4">{t("application.alternateContact.type.helperText")}</p>
+            <p className="field-note mt-2 mb-4">
+              {t("application.alternateContact.type.helperText")}
+            </p>
             {options.map((option, i) => {
               return (
                 <>
@@ -105,7 +107,12 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true} onClick={() => {}}>
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
                 Next
               </Button>
             </div>

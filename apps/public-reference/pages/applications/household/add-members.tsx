@@ -4,7 +4,14 @@ Add household members
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, HouseholdMemberForm, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  Button,
+  FormCard,
+  HouseholdMemberForm,
+  ProgressNav,
+  t,
+  ErrorMessage,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -13,14 +20,14 @@ import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 2
+  application.householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
-  const { handleSubmit } = useForm()
+  const { errors, handleSubmit, register } = useForm()
   const onSubmit = (data) => {
-    application.householdSize = application.householdMembers.length + 1
     conductor.sync()
     console.log(data)
     Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
@@ -44,6 +51,7 @@ export default () => {
       />
     )
   })
+  console.log(listing)
 
   return (
     <FormsLayout>
@@ -70,6 +78,36 @@ export default () => {
 
         <div className="form-card__pager-row">
           <form onSubmit={handleSubmit(onSubmit)}>
+            {listing && (
+              <>
+                <span className="hidden">
+                  <input
+                    className="invisible"
+                    type="number"
+                    id="householdSize"
+                    name="householdSize"
+                    defaultValue={application.householdSize}
+                    ref={register({
+                      min: {
+                        value: listing.householdSizeMin,
+                        message: t("application.form.errors.householdTooSmall"),
+                      },
+                      max: {
+                        value: listing.householdSizeMax,
+                        message: t("application.form.errors.householdTooBig"),
+                      },
+                    })}
+                  />
+                </span>
+                <ErrorMessage error={errors.householdSize}>
+                  <p className="text-sm font-semibold">
+                    {t("application.household.dontQualifyHeader")}
+                  </p>
+                  <p className="text-sm">{errors.householdSize?.message}</p>
+                  <p className="text-sm mb-8">{t("application.household.dontQualifyInfo")}</p>
+                </ErrorMessage>
+              </>
+            )}
             <HouseholdMemberForm
               member={applicant}
               type={t("application.household.primaryApplicant")}
@@ -84,7 +122,7 @@ export default () => {
         </div>
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
-            <Button filled={true} className="w-full md:w-3/4" onClick={onSubmit}>
+            <Button filled={true} className="w-full md:w-3/4" onClick={handleSubmit(onSubmit)}>
               {t("application.household.addMembers.done")}
             </Button>
           </div>

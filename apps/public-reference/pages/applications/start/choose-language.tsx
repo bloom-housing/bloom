@@ -19,27 +19,35 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useEffect, useState } from "react"
 
-const loadListing = async (stateFunction) => {
+const loadListing = async (stateFunction, conductor) => {
   const response = await axios.get(process.env.listingServiceUrl)
+  conductor.listing = response.data.listings[2]
   stateFunction(response.data.listings[2])
 }
 
 export default () => {
   const [listing, setListing] = useState(null)
-  useEffect(() => {
-    loadListing(setListing)
-  })
-
   const context = useContext(AppSubmissionContext)
   const { application } = context
-  const conductor = new ApplicationConductor(application, context)
-  conductor.reset(false)
+  const conductor = new ApplicationConductor(application, listing, context)
+  useEffect(() => {
+    conductor.reset(true)
+    loadListing(setListing, conductor)
+  }, [])
+
   const currentPageStep = 1
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     console.log(data)
+    conductor.application.applicant.firstName = "Marcin"
+    conductor.sync()
+
+    console.log(
+      "choose lang sync: " +
+        (conductor.listing && conductor.listing.id ? conductor.listing.id : "null")
+    )
 
     Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
   }

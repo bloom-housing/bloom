@@ -9,7 +9,7 @@ export interface FieldProps {
   id?: string
   name: string
   label?: string
-  defaultValue?: string
+  defaultValue?: string | number
   placeholder?: string
   register: any // comes from React Hook Form
   validation?: Record<string, any>

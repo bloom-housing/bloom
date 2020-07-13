@@ -41,7 +41,7 @@ export const blankApplication = () => {
     additionalPhone: false,
     additionalPhoneNumber: "",
     additionalPhoneNumberType: "",
-    householdSize: 0,
+    householdSizehouseholdSize: 0,
     housingStatus: "",
     sendMailToMailingAddress: false,
     mailingAddress: {
@@ -84,6 +84,8 @@ export const blankApplication = () => {
 
 export const AppSubmissionContext = React.createContext({
   application: blankApplication(),
+  listing: null,
   /* eslint-disable */
   syncApplication: (data) => {},
+  syncListing: (data) => {},
 })

@@ -13,8 +13,8 @@ import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 1
 
   /* Form Handler */
@@ -98,7 +98,12 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true} onClick={() => {}}>
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
                 Next
               </Button>
             </div>
