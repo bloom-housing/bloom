@@ -16,17 +16,14 @@ export default () => {
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 2
+  let nextPageUrl
 
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     conductor.sync()
 
-    if (application.householdSize == 1) {
-      Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
-    } else {
-      Router.push("/applications/household/members-info").then(() => window.scrollTo(0, 0))
-    }
+    Router.push(nextPageUrl).then(() => window.scrollTo(0, 0))
   }
 
   const backUrl =
@@ -64,7 +61,7 @@ export default () => {
                 big={true}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  application.householdSize = 1
+                  nextPageUrl = "/applications/household/preferred-units"
                 }}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
@@ -75,8 +72,7 @@ export default () => {
                 big={true}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  application.householdSize = 0
-                  application.householdMembers = []
+                  nextPageUrl = "/applications/household/members-info"
                 }}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}

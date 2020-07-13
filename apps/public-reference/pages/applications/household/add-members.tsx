@@ -20,7 +20,7 @@ export default () => {
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = (data) => {
-    application.householdSize = application.householdMembers.length
+    application.householdSize = application.householdMembers.length + 1
     conductor.sync()
     console.log(data)
     Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))

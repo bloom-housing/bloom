@@ -60,7 +60,7 @@ export default () => {
     Router.push("/applications/contact/alternate-contact-type").then(() => window.scrollTo(0, 0))
   }
 
-  const noPhone = watch("applicant.noPhone")
+  const noPhone = watch("applicant.noPhone") || false
   const additionalPhone = watch("additionalPhone")
   const sendMailToMailingAddress = watch("sendMailToMailingAddress")
   const workInRegion = watch("applicant.workInRegion")
@@ -96,8 +96,8 @@ export default () => {
             </label>
 
             <PhoneField
-              name="phoneNumber"
-              error={errors.phoneNumber}
+              name="applicant.phoneNumber"
+              error={errors.applicant?.phoneNumber}
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
               control={control}

@@ -26,8 +26,10 @@ export const PhoneField = (props: {
           rules={{
             validate: {
               inputTel: (v) => {
-                const dropdown = document.querySelector<HTMLInputElement>("#" + props.name)
-                if (dropdown.disabled) return true
+                const dropdown = document.querySelector<HTMLInputElement>(
+                  "#" + props.name.replace(".", "\\.")
+                )
+                if (!dropdown || dropdown.disabled) return true
                 return v?.match(/\d/g)?.length == 10 ? true : false
               },
             },
