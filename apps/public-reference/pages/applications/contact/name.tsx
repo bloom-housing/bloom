@@ -22,11 +22,11 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({
     defaultValues: {
-      noEmail: application.noEmail,
+      noEmail: application.applicant.noEmail,
     },
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save(data)
+    new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
 
     Router.push("/applications/contact/address").then(() => window.scrollTo(0, 0))
   }
@@ -56,28 +56,28 @@ export default () => {
             </label>
 
             <Field
-              name="firstName"
+              name="applicant.firstName"
               placeholder={t("application.name.firstName")}
-              defaultValue={application.firstName}
+              defaultValue={application.applicant.firstName}
               validation={{ required: true }}
-              error={errors.firstName}
+              error={errors.applicant?.firstName}
               errorMessage={t("application.name.firstNameError")}
               register={register}
             />
 
             <Field
-              name="middleName"
+              name="applicant.middleName"
               placeholder={t("application.name.middleName")}
-              defaultValue={application.middleName}
+              defaultValue={application.applicant.middleName}
               register={register}
             />
 
             <Field
-              name="lastName"
+              name="applicant.lastName"
               placeholder={t("application.name.lastName")}
-              defaultValue={application.lastName}
+              defaultValue={application.applicant.lastName}
               validation={{ required: true }}
-              error={errors.lastName}
+              error={errors.applicant?.lastName}
               errorMessage={t("application.name.lastNameError")}
               register={register}
             />
@@ -90,10 +90,13 @@ export default () => {
 
             <div className="field-group--dob">
               <Field
-                name="birthMonth"
+                name="applicant.birthMonth"
                 placeholder="MM"
-                defaultValue={"" + (application.birthMonth > 0 ? application.birthMonth : "")}
-                error={errors.birthMonth}
+                defaultValue={
+                  "" +
+                  (application.applicant.birthMonth > 0 ? application.applicant.birthMonth : "")
+                }
+                error={errors.applicant?.birthMonth}
                 validation={{
                   required: true,
                   validate: {
@@ -103,10 +106,12 @@ export default () => {
                 register={register}
               />
               <Field
-                name="birthDay"
+                name="applicant.birthDay"
                 placeholder="DD"
-                defaultValue={"" + (application.birthDay > 0 ? application.birthDay : "")}
-                error={errors.birthDay}
+                defaultValue={
+                  "" + (application.applicant.birthDay > 0 ? application.applicant.birthDay : "")
+                }
+                error={errors.applicant?.birthDay}
                 validation={{
                   required: true,
                   validate: {
@@ -116,10 +121,12 @@ export default () => {
                 register={register}
               />
               <Field
-                name="birthYear"
+                name="applicant.birthYear"
                 placeholder="YYYY"
-                defaultValue={"" + (application.birthYear > 0 ? application.birthYear : "")}
-                error={errors.birthYear}
+                defaultValue={
+                  "" + (application.applicant.birthYear > 0 ? application.applicant.birthYear : "")
+                }
+                error={errors.applicant?.birthYear}
                 validation={{
                   required: true,
                   validate: {
@@ -131,7 +138,9 @@ export default () => {
               />
             </div>
 
-            {(errors.birthMonth || errors.birthDay || errors.birthYear) && (
+            {(errors.applicant?.birthMonth ||
+              errors.applicant?.birthDay ||
+              errors.applicant?.birthYear) && (
               <div className="field error">
                 <span className="error-message">{t("application.name.dateOfBirthError")}</span>
               </div>
@@ -147,11 +156,11 @@ export default () => {
 
             <Field
               type="email"
-              name="emailAddress"
+              name="applicant.emailAddress"
               placeholder={noEmail ? t("t.none") : "example@web.com"}
-              defaultValue={application.emailAddress}
+              defaultValue={application.applicant.emailAddress}
               validation={{ pattern: emailRegex }}
-              error={errors.emailAddress}
+              error={errors.applicant?.emailAddress}
               errorMessage={t("application.name.emailAddressError")}
               register={register}
               disabled={noEmail}
@@ -161,8 +170,8 @@ export default () => {
               <input
                 type="checkbox"
                 id="noEmail"
-                name="noEmail"
-                defaultChecked={application.noEmail}
+                name="applicant.noEmail"
+                defaultChecked={application.applicant.noEmail}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {

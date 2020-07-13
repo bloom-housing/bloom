@@ -16,18 +16,20 @@ export default () => {
   const { application } = context
   const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 2
+  let nextPageUrl
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
+  const { handleSubmit } = useForm()
+  const onSubmit = () => {
     conductor.sync()
 
-    if (application.householdSize == 1) {
-      Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
-    } else {
-      Router.push("/applications/household/members-info").then(() => window.scrollTo(0, 0))
-    }
+    Router.push(nextPageUrl).then(() => window.scrollTo(0, 0))
   }
+
+  const backUrl =
+    application.alternateContact.type == "noContact"
+      ? "/applications/contact/alternate-contact-type"
+      : "/applications/contact/alternate-contact-contact"
 
   return (
     <FormsLayout>
@@ -43,7 +45,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/alternate">{t("t.back")}</Link>
+            <Link href={backUrl}>{t("t.back")}</Link>
           </strong>
         </p>
         <div className="form-card__lead border-b">
@@ -59,7 +61,7 @@ export default () => {
                 big={true}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  application.householdSize = 1
+                  nextPageUrl = "/applications/household/preferred-units"
                 }}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
@@ -70,7 +72,7 @@ export default () => {
                 big={true}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  application.householdSize = 0
+                  nextPageUrl = "/applications/household/members-info"
                 }}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}

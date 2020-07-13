@@ -2,8 +2,84 @@
   "application": {
     "form": {
       "errors": {
-        "pleaseEnterZipcode": "Please enter your Zipcode",
+        "pleaseEnterZipCode": "Please enter your Zipcode",
         "selectOption": "Please select one of the options above."
+      },
+      "radio": {
+        "no": "No",
+        "yes": "Yes"
+      },
+      "options" : {
+        "relationship": {
+          "spouse": "Spouse",
+          "registeredDomesticPartner": "Registered Domestic Partner",
+          "parent": "Parent",
+          "child": "Child",
+          "sibling": "Sibling",
+          "cousin": "Cousin",
+          "aunt": "Aunt",
+          "uncle": "Uncle",
+          "nephew": "Nephew",
+          "niece": "Niece",
+          "grandparent": "Grandparent",
+          "greatGrandparent": "Great Grandparent",
+          "inLaw": "In Law",
+          "friend": "Friend",
+          "other": "Other"
+        },
+        "states": {
+          "AL": "Alabama",
+          "AK": "Alaska",
+          "AZ": "Arizona",
+          "AR": "Arkansas",
+          "CA": "California",
+          "CO": "Colorado",
+          "CT": "Connecticut",
+          "DE": "Delaware",
+          "DC": "District Of Columbia",
+          "FL": "Florida",
+          "GA": "Georgia",
+          "HI": "Hawaii",
+          "ID": "Idaho",
+          "IL": "Illinois",
+          "IN": "Indiana",
+          "IA": "Iowa",
+          "KS": "Kansas",
+          "KY": "Kentucky",
+          "LA": "Louisiana",
+          "ME": "Maine",
+          "MD": "Maryland",
+          "MA": "Massachusetts",
+          "MI": "Michigan",
+          "MN": "Minnesota",
+          "MS": "Mississippi",
+          "MO": "Missouri",
+          "MT": "Montana",
+          "NE": "Nebraska",
+          "NV": "Nevada",
+          "NH": "New Hampshire",
+          "NJ": "New Jersey",
+          "NM": "New Mexico",
+          "NY": "New York",
+          "NC": "North Carolina",
+          "ND": "North Dakota",
+          "OH": "Ohio",
+          "OK": "Oklahoma",
+          "OR": "Oregon",
+          "PA": "Pennsylvania",
+          "RI": "Rhode Island",
+          "SC": "South Carolina",
+          "SD": "South Dakota",
+          "TN": "Tennessee",
+          "TX": "Texas",
+          "UT": "Utah",
+          "VT": "Vermont",
+          "VA": "Virginia",
+          "WA": "Washington",
+          "WV": "West Virginia",
+          "WI": "Wisconsin",
+          "WY": "Wyoming"
+        }
       }
     },
     "chooseLanguage": {
@@ -44,8 +120,8 @@
       "state": "State",
       "stateError": "Please enter a state",
       "zip": "Zip",
-      "zipcode": "Zipcode",
-      "zipcodeError": "Please enter a zipcode",
+      "zipCode": "Zipcode",
+      "zipCodeError": "Please enter a zipcode",
       "sendMailToMailingAddress": "Send my mail to a different address",
       "mailingAddress": "Mailing Address",
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
@@ -100,15 +176,37 @@
       }
     },
     "household": {
+      "addMembers": {
+        "addHouseholdMember": "+ Add Household Member",
+        "done": "Done adding people",
+        "title": "Tell us about your household."
+      },
+      "householdMember": "Household Member",
       "liveAlone": {
         "title": "Next we would like to know about the others who will live with you in the unit",
         "willLiveAlone": "I will live alone",
         "liveWithOtherPeople": "Other people will live with me"
       },
+      "member": {
+        "cancelAddingThisPerson": "Cancel adding this person",
+        "deleteThisPerson": "Delete this person",
+        "dateOfBirth": "Date of Birth",
+        "name": "Household member's name",
+        "haveSameAddress": "Do they have same address as you?",
+        "whatIsTheirRelationship": "What is their relationship to you?",
+        "saveHouseholdMember": "Save household member",
+        "subTitle": "You will have an opportunity to add more household members on the next screen",
+        "title": "Tell us about this person",
+        "updateHouseholdMember": "Update Household Member",
+        "whatReletionship": "What is their relationship to you",
+        "workInRegion": "Do they work in <REGION>?",
+        "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
+      },
       "membersInfo": {
         "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
         "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
-      }
+      },
+      "primaryApplicant": "Primary Applicant"
     },
     "ada": {
       "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
@@ -146,6 +244,7 @@
   },
   "label": {
     "call": "Call",
+    "edit": "Edit",
     "email": "Email",
     "getDirections": "Get Directions",
     "less": "Less",
@@ -347,6 +446,7 @@
     "range": "%{from} to %{to}",
     "rent": "Rent",
     "selectAllThatApply": "Please select all that apply.",
+    "selectOne": "Select One",
     "skipToMainContent": "Skip to main content",
     "smokingPolicy": "Smoking Policy",
     "sqFeet": "sqft",
