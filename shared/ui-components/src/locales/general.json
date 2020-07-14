@@ -272,11 +272,11 @@
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
-    "applicationDeadline": "Application Deadline",
+    "applicationDeadline": "Application Due Date",
     "applicationFCFS": "First Come First Serve",
     "applicationFee": "Application Fee",
     "applicationFeeDueAt": "Due at interview",
-    "applicationOpenPeriod": "Application Open Period",
+    "applicationOpenPeriod": "Applications Open",
     "applicationPerApplicantAgeDescription": "per applicant age 18 and over",
     "applicationsClosed": "Applications Closed",
     "apply": {
@@ -375,13 +375,16 @@
       "title": "Closed Listings"
     },
     "waitlist": {
+      "closed": "Waitlist Closed",
       "label": "Waitlist",
       "isOpen": "Waitlist is open",
       "currentSize": "Current Waitlist Size",
       "finalSize": "Final Waitlist Size",
       "open": "Open Waitlist",
       "openSlots": "Open Waitlist Slots",
-      "submitAnApplication": "Submit an application for an open slot on the waitlist for %{units} units."
+      "submitAnApplication": "Once ranked applicants fill all available units, the remaining ranked applicants will be placed on a waitlist for those same units.",
+      "submitForWaitlist": "Submit an application for an open slot on the waitlist.",
+      "unitsAndWaitlist": "Available Units and Waitlist"
     },
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
