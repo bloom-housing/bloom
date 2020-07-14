@@ -2,11 +2,82 @@
   "application": {
     "form": {
       "errors": {
-        "pleaseEnterZipcode": "Please enter your Zipcode",
         "selectOption": "Please select one of the options above."
       },
       "general": {
         "saveAndReturn": "Save & return to review"
+      },
+      "options": {
+        "relationship": {
+          "spouse": "Spouse",
+          "registeredDomesticPartner": "Registered Domestic Partner",
+          "parent": "Parent",
+          "child": "Child",
+          "sibling": "Sibling",
+          "cousin": "Cousin",
+          "aunt": "Aunt",
+          "uncle": "Uncle",
+          "nephew": "Nephew",
+          "niece": "Niece",
+          "grandparent": "Grandparent",
+          "greatGrandparent": "Great Grandparent",
+          "inLaw": "In Law",
+          "friend": "Friend",
+          "other": "Other"
+        },
+        "states": {
+          "AL": "Alabama",
+          "AK": "Alaska",
+          "AZ": "Arizona",
+          "AR": "Arkansas",
+          "CA": "California",
+          "CO": "Colorado",
+          "CT": "Connecticut",
+          "DE": "Delaware",
+          "DC": "District Of Columbia",
+          "FL": "Florida",
+          "GA": "Georgia",
+          "HI": "Hawaii",
+          "ID": "Idaho",
+          "IL": "Illinois",
+          "IN": "Indiana",
+          "IA": "Iowa",
+          "KS": "Kansas",
+          "KY": "Kentucky",
+          "LA": "Louisiana",
+          "ME": "Maine",
+          "MD": "Maryland",
+          "MA": "Massachusetts",
+          "MI": "Michigan",
+          "MN": "Minnesota",
+          "MS": "Mississippi",
+          "MO": "Missouri",
+          "MT": "Montana",
+          "NE": "Nebraska",
+          "NV": "Nevada",
+          "NH": "New Hampshire",
+          "NJ": "New Jersey",
+          "NM": "New Mexico",
+          "NY": "New York",
+          "NC": "North Carolina",
+          "ND": "North Dakota",
+          "OH": "Ohio",
+          "OK": "Oklahoma",
+          "OR": "Oregon",
+          "PA": "Pennsylvania",
+          "RI": "Rhode Island",
+          "SC": "South Carolina",
+          "SD": "South Dakota",
+          "TN": "Tennessee",
+          "TX": "Texas",
+          "UT": "Utah",
+          "VT": "Vermont",
+          "VA": "Virginia",
+          "WA": "Washington",
+          "WV": "West Virginia",
+          "WI": "Wisconsin",
+          "WY": "Wyoming"
+        }
       }
     },
     "chooseLanguage": {
@@ -47,8 +118,8 @@
       "state": "State",
       "stateError": "Please enter a state",
       "zip": "Zip",
-      "zipcode": "Zipcode",
-      "zipcodeError": "Please enter a zipcode",
+      "zipCode": "Zipcode",
+      "zipCodeError": "Please enter a zipcode",
       "sendMailToMailingAddress": "Send my mail to a different address",
       "mailingAddress": "Mailing Address",
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
@@ -103,15 +174,37 @@
       }
     },
     "household": {
+      "addMembers": {
+        "addHouseholdMember": "+ Add Household Member",
+        "done": "Done adding people",
+        "title": "Tell us about your household."
+      },
+      "householdMember": "Household Member",
       "liveAlone": {
         "title": "Next we would like to know about the others who will live with you in the unit",
         "willLiveAlone": "I will live alone",
         "liveWithOtherPeople": "Other people will live with me"
       },
+      "member": {
+        "cancelAddingThisPerson": "Cancel adding this person",
+        "deleteThisPerson": "Delete this person",
+        "dateOfBirth": "Date of Birth",
+        "name": "Household member's name",
+        "haveSameAddress": "Do they have same address as you?",
+        "whatIsTheirRelationship": "What is their relationship to you?",
+        "saveHouseholdMember": "Save household member",
+        "subTitle": "You will have an opportunity to add more household members on the next screen",
+        "title": "Tell us about this person",
+        "updateHouseholdMember": "Update Household Member",
+        "whatReletionship": "What is their relationship to you",
+        "workInRegion": "Do they work in <REGION>?",
+        "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
+      },
       "membersInfo": {
         "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
         "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
-      }
+      },
+      "primaryApplicant": "Primary Applicant"
     },
     "ada": {
       "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
@@ -149,6 +242,7 @@
   },
   "label": {
     "call": "Call",
+    "edit": "Edit",
     "email": "Email",
     "getDirections": "Get Directions",
     "less": "Less",
@@ -176,11 +270,11 @@
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
-    "applicationDeadline": "Application Deadline",
+    "applicationDeadline": "Application Due Date",
     "applicationFCFS": "First Come First Serve",
     "applicationFee": "Application Fee",
     "applicationFeeDueAt": "Due at interview",
-    "applicationOpenPeriod": "Application Open Period",
+    "applicationOpenPeriod": "Applications Open",
     "applicationPerApplicantAgeDescription": "per applicant age 18 and over",
     "applicationsClosed": "Applications Closed",
     "apply": {
@@ -279,13 +373,16 @@
       "title": "Closed Listings"
     },
     "waitlist": {
+      "closed": "Waitlist Closed",
       "label": "Waitlist",
       "isOpen": "Waitlist is open",
       "currentSize": "Current Waitlist Size",
       "finalSize": "Final Waitlist Size",
       "open": "Open Waitlist",
       "openSlots": "Open Waitlist Slots",
-      "submitAnApplication": "Submit an application for an open slot on the waitlist for %{units} units."
+      "submitAnApplication": "Once ranked applicants fill all available units, the remaining ranked applicants will be placed on a waitlist for those same units.",
+      "submitForWaitlist": "Submit an application for an open slot on the waitlist.",
+      "unitsAndWaitlist": "Available Units and Waitlist"
     },
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
@@ -350,13 +447,15 @@
     "range": "%{from} to %{to}",
     "rent": "Rent",
     "selectAllThatApply": "Please select all that apply.",
+    "selectOne": "Select One",
     "skipToMainContent": "Skip to main content",
     "smokingPolicy": "Smoking Policy",
     "sqFeet": "sqft",
     "unitAmenities": "Unit Amenities",
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
-    "viewOnMap": "View on Map"
+    "viewOnMap": "View on Map",
+    "yes": "Yes"
   },
   "welcome": {
     "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",

@@ -4,6 +4,7 @@ export interface Address {
   county?: string
   state: string
   street: string
+  street2?: string
   zipCode: string
   latitude?: number
   longitude?: number

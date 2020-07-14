@@ -1,6 +1,6 @@
 import { transformUnits } from "../../src/lib/unit_transformations"
 import { amiCharts } from "../../src/lib/ami_charts"
-import triton from "../../listings/triton.json"
+import triton from "../../listings/triton-test.json"
 type AnyDict = { [key: string]: any }
 
 describe("transformUnits", () => {

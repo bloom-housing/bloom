@@ -1,6 +1,6 @@
 /*
-2.1 - Live Alone
-Asks whether the applicant will be adding any additional household members
+2.1a - Member Info
+A notice regarding adding househole members
 */
 import Link from "next/link"
 import Router from "next/router"
@@ -21,7 +21,7 @@ export default () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     console.log(data)
-    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
 
   return (

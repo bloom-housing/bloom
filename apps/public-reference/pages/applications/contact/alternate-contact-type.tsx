@@ -21,7 +21,11 @@ export default () => {
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
     conductor.sync()
-    Router.push("/applications/contact/alternate-contact-name").then(() => window.scrollTo(0, 0))
+    if (data.type == "noContact") {
+      Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
+    } else {
+      Router.push("/applications/contact/alternate-contact-name").then(() => window.scrollTo(0, 0))
+    }
   }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
   const type = watch("type")

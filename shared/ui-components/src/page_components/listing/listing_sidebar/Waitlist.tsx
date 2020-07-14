@@ -17,12 +17,46 @@ const Waitlist = (props: WaitlistProps) => {
   const listing = props.listing
   const showWaitlistValues = listing.waitlistCurrentSize != null && listing.waitlistMaxSize != null
   const waitlistOpen = listing.waitlistCurrentSize < listing.waitlistMaxSize
-  const header = waitlistOpen ? "Waitlist open" : "Waitlist closed"
-  let availableUnitsInfo
+  let header, subheader, waitlistItems
 
-  if (listing.unitsAvailable == 0) {
-    availableUnitsInfo = (
-      <p className="text-sm italic text-gray-700 pb-3">{t("listings.noAvailableUnits")}</p>
+  if (listing.unitsAvailable > 0 && waitlistOpen) {
+    header = t("listings.waitlist.unitsAndWaitlist")
+    subheader = t("listings.waitlist.submitAnApplication")
+    waitlistItems = (
+      <>
+        <WaitlistItem
+          value={listing.unitsAvailable}
+          text={t("listings.availableUnits")}
+          className={"font-semibold"}
+        />
+        <WaitlistItem
+          value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+          text={t("listings.waitlist.openSlots")}
+          className={"font-semibold"}
+        />
+      </>
+    )
+  } else {
+    if (waitlistOpen) {
+      header = t("listings.waitlist.isOpen")
+      subheader = t("listings.waitlist.submitForWaitlist")
+    } else {
+      header = t("listings.waitlist.closed")
+      subheader = null
+    }
+    waitlistItems = (
+      <>
+        <WaitlistItem
+          value={listing.waitlistCurrentSize}
+          text={t("listings.waitlist.currentSize")}
+        />
+        <WaitlistItem
+          value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+          text={t("listings.waitlist.openSlots")}
+          className={"font-semibold"}
+        />
+        <WaitlistItem value={listing.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
+      </>
     )
   }
 
@@ -30,24 +64,8 @@ const Waitlist = (props: WaitlistProps) => {
     <>
       <h4 className="text-caps-tiny">{header}</h4>
       <div>
-        {availableUnitsInfo}
-        <p className="text-tiny text-gray-800 pb-3">
-          {t("listings.waitlist.submitAnApplication", { units: listing.buildingTotalUnits })}
-        </p>
-        {showWaitlistValues && (
-          <ul>
-            <WaitlistItem
-              value={listing.waitlistCurrentSize}
-              text={t("listings.waitlist.currentSize")}
-            />
-            <WaitlistItem
-              value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
-              text={t("listings.waitlist.openSlots")}
-              className={"font-semibold"}
-            />
-            <WaitlistItem value={listing.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
-          </ul>
-        )}
+        {subheader && <p className="text-tiny text-gray-800 pb-3">{subheader}</p>}
+        {showWaitlistValues && <ul>{waitlistItems}</ul>}
       </div>
     </>
   )
