@@ -44,11 +44,6 @@ export default () => {
     conductor.application.applicant.firstName = "Marcin"
     conductor.sync()
 
-    console.log(
-      "choose lang sync: " +
-        (conductor.listing && conductor.listing.id ? conductor.listing.id : "null")
-    )
-
     Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
   }
 

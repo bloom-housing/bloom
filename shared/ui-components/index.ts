@@ -25,6 +25,7 @@ export * from "./src/forms/ErrorMessage"
 export * from "./src/forms/Field"
 export * from "./src/forms/ProgressNav"
 export * from "./src/forms/HouseholdMemberForm"
+export * from "./src/forms/HouseholdSizeField"
 
 /* Headers */
 export * from "./src/headers/Hero/Hero"

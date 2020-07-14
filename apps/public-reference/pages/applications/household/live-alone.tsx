@@ -4,19 +4,20 @@ Asks whether the applicant will be adding any additional household members
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t, Field } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, HouseholdSizeField } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
+let nextPageUrl
 export default () => {
+  const [validateHousehold, setValidateHousehold] = useState(true)
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
   const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 2
-  let nextPageUrl, validateHousehold
 
   /* Form Handler */
   const { handleSubmit, register, errors } = useForm()
@@ -55,30 +56,15 @@ export default () => {
         </div>
 
         <form className="my-4" onSubmit={handleSubmit(onSubmit)}>
-          {listing && validateHousehold && (
-            <Field
-              name="householdSize"
-              defaultValue={application.householdSize}
-              error={errors.householdSize}
-              errorMessage={t("application.name.emailAddressError")}
-              type="number"
-              validation={{
-                min: {
-                  value: 2,
-                  message: " MIN error message",
-                },
-                max: {
-                  value: 3,
-                  message: "Max error message",
-                },
-                required: true,
-                validate: {
-                  householdSizeRange: (value) => parseInt(value) > 0 && parseInt(value) <= 0,
-                },
-              }}
+          <div className="form-card__pager-row">
+            <HouseholdSizeField
+              listing={listing}
+              householdSize={application.householdSize}
+              validate={validateHousehold}
               register={register}
+              error={errors.householdSize}
             />
-          )}
+          </div>
 
           <div className="form-card__pager">
             <div className="form-card__pager-row">
@@ -87,7 +73,9 @@ export default () => {
                 className="w-full md:w-3/4"
                 onClick={() => {
                   nextPageUrl = "/applications/household/preferred-units"
-                  validateHousehold = true
+                  application.householdSize = 1
+                  application.householdMembers = []
+                  setValidateHousehold(true)
                 }}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
@@ -99,7 +87,7 @@ export default () => {
                 className="w-full md:w-3/4"
                 onClick={() => {
                   nextPageUrl = "/applications/household/members-info"
-                  validateHousehold = false
+                  setValidateHousehold(false)
                 }}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}

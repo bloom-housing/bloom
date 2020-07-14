@@ -1,26 +1,50 @@
 import React from "react"
-import Router from "next/router"
-import { HouseholdMember, Listing } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 import { t } from "../helpers/translator"
+import ErrorMessage from "./ErrorMessage"
 
 export interface HouseholdSizeFieldProps {
   listing: Listing
-  application: any
+  householdSize: number
+  validate: boolean
+  register: any
+  error: any
 }
 
 const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
-  const { listing, application } = props
+  const { listing, householdSize, validate, register, error } = props
 
   return (
-    <div className="info-item mb-4 pb-4 border-b text-left">
-      <p className="info-item__value">
-        {member.firstName} {member.lastName}
-      </p>
-      <h4 className="info-item__name">{type}</h4>
-      <a className="edit-link info-item__link" href="#" onClick={editMember}>
-        {t("label.edit")}
-      </a>
-    </div>
+    <>
+      {listing && validate && (
+        <>
+          <span className="hidden">
+            <input
+              className="invisible"
+              type="number"
+              id="householdSize"
+              name="householdSize"
+              defaultValue={householdSize}
+              ref={register({
+                min: {
+                  value: listing.householdSizeMin,
+                  message: t("application.form.errors.householdTooSmall"),
+                },
+                max: {
+                  value: listing.householdSizeMax,
+                  message: t("application.form.errors.householdTooBig"),
+                },
+              })}
+            />
+          </span>
+          <ErrorMessage error={error}>
+            <p className="text-sm font-semibold">{t("application.household.dontQualifyHeader")}</p>
+            <p className="text-sm">{error?.message}</p>
+            <p className="text-sm mb-8">{t("application.household.dontQualifyInfo")}</p>
+          </ErrorMessage>
+        </>
+      )}
+    </>
   )
 }
 

@@ -440,7 +440,7 @@ export default () => {
                   </select>
                 </div>
                 <ErrorMessage error={errors.relationship}>
-                  {t("application.contact.stateError")}
+                  {t("application.form.errors.selectOption")}
                 </ErrorMessage>
               </div>
             </div>

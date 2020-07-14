@@ -20,7 +20,6 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
     Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
 

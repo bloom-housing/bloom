@@ -14,7 +14,6 @@ class MyApp extends App {
     // Load autosaved listing application, if any
     const autosavedApplication = loadApplicationFromAutosave()
     const savedListing = loadSavedListing()
-    console.log("state: " + (savedListing && savedListing.id ? savedListing.id : "null"))
     this.state = { application: autosavedApplication || blankApplication(), listing: savedListing }
   }
 

@@ -10,7 +10,7 @@ import {
   HouseholdMemberForm,
   ProgressNav,
   t,
-  ErrorMessage,
+  HouseholdSizeField,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -29,7 +29,6 @@ export default () => {
   const { errors, handleSubmit, register } = useForm()
   const onSubmit = (data) => {
     conductor.sync()
-    console.log(data)
     Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
   }
 
@@ -51,7 +50,6 @@ export default () => {
       />
     )
   })
-  console.log(listing)
 
   return (
     <FormsLayout>
@@ -78,36 +76,13 @@ export default () => {
 
         <div className="form-card__pager-row">
           <form onSubmit={handleSubmit(onSubmit)}>
-            {listing && (
-              <>
-                <span className="hidden">
-                  <input
-                    className="invisible"
-                    type="number"
-                    id="householdSize"
-                    name="householdSize"
-                    defaultValue={application.householdSize}
-                    ref={register({
-                      min: {
-                        value: listing.householdSizeMin,
-                        message: t("application.form.errors.householdTooSmall"),
-                      },
-                      max: {
-                        value: listing.householdSizeMax,
-                        message: t("application.form.errors.householdTooBig"),
-                      },
-                    })}
-                  />
-                </span>
-                <ErrorMessage error={errors.householdSize}>
-                  <p className="text-sm font-semibold">
-                    {t("application.household.dontQualifyHeader")}
-                  </p>
-                  <p className="text-sm">{errors.householdSize?.message}</p>
-                  <p className="text-sm mb-8">{t("application.household.dontQualifyInfo")}</p>
-                </ErrorMessage>
-              </>
-            )}
+            <HouseholdSizeField
+              listing={listing}
+              householdSize={application.householdSize}
+              validate={true}
+              register={register}
+              error={errors.householdSize}
+            />
             <HouseholdMemberForm
               member={applicant}
               type={t("application.household.primaryApplicant")}

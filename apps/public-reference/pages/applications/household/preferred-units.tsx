@@ -18,7 +18,7 @@ export default () => {
   const currentPageStep = 2
 
   const backPath =
-    application.householdSize > 0
+    application.householdSize > 1
       ? "/applications/household/add-members"
       : "/applications/household/live-alone"
 
