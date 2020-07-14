@@ -55,7 +55,9 @@ export default () => {
             <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
             </label>
-            <p className="field-note mt-2 mb-4">{t("application.alternateContact.type.helperText")}</p>
+            <p className="field-note mt-2 mb-4">
+              {t("application.alternateContact.type.helperText")}
+            </p>
             {options.map((option, i) => {
               return (
                 <>
@@ -102,9 +104,22 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button filled={true} onClick={() => {}}>
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

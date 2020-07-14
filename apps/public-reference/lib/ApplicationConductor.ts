@@ -17,6 +17,7 @@ export const loadApplicationFromAutosave = () => {
 export default class ApplicationConductor {
   application = {} as Record<string, any>
   context = null
+  returnToReview = false
 
   constructor(application, context) {
     this.application = application
@@ -31,7 +32,7 @@ export default class ApplicationConductor {
     this.application.completedStep += 1
   }
 
-  shouldJumpForwardToReview() {
+  canJumpForwardToReview() {
     return this.application.completedStep == 4
   }
 
@@ -62,7 +63,7 @@ export default class ApplicationConductor {
   }
 
   nextOrReturnUrl(url: string) {
-    if (this.shouldJumpForwardToReview()) {
+    if (this.returnToReview) {
       return "/applications/review/summary"
     } else {
       return url
