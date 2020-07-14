@@ -8,12 +8,12 @@ export interface ApplicationSectionProps {
   listing: Listing
 }
 
-// Hide waitlist for FCFS
-const hideWaitlist = (listing: Listing) => {
-  const applicationsClosed =
-    listing.waitlistMaxSize - listing.waitlistCurrentSize == 0 && listing.unitsAvailable == 0
+const showWaitlist = (listing: Listing) => {
+  const hasWaitlist =
+    !isNaN(listing.waitlistMaxSize) && listing.waitlistMaxSize - listing.waitlistCurrentSize > 0
 
-  return listing.applicationDueDate == null || applicationsClosed
+  // Hide waitlist for FCFS and when ther are no waitlist spots
+  return listing.applicationDueDate != null && hasWaitlist
 }
 
 const ApplicationSection = (props: ApplicationSectionProps) => {
@@ -26,7 +26,7 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
 
   return (
     <div>
-      {!hideWaitlist(listing) && (
+      {showWaitlist(listing) && (
         <section className="aside-block bg-primary-lighter border-t">
           <Waitlist listing={listing} />
         </section>
