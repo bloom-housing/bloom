@@ -360,7 +360,7 @@
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
     "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
-    "occupancyDescriptionNoSro": "Minimum and maximum occupancy standards for this building differ according to unit type.",
+    "occupancyDescriptionNoSro": "Occupancy limits for this building are based on unit type.",
     "occupancyDescriptionSomeSro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
     "people": "people",
     "person": "person",
