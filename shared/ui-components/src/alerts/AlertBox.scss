@@ -1,0 +1,56 @@
+.alert-box {
+  @apply relative;
+  @apply p-4;
+  @apply leading-snug;
+  @apply flex;
+  @apply items-center;
+
+  // Inverts color scheme of alert
+  &.invert {
+    @apply text-white;
+
+    svg use {
+      // fill: $white;
+    }
+
+    .close {
+      @apply text-white;
+    }
+  }
+
+  &.alert {
+    @apply bg-alert-light;
+
+    &.invert {
+      @apply bg-alert;
+    }
+  }
+
+  &.primary {
+    @apply bg-primary-light;
+
+    &.invert {
+      @apply bg-primary;
+    }
+  }
+
+  &.success {
+    @apply bg-success-light;
+
+    &.invert {
+      @apply bg-success;
+    }
+  }
+}
+
+.alert-box__body {
+  @apply ml-2;
+  @apply font-bold;
+  @apply text-tiny;
+}
+
+.alert-box__close {
+  @apply absolute;
+  @apply text-3xl;
+  right: 1rem;
+}

@@ -14,7 +14,7 @@ export const Description = (props: DescriptionProps) => {
       <dd className="description__title">{props.term}</dd>
       {props.markdown ? (
         <dt className="description__body">
-          <Markdown options={{ disableParsingRawHTML: false }} children={props.description} />
+          <Markdown options={{ disableParsingRawHTML: true }} children={props.description} />
         </dt>
       ) : (
         <dt className="description__body">{props.description}</dt>

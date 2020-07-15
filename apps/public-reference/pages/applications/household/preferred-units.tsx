@@ -17,6 +17,11 @@ export default () => {
   const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 2
 
+  const backPath =
+    application.householdSize > 0
+      ? "/applications/household/add-members"
+      : "/applications/household/live-alone"
+
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
@@ -41,7 +46,7 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/household/live-alone">Back</Link>
+            <Link href={backPath}>Back</Link>
           </strong>
         </p>
 

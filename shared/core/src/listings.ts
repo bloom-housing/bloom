@@ -19,13 +19,33 @@ export interface WhatToExpect {
   bePreparedIfChosen: string
 }
 
+export interface HouseholdMember {
+  address: Address
+  id?: number
+  firstName: string
+  middleName: string
+  lastName: string
+  birthMonth: number
+  birthDay: number
+  birthYear: number
+  emailAddress: string
+  noEmail: boolean
+  phoneNumber: string
+  phoneNumberType: string
+  noPhone: boolean
+  sameAddress?: boolean
+  relationship?: string
+  workInRegion?: boolean
+  workAddress?: Address
+}
+
 export interface Listing {
   acceptingApplicationsAtLeasingAgent: boolean
   acceptingApplicationsByPoBox: boolean
   acceptingOnlineApplications: boolean
   acceptsPostmarkedApplications: boolean
-  applicationPickUpAddress: Address
-  applicationPickUpAddressOfficeHours: string
+  applicationPickUpAddress?: Address
+  applicationPickUpAddressOfficeHours?: string
   accessibility: string
   amenities: string
   applicationDueDate: string

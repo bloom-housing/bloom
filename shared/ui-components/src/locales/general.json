@@ -1,4 +1,263 @@
 {
+  "application": {
+    "form": {
+      "errors": {
+        "pleaseEnterZipCode": "Please enter your Zipcode",
+        "selectOption": "Please select one of the options above."
+      },
+      "radio": {
+        "no": "No",
+        "yes": "Yes"
+      },
+      "options" : {
+        "relationship": {
+          "spouse": "Spouse",
+          "registeredDomesticPartner": "Registered Domestic Partner",
+          "parent": "Parent",
+          "child": "Child",
+          "sibling": "Sibling",
+          "cousin": "Cousin",
+          "aunt": "Aunt",
+          "uncle": "Uncle",
+          "nephew": "Nephew",
+          "niece": "Niece",
+          "grandparent": "Grandparent",
+          "greatGrandparent": "Great Grandparent",
+          "inLaw": "In Law",
+          "friend": "Friend",
+          "other": "Other"
+        },
+        "states": {
+          "AL": "Alabama",
+          "AK": "Alaska",
+          "AZ": "Arizona",
+          "AR": "Arkansas",
+          "CA": "California",
+          "CO": "Colorado",
+          "CT": "Connecticut",
+          "DE": "Delaware",
+          "DC": "District Of Columbia",
+          "FL": "Florida",
+          "GA": "Georgia",
+          "HI": "Hawaii",
+          "ID": "Idaho",
+          "IL": "Illinois",
+          "IN": "Indiana",
+          "IA": "Iowa",
+          "KS": "Kansas",
+          "KY": "Kentucky",
+          "LA": "Louisiana",
+          "ME": "Maine",
+          "MD": "Maryland",
+          "MA": "Massachusetts",
+          "MI": "Michigan",
+          "MN": "Minnesota",
+          "MS": "Mississippi",
+          "MO": "Missouri",
+          "MT": "Montana",
+          "NE": "Nebraska",
+          "NV": "Nevada",
+          "NH": "New Hampshire",
+          "NJ": "New Jersey",
+          "NM": "New Mexico",
+          "NY": "New York",
+          "NC": "North Carolina",
+          "ND": "North Dakota",
+          "OH": "Ohio",
+          "OK": "Oklahoma",
+          "OR": "Oregon",
+          "PA": "Pennsylvania",
+          "RI": "Rhode Island",
+          "SC": "South Carolina",
+          "SD": "South Dakota",
+          "TN": "Tennessee",
+          "TX": "Texas",
+          "UT": "Utah",
+          "VT": "Vermont",
+          "VA": "Virginia",
+          "WA": "Washington",
+          "WV": "West Virginia",
+          "WI": "Wisconsin",
+          "WY": "Wyoming"
+        }
+      }
+    },
+    "chooseLanguage": {
+      "letsGetStarted": "Let’s get started on your application",
+      "chooseYourLanguage": "Choose Your Language",
+      "haveAnAccount": "Already have an account?",
+      "signInSaveTime": "Signing in could save you time by starting with details of your last application, and allow you to check the status of this application at any time."
+    },
+    "name": {
+      "title": "What's your name?",
+      "yourName": "Your Name",
+      "firstName": "First Name",
+      "firstNameError": "Please enter a First Name",
+      "middleName": "Middle Name (optional)",
+      "lastName": "Last Name",
+      "lastNameError": "Please enter a Last Name",
+      "yourDateOfBirth": "Your Date of Birth",
+      "dateOfBirthError": "Please enter a valid Date of Birth",
+      "yourEmailAddress": "Your Email Address",
+      "emailPrivacy": "We will only use your email address to contact you about your application.",
+      "emailAddressError": "Please enter an email address",
+      "noEmailAddress": "I don't have an email address"
+    },
+    "contact": {
+      "title": "Thanks %{firstName}. Now we need to know how to contact you.",
+      "yourPhoneNumber": "Your Phone Number",
+      "phoneNumberError": "Please enter a phone number",
+      "noPhoneNumber": "I don't have a telephone number",
+      "phoneNumberTypeError": "Please enter a phone number type",
+      "additionalPhoneNumber": "I have an additional phone number",
+      "address": "Address",
+      "addressWhereYouCurrentlyLive": "We need the address where you currently live. If you are homeless, enter either the shelter address or an address close to where you stay.",
+      "streetAddress": "Street Address",
+      "streetError": "Please enter an address",
+      "apt": "Apt or Unit #",
+      "cityName": "City Name",
+      "cityError": "Please enter a city",
+      "state": "State",
+      "stateError": "Please enter a state",
+      "zip": "Zip",
+      "zipCode": "Zipcode",
+      "zipCodeError": "Please enter a zipcode",
+      "sendMailToMailingAddress": "Send my mail to a different address",
+      "mailingAddress": "Mailing Address",
+      "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
+      "doYouWorkIn": "Do you work in <REGION>?",
+      "doYouWorkInDescription": "TBD",
+      "workAddress": "Work Address"
+    },
+    "alternateContact": {
+      "type": {
+        "title": "Is there someone else you'd like to authorize us to contact if we can't reach you?",
+        "description": "By providing alternate contact, you are allowing us to discuss information on your application with them.",
+        "label": "Alternate contact",
+        "helperText": "Please select one.",
+        "options": {
+          "familyMember": "Family member",
+          "friend": "Friend",
+          "caseManager": "Case manager or housing counselor",
+          "other": "Other",
+          "noContact": "I don't have an alternate contact"
+        },
+        "otherTypeFormPlaceholder": "What is your relationship?",
+        "otherTypeValidationErrorMessage": "Please enter relationship type",
+        "validationErrorMessage": "Please select an alternate contact"
+      },
+      "name": {
+        "title": "Who is your alternate contact?",
+        "alternateContactFormLabel": "Name of alternate contact",
+        "firstNameFormPlaceholder": "First Name",
+        "firstNameValidationErrorMessage": "Please enter a First Name",
+        "lastNameFormPlaceholder": "Last Name",
+        "lastNameValidationErrorMessage": "Please enter a Last Name",
+        "caseManagerAgencyFormLabel": "Where does your case manager or housing counselor work?",
+        "caseManagerAgencyFormPlaceHolder": "Agency",
+        "caseManagerAgencyValidationErrorMessage": "Please enter an agency"
+      },
+      "contact": {
+        "title": "Let us know how to reach your alternate contact",
+        "description": "We'll only use this information to contact them about your application.",
+        "phoneNumberFormLabel": "Contact phone number",
+        "phoneNumberFormPlaceHolder": "(555) 555-5555",
+        "emailAddressFormLabel": "Contact email address",
+        "emailAddressFormPlaceHolder": "you@myemail.com",
+        "contactMailingAddressLabel": "Contact mailing address",
+        "contactMailingAddressHelperText": "Choose an address where they can receive updates and materials about your application",
+        "streetFormPlaceholder": "Street Address",
+        "cityFormLabel": "City Name",
+        "cityFormPlaceholder": "City Name",
+        "stateFormLabel": "State",
+        "stateFormPlaceholder": "Select One",
+        "zipcodeFormLabel": "Zip",
+        "zipcodeFormPlaceholder": "Zip Code"
+      }
+    },
+    "household": {
+      "addMembers": {
+        "addHouseholdMember": "+ Add Household Member",
+        "done": "Done adding people",
+        "title": "Tell us about your household."
+      },
+      "householdMember": "Household Member",
+      "liveAlone": {
+        "title": "Next we would like to know about the others who will live with you in the unit",
+        "willLiveAlone": "I will live alone",
+        "liveWithOtherPeople": "Other people will live with me"
+      },
+      "member": {
+        "cancelAddingThisPerson": "Cancel adding this person",
+        "deleteThisPerson": "Delete this person",
+        "dateOfBirth": "Date of Birth",
+        "name": "Household member's name",
+        "haveSameAddress": "Do they have same address as you?",
+        "whatIsTheirRelationship": "What is their relationship to you?",
+        "saveHouseholdMember": "Save household member",
+        "subTitle": "You will have an opportunity to add more household members on the next screen",
+        "title": "Tell us about this person",
+        "updateHouseholdMember": "Update Household Member",
+        "whatReletionship": "What is their relationship to you",
+        "workInRegion": "Do they work in <REGION>?",
+        "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
+      },
+      "membersInfo": {
+        "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
+        "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
+      },
+      "primaryApplicant": "Primary Applicant"
+    },
+    "ada": {
+      "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
+      "subTitle": "If you are selected for a unit, the property will work to accommodate your need to the best of their ability. Should your application be chosen, be prepared to provide supporting documentation from your physician.",
+      "mobility": "For Mobility Impairments",
+      "vision": "For Vision Impairments",
+      "hearing": "For Hearing Impairments"
+    },
+    "financial": {
+      "income": {
+        "title": "Let's move to income.",
+        "instruction1": "Add up your total gross (pre-tax) household income from wages, benefits and other sources from all household members.",
+        "instruction2": "You only need to provide an estimated total right now. The actual total will be calculated if you are selected in the lottery.",
+        "prompt": "What is your household total pre-tax income?",
+        "placeholder": "Total all of your income sources",
+        "incomeError": "Please enter a valid number greater than 0.",
+        "perMonth": "per month",
+        "perYear": "per year",
+        "periodError": "Please select one of the options above.",
+        "validationError": {
+          "title": "Unfortunately it appears you do not qualify for this listing.",
+          "reason": {
+            "low": "Your household income is too low.",
+            "high": "Your household income is too high."
+          },
+          "instruction1": "Please make changes if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.",
+          "instruction2": "If the information you entered is accurate, we encourage you to check back in the future as more properties become available.",
+          "assistance": "Get Assistance"
+        }
+      },
+      "vouchers": {
+        "title": "Do you or anyone on this application receive any of the following?",
+        "housingVouchers": {
+          "strong": "Housing vouchers",
+          "text": "like Section 8"
+        },
+        "nonTaxableIncome": {
+          "strong": "Non-taxable income",
+          "text": "like SSI, SSDI, child support payments, or worker's compensation benefits"
+        },
+        "rentalSubsidies": {
+          "strong": "Rental subsidies",
+          "text": "like VASH, HSA, HOPWA, Catholic Charities, AIDS Foundation, etc."
+        },
+        "prompt": "Please select one.",
+        "yes": "Yes",
+        "no": "No",
+        "error": "Please select an option."
+      }
+    }
+  },
   "config": {
     "routePrefix": ""
   },
@@ -27,6 +286,7 @@
   },
   "label": {
     "call": "Call",
+    "edit": "Edit",
     "email": "Email",
     "getDirections": "Get Directions",
     "less": "Less",
@@ -54,11 +314,11 @@
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
-    "applicationDeadline": "Application Deadline",
+    "applicationDeadline": "Application Due Date",
     "applicationFCFS": "First Come First Serve",
     "applicationFee": "Application Fee",
     "applicationFeeDueAt": "Due at interview",
-    "applicationOpenPeriod": "Application Open Period",
+    "applicationOpenPeriod": "Applications Open",
     "applicationPerApplicantAgeDescription": "per applicant age 18 and over",
     "applicationsClosed": "Applications Closed",
     "apply": {
@@ -163,13 +423,16 @@
       "title": "Closed Listings"
     },
     "waitlist": {
+      "closed": "Waitlist Closed",
       "label": "Waitlist",
       "isOpen": "Waitlist is open",
       "currentSize": "Current Waitlist Size",
       "finalSize": "Final Waitlist Size",
       "open": "Open Waitlist",
       "openSlots": "Open Waitlist Slots",
-      "submitAnApplication": "Submit an application for an open slot on the waitlist for %{units} units."
+      "submitAnApplication": "Once ranked applicants fill all available units, the remaining ranked applicants will be placed on a waitlist for those same units.",
+      "submitForWaitlist": "Submit an application for an open slot on the waitlist.",
+      "unitsAndWaitlist": "Available Units and Waitlist"
     },
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
@@ -214,6 +477,7 @@
     "area": "area",
     "accessibility": "Accessibility",
     "availability": "Availability",
+    "back": "Back",
     "built": "Built",
     "deposit": "Deposit",
     "floor": "floor",
@@ -221,14 +485,19 @@
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "neighborhood": "Neighborhood",
+    "next": "Next",
+    "no": "No",
     "none": "None",
     "noneFound": "None found.",
     "occupancy": "Occupancy",
     "or": "or",
     "petsPolicy": "Pets Policy",
+    "phoneNumberPlaceholder": "(555) 555-5555",
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "selectAllThatApply": "Please select all that apply.",
+    "selectOne": "Select One",
     "skipToMainContent": "Skip to main content",
     "smokingPolicy": "Smoking Policy",
     "sqFeet": "sqft",

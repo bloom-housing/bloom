@@ -1,7 +1,7 @@
 import { formatUrlSlug, listingUrlSlug } from "../../src/lib/url_helper"
 
-import triton from "@bloom-housing/listings-service/listings/triton.json"
-import { Listing } from "../../src/entity/Listing"
+import triton from "../../../../services/listings/listings/triton-test.json"
+import { Listing } from "../../src/entity/listing.entity"
 
 describe("formatUrlSlug", () => {
   test("reformats strings properly", () => {

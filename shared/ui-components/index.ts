@@ -25,6 +25,7 @@ export * from "./src/forms/ErrorMessage"
 export * from "./src/forms/Field"
 export * from "./src/forms/MultistepProgress"
 export * from "./src/forms/ProgressNav"
+export * from "./src/forms/HouseholdMemberForm"
 
 /* Headers */
 export * from "./src/headers/Hero/Hero"
@@ -34,6 +35,8 @@ export * from "./src/headers/SiteHeader/SiteHeader"
 /* Helpers */
 export * from "./src/helpers/address"
 export * from "./src/helpers/capitalize"
+export * from "./src/helpers/formOptions"
+export * from "./src/helpers/mergeDeep"
 export * from "./src/helpers/localeRoute"
 export * from "./src/helpers/nextjs"
 export * from "./src/helpers/numberOrdinal"
@@ -73,3 +76,9 @@ export * from "./src/sections/MarkdownSection"
 /* Tables */
 export * from "./src/tables/BasicTable"
 export * from "./src/tables/GroupedTable"
+
+/* Contexts */
+export * from "./src/authentication"
+export * from "./src/config"
+
+export * from "./src/alerts"

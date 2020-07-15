@@ -1,6 +1,6 @@
 import { formatUrlSlug, listingUrlSlug } from "../../src/lib/url_helper"
 import { Listing } from "@bloom-housing/core"
-import triton from "../../listings/triton.json"
+import triton from "../../listings/triton-test.json"
 
 describe("formatUrlSlug", () => {
   test("reformats strings properly", () => {
@@ -23,6 +23,6 @@ describe("listingUrlSlug", () => {
 
   test("Generates a URL slug for a Listing", () => {
     const slug = listingUrlSlug(listing)
-    expect(slug).toEqual("the_triton_55_triton_park_lane_foster_city_ca")
+    expect(slug).toEqual("test_triton_55_triton_park_lane_foster_city_ca")
   })
 })

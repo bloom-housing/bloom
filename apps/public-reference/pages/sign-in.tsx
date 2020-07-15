@@ -1,6 +1,5 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
-import axios from "axios"
 import {
   Button,
   Field,
@@ -8,12 +7,12 @@ import {
   Icon,
   LinkButton,
   ErrorMessage,
+  UserContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 
-const apiBase = process.env.listingServiceUrl
-
 export default () => {
+  const { login } = useContext(UserContext)
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
@@ -22,9 +21,8 @@ export default () => {
     const { email, password } = data
 
     try {
-      const res = await axios.post(`${apiBase}/auth/login`, { username: email, password })
-      const { accessToken } = res.data
-      console.log(`Got access token '${accessToken}'`)
+      await login(email, password)
+      console.log("Login success!")
     } catch (err) {
       const { status } = err.response
       if (status === 401) {
@@ -41,50 +39,47 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard>
-        <div className="text-center">
+        <div className="form-card__lead pb-0 text-center">
           <Icon size="2xl" symbol="profile" />
+          <h2 className="form-card__title">Sign In</h2>
         </div>
-        <h2 className="form-card__title">Sign In</h2>
 
-        <hr />
+        <div className="form-card__group pt-0 border-b">
+          <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
 
-        <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
+          <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+            <Field
+              name="email"
+              label="Email"
+              validation={{ required: true }}
+              error={errors.email}
+              errorMessage="Please enter your login email"
+              register={register}
+            />
 
-        <form id="sign-in" className="px-8 mt-10" onSubmit={handleSubmit(onSubmit)}>
-          <Field
-            name="email"
-            label="Email"
-            validation={{ required: true }}
-            error={errors.email}
-            errorMessage="Please enter your login email"
-            register={register}
-          />
+            <Field
+              name="password"
+              label="Password"
+              validation={{ required: true }}
+              error={errors.password}
+              errorMessage="Please enter your login password"
+              register={register}
+              type="password"
+            />
 
-          <Field
-            name="password"
-            label="Password"
-            validation={{ required: true }}
-            error={errors.password}
-            errorMessage="Please enter your login password"
-            register={register}
-            type="password"
-          />
-
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Sign In
-            </Button>
-          </div>
-        </form>
-
-        <hr />
-
-        <div className="text-center">
+            <div className="text-center mt-6">
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                Sign In
+              </Button>
+            </div>
+          </form>
+        </div>
+        <div className="form-card__group text-center">
           <h2 className="mb-6">Don't have an account?</h2>
 
           <LinkButton href="/create-account">Create Account</LinkButton>

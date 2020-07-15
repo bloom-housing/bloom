@@ -5,7 +5,7 @@ import axios from "axios"
 import { Listing } from "@bloom-housing/core"
 import {
   AdditionalFees,
-  // ApplicationSection, -- Local override below
+  ApplicationSection,
   ApplicationStatus,
   BasicTable,
   Description,
@@ -30,7 +30,6 @@ import {
   occupancyTable,
   t,
 } from "@bloom-housing/ui-components"
-import { ApplicationSection } from "../src/page_components/listing/listing_sidebar/ApplicationSection"
 import Layout from "../layouts/application"
 
 interface ListingProps {

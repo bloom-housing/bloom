@@ -14,7 +14,7 @@ describe("Navigating around the site", () => {
   })
 
   it("Loads a listing page directly by id", () => {
-    cy.visit("/listing/vWgL5K1EUG8q0SX-Dv5BA")
+    cy.visit("/listing/Uvbk5qurpB2WI9V6WnNdH")
 
     // Check that the listing page sidebar apply section text is present on the page
     cy.contains("Get a Paper Application")
@@ -22,12 +22,12 @@ describe("Navigating around the site", () => {
     // Check that the URL got re-written with a URL slug
     cy.location("pathname").should(
       "eq",
-      "/listing/vWgL5K1EUG8q0SX-Dv5BA/archer_studios_98_archer_street_san_jose_ca"
+      "/listing/Uvbk5qurpB2WI9V6WnNdH/archer_studios_98_archer_street_san_jose_ca"
     )
   })
 
   it("Loads a listing page directly with a full url", () => {
-    cy.visit("/listing/vWgL5K1EUG8q0SX-Dv5BA/archer_studios_98_archer_street_san_jose_ca")
+    cy.visit("/listing/Uvbk5qurpB2WI9V6WnNdH/archer_studios_98_archer_street_san_jose_ca")
 
     // Check that the listing page sidebar apply section text is present on the page
     cy.contains("Get a Paper Application")

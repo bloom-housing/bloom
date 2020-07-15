@@ -47,6 +47,11 @@
     @apply py-3;
   }
 
+  &.is-big {
+    @apply px-6;
+    @apply py-6;
+  }
+
   &.is-normal-case {
     @apply normal-case;
   }
@@ -62,22 +67,6 @@
   }
 
   &.is-unstyled {
-    @apply normal-case;
-    @apply border-0;
-    @apply p-0;
-    @apply font-sans;
-    @apply tracking-normal;
-    @apply font-normal;
-    @apply underline;
-    @apply m-4;
-
-    &:hover {
-      @apply text-primary;
-      background: transparent;
-    }
-  }
-
-  &.button-link {
     @apply normal-case;
     @apply border-0;
     @apply p-0;

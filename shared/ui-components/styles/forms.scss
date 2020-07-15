@@ -1,6 +1,5 @@
 .field {
   margin-bottom: 1.25rem;
-  
   * > &:last-child {
     margin-bottom: 0;
   }
@@ -22,30 +21,50 @@
       @apply bg-gray-200;
       @apply rounded;
       @apply w-full;
-      @apply py-2;
+      @apply py-3;
       @apply px-3;
       @apply text-gray-900;
       font-family: inherit;
       font-size: 1rem;
       line-height: normal;
     }
+
+    .prepend {
+      @apply absolute;
+      @apply px-3;
+      @apply py-2;
+      @apply items-center;
+      @apply text-lg;
+      background: transparent;
+    }
+
+    // & input:not(:first-child)
+    .prepend + input {
+      @apply pl-8;
+    }
+
     &.control-narrower {
       max-width: 8rem;
     }
   }
 
   &.error {
-
     label {
       @apply text-red-700;
     }
 
     .control {
       .input,
+      .prepend,
       select {
         @apply border-red-700;
       }
+
+      .prepend {
+        @apply text-red-700;
+      }
     }
+
     .error-message {
       @apply text-sm;
       @apply text-red-700;
@@ -115,7 +134,7 @@
 
   input[type="radio"]:focus + label::before,
   input[type="checkbox"]:focus + label::before {
-    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary, 0 0 3px 4px $tailwind-primary;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-attention, 0 0 3px 4px $tailwind-attention;
   }
 
   input[type="checkbox"]:disabled + label {
@@ -139,6 +158,7 @@
     @apply leading-tight;
     @apply py-2;
     @apply px-3;
+    height: 3em;
     font-family: inherit;
     font-size: 1rem;
     line-height: normal;
@@ -152,6 +172,50 @@
     background-size: 0.75rem;
     padding-right: 2.25rem;
   }
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    @apply bg-gray-400;
+    cursor: not-allowed;
+    @apply text-gray-700;
+  }
+}
+
+input[type],
+textarea,
+select {
+  @apply rounded;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+.field-label {
+  @apply text-gray-750;
+  @apply text-tiny;
+  @apply font-semibold;
+}
+
+.field-label--caps {
+  @apply uppercase;
+  @apply text-gray-750;
+  @apply tracking-widest;
+  @apply font-semibold;
+  @apply text-tiny;
+  @apply mb-2;
+  @apply inline-block;
 }
 
 .field--inline {
@@ -161,15 +225,35 @@
   margin-left: 1.5rem;
 }
 
-.flex > .field {
+.flex > .field,
+.field-group--dob .field {
   @apply flex-auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 
   &:first-child {
-    padding-left: 0;
+    margin-left: 0;
   }
   &:last-child {
-    padding-right: 0;
+    margin-right: 0;
   }
+}
+
+.field-group--dob {
+  @apply flex;
+
+  .field {
+    max-width: 3.5rem;
+    margin-bottom: 0;
+
+    &:last-child {
+      max-width: 4rem;
+    }
+  }
+}
+
+.field-note {
+  @apply text-tiny;
+  @apply text-gray-700;
+  @apply font-semibold;
 }
