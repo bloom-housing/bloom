@@ -57,7 +57,6 @@ describe("Applications", () => {
 
     res = await supertest(app.getHttpServer()).get("/").expect(200)
     listingId = res.body.listings[0].id
-
   })
 
   it(`/GET `, async () => {

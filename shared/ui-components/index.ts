@@ -80,3 +80,5 @@ export * from "./src/tables/GroupedTable"
 /* Contexts */
 export * from "./src/authentication"
 export * from "./src/config"
+
+export * from "./src/alerts"

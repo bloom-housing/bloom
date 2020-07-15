@@ -1,0 +1,1441 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Atoms|Icon Icon Application 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="application"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-application"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Arrow Down 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="arrow-down"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-arrow-down"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Assistance 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="assistance"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-assistance"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Asterisk 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="asterisk"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-asterisk"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Bed 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="bed"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-bed"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Browse 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="browse"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-browse"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Building 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="building"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-building"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Calendar 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="calendar"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-calendar"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Check 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="check"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-check"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Clock 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="clock"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-clock"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Close 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="close"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-close"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Close Round 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="close-round"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-close-round"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Cross 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="cross"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-cross"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Down 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="down"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-down"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Download 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="download"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-download"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Edit 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="edit"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-edit"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Eligibility 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="eligibility"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-eligibility"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Eye 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="eye"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-eye"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Favorite 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="favorite"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-favorite"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon File 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="file"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-file"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Forward 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="forward"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-forward"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Globe 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="globe"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-globe"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Info 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="info"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-info"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Left 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="left"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-left"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Light Bulb 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="light-bulb"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-light-bulb"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Like 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="like"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-like"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Like Fill 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="like-fill"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-like-fill"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Link 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="link"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-link"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon List 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="list"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-list"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Lock 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="lock"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-lock"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Mail 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="mail"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-mail"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Map 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="map"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-map"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Map Thin 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="map-thin"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-map-thin"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Menu 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="menu"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-menu"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Oval 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="oval"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-oval"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Phone 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="phone"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-phone"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Plus 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="plus"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-plus"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Polygon 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="polygon"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-polygon"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Profile 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="profile"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-profile"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Question 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="question"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-question"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Result 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="result"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-result"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Right 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="right"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-right"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Search 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="search"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-search"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Settings 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="settings"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-settings"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Star 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="star"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-star"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Ticket 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="ticket"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-ticket"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Trash 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="trash"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-trash"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Atoms|Icon Icon Warning 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Icon
+    size="large"
+    symbol="warning"
+  >
+    <span
+      className="ui-icon ui-large"
+    >
+      <svg>
+        <use
+          xlinkHref="#i-warning"
+        />
+      </svg>
+    </span>
+  </Icon>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;

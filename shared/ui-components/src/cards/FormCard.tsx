@@ -4,12 +4,14 @@ import "./FormCard.scss"
 export interface FormCardProps {
   header?: string
   children: JSX.Element | JSX.Element[]
+  className?: string
 }
 
 const FormCard = (props: FormCardProps) => {
+  const classNames = props.className ? `${props.className} form-card` : "form-card"
   if (props.header) {
     return (
-      <article className="form-card">
+      <article className={classNames}>
         <div className="form-card__header">
           <header className="form-card__header_group">
             <h5 className="form-card__header_title">{props.header}</h5>
@@ -21,7 +23,7 @@ const FormCard = (props: FormCardProps) => {
     )
   }
 
-  return <article className="form-card">{props.children}</article>
+  return <article className={classNames}>{props.children}</article>
 }
 
 export { FormCard as default, FormCard }
