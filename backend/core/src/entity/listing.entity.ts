@@ -106,7 +106,7 @@ class Listing extends BaseEntity {
 
   unitsSummarized?: UnitsSummarized
   urlSlug?: string
-  @OneToMany(type => Application, application => application.listing)
+  @OneToMany((type) => Application, (application) => application.listing)
   applications: Application[]
 }
 

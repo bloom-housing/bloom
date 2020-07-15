@@ -4,7 +4,8 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  Index, OneToMany
+  Index,
+  OneToMany,
 } from "typeorm"
 import { Application } from "./application.entity"
 import { Exclude } from "class-transformer"
@@ -31,8 +32,8 @@ class User {
   createdAt: Date
   @UpdateDateColumn()
   updatedAt: Date
-  @OneToMany(type => Application, application => application.user)
-  applications: Application[];
+  @OneToMany((type) => Application, (application) => application.user)
+  applications: Application[]
 }
 
 export { User as default, User }

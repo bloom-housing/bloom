@@ -1,6 +1,6 @@
-import React from "react"
+import React, { ReactNode } from "react"
 
-const ErrorMessage = (props: { error?: boolean; children?: string }) => {
+const ErrorMessage = (props: { error?: boolean; children?: ReactNode }) => {
   if (props.error) {
     return (
       <span className="error-message" aria-live="assertive">

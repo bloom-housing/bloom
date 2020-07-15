@@ -19,7 +19,11 @@ async function bootstrap() {
       transform: true,
     })
   )
-  const options = new DocumentBuilder().setTitle("Bloom API").setVersion("1.0").addBearerAuth().build()
+  const options = new DocumentBuilder()
+    .setTitle("Bloom API")
+    .setVersion("1.0")
+    .addBearerAuth()
+    .build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup("docs", app, document)
   await app.listen(process.env.PORT || 3001)

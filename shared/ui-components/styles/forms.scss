@@ -16,6 +16,7 @@
   }
 
   .control {
+
     .input {
       @apply border;
       @apply border-gray-450;
@@ -30,6 +31,20 @@
       line-height: normal;
     }
 
+    .prepend {
+      @apply absolute;
+      @apply px-3;
+      @apply py-2;
+      @apply items-center;
+      @apply text-lg;
+      background: transparent;
+    }
+
+    // & input:not(:first-child)
+    .prepend + input {
+      @apply pl-8;
+    }
+
     &.control-narrower {
       max-width: 8rem;
     }
@@ -42,8 +57,13 @@
 
     .control {
       .input,
+      .prepend,
       select {
         @apply border-red-700;
+      }
+
+      .prepend {
+        @apply text-red-700;
       }
     }
 
@@ -173,6 +193,21 @@ select {
     outline: none;
     box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+.field-label {
+  @apply text-gray-750;
+  @apply text-tiny;
+  @apply font-semibold;
 }
 
 .field-label--caps {

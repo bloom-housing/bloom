@@ -3,6 +3,7 @@
   @apply p-4;
   @apply leading-snug;
   @apply flex;
+  @apply items-center;
 
   // Inverts color scheme of alert
   &.invert {
@@ -15,7 +16,7 @@
     .close {
       @apply text-white;
     }
-  }  
+  }
 
   &.alert {
     @apply bg-alert-light;
@@ -26,7 +27,7 @@
   }
 
   &.primary {
-    @apply bg-primary-lighter;
+    @apply bg-primary-light;
 
     &.invert {
       @apply bg-primary;
@@ -43,12 +44,13 @@
 }
 
 .alert-box__body {
-  @apply text-tiny;
   @apply ml-2;
+  @apply font-bold;
+  @apply text-tiny;
 }
 
 .alert-box__close {
   @apply absolute;
-  top: 1rem;
-  right: 1.5rem;
+  @apply text-3xl;
+  right: 1rem;
 }
