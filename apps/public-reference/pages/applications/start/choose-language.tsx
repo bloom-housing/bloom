@@ -41,7 +41,6 @@ export default () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     console.log(data)
-    conductor.application.applicant.firstName = "Marcin"
     conductor.sync()
 
     Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
