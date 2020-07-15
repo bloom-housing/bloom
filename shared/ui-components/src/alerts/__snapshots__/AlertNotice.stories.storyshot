@@ -1,0 +1,236 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Alerts|AlertNotice Alert Notice Alert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertNotice
+    title="Your household income is too low."
+  >
+    <div
+      className="alert-notice alert"
+    >
+      <div
+        className="alert-notice__title alert"
+      >
+        <p>
+          Your household income is too low.
+        </p>
+      </div>
+      <div
+        className="alert-notice__body"
+      >
+        <p
+          className="mb-2"
+        >
+          Please edit your income if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.
+        </p>
+        <p>
+          If the information you entered is accurate, we encourage you to check back in the future of as more properties become available.
+        </p>
+      </div>
+    </div>
+  </AlertNotice>
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertNotice Alert Notice Alert Inverted 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertNotice
+    inverted={true}
+    title="Your household income is too low."
+  >
+    <div
+      className="alert-notice alert invert"
+    >
+      <div
+        className="alert-notice__title alert"
+      >
+        <p>
+          Your household income is too low.
+        </p>
+      </div>
+      <div
+        className="alert-notice__body"
+      >
+        <p
+          className="mb-2"
+        >
+          Please edit your income if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.
+        </p>
+        <p>
+          If the information you entered is accurate, we encourage you to check back in the future of as more properties become available.
+        </p>
+      </div>
+    </div>
+  </AlertNotice>
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertNotice Alert Notice Notice 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertNotice
+    title="Your household income is too low."
+    type="notice"
+  >
+    <div
+      className="alert-notice primary"
+    >
+      <div
+        className="alert-notice__title primary"
+      >
+        <p>
+          Your household income is too low.
+        </p>
+      </div>
+      <div
+        className="alert-notice__body"
+      >
+        <p
+          className="mb-2"
+        >
+          Please edit your income if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.
+        </p>
+        <p>
+          If the information you entered is accurate, we encourage you to check back in the future of as more properties become available.
+        </p>
+      </div>
+    </div>
+  </AlertNotice>
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertNotice Alert Notice Notice Inverted 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertNotice
+    inverted={true}
+    title="Your household income is too low."
+    type="notice"
+  >
+    <div
+      className="alert-notice primary invert"
+    >
+      <div
+        className="alert-notice__title primary"
+      >
+        <p>
+          Your household income is too low.
+        </p>
+      </div>
+      <div
+        className="alert-notice__body"
+      >
+        <p
+          className="mb-2"
+        >
+          Please edit your income if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.
+        </p>
+        <p>
+          If the information you entered is accurate, we encourage you to check back in the future of as more properties become available.
+        </p>
+      </div>
+    </div>
+  </AlertNotice>
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertNotice Alert Notice Success 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertNotice
+    title="Your household income is too low."
+    type="success"
+  >
+    <div
+      className="alert-notice success"
+    >
+      <div
+        className="alert-notice__title success"
+      >
+        <p>
+          Your household income is too low.
+        </p>
+      </div>
+      <div
+        className="alert-notice__body"
+      >
+        <p
+          className="mb-2"
+        >
+          Please edit your income if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.
+        </p>
+        <p>
+          If the information you entered is accurate, we encourage you to check back in the future of as more properties become available.
+        </p>
+      </div>
+    </div>
+  </AlertNotice>
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertNotice Alert Notice Success Inverted 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertNotice
+    inverted={true}
+    title="Your household income is too low."
+    type="success"
+  >
+    <div
+      className="alert-notice success invert"
+    >
+      <div
+        className="alert-notice__title success"
+      >
+        <p>
+          Your household income is too low.
+        </p>
+      </div>
+      <div
+        className="alert-notice__body"
+      >
+        <p
+          className="mb-2"
+        >
+          Please edit your income if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.
+        </p>
+        <p>
+          If the information you entered is accurate, we encourage you to check back in the future of as more properties become available.
+        </p>
+      </div>
+    </div>
+  </AlertNotice>
+</div>
+`;
