@@ -107,16 +107,18 @@ export default () => {
 
         <div className="form-card__group mx-0">
           <ReviewItem label={"Name"}>
-            {application.firstName} {application.middleName} {application.lastName}
+            {application.applicant.firstName} {application.applicant.middleName}{" "}
+            {application.applicant.lastName}
           </ReviewItem>
 
           <ReviewItem label={"Date of Birth"}>
-            {application.birthMonth}/{application.birthDay}/{application.birthYear}
+            {application.applicant.birthMonth}/{application.applicant.birthDay}/
+            {application.applicant.birthYear}
           </ReviewItem>
 
-          {application.phoneNumber && (
-            <ReviewItem label={"Phone"} sublabel={application.phoneNumberType}>
-              {application.phoneNumber}
+          {application.applicant.phoneNumber && (
+            <ReviewItem label={"Phone"} sublabel={application.applicant.phoneNumberType}>
+              {application.applicant.phoneNumber}
             </ReviewItem>
           )}
 
@@ -126,12 +128,12 @@ export default () => {
             </ReviewItem>
           )}
 
-          {application.emailAddress && (
-            <ReviewItem label={"Email"}>{application.emailAddress}</ReviewItem>
+          {application.applicant.emailAddress && (
+            <ReviewItem label={"Email"}>{application.applicant.emailAddress}</ReviewItem>
           )}
 
           <ReviewItem label={"Address"}>
-            <MultiLineAddress address={reformatAddress(application.address)} />
+            <MultiLineAddress address={reformatAddress(application.applicant.address)} />
           </ReviewItem>
 
           {application.sendMailToMailingAddress && (
@@ -140,9 +142,9 @@ export default () => {
             </ReviewItem>
           )}
 
-          {application.workInRegion == "yes" && (
+          {application.applicant.workInRegion == "yes" && (
             <ReviewItem label={"Work Address"}>
-              <MultiLineAddress address={reformatAddress(application.workAddress)} />
+              <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
             </ReviewItem>
           )}
         </div>

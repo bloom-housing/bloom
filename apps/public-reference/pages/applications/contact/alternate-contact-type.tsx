@@ -22,9 +22,9 @@ export default () => {
     application.alternateContact.type = data.type
     conductor.sync()
     if (data.type == "noContact") {
-      Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
+      conductor.routeTo("/applications/household/live-alone")
     } else {
-      Router.push("/applications/contact/alternate-contact-name").then(() => window.scrollTo(0, 0))
+      conductor.routeTo("/applications/contact/alternate-contact-name")
     }
   }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
@@ -111,19 +111,6 @@ export default () => {
                 {t("t.next")}
               </Button>
             </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  className="button is-unstyled mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
           </div>
         </form>
       </FormCard>

@@ -241,7 +241,7 @@ export default () => {
                 placeholder={t("application.contact.cityName")}
                 defaultValue={context.application.applicant.address.city}
                 validation={{ required: true }}
-                error={errors.address?.city}
+                error={errors.applicant?.address?.city}
                 errorMessage={t("application.contact.cityError")}
                 register={register}
               />
@@ -249,7 +249,7 @@ export default () => {
               <StateSelect
                 id="addressState"
                 name="applicant.address.state"
-                label="State"
+                label={t("application.contact.state")}
                 defaultValue={context.application.applicant.address.state}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.state}
@@ -261,8 +261,8 @@ export default () => {
             <Field
               id="addressZipCode"
               name="applicant.address.zipCode"
-              label="Zip"
-              placeholder="ZipCode"
+              label={t("application.contact.zip")}
+              placeholder={t("application.contact.zipCode")}
               defaultValue={context.application.applicant.address.zipCode}
               validation={{ required: true }}
               error={errors.applicant?.address?.zipCode}
@@ -328,7 +328,7 @@ export default () => {
                 <StateSelect
                   id="mailingAddressState"
                   name="mailingAddress.state"
-                  label="State"
+                  label={t("application.contact.state")}
                   defaultValue={context.application.mailingAddress.state}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.state}
@@ -341,12 +341,12 @@ export default () => {
               <Field
                 id="mailingAddressZipCode"
                 name="mailingAddress.zipCode"
-                label="Zip"
-                placeholder="ZipCode"
+                label={t("application.contact.zip")}
+                placeholder={t("application.contact.zipCode")}
                 defaultValue={context.application.mailingAddress.zipCode}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.zipCode}
-                errorMessage="Please enter your ZipCode"
+                errorMessage={t("application.contact.zipCodeError")}
                 register={register}
               />
             </div>
@@ -435,7 +435,7 @@ export default () => {
                   <StateSelect
                     id="workAddressState"
                     name="applicant.workAddress.state"
-                    label="State"
+                    label={t("application.contact.state")}
                     defaultValue={context.application.applicant.workAddress.state}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.state}
@@ -448,12 +448,12 @@ export default () => {
                 <Field
                   id="workAddressZipCode"
                   name="applicant.workAddress.zipCode"
-                  label="Zip"
-                  placeholder="ZipCode"
+                  label={t("application.contact.zip")}
+                  placeholder={t("application.contact.zipCode")}
                   defaultValue={context.application.applicant.workAddress.zipCode}
                   validation={{ required: true }}
                   error={errors.applicant?.workAddress?.zipCode}
-                  errorMessage="Please enter your ZipCode"
+                  errorMessage={t("application.contact.zipCodeError")}
                   register={register}
                 />
               </>

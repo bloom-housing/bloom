@@ -24,7 +24,7 @@ export default () => {
     application.alternateContact.lastName = data.lastName
     application.alternateContact.agency = data.agency
     conductor.sync()
-    Router.push("/applications/contact/alternate-contact-contact").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-contact")
   }
   return (
     <FormsLayout>
