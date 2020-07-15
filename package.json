@@ -29,9 +29,9 @@
     "dev:app:partners": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/partners-reference && yarn dev",
     "test:app:partners": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/partners-reference && yarn test",
     "dev:listings": "cd services/listings && yarn dev",
-    "dev:app:ala": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-ala && yarn dev",
-    "dev:app:sj": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-sj && yarn dev",
-    "dev:app:smc": "export $(cat services/listings/.env | xargs) && wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-smc && yarn dev",
+    "dev:app:ala": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-ala && yarn dev",
+    "dev:app:sj": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-sj && yarn dev",
+    "dev:app:smc": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/public-smc && yarn dev",
     "dev:ala": "concurrently \"yarn dev:listings\" \"yarn dev:app:ala\"",
     "dev:sj": "concurrently \"yarn dev:listings\" \"yarn dev:app:sj\"",
     "dev:smc": "concurrently \"yarn dev:listings\" \"yarn dev:app:smc\"",
@@ -40,7 +40,7 @@
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\"",
-    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js' --ignore-pattern 'node_modules' --ignore-pattern 'storybook-static/' --ignore-pattern '.next/' --ignore-pattern 'dist/'"
+    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.14",
