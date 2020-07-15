@@ -31,7 +31,7 @@ export default () => {
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     application.completedStep = 5
     ApiClient.ApplicationsService.create(
       {
@@ -39,29 +39,28 @@ export default () => {
           application,
           listing: {
             // TODO determine where does the listing data come from
-            id: "listingId"
+            id: listing.id,
           },
           user: {
             //  TODO How to handle undefined profile
-            id: "profileId"
-          }
-        }
+            id: profile.id,
+          },
+        },
       },
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
-    )
-    conductor.sync()
-    Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
+    ).then((result) => {
+      conductor.sync()
+      Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
+    })
   }
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -86,12 +85,12 @@ export default () => {
         </div>
         <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
-            <Markdown options={{ disableParsingRawHTML: true }}>
+            <Markdown options={{ disableParsingRawHTML: false }}>
               {t("application.review.terms.text", { applicationDueDate: "Oct 4, 2020" })}
             </Markdown>
-            <div className="field mt-4">
-              <input type="checkbox" id="agree" name="agree" ref={register} />
-              <label htmlFor="noPhone" className="text-primary font-semibold block">
+            <div className="field mt-4 flex flex-row flex-no-wrap">
+              <input className="inline-block" type="checkbox" id="agree" name="agree" ref={register} />
+              <label htmlFor="agree" className="text-primary font-semibold inline-block">
                 {t("application.review.terms.confirmCheckboxText")}
               </label>
             </div>
