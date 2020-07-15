@@ -16,21 +16,24 @@ import {
   register,
   scheduleTokenRefresh,
 } from "./api_requests"
-import ConfigContext from "../config/ConfigContext"
+import { ConfigContext } from "../config/ConfigContext"
 
 // External interface this context provides
 type ContextProps = {
   login: (email: string, password: string) => Promise<void>
   createUser: (user: CreateUserDto) => Promise<User>
   signOut: () => void
+  // True when an API request is processing
   loading: boolean
   profile?: User
   accessToken?: string
+  initialStateLoaded: boolean
 }
 
 // Internal Provider State
 type UserState = {
   loading: boolean
+  initialStateLoaded: boolean
   storageType: string
   accessToken?: string
   profile?: User
@@ -50,38 +53,41 @@ const stopLoading = createAction("STOP_LOADING")()
 const saveProfile = createAction("SAVE_PROFILE")<User>()
 const signOut = createAction("SIGN_OUT")()
 
-const reducer = createReducer({ loading: false, storageType: "session" } as UserState, {
-  SAVE_TOKEN: (state, { payload }) => {
-    const { refreshTimer: oldRefresh, ...rest } = state
-    const { accessToken, apiUrl, dispatch } = payload
+const reducer = createReducer(
+  { loading: false, initialStateLoaded: false, storageType: "session" } as UserState,
+  {
+    SAVE_TOKEN: (state, { payload }) => {
+      const { refreshTimer: oldRefresh, ...rest } = state
+      const { accessToken, apiUrl, dispatch } = payload
 
-    // If an existing refresh timer has been defined, remove it as the access token has changed
-    if (oldRefresh) {
-      clearTimeout(oldRefresh)
-    }
+      // If an existing refresh timer has been defined, remove it as the access token has changed
+      if (oldRefresh) {
+        clearTimeout(oldRefresh)
+      }
 
-    // Save off the token in local storage for persistence across reloads.
-    setToken(state.storageType, accessToken)
+      // Save off the token in local storage for persistence across reloads.
+      setToken(state.storageType, accessToken)
 
-    const refreshTimer = scheduleTokenRefresh(apiUrl, accessToken, (newAccessToken) =>
-      dispatch(saveToken({ apiUrl, accessToken: newAccessToken, dispatch }))
-    )
+      const refreshTimer = scheduleTokenRefresh(apiUrl, accessToken, (newAccessToken) =>
+        dispatch(saveToken({ apiUrl, accessToken: newAccessToken, dispatch }))
+      )
 
-    return {
-      ...rest,
-      ...(refreshTimer && { refreshTimer }),
-      accessToken: accessToken,
-    }
-  },
-  START_LOADING: (state) => ({ ...state, loading: true }),
-  END_LOADING: (state) => ({ ...state, loading: false }),
-  SAVE_PROFILE: (state, { payload: user }) => ({ ...state, profile: user }),
-  SIGN_OUT: ({ storageType }) => {
-    clearToken(storageType)
-    // Clear out all existing state other than the storage ty
-    return { loading: false, storageType }
-  },
-})
+      return {
+        ...rest,
+        ...(refreshTimer && { refreshTimer }),
+        accessToken: accessToken,
+      }
+    },
+    START_LOADING: (state) => ({ ...state, loading: true }),
+    END_LOADING: (state) => ({ ...state, loading: false }),
+    SAVE_PROFILE: (state, { payload: user }) => ({ ...state, profile: user }),
+    SIGN_OUT: ({ storageType }) => {
+      clearToken(storageType)
+      // Clear out all existing state other than the storage type
+      return { loading: false, storageType, initialStateLoaded: true }
+    },
+  }
+)
 
 export const UserContext = createContext<Partial<ContextProps>>({})
 
@@ -89,6 +95,7 @@ export const UserProvider: FunctionComponent = ({ children }) => {
   const { apiUrl, storageType } = useContext(ConfigContext)
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
+    initialStateLoaded: false,
     storageType,
   })
 
@@ -101,6 +108,8 @@ export const UserProvider: FunctionComponent = ({ children }) => {
         try {
           const profile = await getProfile(client)
           dispatch(saveProfile(profile))
+        } catch (err) {
+          dispatch(signOut())
         } finally {
           dispatch(stopLoading())
         }
@@ -120,6 +129,8 @@ export const UserProvider: FunctionComponent = ({ children }) => {
       } else {
         dispatch(signOut())
       }
+    } else {
+      dispatch(signOut())
     }
   }, [apiUrl, storageType])
 
@@ -127,7 +138,9 @@ export const UserProvider: FunctionComponent = ({ children }) => {
     loading: state.loading,
     profile: state.profile,
     accessToken: state.accessToken,
+    initialStateLoaded: state.initialStateLoaded,
     login: async (email, password) => {
+      dispatch(signOut())
       dispatch(startLoading())
       try {
         const accessToken = await login(apiUrl, email, password)

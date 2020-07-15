@@ -21,7 +21,11 @@ export default () => {
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
     conductor.sync()
-    Router.push("/applications/contact/alternate-contact-name").then(() => window.scrollTo(0, 0))
+    if (data.type == "noContact") {
+      Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
+    } else {
+      Router.push("/applications/contact/alternate-contact-name").then(() => window.scrollTo(0, 0))
+    }
   }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
   const type = watch("type")
@@ -55,7 +59,9 @@ export default () => {
             <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
             </label>
-            <p className="field-note mt-2 mb-4">{t("application.alternateContact.type.helperText")}</p>
+            <p className="field-note mt-2 mb-4">
+              {t("application.alternateContact.type.helperText")}
+            </p>
             {options.map((option, i) => {
               return (
                 <>

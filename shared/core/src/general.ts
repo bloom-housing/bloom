@@ -1,9 +1,10 @@
 export interface Address {
-  placeName: string
+  placeName?: string
   city: string
   county: string
   state: string
   street: string
+  street2?: string
   zipCode: string
   latitude: number
   longitude: number

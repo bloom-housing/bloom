@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
-import { User } from "../entity/User"
+import { User } from "../entity/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import { RevokedToken } from "../entity/RevokedToken"
+import { RevokedToken } from "../entity/revokedToken.entity"
 import { Repository } from "typeorm"
 
 @Injectable()

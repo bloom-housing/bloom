@@ -72,7 +72,6 @@ export default () => {
         </div>
 
         <form className="" onSubmit={handleSubmit(onSubmit)}>
-          
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
             <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
 
@@ -85,7 +84,9 @@ export default () => {
                 ref={register({ required: true })}
               />
 
-              <label htmlFor="incomeVouchersYes" className="font-semibold">{t("application.financial.vouchers.yes")}</label>
+              <label htmlFor="incomeVouchersYes" className="font-semibold">
+                {t("application.financial.vouchers.yes")}
+              </label>
             </div>
 
             <div className="field">
@@ -97,7 +98,9 @@ export default () => {
                 ref={register({ required: true })}
               />
 
-              <label htmlFor="incomeVouchersNo" className="font-semibold">{t("application.financial.vouchers.no")}</label>
+              <label htmlFor="incomeVouchersNo" className="font-semibold">
+                {t("application.financial.vouchers.no")}
+              </label>
             </div>
 
             <ErrorMessage error={errors.incomeVouchers}>
@@ -107,14 +110,14 @@ export default () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-            <Button
-              filled={true}
-              onClick={() => {
-                // Do nothing - handled by React Hook Forms
-              }}
-            >
-              Next
-            </Button>
+              <Button
+                filled={true}
+                onClick={() => {
+                  // Do nothing - handled by React Hook Forms
+                }}
+              >
+                Next
+              </Button>
             </div>
           </div>
         </form>

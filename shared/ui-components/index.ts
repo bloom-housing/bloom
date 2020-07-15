@@ -24,6 +24,7 @@ export * from "./src/footers/SiteFooter/SiteFooter"
 export * from "./src/forms/ErrorMessage"
 export * from "./src/forms/Field"
 export * from "./src/forms/ProgressNav"
+export * from "./src/forms/HouseholdMemberForm"
 
 /* Headers */
 export * from "./src/headers/Hero/Hero"
@@ -33,6 +34,8 @@ export * from "./src/headers/SiteHeader/SiteHeader"
 /* Helpers */
 export * from "./src/helpers/address"
 export * from "./src/helpers/capitalize"
+export * from "./src/helpers/formOptions"
+export * from "./src/helpers/mergeDeep"
 export * from "./src/helpers/localeRoute"
 export * from "./src/helpers/nextjs"
 export * from "./src/helpers/numberOrdinal"

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Listing } from "./Listing"
+import { Listing } from "./listing.entity"
 
 @Entity({ name: "units" })
 class Unit {
