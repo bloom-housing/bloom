@@ -9,7 +9,7 @@
         "no": "No",
         "yes": "Yes"
       },
-      "options" : {
+      "options": {
         "relationship": {
           "spouse": "Spouse",
           "registeredDomesticPartner": "Registered Domestic Partner",
@@ -360,7 +360,7 @@
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
     "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
-    "occupancyDescriptionNoSro": "Occupancy limits for this building differ from household size, and do not include children under 6.",
+    "occupancyDescriptionNoSro": "Minimum and maximum occupancy standards for this building differ according to unit type.",
     "occupancyDescriptionSomeSro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
     "people": "people",
     "person": "person",
