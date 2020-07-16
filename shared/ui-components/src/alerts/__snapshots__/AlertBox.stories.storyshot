@@ -1,0 +1,343 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Alerts|AlertBox Alert Box Alert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertBox
+    onClose={[Function]}
+    type="alert"
+  >
+    <div
+      className="alert-box alert"
+    >
+      <span
+        className="alert-box__icon"
+      >
+        <Icon
+          size="medium"
+          symbol="warning"
+        >
+          <span
+            className="ui-icon ui-medium"
+          >
+            <svg>
+              <use
+                xlinkHref="#i-warning"
+              />
+            </svg>
+          </span>
+        </Icon>
+      </span>
+      <span
+        className="alert-box__body"
+      >
+        <p>
+          Some warning
+        </p>
+      </span>
+      <button
+        className="alert-box__close "
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </div>
+  </AlertBox>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertBox Alert Box Alert Invert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertBox
+    inverted={true}
+    onClose={[Function]}
+    type="alert"
+  >
+    <div
+      className="alert-box alert invert"
+    >
+      <span
+        className="alert-box__icon"
+      >
+        <Icon
+          size="medium"
+          symbol="warning"
+          white={true}
+        >
+          <span
+            className="ui-icon ui-medium ui-white"
+          >
+            <svg>
+              <use
+                xlinkHref="#i-warning"
+              />
+            </svg>
+          </span>
+        </Icon>
+      </span>
+      <span
+        className="alert-box__body"
+      >
+        <p>
+          Some warning
+        </p>
+      </span>
+      <button
+        className="alert-box__close text-white"
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </div>
+  </AlertBox>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertBox Alert Box Notice 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertBox
+    onClose={[Function]}
+    type="notice"
+  >
+    <div
+      className="alert-box primary"
+    >
+      <span
+        className="alert-box__icon"
+      >
+        <Icon
+          size="medium"
+          symbol="info"
+        >
+          <span
+            className="ui-icon ui-medium"
+          >
+            <svg>
+              <use
+                xlinkHref="#i-info"
+              />
+            </svg>
+          </span>
+        </Icon>
+      </span>
+      <span
+        className="alert-box__body"
+      >
+        <p>
+          Some warning
+        </p>
+      </span>
+      <button
+        className="alert-box__close "
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </div>
+  </AlertBox>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertBox Alert Box Notice Invert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertBox
+    inverted={true}
+    onClose={[Function]}
+    type="notice"
+  >
+    <div
+      className="alert-box primary invert"
+    >
+      <span
+        className="alert-box__icon"
+      >
+        <Icon
+          size="medium"
+          symbol="info"
+          white={true}
+        >
+          <span
+            className="ui-icon ui-medium ui-white"
+          >
+            <svg>
+              <use
+                xlinkHref="#i-info"
+              />
+            </svg>
+          </span>
+        </Icon>
+      </span>
+      <span
+        className="alert-box__body"
+      >
+        <p>
+          Some warning
+        </p>
+      </span>
+      <button
+        className="alert-box__close text-white"
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </div>
+  </AlertBox>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertBox Alert Box Success 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertBox
+    onClose={[Function]}
+    type="success"
+  >
+    <div
+      className="alert-box success"
+    >
+      <span
+        className="alert-box__icon"
+      >
+        <Icon
+          size="medium"
+          symbol="check"
+        >
+          <span
+            className="ui-icon ui-medium"
+          >
+            <svg>
+              <use
+                xlinkHref="#i-check"
+              />
+            </svg>
+          </span>
+        </Icon>
+      </span>
+      <span
+        className="alert-box__body"
+      >
+        <p>
+          Some warning
+        </p>
+      </span>
+      <button
+        className="alert-box__close "
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </div>
+  </AlertBox>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Alerts|AlertBox Alert Box Success Invert 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <AlertBox
+    inverted={true}
+    onClose={[Function]}
+    type="success"
+  >
+    <div
+      className="alert-box success invert"
+    >
+      <span
+        className="alert-box__icon"
+      >
+        <Icon
+          size="medium"
+          symbol="check"
+          white={true}
+        >
+          <span
+            className="ui-icon ui-medium ui-white"
+          >
+            <svg>
+              <use
+                xlinkHref="#i-check"
+              />
+            </svg>
+          </span>
+        </Icon>
+      </span>
+      <span
+        className="alert-box__body"
+      >
+        <p>
+          Some warning
+        </p>
+      </span>
+      <button
+        className="alert-box__close text-white"
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </div>
+  </AlertBox>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;

@@ -14,6 +14,8 @@ export interface FieldProps {
   register: any // comes from React Hook Form
   validation?: Record<string, any>
   disabled?: boolean
+  prepend?: string
+  inputProps?: object
 }
 
 const Field = (props: FieldProps) => {
@@ -30,6 +32,7 @@ const Field = (props: FieldProps) => {
     <div className={classes.join(" ")}>
       {props.label && <label htmlFor={props.name}>{props.label}</label>}
       <div className={controlClasses.join(" ")}>
+        {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
           className="input"
           type={props.type || "text"}
@@ -39,6 +42,7 @@ const Field = (props: FieldProps) => {
           placeholder={props.placeholder}
           ref={props.register(props.validation)}
           disabled={props.disabled}
+          {...props.inputProps}
         />
       </div>
       <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>

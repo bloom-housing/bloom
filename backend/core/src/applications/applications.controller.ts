@@ -6,9 +6,10 @@ import {
   Get,
   Param,
   Post,
-  Put, Query,
+  Put,
+  Query,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from "@nestjs/common"
 import { ApplicationDto, ApplicationsListQueryParams } from "./applications.dto"
 import { ApplicationsService } from "./applications.service"
