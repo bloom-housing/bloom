@@ -57,7 +57,6 @@ describe("Applications", () => {
 
     res = await supertest(app.getHttpServer()).get("/").expect(200)
     listingId = res.body.listings[0].id
-
   })
 
   it(`/GET `, async () => {
@@ -90,6 +89,40 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+  })
+
+  it(`/POST unauthenticated`, async () => {
+    const body = {
+      listing: {
+        id: listingId,
+      },
+      application: {
+        foo: "bar",
+      },
+    }
+    const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(201)
+    expect(res.body).toEqual(expect.objectContaining(body))
+    expect(res.body).toHaveProperty("createdAt")
+    expect(res.body).toHaveProperty("updatedAt")
+    expect(res.body).toHaveProperty("id")
+  })
+
+  it(`/POST unauthenticated post disallowed to specify user`, async () => {
+    const body = {
+      listing: {
+        id: listingId,
+      },
+      application: {
+        foo: "bar",
+      },
+      user: {
+        id: user1Id
+      }
+    }
+    const res = await supertest(app.getHttpServer())
+      .post(`/applications`)
+      .send(body)
+      .expect(401)
   })
 
   it(`/POST user 1 unauthorized to create application for user 2`, async () => {
@@ -158,7 +191,7 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .delete(`/applications/${createRes.body.id}`)
       .set("Authorization", `Bearer ${user2AccessToken}`)
-      .expect(401)
+      .expect(404)
   })
 
   it(`/PUT `, async () => {
