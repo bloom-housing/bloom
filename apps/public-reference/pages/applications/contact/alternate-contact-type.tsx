@@ -55,7 +55,7 @@ export default () => {
           <p className="field-note mt-4">{t("application.alternateContact.type.description")}</p>
         </div>
         <form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group border-b">
+          <div className="form-card__group">
             <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
             </label>
@@ -107,7 +107,12 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true} onClick={() => {}}>
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
                 {t("t.next")}
               </Button>
             </div>

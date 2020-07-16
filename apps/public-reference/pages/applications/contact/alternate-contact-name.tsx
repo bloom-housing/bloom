@@ -50,7 +50,7 @@ export default () => {
           </h2>
         </div>
         <form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group border-b">
+          <div className="form-card__group">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.alternateContact.name.alternateContactFormLabel")}
             </label>
@@ -98,7 +98,12 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true} onClick={() => {}}>
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
                 {t("t.next")}
               </Button>
             </div>

@@ -81,7 +81,7 @@ export default () => {
               register={register}
             />
           </div>
-          <div className="form-card__group border-b">
+          <div className="form-card__group">
             <label className="field-label--caps">
               {t("application.alternateContact.contact.contactMailingAddressLabel")}
             </label>
@@ -126,7 +126,12 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true} onClick={() => {}}>
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
                 {t("t.next")}
               </Button>
             </div>
