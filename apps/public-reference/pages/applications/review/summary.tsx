@@ -172,11 +172,38 @@ export default () => {
             </>
           )}
 
-        <h3 className="px-8 py-4 bg-gray-200">Household Members</h3>
+        <h3 className="px-8 py-4 bg-gray-200">
+          Household Members
+          <EditLink href="/applications/household/add-members" />
+        </h3>
 
-        <div className="form-card__group mx-0">
-          <p>...</p>
-        </div>
+        {application.householdSize > 0 && (
+          <div className="form-card__group mx-0">
+            {application.householdMembers.map((member) => (
+              <>
+                <p className="info-item__value mb-2">
+                  {member.firstName} {member.lastName}
+                </p>
+                <div class="pl-4">
+                  <ReviewItem label="Date of Birth">
+                    {member.birthMonth}/{member.birthDay}/{member.birthYear}
+                  </ReviewItem>
+                  {member.sameAddress == "no" && (
+                    <ReviewItem label="Address">
+                      <MultiLineAddress address={reformatAddress(member.address)} />
+                    </ReviewItem>
+                  )}
+                  {member.sameAddress != "no" && (
+                    <ReviewItem label="Same Address as Applicant"></ReviewItem>
+                  )}
+                </div>
+              </>
+            ))}
+          </div>
+        )}
+        {application.householdSize == 0 && (
+          <div className="form-card__group mx-0">No additional household members</div>
+        )}
 
         <h3 className="px-8 py-4 bg-gray-200">
           Household Details

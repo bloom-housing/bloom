@@ -22,8 +22,7 @@ export default () => {
   const onSubmit = (data) => {
     application.householdSize = application.householdMembers.length + 1
     conductor.sync()
-    console.log(data)
-    Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/household/preferred-units")
   }
 
   const onAddMember = () => {
@@ -88,6 +87,20 @@ export default () => {
               {t("application.household.addMembers.done")}
             </Button>
           </div>
+
+          {conductor.canJumpForwardToReview() && (
+            <div className="form-card__pager-row">
+              <Button
+                className="button is-unstyled mb-4"
+                onClick={() => {
+                  conductor.returnToReview = true
+                  onSubmit(null)
+                }}
+              >
+                {t("application.form.general.saveAndReturn")}
+              </Button>
+            </div>
+          )}
         </div>
       </FormCard>
     </FormsLayout>
