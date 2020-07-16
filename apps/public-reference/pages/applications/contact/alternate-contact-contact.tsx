@@ -24,7 +24,7 @@ export default () => {
     application.alternateContact.emailAddress = data.emailAddress
     application.alternateContact.mailingAddress.street = data.mailingAddress.street
     application.alternateContact.mailingAddress.state = data.mailingAddress.state
-    application.alternateContact.mailingAddress.zipcode = data.mailingAddress.zipcode
+    application.alternateContact.mailingAddress.zipCode = data.mailingAddress.zipCode
     application.alternateContact.mailingAddress.city = data.mailingAddress.city
     conductor.sync()
     conductor.routeToNextOrReturnUrl("/applications/household/live-alone")
@@ -116,11 +116,11 @@ export default () => {
               />
             </div>
             <Field
-              id="mailingAddress.zipcode"
-              name="mailingAddress.zipcode"
+              id="mailingAddress.zipCode"
+              name="mailingAddress.zipCode"
               label={t("application.alternateContact.contact.zipcodeFormLabel")}
               placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
-              defaultValue={application.alternateContact.mailingAddress.zipcode}
+              defaultValue={application.alternateContact.mailingAddress.zipCode}
               register={register}
             />
           </div>
