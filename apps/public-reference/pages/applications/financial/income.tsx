@@ -80,8 +80,7 @@ export default () => {
 
       application.completedStep = 3
       conductor.sync()
-
-      Router.push("/applications/preferences/intro").then(() => window.scrollTo(0, 0))
+      conductor.routeToNextOrReturnUrl("/applications/preferences/intro")
     }
   }
 
@@ -202,9 +201,22 @@ export default () => {
                   //
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

@@ -116,7 +116,7 @@ export default () => {
                   // Do nothing - handled by React Hook Forms
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
           </div>

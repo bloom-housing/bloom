@@ -221,6 +221,19 @@ export default () => {
           </ReviewItem>
         </div>
 
+        <h3 className="px-8 py-4 bg-gray-200">
+          Income
+          <EditLink href="/applications/financial/vouchers" />
+        </h3>
+
+        <div className="form-card__group mx-0">
+          <ReviewItem label={"Housing Voucher or Rental Subsidy"}>
+            {application.incomeVouchers ? t("t.yes") : t("t.no")}
+          </ReviewItem>
+
+          <ReviewItem label={"Income"}>{application.income}</ReviewItem>
+        </div>
+
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <form onSubmit={handleSubmit(onSubmit)}>
