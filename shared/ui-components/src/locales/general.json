@@ -9,7 +9,7 @@
         "no": "No",
         "yes": "Yes"
       },
-      "options" : {
+      "options": {
         "relationship": {
           "spouse": "Spouse",
           "registeredDomesticPartner": "Registered Domestic Partner",
@@ -360,7 +360,7 @@
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
     "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
-    "occupancyDescriptionNoSro": "Occupancy limits for this building differ from household size, and do not include children under 6.",
+    "occupancyDescriptionNoSro": "Occupancy limits for this building are based on unit type.",
     "occupancyDescriptionSomeSro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
     "people": "people",
     "person": "person",
@@ -507,8 +507,8 @@
   },
   "whatToExpect": {
     "label": "What to Expect",
-    "applicantsWillBeContacted": "Applicants will be contacted by the property agent in waitlist order until vacancies are filled.",
-    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
-    "bePreparedIfChosen": "Should your application be chosen from the waitlist, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted."
+    "applicantsWillBeContacted": "Applicants will be contacted by the property agent in rank order until vacancies are filled.",
+    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
+    "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
   }
 }
