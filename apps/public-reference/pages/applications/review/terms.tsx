@@ -10,7 +10,7 @@ import {
   ProgressNav,
   t,
   ConfigContext,
-  UserContext
+  UserContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -38,13 +38,13 @@ export default () => {
         body: {
           application,
           listing: {
-            // TODO determine where does the listing data come from
             id: listing.id,
           },
-          user: {
-            //  TODO How to handle undefined profile
-            id: profile.id,
-          },
+          ...(profile && {
+            user: {
+              id: profile.id,
+            },
+          }),
         },
       },
       {
@@ -89,7 +89,13 @@ export default () => {
               {t("application.review.terms.text", { applicationDueDate: "Oct 4, 2020" })}
             </Markdown>
             <div className="field mt-4 flex flex-row flex-no-wrap">
-              <input className="inline-block" type="checkbox" id="agree" name="agree" ref={register} />
+              <input
+                className="inline-block"
+                type="checkbox"
+                id="agree"
+                name="agree"
+                ref={register}
+              />
               <label htmlFor="agree" className="text-primary font-semibold inline-block">
                 {t("application.review.terms.confirmCheckboxText")}
               </label>
