@@ -108,12 +108,5 @@
         "region": "San Mateo County and Bay Area"
       }
     }
-  },
-  "listings": {
-    "occupancyDescriptionNoSro": "Minimum and maximum occupancy standards for this building differ according to unit type.",
-    "waitlist": {
-      "unitsAvailable": "Available Units",
-      "submitAnApplication": "Once lottery winners fill all available units, additional lottery winners will be placed on a waitlist."
-    }
   }
 }
