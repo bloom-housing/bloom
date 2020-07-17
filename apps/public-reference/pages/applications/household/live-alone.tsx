@@ -55,8 +55,8 @@ export default () => {
           </h2>
         </div>
 
-        <form className="my-4" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager-row">
+        <form className="mb-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-4">
             <HouseholdSizeField
               listing={listing}
               householdSize={application.householdSize}
