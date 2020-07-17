@@ -3,13 +3,20 @@
     "form": {
       "errors": {
         "pleaseEnterZipCode": "Please enter your Zipcode",
-        "selectOption": "Please select one of the options above."
+        "selectOption": "Please select one of the options above.",
+        "selectAtLeastOne": "Please select at least one option."
       },
       "radio": {
         "no": "No",
         "yes": "Yes"
       },
       "options" : {
+        "contact": {
+          "email": "Email",
+          "phone": "Phone",
+          "letter": "Letter",
+          "text": "Text"
+        },
         "relationship": {
           "spouse": "Spouse",
           "registeredDomesticPartner": "Registered Domestic Partner",
@@ -117,6 +124,7 @@
       "apt": "Apt or Unit #",
       "cityName": "City Name",
       "cityError": "Please enter a city",
+      "contactPreference": "How do you prefer to be contacted?",
       "state": "State",
       "stateError": "Please enter a state",
       "zip": "Zip",

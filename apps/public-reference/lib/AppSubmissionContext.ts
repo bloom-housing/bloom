@@ -41,6 +41,7 @@ export const blankApplication = () => {
     additionalPhone: false,
     additionalPhoneNumber: "",
     additionalPhoneNumberType: "",
+    contactPreferences: [],
     housingStatus: "",
     sendMailToMailingAddress: false,
     mailingAddress: {
