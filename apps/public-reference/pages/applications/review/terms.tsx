@@ -22,7 +22,7 @@ export default () => {
   const onSubmit = (data) => {
     console.log(data)
 
-    application.completedStep = 5
+    conductor.completeStep(5)
     conductor.sync()
 
     Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))

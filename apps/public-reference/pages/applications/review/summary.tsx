@@ -231,7 +231,9 @@ export default () => {
             {application.incomeVouchers ? t("t.yes") : t("t.no")}
           </ReviewItem>
 
-          <ReviewItem label={"Income"}>{application.income}</ReviewItem>
+          <ReviewItem label={"Income"}>
+            ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+          </ReviewItem>
         </div>
 
         <div className="form-card__pager">

@@ -20,6 +20,7 @@ export default () => {
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
+    conductor.completeStep(1)
     conductor.sync()
     if (data.type == "noContact") {
       conductor.routeTo("/applications/household/live-alone")

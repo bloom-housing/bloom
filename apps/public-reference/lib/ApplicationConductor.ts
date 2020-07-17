@@ -28,8 +28,8 @@ export default class ApplicationConductor {
     return 5
   }
 
-  advanceToNextStep() {
-    this.application.completedStep += 1
+  completeStep(step) {
+    this.application.completedStep = Math.max(step, this.application.completedStep)
   }
 
   canJumpForwardToReview() {

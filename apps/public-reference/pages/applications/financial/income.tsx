@@ -78,7 +78,7 @@ export default () => {
       const toSave = { income, incomePeriod }
       new FormStep(conductor).save(toSave)
 
-      application.completedStep = 3
+      conductor.completeStep(3)
       conductor.sync()
       conductor.routeToNextOrReturnUrl("/applications/preferences/intro")
     }

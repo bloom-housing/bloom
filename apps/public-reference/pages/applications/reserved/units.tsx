@@ -22,7 +22,7 @@ export default () => {
   const onSubmit = (data) => {
     console.log(data)
 
-    application.completedStep = 2
+    conductor.completeStep(2)
     conductor.sync()
 
     Router.push("/applications/financial/vouchers").then(() => window.scrollTo(0, 0))
