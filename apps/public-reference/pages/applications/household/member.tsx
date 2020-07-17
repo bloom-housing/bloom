@@ -175,6 +175,7 @@ export default () => {
                       monthRange: (value) => parseInt(value) > 0 && parseInt(value) <= 12,
                     },
                   }}
+                  inputProps={{ maxLength: 2 }}
                   register={register}
                 />
                 <Field
@@ -188,6 +189,7 @@ export default () => {
                       dayRange: (value) => parseInt(value) > 0 && parseInt(value) <= 31,
                     },
                   }}
+                  inputProps={{ maxLength: 2 }}
                   register={register}
                 />
                 <Field
@@ -202,6 +204,7 @@ export default () => {
                         parseInt(value) > 1900 && parseInt(value) <= new Date().getFullYear() - 18,
                     },
                   }}
+                  inputProps={{ maxLength: 4 }}
                   register={register}
                 />
               </div>
