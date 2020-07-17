@@ -17,7 +17,8 @@
   @apply pb-2;
   @apply pr-1;
 
-  a, a:hover {
+  a,
+  a:hover {
     @apply underline;
     color: inherit;
   }
