@@ -372,6 +372,11 @@
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",
     "reservedFor": "Reserved for %{type}",
+    "reservedTypePlural": {
+      "family": "families",
+      "senior": "seniors",
+      "veteran": "veterans"
+    },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
     "reservedUnitsForWhoAre": "Reserved for %{communityType} who are %{reservedType}",
@@ -405,7 +410,8 @@
       "oneBdrm": "1 BR",
       "twoBdrm": "2 BR",
       "threeBdrm": "3 BR",
-      "studio": "Studio"
+      "studio": "Studio",
+      "SRO": "Single Room Occupancy"
     },
     "units": "units",
     "unitsAreFor": "These units are for %{type}.",
