@@ -5,7 +5,7 @@
   "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spafitness center, clubhouse, business center, heated pool & spa, outdoor BBQ’s, courtyard w/ fireplace",
-  "applicationDueDate": null,
+  "applicationDueDate": "2020-08-10T17:00:00.000-07:00",
   "applicationOrganization": "One Hundred Grand",
   "applicationAddress": {
     "city": "Foster City",
@@ -20,7 +20,7 @@
   "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "city": "Foster City",
-    "county": "San Mateo Preview",
+    "county": "San Mateo",
     "zipCode": "94404",
     "state": "CA",
     "street": "100 Grand Lane",
@@ -43,7 +43,7 @@
   "waitlistCurrentSize": 452,
   "petPolicy": "The following breeds are restricted from this community: Chows, Doberman Pinschers, Pit Bull/Staffordshire Terriers, Rottweilers, Presa Canarios, Akitas, Alaskan Malamutes, and Wolf-hybrids. Prohibited pets include, but are not limited to, monkeys, snakes, ferrets, iguanas, potbelly pigs and rabbits. There is a maximum of two pets per apartment home. The maximum weight limit for pets is 50 lbs.",
   "prioritiesDescriptor": null,
-  "requiredDocuments": "Due at Interview: Income: If you work and receive paystubs: ▪ Copies of 3 months’ worth of consecutive paystubs, beginning with the most recent paystub.  ▪ If hired recently, provide Employment Offer Letter. If you receive severance pay, Social Security, unemployment benefits, retirement income, disability, public assistance, or the like, submit: ▪ Most recent benefits letter(s) stating your monthly award If you are Self-Employed, you must: ▪ Complete an Self-Employed Declaration form ▪ Submit Year-to-Date Profit and Loss statement ▪ Submit the past year’s federal income tax returns  If you are Unemployed and have ZERO income, you must: ▪ Complete an Unemployment Declaration  ▪ Submit the previous year’s federal income tax returns Assets: ▪ 6-consecutive and most recent official bank statements for Checking accounts and include ALL pages. ▪ 1 most recent statement for all other assets (IE: Savings, 401K, Money Market, etc.) and include ALL pages. ▪ A written explanation and supporting documentation for any deposit over $100 other than that of your documented employment. Building Documents: ▪ BMR Questionnaire ▪ Release & Consent Form ▪ Resident Qualification Acknowledgment ",
+  "requiredDocuments": "Due at Interview: Income: If you work and receive paystubs: ▪ Copies of 3 months’ worth of consecutive paystubs, beginning with the most recent paystub.\n\n▪ If hired recently, provide Employment Offer Letter. If you receive severance pay, Social Security, unemployment benefits, retirement income, disability, public assistance, or the like, submit: ▪ Most recent benefits letter(s) stating your monthly award If you are Self-Employed, you must: ▪ Complete an Self-Employed Declaration form ▪ Submit Year-to-Date Profit and Loss statement ▪ Submit the past year’s federal income tax returns  If you are Unemployed and have ZERO income, you must: ▪ Complete an Unemployment Declaration  ▪ Submit the previous year’s federal income tax returns Assets: ▪ 6-consecutive and most recent official bank statements for Checking accounts and include ALL pages. ▪ 1 most recent statement for all other assets (IE: Savings, 401K, Money Market, etc.) and include ALL pages. ▪ A written explanation and supporting documentation for any deposit over $100 other than that of your documented employment. Building Documents: ▪ BMR Questionnaire ▪ Release & Consent Form ▪ Resident Qualification Acknowledgment ",
   "reservedCommunityMaximumAge": 0,
   "reservedCommunityMinimumAge": 0,
   "reservedDescriptor": null,

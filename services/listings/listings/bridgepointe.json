@@ -20,7 +20,7 @@
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "San Mateo",
-    "county": "San Mateo Preview",
+    "county": "San Mateo",
     "state": "CA",
     "street": "1927 Bridgepointe Circle",
     "zipCode": "94404",
@@ -160,7 +160,14 @@
       "ordinal": "1st",
       "title": "Live or Work in San Mateo",
       "subtitle": null,
-      "description": "1. Live or work in San Mateo 2. Others",
+      "description": "Applicants who currently live or work in San Mateo.",
+      "links": null
+    },
+    {
+      "ordinal": "2nd",
+      "title": "General Pool",
+      "subtitle": null,
+      "description": "All other applicants.",
       "links": null
     }
   ],
