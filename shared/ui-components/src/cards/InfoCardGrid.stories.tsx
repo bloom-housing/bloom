@@ -29,3 +29,38 @@ export const TwoColumns = () => (
     </InfoCard>
   </InfoCardGrid>
 )
+
+export const TwoColumnsMarkdown = () => (
+  <InfoCardGrid
+    title="Rentals"
+    subtitle="Other rental housing funded by the City, as well as lists developed each month by community nonprofit agencies."
+  >
+    <InfoCard
+      title="My Card"
+      externalHref="http://google.com"
+      className="is-normal-primary-lighter"
+      markdown={true}
+    >
+      {`
+Paragraph content
+
+----
+
+More content
+      `}
+    </InfoCard>
+    <InfoCard
+      title="My Card"
+      externalHref="http://google.com"
+      className="is-normal-primary-lighter"
+      markdown={true}
+    >
+      {`
+### Header 3
+
+* A list
+* of items
+      `}
+    </InfoCard>
+  </InfoCardGrid>
+)
