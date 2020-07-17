@@ -22,7 +22,6 @@ import * as ApiClient from "@bloom-housing/backend-core/client"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { apiUrl } = useContext(ConfigContext)
   const { accessToken, profile } = useContext(UserContext)
 
   const { application, listing } = context
@@ -86,7 +85,7 @@ export default () => {
         <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>
-              {t("application.review.terms.text", { applicationDueDate: "Oct 4, 2020" })}
+              {t("application.review.terms.text", { applicationDueDate: listing.applicationDueDate })}
             </Markdown>
             <div className="field mt-4 flex flex-row flex-no-wrap">
               <input
