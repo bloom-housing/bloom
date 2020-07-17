@@ -178,6 +178,7 @@
       }
     },
     "household": {
+      "assistanceUrl": "https://exygy.com/",
       "dontQualifyHeader": "Unfortunately it appears you do not qualify for this listing.",
       "dontQualifyInfo": "Please make changes if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified. If the information you entered is accurate, we encourage you to check back in the future as more properties become available.",
       "addMembers": {

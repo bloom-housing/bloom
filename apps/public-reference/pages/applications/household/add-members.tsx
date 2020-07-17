@@ -26,7 +26,7 @@ export default () => {
   application.householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
-  const { errors, handleSubmit, register } = useForm()
+  const { errors, handleSubmit, register, clearError } = useForm()
   const onSubmit = (data) => {
     conductor.sync()
     Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
@@ -76,13 +76,17 @@ export default () => {
 
         <div className="form-card__pager-row">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <HouseholdSizeField
-              listing={listing}
-              householdSize={application.householdSize}
-              validate={true}
-              register={register}
-              error={errors.householdSize}
-            />
+            <div className={errors.householdSize ? "mb-8" : ""}>
+              <HouseholdSizeField
+                listing={listing}
+                householdSize={application.householdSize}
+                validate={true}
+                register={register}
+                error={errors.householdSize}
+                clearError={clearError}
+                assistanceUrl={t("application.household.assistanceUrl")}
+              />
+            </div>
             <HouseholdMemberForm
               member={applicant}
               type={t("application.household.primaryApplicant")}

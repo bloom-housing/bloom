@@ -2,6 +2,7 @@ import React from "react"
 import { Listing } from "@bloom-housing/core"
 import { t } from "../helpers/translator"
 import ErrorMessage from "./ErrorMessage"
+import { AlertBox, AlertNotice } from "../alerts"
 
 export interface HouseholdSizeFieldProps {
   listing: Listing
@@ -9,10 +10,12 @@ export interface HouseholdSizeFieldProps {
   validate: boolean
   register: any
   error: any
+  clearError: () => void
+  assistanceUrl: string
 }
 
 const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
-  const { listing, householdSize, validate, register, error } = props
+  const { listing, householdSize, validate, register, clearError, error, assistanceUrl } = props
 
   return (
     <>
@@ -38,9 +41,17 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
             />
           </span>
           <ErrorMessage error={error}>
-            <p className="text-sm font-semibold">{t("application.household.dontQualifyHeader")}</p>
-            <p className="text-sm">{error?.message}</p>
-            <p className="text-sm mb-8">{t("application.household.dontQualifyInfo")}</p>
+            <AlertBox type="alert" inverted onClose={() => clearError()}>
+              {t("application.household.dontQualifyHeader")}
+            </AlertBox>
+            <AlertNotice title={error?.message} type="alert" inverted>
+              <p className="mb-2">{t("application.household.dontQualifyInfo")}</p>
+              <p>
+                <a href={assistanceUrl}>
+                  {t("application.financial.income.validationError.assistance")}
+                </a>
+              </p>
+            </AlertNotice>
           </ErrorMessage>
         </>
       )}
