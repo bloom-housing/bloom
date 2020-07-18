@@ -26,18 +26,7 @@
   "region": {
     "name": "Alameda County"
   },
-  "listings" : {
-    "depositOrMonthsRent": "",
-    "occupancyDescriptionNoSro": "Minimum and maximum occupancy standards for this building differ according to unit type.",
-    "waitlist": {
-      "finalSize": "Open Waitlist Slots",
-      "currentSize": "Available Units",
-      "submitAnApplication": "Once lottery winners fill all available units, additional lottery winners will be placed on the waitlist for 45 units"
-    }
-  },
-  "whatToExpect": {
-    "applicantsWillBeContacted": "Applicants will be contacted in lottery rank order until vacancies are filled.",
-    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
-    "bePreparedIfChosen": "Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted."
+  "listings": {
+    "depositOrMonthsRent": ""
   }
 }
