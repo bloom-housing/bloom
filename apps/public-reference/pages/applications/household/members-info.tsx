@@ -13,14 +13,13 @@ import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 2
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
     Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
 

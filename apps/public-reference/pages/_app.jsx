@@ -5,7 +5,7 @@ import "@bloom-housing/ui-components/styles/index.scss"
 import { addTranslation, UserProvider, ConfigProvider } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
-import { loadApplicationFromAutosave } from "../lib/ApplicationConductor"
+import { loadApplicationFromAutosave, loadSavedListing } from "../lib/ApplicationConductor"
 
 class MyApp extends App {
   constructor(props) {
@@ -13,12 +13,16 @@ class MyApp extends App {
 
     // Load autosaved listing application, if any
     const autosavedApplication = loadApplicationFromAutosave()
-    this.state = { application: autosavedApplication || blankApplication() }
+    const savedListing = loadSavedListing()
+    this.state = { application: autosavedApplication || blankApplication(), listing: savedListing }
   }
 
   // This gets passed along through the context
   syncApplication = (data) => {
     this.setState({ application: data })
+  }
+  syncListing = (data) => {
+    this.setState({ listing: data })
   }
 
   static async getInitialProps({ Component, ctx }) {
@@ -91,7 +95,9 @@ class MyApp extends App {
       <AppSubmissionContext.Provider
         value={{
           application: this.state.application,
+          listing: this.state.listing,
           syncApplication: this.syncApplication,
+          syncListing: this.syncListing,
         }}
       >
         <ConfigProvider apiUrl={process.env.listingServiceUrl}>

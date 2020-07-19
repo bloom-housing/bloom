@@ -69,8 +69,8 @@ export default () => {
   const router = useRouter()
   let memberId, member, saveText, cancelText
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 2
 
   if (router.query.memberId) {
@@ -440,7 +440,7 @@ export default () => {
                   </select>
                 </div>
                 <ErrorMessage error={errors.relationship}>
-                  {t("application.contact.stateError")}
+                  {t("application.form.errors.selectOption")}
                 </ErrorMessage>
               </div>
             </div>
@@ -448,9 +448,9 @@ export default () => {
             <div className="form-card__pager">
               <div className="form-card__pager-row primary">
                 <Button
-                  big={false}
+                  big={true}
                   filled={true}
-                  className=""
+                  className="w-full md:w-3/4"
                   onClick={() => {
                     //
                   }}
