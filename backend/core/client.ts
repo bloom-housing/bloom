@@ -1,7 +1,7 @@
 /** Generate by swagger-axios-codegen */
 // tslint:disable
 /* eslint-disable */
-import axiosStatic, { AxiosInstance } from "axios";
+import axiosStatic, { AxiosInstance } from 'axios';
 
 export interface IRequestOptions {
   headers?: any;
@@ -24,9 +24,6 @@ export interface ServiceOptions {
 
 // Add default options
 export const serviceOptions: ServiceOptions = {};
-serviceOptions.axios = axiosStatic.create({
-  baseURL: process.env.listingServiceUrl,
-});
 
 // Instance selector
 export function axios(configs: IRequestConfig, resolve: (p: any) => void, reject: (p: any) => void): Promise<any> {
@@ -88,8 +85,6 @@ export class ApplicationsService {
     params: {
       /**  */
       listingId?: string;
-      /**  */
-      userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationDto[]> {
@@ -97,7 +92,7 @@ export class ApplicationsService {
       let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { listingId: params['listingId'], userId: params['userId'] };
+      configs.params = { listingId: params['listingId'] };
       let data = null;
 
       configs.data = data;
@@ -386,12 +381,6 @@ export interface Application {
 
   /**  */
   application: object;
-
-  /**  */
-  userId: string;
-
-  /**  */
-  listingId: string;
 }
 
 export interface Listing {
@@ -472,6 +461,12 @@ export interface Listing {
 
   /**  */
   disableUnitsAccordion: boolean;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
 
   /**  */
   imageUrl: string;
@@ -574,6 +569,12 @@ export interface ApplicationDto {
 
   /**  */
   listing: IdDto;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 }
 
 export interface ApplicationCreateDto {

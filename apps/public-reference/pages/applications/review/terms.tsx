@@ -9,8 +9,8 @@ import {
   FormCard,
   ProgressNav,
   t,
-  ConfigContext,
   UserContext,
+  ApiClientContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -18,12 +18,11 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext } from "react"
 import Markdown from "markdown-to-jsx"
-import * as ApiClient from "@bloom-housing/backend-core/client"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { apiUrl } = useContext(ConfigContext)
-  const { accessToken, profile } = useContext(UserContext)
+  const { applicationsService } = useContext(ApiClientContext)
+  const { profile } = useContext(UserContext)
 
   const { application, listing } = context
   const conductor = new ApplicationConductor(application, listing, context)
@@ -33,8 +32,8 @@ export default () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     application.completedStep = 5
-    ApiClient.ApplicationsService.create(
-      {
+    applicationsService
+      .create({
         body: {
           application,
           listing: {
@@ -46,16 +45,11 @@ export default () => {
             },
           }),
         },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    ).then((result) => {
-      conductor.sync()
-      Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-    })
+      })
+      .then((result) => {
+        conductor.sync()
+        Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
+      })
   }
 
   return (
