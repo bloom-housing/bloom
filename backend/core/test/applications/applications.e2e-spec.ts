@@ -116,13 +116,10 @@ describe("Applications", () => {
         foo: "bar",
       },
       user: {
-        id: user1Id
-      }
+        id: user1Id,
+      },
     }
-    const res = await supertest(app.getHttpServer())
-      .post(`/applications`)
-      .send(body)
-      .expect(401)
+    const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(401)
   })
 
   it(`/POST user 1 unauthorized to create application for user 2`, async () => {
