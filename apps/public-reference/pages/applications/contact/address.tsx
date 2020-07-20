@@ -29,7 +29,7 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { control, register, handleSubmit, setValue, triggerValidation, watch, errors } = useForm<
+  const { control, register, handleSubmit, setValue, trigger, watch, errors } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -147,8 +147,8 @@ export default () => {
                   if (e.target.checked) {
                     setValue("phoneNumber", "")
                     setTimeout(() => {
-                      triggerValidation("phoneNumber")
-                      triggerValidation("phoneNumberType")
+                      trigger("phoneNumber")
+                      trigger("phoneNumberType")
                     }, 1)
                   }
                 }}
