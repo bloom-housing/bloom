@@ -80,6 +80,7 @@ export default () => {
         <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>
+              {/* TODO */}
               {t("application.review.terms.text", { applicationDueDate: "Oct 4, 2020" })}
             </Markdown>
             <div className="field mt-4 flex flex-row flex-no-wrap">
