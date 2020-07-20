@@ -6,7 +6,7 @@ export interface InfoCardProps {
   title: string
   externalHref?: string
   className?: string
-  children: string
+  children: JSX.Element | string
 }
 
 const InfoCard = (props: InfoCardProps) => {
@@ -26,9 +26,13 @@ const InfoCard = (props: InfoCardProps) => {
       ) : (
         <h4 className="info-card__title">{props.title}</h4>
       )}
-      <div className="markdown">
-        <Markdown options={{ disableParsingRawHTML: true }} children={props.children} />
-      </div>
+      {typeof props.children == "string" ? (
+        <div className="markdown">
+          <Markdown options={{ disableParsingRawHTML: true }} children={props.children} />
+        </div>
+      ) : (
+        props.children
+      )}
     </div>
   )
 }
