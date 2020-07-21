@@ -67,7 +67,9 @@ export const groupNonReservedAndReservedSummaries = (
         header: (
           <>
             <span className="reserved-icon">★</span>{" "}
-            {t("listings.reservedFor", { type: item.reservedType + "s" })}
+            {t("listings.reservedFor", {
+              type: t("listings.reservedTypePlural." + item.reservedType),
+            })}
           </>
         ),
         className: "reserved",

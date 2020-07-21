@@ -1,5 +1,6 @@
-import { blankApplication } from "../lib/AppSubmissionContext"
 import Router from "next/router"
+import { Listing } from "@bloom-housing/core"
+import { blankApplication } from "../lib/AppSubmissionContext"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -14,13 +15,27 @@ export const loadApplicationFromAutosave = () => {
   return null
 }
 
+export const loadSavedListing = () => {
+  if (typeof window != "undefined") {
+    const savedListing = window.sessionStorage.getItem("bloom-app-listing")
+    if (savedListing) {
+      const listing = JSON.parse(savedListing)
+      return listing
+    }
+  }
+
+  return null
+}
+
 export default class ApplicationConductor {
   application = {} as Record<string, any>
+  listing = {} as Listing
   context = null
   returnToReview = false
 
-  constructor(application, context) {
+  constructor(application, listing, context) {
     this.application = application
+    this.listing = listing
     this.context = context
   }
 
@@ -40,17 +55,21 @@ export default class ApplicationConductor {
     setTimeout(() => {
       if (typeof window != "undefined") {
         window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
+        window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
       }
     }, 800)
   }
 
   reset(shouldSync = true) {
     this.application = blankApplication()
+    this.listing = {} as Listing
     if (shouldSync) {
       this.context.syncApplication(this.application)
+      this.context.syncListing(this.listing)
     }
     if (typeof window != "undefined") {
       window.sessionStorage.removeItem("bloom-app-autosave")
+      window.sessionStorage.removeItem("bloom-app-listing")
     }
   }
 

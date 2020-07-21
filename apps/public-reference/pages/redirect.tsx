@@ -8,7 +8,7 @@ interface RedirectProps {
 
 const Redirect: NextPage<RedirectProps> = ({ to }) => (
   <Head>
-    <meta http-equiv="refresh" content={`0; url=${to}`} />
+    <meta httpEquiv="refresh" content={`0; url=${to}`} />
   </Head>
 )
 

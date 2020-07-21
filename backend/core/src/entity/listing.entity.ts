@@ -59,6 +59,10 @@ class Listing extends BaseEntity {
   developer: string
   @Column({ type: "boolean", nullable: true })
   disableUnitsAccordion?: boolean
+  @Column({ type: "numeric", nullable: true })
+  householdSizeMax?: number
+  @Column({ type: "numeric", nullable: true })
+  householdSizeMin?: number
   @Column({ type: "text", nullable: true })
   imageUrl?: string
   @Column({ type: "jsonb", nullable: true })
