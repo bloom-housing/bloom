@@ -4,7 +4,14 @@ Add household members
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, HouseholdMemberForm, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  Button,
+  FormCard,
+  HouseholdMemberForm,
+  ProgressNav,
+  t,
+  HouseholdSizeField,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -13,16 +20,15 @@ import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 2
+  application.householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
-  const { handleSubmit } = useForm()
+  const { errors, handleSubmit, register, clearError } = useForm()
   const onSubmit = (data) => {
-    application.householdSize = application.householdMembers.length + 1
     conductor.sync()
-    console.log(data)
     Router.push("/applications/household/preferred-units").then(() => window.scrollTo(0, 0))
   }
 
@@ -70,13 +76,24 @@ export default () => {
 
         <div className="form-card__pager-row">
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className={errors.householdSize ? "mb-8" : ""}>
+              <HouseholdSizeField
+                listing={listing}
+                householdSize={application.householdSize}
+                validate={true}
+                register={register}
+                error={errors.householdSize}
+                clearError={clearError}
+                assistanceUrl={t("application.household.assistanceUrl")}
+              />
+            </div>
             <HouseholdMemberForm
               member={applicant}
               type={t("application.household.primaryApplicant")}
             />
             {membersSection}
           </form>
-          <div className="text-center py-4">
+          <div className="text-center">
             <Button onClick={onAddMember}>
               {t("application.household.addMembers.addHouseholdMember")}
             </Button>
@@ -84,7 +101,7 @@ export default () => {
         </div>
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
-            <Button filled={true} className="" onClick={onSubmit}>
+            <Button filled={true} className="w-full md:w-3/4" onClick={handleSubmit(onSubmit)}>
               {t("application.household.addMembers.done")}
             </Button>
           </div>

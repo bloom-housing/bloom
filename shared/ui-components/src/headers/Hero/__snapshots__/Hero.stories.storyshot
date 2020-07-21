@@ -1177,6 +1177,8 @@ Credit recommendations other than an accept decision, will require a rental veri
         "externalId": null,
         "groupId": 2,
         "hideUnitFeatures": false,
+        "householdSizeMax": 3,
+        "householdSizeMin": 2,
         "id": "jsQvgvy6eJy56TNCFfQp8",
         "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
         "leasingAgentAddress": Object {

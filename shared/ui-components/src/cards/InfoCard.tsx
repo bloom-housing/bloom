@@ -1,11 +1,12 @@
 import * as React from "react"
 import "./InfoCard.scss"
+import Markdown from "markdown-to-jsx"
 
 export interface InfoCardProps {
   title: string
   externalHref?: string
   className?: string
-  children: JSX.Element
+  children: JSX.Element | string
 }
 
 const InfoCard = (props: InfoCardProps) => {
@@ -25,7 +26,13 @@ const InfoCard = (props: InfoCardProps) => {
       ) : (
         <h4 className="info-card__title">{props.title}</h4>
       )}
-      {props.children}
+      {typeof props.children == "string" ? (
+        <div className="markdown">
+          <Markdown options={{ disableParsingRawHTML: true }} children={props.children} />
+        </div>
+      ) : (
+        props.children
+      )}
     </div>
   )
 }
