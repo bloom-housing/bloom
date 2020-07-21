@@ -4,7 +4,7 @@
       "errors": {
         "pleaseEnterZipCode": "Please enter your Zipcode",
         "selectOption": "Please select one of the options above.",
-        "selectAtLeastOne": "Please select at least one option."
+        "selectAtLeastOne": "Please select at least one option.",
         "householdTooBig": "Your household size is too big.",
         "householdTooSmall": "Your household size is too small."
       },
