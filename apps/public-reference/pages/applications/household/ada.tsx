@@ -20,7 +20,7 @@ export default () => {
   const currentPageStep = 2
 
   /* Form Handler */
-  const { register, handleSubmit, getValues, setValue, triggerValidation, watch, errors } = useForm<
+  const { register, handleSubmit, getValues, setValue, trigger, watch, errors } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -81,7 +81,7 @@ export default () => {
               onChange={() => {
                 setTimeout(() => {
                   setValue("none", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }, 1)
               }}
             />
@@ -100,7 +100,7 @@ export default () => {
               onChange={() => {
                 setTimeout(() => {
                   setValue("none", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }, 1)
               }}
             />
@@ -119,7 +119,7 @@ export default () => {
               onChange={() => {
                 setTimeout(() => {
                   setValue("none", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }, 1)
               }}
             />
@@ -145,7 +145,7 @@ export default () => {
                   setValue("mobility", false)
                   setValue("vision", false)
                   setValue("hearing", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }
               }}
             />
