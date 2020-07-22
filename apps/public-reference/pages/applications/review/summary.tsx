@@ -184,7 +184,7 @@ export default () => {
                 <p className="info-item__value mb-2">
                   {member.firstName} {member.lastName}
                 </p>
-                <div class="pl-4">
+                <div className="pl-4">
                   <ReviewItem label="Date of Birth">
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </ReviewItem>
