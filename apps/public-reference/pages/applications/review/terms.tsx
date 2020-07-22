@@ -81,7 +81,7 @@ export default () => {
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>
               {/* TODO */}
-              {t("application.review.terms.text", { applicationDueDate: "Oct 4, 2020" })}
+              {t("application.review.terms.text", { applicationDueDate: listing.applicationDueDate })}
             </Markdown>
             <div className="field mt-4 flex flex-row flex-no-wrap">
               <input
