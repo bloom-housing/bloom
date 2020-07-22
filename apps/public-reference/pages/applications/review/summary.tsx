@@ -22,7 +22,7 @@ const EditLink = (props: { href: string }) => (
   </div>
 )
 
-const ReviewItem = (props: { label: string; sublabel?: string; children: any }) => (
+const ReviewItem = (props: { label: string; sublabel?: string; children?: any }) => (
   <p className="mb-2">
     <span className="text-gray-700">{props.label}</span>
     {props.children && (
