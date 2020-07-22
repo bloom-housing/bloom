@@ -25,8 +25,14 @@ const EditLink = (props: { href: string }) => (
 const ReviewItem = (props: { label: string; sublabel?: string; children: any }) => (
   <p className="mb-2">
     <span className="text-gray-700">{props.label}</span>
-    <br />
-    <span className="field-label--caps font-alt-sans text-base text-black">{props.children}</span>
+    {props.children && (
+      <>
+        <br />
+        <span className="field-label--caps font-alt-sans text-base text-black">
+          {props.children}
+        </span>
+      </>
+    )}
     {props.sublabel && (
       <>
         <br />
