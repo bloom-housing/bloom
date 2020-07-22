@@ -24,8 +24,8 @@ export class Application extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @ManyToOne((type) => User, (user) => user.applications)
-  user: User
+  @ManyToOne((type) => User, (user) => user.applications, { nullable: true })
+  user: User | null
 
   @ManyToOne((type) => Listing, (listing) => listing.applications)
   listing: Listing

@@ -2,7 +2,11 @@ import React from "react"
 import App from "next/app"
 import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
-import { addTranslation, UserProvider, ConfigProvider } from "@bloom-housing/ui-components"
+import {
+  addTranslation,
+  UserProvider,
+  ConfigProvider, ApiClientProvider
+} from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
 import { loadApplicationFromAutosave, loadSavedListing } from "../lib/ApplicationConductor"
@@ -102,7 +106,9 @@ class MyApp extends App {
       >
         <ConfigProvider apiUrl={process.env.listingServiceUrl}>
           <UserProvider>
-            <Component {...pageProps} />
+            <ApiClientProvider>
+              <Component {...pageProps} />
+            </ApiClientProvider>
           </UserProvider>
         </ConfigProvider>
       </AppSubmissionContext.Provider>

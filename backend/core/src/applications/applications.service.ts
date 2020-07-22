@@ -23,10 +23,30 @@ export class ApplicationsService {
     })
   }
 
-  async create(applicationCreateDto: ApplicationCreateDto) {
-    if (applicationCreateDto.user.id !== this.request.user.id) {
-      throw new UnauthorizedException()
+  private validateApplicationAgainstAuthWeak(
+    application: ApplicationCreateDto | ApplicationUpdateDto
+  ) {
+    // Allow unauthenticated users or make sure application user matches request authentication
+    if (!this.request.user && !application.user) {
+      return
     }
+    if (application.user && application.user.id === this.request.user.id) {
+      return
+    }
+    throw new UnauthorizedException()
+  }
+
+  private validateApplicationAgainstAuthStrong(
+    application: ApplicationCreateDto | ApplicationUpdateDto
+  ) {
+    if (this.request.user && application.user && this.request.user.id == application.user.id) {
+      return
+    }
+    throw new UnauthorizedException()
+  }
+
+  async create(applicationCreateDto: ApplicationCreateDto) {
+    this.validateApplicationAgainstAuthWeak(applicationCreateDto)
     const application = plainToClass(Application, applicationCreateDto)
     await application.save()
     return application
@@ -37,28 +57,27 @@ export class ApplicationsService {
       where: {
         id: applicationId,
         user: { id: this.request.user.id },
-        relations: ["listing", "user"],
       },
+      relations: ["listing", "user"],
     })
   }
 
   async update(applicationUpdateDto: ApplicationUpdateDto) {
-    if (applicationUpdateDto.user.id !== this.request.user.id) {
-      throw new UnauthorizedException()
-    }
-    const application = plainToClass(Application, applicationUpdateDto)
+    this.validateApplicationAgainstAuthStrong(applicationUpdateDto)
+    const application = await Application.findOneOrFail({
+      where: { id: applicationUpdateDto.id, user: { id: this.request.user.id } },
+      relations: ["user"],
+    })
+    Object.assign(application, applicationUpdateDto)
     await application.save()
     return application
   }
 
   async delete(applicationId: string) {
-    const application = await Application.findOneOrFail({
-      where: { id: applicationId },
+    await Application.findOneOrFail({
+      where: { id: applicationId, user: { id: this.request.user.id } },
       relations: ["user"],
     })
-    if (application.user.id !== this.request.user.id) {
-      throw new UnauthorizedException()
-    }
     return await Application.delete({ id: applicationId })
   }
 }
