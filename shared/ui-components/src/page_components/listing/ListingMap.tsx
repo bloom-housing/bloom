@@ -43,6 +43,7 @@ const ListingMap = (props: ListingMapProps) => {
         mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
         onViewportChange={_onViewportChange}
         mapStyle="mapbox://styles/mapbox/streets-v11"
+        scrollZoom={false}
         {...viewport}
       >
         <Marker
