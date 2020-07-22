@@ -20,7 +20,7 @@ export default () => {
   const currentPageStep = 2
 
   /* Form Handler */
-  const { handleSubmit, register, errors, clearError } = useForm()
+  const { handleSubmit, register, errors, clearErrors } = useForm()
   const onSubmit = () => {
     conductor.sync()
 
@@ -63,7 +63,7 @@ export default () => {
               validate={validateHousehold}
               register={register}
               error={errors.householdSize}
-              clearError={clearError}
+              clearErrors={clearErrors}
               assistanceUrl={t("application.household.assistanceUrl")}
             />
           </div>

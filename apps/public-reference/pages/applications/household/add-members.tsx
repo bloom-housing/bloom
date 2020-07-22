@@ -26,7 +26,7 @@ export default () => {
   application.householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
-  const { errors, handleSubmit, register, clearError } = useForm()
+  const { errors, handleSubmit, register, clearErrors } = useForm()
   const onSubmit = (data) => {
     conductor.sync()
     conductor.routeToNextOrReturnUrl("/applications/household/preferred-units")
@@ -83,7 +83,7 @@ export default () => {
                 validate={true}
                 register={register}
                 error={errors.householdSize}
-                clearError={clearError}
+                clearErrors={clearErrors}
                 assistanceUrl={t("application.household.assistanceUrl")}
               />
             </div>
