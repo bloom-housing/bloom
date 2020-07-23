@@ -269,6 +269,14 @@
         "no": "No",
         "error": "Please select an option."
       }
+    },
+    "start": {
+      "whatToExpect": {
+        "title": "Here's what to expect from this application.",
+        "info1": "First we'll ask about you and the people you plan to live with. Then, we'll ask about your income. Finally, we'll see if you qualify for any affordable housing lottery preference.",
+        "info2": "Please be aware that each household member can only appear on one application for each listing.",
+        "info3": "Any fraudulent statements will cause your application to be removed."
+      }
     }
   },
   "config": {
