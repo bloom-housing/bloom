@@ -1,0 +1,15 @@
+{
+//  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["cypress"],
+    "isolatedModules": false,
+    "noEmit": false,
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "./**/*.ts",
+    "../../../node_modules/cypress/types/cypress-global-vars.d.ts"
+  ]
+}

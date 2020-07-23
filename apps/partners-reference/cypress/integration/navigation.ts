@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe("Navigating around the site", () => {
   it("Loads the homepage directly", () => {
     cy.visit("/")
@@ -16,8 +18,12 @@ describe("Navigating around the site", () => {
   })
 
   it("Applications page", () => {
-    cy.visit("/")
-    cy.contains("View Submitted Applications").click()
-    cy.contains("List of Applications will go here.")
+    cy.fixture("user")
+      .then(({ email, password }) => cy.login(email, password))
+      .then(() => {
+        cy.visit("/")
+        cy.contains("View Submitted Applications").click()
+        cy.contains("List of Applications will go here.")
+      })
   })
 })
