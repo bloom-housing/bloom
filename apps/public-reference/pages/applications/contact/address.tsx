@@ -13,6 +13,7 @@ import {
   ProgressNav,
   t,
   mergeDeep,
+  contactPreferencesKeys,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -351,6 +352,37 @@ export default () => {
               />
             </div>
           )}
+          <div className="form-card__group border-b">
+            <label className="field-label--caps" htmlFor="contactPreference">
+              {t("application.contact.contactPreference")}
+            </label>
+            <div className={"field " + (errors.contactPreferences ? "error" : "")}>
+              {contactPreferencesKeys.map((preference) => {
+                return (
+                  <>
+                    <input
+                      type="checkbox"
+                      name="contactPreferences"
+                      id={"contactPreferences" + preference}
+                      value={preference}
+                      defaultChecked={application.contactPreferences.includes(preference)}
+                      ref={register({ required: true })}
+                    />
+                    <label
+                      htmlFor={"contactPreferences" + preference}
+                      className="font-semibold"
+                      key={preference}
+                    >
+                      {t("application.form.options.contact." + preference)}
+                    </label>
+                  </>
+                )
+              })}
+              <ErrorMessage error={errors.contactPreferences}>
+                {t("application.form.errors.selectAtLeastOne")}
+              </ErrorMessage>
+            </div>
+          </div>
 
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="street">

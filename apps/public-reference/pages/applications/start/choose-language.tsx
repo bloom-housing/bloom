@@ -43,7 +43,7 @@ export default () => {
     console.log(data)
     conductor.sync()
 
-    Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
   }
 
   return (
