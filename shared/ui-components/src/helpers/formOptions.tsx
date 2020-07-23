@@ -5,6 +5,8 @@ interface FormOptionsProps {
   options: string[]
   keyPrefix: string
 }
+export const contactPreferencesKeys = ["email", "phone", "letter", "text"]
+
 export const relotionshipKeys = [
   "",
   "spouse",
