@@ -18,14 +18,18 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 1
 
   /* Form Handler */
@@ -465,7 +469,7 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
                 {t("t.next")}

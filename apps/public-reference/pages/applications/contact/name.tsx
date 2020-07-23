@@ -9,13 +9,17 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { emailRegex } from "../../../lib/emailRegex"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 1
 
   /* Form Handler */
@@ -191,7 +195,7 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
                 {t("t.next")}

@@ -18,7 +18,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
 import { Listing } from "@bloom-housing/core"
 
@@ -54,7 +54,11 @@ export default () => {
   const context = useContext(AppSubmissionContext)
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 3
 
   /* Form Handler */
@@ -195,14 +199,7 @@ export default () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                filled={true}
-                onClick={() => {
-                  //
-                }}
-              >
-                {t("t.next")}
-              </Button>
+              <Button filled={true}>{t("t.next")}</Button>
             </div>
 
             {conductor.canJumpForwardToReview() && (

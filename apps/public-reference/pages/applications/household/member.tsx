@@ -18,7 +18,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 
 class Member implements HouseholdMember {
@@ -70,7 +70,11 @@ export default () => {
   let memberId, member, saveText, cancelText
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 2
 
   if (router.query.memberId) {

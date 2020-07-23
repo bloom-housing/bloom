@@ -9,14 +9,18 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 
 let nextPageUrl
 export default () => {
   const [validateHousehold, setValidateHousehold] = useState(true)
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 2
 
   /* Form Handler */

@@ -2,6 +2,7 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
+import { useMemo, ReactNode } from "react"
 import Link from "next/link"
 import Router from "next/router"
 import { Address } from "@bloom-housing/core"
@@ -10,7 +11,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right">
@@ -22,7 +23,7 @@ const EditLink = (props: { href: string }) => (
   </div>
 )
 
-const ReviewItem = (props: { label: string; sublabel?: string; children?: any }) => (
+const ReviewItem = (props: { label: string; sublabel?: string; children: ReactNode }) => (
   <p className="mb-2">
     <span className="text-gray-700">{props.label}</span>
     {props.children && (
@@ -51,7 +52,7 @@ const reformatAddress = (address: any) => {
     state,
     zipCode,
   } as Address
-  if (newAddress.street == null || newAddress.street == "") {
+  if (newAddress.street === null || newAddress.street === "") {
     newAddress.street = newAddress.placeName
     delete newAddress.placeName
   }
@@ -63,7 +64,7 @@ const accessibilityLabels = (accessibility) => {
   if (accessibility.mobility) labels.push(t("application.ada.mobility"))
   if (accessibility.vision) labels.push(t("application.ada.vision"))
   if (accessibility.hearing) labels.push(t("application.ada.hearing"))
-  if (labels.length == 0) labels.push(t("t.no"))
+  if (labels.length === 0) labels.push(t("t.no"))
 
   return labels
 }
@@ -71,7 +72,11 @@ const accessibilityLabels = (accessibility) => {
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 5
 
   /* Form Handler */
@@ -148,15 +153,15 @@ export default () => {
             </ReviewItem>
           )}
 
-          {application.applicant.workInRegion == "yes" && (
+          {application.applicant.workInRegion === "yes" && (
             <ReviewItem label={"Work Address"}>
               <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
             </ReviewItem>
           )}
         </div>
 
-        {application.alternateContact.type != "" &&
-          application.alternateContact.type != "noContact" && (
+        {application.alternateContact.type !== "" &&
+          application.alternateContact.type !== "noContact" && (
             <>
               <h3 className="px-8 py-4 bg-gray-200">
                 Alternate Contact
@@ -165,7 +170,7 @@ export default () => {
               <div className="form-card__group mx-0">
                 <ReviewItem
                   label={t(
-                    "application.alternateContact.type.options." + application.alternateContact.type
+                    `application.alternateContact.type.options.${application.alternateContact.type}`
                   )}
                 >
                   {application.alternateContact.firstName} {application.alternateContact.lastName}
@@ -194,12 +199,12 @@ export default () => {
                   <ReviewItem label="Date of Birth">
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </ReviewItem>
-                  {member.sameAddress == "no" && (
+                  {member.sameAddress === "no" && (
                     <ReviewItem label="Address">
                       <MultiLineAddress address={reformatAddress(member.address)} />
                     </ReviewItem>
                   )}
-                  {member.sameAddress != "no" && (
+                  {member.sameAddress !== "no" && (
                     <ReviewItem label="Same Address as Applicant"></ReviewItem>
                   )}
                 </div>
@@ -207,7 +212,7 @@ export default () => {
             ))}
           </div>
         )}
-        {application.householdSize == 0 && (
+        {application.householdSize === 0 && (
           <div className="form-card__group mx-0">No additional household members</div>
         )}
 
