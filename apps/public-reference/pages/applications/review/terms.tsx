@@ -27,6 +27,7 @@ export default () => {
   const { application, listing } = context
   const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 5
+  const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
@@ -81,7 +82,7 @@ export default () => {
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>
               {/* TODO */}
-              {t("application.review.terms.text", { applicationDueDate: "Oct 4, 2020" })}
+              {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
             </Markdown>
             <div className="field mt-4 flex flex-row flex-no-wrap">
               <input
