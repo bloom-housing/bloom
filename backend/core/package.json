@@ -21,7 +21,8 @@
     "typeorm-test": "ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts",
     "herokusetup": "node heroku.setup.js",
     "seed:test": "ts-node src/seed.ts --test",
-    "seed": "ts-node src/seed.ts"
+    "seed": "ts-node src/seed.ts",
+    "generate:client": "ts-node generate-axios-client.ts"
   },
   "dependencies": {
     "@bloom-housing/core": "^0.2.11",
@@ -65,6 +66,7 @@
     "fishery": "^0.3.0",
     "jest": "^25.1.0",
     "supertest": "^4.0.2",
+    "swagger-axios-codegen": "^0.11.5",
     "ts-jest": "25.2.1",
     "ts-loader": "^6.2.1",
     "tsconfig-paths": "^3.9.0",
