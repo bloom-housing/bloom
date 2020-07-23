@@ -16,6 +16,16 @@
 // Import commands.ts using ES2015 syntax:
 import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "@bloom-housing/ui-components"
 
+// TODO: Replace this with a DTO to avoid duplication
+type UserFields = {
+  email: string
+  firstName: string
+  middleName?: string
+  lastName: string
+  dob: Date
+  password: string
+}
+
 // If TypeScript considers this file a module (as opposed to a script), then we need to define this as a global for
 // it to register. See:
 // https://github.com/cypress-io/add-cypress-custom-command-in-typescript/issues/2#issuecomment-389870033
@@ -28,6 +38,16 @@ declare global {
        * @example cy.login('email@example.com", "123abc").then(...)
        */
       login(email: string, password: string, options?: { apiBase: string }): Chainable
+
+      /**
+       * Logout from the app (clears session storage's saved version of the key.)
+       */
+      logout(): Chainable
+
+      /**
+       * Create a new user with the specified options.
+       */
+      createUser(user: UserFields, options?: { apiBase: string }): Chainable
     }
   }
 }
@@ -48,4 +68,19 @@ Cypress.Commands.add(
         )
       })
   }
+)
+
+Cypress.Commands.add("logout", () =>
+  cy.window().then((window) => window.sessionStorage.removeItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY))
+)
+
+Cypress.Commands.add("createUser", (user: UserFields, { apiBase = "http://localhost:3001" } = {}) =>
+  cy
+    .request({
+      url: `${apiBase}/auth/register`,
+      method: "POST",
+      body: user,
+    })
+    .its("body")
+    .then(({ accessToken }) => accessToken)
 )
