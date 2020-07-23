@@ -12,12 +12,13 @@
     "export": "next export",
     "start": "next start",
     "dev:listings": "cd ../../services/listings && yarn dev",
-    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev\""
+    "dev:server-wait": "wait-on \"http://localhost:${PORT:-3001}/\" && yarn dev",
+    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
     "@bloom-housing/core": "^0.2.11",
     "@bloom-housing/ui-components": "^0.2.12",
-    "@mdx-js/loader": "1.6.6",
+    "@mdx-js/loader": "1.6.11",
     "@next/mdx": "9.4.4",
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.19.2",
@@ -35,14 +36,14 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "9.4.4",
-    "@types/node": "^12.12.47",
-    "@types/react": "^16.9.41",
+    "@types/node": "^12.12.50",
+    "@types/react": "^16.9.43",
     "concurrently": "^5.2.0",
     "cypress": "^4.9.0",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^3.0.1",
     "sass-loader": "^8.0.2",
-    "typescript": "^3.9.5",
+    "typescript": "^3.9.7",
     "webpack": "^4.43.0"
   }
 }
