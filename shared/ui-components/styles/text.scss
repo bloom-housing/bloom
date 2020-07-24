@@ -98,6 +98,17 @@ h1.title {
   @apply mb-4;
 }
 
+.info-group__item {
+  @apply border-b;
+  @apply border-gray-450;
+  @apply mb-4;
+
+  &:last-child {
+    @apply border-0;
+    @apply mb-0;
+  }
+}
+
 .info-item {
   @apply relative;
   @apply text-base;

@@ -188,13 +188,13 @@ export default () => {
         </h3>
 
         {application.householdSize > 0 && (
-          <div className="form-card__group mx-0">
+          <div className="form-card__group info-group mx-0">
             {application.householdMembers.map((member) => (
-              <>
+              <div className="info-group__item">
                 <p className="info-item__value">
                   {member.firstName} {member.lastName}
                 </p>
-                <div className="border-b">
+                <div>
                   <ReviewItem label="Date of Birth">
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </ReviewItem>
@@ -207,7 +207,7 @@ export default () => {
                     <ReviewItem label="Same Address as Applicant"></ReviewItem>
                   )}
                 </div>
-              </>
+              </div>
             ))}
           </div>
         )}
