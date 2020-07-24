@@ -2,7 +2,6 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
-import { useMemo, ReactNode } from "react"
 import Link from "next/link"
 import Router from "next/router"
 import { Address } from "@bloom-housing/core"
@@ -11,7 +10,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import { useContext, useMemo, ReactNode } from "react"
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right">
