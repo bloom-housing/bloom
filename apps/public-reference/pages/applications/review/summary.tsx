@@ -13,9 +13,9 @@ import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo, ReactNode } from "react"
 
 const EditLink = (props: { href: string }) => (
-  <div className="float-right">
+  <div className="float-right flex">
     <Link href={props.href}>
-      <a className="button is-unstyled is-borderless uppercase text-base my-2 text-primary-dark">
+      <a className="edit-link">
         Edit
       </a>
     </Link>
@@ -23,12 +23,12 @@ const EditLink = (props: { href: string }) => (
 )
 
 const ReviewItem = (props: { label: string; sublabel?: string; children: ReactNode }) => (
-  <p className="mb-2">
-    <span className="text-gray-700">{props.label}</span>
+  <p className="info-item mb-4">
+    <span className="info-item__label">{props.label}</span>
     {props.children && (
       <>
         <br />
-        <span className="field-label--caps font-alt-sans text-base text-black">
+        <span className="info-item__value">
           {props.children}
         </span>
       </>
@@ -36,7 +36,7 @@ const ReviewItem = (props: { label: string; sublabel?: string; children: ReactNo
     {props.sublabel && (
       <>
         <br />
-        <span className="-mt-3 block text-base">{props.sublabel}</span>
+        <span className="info-item__helper">{props.sublabel}</span>
       </>
     )}
   </p>
@@ -110,7 +110,7 @@ export default () => {
           </h2>
         </div>
 
-        <h3 className="px-8 py-4 bg-gray-200">
+        <h3 className="form--card__sub-header">
           You
           <EditLink href="/applications/contact/name" />
         </h3>
@@ -162,7 +162,7 @@ export default () => {
         {application.alternateContact.type !== "" &&
           application.alternateContact.type !== "noContact" && (
             <>
-              <h3 className="px-8 py-4 bg-gray-200">
+              <h3 className="form--card__sub-header">
                 Alternate Contact
                 <EditLink href="/applications/contact/alternate-contact-type" />
               </h3>
@@ -182,7 +182,7 @@ export default () => {
             </>
           )}
 
-        <h3 className="px-8 py-4 bg-gray-200">
+        <h3 className="form--card__sub-header">
           Household Members
           <EditLink href="/applications/household/add-members" />
         </h3>
@@ -191,10 +191,10 @@ export default () => {
           <div className="form-card__group mx-0">
             {application.householdMembers.map((member) => (
               <>
-                <p className="info-item__value mb-2">
+                <p className="info-item__value">
                   {member.firstName} {member.lastName}
                 </p>
-                <div className="pl-4">
+                <div className="border-b">
                   <ReviewItem label="Date of Birth">
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </ReviewItem>
@@ -215,7 +215,7 @@ export default () => {
           <div className="form-card__group mx-0">No additional household members</div>
         )}
 
-        <h3 className="px-8 py-4 bg-gray-200">
+        <h3 className="form--card__sub-header">
           Household Details
           <EditLink href="/applications/household/ada" />
         </h3>
@@ -231,7 +231,7 @@ export default () => {
           </ReviewItem>
         </div>
 
-        <h3 className="px-8 py-4 bg-gray-200">
+        <h3 className="form--card__sub-header">
           Income
           <EditLink href="/applications/financial/vouchers" />
         </h3>

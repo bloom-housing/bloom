@@ -118,3 +118,19 @@
     @apply py-8;
   }
 }
+
+.form--card__sub-header {
+  @apply py-4;
+  @apply px-8;
+  @apply bg-gray-300;
+  @apply flex;
+  @apply justify-between;
+
+  .edit-link {
+    @apply self-center;
+  }
+}
+
+.form-card__sub-title {
+  @apply mb-0;
+}

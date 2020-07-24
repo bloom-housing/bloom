@@ -100,20 +100,25 @@ h1.title {
 
 .info-item {
   @apply relative;
-  @apply text-sm;
+  @apply text-base;
 }
 
-.info-item__name {
-  @apply text-gray-800;
+.info-item__label {
+  @apply text-gray-700;
   @apply font-sans;
-  @apply text-sm;
+  @apply text-tiny;
 }
 
 .info-item__value {
-  @apply uppercase;
   @apply font-alt-sans;
-  @apply font-bold;
   @apply tracking-wide;
+}
+
+.info-item__helper {
+  @apply text-gray-700;
+  @apply font-sans;
+  @apply text-tiny;
+  @apply block;
 }
 
 .info-item__link {
@@ -123,9 +128,11 @@ h1.title {
 }
 
 .edit-link {
-  @apply uppercase;
-  @apply text-sm;
   @apply underline;
+  @apply font-alt-sans;
+  @apply text-tiny;
+  @apply uppercase;
+  @apply block;
 }
 
 .pill {
