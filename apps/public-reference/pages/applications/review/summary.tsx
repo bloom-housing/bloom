@@ -15,22 +15,18 @@ import { useContext, useMemo, ReactNode } from "react"
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">
     <Link href={props.href}>
-      <a className="edit-link">
-        Edit
-      </a>
+      <a className="edit-link">{t("label.edit")}</a>
     </Link>
   </div>
 )
 
-const ReviewItem = (props: { label: string; sublabel?: string; children: ReactNode }) => (
+const ReviewItem = (props: { label: string; sublabel?: string; children?: ReactNode }) => (
   <p className="info-item mb-4">
     <span className="info-item__label">{props.label}</span>
     {props.children && (
       <>
         <br />
-        <span className="info-item__value">
-          {props.children}
-        </span>
+        <span className="info-item__value">{props.children}</span>
       </>
     )}
     {props.sublabel && (
@@ -106,7 +102,7 @@ export default () => {
 
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">
-            Take a moment to review your information before submitting your application.
+            {t("application.review.takeAMomentToReview")}
           </h2>
         </div>
 
@@ -116,44 +112,47 @@ export default () => {
         </h3>
 
         <div className="form-card__group mx-0">
-          <ReviewItem label={"Name"}>
+          <ReviewItem label={t("t.name")}>
             {application.applicant.firstName} {application.applicant.middleName}{" "}
             {application.applicant.lastName}
           </ReviewItem>
 
-          <ReviewItem label={"Date of Birth"}>
+          <ReviewItem label={t("application.household.member.dateOfBirth")}>
             {application.applicant.birthMonth}/{application.applicant.birthDay}/
             {application.applicant.birthYear}
           </ReviewItem>
 
           {application.applicant.phoneNumber && (
-            <ReviewItem label={"Phone"} sublabel={application.applicant.phoneNumberType}>
+            <ReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
               {application.applicant.phoneNumber}
             </ReviewItem>
           )}
 
           {application.additionalPhoneNumber && (
-            <ReviewItem label={"Additional Phone"} sublabel={application.additionalPhoneNumberType}>
+            <ReviewItem
+              label={t("t.additionalPhone")}
+              sublabel={application.additionalPhoneNumberType}
+            >
               {application.additionalPhoneNumber}
             </ReviewItem>
           )}
 
           {application.applicant.emailAddress && (
-            <ReviewItem label={"Email"}>{application.applicant.emailAddress}</ReviewItem>
+            <ReviewItem label={t("label.email")}>{application.applicant.emailAddress}</ReviewItem>
           )}
 
-          <ReviewItem label={"Address"}>
+          <ReviewItem label={t("application.contact.address")}>
             <MultiLineAddress address={reformatAddress(application.applicant.address)} />
           </ReviewItem>
 
           {application.sendMailToMailingAddress && (
-            <ReviewItem label={"Mailing Address"}>
+            <ReviewItem label={t("application.contact.mailingAddress")}>
               <MultiLineAddress address={reformatAddress(application.mailingAddress)} />
             </ReviewItem>
           )}
 
           {application.applicant.workInRegion === "yes" && (
-            <ReviewItem label={"Work Address"}>
+            <ReviewItem label={t("application.contact.workAddress")}>
               <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
             </ReviewItem>
           )}
@@ -163,7 +162,7 @@ export default () => {
           application.alternateContact.type !== "noContact" && (
             <>
               <h3 className="form--card__sub-header">
-                Alternate Contact
+                {t("application.alternateContact.label")}
                 <EditLink href="/applications/contact/alternate-contact-type" />
               </h3>
               <div className="form-card__group mx-0">
@@ -183,7 +182,7 @@ export default () => {
           )}
 
         <h3 className="form--card__sub-header">
-          Household Members
+          {t("application.household.householdMembers")}
           <EditLink href="/applications/household/add-members" />
         </h3>
 
@@ -195,16 +194,16 @@ export default () => {
                   {member.firstName} {member.lastName}
                 </p>
                 <div>
-                  <ReviewItem label="Date of Birth">
+                  <ReviewItem label={t("application.household.member.dateOfBirth")}>
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </ReviewItem>
                   {member.sameAddress === "no" && (
-                    <ReviewItem label="Address">
+                    <ReviewItem label={t("application.contact.address")}>
                       <MultiLineAddress address={reformatAddress(member.address)} />
                     </ReviewItem>
                   )}
                   {member.sameAddress !== "no" && (
-                    <ReviewItem label="Same Address as Applicant"></ReviewItem>
+                    <ReviewItem label={t("application.review.sameAddressAsApplicant")}></ReviewItem>
                   )}
                 </div>
               </div>
@@ -212,16 +211,16 @@ export default () => {
           </div>
         )}
         {application.householdSize === 0 && (
-          <div className="form-card__group mx-0">No additional household members</div>
+          <div className="form-card__group mx-0">{t("application.review.noAdditionalMembers")}</div>
         )}
 
         <h3 className="form--card__sub-header">
-          Household Details
+          {t("application.review.householdDetails")}
           <EditLink href="/applications/household/ada" />
         </h3>
 
         <div className="form-card__group mx-0">
-          <ReviewItem label={"ADA Accessible Units"}>
+          <ReviewItem label={t("application.ada.label")}>
             {accessibilityLabels(application.accessibility).map((item) => (
               <>
                 {item}
@@ -232,16 +231,16 @@ export default () => {
         </div>
 
         <h3 className="form--card__sub-header">
-          Income
+          {t("t.income")}
           <EditLink href="/applications/financial/vouchers" />
         </h3>
 
         <div className="form-card__group mx-0">
-          <ReviewItem label={"Housing Voucher or Rental Subsidy"}>
+          <ReviewItem label={t("application.review.voucherOrSubsidy")}>
             {application.incomeVouchers ? t("t.yes") : t("t.no")}
           </ReviewItem>
 
-          <ReviewItem label={"Income"}>
+          <ReviewItem label={t("t.income")}>
             ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
           </ReviewItem>
         </div>
@@ -255,7 +254,7 @@ export default () => {
                   //
                 }}
               >
-                Confirm
+                {t("t.confirm")}
               </Button>
             </form>
           </div>

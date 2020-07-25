@@ -185,6 +185,7 @@
         "title": "Tell us about your household."
       },
       "householdMember": "Household Member",
+      "householdMembers": "Household Members",
       "liveAlone": {
         "title": "Next we would like to know about the others who will live with you in the unit",
         "willLiveAlone": "I will live alone",
@@ -212,6 +213,7 @@
       "primaryApplicant": "Primary Applicant"
     },
     "ada": {
+      "label": "ADA Accessible Units",
       "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
       "subTitle": "If you are selected for a unit, the property will work to accommodate your need to the best of their ability. Should your application be chosen, be prepared to provide supporting documentation from your physician.",
       "mobility": "For Mobility Impairments",
@@ -259,6 +261,13 @@
         "no": "No",
         "error": "Please select an option."
       }
+    },
+    "review": {
+      "takeAMomentToReview": "Take a moment to review your information before submitting your application.",
+      "sameAddressAsApplicant": "Same Address as Applicant",
+      "noAdditionalMembers": "No additional household members",
+      "householdDetails": "Household Details",
+      "voucherOrSubsidy": "Housing Voucher or Rental Subsidy"
     }
   },
   "config": {
@@ -477,16 +486,20 @@
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
   },
   "t": {
+    "additionalPhone": "Additional Phone",
     "area": "area",
     "accessibility": "Accessibility",
     "availability": "Availability",
     "back": "Back",
     "built": "Built",
+    "confirm": "Confirm",
     "deposit": "Deposit",
     "floor": "floor",
     "floors": "floors",
+    "income": "Income",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
+    "name": "Name",
     "neighborhood": "Neighborhood",
     "next": "Next",
     "no": "No",
@@ -495,6 +508,7 @@
     "occupancy": "Occupancy",
     "or": "or",
     "petsPolicy": "Pets Policy",
+    "phone": "Phone",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
