@@ -7,7 +7,7 @@ import { Application } from "./application.entity"
 
 export enum ListingStatus {
   active = "active",
-  unapproved = "unapproved",
+  pending = "pending",
 }
 
 @Entity({ name: "listings" })
@@ -120,6 +120,7 @@ class Listing extends BaseEntity {
   @Column({
     type: "enum",
     enum: ListingStatus,
+    default: ListingStatus.pending,
   })
   status: ListingStatus
 }
