@@ -1,0 +1,1007 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bloom API",
+    "description": "",
+    "version": "1.0",
+    "contact": {
+      
+    }
+  },
+  "tags": [
+    
+  ],
+  "servers": [
+    
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "ApplicationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "listingId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "application": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "listingId",
+          "userId",
+          "application"
+        ]
+      },
+      "ApplicationCreateDto": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "type": "object"
+          },
+          "listingId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "application",
+          "listingId",
+          "userId"
+        ]
+      },
+      "ApplicationUpdateDto": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "listingId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "application",
+          "id",
+          "listingId",
+          "userId"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accessToken"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dob": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "firstName",
+          "middleName",
+          "lastName",
+          "dob",
+          "password"
+        ]
+      },
+      "Preference": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ordinal": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "listing": {
+            "$ref": "#/components/schemas/Listing"
+          }
+        },
+        "required": [
+          "id",
+          "ordinal",
+          "title",
+          "listing"
+        ]
+      },
+      "Unit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "amiPercentage": {
+            "type": "string"
+          },
+          "annualIncomeMin": {
+            "type": "string"
+          },
+          "monthlyIncomeMin": {
+            "type": "number"
+          },
+          "floor": {
+            "type": "number"
+          },
+          "annualIncomeMax": {
+            "type": "string"
+          },
+          "maxOccupancy": {
+            "type": "number"
+          },
+          "minOccupancy": {
+            "type": "number"
+          },
+          "monthlyRent": {
+            "type": "number"
+          },
+          "numBathrooms": {
+            "type": "number"
+          },
+          "numBedrooms": {
+            "type": "number"
+          },
+          "number": {
+            "type": "string"
+          },
+          "priorityType": {
+            "type": "string"
+          },
+          "reservedType": {
+            "type": "string"
+          },
+          "sqFeet": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "unitType": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "amiChartId": {
+            "type": "number"
+          },
+          "monthlyRentAsPercentOfIncome": {
+            "type": "number"
+          },
+          "listing": {
+            "$ref": "#/components/schemas/Listing"
+          }
+        },
+        "required": [
+          "id",
+          "amiPercentage",
+          "annualIncomeMin",
+          "monthlyIncomeMin",
+          "floor",
+          "annualIncomeMax",
+          "maxOccupancy",
+          "minOccupancy",
+          "monthlyRent",
+          "numBathrooms",
+          "numBedrooms",
+          "number",
+          "priorityType",
+          "reservedType",
+          "sqFeet",
+          "status",
+          "unitType",
+          "createdAt",
+          "updatedAt",
+          "amiChartId",
+          "monthlyRentAsPercentOfIncome",
+          "listing"
+        ]
+      },
+      "Attachment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "fileUrl": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "ApplicationDownload",
+              "ExternalApplication"
+            ],
+            "type": "string"
+          },
+          "listing": {
+            "$ref": "#/components/schemas/Listing"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "fileUrl",
+          "type",
+          "listing"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "passwordHash": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dob": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Application"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "passwordHash",
+          "email",
+          "firstName",
+          "lastName",
+          "dob",
+          "createdAt",
+          "updatedAt",
+          "applications"
+        ]
+      },
+      "Application": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "listing": {
+            "$ref": "#/components/schemas/Listing"
+          },
+          "listingId": {
+            "type": "string"
+          },
+          "application": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "user",
+          "userId",
+          "listing",
+          "listingId",
+          "application"
+        ]
+      },
+      "Listing": {
+        "type": "object",
+        "properties": {
+          "preferences": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Preference"
+            }
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Unit"
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "acceptingApplicationsAtLeasingAgent": {
+            "type": "boolean"
+          },
+          "acceptingApplicationsByPoBox": {
+            "type": "boolean"
+          },
+          "acceptingOnlineApplications": {
+            "type": "boolean"
+          },
+          "acceptsPostmarkedApplications": {
+            "type": "boolean"
+          },
+          "accessibility": {
+            "type": "string"
+          },
+          "amenities": {
+            "type": "string"
+          },
+          "applicationDueDate": {
+            "type": "string"
+          },
+          "applicationOpenDate": {
+            "type": "string"
+          },
+          "applicationFee": {
+            "type": "string"
+          },
+          "applicationOrganization": {
+            "type": "string"
+          },
+          "applicationAddress": {
+            "type": "object"
+          },
+          "blankPaperApplicationCanBePickedUp": {
+            "type": "boolean"
+          },
+          "buildingAddress": {
+            "type": "object"
+          },
+          "buildingTotalUnits": {
+            "type": "number"
+          },
+          "buildingSelectionCriteria": {
+            "type": "string"
+          },
+          "costsNotIncluded": {
+            "type": "string"
+          },
+          "creditHistory": {
+            "type": "string"
+          },
+          "criminalBackground": {
+            "type": "string"
+          },
+          "depositMin": {
+            "type": "string"
+          },
+          "depositMax": {
+            "type": "string"
+          },
+          "developer": {
+            "type": "string"
+          },
+          "disableUnitsAccordion": {
+            "type": "boolean"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "leasingAgentAddress": {
+            "type": "object"
+          },
+          "leasingAgentEmail": {
+            "type": "string"
+          },
+          "leasingAgentName": {
+            "type": "string"
+          },
+          "leasingAgentOfficeHours": {
+            "type": "string"
+          },
+          "leasingAgentPhone": {
+            "type": "string"
+          },
+          "leasingAgentTitle": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "petPolicy": {
+            "type": "string"
+          },
+          "postmarkedApplicationsReceivedByDate": {
+            "type": "string"
+          },
+          "programRules": {
+            "type": "string"
+          },
+          "rentalHistory": {
+            "type": "string"
+          },
+          "requiredDocuments": {
+            "type": "string"
+          },
+          "smokingPolicy": {
+            "type": "string"
+          },
+          "unitsAvailable": {
+            "type": "number"
+          },
+          "unitAmenities": {
+            "type": "string"
+          },
+          "waitlistCurrentSize": {
+            "type": "number"
+          },
+          "waitlistMaxSize": {
+            "type": "number"
+          },
+          "whatToExpect": {
+            "type": "object"
+          },
+          "yearBuilt": {
+            "type": "number"
+          },
+          "unitsSummarized": {
+            "type": "object"
+          },
+          "urlSlug": {
+            "type": "string"
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Application"
+            }
+          }
+        },
+        "required": [
+          "preferences",
+          "units",
+          "attachments",
+          "id",
+          "acceptingApplicationsAtLeasingAgent",
+          "acceptingApplicationsByPoBox",
+          "acceptingOnlineApplications",
+          "acceptsPostmarkedApplications",
+          "accessibility",
+          "amenities",
+          "applicationDueDate",
+          "applicationFee",
+          "applicationOrganization",
+          "applicationAddress",
+          "blankPaperApplicationCanBePickedUp",
+          "buildingAddress",
+          "buildingTotalUnits",
+          "buildingSelectionCriteria",
+          "costsNotIncluded",
+          "creditHistory",
+          "criminalBackground",
+          "depositMin",
+          "developer",
+          "leasingAgentAddress",
+          "leasingAgentEmail",
+          "leasingAgentName",
+          "leasingAgentOfficeHours",
+          "leasingAgentPhone",
+          "leasingAgentTitle",
+          "name",
+          "neighborhood",
+          "petPolicy",
+          "postmarkedApplicationsReceivedByDate",
+          "rentalHistory",
+          "requiredDocuments",
+          "smokingPolicy",
+          "unitsAvailable",
+          "unitAmenities",
+          "waitlistCurrentSize",
+          "waitlistMaxSize",
+          "yearBuilt",
+          "applications"
+        ]
+      },
+      "ListingsListResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          },
+          "listings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Listing"
+            }
+          },
+          "amiCharts": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "status",
+          "listings",
+          "amiCharts"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/user/profile": {
+      "get": {
+        "operationId": "UserController_profile",
+        "parameters": [
+          
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/user/{userId}/applications": {
+      "get": {
+        "operationId": "UserApplicationsController_list",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApplicationDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+              
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "UserApplicationsController_create",
+        "parameters": [
+          
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/user/{userId}/applications/{applicationId}": {
+      "get": {
+        "operationId": "UserApplicationsController_findOne",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+              
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UserApplicationsController_update",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+              
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "UserApplicationsController_delete",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [
+          
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [
+          
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/token": {
+      "post": {
+        "operationId": "AuthController_token",
+        "parameters": [
+          
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "operationId": "ListingsController_getAll",
+        "parameters": [
+          {
+            "name": "jsonpath",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListingsListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/applications": {
+      "get": {
+        "operationId": "ApplicationsController_list",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "listingId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Application"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+              
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

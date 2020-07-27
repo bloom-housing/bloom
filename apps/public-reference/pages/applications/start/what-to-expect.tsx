@@ -1,8 +1,7 @@
 /*
-2.1a - Member Info
-A notice regarding adding househole members
+0.2 - What To Expect
+A notice regarding application process and rules
 */
-import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -18,9 +17,9 @@ export default () => {
   const currentPageStep = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+  const { handleSubmit } = useForm()
+  const onSubmit = () => {
+    Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
   }
 
   return (
@@ -35,20 +34,16 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/household/live-alone">{t("t.back")}</Link>
-          </strong>
-        </p>
-        <div className="form-card__lead">
+        <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">
-            {t("application.household.membersInfo.title")}
-          </h2>
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.household.membersInfo.subTitle")}
+            {t("application.start.whatToExpect.title")}
           </h2>
         </div>
-
+        <div className="form-card__pager-row px-16">
+          <p className="field-note py-2">{t("application.start.whatToExpect.info1")}</p>
+          <p className="field-note py-2">{t("application.start.whatToExpect.info2")}</p>
+          <p className="field-note py-2">{t("application.start.whatToExpect.info3")}</p>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

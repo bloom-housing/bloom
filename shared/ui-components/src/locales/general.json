@@ -3,13 +3,22 @@
     "form": {
       "errors": {
         "pleaseEnterZipCode": "Please enter your Zipcode",
-        "selectOption": "Please select one of the options above."
+        "selectOption": "Please select one of the options above.",
+        "selectAtLeastOne": "Please select at least one option.",
+        "householdTooBig": "Your household size is too big.",
+        "householdTooSmall": "Your household size is too small."
       },
       "radio": {
         "no": "No",
         "yes": "Yes"
       },
       "options" : {
+        "contact": {
+          "email": "Email",
+          "phone": "Phone",
+          "letter": "Letter",
+          "text": "Text"
+        },
         "relationship": {
           "spouse": "Spouse",
           "registeredDomesticPartner": "Registered Domestic Partner",
@@ -117,6 +126,7 @@
       "apt": "Apt or Unit #",
       "cityName": "City Name",
       "cityError": "Please enter a city",
+      "contactPreference": "How do you prefer to be contacted?",
       "state": "State",
       "stateError": "Please enter a state",
       "zip": "Zip",
@@ -176,6 +186,9 @@
       }
     },
     "household": {
+      "assistanceUrl": "https://exygy.com/",
+      "dontQualifyHeader": "Unfortunately it appears you do not qualify for this listing.",
+      "dontQualifyInfo": "Please make changes if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified. If the information you entered is accurate, we encourage you to check back in the future as more properties become available.",
       "addMembers": {
         "addHouseholdMember": "+ Add Household Member",
         "done": "Done adding people",
@@ -214,6 +227,13 @@
       "mobility": "For Mobility Impairments",
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
+    },
+    "review": {
+      "terms": {
+        "title": "Terms",
+        "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
+        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
+      }
     },
     "financial": {
       "income": {
@@ -255,6 +275,14 @@
         "yes": "Yes",
         "no": "No",
         "error": "Please select an option."
+      }
+    },
+    "start": {
+      "whatToExpect": {
+        "title": "Here's what to expect from this application.",
+        "info1": "First we'll ask about you and the people you plan to live with. Then, we'll ask about your income. Finally, we'll see if you qualify for any affordable housing lottery preference.",
+        "info2": "Please be aware that each household member can only appear on one application for each listing.",
+        "info3": "Any fraudulent statements will cause your application to be removed."
       }
     }
   },
@@ -360,7 +388,7 @@
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
     "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
-    "occupancyDescriptionNoSro": "Occupancy limits for this building differ from household size, and do not include children under 6.",
+    "occupancyDescriptionNoSro": "Occupancy limits for this building are based on unit type.",
     "occupancyDescriptionSomeSro": "Occupancy for this building varies by unit type. SROs are limited to 1 person per unit, regardless of age. For all other unit types, occupancy limits do not count children under 6.",
     "people": "people",
     "person": "person",
@@ -372,6 +400,11 @@
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",
     "reservedFor": "Reserved for %{type}",
+    "reservedTypePlural": {
+      "family": "families",
+      "senior": "seniors",
+      "veteran": "veterans"
+    },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
     "reservedUnitsForWhoAre": "Reserved for %{communityType} who are %{reservedType}",
@@ -405,7 +438,8 @@
       "oneBdrm": "1 BR",
       "twoBdrm": "2 BR",
       "threeBdrm": "3 BR",
-      "studio": "Studio"
+      "studio": "Studio",
+      "SRO": "Single Room Occupancy"
     },
     "units": "units",
     "unitsAreFor": "These units are for %{type}.",
@@ -507,8 +541,8 @@
   },
   "whatToExpect": {
     "label": "What to Expect",
-    "applicantsWillBeContacted": "Applicants will be contacted by the property agent in waitlist order until vacancies are filled.",
-    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
-    "bePreparedIfChosen": "Should your application be chosen from the waitlist, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted."
+    "applicantsWillBeContacted": "Applicants will be contacted by the property agent in rank order until vacancies are filled.",
+    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
+    "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
   }
 }

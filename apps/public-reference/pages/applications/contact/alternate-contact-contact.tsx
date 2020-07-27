@@ -15,8 +15,8 @@ import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { application, listing } = context
+  const conductor = new ApplicationConductor(application, listing, context)
   const currentPageStep = 1
   /* Form Handler */
   const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>()

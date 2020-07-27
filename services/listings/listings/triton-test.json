@@ -31,6 +31,8 @@
   "depositMax": "800.0",
   "depositMin": "500.0",
   "developer": "Thompson Dorfman, LLC",
+  "householdSizeMin": 2,
+  "householdSizeMax": 3,
   "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
   "programRules": null,
   "externalId": null,
