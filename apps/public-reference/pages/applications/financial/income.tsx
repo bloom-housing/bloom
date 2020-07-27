@@ -199,7 +199,14 @@ export default () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true}>{t("t.next")}</Button>
+              <Button
+                filled={true}
+                onClick={() => {
+                  conductor.returnToReview = false
+                }}
+              >
+                {t("t.next")}
+              </Button>
             </div>
 
             {conductor.canJumpForwardToReview() && (

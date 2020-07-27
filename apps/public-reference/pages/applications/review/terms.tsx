@@ -4,15 +4,26 @@ View of application terms with checkbox
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  Button,
+  FormCard,
+  ProgressNav,
+  t,
+  UserContext,
+  ApiClientContext,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import React, { useContext, useMemo } from "react"
+import Markdown from "markdown-to-jsx"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
+  const { applicationsService } = useContext(ApiClientContext)
+  const { profile } = useContext(UserContext)
+
   const { application, listing } = context
   const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
     application,
@@ -20,23 +31,37 @@ export default () => {
     context,
   ])
   const currentPageStep = 5
+  const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
-
-    conductor.completeStep(5)
-    conductor.sync()
-
-    Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
+    application.completedStep = 5
+    // FIXME: getting a build error from the following. Message:
+    // Property 'create' is a static member of type 'ApplicationsService'
+    /* applicationsService
+      .create({
+        body: {
+          application,
+          listing: {
+            id: listing.id,
+          },
+          ...(profile && {
+            user: {
+              id: profile.id,
+            },
+          }),
+        },
+      })
+      .then((result) => {
+        conductor.sync()
+        Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
+      }) */
   }
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -46,27 +71,47 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="text-bold">
+        <p className="form-card__back">
           <strong>
             <Link href="/applications/review/summary">{t("t.back")}</Link>
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless">Terms</h2>
-
-        <hr />
-
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (FORM)
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+        <div className="form-card__lead border-b">
+          <h2 className="form-card__title is-borderless mt-4">
+            {t("application.review.terms.title")}
+          </h2>
+        </div>
+        <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__pager-row">
+            <Markdown options={{ disableParsingRawHTML: false }}>
+              {/* TODO */}
+              {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
+            </Markdown>
+            <div className="field mt-4 flex flex-row flex-no-wrap">
+              <input
+                className="inline-block"
+                type="checkbox"
+                id="agree"
+                name="agree"
+                ref={register}
+              />
+              <label htmlFor="agree" className="text-primary font-semibold inline-block">
+                {t("application.review.terms.confirmCheckboxText")}
+              </label>
+            </div>
+          </div>
+          <div className="form-card__pager">
+            <div className="form-card__pager-row primary">
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                Submit
+              </Button>
+            </div>
           </div>
         </form>
       </FormCard>

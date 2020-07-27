@@ -105,7 +105,14 @@ export default () => {
         </div>
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
-            <Button filled={true} className="w-full md:w-3/4" onClick={handleSubmit(onSubmit)}>
+            <Button
+              filled={true}
+              className="w-full md:w-3/4"
+              onClick={() => {
+                conductor.returnToReview = false
+                handleSubmit(onSubmit)
+              }}
+            >
               {t("application.household.addMembers.done")}
             </Button>
           </div>
@@ -116,7 +123,7 @@ export default () => {
                 className="button is-unstyled mb-4"
                 onClick={() => {
                   conductor.returnToReview = true
-                  onSubmit(null)
+                  handleSubmit(onSubmit)
                 }}
               >
                 {t("application.form.general.saveAndReturn")}
