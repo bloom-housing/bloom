@@ -110,7 +110,7 @@ export default () => {
               className="w-full md:w-3/4"
               onClick={() => {
                 conductor.returnToReview = false
-                handleSubmit(onSubmit)
+                handleSubmit(onSubmit)()
               }}
             >
               {t("application.household.addMembers.done")}
@@ -123,7 +123,7 @@ export default () => {
                 className="button is-unstyled mb-4"
                 onClick={() => {
                   conductor.returnToReview = true
-                  handleSubmit(onSubmit)
+                  handleSubmit(onSubmit)()
                 }}
               >
                 {t("application.form.general.saveAndReturn")}
