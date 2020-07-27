@@ -8,6 +8,6 @@ export class ListingsController {
 
   @Get()
   public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingsListResponse> {
-    return await this.listingsService.list(jsonpath)
+    return this.listingsService.list(jsonpath)
   }
 }
