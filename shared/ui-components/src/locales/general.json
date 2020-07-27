@@ -267,7 +267,8 @@
       "sameAddressAsApplicant": "Same Address as Applicant",
       "noAdditionalMembers": "No additional household members",
       "householdDetails": "Household Details",
-      "voucherOrSubsidy": "Housing Voucher or Rental Subsidy"
+      "voucherOrSubsidy": "Housing Voucher or Rental Subsidy",
+      "lastChanceToEdit": "This is your last chance to edit before submitting."
     }
   },
   "config": {

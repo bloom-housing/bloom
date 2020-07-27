@@ -235,7 +235,7 @@ export default () => {
           <EditLink href="/applications/financial/vouchers" />
         </h3>
 
-        <div className="form-card__group mx-0">
+        <div className="form-card__group border-b mx-0">
           <ReviewItem label={t("application.review.voucherOrSubsidy")}>
             {application.incomeVouchers ? t("t.yes") : t("t.no")}
           </ReviewItem>
@@ -243,6 +243,12 @@ export default () => {
           <ReviewItem label={t("t.income")}>
             ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
           </ReviewItem>
+        </div>
+
+        <div className="form-card__group">
+          <p className="field-note text-gray-800 text-center">
+            {t("application.review.lastChanceToEdit")}
+          </p>
         </div>
 
         <div className="form-card__pager">
