@@ -2,6 +2,7 @@
 
 module.exports = {
   important: true,
+  purge: false,
   theme: {
     screens: {
       sm: "640px",

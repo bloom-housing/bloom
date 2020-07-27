@@ -3,6 +3,7 @@
     "form": {
       "errors": {
         "selectOption": "Please select one of the options above.",
+        "selectAtLeastOne": "Please select at least one option.",
         "householdTooBig": "Your household size is too big.",
         "householdTooSmall": "Your household size is too small."
       },
@@ -10,6 +11,12 @@
         "saveAndReturn": "Save and return to review"
       },
       "options": {
+        "contact": {
+          "email": "Email",
+          "phone": "Phone",
+          "letter": "Letter",
+          "text": "Text"
+        },
         "relationship": {
           "spouse": "Spouse",
           "registeredDomesticPartner": "Registered Domestic Partner",
@@ -117,6 +124,7 @@
       "apt": "Apt or Unit #",
       "cityName": "City Name",
       "cityError": "Please enter a city",
+      "contactPreference": "How do you prefer to be contacted?",
       "state": "State",
       "stateError": "Please enter a state",
       "zip": "Zip",
@@ -220,6 +228,19 @@
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
     },
+    "review": {
+      "takeAMomentToReview": "Take a moment to review your information before submitting your application.",
+      "sameAddressAsApplicant": "Same Address as Applicant",
+      "noAdditionalMembers": "No additional household members",
+      "householdDetails": "Household Details",
+      "voucherOrSubsidy": "Housing Voucher or Rental Subsidy",
+      "lastChanceToEdit": "This is your last chance to edit before submitting.",
+      "terms": {
+        "title": "Terms",
+        "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
+        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
+      }
+    },
     "financial": {
       "income": {
         "title": "Let's move to income.",
@@ -262,13 +283,13 @@
         "error": "Please select an option."
       }
     },
-    "review": {
-      "takeAMomentToReview": "Take a moment to review your information before submitting your application.",
-      "sameAddressAsApplicant": "Same Address as Applicant",
-      "noAdditionalMembers": "No additional household members",
-      "householdDetails": "Household Details",
-      "voucherOrSubsidy": "Housing Voucher or Rental Subsidy",
-      "lastChanceToEdit": "This is your last chance to edit before submitting."
+    "start": {
+      "whatToExpect": {
+        "title": "Here's what to expect from this application.",
+        "info1": "First we'll ask about you and the people you plan to live with. Then, we'll ask about your income. Finally, we'll see if you qualify for any affordable housing lottery preference.",
+        "info2": "Please be aware that each household member can only appear on one application for each listing.",
+        "info3": "Any fraudulent statements will cause your application to be removed."
+      }
     }
   },
   "config": {
