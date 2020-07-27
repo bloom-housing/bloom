@@ -1,5 +1,5 @@
 import { Test } from "@nestjs/testing"
-import { INestApplication, ValidationPipe } from "@nestjs/common"
+import { INestApplication } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
@@ -8,7 +8,6 @@ import supertest from "supertest"
 import { AuthModule } from "../../src/auth/auth.module"
 import { UserModule } from "../../src/user/user.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EntityNotFoundExceptionFilter } from "../../src/filters/entity-not-found-exception.filter"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { applicationSetup } from "../../src/app.module"
 
