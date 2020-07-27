@@ -133,7 +133,7 @@
       "type": {
         "title": "Is there someone else you'd like to authorize us to contact if we can't reach you?",
         "description": "By providing alternate contact, you are allowing us to discuss information on your application with them.",
-        "label": "Alternate contact",
+        "label": "Alternate Contact",
         "helperText": "Please select one.",
         "options": {
           "familyMember": "Family member",
@@ -522,7 +522,8 @@
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
     "viewOnMap": "View on Map",
-    "yes": "Yes"
+    "yes": "Yes",
+    "you": "You"
   },
   "welcome": {
     "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",

@@ -48,7 +48,7 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/household/ada">Back</Link>
+            <Link href="/applications/household/ada">{t("t.back")}</Link>
           </strong>
         </p>
 

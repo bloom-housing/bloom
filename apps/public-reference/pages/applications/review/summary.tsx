@@ -96,7 +96,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/review/demographics">Back</Link>
+            <Link href="/applications/review/demographics">{t("t.back")}</Link>
           </strong>
         </p>
 
@@ -107,7 +107,7 @@ export default () => {
         </div>
 
         <h3 className="form--card__sub-header">
-          You
+          {t("t.you")}
           <EditLink href="/applications/contact/name" />
         </h3>
 
@@ -162,7 +162,7 @@ export default () => {
           application.alternateContact.type !== "noContact" && (
             <>
               <h3 className="form--card__sub-header">
-                {t("application.alternateContact.label")}
+                {t("application.alternateContact.type.label")}
                 <EditLink href="/applications/contact/alternate-contact-type" />
               </h3>
               <div className="form-card__group mx-0">
