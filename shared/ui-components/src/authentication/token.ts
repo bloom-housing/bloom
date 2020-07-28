@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode"
 
-const ACCESS_TOKEN_LOCAL_STORAGE_KEY = "@bht"
+export const ACCESS_TOKEN_LOCAL_STORAGE_KEY = "@bht"
 
 const getStorage = (type: string) => (type === "local" ? localStorage : sessionStorage)
 

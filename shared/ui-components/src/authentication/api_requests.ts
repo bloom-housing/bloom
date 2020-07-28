@@ -10,7 +10,7 @@ export const renewToken = async (client: AxiosInstance) => {
 
 export const login = async (apiBase: string, email: string, password: string) => {
   const res = await axios.post<{ accessToken: string }>(`${apiBase}/auth/login`, {
-    username: email,
+    email: email,
     password,
   })
   const { accessToken } = res.data

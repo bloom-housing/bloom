@@ -145,6 +145,9 @@ export const UserProvider: FunctionComponent = ({ children }) => {
       try {
         const accessToken = await login(apiUrl, email, password)
         dispatch(saveToken({ accessToken, apiUrl, dispatch }))
+        const client = createAxiosInstance(apiUrl, accessToken)
+        const profile = await getProfile(client)
+        dispatch(saveProfile(profile))
       } finally {
         dispatch(stopLoading())
       }
