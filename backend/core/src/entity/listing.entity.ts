@@ -5,6 +5,11 @@ import { Attachment } from "./attachment.entity"
 import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 import { Application } from "./application.entity"
 
+export enum ListingStatus {
+  active = "active",
+  pending = "pending",
+}
+
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
   @OneToMany((type) => Preference, (preference) => preference.listing)
@@ -112,6 +117,12 @@ class Listing extends BaseEntity {
   urlSlug?: string
   @OneToMany((type) => Application, (application) => application.listing)
   applications: Application[]
+  @Column({
+    type: "enum",
+    enum: ListingStatus,
+    default: ListingStatus.pending,
+  })
+  status: ListingStatus
 }
 
 export { Listing as default, Listing }

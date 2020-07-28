@@ -128,7 +128,8 @@
       }
     ],
     "totalUnits": 2,
-    "unitsAvailable": 2
+    "unitsAvailable": 2,
+    "status": "active"
   },
   {
     "id": "sz0UrxnBdAxHMdfgcgha7",
@@ -365,7 +366,8 @@
       }
     ],
     "totalUnits": 5,
-    "unitsAvailable": 0
+    "unitsAvailable": 0,
+    "status": "active"
   },
   {
     "id": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1427,6 +1429,7 @@
       }
     ],
     "totalUnits": 2,
-    "unitsAvailable": 0
+    "unitsAvailable": 0,
+    "status": "unapproved"
   }  
 ]

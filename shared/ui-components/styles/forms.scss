@@ -16,7 +16,6 @@
   }
 
   .control {
-
     .input {
       @apply border;
       @apply border-gray-450;
@@ -92,8 +91,9 @@
     cursor: pointer;
     font-weight: 400;
     margin-bottom: 0.5em;
-    margin-left: 0;
+    margin-left: 2rem;
     display: block;
+    text-indent: -2rem;
   }
 
   input[type="checkbox"] + label::before,
