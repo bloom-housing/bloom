@@ -1,5 +1,6 @@
-import { blankApplication } from "../lib/AppSubmissionContext"
+import Router from "next/router"
 import { Listing } from "@bloom-housing/core"
+import { blankApplication } from "../lib/AppSubmissionContext"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -30,6 +31,7 @@ export default class ApplicationConductor {
   application = {} as Record<string, any>
   listing = {} as Listing
   context = null
+  returnToReview = false
 
   constructor(application, listing, context) {
     this.application = application
@@ -41,8 +43,12 @@ export default class ApplicationConductor {
     return 5
   }
 
-  advanceToNextStep() {
-    this.application.completedStep += 1
+  completeStep(step) {
+    this.application.completedStep = Math.max(step, this.application.completedStep)
+  }
+
+  canJumpForwardToReview() {
+    return this.application.completedStep === this.totalNumberOfSteps() - 1
   }
 
   sync() {
@@ -64,6 +70,22 @@ export default class ApplicationConductor {
     if (typeof window != "undefined") {
       window.sessionStorage.removeItem("bloom-app-autosave")
       window.sessionStorage.removeItem("bloom-app-listing")
+    }
+  }
+
+  routeTo(url: string) {
+    Router.push(url).then(() => window.scrollTo(0, 0))
+  }
+
+  routeToNextOrReturnUrl(url: string) {
+    Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
+  }
+
+  nextOrReturnUrl(url: string) {
+    if (this.returnToReview) {
+      return "/applications/review/summary"
+    } else {
+      return url
     }
   }
 }

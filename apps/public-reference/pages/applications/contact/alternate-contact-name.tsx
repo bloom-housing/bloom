@@ -9,12 +9,16 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 1
 
   /* Form Handler */
@@ -24,7 +28,7 @@ export default () => {
     application.alternateContact.lastName = data.lastName
     application.alternateContact.agency = data.agency
     conductor.sync()
-    Router.push("/applications/contact/alternate-contact-contact").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-contact")
   }
   return (
     <FormsLayout>
@@ -101,12 +105,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

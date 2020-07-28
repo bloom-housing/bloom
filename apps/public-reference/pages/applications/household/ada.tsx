@@ -4,19 +4,22 @@ If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
 import Link from "next/link"
-import Router from "next/router"
 import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 2
 
   /* Form Handler */
@@ -39,7 +42,7 @@ export default () => {
       },
     })
 
-    Router.push("/applications/reserved/units").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/reserved/units")
   }
 
   const adaNone = watch("none")
@@ -58,7 +61,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/household/current">Back</Link>
+            <Link href="/applications/household/current">{t("t.back")}</Link>
           </strong>
         </p>
 
@@ -165,12 +168,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

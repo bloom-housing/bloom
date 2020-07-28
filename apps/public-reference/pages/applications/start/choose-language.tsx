@@ -17,7 +17,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 
 const loadListing = async (stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
@@ -30,7 +30,11 @@ export default () => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { application } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   useEffect(() => {
     loadListing(setListing, conductor, context)
   }, [])

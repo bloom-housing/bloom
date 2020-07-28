@@ -9,14 +9,18 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const router = useRouter()
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 3
 
   /* Form Handler */
@@ -46,7 +50,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/reserved/units">Back</Link>
+            <Link href="/applications/reserved/units">{t("t.back")}</Link>
           </strong>
         </p>
 
@@ -116,7 +120,7 @@ export default () => {
                   // Do nothing - handled by React Hook Forms
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
           </div>

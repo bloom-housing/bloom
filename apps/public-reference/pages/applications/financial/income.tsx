@@ -18,7 +18,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
 import { Listing } from "@bloom-housing/core"
 
@@ -54,7 +54,11 @@ export default () => {
   const context = useContext(AppSubmissionContext)
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 3
 
   /* Form Handler */
@@ -78,10 +82,9 @@ export default () => {
       const toSave = { income, incomePeriod }
       new FormStep(conductor).save(toSave)
 
-      application.completedStep = 3
+      conductor.completeStep(3)
       conductor.sync()
-
-      Router.push("/applications/preferences/intro").then(() => window.scrollTo(0, 0))
+      conductor.routeToNextOrReturnUrl("/applications/preferences/intro")
     }
   }
 
@@ -107,7 +110,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/financial/vouchers">Back</Link>
+            <Link href="/applications/financial/vouchers">{t("t.back")}</Link>
           </strong>
         </p>
 
@@ -199,12 +202,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

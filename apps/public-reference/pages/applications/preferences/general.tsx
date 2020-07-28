@@ -4,17 +4,21 @@ If all preferences are opted out the applicant is shown a screen confirming thei
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 4
 
   /* Form Handler */
@@ -22,7 +26,7 @@ export default () => {
   const onSubmit = (data) => {
     console.log(data)
 
-    application.completedStep = 4
+    conductor.completeStep(4)
     conductor.sync()
 
     Router.push("/applications/review/demographics").then(() => window.scrollTo(0, 0))
@@ -44,7 +48,7 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/preferences/live-or-work">Back</Link>
+            <Link href="/applications/preferences/live-or-work">{t("t.back")}</Link>
           </strong>
         </p>
 

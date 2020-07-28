@@ -10,12 +10,12 @@ export interface HouseholdSizeFieldProps {
   validate: boolean
   register: any
   error: any
-  clearError: () => void
+  clearErrors: () => void
   assistanceUrl: string
 }
 
 const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
-  const { listing, householdSize, validate, register, clearError, error, assistanceUrl } = props
+  const { listing, householdSize, validate, register, clearErrors, error, assistanceUrl } = props
 
   return (
     <>
@@ -41,7 +41,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
             />
           </span>
           <ErrorMessage error={error}>
-            <AlertBox type="alert" inverted onClose={() => clearError()}>
+            <AlertBox type="alert" inverted onClose={() => clearErrors()}>
               {t("application.household.dontQualifyHeader")}
             </AlertBox>
             <AlertNotice title={error?.message} type="alert" inverted>

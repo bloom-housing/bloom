@@ -2,17 +2,15 @@
   "application": {
     "form": {
       "errors": {
-        "pleaseEnterZipCode": "Please enter your Zipcode",
         "selectOption": "Please select one of the options above.",
         "selectAtLeastOne": "Please select at least one option.",
         "householdTooBig": "Your household size is too big.",
         "householdTooSmall": "Your household size is too small."
       },
-      "radio": {
-        "no": "No",
-        "yes": "Yes"
+      "general": {
+        "saveAndReturn": "Save and return to review"
       },
-      "options" : {
+      "options": {
         "contact": {
           "email": "Email",
           "phone": "Phone",
@@ -143,7 +141,7 @@
       "type": {
         "title": "Is there someone else you'd like to authorize us to contact if we can't reach you?",
         "description": "By providing alternate contact, you are allowing us to discuss information on your application with them.",
-        "label": "Alternate contact",
+        "label": "Alternate Contact",
         "helperText": "Please select one.",
         "options": {
           "familyMember": "Family member",
@@ -195,6 +193,7 @@
         "title": "Tell us about your household."
       },
       "householdMember": "Household Member",
+      "householdMembers": "Household Members",
       "liveAlone": {
         "title": "Next we would like to know about the others who will live with you in the unit",
         "willLiveAlone": "I will live alone",
@@ -222,6 +221,7 @@
       "primaryApplicant": "Primary Applicant"
     },
     "ada": {
+      "label": "ADA Accessible Units",
       "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
       "subTitle": "If you are selected for a unit, the property will work to accommodate your need to the best of their ability. Should your application be chosen, be prepared to provide supporting documentation from your physician.",
       "mobility": "For Mobility Impairments",
@@ -229,6 +229,12 @@
       "hearing": "For Hearing Impairments"
     },
     "review": {
+      "takeAMomentToReview": "Take a moment to review your information before submitting your application.",
+      "sameAddressAsApplicant": "Same Address as Applicant",
+      "noAdditionalMembers": "No additional household members",
+      "householdDetails": "Household Details",
+      "voucherOrSubsidy": "Housing Voucher or Rental Subsidy",
+      "lastChanceToEdit": "This is your last chance to edit before submitting.",
       "terms": {
         "title": "Terms",
         "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
@@ -502,16 +508,20 @@
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
   },
   "t": {
+    "additionalPhone": "Additional Phone",
     "area": "area",
     "accessibility": "Accessibility",
     "availability": "Availability",
     "back": "Back",
     "built": "Built",
+    "confirm": "Confirm",
     "deposit": "Deposit",
     "floor": "floor",
     "floors": "floors",
+    "income": "Income",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
+    "name": "Name",
     "neighborhood": "Neighborhood",
     "next": "Next",
     "no": "No",
@@ -520,6 +530,7 @@
     "occupancy": "Occupancy",
     "or": "or",
     "petsPolicy": "Pets Policy",
+    "phone": "Phone",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
@@ -532,7 +543,9 @@
     "unitAmenities": "Unit Amenities",
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
-    "viewOnMap": "View on Map"
+    "viewOnMap": "View on Map",
+    "yes": "Yes",
+    "you": "You"
   },
   "welcome": {
     "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",

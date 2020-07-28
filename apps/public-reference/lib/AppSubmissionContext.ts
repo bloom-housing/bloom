@@ -71,7 +71,7 @@ export const blankApplication = () => {
         street: "",
         city: "",
         state: "",
-        zipcode: "",
+        zipCode: "",
       },
     },
     accessibility: {

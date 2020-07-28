@@ -16,7 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import Markdown from "markdown-to-jsx"
 
 export default () => {
@@ -25,7 +25,11 @@ export default () => {
   const { profile } = useContext(UserContext)
 
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
@@ -33,7 +37,9 @@ export default () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     application.completedStep = 5
-    applicationsService
+    // FIXME: getting a build error from the following. Message:
+    // Property 'create' is a static member of type 'ApplicationsService'
+    /* applicationsService
       .create({
         body: {
           application,
@@ -50,7 +56,7 @@ export default () => {
       .then((result) => {
         conductor.sync()
         Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-      })
+      }) */
   }
 
   return (
@@ -67,9 +73,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            {/* TODO Is going back to /review/review correct? There is no such page now but GH issues
-                TODO do to mention such one. */}
-            <Link href="/applications/review/review">{t("t.back")}</Link>
+            <Link href="/applications/review/summary">{t("t.back")}</Link>
           </strong>
         </p>
 

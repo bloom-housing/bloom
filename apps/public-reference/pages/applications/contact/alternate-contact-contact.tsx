@@ -3,20 +3,23 @@
 Type of alternate contact
 */
 import Link from "next/link"
-import Router from "next/router"
 import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 1
   /* Form Handler */
   const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
@@ -25,10 +28,10 @@ export default () => {
     application.alternateContact.emailAddress = data.emailAddress
     application.alternateContact.mailingAddress.street = data.mailingAddress.street
     application.alternateContact.mailingAddress.state = data.mailingAddress.state
-    application.alternateContact.mailingAddress.zipcode = data.mailingAddress.zipcode
+    application.alternateContact.mailingAddress.zipCode = data.mailingAddress.zipCode
     application.alternateContact.mailingAddress.city = data.mailingAddress.city
     conductor.sync()
-    Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/household/live-alone")
   }
   return (
     <FormsLayout>
@@ -117,11 +120,11 @@ export default () => {
               />
             </div>
             <Field
-              id="mailingAddress.zipcode"
-              name="mailingAddress.zipcode"
+              id="mailingAddress.zipCode"
+              name="mailingAddress.zipCode"
               label={t("application.alternateContact.contact.zipcodeFormLabel")}
               placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
-              defaultValue={application.alternateContact.mailingAddress.zipcode}
+              defaultValue={application.alternateContact.mailingAddress.zipCode}
               register={register}
             />
           </div>
@@ -130,12 +133,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

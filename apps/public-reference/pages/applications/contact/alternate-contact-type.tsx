@@ -9,22 +9,27 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 1
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
+    conductor.completeStep(1)
     conductor.sync()
     if (data.type == "noContact") {
-      Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
+      conductor.routeTo("/applications/household/live-alone")
     } else {
-      Router.push("/applications/contact/alternate-contact-name").then(() => window.scrollTo(0, 0))
+      conductor.routeTo("/applications/contact/alternate-contact-name")
     }
   }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
@@ -113,7 +118,7 @@ export default () => {
                   //
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
           </div>

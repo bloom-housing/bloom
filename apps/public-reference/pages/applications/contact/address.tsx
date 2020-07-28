@@ -19,14 +19,18 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 1
 
   /* Form Handler */
@@ -58,7 +62,7 @@ export default () => {
     }
     conductor.sync()
 
-    Router.push("/applications/contact/alternate-contact-type").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
   }
 
   const noPhone = watch("applicant.noPhone") || false
@@ -80,7 +84,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/name">Back</Link>
+            <Link href="/applications/contact/name">{t("t.back")}</Link>
           </strong>
         </p>
 
@@ -242,7 +246,7 @@ export default () => {
                 placeholder={t("application.contact.cityName")}
                 defaultValue={context.application.applicant.address.city}
                 validation={{ required: true }}
-                error={errors.address?.city}
+                error={errors.applicant?.address?.city}
                 errorMessage={t("application.contact.cityError")}
                 register={register}
               />
@@ -250,7 +254,7 @@ export default () => {
               <StateSelect
                 id="addressState"
                 name="applicant.address.state"
-                label="State"
+                label={t("application.contact.state")}
                 defaultValue={context.application.applicant.address.state}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.state}
@@ -262,12 +266,12 @@ export default () => {
             <Field
               id="addressZipCode"
               name="applicant.address.zipCode"
-              label="Zip"
-              placeholder="ZipCode"
+              label={t("application.contact.zip")}
+              placeholder={t("application.contact.zipCode")}
               defaultValue={context.application.applicant.address.zipCode}
               validation={{ required: true }}
               error={errors.applicant?.address?.zipCode}
-              errorMessage="Please enter your ZipCode"
+              errorMessage={t("application.contact.zipCodeError")}
               register={register}
             />
 
@@ -329,7 +333,7 @@ export default () => {
                 <StateSelect
                   id="mailingAddressState"
                   name="mailingAddress.state"
-                  label="State"
+                  label={t("application.contact.state")}
                   defaultValue={context.application.mailingAddress.state}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.state}
@@ -342,12 +346,12 @@ export default () => {
               <Field
                 id="mailingAddressZipCode"
                 name="mailingAddress.zipCode"
-                label="Zip"
-                placeholder="ZipCode"
+                label={t("application.contact.zip")}
+                placeholder={t("application.contact.zipCode")}
                 defaultValue={context.application.mailingAddress.zipCode}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.zipCode}
-                errorMessage="Please enter your ZipCode"
+                errorMessage={t("application.contact.zipCodeError")}
                 register={register}
               />
             </div>
@@ -467,7 +471,7 @@ export default () => {
                   <StateSelect
                     id="workAddressState"
                     name="applicant.workAddress.state"
-                    label="State"
+                    label={t("application.contact.state")}
                     defaultValue={context.application.applicant.workAddress.state}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.state}
@@ -480,12 +484,12 @@ export default () => {
                 <Field
                   id="workAddressZipCode"
                   name="applicant.workAddress.zipCode"
-                  label="Zip"
-                  placeholder="ZipCode"
+                  label={t("application.contact.zip")}
+                  placeholder={t("application.contact.zipCode")}
                   defaultValue={context.application.applicant.workAddress.zipCode}
                   validation={{ required: true }}
                   error={errors.applicant?.workAddress?.zipCode}
-                  errorMessage="Please enter your ZipCode"
+                  errorMessage={t("application.contact.zipCodeError")}
                   register={register}
                 />
               </>
@@ -497,12 +501,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

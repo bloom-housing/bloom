@@ -3,20 +3,23 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import Router from "next/router"
 import { Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { emailRegex } from "../../../lib/emailRegex"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
+    application,
+    listing,
+    context,
+  ])
   const currentPageStep = 1
 
   /* Form Handler */
@@ -27,8 +30,7 @@ export default () => {
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
-
-    Router.push("/applications/contact/address").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/contact/address")
   }
 
   const noEmail = watch("noEmail")
@@ -103,6 +105,7 @@ export default () => {
                     monthRange: (value) => parseInt(value) > 0 && parseInt(value) <= 12,
                   },
                 }}
+                inputProps={{ maxLength: 2 }}
                 register={register}
               />
               <Field
@@ -118,6 +121,7 @@ export default () => {
                     dayRange: (value) => parseInt(value) > 0 && parseInt(value) <= 31,
                   },
                 }}
+                inputProps={{ maxLength: 2 }}
                 register={register}
               />
               <Field
@@ -134,6 +138,7 @@ export default () => {
                       parseInt(value) > 1900 && parseInt(value) <= new Date().getFullYear() - 18,
                   },
                 }}
+                inputProps={{ maxLength: 4 }}
                 register={register}
               />
             </div>
@@ -190,12 +195,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
                 {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>
