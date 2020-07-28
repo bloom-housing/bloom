@@ -140,6 +140,7 @@ export const UserProvider: FunctionComponent = ({ children }) => {
     accessToken: state.accessToken,
     initialStateLoaded: state.initialStateLoaded,
     login: async (email, password) => {
+      dispatch(signOut())
       dispatch(startLoading())
       try {
         const accessToken = await login(apiUrl, email, password)
