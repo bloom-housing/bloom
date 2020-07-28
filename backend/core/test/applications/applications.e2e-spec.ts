@@ -1,5 +1,5 @@
 import { Test } from "@nestjs/testing"
-import { INestApplication, ValidationPipe } from "@nestjs/common"
+import { INestApplication } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
@@ -8,8 +8,8 @@ import supertest from "supertest"
 import { AuthModule } from "../../src/auth/auth.module"
 import { UserModule } from "../../src/user/user.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EntityNotFoundExceptionFilter } from "../../src/filters/entity-not-found-exception.filter"
 import { ApplicationsModule } from "../../src/applications/applications.module"
+import { applicationSetup } from "../../src/app.module"
 
 describe("Applications", () => {
   let app: INestApplication
@@ -30,8 +30,7 @@ describe("Applications", () => {
       ],
     }).compile()
     app = moduleRef.createNestApplication()
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
-    app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+    app = applicationSetup(app)
     await app.init()
     let res = await supertest(app.getHttpServer())
       .post("/auth/login")

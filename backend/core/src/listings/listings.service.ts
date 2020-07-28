@@ -3,7 +3,8 @@ import { amiCharts } from "../lib/ami_charts"
 import { transformUnits } from "../lib/unit_transformations"
 import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
-import { ListingsListQueryParams, ListingsListResponse } from "./listings.dto"
+
+import { ListingsListResponse } from "./listings.dto"
 import { Listing } from "../entity/listing.entity"
 
 export enum ListingsResponseStatus {
@@ -12,11 +13,11 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(options?: ListingsListQueryParams): Promise<ListingsListResponse> {
+  public async list(jsonpath?: string): Promise<ListingsListResponse> {
     let listings = await Listing.find({ relations: ["units", "attachments", "preferences"] })
 
-    if (options?.jsonpath) {
-      listings = jp.query(listings, options.jsonpath)
+    if (jsonpath) {
+      listings = jp.query(listings, jsonpath)
     }
 
     listings.forEach((listing) => {
