@@ -1103,9 +1103,8 @@ exports[`Storyshots Listing|Map Show BW Map With Pin 1`] = `
         98 Archer Street
         <br />
         San Jose
-         
+        , 
         CA
-        ,
          
         95112
       </Component>
