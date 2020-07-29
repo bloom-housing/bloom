@@ -9,7 +9,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import { useContext, useMemo, Fragment } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -68,7 +68,7 @@ export default () => {
             </p>
             {options.map((option, i) => {
               return (
-                <>
+                <Fragment key={option}>
                   <div className={"field " + (errors.type ? "error" : "")}>
                     <input
                       key={option}
@@ -105,7 +105,7 @@ export default () => {
                       </ErrorMessage>
                     )}
                   </div>
-                </>
+                </Fragment>
               )
             })}
           </div>
