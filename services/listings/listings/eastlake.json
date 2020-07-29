@@ -29,7 +29,7 @@
   },
   "buildingSelectionCriteria": "https://ebaldc.org/how-to-apply/residential-selection-criteria",
   "costsNotIncluded": "Residents responsible for PG&E and Internet.",
-  "creditHistory": "Both the current and previous landlords for the past three (3) years will be contacted by mail or fax for information concerning the history of complying with lease requirements, payment records, damage or destruction of property, interference with the rights of others, or failure to maintain the unit in a healthy, safe and sanitary. Additionally, EBALDC will verify past tenant history of the applicant household within its own portfolio. Absence of prior rental history will not automatically disqualify an otherwise eligible applicant. EBALDC, however, may request alternative means of verifying prior residence or lack of residence, as well as request provision of personal references.  Applicants may be denied due to 1) A negative unlawful detainer report indicating failure to meet financial obligations in past tenant history, or a recent eviction within the past 5 years and 2) A negative landlord recommendation, encompassing failure to comply with the lease, poor payment history, failure to maintain the unit in a healthy, safe, and sanitary condition, crimes of violence to persons, destruction or theft of property, sales of narcotics, eviction for cause or other criminal acts which would adversely affect the health, safety, or welfare of other tenants.",
+  "creditHistory": "Both the current and previous landlords for the past three (3) years will be contacted by mail or fax for information concerning the history of complying with lease requirements, payment records, damage or destruction of property, interference with the rights of others, or failure to maintain the unit in a healthy, safe and sanitary. Additionally, EBALDC will verify past tenant history of the applicant household within its own portfolio. Absence of prior rental history will not automatically disqualify an otherwise eligible applicant. EBALDC, however, may request alternative means of verifying prior residence or lack of residence, as well as request provision of personal references. Applicants may be denied due to 1) A negative unlawful detainer report indicating failure to meet financial obligations in past tenant history, or a recent eviction within the past 5 years, and 2) A negative landlord recommendation, encompassing failure to comply with the lease; poor payment history; failure to maintain the unit in a healthy, safe, and sanitary condition; crimes of violence to persons; destruction or theft of property; sales of narcotics; eviction for cause or other criminal acts which would adversely affect the health, safety, or welfare of other tenants.",
   "depositMax": "1811.00",
   "depositMin": "1811.00",
   "developer": "EBALDC",
@@ -61,7 +61,7 @@
     }
   ],
   "applicationFee": "26.00",
-  "criminalBackground": "Applicants will be denied for the following:\n\n - No history that constitutes a direct threat to the health or safety of others; - No felony conviction for crimes against person or property; - No History of sale or manufacture of drugs; - No violence, robbery/theft/fraud (including welfare fraud), vandalism, arson in past 7 years; - No lifetime sex offender registration",
+  "criminalBackground": "Applicants will be denied for the following: 1) No history of manufacturing methamhetamines on federal property and 2) No lifetime sex offender registration",
   "leasingAgentEmail": "iterriquez@ebaldc.org",
   "leasingAgentName": "Israel Terriquez",
   "leasingAgentAddress": {
@@ -152,5 +152,10 @@
       "monthlyRentAsPercentOfIncome": null
     }
   ],
-  "unitsAvailable": 3
+  "unitsAvailable": 3,
+  "whatToExpect": {
+    "applicantsWillBeContacted": "Applicants will be contacted on a first come first serve basis until vacancies are filled.",
+    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
+    "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents within 5 days of being contacted."
+  }
 }
