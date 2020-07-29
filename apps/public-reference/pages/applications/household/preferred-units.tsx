@@ -49,7 +49,9 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href={backPath}>Back</Link>
+            <Link href={backPath}>
+              <a>Back</a>
+            </Link>
           </strong>
         </p>
 

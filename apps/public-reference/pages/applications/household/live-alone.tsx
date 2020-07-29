@@ -49,7 +49,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href={backUrl}>{t("t.back")}</Link>
+            <Link href={backUrl}>
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
         <div className="form-card__lead border-b">

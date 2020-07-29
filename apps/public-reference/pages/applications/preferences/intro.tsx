@@ -44,7 +44,9 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/financial/income">{t("t.back")}</Link>
+            <Link href="/applications/financial/income">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 

@@ -60,7 +60,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/household/current">{t("t.back")}</Link>
+            <Link href="/applications/household/current">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 

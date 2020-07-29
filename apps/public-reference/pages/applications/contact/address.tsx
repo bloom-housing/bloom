@@ -82,7 +82,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/name">{t("t.back")}</Link>
+            <Link href="/applications/contact/name">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
