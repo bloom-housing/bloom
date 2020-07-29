@@ -7,14 +7,12 @@ import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
-  const currentPageStep = 2
+  const { application } = context
+  const currentPageStep = 1
 
   /* Form Handler */
   const { handleSubmit } = useForm()
