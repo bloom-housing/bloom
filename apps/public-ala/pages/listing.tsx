@@ -9,6 +9,7 @@ import {
   ApplicationStatus,
   BasicTable,
   Description,
+  ExpandableText,
   GroupedTable,
   GroupedTableGroup,
   Headers,
@@ -221,13 +222,19 @@ export default class extends Component<ListingProps> {
                 >
                   <>
                     <InfoCard title={t("listings.creditHistory")}>
-                      <p className="text-sm text-gray-700">{listing.creditHistory}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.creditHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.rentalHistory")}>
-                      <p className="text-sm text-gray-700">{listing.rentalHistory}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.rentalHistory}
+                      </ExpandableText>
                     </InfoCard>
                     <InfoCard title={t("listings.criminalBackground")}>
-                      <p className="text-sm text-gray-700">{listing.criminalBackground}</p>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.criminalBackground}
+                      </ExpandableText>
                     </InfoCard>
                     {buildingSelectionCriteria}
                   </>
