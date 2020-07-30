@@ -5,7 +5,9 @@ import "@bloom-housing/ui-components/styles/index.scss"
 import {
   addTranslation,
   UserProvider,
-  ConfigProvider, ApiClientProvider
+  ConfigProvider,
+  ApiClientProvider,
+  IdleTimeout,
 } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
@@ -107,6 +109,7 @@ class MyApp extends App {
         <ConfigProvider apiUrl={process.env.listingServiceUrl}>
           <UserProvider>
             <ApiClientProvider>
+              <IdleTimeout />
               <Component {...pageProps} />
             </ApiClientProvider>
           </UserProvider>

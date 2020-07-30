@@ -293,6 +293,12 @@
     }
   },
   "authentication": {
+    "timeout": {
+      "title": "Are you still working?",
+      "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information and be logged out if you choose not to respond.",
+      "action": "Stay logged in",
+      "signOutMessage": "We care about your security. We logged you out due to inactivity. Please sign in to continue."
+    },
     "signIn": {
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
