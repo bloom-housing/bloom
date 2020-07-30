@@ -292,6 +292,13 @@
       }
     }
   },
+  "authentication": {
+    "signIn": {
+      "error": "There was an error signing you in",
+      "errorGenericMessage": "Please try again, or contact support for help.",
+      "success": "Welcome back, %{name}!"
+    }
+  },
   "config": {
     "routePrefix": ""
   },
@@ -479,9 +486,6 @@
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
     "viewPreferenceList": "View Preference List"
   },
-  "region": {
-    "name": "Local Region"
-  },
   "nav": {
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
@@ -506,6 +510,9 @@
   "pageDescription": {
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
+  },
+  "region": {
+    "name": "Local Region"
   },
   "t": {
     "additionalPhone": "Additional Phone",
