@@ -35,7 +35,7 @@
   "leasingAgentOfficeHours": "Message line returns calls during application intake, 8/3/20 to 8/21/20, Monday thru Saturday from 10am to 4pm. \u00a0Saturday hours are only during application intake (August 8th and August 15th), then it returns to Monday \u2013Friday.",
   "applicationFee": "35",
   "depositMin": "500",
-  "depositMax": "2,036",
+  "depositMax": "500",
   "costsNotIncluded": "Application fee is only charged if selected to be interviewed. Electric, cable & internet not included. Rent is due on the first considered late on the 6th of each month, however fees & payments arrangements are made sue to COVID. $25 late fee, waived during COVID, $10 NSF plus bank fees, Pet Deposit is $150.",
   "unitsAvailable": 60,
   "waitlistMaxSize": 500,
