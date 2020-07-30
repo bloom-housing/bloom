@@ -40,7 +40,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "yarn run clean && tsc -p tsconfig.prod.json && cp -r listings dist",
-    "start": "yarn install && yarn run build && node dist/src/index.js",
+    "start": "node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts",
     "test": "jest",
     "herokusetup": "node heroku.setup.js"
