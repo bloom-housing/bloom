@@ -53,7 +53,9 @@ export default class ApplicationConductor {
     setTimeout(() => {
       if (typeof window != "undefined") {
         window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
-        window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
+        if (this.listing) {
+          window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
+        }
       }
     }, 800)
   }
