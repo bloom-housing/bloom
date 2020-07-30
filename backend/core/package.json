@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "rimraf dist && nest build",
-    "start": "yarn run build && node dist/src/main",
+    "start": "node dist/src/main",
     "dev": "NODE_ENV=development nest start --watch",
     "debug": "nest start --debug --watch",
     "test": "jest --config ./jest.json",
