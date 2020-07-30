@@ -66,12 +66,7 @@ const accessibilityLabels = (accessibility) => {
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = context
   const currentPageStep = 5
 
   /* Form Handler */

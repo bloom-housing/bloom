@@ -12,8 +12,7 @@ import { useContext } from "react"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = new ApplicationConductor(application, listing, context)
+  const { conductor, application, listing } = context
   const currentPageStep = 2
 
   /* Form Handler */

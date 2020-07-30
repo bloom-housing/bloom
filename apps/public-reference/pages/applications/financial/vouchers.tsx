@@ -15,12 +15,7 @@ import FormStep from "../../../src/forms/applications/FormStep"
 export default () => {
   const context = useContext(AppSubmissionContext)
   const router = useRouter()
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = context
   const currentPageStep = 3
 
   /* Form Handler */

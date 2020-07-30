@@ -23,13 +23,8 @@ export default () => {
   const context = useContext(AppSubmissionContext)
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
+  const { conductor, application, listing } = context
 
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
   const currentPageStep = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 

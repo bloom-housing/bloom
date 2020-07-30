@@ -1,4 +1,5 @@
 import React from "react"
+import ApplicationConductor from "./ApplicationConductor"
 
 export const blankApplication = () => {
   return {
@@ -87,6 +88,7 @@ export const blankApplication = () => {
 }
 
 export const AppSubmissionContext = React.createContext({
+  conductor: {} as ApplicationConductor,
   application: blankApplication(),
   listing: null,
   /* eslint-disable */
