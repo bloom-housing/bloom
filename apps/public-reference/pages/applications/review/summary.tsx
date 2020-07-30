@@ -10,7 +10,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo, ReactNode } from "react"
+import { useContext, useMemo, ReactNode, Fragment } from "react"
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">
@@ -88,7 +88,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -96,7 +95,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/review/demographics">{t("t.back")}</Link>
+            <Link href="/applications/review/demographics">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -189,7 +190,7 @@ export default () => {
         {application.householdSize > 0 && (
           <div className="form-card__group info-group mx-0">
             {application.householdMembers.map((member) => (
-              <div className="info-group__item">
+              <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
                 <p className="info-item__value">
                   {member.firstName} {member.lastName}
                 </p>
@@ -222,10 +223,10 @@ export default () => {
         <div className="form-card__group mx-0">
           <ReviewItem label={t("application.ada.label")}>
             {accessibilityLabels(application.accessibility).map((item) => (
-              <>
+              <Fragment key={item}>
                 {item}
                 <br />
-              </>
+              </Fragment>
             ))}
           </ReviewItem>
         </div>

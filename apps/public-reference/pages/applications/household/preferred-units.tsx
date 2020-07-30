@@ -42,7 +42,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -50,7 +49,9 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href={backPath}>Back</Link>
+            <Link href={backPath}>
+              <a>Back</a>
+            </Link>
           </strong>
         </p>
 

@@ -42,7 +42,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -50,7 +49,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/reserved/units">{t("t.back")}</Link>
+            <Link href="/applications/reserved/units">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 

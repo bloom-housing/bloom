@@ -42,9 +42,8 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
+  const { handleSubmit } = useForm()
+  const onSubmit = () => {
     conductor.sync()
 
     Router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
@@ -56,7 +55,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>

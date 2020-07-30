@@ -4,7 +4,6 @@ Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
-import Router from "next/router"
 import {
   Button,
   ErrorMessage,
@@ -19,7 +18,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, Fragment } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
@@ -76,7 +75,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -84,7 +82,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/name">{t("t.back")}</Link>
+            <Link href="/applications/contact/name">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -195,10 +195,14 @@ export default () => {
                       defaultValue={application.additionalPhoneNumberType}
                       ref={register({ required: true })}
                     >
-                      <option value="">What type of number is this?</option>
-                      <option value="Work">Work</option>
-                      <option value="Home">Home</option>
-                      <option value="Cell">Cell</option>
+                      {["prompt", "work", "home", "cell"].map((key) => (
+                        <option
+                          key={key}
+                          value={key === "prompt" ? "" : key[0].toUpperCase() + key.slice(1)}
+                        >
+                          {t(`application.contact.phoneNumberTypes.${key}`)}
+                        </option>
+                      ))}
                     </select>
                     <ErrorMessage error={errors?.additionalPhoneNumberType}>
                       {t("application.contact.phoneNumberTypeError")}
@@ -363,7 +367,7 @@ export default () => {
             <div className={"field " + (errors.contactPreferences ? "error" : "")}>
               {contactPreferencesKeys.map((preference) => {
                 return (
-                  <>
+                  <Fragment key={preference}>
                     <input
                       type="checkbox"
                       name="contactPreferences"
@@ -379,7 +383,7 @@ export default () => {
                     >
                       {t("application.form.options.contact." + preference)}
                     </label>
-                  </>
+                  </Fragment>
                 )
               })}
               <ErrorMessage error={errors.contactPreferences}>
