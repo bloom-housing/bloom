@@ -18,6 +18,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./jest-e2e.json",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
+    "typeorm:migrate": "yarn typeorm migration:run",
     "typeorm-test": "ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts",
     "herokusetup": "node heroku.setup.js",
     "seed:test": "ts-node src/seed.ts --test",
