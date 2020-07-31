@@ -36,7 +36,6 @@ export const withDropdownAndButton = () => (
       <a href="#" className="navbar-item">
         Get Assistance
       </a>
-      <hr className="navbar-divider" />
       <a href="#" className="navbar-item">
         Sign In
       </a>

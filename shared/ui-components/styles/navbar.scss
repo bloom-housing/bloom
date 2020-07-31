@@ -98,11 +98,11 @@ nav.navbar {
   @apply pb-1;
 }
 
+a.navbar-link,
 a.navbar-item {
   @apply text-base;
   @apply text-gray-800;
-  @apply pt-4;
-  @apply pb-4;
+  @apply py-4;
   @apply border-b;
   @apply border-gray-400;
 
@@ -122,6 +122,46 @@ a.navbar-item {
       @apply bg-white;
       @apply border-primary;
       @apply text-gray-800;
+    }
+  }
+}
+
+.navbar-dropdown {
+  @apply py-0;
+  @apply rounded-b-none;
+
+  a.navbar-item {
+    @apply text-base;
+    @apply normal-case;
+    @apply py-4;
+    @apply px-4;
+    @apply border-b;
+    @apply border-gray-400;
+
+    &:hover {
+      @apply bg-primary-lighter;
+    }
+
+    @screen md {
+      @apply text-tiny;
+    }
+  }
+}
+
+.navbar-divider {
+  @apply my-0;
+}
+
+.navbar-link:not(.is-arrowless)::after {
+  @apply border-gray-600;
+  bottom: 1.25rem;
+  top: auto;
+}
+
+.navbar-item.has-dropdown {
+  &:hover {
+    .navbar-link {
+      background-color: transparent;    
     }
   }
 }
