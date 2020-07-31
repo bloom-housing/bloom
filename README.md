@@ -43,6 +43,16 @@ yarn dev:all
 yarn test:all
 ```
 
+### Adding a new app
+1. Duplicate the [public-reference](apps/public-reference) directory to `apps/<your-app-name>`
+1. Change all usages of `public-reference` in `apps/<your-app-name>/package.json` to `<your-app-name>`
+1. Update root-level [package.json](package.json)
+  - Add `<your-app-name>` to the `workspaces.packages` list
+  - Add yarn scripts for your new app
+    - ex build script: `"dev:app:<myapp>": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/<your-app-name> && yarn dev"`
+    - ex test script: `"test:app:<myapp>": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/<your-app-name> && yarn test"`
+1. Run `yarn install` and now you should be able to build your app with `yarn dev:app:<myapp>`
+
 ### Versioning
 
 We are using [lerna](https://lerna.js.org/) as a package versioning tool. It helps with keeping multiple package versions in sync.
