@@ -241,6 +241,12 @@
         "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
       }
     },
+    "confirmation": {
+      "viewOriginalListing": "View the original listing",
+      "informationSubmittedTitle": "Here's the information you submitted.",
+      "submitted": "Submitted: ",
+      "lotteryNumber": "Your lottery number"
+    },
     "financial": {
       "income": {
         "title": "Let's move to income.",

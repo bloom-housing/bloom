@@ -37,6 +37,7 @@ export default () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     application.completedStep = 5
+    Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
     // FIXME: getting a build error from the following. Message:
     // Property 'create' is a static member of type 'ApplicationsService'
     /* applicationsService

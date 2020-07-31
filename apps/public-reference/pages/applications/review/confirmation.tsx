@@ -4,7 +4,7 @@ Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -31,34 +31,36 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
+      <p className="form-card__back">
+        <strong>
+          <Link href="/applications/review/summary">{t("t.back")}</Link>
+        </strong>
+      </p>
 
-        <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
-        />
+      <FormCard header="Confirmation">
+        <div className="p-4">
+          <Link href="/applications/review/summary">
+            {t("application.confirmation.viewOriginalListing")}
+          </Link>
+        </div>
       </FormCard>
 
       <FormCard>
-        <h2 className="form-card__title is-borderless">Confirmation</h2>
+        <h2 className="form-card__title is-borderless mt-4">
+          {t("application.confirmation.informationSubmittedTitle")}
+        </h2>
 
-        <hr />
+        <div className="flex justify-center field-note p-2">
+          <p>
+            {t("application.confirmation.submitted")}
+            May 14, 2020
+          </p>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                Router.push("/create-account").then(() => window.scrollTo(0, 0))
-              }}
-            >
-              Create Account
-            </Button>
-          </div>
-        </form>
+          <hr />
+
+          <h3 className="uppercase">{t("application.confirmation.lotteryNumber")}</h3>
+          <span>#00545847</span>
+        </div>
       </FormCard>
     </FormsLayout>
   )
