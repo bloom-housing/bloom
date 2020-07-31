@@ -28,8 +28,8 @@
     "longitude": -122.239349
   },
   "buildingSelectionCriteria": "https://ebaldc.org/how-to-apply/residential-selection-criteria",
-  "costsNotIncluded": "Residents responsible for PG&E and Internet.",
-  "creditHistory": "Both the current and previous landlords for the past three (3) years will be contacted by mail or fax for information concerning the history of complying with lease requirements, payment records, damage or destruction of property, interference with the rights of others, or failure to maintain the unit in a healthy, safe and sanitary. Additionally, EBALDC will verify past tenant history of the applicant household within its own portfolio. Absence of prior rental history will not automatically disqualify an otherwise eligible applicant. EBALDC, however, may request alternative means of verifying prior residence or lack of residence, as well as request provision of personal references. Applicants may be denied due to 1) A negative unlawful detainer report indicating failure to meet financial obligations in past tenant history, or a recent eviction within the past 5 years, and 2) A negative landlord recommendation, encompassing failure to comply with the lease; poor payment history; failure to maintain the unit in a healthy, safe, and sanitary condition; crimes of violence to persons; destruction or theft of property; sales of narcotics; eviction for cause or other criminal acts which would adversely affect the health, safety, or welfare of other tenants.",
+  "costsNotIncluded": "Application fee waived for Section 8 Voucher holders. Unit Holding Fee (upon meeting tenancy requirements & before criminal background check): $250 Residents responsible for PG&E and Internet. Owner pays for water, trash and sewage.  Residents are encouraged to obtain renter's insurance at their own cost but it is not a requirement.",
+  "creditHistory": "Credit Reports are used to verify that the applicant is free of debt on items pertaining to the habitablity of a unit, i.e. eletricity/gas bills, water bills, etc.",
   "depositMax": "1811.00",
   "depositMin": "1811.00",
   "developer": "EBALDC",
@@ -61,7 +61,7 @@
     }
   ],
   "applicationFee": "26.00",
-  "criminalBackground": "Applicants will be denied for the following: 1) No history of manufacturing methamhetamines on federal property and 2) No lifetime sex offender registration",
+  "criminalBackground": "Applicants will be denied for the following: 1) History of manufacturing methamphetamines on federal property and 2) Lifetime sex offender registration",
   "leasingAgentEmail": "iterriquez@ebaldc.org",
   "leasingAgentName": "Israel Terriquez",
   "leasingAgentAddress": {
@@ -75,7 +75,7 @@
   "leasingAgentOfficeHours": "Monday - Friday, 9:00 am - 5:00 pm",
   "leasingAgentPhone": "510-287-5353 x350",
   "leasingAgentTitle": "",
-  "rentalHistory": "Applicants for the waitlist lottery will be screened based on the following criteria: A record of disturbance of neighbors, destruction of property, or living or housekeeping habits at prior residences which may adversely affect the health, safety or welfare of other residents, or cause damage to the apartment or development; A record of eviction from housing or termination from a residential program; An applicant's ability and willingness to comply with the terms of the Lease.",
+  "rentalHistory": "Both the current and previous landlords for the past three (3) years will be contacted by mail or fax for information concerning the history of complying with lease requirements, payment records, damage or destruction of property, interference with the rights of others, or failure to maintain the unit in a healthy, safe and sanitary. Additionally, EBALDC will verify past tenant history of the applicant household within its own portfolio. Absence of prior rental history will not automatically disqualify an otherwise eligible applicant. EBALDC, however, may request alternative means of verifying prior residence or lack of residence, as well as request provision of personal references. Applicants may be denied due to 1) A negative unlawful detainer report indicating failure to meet financial obligations in past tenant history, or a recent eviction within the past 5 years, and 2) A negative landlord recommendation, encompassing failure to comply with the lease; poor payment history; failure to maintain the unit in a healthy, safe, and sanitary condition; crimes of violence to persons; destruction or theft of property; sales of narcotics; eviction for cause or other criminal acts which would adversely affect the health, safety, or welfare of other tenants.",
   "preferences": [],
   "buildingTotalUnits": 35,
   "units": [
