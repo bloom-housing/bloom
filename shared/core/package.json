@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/core",
-  "version": "0.2.11",
+  "version": "0.2.13",
   "description": "Shared types for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared/core",
   "main": "index.js",
