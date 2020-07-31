@@ -51,9 +51,8 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
 }
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const { conductor, application, listing } = context
   const currentPageStep = 3
 
   /* Form Handler */

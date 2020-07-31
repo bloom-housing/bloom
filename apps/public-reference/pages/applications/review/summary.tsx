@@ -65,8 +65,7 @@ const accessibilityLabels = (accessibility) => {
 }
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { conductor, application, listing } = context
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */

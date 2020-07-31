@@ -13,8 +13,7 @@ import FormStep from "../../../src/forms/applications/FormStep"
 import { useContext, useMemo } from "react"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { conductor, application, listing } = context
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 2
 
   /* Form Handler */

@@ -66,10 +66,9 @@ class Member implements HouseholdMember {
 }
 
 export default () => {
-  const router = useRouter()
   let memberId, member, saveText, cancelText
-  const context = useContext(AppSubmissionContext)
-  const { conductor, application, listing } = context
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const router = useRouter()
   const currentPageStep = 2
 
   if (router.query.memberId) {

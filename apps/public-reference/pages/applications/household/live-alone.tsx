@@ -13,9 +13,8 @@ import { useContext, useMemo, useState } from "react"
 
 let nextPageUrl
 export default () => {
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [validateHousehold, setValidateHousehold] = useState(true)
-  const context = useContext(AppSubmissionContext)
-  const { conductor, application, listing } = context
   const currentPageStep = 2
 
   /* Form Handler */

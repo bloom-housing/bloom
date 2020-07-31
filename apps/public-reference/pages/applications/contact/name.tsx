@@ -13,8 +13,7 @@ import { useContext, useMemo } from "react"
 import { emailRegex } from "../../../lib/emailRegex"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { conductor, application, listing } = context
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
 
   /* Form Handler */

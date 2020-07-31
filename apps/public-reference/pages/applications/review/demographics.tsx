@@ -12,8 +12,7 @@ import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { conductor, application, listing } = context
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */
