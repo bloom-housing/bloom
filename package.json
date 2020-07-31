@@ -28,6 +28,7 @@
     "dev:listings": "cd services/listings && yarn dev",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:app:public\"",
+    "dev:all:nest": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "new-version": "lerna version --conventional-commits --yes",
     "test:shared:ui": "cd shared/ui-components && yarn test",
