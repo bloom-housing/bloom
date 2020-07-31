@@ -113,6 +113,12 @@
     "contact": {
       "title": "Thanks %{firstName}. Now we need to know how to contact you.",
       "yourPhoneNumber": "Your Phone Number",
+      "phoneNumberTypes": {
+        "prompt": "What type of number is this?",
+        "work": "Work",
+        "home": "Home",
+        "cell": "Cell"
+      },
       "phoneNumberError": "Please enter a phone number",
       "noPhoneNumber": "I don't have a telephone number",
       "phoneNumberTypeError": "Please enter a phone number type",
