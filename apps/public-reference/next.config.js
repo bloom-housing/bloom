@@ -105,6 +105,9 @@ module.exports = withCSS(
               },
               "/sign-in": { page: "/sign-in" },
               "/create-account": { page: "/create-account" },
+              "/account/applications": { page: "/account/applications" },
+              "/account/dashboard": { page: "/account/dashboard" },
+              "/account/settings": { page: "/account/settings" },
             })
           },
         })
