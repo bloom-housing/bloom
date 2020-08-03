@@ -1,10 +1,10 @@
 import React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import "./AppCard.scss"
 
 export default {
-  title: "Prototypes|AppCard",
-  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  title: "Prototypes/AppCard",
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 export const AppCard = () => (

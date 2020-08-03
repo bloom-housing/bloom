@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import {
   ResponsiveContentList,
   ResponsiveContentItem,
@@ -8,8 +8,7 @@ import {
 } from "./ResponsiveContentList"
 
 export default {
-  title: "Sections|ResponsiveContentList",
-  decorators: [withA11y],
+  title: "Sections/ResponsiveContentList",
 }
 
 export const withContentItems = () => (

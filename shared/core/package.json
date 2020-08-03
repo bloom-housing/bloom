@@ -11,17 +11,17 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
-    "@types/jest": "^25.2.2",
-    "babel-jest": "^25.5.1",
+    "@types/jest": "^26.0.8",
+    "babel-jest": "^26.2.2",
     "babel-loader": "^8.1.0",
-    "jest": "^25.5.4",
+    "jest": "^26.2.2",
     "typescript": "^3.9.7",
-    "webpack": "^4.43.0"
+    "webpack": "^4.44.1"
   },
   "dependencies": {
     "@types/node": "^12.12.50",
     "@types/node-polyglot": "^0.4.34",
-    "nanoid": "^3.1.10"
+    "nanoid": "^3.1.12"
   },
   "babel": {
     "presets": [

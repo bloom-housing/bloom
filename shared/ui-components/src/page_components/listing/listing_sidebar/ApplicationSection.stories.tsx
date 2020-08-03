@@ -7,7 +7,7 @@ import Archer from "@bloom-housing/listings-service/listings/archer.json"
 // @ts-ignore
 export default {
   component: ApplicationSection,
-  title: "Listing Sidebar|Application Section",
+  title: "Listing Sidebar/Application Section",
 }
 /* eslint-enable @typescript-eslint/ban-ts-ignore */
 

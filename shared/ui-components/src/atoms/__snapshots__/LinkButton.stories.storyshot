@@ -1,5 +1,130 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Atoms/LinkButton Filled 1`] = `
+<LinkButton
+  filled={true}
+  href="#"
+>
+  <LocalizedLink
+    className="button is-filled"
+    href="#"
+  >
+    <Link
+      href="#"
+    >
+      <a
+        className="button is-filled"
+        href="/#"
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+      >
+        Filled LinkButton
+      </a>
+    </Link>
+  </LocalizedLink>
+</LinkButton>
+`;
+
+exports[`Storyshots Atoms/LinkButton Regular Case 1`] = `
+<LinkButton
+  href="#"
+  normalCase={true}
+>
+  <LocalizedLink
+    className="button is-normal-case"
+    href="#"
+  >
+    <Link
+      href="#"
+    >
+      <a
+        className="button is-normal-case"
+        href="/#"
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+      >
+        LinkButton (Normal Case)
+      </a>
+    </Link>
+  </LocalizedLink>
+</LinkButton>
+`;
+
+exports[`Storyshots Atoms/LinkButton Small 1`] = `
+<LinkButton
+  href="#"
+  small={true}
+>
+  <LocalizedLink
+    className="button is-small"
+    href="#"
+  >
+    <Link
+      href="#"
+    >
+      <a
+        className="button is-small"
+        href="/#"
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+      >
+        Small LinkButton
+      </a>
+    </Link>
+  </LocalizedLink>
+</LinkButton>
+`;
+
+exports[`Storyshots Atoms/LinkButton Small And Filled 1`] = `
+<LinkButton
+  filled={true}
+  href="#"
+  small={true}
+>
+  <LocalizedLink
+    className="button is-filled is-small"
+    href="#"
+  >
+    <Link
+      href="#"
+    >
+      <a
+        className="button is-filled is-small"
+        href="/#"
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+      >
+        Small and Filled LinkButton
+      </a>
+    </Link>
+  </LocalizedLink>
+</LinkButton>
+`;
+
+exports[`Storyshots Atoms/LinkButton Standard 1`] = `
+<LinkButton
+  href="#"
+>
+  <LocalizedLink
+    className="button"
+    href="#"
+  >
+    <Link
+      href="#"
+    >
+      <a
+        className="button"
+        href="/#"
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+      >
+        LinkButton w/Link
+      </a>
+    </Link>
+  </LocalizedLink>
+</LinkButton>
+`;
+
 exports[`Storyshots Atoms|LinkButton Filled 1`] = `
 <LinkButton
   filled={true}

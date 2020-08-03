@@ -1,10 +1,9 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import LinkButton from "./LinkButton"
 
 export default {
-  title: "Atoms|LinkButton",
-  decorators: [withA11y],
+  title: "Atoms/LinkButton",
 }
 
 export const standard = () => <LinkButton href="#">LinkButton w/Link</LinkButton>

@@ -1,11 +1,10 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import ListingMap from "./ListingMap"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
 export default {
-  title: "Listing|Map",
-  decorators: [withA11y],
+  title: "Listing/Map",
 }
 
 const listing = Object.assign({}, Archer) as any

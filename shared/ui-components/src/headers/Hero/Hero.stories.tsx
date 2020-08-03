@@ -1,13 +1,12 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import Hero from "./Hero"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import Triton from "@bloom-housing/listings-service/listings/triton-test.json"
 import { Listing } from "@bloom-housing/core"
 
 export default {
-  title: "Headers|Hero",
-  decorators: [withA11y],
+  title: "Headers/Hero",
 }
 
 const archer = Object.assign({}, Archer) as any

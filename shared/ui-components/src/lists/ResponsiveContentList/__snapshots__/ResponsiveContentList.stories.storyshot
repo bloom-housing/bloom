@@ -1,5 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Sections/ResponsiveContentList With Content Items 1`] = `
+<ResponsiveContentList>
+  <Mobile>
+    <Media
+      defaultMatches={true}
+      query={
+        Object {
+          "maxWidth": 767,
+        }
+      }
+      render={[Function]}
+    />
+  </Mobile>
+  <Desktop>
+    <Media
+      defaultMatches={false}
+      query={
+        Object {
+          "minWidth": 768,
+        }
+      }
+      render={[Function]}
+    />
+  </Desktop>
+</ResponsiveContentList>
+`;
+
 exports[`Storyshots Sections|ResponsiveContentList With Content Items 1`] = `
 <ResponsiveContentList>
   <Mobile>

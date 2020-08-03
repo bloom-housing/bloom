@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import moment from "moment"
 import ApplicationStatus from "./ApplicationStatus"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
@@ -9,9 +9,8 @@ import SVG from "react-inlinesvg"
 // @ts-ignore
 export default {
   component: ApplicationStatus,
-  title: "Listing Sidebar|Application Status",
+  title: "Listing Sidebar/Application Status",
   decorators: [
-    withA11y,
     (storyFn: any) => (
       <div>
         {storyFn()}
