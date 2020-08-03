@@ -3,13 +3,15 @@
 Application confirmation with lottery number (confirmation number) 
 */
 import Link from "next/link"
-import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import moment from "moment"
+import { FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
+import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
+import { DATE_FORMAT } from "../../../lib/constants"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -29,37 +31,56 @@ export default () => {
     //Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
   }
 
+  const confirmationDate = useMemo(() => {
+    return moment().format(DATE_FORMAT)
+  }, [])
+
   return (
     <FormsLayout>
-      <p className="form-card__back">
-        <strong>
-          <Link href="/applications/review/summary">{t("t.back")}</Link>
-        </strong>
-      </p>
-
       <FormCard header="Confirmation">
         <div className="p-4">
           <Link href="/applications/review/summary">
-            {t("application.confirmation.viewOriginalListing")}
+            <a className="lined">{t("application.confirmation.viewOriginalListing")}</a>
           </Link>
         </div>
       </FormCard>
 
       <FormCard>
-        <h2 className="form-card__title is-borderless mt-4">
-          {t("application.confirmation.informationSubmittedTitle")}
-        </h2>
+        <div className="form-card__group mx-0">
+          <h2 className="form-card__title is-borderless">
+            {t("application.confirmation.informationSubmittedTitle")}
+          </h2>
 
-        <div className="flex justify-center field-note p-2">
-          <p>
-            {t("application.confirmation.submitted")}
-            May 14, 2020
-          </p>
+          <div className="flex flex-col justify-center text-center mt-3">
+            <span className="text-sm font-normal">
+              {t("application.confirmation.submitted")}
+              {confirmationDate}
+            </span>
 
-          <hr />
+            <hr className="my-6" />
 
-          <h3 className="uppercase">{t("application.confirmation.lotteryNumber")}</h3>
-          <span>#00545847</span>
+            <h3 className="font-alt-sans uppercase text-sm text-black font-semibold">
+              {t("application.confirmation.lotteryNumber")}
+            </h3>
+
+            {/* TODO: replace with the number from backend */}
+            <span className="text-black text-3xl text-serif-lg font-normal my-0">#00545847</span>
+          </div>
+        </div>
+
+        <FormSummaryDetails application={application} editMode={false} />
+
+        <h3 className="form--card__sub-header">{t("application.confirmation.preferences")}</h3>
+
+        <div className="form-card__group border-b mx-0">
+          {/* TODO: probably status should depends on backend result (?) */}
+          <p className="text-base font-semibold">{t("application.confirmation.generalLottery")}</p>
+
+          <div className="text-center mt-10">
+            <a href="#" className="lined" onClick={() => window.print()}>
+              {t("application.confirmation.printCopy")}
+            </a>
+          </div>
         </div>
       </FormCard>
     </FormsLayout>
