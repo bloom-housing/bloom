@@ -1,0 +1,24 @@
+.language-bar {
+  @apply bg-gray-800;
+}
+
+.language-bar__inner {
+  @apply max-w-5xl;
+  @apply m-auto;
+  @apply flex;
+  @apply justify-end;
+}
+
+.language-nav__list {
+  @apply flex;
+
+  li {
+    @apply py-2;
+    @apply px-2;
+
+    a {
+      @apply text-white;
+      @apply font-semibold;
+    }
+  }
+}

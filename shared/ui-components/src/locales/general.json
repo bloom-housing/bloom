@@ -1,4 +1,10 @@
 {
+  "account": {
+    "accountSettings": "Account Settings",
+    "accountSettingsSubtitle": "Account Settings, email and password",
+    "myApplications": "My Applications",
+    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
+  },
   "application": {
     "form": {
       "errors": {
@@ -296,7 +302,18 @@
         "info2": "Please be aware that each household member can only appear on one application for each listing.",
         "info3": "Any fraudulent statements will cause your application to be removed."
       }
-    }
+    },
+    "continueApplication": "Continue Application",
+    "applicationNeverSubmitted": "Your application was never submitted",
+    "edited": "Edited",
+    "status": "Status",
+    "statuses": {
+      "inProgress": "In Progress",
+      "neverSubmitted": "Never Submitted",
+      "submitted": "Submitted"
+    },
+    "viewApplication": "View Application",
+    "yourLotteryNumber": "Your lottery number is"
   },
   "config": {
     "routePrefix": ""
@@ -489,10 +506,14 @@
     "name": "Local Region"
   },
   "nav": {
+    "accountSettings": "Account Settings",
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
     "getFeedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>your feedback.</a>",
     "listings": "Listings",
+    "myAccount": "My Account",
+    "myApplications": "My Applications",
+    "myDashboard": "My Dashboard",
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "siteTitle": "Housing Portal"
@@ -521,6 +542,7 @@
     "back": "Back",
     "built": "Built",
     "confirm": "Confirm",
+    "delete": "Delete",
     "deposit": "Deposit",
     "floor": "floor",
     "floors": "floors",
@@ -541,6 +563,7 @@
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "seeListing": "See Listing",
     "selectAllThatApply": "Please select all that apply.",
     "selectOne": "Select One",
     "skipToMainContent": "Skip to main content",
