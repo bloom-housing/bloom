@@ -4,7 +4,6 @@ Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
-import Router from "next/router"
 import {
   Button,
   ErrorMessage,
@@ -19,18 +18,12 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, Fragment } from "react"
 import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
 
   /* Form Handler */
@@ -76,7 +69,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -84,7 +76,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/name">{t("t.back")}</Link>
+            <Link href="/applications/contact/name">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -195,10 +189,14 @@ export default () => {
                       defaultValue={application.additionalPhoneNumberType}
                       ref={register({ required: true })}
                     >
-                      <option value="">What type of number is this?</option>
-                      <option value="Work">Work</option>
-                      <option value="Home">Home</option>
-                      <option value="Cell">Cell</option>
+                      {["prompt", "work", "home", "cell"].map((key) => (
+                        <option
+                          key={key}
+                          value={key === "prompt" ? "" : key[0].toUpperCase() + key.slice(1)}
+                        >
+                          {t(`application.contact.phoneNumberTypes.${key}`)}
+                        </option>
+                      ))}
                     </select>
                     <ErrorMessage error={errors?.additionalPhoneNumberType}>
                       {t("application.contact.phoneNumberTypeError")}
@@ -222,7 +220,7 @@ export default () => {
               id="addressStreet"
               name="applicant.address.street"
               placeholder={t("application.contact.streetAddress")}
-              defaultValue={context.application.applicant.address.street}
+              defaultValue={application.applicant.address.street}
               validation={{ required: true }}
               error={errors.applicant?.address?.street}
               errorMessage={t("application.contact.streetError")}
@@ -234,7 +232,7 @@ export default () => {
               name="applicant.address.street2"
               label={t("application.contact.apt")}
               placeholder={t("application.contact.apt")}
-              defaultValue={context.application.applicant.address.street2}
+              defaultValue={application.applicant.address.street2}
               register={register}
             />
 
@@ -244,7 +242,7 @@ export default () => {
                 name="applicant.address.city"
                 label={t("application.contact.cityName")}
                 placeholder={t("application.contact.cityName")}
-                defaultValue={context.application.applicant.address.city}
+                defaultValue={application.applicant.address.city}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.city}
                 errorMessage={t("application.contact.cityError")}
@@ -255,7 +253,7 @@ export default () => {
                 id="addressState"
                 name="applicant.address.state"
                 label={t("application.contact.state")}
-                defaultValue={context.application.applicant.address.state}
+                defaultValue={application.applicant.address.state}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.state}
                 errorMessage={t("application.contact.stateError")}
@@ -268,7 +266,7 @@ export default () => {
               name="applicant.address.zipCode"
               label={t("application.contact.zip")}
               placeholder={t("application.contact.zipCode")}
-              defaultValue={context.application.applicant.address.zipCode}
+              defaultValue={application.applicant.address.zipCode}
               validation={{ required: true }}
               error={errors.applicant?.address?.zipCode}
               errorMessage={t("application.contact.zipCodeError")}
@@ -301,7 +299,7 @@ export default () => {
                 id="mailingAddressStreet"
                 name="mailingAddress.street"
                 placeholder={t("application.contact.streetAddress")}
-                defaultValue={context.application.mailingAddress.street}
+                defaultValue={application.mailingAddress.street}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.street}
                 errorMessage={t("application.contact.streetError")}
@@ -313,7 +311,7 @@ export default () => {
                 name="mailingAddress.street2"
                 label={t("application.contact.apt")}
                 placeholder={t("application.contact.apt")}
-                defaultValue={context.application.mailingAddress.street2}
+                defaultValue={application.mailingAddress.street2}
                 register={register}
               />
 
@@ -323,7 +321,7 @@ export default () => {
                   name="mailingAddress.city"
                   label={t("application.contact.cityName")}
                   placeholder={t("application.contact.cityName")}
-                  defaultValue={context.application.mailingAddress.city}
+                  defaultValue={application.mailingAddress.city}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.city}
                   errorMessage={t("application.contact.cityError")}
@@ -334,7 +332,7 @@ export default () => {
                   id="mailingAddressState"
                   name="mailingAddress.state"
                   label={t("application.contact.state")}
-                  defaultValue={context.application.mailingAddress.state}
+                  defaultValue={application.mailingAddress.state}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.state}
                   errorMessage={t("application.contact.stateError")}
@@ -348,7 +346,7 @@ export default () => {
                 name="mailingAddress.zipCode"
                 label={t("application.contact.zip")}
                 placeholder={t("application.contact.zipCode")}
-                defaultValue={context.application.mailingAddress.zipCode}
+                defaultValue={application.mailingAddress.zipCode}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.zipCode}
                 errorMessage={t("application.contact.zipCodeError")}
@@ -363,7 +361,7 @@ export default () => {
             <div className={"field " + (errors.contactPreferences ? "error" : "")}>
               {contactPreferencesKeys.map((preference) => {
                 return (
-                  <>
+                  <Fragment key={preference}>
                     <input
                       type="checkbox"
                       name="contactPreferences"
@@ -379,7 +377,7 @@ export default () => {
                     >
                       {t("application.form.options.contact." + preference)}
                     </label>
-                  </>
+                  </Fragment>
                 )
               })}
               <ErrorMessage error={errors.contactPreferences}>
@@ -439,7 +437,7 @@ export default () => {
                   id="workAddressStreet"
                   name="applicant.workAddress.street"
                   placeholder={t("application.contact.streetAddress")}
-                  defaultValue={context.application.applicant.workAddress.street}
+                  defaultValue={application.applicant.workAddress.street}
                   validation={{ required: true }}
                   error={errors.applicant?.workAddress?.street}
                   errorMessage={t("application.contact.streetError")}
@@ -451,7 +449,7 @@ export default () => {
                   name="applicant.workAddress.street2"
                   label={t("application.contact.apt")}
                   placeholder={t("application.contact.apt")}
-                  defaultValue={context.application.applicant.workAddress.street2}
+                  defaultValue={application.applicant.workAddress.street2}
                   register={register}
                 />
 
@@ -461,7 +459,7 @@ export default () => {
                     name="applicant.workAddress.city"
                     label={t("application.contact.cityName")}
                     placeholder={t("application.contact.cityName")}
-                    defaultValue={context.application.applicant.workAddress.city}
+                    defaultValue={application.applicant.workAddress.city}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.city}
                     errorMessage={t("application.contact.cityError")}
@@ -472,7 +470,7 @@ export default () => {
                     id="workAddressState"
                     name="applicant.workAddress.state"
                     label={t("application.contact.state")}
-                    defaultValue={context.application.applicant.workAddress.state}
+                    defaultValue={application.applicant.workAddress.state}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.state}
                     errorMessage={t("application.contact.stateError")}
@@ -486,7 +484,7 @@ export default () => {
                   name="applicant.workAddress.zipCode"
                   label={t("application.contact.zip")}
                   placeholder={t("application.contact.zipCode")}
-                  defaultValue={context.application.applicant.workAddress.zipCode}
+                  defaultValue={application.applicant.workAddress.zipCode}
                   validation={{ required: true }}
                   error={errors.applicant?.workAddress?.zipCode}
                   errorMessage={t("application.contact.zipCodeError")}

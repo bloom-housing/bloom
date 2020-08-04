@@ -66,15 +66,9 @@ class Member implements HouseholdMember {
 }
 
 export default () => {
-  const router = useRouter()
   let memberId, member, saveText, cancelText
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const router = useRouter()
   const currentPageStep = 2
 
   if (router.query.memberId) {
@@ -113,7 +107,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>

@@ -13,14 +13,8 @@ import { useContext, useMemo } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
   const currentPageStep = 3
 
   /* Form Handler */
@@ -42,7 +36,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -50,7 +43,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/reserved/units">{t("t.back")}</Link>
+            <Link href="/applications/reserved/units">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 

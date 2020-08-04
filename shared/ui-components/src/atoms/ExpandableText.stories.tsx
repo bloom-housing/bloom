@@ -1,10 +1,9 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import ExpandableText from "./ExpandableText"
 
 export default {
-  title: "Atoms|ExpandableText",
-  decorators: [withA11y],
+  title: "Atoms/ExpandableText",
 }
 
 const longText =

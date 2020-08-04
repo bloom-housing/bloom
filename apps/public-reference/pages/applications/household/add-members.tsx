@@ -19,13 +19,7 @@ import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 2
   application.householdSize = application.householdMembers.length + 1
 
@@ -61,7 +55,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -69,7 +62,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/household/members-info">{t("t.back")}</Link>
+            <Link href="/applications/household/members-info">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
         <div className="form-card__lead border-b">

@@ -1,13 +1,11 @@
 import React from "react"
-import { withA11y } from "@storybook/addon-a11y"
 import "./Modal.scss"
 import Modal from "./Modal"
 import SVG from "react-inlinesvg"
 
 export default {
-  title: "Modal|Modal",
+  title: "Modal/Modal",
   decorators: [
-    withA11y,
     (storyFn: any) => (
       <div style={{ padding: "1rem" }}>
         {storyFn()}

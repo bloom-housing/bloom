@@ -1,12 +1,11 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import "../cards/InfoCard.scss"
 import PreferencesList from "./PreferencesList"
 import Gish from "@bloom-housing/listings-service/listings/gish.json"
 
 export default {
-  title: "Listing|Preferences List",
-  decorators: [withA11y],
+  title: "Listing/Preferences List",
 }
 
 const listing = Object.assign({}, Gish) as any

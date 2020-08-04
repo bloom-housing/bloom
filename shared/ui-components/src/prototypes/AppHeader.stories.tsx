@@ -1,11 +1,11 @@
 import React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import "./AppHeader.scss"
 import ProgressNav from "./ProgressNav"
 
 export default {
-  title: "Prototypes|AppHeader",
-  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  title: "Prototypes/AppHeader",
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 export const AppHeader = () => (

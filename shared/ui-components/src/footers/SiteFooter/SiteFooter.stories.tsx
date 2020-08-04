@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import SiteFooter from "./SiteFooter"
 import FooterNav from "../FooterNav/FooterNav"
 import LocalizedLink from "../../atoms/LocalizedLink"
@@ -7,12 +7,11 @@ import ExygyFooter from "../ExygyFooter"
 import FooterSection from "../FooterSection/FooterSection"
 
 export default {
-  title: "Footers|Site Footer",
+  title: "Footers/Site Footer",
   parameters: {
     componentSubtitle: "Site-wide footer, shown on every page.",
   },
   component: SiteFooter,
-  decorators: [withA11y],
 }
 
 const credits = (

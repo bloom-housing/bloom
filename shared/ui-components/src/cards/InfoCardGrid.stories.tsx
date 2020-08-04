@@ -1,12 +1,12 @@
 import React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import InfoCard from "./InfoCard"
 import InfoCardGrid from "./InfoCardGrid"
 import ExpandableText from "../atoms/ExpandableText"
 
 export default {
-  title: "Cards|InfoCardGrid",
-  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  title: "Cards/InfoCardGrid",
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 export const ThreeColumns = () => (

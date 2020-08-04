@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import UnitTables from "./UnitTables"
 import { BasicTable } from "../tables/BasicTable"
 import { GroupedTable } from "../tables/GroupedTable"
@@ -7,8 +7,7 @@ import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import { unitSummariesTable, groupNonReservedAndReservedSummaries } from "../helpers/tableSummaries"
 
 export default {
-  title: "Tables|UnitSummaryTables",
-  decorators: [withA11y],
+  title: "Tables/UnitSummaryTables",
 }
 
 const archer = Object.assign({}, Archer) as any

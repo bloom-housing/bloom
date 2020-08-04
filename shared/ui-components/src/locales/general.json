@@ -113,6 +113,12 @@
     "contact": {
       "title": "Thanks %{firstName}. Now we need to know how to contact you.",
       "yourPhoneNumber": "Your Phone Number",
+      "phoneNumberTypes": {
+        "prompt": "What type of number is this?",
+        "work": "Work",
+        "home": "Home",
+        "cell": "Cell"
+      },
       "phoneNumberError": "Please enter a phone number",
       "noPhoneNumber": "I don't have a telephone number",
       "phoneNumberTypeError": "Please enter a phone number type",
@@ -414,7 +420,7 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
-    "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to qualified applicants.",
+    "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",

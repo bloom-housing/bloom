@@ -13,14 +13,8 @@ import { useContext, useMemo, useState } from "react"
 
 let nextPageUrl
 export default () => {
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [validateHousehold, setValidateHousehold] = useState(true)
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
   const currentPageStep = 2
 
   /* Form Handler */
@@ -42,7 +36,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -50,7 +43,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href={backUrl}>{t("t.back")}</Link>
+            <Link href={backUrl}>
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
         <div className="form-card__lead border-b">

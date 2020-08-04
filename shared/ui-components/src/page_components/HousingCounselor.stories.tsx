@@ -1,10 +1,9 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
+
 import HousingCounselor from "./HousingCounselor"
 
 export default {
-  title: "PageComponents|HousingCounselor",
-  decorators: [withA11y],
+  title: "PageComponents/HousingCounselor",
 }
 
 export const withOnlyRequiredFields = () => (
