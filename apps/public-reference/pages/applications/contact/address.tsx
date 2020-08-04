@@ -19,8 +19,9 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo, Fragment } from "react"
-import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -255,7 +256,7 @@ export default () => {
                 register={register}
               />
 
-              <StateSelect
+              <Select
                 id="addressState"
                 name="applicant.address.state"
                 label={t("application.contact.state")}
@@ -265,6 +266,8 @@ export default () => {
                 errorMessage={t("application.contact.stateError")}
                 register={register}
                 controlClassName="control"
+                options={stateKeys}
+                keyPrefix="application.form.options.states"
               />
             </div>
             <Field
@@ -334,7 +337,7 @@ export default () => {
                   register={register}
                 />
 
-                <StateSelect
+                <Select
                   id="mailingAddressState"
                   name="mailingAddress.state"
                   label={t("application.contact.state")}
@@ -344,6 +347,8 @@ export default () => {
                   errorMessage={t("application.contact.stateError")}
                   register={register}
                   controlClassName="control"
+                  options={stateKeys}
+                  keyPrefix="application.form.options.states"
                 />
               </div>
 
@@ -472,7 +477,7 @@ export default () => {
                     register={register}
                   />
 
-                  <StateSelect
+                  <Select
                     id="workAddressState"
                     name="applicant.workAddress.state"
                     label={t("application.contact.state")}
@@ -482,6 +487,8 @@ export default () => {
                     errorMessage={t("application.contact.stateError")}
                     register={register}
                     controlClassName="control"
+                    options={stateKeys}
+                    keyPrefix="application.form.options.states"
                   />
                 </div>
 
