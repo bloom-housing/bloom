@@ -26,10 +26,14 @@ export const Select = ({
           id={id || name}
           name={name}
           defaultValue={defaultValue}
-          placeholder={placeholder}
           ref={register(validation)}
           disabled={disabled}
         >
+          {placeholder && (
+            <option value="" disabled selected>
+              {placeholder}
+            </option>
+          )}
           <FormOptions options={options} keyPrefix={keyPrefix} />
         </select>
       </div>
