@@ -29,12 +29,8 @@ const loadListing = async (stateFunction, conductor, context) => {
 export default () => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application } = context
+
   useEffect(() => {
     loadListing(setListing, conductor, context)
   }, [])

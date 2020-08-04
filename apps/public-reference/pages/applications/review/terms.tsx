@@ -20,16 +20,10 @@ import React, { useContext, useMemo } from "react"
 import Markdown from "markdown-to-jsx"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
 
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
   const currentPageStep = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
