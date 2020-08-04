@@ -8,7 +8,8 @@
         "householdTooSmall": "Your household size is too small."
       },
       "general": {
-        "saveAndReturn": "Save and return to review"
+        "saveAndReturn": "Save and return to review",
+        "defaultSelectPlaceholder": "Select One"
       },
       "options": {
         "contact": {
@@ -88,34 +89,34 @@
           "WY": "Wyoming"
         },
         "ethnicity": {
-          "hispanicLatino": "Hispanic/Latino",
-          "notHispanicLatino": "Not Hispanic/Latino"
+          "hispanicLatino": "Hispanic / Latino",
+          "notHispanicLatino": "Not Hispanic / Latino"
         },
         "race": {
-          "americanIndianAlaskanNative": "American Indian/Alaskan Native",
+          "americanIndianAlaskanNative": "American Indian / Alaskan Native",
           "asian": "Asian",
-          "blackAfricanAmerican": "Black/African American",
-          "nativeHawaiianOtherPacificIslander": "Native Hawaiian/Other Pacific Islander",
+          "blackAfricanAmerican": "Black / African American",
+          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
           "white": "White",
-          "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian/Alaskan Native and Black/African American",
-          "americanIndianAlaskanNativeAndWhite": "American Indian/Alaskan Native and White",
+          "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
+          "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
           "asianAndWhite": "Asian and White",
-          "blackAfricanAmericanAndWhite": "Black/African American and White",
-          "otherMutliracial" :"Other/Mutliracial"
+          "blackAfricanAmericanAndWhite": "Black / African American and White",
+          "otherMutliracial" :"Other / Mutliracial"
         },
         "gender": {
           "female": "Female",
           "male": "Male",
-          "genderqueerGenderNon-Binary": "Genderqueer/Gender Non-Binary",
+          "genderqueerGenderNon-Binary": "Genderqueer / Gender Non-Binary",
           "transFemale": "Trans Female",
           "transMale": "Trans Male",
           "notListed": "Not Listed"
         },
         "sexualOrientation": {
           "bisexual": "Bisexual",
-          "gayLesbianSameGenderLoving": "Gay/Lesbian/Same-Gender Loving",
-          "questioningUnsure": "Questioning/Unsure",
-          "straightHeterosexual": "Straight/Heterosexual",
+          "gayLesbianSameGenderLoving": "Gay / Lesbian / Same-Gender Loving",
+          "questioningUnsure": "Questioning / Unsure",
+          "straightHeterosexual": "Straight / Heterosexual",
           "notListed": "Not Listed"
         },
         "howDidYouHear": {
@@ -290,7 +291,13 @@
       },
       "demographics": {
         "title": "Help us ensure we are meeting our goal to serve all people.",
-        "subTitle": "These questions are optional and won't affect your eligibility for housing. Your answers will be kept private."
+        "subTitle": "These questions are optional and won't affect your eligibility for housing. Your answers will be kept private.",
+        "ethnicityLabel": "Which best describes your ethnicity?",
+        "raceLabel": "Which best describes your race?",
+        "genderLabel": "What is your gender?",
+        "genderInfo": "Select one that best describes your current gender identity.",
+        "sexualOrientationLabel": "How do you describe your sexual orientation or sexual identity?",
+        "howDidYouHearLabel": "How did you hear about this listing?"
       }
     },
     "financial": {

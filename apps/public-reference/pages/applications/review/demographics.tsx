@@ -11,7 +11,13 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { ethnicityKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import {
+  ethnicityKeys,
+  raceKeys,
+  genderKeys,
+  sexualOrientation,
+  howDidYouHear,
+} from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -59,20 +65,54 @@ export default () => {
           <p className="mt-4 field-note">{t("application.review.demographics.subTitle")}</p>
         </div>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <Select
-              id="addressState"
-              name="applicant.address.state"
-              label={t("application.contact.state")}
-              defaultValue={context.application.applicant.address.state}
-              validation={{ required: true }}
-              error={errors.applicant?.address?.state}
-              errorMessage={t("application.contact.stateError")}
+              id="demographicsEthnicity"
+              name="demographicsEthnicity"
+              label={t("application.review.demographics.ethnicityLabel")}
+              placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
               controlClassName="control"
               options={ethnicityKeys}
               keyPrefix="application.form.options.ethnicity"
+            />
+
+            <Select
+              id="demographicsRace"
+              name="demographicsRace"
+              label={t("application.review.demographics.raceLabel")}
+              placeholder={t("application.form.general.defaultSelectPlaceholder")}
+              register={register}
+              controlClassName="control"
+              options={raceKeys}
+              keyPrefix="application.form.options.race"
+            />
+          </div>
+
+          <div className="form-card__group border-b">
+            <Select
+              id="demographicsGender"
+              name="demographicsGender"
+              label={t("application.review.demographics.genderLabel")}
+              placeholder={t("application.form.general.defaultSelectPlaceholder")}
+              register={register}
+              controlClassName="control"
+              options={genderKeys}
+              keyPrefix="application.form.options.gender"
+            />
+          </div>
+
+          <div className="form-card__group border-b">
+            <Select
+              id="demographicsSexualOrientation"
+              name="demographicsSexualOrientation"
+              label={t("application.review.demographics.sexualOrientationLabel")}
+              placeholder={t("application.form.general.defaultSelectPlaceholder")}
+              register={register}
+              controlClassName="control"
+              options={sexualOrientation}
+              keyPrefix="application.form.options.sexualOrientation"
             />
           </div>
 
