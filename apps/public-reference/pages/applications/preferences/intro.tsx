@@ -25,9 +25,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -36,7 +34,7 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="text-bold">
+        <p className="form-card__back">
           <strong>
             <Link href="/applications/financial/income">
               <a>{t("t.back")}</a>
@@ -44,21 +42,93 @@ export default () => {
           </strong>
         </p>
 
-        <h2 className="form-card__title is-borderless">Preferences Introduction</h2>
+        <div className="form-card__lead border-b">
+          <h2 className="form-card__title is-borderless">
+            Based on the addresses you entered, your household may qualify for the following lottery
+            preferences.
+          </h2>
 
-        <hr />
+          <p className="field-note mt-5">
+            Just upload valid proof of where you live or work in [region] and get a higher ranking
+            in the lottery.
+          </p>
+        </div>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (FORM)
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+        <form className="" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__group px-0 border-b">
+            <p className="field-note mb-4">
+              If you have one of these lottery preferences, select it below:
+            </p>
+
+            <div className="field">
+              <input
+                type="checkbox"
+                id="liveWork"
+                name="liveWork"
+                defaultChecked={application.preferences.liveWork}
+                ref={register}
+                onChange={() => {
+                  setTimeout(() => {
+                    setValue("none", false)
+                    trigger("none")
+                  }, 1)
+                }}
+              />
+              <label htmlFor="hearing" className="font-semibold">
+                Live or work in [region] preference
+              </label>
+            </div>
+          </div>
+
+          <div className="form-card__group px-0">
+            <div className="field">
+              <input
+                type="checkbox"
+                id="liveWork"
+                name="liveWork"
+                defaultChecked={application.preferences.liveWork}
+                ref={register}
+                onChange={() => {
+                  setTimeout(() => {
+                    setValue("none", false)
+                    trigger("none")
+                  }, 1)
+                }}
+              />
+              <label htmlFor="hearing" className="font-semibold">
+                I don't want this lottery preference
+              </label>
+
+              <p className="ml-8 field-note">
+                You'll still have the opportunity to claim other preferences.
+              </p>
+            </div>
+          </div>
+
+          <div className="form-card__pager">
+            <div className="form-card__pager-row primary">
+              <Button
+                filled={true}
+                onClick={() => {
+                  conductor.returnToReview = false
+                }}
+              >
+                {t("t.next")}
+              </Button>
+            </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>
