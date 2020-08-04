@@ -81,6 +81,50 @@ export const stateKeys = [
   "WY",
 ]
 
+export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
+
+export const raceKeys = [
+  "americanIndianAlaskanNative",
+  "asian",
+  "blackAfricanAmerican",
+  "nativeHawaiianOtherPacificIslander",
+  "white",
+  "americanIndianAlaskanNativeAndBlackAfricanAmerican",
+  "americanIndianAlaskanNativeAndWhite",
+  "asianAndWhite",
+  "blackAfricanAmericanAndWhite",
+  "otherMutliracial",
+]
+
+export const genderKeys = [
+  "female",
+  "male",
+  "genderqueerGenderNon-Binary",
+  "transFemale",
+  "transMale",
+  "notListed",
+]
+
+export const sexualOrientation = [
+  "bisexual",
+  "gayLesbianSameGenderLoving",
+  "questioningUnsure",
+  "straightHeterosexual",
+  "notListed",
+]
+
+export const howDidYouHear = [
+  "alamedaCountyHCDWebsite",
+  "developerWebsite",
+  "flyer",
+  "emailAlert",
+  "friend",
+  "housingCounselor",
+  "radioAd",
+  "busAd",
+  "other",
+]
+
 export const FormOptions = (props: FormOptionsProps) => {
   const keyPrefix = props.keyPrefix
   const options = props.options.map((option, key) => {
