@@ -407,7 +407,7 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
-    "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to qualified applicants.",
+    "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",
