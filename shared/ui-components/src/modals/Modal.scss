@@ -2,10 +2,12 @@
   @apply relative;
   @apply max-w-5xl;
   @apply m-auto;
-  @apply border-2;
+  @apply border;
   @apply border-solid;
-  @apply border-gray-500;
+  @apply border-gray-400;
   @apply bg-white;
+  @apply rounded-md;
+  @apply shadow-md;
   min-width: 32rem;
 }
 
@@ -91,7 +93,7 @@
 
 .modal__close {
   @apply absolute;
-  top: 2rem;
+  top: 1.5rem;
   right: 2rem;
   cursor: pointer;
 }
