@@ -91,7 +91,7 @@ export const blankApplication = () => {
       sexualOrientation: "",
       howDidYouHear: "",
     },
-    preferences: [],
+    preferences: {},
   }
 }
 

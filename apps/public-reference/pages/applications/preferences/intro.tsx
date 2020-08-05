@@ -9,18 +9,20 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
+import FormStep from "../../../src/forms/applications/FormStep"
 import { useContext, useMemo } from "react"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 4
 
-  /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
+  const preferenceOptions = ["liveOrWork"]
 
-    Router.push("/applications/preferences/live-or-work").then(() => window.scrollTo(0, 0))
+  /* Form Handler */
+  const { register, handleSubmit, errors, setValue, trigger } = useForm()
+  const onSubmit = (data) => {
+    new FormStep(conductor).save({ preferences: data })
+    conductor.routeToNextOrReturnUrl("/applications/preferences/live-or-work")
   }
 
   return (
@@ -60,42 +62,47 @@ export default () => {
               If you have one of these lottery preferences, select it below:
             </p>
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="liveWork"
-                name="liveWork"
-                defaultChecked={application.preferences.liveWork}
-                ref={register}
-                onChange={() => {
-                  setTimeout(() => {
-                    setValue("none", false)
-                    trigger("none")
-                  }, 1)
-                }}
-              />
-              <label htmlFor="hearing" className="font-semibold">
-                Live or work in [region] preference
-              </label>
-            </div>
+            {preferenceOptions.map((option) => (
+              <div className="field">
+                <input
+                  type="checkbox"
+                  id={option}
+                  name={option}
+                  defaultChecked={application.preferences[option]}
+                  ref={register}
+                  onChange={() => {
+                    setTimeout(() => {
+                      setValue("none", false)
+                      trigger("none")
+                    }, 1)
+                  }}
+                />
+                <label htmlFor={option} className="font-semibold uppercase tracking-wider">
+                  {t(`application.preferences.${option}.label`)}
+                </label>
+              </div>
+            ))}
           </div>
 
           <div className="form-card__group px-0">
             <div className="field">
               <input
                 type="checkbox"
-                id="liveWork"
-                name="liveWork"
-                defaultChecked={application.preferences.liveWork}
+                id="none"
+                name="none"
+                defaultChecked={application.preferences.none}
                 ref={register}
-                onChange={() => {
-                  setTimeout(() => {
-                    setValue("none", false)
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setValue("none", true)
+                    preferenceOptions.forEach((option) => {
+                      setValue(option, false)
+                    })
                     trigger("none")
-                  }, 1)
+                  }
                 }}
               />
-              <label htmlFor="hearing" className="font-semibold">
+              <label htmlFor="none" className="font-semibold">
                 I don't want this lottery preference
               </label>
 

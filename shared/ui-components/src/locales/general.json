@@ -247,6 +247,11 @@
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
     },
+    "preferences": {
+      "liveOrWork": {
+        "label": "Live or Work in <REGION> Preference"
+      }
+    },
     "review": {
       "takeAMomentToReview": "Take a moment to review your information before submitting your application.",
       "sameAddressAsApplicant": "Same Address as Applicant",
