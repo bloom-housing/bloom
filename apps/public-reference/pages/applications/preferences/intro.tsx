@@ -45,22 +45,14 @@ export default () => {
         </p>
 
         <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            Based on the addresses you entered, your household may qualify for the following lottery
-            preferences.
-          </h2>
+          <h2 className="form-card__title is-borderless">{t("application.preferences.title")}</h2>
 
-          <p className="field-note mt-5">
-            Just upload valid proof of where you live or work in [region] and get a higher ranking
-            in the lottery.
-          </p>
+          <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
         </div>
 
         <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group px-0 border-b">
-            <p className="field-note mb-4">
-              If you have one of these lottery preferences, select it below:
-            </p>
+            <p className="field-note mb-4">{t("application.preferences.selectBelow")}</p>
 
             {preferenceOptions.map((option) => (
               <div className="field">
@@ -103,12 +95,10 @@ export default () => {
                 }}
               />
               <label htmlFor="none" className="font-semibold">
-                I don't want this lottery preference
+                {t("application.preferences.dontWant")}
               </label>
 
-              <p className="ml-8 field-note">
-                You'll still have the opportunity to claim other preferences.
-              </p>
+              <p className="ml-8 field-note">{t("application.preferences.stillHaveOpportunity")}</p>
             </div>
           </div>
 
