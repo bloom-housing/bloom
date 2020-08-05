@@ -87,48 +87,6 @@
           "WV": "West Virginia",
           "WI": "Wisconsin",
           "WY": "Wyoming"
-        },
-        "ethnicity": {
-          "hispanicLatino": "Hispanic / Latino",
-          "notHispanicLatino": "Not Hispanic / Latino"
-        },
-        "race": {
-          "americanIndianAlaskanNative": "American Indian / Alaskan Native",
-          "asian": "Asian",
-          "blackAfricanAmerican": "Black / African American",
-          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
-          "white": "White",
-          "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
-          "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
-          "asianAndWhite": "Asian and White",
-          "blackAfricanAmericanAndWhite": "Black / African American and White",
-          "otherMutliracial" :"Other / Mutliracial"
-        },
-        "gender": {
-          "female": "Female",
-          "male": "Male",
-          "genderqueerGenderNon-Binary": "Genderqueer / Gender Non-Binary",
-          "transFemale": "Trans Female",
-          "transMale": "Trans Male",
-          "notListed": "Not Listed"
-        },
-        "sexualOrientation": {
-          "bisexual": "Bisexual",
-          "gayLesbianSameGenderLoving": "Gay / Lesbian / Same-Gender Loving",
-          "questioningUnsure": "Questioning / Unsure",
-          "straightHeterosexual": "Straight / Heterosexual",
-          "notListed": "Not Listed"
-        },
-        "howDidYouHear": {
-          "alamedaCountyHCDWebsite": "Alameda County HCD Website",
-          "developerWebsite": "Developer Website",
-          "flyer": "Flyer",
-          "emailAlert": "Email Alert",
-          "friend": "Friend",
-          "housingCounselor": "Housing Counselor",
-          "radioAd": "Radio Ad",
-          "busAd": "Bus Ad",
-          "other": "Other"
         }
       }
     },
@@ -297,7 +255,49 @@
         "genderLabel": "What is your gender?",
         "genderInfo": "Select one that best describes your current gender identity.",
         "sexualOrientationLabel": "How do you describe your sexual orientation or sexual identity?",
-        "howDidYouHearLabel": "How did you hear about this listing?"
+        "howDidYouHearLabel": "How did you hear about this listing?",
+        "ethnicityOptions": {
+          "hispanicLatino": "Hispanic / Latino",
+          "notHispanicLatino": "Not Hispanic / Latino"
+        },
+        "raceOptions": {
+          "americanIndianAlaskanNative": "American Indian / Alaskan Native",
+          "asian": "Asian",
+          "blackAfricanAmerican": "Black / African American",
+          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
+          "white": "White",
+          "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
+          "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
+          "asianAndWhite": "Asian and White",
+          "blackAfricanAmericanAndWhite": "Black / African American and White",
+          "otherMutliracial" :"Other / Mutliracial"
+        },
+        "genderOptions": {
+          "female": "Female",
+          "male": "Male",
+          "genderqueerGenderNon-Binary": "Genderqueer / Gender Non-Binary",
+          "transFemale": "Trans Female",
+          "transMale": "Trans Male",
+          "notListed": "Not Listed"
+        },
+        "sexualOrientationOptions": {
+          "bisexual": "Bisexual",
+          "gayLesbianSameGenderLoving": "Gay / Lesbian / Same-Gender Loving",
+          "questioningUnsure": "Questioning / Unsure",
+          "straightHeterosexual": "Straight / Heterosexual",
+          "notListed": "Not Listed"
+        },
+        "howDidYouHearOptions": {
+          "alamedaCountyHCDWebsite": "Alameda County HCD Website",
+          "developerWebsite": "Developer Website",
+          "flyer": "Flyer",
+          "emailAlert": "Email Alert",
+          "friend": "Friend",
+          "housingCounselor": "Housing Counselor",
+          "radioAd": "Radio Ad",
+          "busAd": "Bus Ad",
+          "other": "Other"
+        }
       }
     },
     "financial": {

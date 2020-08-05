@@ -11,6 +11,7 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
+import { CheckboxGroup } from "@bloom-housing/ui-components/src/forms/CheckboxGroup"
 import {
   ethnicityKeys,
   raceKeys,
@@ -18,6 +19,8 @@ import {
   sexualOrientation,
   howDidYouHear,
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { getCheckboxValues } from "@bloom-housing/ui-components/src/helpers/checkboxValues"
+import FormStep from "../../../src/forms/applications/FormStep"
 
 export default () => {
   const context = useContext(AppSubmissionContext)
@@ -30,12 +33,35 @@ export default () => {
   const currentPageStep = 5
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit } = useForm()
   const onSubmit = (data) => {
-    console.log(data)
+    const howDidYouHearKeys = howDidYouHear.map((item) => item.name)
+    const howDidYouHearValue = getCheckboxValues({ keys: howDidYouHearKeys, data })
+
+    const { demographicsEthnicity, demographicsGender, demographicsSexualOrientation } = data
+
+    console.log("val: ", howDidYouHearValue)
+
+    new FormStep(conductor).save({
+      demographics: {
+        ethnicity: demographicsEthnicity,
+        gender: demographicsGender,
+        sexualOrientation: demographicsSexualOrientation,
+        howDidYouHear: howDidYouHearValue,
+      },
+    })
 
     Router.push("/applications/review/summary").then(() => window.scrollTo(0, 0))
   }
+
+  const howDidYouHearOptions = useMemo(() => {
+    return howDidYouHear?.map((item) => ({
+      name: item.name,
+      label: t(`application.review.demographics.howDidYouHearOptions.${item.name}`),
+      defaultChecked: item.checked,
+      register,
+    }))
+  }, [])
 
   return (
     <FormsLayout>
@@ -75,7 +101,7 @@ export default () => {
               register={register}
               controlClassName="control"
               options={ethnicityKeys}
-              keyPrefix="application.form.options.ethnicity"
+              keyPrefix="application.review.demographics.ethnicityOptions"
             />
 
             <Select
@@ -86,7 +112,7 @@ export default () => {
               register={register}
               controlClassName="control"
               options={raceKeys}
-              keyPrefix="application.form.options.race"
+              keyPrefix="application.review.demographics.raceOptions"
             />
           </div>
 
@@ -99,7 +125,7 @@ export default () => {
               register={register}
               controlClassName="control"
               options={genderKeys}
-              keyPrefix="application.form.options.gender"
+              keyPrefix="application.review.demographics.genderOptions"
             />
           </div>
 
@@ -112,20 +138,32 @@ export default () => {
               register={register}
               controlClassName="control"
               options={sexualOrientation}
-              keyPrefix="application.form.options.sexualOrientation"
+              keyPrefix="application.review.demographics.sexualOrientationOptions"
             />
           </div>
 
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+          <div className="form-card__group is-borderless">
+            <CheckboxGroup
+              name="howDidYouHear"
+              groupLabel={t("application.review.demographics.howDidYouHearLabel")}
+              fields={howDidYouHearOptions}
+            />
           </div>
+
+          <div className="form-card__pager">
+            <div className="form-card__pager-row primary">
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+
+          <div className="text-center mt-6"></div>
         </form>
       </FormCard>
     </FormsLayout>

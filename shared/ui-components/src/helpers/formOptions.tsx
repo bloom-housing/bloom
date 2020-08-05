@@ -5,6 +5,12 @@ interface FormOptionsProps {
   options: string[]
   keyPrefix: string
 }
+
+interface CheckboxGroupItem {
+  name: string
+  checked?: boolean
+}
+
 export const contactPreferencesKeys = ["email", "phone", "letter", "text"]
 
 export const relotionshipKeys = [
@@ -113,16 +119,34 @@ export const sexualOrientation = [
   "notListed",
 ]
 
-export const howDidYouHear = [
-  "alamedaCountyHCDWebsite",
-  "developerWebsite",
-  "flyer",
-  "emailAlert",
-  "friend",
-  "housingCounselor",
-  "radioAd",
-  "busAd",
-  "other",
+export const howDidYouHear: CheckboxGroupItem[] = [
+  {
+    name: "alamedaCountyHCDWebsite",
+  },
+  {
+    name: "developerWebsite",
+  },
+  {
+    name: "flyer",
+  },
+  {
+    name: "emailAlert",
+  },
+  {
+    name: "friend",
+  },
+  {
+    name: "housingCounselor",
+  },
+  {
+    name: "radioAd",
+  },
+  {
+    name: "busAd",
+  },
+  {
+    name: "other",
+  },
 ]
 
 export const FormOptions = (props: FormOptionsProps) => {
