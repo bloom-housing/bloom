@@ -6,6 +6,7 @@ export const Select = ({
   error,
   errorMessage,
   controlClassName,
+  labelClassName,
   id,
   name,
   label,
@@ -19,7 +20,7 @@ export const Select = ({
 }: Props) => {
   return (
     <div className={"field " + (error ? "error" : "")}>
-      <label className="field-label--caps" htmlFor={id}>
+      <label className={labelClassName} htmlFor={id}>
         {label}
       </label>
       <div className={controlClassName}>
@@ -48,6 +49,7 @@ interface Props {
   error?: boolean
   errorMessage?: string
   controlClassName?: string
+  labelClassName?: string
   type?: string
   id?: string
   name: string

@@ -366,13 +366,14 @@ export default () => {
             </div>
           )}
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="contactPreference">
+            <label className="field-label--caps mb-4" htmlFor="contactPreference">
               {t("application.contact.contactPreference")}
             </label>
             <div className={"field " + (errors.contactPreferences ? "error" : "")}>
               {contactPreferencesKeys.map((preference) => {
                 return (
                   <Fragment key={preference}>
+                  <div className="field">
                     <input
                       type="checkbox"
                       name="contactPreferences"
@@ -388,6 +389,7 @@ export default () => {
                     >
                       {t("application.form.options.contact." + preference)}
                     </label>
+                  </div>
                   </Fragment>
                 )
               })}

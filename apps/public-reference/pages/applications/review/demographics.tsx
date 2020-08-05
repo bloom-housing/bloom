@@ -65,9 +65,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header="LISTING">
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -99,6 +97,7 @@ export default () => {
               label={t("application.review.demographics.ethnicityLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
+              labelClassName="field-label--caps"
               controlClassName="control"
               options={ethnicityKeys}
               keyPrefix="application.review.demographics.ethnicityOptions"
@@ -110,6 +109,7 @@ export default () => {
               label={t("application.review.demographics.raceLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
+              labelClassName="field-label--caps"
               controlClassName="control"
               options={raceKeys}
               keyPrefix="application.review.demographics.raceOptions"
@@ -123,6 +123,7 @@ export default () => {
               label={t("application.review.demographics.genderLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
+              labelClassName="field-label--caps"
               controlClassName="control"
               options={genderKeys}
               keyPrefix="application.review.demographics.genderOptions"
@@ -136,6 +137,7 @@ export default () => {
               label={t("application.review.demographics.sexualOrientationLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
+              labelClassName="field-label--caps"
               controlClassName="control"
               options={sexualOrientation}
               keyPrefix="application.review.demographics.sexualOrientationOptions"
