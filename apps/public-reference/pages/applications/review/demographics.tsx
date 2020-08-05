@@ -163,7 +163,11 @@ export default () => {
             </div>
           </div>
 
-          <div className="text-center mt-6"></div>
+          <div className="p-8 text-center">
+            <Link href="/">
+              <a className="lined">{t("application.form.general.saveAndFinishLater")}</a>
+            </Link>
+          </div>
         </form>
       </FormCard>
     </FormsLayout>

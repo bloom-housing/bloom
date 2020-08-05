@@ -19,7 +19,9 @@ export const Select = ({
 }: Props) => {
   return (
     <div className={"field " + (error ? "error" : "")}>
-      <label htmlFor={id}>{label}</label>
+      <label className="field-label--caps" htmlFor={id}>
+        {label}
+      </label>
       <div className={controlClassName}>
         <select
           className="input"

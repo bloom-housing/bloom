@@ -16,7 +16,7 @@ export const CheckboxGroup = ({ groupLabel, fields }: Props) => {
                 defaultChecked={item.defaultChecked || false}
                 ref={item.register}
               />
-              <label htmlFor={item.name} className="text-primary font-semibold">
+              <label htmlFor={item.name} className="font-semibold">
                 {item.label}
               </label>
             </div>

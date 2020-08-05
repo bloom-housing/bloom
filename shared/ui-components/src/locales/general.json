@@ -9,6 +9,7 @@
       },
       "general": {
         "saveAndReturn": "Save and return to review",
+        "saveAndFinishLater": "Save and finish later",
         "defaultSelectPlaceholder": "Select One"
       },
       "options": {
