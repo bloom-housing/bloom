@@ -103,7 +103,7 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:44:01.384Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     },
     {
@@ -127,7 +127,7 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:44:01.384Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     },
     {
@@ -151,7 +151,7 @@
       "createdAt": "2019-06-03T10:42:43.134Z",
       "updatedAt": "2019-07-10T09:44:01.384Z",
       "listingId": 3,
-      "amiChartId": 1,
+      "amiChartId": 7,
       "monthlyRentAsPercentOfIncome": null
     }
   ],
