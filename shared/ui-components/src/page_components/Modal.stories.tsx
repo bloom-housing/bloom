@@ -4,7 +4,7 @@ import Modal from "./Modal"
 //import Icon from "../atoms/Icon"
 
 export default {
-  title: "Prototypes|Modal",
+  title: "Prototypes/Modal",
   decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
