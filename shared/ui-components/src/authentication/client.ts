@@ -23,7 +23,7 @@ export const ApiClientProvider: FunctionComponent = ({ children }) => {
     ApiClientContext.Provider,
     {
       value: {
-        applicationsService: ApplicationsService,
+        applicationsService: new ApplicationsService(),
       },
     },
     children
