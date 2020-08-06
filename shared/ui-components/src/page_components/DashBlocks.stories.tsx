@@ -5,7 +5,7 @@ import DashBlock from "./DashBlock"
 import HeaderBadge from "./HeaderBadge"
 
 export default {
-  title: "PageComponents|DashBlocks",
+  title: "PageComponents/DashBlocks",
   decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
