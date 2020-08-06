@@ -11,7 +11,7 @@ import {
   t,
   ErrorMessage,
   FormOptions,
-  relotionshipKeys,
+  relationshipKeys,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
@@ -445,7 +445,7 @@ export default () => {
                     className="w-full"
                   >
                     <FormOptions
-                      options={relotionshipKeys}
+                      options={relationshipKeys}
                       keyPrefix="application.form.options.relationship"
                     />
                   </select>

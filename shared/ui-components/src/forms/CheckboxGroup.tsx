@@ -1,6 +1,19 @@
 import React from "react"
 
-export const CheckboxGroup = ({ groupLabel, fields }: Props) => {
+interface CheckboxSingle {
+  name: string
+  label: string
+  defaultChecked?: boolean
+  register: any
+}
+
+interface CheckboxGroupProps {
+  name: string
+  groupLabel: string
+  fields: CheckboxSingle[]
+}
+
+export const CheckboxGroup = ({ groupLabel, fields }: CheckboxGroupProps) => {
   return (
     <div>
       <p className="field-label--caps">{groupLabel}</p>
@@ -24,17 +37,4 @@ export const CheckboxGroup = ({ groupLabel, fields }: Props) => {
       </div>
     </div>
   )
-}
-
-interface CheckboxSingle {
-  name: string
-  label: string
-  defaultChecked?: boolean
-  register: any
-}
-
-interface Props {
-  name: string
-  groupLabel: string
-  fields: CheckboxSingle[]
 }

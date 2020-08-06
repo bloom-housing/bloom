@@ -13,7 +13,7 @@ interface CheckboxGroupItem {
 
 export const contactPreferencesKeys = ["email", "phone", "letter", "text"]
 
-export const relotionshipKeys = [
+export const relationshipKeys = [
   "",
   "spouse",
   "registeredDomesticPartner",
