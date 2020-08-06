@@ -76,7 +76,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/name">
+            <Link href="/applications/preferences/general">
               <a>{t("t.back")}</a>
             </Link>
           </strong>
