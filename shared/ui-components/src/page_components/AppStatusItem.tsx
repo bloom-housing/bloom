@@ -1,9 +1,10 @@
 import React, { useState } from "react"
 import "./AppStatusItem.scss"
-import { Application } from "@bloom-housing/backend-core/src/entity/application.entity"
 import moment from "moment"
 import { MultiLineAddress } from "../helpers/address"
 import { t } from "../helpers/translator"
+import { Application } from "@bloom-housing/backend-core/client"
+import LocalizedLink from "../atoms/LocalizedLink"
 
 // TODO status and lotteryNumber should be loaded from Application
 interface AppStatusItemProps {
@@ -72,12 +73,23 @@ const AppStatusItem = (props: AppStatusItemProps) => {
 
         <footer className="status-item__footer">
           <div className="status-item_links">
-            <a href="#" className="status-item__link lined">
+            <LocalizedLink
+              className="status-item__link lined"
+              href={`listing/id=${listing.id}`}
+              as={`/listing/${listing.id}/${listing.urlSlug}`}
+            >
               {t("t.seeListing")}
-            </a>
-            <a className="status-item__link alert lined" onClick={}>
-              {t("t.delete")}
-            </a>
+            </LocalizedLink>
+            {status != "submitted" && (
+              <a
+                className="status-item__link alert lined"
+                onClick={() => {
+                  //
+                }}
+              >
+                {t("t.delete")}
+              </a>
+            )}
           </div>
 
           <div className="status-item__meta">
