@@ -248,13 +248,20 @@
       "hearing": "For Hearing Impairments"
     },
     "preferences": {
-      "title": "Based on the addresses you entered, your household may qualify for the following lottery preferences.",
-      "preamble": "Just upload valid proof of where you live or work in <REGION> and get a higher ranking in the lottery.",
-      "selectBelow": "If you have one of these lottery preferences, select it below:",
+      "title": "Your household may qualify for the following housing preferences.",
+      "preamble": "If you qualify for this preference, you'll get a higher ranking.",
+      "selectBelow": "If you have one of these housing preferences, select it below:",
       "dontWant": "I don't want this lottery preference",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
-      "liveOrWork": {
-        "label": "Live or Work in <REGION> Preference"
+      "liveIn": {
+        "label": "Live in <REGION> Preference",
+        "description": "Live in <REGION> copy goes here…",
+        "link": "http://domain.com"
+      },
+      "workIn": {
+        "label": "Work in <REGION> Preference",
+        "description": "Work in <REGION> copy goes here…",
+        "link": "http://domain.com"
       }
     },
     "review": {
