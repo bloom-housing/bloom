@@ -32,36 +32,3 @@ exports[`Storyshots Prototypes/ButtonPager Button Pager 1`] = `
   </div>
 </div>
 `;
-
-exports[`Storyshots Prototypes|ButtonPager Button Pager 1`] = `
-<div
-  style={
-    Object {
-      "padding": "1rem",
-    }
-  }
->
-  <div
-    className="button-pager"
-  >
-    <div
-      className="button-pager__row primary"
-    >
-      <button
-        className="button is-filled"
-      >
-        Next
-      </button>
-    </div>
-    <div
-      className="button-pager__row"
-    >
-      <button
-        className="button is-unstyled"
-      >
-        Save and Finish Later
-      </button>
-    </div>
-  </div>
-</div>
-`;
