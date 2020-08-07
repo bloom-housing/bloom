@@ -1,8 +1,8 @@
 import React from "react"
 
-import InfoCard from "./InfoCard"
-import InfoCardGrid from "./InfoCardGrid"
-import ExpandableText from "../atoms/ExpandableText"
+import { InfoCard } from "./InfoCard"
+import { InfoCardGrid } from "./InfoCardGrid"
+import { ExpandableText } from "../atoms/ExpandableText"
 
 export default {
   title: "Cards/InfoCardGrid",

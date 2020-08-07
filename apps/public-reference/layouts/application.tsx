@@ -1,6 +1,6 @@
 import * as React from "react"
 import Head from "next/head"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
+import { t } from "@bloom-housing/ui-components/src/helpers/translator"
 import {
   LocalizedLink,
   SiteHeader,

@@ -1,8 +1,8 @@
 import * as React from "react"
 
-import Apply from "./Apply"
+import { Apply } from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import { Attachment } from "@bloom-housing/core"
+import { Attachment, Listing } from "@bloom-housing/core"
 
 export default {
   title: "Listing Sidebar/Apply",

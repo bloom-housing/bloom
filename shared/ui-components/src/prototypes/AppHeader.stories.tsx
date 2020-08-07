@@ -1,7 +1,7 @@
 import React from "react"
 
 import "./AppHeader.scss"
-import ProgressNav from "./ProgressNav"
+import { ProgressNav } from "./ProgressNav"
 
 export default {
   title: "Prototypes/AppHeader",

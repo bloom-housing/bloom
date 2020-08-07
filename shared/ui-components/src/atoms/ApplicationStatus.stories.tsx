@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import moment from "moment"
-import ApplicationStatus from "./ApplicationStatus"
+import { ApplicationStatus } from "./ApplicationStatus"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import SVG from "react-inlinesvg"
 

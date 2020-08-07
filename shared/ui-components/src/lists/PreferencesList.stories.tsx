@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import "../cards/InfoCard.scss"
-import PreferencesList from "./PreferencesList"
+import { PreferencesList } from "./PreferencesList"
 import Gish from "@bloom-housing/listings-service/listings/gish.json"
 
 export default {

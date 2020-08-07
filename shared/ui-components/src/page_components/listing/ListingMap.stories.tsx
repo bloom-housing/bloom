@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import ListingMap from "./ListingMap"
+import { ListingMap } from "./ListingMap"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
 export default {

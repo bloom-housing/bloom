@@ -3,7 +3,7 @@ import { nanoid } from "nanoid"
 import { MinMax, UnitSummary, Unit } from "@bloom-housing/core"
 
 import { BasicTable } from "../tables/BasicTable"
-import t from "../../src/helpers/translator"
+import { t } from "../../src/helpers/translator"
 import { numberOrdinal } from "../../src/helpers/numberOrdinal"
 import { capitalize } from "../../src/helpers/capitalize"
 

@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import AdditionalFees from "./AdditionalFees"
+import { AdditionalFees } from "./AdditionalFees"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
 export default {

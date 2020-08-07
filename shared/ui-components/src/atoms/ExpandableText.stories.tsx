@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import ExpandableText from "./ExpandableText"
+import { ExpandableText } from "./ExpandableText"
 
 export default {
   title: "Atoms/ExpandableText",

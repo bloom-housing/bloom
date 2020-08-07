@@ -1,7 +1,7 @@
 import React from "react"
 
 import "./DashBlocks.scss"
-import HeaderBadge from "./HeaderBadge"
+import { HeaderBadge } from "./HeaderBadge"
 
 export default {
   title: "Prototypes/DashBlocks",
