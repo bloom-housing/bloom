@@ -19,10 +19,9 @@ import {
   sexualOrientation,
   howDidYouHear,
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
-import { getCheckboxValues } from "@bloom-housing/ui-components/src/helpers/checkboxValues"
 import FormStep from "../../../src/forms/applications/FormStep"
 
-export default () => {
+const demographics = () => {
   const context = useContext(AppSubmissionContext)
   const { application, listing } = context
   const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
@@ -34,20 +33,16 @@ export default () => {
 
   /* Form Handler */
   const { register, handleSubmit } = useForm()
+
   const onSubmit = (data) => {
-    const howDidYouHearKeys = howDidYouHear.map((item) => item.name)
-    const howDidYouHearValue = getCheckboxValues({ keys: howDidYouHearKeys, data })
-
-    const { demographicsEthnicity, demographicsGender, demographicsSexualOrientation } = data
-
-    console.log("val: ", howDidYouHearValue)
+    const { ethnicity, gender, sexualOrientation, howDidYouHear } = data
 
     new FormStep(conductor).save({
       demographics: {
-        ethnicity: demographicsEthnicity,
-        gender: demographicsGender,
-        sexualOrientation: demographicsSexualOrientation,
-        howDidYouHear: howDidYouHearValue,
+        ethnicity,
+        gender,
+        sexualOrientation,
+        howDidYouHear,
       },
     })
 
@@ -56,8 +51,8 @@ export default () => {
 
   const howDidYouHearOptions = useMemo(() => {
     return howDidYouHear?.map((item) => ({
-      name: item.name,
-      label: t(`application.review.demographics.howDidYouHearOptions.${item.name}`),
+      id: item.id,
+      label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
       defaultChecked: item.checked,
       register,
     }))
@@ -92,8 +87,8 @@ export default () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <Select
-              id="demographicsEthnicity"
-              name="demographicsEthnicity"
+              id="ethnicity"
+              name="ethnicity"
               label={t("application.review.demographics.ethnicityLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
@@ -104,8 +99,8 @@ export default () => {
             />
 
             <Select
-              id="demographicsRace"
-              name="demographicsRace"
+              id="race"
+              name="race"
               label={t("application.review.demographics.raceLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
@@ -118,8 +113,8 @@ export default () => {
 
           <div className="form-card__group border-b">
             <Select
-              id="demographicsGender"
-              name="demographicsGender"
+              id="gender"
+              name="gender"
               label={t("application.review.demographics.genderLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
@@ -132,8 +127,8 @@ export default () => {
 
           <div className="form-card__group border-b">
             <Select
-              id="demographicsSexualOrientation"
-              name="demographicsSexualOrientation"
+              id="sexualOrientation"
+              name="sexualOrientation"
               label={t("application.review.demographics.sexualOrientationLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
@@ -175,3 +170,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default demographics
