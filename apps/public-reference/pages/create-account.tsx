@@ -40,7 +40,7 @@ export default () => {
         </div>
 
         <div className="form-card__group pt-0 border-b">
-          <p className="mt-4 mb-8 text-center text-gray-700 text-tiny px-6">
+          <p className="mt-4 text-center text-gray-700 text-tiny px-6">
             You'll use this information to log in to your account, so make sure you can remember it.
           </p>
         </div>
