@@ -1,6 +1,11 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { UserService } from "./user.service"
 
+// Cypress brings in Chai types for the global expect, but we want to use jest
+// expect here so we need to re-declare it.
+// see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
+declare const expect: jest.Expect
+
 describe("UserService", () => {
   let service: UserService
 

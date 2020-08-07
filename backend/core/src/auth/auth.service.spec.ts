@@ -3,6 +3,11 @@ import { AuthService } from "./auth.service"
 import { User } from "../entity/user.entity"
 import { JwtModule, JwtService } from "@nestjs/jwt"
 
+// Cypress brings in Chai types for the global expect, but we want to use jest
+// expect here so we need to re-declare it.
+// see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
+declare const expect: jest.Expect
+
 describe("AuthService", () => {
   let service: AuthService
   let jwtService: JwtService
