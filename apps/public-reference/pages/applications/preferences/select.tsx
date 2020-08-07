@@ -84,10 +84,10 @@ export default () => {
                   </label>
                 </div>
 
-                <p className="ml-8">
+                <p className="ml-8 -mt-3">
                   <button
                     type="button"
-                    className="button is-unstyled m-0"
+                    className="button is-unstyled m-0 no-underline has-toggle"
                     onClick={() => {
                       setShowMore(!showMore)
                     }}
@@ -98,10 +98,10 @@ export default () => {
                 </p>
 
                 {showMore && (
-                  <p className="mt-6 ml-8">
+                  <p className="field-note mt-6 ml-8">
                     {t(`application.preferences.${option}.description`)}
                     <br />
-                    <a href={t(`application.preferences.${option}.link`)} target="_blank">
+                    <a className="block pt-2" href={t(`application.preferences.${option}.link`)} target="_blank">
                       Link
                     </a>
                   </p>

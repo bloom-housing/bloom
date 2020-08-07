@@ -29,3 +29,13 @@
   }
 }
 
+@mixin has-toggle() {
+  &:after {
+    @apply font-bold;
+    @apply inline-block;
+    @apply ml-2;
+    @apply text-sm;
+    content: "⌃";
+    transform: rotate(180deg) translateY(3px);
+  }
+}
