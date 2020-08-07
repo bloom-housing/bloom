@@ -14,6 +14,7 @@ interface CheckboxGroupProps {
   errorMessage?: string
   name: string
   groupLabel: string
+  groupNote: string
   fields: CheckboxSingle[]
 }
 
@@ -23,12 +24,17 @@ export const CheckboxGroup = ({
   fields,
   required = false,
   error,
+  groupNote,
   errorMessage,
 }: CheckboxGroupProps) => {
   return (
     <>
-      <p className="field-label--caps">{groupLabel}</p>
-
+      {groupLabel && (
+        <label className="field-label--caps">{groupLabel}</label>
+      )}
+      {groupNote && (
+        <p className="field-note mb-4">{groupNote}</p>
+      )}
       <div className="mt-3 field">
         {fields &&
           fields.map((item) => (
