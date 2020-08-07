@@ -51,11 +51,10 @@ export default () => {
 
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">
-            Based on the information you have entered, your household has not claimed any housing
-            lottery preferences.
+            {t("application.preferences.general.title")}
           </h2>
 
-          <p className="field-note mt-5">You will be in the general lottery.</p>
+          <p className="field-note mt-5">{t("application.preferences.general.preamble")}</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
