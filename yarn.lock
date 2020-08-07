@@ -3013,14 +3013,6 @@
   dependencies:
     mkdirp "^1.0.4"
 
-"@ntegral/nestjs-sendgrid@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ntegral/nestjs-sendgrid/-/nestjs-sendgrid-1.0.0.tgz#3b6c5a8df84830e48e31f2f7d4c85c0182116390"
-  integrity sha512-M7/xkb6nr++dZJi4+t1PAhygarNNWe3u0n1I5EXD6u3EsnLu7bHl23RTy3X9C/7zPLSg31AhNp5mv6IO4nYlew==
-  dependencies:
-    "@sendgrid/mail" "^7.0.1"
-    deepmerge "^4.2.2"
-
 "@nuxtjs/opencollective@0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@nuxtjs/opencollective/-/opencollective-0.2.2.tgz#26a761ebf588cc92a422d7cee996a66bd6e2761e"
@@ -3172,26 +3164,10 @@
     "@sendgrid/helpers" "^7.2.0"
     axios "^0.19.2"
 
-"@sendgrid/client@^7.2.3":
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.2.3.tgz#6cbd0648711eedd36d96507c46caf707c9dde4c1"
-  integrity sha512-HGU/vipv5i/j4Nm/HAXCrFi7gwEuaUukfqlF8SZ4A6jtyKJfa7emV2H4dMvMO/vzqcH4E7Gl+5sDdIi9v8j88g==
-  dependencies:
-    "@sendgrid/helpers" "^7.2.3"
-    axios "^0.19.2"
-
 "@sendgrid/helpers@^7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.2.0.tgz#75cbde76815fa0f8b7966b3e2a0650fc125c3276"
   integrity sha512-Ps8rc3xFpaQvIWoW1zlWi9G7QnxYwXFOeq0915DzXf5knoiOgXdFk/XBXbCFjr2lf/JIzjgFUtAV/dN8Z8jzHw==
-  dependencies:
-    chalk "^2.0.1"
-    deepmerge "^4.2.2"
-
-"@sendgrid/helpers@^7.2.3":
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.2.3.tgz#0a6b803a2df81208f28505adb35e229d2a064e2d"
-  integrity sha512-MMi7AtCs0uMzoYeKkyKOoONRjGDWbEYFF05d7OAohKglWFfbphE1dULHazHRQ/AnHcJFXMzb5rWL/PaDjeZwxg==
   dependencies:
     chalk "^2.0.1"
     deepmerge "^4.2.2"
@@ -3203,14 +3179,6 @@
   dependencies:
     "@sendgrid/client" "^7.2.2"
     "@sendgrid/helpers" "^7.2.0"
-
-"@sendgrid/mail@^7.0.1":
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.2.3.tgz#e76b9b64a11030d7d0898c0dd0c8519bcfa519c0"
-  integrity sha512-ZuVYzXI+3M02w6Qsu562aJXzwhoymMJ589is0yaL+Y+VMMMdM/cFlgwLcNFbmuvsRw9qBrjy5S2HpdeB5E8vtA==
-  dependencies:
-    "@sendgrid/client" "^7.2.3"
-    "@sendgrid/helpers" "^7.2.3"
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
