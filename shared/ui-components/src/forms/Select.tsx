@@ -28,7 +28,7 @@ export const Select = ({
   id,
   name,
   label,
-  defaultValue,
+  defaultValue = "",
   placeholder,
   register,
   validation,
@@ -51,7 +51,7 @@ export const Select = ({
           disabled={disabled}
         >
           {placeholder && (
-            <option value="" disabled selected>
+            <option value="" disabled>
               {placeholder}
             </option>
           )}
