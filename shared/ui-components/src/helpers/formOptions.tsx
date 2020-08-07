@@ -7,7 +7,7 @@ interface FormOptionsProps {
 }
 
 interface CheckboxGroupItem {
-  name: string
+  id: string
   checked?: boolean
 }
 
@@ -121,31 +121,31 @@ export const sexualOrientation = [
 
 export const howDidYouHear: CheckboxGroupItem[] = [
   {
-    name: "alamedaCountyHCDWebsite",
+    id: "alamedaCountyHCDWebsite",
   },
   {
-    name: "developerWebsite",
+    id: "developerWebsite",
   },
   {
-    name: "flyer",
+    id: "flyer",
   },
   {
-    name: "emailAlert",
+    id: "emailAlert",
   },
   {
-    name: "friend",
+    id: "friend",
   },
   {
-    name: "housingCounselor",
+    id: "housingCounselor",
   },
   {
-    name: "radioAd",
+    id: "radioAd",
   },
   {
-    name: "busAd",
+    id: "busAd",
   },
   {
-    name: "other",
+    id: "other",
   },
 ]
 

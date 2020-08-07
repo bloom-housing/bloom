@@ -1,40 +1,54 @@
 import React from "react"
+import { ErrorMessage } from "./ErrorMessage"
 
 interface CheckboxSingle {
-  name: string
+  id: string
   label: string
   defaultChecked?: boolean
   register: any
 }
 
 interface CheckboxGroupProps {
+  error?: boolean
+  required?: boolean
+  errorMessage?: string
   name: string
   groupLabel: string
   fields: CheckboxSingle[]
 }
 
-export const CheckboxGroup = ({ groupLabel, fields }: CheckboxGroupProps) => {
+export const CheckboxGroup = ({
+  name,
+  groupLabel,
+  fields,
+  required = false,
+  error,
+  errorMessage,
+}: CheckboxGroupProps) => {
   return (
-    <div>
+    <>
       <p className="field-label--caps">{groupLabel}</p>
 
-      <div className="mt-3">
+      <div className="mt-3 field">
         {fields &&
           fields.map((item) => (
-            <div className="field" key={item.name}>
+            <div className="field" key={item.id}>
               <input
                 type="checkbox"
-                id={item.name}
-                name={item.name}
+                id={item.id}
+                value={item.id}
+                name={name}
                 defaultChecked={item.defaultChecked || false}
-                ref={item.register}
+                ref={item.register({ required })}
               />
-              <label htmlFor={item.name} className="font-semibold">
+              <label htmlFor={item.id} className="font-semibold">
                 {item.label}
               </label>
             </div>
           ))}
       </div>
-    </div>
+
+      {error && errorMessage && <ErrorMessage error={error}>{errorMessage}</ErrorMessage>}
+    </>
   )
 }
