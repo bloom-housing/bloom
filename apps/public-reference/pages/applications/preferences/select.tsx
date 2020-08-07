@@ -25,6 +25,8 @@ export default () => {
     if (data.none) {
       conductor.routeToNextOrReturnUrl("/applications/preferences/general")
     } else {
+      conductor.completeStep(4)
+      conductor.sync()
       conductor.routeToNextOrReturnUrl("/applications/review/demographics")
     }
   }

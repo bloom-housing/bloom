@@ -262,6 +262,10 @@
         "label": "Work in <REGION> Preference",
         "description": "Work in <REGION> copy goes here…",
         "link": "http://domain.com"
+      },
+      "general": {
+        "title": "Based on the information you have entered, your household has not claimed any housing lottery preferences.",
+        "preamble": "You will be in the general lottery."
       }
     },
     "review": {
