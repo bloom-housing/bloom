@@ -2,10 +2,10 @@ import { PrimaryColumn, CreateDateColumn, Entity } from "typeorm"
 
 @Entity({ name: "revoked_tokens" })
 class RevokedToken {
-  @PrimaryColumn("string")
+  @PrimaryColumn("varchar")
   token: string
 
-  @CreateDateColumn()
+  @CreateDateColumn("timestamp without time zone")
   revokedAt: Date
 }
 
