@@ -88,6 +88,7 @@ export default () => {
                   <button
                     type="button"
                     className="button is-unstyled m-0 no-underline has-toggle"
+                    aria-expanded={showMore ? "true" : "false"}
                     onClick={() => {
                       setShowMore(!showMore)
                     }}
@@ -101,7 +102,11 @@ export default () => {
                   <p className="field-note mt-6 ml-8">
                     {t(`application.preferences.${option}.description`)}
                     <br />
-                    <a className="block pt-2" href={t(`application.preferences.${option}.link`)} target="_blank">
+                    <a
+                      className="block pt-2"
+                      href={t(`application.preferences.${option}.link`)}
+                      target="_blank"
+                    >
                       Link
                     </a>
                   </p>
