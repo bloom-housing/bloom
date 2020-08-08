@@ -6,7 +6,6 @@ import {
   Field,
   FormCard,
   Icon,
-  LinkButton,
   ErrorMessage,
   UserContext,
 } from "@bloom-housing/ui-components"
@@ -40,53 +39,45 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard>
-        <div className="text-center">
+        <div className="form-card__lead pb-0 text-center">
           <Icon size="2xl" symbol="profile" />
+          <h2 className="form-card__title">Partners Sign In</h2>
         </div>
-        <h2 className="form-card__title">Sign In</h2>
 
-        <hr />
+        <div className="form-card__group pt-0 border-b">
+          <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
 
-        <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
+          <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+            <Field
+              name="email"
+              label="Email"
+              validation={{ required: true }}
+              error={errors.email}
+              errorMessage="Please enter your login email"
+              register={register}
+            />
 
-        <form id="sign-in" className="px-8 mt-10" onSubmit={handleSubmit(onSubmit)}>
-          <Field
-            name="email"
-            label="Email"
-            validation={{ required: true }}
-            error={errors.email}
-            errorMessage="Please enter your login email"
-            register={register}
-          />
+            <Field
+              name="password"
+              label="Password"
+              validation={{ required: true }}
+              error={errors.password}
+              errorMessage="Please enter your login password"
+              register={register}
+              type="password"
+            />
 
-          <Field
-            name="password"
-            label="Password"
-            validation={{ required: true }}
-            error={errors.password}
-            errorMessage="Please enter your login password"
-            register={register}
-            type="password"
-          />
-
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Sign In
-            </Button>
-          </div>
-        </form>
-
-        <hr />
-
-        <div className="text-center">
-          <h2 className="mb-6">Don't have an account?</h2>
-
-          <LinkButton href="/create-account">Create Account</LinkButton>
+            <div className="text-center mt-6">
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                Sign In
+              </Button>
+            </div>
+          </form>
         </div>
       </FormCard>
     </FormsLayout>
