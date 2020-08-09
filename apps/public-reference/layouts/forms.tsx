@@ -1,6 +1,6 @@
 import Layout from "./application"
 
-export default (props) => {
+const FormLayout = (props) => {
   return (
     <Layout>
       <section style={{ padding: "1px", background: "#f6f6f6" }}>
@@ -11,3 +11,5 @@ export default (props) => {
     </Layout>
   )
 }
+
+export { FormLayout as default, FormLayout }

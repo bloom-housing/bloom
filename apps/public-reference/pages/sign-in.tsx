@@ -14,7 +14,7 @@ import {
 import FormsLayout from "../layouts/forms"
 import { useRouter } from "next/router"
 
-export default () => {
+const SignIn = () => {
   const { login } = useContext(UserContext)
   const router = useRouter()
   /* Form Handler */
@@ -100,3 +100,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export { SignIn as default, SignIn }
