@@ -5,9 +5,15 @@ interface FormOptionsProps {
   options: string[]
   keyPrefix: string
 }
+
+interface CheckboxGroupItem {
+  id: string
+  checked?: boolean
+}
+
 export const contactPreferencesKeys = ["email", "phone", "letter", "text"]
 
-export const relotionshipKeys = [
+export const relationshipKeys = [
   "",
   "spouse",
   "registeredDomesticPartner",
@@ -79,6 +85,68 @@ export const stateKeys = [
   "WV",
   "WI",
   "WY",
+]
+
+export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
+
+export const raceKeys = [
+  "americanIndianAlaskanNative",
+  "asian",
+  "blackAfricanAmerican",
+  "nativeHawaiianOtherPacificIslander",
+  "white",
+  "americanIndianAlaskanNativeAndBlackAfricanAmerican",
+  "americanIndianAlaskanNativeAndWhite",
+  "asianAndWhite",
+  "blackAfricanAmericanAndWhite",
+  "otherMutliracial",
+]
+
+export const genderKeys = [
+  "female",
+  "male",
+  "genderqueerGenderNon-Binary",
+  "transFemale",
+  "transMale",
+  "notListed",
+]
+
+export const sexualOrientation = [
+  "bisexual",
+  "gayLesbianSameGenderLoving",
+  "questioningUnsure",
+  "straightHeterosexual",
+  "notListed",
+]
+
+export const howDidYouHear: CheckboxGroupItem[] = [
+  {
+    id: "alamedaCountyHCDWebsite",
+  },
+  {
+    id: "developerWebsite",
+  },
+  {
+    id: "flyer",
+  },
+  {
+    id: "emailAlert",
+  },
+  {
+    id: "friend",
+  },
+  {
+    id: "housingCounselor",
+  },
+  {
+    id: "radioAd",
+  },
+  {
+    id: "busAd",
+  },
+  {
+    id: "other",
+  },
 ]
 
 export const FormOptions = (props: FormOptionsProps) => {

@@ -8,7 +8,8 @@
   label,
   .label {
     @apply text-gray-750;
-    font-size: 0.95rem;
+    @apply font-semibold;
+    font-size: .875rem;
   }
 
   label + .control {

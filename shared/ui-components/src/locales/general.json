@@ -8,7 +8,9 @@
         "householdTooSmall": "Your household size is too small."
       },
       "general": {
-        "saveAndReturn": "Save and return to review"
+        "saveAndReturn": "Save and return to review",
+        "saveAndFinishLater": "Save and finish later",
+        "defaultSelectPlaceholder": "Select One"
       },
       "options": {
         "contact": {
@@ -245,6 +247,58 @@
         "title": "Terms",
         "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
         "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
+      },
+      "demographics": {
+        "title": "Help us ensure we are meeting our goal to serve all people.",
+        "subTitle": "These questions are optional and won't affect your eligibility for housing. Your answers will be kept private.",
+        "ethnicityLabel": "Which best describes your ethnicity?",
+        "raceLabel": "Which best describes your race?",
+        "genderLabel": "What is your gender?",
+        "genderInfo": "Select one that best describes your current gender identity.",
+        "sexualOrientationLabel": "How do you describe your sexual orientation or sexual identity?",
+        "howDidYouHearLabel": "How did you hear about this listing?",
+        "ethnicityOptions": {
+          "hispanicLatino": "Hispanic / Latino",
+          "notHispanicLatino": "Not Hispanic / Latino"
+        },
+        "raceOptions": {
+          "americanIndianAlaskanNative": "American Indian / Alaskan Native",
+          "asian": "Asian",
+          "blackAfricanAmerican": "Black / African American",
+          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
+          "white": "White",
+          "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
+          "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
+          "asianAndWhite": "Asian and White",
+          "blackAfricanAmericanAndWhite": "Black / African American and White",
+          "otherMutliracial" :"Other / Mutliracial"
+        },
+        "genderOptions": {
+          "female": "Female",
+          "male": "Male",
+          "genderqueerGenderNon-Binary": "Genderqueer / Gender Non-Binary",
+          "transFemale": "Trans Female",
+          "transMale": "Trans Male",
+          "notListed": "Not Listed"
+        },
+        "sexualOrientationOptions": {
+          "bisexual": "Bisexual",
+          "gayLesbianSameGenderLoving": "Gay / Lesbian / Same-Gender Loving",
+          "questioningUnsure": "Questioning / Unsure",
+          "straightHeterosexual": "Straight / Heterosexual",
+          "notListed": "Not Listed"
+        },
+        "howDidYouHearOptions": {
+          "alamedaCountyHCDWebsite": "Alameda County HCD Website",
+          "developerWebsite": "Developer Website",
+          "flyer": "Flyer",
+          "emailAlert": "Email Alert",
+          "friend": "Friend",
+          "housingCounselor": "Housing Counselor",
+          "radioAd": "Radio Ad",
+          "busAd": "Bus Ad",
+          "other": "Other"
+        }
       }
     },
     "financial": {

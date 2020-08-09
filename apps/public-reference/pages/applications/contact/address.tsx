@@ -19,8 +19,9 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo, Fragment } from "react"
-import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -249,7 +250,7 @@ export default () => {
                 register={register}
               />
 
-              <StateSelect
+              <Select
                 id="addressState"
                 name="applicant.address.state"
                 label={t("application.contact.state")}
@@ -259,6 +260,8 @@ export default () => {
                 errorMessage={t("application.contact.stateError")}
                 register={register}
                 controlClassName="control"
+                options={stateKeys}
+                keyPrefix="application.form.options.states"
               />
             </div>
             <Field
@@ -328,7 +331,7 @@ export default () => {
                   register={register}
                 />
 
-                <StateSelect
+                <Select
                   id="mailingAddressState"
                   name="mailingAddress.state"
                   label={t("application.contact.state")}
@@ -338,6 +341,8 @@ export default () => {
                   errorMessage={t("application.contact.stateError")}
                   register={register}
                   controlClassName="control"
+                  options={stateKeys}
+                  keyPrefix="application.form.options.states"
                 />
               </div>
 
@@ -355,28 +360,30 @@ export default () => {
             </div>
           )}
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="contactPreference">
+            <label className="field-label--caps mb-4" htmlFor="contactPreference">
               {t("application.contact.contactPreference")}
             </label>
             <div className={"field " + (errors.contactPreferences ? "error" : "")}>
               {contactPreferencesKeys.map((preference) => {
                 return (
                   <Fragment key={preference}>
-                    <input
-                      type="checkbox"
-                      name="contactPreferences"
-                      id={"contactPreferences" + preference}
-                      value={preference}
-                      defaultChecked={application.contactPreferences.includes(preference)}
-                      ref={register({ required: true })}
-                    />
-                    <label
-                      htmlFor={"contactPreferences" + preference}
-                      className="font-semibold"
-                      key={preference}
-                    >
-                      {t("application.form.options.contact." + preference)}
-                    </label>
+                    <div className="field">
+                      <input
+                        type="checkbox"
+                        name="contactPreferences"
+                        id={"contactPreferences" + preference}
+                        value={preference}
+                        defaultChecked={application.contactPreferences.includes(preference)}
+                        ref={register({ required: true })}
+                      />
+                      <label
+                        htmlFor={"contactPreferences" + preference}
+                        className="font-semibold"
+                        key={preference}
+                      >
+                        {t("application.form.options.contact." + preference)}
+                      </label>
+                    </div>
                   </Fragment>
                 )
               })}
@@ -466,7 +473,7 @@ export default () => {
                     register={register}
                   />
 
-                  <StateSelect
+                  <Select
                     id="workAddressState"
                     name="applicant.workAddress.state"
                     label={t("application.contact.state")}
@@ -476,6 +483,8 @@ export default () => {
                     errorMessage={t("application.contact.stateError")}
                     register={register}
                     controlClassName="control"
+                    options={stateKeys}
+                    keyPrefix="application.form.options.states"
                   />
                 </div>
 
