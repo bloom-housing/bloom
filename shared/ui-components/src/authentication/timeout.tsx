@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useContext, useEffect, useState } from "react"
+import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import UserContext from "./UserContext"
 import { ConfigContext } from "../config"
 import { Modal } from "../modals/Modal"
 import { t } from "../helpers/translator"
 
+const PROMPT_TIMEOUT = 60000
 const events = ["mousemove", "keypress", "scroll"]
 
 function useIdleTimeout(timeoutMs: number, onTimeout: () => void) {
@@ -32,34 +33,47 @@ function useIdleTimeout(timeoutMs: number, onTimeout: () => void) {
   }, [timeoutMs, onTimeout])
 }
 
-export const IdleTimeout: FunctionComponent = ({ children }) => {
+type IdleTimeoutProps = {
+  promptTitle: string
+  promptText: string
+  promptAction: string
+  redirectPath: string
+  onTimeout: () => unknown
+}
+
+export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
+  promptTitle,
+  promptAction,
+  promptText,
+  redirectPath,
+  onTimeout,
+}) => {
   const { idleTimeout } = useContext(ConfigContext)
-  const { profile, signOut } = useContext(UserContext)
   const [promptTimeout, setPromptTimeout] = useState<number | undefined>()
   const router = useRouter()
 
   useIdleTimeout(idleTimeout, () => {
-    // Only do anything if the user is logged in
-    if (profile && signOut) {
-      if (promptTimeout) {
-        clearTimeout(promptTimeout)
-      }
-      // Give the user 1 minute to respond to the prompt before they're logged out
-      setPromptTimeout(
-        (setTimeout(() => {
-          setPromptTimeout(undefined)
-          signOut()
-          router.push(
-            `/sign-in?message=${encodeURIComponent(t("authentication.timeout.signOutMessage"))}`
-          )
-        }, 60000) as unknown) as number
-      )
+    // Clear any existing prompt timeouts
+    if (promptTimeout) {
+      clearTimeout(promptTimeout)
     }
+
+    // Give the user 1 minute to respond to the prompt before the onTimeout action
+    setPromptTimeout(
+      (setTimeout(() => {
+        const timeoutAction = async () => {
+          setPromptTimeout(undefined)
+          await onTimeout()
+          router.push(redirectPath)
+        }
+        timeoutAction()
+      }, PROMPT_TIMEOUT) as unknown) as number
+    )
   })
 
   const modalActions = [
     {
-      label: t("authentication.timeout.action"),
+      label: promptAction,
       type: "primary" as const,
       onClick: () => {
         clearTimeout(promptTimeout)
@@ -69,16 +83,29 @@ export const IdleTimeout: FunctionComponent = ({ children }) => {
   ]
 
   return (
-    <>
-      <Modal
-        open={Boolean(promptTimeout)}
-        title={t("authentication.timeout.title")}
-        actions={modalActions}
-        fullScreen
-      >
-        {t("authentication.timeout.text")}
-      </Modal>
-      {children}
-    </>
+    <Modal open={Boolean(promptTimeout)} title={promptTitle} actions={modalActions} fullScreen>
+      {promptText}
+    </Modal>
   )
+}
+
+export const LoggedInUserIdleTimeout = () => {
+  const { profile, signOut } = useContext(UserContext)
+
+  const onTimeout = () => {
+    signOut && signOut()
+  }
+
+  // Only render the IdleTimeout component if the user is logged in
+  return profile && signOut
+    ? createElement(IdleTimeout, {
+        promptTitle: t("authentication.timeout.title"),
+        promptText: t("authentication.timeout.text"),
+        promptAction: t("authentication.timeout.action"),
+        redirectPath: `/sign-in?message=${encodeURIComponent(
+          t("authentication.timeout.signOutMessage")
+        )}`,
+        onTimeout,
+      })
+    : null
 }
