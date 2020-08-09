@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Set up app-wide constants
-let LISTING_SERVICE_URL = "http://localhost:3001"
+let LISTING_SERVICE_URL = "http://localhost:3100"
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
   // This is a value that can get set via a Netlify webhook for branch deploys
   LISTING_SERVICE_URL = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
