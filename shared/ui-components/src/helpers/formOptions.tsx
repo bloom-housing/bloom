@@ -149,6 +149,24 @@ export const howDidYouHear: CheckboxGroupItem[] = [
   },
 ]
 
+export const preferredUnit: CheckboxGroupItem[] = [
+  {
+    id: "studio",
+  },
+  {
+    id: "oneBedroom",
+  },
+  {
+    id: "twoBedroom",
+  },
+  {
+    id: "threeBedroom",
+  },
+  {
+    id: "moreThanThreeBedroom",
+  },
+]
+
 export const FormOptions = (props: FormOptionsProps) => {
   const keyPrefix = props.keyPrefix
   const options = props.options.map((option, key) => {

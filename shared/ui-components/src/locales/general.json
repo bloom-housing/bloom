@@ -207,6 +207,17 @@
         "willLiveAlone": "I will live alone",
         "liveWithOtherPeople": "Other people will live with me"
       },
+      "preferredUnit": {
+        "title": "What unit sizes are you interested in?",
+        "optionsLabel": "Check all that apply:",
+        "options": {
+          "studio": "Studio",
+          "oneBedroom": "1 Bedroom",
+          "twoBedroom": "2 Bedroom",
+          "threeBedroom": "3 Bedroom",
+          "moreThanThreeBedroom": "3+ Bedroom"
+        }
+      },
       "member": {
         "cancelAddingThisPerson": "Cancel adding this person",
         "deleteThisPerson": "Delete this person",

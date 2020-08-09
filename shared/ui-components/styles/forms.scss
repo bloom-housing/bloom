@@ -221,6 +221,10 @@ input[type=number] {
   @apply inline-block;
 }
 
+.field-label--caps + .field-note {
+  @apply mt-2;
+}
+
 .field--inline {
   display: inline-block;
 }

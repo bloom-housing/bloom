@@ -15,6 +15,7 @@ interface CheckboxGroupProps {
   name: string
   groupLabel: string
   fields: CheckboxSingle[]
+  groupNote: string
 }
 
 export const CheckboxGroup = ({
@@ -24,10 +25,12 @@ export const CheckboxGroup = ({
   required = false,
   error,
   errorMessage,
+  groupNote,
 }: CheckboxGroupProps) => {
   return (
     <>
-      <p className="field-label--caps">{groupLabel}</p>
+      {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
+      {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
       <div className="mt-3 field">
         {fields &&
