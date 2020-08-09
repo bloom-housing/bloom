@@ -3,7 +3,7 @@
 Dev DB reseed:
 
 ```shell script
-psql -c 'DROP DATABASE bloom;' && psql -c 'CREATE DATABASE bloom;' && yarn typeorm migration:run && yarn seed
+psql -c 'DROP DATABASE bloom;' && psql -c 'CREATE DATABASE bloom;' && yarn migrate && yarn seed
 ```
 
 Test DB reseed:

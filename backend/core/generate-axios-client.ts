@@ -4,6 +4,6 @@ codegen({
   methodNameMode: "operationId",
   remoteUrl: "http://localhost:3001/docs-json",
   outputDir: ".",
-  useStaticMethod: true,
+  useStaticMethod: false,
   fileName: "client.ts",
 })
