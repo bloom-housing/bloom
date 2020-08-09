@@ -5,7 +5,7 @@ class RevokedToken {
   @PrimaryColumn("varchar")
   token: string
 
-  @CreateDateColumn("timestamp without time zone")
+  @CreateDateColumn()
   revokedAt: Date
 }
 

@@ -26,9 +26,9 @@ class User {
   lastName: string
   @Column("timestamp without time zone")
   dob: Date
-  @CreateDateColumn("timestamp without time zone")
+  @CreateDateColumn()
   createdAt: Date
-  @UpdateDateColumn("timestamp without time zone")
+  @UpdateDateColumn()
   updatedAt: Date
   @OneToMany((type) => Application, (application) => application.user)
   applications: Application[]
