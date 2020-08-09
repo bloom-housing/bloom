@@ -32,7 +32,7 @@ export const CheckboxGroup = ({
       <div className="mt-3 field">
         {fields &&
           fields.map((item) => (
-            <div className="field" key={item.id}>
+            <div className={`field ${error && "error"}`} key={item.id}>
               <input
                 type="checkbox"
                 id={item.id}
