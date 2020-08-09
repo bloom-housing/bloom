@@ -1,6 +1,6 @@
 import * as React from "react"
 import moment from "moment"
-import { t } from "@bloom-housing/ui-components/src/helpers/translator"
+import { t } from "../helpers/translator"
 import { Listing } from "@bloom-housing/core"
 import { openDateState } from "../helpers/state"
 import { Icon } from "../atoms/Icon"
