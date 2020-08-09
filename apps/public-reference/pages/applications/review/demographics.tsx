@@ -8,7 +8,6 @@ import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { CheckboxGroup } from "@bloom-housing/ui-components/src/forms/CheckboxGroup"
@@ -22,13 +21,7 @@ import {
 import FormStep from "../../../src/forms/applications/FormStep"
 
 const demographics = () => {
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */

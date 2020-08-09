@@ -10,8 +10,7 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { useContext } from "react"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
+  const { application } = useContext(AppSubmissionContext)
   const currentPageStep = 1
 
   /* Form Handler */
