@@ -89,10 +89,11 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
   )
 }
 
-export const LoggedInUserIdleTimeout = () => {
+export const LoggedInUserIdleTimeout = ({ onTimeout }: { onTimeout?: () => unknown }) => {
   const { profile, signOut } = useContext(UserContext)
 
-  const onTimeout = () => {
+  const timeoutFxn = async () => {
+    onTimeout && (await onTimeout())
     signOut && signOut()
   }
 
@@ -105,7 +106,7 @@ export const LoggedInUserIdleTimeout = () => {
         redirectPath: `/sign-in?message=${encodeURIComponent(
           t("authentication.timeout.signOutMessage")
         )}`,
-        onTimeout,
+        onTimeout: timeoutFxn,
       })
     : null
 }

@@ -117,7 +117,7 @@ class MyApp extends App {
         <ConfigProvider apiUrl={process.env.listingServiceUrl}>
           <UserProvider>
             <ApiClientProvider>
-              <LoggedInUserIdleTimeout />
+              <LoggedInUserIdleTimeout onTimeout={() => this.state.conductor.reset()} />
               <Component {...pageProps} />
             </ApiClientProvider>
           </UserProvider>
