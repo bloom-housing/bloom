@@ -3,6 +3,8 @@
 /* eslint-disable */
 import axiosStatic, { AxiosInstance } from 'axios';
 
+const basePath = '';
+
 export interface IRequestOptions {
   headers?: any;
   baseURL?: string;
@@ -42,6 +44,7 @@ export function axios(configs: IRequestConfig, resolve: (p: any) => void, reject
 }
 
 export function getConfigs(method: string, contentType: string, url: string, options: any): IRequestConfig {
+  url = basePath + url;
   const configs: IRequestConfig = { ...options, method, url };
   configs.headers = {
     ...options.headers,
@@ -75,13 +78,12 @@ export class PagedResultDto<T> implements IPagedResult<T> {
 
 // customer definition
 // empty
-const basePath = '';
 
 export class ApplicationsService {
   /**
    * List applications
    */
-  static list(
+  list(
     params: {
       /**  */
       listingId?: string;
@@ -89,7 +91,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationDto[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications';
+      let url = '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { listingId: params['listingId'] };
@@ -102,7 +104,7 @@ export class ApplicationsService {
   /**
    * Create application
    */
-  static create(
+  create(
     params: {
       /** requestBody */
       body?: ApplicationCreateDto;
@@ -110,7 +112,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications';
+      let url = '/applications';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -123,7 +125,7 @@ export class ApplicationsService {
   /**
    * Get application by id
    */
-  static retrieve(
+  retrieve(
     params: {
       /**  */
       applicationId: string;
@@ -131,7 +133,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/{applicationId}';
+      let url = '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -145,7 +147,7 @@ export class ApplicationsService {
   /**
    * Update application by id
    */
-  static update(
+  update(
     params: {
       /**  */
       applicationId: string;
@@ -155,7 +157,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/{applicationId}';
+      let url = '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
@@ -169,7 +171,7 @@ export class ApplicationsService {
   /**
    * Delete application by id
    */
-  static delete(
+  delete(
     params: {
       /**  */
       applicationId: string;
@@ -177,7 +179,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/{applicationId}';
+      let url = '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -539,6 +541,9 @@ export interface Listing {
 
   /**  */
   applications: Application[];
+
+  /**  */
+  status: EnumListingStatus;
 }
 
 export interface ListingsListResponse {
@@ -604,6 +609,10 @@ export interface ApplicationUpdateDto {
 export enum EnumAttachmentType {
   'ApplicationDownload' = 'ApplicationDownload',
   'ExternalApplication' = 'ExternalApplication'
+}
+export enum EnumListingStatus {
+  'active' = 'active',
+  'pending' = 'pending'
 }
 export enum EnumListingsListResponseStatus {
   'ok' = 'ok'
