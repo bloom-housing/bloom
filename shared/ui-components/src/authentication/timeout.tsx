@@ -49,7 +49,9 @@ export const IdleTimeout: FunctionComponent = ({ children }) => {
         (setTimeout(() => {
           setPromptTimeout(undefined)
           signOut()
-          router.push(`/?alert=${encodeURIComponent(t("authentication.timeout.signOutMessage"))}`)
+          router.push(
+            `/sign-in?message=${encodeURIComponent(t("authentication.timeout.signOutMessage"))}`
+          )
         }, 60000) as unknown) as number
       )
     }

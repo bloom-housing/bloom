@@ -43,7 +43,7 @@ export default class extends Component<IndexProps> {
         </Head>
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <div className="flex absolute w-full flex-col items-center">
-          <UrlAlert type="alert" urlParam="alert" className={alertClasses} timeout={30000} />
+          <UrlAlert type="alert" urlParam="alert" className={alertClasses} />
           <UrlAlert type="success" urlParam="success" className={alertClasses} timeout={30000} />
         </div>
         <Hero

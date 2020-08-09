@@ -6,10 +6,10 @@ import {
   FormCard,
   Icon,
   LinkButton,
-  ErrorMessage,
   UserContext,
   t,
   AlertBox,
+  UrlAlert,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRouter } from "next/router"
@@ -58,6 +58,7 @@ const SignIn = () => {
               {requestError}
             </AlertBox>
           )}
+          <UrlAlert type="notice" urlParam="message" dismissable />
 
           <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
