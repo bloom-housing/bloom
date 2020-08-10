@@ -54,7 +54,7 @@ declare global {
 
 Cypress.Commands.add(
   "login",
-  (email: string, password: string, { apiBase = "http://localhost:3001" } = {}) => {
+  (email: string, password: string, { apiBase = "http://localhost:3100" } = {}) => {
     return cy
       .request({
         url: `${apiBase}/auth/login`,
@@ -74,7 +74,7 @@ Cypress.Commands.add("logout", () =>
   cy.window().then((window) => window.sessionStorage.removeItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY))
 )
 
-Cypress.Commands.add("createUser", (user: UserFields, { apiBase = "http://localhost:3001" } = {}) =>
+Cypress.Commands.add("createUser", (user: UserFields, { apiBase = "http://localhost:3100" } = {}) =>
   cy
     .request({
       url: `${apiBase}/auth/register`,

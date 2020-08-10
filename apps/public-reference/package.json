@@ -40,7 +40,7 @@
     "@types/node": "^12.12.50",
     "@types/react": "^16.9.44",
     "concurrently": "^5.2.0",
-    "cypress": "^4.12.0",
+    "cypress": "^4.12.1",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^4.0.2",
     "sass-loader": "^9.0.2",

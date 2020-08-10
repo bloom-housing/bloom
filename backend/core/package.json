@@ -54,7 +54,7 @@
     "typescript": "^3.9.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.5",
+    "@babel/core": "^7.11.1",
     "@babel/plugin-proposal-decorators": "^7.10.5",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.4.2",
