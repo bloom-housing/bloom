@@ -7,7 +7,7 @@ import "./AlertBox.scss"
 
 export interface AlertBoxProps {
   type?: AlertTypes
-  onClose: () => void
+  onClose?: () => void
   children: ReactNode
   inverted?: boolean
   className?: string
@@ -35,12 +35,14 @@ const AlertBox = (props: AlertBoxProps) => {
       <span className="alert-box__body">
         {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
       </span>
-      <button
-        className={`alert-box__close ${props.inverted ? "text-white" : ""}`}
-        onClick={props.onClose}
-      >
-        &times;
-      </button>
+      {props.onClose && (
+        <button
+          className={`alert-box__close ${props.inverted ? "text-white" : ""}`}
+          onClick={props.onClose}
+        >
+          &times;
+        </button>
+      )}
     </div>
   )
 }

@@ -84,6 +84,13 @@ export const blankApplication = () => {
     income: null,
     incomePeriod: null,
     householdMembers: [],
+    preferredUnit: [],
+    demographics: {
+      ethnicity: "",
+      gender: "",
+      sexualOrientation: "",
+      howDidYouHear: "",
+    },
   }
 }
 

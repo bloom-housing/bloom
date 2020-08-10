@@ -14,17 +14,17 @@ import { Application } from "./application.entity"
 class User {
   @PrimaryGeneratedColumn("uuid")
   id: string
-  @Column({ select: false })
+  @Column("varchar", { select: false })
   passwordHash: string
-  @Column()
+  @Column("varchar")
   email: string
-  @Column()
+  @Column("varchar")
   firstName: string
-  @Column({ nullable: true })
+  @Column("varchar", { nullable: true })
   middleName?: string
-  @Column()
+  @Column("varchar")
   lastName: string
-  @Column()
+  @Column("timestamp without time zone")
   dob: Date
   @CreateDateColumn()
   createdAt: Date

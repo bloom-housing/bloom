@@ -102,7 +102,7 @@ export default () => {
           <div className="form-card__pager-row primary">
             <Button
               filled={true}
-              className="w-full md:w-3/4"
+              className=""
               onClick={() => {
                 conductor.returnToReview = false
                 handleSubmit(onSubmit)()

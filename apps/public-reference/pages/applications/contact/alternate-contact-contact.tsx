@@ -9,8 +9,9 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo } from "react"
-import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -103,13 +104,15 @@ export default () => {
                 register={register}
               />
 
-              <StateSelect
+              <Select
                 id="mailingAddress.state"
                 name="mailingAddress.state"
                 label={t("application.alternateContact.contact.stateFormPlaceholder")}
                 defaultValue={application.alternateContact.mailingAddress.state}
                 register={register}
                 controlClassName="control"
+                options={stateKeys}
+                keyPrefix="application.form.options.states"
               />
             </div>
             <Field

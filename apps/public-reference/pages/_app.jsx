@@ -7,6 +7,7 @@ import {
   UserProvider,
   ConfigProvider,
   ApiClientProvider,
+  LoggedInUserIdleTimeout,
 } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
@@ -116,6 +117,7 @@ class MyApp extends App {
         <ConfigProvider apiUrl={process.env.listingServiceUrl}>
           <UserProvider>
             <ApiClientProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => this.state.conductor.reset()} />
               <Component {...pageProps} />
             </ApiClientProvider>
           </UserProvider>
