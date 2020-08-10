@@ -73,7 +73,7 @@ export default () => {
           <div className="form-card__group is-borderless">
             <CheckboxGroup
               name="preferredUnit"
-              groupLabel = ""
+              groupLabel=""
               groupNote={t("application.household.preferredUnit.optionsLabel")}
               fields={preferredUnitOptions}
               error={errors.preferredUnit}
