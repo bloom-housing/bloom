@@ -30,7 +30,8 @@
     "node-sass": "^4.14.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-hook-form": "^6.3.0"
+    "react-hook-form": "^6.3.0",
+    "swr": "^0.3.0"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.4.2",
