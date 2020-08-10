@@ -1,5 +1,4 @@
-import { Application } from "./src/backend-swagger"
-export type Application = Application
+export type { Application } from "./src/backend-swagger"
 
 export * from "./src/HousingCounselors"
 export * from "./src/ami_charts"
