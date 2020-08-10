@@ -1,19 +1,25 @@
-import { Component, useContext, useState, useEffect } from "react"
+import React from "react"
 import Head from "next/head"
-import { PageHeader, MetaTags, ApiClientContext, t } from "@bloom-housing/ui-components"
+import { PageHeader, MetaTags, t } from "@bloom-housing/ui-components"
+import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 
 import { AgGridReact } from "ag-grid-react"
 
 export default function ListingsList() {
-  const { applicationsService } = useContext(ApiClientContext)
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
   const columnDefs = [
     {
-      headerName: "Foo",
-      field: "application.foo",
+      headerName: "Name",
+      field: "name",
+      sortable: true,
+      filter: true,
+    },
+    {
+      headerName: "Status",
+      field: "status",
       sortable: true,
       filter: true,
     },
@@ -31,17 +37,9 @@ export default function ListingsList() {
     },
   ]
 
-  const [listings, setListings] = useState({ applications: [] })
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await applicationsService.list()
-      console.log(result)
-      setListings({ applications: result })
-    }
-
-    fetchData()
-  }, [])
+  const { listingDtos, listingsLoading, listingsError } = useListingsData()
+  if (listingsError) return "An error has occurred."
+  if (listingsLoading) return "Loading..."
 
   return (
     <Layout>
@@ -49,13 +47,15 @@ export default function ListingsList() {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>List of Applications will go here.</PageHeader>
+      <PageHeader>All Listings</PageHeader>
       <article className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
-        <AgGridReact
-          columnDefs={columnDefs}
-          rowData={listings.applications}
-          gridAutoHeight={true}
-        ></AgGridReact>
+        <div className="ag-theme-alpine">
+          <AgGridReact
+            columnDefs={columnDefs}
+            rowData={listingDtos.listings}
+            domLayout={"autoHeight"}
+          ></AgGridReact>
+        </div>
       </article>
     </Layout>
   )
