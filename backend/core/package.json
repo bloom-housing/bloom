@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@bloom-housing/core": "^0.2.14",
+    "@anchan828/nest-sendgrid": "^0.3.16",
     "@nestjs/cli": "^7.4.1",
     "@nestjs/common": "^7.4.2",
     "@nestjs/core": "^7.4.2",
@@ -35,7 +36,6 @@
     "@nestjs/platform-express": "^7.4.2",
     "@nestjs/swagger": "^4.5.12",
     "@nestjs/typeorm": "^7.1.0",
-    "@anchan828/nest-sendgrid": "^0.3.16",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
     "dotenv": "^8.2.0",
@@ -43,6 +43,7 @@
     "handlebars": "^4.7.6",
     "jsonpath": "^1.0.2",
     "nanoid": "^3.1.12",
+    "node-polyglot": "^2.4.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
