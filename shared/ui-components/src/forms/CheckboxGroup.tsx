@@ -15,7 +15,7 @@ interface CheckboxGroupProps {
   name: string
   groupLabel: string
   fields: CheckboxSingle[]
-  groupNote: string
+  groupNote?: string
 }
 
 export const CheckboxGroup = ({
