@@ -74,7 +74,7 @@ export default () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={errors.householdSize ? "" : ""}>
+          <div>
             <HouseholdSizeField
               listing={listing}
               householdSize={application.householdSize}
@@ -92,8 +92,8 @@ export default () => {
             />
             {membersSection}
           </div>
-         </form>
-         <div className="form-card__group pt-0 mt-0">
+        </form>
+        <div className="form-card__group pt-0 mt-0">
           <div className="text-center">
             <Button onClick={onAddMember}>
               {t("application.household.addMembers.addHouseholdMember")}

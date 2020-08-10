@@ -2,15 +2,71 @@
 4.1 Preferences Introduction
 Instructions on how preferences work and their value
 */
+import { useContext, useState } from "react"
 import Link from "next/link"
-import Router from "next/router"
+import { useForm } from "react-hook-form"
 import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useMemo, useState } from "react"
+
+const PreferenceOption = (props: {
+  checked: boolean
+  option: string
+  formHandlers: Record<string, any>
+}) => {
+  const { checked, option, formHandlers } = props
+  const [showMore, setShowMore] = useState(false)
+  return (
+    <div key={option} className="form-card__group px-0 border-b">
+      <div className={"field " + (formHandlers.errors.none ? "error" : "")}>
+        <input
+          type="checkbox"
+          id={option}
+          name={option}
+          defaultChecked={checked}
+          ref={formHandlers.register}
+          onChange={() => {
+            setTimeout(() => {
+              formHandlers.setValue("none", false)
+              formHandlers.trigger("none")
+            }, 1)
+          }}
+        />
+        <label htmlFor={option} className="font-semibold uppercase tracking-wider">
+          {t(`application.preferences.${option}.label`)}
+        </label>
+      </div>
+
+      <p className="ml-8 -mt-3">
+        <button
+          type="button"
+          className="button is-unstyled m-0 no-underline has-toggle"
+          aria-expanded={showMore ? "true" : "false"}
+          onClick={() => {
+            setShowMore(!showMore)
+          }}
+        >
+          {t(showMore ? "label.readLess" : "label.readMore")}
+        </button>
+      </p>
+
+      {showMore && (
+        <p className="field-note mt-6 ml-8">
+          {t(`application.preferences.${option}.description`)}
+          <br />
+          <a
+            className="block pt-2"
+            href={t(`application.preferences.${option}.link`)}
+            target="_blank"
+          >
+            Link
+          </a>
+        </p>
+      )}
+    </div>
+  )
+}
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -61,59 +117,13 @@ export default () => {
             <p className="field-note">{t("application.preferences.selectBelow")}</p>
           </div>
 
-          {preferenceOptions.map((option) => {
-            const [showMore, setShowMore] = useState(false)
-            return (
-              <div className="form-card__group px-0 border-b">
-                <div className={"field " + (errors.none ? "error" : "")}>
-                  <input
-                    type="checkbox"
-                    id={option}
-                    name={option}
-                    defaultChecked={application.preferences[option]}
-                    ref={register}
-                    onChange={() => {
-                      setTimeout(() => {
-                        setValue("none", false)
-                        trigger("none")
-                      }, 1)
-                    }}
-                  />
-                  <label htmlFor={option} className="font-semibold uppercase tracking-wider">
-                    {t(`application.preferences.${option}.label`)}
-                  </label>
-                </div>
-
-                <p className="ml-8 -mt-3">
-                  <button
-                    type="button"
-                    className="button is-unstyled m-0 no-underline has-toggle"
-                    aria-expanded={showMore ? "true" : "false"}
-                    onClick={() => {
-                      setShowMore(!showMore)
-                    }}
-                  >
-                    {!showMore && t("label.readMore")}
-                    {showMore && t("label.readLess")}
-                  </button>
-                </p>
-
-                {showMore && (
-                  <p className="field-note mt-6 ml-8">
-                    {t(`application.preferences.${option}.description`)}
-                    <br />
-                    <a
-                      className="block pt-2"
-                      href={t(`application.preferences.${option}.link`)}
-                      target="_blank"
-                    >
-                      Link
-                    </a>
-                  </p>
-                )}
-              </div>
-            )
-          })}
+          {preferenceOptions.map((option) => (
+            <PreferenceOption
+              checked={application.preferences[option]}
+              option={option}
+              formHandlers={{ errors, register, setValue, trigger }}
+            />
+          ))}
 
           <div className="form-card__group px-0">
             <div className={"field " + (errors.none ? "error" : "")}>
@@ -125,11 +135,7 @@ export default () => {
                 ref={register({
                   validate: {
                     somethingIsChecked: (value) => {
-                      let returnValue = value
-                      preferenceOptions.forEach((option) => {
-                        if (getValues(option)) returnValue = true
-                      })
-                      return returnValue
+                      return value || preferenceOptions.some((option) => getValues(option))
                     },
                   },
                 })}
