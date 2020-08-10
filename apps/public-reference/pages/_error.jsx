@@ -3,7 +3,7 @@ import Head from "next/head"
 import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/homepage.mdx"
 
-export default () => {
+const ErrorPage = () => {
   const pageTitle = t("error.notFound.title")
 
   return (
@@ -22,3 +22,5 @@ export default () => {
     </Layout>
   )
 }
+
+export { ErrorPage as default, ErrorPage }

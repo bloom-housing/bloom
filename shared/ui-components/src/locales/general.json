@@ -361,6 +361,25 @@
         "info2": "Please be aware that each household member can only appear on one application for each listing.",
         "info3": "Any fraudulent statements will cause your application to be removed."
       }
+    },
+    "timeout": {
+      "title": "Are you still working?",
+      "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information if you choose not to respond.",
+      "action": "Continue working",
+      "afterMessage": "We care about your security. We ended your session due to inactivity. Please log in or start a new application to continue."
+    }
+  },
+  "authentication": {
+    "timeout": {
+      "title": "Are you still working?",
+      "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information and be logged out if you choose not to respond.",
+      "action": "Stay logged in",
+      "signOutMessage": "We care about your security. We logged you out due to inactivity. Please sign in to continue."
+    },
+    "signIn": {
+      "error": "There was an error signing you in",
+      "errorGenericMessage": "Please try again, or contact support for help.",
+      "success": "Welcome back, %{name}!"
     }
   },
   "config": {
@@ -550,9 +569,6 @@
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
     "viewPreferenceList": "View Preference List"
   },
-  "region": {
-    "name": "Local Region"
-  },
   "nav": {
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
@@ -577,6 +593,9 @@
   "pageDescription": {
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
+  },
+  "region": {
+    "name": "Local Region"
   },
   "t": {
     "additionalPhone": "Additional Phone",

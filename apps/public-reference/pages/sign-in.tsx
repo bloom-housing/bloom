@@ -6,13 +6,17 @@ import {
   FormCard,
   Icon,
   LinkButton,
-  ErrorMessage,
   UserContext,
+  t,
+  AlertBox,
+  UrlAlert,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
+import { useRouter } from "next/router"
 
-export default () => {
+const SignIn = () => {
   const { login } = useContext(UserContext)
+  const router = useRouter()
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
@@ -21,16 +25,20 @@ export default () => {
     const { email, password } = data
 
     try {
-      await login(email, password)
-      console.log("Login success!")
+      const user = await login(email, password)
+      router.push(
+        `/?success=${encodeURIComponent(
+          t(`authentication.signIn.success`, { name: user.firstName })
+        )}`
+      )
     } catch (err) {
       const { status } = err.response
       if (status === 401) {
-        setRequestError(`Error signing you in: ${err.message}`)
+        setRequestError(`${t("authentication.signIn.error")}: ${err.message}`)
       } else {
         console.error(err)
         setRequestError(
-          "There was an error signing you in. Please try again, or contact support for help."
+          `${t("authentication.signIn.error")}. ${t("authentication.signIn.errorGenericMessage")}`
         )
       }
     }
@@ -45,7 +53,12 @@ export default () => {
         </div>
 
         <div className="form-card__group pt-0 border-b">
-          <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
+          {requestError && (
+            <AlertBox className="mt-2" onClose={() => setRequestError(undefined)} type="alert">
+              {requestError}
+            </AlertBox>
+          )}
+          <UrlAlert type="notice" urlParam="message" dismissable />
 
           <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
@@ -88,3 +101,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export { SignIn as default, SignIn }
