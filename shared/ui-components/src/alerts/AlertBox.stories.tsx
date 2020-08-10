@@ -1,7 +1,7 @@
 import React from "react"
 
 import SVG from "react-inlinesvg"
-import AlertBox from "./AlertBox"
+import { AlertBox } from "./AlertBox"
 
 export default {
   title: "Alerts/AlertBox",

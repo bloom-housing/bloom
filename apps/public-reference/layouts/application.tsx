@@ -1,6 +1,5 @@
 import * as React from "react"
 import Head from "next/head"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
 import {
   LocalizedLink,
   SiteHeader,
@@ -8,6 +7,7 @@ import {
   FooterNav,
   FooterSection,
   ExygyFooter,
+  t,
 } from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
 

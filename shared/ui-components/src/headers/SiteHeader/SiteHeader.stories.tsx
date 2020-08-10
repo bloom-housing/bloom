@@ -1,7 +1,7 @@
 import * as React from "react"
 
-import SiteHeader, { NavbarDropdown } from "./SiteHeader"
-import Button from "../../atoms/Button"
+import { SiteHeader, NavbarDropdown } from "./SiteHeader"
+import { Button } from "../../atoms/Button"
 
 export default {
   title: "Headers/SiteHeader",

@@ -5,7 +5,7 @@ import {
   ResponsiveContentItemHeader,
   ResponsiveContentItemBody,
 } from "../../lists/ResponsiveContentList/ResponsiveContentList"
-import ListingDetailHeader, { ListingDetailHeaderProps } from "./ListingDetailHeader"
+import { ListingDetailHeader, ListingDetailHeaderProps } from "./ListingDetailHeader"
 
 export const ListingDetails = (props: any) => (
   <div className="w-full md:w-2/3 md:pr-8 md:pt-8">

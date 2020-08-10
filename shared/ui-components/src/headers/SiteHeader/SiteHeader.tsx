@@ -1,5 +1,5 @@
 import * as React from "react"
-import LocalizedLink from "../../atoms/LocalizedLink"
+import { LocalizedLink } from "../../atoms/LocalizedLink"
 
 export interface SiteHeaderProps {
   logoSrc: string

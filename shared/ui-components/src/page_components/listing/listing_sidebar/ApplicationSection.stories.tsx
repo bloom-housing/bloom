@@ -1,6 +1,6 @@
 import * as React from "react"
 import moment from "moment"
-import ApplicationSection from "./ApplicationSection"
+import { ApplicationSection } from "./ApplicationSection"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
@@ -9,14 +9,18 @@ export default {
   component: ApplicationSection,
   title: "Listing Sidebar/Application Section",
 }
-/* eslint-enable @typescript-eslint/ban-ts-ignore */
 
-const listing = Object.assign({}, Archer) as any
-listing.applicationOpenDate = ""
-listing.waitlistCurrentSize = 0
-listing.applicationDueDate = moment().add(10, "days").format()
-export const dueSoon = () => <ApplicationSection listing={listing} />
+export const dueSoon = () => {
+  const listing = Object.assign({}, Archer) as any
+  listing.applicationOpenDate = ""
+  listing.waitlistCurrentSize = 0
+  listing.applicationDueDate = moment().add(10, "days").format()
+  /* eslint-disable @typescript-eslint/ban-ts-ignore */
+  // @ts-ignore
+  return <ApplicationSection listing={listing} />
+}
 
+/*
 const listing2 = Object.assign({}, Archer) as any
 listing2.applicationOpenDate = moment().add(5, "days").format()
 listing2.applicationDueDate = moment().add(10, "days").format()
@@ -49,3 +53,4 @@ export const withOpenWaitlistAndUnits = () => <ApplicationSection listing={listi
 const listing7 = Object.assign({}, Archer) as any
 listing7.applicationDueDate = moment().add(10, "days").format()
 export const closedWaitlist = () => <ApplicationSection listing={listing7} />
+*/

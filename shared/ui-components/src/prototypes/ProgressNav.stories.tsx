@@ -1,6 +1,6 @@
 import React from "react"
 
-import ProgressNav from "./ProgressNav"
+import { ProgressNav } from "./ProgressNav"
 
 export default {
   title: "Prototypes/ProgressNav",

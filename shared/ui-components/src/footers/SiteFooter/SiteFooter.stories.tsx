@@ -1,10 +1,10 @@
 import * as React from "react"
 
-import SiteFooter from "./SiteFooter"
-import FooterNav from "../FooterNav/FooterNav"
-import LocalizedLink from "../../atoms/LocalizedLink"
-import ExygyFooter from "../ExygyFooter"
-import FooterSection from "../FooterSection/FooterSection"
+import { SiteFooter } from "./SiteFooter"
+import { FooterNav } from "../FooterNav/FooterNav"
+import { LocalizedLink } from "../../atoms/LocalizedLink"
+import { ExygyFooter } from "../ExygyFooter"
+import { FooterSection } from "../FooterSection/FooterSection"
 
 export default {
   title: "Footers/Site Footer",

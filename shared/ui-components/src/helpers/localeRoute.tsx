@@ -1,4 +1,4 @@
-import t from "./translator"
+import { t } from "./translator"
 
 export const lRoute = (routeString: string) => {
   let routePrefix = t("config.routePrefix")

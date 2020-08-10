@@ -1,5 +1,5 @@
 import React from "react"
-import Router from "next/router"
+import { Router } from "next/router"
 import { HouseholdMember } from "@bloom-housing/core"
 import { t } from "../helpers/translator"
 
