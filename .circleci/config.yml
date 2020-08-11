@@ -8,6 +8,13 @@ executors:
       - image: "cypress/base:12.16.1"
 
 jobs:
+  lint:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run: yarn install
+      - run: yarn lint
   jest-tests:
     docker:
       - image: circleci/node:12
@@ -16,10 +23,29 @@ jobs:
       - run: yarn install
       - run: yarn test:shared:ui
       - run: yarn test:services:listings
+      - run: yarn test:backend:core
+  build-public:
+    docker:
+      - image: circleci/node:12
+    working_directory: apps/public-reference
+    steps:
+      - checkout
+      - run: cd yarn install
+      - run: yarn install
+  build-partners:
+    docker:
+      - image: circleci/node:12
+    working_directory: apps/partners-reference
+    steps:
+      - checkout
+      - run: cd yarn install
+      - run: yarn install
 
 workflows:
+  version: 2
   build:
     jobs:
+      - lint
       - cypress/run:
           executor: cypress-node-12
           working_directory: apps/public-reference
@@ -27,3 +53,4 @@ workflows:
           start: yarn dev:all
           wait-on: "http://localhost:3000"
       - jest-tests
+      - build-apps
