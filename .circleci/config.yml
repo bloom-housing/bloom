@@ -25,33 +25,35 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
-  jest-tests:
+  jest-ui-components:
     docker:
       - image: circleci/node:12
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
+  jest-backend:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:services:listings
       - run: yarn test:backend:core
   build-public:
     docker:
       - image: circleci/node:12
-    working_directory: apps/public-reference
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn build
-      - run: yarn export
+      - run: yarn build:app:public
   build-partners:
     docker:
       - image: circleci/node:12
-    working_directory: apps/partners-reference
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn build
-      - run: yarn export
+      - run: yarn build:app:partners
 
 workflows:
   version: 2
@@ -61,7 +63,10 @@ workflows:
       - lint:
           requires:
             - setup
-      - jest-tests:
+      - jest-ui-components:
+          requires:
+            - setup
+      - jest-ui-backend:
           requires:
             - setup
       - build-public:
