@@ -247,6 +247,27 @@
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
     },
+    "preferences": {
+      "title": "Your household may qualify for the following housing preferences.",
+      "preamble": "If you qualify for this preference, you'll get a higher ranking.",
+      "selectBelow": "If you have one of these housing preferences, select it below:",
+      "dontWant": "I don't want this lottery preference",
+      "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
+      "liveIn": {
+        "label": "Live in <REGION> Preference",
+        "description": "Live in <REGION> copy goes here…",
+        "link": "http://domain.com"
+      },
+      "workIn": {
+        "label": "Work in <REGION> Preference",
+        "description": "Work in <REGION> copy goes here…",
+        "link": "http://domain.com"
+      },
+      "general": {
+        "title": "Based on the information you have entered, your household has not claimed any housing lottery preferences.",
+        "preamble": "You will be in the general lottery."
+      }
+    },
     "review": {
       "takeAMomentToReview": "Take a moment to review your information before submitting your application.",
       "sameAddressAsApplicant": "Same Address as Applicant",

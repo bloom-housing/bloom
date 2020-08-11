@@ -64,9 +64,15 @@ const demographics = () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/preferences/general">
-              <a>{t("t.back")}</a>
-            </Link>
+            {application.preferences.none ? (
+              <Link href="/applications/preferences/general">
+                <a>{t("t.back")}</a>
+              </Link>
+            ) : (
+              <Link href="/applications/preferences/select">
+                <a>{t("t.back")}</a>
+              </Link>
+            )}
           </strong>
         </p>
 
