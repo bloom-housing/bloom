@@ -3,8 +3,8 @@
 Instructions on how preferences work and their value
 */
 import { useContext, useState } from "react"
-import Link from "next/link"
 import { useForm } from "react-hook-form"
+import Link from "next/link"
 import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
