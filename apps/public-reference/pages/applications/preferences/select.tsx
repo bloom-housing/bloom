@@ -10,69 +10,15 @@ import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
 
-const PreferenceOption = (props: {
-  checked: boolean
-  option: string
-  formHandlers: Record<string, any>
-}) => {
-  const { checked, option, formHandlers } = props
-  const [showMore, setShowMore] = useState(false)
-  return (
-    <div key={option} className="form-card__group px-0 border-b">
-      <div className={"field " + (formHandlers.errors.none ? "error" : "")}>
-        <input
-          type="checkbox"
-          id={option}
-          name={option}
-          defaultChecked={checked}
-          ref={formHandlers.register}
-          onChange={() => {
-            setTimeout(() => {
-              formHandlers.setValue("none", false)
-              formHandlers.trigger("none")
-            }, 1)
-          }}
-        />
-        <label htmlFor={option} className="font-semibold uppercase tracking-wider">
-          {t(`application.preferences.${option}.label`)}
-        </label>
-      </div>
-
-      <p className="ml-8 -mt-3">
-        <button
-          type="button"
-          className="button is-unstyled m-0 no-underline has-toggle"
-          aria-expanded={showMore ? "true" : "false"}
-          onClick={() => {
-            setShowMore(!showMore)
-          }}
-        >
-          {t(showMore ? "label.readLess" : "label.readMore")}
-        </button>
-      </p>
-
-      {showMore && (
-        <p className="field-note mt-6 ml-8">
-          {t(`application.preferences.${option}.description`)}
-          <br />
-          <a
-            className="block pt-2"
-            href={t(`application.preferences.${option}.link`)}
-            target="_blank"
-          >
-            Link
-          </a>
-        </p>
-      )}
-    </div>
-  )
-}
-
 export default () => {
+  const [showMore, setShowMore] = useState({})
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 4
 
   const preferenceOptions = ["liveIn", "workIn"]
+
+  const toggleShowMoreForOption = (option) =>
+    setShowMore({ ...showMore, [option]: !showMore[option] })
 
   /* Form Handler */
   const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm()
@@ -118,11 +64,53 @@ export default () => {
           </div>
 
           {preferenceOptions.map((option) => (
-            <PreferenceOption
-              checked={application.preferences[option]}
-              option={option}
-              formHandlers={{ errors, register, setValue, trigger }}
-            />
+            <div key={option} className="form-card__group px-0 border-b">
+              <div className={"field " + (errors.none ? "error" : "")}>
+                <input
+                  type="checkbox"
+                  id={option}
+                  name={option}
+                  defaultChecked={application.preferences[option]}
+                  ref={register}
+                  onChange={() => {
+                    setTimeout(() => {
+                      setValue("none", false)
+                      trigger("none")
+                    }, 1)
+                  }}
+                />
+                <label htmlFor={option} className="font-semibold uppercase tracking-wider">
+                  {t(`application.preferences.${option}.label`)}
+                </label>
+              </div>
+
+              <p className="ml-8 -mt-3">
+                <button
+                  type="button"
+                  className="button is-unstyled m-0 no-underline has-toggle"
+                  aria-expanded={showMore[option] ? "true" : "false"}
+                  onClick={() => {
+                    toggleShowMoreForOption(option)
+                  }}
+                >
+                  {t(showMore[option] ? "label.readLess" : "label.readMore")}
+                </button>
+              </p>
+
+              {showMore[option] && (
+                <p className="field-note mt-6 ml-8">
+                  {t(`application.preferences.${option}.description`)}
+                  <br />
+                  <a
+                    className="block pt-2"
+                    href={t(`application.preferences.${option}.link`)}
+                    target="_blank"
+                  >
+                    Link
+                  </a>
+                </p>
+              )}
+            </div>
           ))}
 
           <div className="form-card__group px-0">
