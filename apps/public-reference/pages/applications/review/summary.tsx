@@ -240,6 +240,30 @@ export default () => {
           </ReviewItem>
         </div>
 
+        <h3 className="form--card__sub-header">
+          {t("t.preferences")}
+          <EditLink href="/applications/preferences/select" />
+        </h3>
+
+        <div className="form-card__group border-b mx-0">
+          {application.preferences.none ? (
+            <p className="field-note text-black">
+              {t("application.preferences.general.title")}{" "}
+              {t("application.preferences.general.preamble")}
+            </p>
+          ) : (
+            <>
+              {Object.entries(application.preferences)
+                .filter((option) => option[0] != "none" && option[1])
+                .map((option) => (
+                  <ReviewItem label={t("application.preferences.youHaveClaimed")}>
+                    {t(`application.preferences.${option[0]}.label`)}
+                  </ReviewItem>
+                ))}
+            </>
+          )}
+        </div>
+
         <div className="form-card__group">
           <p className="field-note text-gray-800 text-center">
             {t("application.review.lastChanceToEdit")}

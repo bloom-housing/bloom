@@ -253,6 +253,7 @@
       "selectBelow": "If you have one of these housing preferences, select it below:",
       "dontWant": "I don't want this lottery preference",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
+      "youHaveClaimed": "You have claimed:",
       "liveIn": {
         "label": "Live in <REGION> Preference",
         "description": "Live in <REGION> copy goes here…",
@@ -303,7 +304,7 @@
           "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
           "asianAndWhite": "Asian and White",
           "blackAfricanAmericanAndWhite": "Black / African American and White",
-          "otherMutliracial" :"Other / Mutliracial"
+          "otherMutliracial": "Other / Mutliracial"
         },
         "genderOptions": {
           "female": "Female",
@@ -643,6 +644,7 @@
     "petsPolicy": "Pets Policy",
     "phone": "Phone",
     "phoneNumberPlaceholder": "(555) 555-5555",
+    "preferences": "Preferences",
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
