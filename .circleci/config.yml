@@ -14,15 +14,23 @@ jobs:
     steps:
       - checkout
       - run: yarn install
+      - save_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
   lint:
     docker:
       - image: circleci/node:12
     steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
   jest-tests:
     docker:
       - image: circleci/node:12
     steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
       - run: yarn test:services:listings
       - run: yarn test:backend:core
@@ -31,6 +39,8 @@ jobs:
       - image: circleci/node:12
     working_directory: apps/public-reference
     steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build
       - run: yarn export
   build-partners:
@@ -38,6 +48,8 @@ jobs:
       - image: circleci/node:12
     working_directory: apps/partners-reference
     steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build
       - run: yarn export
 
@@ -59,6 +71,8 @@ workflows:
           requires:
             - setup
       - cypress/run:
+          requires:
+            - setup
           executor: cypress-node-12
           working_directory: apps/public-reference
           yarn: true
