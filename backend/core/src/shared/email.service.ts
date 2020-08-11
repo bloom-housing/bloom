@@ -1,5 +1,6 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable, Logger } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
+import { ResponseError } from "@sendgrid/helpers/classes"
 import Handlebars from "handlebars"
 import path from "path"
 import { User } from "../entity/user.entity"
@@ -20,6 +21,9 @@ export class EmailService {
   }
 
   public async welcome(user: User) {
+    Logger.log(
+      `Preparing to send a welcome email to ${user.email} from ${process.env.EMAIL_FROM_ADDRESS}...`
+    )
     const template = Handlebars.compile(path.join(__dirname, "views/register-email.hbs"))
     const t = Handlebars.compile("asdsdads{{test}}")
     const resp = t({ test: "abd" })
@@ -36,7 +40,7 @@ export class EmailService {
     await this.sendGrid.send(
       {
         to: user.email,
-        // from: "test",
+        from: process.env.EMAIL_FROM_ADDRESS,
         subject: "Welcome to Bloom",
         text: "and easy to do anywhere, even with Node.js",
         // html: template({ user: user }),
@@ -45,6 +49,11 @@ export class EmailService {
       false,
       (error, info) => {
         console.error(error)
+        if (error instanceof ResponseError) {
+          const { message, code, response } = error
+          const { headers, body } = response
+          console.error(`Error sending email! Error body: ${body}`)
+        }
       }
     )
   }
