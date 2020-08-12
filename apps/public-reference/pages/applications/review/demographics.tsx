@@ -20,7 +20,7 @@ import {
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import FormStep from "../../../src/forms/applications/FormStep"
 
-const demographics = () => {
+const Demographics = () => {
   const { conductor, application } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
@@ -170,4 +170,4 @@ const demographics = () => {
   )
 }
 
-export default demographics
+export default Demographics
