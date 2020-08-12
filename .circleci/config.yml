@@ -8,22 +8,78 @@ executors:
       - image: "cypress/base:12.16.1"
 
 jobs:
-  jest-tests:
+  setup:
     docker:
       - image: circleci/node:12
     steps:
       - checkout
       - run: yarn install
+      - save_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
+  lint:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn lint
+  jest-ui-components:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
+  jest-backend:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:services:listings
+      - run: yarn test:backend:core
+  build-public:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn build:app:public
+  build-partners:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn build:app:partners
 
 workflows:
+  version: 2
   build:
     jobs:
+      - setup
+      - lint:
+          requires:
+            - setup
+      - jest-ui-components:
+          requires:
+            - setup
+      - jest-backend:
+          requires:
+            - setup
+      - build-public:
+          requires:
+            - setup
+      - build-partners:
+          requires:
+            - setup
       - cypress/run:
+          requires:
+            - setup
           executor: cypress-node-12
           working_directory: apps/public-reference
           yarn: true
           start: yarn dev:all
           wait-on: "http://localhost:3000"
-      - jest-tests

@@ -18,8 +18,10 @@
   "scripts": {
     "dev:app:public": "wait-on \"http://localhost:${PORT:-3100}/\" && cd apps/public-reference && yarn dev",
     "test:app:public": "wait-on \"http://localhost:${PORT:-3101}/\" && cd apps/public-reference && yarn test",
+    "build:app:public": "cd apps/public-reference && yarn build",
     "dev:app:partners": "wait-on \"http://localhost:${PORT:-3100}/\" && cd apps/partners-reference && yarn dev",
     "test:app:partners": "wait-on \"http://localhost:${PORT:-3101}/\" && cd apps/partners-reference && yarn test",
+    "build:app:partners": "cd apps/partners-reference && yarn build",
     "dev:listings": "cd services/listings && yarn dev",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" OLD_LISTINGS,BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:listings\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
@@ -40,6 +42,7 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.5",
+    "eslint-plugin-react-hooks": "^4.0.8",
     "husky": "^4.2.5",
     "jest": "^26.3.0",
     "lerna": "^3.22.1",
