@@ -21,7 +21,7 @@ import {
 import FormStep from "../../../src/forms/applications/FormStep"
 
 const Demographics = () => {
-  const { conductor, application } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */
@@ -53,7 +53,7 @@ const Demographics = () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
