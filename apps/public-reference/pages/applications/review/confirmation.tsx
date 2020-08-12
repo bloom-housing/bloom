@@ -111,7 +111,7 @@ export default () => {
         </div>
 
         <div className="p-8 text-center border-b">
-          <Link href="/applications/review/viev-application">
+          <Link href="/applications/review/view-application">
             <a className="lined">{t("application.review.confirmation.print")}</a>
           </Link>
         </div>
