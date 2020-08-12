@@ -331,6 +331,11 @@
           "busAd": "Bus Ad",
           "other": "Other"
         }
+      },
+      "confirmation": {
+        "title": "Thanks. We have received your application for Alchemy by ",
+        "lotteryNumber": "Here's your lottery ticket number",
+        "pleaseWriteNumber": "Please write down your lottery number and keep it in a safe place. We have also emailed this number to you if you provided an email address."
       }
     },
     "financial": {

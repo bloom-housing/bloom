@@ -4,7 +4,7 @@ Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -26,17 +26,26 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
+        <div className="form-card__lead">
+          <h2 className="form-card__title is-borderless">
+            {t("application.review.confirmation.title")}
+            {listing?.name}
+          </h2>
+        </div>
 
-        <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
-        />
-      </FormCard>
+        {listing?.imageUrl && (
+          <div className="form-card__image">
+            <img src={listing.imageUrl} alt={listing?.name} />
+          </div>
+        )}
 
-      <FormCard>
-        <h2 className="form-card__title is-borderless">Confirmation</h2>
+        <div className="form-card__group text-center">
+          <h3 className="">{t("application.review.confirmation.lotteryNumber")}</h3>
+          #00545847
+          <p className="field-note mt-2">
+            {t("application.review.confirmation.pleaseWriteNumber")}
+          </p>
+        </div>
 
         <hr />
 
