@@ -4,54 +4,117 @@ Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 6
-
-  /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-
-    //Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-  }
+  const { listing } = useContext(AppSubmissionContext)
 
   return (
     <FormsLayout>
       <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
+        <div className="form-card__lead">
+          <h2 className="form-card__title is-borderless">
+            {t("application.review.confirmation.title")}
+            {listing?.name}
+          </h2>
+        </div>
 
-        <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
-        />
-      </FormCard>
+        {listing?.imageUrl && <img src={listing.imageUrl} alt={listing?.name} />}
 
-      <FormCard>
-        <h2 className="form-card__title is-borderless">Confirmation</h2>
+        <div className="form-card__group border-b text-center">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.lotteryNumber")}
+          </h3>
+          {/* TODO: replace with real application number */}
+          <p className="font-serif text-3xl my-1">#00545847</p>
+          <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
+        </div>
 
-        <hr />
+        <div className="form-card__group border-b">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.whatExpectTitle")}
+          </h3>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          <div className="text-center mt-6">
+          <p className="field-note mt-1">
+            {t("application.review.confirmation.whatExpectFirstParagraph.held")}
+            {/* TODO: replace with real date */}
+            ###
+            {t("application.review.confirmation.whatExpectFirstParagraph.attend")}
+            {/* TODO: url slug seems to be not completed */}
+            {listing?.urlSlug && (
+              <Link href={`/${listing.urlSlug}`}>
+                {t("application.review.confirmation.whatExpectFirstParagraph.listing")}
+              </Link>
+            )}
+            {t("application.review.confirmation.whatExpectFirstParagraph.refer")}
+          </p>
+
+          <p className="field-note mt-2">
+            {t("application.review.confirmation.whatExpectSecondparagraph")}
+          </p>
+        </div>
+
+        <div className="form-card__group border-b">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.doNotSubmitTitle")}
+          </h3>
+
+          <p className="field-note mt-1">{t("application.review.confirmation.needToUpdate")}</p>
+
+          {listing && (
+            <p className="field-note mt-2">
+              {listing.leasingAgentName}
+              <br />
+              {listing.leasingAgentPhone}
+              <br />
+              {listing.leasingAgentEmail}
+            </p>
+          )}
+        </div>
+
+        <div className="form-card__group">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.createAccountTitle")}
+          </h3>
+
+          <p className="field-note mt-1">
+            {t("application.review.confirmation.createAccountParagraph")}
+          </p>
+        </div>
+
+        <div className="form-card__pager">
+          <div className="form-card__pager-row primary">
             <Button
               filled={true}
               onClick={() => {
                 Router.push("/create-account").then(() => window.scrollTo(0, 0))
               }}
             >
-              Create Account
+              {t("application.form.general.createAccount")}
             </Button>
           </div>
-        </form>
+        </div>
+
+        <div className="p-8 text-center">
+          <a className="lined" href="/">
+            {t("application.review.confirmation.imdone")}
+          </a>
+        </div>
+
+        <div className="p-8 text-center border-b">
+          <Link href="/listings">
+            <a className="lined">{t("application.review.confirmation.browseMore")}</a>
+          </Link>
+        </div>
+
+        <div className="p-8 text-center border-b">
+          <Link href="/applications/review/view-application">
+            <a className="lined">{t("application.review.confirmation.print")}</a>
+          </Link>
+        </div>
       </FormCard>
     </FormsLayout>
   )

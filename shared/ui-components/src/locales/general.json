@@ -10,7 +10,8 @@
       "general": {
         "saveAndReturn": "Save and return to review",
         "saveAndFinishLater": "Save and finish later",
-        "defaultSelectPlaceholder": "Select One"
+        "defaultSelectPlaceholder": "Select One",
+        "createAccount": "Create Account"
       },
       "options": {
         "contact": {
@@ -332,6 +333,26 @@
           "busAd": "Bus Ad",
           "other": "Other"
         }
+      },
+      "confirmation": {
+        "title": "Thanks. We have received your application for Alchemy by ",
+        "lotteryNumber": "Here's your lottery ticket number",
+        "pleaseWriteNumber": "Please write down your lottery number and keep it in a safe place. We have also emailed this number to you if you provided an email address.",
+        "whatExpectTitle": "What to expect next",
+        "whatExpectFirstParagraph": {
+          "held": "The lottery will be held on ",
+          "attend": " You do not need to attend the housing lottery. Results will be posted ",
+          "listing": "on the listing. ",
+          "refer": "Please refer to the listing for the lottery results date."
+        },
+        "whatExpectSecondparagraph": "Applicants will be contacted by the agent in lottery rank order until vacancies are filled. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted.",
+        "doNotSubmitTitle": "Do not submit another application for this listing.",
+        "needToUpdate": "If you need to update information on your application, do not apply again or both applications will be removed from the lottery. Contact the agent if you did not receive an email confirmation.",
+        "createAccountTitle": "Would you like to create an account?",
+        "createAccountParagraph": "Creating an account will save your information for future applications, and you can check the status of this application anytime.",
+        "imdone": "No thanks, I'm done.",
+        "browseMore": "Browse more listings",
+        "print": "View submitted application and print a copy."
       }
     },
     "financial": {
