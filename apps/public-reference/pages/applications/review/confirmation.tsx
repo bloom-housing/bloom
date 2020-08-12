@@ -33,34 +33,99 @@ export default () => {
           </h2>
         </div>
 
-        {listing?.imageUrl && (
-          <div className="form-card__image">
-            <img src={listing.imageUrl} alt={listing?.name} />
-          </div>
-        )}
+        {listing?.imageUrl && <img src={listing.imageUrl} alt={listing?.name} />}
 
-        <div className="form-card__group text-center">
-          <h3 className="">{t("application.review.confirmation.lotteryNumber")}</h3>
-          #00545847
+        <div className="form-card__group border-b text-center">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.lotteryNumber")}
+          </h3>
+          {/* TODO: replace with real application number */}
+          <p className="font-serif text-3xl my-1">#00545847</p>
+          <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
+        </div>
+
+        <div className="form-card__group border-b">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.whatExpectTitle")}
+          </h3>
+
+          <p className="field-note mt-1">
+            {t("application.review.confirmation.whatExpectFirstParagraph.held")}
+            {/* TODO: replace with real date */}
+            ###
+            {t("application.review.confirmation.whatExpectFirstParagraph.attend")}
+            {/* TODO: url slug seems to be not completed */}
+            {listing?.urlSlug && (
+              <Link href={`/${listing.urlSlug}`}>
+                {t("application.review.confirmation.whatExpectFirstParagraph.listing")}
+              </Link>
+            )}
+            {t("application.review.confirmation.whatExpectFirstParagraph.refer")}
+          </p>
+
           <p className="field-note mt-2">
-            {t("application.review.confirmation.pleaseWriteNumber")}
+            {t("application.review.confirmation.whatExpectSecondparagraph")}
           </p>
         </div>
 
-        <hr />
+        <div className="form-card__group border-b">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.doNotSubmitTitle")}
+          </h3>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          <div className="text-center mt-6">
+          <p className="field-note mt-1">{t("application.review.confirmation.needToUpdate")}</p>
+
+          {listing && (
+            <p className="field-note mt-2">
+              {listing.leasingAgentName}
+              <br />
+              {listing.leasingAgentPhone}
+              <br />
+              {listing.leasingAgentEmail}
+            </p>
+          )}
+        </div>
+
+        <div className="form-card__group">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.createAccountTitle")}
+          </h3>
+
+          <p className="field-note mt-1">
+            {t("application.review.confirmation.createAccountParagraph")}
+          </p>
+        </div>
+
+        <div className="form-card__pager">
+          <div className="form-card__pager-row primary">
             <Button
               filled={true}
               onClick={() => {
                 Router.push("/create-account").then(() => window.scrollTo(0, 0))
               }}
             >
-              Create Account
+              {t("application.form.general.createAccount")}
             </Button>
           </div>
-        </form>
+        </div>
+
+        <div className="p-8 text-center">
+          <a className="lined" href="/">
+            {t("application.review.confirmation.imdone")}
+          </a>
+        </div>
+
+        <div className="p-8 text-center border-b">
+          <Link href="/listings">
+            <a className="lined">{t("application.review.confirmation.browseMore")}</a>
+          </Link>
+        </div>
+
+        <div className="p-8 text-center border-b">
+          <Link href="/applications/review/viev-application">
+            <a className="lined">{t("application.review.confirmation.print")}</a>
+          </Link>
+        </div>
       </FormCard>
     </FormsLayout>
   )
