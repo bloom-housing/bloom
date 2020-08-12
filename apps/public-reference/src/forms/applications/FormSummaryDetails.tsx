@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, Fragment } from "react"
 import Link from "next/link"
 import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Address } from "@bloom-housing/core"
 
-const FormCardReviewItem = (props: { label: string; sublabel?: string; children?: ReactNode }) => (
+const ReviewItem = (props: { label: string; sublabel?: string; children?: ReactNode }) => (
   <p className="info-item mb-4">
     <span className="info-item__label">{props.label}</span>
     {props.children && (
@@ -66,51 +66,49 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       </h3>
 
       <div className="form-card__group mx-0">
-        <FormCardReviewItem label={t("t.name")}>
+        <ReviewItem label={t("t.name")}>
           {application.applicant.firstName} {application.applicant.middleName}{" "}
           {application.applicant.lastName}
-        </FormCardReviewItem>
+        </ReviewItem>
 
-        <FormCardReviewItem label={t("application.household.member.dateOfBirth")}>
+        <ReviewItem label={t("application.household.member.dateOfBirth")}>
           {application.applicant.birthMonth}/{application.applicant.birthDay}/
           {application.applicant.birthYear}
-        </FormCardReviewItem>
+        </ReviewItem>
 
         {application.applicant.phoneNumber && (
-          <FormCardReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
+          <ReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
             {application.applicant.phoneNumber}
-          </FormCardReviewItem>
+          </ReviewItem>
         )}
 
         {application.additionalPhoneNumber && (
-          <FormCardReviewItem
+          <ReviewItem
             label={t("t.additionalPhone")}
             sublabel={application.additionalPhoneNumberType}
           >
             {application.additionalPhoneNumber}
-          </FormCardReviewItem>
+          </ReviewItem>
         )}
 
         {application.applicant.emailAddress && (
-          <FormCardReviewItem label={t("label.email")}>
-            {application.applicant.emailAddress}
-          </FormCardReviewItem>
+          <ReviewItem label={t("label.email")}>{application.applicant.emailAddress}</ReviewItem>
         )}
 
-        <FormCardReviewItem label={t("application.contact.address")}>
+        <ReviewItem label={t("application.contact.address")}>
           <MultiLineAddress address={reformatAddress(application.applicant.address)} />
-        </FormCardReviewItem>
+        </ReviewItem>
 
         {application.sendMailToMailingAddress && (
-          <FormCardReviewItem label={t("application.contact.mailingAddress")}>
+          <ReviewItem label={t("application.contact.mailingAddress")}>
             <MultiLineAddress address={reformatAddress(application.mailingAddress)} />
-          </FormCardReviewItem>
+          </ReviewItem>
         )}
 
         {application.applicant.workInRegion === "yes" && (
-          <FormCardReviewItem label={t("application.contact.workAddress")}>
+          <ReviewItem label={t("application.contact.workAddress")}>
             <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
-          </FormCardReviewItem>
+          </ReviewItem>
         )}
       </div>
 
@@ -122,7 +120,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
             </h3>
             <div className="form-card__group mx-0">
-              <FormCardReviewItem
+              <ReviewItem
                 label={t(
                   `application.alternateContact.type.options.${application.alternateContact.type}`
                 )}
@@ -132,7 +130,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
                 {application.alternateContact.phoneNumber}
                 <br />
                 {application.alternateContact.emailAddress}
-              </FormCardReviewItem>
+              </ReviewItem>
             </div>
           </>
         )}
@@ -145,23 +143,21 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       {application.householdSize > 0 && (
         <div className="form-card__group info-group mx-0">
           {application.householdMembers.map((member) => (
-            <div className="info-group__item">
+            <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
               <p className="info-item__value">
                 {member.firstName} {member.lastName}
               </p>
               <div>
-                <FormCardReviewItem label={t("application.household.member.dateOfBirth")}>
+                <ReviewItem label={t("application.household.member.dateOfBirth")}>
                   {member.birthMonth}/{member.birthDay}/{member.birthYear}
-                </FormCardReviewItem>
+                </ReviewItem>
                 {member.sameAddress === "no" && (
-                  <FormCardReviewItem label={t("application.contact.address")}>
+                  <ReviewItem label={t("application.contact.address")}>
                     <MultiLineAddress address={reformatAddress(member.address)} />
-                  </FormCardReviewItem>
+                  </ReviewItem>
                 )}
                 {member.sameAddress !== "no" && (
-                  <FormCardReviewItem
-                    label={t("application.review.sameAddressAsApplicant")}
-                  ></FormCardReviewItem>
+                  <ReviewItem label={t("application.review.sameAddressAsApplicant")}></ReviewItem>
                 )}
               </div>
             </div>
@@ -178,14 +174,14 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       </h3>
 
       <div className="form-card__group mx-0">
-        <FormCardReviewItem label={t("application.ada.label")}>
+        <ReviewItem label={t("application.ada.label")}>
           {accessibilityLabels(application.accessibility).map((item) => (
-            <>
+            <Fragment key={item}>
               {item}
               <br />
-            </>
+            </Fragment>
           ))}
-        </FormCardReviewItem>
+        </ReviewItem>
       </div>
 
       <h3 className="form--card__sub-header">
@@ -194,13 +190,13 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       </h3>
 
       <div className="form-card__group border-b mx-0">
-        <FormCardReviewItem label={t("application.review.voucherOrSubsidy")}>
+        <ReviewItem label={t("application.review.voucherOrSubsidy")}>
           {application.incomeVouchers ? t("t.yes") : t("t.no")}
-        </FormCardReviewItem>
+        </ReviewItem>
 
-        <FormCardReviewItem label={t("t.income")}>
+        <ReviewItem label={t("t.income")}>
           ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
-        </FormCardReviewItem>
+        </ReviewItem>
       </div>
     </>
   )
