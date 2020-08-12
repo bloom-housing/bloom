@@ -10,7 +10,7 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { useContext } from "react"
 
 export default () => {
-  const { application } = useContext(AppSubmissionContext)
+  const { application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
 
   /* Form Handler */
@@ -21,7 +21,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
