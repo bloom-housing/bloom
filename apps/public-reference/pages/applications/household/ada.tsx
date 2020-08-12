@@ -36,7 +36,7 @@ export default () => {
       },
     })
 
-    conductor.routeToNextOrReturnUrl("/applications/reserved/units")
+    conductor.routeToNextOrReturnUrl("/applications/financial/vouchers")
   }
 
   const adaNone = watch("none")
@@ -54,7 +54,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/household/current">
+            <Link href="/applications/household/preferred-units">
               <a>{t("t.back")}</a>
             </Link>
           </strong>
