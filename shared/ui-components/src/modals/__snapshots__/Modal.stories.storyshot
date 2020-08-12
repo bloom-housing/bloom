@@ -1,0 +1,344 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Modal/Modal Basic Modal 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component
+    actions={
+      Array [
+        Object {
+          "label": "Cancel",
+          "onClick": [Function],
+          "type": "cancel",
+        },
+        Object {
+          "label": "Submit",
+          "onClick": [Function],
+          "type": "primary",
+        },
+      ]
+    }
+    onClose={[Function]}
+    open={true}
+    title="Modal Title"
+  >
+    <div
+      className="modal__wrapper"
+    >
+      <div
+        className="modal"
+        role="dialog"
+      >
+        <header
+          className="modal__inner"
+        >
+          <h1
+            className="modal__title"
+          >
+            Modal Title
+          </h1>
+        </header>
+        <section
+          className="modal__inner"
+        >
+          <p
+            className="c-steel"
+          >
+            Modal Content
+          </p>
+        </section>
+        <footer
+          className="modal__footer bg-primary-lighter"
+        >
+          <div
+            className="modal__button-group"
+          >
+            <div
+              className="modal__button_item"
+              key="Cancel"
+            >
+              <button
+                className="button cancel"
+                onClick={[Function]}
+              >
+                Cancel
+              </button>
+            </div>
+            <div
+              className="modal__button_item"
+              key="Submit"
+            >
+              <button
+                className="button primary"
+                onClick={[Function]}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </footer>
+        <a
+          aria-label="Close"
+          className="modal__close"
+          onClick={[Function]}
+        >
+          <Icon
+            size="medium"
+            symbol="close"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-close"
+                />
+              </svg>
+            </span>
+          </Icon>
+        </a>
+      </div>
+    </div>
+  </Component>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Modal/Modal Full Screen Modal 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component
+    actions={
+      Array [
+        Object {
+          "label": "Cancel",
+          "onClick": [Function],
+          "type": "cancel",
+        },
+        Object {
+          "label": "Submit",
+          "onClick": [Function],
+          "type": "primary",
+        },
+      ]
+    }
+    fullScreen={true}
+    onClose={[Function]}
+    open={true}
+    title="Modal Title"
+  >
+    <div
+      className="modal__wrapper full-screen"
+    >
+      <div
+        className="modal__backdrop"
+      />
+      <div
+        className="modal"
+        role="dialog"
+      >
+        <header
+          className="modal__inner"
+        >
+          <h1
+            className="modal__title"
+          >
+            Modal Title
+          </h1>
+        </header>
+        <section
+          className="modal__inner"
+        >
+          <p
+            className="c-steel"
+          >
+            Modal Content
+          </p>
+        </section>
+        <footer
+          className="modal__footer bg-primary-lighter"
+        >
+          <div
+            className="modal__button-group"
+          >
+            <div
+              className="modal__button_item"
+              key="Cancel"
+            >
+              <button
+                className="button cancel"
+                onClick={[Function]}
+              >
+                Cancel
+              </button>
+            </div>
+            <div
+              className="modal__button_item"
+              key="Submit"
+            >
+              <button
+                className="button primary"
+                onClick={[Function]}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </footer>
+        <a
+          aria-label="Close"
+          className="modal__close"
+          onClick={[Function]}
+        >
+          <Icon
+            size="medium"
+            symbol="close"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-close"
+                />
+              </svg>
+            </span>
+          </Icon>
+        </a>
+      </div>
+    </div>
+  </Component>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Modal/Modal Success Failure Modal 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component
+    actions={
+      Array [
+        Object {
+          "label": "Cancel",
+          "onClick": [Function],
+          "type": "failure",
+        },
+        Object {
+          "label": "Submit",
+          "onClick": [Function],
+          "type": "success",
+        },
+      ]
+    }
+    onClose={[Function]}
+    open={true}
+    title="Modal Title"
+  >
+    <div
+      className="modal__wrapper"
+    >
+      <div
+        className="modal"
+        role="dialog"
+      >
+        <header
+          className="modal__inner"
+        >
+          <h1
+            className="modal__title"
+          >
+            Modal Title
+          </h1>
+        </header>
+        <section
+          className="modal__inner"
+        >
+          <p
+            className="c-steel"
+          >
+            Modal Content
+          </p>
+        </section>
+        <footer
+          className="modal__footer bg-primary-lighter"
+        >
+          <div
+            className="modal__button-group"
+          >
+            <div
+              className="modal__button_item"
+              key="Cancel"
+            >
+              <button
+                className="button failure"
+                onClick={[Function]}
+              >
+                Cancel
+              </button>
+            </div>
+            <div
+              className="modal__button_item"
+              key="Submit"
+            >
+              <button
+                className="button success"
+                onClick={[Function]}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </footer>
+        <a
+          aria-label="Close"
+          className="modal__close"
+          onClick={[Function]}
+        >
+          <Icon
+            size="medium"
+            symbol="close"
+          >
+            <span
+              className="ui-icon ui-medium"
+            >
+              <svg>
+                <use
+                  xlinkHref="#i-close"
+                />
+              </svg>
+            </span>
+          </Icon>
+        </a>
+      </div>
+    </div>
+  </Component>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;

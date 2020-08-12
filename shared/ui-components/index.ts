@@ -82,3 +82,6 @@ export * from "./src/authentication"
 export * from "./src/config"
 
 export * from "./src/alerts"
+
+/* Modals */
+export { Modal } from "./src/modals/Modal"

@@ -73,25 +73,27 @@ export default () => {
           </h2>
         </div>
 
-        <div className="form-card__pager-row">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className={errors.householdSize ? "mb-8" : ""}>
-              <HouseholdSizeField
-                listing={listing}
-                householdSize={application.householdSize}
-                validate={true}
-                register={register}
-                error={errors.householdSize}
-                clearErrors={clearErrors}
-                assistanceUrl={t("application.household.assistanceUrl")}
-              />
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <HouseholdSizeField
+              listing={listing}
+              householdSize={application.householdSize}
+              validate={true}
+              register={register}
+              error={errors.householdSize}
+              clearErrors={clearErrors}
+              assistanceUrl={t("application.household.assistanceUrl")}
+            />
+          </div>
+          <div className="form-card__group my-0 mx-0 pb-4 pt-4">
             <HouseholdMemberForm
               member={applicant}
               type={t("application.household.primaryApplicant")}
             />
             {membersSection}
-          </form>
+          </div>
+        </form>
+        <div className="form-card__group pt-0 mt-0">
           <div className="text-center">
             <Button onClick={onAddMember}>
               {t("application.household.addMembers.addHouseholdMember")}

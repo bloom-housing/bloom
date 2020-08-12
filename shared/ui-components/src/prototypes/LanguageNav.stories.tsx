@@ -1,6 +1,6 @@
 import React from "react"
 
-import LanguageNav from "./LanguageNav"
+import { LanguageNav } from "./LanguageNav"
 
 export default {
   title: "Prototypes/LanguageNav",

@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Preference, PreferenceLink } from "@bloom-housing/core"
-//import t from "@bloom-housing/ui-components/src/helpers/translator"
 import "./PreferencesList.scss"
 
 export interface PreferencesListProps {

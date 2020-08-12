@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import HousingCounselor from "./HousingCounselor"
+import { HousingCounselor } from "./HousingCounselor"
 
 export default {
   title: "PageComponents/HousingCounselor",

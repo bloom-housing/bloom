@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import ImageCard from "./ImageCard"
+import { ImageCard } from "./ImageCard"
 
 export default {
   title: "Cards/ImageCard",

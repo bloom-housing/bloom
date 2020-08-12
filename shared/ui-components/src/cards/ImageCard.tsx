@@ -1,6 +1,6 @@
 import * as React from "react"
-import LocalizedLink from "../atoms/LocalizedLink"
-import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
+import { LocalizedLink } from "../atoms/LocalizedLink"
+import { ApplicationStatus } from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
 import "./ImageCard.scss"
 import { Listing } from "@bloom-housing/core"
 

@@ -1,6 +1,6 @@
 import React from "react"
 
-import HeaderBadge from "./HeaderBadge"
+import { HeaderBadge } from "./HeaderBadge"
 
 export default {
   title: "Prototypes/HeaderBadge",

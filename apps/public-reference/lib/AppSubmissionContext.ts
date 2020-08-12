@@ -91,6 +91,7 @@ export const blankApplication = () => {
       sexualOrientation: "",
       howDidYouHear: "",
     },
+    preferences: {} as Record<string, any>,
   }
 }
 

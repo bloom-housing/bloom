@@ -30,15 +30,19 @@ Each application is designed to run entirely in the browser, and to only serve a
 
 ## Getting Started for Developers
 
-Bloom uses a monorepo-style repository, containing multiple user-facing applications and back-end services. Services expose a REST API, and aren't expected to have any UI other than for debugging.
+Bloom uses a monorepo-style repository, containing multiple user-facing applications and back-end services. Most services are part of a consolidated NestJS application in `backend/core`, which allows for easy consolidated operation in one runtime environment. Services expose a REST API, and aren't expected to have any UI other than for debugging.
 
-If this is your first time working with Bloom, please be sure to check out the individual app and service README files as well for important configuration information specific to those pieces.
+If this is your first time working with Bloom, please be sure to check out the app and service README files as well for important configuration information specific to those pieces.
 
 ### Installing Dependencies
 
 ```
 yarn install
 ```
+
+### Setting up your local environment variables
+
+Operational configuration of each app and service is read from environment variables. There is a `.env.template` file in each app or service directory that must be copied to `.env` (or equivalent), and the settings modified specific to your development environment.
 
 ### Setting up a test Database
 
@@ -68,6 +72,7 @@ yarn test:all
 ```
 
 ### Adding a new app
+
 1. Duplicate the [public-reference](apps/public-reference) directory to `apps/<your-app-name>`
 1. Change all usages of `public-reference` in `apps/<your-app-name>/package.json` to `<your-app-name>`
 1. Update root-level [package.json](package.json)

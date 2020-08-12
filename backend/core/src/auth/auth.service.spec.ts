@@ -2,6 +2,13 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { AuthService } from "./auth.service"
 import { User } from "../entity/user.entity"
 import { JwtModule, JwtService } from "@nestjs/jwt"
+import { getRepositoryToken } from "@nestjs/typeorm"
+import { RevokedToken } from "../entity/revokedToken.entity"
+
+// Cypress brings in Chai types for the global expect, but we want to use jest
+// expect here so we need to re-declare it.
+// see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
+declare const expect: jest.Expect
 
 describe("AuthService", () => {
   let service: AuthService
@@ -10,7 +17,13 @@ describe("AuthService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: "secret" })],
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        {
+          provide: getRepositoryToken(RevokedToken),
+          useValue: {},
+        },
+      ],
     }).compile()
 
     service = module.get<AuthService>(AuthService)

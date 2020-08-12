@@ -1,13 +1,10 @@
 import * as React from "react"
-import ImageCard from "../../cards/ImageCard"
+import { ImageCard } from "../../cards/ImageCard"
 import { Listing } from "@bloom-housing/core"
-import LinkButton from "../../atoms/LinkButton"
+import { LinkButton } from "../../atoms/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
-import {
-  GroupedTable,
-  GroupedTableGroup,
-} from "@bloom-housing/ui-components/src/tables/GroupedTable"
-import t from "@bloom-housing/ui-components/src/helpers/translator"
+import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
+import { t } from "../../helpers/translator"
 import "./ListingsList.scss"
 
 export interface ListingsProps {

@@ -23,15 +23,7 @@ details.disclosure {
     @apply bottom-0;
     @apply pr-1;
     @apply pb-2;
-
-    &:after {
-      @apply font-bold;
-      @apply inline-block;
-      @apply ml-2;
-      @apply text-sm;
-      content: "⌃";
-      transform: rotate(180deg) translateY(3px);
-    }
+    @include has-toggle;
   }
 
   &[open] > summary {

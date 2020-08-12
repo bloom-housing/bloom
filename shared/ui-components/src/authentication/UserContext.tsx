@@ -20,7 +20,7 @@ import { ConfigContext } from "../config/ConfigContext"
 
 // External interface this context provides
 type ContextProps = {
-  login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<User>
   createUser: (user: CreateUserDto) => Promise<User>
   signOut: () => void
   // True when an API request is processing
@@ -148,6 +148,7 @@ export const UserProvider: FunctionComponent = ({ children }) => {
         const client = createAxiosInstance(apiUrl, accessToken)
         const profile = await getProfile(client)
         dispatch(saveProfile(profile))
+        return profile
       } finally {
         dispatch(stopLoading())
       }

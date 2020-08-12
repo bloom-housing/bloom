@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import PageHeader from "./PageHeader"
+import { PageHeader } from "./PageHeader"
 
 export default {
   title: "Headers/PageHeader",

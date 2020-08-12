@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import UnitTables from "./UnitTables"
+import { UnitTables } from "./UnitTables"
 import { BasicTable } from "../tables/BasicTable"
 import { GroupedTable } from "../tables/GroupedTable"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
