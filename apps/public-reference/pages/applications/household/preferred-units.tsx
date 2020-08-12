@@ -32,7 +32,7 @@ export default () => {
       preferredUnit,
     })
 
-    Router.push("/applications/household/current").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
   }
 
   const preferredUnitOptions = useMemo(() => {
