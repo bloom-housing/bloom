@@ -5,12 +5,12 @@ orbs:
 executors:
   cypress-node-12:
     docker:
-      - image: "cypress/base:12.16.1"
+      - image: "cypress/base:12.18.2"
 
 jobs:
   setup:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:12.18.3
     steps:
       - checkout
       - run: yarn install
@@ -20,21 +20,21 @@ jobs:
             - ~/
   lint:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:12.18.3
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
   jest-ui-components:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:12.18.3
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
   jest-backend:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:12.18.3
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
@@ -42,14 +42,14 @@ jobs:
       - run: yarn test:backend:core
   build-public:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:12.18.3
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:public
   build-partners:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:12.18.3
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
