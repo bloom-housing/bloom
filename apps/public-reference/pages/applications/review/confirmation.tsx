@@ -4,24 +4,13 @@ Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 6
-
-  /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-
-    //Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-  }
+  const { listing } = useContext(AppSubmissionContext)
 
   return (
     <FormsLayout>
