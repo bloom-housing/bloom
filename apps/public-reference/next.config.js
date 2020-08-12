@@ -46,7 +46,7 @@ module.exports = withCSS(
             gtmKey: process.env.GTM_KEY || null,
           },
           sassLoaderOptions: {
-            prependData: tailwindVars,
+            additionalData: tailwindVars,
           },
           // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
           async exportPathMap() {

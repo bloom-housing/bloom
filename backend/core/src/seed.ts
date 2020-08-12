@@ -4,7 +4,6 @@ import { ListingsSeederService } from "./seeder/listings-seeder/listings-seeder.
 import { UserService } from "./user/user.service"
 import { CreateUserDto } from "./user/createUser.dto"
 import { plainToClass } from "class-transformer"
-import { ApplicationsService } from "./applications/applications.service"
 import { Application } from "./entity/application.entity"
 import { ListingsService } from "./listings/listings.service"
 

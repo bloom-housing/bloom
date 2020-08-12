@@ -12,18 +12,17 @@ export const ApiClientContext = createContext<Partial<ContextProps>>({})
 export const ApiClientProvider: FunctionComponent = ({ children }) => {
   const { apiUrl } = useContext(ConfigContext)
   const authClient = useAuthenticatedClient()
-  if (authClient) {
-    serviceOptions.axios = useAuthenticatedClient()
-  } else {
-    serviceOptions.axios = axiosStatic.create({
+  serviceOptions.axios =
+    authClient ||
+    axiosStatic.create({
       baseURL: apiUrl,
     })
-  }
+
   return createElement(
     ApiClientContext.Provider,
     {
       value: {
-        applicationsService: ApplicationsService,
+        applicationsService: new ApplicationsService(),
       },
     },
     children

@@ -11,7 +11,7 @@ import {
   t,
   ErrorMessage,
   FormOptions,
-  relotionshipKeys,
+  relationshipKeys,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
@@ -19,7 +19,8 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
-import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { Select } from "@bloom-housing/ui-components/src/forms/Select"
+import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 class Member implements HouseholdMember {
   id: number
@@ -66,15 +67,9 @@ class Member implements HouseholdMember {
 }
 
 export default () => {
-  const router = useRouter()
   let memberId, member, saveText, cancelText
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const router = useRouter()
   const currentPageStep = 2
 
   if (router.query.memberId) {
@@ -113,7 +108,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -294,7 +288,7 @@ export default () => {
                       register={register}
                     />
 
-                    <StateSelect
+                    <Select
                       id="addressState"
                       name="address.state"
                       label="State"
@@ -304,6 +298,8 @@ export default () => {
                       errorMessage={t("application.contact.stateError")}
                       register={register}
                       controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="application.form.options.states"
                     />
                   </div>
 
@@ -399,7 +395,7 @@ export default () => {
                       register={register}
                     />
 
-                    <StateSelect
+                    <Select
                       id="addressState"
                       name="workAddress.state"
                       label="State"
@@ -409,6 +405,8 @@ export default () => {
                       errorMessage={t("application.contact.stateError")}
                       register={register}
                       controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="application.form.options.states"
                     />
                   </div>
 
@@ -441,7 +439,7 @@ export default () => {
                     className="w-full"
                   >
                     <FormOptions
-                      options={relotionshipKeys}
+                      options={relationshipKeys}
                       keyPrefix="application.form.options.relationship"
                     />
                   </select>
@@ -456,7 +454,7 @@ export default () => {
               <div className="form-card__pager-row primary">
                 <Button
                   filled={true}
-                  className="w-full md:w-3/4"
+                  className=""
                   onClick={() => {
                     //
                   }}

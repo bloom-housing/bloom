@@ -1,0 +1,128 @@
+.modal {
+  @apply relative;
+  @apply max-w-5xl;
+  @apply m-auto;
+  @apply border;
+  @apply border-solid;
+  @apply border-gray-400;
+  @apply bg-white;
+  @apply rounded-md;
+  @apply shadow-md;
+  min-width: 32rem;
+}
+
+// Content containers
+.modal__header,
+.modal__inner,
+.modal__footer {
+  @apply py-4;
+  @apply px-8;
+}
+
+.modal__header {
+  @apply pt-8;
+}
+
+.modal__inner {
+  &:last-of-type {
+    @apply rounded-b;
+  }
+}
+
+.modal__footer {
+  @apply rounded-b;
+}
+
+// Buttons stack with no column classes
+.modal__button-group {
+  @screen md {
+    @apply flex;
+    @apply justify-end;
+  }
+
+  .modal__button_item {
+    @screen md {
+      @apply ml-4;
+    }
+  }
+
+  button,
+  .button {
+    @apply block;
+    @apply w-full;
+    @apply mt-0;
+    @apply mb-1;
+    @apply mx-auto;
+
+    &.primary {
+      @apply bg-primary-dark;
+      @apply text-white;
+      &:hover {
+        @apply bg-primary-darker;
+      }
+    }
+
+    &.success {
+      @apply bg-success;
+      @apply border-success;
+      @apply text-white;
+      &:hover {
+        @apply border-success-light;
+      }
+    }
+
+    &.failure {
+      @apply bg-alert;
+      @apply border-alert;
+      @apply text-white;
+      &:hover {
+        @apply border-alert-light;
+      }
+    }
+
+    &.cancel {
+      @apply text-primary-dark;
+      border-color: transparent;
+      background: transparent;
+      &:hover {
+        @apply text-primary-darker;
+      }
+    }
+  }
+}
+
+.modal__close {
+  @apply absolute;
+  top: 1.5rem;
+  right: 2rem;
+  cursor: pointer;
+}
+
+// Loading container for modal
+.modal__loading {
+  @apply w-full;
+  @apply flex;
+  @apply text-center;
+  @apply items-center;
+  @apply justify-center;
+  min-height: 12rem;
+}
+
+// Fixed backdrop for a full screen modal (covers up remaining content)
+.modal__wrapper {
+  &.full-screen {
+    @apply fixed;
+    @apply w-screen;
+    @apply h-screen;
+    @apply z-50;
+  }
+  @apply flex;
+}
+
+.modal__backdrop {
+  @apply absolute;
+  @apply w-full;
+  @apply h-full;
+  @apply bg-gray-900;
+  @apply bg-opacity-75;
+}

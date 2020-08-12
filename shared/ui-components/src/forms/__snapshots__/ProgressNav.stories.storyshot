@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Forms|ProgressNav Default 1`] = `
+exports[`Storyshots Forms/ProgressNav Default 1`] = `
 <div
   style={
     Object {
@@ -20,7 +20,6 @@ exports[`Storyshots Forms|ProgressNav Default 1`] = `
         "Review",
       ]
     }
-    totalNumberOfSteps={5}
   >
     <ul
       className="progress-nav"
@@ -28,6 +27,7 @@ exports[`Storyshots Forms|ProgressNav Default 1`] = `
       <ProgressNavItem
         completedSteps={1}
         currentPageStep={2}
+        key="You"
         label="You"
         step={1}
       >
@@ -44,6 +44,7 @@ exports[`Storyshots Forms|ProgressNav Default 1`] = `
       <ProgressNavItem
         completedSteps={1}
         currentPageStep={2}
+        key="Household"
         label="Household"
         step={2}
       >
@@ -60,6 +61,7 @@ exports[`Storyshots Forms|ProgressNav Default 1`] = `
       <ProgressNavItem
         completedSteps={1}
         currentPageStep={2}
+        key="Income"
         label="Income"
         step={3}
       >
@@ -76,6 +78,7 @@ exports[`Storyshots Forms|ProgressNav Default 1`] = `
       <ProgressNavItem
         completedSteps={1}
         currentPageStep={2}
+        key="Preferences"
         label="Preferences"
         step={4}
       >
@@ -92,6 +95,7 @@ exports[`Storyshots Forms|ProgressNav Default 1`] = `
       <ProgressNavItem
         completedSteps={1}
         currentPageStep={2}
+        key="Review"
         label="Review"
         step={5}
       >

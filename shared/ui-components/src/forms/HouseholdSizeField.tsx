@@ -1,7 +1,7 @@
 import React from "react"
 import { Listing } from "@bloom-housing/core"
 import { t } from "../helpers/translator"
-import ErrorMessage from "./ErrorMessage"
+import { ErrorMessage } from "./ErrorMessage"
 import { AlertBox, AlertNotice } from "../alerts"
 
 export interface HouseholdSizeFieldProps {

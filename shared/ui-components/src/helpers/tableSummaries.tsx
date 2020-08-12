@@ -1,5 +1,5 @@
 import * as React from "react"
-import t from "./translator"
+import { t } from "./translator"
 import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core"
 import { GroupedTableGroup } from "../tables/GroupedTable"
 

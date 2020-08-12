@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Tables|UnitSummaryTables Units List 1`] = `
+exports[`Storyshots Tables/UnitSummaryTables Units List 1`] = `
 <UnitTables
   unitSummaries={
     Array [
@@ -4033,7 +4033,7 @@ exports[`Storyshots Tables|UnitSummaryTables Units List 1`] = `
 </UnitTables>
 `;
 
-exports[`Storyshots Tables|UnitSummaryTables Units List With Disabled Accordion 1`] = `
+exports[`Storyshots Tables/UnitSummaryTables Units List With Disabled Accordion 1`] = `
 <UnitTables
   disableAccordion={true}
   unitSummaries={
@@ -8067,7 +8067,7 @@ exports[`Storyshots Tables|UnitSummaryTables Units List With Disabled Accordion 
 </UnitTables>
 `;
 
-exports[`Storyshots Tables|UnitSummaryTables Units List Without Floor 1`] = `
+exports[`Storyshots Tables/UnitSummaryTables Units List Without Floor 1`] = `
 <UnitTables
   unitSummaries={
     Array [
@@ -12090,7 +12090,7 @@ exports[`Storyshots Tables|UnitSummaryTables Units List Without Floor 1`] = `
 </UnitTables>
 `;
 
-exports[`Storyshots Tables|UnitSummaryTables Units Summaries 1`] = `
+exports[`Storyshots Tables/UnitSummaryTables Units Summaries 1`] = `
 <div>
   <div>
     <h2
@@ -12421,7 +12421,7 @@ exports[`Storyshots Tables|UnitSummaryTables Units Summaries 1`] = `
 </div>
 `;
 
-exports[`Storyshots Tables|UnitSummaryTables Units Summaries Grouped By Reserved Types 1`] = `
+exports[`Storyshots Tables/UnitSummaryTables Units Summaries Grouped By Reserved Types 1`] = `
 <div>
   <div>
     <h2

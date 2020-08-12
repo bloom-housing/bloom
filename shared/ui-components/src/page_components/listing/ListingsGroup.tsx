@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { Listing } from "@bloom-housing/core"
-import ListingsList from "./ListingsList"
-import Button from "../../atoms/Button"
-import Icon from "../../atoms/Icon"
+import { ListingsList } from "./ListingsList"
+import { Button } from "../../atoms/Button"
+import { Icon } from "../../atoms/Icon"
 import "./ListingsGroup.scss"
 
 export interface ListingsGroupProps {

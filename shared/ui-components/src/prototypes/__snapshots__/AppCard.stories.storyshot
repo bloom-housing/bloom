@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Prototypes|AppCard App Card 1`] = `
+exports[`Storyshots Prototypes/AppCard App Card 1`] = `
 <div
   style={
     Object {
@@ -80,7 +80,7 @@ exports[`Storyshots Prototypes|AppCard App Card 1`] = `
 </div>
 `;
 
-exports[`Storyshots Prototypes|AppCard App Card Edit 1`] = `
+exports[`Storyshots Prototypes/AppCard App Card Edit 1`] = `
 <div
   style={
     Object {

@@ -21,13 +21,16 @@
 .form-card__title {
   @apply text-center;
   width: fit-content;
-  @apply mx-auto;
   @apply mt-4;
   @apply pt-4;
-  @apply px-3;
   @apply border-t-4;
   @apply border-primary;
   @apply leading-tight;
+
+  @screen md {
+    @apply mx-auto;
+    @apply px-3;
+  }
 
   &.is-borderless {
     @apply pt-0;
@@ -38,8 +41,11 @@
 
 .form-card__back {
   @apply ml-8;
-  @apply mt-5;
   @apply -mb-5;
+
+  @screen md {
+    @apply mt-5;
+  }
 
   a {
     @apply underline;
@@ -49,6 +55,7 @@
 .form-card__lead,
 .form-card__group {
   @apply py-8;
+  @apply px-6;
 
   @screen md {
     @apply mx-8;
@@ -61,8 +68,6 @@
 }
 
 .form-card__group {
-  @apply px-6;
-
   @screen md {
     @apply px-8;
   }

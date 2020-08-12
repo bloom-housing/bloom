@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = `
+exports[`Storyshots Listing Sidebar/Apply Accepts Postmarked Applications 1`] = `
 <Apply
   listing={
     Object {
@@ -1387,7 +1387,7 @@ exports[`Storyshots Listing Sidebar|Apply Accepts Postmarked Applications 1`] = 
 </Apply>
 `;
 
-exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
+exports[`Storyshots Listing Sidebar/Apply Hard Application Deadline 1`] = `
 <Apply
   listing={
     Object {
@@ -2774,7 +2774,7 @@ exports[`Storyshots Listing Sidebar|Apply Hard Application Deadline 1`] = `
 </Apply>
 `;
 
-exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 1`] = `
+exports[`Storyshots Listing Sidebar/Apply Link Directly To External Application 1`] = `
 <Apply
   listing={
     Object {
@@ -3963,7 +3963,7 @@ exports[`Storyshots Listing Sidebar|Apply Link Directly To External Application 
 </Apply>
 `;
 
-exports[`Storyshots Listing Sidebar|Apply Shows Multiple Download UR Ls 1`] = `
+exports[`Storyshots Listing Sidebar/Apply Shows Multiple Download UR Ls 1`] = `
 <Apply
   listing={
     Object {

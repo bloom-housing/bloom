@@ -1,4 +1,5 @@
 import React from "react"
+import ApplicationConductor from "./ApplicationConductor"
 
 export const blankApplication = () => {
   return {
@@ -83,10 +84,19 @@ export const blankApplication = () => {
     income: null,
     incomePeriod: null,
     householdMembers: [],
+    preferredUnit: [],
+    demographics: {
+      ethnicity: "",
+      gender: "",
+      sexualOrientation: "",
+      howDidYouHear: "",
+    },
+    preferences: {} as Record<string, any>,
   }
 }
 
 export const AppSubmissionContext = React.createContext({
+  conductor: {} as ApplicationConductor,
   application: blankApplication(),
   listing: null,
   /* eslint-disable */

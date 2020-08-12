@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Prototypes|Modal Modal 1`] = `
+exports[`Storyshots Prototypes/Modal Modal 1`] = `
 <div
   style={
     Object {
@@ -86,7 +86,7 @@ exports[`Storyshots Prototypes|Modal Modal 1`] = `
 </div>
 `;
 
-exports[`Storyshots Prototypes|Modal Modal Warning 1`] = `
+exports[`Storyshots Prototypes/Modal Modal Warning 1`] = `
 <div
   style={
     Object {

@@ -1,11 +1,10 @@
 import * as React from "react"
-import { withA11y } from "@storybook/addon-a11y"
-import SiteHeader, { NavbarDropdown } from "./SiteHeader"
-import Button from "../../atoms/Button"
+
+import { SiteHeader, NavbarDropdown } from "./SiteHeader"
+import { Button } from "../../atoms/Button"
 
 export default {
-  title: "Headers|SiteHeader",
-  decorators: [withA11y],
+  title: "Headers/SiteHeader",
 }
 
 export const standard = () => (
@@ -36,7 +35,6 @@ export const withDropdownAndButton = () => (
       <a href="#" className="navbar-item">
         Get Assistance
       </a>
-      <hr className="navbar-divider" />
       <a href="#" className="navbar-item">
         Sign In
       </a>

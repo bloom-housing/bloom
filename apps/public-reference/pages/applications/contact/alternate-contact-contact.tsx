@@ -9,17 +9,12 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo } from "react"
-import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
   /* Form Handler */
   const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
@@ -39,7 +34,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -110,13 +104,15 @@ export default () => {
                 register={register}
               />
 
-              <StateSelect
+              <Select
                 id="mailingAddress.state"
                 name="mailingAddress.state"
                 label={t("application.alternateContact.contact.stateFormPlaceholder")}
                 defaultValue={application.alternateContact.mailingAddress.state}
                 register={register}
                 controlClassName="control"
+                options={stateKeys}
+                keyPrefix="application.form.options.states"
               />
             </div>
             <Field

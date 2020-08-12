@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Forms|Radio Standard 1`] = `
+exports[`Storyshots Forms/Radio Standard 1`] = `
 <div
   style={
     Object {

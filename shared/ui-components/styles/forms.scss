@@ -8,7 +8,8 @@
   label,
   .label {
     @apply text-gray-750;
-    font-size: 0.95rem;
+    @apply font-semibold;
+    font-size: .875rem;
   }
 
   label + .control {
@@ -220,6 +221,10 @@ input[type=number] {
   @apply inline-block;
 }
 
+.field-label--caps + .field-note {
+  @apply mt-2;
+}
+
 .field--inline {
   display: inline-block;
 }
@@ -259,4 +264,10 @@ input[type=number] {
   @apply text-tiny;
   @apply text-gray-700;
   @apply font-semibold;
+}
+
+button {
+  &.has-toggle {
+    @include has-toggle;
+  }
 }

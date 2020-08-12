@@ -8,7 +8,9 @@
         "householdTooSmall": "Your household size is too small."
       },
       "general": {
-        "saveAndReturn": "Save and return to review"
+        "saveAndReturn": "Save and return to review",
+        "saveAndFinishLater": "Save and finish later",
+        "defaultSelectPlaceholder": "Select One"
       },
       "options": {
         "contact": {
@@ -113,6 +115,12 @@
     "contact": {
       "title": "Thanks %{firstName}. Now we need to know how to contact you.",
       "yourPhoneNumber": "Your Phone Number",
+      "phoneNumberTypes": {
+        "prompt": "What type of number is this?",
+        "work": "Work",
+        "home": "Home",
+        "cell": "Cell"
+      },
       "phoneNumberError": "Please enter a phone number",
       "noPhoneNumber": "I don't have a telephone number",
       "phoneNumberTypeError": "Please enter a phone number type",
@@ -199,6 +207,17 @@
         "willLiveAlone": "I will live alone",
         "liveWithOtherPeople": "Other people will live with me"
       },
+      "preferredUnit": {
+        "title": "What unit sizes are you interested in?",
+        "optionsLabel": "Check all that apply:",
+        "options": {
+          "studio": "Studio",
+          "oneBedroom": "1 Bedroom",
+          "twoBedroom": "2 Bedroom",
+          "threeBedroom": "3 Bedroom",
+          "moreThanThreeBedroom": "3+ Bedroom"
+        }
+      },
       "member": {
         "cancelAddingThisPerson": "Cancel adding this person",
         "deleteThisPerson": "Delete this person",
@@ -228,6 +247,27 @@
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
     },
+    "preferences": {
+      "title": "Your household may qualify for the following housing preferences.",
+      "preamble": "If you qualify for this preference, you'll get a higher ranking.",
+      "selectBelow": "If you have one of these housing preferences, select it below:",
+      "dontWant": "I don't want this lottery preference",
+      "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
+      "liveIn": {
+        "label": "Live in <REGION> Preference",
+        "description": "Live in <REGION> copy goes here…",
+        "link": "http://domain.com"
+      },
+      "workIn": {
+        "label": "Work in <REGION> Preference",
+        "description": "Work in <REGION> copy goes here…",
+        "link": "http://domain.com"
+      },
+      "general": {
+        "title": "Based on the information you have entered, your household has not claimed any housing lottery preferences.",
+        "preamble": "You will be in the general lottery."
+      }
+    },
     "review": {
       "takeAMomentToReview": "Take a moment to review your information before submitting your application.",
       "sameAddressAsApplicant": "Same Address as Applicant",
@@ -239,6 +279,58 @@
         "title": "Terms",
         "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
         "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
+      },
+      "demographics": {
+        "title": "Help us ensure we are meeting our goal to serve all people.",
+        "subTitle": "These questions are optional and won't affect your eligibility for housing. Your answers will be kept private.",
+        "ethnicityLabel": "Which best describes your ethnicity?",
+        "raceLabel": "Which best describes your race?",
+        "genderLabel": "What is your gender?",
+        "genderInfo": "Select one that best describes your current gender identity.",
+        "sexualOrientationLabel": "How do you describe your sexual orientation or sexual identity?",
+        "howDidYouHearLabel": "How did you hear about this listing?",
+        "ethnicityOptions": {
+          "hispanicLatino": "Hispanic / Latino",
+          "notHispanicLatino": "Not Hispanic / Latino"
+        },
+        "raceOptions": {
+          "americanIndianAlaskanNative": "American Indian / Alaskan Native",
+          "asian": "Asian",
+          "blackAfricanAmerican": "Black / African American",
+          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
+          "white": "White",
+          "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
+          "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
+          "asianAndWhite": "Asian and White",
+          "blackAfricanAmericanAndWhite": "Black / African American and White",
+          "otherMutliracial" :"Other / Mutliracial"
+        },
+        "genderOptions": {
+          "female": "Female",
+          "male": "Male",
+          "genderqueerGenderNon-Binary": "Genderqueer / Gender Non-Binary",
+          "transFemale": "Trans Female",
+          "transMale": "Trans Male",
+          "notListed": "Not Listed"
+        },
+        "sexualOrientationOptions": {
+          "bisexual": "Bisexual",
+          "gayLesbianSameGenderLoving": "Gay / Lesbian / Same-Gender Loving",
+          "questioningUnsure": "Questioning / Unsure",
+          "straightHeterosexual": "Straight / Heterosexual",
+          "notListed": "Not Listed"
+        },
+        "howDidYouHearOptions": {
+          "alamedaCountyHCDWebsite": "Alameda County HCD Website",
+          "developerWebsite": "Developer Website",
+          "flyer": "Flyer",
+          "emailAlert": "Email Alert",
+          "friend": "Friend",
+          "housingCounselor": "Housing Counselor",
+          "radioAd": "Radio Ad",
+          "busAd": "Bus Ad",
+          "other": "Other"
+        }
       }
     },
     "confirmation": {
@@ -299,6 +391,25 @@
         "info2": "Please be aware that each household member can only appear on one application for each listing.",
         "info3": "Any fraudulent statements will cause your application to be removed."
       }
+    },
+    "timeout": {
+      "title": "Are you still working?",
+      "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information if you choose not to respond.",
+      "action": "Continue working",
+      "afterMessage": "We care about your security. We ended your session due to inactivity. Please log in or start a new application to continue."
+    }
+  },
+  "authentication": {
+    "timeout": {
+      "title": "Are you still working?",
+      "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information and be logged out if you choose not to respond.",
+      "action": "Stay logged in",
+      "signOutMessage": "We care about your security. We logged you out due to inactivity. Please sign in to continue."
+    },
+    "signIn": {
+      "error": "There was an error signing you in",
+      "errorGenericMessage": "Please try again, or contact support for help.",
+      "success": "Welcome back, %{name}!"
     }
   },
   "config": {
@@ -410,7 +521,7 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
-    "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to qualified applicants.",
+    "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",
@@ -488,9 +599,6 @@
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
     "viewPreferenceList": "View Preference List"
   },
-  "region": {
-    "name": "Local Region"
-  },
   "nav": {
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
@@ -515,6 +623,9 @@
   "pageDescription": {
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
+  },
+  "region": {
+    "name": "Local Region"
   },
   "t": {
     "additionalPhone": "Additional Phone",

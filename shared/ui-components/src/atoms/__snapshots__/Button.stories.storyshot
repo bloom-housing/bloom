@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Atoms|Button Big 1`] = `
+exports[`Storyshots Atoms/Button Big 1`] = `
 <Button
   big={true}
   onClick={[Function]}
@@ -14,7 +14,7 @@ exports[`Storyshots Atoms|Button Big 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button Filled 1`] = `
+exports[`Storyshots Atoms/Button Filled 1`] = `
 <Button
   filled={true}
   onClick={[Function]}
@@ -28,7 +28,7 @@ exports[`Storyshots Atoms|Button Filled 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button Inaccessible 1`] = `
+exports[`Storyshots Atoms/Button Inaccessible 1`] = `
 <button
   style={
     Object {
@@ -41,7 +41,7 @@ exports[`Storyshots Atoms|Button Inaccessible 1`] = `
 </button>
 `;
 
-exports[`Storyshots Atoms|Button Regular Case 1`] = `
+exports[`Storyshots Atoms/Button Regular Case 1`] = `
 <Button
   normalCase={true}
   onClick={[Function]}
@@ -55,7 +55,7 @@ exports[`Storyshots Atoms|Button Regular Case 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button Small 1`] = `
+exports[`Storyshots Atoms/Button Small 1`] = `
 <Button
   onClick={[Function]}
   small={true}
@@ -69,7 +69,7 @@ exports[`Storyshots Atoms|Button Small 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button Small And Filled 1`] = `
+exports[`Storyshots Atoms/Button Small And Filled 1`] = `
 <Button
   filled={true}
   onClick={[Function]}
@@ -84,7 +84,7 @@ exports[`Storyshots Atoms|Button Small And Filled 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Atoms|Button Standard 1`] = `
+exports[`Storyshots Atoms/Button Standard 1`] = `
 <Button
   onClick={[Function]}
 >

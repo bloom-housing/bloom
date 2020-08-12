@@ -14,13 +14,7 @@ import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetai
 import { DATE_FORMAT } from "../../../lib/constants"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 6
 
   /* Form Handler */

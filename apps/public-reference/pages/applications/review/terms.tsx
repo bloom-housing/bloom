@@ -20,16 +20,10 @@ import React, { useContext, useMemo } from "react"
 import Markdown from "markdown-to-jsx"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
 
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
   const currentPageStep = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
@@ -37,10 +31,7 @@ export default () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     application.completedStep = 5
-    Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-    // FIXME: getting a build error from the following. Message:
-    // Property 'create' is a static member of type 'ApplicationsService'
-    /* applicationsService
+    applicationsService
       .create({
         body: {
           application,
@@ -57,7 +48,7 @@ export default () => {
       .then((result) => {
         conductor.sync()
         Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-      }) */
+      })
   }
 
   return (
@@ -66,7 +57,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>

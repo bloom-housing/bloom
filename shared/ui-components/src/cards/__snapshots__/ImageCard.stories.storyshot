@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Cards|ImageCard Image And Title 1`] = `
+exports[`Storyshots Cards/ImageCard Image And Title 1`] = `
 <div
   style={
     Object {
@@ -38,7 +38,7 @@ exports[`Storyshots Cards|ImageCard Image And Title 1`] = `
 </div>
 `;
 
-exports[`Storyshots Cards|ImageCard With Link 1`] = `
+exports[`Storyshots Cards/ImageCard With Link 1`] = `
 <div
   style={
     Object {

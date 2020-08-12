@@ -5,20 +5,29 @@ import "@bloom-housing/ui-components/styles/index.scss"
 import {
   addTranslation,
   UserProvider,
-  ConfigProvider, ApiClientProvider
+  ConfigProvider,
+  ApiClientProvider,
+  LoggedInUserIdleTimeout,
 } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
-import { loadApplicationFromAutosave, loadSavedListing } from "../lib/ApplicationConductor"
+import ApplicationConductor, {
+  loadApplicationFromAutosave,
+  loadSavedListing,
+} from "../lib/ApplicationConductor"
 
 class MyApp extends App {
   constructor(props) {
     super(props)
 
     // Load autosaved listing application, if any
-    const autosavedApplication = loadApplicationFromAutosave()
+    const application = loadApplicationFromAutosave() || blankApplication()
     const savedListing = loadSavedListing()
-    this.state = { application: autosavedApplication || blankApplication(), listing: savedListing }
+    this.state = {
+      conductor: new ApplicationConductor(application, savedListing),
+      application: application,
+      listing: savedListing,
+    }
   }
 
   // This gets passed along through the context
@@ -98,6 +107,7 @@ class MyApp extends App {
     return (
       <AppSubmissionContext.Provider
         value={{
+          conductor: this.state.conductor,
           application: this.state.application,
           listing: this.state.listing,
           syncApplication: this.syncApplication,
@@ -107,6 +117,7 @@ class MyApp extends App {
         <ConfigProvider apiUrl={process.env.listingServiceUrl}>
           <UserProvider>
             <ApiClientProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => this.state.conductor.reset()} />
               <Component {...pageProps} />
             </ApiClientProvider>
           </UserProvider>

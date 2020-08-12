@@ -51,14 +51,8 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
 }
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
   const currentPageStep = 3
 
   /* Form Handler */
@@ -84,7 +78,7 @@ export default () => {
 
       conductor.completeStep(3)
       conductor.sync()
-      conductor.routeToNextOrReturnUrl("/applications/preferences/intro")
+      conductor.routeToNextOrReturnUrl("/applications/preferences/select")
     }
   }
 
@@ -102,7 +96,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -110,7 +103,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/financial/vouchers">{t("t.back")}</Link>
+            <Link href="/applications/financial/vouchers">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 

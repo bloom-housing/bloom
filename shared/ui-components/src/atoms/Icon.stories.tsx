@@ -1,12 +1,11 @@
 import React from "react"
-import { withA11Y } from "@storybook/addon-a11y"
+
 import SVG from "react-inlinesvg"
 import { Icon } from "./Icon"
 
 export default {
-  title: "Atoms|Icon",
+  title: "Atoms/Icon",
   decorators: [
-    withA11Y,
     (storyFn: any) => (
       <div style={{ padding: "1rem" }}>
         {storyFn()}

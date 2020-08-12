@@ -1,5 +1,5 @@
 import React from "react"
-import PageHeader from "../src/headers/PageHeader/PageHeader"
+import { PageHeader } from "../src/headers/PageHeader/PageHeader"
 import { shallow } from "enzyme"
 
 test("example test", () => {

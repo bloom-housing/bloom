@@ -8,18 +8,11 @@ import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application, listing } = context
-  const conductor = useMemo(() => new ApplicationConductor(application, listing, context), [
-    application,
-    listing,
-    context,
-  ])
+  const { application } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */
@@ -36,7 +29,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -44,7 +36,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/review/demographics">{t("t.back")}</Link>
+            <Link href="/applications/review/demographics">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
