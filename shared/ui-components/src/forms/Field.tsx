@@ -5,7 +5,8 @@ export interface FieldProps {
   error?: boolean
   errorMessage?: string
   controlClassName?: string
-  labelClassName?: string
+  caps?: boolean
+  labelClasses?: string
   type?: string
   id?: string
   name: string
@@ -24,6 +25,10 @@ const Field = (props: FieldProps) => {
   if (props.error) {
     classes.push("error")
   }
+  const labelClasses = ["label"]
+  if (props.caps) { 
+    labelClasses.push("field-label--caps") 
+  }
   const controlClasses = ["control"]
   if (props.controlClassName) {
     controlClasses.push(props.controlClassName)
@@ -31,7 +36,7 @@ const Field = (props: FieldProps) => {
 
   return (
     <div className={classes.join(" ")}>
-      {props.label && <label className={props.labelClassName} htmlFor={props.name}>{props.label}</label>}
+      {props.label && <label className={labelClasses.join(" ")} htmlFor={props.name}>{props.label}</label>}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input

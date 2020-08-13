@@ -60,7 +60,7 @@ const SignIn = () => {
         <div className="form-card__group pt-0 border-b">
           <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
-              labelClassName="field-label--caps"
+              caps={true}
               name="email"
               label="Email"
               validation={{ required: true }}
@@ -70,7 +70,7 @@ const SignIn = () => {
             />
 
             <Field
-              labelClassName="field-label--caps"
+              caps={true}
               name="password"
               label="Password"
               validation={{ required: true }}

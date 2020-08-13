@@ -101,7 +101,7 @@ export default () => {
 
           <div className="form-card__group border-b">
             <Field
-              labelClassName="field-label--caps"
+              caps={true}
               type="email"
               name="email"
               label="Email"
@@ -113,7 +113,7 @@ export default () => {
             />
 
             <Field
-              labelClassName="field-label--caps"
+              caps={true}
               type="password"
               name="password"
               label="Password"
