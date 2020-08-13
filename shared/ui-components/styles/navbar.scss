@@ -3,14 +3,14 @@
 @import "~bulma/sass/components/navbar.sass";
 
 .navbar-notice {
-  display: none;
+  @apply hidden;
   @apply w-full;
   @apply bg-primary;
   @apply text-right;
   @apply text-white;
 
   @screen md {
-    display: flex;
+    @apply block;
   }
 }
 
@@ -40,7 +40,7 @@ nav.navbar {
 }
 
 .navbar-brand {
-  position: relative;
+  @apply relative;
   @apply justify-center;
 
   @screen md {
@@ -187,14 +187,14 @@ a.navbar-item {
 }
 
 .navbar-burger {
-  position: absolute;
+  @apply absolute;
   top: 50%;
   right: 0;
   transform: translateY(-50%);
 
   &:before {
+    @apply absolute;
     content: "Menu";
-    position: absolute;
     left: -22px;
     top: calc(50% + 1px);
     transform: translateY(-50%);
