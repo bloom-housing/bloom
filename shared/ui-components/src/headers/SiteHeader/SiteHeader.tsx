@@ -87,7 +87,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
 
             <div
               id="navbarMenuLinks"
-              className={"navbar-menu mt-3 md:mt-0" + (this.state.active ? " is-active" : "")}
+              className={"navbar-menu md:mt-0" + (this.state.active ? " is-active" : "")}
             >
               <div className="navbar-end">{this.props.children}</div>
             </div>
