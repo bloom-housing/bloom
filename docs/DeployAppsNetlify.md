@@ -8,6 +8,12 @@ Because Bloom uses a monorepo style of organization, there are likely multiple a
 
     cd apps/public-reference; yarn run build ; yarn run export
 
+### Changing the Base Directory
+
+Netlify offers the option to set a "Base Directory" for each deployed app, which can offer increased isolation from the rest of the monorepo and ensures that shared packages are imported from the officially published versions rather than elsewhere in the monorepo tree.
+
+In order to make this configuration work, make sure to have an empty yarn.lock in your base directory in addition to having YARN_VERSION defined (see below). Netlify will not install or use yarn correctly unless it sees a yarn.lock file in the build root.
+
 ## Server-side Rendering
 
 ## Environment Variables
