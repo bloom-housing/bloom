@@ -5,6 +5,7 @@ export interface FieldProps {
   error?: boolean
   errorMessage?: string
   controlClassName?: string
+  labelClassName?: string
   type?: string
   id?: string
   name: string
@@ -30,7 +31,7 @@ const Field = (props: FieldProps) => {
 
   return (
     <div className={classes.join(" ")}>
-      {props.label && <label htmlFor={props.name}>{props.label}</label>}
+      {props.label && <label className={props.labelClassName} htmlFor={props.name}>{props.label}</label>}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
