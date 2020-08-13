@@ -15,7 +15,7 @@ import FormsLayout from "../layouts/forms"
 import { useRouter } from "next/router"
 
 const SignIn = () => {
-  const { login } = useContext(UserContext)
+  const { login, redirectToPrevPage } = useContext(UserContext)
   const router = useRouter()
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
@@ -26,11 +26,13 @@ const SignIn = () => {
 
     try {
       const user = await login(email, password)
-      router.push(
-        `/?success=${encodeURIComponent(
-          t(`authentication.signIn.success`, { name: user.firstName })
-        )}`
-      )
+      redirectToPrevPage()
+      // router.back()
+      // router.push(
+      //   `?success=${encodeURIComponent(
+      //     t(`authentication.signIn.success`, { name: user.firstName })
+      //   )}`
+      // )
     } catch (err) {
       const { status } = err.response
       if (status === 401) {
