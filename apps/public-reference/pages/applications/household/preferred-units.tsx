@@ -32,7 +32,7 @@ export default () => {
       preferredUnit,
     })
 
-    Router.push("/applications/household/current").then(() => window.scrollTo(0, 0))
+    Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
   }
 
   const preferredUnitOptions = useMemo(() => {
@@ -46,7 +46,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}

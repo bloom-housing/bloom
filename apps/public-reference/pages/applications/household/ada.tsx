@@ -36,14 +36,14 @@ export default () => {
       },
     })
 
-    conductor.routeToNextOrReturnUrl("/applications/reserved/units")
+    conductor.routeToNextOrReturnUrl("/applications/financial/vouchers")
   }
 
   const adaNone = watch("none")
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -54,7 +54,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/household/current">
+            <Link href="/applications/household/preferred-units">
               <a>{t("t.back")}</a>
             </Link>
           </strong>

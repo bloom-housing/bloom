@@ -3,78 +3,117 @@
 Application confirmation with lottery number (confirmation number) 
 */
 import Link from "next/link"
-import moment from "moment"
-import { FormCard, t } from "@bloom-housing/ui-components"
+import Router from "next/router"
+import { Button, FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
-import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
-import { DATE_FORMAT } from "../../../lib/constants"
+import { useContext } from "react"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 6
-
-  /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-
-    //Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-  }
-
-  const confirmationDate = useMemo(() => {
-    return moment().format(DATE_FORMAT)
-  }, [])
+  const { listing } = useContext(AppSubmissionContext)
 
   return (
     <FormsLayout>
-      <FormCard header="Confirmation">
-        <div className="p-4">
-          <Link href="/applications/review/summary">
-            <a className="lined">{t("application.confirmation.viewOriginalListing")}</a>
+      <FormCard>
+        <div className="form-card__lead">
+          <h2 className="form-card__title is-borderless">
+            {t("application.review.confirmation.title")}
+            {listing?.name}
+          </h2>
+        </div>
+
+        {listing?.imageUrl && <img src={listing.imageUrl} alt={listing?.name} />}
+
+        <div className="form-card__group border-b text-center">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.lotteryNumber")}
+          </h3>
+          {/* TODO: replace with real application number */}
+          <p className="font-serif text-3xl my-1">#00545847</p>
+          <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
+        </div>
+
+        <div className="form-card__group border-b">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.whatExpectTitle")}
+          </h3>
+
+          <p className="field-note mt-1">
+            {t("application.review.confirmation.whatExpectFirstParagraph.held")}
+            {/* TODO: replace with real date */}
+            ###
+            {t("application.review.confirmation.whatExpectFirstParagraph.attend")}
+            {/* TODO: url slug seems to be not completed */}
+            {listing?.urlSlug && (
+              <Link href={`/${listing.urlSlug}`}>
+                {t("application.review.confirmation.whatExpectFirstParagraph.listing")}
+              </Link>
+            )}
+            {t("application.review.confirmation.whatExpectFirstParagraph.refer")}
+          </p>
+
+          <p className="field-note mt-2">
+            {t("application.review.confirmation.whatExpectSecondparagraph")}
+          </p>
+        </div>
+
+        <div className="form-card__group border-b">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.doNotSubmitTitle")}
+          </h3>
+
+          <p className="field-note mt-1">{t("application.review.confirmation.needToUpdate")}</p>
+
+          {listing && (
+            <p className="field-note mt-2">
+              {listing.leasingAgentName}
+              <br />
+              {listing.leasingAgentPhone}
+              <br />
+              {listing.leasingAgentEmail}
+            </p>
+          )}
+        </div>
+
+        <div className="form-card__group">
+          <h3 className="form-card__paragraph-title">
+            {t("application.review.confirmation.createAccountTitle")}
+          </h3>
+
+          <p className="field-note mt-1">
+            {t("application.review.confirmation.createAccountParagraph")}
+          </p>
+        </div>
+
+        <div className="form-card__pager">
+          <div className="form-card__pager-row primary">
+            <Button
+              filled={true}
+              onClick={() => {
+                Router.push("/create-account").then(() => window.scrollTo(0, 0))
+              }}
+            >
+              {t("application.form.general.createAccount")}
+            </Button>
+          </div>
+        </div>
+
+        <div className="p-8 text-center">
+          <a className="lined" href="/">
+            {t("application.review.confirmation.imdone")}
+          </a>
+        </div>
+
+        <div className="p-8 text-center border-b">
+          <Link href="/listings">
+            <a className="lined">{t("application.review.confirmation.browseMore")}</a>
           </Link>
         </div>
-      </FormCard>
 
-      <FormCard>
-        <div className="form-card__group mx-0">
-          <h2 className="form-card__title is-borderless">
-            {t("application.confirmation.informationSubmittedTitle")}
-          </h2>
-
-          <div className="flex flex-col justify-center text-center mt-3">
-            <span className="text-sm font-normal">
-              {t("application.confirmation.submitted")}
-              {confirmationDate}
-            </span>
-
-            <hr className="my-6" />
-
-            <h3 className="font-alt-sans uppercase text-sm text-black font-semibold">
-              {t("application.confirmation.lotteryNumber")}
-            </h3>
-
-            {/* TODO: replace with the number from backend */}
-            <span className="text-black text-3xl text-serif-lg font-normal my-0">#00545847</span>
-          </div>
-        </div>
-
-        <FormSummaryDetails application={application} editMode={false} />
-
-        <h3 className="form--card__sub-header">{t("application.confirmation.preferences")}</h3>
-
-        <div className="form-card__group border-b mx-0">
-          {/* TODO: probably status should depends on backend result (?) */}
-          <p className="text-base font-semibold">{t("application.confirmation.generalLottery")}</p>
-
-          <div className="text-center mt-10">
-            <a href="#" className="lined" onClick={() => window.print()}>
-              {t("application.confirmation.printCopy")}
-            </a>
-          </div>
+        <div className="p-8 text-center border-b">
+          <Link href="/applications/review/view-application">
+            <a className="lined">{t("application.review.confirmation.print")}</a>
+          </Link>
         </div>
       </FormCard>
     </FormsLayout>

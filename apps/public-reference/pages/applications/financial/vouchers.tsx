@@ -32,7 +32,7 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -43,7 +43,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/reserved/units">
+            <Link href="/applications/household/ada">
               <a>{t("t.back")}</a>
             </Link>
           </strong>

@@ -6,7 +6,12 @@ import {
   ConfigProvider,
   UserProvider,
   RequireLogin,
+  ApiClientProvider,
 } from "@bloom-housing/ui-components"
+
+// TODO: Make these not-global
+import "ag-grid-community/dist/styles/ag-grid.css"
+import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 class MyApp extends App {
   constructor(props) {
@@ -64,7 +69,9 @@ class MyApp extends App {
       <ConfigProvider apiUrl={process.env.listingServiceUrl}>
         <UserProvider>
           <RequireLogin signInPath={`/sign-in?message=${encodeURIComponent(signInMessage)}`}>
-            <Component {...pageProps} />
+            <ApiClientProvider>
+              <Component {...pageProps} />
+            </ApiClientProvider>
           </RequireLogin>
         </UserProvider>
       </ConfigProvider>

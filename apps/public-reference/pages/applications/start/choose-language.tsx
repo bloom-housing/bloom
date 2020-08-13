@@ -4,7 +4,7 @@ Applicants are given the option to start the Application in one of a number of l
 https://github.com/bloom-housing/bloom/issues/277
 */
 import axios from "axios"
-import Router from "next/router"
+import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
@@ -19,20 +19,24 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useEffect, useMemo, useState } from "react"
 
-const loadListing = async (stateFunction, conductor, context) => {
+const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
-  conductor.listing = response.data.listings[2]
+  conductor.listing =
+    response.data.listings.find((listing) => listing.id == listingId) || response.data.listings[2] // FIXME: temporary fallback
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
 }
 
 export default () => {
+  const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { conductor, application } = context
 
+  const listingId = router.query.listingId
+
   useEffect(() => {
-    loadListing(setListing, conductor, context)
+    loadListing(listingId, setListing, conductor, context)
   }, [])
 
   const currentPageStep = 1
@@ -42,12 +46,12 @@ export default () => {
   const onSubmit = () => {
     conductor.sync()
 
-    Router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
+    router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
   }
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}

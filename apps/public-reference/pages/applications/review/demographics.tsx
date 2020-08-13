@@ -20,8 +20,8 @@ import {
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import FormStep from "../../../src/forms/applications/FormStep"
 
-const demographics = () => {
-  const { conductor, application } = useContext(AppSubmissionContext)
+const Demographics = () => {
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */
@@ -53,7 +53,7 @@ const demographics = () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
@@ -170,4 +170,4 @@ const demographics = () => {
   )
 }
 
-export default demographics
+export default Demographics
