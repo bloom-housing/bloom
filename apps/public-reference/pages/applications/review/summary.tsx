@@ -12,7 +12,7 @@ import { useContext } from "react"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 
 export default () => {
-  const { application } = useContext(AppSubmissionContext)
+  const { listing, application } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */
@@ -49,30 +49,6 @@ export default () => {
         </div>
 
         <FormSummaryDetails application={application} editMode />
-
-        <h3 className="form--card__sub-header">
-          {t("t.preferences")}
-          <EditLink href="/applications/preferences/select" />
-        </h3>
-
-        <div className="form-card__group border-b mx-0">
-          {application.preferences.none ? (
-            <p className="field-note text-black">
-              {t("application.preferences.general.title")}{" "}
-              {t("application.preferences.general.preamble")}
-            </p>
-          ) : (
-            <>
-              {Object.entries(application.preferences)
-                .filter((option) => option[0] != "none" && option[1])
-                .map((option) => (
-                  <ReviewItem label={t("application.preferences.youHaveClaimed")}>
-                    {t(`application.preferences.${option[0]}.label`)}
-                  </ReviewItem>
-                ))}
-            </>
-          )}
-        </div>
 
         <div className="form-card__group">
           <p className="field-note text-gray-800 text-center">
