@@ -60,6 +60,7 @@
       .prepend,
       select {
         @apply border-red-700;
+        @apply border-2;
       }
 
       .prepend {
@@ -70,6 +71,14 @@
     .error-message {
       @apply text-sm;
       @apply text-red-700;
+    }
+
+    input[type="radio"] + label::before {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px $tailwind-alert;
+    }
+
+    input[type="checkbox"] + label::before {
+      box-shadow: 0 0 0 1px #fff, 0 0 0 3px $tailwind-alert;
     }
   }
 
@@ -255,7 +264,7 @@ input[type=number] {
     margin-bottom: 0;
 
     &:last-child {
-      max-width: 4rem;
+      max-width: 4.5rem;
     }
   }
 }

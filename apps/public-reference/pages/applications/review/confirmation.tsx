@@ -99,20 +99,20 @@ export default () => {
         </div>
 
         <div className="p-8 text-center">
-          <a className="lined" href="/">
+          <a className="lined text-tiny" href="/">
             {t("application.review.confirmation.imdone")}
           </a>
         </div>
 
         <div className="p-8 text-center border-b">
           <Link href="/listings">
-            <a className="lined">{t("application.review.confirmation.browseMore")}</a>
+            <a className="lined text-tiny">{t("application.review.confirmation.browseMore")}</a>
           </Link>
         </div>
 
         <div className="p-8 text-center border-b">
           <Link href="/applications/review/view-application">
-            <a className="lined">{t("application.review.confirmation.print")}</a>
+            <a className="lined text-tiny">{t("application.review.confirmation.print")}</a>
           </Link>
         </div>
       </FormCard>
