@@ -6,7 +6,6 @@ export interface FieldProps {
   errorMessage?: string
   controlClassName?: string
   caps?: boolean
-  labelClasses?: string
   type?: string
   id?: string
   name: string
