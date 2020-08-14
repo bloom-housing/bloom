@@ -1,28 +1,18 @@
 /*
-5.4 View application
+5.5 View
+Optional application summary
 */
 import Link from "next/link"
 import moment from "moment"
 import { FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT } from "../../../lib/constants"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 6
-
-  /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-
-    //Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
-  }
+  const { application } = useContext(AppSubmissionContext)
 
   const confirmationDate = useMemo(() => {
     return moment().format(DATE_FORMAT)
@@ -63,17 +53,10 @@ export default () => {
 
         <FormSummaryDetails application={application} editMode={false} />
 
-        <h3 className="form--card__sub-header">{t("application.confirmation.preferences")}</h3>
-
-        <div className="form-card__group border-b mx-0">
-          {/* TODO: probably status should depends on backend result (?) */}
-          <p className="text-base font-semibold">{t("application.confirmation.generalLottery")}</p>
-
-          <div className="text-center mt-10">
-            <a href="#" className="lined" onClick={() => window.print()}>
-              {t("application.confirmation.printCopy")}
-            </a>
-          </div>
+        <div className="text-center form-card__group border-b mx-0">
+          <a href="#" className="lined" onClick={() => window.print()}>
+            {t("application.confirmation.printCopy")}
+          </a>
         </div>
       </FormCard>
     </FormsLayout>
