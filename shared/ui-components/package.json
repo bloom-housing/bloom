@@ -60,7 +60,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-input-mask": "^2.0.5",
     "axios": "^0.19.2",
-    "bulma": "^0.7.5",
+    "bulma": "^0.9.0",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^6.11.4",
     "moment": "^2.27.0",
