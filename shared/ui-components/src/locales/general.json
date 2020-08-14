@@ -441,17 +441,6 @@
       "errorGenericMessage": "Please try again, or contact support for help.",
       "success": "Welcome back, %{name}!"
     },
-    "continueApplication": "Continue Application",
-    "applicationNeverSubmitted": "Your application was never submitted",
-    "edited": "Edited",
-    "status": "Status",
-    "statuses": {
-      "inProgress": "In Progress",
-      "neverSubmitted": "Never Submitted",
-      "submitted": "Submitted"
-    },
-    "viewApplication": "View Application",
-    "yourLotteryNumber": "Your lottery number is"
   },
   "config": {
     "routePrefix": ""
@@ -647,6 +636,7 @@
     "getAssistance": "Get Assistance",
     "getFeedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>your feedback.</a>",
     "listings": "Listings",
+
     "properties": "Properties",
     "applications": "Applications",
     "myAccount": "My Account",
