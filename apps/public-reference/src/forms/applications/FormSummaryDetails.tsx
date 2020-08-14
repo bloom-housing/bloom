@@ -194,9 +194,11 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           {application.incomeVouchers ? t("t.yes") : t("t.no")}
         </ReviewItem>
 
-        <ReviewItem label={t("t.income")}>
-          ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
-        </ReviewItem>
+        {application.incomePeriod && (
+          <ReviewItem label={t("t.income")}>
+            ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+          </ReviewItem>
+        )}
       </div>
 
       <h3 className="form--card__sub-header">
