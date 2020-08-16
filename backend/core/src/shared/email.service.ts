@@ -33,7 +33,15 @@ export class EmailService {
   }
 
   private template(view: string) {
-    return Handlebars.compile(fs.readFileSync(path.join(__dirname, `/views/${view}.hbs`), "utf8"))
+    return Handlebars.compile(
+      fs.readFileSync(
+        path.join(
+          path.resolve(__dirname, "..", "..", "views").replace("/dist", ""),
+          `/${view}.hbs`
+        ),
+        "utf8"
+      )
+    )
   }
 
   private async send(to: string, subject: string, body: string, retry?: number) {
