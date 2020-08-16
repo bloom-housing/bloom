@@ -7,7 +7,7 @@ import { Application } from "@bloom-housing/backend-core/client"
 const listing = Object.assign({}, Archer) as any
 
 export default {
-  title: "PageComponents/AppStatusItem",
+  title: "PageComponents/DashBlocks",
   decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 const application = {} as Application

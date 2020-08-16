@@ -419,6 +419,8 @@
     },
     "continueApplication": "Continue Application",
     "applicationNeverSubmitted": "Your application was never submitted",
+    "deleteThisApplication": "Delete this application?",
+    "deleteApplicationDescription": "Deleting this application means you will lose all the information you've entered.",
     "edited": "Edited",
     "status": "Status",
     "statuses": {
@@ -440,7 +442,7 @@
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "success": "Welcome back, %{name}!"
-    },
+    }
   },
   "config": {
     "routePrefix": ""
@@ -672,6 +674,7 @@
     "availability": "Availability",
     "back": "Back",
     "built": "Built",
+    "cancel": "Cancel",
     "confirm": "Confirm",
     "delete": "Delete",
     "deposit": "Deposit",

@@ -4,18 +4,20 @@ import moment from "moment"
 import { MultiLineAddress } from "../helpers/address"
 import { t } from "../helpers/translator"
 import { Application } from "@bloom-housing/backend-core/client"
-import LocalizedLink from "../atoms/LocalizedLink"
+import { LocalizedLink } from "../atoms/LocalizedLink"
+import { Modal } from "../modals/Modal"
 
 // TODO status and lotteryNumber should be loaded from Application
 interface AppStatusItemProps {
   application: Application
   status: string
+  setDeletingApplication: (application: Application) => void
   lotteryNumber?: string
 }
 
 const AppStatusItem = (props: AppStatusItemProps) => {
   const [showModal, setShowModal] = useState(false)
-  const { application, status, lotteryNumber } = props
+  const { application, status, lotteryNumber, setDeletingApplication } = props
   const listing = application.listing
   const applicationDueDate = moment(listing.applicationDueDate)
   const editDate = moment(application.updatedAt)
@@ -84,7 +86,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
               <a
                 className="status-item__link alert lined"
                 onClick={() => {
-                  //
+                  setDeletingApplication(application)
                 }}
               >
                 {t("t.delete")}
