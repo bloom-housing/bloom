@@ -80,7 +80,7 @@ export default () => {
               <Fragment>
                 {applications.map((application, i) => (
                   <AppStatusItem
-                    key={"application" + i}
+                    key={application.id}
                     status="inProgress"
                     application={application}
                     setDeletingApplication={setDeletingApplication}
