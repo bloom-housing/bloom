@@ -62,14 +62,8 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/review/summary">{t("t.back")}</Link>
-          </strong>
-        </p>
-
         <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless mt-4">
+          <h2 className="form-card__title is-borderless">
             {t("application.review.terms.title")}
           </h2>
         </div>

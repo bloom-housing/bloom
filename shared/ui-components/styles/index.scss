@@ -23,31 +23,55 @@ main {
 
 }
 
-// Sticky footer\
-html {
-  @apply h-full;
+// Sticky footer
+// html {
+//   @apply h-full;
 
-  body {
-    @apply table;
-    @apply h-full;
-    @apply w-full;
-  }
+//   body,
+//   .site-container {
+//     @apply table;
+//     @apply h-full;
+//     @apply w-full;
+//     min-height: 100%;
+//   }
 
-  .site-container {
-    @apply table-row;
-    @apply h-full;
-  }
+//   .site-content {
+//     @apply table-row;
+//     @apply h-full;
+//   }
 
-  .footer-section {
-    @apply table-row;
-    height: 1px;
-  }
+//   .site-footer {
+//     @apply table-row;
+//     height: 1px;
+//   }
+// }
+
+// html,
+// body {
+//   @screen md {
+//     @apply overflow-x-hidden;
+//   }
+// }
+
+.site-container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
-html,
-body {
-  @screen md {
-    @apply overflow-x-hidden;
+.site-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    > section {
+      flex: 1;
+    }
   }
 }
 

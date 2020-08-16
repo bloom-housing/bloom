@@ -97,7 +97,7 @@ export default () => {
 
           <div className="p-8 text-center">
             <Link href="/">
-              <a className="lined">{t("application.form.general.saveAndFinishLater")}</a>
+              <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
             </Link>
           </div>
         </form>
