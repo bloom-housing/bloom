@@ -22,7 +22,6 @@ import { t } from "@bloom-housing/ui-components"
 // External interface this context provides
 type ContextProps = {
   login: (email: string, password: string) => Promise<User>
-  redirectToPrevPage: () => void
   createUser: (user: CreateUserDto) => Promise<User>
   signOut: () => void
   // True when an API request is processing
@@ -40,7 +39,6 @@ type UserState = {
   accessToken?: string
   profile?: User
   refreshTimer?: number
-  lastPath?: string
 }
 
 type DispatchType = (...arg: [unknown]) => void
@@ -55,7 +53,6 @@ const startLoading = createAction("START_LOADING")()
 const stopLoading = createAction("STOP_LOADING")()
 const saveProfile = createAction("SAVE_PROFILE")<User>()
 const signOut = createAction("SIGN_OUT")()
-const setLastPath = createAction("SET_LAST_PATH")<string>()
 
 const reducer = createReducer(
   { loading: false, initialStateLoaded: false, storageType: "session" } as UserState,
@@ -90,7 +87,6 @@ const reducer = createReducer(
       // Clear out all existing state other than the storage type
       return { loading: false, storageType, initialStateLoaded: true }
     },
-    SET_LAST_PATH: (state, { payload }) => ({ ...state, lastPath: payload }),
   }
 )
 
@@ -98,7 +94,6 @@ export const UserContext = createContext<Partial<ContextProps>>({})
 
 export const UserProvider: FunctionComponent = ({ children }) => {
   const { apiUrl, storageType } = useContext(ConfigContext)
-  const router = useRouter()
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     initialStateLoaded: false,
@@ -140,20 +135,6 @@ export const UserProvider: FunctionComponent = ({ children }) => {
     }
   }, [apiUrl, storageType])
 
-  useEffect(() => {
-    if (typeof window === "undefined") return
-
-    const onRouteChange = () => {
-      dispatch(setLastPath(window.location.pathname))
-    }
-
-    router.events.on("routeChangeStart", onRouteChange)
-
-    return () => {
-      router.events.off("routeChangeStart", onRouteChange)
-    }
-  }, [])
-
   const contextValues: ContextProps = {
     loading: state.loading,
     profile: state.profile,
@@ -185,22 +166,6 @@ export const UserProvider: FunctionComponent = ({ children }) => {
       }
     },
     signOut: () => dispatch(signOut()),
-    redirectToPrevPage: () => {
-      const { firstName, lastName } = state.profile || {}
-
-      // back to the previous page
-      const lastPathWithAlert = `${state.lastPath}?success=${encodeURIComponent(
-        t(`authentication.signIn.success`, {
-          name: `${firstName} ${lastName}`,
-        })
-      )}`
-
-      if (state.lastPath) {
-        router.push(lastPathWithAlert)
-      } else {
-        router.push("/")
-      }
-    },
   }
   return createElement(UserContext.Provider, { value: contextValues }, children)
 }
