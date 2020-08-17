@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from "react"
+import React, { useEffect, FunctionComponent } from "react"
 import Icon from "../atoms/Icon"
 import "./Modal.scss"
+import useKeyPress from "../helpers/useKeyPress"
 
 type ModalAction = {
   label: string
@@ -11,6 +12,7 @@ type ModalAction = {
 export type ModalProps = {
   open: boolean
   title: string
+  ariaDescription: string
   actions: ModalAction[]
   className?: string
   fullScreen?: boolean
@@ -26,7 +28,16 @@ export const Modal: FunctionComponent<ModalProps> = ({
   fullScreen = false,
   onClose,
   children,
+  ariaDescription,
 }) => {
+  const isEscClicked = useKeyPress("Escape")
+
+  useEffect(() => {
+    if (isEscClicked && onClose) {
+      onClose()
+    }
+  }, [isEscClicked, onClose])
+
   if (!open) {
     return null
   }
@@ -38,7 +49,13 @@ export const Modal: FunctionComponent<ModalProps> = ({
         .join(" ")}
     >
       {fullScreen && <div className="modal__backdrop" />}
-      <div className="modal" role="dialog">
+      <div
+        className="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title}
+        aria-describedby={ariaDescription}
+      >
         <header className="modal__inner">
           <h1 className="modal__title">{title}</h1>
         </header>
