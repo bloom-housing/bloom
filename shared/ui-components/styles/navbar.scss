@@ -2,10 +2,15 @@
 @import "~bulma/sass/components/navbar.sass";
 
 .navbar-notice {
+  @apply hidden;
   @apply w-full;
   @apply bg-primary;
   @apply text-right;
   @apply text-white;
+
+  @screen md {
+    @apply block;
+  }
 }
 
 .navbar-notice__text {
@@ -34,6 +39,15 @@ nav.navbar {
   @apply m-auto;
 }
 
+.navbar-brand {
+  @apply relative;
+  @apply justify-center;
+
+  @screen md {
+    @apply justify-start;
+  }
+}
+
 .navbar-brand .logo {
   @apply text-black;
   @apply block;
@@ -41,8 +55,12 @@ nav.navbar {
   @apply z-10;
   @apply items-center;
   @apply justify-center;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-  margin-bottom: -0.75rem;
+
+
+  @screen md {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+    margin-bottom: -0.75rem;
+  }
 
   &.navbar-item,
   &.navbar-item:hover,
@@ -59,9 +77,6 @@ nav.navbar {
   @screen md {
     margin-top: -2.75em;
     padding-top: 1em;
-  }
-
-  .logo__lockup {
   }
 
   .logo__image {
@@ -171,8 +186,25 @@ a.navbar-item {
   }
 }
 
-.navbar-burger span {
-  height: 2px;
+.navbar-burger {
+  @apply absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+
+  &:before {
+    @apply absolute;
+    content: "Menu";
+    left: -22px;
+    top: calc(50% + 1px);
+    transform: translateY(-50%);
+    @apply uppercase;
+    @apply text-xs;
+  }
+
+  span {
+    height: 2px;
+  }
 }
 
 .navbar-menu {

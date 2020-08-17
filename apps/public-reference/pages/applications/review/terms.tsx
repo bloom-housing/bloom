@@ -63,9 +63,7 @@ export default () => {
 
       <FormCard>
         <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.review.terms.title")}
-          </h2>
+          <h2 className="form-card__title is-borderless">{t("application.review.terms.title")}</h2>
         </div>
         <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
