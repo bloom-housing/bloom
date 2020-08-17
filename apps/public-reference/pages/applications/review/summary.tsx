@@ -34,14 +34,6 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/review/demographics">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
-
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">
             {t("application.review.takeAMomentToReview")}

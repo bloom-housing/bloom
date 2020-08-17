@@ -47,21 +47,20 @@ const SignIn = () => {
   return (
     <FormsLayout>
       <FormCard>
-        <div className="form-card__lead pb-0 text-center">
+        <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl" symbol="profile" />
           <h2 className="form-card__title">Sign In</h2>
         </div>
-
+        {requestError && (
+          <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
+            {requestError}
+          </AlertBox>
+        )}
+        <UrlAlert type="notice" urlParam="message" dismissable />
         <div className="form-card__group pt-0 border-b">
-          {requestError && (
-            <AlertBox className="mt-2" onClose={() => setRequestError(undefined)} type="alert">
-              {requestError}
-            </AlertBox>
-          )}
-          <UrlAlert type="notice" urlParam="message" dismissable />
-
           <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
+              caps={true}
               name="email"
               label="Email"
               validation={{ required: true }}
@@ -71,6 +70,7 @@ const SignIn = () => {
             />
 
             <Field
+              caps={true}
               name="password"
               label="Password"
               validation={{ required: true }}

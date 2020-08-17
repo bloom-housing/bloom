@@ -22,14 +22,16 @@
   @apply text-center;
   width: fit-content;
   @apply mt-4;
+  @apply mx-auto;
   @apply pt-4;
+  @apply px-3;
   @apply border-t-4;
   @apply border-primary;
   @apply leading-tight;
 
   @screen md {
     @apply mx-auto;
-    @apply px-3;
+    @apply px-0;
   }
 
   &.is-borderless {
@@ -63,8 +65,12 @@
 }
 
 .form-card__lead {
-  @apply pt-10;
+  @apply pt-12;
   @apply pb-8;
+
+  @screen md {
+    @apply px-0;
+  }
 }
 
 .form-card__group {
@@ -141,10 +147,12 @@
 }
 
 .form-card__paragraph-title {
-  @apply tracking-wide;
-  @apply text-gray-700;
-  @apply font-alt-sans;
   @apply uppercase;
+  @apply text-gray-750;
+  @apply tracking-widest;
   @apply font-semibold;
-  @apply text-base;
+  @apply font-sans;
+  @apply text-tiny;
+  @apply mb-2;
+  @apply inline-block;
 }

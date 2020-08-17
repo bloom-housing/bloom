@@ -34,13 +34,10 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard>
-        <div className="form-card__lead pb-0 text-center">
+        <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl" symbol="profile" />
           <h2 className="form-card__title">Create Account</h2>
-        </div>
-
-        <div className="form-card__group pt-0 border-b">
-          <p className="mt-4 mb-8 text-center text-gray-700 text-tiny px-6">
+          <p className="mt-4 text-center text-gray-700 text-tiny px-6">
             You'll use this information to log in to your account, so make sure you can remember it.
           </p>
         </div>
@@ -104,6 +101,7 @@ export default () => {
 
           <div className="form-card__group border-b">
             <Field
+              caps={true}
               type="email"
               name="email"
               label="Email"
@@ -115,6 +113,7 @@ export default () => {
             />
 
             <Field
+              caps={true}
               type="password"
               name="password"
               label="Password"

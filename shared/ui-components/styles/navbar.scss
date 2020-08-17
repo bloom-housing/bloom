@@ -1,5 +1,4 @@
 @import "utilities/setup_bulma";
-@import "~bulma/sass/utilities/mixins.sass";
 @import "~bulma/sass/components/navbar.sass";
 
 .navbar-notice {
@@ -17,7 +16,8 @@
   @apply pb-2;
   @apply pr-1;
 
-  a, a:hover {
+  a,
+  a:hover {
     @apply underline;
     color: inherit;
   }
@@ -62,7 +62,6 @@ nav.navbar {
   }
 
   .logo__lockup {
-
   }
 
   .logo__image {
@@ -161,7 +160,7 @@ a.navbar-item {
 .navbar-item.has-dropdown {
   &:hover {
     .navbar-link {
-      background-color: transparent;    
+      background-color: transparent;
     }
   }
 }
