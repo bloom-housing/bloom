@@ -24,9 +24,11 @@ export class EmailService {
   }
 
   public async welcome(user: User) {
-    Logger.log(
-      `Preparing to send a welcome email to ${user.email} from ${process.env.EMAIL_FROM_ADDRESS}...`
-    )
+    if (process.env.NODE_ENV == "production") {
+      Logger.log(
+        `Preparing to send a welcome email to ${user.email} from ${process.env.EMAIL_FROM_ADDRESS}...`
+      )
+    }
     // TODO set locale for user
     // polyglot.locale(user.lang)
     await this.send(user.email, "Welcome to Bloom", this.template("register-email")({ user: user }))
