@@ -2,6 +2,7 @@ import { Controller, Request, Post, UseGuards, Body, HttpCode } from "@nestjs/co
 import { LocalAuthGuard } from "./local-auth.guard"
 import { AuthService } from "./auth.service"
 import { UserService } from "../user/user.service"
+import { EmailService } from "../shared/email.service"
 import { CreateUserDto } from "../user/createUser.dto"
 import { DefaultAuthGuard } from "./default.guard"
 import { ApiBody } from "@nestjs/swagger"
@@ -9,7 +10,11 @@ import { LoginDto, LoginResponseDto } from "./login.dto"
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService, private userService: UserService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private emailService: EmailService
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post("login")
@@ -23,6 +28,7 @@ export class AuthController {
   async register(@Body() params: CreateUserDto) {
     const user = await this.userService.createUser(params)
     const accessToken = this.authService.generateAccessToken(user)
+    this.emailService.welcome(user)
     return { ...user, accessToken }
   }
 

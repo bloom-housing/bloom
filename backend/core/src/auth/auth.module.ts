@@ -9,6 +9,8 @@ import { secretKey } from "./constants"
 import { AuthService } from "./auth.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { RevokedToken } from "../entity/revokedToken.entity"
+import { EmailService } from "../shared/email.service"
+import { SharedModule } from "../shared/shared.module"
 
 @Module({
   imports: [
@@ -21,8 +23,9 @@ import { RevokedToken } from "../entity/revokedToken.entity"
       },
     }),
     TypeOrmModule.forFeature([RevokedToken]),
+    SharedModule,
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService],
+  providers: [LocalStrategy, JwtStrategy, AuthService, EmailService],
   controllers: [AuthController],
 })
 export class AuthModule {}
