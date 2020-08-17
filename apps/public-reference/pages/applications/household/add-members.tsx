@@ -31,10 +31,7 @@ export default () => {
   }
 
   const onAddMember = () => {
-    Router.push({
-      pathname: "/applications/household/member",
-      query: { memberId: null },
-    }).then(() => window.scrollTo(0, 0))
+    Router.push("/applications/household/member").then(() => window.scrollTo(0, 0))
   }
 
   const applicant = application.applicant

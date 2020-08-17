@@ -75,6 +75,7 @@
     @apply font-normal;
     @apply underline;
     @apply m-4;
+    @apply text-tiny;
 
     &:hover {
       @apply text-primary;
