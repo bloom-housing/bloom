@@ -25,8 +25,8 @@ const Field = (props: FieldProps) => {
     classes.push("error")
   }
   const labelClasses = ["label"]
-  if (props.caps) { 
-    labelClasses.push("field-label--caps") 
+  if (props.caps) {
+    labelClasses.push("field-label--caps")
   }
   const controlClasses = ["control"]
   if (props.controlClassName) {
@@ -35,7 +35,11 @@ const Field = (props: FieldProps) => {
 
   return (
     <div className={classes.join(" ")}>
-      {props.label && <label className={labelClasses.join(" ")} htmlFor={props.name}>{props.label}</label>}
+      {props.label && (
+        <label className={labelClasses.join(" ")} htmlFor={props.name}>
+          {props.label}
+        </label>
+      )}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
