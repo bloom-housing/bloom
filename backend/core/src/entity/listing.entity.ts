@@ -5,6 +5,7 @@ import { Attachment } from "./attachment.entity"
 import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 import { Application } from "./application.entity"
 import { ListingTranslation } from "./listing-translation.entity"
+import { Exclude } from "class-transformer"
 
 export enum ListingStatus {
   active = "active",
@@ -127,6 +128,9 @@ class Listing extends BaseEntity {
 
   @OneToMany(() => ListingTranslation, (translation) => translation.listing)
   translations: ListingTranslation[]
+
+  @Exclude()
+  languageCode = "en"
 }
 
 export { Listing as default, Listing }

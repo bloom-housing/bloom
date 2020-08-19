@@ -1,4 +1,4 @@
-import { Request } from "express"
+import { Request, Response } from "express"
 import { BaseEntity } from "typeorm"
 
 export const getPreferredLanguage = (req: Request) => req.acceptsLanguages()[0]
@@ -9,6 +9,9 @@ export class TranslationEntity extends BaseEntity {
 
 export class TranslateableEntity extends BaseEntity {
   translations: TranslationEntity[]
+
+  // Language of the output object
+  languageCode: string
 }
 
 export function translateEntity<T extends TranslateableEntity>(
@@ -35,7 +38,16 @@ export function translateEntity<T extends TranslateableEntity>(
           key !== "languageCode" && key in entity && translation[key] && translation[key].length > 0
       )
       .forEach((key) => (entity[key] = translation[key]))
+    entity.languageCode = translation.languageCode
   }
   delete entity.translations
   return entity
+}
+
+export function setContentLanguageHeader(res: Response, languages: string[]) {
+  // Create a comma-separated list of unique languages
+  const headerLanguages = [...new Set(languages.filter((l) => l))].join(", ")
+  if (headerLanguages.length > 0) {
+    res.setHeader("Content-Language", headerLanguages)
+  }
 }
