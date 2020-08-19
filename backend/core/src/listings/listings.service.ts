@@ -7,32 +7,16 @@ import jp from "jsonpath"
 
 import { ListingsListResponse } from "./listings.dto"
 import { Listing } from "../entity/listing.entity"
+import { translateEntity } from "../lib/translations"
 
 export enum ListingsResponseStatus {
   ok = "ok",
 }
 
-function translate(listing: Listing): Listing {
-  const [translation] = listing.translations
-  if (translation) {
-    Object.keys(translation)
-      .filter(
-        (key) =>
-          key !== "languageCode" &&
-          key in listing &&
-          translation[key] &&
-          translation[key].length > 0
-      )
-      .forEach((key) => (listing[key] = translation[key]))
-  }
-  delete listing.translations
-  return listing
-}
-
 function transformListing(listing: Listing): Listing {
   listing.unitsSummarized = transformUnits(listing.units, amiCharts)
   listing.urlSlug = listingUrlSlug(listing)
-  listing = translate(listing)
+  listing = translateEntity(listing)
   return listing
 }
 
