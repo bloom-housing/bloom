@@ -9,6 +9,7 @@ import {
   LinkButton,
   MetaTags,
   Modal,
+  RequireLogin,
   t,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
@@ -63,35 +64,37 @@ export default () => {
   ]
   return (
     <>
-      <Modal
-        open={deletingApplication}
-        title={t("application.deleteThisApplication")}
-        actions={modalActions}
-        fullScreen
-      ></Modal>
-      <Layout>
-        <Head>
-          <title>{t("nav.myApplications")}</title>
-        </Head>
-        <MetaTags title={t("nav.myApplications")} description="" />
-        <div className="p-16" style={{ background: "#f6f6f6" }}>
-          <DashBlocks>
-            <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
-              <Fragment>
-                {applications.map((application, i) => (
-                  <AppStatusItem
-                    key={application.id}
-                    status="inProgress"
-                    application={application}
-                    setDeletingApplication={setDeletingApplication}
-                  ></AppStatusItem>
-                ))}
-                {applications.length == 0 && noApplicationsSection}
-              </Fragment>
-            </DashBlock>
-          </DashBlocks>
-        </div>
-      </Layout>
+      <RequireLogin signInPath={`/sign-in?message=${encodeURIComponent(t("t.loginIsRequired"))}`}>
+        <Modal
+          open={deletingApplication}
+          title={t("application.deleteThisApplication")}
+          actions={modalActions}
+          fullScreen
+        ></Modal>
+        <Layout>
+          <Head>
+            <title>{t("nav.myApplications")}</title>
+          </Head>
+          <MetaTags title={t("nav.myApplications")} description="" />
+          <div className="p-16" style={{ background: "#f6f6f6" }}>
+            <DashBlocks>
+              <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
+                <Fragment>
+                  {applications.map((application, i) => (
+                    <AppStatusItem
+                      key={application.id}
+                      status="inProgress"
+                      application={application}
+                      setDeletingApplication={setDeletingApplication}
+                    ></AppStatusItem>
+                  ))}
+                  {applications.length == 0 && noApplicationsSection}
+                </Fragment>
+              </DashBlock>
+            </DashBlocks>
+          </div>
+        </Layout>
+      </RequireLogin>
     </>
   )
 }

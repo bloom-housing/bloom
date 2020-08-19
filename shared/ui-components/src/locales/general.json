@@ -690,6 +690,7 @@
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
+    "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "name": "Name",

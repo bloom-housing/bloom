@@ -1,5 +1,4 @@
 import React from "react"
-import { withA11y } from "@storybook/addon-a11y"
 import { AppStatusItem } from "./AppStatusItem"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import moment from "moment"
@@ -8,7 +7,6 @@ const listing = Object.assign({}, Archer) as any
 
 export default {
   title: "PageComponents/DashBlocks",
-  decorators: [withA11y, (storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 const application = {} as Application
 listing.applicationDueDate = moment().add(10, "days").format()
@@ -16,7 +14,13 @@ application.listing = listing
 application.updatedAt = moment().toDate()
 
 export const AppStatusItemPending = () => (
-  <AppStatusItem status="inProgress" application={application}></AppStatusItem>
+  <AppStatusItem
+    status="inProgress"
+    application={application}
+    setDeletingApplication={() => {
+      //
+    }}
+  ></AppStatusItem>
 )
 
 export const AppStatusItemSubmitted = () => (
@@ -24,6 +28,9 @@ export const AppStatusItemSubmitted = () => (
     status="submitted"
     application={application}
     lotteryNumber="#98AU18"
+    setDeletingApplication={() => {
+      //
+    }}
   ></AppStatusItem>
 )
 
@@ -32,5 +39,11 @@ const listing2 = Object.assign({}, Archer) as any
 application2.listing = listing2
 
 export const AppStatusItemPastDue = () => (
-  <AppStatusItem status="inProgress" application={application2}></AppStatusItem>
+  <AppStatusItem
+    status="inProgress"
+    application={application2}
+    setDeletingApplication={() => {
+      //
+    }}
+  ></AppStatusItem>
 )
