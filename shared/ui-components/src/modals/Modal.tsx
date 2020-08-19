@@ -1,7 +1,11 @@
-import React, { useEffect, FunctionComponent } from "react"
+import React, { useEffect, FunctionComponent, createRef } from "react"
 import Icon from "../atoms/Icon"
 import "./Modal.scss"
 import useKeyPress from "../helpers/useKeyPress"
+import { useOutsideClick } from "../helpers/useOutsideClick"
+import { createPortal } from "react-dom"
+import FocusLock from "react-focus-lock"
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock"
 
 type ModalAction = {
   label: string
@@ -30,7 +34,28 @@ export const Modal: FunctionComponent<ModalProps> = ({
   children,
   ariaDescription,
 }) => {
+  // append modal to the root of app
+  const modalRoot = typeof document !== "undefined" ? document.querySelector("#__next") : null
+  const el = typeof document !== "undefined" ? document.createElement("div") : null
+  const siteContainer =
+    typeof document !== "undefined" ? document.querySelector(".site-container") : null
+
   const isEscClicked = useKeyPress("Escape")
+
+  const modalContentRef = createRef<HTMLDivElement>()
+
+  useEffect(() => {
+    if (!modalRoot || !el || !siteContainer || !open) return
+    modalRoot.appendChild(el)
+    siteContainer.setAttribute("aria-hidden", "true")
+    disableBodyScroll(el)
+
+    return () => {
+      siteContainer.removeAttribute("aria-hidden")
+      enableBodyScroll(el)
+      modalRoot.removeChild(el)
+    }
+  }, [el, modalRoot, siteContainer, open])
 
   useEffect(() => {
     if (isEscClicked && onClose) {
@@ -38,51 +63,66 @@ export const Modal: FunctionComponent<ModalProps> = ({
     }
   }, [isEscClicked, onClose])
 
+  function handleClose() {
+    if (onClose) {
+      onClose()
+    }
+  }
+
+  // close modal on click outside modal content
+  useOutsideClick({
+    ref: modalContentRef,
+    callback: handleClose,
+  })
+
   if (!open) {
     return null
   }
 
   return (
-    <div
-      className={["modal__wrapper", className, fullScreen && "full-screen"]
-        .filter((name) => Boolean(name))
-        .join(" ")}
-    >
-      {fullScreen && <div className="modal__backdrop" />}
-      <div
-        className="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={title}
-        aria-describedby={ariaDescription}
-      >
-        <header className="modal__inner">
-          <h1 className="modal__title">{title}</h1>
-        </header>
+    el &&
+    open &&
+    createPortal(
+      <FocusLock>
+        <div
+          className={["modal__wrapper", className, fullScreen && "modal__wrapper--backdrop"]
+            .filter((name) => Boolean(name))
+            .join(" ")}
+          role="dialog"
+          aria-labelledby={title}
+          aria-describedby={ariaDescription}
+        >
+          <div className="modal" ref={modalContentRef}>
+            <header className="modal__inner">
+              <h1 className="modal__title">{title}</h1>
+            </header>
 
-        <section className="modal__inner">
-          {typeof children === "string" ? <p className="c-steel">{children}</p> : children}
-        </section>
+            <section className="modal__inner">
+              {typeof children === "string" ? <p className="c-steel">{children}</p> : children}
+            </section>
 
-        <footer className="modal__footer bg-primary-lighter">
-          <div className="modal__button-group">
-            {actions.map(({ label, onClick, type }) => (
-              <div className="modal__button_item" key={label}>
-                <button className={`button ${type}`} onClick={onClick}>
-                  {label}
-                </button>
+            <footer className="modal__footer bg-primary-lighter">
+              <div className="modal__button-group">
+                {actions.map(({ label, onClick, type }) => (
+                  <div className="modal__button_item" key={label}>
+                    <button className={`button ${type}`} onClick={onClick}>
+                      {label}
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </footer>
+            </footer>
 
-        {onClose && (
-          <a className="modal__close" aria-label="Close" onClick={onClose}>
-            <Icon size="medium" symbol="close" />
-          </a>
-        )}
-      </div>
-    </div>
+            {onClose && (
+              <button className="modal__close" aria-label="Close" onClick={onClose} tabIndex={1}>
+                <Icon size="medium" symbol="close" />
+              </button>
+            )}
+          </div>
+        </div>
+      </FocusLock>,
+      el
+    )
   )
 }
 
