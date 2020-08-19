@@ -1,14 +1,10 @@
 import { useState, useEffect, useCallback } from "react"
 
-type Handler = {
-  key: string
-}
-
 function useKeyPress(targetKey: string) {
-  const [keyPressed, setKeyPressed] = useState(false)
+  const [keyPressed, setKeyPressed] = useState<boolean>(false)
 
   const downHandler = useCallback(
-    ({ key }: Handler) => {
+    ({ key }: KeyboardEvent) => {
       if (key === targetKey) {
         setKeyPressed(true)
       }
@@ -17,7 +13,7 @@ function useKeyPress(targetKey: string) {
   )
 
   const upHandler = useCallback(
-    ({ key }: Handler) => {
+    ({ key }: KeyboardEvent) => {
       if (key === targetKey) {
         setKeyPressed(false)
       }
