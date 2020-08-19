@@ -6,44 +6,79 @@ import { Unit } from "../../entity/unit.entity"
 import { Attachment } from "../../entity/attachment.entity"
 import { Preference } from "../../entity/preference.entity"
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ImportedJsonData = any
+
+const subTypes = {
+  units: Unit,
+  attachments: Attachment,
+  preferences: Preference,
+}
+type RelationTypes = keyof typeof subTypes
+type RelationEntities = {
+  [k in RelationTypes]?: ImportedJsonData
+}
+// Extract the values of subTypes to build up a type map mapping the keys of subTypes to the instance types of the
+// constructors. This basically just is translating subTypes from "value space" into "type space".
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ConstructorMap = Record<string, new (...args: any) => any>
+type ValueForKey<K extends keyof T, T extends ConstructorMap> = InstanceType<T[K]>
+type SubTypes = {
+  [k in RelationTypes]: ValueForKey<k, typeof subTypes>
+}
+
+export function makeListing(rawListing: ImportedJsonData): [Listing, RelationEntities] {
+  const l = new Listing()
+  const relationEntities: RelationEntities = {}
+  for (const key in rawListing) {
+    if (key !== "id") {
+      if (!Object.keys(subTypes).includes(key)) {
+        l[key] = rawListing[key]
+      } else {
+        relationEntities[key] = rawListing[key]
+      }
+    }
+  }
+  return [l, relationEntities]
+}
+
+export function makeRelation<T extends RelationTypes>(
+  type: T,
+  listing: Listing,
+  definition: ImportedJsonData
+): SubTypes[T] | SubTypes[T][] {
+  if (definition instanceof Array) {
+    return definition.map((d) => makeRelation(type, listing, d) as SubTypes[T])
+  } else {
+    const entity = new subTypes[type]() as SubTypes[T]
+    for (const key in definition) {
+      if (key !== "id") {
+        entity[key] = definition[key]
+      }
+    }
+    entity.listing = listing
+    return entity
+  }
+}
+
 @Injectable()
 export class ListingsSeederService {
   async seed() {
-    const skipped = ["id", "units", "attachments", "preferences"]
-    const types = { units: Unit, attachments: Attachment, preferences: Preference }
-
     const connection = getConnection()
-    const listings = listingsSeeds as any[]
+    const listings = listingsSeeds as ImportedJsonData[]
 
-    for await (const listing of listings) {
-      const l = new Listing()
-      const entities = {}
-      for (const key in listing) {
-        if (!skipped.includes(key)) {
-          l[key] = listing[key]
-        } else if (key !== "id") {
-          entities[key] = listing[key]
-        }
-      }
-      await connection.manager.save(l)
+    for await (const listingDefinition of listings) {
+      const [listing, entities] = makeListing(listingDefinition)
+      await connection.manager.save(listing)
 
       for (const key in entities) {
-        for (let value of entities[key]) {
-          if (value) {
-            if (value instanceof Array) {
-              value = (value as any).map((obj) => {
-                delete obj["id"]
-                obj["listing"] = l.id
-                return obj
-              })
-            } else {
-              delete value["id"]
-              value["listing"] = l.id
-            }
-
-            await connection.createQueryBuilder().insert().into(types[key]).values(value).execute()
-          }
-        }
+        const relations = makeRelation(key as RelationTypes, listing, entities[key])
+        await connection
+          .createQueryBuilder()
+          .insert()
+          .into(subTypes[key])
+          .values(relations)
+          .execute()
       }
     }
   }
