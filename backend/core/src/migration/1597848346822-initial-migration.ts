@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class initialMigration1595856133952 implements MigrationInterface {
-    name = 'initialMigration1595856133952'
+export class initialMigration1597848346822 implements MigrationInterface {
+    name = 'initialMigration1597848346822'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "user_accounts" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "password_hash" character varying NOT NULL, "email" character varying NOT NULL, "first_name" character varying NOT NULL, "middle_name" character varying, "last_name" character varying NOT NULL, "dob" TIMESTAMP NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_125e915cf23ad1cfb43815ce59b" PRIMARY KEY ("id"))`);
@@ -9,6 +9,7 @@ export class initialMigration1595856133952 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "preferences" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "ordinal" text, "title" text, "subtitle" text, "description" text, "links" jsonb, "listing_id" uuid, CONSTRAINT "PK_17f8855e4145192bbabd91a51be" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "attachments_type_enum" AS ENUM('1', '2')`);
         await queryRunner.query(`CREATE TABLE "attachments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "label" text, "file_url" text, "type" "attachments_type_enum", "listing_id" uuid, CONSTRAINT "PK_5e1f050bcff31e3084a1d662412" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "listings_translations" ("listing_id" uuid NOT NULL, "language_code" citext NOT NULL, "accessibility" text, "amenities" text, "building_selection_criteria" text, "costs_not_included" text, "credit_history" text, "criminal_background" text, "leasing_agent_office_hours" text, "leasing_agent_title" text, "name" text, "neighborhood" text, "pet_policy" text, "program_rules" text, "rental_history" text, "required_documents" text, "smoking_policy" text, "unit_amenities" text, "what_to_expect" jsonb, CONSTRAINT "PK_ce950a8ec07770bb032b7c2f1a1" PRIMARY KEY ("listing_id", "language_code"))`);
         await queryRunner.query(`CREATE TYPE "listings_status_enum" AS ENUM('active', 'pending')`);
         await queryRunner.query(`CREATE TABLE "listings" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "accepting_applications_at_leasing_agent" boolean, "accepting_applications_by_po_box" boolean, "accepting_online_applications" boolean, "accepts_postmarked_applications" boolean, "accessibility" text, "amenities" text, "application_due_date" text, "application_open_date" text, "application_fee" text, "application_organization" text, "application_address" jsonb, "blank_paper_application_can_be_picked_up" boolean, "building_address" jsonb, "building_total_units" numeric, "building_selection_criteria" text, "costs_not_included" text, "credit_history" text, "criminal_background" text, "deposit_min" text, "deposit_max" text, "developer" text, "disable_units_accordion" boolean, "household_size_max" numeric, "household_size_min" numeric, "image_url" text, "leasing_agent_address" jsonb, "leasing_agent_email" text, "leasing_agent_name" text, "leasing_agent_office_hours" text, "leasing_agent_phone" text, "leasing_agent_title" text, "name" text, "neighborhood" text, "pet_policy" text, "postmarked_applications_received_by_date" text, "program_rules" text, "rental_history" text, "required_documents" text, "smoking_policy" text, "units_available" numeric, "unit_amenities" text, "waitlist_current_size" numeric, "waitlist_max_size" numeric, "what_to_expect" jsonb, "year_built" numeric, "status" "listings_status_enum" NOT NULL DEFAULT 'pending', CONSTRAINT "PK_520ecac6c99ec90bcf5a603cdcb" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "applications" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "application" jsonb, "user_id" uuid, "listing_id" uuid, CONSTRAINT "PK_938c0a27255637bde919591888f" PRIMARY KEY ("id"))`);
@@ -16,6 +17,7 @@ export class initialMigration1595856133952 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "units" ADD CONSTRAINT "FK_9aebcde52d6e054e5ac5d26228c" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "preferences" ADD CONSTRAINT "FK_91017f2182ec7b0dcd4abe68b5a" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "attachments" ADD CONSTRAINT "FK_4f28a952892a175dbb21d05d96d" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "listings_translations" ADD CONSTRAINT "FK_c9184df30660bba38bd77c0bf98" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "applications" ADD CONSTRAINT "FK_9e7594d5b474d9cbebba15c1ae7" FOREIGN KEY ("user_id") REFERENCES "user_accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "applications" ADD CONSTRAINT "FK_cc9d65c58d8deb0ef5353e9037d" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
     }
@@ -23,6 +25,7 @@ export class initialMigration1595856133952 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "applications" DROP CONSTRAINT "FK_cc9d65c58d8deb0ef5353e9037d"`);
         await queryRunner.query(`ALTER TABLE "applications" DROP CONSTRAINT "FK_9e7594d5b474d9cbebba15c1ae7"`);
+        await queryRunner.query(`ALTER TABLE "listings_translations" DROP CONSTRAINT "FK_c9184df30660bba38bd77c0bf98"`);
         await queryRunner.query(`ALTER TABLE "attachments" DROP CONSTRAINT "FK_4f28a952892a175dbb21d05d96d"`);
         await queryRunner.query(`ALTER TABLE "preferences" DROP CONSTRAINT "FK_91017f2182ec7b0dcd4abe68b5a"`);
         await queryRunner.query(`ALTER TABLE "units" DROP CONSTRAINT "FK_9aebcde52d6e054e5ac5d26228c"`);
@@ -30,6 +33,7 @@ export class initialMigration1595856133952 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "applications"`);
         await queryRunner.query(`DROP TABLE "listings"`);
         await queryRunner.query(`DROP TYPE "listings_status_enum"`);
+        await queryRunner.query(`DROP TABLE "listings_translations"`);
         await queryRunner.query(`DROP TABLE "attachments"`);
         await queryRunner.query(`DROP TYPE "attachments_type_enum"`);
         await queryRunner.query(`DROP TABLE "preferences"`);

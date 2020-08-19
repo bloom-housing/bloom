@@ -4,6 +4,7 @@ import { Preference } from "./preference.entity"
 import { Attachment } from "./attachment.entity"
 import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 import { Application } from "./application.entity"
+import { ListingTranslation } from "./listing-translation.entity"
 
 export enum ListingStatus {
   active = "active",
@@ -12,11 +13,11 @@ export enum ListingStatus {
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
-  @OneToMany((type) => Preference, (preference) => preference.listing)
+  @OneToMany(() => Preference, (preference) => preference.listing)
   preferences: Preference[]
-  @OneToMany((type) => Unit, (unit) => unit.listing)
+  @OneToMany(() => Unit, (unit) => unit.listing)
   units: Unit[]
-  @OneToMany((type) => Attachment, (attachment) => attachment.listing)
+  @OneToMany(() => Attachment, (attachment) => attachment.listing)
   attachments: Attachment[]
   @PrimaryGeneratedColumn("uuid")
   id: string
@@ -115,7 +116,7 @@ class Listing extends BaseEntity {
 
   unitsSummarized?: UnitsSummarized
   urlSlug?: string
-  @OneToMany((type) => Application, (application) => application.listing)
+  @OneToMany(() => Application, (application) => application.listing)
   applications: Application[]
   @Column({
     type: "enum",
@@ -123,6 +124,9 @@ class Listing extends BaseEntity {
     default: ListingStatus.pending,
   })
   status: ListingStatus
+
+  @OneToMany(() => ListingTranslation, (translation) => translation.listing)
+  translations: ListingTranslation[]
 }
 
 export { Listing as default, Listing }
