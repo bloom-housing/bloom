@@ -23,6 +23,7 @@ export const BasicModal = () => (
   <Modal
     open={true}
     title="Modal Title"
+    ariaDescription="Modal description"
     onClose={noop}
     actions={[
       { label: "Cancel", onClick: noop, type: "cancel" },
@@ -37,6 +38,7 @@ export const FullScreenModal = () => (
   <Modal
     open={true}
     title="Modal Title"
+    ariaDescription="Modal description"
     onClose={noop}
     actions={[
       { label: "Cancel", onClick: noop, type: "cancel" },
@@ -52,6 +54,7 @@ export const SuccessFailureModal = () => (
   <Modal
     open={true}
     title="Modal Title"
+    ariaDescription="Modal description"
     onClose={noop}
     actions={[
       { label: "Cancel", onClick: noop, type: "failure" },
