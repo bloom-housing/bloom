@@ -7,6 +7,20 @@ export class TranslationEntity extends BaseEntity {
   languageCode: string
 }
 
+/**
+ * This function adds "generic" (non locale specific) versions of languages after the locale-specific version in the
+ * language preference list if applicable.
+ *
+ * ["es", "en-US", "fr"] => ["es", "en-US", "en", "fr"]
+ * @param languages
+ */
+export function appendGenericVersionsOfLanguages(languages) {
+  return languages.map((l) => (l.indexOf("-") === -1 ? l : [l, l.split("-")[0]])).flat()
+}
+
+export const getPreferredLanguages = (req: Request) =>
+  appendGenericVersionsOfLanguages(req.acceptsLanguages())
+
 export class TranslateableEntity extends BaseEntity {
   translations: TranslationEntity[]
 

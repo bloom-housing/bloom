@@ -130,7 +130,7 @@ class Listing extends BaseEntity {
   translations: ListingTranslation[]
 
   @Exclude()
-  languageCode = "en"
+  languageCode = "en-US"
 }
 
 export { Listing as default, Listing }
