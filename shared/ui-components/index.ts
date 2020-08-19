@@ -85,3 +85,6 @@ export * from "./src/alerts"
 
 /* Modals */
 export { Modal } from "./src/modals/Modal"
+
+/* Navigations */
+export { LanguageNav } from "./src/navigations/LanguageNav/LanguageNav"

@@ -26,4 +26,11 @@ const t = (phrase: string, options?: any): string => {
   return "{{ Missing Translation Phrases }}"
 }
 
-export { t as default, t }
+const changeLang = (lang: string) => {
+  if (translatorConfig.polyglot) {
+    console.log("change translations")
+    translatorConfig.polyglot.locale(lang)
+  }
+}
+
+export { t as default, t, changeLang }

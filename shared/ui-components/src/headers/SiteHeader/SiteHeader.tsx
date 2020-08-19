@@ -1,5 +1,6 @@
 import * as React from "react"
 import { LocalizedLink } from "../../atoms/LocalizedLink"
+import { LanguageNav } from "@bloom-housing/ui-components"
 
 export interface SiteHeaderProps {
   logoSrc: string
@@ -74,9 +75,22 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     )
   }
 
+  tempLangItems = [
+    {
+      name: "en",
+      label: "English",
+    },
+    {
+      name: "es",
+      label: "Espanol",
+    },
+  ]
+
   render() {
     return (
       <>
+        <LanguageNav items={this.tempLangItems} />
+
         {this.noticeBar()}
         <div className="navbar__wrapper">
           <nav className="navbar" role="navigation" aria-label="main navigation">
