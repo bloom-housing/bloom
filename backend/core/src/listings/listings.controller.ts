@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Request, Res } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { Request as ExpressRequest, Response } from "express"
-import { getPreferredLanguages, setContentLanguageHeader } from "../lib/translations"
+import { setContentLanguageHeader } from "../lib/translations"
 
 @Controller()
 export class ListingsController {
@@ -13,7 +13,7 @@ export class ListingsController {
     @Res() res: Response,
     @Query("jsonpath") jsonpath?: string
   ) {
-    const body = await this.listingsService.list(jsonpath, getPreferredLanguages(req))
+    const body = await this.listingsService.list(jsonpath, req.acceptsLanguages())
     setContentLanguageHeader(
       res,
       body.listings.map(({ languageCode }) => languageCode)

@@ -8,7 +8,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 
 import { ListingsListResponse } from "./listings.dto"
 import { Listing } from "../entity/listing.entity"
-import { translateEntity } from "../lib/translations"
+import { translateEntity, appendGenericVersionsOfLanguages } from "../lib/translations"
 
 export enum ListingsResponseStatus {
   ok = "ok",
@@ -34,7 +34,7 @@ export class ListingsService {
         "listing.translations",
         "translations",
         "translations.languageCode = ANY(:codes)",
-        { codes: languages }
+        { codes: appendGenericVersionsOfLanguages(languages) }
       )
       .getMany()
 

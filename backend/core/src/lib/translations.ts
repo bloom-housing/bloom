@@ -1,7 +1,5 @@
-import { Request, Response } from "express"
+import { Response } from "express"
 import { BaseEntity } from "typeorm"
-
-export const getPreferredLanguage = (req: Request) => req.acceptsLanguages()[0]
 
 export class TranslationEntity extends BaseEntity {
   languageCode: string
@@ -18,9 +16,6 @@ export function appendGenericVersionsOfLanguages(languages) {
   return languages.map((l) => (l.indexOf("-") === -1 ? l : [l, l.split("-")[0]])).flat()
 }
 
-export const getPreferredLanguages = (req: Request) =>
-  appendGenericVersionsOfLanguages(req.acceptsLanguages())
-
 export class TranslateableEntity extends BaseEntity {
   translations: TranslationEntity[]
 
@@ -36,7 +31,7 @@ export function translateEntity<T extends TranslateableEntity>(
 
   // languagePreferences is an array of preferred language codes in order of preference. Find the most
   // preferred language that matches available translations. If nothing is found, we'll default to no translations.
-  const languageToTranslate = languagePreferences.find((l) => {
+  const languageToTranslate = appendGenericVersionsOfLanguages(languagePreferences).find((l) => {
     const language = l.toLowerCase()
     return language === "en" || availableLanguages.includes(l)
   })
