@@ -3,7 +3,8 @@
 NODE_VERSION = "12.18.3"
 YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"
-LISTING_SERVICE_URL = "https://listings.bloom.exygy.dev/"
+# reminder: URL should *not* have a trailing /
+LISTING_SERVICE_URL = "https://listings.bloom.exygy.dev"
 
 [context.production.environment]
 GTM_KEY = "GTM-W8LH9F9"
