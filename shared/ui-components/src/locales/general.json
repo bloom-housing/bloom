@@ -355,6 +355,15 @@
         "print": "View submitted application and print a copy."
       }
     },
+    "confirmation": {
+      "viewOriginalListing": "View the original listing",
+      "informationSubmittedTitle": "Here's the information you submitted.",
+      "submitted": "Submitted: ",
+      "lotteryNumber": "Your lottery number",
+      "preferences": "Preferences",
+      "generalLottery": "Based on information you have entered, your household has not claimed any housing lottery preferences. You will be in the general lottery.",
+      "printCopy": "Print a copy for your records"
+    },
     "financial": {
       "income": {
         "title": "Let's move to income.",
