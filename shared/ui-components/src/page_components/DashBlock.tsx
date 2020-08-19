@@ -12,11 +12,7 @@ const DashBlock = (props: DashBlockProps) => {
   const { href, title, subtitle, icon, children } = props
   let content, wrapper
   if (children) {
-    content = (
-      <div className="dash-item__content" style={{ background: "#f6f6f6" }}>
-        {children}
-      </div>
-    )
+    content = <div className="dash-item__content">{children}</div>
   }
   const header = (
     <>

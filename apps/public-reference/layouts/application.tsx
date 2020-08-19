@@ -15,7 +15,7 @@ import SVG from "react-inlinesvg"
 import { useContext } from "react"
 
 const Layout = (props) => {
-  const { profile } = useContext(UserContext)
+  const { profile, signOut } = useContext(UserContext)
   return (
     <div className="site-container">
       <div className="site-content">
@@ -30,7 +30,7 @@ const Layout = (props) => {
           <LocalizedLink href="/listings" className="navbar-item">
             {t("nav.listings")}
           </LocalizedLink>
-          <UserNav signedIn={!!profile}>
+          <UserNav signedIn={!!profile} signOut={signOut}>
             <LocalizedLink href="/account/dashboard" className="navbar-item">
               {t("nav.myDashboard")}
             </LocalizedLink>

@@ -1,16 +1,17 @@
 import * as React from "react"
 import "./UserNav.scss"
-import LocalizedLink from "../atoms/LocalizedLink"
-import t from "../helpers/translator"
+import { LocalizedLink } from "../atoms/LocalizedLink"
+import { t } from "../helpers/translator"
 import { NavbarDropdown } from "../headers/SiteHeader/SiteHeader"
 
 export interface UserNavProps {
   signedIn: boolean
   children: JSX.Element | JSX.Element[]
+  signOut: () => void
 }
 
 const UserNav = (props: UserNavProps) => {
-  const { signedIn, children } = props
+  const { signedIn, children, signOut } = props
 
   if (signedIn) {
     return (
@@ -18,7 +19,7 @@ const UserNav = (props: UserNavProps) => {
         <NavbarDropdown menuTitle={t("nav.myAccount")}>
           {children}
           <hr className="navbar-divider" />
-          <a href="#" className="navbar-item">
+          <a href="#" className="navbar-item" onClick={signOut}>
             {t("nav.signOut")}
           </a>
         </NavbarDropdown>
