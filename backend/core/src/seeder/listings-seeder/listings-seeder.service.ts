@@ -14,7 +14,7 @@ const subTypes = {
   attachments: Attachment,
   preferences: Preference,
 }
-type RelationTypes = keyof typeof subTypes
+export type RelationTypes = keyof typeof subTypes
 type RelationEntities = {
   [k in RelationTypes]?: ImportedJsonData
 }

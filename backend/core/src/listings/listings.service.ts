@@ -1,9 +1,10 @@
-import { getConnection } from "typeorm"
+import { Repository } from "typeorm"
 import { Injectable } from "@nestjs/common"
 import { amiCharts } from "../lib/ami_charts"
 import { transformUnits } from "../lib/unit_transformations"
 import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
+import { InjectRepository } from "@nestjs/typeorm"
 
 import { ListingsListResponse } from "./listings.dto"
 import { Listing } from "../entity/listing.entity"
@@ -22,9 +23,10 @@ function transformListing(listing: Listing, languages?: string[]): Listing {
 
 @Injectable()
 export class ListingsService {
+  constructor(@InjectRepository(Listing) private readonly repo: Repository<Listing>) {}
   public async list(jsonpath?: string, languages?: string[]): Promise<ListingsListResponse> {
-    let listings = await getConnection()
-      .createQueryBuilder(Listing, "listing")
+    let listings = await this.repo
+      .createQueryBuilder("listing")
       .leftJoinAndSelect("listing.units", "units")
       .leftJoinAndSelect("listing.attachments", "attachments")
       .leftJoinAndSelect("listing.preferences", "preferences")
