@@ -13,16 +13,16 @@ export enum ListingsResponseStatus {
   ok = "ok",
 }
 
-function transformListing(listing: Listing): Listing {
+function transformListing(listing: Listing, languages?: string[]): Listing {
   listing.unitsSummarized = transformUnits(listing.units, amiCharts)
   listing.urlSlug = listingUrlSlug(listing)
-  listing = translateEntity(listing)
+  listing = translateEntity(listing, languages)
   return listing
 }
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string, language?: string): Promise<ListingsListResponse> {
+  public async list(jsonpath?: string, languages?: string[]): Promise<ListingsListResponse> {
     let listings = await getConnection()
       .createQueryBuilder(Listing, "listing")
       .leftJoinAndSelect("listing.units", "units")
@@ -31,8 +31,8 @@ export class ListingsService {
       .leftJoinAndSelect(
         "listing.translations",
         "translations",
-        "translations.languageCode = :code",
-        { code: language }
+        "translations.languageCode = ANY(:codes)",
+        { codes: languages }
       )
       .getMany()
 
@@ -42,7 +42,7 @@ export class ListingsService {
 
     const data: ListingsListResponse = {
       status: ListingsResponseStatus.ok,
-      listings: listings.map(transformListing),
+      listings: listings.map((l) => transformListing(l, languages)),
       amiCharts: amiCharts,
     }
 
