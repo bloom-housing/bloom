@@ -1,3 +1,4 @@
+import { getConnection } from "typeorm"
 import { Injectable } from "@nestjs/common"
 import { amiCharts } from "../lib/ami_charts"
 import { transformUnits } from "../lib/unit_transformations"
@@ -11,23 +12,53 @@ export enum ListingsResponseStatus {
   ok = "ok",
 }
 
+function translate(listing: Listing): Listing {
+  const [translation] = listing.translations
+  if (translation) {
+    Object.keys(translation)
+      .filter(
+        (key) =>
+          key !== "languageCode" &&
+          key in listing &&
+          translation[key] &&
+          translation[key].length > 0
+      )
+      .forEach((key) => (listing[key] = translation[key]))
+  }
+  delete listing.translations
+  return listing
+}
+
+function transformListing(listing: Listing): Listing {
+  listing.unitsSummarized = transformUnits(listing.units, amiCharts)
+  listing.urlSlug = listingUrlSlug(listing)
+  listing = translate(listing)
+  return listing
+}
+
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<ListingsListResponse> {
-    let listings = await Listing.find({ relations: ["units", "attachments", "preferences"] })
+  public async list(jsonpath?: string, language?: string): Promise<ListingsListResponse> {
+    let listings = await getConnection()
+      .createQueryBuilder(Listing, "listing")
+      .leftJoinAndSelect("listing.units", "units")
+      .leftJoinAndSelect("listing.attachments", "attachments")
+      .leftJoinAndSelect("listing.preferences", "preferences")
+      .leftJoinAndSelect(
+        "listing.translations",
+        "translations",
+        "translations.languageCode = :code",
+        { code: language }
+      )
+      .getMany()
 
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)
     }
 
-    listings.forEach((listing) => {
-      listing.unitsSummarized = transformUnits(listing.units, amiCharts)
-      listing.urlSlug = listingUrlSlug(listing)
-    })
-
     const data: ListingsListResponse = {
       status: ListingsResponseStatus.ok,
-      listings: listings,
+      listings: listings.map(transformListing),
       amiCharts: amiCharts,
     }
 
