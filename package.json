@@ -10,6 +10,9 @@
       "apps/partners-reference",
       "services/listings",
       "backend/core"
+    ],
+    "nohoist": [
+      "**/@anchan828/nest-sendgrid"
     ]
   },
   "repository": "https://github.com/Exygy/bloom.git",

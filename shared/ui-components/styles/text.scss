@@ -123,6 +123,8 @@ h1.title {
 .info-item__value {
   @apply font-alt-sans;
   @apply tracking-wide;
+  @apply font-semibold;
+  @apply uppercase;
 }
 
 .info-item__helper {
