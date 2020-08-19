@@ -10,12 +10,16 @@ import {
 } from "../seeder/listings-seeder/listings-seeder.service"
 import listingsSeeds from "../../seeds.json"
 import { ListingTranslation } from "../entity/listing-translation.entity"
+import { PreferenceTranslation } from "../entity/preference-translation.entity"
 
 const loadListings = () =>
   listingsSeeds.map((listingDefinition) => {
     const [listing, relatedEntities] = makeListing(listingDefinition)
     for (const key in relatedEntities) {
       listing[key] = makeRelation(key as RelationTypes, listing, relatedEntities[key])
+      if (key === "preferences") {
+        listing[key].forEach((p) => (p.translations = []))
+      }
     }
     return listing
   })
@@ -119,6 +123,30 @@ describe("ListingService", () => {
             listings: [listing],
           } = await subject()
           expect(listing.languageCode).toEqual(translation.languageCode)
+        })
+      })
+
+      describe("with a translation for preferences", () => {
+        let preferenceTranslation: PreferenceTranslation
+        let listingName
+        beforeEach(() => {
+          preferenceTranslation = new PreferenceTranslation()
+          preferenceTranslation.title = "Translated"
+          preferenceTranslation.languageCode = languages[0]
+          const listing = mockListings.find((l) => l.preferences.length > 0)
+          listingName = listing.name
+          const pref = listing.preferences[0]
+          pref.translations = [preferenceTranslation]
+          preferenceTranslation.preference = pref
+        })
+
+        it("should translate the preference", async () => {
+          const { listings } = await subject()
+          const {
+            preferences: [preference],
+          } = listings.find(({ name }) => name === listingName)
+          expect(preference.title).toEqual(preferenceTranslation.title)
+          expect(preference.description).not.toEqual(preferenceTranslation.description)
         })
       })
     })

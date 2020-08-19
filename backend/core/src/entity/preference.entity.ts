@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, BaseEntity } from "typeorm"
 import { Listing } from "./listing.entity"
 import { PreferenceLink } from "@bloom-housing/core"
+import { PreferenceTranslation } from "./preference-translation.entity"
 
 @Entity({ name: "preferences" })
-class Preference {
+class Preference extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
   @Column({ type: "text", nullable: true })
@@ -21,6 +22,11 @@ class Preference {
     onUpdate: "CASCADE",
   })
   listing: Listing
+
+  @OneToMany(() => PreferenceTranslation, (translation) => translation.preference)
+  translations: PreferenceTranslation[]
+
+  languageCode: "us-EN"
 }
 
 export { Preference as default, Preference }

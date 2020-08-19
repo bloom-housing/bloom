@@ -7,9 +7,19 @@ import { Attachment } from "../entity/attachment.entity"
 import { Preference } from "../entity/preference.entity"
 import { Unit } from "../entity/unit.entity"
 import { ListingTranslation } from "../entity/listing-translation.entity"
+import { PreferenceTranslation } from "../entity/preference-translation.entity"
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Listing, Attachment, Preference, Unit, ListingTranslation])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Listing,
+      Attachment,
+      Preference,
+      Unit,
+      ListingTranslation,
+      PreferenceTranslation,
+    ]),
+  ],
   providers: [ListingsService],
   exports: [ListingsService],
   controllers: [ListingsController],

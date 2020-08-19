@@ -18,6 +18,9 @@ function transformListing(listing: Listing, languages?: string[]): Listing {
   listing.unitsSummarized = transformUnits(listing.units, amiCharts)
   listing.urlSlug = listingUrlSlug(listing)
   listing = translateEntity(listing, languages)
+  listing.preferences = listing.preferences.map((preference) =>
+    translateEntity(preference, languages)
+  )
   return listing
 }
 
@@ -25,6 +28,7 @@ function transformListing(listing: Listing, languages?: string[]): Listing {
 export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly repo: Repository<Listing>) {}
   public async list(jsonpath?: string, languages?: string[]): Promise<ListingsListResponse> {
+    const augmentedLanguages = appendGenericVersionsOfLanguages(languages || [])
     let listings = await this.repo
       .createQueryBuilder("listing")
       .leftJoinAndSelect("listing.units", "units")
@@ -34,7 +38,13 @@ export class ListingsService {
         "listing.translations",
         "translations",
         "translations.languageCode = ANY(:codes)",
-        { codes: appendGenericVersionsOfLanguages(languages) }
+        { codes: augmentedLanguages }
+      )
+      .leftJoinAndSelect(
+        "preferences.translations",
+        "preference_translations",
+        "preference_translations.languageCode = ANY(:codes)",
+        { codes: augmentedLanguages }
       )
       .getMany()
 

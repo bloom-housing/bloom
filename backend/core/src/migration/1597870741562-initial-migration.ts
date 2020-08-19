@@ -1,11 +1,12 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class initialMigration1597848346822 implements MigrationInterface {
-    name = 'initialMigration1597848346822'
+export class initialMigration1597870741562 implements MigrationInterface {
+    name = 'initialMigration1597870741562'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "user_accounts" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "password_hash" character varying NOT NULL, "email" character varying NOT NULL, "first_name" character varying NOT NULL, "middle_name" character varying, "last_name" character varying NOT NULL, "dob" TIMESTAMP NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_125e915cf23ad1cfb43815ce59b" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "units" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "ami_percentage" text, "annual_income_min" text, "monthly_income_min" numeric(8,2), "floor" numeric, "annual_income_max" text, "max_occupancy" numeric, "min_occupancy" numeric, "monthly_rent" numeric(8,2), "num_bathrooms" numeric, "num_bedrooms" numeric, "number" text, "priority_type" text, "reserved_type" text, "sq_feet" numeric(8,2), "status" text, "unit_type" text, "created_at" date, "updated_at" date, "ami_chart_id" numeric, "monthly_rent_as_percent_of_income" numeric(8,2), "listing_id" uuid, CONSTRAINT "PK_5a8f2f064919b587d93936cb223" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "preferences_translations" ("preference_id" uuid NOT NULL, "language_code" citext NOT NULL, "ordinal" text, "title" text, "subtitle" text, "description" text, "links" jsonb, CONSTRAINT "PK_8c4d6fcb3b1c177d4f09ceaba70" PRIMARY KEY ("preference_id", "language_code"))`);
         await queryRunner.query(`CREATE TABLE "preferences" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "ordinal" text, "title" text, "subtitle" text, "description" text, "links" jsonb, "listing_id" uuid, CONSTRAINT "PK_17f8855e4145192bbabd91a51be" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "attachments_type_enum" AS ENUM('1', '2')`);
         await queryRunner.query(`CREATE TABLE "attachments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "label" text, "file_url" text, "type" "attachments_type_enum", "listing_id" uuid, CONSTRAINT "PK_5e1f050bcff31e3084a1d662412" PRIMARY KEY ("id"))`);
@@ -15,6 +16,7 @@ export class initialMigration1597848346822 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "applications" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "application" jsonb, "user_id" uuid, "listing_id" uuid, CONSTRAINT "PK_938c0a27255637bde919591888f" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "revoked_tokens" ("token" character varying NOT NULL, "revoked_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_f38f625b4823c8903e819bfedd1" PRIMARY KEY ("token"))`);
         await queryRunner.query(`ALTER TABLE "units" ADD CONSTRAINT "FK_9aebcde52d6e054e5ac5d26228c" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "preferences_translations" ADD CONSTRAINT "FK_3d434fd561f38cafd565177508e" FOREIGN KEY ("preference_id") REFERENCES "preferences"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "preferences" ADD CONSTRAINT "FK_91017f2182ec7b0dcd4abe68b5a" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "attachments" ADD CONSTRAINT "FK_4f28a952892a175dbb21d05d96d" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "listings_translations" ADD CONSTRAINT "FK_c9184df30660bba38bd77c0bf98" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
@@ -28,6 +30,7 @@ export class initialMigration1597848346822 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "listings_translations" DROP CONSTRAINT "FK_c9184df30660bba38bd77c0bf98"`);
         await queryRunner.query(`ALTER TABLE "attachments" DROP CONSTRAINT "FK_4f28a952892a175dbb21d05d96d"`);
         await queryRunner.query(`ALTER TABLE "preferences" DROP CONSTRAINT "FK_91017f2182ec7b0dcd4abe68b5a"`);
+        await queryRunner.query(`ALTER TABLE "preferences_translations" DROP CONSTRAINT "FK_3d434fd561f38cafd565177508e"`);
         await queryRunner.query(`ALTER TABLE "units" DROP CONSTRAINT "FK_9aebcde52d6e054e5ac5d26228c"`);
         await queryRunner.query(`DROP TABLE "revoked_tokens"`);
         await queryRunner.query(`DROP TABLE "applications"`);
@@ -37,6 +40,7 @@ export class initialMigration1597848346822 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "attachments"`);
         await queryRunner.query(`DROP TYPE "attachments_type_enum"`);
         await queryRunner.query(`DROP TABLE "preferences"`);
+        await queryRunner.query(`DROP TABLE "preferences_translations"`);
         await queryRunner.query(`DROP TABLE "units"`);
         await queryRunner.query(`DROP TABLE "user_accounts"`);
     }
