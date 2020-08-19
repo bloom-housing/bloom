@@ -1,6 +1,6 @@
 import React from "react"
 import "./Modal.scss"
-import Modal from "./Modal"
+import { Modal } from "./Modal"
 import SVG from "react-inlinesvg"
 
 export default {
