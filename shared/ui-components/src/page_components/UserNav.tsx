@@ -1,12 +1,11 @@
 import * as React from "react"
-import "./UserNav.scss"
 import { LocalizedLink } from "../atoms/LocalizedLink"
 import { t } from "../helpers/translator"
 import { NavbarDropdown } from "../headers/SiteHeader/SiteHeader"
 
 export interface UserNavProps {
   signedIn: boolean
-  children: JSX.Element | JSX.Element[]
+  children: React.ReactNode
   signOut: () => void
 }
 

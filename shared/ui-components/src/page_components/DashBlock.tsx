@@ -5,8 +5,8 @@ interface DashBlockProps {
   href?: string
   title: string
   subtitle?: string
-  icon: JSX.Element
-  children?: JSX.Element | JSX.Element[]
+  icon: React.ReactNode
+  children?: React.ReactNode
 }
 const DashBlock = (props: DashBlockProps) => {
   const { href, title, subtitle, icon, children } = props
