@@ -2,7 +2,7 @@ import { useEffect, useCallback, RefObject } from "react"
 
 type OutsideClickProps = {
   ref: RefObject<Element>
-  callback: () => void
+  callback: () => unknown
 }
 
 export const useOutsideClick = ({ ref, callback }: OutsideClickProps) => {
