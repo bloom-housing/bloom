@@ -1,37 +1,17 @@
-import { useState, useEffect, useCallback } from "react"
+import { useEffect } from "react"
 
-function useKeyPress(targetKey: string) {
-  const [keyPressed, setKeyPressed] = useState<boolean>(false)
-
-  const downHandler = useCallback(
-    ({ key }: KeyboardEvent) => {
-      if (key === targetKey) {
-        setKeyPressed(true)
-      }
-    },
-    [targetKey]
-  )
-
-  const upHandler = useCallback(
-    ({ key }: KeyboardEvent) => {
-      if (key === targetKey) {
-        setKeyPressed(false)
-      }
-    },
-    [targetKey]
-  )
-
+function useKeyPress(targetKey: string, callback: () => unknown) {
   useEffect(() => {
-    window.addEventListener("keydown", downHandler)
-    window.addEventListener("keyup", upHandler)
+    function keyUp(e: KeyboardEvent) {
+      if (e.key === targetKey) callback()
+    }
+
+    window.addEventListener("keyup", keyUp)
 
     return () => {
-      window.removeEventListener("keydown", downHandler)
-      window.removeEventListener("keyup", upHandler)
+      window.removeEventListener("keyup", keyUp)
     }
-  }, [downHandler, upHandler])
-
-  return keyPressed
+  }, [targetKey, callback])
 }
 
 export default useKeyPress
