@@ -5,10 +5,6 @@ exports[`Storyshots Listing Sidebar/Application Status Due Soon And Vivid 1`] = 
   <ApplicationStatus
     listing={
       Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -21,11 +17,22 @@ exports[`Storyshots Listing Sidebar/Application Status Due Soon And Vivid 1`] = 
         },
         "applicationDueDate": "2030-04-11T16:00:00+00:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": 5,
+          },
+          Object {
+            "type": 6,
+          },
+          Object {
+            "type": 4,
+          },
+        ],
         "applicationOpenDate": "",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -1106,10 +1113,6 @@ exports[`Storyshots Listing Sidebar/Application Status Open Soon 1`] = `
   <ApplicationStatus
     listing={
       Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -1122,11 +1125,22 @@ exports[`Storyshots Listing Sidebar/Application Status Open Soon 1`] = `
         },
         "applicationDueDate": "2030-04-11T16:00:00+00:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": 5,
+          },
+          Object {
+            "type": 6,
+          },
+          Object {
+            "type": 4,
+          },
+        ],
         "applicationOpenDate": "2030-04-06T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -2206,10 +2220,6 @@ exports[`Storyshots Listing Sidebar/Application Status Opened Already 1`] = `
   <ApplicationStatus
     listing={
       Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -2222,11 +2232,22 @@ exports[`Storyshots Listing Sidebar/Application Status Opened Already 1`] = `
         },
         "applicationDueDate": "2030-04-11T16:00:00+00:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": 5,
+          },
+          Object {
+            "type": 6,
+          },
+          Object {
+            "type": 4,
+          },
+        ],
         "applicationOpenDate": "2030-03-27T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -3306,10 +3327,6 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With FCFS 1`] = `
   <ApplicationStatus
     listing={
       Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -3322,11 +3339,22 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With FCFS 1`] = `
         },
         "applicationDueDate": null,
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": 5,
+          },
+          Object {
+            "type": 6,
+          },
+          Object {
+            "type": 4,
+          },
+        ],
         "applicationOpenDate": "2030-03-17T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -4405,10 +4433,6 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With No Due 1`] = 
   <ApplicationStatus
     listing={
       Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -4421,11 +4445,22 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With No Due 1`] = 
         },
         "applicationDueDate": "",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": 5,
+          },
+          Object {
+            "type": 6,
+          },
+          Object {
+            "type": 4,
+          },
+        ],
         "applicationOpenDate": "2030-03-17T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -5505,10 +5540,6 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due 1`] = `
   <ApplicationStatus
     listing={
       Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -5521,11 +5552,22 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due 1`] = `
         },
         "applicationDueDate": "2030-03-22T16:00:00+00:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": 5,
+          },
+          Object {
+            "type": 6,
+          },
+          Object {
+            "type": 4,
+          },
+        ],
         "applicationOpenDate": "",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -6606,10 +6648,6 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due And Vivid 1`] = 
   <ApplicationStatus
     listing={
       Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -6622,11 +6660,22 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due And Vivid 1`] = 
         },
         "applicationDueDate": "2030-03-22T16:00:00+00:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": 5,
+          },
+          Object {
+            "type": 6,
+          },
+          Object {
+            "type": 4,
+          },
+        ],
         "applicationOpenDate": "",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,

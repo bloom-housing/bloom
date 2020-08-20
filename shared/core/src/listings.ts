@@ -13,6 +13,22 @@ export interface Attachment {
   type: AttachmentType
 }
 
+export enum ApplicationMethodType {
+  Internal = 1,
+  FileDownload = 2,
+  ExternalLink = 3,
+  PaperPickup = 4,
+  POBox = 5,
+  LeasingAgent = 6,
+}
+
+export interface ApplicationMethod {
+  type: ApplicationMethodType
+  label?: string
+  externalReference?: string
+  acceptsPostmarkedApplications?: boolean
+}
+
 export interface WhatToExpect {
   applicantsWillBeContacted: string
   allInfoWillBeVerified: string
@@ -40,10 +56,6 @@ export interface HouseholdMember {
 }
 
 export interface Listing {
-  acceptingApplicationsAtLeasingAgent: boolean
-  acceptingApplicationsByPoBox: boolean
-  acceptingOnlineApplications: boolean
-  acceptsPostmarkedApplications: boolean
   applicationPickUpAddress?: Address
   applicationPickUpAddressOfficeHours?: string
   accessibility: string
@@ -53,8 +65,8 @@ export interface Listing {
   applicationFee: string
   applicationOrganization: string
   applicationAddress: Address
+  applicationMethods: ApplicationMethod[]
   attachments: Attachment[]
-  blankPaperApplicationCanBePickedUp: boolean
   buildingAddress: Address
   buildingTotalUnits: number
   buildingSelectionCriteria: string
