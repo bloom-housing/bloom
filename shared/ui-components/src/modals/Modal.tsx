@@ -1,4 +1,4 @@
-import React, { useEffect, FunctionComponent, createRef } from "react"
+import React, { useState, useEffect, FunctionComponent, createRef } from "react"
 import Icon from "../atoms/Icon"
 import "./Modal.scss"
 import useKeyPress from "../helpers/useKeyPress"
@@ -35,14 +35,25 @@ export const Modal: FunctionComponent<ModalProps> = ({
   ariaDescription,
 }) => {
   // append modal to the root of app
-  const modalRoot = typeof document !== "undefined" ? document.querySelector("#__next") : null
-  const el = typeof document !== "undefined" ? document.createElement("div") : null
-  const siteContainer =
-    typeof document !== "undefined" ? document.querySelector(".site-container") : null
+  const [modalRoot] = useState<Element | null>(
+    typeof document !== "undefined" ? document.querySelector("#__next") : null
+  )
 
-  const isEscClicked = useKeyPress("Escape")
+  const [el] = useState<Element | null>(
+    typeof document !== "undefined" ? document.createElement("div") : null
+  )
+
+  const [siteContainer] = useState<Element | null>(
+    typeof document !== "undefined" ? document.querySelector(".site-container") : null
+  )
+  // append modal to the root of app
+  // const modalRoot = typeof document !== "undefined" ? document.querySelector("#__next") : null
+  // const el = typeof document !== "undefined" ? document.createElement("div") : null
+  // const siteContainer =
+  //   typeof document !== "undefined" ? document.querySelector(".site-container") : null
 
   const modalContentRef = createRef<HTMLDivElement>()
+  const buttonCloseRef = createRef<HTMLButtonElement>()
 
   useEffect(() => {
     if (!modalRoot || !el || !siteContainer || !open) return
@@ -57,11 +68,9 @@ export const Modal: FunctionComponent<ModalProps> = ({
     }
   }, [el, modalRoot, siteContainer, open])
 
-  useEffect(() => {
-    if (isEscClicked && onClose) {
-      onClose()
-    }
-  }, [isEscClicked, onClose])
+  useKeyPress("Escape", () => {
+    if (onClose) onClose()
+  })
 
   function handleClose() {
     if (onClose) {
@@ -114,7 +123,13 @@ export const Modal: FunctionComponent<ModalProps> = ({
             </footer>
 
             {onClose && (
-              <button className="modal__close" aria-label="Close" onClick={onClose} tabIndex={1}>
+              <button
+                ref={buttonCloseRef}
+                className="modal__close"
+                aria-label="Close"
+                onClick={onClose}
+                tabIndex={0}
+              >
                 <Icon size="medium" symbol="close" />
               </button>
             )}

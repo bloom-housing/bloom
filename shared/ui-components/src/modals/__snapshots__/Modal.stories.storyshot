@@ -100,7 +100,7 @@ exports[`Storyshots Modal/Modal Basic Modal 1`] = `
                 <button
                   aria-label="Close"
                   class="modal__close"
-                  tabindex="1"
+                  tabindex="0"
                 >
                   <span
                     class="ui-icon ui-medium"
@@ -232,7 +232,7 @@ exports[`Storyshots Modal/Modal Basic Modal 1`] = `
                     <button
                       aria-label="Close"
                       class="modal__close"
-                      tabindex="1"
+                      tabindex="0"
                     >
                       <span
                         class="ui-icon ui-medium"
@@ -331,7 +331,7 @@ exports[`Storyshots Modal/Modal Basic Modal 1`] = `
                       <button
                         aria-label="Close"
                         class="modal__close"
-                        tabindex="1"
+                        tabindex="0"
                       >
                         <span
                           class="ui-icon ui-medium"
@@ -432,7 +432,7 @@ exports[`Storyshots Modal/Modal Basic Modal 1`] = `
                   aria-label="Close"
                   className="modal__close"
                   onClick={[Function]}
-                  tabIndex={1}
+                  tabIndex={0}
                 >
                   <Icon
                     size="medium"
@@ -580,7 +580,7 @@ exports[`Storyshots Modal/Modal Full Screen Modal 1`] = `
                 <button
                   aria-label="Close"
                   class="modal__close"
-                  tabindex="1"
+                  tabindex="0"
                 >
                   <span
                     class="ui-icon ui-medium"
@@ -712,7 +712,7 @@ exports[`Storyshots Modal/Modal Full Screen Modal 1`] = `
                     <button
                       aria-label="Close"
                       class="modal__close"
-                      tabindex="1"
+                      tabindex="0"
                     >
                       <span
                         class="ui-icon ui-medium"
@@ -811,7 +811,7 @@ exports[`Storyshots Modal/Modal Full Screen Modal 1`] = `
                       <button
                         aria-label="Close"
                         class="modal__close"
-                        tabindex="1"
+                        tabindex="0"
                       >
                         <span
                           class="ui-icon ui-medium"
@@ -912,7 +912,7 @@ exports[`Storyshots Modal/Modal Full Screen Modal 1`] = `
                   aria-label="Close"
                   className="modal__close"
                   onClick={[Function]}
-                  tabIndex={1}
+                  tabIndex={0}
                 >
                   <Icon
                     size="medium"
@@ -1059,7 +1059,7 @@ exports[`Storyshots Modal/Modal Success Failure Modal 1`] = `
                 <button
                   aria-label="Close"
                   class="modal__close"
-                  tabindex="1"
+                  tabindex="0"
                 >
                   <span
                     class="ui-icon ui-medium"
@@ -1191,7 +1191,7 @@ exports[`Storyshots Modal/Modal Success Failure Modal 1`] = `
                     <button
                       aria-label="Close"
                       class="modal__close"
-                      tabindex="1"
+                      tabindex="0"
                     >
                       <span
                         class="ui-icon ui-medium"
@@ -1290,7 +1290,7 @@ exports[`Storyshots Modal/Modal Success Failure Modal 1`] = `
                       <button
                         aria-label="Close"
                         class="modal__close"
-                        tabindex="1"
+                        tabindex="0"
                       >
                         <span
                           class="ui-icon ui-medium"
@@ -1391,7 +1391,7 @@ exports[`Storyshots Modal/Modal Success Failure Modal 1`] = `
                   aria-label="Close"
                   className="modal__close"
                   onClick={[Function]}
-                  tabIndex={1}
+                  tabIndex={0}
                 >
                   <Icon
                     size="medium"
