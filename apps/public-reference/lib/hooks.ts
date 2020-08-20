@@ -3,10 +3,11 @@ import { useRouter } from "next/router"
 export function useRedirectToPrevPage(defaultPath = "/") {
   const router = useRouter()
 
-  const redirectTo = (typeof document !== "undefined" && document.referrer) || defaultPath
   return (queryParams: Record<string, any> = {}) => {
+    const redirectUrl = router.query.redirectUrl
+
     router.push({
-      pathname: redirectTo,
+      pathname: redirectUrl && typeof redirectUrl === "string" ? redirectUrl : defaultPath,
       query: queryParams,
     })
   }
