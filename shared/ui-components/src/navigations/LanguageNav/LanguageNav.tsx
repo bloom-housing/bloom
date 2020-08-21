@@ -1,8 +1,6 @@
 import * as React from "react"
 import "./LanguageNav.scss"
-import { LocalizedLink } from "../../atoms/LocalizedLink"
 import { useRouter } from "next/router"
-import { lRoute } from "../../helpers/localeRoute"
 import { t } from "../../helpers/translator"
 
 type LangItem = {
