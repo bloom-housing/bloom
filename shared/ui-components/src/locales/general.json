@@ -630,7 +630,8 @@
     "applications": "Applications",
     "signIn": "Sign In",
     "signOut": "Sign Out",
-    "siteTitle": "Housing Portal"
+    "siteTitle": "Housing Portal",
+    "skip": "Skip to main content"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
