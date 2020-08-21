@@ -9,7 +9,7 @@ export default {
 }
 
 const listing = Object.assign({}, Archer) as any
-const internalFormRoute = "/applicationssssssss/start/choose-language"
+const internalFormRoute = "/applications/start/choose-language"
 
 export const hardApplicationDeadline = () => {
   listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
@@ -38,12 +38,12 @@ export const showsMultipleDownloadURLs = () => {
   const testMethod1: ApplicationMethod = {
     label: "English",
     externalReference: "#english",
-    type: 2,
+    type: "FileDownload",
   }
   const testMethod2: ApplicationMethod = {
     label: "Spanish",
     externalReference: "#spanish",
-    type: 2,
+    type: "FileDownload",
   }
 
   listingWithDownloadMethods.applicationMethods = listingWithDownloadMethods.applicationMethods.concat(
@@ -60,7 +60,7 @@ export const linkDirectlyToInternalApplication = () => {
   const listingWithInternalLink = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
-    type: 1,
+    type: "Internal",
   }
 
   listingWithInternalLink.applicationMethods = listingWithInternalLink.applicationMethods.concat([
@@ -79,7 +79,7 @@ export const linkDirectlyToExternalApplication = () => {
   const externalMethod: ApplicationMethod = {
     label: "External",
     externalReference: "https://icann.org",
-    type: 3,
+    type: "ExternalLink",
   }
 
   listingWithMethodLinks.applicationMethods = listingWithMethodLinks.applicationMethods.concat([

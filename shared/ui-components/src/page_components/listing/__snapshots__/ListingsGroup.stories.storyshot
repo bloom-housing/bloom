@@ -22,13 +22,13 @@ exports[`Storyshots PageComponents/ListingGroup Show Listings Group 1`] = `
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOrganization": "98 Archer Street",

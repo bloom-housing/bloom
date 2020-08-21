@@ -20,13 +20,13 @@ exports[`Storyshots Listing Sidebar/Application Status Due Soon And Vivid 1`] = 
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOpenDate": "",
@@ -1128,13 +1128,13 @@ exports[`Storyshots Listing Sidebar/Application Status Open Soon 1`] = `
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOpenDate": "2030-04-06T16:00:00+00:00",
@@ -2235,13 +2235,13 @@ exports[`Storyshots Listing Sidebar/Application Status Opened Already 1`] = `
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOpenDate": "2030-03-27T16:00:00+00:00",
@@ -3342,13 +3342,13 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With FCFS 1`] = `
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOpenDate": "2030-03-17T16:00:00+00:00",
@@ -4448,13 +4448,13 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With No Due 1`] = 
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOpenDate": "2030-03-17T16:00:00+00:00",
@@ -5555,13 +5555,13 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due 1`] = `
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOpenDate": "",
@@ -6663,13 +6663,13 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due And Vivid 1`] = 
         "applicationMethods": Array [
           Object {
             "acceptsPostmarkedApplications": true,
-            "type": 5,
+            "type": "POBox",
           },
           Object {
-            "type": 6,
+            "type": "LeasingAgent",
           },
           Object {
-            "type": 4,
+            "type": "PaperPickup",
           },
         ],
         "applicationOpenDate": "",

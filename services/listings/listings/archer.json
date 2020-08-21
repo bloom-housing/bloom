@@ -14,14 +14,14 @@
   "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
   "applicationMethods": [
     {
-      "type": 5,
+      "type": "POBox",
       "acceptsPostmarkedApplications": true
     },
     {
-      "type": 6
+      "type": "LeasingAgent"
     },
     {
-      "type": 4
+      "type": "PaperPickup"
     }
   ],
   "applicationOrganization": "98 Archer Street",

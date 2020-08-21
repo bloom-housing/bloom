@@ -14,12 +14,12 @@ export interface Attachment {
 }
 
 export enum ApplicationMethodType {
-  Internal = 1,
-  FileDownload = 2,
-  ExternalLink = 3,
-  PaperPickup = 4,
-  POBox = 5,
-  LeasingAgent = 6,
+  Internal = "Internal",
+  FileDownload = "FileDownload",
+  ExternalLink = "ExternalLink",
+  PaperPickup = "PaperPickup",
+  POBox = "POBox",
+  LeasingAgent = "LeasingAgent",
 }
 
 export interface ApplicationMethod {
