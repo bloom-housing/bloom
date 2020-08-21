@@ -80,7 +80,7 @@ module.exports = withCSS(
             const translatablePaths = Object.assign({}, listingPaths, {
               "/": { page: "/" },
               "/listings": { page: "/listings" },
-              "/housing-counselors": { page: "/HousingCounselors" },
+              "/housing-counselors": { page: "/housing-counselors" },
             })
             const languages = ["es"] // add new language codes here
             const languagePaths = {}

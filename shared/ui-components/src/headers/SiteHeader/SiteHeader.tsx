@@ -77,12 +77,12 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
 
   tempLangItems = [
     {
-      name: "en",
+      name: "",
       label: "English",
     },
     {
       name: "es",
-      label: "Espanol",
+      label: "Spanish",
     },
   ]
 

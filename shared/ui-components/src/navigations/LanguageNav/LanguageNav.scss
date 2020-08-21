@@ -17,8 +17,12 @@
     @apply px-2;
 
     a {
-      @apply text-white;
+      @apply text-gray-500;
       @apply font-semibold;
+
+      &.is-active {
+        @apply text-white;
+      }
     }
   }
 }
