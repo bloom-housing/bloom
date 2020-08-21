@@ -29,7 +29,7 @@ const LanguageNav = ({ items }: LanguageNavProps) => {
                   href={item.name + router.pathname}
                   className={routePrefix === item.name ? "is-active" : ""}
                 >
-                  {item.label} {router.pathname}
+                  {item.label}
                 </a>
               </li>
             ))}
