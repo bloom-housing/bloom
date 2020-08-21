@@ -127,6 +127,10 @@ a.navbar-item {
     @apply bg-primary-lighter;
   }
 
+  &:focus {
+    @apply bg-white;
+  }
+
   @screen md {
     @apply text-sm;
     @apply border-b-2;
