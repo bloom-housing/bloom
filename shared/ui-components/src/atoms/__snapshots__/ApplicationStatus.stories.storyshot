@@ -32,6 +32,14 @@ exports[`Storyshots Listing Sidebar/Application Status Due Soon And Vivid 1`] = 
         "applicationOpenDate": "",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
         "buildingAddress": Object {
           "city": "San Jose",
@@ -53,7 +61,6 @@ exports[`Storyshots Listing Sidebar/Application Status Due Soon And Vivid 1`] = 
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -1140,6 +1147,14 @@ exports[`Storyshots Listing Sidebar/Application Status Open Soon 1`] = `
         "applicationOpenDate": "2030-04-06T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
         "buildingAddress": Object {
           "city": "San Jose",
@@ -1161,7 +1176,6 @@ exports[`Storyshots Listing Sidebar/Application Status Open Soon 1`] = `
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -2247,6 +2261,14 @@ exports[`Storyshots Listing Sidebar/Application Status Opened Already 1`] = `
         "applicationOpenDate": "2030-03-27T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
         "buildingAddress": Object {
           "city": "San Jose",
@@ -2268,7 +2290,6 @@ exports[`Storyshots Listing Sidebar/Application Status Opened Already 1`] = `
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -3354,6 +3375,14 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With FCFS 1`] = `
         "applicationOpenDate": "2030-03-17T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
         "buildingAddress": Object {
           "city": "San Jose",
@@ -3375,7 +3404,6 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With FCFS 1`] = `
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -4460,6 +4488,14 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With No Due 1`] = 
         "applicationOpenDate": "2030-03-17T16:00:00+00:00",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
         "buildingAddress": Object {
           "city": "San Jose",
@@ -4481,7 +4517,6 @@ exports[`Storyshots Listing Sidebar/Application Status Opened With No Due 1`] = 
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -5567,6 +5602,14 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due 1`] = `
         "applicationOpenDate": "",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
         "buildingAddress": Object {
           "city": "San Jose",
@@ -5588,7 +5631,6 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due 1`] = `
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -6675,6 +6717,14 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due And Vivid 1`] = 
         "applicationOpenDate": "",
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
         "buildingAddress": Object {
           "city": "San Jose",
@@ -6696,7 +6746,6 @@ exports[`Storyshots Listing Sidebar/Application Status Past Due And Vivid 1`] = 
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,

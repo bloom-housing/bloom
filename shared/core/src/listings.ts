@@ -1,17 +1,7 @@
+import { Asset } from "./assets"
 import { Unit, UnitsSummarized } from "./units"
 import { Address } from "./general"
 import { Preference } from "./preferences"
-
-export enum AttachmentType {
-  ApplicationDownload = 1,
-  ExternalApplication = 2,
-}
-
-export interface Attachment {
-  label: string
-  fileUrl: string
-  type: AttachmentType
-}
 
 export enum ApplicationMethodType {
   Internal = "Internal",
@@ -66,7 +56,7 @@ export interface Listing {
   applicationOrganization: string
   applicationAddress: Address
   applicationMethods: ApplicationMethod[]
-  attachments: Attachment[]
+  assets: Asset[]
   buildingAddress: Address
   buildingTotalUnits: number
   buildingSelectionCriteria: string

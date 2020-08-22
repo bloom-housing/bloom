@@ -14,15 +14,15 @@ export interface ApplyProps {
 }
 
 const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
-  return applicationMethods.some((item) => item.type == type)
+  return applicationMethods.some((method) => method.type == type)
 }
 
 const hasAnyMethods = (applicationMethods: ApplicationMethod[], types: ApplicationMethodType[]) => {
-  return applicationMethods.some((item) => types.some((type) => type == item.type))
+  return applicationMethods.some((method) => types.some((type) => type == method.type))
 }
 
 const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
-  return applicationMethods.find((item) => item.type == type)
+  return applicationMethods.find((method) => method.type == type)
 }
 
 const OrDivider = (props: { bgColor: string }) => (
