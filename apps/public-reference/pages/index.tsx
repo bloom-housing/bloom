@@ -1,9 +1,15 @@
 import { Component } from "react"
 import Head from "next/head"
 import { Listing } from "@bloom-housing/core"
-import { Hero, MarkdownSection, MetaTags, t, UrlAlert } from "@bloom-housing/ui-components"
+import {
+  LinkButton,
+  Hero,
+  MarkdownSection,
+  MetaTags,
+  t,
+  UrlAlert,
+} from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
-import PageContent from "../page_content/homepage.mdx"
 import axios from "axios"
 
 interface IndexProps {
@@ -54,7 +60,12 @@ export default class extends Component<IndexProps> {
         />
         <div className="homepage-extra">
           <MarkdownSection fullwidth={true}>
-            <PageContent />
+            <>
+              <p>{t("welcome.seeMoreOpportunities")}</p>
+              <LinkButton href="/additional-resources">
+                {t("welcome.viewAdditionalHousing")}
+              </LinkButton>
+            </>
           </MarkdownSection>
         </div>
       </Layout>
