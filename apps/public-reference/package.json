@@ -21,7 +21,7 @@
     "@mdx-js/loader": "1.6.16",
     "@next/mdx": "9.5.2",
     "@zeit/next-sass": "^1.0.1",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "dotenv": "^8.2.0",
     "moment": "^2.27.0",
     "nanoid": "^3.1.12",
@@ -32,7 +32,7 @@
     "openapi-client-axios": "^3.6.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-hook-form": "^6.3.2",
+    "react-hook-form": "^6.5.1",
     "react-inlinesvg": "^2.0.1"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "concurrently": "^5.3.0",
     "cypress": "^4.12.1",
     "js-levenshtein": "^1.1.6",
-    "next-transpile-modules": "^4.0.3",
+    "next-transpile-modules": "^4.1.0",
     "sass-loader": "^9.0.3",
     "typescript": "^3.9.7",
     "webpack": "^4.44.1"
