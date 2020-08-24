@@ -1,7 +1,6 @@
 import Layout from "../layouts/application"
 import Head from "next/head"
-import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
-import PageContent from "../page_content/homepage.mdx"
+import { Hero, LinkButton, MarkdownSection, t } from "@bloom-housing/ui-components"
 
 const ErrorPage = () => {
   const pageTitle = t("error.notFound.title")
@@ -16,7 +15,12 @@ const ErrorPage = () => {
       </Hero>
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>
-          <PageContent />
+          <>
+            <p>{t("welcome.seeMoreOpportunities")}</p>
+            <LinkButton href="/additional-resources">
+              {t("welcome.viewAdditionalHousing")}
+            </LinkButton>
+          </>
         </MarkdownSection>
       </div>
     </Layout>
