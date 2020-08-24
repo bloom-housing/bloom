@@ -21,7 +21,7 @@
     "@mdx-js/loader": "1.6.16",
     "@next/mdx": "9.5.2",
     "@zeit/next-sass": "^1.0.1",
-    "axios": "^0.20.0",
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "moment": "^2.27.0",
     "nanoid": "^3.1.12",
