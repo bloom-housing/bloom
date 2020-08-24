@@ -1,4 +1,10 @@
 {
+  "account": {
+    "accountSettings": "Account Settings",
+    "accountSettingsSubtitle": "Account Settings, email and password",
+    "myApplications": "My Applications",
+    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
+  },
   "application": {
     "form": {
       "errors": {
@@ -419,7 +425,20 @@
       "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information if you choose not to respond.",
       "action": "Continue working",
       "afterMessage": "We care about your security. We ended your session due to inactivity. Please log in or start a new application to continue."
-    }
+    },
+    "continueApplication": "Continue Application",
+    "applicationNeverSubmitted": "Your application was never submitted",
+    "deleteThisApplication": "Delete this application?",
+    "deleteApplicationDescription": "Deleting this application means you will lose all the information you've entered.",
+    "edited": "Edited",
+    "status": "Status",
+    "statuses": {
+      "inProgress": "In Progress",
+      "neverSubmitted": "Never Submitted",
+      "submitted": "Submitted"
+    },
+    "viewApplication": "View Application",
+    "yourLotteryNumber": "Your lottery number is"
   },
   "authentication": {
     "timeout": {
@@ -517,6 +536,7 @@
     "availableUnitsAndWaitlist": "Available units and waitlist",
     "availableUnitsAndWaitlistDesc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>%{number} units</span>",
     "bath": "bath",
+    "browseListings": "Browse Listings",
     "closedListings": "Closed Listings",
     "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
@@ -622,12 +642,17 @@
     "viewPreferenceList": "View Preference List"
   },
   "nav": {
+    "accountSettings": "Account Settings",
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
     "getFeedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>your feedback.</a>",
     "listings": "Listings",
     "properties": "Properties",
     "applications": "Applications",
+    "myAccount": "My Account",
+    "myApplications": "My Applications",
+    "myDashboard": "My Dashboard",
+    "mySettings": "My Settings",
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "siteTitle": "Housing Portal"
@@ -658,11 +683,14 @@
     "availability": "Availability",
     "back": "Back",
     "built": "Built",
+    "cancel": "Cancel",
     "confirm": "Confirm",
+    "delete": "Delete",
     "deposit": "Deposit",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
+    "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "name": "Name",
@@ -680,6 +708,7 @@
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "seeListing": "See Listing",
     "selectAllThatApply": "Please select all that apply.",
     "selectOne": "Select One",
     "skipToMainContent": "Skip to main content",
