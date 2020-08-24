@@ -34,6 +34,18 @@
     @apply mb-0;
     @apply text-sm;
   }
+
+  .dash-item__content {
+    @apply border-t;
+    @apply border-gray-450;
+    @apply -mx-8;
+    @apply -mb-8;
+    @apply background-grey-300
+    @screen md {
+      @apply rounded-b-lg;
+      @apply border-t;
+    }
+  }
 }
 
 .dash-item__name {

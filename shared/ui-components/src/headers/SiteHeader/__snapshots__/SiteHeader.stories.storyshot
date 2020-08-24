@@ -75,7 +75,7 @@ exports[`Storyshots Headers/SiteHeader Standard 1`] = `
         </a>
       </div>
       <div
-        className="navbar-menu mt-3 md:mt-0"
+        className="navbar-menu md:mt-0"
         id="navbarMenuLinks"
       >
         <div
@@ -169,7 +169,7 @@ exports[`Storyshots Headers/SiteHeader With Dropdown And Button 1`] = `
         </a>
       </div>
       <div
-        className="navbar-menu mt-3 md:mt-0"
+        className="navbar-menu md:mt-0"
         id="navbarMenuLinks"
       >
         <div

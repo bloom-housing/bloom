@@ -1,5 +1,5 @@
 import React from "react"
-import { onClientSide } from "../helpers/nextjs"
+import { OnClientSide } from "../helpers/nextjs"
 import "./ProgressNav.scss"
 
 const ProgressNavItem = (props: {
@@ -9,7 +9,7 @@ const ProgressNavItem = (props: {
   label: string
 }) => {
   let bgColor = "is-disabled"
-  if (onClientSide()) {
+  if (OnClientSide()) {
     if (props.step === props.currentPageStep) {
       bgColor = "is-active"
     } else if (props.completedSteps >= props.step) {
@@ -30,7 +30,7 @@ const ProgressNav = (props: {
   labels: string[]
 }) => {
   return (
-    <ul className={!onClientSide() ? "invisible" : "progress-nav"}>
+    <ul className={!OnClientSide() ? "invisible" : "progress-nav"}>
       {props.labels.map((label, i) => (
         <ProgressNavItem
           key={label}
