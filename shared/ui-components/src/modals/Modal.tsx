@@ -46,11 +46,6 @@ export const Modal: FunctionComponent<ModalProps> = ({
   const [siteContainer] = useState<Element | null>(
     typeof document !== "undefined" ? document.querySelector(".site-container") : null
   )
-  // append modal to the root of app
-  // const modalRoot = typeof document !== "undefined" ? document.querySelector("#__next") : null
-  // const el = typeof document !== "undefined" ? document.createElement("div") : null
-  // const siteContainer =
-  //   typeof document !== "undefined" ? document.querySelector(".site-container") : null
 
   const modalContentRef = createRef<HTMLDivElement>()
   const buttonCloseRef = createRef<HTMLButtonElement>()
