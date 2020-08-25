@@ -4,6 +4,8 @@ import { ResponseError } from "@sendgrid/helpers/classes"
 import Handlebars from "handlebars"
 import path from "path"
 import { User } from "../entity/user.entity"
+import { Listing } from "../entity/listing.entity"
+import { Application } from "../entity/application.entity"
 import Polyglot from "node-polyglot"
 import fs from "fs"
 
@@ -14,13 +16,14 @@ export class EmailService {
   constructor(private readonly sendGrid: SendGridService) {
     const polyglot = new Polyglot({
       // TODO Add translations loaded from a file
-      phrases: { register: { welcome: "Welcome" } },
+      phrases: this.translations(),
     })
     this.polyglot = polyglot
 
     Handlebars.registerHelper("t", function (phrase: string, options?: any) {
       return polyglot.t(phrase, options)
     })
+    Handlebars.registerPartial(this.partials())
   }
 
   public async welcome(user: User) {
@@ -34,6 +37,43 @@ export class EmailService {
     await this.send(user.email, "Welcome to Bloom", this.template("register-email")({ user: user }))
   }
 
+  public async confirmation(user: User, listing: Listing, application: Application) {
+    let whatToExpectText
+    const listingUrl = `${process.env.APP_URL}/listing/${listing.id}`
+    const compiledTemplate = this.template("confirmation")
+
+    if (process.env.NODE_ENV == "production") {
+      Logger.log(
+        `Preparing to send a confirmation email to ${user.email} from ${process.env.EMAIL_FROM_ADDRESS}...`
+      )
+    }
+
+    if (listing.applicationDueDate) {
+      if (!listing.waitlistMaxSize) {
+        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
+          lotteryDate: listing.applicationDueDate,
+        })
+      } else {
+        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.noLottery", {
+          lotteryDate: listing.applicationDueDate,
+        })
+      }
+    } else {
+      whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
+    }
+    await this.send(
+      user.email,
+      this.polyglot.t("confirmation.subject"),
+      compiledTemplate({
+        user: user,
+        listing: listing,
+        listingUrl: listingUrl,
+        application: application,
+        whatToExpectText: whatToExpectText,
+      })
+    )
+  }
+
   private template(view: string) {
     return Handlebars.compile(
       fs.readFileSync(
@@ -41,6 +81,33 @@ export class EmailService {
           path.resolve(__dirname, "..", "..", "views").replace("/dist", ""),
           `/${view}.hbs`
         ),
+        "utf8"
+      )
+    )
+  }
+
+  private partial(view: string) {
+    return fs.readFileSync(
+      path.join(path.resolve(__dirname, "..", "..", "views").replace("/dist", ""), `/${view}`),
+      "utf8"
+    )
+  }
+
+  private partials() {
+    const partials = {}
+    const dirName = path.resolve(__dirname, "..", "..", "views/partials").replace("/dist", "")
+
+    fs.readdirSync(dirName).forEach((filename) => {
+      partials[filename.slice(0, -4)] = this.partial("partials/" + filename)
+    })
+
+    return partials
+  }
+
+  private translations() {
+    return JSON.parse(
+      fs.readFileSync(
+        path.resolve(__dirname, "..", "..", "locals/general.json").replace("/dist", ""),
         "utf8"
       )
     )
