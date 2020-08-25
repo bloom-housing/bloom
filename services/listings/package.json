@@ -7,21 +7,21 @@
   "license": "GPL-3.0",
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.11.1",
+    "@babel/core": "^7.11.4",
     "@babel/preset-typescript": "^7.10.4",
-    "@types/jest": "^26.0.9",
+    "@types/jest": "^26.0.10",
     "@types/jsonpath": "^0.2.0",
     "@types/supertest": "^2.0.10",
     "babel-jest": "^26.3.0",
     "concurrently": "^5.3.0",
-    "jest": "^26.3.0",
+    "jest": "^26.4.2",
     "supertest": "^4.0.2",
-    "ts-node-dev": "^1.0.0-pre.56"
+    "ts-node-dev": "^1.0.0-pre.60"
   },
   "dependencies": {
     "@bloom-housing/core": "^0.2.14",
     "@koa/cors": "^3.0.0",
-    "@types/koa": "^2.11.3",
+    "@types/koa": "^2.11.4",
     "@types/koa-router": "^7.4.0",
     "@types/koa__cors": "^3.0.1",
     "@types/node": "^12.12.54",
@@ -30,7 +30,7 @@
     "koa": "^2.13.0",
     "nanoid": "^3.1.12",
     "rimraf": "^3.0.2",
-    "simple-git": "^2.17.0",
+    "simple-git": "^2.20.1",
     "typescript": "^3.9.7"
   },
   "engines": {
