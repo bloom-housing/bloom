@@ -208,6 +208,7 @@ export default () => {
             <Field
               id="addressStreet"
               name="applicant.address.street"
+              label={t("application.contact.streetAddress")}
               placeholder={t("application.contact.streetAddress")}
               defaultValue={application.applicant.address.street}
               validation={{ required: true }}
