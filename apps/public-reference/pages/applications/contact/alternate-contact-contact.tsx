@@ -41,7 +41,7 @@ export default () => {
         <p className="form-card__back">
           <strong>
             <Link href="/applications/contact/alternate-contact-name">
-              <a>Back</a>
+              <a>{t("t.back")}</a>
             </Link>
           </strong>
         </p>

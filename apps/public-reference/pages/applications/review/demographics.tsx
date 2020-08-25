@@ -49,7 +49,13 @@ const Demographics = () => {
       defaultChecked: item.checked,
       register,
     }))
-  }, [])
+  }, [register])
+
+  const backPath = useMemo(() => {
+    return application.preferences.none
+      ? "/applications/preferences/general"
+      : "/applications/preferences/select"
+  }, [application.preferences.none])
 
   return (
     <FormsLayout>
@@ -64,15 +70,9 @@ const Demographics = () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            {application.preferences.none ? (
-              <Link href="/applications/preferences/general">
-                <a>{t("t.back")}</a>
-              </Link>
-            ) : (
-              <Link href="/applications/preferences/select">
-                <a>{t("t.back")}</a>
-              </Link>
-            )}
+            <Link href={backPath}>
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
