@@ -1,6 +1,6 @@
 import React from "react"
 import "./Modal.scss"
-import Modal from "./Modal"
+import { Modal } from "./Modal"
 import SVG from "react-inlinesvg"
 
 export default {
@@ -23,6 +23,7 @@ export const BasicModal = () => (
   <Modal
     open={true}
     title="Modal Title"
+    ariaDescription="Modal description"
     onClose={noop}
     actions={[
       { label: "Cancel", onClick: noop, type: "cancel" },
@@ -37,6 +38,7 @@ export const FullScreenModal = () => (
   <Modal
     open={true}
     title="Modal Title"
+    ariaDescription="Modal description"
     onClose={noop}
     actions={[
       { label: "Cancel", onClick: noop, type: "cancel" },
@@ -52,6 +54,7 @@ export const SuccessFailureModal = () => (
   <Modal
     open={true}
     title="Modal Title"
+    ariaDescription="Modal description"
     onClose={noop}
     actions={[
       { label: "Cancel", onClick: noop, type: "failure" },
