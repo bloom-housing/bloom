@@ -94,7 +94,7 @@ export default () => {
 
         <form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="phoneNumber">
+            <label className="field-label--caps" htmlFor="applicant.phoneNumber">
               {t("application.contact.yourPhoneNumber")}
             </label>
 
@@ -123,37 +123,6 @@ export default () => {
               options={phoneNumberKeys}
               keyPrefix="application.contact.phoneNumberTypes"
             />
-
-            {/* <div className={"field " + (errors.applicant?.phoneNumberType ? "error" : "")}>
-              <div className="control">
-                <select
-                  id="applicant.phoneNumberType"
-                  name="applicant.phoneNumberType"
-                  className="w-full"
-                  defaultValue={application.applicant.phoneNumberType}
-                  disabled={noPhone}
-                  ref={register({
-                    validate: {
-                      selectionMade: (v) => {
-                        const dropdown = document.querySelector<HTMLSelectElement>(
-                          "#applicant\\.phoneNumberType"
-                        )
-                        if (noPhone || dropdown.disabled) return true
-                        return v != ""
-                      },
-                    },
-                  })}
-                >
-                  <option value="">What type of number is this?</option>
-                  <option>Work</option>
-                  <option>Home</option>
-                  <option>Cell</option>
-                </select>
-                <ErrorMessage error={errors.applicant?.phoneNumberType}>
-                  {t("application.contact.phoneNumberTypeError")}
-                </ErrorMessage>
-              </div>
-            </div> */}
 
             <div className="field">
               <input
