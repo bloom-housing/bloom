@@ -62,6 +62,11 @@
   @screen md {
     @apply mx-8;
   }
+
+  @screen print {
+    @apply py-2;
+    @apply px-0;
+  }
 }
 
 .form-card__lead {
@@ -70,6 +75,10 @@
 
   @screen md {
     @apply px-0;
+  }
+
+  @screen print {
+    @apply py-2;
   }
 }
 
@@ -128,6 +137,11 @@
     @apply bg-primary-lighter;
     @apply py-8;
   }
+
+  &.border-t,
+  &.border-b {
+    @apply border-gray-450;
+  }
 }
 
 .form--card__sub-header {
@@ -139,6 +153,11 @@
 
   .edit-link {
     @apply self-center;
+  }
+
+  @screen print {
+    @apply px-0;
+    @apply py-1;
   }
 }
 
