@@ -149,6 +149,8 @@ export const howDidYouHear: CheckboxGroupItem[] = [
   },
 ]
 
+export const phoneNumberKeys = ["work", "home", "cell"]
+
 export const preferredUnit: CheckboxGroupItem[] = [
   {
     id: "studio",

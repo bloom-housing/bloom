@@ -21,7 +21,7 @@ import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo, Fragment } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -105,36 +105,21 @@ export default () => {
               disabled={noPhone}
             />
 
-            <div className={"field " + (errors.applicant?.phoneNumberType ? "error" : "")}>
-              <div className="control">
-                <select
-                  id="applicant.phoneNumberType"
-                  name="applicant.phoneNumberType"
-                  className="w-full"
-                  defaultValue={application.applicant.phoneNumberType}
-                  disabled={noPhone}
-                  ref={register({
-                    validate: {
-                      selectionMade: (v) => {
-                        const dropdown = document.querySelector<HTMLSelectElement>(
-                          "#applicant\\.phoneNumberType"
-                        )
-                        if (dropdown.disabled) return true
-                        return v != ""
-                      },
-                    },
-                  })}
-                >
-                  <option value="">What type of number is this?</option>
-                  <option>Work</option>
-                  <option>Home</option>
-                  <option>Cell</option>
-                </select>
-                <ErrorMessage error={errors.applicant?.phoneNumberType}>
-                  {t("application.contact.phoneNumberTypeError")}
-                </ErrorMessage>
-              </div>
-            </div>
+            <Select
+              id="applicant.phoneNumberType"
+              name="applicant.phoneNumberType"
+              placeholder={t("application.contact.phoneNumberTypes.prompt")}
+              label={t("application.contact.phoneNumberTypes.prompt")}
+              defaultValue={application.applicant.phoneNumberType}
+              disabled={noPhone}
+              validation={{ required: !noPhone }}
+              error={!noPhone && errors.applicant?.phoneNumberType}
+              errorMessage={t("application.contact.phoneNumberTypeError")}
+              register={register}
+              controlClassName="control"
+              options={phoneNumberKeys}
+              keyPrefix="application.contact.phoneNumberTypes"
+            />
 
             <div className="field">
               <input
@@ -182,27 +167,20 @@ export default () => {
                   controlClassName="control mt-2"
                 />
                 <div className={"field " + (errors.additionalPhoneNumberType ? "error" : "")}>
-                  <div className="control">
-                    <select
-                      id="additionalPhoneNumberType"
-                      name="additionalPhoneNumberType"
-                      className="w-full"
-                      defaultValue={application.additionalPhoneNumberType}
-                      ref={register({ required: true })}
-                    >
-                      {["prompt", "work", "home", "cell"].map((key) => (
-                        <option
-                          key={key}
-                          value={key === "prompt" ? "" : key[0].toUpperCase() + key.slice(1)}
-                        >
-                          {t(`application.contact.phoneNumberTypes.${key}`)}
-                        </option>
-                      ))}
-                    </select>
-                    <ErrorMessage error={errors?.additionalPhoneNumberType}>
-                      {t("application.contact.phoneNumberTypeError")}
-                    </ErrorMessage>
-                  </div>
+                  <Select
+                    id="additionalPhoneNumberType"
+                    name="additionalPhoneNumberType"
+                    defaultValue={application.additionalPhoneNumberType}
+                    validation={{ required: true }}
+                    error={errors?.additionalPhoneNumberType}
+                    errorMessage={t("application.contact.phoneNumberTypeError")}
+                    register={register}
+                    controlClassName="control"
+                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                    label={t("application.contact.phoneNumberTypes.prompt")}
+                    options={phoneNumberKeys}
+                    keyPrefix="application.contact.phoneNumberTypes"
+                  />
                 </div>
               </>
             )}
