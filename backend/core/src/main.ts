@@ -4,9 +4,12 @@ import { logger } from "./middleware/logger.middleware"
 import { ValidationPipe } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
+import { getConnection } from "typeorm"
+import { Logger } from "@nestjs/common"
 
 let app
 async function bootstrap() {
+
   app = await NestFactory.create(AppModule)
   app.enableCors()
   app.use(logger)
@@ -19,6 +22,13 @@ async function bootstrap() {
       transform: true,
     })
   )
+
+  const conn = getConnection()
+  // showMigrations returns true if there are pending migrations
+  if (await conn.showMigrations()) {
+    Logger.warn("Detected pending migrations. Consider running them before starting the app.")
+  }
+
   const options = new DocumentBuilder()
     .setTitle("Bloom API")
     .setVersion("1.0")
