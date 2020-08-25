@@ -28,9 +28,9 @@ export default () => {
   const onSubmit = (data) => {
     const { preferredUnit } = data
 
-    new FormStep(conductor).save({
-      preferredUnit,
-    })
+    application.preferredUnit = preferredUnit
+
+    conductor.sync()
 
     Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
   }
@@ -39,10 +39,10 @@ export default () => {
     return preferredUnit?.map((item) => ({
       id: item.id,
       label: t(`application.household.preferredUnit.options.${item.id}`),
-      defaultChecked: item.checked,
+      defaultChecked: item.checked || application.preferredUnit.includes(item.id),
       register,
     }))
-  }, [])
+  }, [register, application.preferredUnit])
 
   return (
     <FormsLayout>
