@@ -121,14 +121,15 @@ export default () => {
               keyPrefix="application.contact.phoneNumberTypes"
             />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="noPhone"
-                name="applicant.noPhone"
-                defaultChecked={application.applicant.noPhone}
-                ref={register}
-                onChange={(e) => {
+            <Field
+              type="checkbox"
+              id="noPhone"
+              name="applicant.noPhone"
+              label={t("application.contact.noPhoneNumber")}
+              register={register}
+              inputProps={{
+                defaultChecked: application.applicant.noPhone,
+                onChange: (e) => {
                   if (e.target.checked) {
                     setValue("phoneNumber", "")
                     setTimeout(() => {
@@ -136,25 +137,20 @@ export default () => {
                       trigger("phoneNumberType")
                     }, 1)
                   }
-                }}
-              />
-              <label htmlFor="noPhone" className="text-primary font-semibold">
-                {t("application.contact.noPhoneNumber")}
-              </label>
-            </div>
+                },
+              }}
+            />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="additionalPhone"
-                name="additionalPhone"
-                defaultChecked={application.additionalPhone}
-                ref={register}
-              />
-              <label htmlFor="additionalPhone" className="text-primary font-semibold">
-                {t("application.contact.additionalPhoneNumber")}
-              </label>
-            </div>
+            <Field
+              type="checkbox"
+              id="additionalPhone"
+              name="additionalPhone"
+              label={t("application.contact.additionalPhoneNumber")}
+              register={register}
+              inputProps={{
+                defaultChecked: application.additionalPhone,
+              }}
+            />
 
             {additionalPhone && (
               <>
@@ -254,18 +250,16 @@ export default () => {
               register={register}
             />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="sendMailToMailingAddress"
-                name="sendMailToMailingAddress"
-                defaultChecked={application.sendMailToMailingAddress}
-                ref={register}
-              />
-              <label htmlFor="sendMailToMailingAddress" className="text-primary font-semibold">
-                {t("application.contact.sendMailToMailingAddress")}
-              </label>
-            </div>
+            <Field
+              type="checkbox"
+              id="sendMailToMailingAddress"
+              name="sendMailToMailingAddress"
+              label={t("application.contact.sendMailToMailingAddress")}
+              register={register}
+              inputProps={{
+                defaultChecked: application.sendMailToMailingAddress,
+              }}
+            />
           </div>
 
           {(sendMailToMailingAddress || application.sendMailToMailingAddress) && (
@@ -378,36 +372,37 @@ export default () => {
 
             <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
-            <div className={"field " + (errors.applicant?.workInRegion ? "error" : "")}>
-              <input
-                type="radio"
-                id="workInRegionYes"
-                name="applicant.workInRegion"
-                value="yes"
-                defaultChecked={application.applicant.workInRegion == "yes"}
-                ref={register({ required: true })}
-              />
-              <label className="font-semibold" htmlFor="workInRegionYes">
-                Yes
-              </label>
-            </div>
-            <div className={"field " + (errors.applicant?.workInRegion ? "error" : "")}>
-              <input
-                type="radio"
-                id="workInRegionNo"
-                name="applicant.workInRegion"
-                value="no"
-                defaultChecked={application.applicant.workInRegion == "no"}
-                ref={register({ required: true })}
-              />
-              <label className="font-semibold" htmlFor="workInRegionNo">
-                No
-              </label>
+            <Field
+              type="radio"
+              id="workInRegionYes"
+              name="applicant.workInRegion"
+              label={t("application.contact.yes")}
+              register={register}
+              validation={{ required: true }}
+              error={errors.applicant.workInRegion}
+              inputProps={{
+                value: "yes",
+                defaultChecked: application.applicant.workInRegion == "yes",
+              }}
+            />
 
-              <ErrorMessage error={errors.applicant?.workInRegion}>
-                Please select an option
-              </ErrorMessage>
-            </div>
+            <Field
+              type="radio"
+              id="workInRegionNo"
+              name="applicant.workInRegion"
+              label={t("application.contact.no")}
+              register={register}
+              validation={{ required: true }}
+              error={errors.applicant.workInRegion}
+              inputProps={{
+                value: "no",
+                defaultChecked: application.applicant.workInRegion == "no",
+              }}
+            />
+
+            <ErrorMessage error={errors.applicant?.workInRegion}>
+              {t("application.contact.radioError")}
+            </ErrorMessage>
 
             {(workInRegion == "yes" ||
               (!workInRegion && application.applicant.workInRegion == "yes")) && (

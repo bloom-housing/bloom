@@ -150,7 +150,10 @@
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
       "doYouWorkIn": "Do you work in <REGION>?",
       "doYouWorkInDescription": "TBD",
-      "workAddress": "Work Address"
+      "workAddress": "Work Address",
+      "yes": "Yes",
+      "no": "No",
+      "radioError": "Please select an option."
     },
     "alternateContact": {
       "type": {

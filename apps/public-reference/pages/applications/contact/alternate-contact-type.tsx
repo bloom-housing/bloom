@@ -63,42 +63,41 @@ export default () => {
             {options.map((option, i) => {
               return (
                 <Fragment key={option}>
-                  <div className={"field " + (errors.type ? "error" : "")}>
-                    <input
-                      key={option}
-                      type="radio"
-                      id={"type" + option}
-                      name="type"
-                      value={option}
-                      defaultChecked={application.alternateContact.type === option}
-                      ref={register({ required: true })}
+                  <Field
+                    key={option}
+                    type="radio"
+                    id={"type" + option}
+                    name="type"
+                    label={t("application.alternateContact.type.options." + option)}
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.type}
+                    inputProps={{
+                      value: option,
+                      defaultChecked: application.alternateContact.type === option,
+                    }}
+                  />
+
+                  {option === "other" && type === "other" && (
+                    <Field
+                      controlClassName="mt-4"
+                      id="otherType"
+                      name="otherType"
+                      placeholder={t("application.alternateContact.type.otherTypeFormPlaceholder")}
+                      defaultValue={application.alternateContact.otherType}
+                      validation={{ required: true }}
+                      error={errors.otherType}
+                      errorMessage={t(
+                        "application.alternateContact.type.otherTypeValidationErrorMessage"
+                      )}
+                      register={register}
                     />
-                    <label className="font-semibold" htmlFor={"type" + option}>
-                      {t("application.alternateContact.type.options." + option)}
-                    </label>
-                    {option === "other" && type === "other" && (
-                      <Field
-                        controlClassName="mt-4"
-                        id="otherType"
-                        name="otherType"
-                        placeholder={t(
-                          "application.alternateContact.type.otherTypeFormPlaceholder"
-                        )}
-                        defaultValue={application.alternateContact.otherType}
-                        validation={{ required: true }}
-                        error={errors.otherType}
-                        errorMessage={t(
-                          "application.alternateContact.type.otherTypeValidationErrorMessage"
-                        )}
-                        register={register}
-                      />
-                    )}
-                    {i === options.length - 1 && (
-                      <ErrorMessage error={errors.type}>
-                        {t("application.alternateContact.type.validationErrorMessage")}
-                      </ErrorMessage>
-                    )}
-                  </div>
+                  )}
+                  {i === options.length - 1 && (
+                    <ErrorMessage error={errors.type}>
+                      {t("application.alternateContact.type.validationErrorMessage")}
+                    </ErrorMessage>
+                  )}
                 </Fragment>
               )
             })}
