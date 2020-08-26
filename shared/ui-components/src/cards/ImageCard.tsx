@@ -42,7 +42,7 @@ const ImageCard = (props: ImageCardProps) => {
 
   if (props.href && props.as) {
     card = (
-      <LocalizedLink href={props.href} as={props.as}>
+      <LocalizedLink className="block" href={props.href} as={props.as}>
         {image}
       </LocalizedLink>
     )

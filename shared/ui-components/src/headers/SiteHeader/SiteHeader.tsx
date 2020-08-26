@@ -4,6 +4,7 @@ import { LocalizedLink } from "../../atoms/LocalizedLink"
 export interface SiteHeaderProps {
   logoSrc: string
   title: string
+  skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
 }
@@ -32,6 +33,12 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     super(props)
     this.state = { active: false }
     this.handleMenuToggle = this.handleMenuToggle.bind(this)
+  }
+
+  skipLink() {
+    return (
+      <a href="#main-content" className="navbar__skip-link">{this.props.skip}</a>
+    )
   }
 
   noticeBar() {
@@ -77,6 +84,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   render() {
     return (
       <>
+        {this.skipLink()}
         {this.noticeBar()}
         <div className="navbar__wrapper">
           <nav className="navbar" role="navigation" aria-label="main navigation">
