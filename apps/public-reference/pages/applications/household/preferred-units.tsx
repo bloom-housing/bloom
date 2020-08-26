@@ -4,13 +4,12 @@ Applicant can designate which unit sizes they prefer
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, FieldGroup } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
-import { CheckboxGroup } from "@bloom-housing/ui-components/src/forms/CheckboxGroup"
 import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import FormStep from "../../../src/forms/applications/FormStep"
 
@@ -40,7 +39,6 @@ export default () => {
       id: item.id,
       label: t(`application.household.preferredUnit.options.${item.id}`),
       defaultChecked: item.checked,
-      register,
     }))
   }, [])
 
@@ -71,14 +69,16 @@ export default () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group is-borderless">
-            <CheckboxGroup
+            <FieldGroup
+              type="checkbox"
               name="preferredUnit"
               groupLabel=""
               groupNote={t("application.household.preferredUnit.optionsLabel")}
               fields={preferredUnitOptions}
               error={errors.preferredUnit}
               errorMessage={t("application.form.errors.selectAtLeastOne")}
-              required
+              validation={{ required: true }}
+              register={register}
             />
           </div>
 

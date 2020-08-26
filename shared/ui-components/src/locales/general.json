@@ -255,7 +255,8 @@
       "subTitle": "If you are selected for a unit, the property will work to accommodate your need to the best of their ability. Should your application be chosen, be prepared to provide supporting documentation from your physician.",
       "mobility": "For Mobility Impairments",
       "vision": "For Vision Impairments",
-      "hearing": "For Hearing Impairments"
+      "hearing": "For Hearing Impairments",
+      "no": "No"
     },
     "preferences": {
       "title": "Your household may qualify for the following housing preferences.",

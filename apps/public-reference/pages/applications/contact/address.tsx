@@ -13,6 +13,7 @@ import {
   t,
   mergeDeep,
   contactPreferencesKeys,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -63,6 +64,12 @@ export default () => {
   const additionalPhone = watch("additionalPhone")
   const sendMailToMailingAddress = watch("sendMailToMailingAddress")
   const workInRegion = watch("applicant.workInRegion")
+
+  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
+    id: item.id,
+    label: t(`application.form.options.contact.${item.id}`),
+    defaultChecked: item?.checked || false,
+  }))
 
   return (
     <FormsLayout>
@@ -332,37 +339,16 @@ export default () => {
             </div>
           )}
           <div className="form-card__group border-b">
-            <label className="field-label--caps mb-4" htmlFor="contactPreference">
-              {t("application.contact.contactPreference")}
-            </label>
-            <div className={"field " + (errors.contactPreferences ? "error" : "")}>
-              {contactPreferencesKeys.map((preference) => {
-                return (
-                  <Fragment key={preference}>
-                    <div className="field">
-                      <input
-                        type="checkbox"
-                        name="contactPreferences"
-                        id={"contactPreferences" + preference}
-                        value={preference}
-                        defaultChecked={application.contactPreferences.includes(preference)}
-                        ref={register({ required: true })}
-                      />
-                      <label
-                        htmlFor={"contactPreferences" + preference}
-                        className="font-semibold"
-                        key={preference}
-                      >
-                        {t("application.form.options.contact." + preference)}
-                      </label>
-                    </div>
-                  </Fragment>
-                )
-              })}
-              <ErrorMessage error={errors.contactPreferences}>
-                {t("application.form.errors.selectAtLeastOne")}
-              </ErrorMessage>
-            </div>
+            <FieldGroup
+              name="contactPreferences"
+              groupLabel={t("application.contact.contactPreference")}
+              fields={contactPreferencesOptions}
+              type="checkbox"
+              validation={{ required: true }}
+              error={errors?.contactPreferences}
+              errorMessage={t("application.form.errors.selectAtLeastOne")}
+              register={register}
+            />
           </div>
 
           <div className="form-card__group">
@@ -379,7 +365,7 @@ export default () => {
               label={t("application.contact.yes")}
               register={register}
               validation={{ required: true }}
-              error={errors.applicant.workInRegion}
+              error={errors?.applicant?.workInRegion}
               inputProps={{
                 value: "yes",
                 defaultChecked: application.applicant.workInRegion == "yes",
@@ -393,7 +379,7 @@ export default () => {
               label={t("application.contact.no")}
               register={register}
               validation={{ required: true }}
-              error={errors.applicant.workInRegion}
+              error={errors?.applicant?.workInRegion}
               inputProps={{
                 value: "no",
                 defaultChecked: application.applicant.workInRegion == "no",

@@ -164,23 +164,21 @@ export default () => {
               disabled={noEmail}
             />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="noEmail"
-                name="applicant.noEmail"
-                defaultChecked={application.applicant.noEmail}
-                ref={register}
-                onChange={(e) => {
+            <Field
+              type="checkbox"
+              id="noEmail"
+              name="applicant.noEmail"
+              label={t("application.name.noEmailAddress")}
+              register={register}
+              inputProps={{
+                defaultChecked: application.applicant.noEmail,
+                onChange: (e) => {
                   if (e.target.checked) {
-                    setValue("emailAddress", "")
+                    setValue("applicant.emailAddress", "")
                   }
-                }}
-              />
-              <label htmlFor="noEmail" className="text-primary font-semibold">
-                {t("application.name.noEmailAddress")}
-              </label>
-            </div>
+                },
+              }}
+            />
           </div>
 
           <div className="form-card__pager">
