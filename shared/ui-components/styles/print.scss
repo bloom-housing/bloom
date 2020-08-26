@@ -5,7 +5,8 @@
   button.button,
   .navbar-burger,
   .site-footer,
-  a.logo:link:after {
+  a.logo:link:after,
+  .navbar-notice {
     display: none;
   }
 
@@ -20,11 +21,11 @@
   }
 
   h2 {
-    font-size: 14px;
+    font-size: 18px;
   }
 
   h3 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   h4 {

@@ -33,7 +33,7 @@ export default () => {
           <h2 className="form-card__title is-borderless">
             {t("application.confirmation.informationSubmittedTitle")}
           </h2>
-            <p className="field-note mt-6 text-center">
+            <p className="field-note mt-4 text-center">
               {t("application.confirmation.submitted")}
               {confirmationDate}
             </p>
