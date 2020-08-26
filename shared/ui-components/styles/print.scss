@@ -1,14 +1,17 @@
 @media print {
+  img,
   button,
   .button,
+  button.button,
   .navbar-burger,
-  .site-footer {
+  .site-footer,
+  a.logo:link:after {
     display: none;
   }
 
   body {
-    font: 12px Georgia, "Times New Roman", Times, serif;
-    // line-height: 1.3;
+    font: 12px;
+    line-height: 1.3;
     text-align: left !important;
   }
 

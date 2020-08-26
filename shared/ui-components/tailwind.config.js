@@ -105,9 +105,9 @@ module.exports = {
       widest: ".12em",
     },
     extend: {
-      borderColor: {
-        default: "colors.gray.450",
-      },
+      borderColor: theme => ({
+       default: theme('colors.gray.450', 'currentColor'),
+      }),
     },
   },
 }
