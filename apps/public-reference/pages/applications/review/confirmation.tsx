@@ -38,20 +38,6 @@ export default () => {
             {t("application.review.confirmation.whatExpectTitle")}
           </h3>
 
-          <p className="field-note mt-1">
-            {t("application.review.confirmation.whatExpectFirstParagraph.held")}
-            {/* TODO: replace with real date */}
-            ###
-            {t("application.review.confirmation.whatExpectFirstParagraph.attend")}
-            {/* TODO: url slug seems to be not completed */}
-            {listing?.urlSlug && (
-              <Link href={`/${listing.urlSlug}`}>
-                {t("application.review.confirmation.whatExpectFirstParagraph.listing")}
-              </Link>
-            )}
-            {t("application.review.confirmation.whatExpectFirstParagraph.refer")}
-          </p>
-
           <p className="field-note mt-2">
             {t("application.review.confirmation.whatExpectSecondparagraph")}
           </p>
