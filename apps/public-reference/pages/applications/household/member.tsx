@@ -426,28 +426,19 @@ export default () => {
             </div>
 
             <div className="form-card__group">
-              <div className={"field " + (errors.relationship ? "error" : "")}>
-                <label className="field-label--caps" htmlFor="relationship">
-                  {t("application.household.member.whatIsTheirRelationship")}
-                </label>
-                <div className="control">
-                  <select
-                    id="relationship"
-                    name="relationship"
-                    defaultValue={member.relationship}
-                    ref={register({ required: true })}
-                    className="w-full"
-                  >
-                    <FormOptions
-                      options={relationshipKeys}
-                      keyPrefix="application.form.options.relationship"
-                    />
-                  </select>
-                </div>
-                <ErrorMessage error={errors.relationship}>
-                  {t("application.form.errors.selectOption")}
-                </ErrorMessage>
-              </div>
+              <Select
+                id="relationship"
+                name="relationship"
+                label={t("application.household.member.whatIsTheirRelationship")}
+                defaultValue={member.relationship}
+                validation={{ required: true }}
+                error={errors.relationship}
+                errorMessage={t("application.form.errors.selectOption")}
+                register={register}
+                controlClassName="control"
+                options={relationshipKeys}
+                keyPrefix="application.form.options.relationship"
+              />
             </div>
 
             <div className="form-card__pager">
