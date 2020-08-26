@@ -11,7 +11,7 @@
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "export": "next export",
     "start": "next start",
-    "dev:listings": "cd ../../services/listings && yarn dev",
+    "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:server-wait": "wait-on \"http://localhost:${PORT:-3100}/\" && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
