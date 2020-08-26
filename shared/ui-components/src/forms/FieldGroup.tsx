@@ -1,32 +1,35 @@
 import React from "react"
 import { ErrorMessage } from "./ErrorMessage"
 
-interface CheckboxSingle {
+interface FieldSingle {
   id: string
   label: string
   defaultChecked?: boolean
-  register: any
 }
 
-interface CheckboxGroupProps {
+interface FieldGroupProps {
   error?: boolean
-  required?: boolean
   errorMessage?: string
   name: string
+  type?: string
   groupLabel: string
-  fields: CheckboxSingle[]
+  fields: FieldSingle[]
   groupNote?: string
+  register: any
+  validation?: Record<string, any>
 }
 
-export const CheckboxGroup = ({
+export const FieldGroup = ({
   name,
   groupLabel,
   fields,
-  required = false,
+  type = "checkbox",
+  validation = {},
   error,
   errorMessage,
   groupNote,
-}: CheckboxGroupProps) => {
+  register,
+}: FieldGroupProps) => {
   return (
     <>
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
@@ -37,12 +40,12 @@ export const CheckboxGroup = ({
           fields.map((item) => (
             <div className={`field ${error && "error"}`} key={item.id}>
               <input
-                type="checkbox"
+                type={type}
                 id={item.id}
                 value={item.id}
                 name={name}
                 defaultChecked={item.defaultChecked || false}
-                ref={item.register({ required })}
+                ref={register(validation)}
               />
               <label htmlFor={item.id} className="font-semibold">
                 {item.label}

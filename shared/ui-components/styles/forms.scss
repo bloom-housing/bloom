@@ -17,6 +17,8 @@
   }
 
   .control {
+    position: relative;
+
     .input {
       @apply border;
       @apply border-gray-450;

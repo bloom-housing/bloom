@@ -26,6 +26,8 @@ export * from "./src/forms/Field"
 export * from "./src/forms/ProgressNav"
 export * from "./src/forms/HouseholdMemberForm"
 export * from "./src/forms/HouseholdSizeField"
+export * from "./src/forms/FieldGroup"
+export * from "./src/forms/Select"
 
 /* Headers */
 export * from "./src/headers/Hero/Hero"
