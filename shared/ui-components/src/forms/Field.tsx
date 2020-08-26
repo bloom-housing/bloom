@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { ErrorMessage } from "./ErrorMessage"
 
 export interface FieldProps {
@@ -33,18 +33,26 @@ const Field = (props: FieldProps) => {
     controlClasses.push(props.controlClassName)
   }
 
+  const type = props.type || "text"
+  const isRadioOrCheckbox = ["radio", "checkbox"].includes(type)
+
+  const label = useMemo(
+    () => (
+      <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
+        {props.label}
+      </label>
+    ),
+    [props.label, props.id, props.name, labelClasses]
+  )
+
   return (
     <div className={classes.join(" ")}>
-      {props.label && (
-        <label className={labelClasses.join(" ")} htmlFor={props.name}>
-          {props.label}
-        </label>
-      )}
+      {!isRadioOrCheckbox && label}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
           className="input"
-          type={props.type || "text"}
+          type={type}
           id={props.id || props.name}
           name={props.name}
           defaultValue={props.defaultValue}
@@ -53,8 +61,9 @@ const Field = (props: FieldProps) => {
           disabled={props.disabled}
           {...props.inputProps}
         />
+        {isRadioOrCheckbox && label}
       </div>
-      <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>
+      {props.errorMessage && <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>}
     </div>
   )
 }
