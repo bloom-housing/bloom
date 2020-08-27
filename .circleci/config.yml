@@ -9,6 +9,8 @@ executors:
       - image: "circleci/postgres:12.3-postgis"
         environment:
           POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: bloom
   cypress-node:
     docker:
@@ -45,8 +47,7 @@ jobs:
       - run:
           name: DB Setup + Backend Core Tests
           command: |
-            yarn migrate
-            yarn seed
+            yarn test:backend:core:dbsetup
             yarn test:backend:core
           environment:
             APP_SECRET: "CI-LONG-SECRET-KEY"
