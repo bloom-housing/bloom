@@ -21,13 +21,13 @@ export default () => {
     defaultValues: {
       noEmail: application.applicant.noEmail,
     },
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl("/applications/contact/address")
   }
   const onError = () => {
-    //alert("An error occurred, you filthy animal!!!")
     window.scrollTo(0, 0)
   }
 
@@ -48,16 +48,11 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
         </div>
 
-        { 
-        
-        
-        Object.entries(errors).length > 0 && (
-        
-        <AlertBox 
-        type="alert" inverted>
-              There are errors you'll need to resolve before moving on.
-            </AlertBox>)}
-        
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
 
         <form className="" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">

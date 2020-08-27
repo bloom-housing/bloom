@@ -5,6 +5,7 @@ https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
 import {
+  AlertBox,
   Button,
   ErrorMessage,
   Field,
@@ -37,6 +38,7 @@ export default () => {
       sendMailToMailingAddress: application.sendMailToMailingAddress,
       workInRegion: application.applicant.workInRegion,
     },
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     mergeDeep(application, data)
@@ -57,6 +59,9 @@ export default () => {
     conductor.sync()
 
     conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const noPhone = watch("applicant.noPhone") || false
@@ -89,7 +94,13 @@ export default () => {
           </h2>
         </div>
 
-        <form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="phoneNumber">
               {t("application.contact.yourPhoneNumber")}
