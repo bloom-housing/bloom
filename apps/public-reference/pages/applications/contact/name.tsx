@@ -3,7 +3,7 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import { Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { AlertBox, Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -26,6 +26,10 @@ export default () => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl("/applications/contact/address")
   }
+  const onError = () => {
+    //alert("An error occurred, you filthy animal!!!")
+    window.scrollTo(0, 0)
+  }
 
   const noEmail = watch("noEmail")
 
@@ -44,7 +48,18 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
+        { 
+        
+        
+        Object.entries(errors).length > 0 && (
+        
+        <AlertBox 
+        type="alert" inverted>
+              There are errors you'll need to resolve before moving on.
+            </AlertBox>)}
+        
+
+        <form className="" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.name.yourName")}

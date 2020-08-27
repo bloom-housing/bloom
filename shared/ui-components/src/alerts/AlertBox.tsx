@@ -28,7 +28,7 @@ const AlertBox = (props: AlertBoxProps) => {
   ].join(" ")
 
   return (
-    <div className={classNames}>
+    <div className={classNames} role="alert">
       <span className="alert-box__icon">
         <Icon size="medium" symbol={icons[props.type || "alert"]} white={props.inverted} />
       </span>
