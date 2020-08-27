@@ -46,6 +46,10 @@ nav.navbar {
   @screen md {
     @apply justify-start;
   }
+
+  @screen print {
+    @apply justify-center;
+  }
 }
 
 .navbar-brand .logo {
@@ -59,10 +63,16 @@ nav.navbar {
   @screen md {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
     margin-bottom: -0.75rem;
+    margin-top: -2.75em;
+    padding-top: 1em;
 
     &:focus {
       box-shadow: 0 0 3px 4px $tailwind-attention;
     }
+  }
+
+  @screen print {
+    margin-top: 0;
   }
 
   &.navbar-item,
@@ -75,11 +85,6 @@ nav.navbar {
     @apply pl-4;
     @apply pr-4;
     @apply flex;
-  }
-
-  @screen md {
-    margin-top: -2.75em;
-    padding-top: 1em;
   }
 
   .logo__image {
@@ -226,7 +231,7 @@ a.navbar-item {
 .navbar__skip-link {
   @apply sr-only;
   @apply text-white;
-  
+
   &:hover {
     @apply text-white;
   }
