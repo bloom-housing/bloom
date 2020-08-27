@@ -6,7 +6,7 @@ executors:
   standard-node:
     docker:
       - image: "cimg/node:12.18.3"
-      - image: "circleci/12-postgis"
+      - image: "circleci/postgres:12.3-postgis"
   cypress-node:
     docker:
       - image: "cypress/base:12.18.2"
