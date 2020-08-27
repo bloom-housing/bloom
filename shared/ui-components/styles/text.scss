@@ -50,6 +50,11 @@ a {
     @apply text-primary;
   }
 
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 3px 4px $tailwind-attention;
+  }
+
   &.lined {
     @apply underline;
   }

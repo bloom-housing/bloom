@@ -65,6 +65,10 @@ nav.navbar {
     margin-bottom: -0.75rem;
     margin-top: -2.75em;
     padding-top: 1em;
+
+    &:focus {
+      box-shadow: 0 0 3px 4px $tailwind-attention;
+    }
   }
 
   @screen print {
@@ -126,6 +130,10 @@ a.navbar-item {
 
   &:hover {
     @apply bg-primary-lighter;
+  }
+
+  &:focus {
+    @apply bg-white;
   }
 
   @screen md {
@@ -218,4 +226,22 @@ a.navbar-item {
 .navbar-end {
   @apply border-t;
   @apply border-gray-400;
+}
+
+.navbar__skip-link {
+  @apply sr-only;
+  @apply text-white;
+
+  &:hover {
+    @apply text-white;
+  }
+
+  &:focus {
+    @apply not-sr-only;
+    @apply absolute;
+    @apply p-1;
+    @apply text-white;
+    top: 0;
+    left: 0;
+  }
 }

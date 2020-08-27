@@ -23,6 +23,7 @@ const Layout = (props) => {
           <title>{t("nav.siteTitle")}</title>
         </Head>
         <SiteHeader
+          skip={t("nav.skip")}
           logoSrc="/images/logo_glyph.svg"
           notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
           title={t("nav.siteTitle")}
@@ -48,7 +49,7 @@ const Layout = (props) => {
             </LocalizedLink>
           )}
         </SiteHeader>
-        <main>{props.children}</main>
+        <main id="main-content">{props.children}</main>
       </div>
 
       <SiteFooter>
