@@ -3,14 +3,17 @@ orbs:
   cypress: cypress-io/cypress@1
 
 executors:
-  cypress-node-12:
+  standard-node:
+    docker:
+      - image: "cimg/node:12.18.3"
+      - image: "circleci/12-postgis"
+  cypress-node:
     docker:
       - image: "cypress/base:12.18.2"
 
 jobs:
   setup:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - checkout
       - run: yarn install
@@ -19,37 +22,32 @@ jobs:
           paths:
             - ~/
   lint:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
   jest-ui-components:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
   jest-backend:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:services:listings
       - run: yarn test:backend:core
   build-public:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:public
   build-partners:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
@@ -78,7 +76,7 @@ workflows:
       - cypress/run:
           requires:
             - setup
-          executor: cypress-node-12
+          executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
           start: yarn dev:all
