@@ -25,7 +25,7 @@ export default class extends Component {
             <title>{t("nav.myDashboard")}</title>
           </Head>
           <MetaTags title={t("nav.myDashboard")} description="" />
-          <section className="" style={{ background: "#f6f6f6" }}>
+          <section className="bg-gray-300">
             <div className="flex flex-wrap relative max-w-5xl mx-auto md:py-8">
             <DashBlocks>
               <DashBlock

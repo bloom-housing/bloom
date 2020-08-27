@@ -32,6 +32,7 @@ export default class extends Component<HousingCounselorsProps> {
         <PageHeader inverse={true} subtitle={t("housingCounselors.subtitle")}>
           {t("pageTitle.housingCounselors")}
         </PageHeader>
+        <section>
         {this.props.counselors.map((c) => {
           return (
             <article
@@ -48,6 +49,7 @@ export default class extends Component<HousingCounselorsProps> {
             <p>{t("t.noneFound")}</p>
           </article>
         )}
+        </section>
       </Layout>
     )
   }

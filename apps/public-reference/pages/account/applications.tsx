@@ -76,7 +76,7 @@ export default () => {
             <title>{t("nav.myApplications")}</title>
           </Head>
           <MetaTags title={t("nav.myApplications")} description="" />
-          <section className="" style={{ background: "#f6f6f6" }}>
+          <section className="bg-gray-300">
             <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>

@@ -6,8 +6,8 @@ const FormLayout = (props) => {
     <>
       <ApplicationTimeout />
       <Layout>
-        <section style={{ padding: "1px", background: "#f6f6f6" }}>
-          <div className="md:mb-20 md:mt-12 mx-auto" style={{ maxWidth: "34rem" }}>
+        <section className="p-px bg-gray-300">
+          <div className="md:mb-20 md:mt-12 mx-auto max-w-lg">
             {props.children}
           </div>
         </section>
