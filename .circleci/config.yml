@@ -43,14 +43,14 @@ jobs:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:services:listings
       - run:
-          name: DB Setup
+          name: DB Setup + Backend Core Tests
           command: |
             yarn migrate
             yarn seed
-      - run: yarn test:backend:core
-        environment:
-          APP_SECRET: "CI-LONG-SECRET-KEY"
-          DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
+            yarn test:backend:core
+          environment:
+            APP_SECRET: "CI-LONG-SECRET-KEY"
+            DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
   build-public:
     executor: standard-node
     steps:
