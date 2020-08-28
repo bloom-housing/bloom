@@ -31,7 +31,7 @@ const ImageCard = (props: ImageCardProps) => {
         {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
         <figcaption className="image-card__figcaption">
           <h2 className="image-card__title">{props.title}</h2>
-          <p>{props.subtitle}</p>
+          {props.subtitle && <p className="image-card__subtitle">{props.subtitle}</p>}
         </figcaption>
       </figure>
       {statusLabel}
