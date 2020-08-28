@@ -33,22 +33,22 @@ export default class extends Component<HousingCounselorsProps> {
           {t("pageTitle.housingCounselors")}
         </PageHeader>
         <section>
-        {this.props.counselors.map((c) => {
-          return (
-            <article
-              key={c.name}
-              data-counselor={c.name}
-              className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2"
-            >
-              <HousingCounselor counselor={c} />
+          {this.props.counselors.map((c) => {
+            return (
+              <article
+                key={c.name}
+                data-counselor={c.name}
+                className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2"
+              >
+                <HousingCounselor counselor={c} />
+              </article>
+            )
+          })}
+          {this.props.counselors.length == 0 && (
+            <article className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
+              <p>{t("t.noneFound")}</p>
             </article>
-          )
-        })}
-        {this.props.counselors.length == 0 && (
-          <article className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
-            <p>{t("t.noneFound")}</p>
-          </article>
-        )}
+          )}
         </section>
       </Layout>
     )
