@@ -9,7 +9,6 @@ import { Logger } from "@nestjs/common"
 
 let app
 async function bootstrap() {
-
   app = await NestFactory.create(AppModule)
   app.enableCors()
   app.use(logger)
