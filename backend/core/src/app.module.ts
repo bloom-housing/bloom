@@ -10,6 +10,7 @@ import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { logger } from "./middleware/logger.middleware"
+import { AssetsModule } from "./assets/assets.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -36,6 +37,7 @@ export function applicationSetup(app: INestApplication) {
     AuthModule,
     ListingsModule,
     ApplicationsModule,
+    AssetsModule,
   ],
 })
 export class AppModule {}

@@ -4,8 +4,10 @@ import { transformUnits } from "../lib/unit_transformations"
 import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
 
-import { ListingsListResponse } from "./listings.dto"
 import { Listing } from "../entity/listing.entity"
+import { plainToClass } from "class-transformer"
+import { ListingCreateDto } from "./listing.create.dto"
+import { ListingExtendedDto } from "./listing.dto"
 
 export enum ListingsResponseStatus {
   ok = "ok",
@@ -13,24 +15,34 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<ListingsListResponse> {
-    let listings = await Listing.find({ relations: ["units", "attachments", "preferences"] })
+  public async list(jsonpath?: string): Promise<ListingExtendedDto> {
+    let listings = await Listing.find({
+      relations: ["units", "preferences", "assets", "applicationMethods"],
+    })
 
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)
     }
 
     listings.forEach((listing) => {
-      listing.unitsSummarized = transformUnits(listing.units, amiCharts)
+      if (listing.units.length) {
+        listing.unitsSummarized = transformUnits(listing.units, amiCharts)
+      }
       listing.urlSlug = listingUrlSlug(listing)
     })
 
-    const data: ListingsListResponse = {
+    const data: ListingExtendedDto = {
       status: ListingsResponseStatus.ok,
       listings: listings,
       amiCharts: amiCharts,
     }
 
     return data
+  }
+
+  async create(listingDto: ListingCreateDto) {
+    const listing = plainToClass(Listing, listingDto)
+    await listing.save()
+    return listing
   }
 }

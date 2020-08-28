@@ -1,9 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "typeorm"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm"
 import { Unit } from "./unit.entity"
-import { Preference } from "./preference.entity"
-import { Attachment } from "./attachment.entity"
-import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 import { Application } from "./application.entity"
+import { Asset } from "./asset.entity"
+import { ApplicationMethod } from "./applicationMethod.entity"
+import { Address } from "../shared/dto/address.dto"
+import { WhatToExpect } from "../shared/dto/whatToExpect.dto"
+import { Preference } from "./preference.entity"
+import { UnitsSummarized } from "@bloom-housing/core"
 
 export enum ListingStatus {
   active = "active",
@@ -12,22 +23,16 @@ export enum ListingStatus {
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
+  id: string
   @OneToMany((type) => Preference, (preference) => preference.listing)
   preferences: Preference[]
   @OneToMany((type) => Unit, (unit) => unit.listing)
   units: Unit[]
-  @OneToMany((type) => Attachment, (attachment) => attachment.listing)
-  attachments: Attachment[]
-  @PrimaryGeneratedColumn("uuid")
-  id: string
-  @Column({ type: "boolean", nullable: true })
-  acceptingApplicationsAtLeasingAgent: boolean
-  @Column({ type: "boolean", nullable: true })
-  acceptingApplicationsByPoBox: boolean
-  @Column({ type: "boolean", nullable: true })
-  acceptingOnlineApplications: boolean
-  @Column({ type: "boolean", nullable: true })
-  acceptsPostmarkedApplications: boolean
+  @OneToMany((type) => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
+  applicationMethods: ApplicationMethod[]
+  @OneToMany((type) => Asset, (asset) => asset.listing)
+  assets: Asset[]
   @Column({ type: "text", nullable: true })
   accessibility: string
   @Column({ type: "text", nullable: true })
@@ -52,6 +57,8 @@ class Listing extends BaseEntity {
   buildingSelectionCriteria: string
   @Column({ type: "text", nullable: true })
   costsNotIncluded: string
+  @CreateDateColumn()
+  createdAt: string
   @Column({ type: "text", nullable: true })
   creditHistory: string
   @Column({ type: "text", nullable: true })
@@ -114,6 +121,8 @@ class Listing extends BaseEntity {
   yearBuilt: number
 
   unitsSummarized?: UnitsSummarized
+  @UpdateDateColumn()
+  updatedAt: string
   urlSlug?: string
   @OneToMany((type) => Application, (application) => application.listing)
   applications: Application[]

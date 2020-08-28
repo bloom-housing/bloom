@@ -2,8 +2,6 @@ import { DynamicModule, Module } from "@nestjs/common"
 import { ListingsSeederService } from "./listings-seeder/listings-seeder.service"
 import { UserModule } from "../user/user.module"
 import { Listing } from "../entity/listing.entity"
-import { Attachment } from "../entity/attachment.entity"
-import { Preference } from "../entity/preference.entity"
 import { Unit } from "../entity/unit.entity"
 import { Application } from "../entity/application.entity"
 
@@ -26,7 +24,7 @@ export class SeederModule {
         TypeOrmModule.forRoot({
           ...dbConfig,
         }),
-        TypeOrmModule.forFeature([Listing, Attachment, Preference, Unit, Application, User]),
+        TypeOrmModule.forFeature([Listing, Unit, Application, User]),
       ],
       providers: [ListingsSeederService, UserService, ListingsService, ApplicationsService],
     }
