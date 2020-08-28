@@ -216,6 +216,7 @@
       },
       "preferredUnit": {
         "title": "What unit sizes are you interested in?",
+        "subTitle": "Your selected unit type will be subject to availability.",
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
