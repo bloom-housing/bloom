@@ -190,6 +190,14 @@ a.navbar-item {
       background-color: transparent;
     }
   }
+
+  > .navbar-link {
+    @apply hidden;
+
+    @screen md {
+      @apply block;
+    }
+  }
 }
 
 .navbar-burger {

@@ -77,23 +77,25 @@ export default () => {
             <title>{t("nav.myApplications")}</title>
           </Head>
           <MetaTags title={t("nav.myApplications")} description="" />
-          <div className="p-16" style={{ background: "#f6f6f6" }}>
-            <DashBlocks>
-              <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
-                <Fragment>
-                  {applications.map((application, i) => (
-                    <AppStatusItem
-                      key={application.id}
-                      status="inProgress"
-                      application={application}
-                      setDeletingApplication={setDeletingApplication}
-                    ></AppStatusItem>
-                  ))}
-                  {applications.length == 0 && noApplicationsSection}
-                </Fragment>
-              </DashBlock>
-            </DashBlocks>
-          </div>
+          <section className="bg-gray-300">
+            <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
+              <DashBlocks>
+                <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
+                  <Fragment>
+                    {applications.map((application, i) => (
+                      <AppStatusItem
+                        key={application.id}
+                        status="inProgress"
+                        application={application}
+                        setDeletingApplication={setDeletingApplication}
+                      ></AppStatusItem>
+                    ))}
+                    {applications.length == 0 && noApplicationsSection}
+                  </Fragment>
+                </DashBlock>
+              </DashBlocks>
+            </div>
+          </section>
         </Layout>
       </RequireLogin>
     </>

@@ -1,4 +1,6 @@
 .dash-blocks {
+  @apply w-full;
+
   @screen md {
     @apply flex;
     @apply flex-wrap;

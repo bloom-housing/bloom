@@ -25,22 +25,24 @@ export default class extends Component {
             <title>{t("nav.myDashboard")}</title>
           </Head>
           <MetaTags title={t("nav.myDashboard")} description="" />
-          <div className="p-16" style={{ background: "#f6f6f6" }}>
-            <DashBlocks>
-              <DashBlock
-                href="/account/applications"
-                title={t("account.myApplications")}
-                subtitle={t("account.myApplicationsSubtitle")}
-                icon={<HeaderBadge />}
-              ></DashBlock>
-              <DashBlock
-                href="/account/settings"
-                title={t("account.accountSettings")}
-                subtitle={t("account.accountSettingsSubtitle")}
-                icon={settingsIcon}
-              ></DashBlock>
-            </DashBlocks>
-          </div>
+          <section className="bg-gray-300">
+            <div className="flex flex-wrap relative max-w-5xl mx-auto md:py-8">
+              <DashBlocks>
+                <DashBlock
+                  href="/account/applications"
+                  title={t("account.myApplications")}
+                  subtitle={t("account.myApplicationsSubtitle")}
+                  icon={<HeaderBadge />}
+                ></DashBlock>
+                <DashBlock
+                  href="/account/settings"
+                  title={t("account.accountSettings")}
+                  subtitle={t("account.accountSettingsSubtitle")}
+                  icon={settingsIcon}
+                ></DashBlock>
+              </DashBlocks>
+            </div>
+          </section>
         </Layout>
       </RequireLogin>
     )

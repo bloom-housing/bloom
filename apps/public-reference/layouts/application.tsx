@@ -31,6 +31,12 @@ const Layout = (props) => {
           <LocalizedLink href="/listings" className="navbar-item">
             {t("nav.listings")}
           </LocalizedLink>
+          {/* Only show Get Assistance if housing counselor data is available */}
+          {process.env.housingCounselorServiceUrl && (
+            <LocalizedLink href="/housing-counselors" className="navbar-item">
+              {t("nav.getAssistance")}
+            </LocalizedLink>
+          )}
           <UserNav signedIn={!!profile} signOut={signOut}>
             <LocalizedLink href="/account/dashboard" className="navbar-item">
               {t("nav.myDashboard")}
@@ -42,12 +48,6 @@ const Layout = (props) => {
               {t("nav.accountSettings")}
             </LocalizedLink>
           </UserNav>
-          {/* Only show Get Assistance if housing counselor data is available */}
-          {process.env.housingCounselorServiceUrl && (
-            <LocalizedLink href="/housing-counselors" className="navbar-item">
-              {t("nav.getAssistance")}
-            </LocalizedLink>
-          )}
         </SiteHeader>
         <main id="main-content">{props.children}</main>
       </div>
