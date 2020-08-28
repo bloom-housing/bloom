@@ -37,7 +37,9 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
 
   skipLink() {
     return (
-      <a href="#main-content" className="navbar__skip-link">{this.props.skip}</a>
+      <a href="#main-content" className="navbar__skip-link">
+        {this.props.skip}
+      </a>
     )
   }
 

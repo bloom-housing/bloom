@@ -68,6 +68,7 @@ export default () => {
         <Modal
           open={deletingApplication}
           title={t("application.deleteThisApplication")}
+          ariaDescription={t("application.deleteThisApplication")}
           actions={modalActions}
           fullScreen
         ></Modal>

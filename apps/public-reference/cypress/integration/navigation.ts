@@ -14,23 +14,25 @@ describe("Navigating around the site", () => {
   })
 
   it("Loads a listing page directly by id", () => {
-    cy.visit("/listing/Uvbk5qurpB2WI9V6WnNdH")
+    cy.visit("/listing/a41641e6-2772-4e18-af8c-b16c1973e976")
 
     // Check that the listing page sidebar apply section text is present on the page
-    cy.contains("Get a Paper Application")
+    cy.contains("Apply Online")
 
     // Check that the URL got re-written with a URL slug
     cy.location("pathname").should(
       "eq",
-      "/listing/Uvbk5qurpB2WI9V6WnNdH/archer_studios_98_archer_street_san_jose_ca"
+      "/listing/a41641e6-2772-4e18-af8c-b16c1973e976/the_triton_55_triton_park_lane_foster_city_ca"
     )
   })
 
   it("Loads a listing page directly with a full url", () => {
-    cy.visit("/listing/Uvbk5qurpB2WI9V6WnNdH/archer_studios_98_archer_street_san_jose_ca")
+    cy.visit(
+      "/listing/a41641e6-2772-4e18-af8c-b16c1973e976/the_triton_55_triton_park_lane_foster_city_ca"
+    )
 
     // Check that the listing page sidebar apply section text is present on the page
-    cy.contains("Get a Paper Application")
+    cy.contains("Apply Online")
   })
 
   it("Loads a non-listing-related page directly", () => {

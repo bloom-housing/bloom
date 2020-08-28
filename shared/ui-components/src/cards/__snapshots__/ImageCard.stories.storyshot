@@ -54,6 +54,7 @@ exports[`Storyshots Cards/ImageCard With Link 1`] = `
   >
     <LocalizedLink
       as="/listings"
+      className="block"
       href="/listings"
     >
       <Link
@@ -61,6 +62,7 @@ exports[`Storyshots Cards/ImageCard With Link 1`] = `
         href="/listings"
       >
         <a
+          className="block"
           href="/listings"
           onClick={[Function]}
           onMouseEnter={[Function]}
