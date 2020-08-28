@@ -65,12 +65,6 @@ export default () => {
             {t("application.financial.vouchers.title")}
           </h2>
 
-          {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted>
-              {t("t.errorsToResolve")}
-            </AlertBox>
-          )}
-
           <p className="field-note mb-4 mt-5">
             <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
             {` ${t("application.financial.vouchers.housingVouchers.text")}`}
@@ -86,6 +80,12 @@ export default () => {
             {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
           </p>
         </div>
+
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
 
         <form className="" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
