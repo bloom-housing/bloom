@@ -49,6 +49,7 @@ jobs:
           command: |
             yarn test:backend:core:dbsetup
             yarn test:backend:core
+            yarn test:e2e:backend:core
           environment:
             APP_SECRET: "CI-LONG-SECRET-KEY"
             # DB URL for migration and seeds:
