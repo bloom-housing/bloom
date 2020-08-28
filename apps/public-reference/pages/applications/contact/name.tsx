@@ -19,6 +19,7 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({
     defaultValues: {
+      "applicant.emailAddress": application.applicant.emailAddress,
       noEmail: application.applicant.noEmail,
     },
   })
@@ -27,6 +28,7 @@ export default () => {
     conductor.routeToNextOrReturnUrl("/applications/contact/address")
   }
 
+  const emailPresent = watch("applicant.emailAddress")
   const noEmail = watch("noEmail")
 
   return (
@@ -170,6 +172,7 @@ export default () => {
                 id="noEmail"
                 name="applicant.noEmail"
                 defaultChecked={application.applicant.noEmail}
+                disabled={emailPresent.length > 0}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {

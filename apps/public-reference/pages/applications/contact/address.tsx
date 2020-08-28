@@ -32,6 +32,7 @@ export default () => {
     Record<string, any>
   >({
     defaultValues: {
+      "applicant.phoneNumber": application.applicant.phoneNumber,
       noPhone: application.applicant.noPhone,
       additionalPhone: application.additionalPhone,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
@@ -60,6 +61,10 @@ export default () => {
   }
 
   const noPhone = watch("applicant.noPhone") || false
+  const phoneNumber = watch("applicant.phoneNumber") as string
+  const phonePresent = () => {
+    return phoneNumber.replace(/[()\-_ ]/g, "").length > 0
+  }
   const additionalPhone = watch("additionalPhone")
   const sendMailToMailingAddress = watch("sendMailToMailingAddress")
   const workInRegion = watch("applicant.workInRegion")
@@ -142,6 +147,7 @@ export default () => {
                 id="noPhone"
                 name="applicant.noPhone"
                 defaultChecked={application.applicant.noPhone}
+                disabled={phonePresent()}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
