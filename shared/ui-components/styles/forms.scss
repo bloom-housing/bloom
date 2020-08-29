@@ -150,13 +150,13 @@
   }
 
   input[type="checkbox"]:disabled + label {
-    color: map-get($tailwind-gray, 600) !important;
+    color: map-get($tailwind-gray, 450) !important;
   }
 
   input[type="checkbox"]:disabled + label::before,
   input[type="radio"]:disabled + label::before {
-    background: map-get($tailwind-gray, 550);
-    box-shadow: 0 0 0 1px map-get($tailwind-gray, 600);
+    background: map-get($tailwind-gray, 400);
+    box-shadow: 0 0 0 1px map-get($tailwind-gray, 450);
     cursor: not-allowed;
   }
 
@@ -187,10 +187,15 @@
 
   input:disabled,
   select:disabled,
-  textarea:disabled {
+  textarea:disabled,
+  .control input:disabled,
+  .control select:disabled,
+  .control textarea:disabled {
     @apply bg-gray-400;
     cursor: not-allowed;
     @apply text-gray-700;
+    @apply border-gray-500;
+    opacity: 1;
   }
 }
 
