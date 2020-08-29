@@ -108,3 +108,9 @@
     }
   }
 }
+
+button {
+  &.has-toggle {
+    @include has-toggle;
+  }
+}
