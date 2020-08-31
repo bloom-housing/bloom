@@ -94,7 +94,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button filled={true} onClick={() => false}>
-                Submit
+                {t("application.review.terms.submit")}
               </Button>
             </div>
           </div>
