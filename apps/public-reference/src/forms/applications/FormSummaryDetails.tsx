@@ -110,6 +110,14 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
             <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
           </ReviewItem>
         )}
+
+        {application.contactPreferences && (
+          <ReviewItem label={t("application.contact.preferredContactType")}>
+            {application.contactPreferences
+              ?.map((item) => t(`application.form.options.contact.${item}`))
+              .join(", ")}
+          </ReviewItem>
+        )}
       </div>
 
       {application.alternateContact.type !== "" &&
@@ -131,49 +139,64 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
                 <br />
                 {application.alternateContact.emailAddress}
               </ReviewItem>
+
+              {application.alternateAddress && (
+                <ReviewItem label={t("application.contact.address")}>
+                  {console.log(application.alternateContact.mailingAddress)}
+                  <MultiLineAddress
+                    address={reformatAddress(application.alternateContact.mailingAddress)}
+                  />
+                </ReviewItem>
+              )}
             </div>
           </>
         )}
 
-      <h3 className="form--card__sub-header">
-        {t("application.household.householdMembers")}
-        {editMode && <EditLink href="/applications/household/add-members" />}
-      </h3>
+      {application.householdSize > 1 && (
+        <>
+          <h3 className="form--card__sub-header">
+            {t("application.household.householdMembers")}
+            {editMode && <EditLink href="/applications/household/add-members" />}
+          </h3>
 
-      {application.householdSize > 0 && (
-        <div className="form-card__group info-group mx-0">
-          {application.householdMembers.map((member) => (
-            <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
-              <p className="info-item__value">
-                {member.firstName} {member.lastName}
-              </p>
-              <div>
-                <ReviewItem label={t("application.household.member.dateOfBirth")}>
-                  {member.birthMonth}/{member.birthDay}/{member.birthYear}
-                </ReviewItem>
-                {member.sameAddress === "no" && (
-                  <ReviewItem label={t("application.contact.address")}>
-                    <MultiLineAddress address={reformatAddress(member.address)} />
+          <div className="form-card__group info-group mx-0">
+            {application.householdMembers.map((member) => (
+              <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
+                <p className="info-item__value">
+                  {member.firstName} {member.lastName}
+                </p>
+                <div>
+                  <ReviewItem label={t("application.household.member.dateOfBirth")}>
+                    {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </ReviewItem>
-                )}
-                {member.sameAddress !== "no" && (
-                  <ReviewItem label={t("application.review.sameAddressAsApplicant")}></ReviewItem>
-                )}
+                  {member.sameAddress === "no" && (
+                    <ReviewItem label={t("application.contact.address")}>
+                      <MultiLineAddress address={reformatAddress(member.address)} />
+                    </ReviewItem>
+                  )}
+                  {member.sameAddress !== "no" && (
+                    <ReviewItem label={t("application.review.sameAddressAsApplicant")}></ReviewItem>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-      {application.householdSize === 0 && (
-        <div className="form-card__group mx-0">{t("application.review.noAdditionalMembers")}</div>
+            ))}
+          </div>
+        </>
       )}
 
       <h3 className="form--card__sub-header">
         {t("application.review.householdDetails")}
-        {editMode && <EditLink href="/applications/household/ada" />}
+        {editMode && <EditLink href="/applications/household/preferred-units" />}
       </h3>
 
       <div className="form-card__group mx-0">
+        {application.preferredUnit && (
+          <ReviewItem label={t("application.household.preferredUnit.preferredUnitType")}>
+            {application.preferredUnit
+              .map((item) => t(`application.household.preferredUnit.options.${item}`))
+              .join(", ")}
+          </ReviewItem>
+        )}
         <ReviewItem label={t("application.ada.label")}>
           {accessibilityLabels(application.accessibility).map((item) => (
             <Fragment key={item}>

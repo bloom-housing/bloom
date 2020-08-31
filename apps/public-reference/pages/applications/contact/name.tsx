@@ -7,10 +7,9 @@ import { Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-compo
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useMemo } from "react"
-import { emailRegex } from "../../../lib/emailRegex"
+import { useContext } from "react"
+import { emailRegex } from "../../../lib/helpers"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)

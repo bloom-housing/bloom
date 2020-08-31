@@ -39,10 +39,10 @@ export default () => {
     return preferredUnit?.map((item) => ({
       id: item.id,
       label: t(`application.household.preferredUnit.options.${item.id}`),
-      defaultChecked: item.checked,
+      defaultChecked: item.checked || application.preferredUnit.includes(item.id),
       register,
     }))
-  }, [])
+  }, [register, application.preferredUnit])
 
   return (
     <FormsLayout>
