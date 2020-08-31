@@ -93,13 +93,7 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                disabled
-                filled={true}
-                onClick={() => {
-                  //
-                }}
-              >
+              <Button filled={true} onClick={() => false}>
                 Submit
               </Button>
             </div>
