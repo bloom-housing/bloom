@@ -1,0 +1,24 @@
+
+// AG Grid
+@import "~ag-grid-community/src/styles/ag-grid.scss";
+@import "~ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin";
+
+.ag-theme-alpine {
+  @include ag-theme-alpine((
+    // use theme parameters where possible
+    header-height: 80px,
+    row-height: 50px,
+    background-color: #000,
+    foreground-color: #333,
+    data-color: #333
+  ));
+
+  .ag-row {
+    height: ag-param(row-height);
+  }
+
+  .ag-header {
+    // or write CSS selectors to make customisations beyond what the parameters support
+    text-style: italic;
+  }
+}

@@ -61,7 +61,7 @@ export default function ApplicationsList() {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>Applications Received</PageHeader>
-      <article className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
+      <article className="flex-row flex-wrap max-w-5xl mx-auto py-8 border-b-2">
         <div className="ag-theme-alpine">
           <AgGridReact
             columnDefs={columnDefs}
