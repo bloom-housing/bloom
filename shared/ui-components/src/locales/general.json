@@ -216,6 +216,7 @@
       },
       "preferredUnit": {
         "title": "What unit sizes are you interested in?",
+        "subTitle": "Your selected unit type will be subject to availability.",
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
@@ -241,8 +242,7 @@
         "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
       },
       "membersInfo": {
-        "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
-        "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
+        "title": "Before adding other people, make sure that they aren't named on any other application for this listing."
       },
       "primaryApplicant": "Primary Applicant"
     },
