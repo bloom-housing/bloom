@@ -1,6 +1,6 @@
 import * as React from "react"
 import { LocalizedLink } from "../../atoms/LocalizedLink"
-import { LanguageNav } from "@bloom-housing/ui-components"
+import { LanguageNav, t } from "@bloom-housing/ui-components"
 
 export interface SiteHeaderProps {
   logoSrc: string
@@ -31,7 +31,9 @@ export const NavbarDropdown = (props: NavbarDropdownProps) => {
 class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   constructor(props: SiteHeaderProps) {
     super(props)
-    this.state = { active: false }
+    this.state = {
+      active: false,
+    }
     this.handleMenuToggle = this.handleMenuToggle.bind(this)
   }
 
@@ -75,21 +77,23 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     )
   }
 
-  tempLangItems = [
+  languages = [
     {
       name: "",
-      label: "English",
+      label: t("languages.english"),
+      path: "/",
     },
     {
       name: "es",
-      label: "Spanish",
+      label: t("languages.spanish"),
+      path: "/es",
     },
   ]
 
   render() {
     return (
       <>
-        <LanguageNav items={this.tempLangItems} />
+        <LanguageNav items={this.languages} />
 
         {this.noticeBar()}
         <div className="navbar__wrapper">

@@ -6,6 +6,7 @@ import { t } from "../../helpers/translator"
 type LangItem = {
   name: string
   label: string
+  path: string
 }
 
 export interface LanguageNavProps {
@@ -13,7 +14,6 @@ export interface LanguageNavProps {
 }
 
 const LanguageNav = ({ items }: LanguageNavProps) => {
-  const router = useRouter()
   const routePrefix = t("config.routePrefix")
 
   return (
@@ -23,10 +23,7 @@ const LanguageNav = ({ items }: LanguageNavProps) => {
           <ul className="language-nav__list">
             {items?.map((item) => (
               <li key={item.name}>
-                <a
-                  href={item.name + router.pathname}
-                  className={routePrefix === item.name ? "is-active" : ""}
-                >
+                <a href={item.path} className={routePrefix === item.name ? "is-active" : ""}>
                   {item.label}
                 </a>
               </li>
