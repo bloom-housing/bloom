@@ -49,7 +49,7 @@ export default () => {
                 href={`listing/id=${listing.id}`}
                 as={`/listing/${listing.id}/${listing.urlSlug}`}
               >
-                {t("application.review.confirmation.whatExpectFirstParagraph.listing")}
+                <a>{t("application.review.confirmation.whatExpectFirstParagraph.listing")}</a>
               </Link>
             )}
             {t("application.review.confirmation.whatExpectFirstParagraph.refer")}
