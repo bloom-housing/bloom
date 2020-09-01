@@ -9,7 +9,7 @@ import {
   UserContext,
   t,
   AlertBox,
-  UrlAlert,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
@@ -57,7 +57,7 @@ const SignIn = () => {
             {requestError}
           </AlertBox>
         )}
-        <UrlAlert type="notice" urlParam="message" dismissable />
+        <SiteAlert type="notice" dismissable />
         <div className="form-card__group pt-0 border-b">
           <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field

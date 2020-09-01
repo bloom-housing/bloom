@@ -41,6 +41,7 @@ type IdleTimeoutProps = {
   promptAction: string
   redirectPath: string
   alertMessage: string
+  alertType?: AlertTypes
   onTimeout: () => unknown
 }
 
@@ -50,6 +51,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
   promptText,
   redirectPath,
   alertMessage,
+  alertType = "alert",
   onTimeout,
 }) => {
   const { idleTimeout } = useContext(ConfigContext)
@@ -68,7 +70,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
         const timeoutAction = async () => {
           setPromptTimeout(undefined)
           await onTimeout()
-          setSiteAlertMessage(alertMessage, "alert")
+          setSiteAlertMessage(alertMessage, alertType)
           router.push(redirectPath)
         }
         timeoutAction()
@@ -114,9 +116,9 @@ export const LoggedInUserIdleTimeout = ({ onTimeout }: { onTimeout?: () => unkno
         promptTitle: t("authentication.timeout.title"),
         promptText: t("authentication.timeout.text"),
         promptAction: t("authentication.timeout.action"),
-        redirectPath: `/sign-in?message=${encodeURIComponent(
-          t("authentication.timeout.signOutMessage")
-        )}`,
+        redirectPath: `/sign-in`,
+        alertMessage: t("authentication.timeout.signOutMessage"),
+        alertType: "notice",
         onTimeout: timeoutFxn,
       })
     : null

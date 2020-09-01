@@ -28,9 +28,10 @@ export const SiteAlert = ({
   useEffect(() => {
     let timeoutRef: number
 
-    setMessage(sessionStorage.getItem(`alert_message_type`) || "")
+    setMessage(sessionStorage.getItem(`alert_message_${type}`) || "")
 
     if (message != "") {
+      sessionStorage.removeItem(`alert_message_${type}`)
       setOpen(true)
 
       // Automatically dismiss the message after the timeout, if applicable
