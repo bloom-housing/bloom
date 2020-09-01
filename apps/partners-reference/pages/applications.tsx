@@ -76,11 +76,75 @@ export default function ApplicationsList() {
       type: 'rightAligned',
     },
     {
+      headerName: "Requested ADA",
+      field: "application.incomeVouchers",
+      sortable: false,
+      filter: false,
+      width: 120,
+      minWidth: 100,
+    },
+    {
+      headerName: "Preference Claimed",
+      field: "application.preferences.youHaveClaimed",
+      sortable: false,
+      filter: false,
+      width: 150,
+      minWidth: 100,
+    },
+    {
+      headerName: "Primary DOB",
+      field: "application.household.member.dateOfBirth",
+      sortable: false,
+      filter: false,
+      width: 150,
+      minWidth: 100,
+    },
+    {
       headerName: "Email",
       field: "application.applicant.emailAddress",
       sortable: false,
       filter: false,
       width: 150,
+      minWidth: 100,
+    },
+    {
+      headerName: "Phone",
+      field: "application.applicant.phoneNumber",
+      sortable: false,
+      filter: false,
+      width: 150,
+      minWidth: 100,
+    },
+    {
+      headerName: "Residence Address",
+      field: "application.applicant.address.street",
+      sortable: false,
+      filter: false,
+      width: 175,
+      minWidth: 150,
+    },
+    {
+      headerName: "Residence City",
+      field: "application.applicant.address.city",
+      sortable: false,
+      filter: false,
+      width: 150,
+      minWidth: 120,
+    },
+    {
+      headerName: "Residence State",
+      field: "application.applicant.address.state",
+      sortable: false,
+      filter: false,
+      width: 120,
+      minWidth: 100,
+    },
+    {
+      headerName: "Residence Zip",
+      field: "application.applicant.address.zipCode",
+      sortable: false,
+      filter: false,
+      width: 120,
       minWidth: 100,
     },
     {
@@ -111,7 +175,42 @@ export default function ApplicationsList() {
             domLayout={"autoHeight"}
             headerHeight={83}
             rowHeight={58}
+            suppressPaginationPanel={true}
+            paginationPageSize={8}
+            suppressScrollOnNewData={true}
           ></AgGridReact>
+        </div>
+        <div className="data-pager">
+          <button className="button data-pager__previous data-pager__control" onClick={() => this.onBtPrevious()}>Previous</button>
+          
+          <div className="data-pager__control-group">
+          <span className="data-pager__control">
+            <span className="field-label" id="lbTotalPages">12</span>
+            <span className="field-label">Total Applications</span>
+          </span>
+
+          <span className="field data-pager__control">
+            <label className="field-label">Show</label>
+            <select onChange={() => this.onPageSizeChanged()} id="page-size">
+              <option value="10" selected>8</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>
+          </span>
+
+          <span className="field data-pager__control">
+            <label className="field-label">Jump to</label>
+            <select onChange={() => this.onPageSizeChanged()} id="page-jump">
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </span>
+          </div>
+
+          <button className="button data-pager__next data-pager__control" onClick={() => this.onBtNext()}>Next</button>
         </div>
       </article>
     </Layout>

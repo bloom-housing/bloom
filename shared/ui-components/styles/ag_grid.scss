@@ -59,3 +59,30 @@
     @apply font-sans;
   }
 }
+
+.data-pager {
+  @apply p-4;
+  @apply flex;
+  @apply items-center;
+  @apply border;
+  @apply border-t-0;
+  @apply rounded-b-md;
+  @apply border-gray-500;
+  @apply bg-gray-200;
+}
+
+.data-pager__control {
+  @apply px-4;
+
+  .field-label {
+    @apply mr-2;
+  }
+}
+
+.data-pager__previous {
+  
+}
+
+.data-pager__control-group {
+  margin-left: auto;
+}
