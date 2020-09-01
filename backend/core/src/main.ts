@@ -1,11 +1,10 @@
 import { NestFactory } from "@nestjs/core"
 import { AppModule } from "./app.module"
 import { logger } from "./middleware/logger.middleware"
-import { ValidationPipe } from "@nestjs/common"
+import { Logger, ValidationPipe } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { getConnection } from "typeorm"
-import { Logger } from "@nestjs/common"
 
 let app
 async function bootstrap() {
@@ -25,7 +24,8 @@ async function bootstrap() {
   const conn = getConnection()
   // showMigrations returns true if there are pending migrations
   if (await conn.showMigrations()) {
-    Logger.warn("Detected pending migrations. Consider running them before starting the app.")
+    Logger.error("Detected pending migrations. Please run them before starting the app.")
+    process.exit(1)
   }
 
   const options = new DocumentBuilder()
