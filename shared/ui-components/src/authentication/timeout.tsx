@@ -3,6 +3,8 @@ import { useRouter } from "next/router"
 import UserContext from "./UserContext"
 import { ConfigContext } from "../config"
 import { Modal } from "../modals/Modal"
+import { setSiteAlertMessage } from "../alerts/SiteAlert"
+import { AlertTypes } from "../alerts/alertTypes"
 import { t } from "../helpers/translator"
 
 const PROMPT_TIMEOUT = 60000
@@ -38,6 +40,7 @@ type IdleTimeoutProps = {
   promptText: string
   promptAction: string
   redirectPath: string
+  alertMessage: string
   onTimeout: () => unknown
 }
 
@@ -46,6 +49,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
   promptAction,
   promptText,
   redirectPath,
+  alertMessage,
   onTimeout,
 }) => {
   const { idleTimeout } = useContext(ConfigContext)
@@ -64,6 +68,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
         const timeoutAction = async () => {
           setPromptTimeout(undefined)
           await onTimeout()
+          setSiteAlertMessage(alertMessage, "alert")
           router.push(redirectPath)
         }
         timeoutAction()
