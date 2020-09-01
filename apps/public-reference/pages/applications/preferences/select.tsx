@@ -71,7 +71,7 @@ export default () => {
         </div>
 
         {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted>
+          <AlertBox type="alert" inverted closeable>
             {t("t.errorsToResolve")}
           </AlertBox>
         )}
