@@ -141,11 +141,10 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
             </h3>
 
-            <div className="form-card__group mx-0 pb-0">
-              <p className="field-note">{t(`application.alternateContact.type.description`)}</p>
-            </div>
-
             <div className="form-card__group mx-0">
+              <p className="field-note mb-5">
+                {t(`application.alternateContact.type.description`)}
+              </p>
               <ReviewItem label={t("t.name")} sublabel={alternateContactName()}>
                 {application.alternateContact.firstName} {application.alternateContact.lastName}
               </ReviewItem>
