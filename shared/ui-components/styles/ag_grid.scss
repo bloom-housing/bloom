@@ -54,6 +54,15 @@
     text-align: right;
   }
 
+  .ag-pinned-left-header,
+  .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell) {
+    @apply border-gray-450;
+    @apply border-r-4;
+    @apply border-t-0;
+    @apply border-l-0;
+    @apply border-b-0;
+  }
+
   .ag-row {
     @apply border-t-0;
     @apply border-l-0;
@@ -69,6 +78,7 @@
     @apply border-b-0;
     @apply rounded-t-md;
     @apply rounded-b-none;
+    overflow: visible;
   }
 }
 
