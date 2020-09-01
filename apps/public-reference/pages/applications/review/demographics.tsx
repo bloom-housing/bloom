@@ -51,11 +51,9 @@ const Demographics = () => {
     }))
   }, [register])
 
-  const backPath = useMemo(() => {
-    return application.preferences.none
-      ? "/applications/preferences/general"
-      : "/applications/preferences/select"
-  }, [application.preferences.none])
+  const backPath = application.preferences.none
+    ? "/applications/preferences/general"
+    : "/applications/preferences/select"
 
   return (
     <FormsLayout>
