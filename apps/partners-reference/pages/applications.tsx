@@ -13,40 +13,68 @@ export default function ApplicationsList() {
 
   const columnDefs = [
     {
-      headerName: "Listing",
-      field: "listing.name",
+      headerName: "Application Submission Date",
+      field: "createdAt",
       sortable: true,
-      filter: true,
+      filter: false,
+      pinned: "left",
+      autoSizeColumn: true,
+      width: 200,
     },
     {
       headerName: "First Name",
       field: "application.applicant.firstName",
       sortable: true,
-      filter: true,
+      filter: false,
+      pinned: "left",
+      autoSizeColumn: true,
+      width: 150,
     },
     {
       headerName: "Last Name",
       field: "application.applicant.lastName",
       sortable: true,
-      filter: true,
+      filter: false,
+      pinned: "left",
+      autoSizeColumn: true,
+      width: 150,
+    },
+    {
+      headerName: "Application Number",
+      field: "id",
+      sortable: false,
+      filter: false,
+      width: 150,
+      type: 'numericColumn',
+    },
+    {
+      headerName: "Household Size",
+      field: "application.householdSize",
+      sortable: false,
+      filter: false,
+      width: 150,
+      type: 'numericColumn',
+    },
+    {
+      headerName: "Declared Annual Income",
+      field: "application.income",
+      sortable: false,
+      filter: false,
+      width: 200,
+      type: 'numericColumn',
     },
     {
       headerName: "Email",
       field: "application.applicant.emailAddress",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
+      width: 150,
     },
     {
-      headerName: "Id",
-      field: "id",
-      sortable: true,
-      filter: true,
-    },
-    {
-      headerName: "Created",
-      field: "createdAt",
-      sortable: true,
-      filter: true,
+      headerName: "Listing",
+      field: "listing.name",
+      sortable: false,
+      filter: false,
     },
   ]
 
@@ -61,12 +89,14 @@ export default function ApplicationsList() {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>Applications Received</PageHeader>
-      <article className="flex-row flex-wrap max-w-5xl mx-auto py-8 border-b-2">
+      <article className="flex-row flex-wrap max-w-screen-xl mx-auto py-8 border-b-2">
         <div className="ag-theme-alpine">
           <AgGridReact
             columnDefs={columnDefs}
             rowData={applicationDtos}
             domLayout={"autoHeight"}
+            headerHeight={83}
+            rowHeight={58}
           ></AgGridReact>
         </div>
       </article>

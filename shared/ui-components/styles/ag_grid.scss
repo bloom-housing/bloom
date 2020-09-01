@@ -18,7 +18,24 @@
   }
 
   .ag-header {
-    // or write CSS selectors to make customisations beyond what the parameters support
-    text-style: italic;
+    @apply whitespace-normal;
+    text-overflow: unset;
+  }
+
+  .ag-header-cell-text {
+    @apply whitespace-normal;
+    text-overflow: unset;
+  }
+
+  .ag-header-cell-text {
+    @apply uppercase;
+    @apply font-sans;
+    @apply font-semibold;
+    @apply tracking-wider;
+  }
+
+  .ag-cell-value {
+    @apply text-gray-750;
+    @apply font-sans;
   }
 }
