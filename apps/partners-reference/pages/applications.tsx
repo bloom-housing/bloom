@@ -11,6 +11,11 @@ export default function ApplicationsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
+  const defaultColDef = {
+    resizable: true,
+    maxWidth: 300,
+  }
+
   const columnDefs = [
     {
       headerName: "Application Submission Date",
@@ -20,6 +25,8 @@ export default function ApplicationsList() {
       pinned: "left",
       autoSizeColumn: true,
       width: 200,
+      minWidth: 150,
+      sort: "asc",
     },
     {
       headerName: "First Name",
@@ -29,6 +36,7 @@ export default function ApplicationsList() {
       pinned: "left",
       autoSizeColumn: true,
       width: 150,
+      minWidth: 100,
     },
     {
       headerName: "Last Name",
@@ -38,6 +46,7 @@ export default function ApplicationsList() {
       pinned: "left",
       autoSizeColumn: true,
       width: 150,
+      minWidth: 100,
     },
     {
       headerName: "Application Number",
@@ -45,7 +54,8 @@ export default function ApplicationsList() {
       sortable: false,
       filter: false,
       width: 150,
-      type: 'numericColumn',
+      minWidth: 120,
+      type: 'rightAligned',
     },
     {
       headerName: "Household Size",
@@ -53,7 +63,8 @@ export default function ApplicationsList() {
       sortable: false,
       filter: false,
       width: 150,
-      type: 'numericColumn',
+      minWidth: 120,
+      type: 'rightAligned',
     },
     {
       headerName: "Declared Annual Income",
@@ -61,7 +72,8 @@ export default function ApplicationsList() {
       sortable: false,
       filter: false,
       width: 200,
-      type: 'numericColumn',
+      minWidth: 150,
+      type: 'rightAligned',
     },
     {
       headerName: "Email",
@@ -69,6 +81,7 @@ export default function ApplicationsList() {
       sortable: false,
       filter: false,
       width: 150,
+      minWidth: 100,
     },
     {
       headerName: "Listing",
@@ -89,9 +102,10 @@ export default function ApplicationsList() {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>Applications Received</PageHeader>
-      <article className="flex-row flex-wrap max-w-screen-xl mx-auto py-8 border-b-2">
-        <div className="ag-theme-alpine">
+      <article className="flex-row flex-wrap max-w-screen-xl mx-auto py-8 px-4 border-b-2">
+        <div className="ag-theme-alpine ag-theme-bloom">
           <AgGridReact
+            defaultColDef={defaultColDef}
             columnDefs={columnDefs}
             rowData={applicationDtos}
             domLayout={"autoHeight"}

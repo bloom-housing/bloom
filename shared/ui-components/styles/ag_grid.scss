@@ -3,14 +3,11 @@
 @import "~ag-grid-community/src/styles/ag-grid.scss";
 @import "~ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin";
 
-.ag-theme-alpine {
+.ag-theme-alpine.ag-theme-bloom { // would like to remove the local theme class
   @include ag-theme-alpine((
     // use theme parameters where possible
-    header-height: 80px,
-    row-height: 50px,
-    background-color: #000,
-    foreground-color: #333,
-    data-color: #333
+    header-height: 83px,
+    row-height: 58px
   ));
 
   .ag-row {
@@ -20,6 +17,19 @@
   .ag-header {
     @apply whitespace-normal;
     text-overflow: unset;
+  }
+
+  .ag-header-cell {
+    @apply px-0;
+  }
+
+  .ag-cell-label-container {
+    @apply px-4;
+  }
+
+  .ag-header-cell-sorted-asc,
+  .ag-header-cell-sorted-desc {
+    box-shadow: inset 0px -3px 0px 0px $tailwind-primary;
   }
 
   .ag-header-cell-text {
@@ -32,6 +42,16 @@
     @apply font-sans;
     @apply font-semibold;
     @apply tracking-wider;
+  }
+
+  .ag-header-cell-resize::after {
+    height: 100%;
+    top: 0;
+    @apply bg-gray-400;
+  }
+
+  .ag-right-aligned-header {
+    text-align: right;
   }
 
   .ag-cell-value {
