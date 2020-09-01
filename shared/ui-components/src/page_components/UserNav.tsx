@@ -17,7 +17,6 @@ const UserNav = (props: UserNavProps) => {
       <>
         <NavbarDropdown menuTitle={t("nav.myAccount")}>
           {children}
-          <hr className="navbar-divider" />
           <a href="#" className="navbar-item" onClick={signOut}>
             {t("nav.signOut")}
           </a>

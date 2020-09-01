@@ -2,7 +2,7 @@
 
 .image-card {
   @apply relative;
-  
+
   img {
     @apply w-full;
   }
@@ -12,6 +12,7 @@
   @apply absolute;
   @apply inset-x-0;
   @apply bottom-0;
+  @apply py-1;
 
   &:before {
     @include overlay-image;
@@ -28,13 +29,26 @@
   @apply relative;
   @apply z-10;
   @apply tracking-wider;
-  @apply py-3;
   @apply px-5;
+  @apply pb-1;
+}
+
+.image-card__subtitle {
+  @apply text-white;
+  @apply text-left;
+  @apply uppercase;
+  @apply font-alt-sans;
+  @apply text-sm;
+  @apply px-5;
+  @apply pb-3;
+  @apply relative;
+  @apply z-10;
+  @apply tracking-widest;
 }
 
 .image-card--leader {
   @apply w-full;
-  
+
   @screen md {
     @apply w-2/3;
     @apply pr-8;

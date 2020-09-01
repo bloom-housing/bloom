@@ -12,11 +12,11 @@ import {
   UrlAlert,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { useRouter } from "next/router"
+import { useRedirectToPrevPage } from "../lib/hooks"
 
 const SignIn = () => {
   const { login } = useContext(UserContext)
-  const router = useRouter()
+  const redirectToPrev = useRedirectToPrevPage()
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
@@ -26,13 +26,14 @@ const SignIn = () => {
 
     try {
       const user = await login(email, password)
-      router.push(
-        `/?success=${encodeURIComponent(
+
+      redirectToPrev({
+        success: `${encodeURIComponent(
           t(`authentication.signIn.success`, { name: user.firstName })
-        )}`
-      )
+        )}`,
+      })
     } catch (err) {
-      const { status } = err.response
+      const { status } = err.response || {}
       if (status === 401) {
         setRequestError(`${t("authentication.signIn.error")}: ${err.message}`)
       } else {

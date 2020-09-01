@@ -6,6 +6,10 @@ exports[`Storyshots Headers/SiteHeader Standard 1`] = `
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
   title="Site Title Here"
 >
+  <a
+    className="navbar__skip-link"
+    href="#main-content"
+  />
   <div
     className="navbar-notice"
   >
@@ -100,6 +104,10 @@ exports[`Storyshots Headers/SiteHeader With Dropdown And Button 1`] = `
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
   title="Site Title Here"
 >
+  <a
+    className="navbar__skip-link"
+    href="#main-content"
+  />
   <div
     className="navbar-notice"
   >
