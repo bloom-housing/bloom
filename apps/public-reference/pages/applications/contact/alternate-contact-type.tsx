@@ -18,6 +18,8 @@ export default () => {
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
+    application.alternateContact.otherType = data.otherType
+
     conductor.completeStep(1)
     conductor.sync()
     if (data.type == "noContact") {
@@ -27,7 +29,7 @@ export default () => {
     }
   }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
-  const type = watch("type")
+  const type = watch("type", application.alternateContact.type)
 
   return (
     <FormsLayout>

@@ -58,6 +58,19 @@ const reformatAddress = (address: Address) => {
 }
 
 const FormSummaryDetails = ({ application, editMode = false }) => {
+  const alternateContactName = () => {
+    switch (application.alternateContact.type) {
+      case "other":
+        return application.alternateContact.otherType
+      case "caseManager":
+        return application.alternateContact.agency
+      case "":
+        return ""
+      default:
+        return t(`application.alternateContact.type.options.${application.alternateContact.type}`)
+    }
+  }
+
   return (
     <>
       <h3 className="form--card__sub-header">
@@ -127,25 +140,31 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               {t("application.alternateContact.type.label")}
               {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
             </h3>
+
+            <div className="form-card__group mx-0 pb-0">
+              <p className="field-note">{t(`application.alternateContact.type.description`)}</p>
+            </div>
+
             <div className="form-card__group mx-0">
-              <ReviewItem
-                label={t(
-                  `application.alternateContact.type.options.${application.alternateContact.type}`
-                )}
-              >
+              <ReviewItem label={t("t.name")} sublabel={alternateContactName()}>
                 {application.alternateContact.firstName} {application.alternateContact.lastName}
-                <br />
-                {application.alternateContact.phoneNumber}
-                <br />
-                {application.alternateContact.emailAddress}
               </ReviewItem>
 
-              {application.alternateAddress && (
+              {application.alternateContact.emailAddress && (
+                <ReviewItem label={t("t.email")}>
+                  {application.alternateContact.emailAddress}
+                </ReviewItem>
+              )}
+
+              {application.alternateContact.phoneNumber && (
+                <ReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
+                  {application.alternateContact.phoneNumber}
+                </ReviewItem>
+              )}
+
+              {application.alternateContact.mailingAddress && (
                 <ReviewItem label={t("application.contact.address")}>
-                  {console.log(application.alternateContact.mailingAddress)}
-                  <MultiLineAddress
-                    address={reformatAddress(application.alternateContact.mailingAddress)}
-                  />
+                  <MultiLineAddress address={application.alternateContact.mailingAddress} />
                 </ReviewItem>
               )}
             </div>
