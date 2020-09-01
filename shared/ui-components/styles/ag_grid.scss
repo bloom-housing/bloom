@@ -54,9 +54,21 @@
     text-align: right;
   }
 
+  .ag-row {
+    @apply border-t-0;
+    @apply border-l-0;
+    @apply border-r-0;
+  }
+
   .ag-cell-value {
     @apply text-gray-750;
     @apply font-sans;
+  }
+
+  .ag-root-wrapper {
+    @apply border-b-0;
+    @apply rounded-t-md;
+    @apply rounded-b-none;
   }
 }
 

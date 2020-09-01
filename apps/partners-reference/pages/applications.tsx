@@ -35,7 +35,7 @@ export default function ApplicationsList() {
       filter: false,
       pinned: "left",
       autoSizeColumn: true,
-      width: 150,
+      width: 125,
       minWidth: 100,
     },
     {
@@ -45,7 +45,7 @@ export default function ApplicationsList() {
       filter: false,
       pinned: "left",
       autoSizeColumn: true,
-      width: 150,
+      width: 125,
       minWidth: 100,
     },
     {
@@ -179,38 +179,39 @@ export default function ApplicationsList() {
             paginationPageSize={8}
             suppressScrollOnNewData={true}
           ></AgGridReact>
-        </div>
-        <div className="data-pager">
-          <button className="button data-pager__previous data-pager__control" onClick={() => this.onBtPrevious()}>Previous</button>
-          
-          <div className="data-pager__control-group">
-          <span className="data-pager__control">
-            <span className="field-label" id="lbTotalPages">12</span>
-            <span className="field-label">Total Applications</span>
-          </span>
 
-          <span className="field data-pager__control">
-            <label className="field-label">Show</label>
-            <select onChange={() => this.onPageSizeChanged()} id="page-size">
-              <option value="10" selected>8</option>
-              <option value="100">100</option>
-              <option value="500">500</option>
-              <option value="1000">1000</option>
-            </select>
-          </span>
+          <div className="data-pager">
+            <button className="button data-pager__previous data-pager__control" onClick={() => this.onBtPrevious()}>Previous</button>
+            
+            <div className="data-pager__control-group">
+            <span className="data-pager__control">
+              <span className="field-label" id="lbTotalPages">12</span>
+              <span className="field-label">Total Applications</span>
+            </span>
 
-          <span className="field data-pager__control">
-            <label className="field-label">Jump to</label>
-            <select onChange={() => this.onPageSizeChanged()} id="page-jump">
-              <option value="2" selected>2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-          </span>
+            <span className="field data-pager__control">
+              <label className="field-label">Show</label>
+              <select onChange={() => this.onPageSizeChanged()} id="page-size">
+                <option value="10" selected>8</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+              </select>
+            </span>
+
+            <span className="field data-pager__control">
+              <label className="field-label">Jump to</label>
+              <select onChange={() => this.onPageSizeChanged()} id="page-jump">
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </span>
+            </div>
+
+            <button className="button data-pager__next data-pager__control" onClick={() => this.onBtNext()}>Next</button>
           </div>
-
-          <button className="button data-pager__next data-pager__control" onClick={() => this.onBtNext()}>Next</button>
         </div>
       </article>
     </Layout>
