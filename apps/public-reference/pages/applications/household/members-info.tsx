@@ -48,9 +48,6 @@ export default () => {
           <h2 className="form-card__title is-borderless mt-4">
             {t("application.household.membersInfo.title")}
           </h2>
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.household.membersInfo.subTitle")}
-          </h2>
         </div>
 
         {Object.entries(errors).length > 0 && (

@@ -9,6 +9,7 @@ module.exports = {
       md: "768px",
       lg: "1200px",
       xl: "1280px",
+      print: { raw: "print" },
     },
     fontSize: {
       "2xs": ".6875rem",
@@ -85,8 +86,8 @@ module.exports = {
         750: "#555555",
         700: "#767676",
         600: "#999999",
-        500: "#AAAAAA",
-        550: "#CCCCCC",
+        550: "#AAAAAA",
+        500: "#CCCCCC",
         450: "#DEDEE0",
         400: "#EFEFEF",
         300: "#F6F6F6",
@@ -102,6 +103,11 @@ module.exports = {
       wide: ".025em",
       wider: ".05em",
       widest: ".12em",
+    },
+    extend: {
+      borderColor: (theme) => ({
+        default: theme("colors.gray.450", "currentColor"),
+      }),
     },
   },
 }

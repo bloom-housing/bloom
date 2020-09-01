@@ -7,9 +7,8 @@ import { AlertBox, Button, Field, FormCard, ProgressNav, t } from "@bloom-housin
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 import { emailRegex } from "../../../lib/emailRegex"
 
 export default () => {
@@ -17,10 +16,9 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({
-    defaultValues: {
-      noEmail: application.applicant.noEmail,
-    },
+  const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
+    Record<string, any>
+  >({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
@@ -31,7 +29,7 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const noEmail = watch("noEmail")
+  const noEmail: boolean = watch("applicant.noEmail", application.applicant.noEmail)
 
   return (
     <FormsLayout>
@@ -167,7 +165,7 @@ export default () => {
               name="applicant.emailAddress"
               placeholder={noEmail ? t("t.none") : "example@web.com"}
               defaultValue={application.applicant.emailAddress}
-              validation={{ pattern: emailRegex }}
+              validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
               error={errors.applicant?.emailAddress}
               errorMessage={t("application.name.emailAddressError")}
               register={register}
@@ -183,7 +181,8 @@ export default () => {
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setValue("emailAddress", "")
+                    setValue("applicant.emailAddress", "")
+                    clearErrors("applicant.emailAddress")
                   }
                 }}
               />

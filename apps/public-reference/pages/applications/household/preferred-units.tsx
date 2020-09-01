@@ -70,6 +70,7 @@ export default () => {
           <h2 className="form-card__title is-borderless">
             {t("application.household.preferredUnit.title")}
           </h2>
+          <p className="mt-4 field-note">{t("application.household.preferredUnit.subTitle")}</p>
         </div>
 
         {Object.entries(errors).length > 0 && (

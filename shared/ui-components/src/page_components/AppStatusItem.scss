@@ -20,7 +20,7 @@
 }
 
 .status-item__header {
-  @apply py-2;
+  @apply pb-2;
 
   @screen md {
     @apply flex;
@@ -88,13 +88,16 @@
 }
 
 .status-item__meta {
+  @apply mt-4;
+
   @screen md {
     @apply text-right;
+    @apply mt-0;
   }
 }
 
 .status-item__status {
-  @apply mb-4;
+  @apply pb-4;
 }
 
 .status-item__label {
@@ -126,7 +129,11 @@
 }
 
 .status-item__link {
-  @apply mr-4;
+  @apply mx-2;
+
+  @screen md {
+    @apply mr-4;
+  }
 }
 
 .status-item__date {
@@ -136,4 +143,10 @@
 .status-item__address,
 .status-item__number {
   @apply mb-4;
+}
+
+.status-item__address {
+  @screen md {
+    @apply text-left;
+  }
 }
