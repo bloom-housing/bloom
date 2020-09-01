@@ -190,7 +190,7 @@ export default function ApplicationsList() {
             </span>
 
             <span className="field data-pager__control">
-              <label className="field-label">Show</label>
+              <label className="field-label" htmlFor="page-size">Show</label>
               <select onChange={() => this.onPageSizeChanged()} id="page-size">
                 <option value="10" selected>8</option>
                 <option value="100">100</option>
@@ -200,7 +200,7 @@ export default function ApplicationsList() {
             </span>
 
             <span className="field data-pager__control">
-              <label className="field-label">Jump to</label>
+              <label className="field-label" htmlFor="page-jump">Jump to</label>
               <select onChange={() => this.onPageSizeChanged()} id="page-jump">
                 <option value="2" selected>2</option>
                 <option value="3">3</option>
