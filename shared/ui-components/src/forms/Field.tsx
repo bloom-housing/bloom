@@ -45,15 +45,19 @@ const Field = (props: FieldProps) => {
     [props.label, props.id, props.name, labelClasses]
   )
 
+  const idOrName = props.id || props.name
+
   return (
     <div className={classes.join(" ")}>
       {!isRadioOrCheckbox && label}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
+          aria-describedby={`${idOrName}-error`}
+          aria-invalid={!!props.error || false}
           className="input"
           type={type}
-          id={props.id || props.name}
+          id={idOrName}
           name={props.name}
           defaultValue={props.defaultValue}
           placeholder={props.placeholder}
@@ -63,7 +67,11 @@ const Field = (props: FieldProps) => {
         />
         {isRadioOrCheckbox && label}
       </div>
-      {props.errorMessage && <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>}
+      {props.errorMessage && (
+        <ErrorMessage id={`${idOrName}-error`} error={props.error}>
+          {props.errorMessage}
+        </ErrorMessage>
+      )}
     </div>
   )
 }

@@ -41,6 +41,8 @@ const FieldGroup = ({
           fields.map((item) => (
             <div className={`field ${error && "error"}`} key={item.id}>
               <input
+                aria-describedby={`${name}-error`}
+                aria-invalid={!!error || false}
                 type={type}
                 id={item.id}
                 value={item.value || item.id}
@@ -55,7 +57,11 @@ const FieldGroup = ({
           ))}
       </div>
 
-      {error && errorMessage && <ErrorMessage error={error}>{errorMessage}</ErrorMessage>}
+      {error && errorMessage && (
+        <ErrorMessage id={`${name}-error`} error={error}>
+          {errorMessage}
+        </ErrorMessage>
+      )}
     </>
   )
 }
