@@ -64,7 +64,7 @@ export default () => {
   ]
   return (
     <>
-      <RequireLogin signInPath={`/sign-in?message=${encodeURIComponent(t("t.loginIsRequired"))}`}>
+      <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <Modal
           open={deletingApplication}
           title={t("application.deleteThisApplication")}
