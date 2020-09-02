@@ -83,7 +83,13 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
   ]
 
   return (
-    <Modal open={Boolean(promptTimeout)} title={promptTitle} actions={modalActions} fullScreen>
+    <Modal
+      open={Boolean(promptTimeout)}
+      title={promptTitle}
+      ariaDescription={promptText}
+      actions={modalActions}
+      fullScreen
+    >
       {promptText}
     </Modal>
   )

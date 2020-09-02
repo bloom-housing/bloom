@@ -3,14 +3,22 @@ orbs:
   cypress: cypress-io/cypress@1
 
 executors:
-  cypress-node-12:
+  standard-node:
+    docker:
+      - image: "cimg/node:12.18.3"
+      - image: "circleci/postgres:12.3-postgis"
+        environment:
+          POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom
+  cypress-node:
     docker:
       - image: "cypress/base:12.18.2"
 
 jobs:
   setup:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - checkout
       - run: yarn install
@@ -19,37 +27,43 @@ jobs:
           paths:
             - ~/
   lint:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
   jest-ui-components:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
   jest-backend:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:services:listings
-      - run: yarn test:backend:core
+      - run:
+          name: DB Setup + Backend Core Tests
+          command: |
+            yarn test:backend:core:dbsetup
+            yarn test:backend:core
+            yarn test:e2e:backend:core
+          environment:
+            APP_SECRET: "CI-LONG-SECRET-KEY"
+            # DB URL for migration and seeds:
+            DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
+            # DB URL for the jest tests per ormconfig.test.ts
+            TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
   build-public:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:public
   build-partners:
-    docker:
-      - image: circleci/node:12.18.3
+    executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
@@ -78,7 +92,7 @@ workflows:
       - cypress/run:
           requires:
             - setup
-          executor: cypress-node-12
+          executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
           start: yarn dev:all

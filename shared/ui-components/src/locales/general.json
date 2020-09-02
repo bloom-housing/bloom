@@ -216,6 +216,7 @@
       },
       "preferredUnit": {
         "title": "What unit sizes are you interested in?",
+        "subTitle": "Your selected unit type will be subject to availability.",
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
@@ -241,8 +242,7 @@
         "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
       },
       "membersInfo": {
-        "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
-        "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
+        "title": "Before adding other people, make sure that they aren't named on any other application for this listing."
       },
       "primaryApplicant": "Primary Applicant"
     },
@@ -286,7 +286,9 @@
       "terms": {
         "title": "Terms",
         "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
-        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
+        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit.",
+        "agreeError": "You must agree to the terms in order to continue",
+        "submit": "Submit"
       },
       "demographics": {
         "title": "Help us ensure we are meeting our goal to serve all people.",
@@ -469,9 +471,10 @@
   "footer": {
     "contact": "Contact",
     "disclaimer": "Disclaimer",
-    "forGeneralQuestions": "For general program inquiries, you may call MOHCD at 415-701-5500.",
+    "forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
     "giveFeedback": "Give Feedback",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "copyright": "Demonstration County © 2020 • All Rights Reserved"
   },
   "housingCounselors": {
     "subtitle": "Talk with a local housing counselor specific to your needs.",
@@ -653,7 +656,8 @@
     "mySettings": "My Settings",
     "signIn": "Sign In",
     "signOut": "Sign Out",
-    "siteTitle": "Housing Portal"
+    "siteTitle": "Housing Portal",
+    "skip": "Skip to main content"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",

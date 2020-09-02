@@ -7,7 +7,15 @@ export default {
   decorators: [(storyFn: any) => <div style={{ maxWidth: "700px" }}>{storyFn()}</div>],
 }
 
-export const imageAndTitle = () => <ImageCard imageUrl="/images/listing.jpg" title="Hello World" />
+export const imageWithTitle = () => <ImageCard imageUrl="/images/listing.jpg" title="Hello World" />
+
+export const imageWithTitleAndSubtitle = () => (
+  <ImageCard
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="55 Triton Park Lane, Foster City CA, 94404"
+  />
+)
 
 export const withLink = () => (
   <ImageCard href="/listings" as="/listings" imageUrl="/images/listing.jpg" title="Hello World" />

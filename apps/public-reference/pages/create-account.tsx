@@ -11,12 +11,13 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { emailRegex } from "../lib/emailRegex"
+import { useRedirectToPrevPage } from "../lib/hooks"
 
 export default () => {
   const { createUser } = useContext(UserContext)
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-
+  const redirectToPrev = useRedirectToPrevPage()
   const onSubmit = async (data) => {
     try {
       const { birthDay, birthMonth, birthYear, ...rest } = data
@@ -24,6 +25,8 @@ export default () => {
         ...rest,
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })
+
+      redirectToPrev()
       console.log("Created user: %o", user)
     } catch (err) {
       // TODO: better error handling

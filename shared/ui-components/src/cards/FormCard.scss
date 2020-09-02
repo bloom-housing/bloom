@@ -8,6 +8,10 @@
     @apply rounded-lg;
   }
 
+  @screen print {
+    @apply border-0;
+  }
+
   hr,
   .border-b {
     @apply border-gray-450;
@@ -62,6 +66,11 @@
   @screen md {
     @apply mx-8;
   }
+
+  @screen print {
+    @apply py-2;
+    @apply px-0;
+  }
 }
 
 .form-card__lead {
@@ -71,11 +80,19 @@
   @screen md {
     @apply px-0;
   }
+
+  @screen print {
+    @apply py-2;
+  }
 }
 
 .form-card__group {
   @screen md {
     @apply px-8;
+  }
+
+  @screen print {
+    @apply px-0;
   }
 }
 
@@ -95,6 +112,10 @@
   @screen md {
     @apply rounded-t-lg;
   }
+
+  @screen print {
+    @apply py-0;
+  }
 }
 
 .form-card__header_title {
@@ -109,6 +130,10 @@
   @apply p-4;
   @apply bg-white;
   @apply rounded-b-lg;
+
+  @screen print {
+    @apply py-0;
+  }
 }
 
 .form-card__pager {
@@ -128,6 +153,11 @@
     @apply bg-primary-lighter;
     @apply py-8;
   }
+
+  &.border-t,
+  &.border-b {
+    @apply border-gray-450;
+  }
 }
 
 .form--card__sub-header {
@@ -139,6 +169,11 @@
 
   .edit-link {
     @apply self-center;
+  }
+
+  @screen print {
+    @apply px-0;
+    @apply py-1;
   }
 }
 

@@ -96,24 +96,24 @@ export default () => {
               {t("application.form.general.createAccount")}
             </Button>
           </div>
-        </div>
 
-        <div className="p-8 text-center">
-          <a className="lined text-tiny" href="/">
-            {t("application.review.confirmation.imdone")}
-          </a>
-        </div>
+          <div className="form-card__pager-row py-6">
+            <a className="lined text-tiny" href="/">
+              {t("application.review.confirmation.imdone")}
+            </a>
+          </div>
 
-        <div className="p-8 text-center border-b">
-          <Link href="/listings">
-            <a className="lined text-tiny">{t("application.review.confirmation.browseMore")}</a>
-          </Link>
-        </div>
+          <div className="form-card__pager-row py-6">
+            <Link href="/listings">
+              <a className="lined text-tiny">{t("application.review.confirmation.browseMore")}</a>
+            </Link>
+          </div>
 
-        <div className="p-8 text-center border-b">
-          <Link href="/applications/view">
-            <a className="lined text-tiny">{t("application.review.confirmation.print")}</a>
-          </Link>
+          <div className="form-card__pager-row py-6 border-t">
+            <Link href="/applications/view">
+              <a className="lined text-tiny">{t("application.review.confirmation.print")}</a>
+            </Link>
+          </div>
         </div>
       </FormCard>
     </FormsLayout>
