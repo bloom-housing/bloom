@@ -12,7 +12,7 @@ export const AppCard = () => (
     <div className="app-card__header border-bottom">
       <div className="app-card__back">
         <a href="#" className="lined">
-          Back
+          Whack
         </a>
       </div>
       <h2 className="app-card__question">
