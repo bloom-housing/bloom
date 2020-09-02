@@ -69,7 +69,6 @@ export default () => {
         <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>
-              {/* TODO */}
               {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
             </Markdown>
             <div className={`field mt-4 ${errors?.agree ? "error" : ""}`}>

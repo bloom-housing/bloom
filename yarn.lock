@@ -3950,7 +3950,7 @@
   dependencies:
     "@types/geojson" "*"
 
-"@types/markdown-to-jsx@^6.11.0":
+"@types/markdown-to-jsx@^6.11.0", "@types/markdown-to-jsx@^6.11.2":
   version "6.11.2"
   resolved "https://registry.yarnpkg.com/@types/markdown-to-jsx/-/markdown-to-jsx-6.11.2.tgz#05d1aaffbf15be7be12c70535fa4fed65cc7c64f"
   integrity sha512-ESuCu8Bk7jpTZ3YPdMW1+6wUj13F5N15vXfc7BuUAN0eCp0lrvVL9nzOTzoqvbRzXMciuqXr1KrHt3xQAhfwPA==
