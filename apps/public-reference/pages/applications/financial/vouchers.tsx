@@ -4,7 +4,14 @@ Question asks if anyone on the application receives a housing voucher or subsidy
 */
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  Button,
+  ErrorMessage,
+  FormCard,
+  ProgressNav,
+  t,
+  FieldGroup,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -29,6 +36,19 @@ export default () => {
 
     router.push("/applications/financial/income").then(() => window.scrollTo(0, 0))
   }
+
+  const incomeVouchersValues = [
+    {
+      id: "incomeVouchersYes",
+      value: "true",
+      label: t("application.financial.vouchers.yes"),
+    },
+    {
+      id: "incomeVouchersNo",
+      value: "false",
+      label: t("application.financial.vouchers.no"),
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -74,37 +94,15 @@ export default () => {
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
             <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
 
-            <div className="field">
-              <input
-                type="radio"
-                id="incomeVouchersYes"
-                name="incomeVouchers"
-                value="true"
-                ref={register({ required: true })}
-              />
-
-              <label htmlFor="incomeVouchersYes" className="font-semibold">
-                {t("application.financial.vouchers.yes")}
-              </label>
-            </div>
-
-            <div className="field">
-              <input
-                type="radio"
-                id="incomeVouchersNo"
-                name="incomeVouchers"
-                value="false"
-                ref={register({ required: true })}
-              />
-
-              <label htmlFor="incomeVouchersNo" className="font-semibold">
-                {t("application.financial.vouchers.no")}
-              </label>
-            </div>
-
-            <ErrorMessage error={errors.incomeVouchers}>
-              {t("application.financial.vouchers.error")}
-            </ErrorMessage>
+            <FieldGroup
+              type="radio"
+              name="incomeVouchers"
+              error={errors.incomeVouchers}
+              errorMessage={t("application.financial.vouchers.error")}
+              register={register}
+              validation={{ required: true }}
+              fields={incomeVouchersValues}
+            />
           </div>
 
           <div className="form-card__pager">

@@ -4,6 +4,7 @@ import { ErrorMessage } from "./ErrorMessage"
 interface FieldSingle {
   id: string
   label: string
+  value?: string
   defaultChecked?: boolean
 }
 
@@ -12,14 +13,14 @@ interface FieldGroupProps {
   errorMessage?: string
   name: string
   type?: string
-  groupLabel: string
+  groupLabel?: string
   fields: FieldSingle[]
   groupNote?: string
   register: any
   validation?: Record<string, any>
 }
 
-export const FieldGroup = ({
+const FieldGroup = ({
   name,
   groupLabel,
   fields,
@@ -42,7 +43,7 @@ export const FieldGroup = ({
               <input
                 type={type}
                 id={item.id}
-                value={item.id}
+                value={item.value || item.id}
                 name={name}
                 defaultChecked={item.defaultChecked || false}
                 ref={register(validation)}
@@ -58,3 +59,5 @@ export const FieldGroup = ({
     </>
   )
 }
+
+export { FieldGroup as default, FieldGroup }

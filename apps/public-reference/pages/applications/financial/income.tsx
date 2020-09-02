@@ -12,6 +12,7 @@ import {
   ErrorMessage,
   AlertBox,
   AlertNotice,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -62,6 +63,7 @@ export default () => {
   })
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
+    console.log(data)
     // Skip validation of total income if the applicant has income vouchers.
     const validationError = application.incomeVouchers
       ? null
@@ -85,6 +87,19 @@ export default () => {
       setValue("income", numericIncome.toFixed(2))
     }
   }
+
+  const incomePeriodValues = [
+    {
+      id: "incomePeriodMonthly",
+      value: "perMonth",
+      label: t("application.financial.income.perMonth"),
+    },
+    {
+      id: "incomePeriodYearly",
+      value: "perYear",
+      label: t("application.financial.income.perYear"),
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -155,37 +170,15 @@ export default () => {
               inputProps={{ step: 0.01, onBlur: formatValue }}
             />
 
-            <div className={`field-group ${errors.incomePeriod ? "error" : ""}`}>
-              <div className="field">
-                <input
-                  type="radio"
-                  id="incomePeriodMonthly"
-                  name="incomePeriod"
-                  value="perMonth"
-                  ref={register({ required: true })}
-                />
-                <label htmlFor="incomePeriodMonthly" className="font-semibold">
-                  {t("application.financial.income.perMonth")}
-                </label>
-              </div>
-
-              <div className="field">
-                <input
-                  type="radio"
-                  id="incomePeriodYearly"
-                  name="incomePeriod"
-                  value="perYear"
-                  ref={register({ required: true })}
-                />
-                <label htmlFor="incomePeriodYearly" className="font-semibold">
-                  {t("application.financial.income.perYear")}
-                </label>
-              </div>
-
-              <ErrorMessage error={errors.incomePeriod}>
-                {t("application.financial.income.periodError")}
-              </ErrorMessage>
-            </div>
+            <FieldGroup
+              type="radio"
+              name="incomePeriod"
+              error={errors.incomePeriod}
+              errorMessage={t("application.financial.income.periodError")}
+              register={register}
+              validation={{ required: true }}
+              fields={incomePeriodValues}
+            />
           </div>
 
           <div className="form-card__pager">
