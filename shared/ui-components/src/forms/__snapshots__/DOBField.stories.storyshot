@@ -21,130 +21,149 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
     register={[Function]}
     watch={[Function]}
   >
-    <label
-      className="field-label--caps"
-      htmlFor="birthMonth"
-    >
-      Date of Birth
-    </label>
-    <div
-      className="field-group--dob"
-    >
-      <Field
-        defaultValue=""
-        inputProps={
-          Object {
-            "maxLength": 2,
-          }
-        }
-        name="birthMonth"
-        placeholder="MM"
-        register={[Function]}
-        validation={
-          Object {
-            "required": true,
-            "validate": Object {
-              "monthRange": [Function],
-            },
-          }
-        }
+    <fieldset>
+      <legend
+        className="field-label--caps"
       >
-        <div
-          className="field"
+        Date of Birth
+      </legend>
+      <div
+        className="field-group--dob"
+      >
+        <label
+          className="sr-only"
+          htmlFor="birthMonth"
+        >
+          Month
+        </label>
+        <Field
+          defaultValue=""
+          inputProps={
+            Object {
+              "maxLength": 2,
+            }
+          }
+          name="birthMonth"
+          placeholder="MM"
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "monthRange": [Function],
+              },
+            }
+          }
         >
           <div
-            className="control"
+            className="field"
           >
-            <input
-              className="input"
-              defaultValue=""
-              id="birthMonth"
-              maxLength={2}
-              name="birthMonth"
-              placeholder="MM"
-              type="text"
-            />
+            <div
+              className="control"
+            >
+              <input
+                className="input"
+                defaultValue=""
+                id="birthMonth"
+                maxLength={2}
+                name="birthMonth"
+                placeholder="MM"
+                type="text"
+              />
+            </div>
+            <ErrorMessage />
           </div>
-          <ErrorMessage />
-        </div>
-      </Field>
-      <Field
-        defaultValue=""
-        inputProps={
-          Object {
-            "maxLength": 2,
+        </Field>
+        <label
+          className="sr-only"
+          htmlFor="birthDay"
+        >
+          Day
+        </label>
+        <Field
+          defaultValue=""
+          inputProps={
+            Object {
+              "maxLength": 2,
+            }
           }
-        }
-        name="birthDay"
-        placeholder="DD"
-        register={[Function]}
-        validation={
-          Object {
-            "required": true,
-            "validate": Object {
-              "dayRange": [Function],
-            },
+          name="birthDay"
+          placeholder="DD"
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "dayRange": [Function],
+              },
+            }
           }
-        }
-      >
-        <div
-          className="field"
         >
           <div
-            className="control"
+            className="field"
           >
-            <input
-              className="input"
-              defaultValue=""
-              id="birthDay"
-              maxLength={2}
-              name="birthDay"
-              placeholder="DD"
-              type="text"
-            />
+            <div
+              className="control"
+            >
+              <input
+                className="input"
+                defaultValue=""
+                id="birthDay"
+                maxLength={2}
+                name="birthDay"
+                placeholder="DD"
+                type="text"
+              />
+            </div>
+            <ErrorMessage />
           </div>
-          <ErrorMessage />
-        </div>
-      </Field>
-      <Field
-        defaultValue=""
-        inputProps={
-          Object {
-            "maxLength": 4,
+        </Field>
+        <label
+          className="sr-only"
+          htmlFor="birthYear"
+        >
+          Year
+        </label>
+        <Field
+          defaultValue=""
+          inputProps={
+            Object {
+              "maxLength": 4,
+            }
           }
-        }
-        name="birthYear"
-        placeholder="YYYY"
-        register={[Function]}
-        validation={
-          Object {
-            "required": true,
-            "validate": Object {
-              "yearRange": [Function],
-            },
+          name="birthYear"
+          placeholder="YYYY"
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "yearRange": [Function],
+              },
+            }
           }
-        }
-      >
-        <div
-          className="field"
         >
           <div
-            className="control"
+            className="field"
           >
-            <input
-              className="input"
-              defaultValue=""
-              id="birthYear"
-              maxLength={4}
-              name="birthYear"
-              placeholder="YYYY"
-              type="text"
-            />
+            <div
+              className="control"
+            >
+              <input
+                className="input"
+                defaultValue=""
+                id="birthYear"
+                maxLength={4}
+                name="birthYear"
+                placeholder="YYYY"
+                type="text"
+              />
+            </div>
+            <ErrorMessage />
           </div>
-          <ErrorMessage />
-        </div>
-      </Field>
-    </div>
+        </Field>
+      </div>
+    </fieldset>
   </DOBField>
 </div>
 `;
