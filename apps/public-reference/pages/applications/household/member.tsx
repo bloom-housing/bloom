@@ -11,15 +11,16 @@ import {
   t,
   ErrorMessage,
   FormOptions,
-  relotionshipKeys,
+  relationshipKeys,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
-import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import { useContext, useMemo } from "react"
+import { Select } from "@bloom-housing/ui-components/src/forms/Select"
+import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 class Member implements HouseholdMember {
   id: number
@@ -66,11 +67,9 @@ class Member implements HouseholdMember {
 }
 
 export default () => {
-  const router = useRouter()
   let memberId, member, saveText, cancelText
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const router = useRouter()
   const currentPageStep = 2
 
   if (router.query.memberId) {
@@ -105,11 +104,10 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -175,6 +173,7 @@ export default () => {
                       monthRange: (value) => parseInt(value) > 0 && parseInt(value) <= 12,
                     },
                   }}
+                  inputProps={{ maxLength: 2 }}
                   register={register}
                 />
                 <Field
@@ -188,6 +187,7 @@ export default () => {
                       dayRange: (value) => parseInt(value) > 0 && parseInt(value) <= 31,
                     },
                   }}
+                  inputProps={{ maxLength: 2 }}
                   register={register}
                 />
                 <Field
@@ -202,6 +202,7 @@ export default () => {
                         parseInt(value) > 1900 && parseInt(value) <= new Date().getFullYear() - 18,
                     },
                   }}
+                  inputProps={{ maxLength: 4 }}
                   register={register}
                 />
               </div>
@@ -228,7 +229,7 @@ export default () => {
                   ref={register({ required: true })}
                 />
                 <label className="font-semibold" htmlFor="sameAddressYes">
-                  {t("application.form.radio.yes")}
+                  {t("t.yes")}
                 </label>
               </div>
               <div className={"field " + (errors.sameAddress ? "error" : "")}>
@@ -241,7 +242,7 @@ export default () => {
                   ref={register({ required: true })}
                 />
                 <label className="font-semibold" htmlFor="sameAddressNo">
-                  {t("application.form.radio.no")}
+                  {t("t.no")}
                 </label>
 
                 <ErrorMessage error={errors.sameAddress}>
@@ -287,7 +288,7 @@ export default () => {
                       register={register}
                     />
 
-                    <StateSelect
+                    <Select
                       id="addressState"
                       name="address.state"
                       label="State"
@@ -297,6 +298,8 @@ export default () => {
                       errorMessage={t("application.contact.stateError")}
                       register={register}
                       controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="application.form.options.states"
                     />
                   </div>
 
@@ -308,7 +311,7 @@ export default () => {
                     defaultValue={member.address.zipCode}
                     validation={{ required: true }}
                     error={errors.address?.zipCode}
-                    errorMessage={t("application.form.errors.pleaseEnterZipCode")}
+                    errorMessage={t("application.contact.zipCodeError")}
                     register={register}
                   />
                 </>
@@ -333,7 +336,7 @@ export default () => {
                   ref={register({ required: true })}
                 />
                 <label className="font-semibold" htmlFor="workInRegionYes">
-                  {t("application.form.radio.yes")}
+                  {t("t.yes")}
                 </label>
               </div>
               <div className={"field " + (errors.workInRegion ? "error" : "")}>
@@ -346,7 +349,7 @@ export default () => {
                   ref={register({ required: true })}
                 />
                 <label className="font-semibold" htmlFor="workInRegionNo">
-                  {t("application.form.radio.no")}
+                  {t("t.no")}
                 </label>
 
                 <ErrorMessage error={errors.workInRegion}>
@@ -392,7 +395,7 @@ export default () => {
                       register={register}
                     />
 
-                    <StateSelect
+                    <Select
                       id="addressState"
                       name="workAddress.state"
                       label="State"
@@ -402,6 +405,8 @@ export default () => {
                       errorMessage={t("application.contact.stateError")}
                       register={register}
                       controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="application.form.options.states"
                     />
                   </div>
 
@@ -413,7 +418,7 @@ export default () => {
                     defaultValue={member.workAddress.zipCode}
                     validation={{ required: true }}
                     error={errors.workAddress?.zipCode}
-                    errorMessage={t("application.form.errors.pleaseEnterZipCode")}
+                    errorMessage={t("application.contact.zipCodeError")}
                     register={register}
                   />
                 </>
@@ -434,13 +439,13 @@ export default () => {
                     className="w-full"
                   >
                     <FormOptions
-                      options={relotionshipKeys}
+                      options={relationshipKeys}
                       keyPrefix="application.form.options.relationship"
                     />
                   </select>
                 </div>
                 <ErrorMessage error={errors.relationship}>
-                  {t("application.contact.stateError")}
+                  {t("application.form.errors.selectOption")}
                 </ErrorMessage>
               </div>
             </div>
@@ -448,7 +453,6 @@ export default () => {
             <div className="form-card__pager">
               <div className="form-card__pager-row primary">
                 <Button
-                  big={false}
                   filled={true}
                   className=""
                   onClick={() => {

@@ -1,5 +1,5 @@
 import * as React from "react"
-import LocalizedLink from "./LocalizedLink"
+import { LocalizedLink } from "./LocalizedLink"
 import "./Button.scss"
 
 interface LinkButtonProps {

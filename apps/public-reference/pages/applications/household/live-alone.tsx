@@ -4,22 +4,21 @@ Asks whether the applicant will be adding any additional household members
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, HouseholdSizeField } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo, useState } from "react"
 
+let nextPageUrl
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const [validateHousehold, setValidateHousehold] = useState(true)
   const currentPageStep = 2
-  let nextPageUrl
 
   /* Form Handler */
-  const { handleSubmit } = useForm()
+  const { handleSubmit, register, errors, clearErrors } = useForm()
   const onSubmit = () => {
     conductor.sync()
 
@@ -33,11 +32,10 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -45,7 +43,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href={backUrl}>{t("t.back")}</Link>
+            <Link href={backUrl}>
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
         <div className="form-card__lead border-b">
@@ -54,7 +54,19 @@ export default () => {
           </h2>
         </div>
 
-        <form className="my-4" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mb-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-4">
+            <HouseholdSizeField
+              listing={listing}
+              householdSize={application.householdSize}
+              validate={validateHousehold}
+              register={register}
+              error={errors.householdSize}
+              clearErrors={clearErrors}
+              assistanceUrl={t("application.household.assistanceUrl")}
+            />
+          </div>
+
           <div className="form-card__pager">
             <div className="form-card__pager-row">
               <Button
@@ -62,6 +74,9 @@ export default () => {
                 className="w-full md:w-3/4"
                 onClick={() => {
                   nextPageUrl = "/applications/household/preferred-units"
+                  application.householdSize = 1
+                  application.householdMembers = []
+                  setValidateHousehold(true)
                 }}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
@@ -73,6 +88,7 @@ export default () => {
                 className="w-full md:w-3/4"
                 onClick={() => {
                   nextPageUrl = "/applications/household/members-info"
+                  setValidateHousehold(false)
                 }}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}

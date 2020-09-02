@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
-import t from "../helpers/translator"
+import { t } from "../helpers/translator"
 import "./ExpandableText.scss"
 
 export interface ExpandableTextProps {

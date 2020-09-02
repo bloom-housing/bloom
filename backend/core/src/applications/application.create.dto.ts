@@ -1,4 +1,4 @@
-import { IsObject } from "class-validator"
+import { IsObject, IsOptional } from "class-validator"
 import { IdDto } from "../lib/id.dto"
 
 export class ApplicationCreateDto {
@@ -8,6 +8,7 @@ export class ApplicationCreateDto {
   @IsObject()
   listing: IdDto
 
+  @IsOptional()
   @IsObject()
-  user: IdDto
+  user?: IdDto
 }

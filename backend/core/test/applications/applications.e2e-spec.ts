@@ -1,5 +1,5 @@
 import { Test } from "@nestjs/testing"
-import { INestApplication, ValidationPipe } from "@nestjs/common"
+import { INestApplication } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
@@ -8,8 +8,13 @@ import supertest from "supertest"
 import { AuthModule } from "../../src/auth/auth.module"
 import { UserModule } from "../../src/user/user.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EntityNotFoundExceptionFilter } from "../../src/filters/entity-not-found-exception.filter"
 import { ApplicationsModule } from "../../src/applications/applications.module"
+import { applicationSetup } from "../../src/app.module"
+
+// Cypress brings in Chai types for the global expect, but we want to use jest
+// expect here so we need to re-declare it.
+// see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
+declare const expect: jest.Expect
 
 describe("Applications", () => {
   let app: INestApplication
@@ -30,8 +35,7 @@ describe("Applications", () => {
       ],
     }).compile()
     app = moduleRef.createNestApplication()
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
-    app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+    app = applicationSetup(app)
     await app.init()
     let res = await supertest(app.getHttpServer())
       .post("/auth/login")
@@ -89,6 +93,37 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+  })
+
+  it(`/POST unauthenticated`, async () => {
+    const body = {
+      listing: {
+        id: listingId,
+      },
+      application: {
+        foo: "bar",
+      },
+    }
+    const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(201)
+    expect(res.body).toEqual(expect.objectContaining(body))
+    expect(res.body).toHaveProperty("createdAt")
+    expect(res.body).toHaveProperty("updatedAt")
+    expect(res.body).toHaveProperty("id")
+  })
+
+  it(`/POST unauthenticated post disallowed to specify user`, async () => {
+    const body = {
+      listing: {
+        id: listingId,
+      },
+      application: {
+        foo: "bar",
+      },
+      user: {
+        id: user1Id,
+      },
+    }
+    const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(401)
   })
 
   it(`/POST user 1 unauthorized to create application for user 2`, async () => {
@@ -157,7 +192,7 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .delete(`/applications/${createRes.body.id}`)
       .set("Authorization", `Bearer ${user2AccessToken}`)
-      .expect(401)
+      .expect(404)
   })
 
   it(`/PUT `, async () => {

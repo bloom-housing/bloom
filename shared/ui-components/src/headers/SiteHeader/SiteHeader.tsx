@@ -1,9 +1,10 @@
 import * as React from "react"
-import LocalizedLink from "../../atoms/LocalizedLink"
+import { LocalizedLink } from "../../atoms/LocalizedLink"
 
 export interface SiteHeaderProps {
   logoSrc: string
   title: string
+  skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
 }
@@ -34,6 +35,14 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     this.handleMenuToggle = this.handleMenuToggle.bind(this)
   }
 
+  skipLink() {
+    return (
+      <a href="#main-content" className="navbar__skip-link">
+        {this.props.skip}
+      </a>
+    )
+  }
+
   noticeBar() {
     return (
       <div className="navbar-notice">
@@ -46,7 +55,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     return (
       <LocalizedLink className="navbar-item logo" href="/">
         <div className="logo__lockup">
-          <img className="logo__image" src={this.props.logoSrc} />
+          <img className="logo__image" src={this.props.logoSrc} alt={this.props.title} />
           <div className="logo__title">{this.props.title}</div>
         </div>
       </LocalizedLink>
@@ -77,6 +86,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   render() {
     return (
       <>
+        {this.skipLink()}
         {this.noticeBar()}
         <div className="navbar__wrapper">
           <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -87,7 +97,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
 
             <div
               id="navbarMenuLinks"
-              className={"navbar-menu mt-3 md:mt-0" + (this.state.active ? " is-active" : "")}
+              className={"navbar-menu md:mt-0" + (this.state.active ? " is-active" : "")}
             >
               <div className="navbar-end">{this.props.children}</div>
             </div>

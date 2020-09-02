@@ -1,7 +1,7 @@
 import * as React from "react"
 
 export default {
-  title: "Forms|Radio",
+  title: "Forms/Radio",
   decorators: [(storyFn: () => JSX.Element) => <div style={{ padding: "30px" }}>{storyFn()}</div>],
 }
 

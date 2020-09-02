@@ -1,6 +1,6 @@
 import { useContext } from "react"
-import UserContext from "./UserContext"
-import ConfigContext from "../config/ConfigContext"
+import { UserContext } from "./UserContext"
+import { ConfigContext } from "../config/ConfigContext"
 import { createAxiosInstance } from "./api_requests"
 
 function useAuthenticatedClient() {

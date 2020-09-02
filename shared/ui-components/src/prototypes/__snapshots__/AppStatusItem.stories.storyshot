@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Prototypes|AppStatusItem App Status Item 1`] = `
+exports[`Storyshots Prototypes/AppStatusItem App Status Item 1`] = `
 <div
   style={
     Object {
@@ -95,7 +95,7 @@ exports[`Storyshots Prototypes|AppStatusItem App Status Item 1`] = `
 </div>
 `;
 
-exports[`Storyshots Prototypes|AppStatusItem App Status Item Past Due 1`] = `
+exports[`Storyshots Prototypes/AppStatusItem App Status Item Past Due 1`] = `
 <div
   style={
     Object {
@@ -189,7 +189,7 @@ exports[`Storyshots Prototypes|AppStatusItem App Status Item Past Due 1`] = `
 </div>
 `;
 
-exports[`Storyshots Prototypes|AppStatusItem App Status Item Submitted 1`] = `
+exports[`Storyshots Prototypes/AppStatusItem App Status Item Submitted 1`] = `
 <div
   style={
     Object {

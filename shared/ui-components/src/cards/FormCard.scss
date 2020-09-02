@@ -8,6 +8,10 @@
     @apply rounded-lg;
   }
 
+  @screen print {
+    @apply border-0;
+  }
+
   hr,
   .border-b {
     @apply border-gray-450;
@@ -21,13 +25,18 @@
 .form-card__title {
   @apply text-center;
   width: fit-content;
-  @apply mx-auto;
   @apply mt-4;
+  @apply mx-auto;
   @apply pt-4;
   @apply px-3;
   @apply border-t-4;
   @apply border-primary;
   @apply leading-tight;
+
+  @screen md {
+    @apply mx-auto;
+    @apply px-0;
+  }
 
   &.is-borderless {
     @apply pt-0;
@@ -38,8 +47,11 @@
 
 .form-card__back {
   @apply ml-8;
-  @apply mt-5;
   @apply -mb-5;
+
+  @screen md {
+    @apply mt-5;
+  }
 
   a {
     @apply underline;
@@ -49,22 +61,38 @@
 .form-card__lead,
 .form-card__group {
   @apply py-8;
+  @apply px-6;
 
   @screen md {
     @apply mx-8;
   }
+
+  @screen print {
+    @apply py-2;
+    @apply px-0;
+  }
 }
 
 .form-card__lead {
-  @apply pt-10;
+  @apply pt-12;
   @apply pb-8;
+
+  @screen md {
+    @apply px-0;
+  }
+
+  @screen print {
+    @apply py-2;
+  }
 }
 
 .form-card__group {
-  @apply px-6;
-
   @screen md {
     @apply px-8;
+  }
+
+  @screen print {
+    @apply px-0;
   }
 }
 
@@ -84,6 +112,10 @@
   @screen md {
     @apply rounded-t-lg;
   }
+
+  @screen print {
+    @apply py-0;
+  }
 }
 
 .form-card__header_title {
@@ -98,6 +130,10 @@
   @apply p-4;
   @apply bg-white;
   @apply rounded-b-lg;
+
+  @screen print {
+    @apply py-0;
+  }
 }
 
 .form-card__pager {
@@ -117,4 +153,41 @@
     @apply bg-primary-lighter;
     @apply py-8;
   }
+
+  &.border-t,
+  &.border-b {
+    @apply border-gray-450;
+  }
+}
+
+.form--card__sub-header {
+  @apply py-4;
+  @apply px-8;
+  @apply bg-gray-300;
+  @apply flex;
+  @apply justify-between;
+
+  .edit-link {
+    @apply self-center;
+  }
+
+  @screen print {
+    @apply px-0;
+    @apply py-1;
+  }
+}
+
+.form-card__sub-title {
+  @apply mb-0;
+}
+
+.form-card__paragraph-title {
+  @apply uppercase;
+  @apply text-gray-750;
+  @apply tracking-widest;
+  @apply font-semibold;
+  @apply font-sans;
+  @apply text-tiny;
+  @apply mb-2;
+  @apply inline-block;
 }

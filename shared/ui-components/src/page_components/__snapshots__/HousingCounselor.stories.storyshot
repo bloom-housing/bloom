@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots PageComponents|HousingCounselor With All Fields 1`] = `
+exports[`Storyshots PageComponents/HousingCounselor With All Fields 1`] = `
 <HousingCounselor
   counselor={
     Object {
@@ -64,7 +64,7 @@ exports[`Storyshots PageComponents|HousingCounselor With All Fields 1`] = `
 </HousingCounselor>
 `;
 
-exports[`Storyshots PageComponents|HousingCounselor With Multiple Languages 1`] = `
+exports[`Storyshots PageComponents/HousingCounselor With Multiple Languages 1`] = `
 <HousingCounselor
   counselor={
     Object {
@@ -116,7 +116,7 @@ exports[`Storyshots PageComponents|HousingCounselor With Multiple Languages 1`] 
 </HousingCounselor>
 `;
 
-exports[`Storyshots PageComponents|HousingCounselor With Only Required Fields 1`] = `
+exports[`Storyshots PageComponents/HousingCounselor With Only Required Fields 1`] = `
 <HousingCounselor
   counselor={
     Object {

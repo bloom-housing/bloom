@@ -4,23 +4,11 @@ const bloomTheme = require("../tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
 module.exports = {
-  stories: ["../src/**/*.stories.(tsx|mdx)"],
-  addons: [
-    {
-      name: "@storybook/preset-typescript",
-      options: {
-        tsLoaderOptions: {
-          configFile: path.resolve(__dirname, "../tsconfig.json"),
-        },
-        tsDocgenLoaderOptions: {
-          tsconfigPath: path.resolve(__dirname, "../tsconfig.json"),
-        },
-      },
-    },
-    "@storybook/addon-docs",
-    "@storybook/addon-a11y",
-    "@storybook/addon-viewport",
-  ],
+  stories: ["../src/**/*.stories.@(tsx|mdx)"],
+  addons: ["@storybook/addon-docs", "@storybook/addon-a11y", "@storybook/addon-viewport"],
+  typescript: {
+    reactDocgen: "react-docgen",
+  },
   // In trouble? try https://storybook.js.org/docs/configurations/custom-webpack-config/#debug-the-default-webpack-config
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
@@ -42,7 +30,7 @@ module.exports = {
         {
           loader: "sass-loader",
           options: {
-            prependData: tailwindVars,
+            additionalData: tailwindVars,
           },
         },
       ],

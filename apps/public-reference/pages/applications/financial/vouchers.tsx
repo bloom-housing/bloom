@@ -9,14 +9,12 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 3
 
   /* Form Handler */
@@ -34,11 +32,10 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -46,7 +43,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/reserved/units">Back</Link>
+            <Link href="/applications/household/ada">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -116,7 +115,7 @@ export default () => {
                   // Do nothing - handled by React Hook Forms
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
           </div>

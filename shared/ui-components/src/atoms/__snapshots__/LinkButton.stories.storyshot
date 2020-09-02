@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Atoms|LinkButton Filled 1`] = `
+exports[`Storyshots Atoms/LinkButton Filled 1`] = `
 <LinkButton
   filled={true}
   href="#"
@@ -14,7 +14,7 @@ exports[`Storyshots Atoms|LinkButton Filled 1`] = `
     >
       <a
         className="button is-filled"
-        href="#"
+        href="/#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -25,7 +25,7 @@ exports[`Storyshots Atoms|LinkButton Filled 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms|LinkButton Regular Case 1`] = `
+exports[`Storyshots Atoms/LinkButton Regular Case 1`] = `
 <LinkButton
   href="#"
   normalCase={true}
@@ -39,7 +39,7 @@ exports[`Storyshots Atoms|LinkButton Regular Case 1`] = `
     >
       <a
         className="button is-normal-case"
-        href="#"
+        href="/#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -50,7 +50,7 @@ exports[`Storyshots Atoms|LinkButton Regular Case 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms|LinkButton Small 1`] = `
+exports[`Storyshots Atoms/LinkButton Small 1`] = `
 <LinkButton
   href="#"
   small={true}
@@ -64,7 +64,7 @@ exports[`Storyshots Atoms|LinkButton Small 1`] = `
     >
       <a
         className="button is-small"
-        href="#"
+        href="/#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -75,7 +75,7 @@ exports[`Storyshots Atoms|LinkButton Small 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms|LinkButton Small And Filled 1`] = `
+exports[`Storyshots Atoms/LinkButton Small And Filled 1`] = `
 <LinkButton
   filled={true}
   href="#"
@@ -90,7 +90,7 @@ exports[`Storyshots Atoms|LinkButton Small And Filled 1`] = `
     >
       <a
         className="button is-filled is-small"
-        href="#"
+        href="/#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >
@@ -101,7 +101,7 @@ exports[`Storyshots Atoms|LinkButton Small And Filled 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms|LinkButton Standard 1`] = `
+exports[`Storyshots Atoms/LinkButton Standard 1`] = `
 <LinkButton
   href="#"
 >
@@ -114,7 +114,7 @@ exports[`Storyshots Atoms|LinkButton Standard 1`] = `
     >
       <a
         className="button"
-        href="#"
+        href="/#"
         onClick={[Function]}
         onMouseEnter={[Function]}
       >

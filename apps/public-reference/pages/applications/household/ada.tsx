@@ -4,23 +4,20 @@ If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
 import Link from "next/link"
-import Router from "next/router"
 import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 2
 
   /* Form Handler */
-  const { register, handleSubmit, getValues, setValue, triggerValidation, watch, errors } = useForm<
+  const { register, handleSubmit, getValues, setValue, trigger, watch, errors } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -39,18 +36,17 @@ export default () => {
       },
     })
 
-    Router.push("/applications/reserved/units").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/financial/vouchers")
   }
 
   const adaNone = watch("none")
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -58,7 +54,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/household/current">Back</Link>
+            <Link href="/applications/household/preferred-units">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -81,7 +79,7 @@ export default () => {
               onChange={() => {
                 setTimeout(() => {
                   setValue("none", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }, 1)
               }}
             />
@@ -100,7 +98,7 @@ export default () => {
               onChange={() => {
                 setTimeout(() => {
                   setValue("none", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }, 1)
               }}
             />
@@ -119,7 +117,7 @@ export default () => {
               onChange={() => {
                 setTimeout(() => {
                   setValue("none", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }, 1)
               }}
             />
@@ -145,7 +143,7 @@ export default () => {
                   setValue("mobility", false)
                   setValue("vision", false)
                   setValue("hearing", false)
-                  triggerValidation("none")
+                  trigger("none")
                 }
               }}
             />
@@ -165,12 +163,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

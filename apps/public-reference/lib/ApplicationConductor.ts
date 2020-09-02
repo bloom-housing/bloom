@@ -1,3 +1,5 @@
+import Router from "next/router"
+import { Listing } from "@bloom-housing/core"
 import { blankApplication } from "../lib/AppSubmissionContext"
 
 export const loadApplicationFromAutosave = () => {
@@ -13,38 +15,74 @@ export const loadApplicationFromAutosave = () => {
   return null
 }
 
+export const loadSavedListing = () => {
+  if (typeof window != "undefined") {
+    const savedListing = window.sessionStorage.getItem("bloom-app-listing")
+    if (savedListing) {
+      const listing = JSON.parse(savedListing)
+      return listing
+    }
+  }
+
+  return null
+}
+
 export default class ApplicationConductor {
   application = {} as Record<string, any>
-  context = null
+  listing = {} as Listing
+  returnToReview = false
 
-  constructor(application, context) {
+  constructor(application, listing) {
     this.application = application
-    this.context = context
+    this.listing = listing
   }
 
   totalNumberOfSteps() {
     return 5
   }
 
-  advanceToNextStep() {
-    this.application.completedStep += 1
+  completeStep(step) {
+    this.application.completedStep = Math.max(step, this.application.completedStep)
+  }
+
+  canJumpForwardToReview() {
+    return this.application.completedStep === this.totalNumberOfSteps() - 1
   }
 
   sync() {
     setTimeout(() => {
       if (typeof window != "undefined") {
         window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
+        if (this.listing) {
+          window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
+        }
       }
     }, 800)
   }
 
-  reset(shouldSync = true) {
+  reset() {
     this.application = blankApplication()
-    if (shouldSync) {
-      this.context.syncApplication(this.application)
-    }
+    this.listing = {} as Listing
+
     if (typeof window != "undefined") {
       window.sessionStorage.removeItem("bloom-app-autosave")
+      window.sessionStorage.removeItem("bloom-app-listing")
+    }
+  }
+
+  routeTo(url: string) {
+    Router.push(url).then(() => window.scrollTo(0, 0))
+  }
+
+  routeToNextOrReturnUrl(url: string) {
+    Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
+  }
+
+  nextOrReturnUrl(url: string) {
+    if (this.returnToReview) {
+      return "/applications/review/summary"
+    } else {
+      return url
     }
   }
 }

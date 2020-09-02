@@ -10,12 +10,13 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { emailRegex } from "../lib/emailRegex"
+import { useRedirectToPrevPage } from "../lib/hooks"
 
 export default () => {
   const { createUser } = useContext(UserContext)
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-
+  const redirectToPrev = useRedirectToPrevPage()
   const onSubmit = async (data) => {
     try {
       const { birthDay, birthMonth, birthYear, ...rest } = data
@@ -23,6 +24,8 @@ export default () => {
         ...rest,
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })
+
+      redirectToPrev()
       console.log("Created user: %o", user)
     } catch (err) {
       // TODO: better error handling
@@ -34,13 +37,10 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard>
-        <div className="form-card__lead pb-0 text-center">
+        <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl" symbol="profile" />
           <h2 className="form-card__title">Create Account</h2>
-        </div>
-
-        <div className="form-card__group pt-0 border-b">
-          <p className="mt-4 mb-8 text-center text-gray-700 text-tiny px-6">
+          <p className="mt-4 text-center text-gray-700 text-tiny px-6">
             You'll use this information to log in to your account, so make sure you can remember it.
           </p>
         </div>
@@ -104,6 +104,7 @@ export default () => {
 
           <div className="form-card__group border-b">
             <Field
+              caps={true}
               type="email"
               name="email"
               label="Email"
@@ -115,6 +116,7 @@ export default () => {
             />
 
             <Field
+              caps={true}
               type="password"
               name="password"
               label="Password"

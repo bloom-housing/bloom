@@ -4,21 +4,19 @@ Display a summary of application fields with edit links per section
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext } from "react"
+import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { listing, application } = useContext(AppSubmissionContext)
   const currentPageStep = 5
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
+  const { handleSubmit } = useForm()
   const onSubmit = (data) => {
     console.log(data)
 
@@ -27,41 +25,43 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
-
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
 
       <FormCard>
-        <p className="text-bold">
-          <strong>
-            <Link href="/applications/review/demographics">Back</Link>
-          </strong>
-        </p>
+        <div className="form-card__lead">
+          <h2 className="form-card__title is-borderless">
+            {t("application.review.takeAMomentToReview")}
+          </h2>
+        </div>
 
-        <h2 className="form-card__title is-borderless">Summary</h2>
+        <FormSummaryDetails application={application} editMode />
 
-        <hr />
+        <div className="form-card__group">
+          <p className="field-note text-gray-800 text-center">
+            {t("application.review.lastChanceToEdit")}
+          </p>
+        </div>
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-          (FORM)
-          <div className="text-center mt-6">
-            <Button
-              filled={true}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+        <div className="form-card__pager">
+          <div className="form-card__pager-row primary">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Button
+                filled={true}
+                onClick={() => {
+                  //
+                }}
+              >
+                {t("t.confirm")}
+              </Button>
+            </form>
           </div>
-        </form>
+        </div>
       </FormCard>
     </FormsLayout>
   )

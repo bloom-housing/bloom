@@ -1,5 +1,5 @@
 import React from "react"
-import { onClientSide } from "../helpers/nextjs"
+import { OnClientSide } from "../helpers/nextjs"
 import "./ProgressNav.scss"
 
 const ProgressNavItem = (props: {
@@ -9,8 +9,8 @@ const ProgressNavItem = (props: {
   label: string
 }) => {
   let bgColor = "is-disabled"
-  if (onClientSide()) {
-    if (props.step == props.currentPageStep) {
+  if (OnClientSide()) {
+    if (props.step === props.currentPageStep) {
       bgColor = "is-active"
     } else if (props.completedSteps >= props.step) {
       bgColor = ""
@@ -27,24 +27,22 @@ const ProgressNavItem = (props: {
 const ProgressNav = (props: {
   currentPageStep: number
   completedSteps: number
-  totalNumberOfSteps: number
   labels: string[]
 }) => {
-  let i = 0
-  const stepIndicators = []
-  while (i < props.totalNumberOfSteps) {
-    i++
-    stepIndicators.push(
-      <ProgressNavItem
-        step={i}
-        currentPageStep={props.currentPageStep}
-        completedSteps={props.completedSteps}
-        label={props.labels[i - 1]}
-      />
-    )
-  }
-
-  return <ul className={!onClientSide() ? "invisible" : "progress-nav"}>{stepIndicators}</ul>
+  return (
+    <ul className={!OnClientSide() ? "invisible" : "progress-nav"}>
+      {props.labels.map((label, i) => (
+        <ProgressNavItem
+          key={label}
+          // Steps are 1-indexed
+          step={i + 1}
+          currentPageStep={props.currentPageStep}
+          completedSteps={props.completedSteps}
+          label={label}
+        />
+      ))}
+    </ul>
+  )
 }
 
 export { ProgressNav as default, ProgressNav }

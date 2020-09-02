@@ -3,7 +3,7 @@
     "id": "jsQvgvy6eJy56TNCFfQp8",
     "acceptingApplicationsAtLeasingAgent": true,
     "acceptingApplicationsByPoBox": true,
-    "acceptingOnlineApplications": false,
+    "acceptingOnlineApplications": true,
     "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
     "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
     "applicationAddress": {
@@ -54,9 +54,8 @@
     "unitAmenities": "Washer and dryer, AC and Heater, Gas Stove",
     "attachments": [
       {
-        "label": "English",
-        "fileUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
-        "type": 1
+        "fileUrl": "/applications/start/choose-language?listingId=jsQvgvy6eJy56TNCFfQp8",
+        "type": 2
       }
     ],
     "applicationFee": "38.0",
@@ -128,7 +127,8 @@
       }
     ],
     "totalUnits": 2,
-    "unitsAvailable": 2
+    "unitsAvailable": 2,
+    "status": "active"
   },
   {
     "id": "sz0UrxnBdAxHMdfgcgha7",
@@ -365,7 +365,8 @@
       }
     ],
     "totalUnits": 5,
-    "unitsAvailable": 0
+    "unitsAvailable": 0,
+    "status": "active"
   },
   {
     "id": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1427,6 +1428,7 @@
       }
     ],
     "totalUnits": 2,
-    "unitsAvailable": 0
-  }  
+    "unitsAvailable": 0,
+    "status": "pending"
+  }
 ]

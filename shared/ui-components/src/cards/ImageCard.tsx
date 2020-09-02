@@ -1,6 +1,6 @@
 import * as React from "react"
-import LocalizedLink from "../atoms/LocalizedLink"
-import ApplicationStatus from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
+import { LocalizedLink } from "../atoms/LocalizedLink"
+import { ApplicationStatus } from "@bloom-housing/ui-components/src/atoms/ApplicationStatus"
 import "./ImageCard.scss"
 import { Listing } from "@bloom-housing/core"
 
@@ -31,7 +31,7 @@ const ImageCard = (props: ImageCardProps) => {
         {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
         <figcaption className="image-card__figcaption">
           <h2 className="image-card__title">{props.title}</h2>
-          <p>{props.subtitle}</p>
+          {props.subtitle && <p className="image-card__subtitle">{props.subtitle}</p>}
         </figcaption>
       </figure>
       {statusLabel}
@@ -42,7 +42,7 @@ const ImageCard = (props: ImageCardProps) => {
 
   if (props.href && props.as) {
     card = (
-      <LocalizedLink href={props.href} as={props.as}>
+      <LocalizedLink className="block" href={props.href} as={props.as}>
         {image}
       </LocalizedLink>
     )

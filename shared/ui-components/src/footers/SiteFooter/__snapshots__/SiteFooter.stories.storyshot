@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Footers|Site Footer Footer 1`] = `
+exports[`Storyshots Footers/Site Footer Footer 1`] = `
 <SiteFooter>
   <footer
     className="site-footer"
@@ -29,7 +29,7 @@ exports[`Storyshots Footers|Site Footer Footer 1`] = `
                 href="#"
               >
                 <a
-                  href="#"
+                  href="/#"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >
@@ -45,7 +45,7 @@ exports[`Storyshots Footers|Site Footer Footer 1`] = `
 </SiteFooter>
 `;
 
-exports[`Storyshots Footers|Site Footer With Logo 1`] = `
+exports[`Storyshots Footers/Site Footer With Logo 1`] = `
 <SiteFooter>
   <footer
     className="site-footer"
@@ -88,7 +88,7 @@ exports[`Storyshots Footers|Site Footer With Logo 1`] = `
                 href="#"
               >
                 <a
-                  href="#"
+                  href="/#"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >
@@ -104,7 +104,7 @@ exports[`Storyshots Footers|Site Footer With Logo 1`] = `
 </SiteFooter>
 `;
 
-exports[`Storyshots Footers|Site Footer With Logo And Credits 1`] = `
+exports[`Storyshots Footers/Site Footer With Logo And Credits 1`] = `
 <SiteFooter>
   <footer
     className="site-footer"
@@ -174,7 +174,7 @@ exports[`Storyshots Footers|Site Footer With Logo And Credits 1`] = `
                 href="#"
               >
                 <a
-                  href="#"
+                  href="/#"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >

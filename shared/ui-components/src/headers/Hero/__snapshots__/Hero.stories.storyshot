@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Headers|Hero With Background 1`] = `
+exports[`Storyshots Headers/Hero With Background 1`] = `
 <Hero
   backgroundImage="/images/banner.png"
   buttonLink="/listings"
@@ -55,7 +55,7 @@ exports[`Storyshots Headers|Hero With Background 1`] = `
 </Hero>
 `;
 
-exports[`Storyshots Headers|Hero With Listings 1`] = `
+exports[`Storyshots Headers/Hero With Listings 1`] = `
 <Hero
   buttonLink="/listings"
   buttonTitle="I am a Button"
@@ -1126,7 +1126,7 @@ exports[`Storyshots Headers|Hero With Listings 1`] = `
       Object {
         "acceptingApplicationsAtLeasingAgent": true,
         "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
+        "acceptingOnlineApplications": true,
         "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
         "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
         "applicationAddress": Object {
@@ -1143,9 +1143,8 @@ exports[`Storyshots Headers|Hero With Listings 1`] = `
         "applicationPhone": "(650) 437-2039",
         "attachments": Array [
           Object {
-            "fileUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/Triton_BMRApplication.pdf",
-            "label": "English",
-            "type": 1,
+            "fileUrl": "/applications/start/choose-language?listingId=jsQvgvy6eJy56TNCFfQp8",
+            "type": 2,
           },
         ],
         "blankPaperApplicationCanBePickedUp": true,
@@ -1177,6 +1176,8 @@ Credit recommendations other than an accept decision, will require a rental veri
         "externalId": null,
         "groupId": 2,
         "hideUnitFeatures": false,
+        "householdSizeMax": 3,
+        "householdSizeMin": 2,
         "id": "jsQvgvy6eJy56TNCFfQp8",
         "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
         "leasingAgentAddress": Object {
@@ -1303,7 +1304,7 @@ Credit recommendations other than an accept decision, will require a rental veri
 </Hero>
 `;
 
-exports[`Storyshots Headers|Hero With No Listings 1`] = `
+exports[`Storyshots Headers/Hero With No Listings 1`] = `
 <Hero
   buttonLink="/listings"
   buttonTitle="I am a Button"

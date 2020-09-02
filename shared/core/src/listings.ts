@@ -66,6 +66,8 @@ export interface Listing {
   depositMaxExtraText?: string
   developer: string
   disableUnitsAccordion?: boolean
+  householdSizeMax?: number
+  householdSizeMin?: number
   id: string
   imageUrl?: string
   leasingAgentAddress: Address

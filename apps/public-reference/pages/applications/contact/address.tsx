@@ -4,7 +4,6 @@ Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
-import Router from "next/router"
 import {
   Button,
   ErrorMessage,
@@ -13,23 +12,23 @@ import {
   ProgressNav,
   t,
   mergeDeep,
+  contactPreferencesKeys,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext } from "react"
-import { StateSelect } from "@bloom-housing/ui-components/src/forms/StateSelect"
+import React, { useContext, useMemo, Fragment } from "react"
+import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
 
   /* Form Handler */
-  const { control, register, handleSubmit, setValue, triggerValidation, watch, errors } = useForm<
+  const { control, register, handleSubmit, setValue, trigger, watch, errors } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -57,7 +56,7 @@ export default () => {
     }
     conductor.sync()
 
-    Router.push("/applications/contact/alternate-contact-type").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
   }
 
   const noPhone = watch("applicant.noPhone") || false
@@ -67,11 +66,10 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -79,7 +77,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/name">Back</Link>
+            <Link href="/applications/contact/name">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -147,8 +147,8 @@ export default () => {
                   if (e.target.checked) {
                     setValue("phoneNumber", "")
                     setTimeout(() => {
-                      triggerValidation("phoneNumber")
-                      triggerValidation("phoneNumberType")
+                      trigger("phoneNumber")
+                      trigger("phoneNumberType")
                     }, 1)
                   }
                 }}
@@ -190,10 +190,14 @@ export default () => {
                       defaultValue={application.additionalPhoneNumberType}
                       ref={register({ required: true })}
                     >
-                      <option value="">What type of number is this?</option>
-                      <option value="Work">Work</option>
-                      <option value="Home">Home</option>
-                      <option value="Cell">Cell</option>
+                      {["prompt", "work", "home", "cell"].map((key) => (
+                        <option
+                          key={key}
+                          value={key === "prompt" ? "" : key[0].toUpperCase() + key.slice(1)}
+                        >
+                          {t(`application.contact.phoneNumberTypes.${key}`)}
+                        </option>
+                      ))}
                     </select>
                     <ErrorMessage error={errors?.additionalPhoneNumberType}>
                       {t("application.contact.phoneNumberTypeError")}
@@ -217,7 +221,7 @@ export default () => {
               id="addressStreet"
               name="applicant.address.street"
               placeholder={t("application.contact.streetAddress")}
-              defaultValue={context.application.applicant.address.street}
+              defaultValue={application.applicant.address.street}
               validation={{ required: true }}
               error={errors.applicant?.address?.street}
               errorMessage={t("application.contact.streetError")}
@@ -229,7 +233,7 @@ export default () => {
               name="applicant.address.street2"
               label={t("application.contact.apt")}
               placeholder={t("application.contact.apt")}
-              defaultValue={context.application.applicant.address.street2}
+              defaultValue={application.applicant.address.street2}
               register={register}
             />
 
@@ -239,34 +243,36 @@ export default () => {
                 name="applicant.address.city"
                 label={t("application.contact.cityName")}
                 placeholder={t("application.contact.cityName")}
-                defaultValue={context.application.applicant.address.city}
+                defaultValue={application.applicant.address.city}
                 validation={{ required: true }}
-                error={errors.address?.city}
+                error={errors.applicant?.address?.city}
                 errorMessage={t("application.contact.cityError")}
                 register={register}
               />
 
-              <StateSelect
+              <Select
                 id="addressState"
                 name="applicant.address.state"
-                label="State"
-                defaultValue={context.application.applicant.address.state}
+                label={t("application.contact.state")}
+                defaultValue={application.applicant.address.state}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.state}
                 errorMessage={t("application.contact.stateError")}
                 register={register}
                 controlClassName="control"
+                options={stateKeys}
+                keyPrefix="application.form.options.states"
               />
             </div>
             <Field
               id="addressZipCode"
               name="applicant.address.zipCode"
-              label="Zip"
-              placeholder="ZipCode"
-              defaultValue={context.application.applicant.address.zipCode}
+              label={t("application.contact.zip")}
+              placeholder={t("application.contact.zipCode")}
+              defaultValue={application.applicant.address.zipCode}
               validation={{ required: true }}
               error={errors.applicant?.address?.zipCode}
-              errorMessage="Please enter your ZipCode"
+              errorMessage={t("application.contact.zipCodeError")}
               register={register}
             />
 
@@ -296,7 +302,7 @@ export default () => {
                 id="mailingAddressStreet"
                 name="mailingAddress.street"
                 placeholder={t("application.contact.streetAddress")}
-                defaultValue={context.application.mailingAddress.street}
+                defaultValue={application.mailingAddress.street}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.street}
                 errorMessage={t("application.contact.streetError")}
@@ -308,7 +314,7 @@ export default () => {
                 name="mailingAddress.street2"
                 label={t("application.contact.apt")}
                 placeholder={t("application.contact.apt")}
-                defaultValue={context.application.mailingAddress.street2}
+                defaultValue={application.mailingAddress.street2}
                 register={register}
               />
 
@@ -318,39 +324,74 @@ export default () => {
                   name="mailingAddress.city"
                   label={t("application.contact.cityName")}
                   placeholder={t("application.contact.cityName")}
-                  defaultValue={context.application.mailingAddress.city}
+                  defaultValue={application.mailingAddress.city}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.city}
                   errorMessage={t("application.contact.cityError")}
                   register={register}
                 />
 
-                <StateSelect
+                <Select
                   id="mailingAddressState"
                   name="mailingAddress.state"
-                  label="State"
-                  defaultValue={context.application.mailingAddress.state}
+                  label={t("application.contact.state")}
+                  defaultValue={application.mailingAddress.state}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.state}
                   errorMessage={t("application.contact.stateError")}
                   register={register}
                   controlClassName="control"
+                  options={stateKeys}
+                  keyPrefix="application.form.options.states"
                 />
               </div>
 
               <Field
                 id="mailingAddressZipCode"
                 name="mailingAddress.zipCode"
-                label="Zip"
-                placeholder="ZipCode"
-                defaultValue={context.application.mailingAddress.zipCode}
+                label={t("application.contact.zip")}
+                placeholder={t("application.contact.zipCode")}
+                defaultValue={application.mailingAddress.zipCode}
                 validation={{ required: true }}
                 error={errors.mailingAddress?.zipCode}
-                errorMessage="Please enter your ZipCode"
+                errorMessage={t("application.contact.zipCodeError")}
                 register={register}
               />
             </div>
           )}
+          <div className="form-card__group border-b">
+            <label className="field-label--caps mb-4" htmlFor="contactPreference">
+              {t("application.contact.contactPreference")}
+            </label>
+            <div className={"field " + (errors.contactPreferences ? "error" : "")}>
+              {contactPreferencesKeys.map((preference) => {
+                return (
+                  <Fragment key={preference}>
+                    <div className="field">
+                      <input
+                        type="checkbox"
+                        name="contactPreferences"
+                        id={"contactPreferences" + preference}
+                        value={preference}
+                        defaultChecked={application.contactPreferences.includes(preference)}
+                        ref={register({ required: true })}
+                      />
+                      <label
+                        htmlFor={"contactPreferences" + preference}
+                        className="font-semibold"
+                        key={preference}
+                      >
+                        {t("application.form.options.contact." + preference)}
+                      </label>
+                    </div>
+                  </Fragment>
+                )
+              })}
+              <ErrorMessage error={errors.contactPreferences}>
+                {t("application.form.errors.selectAtLeastOne")}
+              </ErrorMessage>
+            </div>
+          </div>
 
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="street">
@@ -403,7 +444,7 @@ export default () => {
                   id="workAddressStreet"
                   name="applicant.workAddress.street"
                   placeholder={t("application.contact.streetAddress")}
-                  defaultValue={context.application.applicant.workAddress.street}
+                  defaultValue={application.applicant.workAddress.street}
                   validation={{ required: true }}
                   error={errors.applicant?.workAddress?.street}
                   errorMessage={t("application.contact.streetError")}
@@ -415,7 +456,7 @@ export default () => {
                   name="applicant.workAddress.street2"
                   label={t("application.contact.apt")}
                   placeholder={t("application.contact.apt")}
-                  defaultValue={context.application.applicant.workAddress.street2}
+                  defaultValue={application.applicant.workAddress.street2}
                   register={register}
                 />
 
@@ -425,35 +466,37 @@ export default () => {
                     name="applicant.workAddress.city"
                     label={t("application.contact.cityName")}
                     placeholder={t("application.contact.cityName")}
-                    defaultValue={context.application.applicant.workAddress.city}
+                    defaultValue={application.applicant.workAddress.city}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.city}
                     errorMessage={t("application.contact.cityError")}
                     register={register}
                   />
 
-                  <StateSelect
+                  <Select
                     id="workAddressState"
                     name="applicant.workAddress.state"
-                    label="State"
-                    defaultValue={context.application.applicant.workAddress.state}
+                    label={t("application.contact.state")}
+                    defaultValue={application.applicant.workAddress.state}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.state}
                     errorMessage={t("application.contact.stateError")}
                     register={register}
                     controlClassName="control"
+                    options={stateKeys}
+                    keyPrefix="application.form.options.states"
                   />
                 </div>
 
                 <Field
                   id="workAddressZipCode"
                   name="applicant.workAddress.zipCode"
-                  label="Zip"
-                  placeholder="ZipCode"
-                  defaultValue={context.application.applicant.workAddress.zipCode}
+                  label={t("application.contact.zip")}
+                  placeholder={t("application.contact.zipCode")}
+                  defaultValue={application.applicant.workAddress.zipCode}
                   validation={{ required: true }}
                   error={errors.applicant?.workAddress?.zipCode}
-                  errorMessage="Please enter your ZipCode"
+                  errorMessage={t("application.contact.zipCodeError")}
                   register={register}
                 />
               </>
@@ -465,12 +508,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

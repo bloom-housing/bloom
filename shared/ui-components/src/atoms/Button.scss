@@ -21,6 +21,11 @@
     @apply text-white;
   }
 
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
+  }
+
   &.is-filled,
   &.is-primary {
     @apply bg-primary-dark;
@@ -75,9 +80,30 @@
     @apply font-normal;
     @apply underline;
     @apply m-4;
+    @apply text-tiny;
 
     &:hover {
       @apply text-primary;
+      background: transparent;
+    }
+  }
+
+  &.is-text-caps {
+    @apply text-primary-dark;
+    @apply normal-case;
+    @apply border-0;
+    @apply p-0;
+    @apply font-sans;
+    @apply tracking-normal;
+    @apply font-normal;
+    @apply underline;
+    @apply m-4;
+    @apply uppercase;
+    @apply text-tiny;
+    @apply block;
+
+    &:hover {
+      @apply text-primary-dark;
       background: transparent;
     }
   }

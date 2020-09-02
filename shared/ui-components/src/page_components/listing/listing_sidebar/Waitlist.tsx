@@ -1,5 +1,5 @@
 import * as React from "react"
-import t from "../../../helpers/translator"
+import { t } from "../../../helpers/translator"
 import { Listing } from "@bloom-housing/core"
 
 const WaitlistItem = (props: { className?: string; value: number; text: string }) => (

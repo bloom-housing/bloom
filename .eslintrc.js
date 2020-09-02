@@ -5,7 +5,7 @@ module.exports = {
       "./tsconfig.json",
       "./apps/public-reference/tsconfig.json",
       "./apps/partners-reference/tsconfig.json",
-      "./services/**/tsconfig.json"
+      "./services/**/tsconfig.json",
     ],
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: "module", // Allows for the use of imports
@@ -20,6 +20,7 @@ module.exports = {
     "plugin:import/errors", // check for imports not resolving correctly
     "plugin:import/warnings",
     "plugin:import/typescript",
+    "plugin:react-hooks/recommended", // Make sure we follow https://reactjs.org/docs/hooks-rules.html
     "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
@@ -28,13 +29,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "react/jsx-uses-vars": "warn",
-    "react/jsx-uses-react": "warn"
+    "react/jsx-uses-react": "warn",
   },
-  ignorePatterns: [
-    "node_modules",
-    "storybook-static",
-    ".next",
-    "dist",
-    "migration/",
-  ],
+  ignorePatterns: ["node_modules", "storybook-static", ".next", "dist", "migration/"],
 }

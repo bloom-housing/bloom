@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Prototypes|AppHeader App Header 1`] = `
+exports[`Storyshots Prototypes/AppHeader App Header 1`] = `
 <div
   style={
     Object {
@@ -83,7 +83,7 @@ exports[`Storyshots Prototypes|AppHeader App Header 1`] = `
 </div>
 `;
 
-exports[`Storyshots Prototypes|AppHeader App Header Complete 1`] = `
+exports[`Storyshots Prototypes/AppHeader App Header Complete 1`] = `
 <div
   style={
     Object {
@@ -164,7 +164,7 @@ exports[`Storyshots Prototypes|AppHeader App Header Complete 1`] = `
 </div>
 `;
 
-exports[`Storyshots Prototypes|AppHeader App Header Progress 1`] = `
+exports[`Storyshots Prototypes/AppHeader App Header Progress 1`] = `
 <div
   style={
     Object {

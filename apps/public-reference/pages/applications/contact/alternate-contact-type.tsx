@@ -9,22 +9,21 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo, Fragment } from "react"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
+    conductor.completeStep(1)
     conductor.sync()
     if (data.type == "noContact") {
-      Router.push("/applications/household/live-alone").then(() => window.scrollTo(0, 0))
+      conductor.routeTo("/applications/household/live-alone")
     } else {
-      Router.push("/applications/contact/alternate-contact-name").then(() => window.scrollTo(0, 0))
+      conductor.routeTo("/applications/contact/alternate-contact-name")
     }
   }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
@@ -32,11 +31,10 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -64,7 +62,7 @@ export default () => {
             </p>
             {options.map((option, i) => {
               return (
-                <>
+                <Fragment key={option}>
                   <div className={"field " + (errors.type ? "error" : "")}>
                     <input
                       key={option}
@@ -101,7 +99,7 @@ export default () => {
                       </ErrorMessage>
                     )}
                   </div>
-                </>
+                </Fragment>
               )
             })}
           </div>
@@ -113,7 +111,7 @@ export default () => {
                   //
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
           </div>

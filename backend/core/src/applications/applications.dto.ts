@@ -19,4 +19,8 @@ export class ApplicationDto {
   @Type(() => IdDto)
   @Expose()
   listing: IdDto
+  @Expose()
+  createdAt: Date
+  @Expose()
+  updatedAt: Date
 }

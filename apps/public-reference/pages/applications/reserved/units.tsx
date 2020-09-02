@@ -4,17 +4,15 @@ Unlike Reserved Community Buildings which are 100% reserved, in the event that t
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 2
 
   /* Form Handler */
@@ -22,7 +20,7 @@ export default () => {
   const onSubmit = (data) => {
     console.log(data)
 
-    application.completedStep = 2
+    conductor.completeStep(2)
     conductor.sync()
 
     Router.push("/applications/financial/vouchers").then(() => window.scrollTo(0, 0))
@@ -36,7 +34,6 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -44,7 +41,9 @@ export default () => {
       <FormCard>
         <p className="text-bold">
           <strong>
-            <Link href="/applications/household/ada">Back</Link>
+            <Link href="/applications/household/ada">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 

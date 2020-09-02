@@ -36,7 +36,7 @@ module.exports = withCSS(
           listingServiceUrl: LISTING_SERVICE_URL,
         },
         sassLoaderOptions: {
-          prependData: tailwindVars,
+          additionalData: tailwindVars,
         },
         // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
         async exportPathMap() {
@@ -89,9 +89,6 @@ module.exports = withCSS(
           return Object.assign({}, languagePaths, {
             "/disclaimer": { page: "/disclaimer" },
             "/privacy": { page: "/privacy" },
-            "/applications/new": { page: "/applications/new" },
-            "/applications/step2": { page: "/applications/step2" },
-            "/applications/complete": { page: "/applications/complete" },
             "/sign-in": { page: "/sign-in" },
           })
         },

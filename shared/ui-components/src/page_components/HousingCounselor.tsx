@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { HousingCounselor as Counselor } from "@bloom-housing/core"
 
-import t from "../helpers/translator"
+import { t } from "../helpers/translator"
 
 const LanguageLabel = (language: string) => {
   return (

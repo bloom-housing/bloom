@@ -6,6 +6,7 @@ import {
   useEffect,
   useContext,
 } from "react"
+import Router, { useRouter } from "next/router"
 import { createAction, createReducer } from "typesafe-actions"
 import { User, CreateUserDto } from "@bloom-housing/backend-core"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
@@ -17,10 +18,10 @@ import {
   scheduleTokenRefresh,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
-
+import { t } from "@bloom-housing/ui-components"
 // External interface this context provides
 type ContextProps = {
-  login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<User>
   createUser: (user: CreateUserDto) => Promise<User>
   signOut: () => void
   // True when an API request is processing
@@ -145,6 +146,10 @@ export const UserProvider: FunctionComponent = ({ children }) => {
       try {
         const accessToken = await login(apiUrl, email, password)
         dispatch(saveToken({ accessToken, apiUrl, dispatch }))
+        const client = createAxiosInstance(apiUrl, accessToken)
+        const profile = await getProfile(client)
+        dispatch(saveProfile(profile))
+        return profile
       } finally {
         dispatch(stopLoading())
       }

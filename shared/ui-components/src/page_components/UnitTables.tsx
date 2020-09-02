@@ -3,9 +3,9 @@ import { nanoid } from "nanoid"
 import { MinMax, UnitSummary, Unit } from "@bloom-housing/core"
 
 import { BasicTable } from "../tables/BasicTable"
-import t from "../../src/helpers/translator"
-import { numberOrdinal } from "../../src/helpers/numberOrdinal"
-import { capitalize } from "../../src/helpers/capitalize"
+import { t } from "../helpers/translator"
+import { numberOrdinal } from "../helpers/numberOrdinal"
+import { capitalize } from "../helpers/capitalize"
 
 const formatRange = (range: MinMax, ordinalize?: boolean) => {
   let min: string | number = range.min

@@ -3,7 +3,6 @@
 Total pre-tax household income from all sources
 */
 import Link from "next/link"
-import Router from "next/router"
 import {
   Button,
   FormCard,
@@ -17,7 +16,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useState } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
 import { Listing } from "@bloom-housing/core"
@@ -51,10 +49,8 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
 }
 
 export default () => {
-  const context = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
   const currentPageStep = 3
 
   /* Form Handler */
@@ -66,22 +62,19 @@ export default () => {
   })
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
-
-    // TODO: Figure out where this listing info comes from?
     // Skip validation of total income if the applicant has income vouchers.
-    // const error = application.incomeVouchers ? null : verifyIncome(listing, income, incomePeriod)
-    // Change this line to "low" or "high" to demo validation failure display
-    const error = null
-    setIncomeError(error)
+    const validationError = application.incomeVouchers
+      ? null
+      : verifyIncome(listing, income, incomePeriod)
+    setIncomeError(validationError)
 
-    if (!error) {
+    if (!validationError) {
       const toSave = { income, incomePeriod }
       new FormStep(conductor).save(toSave)
 
-      application.completedStep = 3
+      conductor.completeStep(3)
       conductor.sync()
-
-      Router.push("/applications/preferences/intro").then(() => window.scrollTo(0, 0))
+      conductor.routeToNextOrReturnUrl("/applications/preferences/select")
     }
   }
 
@@ -95,11 +88,10 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -107,7 +99,9 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/financial/vouchers">Back</Link>
+            <Link href="/applications/financial/vouchers">
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -199,12 +193,25 @@ export default () => {
               <Button
                 filled={true}
                 onClick={() => {
-                  //
+                  conductor.returnToReview = false
                 }}
               >
-                Next
+                {t("t.next")}
               </Button>
             </div>
+
+            {conductor.canJumpForwardToReview() && (
+              <div className="form-card__pager-row">
+                <Button
+                  className="button is-unstyled mb-4"
+                  onClick={() => {
+                    conductor.returnToReview = true
+                  }}
+                >
+                  {t("application.form.general.saveAndReturn")}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </FormCard>

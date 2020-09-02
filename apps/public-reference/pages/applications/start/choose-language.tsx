@@ -4,7 +4,7 @@ Applicants are given the option to start the Application in one of a number of l
 https://github.com/bloom-housing/bloom/issues/277
 */
 import axios from "axios"
-import Router from "next/router"
+import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
@@ -17,40 +17,44 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 
-const loadListing = async (stateFunction) => {
+const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
-  stateFunction(response.data.listings[2])
+  conductor.listing =
+    response.data.listings.find((listing) => listing.id == listingId) || response.data.listings[2] // FIXME: temporary fallback
+  stateFunction(conductor.listing)
+  context.syncListing(conductor.listing)
 }
 
 export default () => {
+  const router = useRouter()
   const [listing, setListing] = useState(null)
-  useEffect(() => {
-    loadListing(setListing)
-  })
-
   const context = useContext(AppSubmissionContext)
-  const { application } = context
-  const conductor = new ApplicationConductor(application, context)
-  conductor.reset(false)
+  const { conductor, application } = context
+
+  const listingId = router.query.listingId
+
+  useEffect(() => {
+    loadListing(listingId, setListing, conductor, context)
+  }, [])
+
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
+  const { handleSubmit } = useForm()
+  const onSubmit = () => {
+    conductor.sync()
 
-    Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
+    router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
   }
 
   return (
     <FormsLayout>
-      <FormCard header="LISTING">
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          totalNumberOfSteps={conductor.totalNumberOfSteps()}
           labels={["You", "Household", "Income", "Preferences", "Review"]}
         />
       </FormCard>
@@ -112,7 +116,9 @@ export default () => {
             <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
 
             <div>
-              <LinkButton href="/sign-in">{t("nav.signIn")}</LinkButton>
+              <LinkButton href="/sign-in?redirectUrl=/applications/start/choose-language">
+                {t("nav.signIn")}
+              </LinkButton>
             </div>
           </div>
         </div>
