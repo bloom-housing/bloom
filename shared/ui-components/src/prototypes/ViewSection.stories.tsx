@@ -1,5 +1,6 @@
 import React from "react"
 import Link from "next/link"
+import { SimpleTable } from "./SimpleTable"
 
 import "./ViewSection.scss"
 
@@ -14,7 +15,7 @@ export const ViewSectionFourColumns = () => (
       <h2 className="view-title">My Section</h2>
     </header>
 
-    <div className="view-grid md:grid md:grid-cols-4 md:gap-8 bg-primary-lighter demo">
+    <div className="view-grid md:grid md:grid-cols-4 md:gap-8 bg-primary-lighter">
       <p className="view-item">
         <span className="view-item__label">First Name</span>
         <span className="view-item__value">Lisa</span>
@@ -69,7 +70,7 @@ export const ViewSectionFourColumnsEdit = () => (
       </span>
     </header>
 
-    <div className="view-grid md:grid md:grid-cols-4 md:gap-8 bg-primary-lighter demo">
+    <div className="view-grid md:grid md:grid-cols-4 md:gap-8 bg-primary-lighter">
       <p className="view-item">
         <span className="view-item__label">Label</span>
         <span className="view-item__value">Value</span>
@@ -127,7 +128,7 @@ export const ViewSectionAddress = () => (
       <h2 className="view-title">My Section</h2>
     </header>
 
-    <div className="view-grid md:grid md:grid-cols-2 md:gap-8 bg-primary-lighter demo">
+    <div className="view-grid md:grid md:grid-cols-2 md:gap-8 bg-primary-lighter">
       <div className="view-group">
         <h3 className="view-group__title">My Group</h3>
         <div className="view-subgrid md:grid md:grid-cols-4 md:gap-8">
@@ -163,5 +164,17 @@ export const ViewSectionAddress = () => (
         </div>
       </div>
     </div>
+  </div>
+)
+
+export const ViewSectionTable = () => (
+  <div className="view-section">
+    <header className="view-header">
+      <h2 className="view-title">My Section</h2>
+    </header>
+
+    <div className="view-grid bg-primary-lighter">
+      <SimpleTable />
+    </div> 
   </div>
 )
