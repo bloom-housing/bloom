@@ -4,7 +4,7 @@ Ask housing applicant if their current is temporary or homeless
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -48,7 +48,7 @@ export default () => {
 
         <hr />
 
-        <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+        <Form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           (FORM)
           <div className="text-center mt-6">
             <Button
@@ -60,7 +60,7 @@ export default () => {
               Next
             </Button>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

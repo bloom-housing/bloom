@@ -4,7 +4,7 @@ Optional demographic questions
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -81,7 +81,7 @@ const Demographics = () => {
           <p className="mt-4 field-note">{t("application.review.demographics.subTitle")}</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <Select
               id="ethnicity"
@@ -162,7 +162,7 @@ const Demographics = () => {
               <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
             </Link>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

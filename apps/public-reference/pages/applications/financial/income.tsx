@@ -12,6 +12,7 @@ import {
   ErrorMessage,
   AlertBox,
   AlertNotice,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -138,7 +139,7 @@ export default () => {
           </>
         )}
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
+        <Form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
             <p className="field-label mb-2">{t("application.financial.income.prompt")}</p>
 
@@ -215,7 +216,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

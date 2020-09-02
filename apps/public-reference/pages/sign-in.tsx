@@ -10,6 +10,7 @@ import {
   t,
   AlertBox,
   UrlAlert,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRouter } from "next/router"
@@ -58,7 +59,7 @@ const SignIn = () => {
         )}
         <UrlAlert type="notice" urlParam="message" dismissable />
         <div className="form-card__group pt-0 border-b">
-          <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+          <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
               caps={true}
               name="email"
@@ -90,7 +91,7 @@ const SignIn = () => {
                 Sign In
               </Button>
             </div>
-          </form>
+          </Form>
         </div>
         <div className="form-card__group text-center">
           <h2 className="mb-6">Don't have an account?</h2>

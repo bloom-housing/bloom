@@ -13,6 +13,7 @@ import {
   t,
   mergeDeep,
   contactPreferencesKeys,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -92,7 +93,7 @@ export default () => {
           </h2>
         </div>
 
-        <form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="applicant.phoneNumber">
               {t("application.contact.yourPhoneNumber")}
@@ -517,7 +518,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )
