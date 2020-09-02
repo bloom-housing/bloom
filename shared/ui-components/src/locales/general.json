@@ -1,4 +1,10 @@
 {
+  "account": {
+    "accountSettings": "Account Settings",
+    "accountSettingsSubtitle": "Account Settings, email and password",
+    "myApplications": "My Applications",
+    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
+  },
   "application": {
     "form": {
       "errors": {
@@ -210,6 +216,7 @@
       },
       "preferredUnit": {
         "title": "What unit sizes are you interested in?",
+        "subTitle": "Your selected unit type will be subject to availability.",
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
@@ -235,8 +242,7 @@
         "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
       },
       "membersInfo": {
-        "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
-        "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
+        "title": "Before adding other people, make sure that they aren't named on any other application for this listing."
       },
       "primaryApplicant": "Primary Applicant"
     },
@@ -280,7 +286,9 @@
       "terms": {
         "title": "Terms",
         "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
-        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
+        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit.",
+        "agreeError": "You must agree to the terms in order to continue",
+        "submit": "Submit"
       },
       "demographics": {
         "title": "Help us ensure we are meeting our goal to serve all people.",
@@ -355,6 +363,15 @@
         "print": "View submitted application and print a copy."
       }
     },
+    "confirmation": {
+      "viewOriginalListing": "View the original listing",
+      "informationSubmittedTitle": "Here's the information you submitted.",
+      "submitted": "Submitted: ",
+      "lotteryNumber": "Your lottery number",
+      "preferences": "Preferences",
+      "generalLottery": "Based on information you have entered, your household has not claimed any housing lottery preferences. You will be in the general lottery.",
+      "printCopy": "Print a copy for your records"
+    },
     "financial": {
       "income": {
         "title": "Let's move to income.",
@@ -410,7 +427,20 @@
       "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information if you choose not to respond.",
       "action": "Continue working",
       "afterMessage": "We care about your security. We ended your session due to inactivity. Please log in or start a new application to continue."
-    }
+    },
+    "continueApplication": "Continue Application",
+    "applicationNeverSubmitted": "Your application was never submitted",
+    "deleteThisApplication": "Delete this application?",
+    "deleteApplicationDescription": "Deleting this application means you will lose all the information you've entered.",
+    "edited": "Edited",
+    "status": "Status",
+    "statuses": {
+      "inProgress": "In Progress",
+      "neverSubmitted": "Never Submitted",
+      "submitted": "Submitted"
+    },
+    "viewApplication": "View Application",
+    "yourLotteryNumber": "Your lottery number is"
   },
   "authentication": {
     "timeout": {
@@ -441,9 +471,10 @@
   "footer": {
     "contact": "Contact",
     "disclaimer": "Disclaimer",
-    "forGeneralQuestions": "For general program inquiries, you may call MOHCD at 415-701-5500.",
+    "forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
     "giveFeedback": "Give Feedback",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "copyright": "Demonstration County © 2020 • All Rights Reserved"
   },
   "housingCounselors": {
     "subtitle": "Talk with a local housing counselor specific to your needs.",
@@ -508,6 +539,7 @@
     "availableUnitsAndWaitlist": "Available units and waitlist",
     "availableUnitsAndWaitlistDesc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>%{number} units</span>",
     "bath": "bath",
+    "browseListings": "Browse Listings",
     "closedListings": "Closed Listings",
     "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
@@ -604,24 +636,28 @@
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
     "downloadPdf": "Download PDF",
-    "rePricing": "Re-Pricing",
-    "viewAdditionalHousingOpportunitiesHeader": "See more rental and ownership housing opportunities",
-    "viewAdditionalHousingOpportunitiesButton": "View additional housing opportunities"
+    "rePricing": "Re-Pricing"
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
     "viewPreferenceList": "View Preference List"
   },
   "nav": {
+    "accountSettings": "Account Settings",
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
     "getFeedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>your feedback.</a>",
     "listings": "Listings",
     "properties": "Properties",
     "applications": "Applications",
+    "myAccount": "My Account",
+    "myApplications": "My Applications",
+    "myDashboard": "My Dashboard",
+    "mySettings": "My Settings",
     "signIn": "Sign In",
     "signOut": "Sign Out",
-    "siteTitle": "Housing Portal"
+    "siteTitle": "Housing Portal",
+    "skip": "Skip to main content"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
@@ -649,12 +685,15 @@
     "availability": "Availability",
     "back": "Back",
     "built": "Built",
+    "cancel": "Cancel",
     "confirm": "Confirm",
     "day": "Day",
+    "delete": "Delete",
     "deposit": "Deposit",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
+    "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "month": "Month",
@@ -673,6 +712,7 @@
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "seeListing": "See Listing",
     "selectAllThatApply": "Please select all that apply.",
     "selectOne": "Select One",
     "skipToMainContent": "Skip to main content",
@@ -689,7 +729,9 @@
   "welcome": {
     "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
     "seeRentalListings": "See Rentals",
-    "title": "Apply for affordable housing in"
+    "title": "Apply for affordable housing in",
+    "seeMoreOpportunities": "See more rental and ownership housing opportunities",
+    "viewAdditionalHousing": "View Additional Housing Details"
   },
   "whatToExpect": {
     "label": "What to Expect",

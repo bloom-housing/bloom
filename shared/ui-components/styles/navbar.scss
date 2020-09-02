@@ -2,10 +2,15 @@
 @import "~bulma/sass/components/navbar.sass";
 
 .navbar-notice {
+  @apply hidden;
   @apply w-full;
   @apply bg-primary;
   @apply text-right;
   @apply text-white;
+
+  @screen md {
+    @apply block;
+  }
 }
 
 .navbar-notice__text {
@@ -34,6 +39,19 @@ nav.navbar {
   @apply m-auto;
 }
 
+.navbar-brand {
+  @apply relative;
+  @apply justify-center;
+
+  @screen md {
+    @apply justify-start;
+  }
+
+  @screen print {
+    @apply justify-center;
+  }
+}
+
 .navbar-brand .logo {
   @apply text-black;
   @apply block;
@@ -41,8 +59,21 @@ nav.navbar {
   @apply z-10;
   @apply items-center;
   @apply justify-center;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-  margin-bottom: -0.75rem;
+
+  @screen md {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+    margin-bottom: -0.75rem;
+    margin-top: -2.75em;
+    padding-top: 1em;
+
+    &:focus {
+      box-shadow: 0 0 3px 4px $tailwind-attention;
+    }
+  }
+
+  @screen print {
+    margin-top: 0;
+  }
 
   &.navbar-item,
   &.navbar-item:hover,
@@ -54,14 +85,6 @@ nav.navbar {
     @apply pl-4;
     @apply pr-4;
     @apply flex;
-  }
-
-  @screen md {
-    margin-top: -2.75em;
-    padding-top: 1em;
-  }
-
-  .logo__lockup {
   }
 
   .logo__image {
@@ -107,6 +130,10 @@ a.navbar-item {
 
   &:hover {
     @apply bg-primary-lighter;
+  }
+
+  &:focus {
+    @apply bg-white;
   }
 
   @screen md {
@@ -163,6 +190,14 @@ a.navbar-item {
       background-color: transparent;
     }
   }
+
+  > .navbar-link {
+    @apply hidden;
+
+    @screen md {
+      @apply block;
+    }
+  }
 }
 
 .navbar-burger {
@@ -171,8 +206,25 @@ a.navbar-item {
   }
 }
 
-.navbar-burger span {
-  height: 2px;
+.navbar-burger {
+  @apply absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+
+  &:before {
+    @apply absolute;
+    content: "Menu";
+    left: -22px;
+    top: calc(50% + 1px);
+    transform: translateY(-50%);
+    @apply uppercase;
+    @apply text-xs;
+  }
+
+  span {
+    height: 2px;
+  }
 }
 
 .navbar-menu {
@@ -182,4 +234,22 @@ a.navbar-item {
 .navbar-end {
   @apply border-t;
   @apply border-gray-400;
+}
+
+.navbar__skip-link {
+  @apply sr-only;
+  @apply text-white;
+
+  &:hover {
+    @apply text-white;
+  }
+
+  &:focus {
+    @apply not-sr-only;
+    @apply absolute;
+    @apply p-1;
+    @apply text-white;
+    top: 0;
+    left: 0;
+  }
 }

@@ -11,6 +11,7 @@ import {
   t,
   UserContext,
   ApiClientContext,
+  ErrorMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -68,31 +69,31 @@ export default () => {
         <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>
-              {/* TODO */}
               {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
             </Markdown>
-            <div className="field mt-4 flex flex-row flex-no-wrap">
-              <input
-                className="inline-block"
-                type="checkbox"
-                id="agree"
-                name="agree"
-                ref={register}
-              />
-              <label htmlFor="agree" className="text-primary font-semibold inline-block">
-                {t("application.review.terms.confirmCheckboxText")}
-              </label>
+            <div className={`field mt-4 ${errors?.agree ? "error" : ""}`}>
+              <div>
+                <input
+                  className="inline-block"
+                  type="checkbox"
+                  id="agree"
+                  name="agree"
+                  ref={register({ required: true })}
+                />
+                <label htmlFor="agree" className="font-semibold">
+                  {t("application.review.terms.confirmCheckboxText")}
+                </label>
+              </div>
+
+              <ErrorMessage error={errors?.agree}>
+                {t("application.review.terms.agreeError")}
+              </ErrorMessage>
             </div>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                filled={true}
-                onClick={() => {
-                  //
-                }}
-              >
-                Submit
+              <Button filled={true} onClick={() => false}>
+                {t("application.review.terms.submit")}
               </Button>
             </div>
           </div>

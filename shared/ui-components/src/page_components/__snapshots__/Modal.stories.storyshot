@@ -1,0 +1,222 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/Modal Modal Normal 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Modal
+    cancelText="Cancel"
+    content="Loreum ipsum"
+    onCancel={[Function]}
+    onSubmit={[Function]}
+    submitText="Submit"
+    title="Header"
+  >
+    <div
+      className="modal"
+      role="dialog"
+    >
+      <header
+        className="modal__inner"
+      >
+        <h1
+          className="modal__title"
+        >
+          Header
+        </h1>
+      </header>
+      <section
+        className="modal__inner"
+      >
+        <p
+          className="c-steel"
+        >
+          Loreum ipsum
+        </p>
+      </section>
+      <footer
+        className="modal__footer bg-primary-lighter"
+      >
+        <div
+          className="modal__button-group"
+        >
+          <div
+            className="modal__button_item md:order-last"
+          >
+            <Button
+              className=""
+              filled={true}
+              onClick={[Function]}
+            >
+              <button
+                className="button is-filled"
+                onClick={[Function]}
+              >
+                Submit
+              </button>
+            </Button>
+          </div>
+          <div
+            className="modal__button_item"
+          >
+            <Button
+              className="is-borderless"
+              filled={true}
+              onClick={[Function]}
+            >
+              <button
+                className="button is-filled is-borderless"
+                onClick={[Function]}
+              >
+                Cancel
+              </button>
+            </Button>
+          </div>
+        </div>
+      </footer>
+      <a
+        aria-label="Close"
+        className="modal__close"
+        onClick={[Function]}
+      >
+        <span
+          className="ui-icon"
+        >
+          <svg
+            id="i-close"
+            viewBox="0 0 32 32"
+          >
+            <title>
+              close
+            </title>
+            <path
+              d="M1.867 0.4c0-0.133 0-0.133 0 0-0.4-0.4-1.2-0.4-1.6 0 0 0 0 0 0 0-0.4 0.4-0.4 1.2 0 1.6l14.133 14 1.6-1.6-14.133-14z"
+            />
+            <path
+              d="M31.733 1.867c0.4-0.4 0.4-1.2 0-1.6 0 0 0 0 0 0v0c-0.4-0.4-1.2-0.4-1.6 0 0 0 0 0 0 0l-14.133 14.133 1.6 1.6 14.133-14.133z"
+            />
+            <path
+              d="M31.733 30.133l-15.733-15.733-15.733 15.733c-0.4 0.4-0.4 1.2 0 1.6s1.2 0.4 1.6 0l14.133-14.133 14 14c0.4 0.4 1.2 0.4 1.6 0 0.533-0.4 0.533-1.067 0.133-1.467z"
+            />
+          </svg>
+        </span>
+      </a>
+    </div>
+  </Modal>
+</div>
+`;
+
+exports[`Storyshots Prototypes/Modal Modal Warning 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Modal
+    alert={true}
+    cancelText="Cancel"
+    content="Loreum ipsum"
+    onCancel={[Function]}
+    onSubmit={[Function]}
+    submitText="Submit"
+    title="Header"
+  >
+    <div
+      className="modal"
+      role="dialog"
+    >
+      <header
+        className="modal__inner"
+      >
+        <h1
+          className="modal__title"
+        >
+          Header
+        </h1>
+      </header>
+      <section
+        className="modal__inner"
+      >
+        <p
+          className="c-steel"
+        >
+          Loreum ipsum
+        </p>
+      </section>
+      <footer
+        className="modal__footer bg-primary-lighter"
+      >
+        <div
+          className="modal__button-group"
+        >
+          <div
+            className="modal__button_item md:order-last"
+          >
+            <Button
+              className="is-alert"
+              filled={true}
+              onClick={[Function]}
+            >
+              <button
+                className="button is-filled is-alert"
+                onClick={[Function]}
+              >
+                Submit
+              </button>
+            </Button>
+          </div>
+          <div
+            className="modal__button_item"
+          >
+            <Button
+              className="is-borderless"
+              filled={true}
+              onClick={[Function]}
+            >
+              <button
+                className="button is-filled is-borderless"
+                onClick={[Function]}
+              >
+                Cancel
+              </button>
+            </Button>
+          </div>
+        </div>
+      </footer>
+      <a
+        aria-label="Close"
+        className="modal__close"
+        onClick={[Function]}
+      >
+        <span
+          className="ui-icon"
+        >
+          <svg
+            id="i-close"
+            viewBox="0 0 32 32"
+          >
+            <title>
+              close
+            </title>
+            <path
+              d="M1.867 0.4c0-0.133 0-0.133 0 0-0.4-0.4-1.2-0.4-1.6 0 0 0 0 0 0 0-0.4 0.4-0.4 1.2 0 1.6l14.133 14 1.6-1.6-14.133-14z"
+            />
+            <path
+              d="M31.733 1.867c0.4-0.4 0.4-1.2 0-1.6 0 0 0 0 0 0v0c-0.4-0.4-1.2-0.4-1.6 0 0 0 0 0 0 0l-14.133 14.133 1.6 1.6 14.133-14.133z"
+            />
+            <path
+              d="M31.733 30.133l-15.733-15.733-15.733 15.733c-0.4 0.4-0.4 1.2 0 1.6s1.2 0.4 1.6 0l14.133-14.133 14 14c0.4 0.4 1.2 0.4 1.6 0 0.533-0.4 0.533-1.067 0.133-1.467z"
+            />
+          </svg>
+        </span>
+      </a>
+    </div>
+  </Modal>
+</div>
+`;

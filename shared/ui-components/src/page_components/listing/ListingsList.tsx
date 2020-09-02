@@ -30,11 +30,16 @@ const ListingsList = (props: ListingsProps) => {
       )
     }
 
+    // address as subtitle
+    const { street, city, state, zipCode } = listing?.buildingAddress || {}
+    const subtitle = `${street}, ${city} ${state}, ${zipCode}`
+
     return (
       <article key={listing.id} className="listings-row">
         <div className="listings-row_figure">
           <ImageCard
             title={listing.name}
+            subtitle={subtitle}
             imageUrl={imageUrl}
             href={`listing/id=${listing.id}`}
             as={`/listing/${listing.id}`}
