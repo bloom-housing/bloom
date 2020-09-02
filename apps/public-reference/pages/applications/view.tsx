@@ -21,42 +21,39 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard header="Confirmation">
-        <div className="p-4">
+        <div className="py-2">
           <Link href="/applications/review/summary">
-            <a className="lined">{t("application.confirmation.viewOriginalListing")}</a>
+            <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
           </Link>
         </div>
       </FormCard>
 
       <FormCard>
-        <div className="form-card__group mx-0">
+        <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {t("application.confirmation.informationSubmittedTitle")}
           </h2>
-
-          <div className="flex flex-col justify-center text-center mt-3">
-            <span className="text-sm font-normal">
-              {t("application.confirmation.submitted")}
-              {confirmationDate}
-            </span>
-
-            <hr className="my-6" />
-
-            <h3 className="font-alt-sans uppercase text-sm text-black font-semibold">
-              {t("application.confirmation.lotteryNumber")}
-            </h3>
-
-            {/* TODO: replace with the number from backend */}
-            <span className="text-black text-3xl text-serif-lg font-normal my-0">#00545847</span>
-          </div>
+          <p className="field-note mt-4 text-center">
+            {t("application.confirmation.submitted")}
+            {confirmationDate}
+          </p>
+        </div>
+        <div className="form-card__group text-center">
+          <h3 className="form-card__paragraph-title">
+            {t("application.confirmation.lotteryNumber")}
+          </h3>
+          {/* TODO: replace with the number from backend */}
+          <p className="font-serif text-3xl my-0">#00545847</p>
         </div>
 
         <FormSummaryDetails application={application} editMode={false} />
 
-        <div className="text-center form-card__group border-b mx-0">
-          <a href="#" className="lined" onClick={() => window.print()}>
-            {t("application.confirmation.printCopy")}
-          </a>
+        <div className="form-card__pager">
+          <div className="form-card__pager-row py-6">
+            <a href="#" className="lined text-tiny" onClick={() => window.print()}>
+              {t("application.confirmation.printCopy")}
+            </a>
+          </div>
         </div>
       </FormCard>
     </FormsLayout>
