@@ -25,17 +25,18 @@ const DOBField = (props: DOBFieldProps) => {
   const validateAge = (value: string) => {
     return (
       parseInt(value) > 1900 &&
-      moment(`${birthDay}.${birthMonth}.${value}`) < moment().subtract(atAge ? 18 : 0, "years")
+      moment(`${birthMonth}.${birthDay}.${value}`) < moment().subtract(atAge ? 18 : 0, "years")
     )
   }
 
   return (
-    <>
-      <label className="field-label--caps" htmlFor="birthMonth">
-        {props.label}
-      </label>
+    <fieldset>
+      <legend className="field-label--caps">{props.label}</legend>
 
       <div className="field-group--dob">
+        <label htmlFor={fieldName("birthMonth")} className="sr-only">
+          {t("t.month")}
+        </label>
         <Field
           name={fieldName("birthMonth")}
           placeholder="MM"
@@ -50,6 +51,9 @@ const DOBField = (props: DOBFieldProps) => {
           inputProps={{ maxLength: 2 }}
           register={register}
         />
+        <label htmlFor={fieldName("birthDay")} className="sr-only">
+          {t("t.day")}
+        </label>
         <Field
           name={fieldName("birthDay")}
           placeholder="DD"
@@ -64,6 +68,9 @@ const DOBField = (props: DOBFieldProps) => {
           inputProps={{ maxLength: 2 }}
           register={register}
         />
+        <label htmlFor={fieldName("birthYear")} className="sr-only">
+          {t("t.year")}
+        </label>
         <Field
           name={fieldName("birthYear")}
           placeholder="YYYY"
@@ -85,7 +92,7 @@ const DOBField = (props: DOBFieldProps) => {
           <span className="error-message">{t("application.name.dateOfBirthError")}</span>
         </div>
       )}
-    </>
+    </fieldset>
   )
 }
 
