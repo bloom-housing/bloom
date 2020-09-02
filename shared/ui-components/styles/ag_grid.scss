@@ -74,6 +74,24 @@
     @apply font-sans;
   }
 
+  .ag-body-viewport {
+    ::-webkit-scrollbar {
+      // -webkit-appearance: none;
+      height: 8px;
+      @apply bg-gray-600;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 8px;
+      @apply bg-gray-600;
+    }
+
+    ::-webkit-scrollbar-track {
+      @apply bg-gray-100;
+      -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.7);
+    }
+  }
+
   .ag-root-wrapper {
     @apply border-b-0;
     @apply rounded-t-md;
@@ -98,6 +116,12 @@
 
   .field-label {
     @apply mr-2;
+  }
+
+  &.field {
+    select {
+      @apply bg-white;
+    }
   }
 }
 

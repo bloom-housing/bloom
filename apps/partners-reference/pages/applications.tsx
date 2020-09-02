@@ -420,8 +420,8 @@ export default function ApplicationsList() {
               </span>
 
               <span className="field data-pager__control">
-                <label className="field-label" htmlFor="page-size">Show</label>
-                <select onChange={() => this.onPageSizeChanged()} id="page-size">
+                <label className="field-label font-sans" htmlFor="page-size">Show</label>
+                <select onChange={() => this.onPageSizeChanged()} name="page-size" id="page-size">
                   <option value="10" selected>8</option>
                   <option value="100">100</option>
                   <option value="500">500</option>
@@ -430,8 +430,8 @@ export default function ApplicationsList() {
               </span>
 
               <span className="field data-pager__control">
-                <label className="field-label" htmlFor="page-jump">Jump to</label>
-                <select onChange={() => this.onPageSizeChanged()} id="page-jump">
+                <label className="field-label font-sans" htmlFor="page-jump">Jump to</label>
+                <select onChange={() => this.onPageSizeChanged()} name="page-jump" id="page-jump">
                   <option value="2" selected>2</option>
                   <option value="3">3</option>
                   <option value="4">4</option>
