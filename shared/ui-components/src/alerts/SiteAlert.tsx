@@ -27,12 +27,12 @@ export const SiteAlert = ({
 
   useEffect(() => {
     let timeoutRef: number
+    const storedMessage = sessionStorage.getItem(`alert_message_${type}`)
 
-    setMessage(sessionStorage.getItem(`alert_message_${type}`) || "")
-
-    if (message != "") {
-      sessionStorage.removeItem(`alert_message_${type}`)
+    if (storedMessage) {
+      setMessage(storedMessage)
       setOpen(true)
+      sessionStorage.removeItem(`alert_message_${type}`)
 
       // Automatically dismiss the message after the timeout, if applicable
       if (timeout) {
@@ -40,7 +40,7 @@ export const SiteAlert = ({
       }
     }
     return () => clearTimeout(timeoutRef)
-  }, [message, timeout])
+  }, [timeout, type])
 
   return open ? (
     <AlertBox
