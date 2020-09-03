@@ -109,7 +109,7 @@ export default () => {
             </div>
           </Form>
 
-          <div className="form-card__pager-row primary px-4 border-t border-gray-450">
+          {/* <div className="form-card__pager-row primary px-4 border-t border-gray-450">
             <h2 className="form-card__title w-full border-none pt-0 mt-0">
               {t("application.chooseLanguage.haveAnAccount")}
             </h2>
@@ -121,7 +121,7 @@ export default () => {
                 {t("nav.signIn")}
               </LinkButton>
             </div>
-          </div>
+          </div> */}
         </div>
       </FormCard>
     </FormsLayout>
