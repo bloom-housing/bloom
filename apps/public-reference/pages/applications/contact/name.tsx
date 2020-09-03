@@ -4,13 +4,14 @@ Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
 import {
+  AlertBox,
   Button,
+  DOBField,
   Field,
   Form,
   FormCard,
   ProgressNav,
   t,
-  DOBField,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -26,10 +27,15 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
     Record<string, any>
-  >()
+  >({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl("/applications/contact/address")
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const noEmail: boolean = watch("applicant.noEmail", application.applicant.noEmail)
@@ -49,7 +55,13 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
         </div>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.name.yourName")}

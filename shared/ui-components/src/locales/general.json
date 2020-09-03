@@ -695,6 +695,7 @@
     "day": "Day",
     "delete": "Delete",
     "deposit": "Deposit",
+    "errorsToResolve": "There are errors you'll need to resolve before moving on.",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",

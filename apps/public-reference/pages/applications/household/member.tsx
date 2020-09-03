@@ -4,16 +4,17 @@ Add household members
 */
 import Router, { useRouter } from "next/router"
 import {
+  AlertBox,
   Button,
   DOBField,
-  Field,
-  FormCard,
-  ProgressNav,
-  t,
   ErrorMessage,
-  FormOptions,
-  relationshipKeys,
+  Field,
   Form,
+  FormCard,
+  FormOptions,
+  ProgressNav,
+  relationshipKeys,
+  t,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
@@ -87,11 +88,16 @@ export default () => {
   }
 
   /* Form Handler */
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors, watch } = useForm({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
     Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
   const deleteMember = () => {
     if (member.id != undefined) {
@@ -123,306 +129,313 @@ export default () => {
         </div>
 
         {member && (
-          <Form className="" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="firstName">
-                {t("application.household.member.name")}
-              </label>
+          <>
+            {Object.entries(errors).length > 0 && (
+              <AlertBox type="alert" inverted>
+                {t("t.errorsToResolve")}
+              </AlertBox>
+            )}
 
-              <Field
-                name="firstName"
-                placeholder={t("application.name.firstName")}
-                controlClassName="mt-2"
-                defaultValue={member.firstName}
-                validation={{ required: true }}
-                error={errors.firstName}
-                errorMessage={t("application.name.firstNameError")}
-                register={register}
-              />
+            <Form onSubmit={handleSubmit(onSubmit, onError)}>
+              <div className="form-card__group border-b">
+                <label className="field-label--caps" htmlFor="firstName">
+                  {t("application.household.member.name")}
+                </label>
 
-              <Field
-                name="middleName"
-                placeholder={t("application.name.middleName")}
-                defaultValue={member.middleName}
-                register={register}
-              />
-
-              <Field
-                name="lastName"
-                placeholder={t("application.name.lastName")}
-                defaultValue={member.lastName}
-                validation={{ required: true }}
-                error={errors.lastName}
-                errorMessage={t("application.name.lastNameError")}
-                register={register}
-              />
-            </div>
-
-            <div className="form-card__group border-b">
-              <DOBField
-                applicant={member}
-                register={register}
-                error={errors}
-                watch={watch}
-                label={t("application.household.member.dateOfBirth")}
-              />
-            </div>
-
-            <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="sameAddress">
-                {t("application.household.member.haveSameAddress")}
-              </label>
-
-              <div className={"field mt-4 " + (errors.sameAddress ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="sameAddressYes"
-                  name="sameAddress"
-                  value="yes"
-                  defaultChecked={member.sameAddress == "yes"}
-                  ref={register({ required: true })}
+                <Field
+                  name="firstName"
+                  placeholder={t("application.name.firstName")}
+                  controlClassName="mt-2"
+                  defaultValue={member.firstName}
+                  validation={{ required: true }}
+                  error={errors.firstName}
+                  errorMessage={t("application.name.firstNameError")}
+                  register={register}
                 />
-                <label className="font-semibold" htmlFor="sameAddressYes">
-                  {t("t.yes")}
-                </label>
-              </div>
-              <div className={"field " + (errors.sameAddress ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="sameAddressNo"
-                  name="sameAddress"
-                  value="no"
-                  defaultChecked={member.sameAddress == "no"}
-                  ref={register({ required: true })}
+
+                <Field
+                  name="middleName"
+                  placeholder={t("application.name.middleName")}
+                  defaultValue={member.middleName}
+                  register={register}
                 />
-                <label className="font-semibold" htmlFor="sameAddressNo">
-                  {t("t.no")}
-                </label>
 
-                <ErrorMessage error={errors.sameAddress}>
-                  {t("application.form.errors.selectOption")}
-                </ErrorMessage>
-              </div>
-              {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
-                <>
-                  <label className="field-label--caps" htmlFor="street">
-                    {t("application.contact.address")}
-                  </label>
-
-                  <Field
-                    id="addressStreet"
-                    name="address.street"
-                    placeholder={t("application.contact.streetAddress")}
-                    defaultValue={member.address.street}
-                    validation={{ required: true }}
-                    error={errors.address?.street}
-                    errorMessage={t("application.contact.streetError")}
-                    register={register}
-                  />
-
-                  <Field
-                    id="addressStreet2"
-                    name="address.street2"
-                    label={t("application.contact.apt")}
-                    placeholder={t("application.contact.apt")}
-                    defaultValue={member.address.street2}
-                    register={register}
-                  />
-
-                  <div className="flex max-w-2xl">
-                    <Field
-                      id="addressCity"
-                      name="address.city"
-                      label={t("application.contact.cityName")}
-                      placeholder={t("application.contact.cityName")}
-                      defaultValue={member.address.city}
-                      validation={{ required: true }}
-                      error={errors.address?.city}
-                      errorMessage={t("application.contact.cityError")}
-                      register={register}
-                    />
-
-                    <Select
-                      id="addressState"
-                      name="address.state"
-                      label="State"
-                      defaultValue={member.address.state}
-                      validation={{ required: true }}
-                      error={errors.address?.state}
-                      errorMessage={t("application.contact.stateError")}
-                      register={register}
-                      controlClassName="control"
-                      options={stateKeys}
-                      keyPrefix="application.form.options.states"
-                    />
-                  </div>
-
-                  <Field
-                    id="addressZipCode"
-                    name="address.zipCode"
-                    label="Zip"
-                    placeholder="Zipcode"
-                    defaultValue={member.address.zipCode}
-                    validation={{ required: true }}
-                    error={errors.address?.zipCode}
-                    errorMessage={t("application.contact.zipCodeError")}
-                    register={register}
-                  />
-                </>
-              )}
-            </div>
-
-            <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="firstName">
-                {t("application.household.member.workInRegion")}
-              </label>
-              <p className="field-note my-2">
-                {t("application.household.member.workInRegionNote")}
-              </p>
-
-              <div className={"field mt-4 " + (errors.workInRegion ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="workInRegionYes"
-                  name="workInRegion"
-                  value="yes"
-                  defaultChecked={member.workInRegion == "yes"}
-                  ref={register({ required: true })}
+                <Field
+                  name="lastName"
+                  placeholder={t("application.name.lastName")}
+                  defaultValue={member.lastName}
+                  validation={{ required: true }}
+                  error={errors.lastName}
+                  errorMessage={t("application.name.lastNameError")}
+                  register={register}
                 />
-                <label className="font-semibold" htmlFor="workInRegionYes">
-                  {t("t.yes")}
-                </label>
               </div>
-              <div className={"field " + (errors.workInRegion ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="workInRegionNo"
-                  name="workInRegion"
-                  value="no"
-                  defaultChecked={member.workInRegion == "no"}
-                  ref={register({ required: true })}
+
+              <div className="form-card__group border-b">
+                <DOBField
+                  applicant={member}
+                  register={register}
+                  error={errors}
+                  watch={watch}
+                  label={t("application.household.member.dateOfBirth")}
                 />
-                <label className="font-semibold" htmlFor="workInRegionNo">
-                  {t("t.no")}
-                </label>
-
-                <ErrorMessage error={errors.workInRegion}>
-                  {t("application.form.errors.selectOption")}
-                </ErrorMessage>
               </div>
-              {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
-                <>
-                  <label className="field-label--caps" htmlFor="street">
-                    {t("application.contact.address")}
-                  </label>
 
-                  <Field
-                    id="addressStreet"
-                    name="workAddress.street"
-                    placeholder={t("application.contact.streetAddress")}
-                    defaultValue={member.workAddress.street}
-                    validation={{ required: true }}
-                    error={errors.workAddress?.street}
-                    errorMessage={t("application.contact.streetError")}
-                    register={register}
-                  />
-
-                  <Field
-                    id="addressStreet2"
-                    name="workAddress.street2"
-                    label={t("application.contact.apt")}
-                    placeholder={t("application.contact.apt")}
-                    defaultValue={member.workAddress.street2}
-                    register={register}
-                  />
-
-                  <div className="flex max-w-2xl">
-                    <Field
-                      id="addressCity"
-                      name="workAddress.city"
-                      label={t("application.contact.cityName")}
-                      placeholder={t("application.contact.cityName")}
-                      defaultValue={member.workAddress.city}
-                      validation={{ required: true }}
-                      error={errors.workAddress?.city}
-                      errorMessage={t("application.contact.cityError")}
-                      register={register}
-                    />
-
-                    <Select
-                      id="addressState"
-                      name="workAddress.state"
-                      label="State"
-                      defaultValue={member.workAddress.state}
-                      validation={{ required: true }}
-                      error={errors.workAddress?.state}
-                      errorMessage={t("application.contact.stateError")}
-                      register={register}
-                      controlClassName="control"
-                      options={stateKeys}
-                      keyPrefix="application.form.options.states"
-                    />
-                  </div>
-
-                  <Field
-                    id="addressZipCode"
-                    name="workAddress.zipCode"
-                    label="Zip"
-                    placeholder="Zipcode"
-                    defaultValue={member.workAddress.zipCode}
-                    validation={{ required: true }}
-                    error={errors.workAddress?.zipCode}
-                    errorMessage={t("application.contact.zipCodeError")}
-                    register={register}
-                  />
-                </>
-              )}
-            </div>
-
-            <div className="form-card__group">
-              <div className={"field " + (errors.relationship ? "error" : "")}>
-                <label className="field-label--caps" htmlFor="relationship">
-                  {t("application.household.member.whatIsTheirRelationship")}
+              <div className="form-card__group border-b">
+                <label className="field-label--caps" htmlFor="sameAddress">
+                  {t("application.household.member.haveSameAddress")}
                 </label>
-                <div className="control">
-                  <select
-                    id="relationship"
-                    name="relationship"
-                    defaultValue={member.relationship}
+
+                <div className={"field mt-4 " + (errors.sameAddress ? "error" : "")}>
+                  <input
+                    type="radio"
+                    id="sameAddressYes"
+                    name="sameAddress"
+                    value="yes"
+                    defaultChecked={member.sameAddress == "yes"}
                     ref={register({ required: true })}
-                    className="w-full"
-                  >
-                    <FormOptions
-                      options={relationshipKeys}
-                      keyPrefix="application.form.options.relationship"
-                    />
-                  </select>
+                  />
+                  <label className="font-semibold" htmlFor="sameAddressYes">
+                    {t("t.yes")}
+                  </label>
                 </div>
-                <ErrorMessage error={errors.relationship}>
-                  {t("application.form.errors.selectOption")}
-                </ErrorMessage>
-              </div>
-            </div>
+                <div className={"field " + (errors.sameAddress ? "error" : "")}>
+                  <input
+                    type="radio"
+                    id="sameAddressNo"
+                    name="sameAddress"
+                    value="no"
+                    defaultChecked={member.sameAddress == "no"}
+                    ref={register({ required: true })}
+                  />
+                  <label className="font-semibold" htmlFor="sameAddressNo">
+                    {t("t.no")}
+                  </label>
+                  <ErrorMessage error={errors.sameAddress}>
+                    {t("application.form.errors.selectOption")}
+                  </ErrorMessage>
+                </div>
+                {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
+                  <>
+                    <label className="field-label--caps" htmlFor="street">
+                      {t("application.contact.address")}
+                    </label>
 
-            <div className="form-card__pager">
-              <div className="form-card__pager-row primary">
-                <Button
-                  filled={true}
-                  className=""
-                  onClick={() => {
-                    //
-                  }}
-                >
-                  {saveText}
-                </Button>
+                    <Field
+                      id="addressStreet"
+                      name="address.street"
+                      placeholder={t("application.contact.streetAddress")}
+                      defaultValue={member.address.street}
+                      validation={{ required: true }}
+                      error={errors.address?.street}
+                      errorMessage={t("application.contact.streetError")}
+                      register={register}
+                    />
+
+                    <Field
+                      id="addressStreet2"
+                      name="address.street2"
+                      label={t("application.contact.apt")}
+                      placeholder={t("application.contact.apt")}
+                      defaultValue={member.address.street2}
+                      register={register}
+                    />
+
+                    <div className="flex max-w-2xl">
+                      <Field
+                        id="addressCity"
+                        name="address.city"
+                        label={t("application.contact.cityName")}
+                        placeholder={t("application.contact.cityName")}
+                        defaultValue={member.address.city}
+                        validation={{ required: true }}
+                        error={errors.address?.city}
+                        errorMessage={t("application.contact.cityError")}
+                        register={register}
+                      />
+
+                      <Select
+                        id="addressState"
+                        name="address.state"
+                        label="State"
+                        defaultValue={member.address.state}
+                        validation={{ required: true }}
+                        error={errors.address?.state}
+                        errorMessage={t("application.contact.stateError")}
+                        register={register}
+                        controlClassName="control"
+                        options={stateKeys}
+                        keyPrefix="application.form.options.states"
+                      />
+                    </div>
+
+                    <Field
+                      id="addressZipCode"
+                      name="address.zipCode"
+                      label="Zip"
+                      placeholder="Zipcode"
+                      defaultValue={member.address.zipCode}
+                      validation={{ required: true }}
+                      error={errors.address?.zipCode}
+                      errorMessage={t("application.contact.zipCodeError")}
+                      register={register}
+                    />
+                  </>
+                )}
               </div>
-              <div className="form-card__pager-row py-8">
-                <a href="#" className="lined text-tiny" onClick={deleteMember}>
-                  {cancelText}
-                </a>
+
+              <div className="form-card__group border-b">
+                <label className="field-label--caps" htmlFor="firstName">
+                  {t("application.household.member.workInRegion")}
+                </label>
+                <p className="field-note my-2">
+                  {t("application.household.member.workInRegionNote")}
+                </p>
+
+                <div className={"field mt-4 " + (errors.workInRegion ? "error" : "")}>
+                  <input
+                    type="radio"
+                    id="workInRegionYes"
+                    name="workInRegion"
+                    value="yes"
+                    defaultChecked={member.workInRegion == "yes"}
+                    ref={register({ required: true })}
+                  />
+                  <label className="font-semibold" htmlFor="workInRegionYes">
+                    {t("t.yes")}
+                  </label>
+                </div>
+                <div className={"field " + (errors.workInRegion ? "error" : "")}>
+                  <input
+                    type="radio"
+                    id="workInRegionNo"
+                    name="workInRegion"
+                    value="no"
+                    defaultChecked={member.workInRegion == "no"}
+                    ref={register({ required: true })}
+                  />
+                  <label className="font-semibold" htmlFor="workInRegionNo">
+                    {t("t.no")}
+                  </label>
+
+                  <ErrorMessage error={errors.workInRegion}>
+                    {t("application.form.errors.selectOption")}
+                  </ErrorMessage>
+                </div>
+                {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
+                  <>
+                    <label className="field-label--caps" htmlFor="street">
+                      {t("application.contact.address")}
+                    </label>
+
+                    <Field
+                      id="addressStreet"
+                      name="workAddress.street"
+                      placeholder={t("application.contact.streetAddress")}
+                      defaultValue={member.workAddress.street}
+                      validation={{ required: true }}
+                      error={errors.workAddress?.street}
+                      errorMessage={t("application.contact.streetError")}
+                      register={register}
+                    />
+
+                    <Field
+                      id="addressStreet2"
+                      name="workAddress.street2"
+                      label={t("application.contact.apt")}
+                      placeholder={t("application.contact.apt")}
+                      defaultValue={member.workAddress.street2}
+                      register={register}
+                    />
+
+                    <div className="flex max-w-2xl">
+                      <Field
+                        id="addressCity"
+                        name="workAddress.city"
+                        label={t("application.contact.cityName")}
+                        placeholder={t("application.contact.cityName")}
+                        defaultValue={member.workAddress.city}
+                        validation={{ required: true }}
+                        error={errors.workAddress?.city}
+                        errorMessage={t("application.contact.cityError")}
+                        register={register}
+                      />
+
+                      <Select
+                        id="addressState"
+                        name="workAddress.state"
+                        label="State"
+                        defaultValue={member.workAddress.state}
+                        validation={{ required: true }}
+                        error={errors.workAddress?.state}
+                        errorMessage={t("application.contact.stateError")}
+                        register={register}
+                        controlClassName="control"
+                        options={stateKeys}
+                        keyPrefix="application.form.options.states"
+                      />
+                    </div>
+
+                    <Field
+                      id="addressZipCode"
+                      name="workAddress.zipCode"
+                      label="Zip"
+                      placeholder="Zipcode"
+                      defaultValue={member.workAddress.zipCode}
+                      validation={{ required: true }}
+                      error={errors.workAddress?.zipCode}
+                      errorMessage={t("application.contact.zipCodeError")}
+                      register={register}
+                    />
+                  </>
+                )}
               </div>
-            </div>
-          </Form>
+
+              <div className="form-card__group">
+                <div className={"field " + (errors.relationship ? "error" : "")}>
+                  <label className="field-label--caps" htmlFor="relationship">
+                    {t("application.household.member.whatIsTheirRelationship")}
+                  </label>
+                  <div className="control">
+                    <select
+                      id="relationship"
+                      name="relationship"
+                      defaultValue={member.relationship}
+                      ref={register({ required: true })}
+                      className="w-full"
+                    >
+                      <FormOptions
+                        options={relationshipKeys}
+                        keyPrefix="application.form.options.relationship"
+                      />
+                    </select>
+                  </div>
+                  <ErrorMessage error={errors.relationship}>
+                    {t("application.form.errors.selectOption")}
+                  </ErrorMessage>
+                </div>
+              </div>
+
+              <div className="form-card__pager">
+                <div className="form-card__pager-row primary">
+                  <Button
+                    filled={true}
+                    className=""
+                    onClick={() => {
+                      //
+                    }}
+                  >
+                    {saveText}
+                  </Button>
+                </div>
+                <div className="form-card__pager-row py-8">
+                  <a href="#" className="lined text-tiny" onClick={deleteMember}>
+                    {cancelText}
+                  </a>
+                </div>
+              </div>
+            </Form>
+          </>
         )}
       </FormCard>
     </FormsLayout>

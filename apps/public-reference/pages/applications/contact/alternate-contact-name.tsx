@@ -5,13 +5,13 @@ Type of alternate contact
 import Link from "next/link"
 import Router from "next/router"
 import {
+  AlertBox,
   Button,
-  ErrorMessage,
+  Form,
   Field,
   FormCard,
   ProgressNav,
   t,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -24,7 +24,9 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
+  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     application.alternateContact.firstName = data.firstName
     application.alternateContact.lastName = data.lastName
@@ -32,6 +34,10 @@ export default () => {
     conductor.sync()
     conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-contact")
   }
+  const onError = () => {
+    window.scrollTo(0, 0)
+  }
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -54,7 +60,14 @@ export default () => {
             {t("application.alternateContact.name.title")}
           </h2>
         </div>
-        <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit)}>
+
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.alternateContact.name.alternateContactFormLabel")}

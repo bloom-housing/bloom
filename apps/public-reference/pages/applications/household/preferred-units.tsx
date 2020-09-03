@@ -4,7 +4,7 @@ Applicant can designate which unit sizes they prefer
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -32,6 +32,9 @@ export default () => {
     conductor.sync()
 
     Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const preferredUnitOptions = useMemo(() => {
@@ -69,7 +72,13 @@ export default () => {
           <p className="mt-4 field-note">{t("application.household.preferredUnit.subTitle")}</p>
         </div>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group is-borderless">
             <CheckboxGroup
               name="preferredUnit"

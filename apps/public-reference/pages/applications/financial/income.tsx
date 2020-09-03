@@ -4,15 +4,15 @@ Total pre-tax household income from all sources
 */
 import Link from "next/link"
 import {
+  AlertBox,
+  AlertNotice,
   Button,
+  ErrorMessage,
+  Field,
+  Form,
   FormCard,
   ProgressNav,
   t,
-  Field,
-  ErrorMessage,
-  AlertBox,
-  AlertNotice,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -60,6 +60,7 @@ export default () => {
       income: application.income,
       incomePeriod: application.incomePeriod,
     },
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
@@ -77,6 +78,9 @@ export default () => {
       conductor.sync()
       conductor.routeToNextOrReturnUrl("/applications/preferences/select")
     }
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const formatValue = () => {
@@ -116,6 +120,12 @@ export default () => {
           <p className="field-note">{t("application.financial.income.instruction2")}</p>
         </div>
 
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
         {incomeError && (
           <>
             <AlertBox type="alert" inverted onClose={() => setIncomeError(null)}>
@@ -139,7 +149,7 @@ export default () => {
           </>
         )}
 
-        <Form className="" onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
             <p className="field-label mb-2">{t("application.financial.income.prompt")}</p>
 

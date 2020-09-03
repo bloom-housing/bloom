@@ -5,15 +5,16 @@ https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
 import {
+  AlertBox,
   Button,
+  contactPreferencesKeys,
   ErrorMessage,
   Field,
+  Form,
   FormCard,
+  mergeDeep,
   ProgressNav,
   t,
-  mergeDeep,
-  contactPreferencesKeys,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -38,6 +39,7 @@ export default () => {
       sendMailToMailingAddress: application.sendMailToMailingAddress,
       workInRegion: application.applicant.workInRegion,
     },
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     mergeDeep(application, data)
@@ -58,6 +60,9 @@ export default () => {
     conductor.sync()
 
     conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const noPhone = watch("applicant.noPhone", application.applicant.noPhone)
@@ -93,7 +98,13 @@ export default () => {
           </h2>
         </div>
 
-        <Form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="applicant.phoneNumber">
               {t("application.contact.yourPhoneNumber")}

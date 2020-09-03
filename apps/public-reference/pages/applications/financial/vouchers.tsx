@@ -4,7 +4,15 @@ Question asks if anyone on the application receives a housing voucher or subsidy
 */
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { Button, ErrorMessage, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Button,
+  ErrorMessage,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -19,6 +27,7 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
+    shouldFocusError: false,
   })
 
   const onSubmit = (data) => {
@@ -27,6 +36,9 @@ export default () => {
     new FormStep(conductor).save(toSave)
 
     router.push("/applications/financial/income").then(() => window.scrollTo(0, 0))
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   return (
@@ -69,7 +81,13 @@ export default () => {
           </p>
         </div>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
             <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
 

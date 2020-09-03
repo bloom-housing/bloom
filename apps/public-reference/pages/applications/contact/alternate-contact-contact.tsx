@@ -4,13 +4,13 @@ Type of alternate contact
 */
 import Link from "next/link"
 import {
+  AlertBox,
   Button,
-  ErrorMessage,
+  Form,
   Field,
   FormCard,
   ProgressNav,
   t,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -25,7 +25,9 @@ export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
   /* Form Handler */
-  const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
+  const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     application.alternateContact.phoneNumber = data.phoneNumber
     application.alternateContact.emailAddress = data.emailAddress
@@ -36,6 +38,10 @@ export default () => {
     conductor.sync()
     conductor.routeToNextOrReturnUrl("/applications/household/live-alone")
   }
+  const onError = () => {
+    window.scrollTo(0, 0)
+  }
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -59,7 +65,17 @@ export default () => {
           </h2>
           <p className="field-note my-4">{t("application.alternateContact.contact.description")}</p>
         </div>
-        <Form id="applications-contact-alternate-contact" onSubmit={handleSubmit(onSubmit)}>
+
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form
+          id="applications-contact-alternate-contact"
+          onSubmit={handleSubmit(onSubmit, onError)}
+        >
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="phoneNumber">
               {t("application.alternateContact.contact.phoneNumberFormLabel")}

@@ -5,7 +5,15 @@ Instructions on how preferences work and their value
 import { useContext, useState } from "react"
 import { useForm } from "react-hook-form"
 import Link from "next/link"
-import { Button, ErrorMessage, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Button,
+  ErrorMessage,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
@@ -21,7 +29,9 @@ export default () => {
     setShowMore({ ...showMore, [option]: !showMore[option] })
 
   /* Form Handler */
-  const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm()
+  const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ preferences: data })
     if (data.none) {
@@ -31,6 +41,9 @@ export default () => {
       conductor.sync()
       conductor.routeToNextOrReturnUrl("/applications/review/demographics")
     }
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   return (
@@ -58,7 +71,13 @@ export default () => {
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
         </div>
 
-        <Form className="" onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group px-0 pb-3">
             <p className="field-note">{t("application.preferences.selectBelow")}</p>
           </div>
