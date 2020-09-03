@@ -36,10 +36,10 @@ const FieldGroup = ({
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
-      <div className="mt-3 field">
+      <div className={`mt-3 field ${error && "error"}`}>
         {fields &&
           fields.map((item) => (
-            <div className={`field ${error && "error"}`} key={item.id}>
+            <div className={`field`} key={item.id}>
               <input
                 aria-describedby={`${name}-error`}
                 aria-invalid={!!error || false}
@@ -55,13 +55,13 @@ const FieldGroup = ({
               </label>
             </div>
           ))}
-      </div>
 
-      {error && errorMessage && (
-        <ErrorMessage id={`${name}-error`} error={error}>
-          {errorMessage}
-        </ErrorMessage>
-      )}
+        {error && errorMessage && (
+          <ErrorMessage id={`${name}-error`} error={error}>
+            {errorMessage}
+          </ErrorMessage>
+        )}
+      </div>
     </>
   )
 }
