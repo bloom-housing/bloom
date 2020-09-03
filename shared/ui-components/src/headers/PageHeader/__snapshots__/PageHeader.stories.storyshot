@@ -7,17 +7,21 @@ exports[`Storyshots Headers/PageHeader With Subtitle 1`] = `
   <header
     className="page-header bg-primary-lighter"
   >
-    <h1
-      className="page-header__title"
+    <hgroup
+      className="page-header__group"
     >
-      Hello World
-    </h1>
-    <p
-      className="page-header__lead"
-    >
-       
-      Here is a subtitle
-    </p>
+      <h1
+        className="page-header__title"
+      >
+        Hello World
+      </h1>
+      <p
+        className="page-header__lead"
+      >
+         
+        Here is a subtitle
+      </p>
+    </hgroup>
   </header>
 </PageHeader>
 `;
@@ -27,11 +31,15 @@ exports[`Storyshots Headers/PageHeader With Text Content 1`] = `
   <header
     className="page-header bg-primary-lighter"
   >
-    <h1
-      className="page-header__title"
+    <hgroup
+      className="page-header__group"
     >
-      Hello World
-    </h1>
+      <h1
+        className="page-header__title"
+      >
+        Hello World
+      </h1>
+    </hgroup>
   </header>
 </PageHeader>
 `;

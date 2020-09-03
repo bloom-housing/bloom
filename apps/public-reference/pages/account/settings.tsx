@@ -14,7 +14,7 @@ import Layout from "../../layouts/application"
 export default class extends Component {
   public render() {
     return (
-      <RequireLogin signInPath={`/sign-in?message=${encodeURIComponent(t("t.loginIsRequired"))}`}>
+      <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <Layout>
           <Head>
             <title>{t("nav.")}</title>

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import type { ReactNode } from "react"
 import { Icon } from "../atoms/Icon"
 import type { AlertTypes } from "./alertTypes"
@@ -7,6 +7,7 @@ import "./AlertBox.scss"
 
 export interface AlertBoxProps {
   type?: AlertTypes
+  closeable?: boolean
   onClose?: () => void
   children: ReactNode
   inverted?: boolean
@@ -20,6 +21,9 @@ const icons: { [k in AlertTypes]: string } = {
 }
 
 const AlertBox = (props: AlertBoxProps) => {
+  const [showing, setShowing] = useState(true)
+  let { onClose, closeable } = props
+
   const classNames = [
     "alert-box",
     colorClasses[props.type || "alert"],
@@ -27,24 +31,32 @@ const AlertBox = (props: AlertBoxProps) => {
     ...(props.className ? [props.className] : []),
   ].join(" ")
 
-  return (
-    <div className={classNames}>
+  if (onClose) closeable = true
+
+  if (!onClose && closeable) {
+    onClose = () => {
+      setShowing(false)
+    }
+  }
+
+  return showing ? (
+    <div className={classNames} role="alert">
       <span className="alert-box__icon">
         <Icon size="medium" symbol={icons[props.type || "alert"]} white={props.inverted} />
       </span>
       <span className="alert-box__body">
         {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
       </span>
-      {props.onClose && (
+      {closeable && (
         <button
           className={`alert-box__close ${props.inverted ? "text-white" : ""}`}
-          onClick={props.onClose}
+          onClick={onClose}
         >
           &times;
         </button>
       )}
     </div>
-  )
+  ) : null
 }
 
 export { AlertBox as default, AlertBox }

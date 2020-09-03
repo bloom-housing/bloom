@@ -1,37 +1,38 @@
 import React, { useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import { AlertBox } from "./AlertBox"
 import { AlertTypes } from "./alertTypes"
 
-type UrlAlertProps = {
-  urlParam?: string
+type SiteAlertProps = {
   timeout?: number
   dismissable?: boolean
   type?: AlertTypes
   className?: string
 }
 
+export const setSiteAlertMessage = (message: string, type: AlertTypes) => {
+  sessionStorage.setItem(`alert_message_${type}`, message)
+}
+
 /**
  * Show an alert based on a url query param.
  */
-export const UrlAlert = ({
-  urlParam = "message",
+export const SiteAlert = ({
   timeout,
   dismissable = true,
   type = "alert",
   className,
-}: UrlAlertProps) => {
+}: SiteAlertProps) => {
   const [open, setOpen] = useState(false)
-
-  const router = useRouter()
-  const {
-    query: { [urlParam]: message },
-  } = router
+  const [message, setMessage] = useState("")
 
   useEffect(() => {
     let timeoutRef: number
-    if (message) {
+    const storedMessage = sessionStorage.getItem(`alert_message_${type}`)
+
+    if (storedMessage) {
+      setMessage(storedMessage)
       setOpen(true)
+      sessionStorage.removeItem(`alert_message_${type}`)
 
       // Automatically dismiss the message after the timeout, if applicable
       if (timeout) {
@@ -39,7 +40,7 @@ export const UrlAlert = ({
       }
     }
     return () => clearTimeout(timeoutRef)
-  }, [message, timeout])
+  }, [timeout, type])
 
   return open ? (
     <AlertBox

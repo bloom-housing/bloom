@@ -7,6 +7,7 @@ import {
   Icon,
   LinkButton,
   UserContext,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { emailRegex } from "../lib/emailRegex"
@@ -45,7 +46,7 @@ export default () => {
           </p>
         </div>
 
-        <form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
               Your Name
@@ -138,7 +139,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
 
         <div className="form-card__group text-center">
           <h2 className="mb-6">Already have an account?</h2>
