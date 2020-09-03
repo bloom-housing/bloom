@@ -7,7 +7,7 @@ import moment from "moment"
 import { FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
-import { useContext, useMemo } from "react"
+import { useContext, useMemo, useState } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT } from "../../lib/constants"
 
@@ -18,13 +18,20 @@ export default () => {
     return moment().format(DATE_FORMAT)
   }, [])
 
+  const [origin] = useState<string>(typeof window !== "undefined" ? window.location.origin : "")
+
   return (
     <FormsLayout>
       <FormCard header="Confirmation">
-        <div className="py-2">
-          <Link href={`listing/id=${listing.id}`} as={`/listing/${listing.id}/${listing.urlSlug}`}>
-            <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
-          </Link>
+        <div className="py-2 hide-for-print">
+          {listing && (
+            <Link
+              href={`listing/id=${listing.id}`}
+              as={`${origin}/listing/${listing.id}/${listing.urlSlug}`}
+            >
+              <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
+            </Link>
+          )}
         </div>
       </FormCard>
 
@@ -48,7 +55,7 @@ export default () => {
 
         <FormSummaryDetails application={application} editMode={false} />
 
-        <div className="form-card__pager">
+        <div className="form-card__pager hide-for-print">
           <div className="form-card__pager-row py-6">
             <a href="#" className="lined text-tiny" onClick={() => window.print()}>
               {t("application.confirmation.printCopy")}
