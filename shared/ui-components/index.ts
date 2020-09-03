@@ -21,6 +21,7 @@ export * from "./src/footers/FooterSection/FooterSection"
 export * from "./src/footers/SiteFooter/SiteFooter"
 
 /* Forms */
+export * from "./src/forms/DOBField"
 export * from "./src/forms/ErrorMessage"
 export * from "./src/forms/Field"
 export * from "./src/forms/ProgressNav"

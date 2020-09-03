@@ -3,7 +3,15 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import { Button, Field, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  Button,
+  Field,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+  DOBField,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -76,70 +84,15 @@ export default () => {
           </div>
 
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="birthMonth">
-              {t("application.name.yourDateOfBirth")}
-            </label>
-
-            <div className="field-group--dob">
-              <Field
-                name="applicant.birthMonth"
-                placeholder="MM"
-                defaultValue={
-                  "" +
-                  (application.applicant.birthMonth > 0 ? application.applicant.birthMonth : "")
-                }
-                error={errors.applicant?.birthMonth}
-                validation={{
-                  required: true,
-                  validate: {
-                    monthRange: (value) => parseInt(value) > 0 && parseInt(value) <= 12,
-                  },
-                }}
-                inputProps={{ maxLength: 2 }}
-                register={register}
-              />
-              <Field
-                name="applicant.birthDay"
-                placeholder="DD"
-                defaultValue={
-                  "" + (application.applicant.birthDay > 0 ? application.applicant.birthDay : "")
-                }
-                error={errors.applicant?.birthDay}
-                validation={{
-                  required: true,
-                  validate: {
-                    dayRange: (value) => parseInt(value) > 0 && parseInt(value) <= 31,
-                  },
-                }}
-                inputProps={{ maxLength: 2 }}
-                register={register}
-              />
-              <Field
-                name="applicant.birthYear"
-                placeholder="YYYY"
-                defaultValue={
-                  "" + (application.applicant.birthYear > 0 ? application.applicant.birthYear : "")
-                }
-                error={errors.applicant?.birthYear}
-                validation={{
-                  required: true,
-                  validate: {
-                    yearRange: (value) =>
-                      parseInt(value) > 1900 && parseInt(value) <= new Date().getFullYear() - 18,
-                  },
-                }}
-                inputProps={{ maxLength: 4 }}
-                register={register}
-              />
-            </div>
-
-            {(errors.applicant?.birthMonth ||
-              errors.applicant?.birthDay ||
-              errors.applicant?.birthYear) && (
-              <div className="field error">
-                <span className="error-message">{t("application.name.dateOfBirthError")}</span>
-              </div>
-            )}
+            <DOBField
+              applicant={application.applicant}
+              register={register}
+              error={errors.applicant}
+              name="applicant"
+              watch={watch}
+              atAge={true}
+              label={t("application.name.yourDateOfBirth")}
+            />
           </div>
 
           <div className="form-card__group">

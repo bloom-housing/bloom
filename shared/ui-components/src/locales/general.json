@@ -692,6 +692,7 @@
     "built": "Built",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "day": "Day",
     "delete": "Delete",
     "deposit": "Deposit",
     "floor": "floor",
@@ -700,6 +701,7 @@
     "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
+    "month": "Month",
     "name": "Name",
     "neighborhood": "Neighborhood",
     "next": "Next",
@@ -725,6 +727,7 @@
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
     "viewOnMap": "View on Map",
+    "year": "Year",
     "yes": "Yes",
     "you": "You"
   },

@@ -5,6 +5,7 @@ Add household members
 import Router, { useRouter } from "next/router"
 import {
   Button,
+  DOBField,
   Field,
   FormCard,
   ProgressNav,
@@ -158,61 +159,13 @@ export default () => {
             </div>
 
             <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="birthMonth">
-                {t("application.household.member.dateOfBirth")}
-              </label>
-
-              <div className="field-group--dob mt-2">
-                <Field
-                  name="birthMonth"
-                  placeholder="MM"
-                  defaultValue={"" + (member.birthMonth > 0 ? member.birthMonth : "")}
-                  error={errors.birthMonth}
-                  validation={{
-                    required: true,
-                    validate: {
-                      monthRange: (value) => parseInt(value) > 0 && parseInt(value) <= 12,
-                    },
-                  }}
-                  inputProps={{ maxLength: 2 }}
-                  register={register}
-                />
-                <Field
-                  name="birthDay"
-                  placeholder="DD"
-                  defaultValue={"" + (member.birthDay > 0 ? member.birthDay : "")}
-                  error={errors.birthDay}
-                  validation={{
-                    required: true,
-                    validate: {
-                      dayRange: (value) => parseInt(value) > 0 && parseInt(value) <= 31,
-                    },
-                  }}
-                  inputProps={{ maxLength: 2 }}
-                  register={register}
-                />
-                <Field
-                  name="birthYear"
-                  placeholder="YYYY"
-                  defaultValue={"" + (member.birthYear > 0 ? member.birthYear : "")}
-                  error={errors.birthYear}
-                  validation={{
-                    required: true,
-                    validate: {
-                      yearRange: (value) =>
-                        parseInt(value) > 1900 && parseInt(value) <= new Date().getFullYear() - 18,
-                    },
-                  }}
-                  inputProps={{ maxLength: 4 }}
-                  register={register}
-                />
-              </div>
-
-              {(errors.birthMonth || errors.birthDay || errors.birthYear) && (
-                <div className="field error">
-                  <span className="error-message">{t("application.name.dateOfBirthError")}</span>
-                </div>
-              )}
+              <DOBField
+                applicant={member}
+                register={register}
+                error={errors}
+                watch={watch}
+                label={t("application.household.member.dateOfBirth")}
+              />
             </div>
 
             <div className="form-card__group border-b">
