@@ -119,6 +119,7 @@ export default () => {
               id="noEmail"
               name="applicant.noEmail"
               label={t("application.name.noEmailAddress")}
+              primary={true}
               register={register}
               inputProps={{
                 defaultChecked: application.applicant.noEmail,

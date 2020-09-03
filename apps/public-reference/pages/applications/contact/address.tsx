@@ -137,6 +137,7 @@ export default () => {
               id="noPhone"
               name="applicant.noPhone"
               label={t("application.contact.noPhoneNumber")}
+              primary={true}
               register={register}
               inputProps={{
                 defaultChecked: application.applicant.noPhone,
@@ -157,6 +158,7 @@ export default () => {
               id="additionalPhone"
               name="additionalPhone"
               label={t("application.contact.additionalPhoneNumber")}
+              primary={true}
               register={register}
               inputProps={{
                 defaultChecked: application.additionalPhone,
