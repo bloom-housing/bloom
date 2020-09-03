@@ -11,6 +11,7 @@ import {
   t,
   ErrorMessage,
   FormOptions,
+  FieldGroup,
   relationshipKeys,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
@@ -101,6 +102,36 @@ export default () => {
 
   const sameAddress = watch("sameAddress")
   const workInRegion = watch("workInRegion")
+
+  const sameAddressOptions = [
+    {
+      id: "sameAddressYes",
+      label: t("t.yes"),
+      value: "yes",
+      defaultChecked: member.sameAddress === "yes",
+    },
+    {
+      id: "sameAddressNo",
+      label: t("t.no"),
+      value: "no",
+      defaultChecked: member.sameAddress === "no",
+    },
+  ]
+
+  const workInRegionOptions = [
+    {
+      id: "workInRegionYes",
+      label: t("t.yes"),
+      value: "yes",
+      defaultChecked: member.workInRegion === "yes",
+    },
+    {
+      id: "workInRegionNo",
+      label: t("t.no"),
+      value: "no",
+      defaultChecked: member.workInRegion === "no",
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -215,40 +246,17 @@ export default () => {
             </div>
 
             <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="sameAddress">
-                {t("application.household.member.haveSameAddress")}
-              </label>
+              <FieldGroup
+                name="sameAddress"
+                groupLabel={t("application.household.member.haveSameAddress")}
+                type="radio"
+                register={register}
+                validation={{ required: true }}
+                error={errors.sameAddress}
+                errorMessage={t("application.form.errors.selectOption")}
+                fields={sameAddressOptions}
+              />
 
-              <div className={"field mt-4 " + (errors.sameAddress ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="sameAddressYes"
-                  name="sameAddress"
-                  value="yes"
-                  defaultChecked={member.sameAddress == "yes"}
-                  ref={register({ required: true })}
-                />
-                <label className="font-semibold" htmlFor="sameAddressYes">
-                  {t("t.yes")}
-                </label>
-              </div>
-              <div className={"field " + (errors.sameAddress ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="sameAddressNo"
-                  name="sameAddress"
-                  value="no"
-                  defaultChecked={member.sameAddress == "no"}
-                  ref={register({ required: true })}
-                />
-                <label className="font-semibold" htmlFor="sameAddressNo">
-                  {t("t.no")}
-                </label>
-
-                <ErrorMessage error={errors.sameAddress}>
-                  {t("application.form.errors.selectOption")}
-                </ErrorMessage>
-              </div>
               {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
                 <>
                   <label className="field-label--caps" htmlFor="street">
@@ -319,43 +327,18 @@ export default () => {
             </div>
 
             <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="firstName">
-                {t("application.household.member.workInRegion")}
-              </label>
-              <p className="field-note my-2">
-                {t("application.household.member.workInRegionNote")}
-              </p>
+              <FieldGroup
+                name="workInRegion"
+                groupLabel={t("application.household.member.workInRegion")}
+                groupNote={t("application.household.member.workInRegionNote")}
+                type="radio"
+                register={register}
+                validation={{ required: true }}
+                error={errors.workInRegion}
+                errorMessage={t("application.form.errors.selectOption")}
+                fields={workInRegionOptions}
+              />
 
-              <div className={"field mt-4 " + (errors.workInRegion ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="workInRegionYes"
-                  name="workInRegion"
-                  value="yes"
-                  defaultChecked={member.workInRegion == "yes"}
-                  ref={register({ required: true })}
-                />
-                <label className="font-semibold" htmlFor="workInRegionYes">
-                  {t("t.yes")}
-                </label>
-              </div>
-              <div className={"field " + (errors.workInRegion ? "error" : "")}>
-                <input
-                  type="radio"
-                  id="workInRegionNo"
-                  name="workInRegion"
-                  value="no"
-                  defaultChecked={member.workInRegion == "no"}
-                  ref={register({ required: true })}
-                />
-                <label className="font-semibold" htmlFor="workInRegionNo">
-                  {t("t.no")}
-                </label>
-
-                <ErrorMessage error={errors.workInRegion}>
-                  {t("application.form.errors.selectOption")}
-                </ErrorMessage>
-              </div>
               {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
                 <>
                   <label className="field-label--caps" htmlFor="street">

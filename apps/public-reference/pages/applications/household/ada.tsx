@@ -135,6 +135,8 @@ export default () => {
 
           <div className={"field " + (errors.none ? "error" : "")}>
             <input
+              aria-describedby="accessibilityCheckboxGroupError"
+              aria-invalid={!!errors.none || false}
               type="checkbox"
               id="none"
               name="none"
@@ -158,7 +160,7 @@ export default () => {
               {t("t.no")}
             </label>
 
-            <ErrorMessage error={errors.none}>
+            <ErrorMessage id="accessibilityCheckboxGroupError" error={errors.none}>
               {t("application.form.errors.selectOption")}
             </ErrorMessage>
           </div>

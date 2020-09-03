@@ -68,7 +68,7 @@ export default () => {
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
     label: t(`application.form.options.contact.${item.id}`),
-    defaultChecked: item?.checked || false,
+    defaultChecked: application?.contactPreferences?.includes(item.id) || false,
   }))
 
   return (
