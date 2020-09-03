@@ -18,7 +18,9 @@ const ApplicationTimeout = () => {
         promptTitle: t("application.timeout.title"),
         promptText: t("application.timeout.text"),
         promptAction: t("application.timeout.action"),
-        redirectPath: `/?alert=${encodeURIComponent(t("application.timeout.afterMessage"))}`,
+        redirectPath: "/",
+        alertMessage: t("application.timeout.afterMessage"),
+        alertType: "alert",
         onTimeout,
       })
 }

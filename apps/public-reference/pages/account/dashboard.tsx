@@ -19,7 +19,7 @@ export default class extends Component {
       </span>
     )
     return (
-      <RequireLogin signInPath={`/sign-in?message=${encodeURIComponent(t("t.loginIsRequired"))}`}>
+      <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <Layout>
           <Head>
             <title>{t("nav.myDashboard")}</title>

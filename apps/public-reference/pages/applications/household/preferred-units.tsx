@@ -4,11 +4,10 @@ Applicant can designate which unit sizes they prefer
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t, FieldGroup } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, FieldGroup, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import FormStep from "../../../src/forms/applications/FormStep"
@@ -27,20 +26,18 @@ export default () => {
   const onSubmit = (data) => {
     const { preferredUnit } = data
 
-    new FormStep(conductor).save({
-      preferredUnit,
-    })
+    application.preferredUnit = preferredUnit
+
+    conductor.sync()
 
     Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
   }
 
-  const preferredUnitOptions = useMemo(() => {
-    return preferredUnit?.map((item) => ({
-      id: item.id,
-      label: t(`application.household.preferredUnit.options.${item.id}`),
-      defaultChecked: item.checked,
-    }))
-  }, [])
+  const preferredUnitOptions = preferredUnit?.map((item) => ({
+    id: item.id,
+    label: t(`application.household.preferredUnit.options.${item.id}`),
+    defaultChecked: item.checked || application.preferredUnit.includes(item.id),
+  }))
 
   return (
     <FormsLayout>
@@ -68,7 +65,7 @@ export default () => {
           <p className="mt-4 field-note">{t("application.household.preferredUnit.subTitle")}</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group is-borderless">
             <FieldGroup
               type="checkbox"
@@ -101,7 +98,7 @@ export default () => {
               <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
             </Link>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

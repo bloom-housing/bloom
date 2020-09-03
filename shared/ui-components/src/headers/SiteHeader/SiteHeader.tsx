@@ -55,7 +55,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     return (
       <LocalizedLink className="navbar-item logo" href="/">
         <div className="logo__lockup">
-          <img className="logo__image" src={this.props.logoSrc} />
+          <img className="logo__image" src={this.props.logoSrc} alt={this.props.title} />
           <div className="logo__title">{this.props.title}</div>
         </div>
       </LocalizedLink>

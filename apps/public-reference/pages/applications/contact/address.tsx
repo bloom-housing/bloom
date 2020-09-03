@@ -14,6 +14,7 @@ import {
   mergeDeep,
   contactPreferencesKeys,
   FieldGroup,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -60,10 +61,13 @@ export default () => {
     conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
   }
 
-  const noPhone = watch("applicant.noPhone") || false
-  const additionalPhone = watch("additionalPhone")
-  const sendMailToMailingAddress = watch("sendMailToMailingAddress")
-  const workInRegion = watch("applicant.workInRegion")
+  const noPhone = watch("applicant.noPhone", application.applicant.noPhone)
+  const additionalPhone = watch("additionalPhone", application.additionalPhone)
+  const sendMailToMailingAddress = watch(
+    "sendMailToMailingAddress",
+    application.sendMailToMailingAddress
+  )
+  const workInRegion = watch("applicant.workInRegion", application.applicant.workInRegion)
 
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
@@ -96,15 +100,15 @@ export default () => {
           </h2>
         </div>
 
-        <form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="phoneNumber">
+            <label className="field-label--caps" htmlFor="applicant.phoneNumber">
               {t("application.contact.yourPhoneNumber")}
             </label>
 
             <PhoneField
               name="applicant.phoneNumber"
-              error={errors.applicant?.phoneNumber}
+              error={!noPhone ? errors.applicant?.phoneNumber : false}
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
               control={control}
@@ -201,6 +205,7 @@ export default () => {
             <Field
               id="addressStreet"
               name="applicant.address.street"
+              label={t("application.contact.streetAddress")}
               placeholder={t("application.contact.streetAddress")}
               defaultValue={application.applicant.address.street}
               validation={{ required: true }}
@@ -487,7 +492,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

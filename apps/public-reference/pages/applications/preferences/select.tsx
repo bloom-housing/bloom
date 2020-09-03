@@ -5,7 +5,7 @@ Instructions on how preferences work and their value
 import { useContext, useState } from "react"
 import { useForm } from "react-hook-form"
 import Link from "next/link"
-import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, ErrorMessage, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
@@ -58,7 +58,7 @@ export default () => {
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
+        <Form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group px-0 pb-3">
             <p className="field-note">{t("application.preferences.selectBelow")}</p>
           </div>
@@ -176,7 +176,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

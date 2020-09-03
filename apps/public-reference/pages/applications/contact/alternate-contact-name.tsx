@@ -4,7 +4,15 @@ Type of alternate contact
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  Button,
+  ErrorMessage,
+  Field,
+  FormCard,
+  ProgressNav,
+  t,
+  Form,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -37,7 +45,7 @@ export default () => {
         <p className="form-card__back">
           <strong>
             <Link href="/applications/contact/alternate-contact-type">
-              <a>Back</a>
+              <a>{t("t.back")}</a>
             </Link>
           </strong>
         </p>
@@ -46,7 +54,7 @@ export default () => {
             {t("application.alternateContact.name.title")}
           </h2>
         </div>
-        <form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.alternateContact.name.alternateContactFormLabel")}
@@ -118,7 +126,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

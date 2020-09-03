@@ -11,12 +11,12 @@ import {
   ProgressNav,
   t,
   FieldGroup,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
 
 export default () => {
@@ -90,7 +90,7 @@ export default () => {
           </p>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
             <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
 
@@ -117,7 +117,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

@@ -23,36 +23,6 @@ main {
 
 }
 
-// Sticky footer
-// html {
-//   @apply h-full;
-
-//   body,
-//   .site-container {
-//     @apply table;
-//     @apply h-full;
-//     @apply w-full;
-//     min-height: 100%;
-//   }
-
-//   .site-content {
-//     @apply table-row;
-//     @apply h-full;
-//   }
-
-//   .site-footer {
-//     @apply table-row;
-//     height: 1px;
-//   }
-// }
-
-// html,
-// body {
-//   @screen md {
-//     @apply overflow-x-hidden;
-//   }
-// }
-
 .site-container {
   display: flex;
   min-height: 100vh;
@@ -75,6 +45,13 @@ main {
   }
 }
 
+.site-content--wide-content {
+  .navbar,
+  .page-header__group {
+    @apply max-w-screen-xl;
+  }
+}
+
 @import "mixins.scss";
 @import "markdown.scss";
 @import "navbar.scss";
@@ -88,6 +65,7 @@ main {
 @import "tables.scss";
 @import "homepage.scss";
 @import "print.scss";
+@import "ag_grid.scss";
 /* ***********/
 /* Additional stylesheets are contained within individual component folders */
 /* ***********/
