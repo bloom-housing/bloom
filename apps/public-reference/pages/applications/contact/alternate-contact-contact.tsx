@@ -3,7 +3,15 @@
 Type of alternate contact
 */
 import Link from "next/link"
-import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  Button,
+  ErrorMessage,
+  Field,
+  FormCard,
+  ProgressNav,
+  t,
+  Form,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -41,7 +49,7 @@ export default () => {
         <p className="form-card__back">
           <strong>
             <Link href="/applications/contact/alternate-contact-name">
-              <a>Back</a>
+              <a>{t("t.back")}</a>
             </Link>
           </strong>
         </p>
@@ -51,7 +59,7 @@ export default () => {
           </h2>
           <p className="field-note my-4">{t("application.alternateContact.contact.description")}</p>
         </div>
-        <form id="applications-contact-alternate-contact" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="applications-contact-alternate-contact" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="phoneNumber">
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
@@ -149,7 +157,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )
