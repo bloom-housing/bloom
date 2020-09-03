@@ -8,6 +8,9 @@
     "dtoFileNameSuffix": [
       "dto.ts",
       "entity.ts"
+    ],
+    "assets": [
+      { "include": "auth/*.{conf,csv}", "outDir": "dist/src" }
     ]
   }
 }
