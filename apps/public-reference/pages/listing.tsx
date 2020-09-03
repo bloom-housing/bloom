@@ -189,7 +189,7 @@ export default class extends Component<ListingProps> {
           </div>
           <ListingDetails>
             <ListingDetailItem
-              imageAlt="eligibility-notebook"
+              imageAlt={t("listings.eligibilityNotebook")}
               imageSrc="/images/listing-eligibility.svg"
               title={t("listings.sections.eligibilityTitle")}
               subtitle={t("listings.sections.eligibilitySubtitle")}
@@ -245,7 +245,7 @@ export default class extends Component<ListingProps> {
             </ListingDetailItem>
 
             <ListingDetailItem
-              imageAlt="process-info"
+              imageAlt={t("listings.processInfo")}
               imageSrc="/images/listing-process.svg"
               title={t("listings.sections.processTitle")}
               subtitle={t("listings.sections.processSubtitle")}
@@ -263,7 +263,7 @@ export default class extends Component<ListingProps> {
             </ListingDetailItem>
 
             <ListingDetailItem
-              imageAlt="features-cards"
+              imageAlt={t("listings.featuresCards")}
               imageSrc="/images/listing-features.svg"
               title={t("listings.sections.featuresTitle")}
               subtitle={t("listings.sections.featuresSubtitle")}
@@ -294,7 +294,7 @@ export default class extends Component<ListingProps> {
 
             {listing?.buildingAddress.latitude && listing?.buildingAddress.longitude && (
               <ListingDetailItem
-                imageAlt="neighborhood-buildings"
+                imageAlt={t("listings.neighborhoodBuildings")}
                 imageSrc="/images/listing-neighborhood.svg"
                 title={t("listings.sections.neighborhoodTitle")}
                 subtitle={t("listings.sections.neighborhoodSubtitle")}
@@ -307,7 +307,7 @@ export default class extends Component<ListingProps> {
             )}
 
             <ListingDetailItem
-              imageAlt="additional-information-envelope"
+              imageAlt={t("listings.additionalInformationEnvelope")}
               imageSrc="/images/listing-legal.svg"
               title={t("listings.sections.additionalInformationTitle")}
               subtitle={t("listings.sections.additionalInformationSubtitle")}

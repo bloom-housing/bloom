@@ -12,7 +12,7 @@ import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT } from "../../lib/constants"
 
 export default () => {
-  const { application } = useContext(AppSubmissionContext)
+  const { application, listing } = useContext(AppSubmissionContext)
 
   const confirmationDate = useMemo(() => {
     return moment().format(DATE_FORMAT)
@@ -22,7 +22,7 @@ export default () => {
     <FormsLayout>
       <FormCard header="Confirmation">
         <div className="py-2">
-          <Link href="/applications/review/summary">
+          <Link href={`listing/id=${listing.id}`} as={`/listing/${listing.id}/${listing.urlSlug}`}>
             <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
           </Link>
         </div>

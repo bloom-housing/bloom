@@ -119,6 +119,8 @@ export const sexualOrientation = [
   "notListed",
 ]
 
+export const phoneNumberKeys = ["work", "home", "cell"]
+
 export const howDidYouHear: CheckboxGroupItem[] = [
   {
     id: "alamedaCountyHCDWebsite",

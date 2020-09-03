@@ -3,7 +3,15 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import { Button, Field, FormCard, ProgressNav, t, DOBField } from "@bloom-housing/ui-components"
+import {
+  Button,
+  Field,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+  DOBField,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -41,7 +49,7 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.name.yourName")}
@@ -151,7 +159,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

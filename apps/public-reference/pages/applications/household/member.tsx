@@ -13,6 +13,7 @@ import {
   ErrorMessage,
   FormOptions,
   relationshipKeys,
+  Form,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
@@ -122,7 +123,7 @@ export default () => {
         </div>
 
         {member && (
-          <form className="" onSubmit={handleSubmit(onSubmit)}>
+          <Form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__group border-b">
               <label className="field-label--caps" htmlFor="firstName">
                 {t("application.household.member.name")}
@@ -421,7 +422,7 @@ export default () => {
                 </a>
               </div>
             </div>
-          </form>
+          </Form>
         )}
       </FormCard>
     </FormsLayout>

@@ -45,8 +45,11 @@ export default () => {
             {t("application.review.confirmation.whatExpectFirstParagraph.attend")}
             {/* TODO: url slug seems to be not completed */}
             {listing?.urlSlug && (
-              <Link href={`/${listing.urlSlug}`}>
-                {t("application.review.confirmation.whatExpectFirstParagraph.listing")}
+              <Link
+                href={`listing/id=${listing.id}`}
+                as={`/listing/${listing.id}/${listing.urlSlug}`}
+              >
+                <a>{t("application.review.confirmation.whatExpectFirstParagraph.listing")}</a>
               </Link>
             )}
             {t("application.review.confirmation.whatExpectFirstParagraph.refer")}
