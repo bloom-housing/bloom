@@ -94,15 +94,18 @@ export default () => {
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
             <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
 
-            <FieldGroup
-              type="radio"
-              name="incomeVouchers"
-              error={errors.incomeVouchers}
-              errorMessage={t("application.financial.vouchers.error")}
-              register={register}
-              validation={{ required: true }}
-              fields={incomeVouchersValues}
-            />
+            <fieldset>
+              <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
+              <FieldGroup
+                type="radio"
+                name="incomeVouchers"
+                error={errors.incomeVouchers}
+                errorMessage={t("application.financial.vouchers.error")}
+                register={register}
+                validation={{ required: true }}
+                fields={incomeVouchersValues}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__pager">

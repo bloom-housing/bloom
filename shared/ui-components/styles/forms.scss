@@ -16,6 +16,10 @@
     @apply mt-2;
   }
 
+  .field-label--caps {
+    @apply mb-0;
+  }
+
   .control {
     position: relative;
 
@@ -223,6 +227,7 @@ input[type=number] {
 }
 
 .field-label--caps {
+  @apply font-sans;
   @apply uppercase;
   @apply text-gray-750;
   @apply tracking-widest;
@@ -249,11 +254,14 @@ input[type=number] {
   @apply flex-auto;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+}
 
-  &:first-child {
+.flex > .field,
+.field-group--dob .field {
+  &:first-of-type {
     margin-left: 0;
   }
-  &:last-child {
+  &:last-of-type {
     margin-right: 0;
   }
 }

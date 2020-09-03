@@ -171,15 +171,18 @@ export default () => {
               inputProps={{ step: 0.01, onBlur: formatValue }}
             />
 
-            <FieldGroup
-              type="radio"
-              name="incomePeriod"
-              error={errors.incomePeriod}
-              errorMessage={t("application.financial.income.periodError")}
-              register={register}
-              validation={{ required: true }}
-              fields={incomePeriodValues}
-            />
+            <fieldset>
+              <legend className="sr-only">{t("application.financial.income.legend")}</legend>
+              <FieldGroup
+                type="radio"
+                name="incomePeriod"
+                error={errors.incomePeriod}
+                errorMessage={t("application.financial.income.periodError")}
+                register={register}
+                validation={{ required: true }}
+                fields={incomePeriodValues}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__pager">

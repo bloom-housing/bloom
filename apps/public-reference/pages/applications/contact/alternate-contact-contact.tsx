@@ -88,49 +88,49 @@ export default () => {
             />
           </div>
           <div className="form-card__group">
-            <label className="field-label--caps">
-              {t("application.alternateContact.contact.contactMailingAddressLabel")}
-            </label>
-            <p className="field-note my-2">
-              {t("application.alternateContact.contact.contactMailingAddressHelperText")}
-            </p>
-            <Field
-              id="mailingAddress.street"
-              name="mailingAddress.street"
-              placeholder={t("application.alternateContact.contact.streetFormPlaceholder")}
-              defaultValue={application.alternateContact.mailingAddress.street}
-              register={register}
-            />
-
-            <div className="flex max-w-2xl">
+            <fieldset>
+              <legend className="field-label--caps">{t("application.alternateContact.contact.contactMailingAddressLabel")}</legend>
+              <p className="field-note my-2">
+                {t("application.alternateContact.contact.contactMailingAddressHelperText")}
+              </p>
               <Field
-                id="mailingAddress.city"
-                name="mailingAddress.city"
-                label={t("application.alternateContact.contact.cityFormLabel")}
-                placeholder={t("application.alternateContact.contact.cityFormPlaceholder")}
-                defaultValue={application.alternateContact.mailingAddress.city}
+                id="mailingAddress.street"
+                name="mailingAddress.street"
+                placeholder={t("application.alternateContact.contact.streetFormPlaceholder")}
+                defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}
               />
 
-              <Select
-                id="mailingAddress.state"
-                name="mailingAddress.state"
-                label={t("application.alternateContact.contact.stateFormPlaceholder")}
-                defaultValue={application.alternateContact.mailingAddress.state}
+              <div className="flex max-w-2xl">
+                <Field
+                  id="mailingAddress.city"
+                  name="mailingAddress.city"
+                  label={t("application.alternateContact.contact.cityFormLabel")}
+                  placeholder={t("application.alternateContact.contact.cityFormPlaceholder")}
+                  defaultValue={application.alternateContact.mailingAddress.city}
+                  register={register}
+                />
+
+                <Select
+                  id="mailingAddress.state"
+                  name="mailingAddress.state"
+                  label={t("application.alternateContact.contact.stateFormPlaceholder")}
+                  defaultValue={application.alternateContact.mailingAddress.state}
+                  register={register}
+                  controlClassName="control"
+                  options={stateKeys}
+                  keyPrefix="application.form.options.states"
+                />
+              </div>
+              <Field
+                id="mailingAddress.zipCode"
+                name="mailingAddress.zipCode"
+                label={t("application.alternateContact.contact.zipcodeFormLabel")}
+                placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
+                defaultValue={application.alternateContact.mailingAddress.zipCode}
                 register={register}
-                controlClassName="control"
-                options={stateKeys}
-                keyPrefix="application.form.options.states"
               />
-            </div>
-            <Field
-              id="mailingAddress.zipCode"
-              name="mailingAddress.zipCode"
-              label={t("application.alternateContact.contact.zipcodeFormLabel")}
-              placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
-              defaultValue={application.alternateContact.mailingAddress.zipCode}
-              register={register}
-            />
+            </fieldset>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

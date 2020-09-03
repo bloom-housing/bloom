@@ -62,53 +62,55 @@ export default () => {
         </div>
         <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
-            <label className="field-label--caps" htmlFor="type">
-              {t("application.alternateContact.type.label")}
-            </label>
-            <p className="field-note mt-2 mb-4">
-              {t("application.alternateContact.type.helperText")}
-            </p>
-            {options.map((option, i) => {
-              return (
-                <Fragment key={option}>
-                  <Field
-                    key={option}
-                    type="radio"
-                    id={"type" + option}
-                    name="type"
-                    label={t("application.alternateContact.type.options." + option)}
-                    register={register}
-                    validation={{ required: true }}
-                    error={errors.type}
-                    inputProps={{
-                      value: option,
-                      defaultChecked: application.alternateContact.type === option,
-                    }}
-                  />
-
-                  {option === "other" && type === "other" && (
+            <fieldset>
+              <legend className="field-label--caps">{t("application.alternateContact.type.label")}</legend>
+              <p className="field-note mt-2 mb-4">
+                {t("application.alternateContact.type.helperText")}
+              </p>
+              {options.map((option, i) => {
+                return (
+                  <Fragment key={option}>
                     <Field
-                      controlClassName="mt-4"
-                      id="otherType"
-                      name="otherType"
-                      placeholder={t("application.alternateContact.type.otherTypeFormPlaceholder")}
-                      defaultValue={application.alternateContact.otherType}
-                      validation={{ required: true }}
-                      error={errors.otherType}
-                      errorMessage={t(
-                        "application.alternateContact.type.otherTypeValidationErrorMessage"
-                      )}
+                      key={option}
+                      type="radio"
+                      id={"type" + option}
+                      name="type"
+                      label={t("application.alternateContact.type.options." + option)}
                       register={register}
+                      validation={{ required: true }}
+                      error={errors.type}
+                      inputProps={{
+                        value: option,
+                        defaultChecked: application.alternateContact.type === option,
+                      }}
                     />
-                  )}
-                  {i === options.length - 1 && (
-                    <ErrorMessage error={errors.type}>
-                      {t("application.alternateContact.type.validationErrorMessage")}
-                    </ErrorMessage>
-                  )}
-                </Fragment>
-              )
-            })}
+
+                    {option === "other" && type === "other" && (
+                      <Field
+                        controlClassName="mt-4"
+                        id="otherType"
+                        name="otherType"
+                        label={t("application.alternateContact.type.otherTypeFormPlaceholder")}
+                        placeholder={t("application.alternateContact.type.otherTypeFormPlaceholder")}
+                        readerOnly={true}
+                        defaultValue={application.alternateContact.otherType}
+                        validation={{ required: true }}
+                        error={errors.otherType}
+                        errorMessage={t(
+                          "application.alternateContact.type.otherTypeValidationErrorMessage"
+                        )}
+                        register={register}
+                      />
+                    )}
+                    {i === options.length - 1 && (
+                      <ErrorMessage error={errors.type}>
+                        {t("application.alternateContact.type.validationErrorMessage")}
+                      </ErrorMessage>
+                    )}
+                  </Fragment>
+                )
+              })}
+            </fieldset>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

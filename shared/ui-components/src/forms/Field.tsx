@@ -7,6 +7,7 @@ export interface FieldProps {
   controlClassName?: string
   caps?: boolean
   primary?: boolean
+  readerOnly?: boolean
   type?: string
   id?: string
   name: string
@@ -25,9 +26,11 @@ const Field = (props: FieldProps) => {
   if (props.error) {
     classes.push("error")
   }
+  
   const labelClasses = ["label"]
   if (props.caps) labelClasses.push("field-label--caps")
   if (props.primary) labelClasses.push("text-primary")
+  if (props.readerOnly) labelClasses.push("sr-only")
 
   const controlClasses = ["control"]
   if (props.controlClassName) {

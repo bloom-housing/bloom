@@ -143,13 +143,15 @@ const Demographics = () => {
           </div>
 
           <div className="form-card__group is-borderless">
-            <FieldGroup
-              type="checkbox"
-              name="howDidYouHear"
-              groupLabel={t("application.review.demographics.howDidYouHearLabel")}
-              fields={howDidYouHearOptions}
-              register={register}
-            />
+            <fieldset>
+              <legend className="field-label--caps">{t("application.review.demographics.howDidYouHearLabel")}</legend>
+              <FieldGroup
+                type="checkbox"
+                name="howDidYouHear"
+                fields={howDidYouHearOptions}
+                register={register}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__pager">

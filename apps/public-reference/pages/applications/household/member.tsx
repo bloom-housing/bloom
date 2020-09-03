@@ -156,37 +156,43 @@ export default () => {
         {member && (
           <Form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="firstName">
-                {t("application.household.member.name")}
-              </label>
+              <fieldset>
+                <legend className="field-label--caps" htmlFor="firstName">{t("application.household.member.name")}</legend>
 
-              <Field
-                name="firstName"
-                placeholder={t("application.name.firstName")}
-                controlClassName="mt-2"
-                defaultValue={member.firstName}
-                validation={{ required: true }}
-                error={errors.firstName}
-                errorMessage={t("application.name.firstNameError")}
-                register={register}
-              />
+                <Field
+                  name="firstName"
+                  label={t("application.name.firstName")}
+                  placeholder={t("application.name.firstName")}
+                  readerOnly={true}
+                  controlClassName="mt-2"
+                  defaultValue={member.firstName}
+                  validation={{ required: true }}
+                  error={errors.firstName}
+                  errorMessage={t("application.name.firstNameError")}
+                  register={register}
+                />
 
-              <Field
-                name="middleName"
-                placeholder={t("application.name.middleName")}
-                defaultValue={member.middleName}
-                register={register}
-              />
+                <Field
+                  name="middleName"
+                  label={t("application.name.middleName")}
+                  placeholder={t("application.name.middleName")}
+                  readerOnly={true}
+                  defaultValue={member.middleName}
+                  register={register}
+                />
 
-              <Field
-                name="lastName"
-                placeholder={t("application.name.lastName")}
-                defaultValue={member.lastName}
-                validation={{ required: true }}
-                error={errors.lastName}
-                errorMessage={t("application.name.lastNameError")}
-                register={register}
-              />
+                <Field
+                  name="lastName"
+                  label={t("application.name.lastName")}
+                  placeholder={t("application.name.lastName")}
+                  readerOnly={true}
+                  defaultValue={member.lastName}
+                  validation={{ required: true }}
+                  error={errors.lastName}
+                  errorMessage={t("application.name.lastNameError")}
+                  register={register}
+                />
+              </fieldset>
             </div>
 
             <div className="form-card__group border-b">
@@ -213,69 +219,69 @@ export default () => {
 
               {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
                 <>
-                  <label className="field-label--caps" htmlFor="street">
-                    {t("application.contact.address")}
-                  </label>
+                  <fieldset>
+                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
 
-                  <Field
-                    id="addressStreet"
-                    name="address.street"
-                    placeholder={t("application.contact.streetAddress")}
-                    defaultValue={member.address.street}
-                    validation={{ required: true }}
-                    error={errors.address?.street}
-                    errorMessage={t("application.contact.streetError")}
-                    register={register}
-                  />
-
-                  <Field
-                    id="addressStreet2"
-                    name="address.street2"
-                    label={t("application.contact.apt")}
-                    placeholder={t("application.contact.apt")}
-                    defaultValue={member.address.street2}
-                    register={register}
-                  />
-
-                  <div className="flex max-w-2xl">
                     <Field
-                      id="addressCity"
-                      name="address.city"
-                      label={t("application.contact.cityName")}
-                      placeholder={t("application.contact.cityName")}
-                      defaultValue={member.address.city}
+                      id="addressStreet"
+                      name="address.street"
+                      placeholder={t("application.contact.streetAddress")}
+                      defaultValue={member.address.street}
                       validation={{ required: true }}
-                      error={errors.address?.city}
-                      errorMessage={t("application.contact.cityError")}
+                      error={errors.address?.street}
+                      errorMessage={t("application.contact.streetError")}
                       register={register}
                     />
 
-                    <Select
-                      id="addressState"
-                      name="address.state"
-                      label="State"
-                      defaultValue={member.address.state}
-                      validation={{ required: true }}
-                      error={errors.address?.state}
-                      errorMessage={t("application.contact.stateError")}
+                    <Field
+                      id="addressStreet2"
+                      name="address.street2"
+                      label={t("application.contact.apt")}
+                      placeholder={t("application.contact.apt")}
+                      defaultValue={member.address.street2}
                       register={register}
-                      controlClassName="control"
-                      options={stateKeys}
-                      keyPrefix="application.form.options.states"
                     />
-                  </div>
 
-                  <Field
-                    id="addressZipCode"
-                    name="address.zipCode"
-                    label="Zip"
-                    placeholder="Zipcode"
-                    defaultValue={member.address.zipCode}
-                    validation={{ required: true }}
-                    error={errors.address?.zipCode}
-                    errorMessage={t("application.contact.zipCodeError")}
-                    register={register}
-                  />
+                    <div className="flex max-w-2xl">
+                      <Field
+                        id="addressCity"
+                        name="address.city"
+                        label={t("application.contact.cityName")}
+                        placeholder={t("application.contact.cityName")}
+                        defaultValue={member.address.city}
+                        validation={{ required: true }}
+                        error={errors.address?.city}
+                        errorMessage={t("application.contact.cityError")}
+                        register={register}
+                      />
+
+                      <Select
+                        id="addressState"
+                        name="address.state"
+                        label="State"
+                        defaultValue={member.address.state}
+                        validation={{ required: true }}
+                        error={errors.address?.state}
+                        errorMessage={t("application.contact.stateError")}
+                        register={register}
+                        controlClassName="control"
+                        options={stateKeys}
+                        keyPrefix="application.form.options.states"
+                      />
+                    </div>
+
+                    <Field
+                      id="addressZipCode"
+                      name="address.zipCode"
+                      label="Zip"
+                      placeholder="Zipcode"
+                      defaultValue={member.address.zipCode}
+                      validation={{ required: true }}
+                      error={errors.address?.zipCode}
+                      errorMessage={t("application.contact.zipCodeError")}
+                      register={register}
+                    />
+                  </fieldset>
                 </>
               )}
             </div>
@@ -295,69 +301,69 @@ export default () => {
 
               {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
                 <>
-                  <label className="field-label--caps" htmlFor="street">
-                    {t("application.contact.address")}
-                  </label>
+                  <fieldset>
+                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
 
-                  <Field
-                    id="addressStreet"
-                    name="workAddress.street"
-                    placeholder={t("application.contact.streetAddress")}
-                    defaultValue={member.workAddress.street}
-                    validation={{ required: true }}
-                    error={errors.workAddress?.street}
-                    errorMessage={t("application.contact.streetError")}
-                    register={register}
-                  />
-
-                  <Field
-                    id="addressStreet2"
-                    name="workAddress.street2"
-                    label={t("application.contact.apt")}
-                    placeholder={t("application.contact.apt")}
-                    defaultValue={member.workAddress.street2}
-                    register={register}
-                  />
-
-                  <div className="flex max-w-2xl">
                     <Field
-                      id="addressCity"
-                      name="workAddress.city"
-                      label={t("application.contact.cityName")}
-                      placeholder={t("application.contact.cityName")}
-                      defaultValue={member.workAddress.city}
+                      id="addressStreet"
+                      name="workAddress.street"
+                      placeholder={t("application.contact.streetAddress")}
+                      defaultValue={member.workAddress.street}
                       validation={{ required: true }}
-                      error={errors.workAddress?.city}
-                      errorMessage={t("application.contact.cityError")}
+                      error={errors.workAddress?.street}
+                      errorMessage={t("application.contact.streetError")}
                       register={register}
                     />
 
-                    <Select
-                      id="addressState"
-                      name="workAddress.state"
-                      label="State"
-                      defaultValue={member.workAddress.state}
-                      validation={{ required: true }}
-                      error={errors.workAddress?.state}
-                      errorMessage={t("application.contact.stateError")}
+                    <Field
+                      id="addressStreet2"
+                      name="workAddress.street2"
+                      label={t("application.contact.apt")}
+                      placeholder={t("application.contact.apt")}
+                      defaultValue={member.workAddress.street2}
                       register={register}
-                      controlClassName="control"
-                      options={stateKeys}
-                      keyPrefix="application.form.options.states"
                     />
-                  </div>
 
-                  <Field
-                    id="addressZipCode"
-                    name="workAddress.zipCode"
-                    label="Zip"
-                    placeholder="Zipcode"
-                    defaultValue={member.workAddress.zipCode}
-                    validation={{ required: true }}
-                    error={errors.workAddress?.zipCode}
-                    errorMessage={t("application.contact.zipCodeError")}
-                    register={register}
-                  />
+                    <div className="flex max-w-2xl">
+                      <Field
+                        id="addressCity"
+                        name="workAddress.city"
+                        label={t("application.contact.cityName")}
+                        placeholder={t("application.contact.cityName")}
+                        defaultValue={member.workAddress.city}
+                        validation={{ required: true }}
+                        error={errors.workAddress?.city}
+                        errorMessage={t("application.contact.cityError")}
+                        register={register}
+                      />
+
+                      <Select
+                        id="addressState"
+                        name="workAddress.state"
+                        label="State"
+                        defaultValue={member.workAddress.state}
+                        validation={{ required: true }}
+                        error={errors.workAddress?.state}
+                        errorMessage={t("application.contact.stateError")}
+                        register={register}
+                        controlClassName="control"
+                        options={stateKeys}
+                        keyPrefix="application.form.options.states"
+                      />
+                    </div>
+
+                    <Field
+                      id="addressZipCode"
+                      name="workAddress.zipCode"
+                      label="Zip"
+                      placeholder="Zipcode"
+                      defaultValue={member.workAddress.zipCode}
+                      validation={{ required: true }}
+                      error={errors.workAddress?.zipCode}
+                      errorMessage={t("application.contact.zipCodeError")}
+                      register={register}
+                    />
+                  </fieldset>
                 </>
               )}
             </div>
@@ -367,6 +373,7 @@ export default () => {
                 id="relationship"
                 name="relationship"
                 label={t("application.household.member.whatIsTheirRelationship")}
+                labelClassName={"field-label--caps"}
                 defaultValue={member.relationship}
                 validation={{ required: true }}
                 error={errors.relationship}

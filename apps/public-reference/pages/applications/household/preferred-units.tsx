@@ -67,17 +67,20 @@ export default () => {
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group is-borderless">
-            <FieldGroup
-              type="checkbox"
-              name="preferredUnit"
-              groupLabel=""
-              groupNote={t("application.household.preferredUnit.optionsLabel")}
-              fields={preferredUnitOptions}
-              error={errors.preferredUnit}
-              errorMessage={t("application.form.errors.selectAtLeastOne")}
-              validation={{ required: true }}
-              register={register}
-            />
+            <fieldset>
+              <legend className="sr-only">{t("application.household.preferredUnit.legend")}</legend>
+                <FieldGroup
+                  type="checkbox"
+                  name="preferredUnit"
+                  groupLabel=""
+                  groupNote={t("application.household.preferredUnit.optionsLabel")}
+                  fields={preferredUnitOptions}
+                  error={errors.preferredUnit}
+                  errorMessage={t("application.form.errors.selectAtLeastOne")}
+                  validation={{ required: true }}
+                  register={register}
+                />
+            </fieldset>
           </div>
 
           <div className="form-card__pager">
