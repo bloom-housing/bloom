@@ -142,6 +142,7 @@ const Demographics = () => {
               name="howDidYouHear"
               groupLabel={t("application.review.demographics.howDidYouHearLabel")}
               fields={howDidYouHearOptions}
+              register={register}
             />
           </div>
 
