@@ -16,6 +16,10 @@
     @apply mt-2;
   }
 
+  label.field-label--caps + .control {
+    @apply mt-0;
+  }
+
   .field-label--caps {
     @apply mb-0;
   }
@@ -63,7 +67,6 @@
 
     .control {
       .input,
-      .prepend,
       select {
         @apply border-red-700;
         @apply border-2;
@@ -233,12 +236,12 @@ input[type=number] {
   @apply tracking-widest;
   @apply font-semibold;
   @apply text-tiny;
-  @apply mb-2;
+  @apply mb-3;
   @apply inline-block;
 }
 
 .field-label--caps + .field-note {
-  @apply mt-2;
+  // @apply mt-2;
 }
 
 .field--inline {

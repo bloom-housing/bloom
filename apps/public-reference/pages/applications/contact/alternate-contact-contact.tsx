@@ -69,7 +69,7 @@ export default () => {
               label={t("application.alternateContact.contact.phoneNumberFormLabel")}
               error={errors.phoneNumber}
               errorMessage={t("application.contact.phoneNumberError")}
-              controlClassName="control mt-2"
+              controlClassName="control"
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
             />
@@ -79,9 +79,10 @@ export default () => {
               {t("application.alternateContact.contact.emailAddressFormLabel")}
             </label>
             <Field
-              controlClassName="mt-2"
               id="emailAddress"
               name="emailAddress"
+              label={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
+              readerOnly={true}
               placeholder={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
               defaultValue={application.alternateContact.emailAddress}
               register={register}
@@ -90,12 +91,13 @@ export default () => {
           <div className="form-card__group">
             <fieldset>
               <legend className="field-label--caps">{t("application.alternateContact.contact.contactMailingAddressLabel")}</legend>
-              <p className="field-note my-2">
+              <p className="field-note mb-2">
                 {t("application.alternateContact.contact.contactMailingAddressHelperText")}
               </p>
               <Field
                 id="mailingAddress.street"
                 name="mailingAddress.street"
+                label={t("application.alternateContact.contact.streetFormPlaceholder")}
                 placeholder={t("application.alternateContact.contact.streetFormPlaceholder")}
                 defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}

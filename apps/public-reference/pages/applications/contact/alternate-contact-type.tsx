@@ -64,7 +64,7 @@ export default () => {
           <div className="form-card__group">
             <fieldset>
               <legend className="field-label--caps">{t("application.alternateContact.type.label")}</legend>
-              <p className="field-note mt-2 mb-4">
+              <p className="field-note mb-4">
                 {t("application.alternateContact.type.helperText")}
               </p>
               {options.map((option, i) => {

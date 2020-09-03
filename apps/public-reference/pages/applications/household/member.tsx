@@ -206,25 +206,29 @@ export default () => {
             </div>
 
             <div className="form-card__group border-b">
-              <FieldGroup
-                name="sameAddress"
-                groupLabel={t("application.household.member.haveSameAddress")}
-                type="radio"
-                register={register}
-                validation={{ required: true }}
-                error={errors.sameAddress}
-                errorMessage={t("application.form.errors.selectOption")}
-                fields={sameAddressOptions}
-              />
+              <fieldset>
+                <legend className="sr-only">{t("application.contact.doYouWorkIn")}</legend>
+                <FieldGroup
+                  name="sameAddress"
+                  groupLabel={t("application.household.member.haveSameAddress")}
+                  type="radio"
+                  register={register}
+                  validation={{ required: true }}
+                  error={errors.sameAddress}
+                  errorMessage={t("application.form.errors.selectOption")}
+                  fields={sameAddressOptions}
+                />
+                </fieldset>
 
-              {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
-                <>
+                {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
+                <div className="pt-8">
                   <fieldset>
                     <legend className="field-label--caps">{t("application.contact.address")}</legend>
 
                     <Field
                       id="addressStreet"
                       name="address.street"
+                      label={t("application.contact.streetAddress")}
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.address.street}
                       validation={{ required: true }}
@@ -282,7 +286,7 @@ export default () => {
                       register={register}
                     />
                   </fieldset>
-                </>
+                </div>
               )}
             </div>
 
@@ -300,13 +304,14 @@ export default () => {
               />
 
               {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
-                <>
+                <div className="pt-4">
                   <fieldset>
                     <legend className="field-label--caps">{t("application.contact.address")}</legend>
 
                     <Field
                       id="addressStreet"
                       name="workAddress.street"
+                      label={t("application.contact.streetAddress")}
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.workAddress.street}
                       validation={{ required: true }}
@@ -364,7 +369,7 @@ export default () => {
                       register={register}
                     />
                   </fieldset>
-                </>
+                </div>
               )}
             </div>
 

@@ -354,56 +354,61 @@ export default () => {
             </div>
           )}
           <div className="form-card__group border-b">
-            <FieldGroup
-              name="contactPreferences"
-              groupLabel={t("application.contact.contactPreference")}
-              fields={contactPreferencesOptions}
-              type="checkbox"
-              validation={{ required: true }}
-              error={errors?.contactPreferences}
-              errorMessage={t("application.form.errors.selectAtLeastOne")}
-              register={register}
-            />
+            <fieldset>
+              <legend className="field-label--caps">{t("application.contact.contactPreference")}</legend>
+              <FieldGroup
+                name="contactPreferences"
+                fields={contactPreferencesOptions}
+                type="checkbox"
+                validation={{ required: true }}
+                error={errors?.contactPreferences}
+                errorMessage={t("application.form.errors.selectAtLeastOne")}
+                register={register}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__group">
-            <label className="field-label--caps" htmlFor="street">
+            <h3 className="field-label--caps">
               {t("application.contact.doYouWorkIn")}
-            </label>
+            </h3>
 
             <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
-            <Field
-              type="radio"
-              id="workInRegionYes"
-              name="applicant.workInRegion"
-              label={t("application.contact.yes")}
-              register={register}
-              validation={{ required: true }}
-              error={errors?.applicant?.workInRegion}
-              inputProps={{
-                value: "yes",
-                defaultChecked: application.applicant.workInRegion == "yes",
-              }}
-            />
+            <fieldset>
+              <legend className="sr-only">{t("application.contact.doYouWorkIn")}</legend>
+              <Field
+                type="radio"
+                id="workInRegionYes"
+                name="applicant.workInRegion"
+                label={t("application.contact.yes")}
+                register={register}
+                validation={{ required: true }}
+                error={errors?.applicant?.workInRegion}
+                inputProps={{
+                  value: "yes",
+                  defaultChecked: application.applicant.workInRegion == "yes",
+                }}
+              />
 
-            <Field
-              type="radio"
-              id="workInRegionNo"
-              name="applicant.workInRegion"
-              label={t("application.contact.no")}
-              register={register}
-              validation={{ required: true }}
-              error={errors?.applicant?.workInRegion}
-              inputProps={{
-                value: "no",
-                defaultChecked: application.applicant.workInRegion == "no",
-              }}
-            />
+              <Field
+                type="radio"
+                id="workInRegionNo"
+                name="applicant.workInRegion"
+                label={t("application.contact.no")}
+                register={register}
+                validation={{ required: true }}
+                error={errors?.applicant?.workInRegion}
+                inputProps={{
+                  value: "no",
+                  defaultChecked: application.applicant.workInRegion == "no",
+                }}
+              />
 
-            <ErrorMessage error={errors.applicant?.workInRegion}>
-              {t("application.contact.radioError")}
-            </ErrorMessage>
+              <ErrorMessage error={errors.applicant?.workInRegion}>
+                {t("application.contact.radioError")}
+              </ErrorMessage>
+            </fieldset>
           </div>
 
           {(workInRegion == "yes" ||

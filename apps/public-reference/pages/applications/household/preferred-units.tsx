@@ -69,17 +69,17 @@ export default () => {
           <div className="form-card__group is-borderless">
             <fieldset>
               <legend className="sr-only">{t("application.household.preferredUnit.legend")}</legend>
-                <FieldGroup
-                  type="checkbox"
-                  name="preferredUnit"
-                  groupLabel=""
-                  groupNote={t("application.household.preferredUnit.optionsLabel")}
-                  fields={preferredUnitOptions}
-                  error={errors.preferredUnit}
-                  errorMessage={t("application.form.errors.selectAtLeastOne")}
-                  validation={{ required: true }}
-                  register={register}
-                />
+              <FieldGroup
+                type="checkbox"
+                name="preferredUnit"
+                groupLabel=""
+                groupNote={t("application.household.preferredUnit.optionsLabel")}
+                fields={preferredUnitOptions}
+                error={errors.preferredUnit}
+                errorMessage={t("application.form.errors.selectAtLeastOne")}
+                validation={{ required: true }}
+                register={register}
+              />
             </fieldset>
           </div>
 

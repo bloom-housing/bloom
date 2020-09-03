@@ -36,7 +36,7 @@ const FieldGroup = ({
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
-      <div className={`mt-3 field ${error && "error"}`}>
+      <div className={`field ${error && "error"}`}>
         {fields &&
           fields.map((item) => (
             <div className={`field`} key={item.id}>

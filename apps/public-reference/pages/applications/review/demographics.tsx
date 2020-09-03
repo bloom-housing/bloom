@@ -95,7 +95,7 @@ const Demographics = () => {
               label={t("application.review.demographics.ethnicityLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={ethnicityKeys}
               keyPrefix="application.review.demographics.ethnicityOptions"
@@ -107,7 +107,7 @@ const Demographics = () => {
               label={t("application.review.demographics.raceLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={raceKeys}
               keyPrefix="application.review.demographics.raceOptions"
@@ -121,7 +121,7 @@ const Demographics = () => {
               label={t("application.review.demographics.genderLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={genderKeys}
               keyPrefix="application.review.demographics.genderOptions"
@@ -135,7 +135,7 @@ const Demographics = () => {
               label={t("application.review.demographics.sexualOrientationLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={sexualOrientation}
               keyPrefix="application.review.demographics.sexualOrientationOptions"
