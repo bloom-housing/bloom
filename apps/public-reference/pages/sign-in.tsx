@@ -10,6 +10,7 @@ import {
   t,
   AlertBox,
   SiteAlert,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
@@ -26,12 +27,8 @@ const SignIn = () => {
 
     try {
       const user = await login(email, password)
-
-      redirectToPrev({
-        success: `${encodeURIComponent(
-          t(`authentication.signIn.success`, { name: user.firstName })
-        )}`,
-      })
+      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      redirectToPrev()
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {
