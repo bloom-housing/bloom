@@ -157,11 +157,11 @@ const Demographics = () => {
             </div>
           </div>
 
-          <div className="p-8 text-center">
+          {/* <div className="p-8 text-center">
             <Link href="/">
               <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
             </Link>
-          </div>
+          </div> */}
         </Form>
       </FormCard>
     </FormsLayout>
