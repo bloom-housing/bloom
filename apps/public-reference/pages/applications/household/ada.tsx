@@ -4,7 +4,7 @@ If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
 import Link from "next/link"
-import { Button, ErrorMessage, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, ErrorMessage, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -157,7 +157,7 @@ export default () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
@@ -183,7 +183,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

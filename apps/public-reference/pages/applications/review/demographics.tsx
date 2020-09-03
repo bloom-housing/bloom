@@ -4,7 +4,7 @@ Optional demographic questions
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -49,7 +49,11 @@ const Demographics = () => {
       defaultChecked: item.checked,
       register,
     }))
-  }, [])
+  }, [register])
+
+  const backPath = application.preferences.none
+    ? "/applications/preferences/general"
+    : "/applications/preferences/select"
 
   return (
     <FormsLayout>
@@ -64,15 +68,9 @@ const Demographics = () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            {application.preferences.none ? (
-              <Link href="/applications/preferences/general">
-                <a>{t("t.back")}</a>
-              </Link>
-            ) : (
-              <Link href="/applications/preferences/select">
-                <a>{t("t.back")}</a>
-              </Link>
-            )}
+            <Link href={backPath}>
+              <a>{t("t.back")}</a>
+            </Link>
           </strong>
         </p>
 
@@ -83,7 +81,7 @@ const Demographics = () => {
           <p className="mt-4 field-note">{t("application.review.demographics.subTitle")}</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <Select
               id="ethnicity"
@@ -164,7 +162,7 @@ const Demographics = () => {
               <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
             </Link>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

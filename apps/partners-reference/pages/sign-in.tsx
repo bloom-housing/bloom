@@ -39,16 +39,16 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard>
-        <div className="form-card__lead pb-0 text-center">
+        <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl" symbol="profile" />
           <h2 className="form-card__title">Partners Sign In</h2>
         </div>
-
         <div className="form-card__group pt-0 border-b">
           <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
 
           <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
+              caps={true}
               name="email"
               label="Email"
               validation={{ required: true }}
@@ -58,6 +58,7 @@ export default () => {
             />
 
             <Field
+              caps={true}
               name="password"
               label="Password"
               validation={{ required: true }}

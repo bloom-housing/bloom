@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import {
   Button,
   Field,
+  Form,
   FormCard,
   Icon,
   LinkButton,
@@ -56,7 +57,7 @@ const SignIn = () => {
         )}
         <SiteAlert type="notice" dismissable />
         <div className="form-card__group pt-0 border-b">
-          <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+          <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
               caps={true}
               name="email"
@@ -88,7 +89,7 @@ const SignIn = () => {
                 Sign In
               </Button>
             </div>
-          </form>
+          </Form>
         </div>
         <div className="form-card__group text-center">
           <h2 className="mb-6">Don't have an account?</h2>

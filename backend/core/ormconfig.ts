@@ -28,18 +28,18 @@ const connectionInfo = process.env.DATABASE_URL
 export = {
   type: "postgres",
   ...connectionInfo,
-  // We don't want to auto-synchronize production data - we should deliberately run migrations.
-  synchronize: env === "development",
+  synchronize: false,
+  migrationsRun: false,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
   entities: [
     // Needed to get a TS context on entity imports.
     // See
     // https://stackoverflow.com/questions/59435293/typeorm-entity-in-nestjs-cannot-use-import-statement-outside-a-module
-    join(__dirname, "src/entity/**", "*.ts"),
+    join(__dirname, "src/entity", "*.js"),
   ],
-  migrations: [join(__dirname, "src/migration/**", "*.ts")],
-  subscribers: [join(__dirname, "src/subscriber/**", "*.ts")],
+  migrations: [join(__dirname, "src/migration", "*.js")],
+  subscribers: [join(__dirname, "src/subscriber", "*.js")],
   cli: {
     entitiesDir: "src/entity",
     migrationsDir: "src/migration",

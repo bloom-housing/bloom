@@ -4,7 +4,7 @@ A notice regarding adding househole members
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -45,7 +45,7 @@ export default () => {
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
@@ -58,7 +58,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

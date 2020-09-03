@@ -18,8 +18,10 @@ const PageHeader = (props: PageHeaderProps) => {
 
   return (
     <header className={classNames.join(" ")}>
-      <h1 className="page-header__title">{props.children}</h1>
-      {props.subtitle && <p className="page-header__lead"> {props.subtitle}</p>}
+      <hgroup className="page-header__group">
+        <h1 className="page-header__title">{props.children}</h1>
+        {props.subtitle && <p className="page-header__lead"> {props.subtitle}</p>}
+      </hgroup>
     </header>
   )
 }
