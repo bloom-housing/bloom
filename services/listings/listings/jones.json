@@ -9,24 +9,24 @@
   "amenities": "Fitness Center, Indoor/Outdoor Lounge, Social Lounge, Package Lockers, Indoor Bicyle Parking, On-site Composting, Green Roof Spaces",
   "applicationAddress": {
     "city": "Berkeley",
-    "street": "1500 San Pablo Ave",
-    "zipCode": "94702",
+    "street": "1080 Jones St.",
+    "zipCode": "94710",
     "state": "CA",
-    "latitude": 37.876081,
-    "longitude": -122.294710
+    "latitude": 37.876280, 
+    "longitude": -122.294873
   },
-  "applicationDueDate": "2020-09-24T16:00:00.000-07:00",
+  "applicationDueDate": "2020-10-06T16:00:00.000-07:00",
   "applicationOrganization": "Greystar",
   "applicationPhone": "415-238-5026",
   "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "county": "Alameda",
     "city": "Berkeley",
-    "street": "1500 San Pablo Ave",
-    "zipCode": "94702",
+    "street": "1080 Jones St.",
+    "zipCode": "94710",
     "state": "CA",
-    "latitude": 37.876081,
-    "longitude": -122.294710
+    "latitude": 37.876280,
+    "longitude": -122.294873
   },
   "buildingSelectionCriteria": null,
   "costsNotIncluded": "Residents responsible for utilities: electric and cable/internet. Residents required to maintain a personal liability policy as outlined in the lease agreement. Rent is due by the 3rd of each month and rent is considered late on the 4th of each month. Late fee is 5%. Resident to pay $35 for each returned check or rejected electronic payment. Pet Deposit is $500 per pet. $50 monthly pet rent per pet.",
@@ -43,7 +43,7 @@
   "waitlistCurrentSize": null,
   "petPolicy": "Pets allowed except the following; pit bull, malamute, akita, rottweiler, doberman, staffordshire terrier, presa canario, chowchow, american bull dog, karelian bear dog, st bernard, german shepherd, husky, great dane, any hybrid or mixed breed of the aforementioned breeds. 2 pets per household limit. $500 pet deposit per pet. $50 pet rent per pet.",
   "prioritiesDescriptor": null,
-  "requiredDocuments": "Listed on FAQ & interview letter if selected from the lottery for interview.",
+  "requiredDocuments": "Income: If you work and receive paystubs: ▪ Copies of 3 most current and consecutive paystubs, beginning with the most recent paystub; ▪ If hired recently, provide Employment Offer Letter; If you receive severance pay, Social Security, unemployment benefits, retirement income, disability, public assistance, or the like, submit: ▪ Most recent benefits letter(s) stating your monthly award; If you are Self-Employed, you must: ▪ Complete an Self-Employed Declaration form; ▪ Submit Year-to-Date Profit and Loss statement; ▪ 3 months proof of income; If you are Unemployed and have ZERO income, you must: ▪ Complete an Unemployment Declaration; ▪ Submit the previous year’s federal income tax returns; Assets: ▪ 2-consecutive and most recent official bank statements for all bank accounts and include ALL pages; ▪ A written explanation and supporting documentation for any deposit over $100 other than that of your documented employment; Tax Returns ▪ Submit most recent tax returns including all pages and forms W2s, 1099s, Schedules; Building Documents: ▪ Application; ▪ Release & Consent Form; ▪ Resident Qualification Acknowledgment; ▪ Student Status Affidavit; ",
   "reservedCommunityMaximumAge": null,
   "reservedCommunityMinimumAge": null,
   "reservedDescriptor": "Senior",
@@ -61,24 +61,23 @@
       "type": 1
     }
   ],
-  "applicationFee": "50.94",
+  "applicationFee": "52.46",
   "criminalBackground": "No criminal background checks under Berkeley Fair Chance Ordinance",
   "leasingAgentEmail": "jonesberkeleybmr@greystar.com",
   "leasingAgentName": "Michael Uson",
   "leasingAgentAddress": {
     "city": "Berkeley",
-    "street": "1500 San Pablo Ave",
-    "zipCode": "94702",
+    "street": "1080 Jones St.",
+    "zipCode": "94710",
     "state": "CA",
-    "latitude": 37.876081,
-    "longitude": -122.294710
+    "latitude": 37.876280,
+    "longitude": -122.294873
   },
   "leasingAgentOfficeHours": "Due to COVID-19, our offices are closed. Please call or email or leasing agent for any questions during Mon-Fri 9AM-5PM",
   "leasingAgentPhone": "415-238-5026",
   "leasingAgentTitle": "Management Coordinator",
   "rentalHistory": "Applicant must be able to provide sufficient residential information for at least the past two years to enable the Property Manager to adequately evaluate rental history and/or place of residence. If two years of prior residential information proves insufficient for obtaining adequate references, additional residential history may be requested. Negative rental history will be grounds for denial, including: Any evictions with an outstanding judgement, 4 or more evictions filings, 4 or more late payments being reported on the rental history report",
-  "preferences": [
-    ],
+  "preferences": null,
   "buildingTotalUnits": 170,
   "units": [
     {
