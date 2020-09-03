@@ -10,6 +10,11 @@ export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
+  const defaultColDef = {
+    resizable: true,
+    maxWidth: 300,
+  }
+
   const columnDefs = [
     {
       headerName: "Name",
@@ -48,15 +53,22 @@ export default function ListingsList() {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>All Listings</PageHeader>
-      <article className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
-        <div className="ag-theme-alpine">
-          <AgGridReact
-            columnDefs={columnDefs}
-            rowData={listingDtos.listings}
-            domLayout={"autoHeight"}
-          ></AgGridReact>
-        </div>
-      </article>
+      <section>
+        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
+          <div className="ag-theme-alpine ag-theme-bloom">
+            <AgGridReact
+              columnDefs={columnDefs}
+              rowData={listingDtos.listings}
+              domLayout={"autoHeight"}
+              headerHeight={83}
+              rowHeight={58}
+              suppressPaginationPanel={true}
+              paginationPageSize={8}
+              suppressScrollOnNewData={true}
+            ></AgGridReact>
+          </div>
+        </article>
+      </section>
     </Layout>
   )
 }

@@ -4,7 +4,7 @@ Display a summary of application fields with edit links per section
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -50,7 +50,7 @@ export default () => {
 
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
               <Button
                 filled={true}
                 onClick={() => {
@@ -59,7 +59,7 @@ export default () => {
               >
                 {t("t.confirm")}
               </Button>
-            </form>
+            </Form>
           </div>
         </div>
       </FormCard>

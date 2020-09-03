@@ -3,7 +3,7 @@
 A notice regarding application process and rules
 */
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -40,7 +40,7 @@ export default () => {
           <p className="field-note py-2">{t("application.start.whatToExpect.info2")}</p>
           <p className="field-note py-2">{t("application.start.whatToExpect.info3")}</p>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
@@ -53,7 +53,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

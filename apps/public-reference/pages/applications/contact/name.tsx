@@ -3,13 +3,12 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import { Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Button, Field, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 import { emailRegex } from "../../../lib/emailRegex"
 
 export default () => {
@@ -17,17 +16,15 @@ export default () => {
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({
-    defaultValues: {
-      noEmail: application.applicant.noEmail,
-    },
-  })
+  const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
+    Record<string, any>
+  >()
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl("/applications/contact/address")
   }
 
-  const noEmail = watch("noEmail")
+  const noEmail: boolean = watch("applicant.noEmail", application.applicant.noEmail)
 
   return (
     <FormsLayout>
@@ -44,7 +41,7 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.name.yourName")}
@@ -157,7 +154,7 @@ export default () => {
               name="applicant.emailAddress"
               placeholder={noEmail ? t("t.none") : "example@web.com"}
               defaultValue={application.applicant.emailAddress}
-              validation={{ pattern: emailRegex }}
+              validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
               error={errors.applicant?.emailAddress}
               errorMessage={t("application.name.emailAddressError")}
               register={register}
@@ -173,7 +170,8 @@ export default () => {
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setValue("emailAddress", "")
+                    setValue("applicant.emailAddress", "")
+                    clearErrors("applicant.emailAddress")
                   }
                 }}
               />
@@ -208,7 +206,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )
