@@ -6,13 +6,15 @@ import Router, { useRouter } from "next/router"
 import {
   AlertBox,
   Button,
-  Field,
-  FormCard,
-  ProgressNav,
-  t,
+  DOBField,
   ErrorMessage,
+  Field,
+  Form,
+  FormCard,
   FormOptions,
+  ProgressNav,
   relationshipKeys,
+  t,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
@@ -134,7 +136,7 @@ export default () => {
               </AlertBox>
             )}
 
-            <form className="" onSubmit={handleSubmit(onSubmit, onError)}>
+            <Form onSubmit={handleSubmit(onSubmit, onError)}>
               <div className="form-card__group border-b">
                 <label className="field-label--caps" htmlFor="firstName">
                   {t("application.household.member.name")}
@@ -170,9 +172,46 @@ export default () => {
               </div>
 
               <div className="form-card__group border-b">
-                <label className="field-label--caps" htmlFor="birthMonth">
-                  {t("application.household.member.dateOfBirth")}
+                <DOBField
+                  applicant={member}
+                  register={register}
+                  error={errors}
+                  watch={watch}
+                  label={t("application.household.member.dateOfBirth")}
+                />
+              </div>
+
+              <div className="form-card__group border-b">
+                <label className="field-label--caps" htmlFor="sameAddress">
+                  {t("application.household.member.haveSameAddress")}
                 </label>
+
+                <div className={"field mt-4 " + (errors.sameAddress ? "error" : "")}>
+                  <input
+                    type="radio"
+                    id="sameAddressYes"
+                    name="sameAddress"
+                    value="yes"
+                    defaultChecked={member.sameAddress == "yes"}
+                    ref={register({ required: true })}
+                  />
+                  <label className="font-semibold" htmlFor="sameAddressYes">
+                    {t("t.yes")}
+                  </label>
+                </div>
+                <div className={"field " + (errors.sameAddress ? "error" : "")}>
+                  <input
+                    type="radio"
+                    id="sameAddressNo"
+                    name="sameAddress"
+                    value="no"
+                    defaultChecked={member.sameAddress == "no"}
+                    ref={register({ required: true })}
+                  />
+                  <label className="font-semibold" htmlFor="sameAddressNo">
+                    {t("t.no")}
+                  </label>
+                </div>
 
                 <div className="field-group--dob mt-2">
                   <Field
@@ -482,7 +521,7 @@ export default () => {
                   </a>
                 </div>
               </div>
-            </form>
+            </Form>
           </>
         )}
       </FormCard>

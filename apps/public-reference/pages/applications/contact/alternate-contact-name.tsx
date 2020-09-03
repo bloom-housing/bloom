@@ -7,7 +7,7 @@ import Router from "next/router"
 import {
   AlertBox,
   Button,
-  ErrorMessage,
+  Form,
   Field,
   FormCard,
   ProgressNav,
@@ -51,7 +51,7 @@ export default () => {
         <p className="form-card__back">
           <strong>
             <Link href="/applications/contact/alternate-contact-type">
-              <a>Back</a>
+              <a>{t("t.back")}</a>
             </Link>
           </strong>
         </p>
@@ -67,7 +67,7 @@ export default () => {
           </AlertBox>
         )}
 
-        <form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
+        <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.alternateContact.name.alternateContactFormLabel")}
@@ -139,7 +139,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

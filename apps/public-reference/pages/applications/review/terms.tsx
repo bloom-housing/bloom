@@ -12,6 +12,7 @@ import {
   UserContext,
   ApiClientContext,
   ErrorMessage,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -66,10 +67,9 @@ export default () => {
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.review.terms.title")}</h2>
         </div>
-        <form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>
-              {/* TODO */}
               {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
             </Markdown>
             <div className={`field mt-4 ${errors?.agree ? "error" : ""}`}>
@@ -98,7 +98,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

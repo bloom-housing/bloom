@@ -6,7 +6,7 @@ import Link from "next/link"
 import {
   AlertBox,
   Button,
-  ErrorMessage,
+  Form,
   Field,
   FormCard,
   ProgressNav,
@@ -55,7 +55,7 @@ export default () => {
         <p className="form-card__back">
           <strong>
             <Link href="/applications/contact/alternate-contact-name">
-              <a>Back</a>
+              <a>{t("t.back")}</a>
             </Link>
           </strong>
         </p>
@@ -72,7 +72,7 @@ export default () => {
           </AlertBox>
         )}
 
-        <form
+        <Form
           id="applications-contact-alternate-contact"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
@@ -173,7 +173,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

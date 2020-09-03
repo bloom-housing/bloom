@@ -9,6 +9,7 @@ import {
   Button,
   ErrorMessage,
   Field,
+  Form,
   FormCard,
   ProgressNav,
   t,
@@ -55,7 +56,7 @@ export default () => {
         <p className="form-card__back">
           <strong>
             <Link href="/applications/contact/address">
-              <a>Back</a>
+              <a>{t("t.back")}</a>
             </Link>
           </strong>
         </p>
@@ -72,7 +73,7 @@ export default () => {
           </AlertBox>
         )}
 
-        <form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
+        <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
@@ -135,7 +136,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

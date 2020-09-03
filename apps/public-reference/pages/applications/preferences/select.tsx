@@ -9,6 +9,7 @@ import {
   AlertBox,
   Button,
   ErrorMessage,
+  Form,
   FormCard,
   ProgressNav,
   t,
@@ -76,7 +77,7 @@ export default () => {
           </AlertBox>
         )}
 
-        <form className="" onSubmit={handleSubmit(onSubmit, onError)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group px-0 pb-3">
             <p className="field-note">{t("application.preferences.selectBelow")}</p>
           </div>
@@ -194,7 +195,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

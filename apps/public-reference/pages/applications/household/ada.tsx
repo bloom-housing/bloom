@@ -8,6 +8,7 @@ import {
   AlertBox,
   Button,
   ErrorMessage,
+  Form,
   FormCard,
   ProgressNav,
   t,
@@ -174,7 +175,7 @@ export default () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit, onError)}>
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
@@ -200,7 +201,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

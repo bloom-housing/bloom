@@ -1,6 +1,5 @@
 .page-header {
   @apply py-8;
-  @apply px-5;
 
   @screen md {
     @apply py-10;
@@ -11,9 +10,13 @@
   }
 }
 
-.page-header__title {
+.page-header__group {
+  @apply px-5;
   @apply m-auto;
   @apply max-w-5xl;
+}
+
+.page-header__title {
   @apply text-center;
 
   @screen md {
