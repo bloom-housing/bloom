@@ -114,7 +114,7 @@ export default () => {
                 <Select
                   id="mailingAddress.state"
                   name="mailingAddress.state"
-                  label={t("application.alternateContact.contact.stateFormPlaceholder")}
+                  label={t("application.alternateContact.contact.stateFormLabel")}
                   defaultValue={application.alternateContact.mailingAddress.state}
                   register={register}
                   controlClassName="control"

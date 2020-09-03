@@ -258,7 +258,7 @@ export default () => {
                       <Select
                         id="addressState"
                         name="address.state"
-                        label="State"
+                        label={t("application.contact.state")}
                         defaultValue={member.address.state}
                         validation={{ required: true }}
                         error={errors.address?.state}
@@ -273,8 +273,8 @@ export default () => {
                     <Field
                       id="addressZipCode"
                       name="address.zipCode"
-                      label="Zip"
-                      placeholder="Zipcode"
+                      label={t("application.contact.zip")}
+                      placeholder={t("application.contact.zipCode")}
                       defaultValue={member.address.zipCode}
                       validation={{ required: true }}
                       error={errors.address?.zipCode}
@@ -340,7 +340,7 @@ export default () => {
                       <Select
                         id="addressState"
                         name="workAddress.state"
-                        label="State"
+                        label={t("application.contact.state")}
                         defaultValue={member.workAddress.state}
                         validation={{ required: true }}
                         error={errors.workAddress?.state}
@@ -355,8 +355,8 @@ export default () => {
                     <Field
                       id="addressZipCode"
                       name="workAddress.zipCode"
-                      label="Zip"
-                      placeholder="Zipcode"
+                      label={t("application.contact.zip")}
+                      placeholder={t("application.contact.zipCode")}
                       defaultValue={member.workAddress.zipCode}
                       validation={{ required: true }}
                       error={errors.workAddress?.zipCode}
