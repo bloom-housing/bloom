@@ -1,22 +1,44 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Listing } from "./listing.entity"
-import { IsObject, IsString, IsUUID } from "class-validator"
+import { IsDateString, IsObject, IsString, IsUUID } from "class-validator"
+import { Expose } from "class-transformer"
 
 @Entity({ name: "assets" })
 export class Asset extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
+  @Expose()
+  @IsString()
+  @IsUUID()
   id: string
 
+  @CreateDateColumn()
+  @Expose()
+  @IsDateString()
+  createdAt: string
+
+  @CreateDateColumn()
+  @Expose()
+  @IsDateString()
+  updatedAt: string
+
   @Column({ type: "text" })
+  @Expose()
+  @IsString()
   referenceId: string
 
   @Column({ type: "text" })
+  @Expose()
+  @IsString()
   referenceType: string
 
   @Column({ type: "text" })
+  @Expose()
+  @IsString()
   label: string
 
   @Column({ type: "text" })
+  @Expose()
+  @IsString()
   fileId: string
 
   @ManyToOne((type) => Listing, (listing) => listing.assets, { nullable: true })

@@ -1,25 +1,4 @@
-import { IsString, IsUUID } from "class-validator"
 import { Asset } from "../entity/asset.entity"
-import { Expose } from "class-transformer"
+import { OmitType } from "@nestjs/swagger"
 
-export class AssetDto implements Partial<Asset> {
-  @Expose()
-  @IsUUID()
-  id: string
-
-  @Expose()
-  @IsString()
-  referenceId: string
-
-  @Expose()
-  @IsString()
-  referenceType: string
-
-  @Expose()
-  @IsString()
-  label: string
-
-  @Expose()
-  @IsString()
-  fileId: string
-}
+export class AssetDto extends OmitType(Asset, ["listing"] as const) {}

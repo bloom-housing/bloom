@@ -1,9 +1,4 @@
-import { PickType } from "@nestjs/swagger"
 import { AssetDto } from "./asset.dto"
+import { OmitType } from "@nestjs/swagger"
 
-export class AssetCreateDto extends PickType(AssetDto, [
-  "referenceId",
-  "referenceType",
-  "label",
-  "fileId",
-]) {}
+export class AssetCreateDto extends OmitType(AssetDto, ["id", "createdAt", "updatedAt"]) {}

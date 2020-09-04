@@ -1,10 +1,9 @@
-import { PickType } from "@nestjs/swagger"
-import { AssetDto } from "./asset.dto"
+import { AssetCreateDto } from "./asset.create.dto"
+import { IsUUID } from "class-validator"
+import { Expose } from "class-transformer"
 
-export class AssetUpdateDto extends PickType(AssetDto, [
-  "id",
-  "referenceId",
-  "referenceType",
-  "label",
-  "fileId",
-]) {}
+export class AssetUpdateDto extends AssetCreateDto {
+  @Expose()
+  @IsUUID()
+  id: string
+}
