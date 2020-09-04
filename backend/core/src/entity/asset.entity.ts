@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import { IsDateString, IsObject, IsString, IsUUID } from "class-validator"
@@ -23,7 +24,7 @@ export class Asset extends BaseEntity {
   @IsDateString()
   createdAt: string
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   @Expose()
   @IsDateString()
   updatedAt: string

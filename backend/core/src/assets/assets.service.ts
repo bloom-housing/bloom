@@ -17,7 +17,6 @@ export class AssetsService {
   }
 
   async findOne(assetId: string): Promise<Asset> {
-    console.log(assetId)
     return Asset.findOneOrFail({
       where: {
         id: assetId,

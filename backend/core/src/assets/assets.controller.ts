@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common"
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseInterceptors,
+} from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
 import { AssetsService } from "./assets.service"
@@ -8,6 +18,7 @@ import { AssetUpdateDto } from "./asset.update.dto"
 import { AssetDto } from "./asset.dto"
 
 // TODO Add Admin role check
+
 @Controller("assets")
 @ApiTags("assets")
 @ApiBearerAuth()
@@ -16,6 +27,7 @@ export class AssetsController {
 
   @Get()
   @ApiOperation({ summary: "List assets", operationId: "list" })
+  @UseInterceptors(new TransformInterceptor(AssetDto))
   async list(): Promise<Asset[]> {
     return await this.assetsService.list()
   }
@@ -27,8 +39,8 @@ export class AssetsController {
     return this.assetsService.create(asset)
   }
 
-  @Put()
-  @ApiOperation({ summary: "Create asset", operationId: "create" })
+  @Put(`:assetId`)
+  @ApiOperation({ summary: "Update asset", operationId: "update" })
   @UseInterceptors(new TransformInterceptor(AssetDto))
   async update(@Body() asset: AssetUpdateDto): Promise<AssetDto> {
     return this.assetsService.update(asset)
