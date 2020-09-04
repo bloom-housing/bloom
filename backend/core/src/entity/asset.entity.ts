@@ -1,4 +1,11 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm"
 import { Listing } from "./listing.entity"
 import { IsDateString, IsObject, IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"

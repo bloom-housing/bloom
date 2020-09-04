@@ -9,9 +9,7 @@ import { ApplicationMethod } from "../entity/applicationMethod.entity"
 import { Preference } from "../entity/preference.entity"
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Listing, Preference, Unit, Asset, ApplicationMethod]),
-  ],
+  imports: [TypeOrmModule.forFeature([Listing, Preference, Unit, Asset, ApplicationMethod])],
   providers: [ListingsService],
   exports: [ListingsService],
   controllers: [ListingsController],

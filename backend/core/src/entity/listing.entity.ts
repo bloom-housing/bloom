@@ -19,12 +19,13 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDateString,
-  IsEmail, IsEnum,
+  IsEmail,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 
 export enum ListingStatus {
