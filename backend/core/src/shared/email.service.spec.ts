@@ -17,6 +17,9 @@ const application = {} as Application
 listing.applicationDueDate = moment().add(10, "days").format()
 application.listing = listing
 application.updatedAt = moment().toDate()
+application.application = {
+  applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
+}
 let sendMock
 
 describe("EmailService", () => {
@@ -50,13 +53,15 @@ describe("EmailService", () => {
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
       expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome to Bloom")
       // Check if translation is working correctly
-      expect(sendMock.mock.calls[0][0].html.substring(0, 26)).toEqual("<h1>Welcome Test User</h1>")
+      expect(sendMock.mock.calls[0][0].html.substring(0, 28)).toEqual(
+        "<h1>Welcome Test \n User</h1>"
+      )
     })
   })
 
   describe("confirmation", () => {
     it("should generate html body", async () => {
-      await service.confirmation(user, listing, application)
+      await service.confirmation(listing, application)
       expect(sendMock).toHaveBeenCalled()
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
       expect(sendMock.mock.calls[0][0].subject).toEqual("Your Application Confirmation")

@@ -33,4 +33,12 @@ export class ListingsService {
 
     return data
   }
+
+  public async findOne(listingId: string) {
+    return await Listing.findOneOrFail({
+      where: {
+        id: listingId,
+      },
+    })
+  }
 }

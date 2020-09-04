@@ -70,7 +70,6 @@ export default () => {
           title={t("application.deleteThisApplication")}
           ariaDescription={t("application.deleteThisApplication")}
           actions={modalActions}
-          ariaDescription="Delete Application Modal"
           fullScreen
         ></Modal>
         <Layout>
