@@ -12,7 +12,7 @@
     "street": "1080 Jones St.",
     "zipCode": "94710",
     "state": "CA",
-    "latitude": 37.876280, 
+    "latitude": 37.87628,
     "longitude": -122.294873
   },
   "applicationDueDate": "2020-10-06T16:00:00.000-07:00",
@@ -25,7 +25,7 @@
     "street": "1080 Jones St.",
     "zipCode": "94710",
     "state": "CA",
-    "latitude": 37.876280,
+    "latitude": 37.87628,
     "longitude": -122.294873
   },
   "buildingSelectionCriteria": null,
@@ -37,10 +37,10 @@
   "imageUrl": "/images/jones.jpg",
   "programRules": "Rent shown is based on 2019 guidelines from the California Tax Credit Allocation Committee. These figures may change during lease up in Spring when the new 2020 rates go into effect. One two-bedroom unit at 30% AMI will have a preference for people who live or work in Alameda County.",
   "externalId": null,
-  "waitlistMaxSize": null,
+  "waitlistMaxSize": 9999,
   "name": "Jones Berkeley",
   "neighborhood": "North-West Berkeley",
-  "waitlistCurrentSize": null,
+  "waitlistCurrentSize": 0,
   "petPolicy": "Pets allowed except the following; pit bull, malamute, akita, rottweiler, doberman, staffordshire terrier, presa canario, chowchow, american bull dog, karelian bear dog, st bernard, german shepherd, husky, great dane, any hybrid or mixed breed of the aforementioned breeds. 2 pets per household limit. $500 pet deposit per pet. $50 pet rent per pet.",
   "prioritiesDescriptor": null,
   "requiredDocuments": "Income: If you work and receive paystubs: ▪ Copies of 3 most current and consecutive paystubs, beginning with the most recent paystub; ▪ If hired recently, provide Employment Offer Letter; If you receive severance pay, Social Security, unemployment benefits, retirement income, disability, public assistance, or the like, submit: ▪ Most recent benefits letter(s) stating your monthly award; If you are Self-Employed, you must: ▪ Complete an Self-Employed Declaration form; ▪ Submit Year-to-Date Profit and Loss statement; ▪ 3 months proof of income; If you are Unemployed and have ZERO income, you must: ▪ Complete an Unemployment Declaration; ▪ Submit the previous year’s federal income tax returns; Assets: ▪ 2-consecutive and most recent official bank statements for all bank accounts and include ALL pages; ▪ A written explanation and supporting documentation for any deposit over $100 other than that of your documented employment; Tax Returns ▪ Submit most recent tax returns including all pages and forms W2s, 1099s, Schedules; Building Documents: ▪ Application; ▪ Release & Consent Form; ▪ Resident Qualification Acknowledgment; ▪ Student Status Affidavit; ",
@@ -70,7 +70,7 @@
     "street": "1080 Jones St.",
     "zipCode": "94710",
     "state": "CA",
-    "latitude": 37.876280,
+    "latitude": 37.87628,
     "longitude": -122.294873
   },
   "leasingAgentOfficeHours": "Due to COVID-19, our offices are closed. Please call or email or leasing agent for any questions during Mon-Fri 9AM-5PM",
@@ -442,7 +442,7 @@
       "amiChartId": 10,
       "monthlyRentAsPercentOfIncome": null
     },
-    
+
     {
       "id": "rVfljjqbGk6v7N_nKsA0lg",
       "amiPercentage": "50",
