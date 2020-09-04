@@ -18,6 +18,8 @@ import { PreferenceCreateDto } from "../preferences/preference.create.dto"
 import { PreferenceUpdateDto } from "../preferences/preference.update.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
 
+// TODO Add Admin role check
+
 @Controller("/preferences")
 @ApiTags("preferences")
 @ApiBearerAuth()

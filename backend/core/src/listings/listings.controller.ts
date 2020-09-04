@@ -19,6 +19,8 @@ import { ListingUpdateDto } from "./listings.update.dto"
 import { Listing } from "../entity/listing.entity"
 import { DefaultAuthGuard } from "../auth/default.guard"
 
+// TODO Add Admin role check
+
 @Controller("listings")
 @ApiTags("listings")
 @ApiBearerAuth()

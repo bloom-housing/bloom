@@ -18,6 +18,8 @@ import { ApplicationMethodCreateDto } from "./application-method.create.dto"
 import { ApplicationMethodUpdateDto } from "./application-method.update.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
 
+// TODO Add Admin role check
+
 @Controller("/applicationMethods")
 @ApiTags("applicationMethods")
 @ApiBearerAuth()

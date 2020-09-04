@@ -17,6 +17,8 @@ import { AssetCreateDto } from "./asset.create.dto"
 import { AssetUpdateDto } from "./asset.update.dto"
 import { AssetDto } from "./asset.dto"
 
+// TODO Add Admin role check
+
 @Controller("assets")
 @ApiTags("assets")
 @ApiBearerAuth()

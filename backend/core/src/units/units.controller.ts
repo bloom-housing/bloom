@@ -18,6 +18,8 @@ import { UnitCreateDto } from "./unit.create.dto"
 import { UnitUpdateDto } from "./unit.update.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
 
+// TODO Add Admin role check
+
 @Controller("/units")
 @ApiTags("units")
 @ApiBearerAuth()
