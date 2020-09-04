@@ -42,7 +42,7 @@ export class ApplicationMethodsController {
 
   @Put(`:applicationMethodId`)
   @UseGuards(DefaultAuthGuard)
-  @ApiOperation({ summary: "Update applicationMethod", operationId: "create" })
+  @ApiOperation({ summary: "Update applicationMethod", operationId: "update" })
   @UseInterceptors(new TransformInterceptor(ApplicationMethodDto))
   async update(@Body() applicationMethod: ApplicationMethodUpdateDto): Promise<ApplicationMethod> {
     return this.applicationMethodsService.update(applicationMethod)

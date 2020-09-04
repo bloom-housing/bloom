@@ -42,7 +42,7 @@ export class PreferencesController {
 
   @Put(`:preferenceId`)
   @UseGuards(DefaultAuthGuard)
-  @ApiOperation({ summary: "Update preference", operationId: "create" })
+  @ApiOperation({ summary: "Update preference", operationId: "update" })
   @UseInterceptors(new TransformInterceptor(PreferenceDto))
   async update(@Body() preference: PreferenceUpdateDto): Promise<Preference> {
     return this.preferencesService.update(preference)

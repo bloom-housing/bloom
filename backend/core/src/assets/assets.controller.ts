@@ -38,7 +38,7 @@ export class AssetsController {
   }
 
   @Put(`:assetId`)
-  @ApiOperation({ summary: "Update asset", operationId: "create" })
+  @ApiOperation({ summary: "Update asset", operationId: "update" })
   @UseInterceptors(new TransformInterceptor(AssetDto))
   async update(@Body() asset: AssetUpdateDto): Promise<AssetDto> {
     return this.assetsService.update(asset)

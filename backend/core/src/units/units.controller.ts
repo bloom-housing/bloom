@@ -42,7 +42,7 @@ export class UnitsController {
 
   @Put(`:unitId`)
   @UseGuards(DefaultAuthGuard)
-  @ApiOperation({ summary: "Update unit", operationId: "create" })
+  @ApiOperation({ summary: "Update unit", operationId: "update" })
   @UseInterceptors(new TransformInterceptor(UnitDto))
   async update(@Body() unit: UnitUpdateDto): Promise<Unit> {
     return this.unitsService.update(unit)
