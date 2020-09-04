@@ -23,7 +23,7 @@ export default () => {
   return (
     <FormsLayout>
       <FormCard header="Confirmation">
-        <div className="py-2 hide-for-print">
+        <div className="py-2">
           {listing && (
             <Link
               href={`listing/id=${listing.id}`}
