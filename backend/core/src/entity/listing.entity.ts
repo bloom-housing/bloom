@@ -324,7 +324,10 @@ class Listing extends BaseEntity {
   status: ListingStatus
 
   // # TODO
+  @Expose()
   unitsSummarized?: UnitsSummarized
+
+  @Expose()
   urlSlug?: string
 }
 
