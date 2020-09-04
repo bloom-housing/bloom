@@ -10,7 +10,7 @@ import {
   Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { emailRegex } from "../lib/emailRegex"
+import { emailRegex } from "../lib/helpers"
 import { useRedirectToPrevPage } from "../lib/hooks"
 
 export default () => {
