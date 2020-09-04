@@ -5,11 +5,11 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm"
 import { Listing, ListingStatus } from "./listing.entity"
 import { Expose } from "class-transformer"
-import { IS_ENUM, IsBoolean, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsBoolean, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
 
 export enum ApplicationMethodType {
   Internal = "Internal",

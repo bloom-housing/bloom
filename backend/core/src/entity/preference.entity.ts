@@ -5,7 +5,7 @@ import {
   ManyToOne,
   UpdateDateColumn,
   CreateDateColumn,
-  BaseEntity
+  BaseEntity,
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import { Expose, Type } from "class-transformer"

@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UseInterceptors } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common"
 import { PreferencesService } from "../preferences/preferences.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"

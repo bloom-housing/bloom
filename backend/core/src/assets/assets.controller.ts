@@ -7,7 +7,7 @@ import {
   Param,
   Post,
   Put,
-  UseInterceptors
+  UseInterceptors,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
@@ -16,7 +16,6 @@ import { Asset } from "../entity/asset.entity"
 import { AssetCreateDto } from "./asset.create.dto"
 import { AssetUpdateDto } from "./asset.update.dto"
 import { AssetDto } from "./asset.dto"
-
 
 @Controller("assets")
 @ApiTags("assets")
@@ -57,5 +56,3 @@ export class AssetsController {
     await this.assetsService.delete(assetId)
   }
 }
-
-

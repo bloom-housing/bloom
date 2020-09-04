@@ -4,7 +4,8 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn, UpdateDateColumn
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import { IsDateString, IsObject, IsString, IsUUID } from "class-validator"

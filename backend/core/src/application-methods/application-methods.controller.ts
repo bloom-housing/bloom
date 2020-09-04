@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UseInterceptors } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
 import { ApplicationMethod } from "../entity/application-method.entity"
@@ -42,7 +52,9 @@ export class ApplicationMethodsController {
   @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Get applicationMethod by id", operationId: "retrieve" })
   @UseInterceptors(new TransformInterceptor(ApplicationMethodDto))
-  async retrieve(@Param("applicationMethodId") applicationMethodId: string): Promise<ApplicationMethod> {
+  async retrieve(
+    @Param("applicationMethodId") applicationMethodId: string
+  ): Promise<ApplicationMethod> {
     return await this.applicationMethodsService.findOne(applicationMethodId)
   }
 

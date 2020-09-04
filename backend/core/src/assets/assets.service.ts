@@ -42,4 +42,3 @@ export class AssetsService {
     return asset
   }
 }
-

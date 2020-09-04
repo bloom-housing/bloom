@@ -5,7 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
-  BaseEntity
+  BaseEntity,
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import { IsDate, IsDateString, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
