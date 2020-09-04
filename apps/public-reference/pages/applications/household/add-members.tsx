@@ -11,6 +11,7 @@ import {
   ProgressNav,
   t,
   HouseholdSizeField,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -70,7 +71,7 @@ export default () => {
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <HouseholdSizeField
               listing={listing}
@@ -89,7 +90,7 @@ export default () => {
             />
             {membersSection}
           </div>
-        </form>
+        </Form>
         <div className="form-card__group pt-0 mt-0">
           <div className="text-center">
             <Button onClick={onAddMember}>

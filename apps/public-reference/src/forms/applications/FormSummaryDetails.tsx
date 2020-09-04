@@ -58,6 +58,19 @@ const reformatAddress = (address: Address) => {
 }
 
 const FormSummaryDetails = ({ application, editMode = false }) => {
+  const alternateContactName = () => {
+    switch (application.alternateContact.type) {
+      case "other":
+        return application.alternateContact.otherType
+      case "caseManager":
+        return application.alternateContact.agency
+      case "":
+        return ""
+      default:
+        return t(`application.alternateContact.type.options.${application.alternateContact.type}`)
+    }
+  }
+
   return (
     <>
       <h3 className="form--card__sub-header">
@@ -110,6 +123,14 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
             <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
           </ReviewItem>
         )}
+
+        {application.contactPreferences && (
+          <ReviewItem label={t("application.contact.preferredContactType")}>
+            {application.contactPreferences
+              ?.map((item) => t(`application.form.options.contact.${item}`))
+              .join(", ")}
+          </ReviewItem>
+        )}
       </div>
 
       {application.alternateContact.type !== "" &&
@@ -119,61 +140,81 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               {t("application.alternateContact.type.label")}
               {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
             </h3>
+
             <div className="form-card__group mx-0">
-              <ReviewItem
-                label={t(
-                  `application.alternateContact.type.options.${application.alternateContact.type}`
-                )}
-              >
+              <p className="field-note mb-5">
+                {t(`application.alternateContact.type.description`)}
+              </p>
+              <ReviewItem label={t("t.name")} sublabel={alternateContactName()}>
                 {application.alternateContact.firstName} {application.alternateContact.lastName}
-                <br />
-                {application.alternateContact.phoneNumber}
-                <br />
-                {application.alternateContact.emailAddress}
               </ReviewItem>
+
+              {application.alternateContact.emailAddress && (
+                <ReviewItem label={t("t.email")}>
+                  {application.alternateContact.emailAddress}
+                </ReviewItem>
+              )}
+
+              {application.alternateContact.phoneNumber && (
+                <ReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
+                  {application.alternateContact.phoneNumber}
+                </ReviewItem>
+              )}
+
+              {application.alternateContact.mailingAddress && (
+                <ReviewItem label={t("application.contact.address")}>
+                  <MultiLineAddress address={application.alternateContact.mailingAddress} />
+                </ReviewItem>
+              )}
             </div>
           </>
         )}
 
-      <h3 className="form--card__sub-header">
-        {t("application.household.householdMembers")}
-        {editMode && <EditLink href="/applications/household/add-members" />}
-      </h3>
+      {application.householdSize > 1 && (
+        <>
+          <h3 className="form--card__sub-header">
+            {t("application.household.householdMembers")}
+            {editMode && <EditLink href="/applications/household/add-members" />}
+          </h3>
 
-      {application.householdSize > 0 && (
-        <div className="form-card__group info-group mx-0">
-          {application.householdMembers.map((member) => (
-            <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
-              <p className="info-item__value">
-                {member.firstName} {member.lastName}
-              </p>
-              <div>
-                <ReviewItem label={t("application.household.member.dateOfBirth")}>
-                  {member.birthMonth}/{member.birthDay}/{member.birthYear}
-                </ReviewItem>
-                {member.sameAddress === "no" && (
-                  <ReviewItem label={t("application.contact.address")}>
-                    <MultiLineAddress address={reformatAddress(member.address)} />
+          <div className="form-card__group info-group mx-0">
+            {application.householdMembers.map((member) => (
+              <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
+                <p className="info-item__value">
+                  {member.firstName} {member.lastName}
+                </p>
+                <div>
+                  <ReviewItem label={t("application.household.member.dateOfBirth")}>
+                    {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </ReviewItem>
-                )}
-                {member.sameAddress !== "no" && (
-                  <ReviewItem label={t("application.review.sameAddressAsApplicant")}></ReviewItem>
-                )}
+                  {member.sameAddress === "no" && (
+                    <ReviewItem label={t("application.contact.address")}>
+                      <MultiLineAddress address={reformatAddress(member.address)} />
+                    </ReviewItem>
+                  )}
+                  {member.sameAddress !== "no" && (
+                    <ReviewItem label={t("application.review.sameAddressAsApplicant")}></ReviewItem>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-      {application.householdSize === 0 && (
-        <div className="form-card__group mx-0">{t("application.review.noAdditionalMembers")}</div>
+            ))}
+          </div>
+        </>
       )}
 
       <h3 className="form--card__sub-header">
         {t("application.review.householdDetails")}
-        {editMode && <EditLink href="/applications/household/ada" />}
+        {editMode && <EditLink href="/applications/household/preferred-units" />}
       </h3>
 
       <div className="form-card__group mx-0">
+        {application.preferredUnit && (
+          <ReviewItem label={t("application.household.preferredUnit.preferredUnitType")}>
+            {application.preferredUnit
+              .map((item) => t(`application.household.preferredUnit.options.${item}`))
+              .join(", ")}
+          </ReviewItem>
+        )}
         <ReviewItem label={t("application.ada.label")}>
           {accessibilityLabels(application.accessibility).map((item) => (
             <Fragment key={item}>

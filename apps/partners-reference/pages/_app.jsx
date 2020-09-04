@@ -68,7 +68,7 @@ class MyApp extends App {
     return (
       <ConfigProvider apiUrl={process.env.listingServiceUrl}>
         <UserProvider>
-          <RequireLogin signInPath={`/sign-in?message=${encodeURIComponent(signInMessage)}`}>
+          <RequireLogin signInPath="/sign-in" signInMessage={signInMessage}>
             <ApiClientProvider>
               <Component {...pageProps} />
             </ApiClientProvider>
