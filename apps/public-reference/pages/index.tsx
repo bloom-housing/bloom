@@ -7,7 +7,7 @@ import {
   MarkdownSection,
   MetaTags,
   t,
-  UrlAlert,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
@@ -49,8 +49,8 @@ export default class extends Component<IndexProps> {
         </Head>
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <div className="flex absolute w-full flex-col items-center">
-          <UrlAlert type="alert" urlParam="alert" className={alertClasses} />
-          <UrlAlert type="success" urlParam="success" className={alertClasses} timeout={30000} />
+          <SiteAlert type="alert" className={alertClasses} />
+          <SiteAlert type="success" className={alertClasses} timeout={30000} />
         </div>
         <Hero
           title={heroTitle}
