@@ -164,7 +164,6 @@ export default () => {
                   label={t("application.name.firstName")}
                   placeholder={t("application.name.firstName")}
                   readerOnly={true}
-                  controlClassName="mt-2"
                   defaultValue={member.firstName}
                   validation={{ required: true }}
                   error={errors.firstName}
@@ -291,9 +290,10 @@ export default () => {
             </div>
 
             <div className="form-card__group border-b">
+              <fieldset>
+              <legend className="field-label--caps">{t("application.household.member.workInRegion")}</legend>
               <FieldGroup
                 name="workInRegion"
-                groupLabel={t("application.household.member.workInRegion")}
                 groupNote={t("application.household.member.workInRegionNote")}
                 type="radio"
                 register={register}
@@ -302,9 +302,10 @@ export default () => {
                 errorMessage={t("application.form.errors.selectOption")}
                 fields={workInRegionOptions}
               />
+              </fieldset>
 
               {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
-                <div className="pt-4">
+                <div className="pt-8">
                   <fieldset>
                     <legend className="field-label--caps">{t("application.contact.address")}</legend>
 

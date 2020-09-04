@@ -67,6 +67,7 @@ export default () => {
             <PhoneField
               name="phoneNumber"
               label={t("application.alternateContact.contact.phoneNumberFormLabel")}
+              readerOnly={true}
               error={errors.phoneNumber}
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
@@ -91,7 +92,7 @@ export default () => {
           <div className="form-card__group">
             <fieldset>
               <legend className="field-label--caps">{t("application.alternateContact.contact.contactMailingAddressLabel")}</legend>
-              <p className="field-note mb-2">
+              <p className="field-note mb-4">
                 {t("application.alternateContact.contact.contactMailingAddressHelperText")}
               </p>
               <Field

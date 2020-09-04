@@ -16,12 +16,9 @@
     @apply mt-2;
   }
 
+  label.sr-only + .control,
   label.field-label--caps + .control {
     @apply mt-0;
-  }
-
-  .field-label--caps {
-    @apply mb-0;
   }
 
   .control {

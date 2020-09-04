@@ -92,10 +92,9 @@ export default () => {
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
-            <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
-
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
+              <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
               <FieldGroup
                 type="radio"
                 name="incomeVouchers"

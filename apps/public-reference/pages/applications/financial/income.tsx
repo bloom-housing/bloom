@@ -156,14 +156,12 @@ export default () => {
 
         <Form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
-            <p className="field-label mb-2">{t("application.financial.income.prompt")}</p>
-
             <Field
               id="income"
               name="income"
               type="number"
-              label={t("application.financial.income.placeholder")}
-              readerOnly={true}
+              label={t("application.financial.income.prompt")}
+              caps={true}
               placeholder={t("application.financial.income.placeholder")}
               validation={{ required: true, min: 0.01 }}
               error={errors.income}

@@ -102,12 +102,10 @@ export default () => {
 
         <Form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="applicant.phoneNumber">
-              {t("application.contact.yourPhoneNumber")}
-            </label>
-
             <PhoneField
               name="applicant.phoneNumber"
+              label={t("application.contact.yourPhoneNumber")}
+              caps={true}
               error={!noPhone ? errors.applicant?.phoneNumber : false}
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
@@ -168,12 +166,10 @@ export default () => {
 
             {additionalPhone && (
               <>
-                <label className="field-label--caps" htmlFor="applicant.phoneNumber">
-                  {t("application.contact.yourAdditionalPhoneNumber")}
-                </label>
-
                 <PhoneField
                   name="additionalPhoneNumber"
+                  label={t("application.contact.yourAdditionalPhoneNumber")}
+                  caps={true}
                   error={errors.additionalPhoneNumber}
                   errorMessage={t("application.contact.phoneNumberError")}
                   control={control}

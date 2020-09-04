@@ -34,11 +34,10 @@ const DOBField = (props: DOBFieldProps) => {
       <legend className="field-label--caps">{props.label}</legend>
 
       <div className="field-group--dob">
-        <label htmlFor={fieldName("birthMonth")} className="sr-only">
-          {t("t.month")}
-        </label>
         <Field
           name={fieldName("birthMonth")}
+          label={t("t.month")}
+          readerOnly={true}
           placeholder="MM"
           defaultValue={"" + (applicant.birthMonth > 0 ? applicant.birthMonth : "")}
           error={error?.birthMonth}
@@ -51,11 +50,10 @@ const DOBField = (props: DOBFieldProps) => {
           inputProps={{ maxLength: 2 }}
           register={register}
         />
-        <label htmlFor={fieldName("birthDay")} className="sr-only">
-          {t("t.day")}
-        </label>
         <Field
           name={fieldName("birthDay")}
+          label={t("t.day")}
+          readerOnly={true}
           placeholder="DD"
           defaultValue={"" + (applicant.birthDay > 0 ? applicant.birthDay : "")}
           error={error?.birthDay}
@@ -68,11 +66,10 @@ const DOBField = (props: DOBFieldProps) => {
           inputProps={{ maxLength: 2 }}
           register={register}
         />
-        <label htmlFor={fieldName("birthYear")} className="sr-only">
-          {t("t.year")}
-        </label>
         <Field
           name={fieldName("birthYear")}
+          label={t("t.year")}
+          readerOnly={true}
           placeholder="YYYY"
           defaultValue={"" + (applicant.birthYear > 0 ? applicant.birthYear : "")}
           error={error?.birthYear}

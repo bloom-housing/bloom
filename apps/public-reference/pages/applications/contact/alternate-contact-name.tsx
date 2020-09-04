@@ -83,13 +83,12 @@ export default () => {
                 register={register}
               />
               {application.alternateContact.type === "caseManager" && (
-                <>
-                  <label className="field-label--caps mt-4" htmlFor="agency">
-                    {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                  </label>
+                <div className="mt-6">
                   <Field
                     id="agency"
                     name="agency"
+                    label={t("application.alternateContact.name.caseManagerAgencyFormLabel")}
+                    caps={true}
                     placeholder={t(
                       "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
                     )}
@@ -101,7 +100,7 @@ export default () => {
                     )}
                     register={register}
                   />
-                </>
+                </div>
               )}
             </fieldset>
           </div>

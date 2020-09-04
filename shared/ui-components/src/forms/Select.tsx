@@ -32,12 +32,10 @@ export const Select = ({
   placeholder,
   register,
   validation,
-  disabled = false,
+  disabled,
   options,
   keyPrefix,
 }: SelectProps) => {
-  const idOrName = id || name
-
   return (
     <div className={"field " + (error ? "error" : "")}>
       <label className={labelClassName} htmlFor={id}>
@@ -45,10 +43,8 @@ export const Select = ({
       </label>
       <div className={controlClassName}>
         <select
-          aria-describedby={`${idOrName}-error`}
-          aria-invalid={!!error || false}
           className="input"
-          id={idOrName}
+          id={id || name}
           name={name}
           defaultValue={defaultValue}
           ref={register(validation)}
@@ -62,11 +58,7 @@ export const Select = ({
           <FormOptions options={options} keyPrefix={keyPrefix} />
         </select>
       </div>
-      {error && errorMessage && (
-        <ErrorMessage id={`${idOrName}-error`} error={error}>
-          {errorMessage}
-        </ErrorMessage>
-      )}
+      {error && errorMessage && <ErrorMessage error={error}>{errorMessage}</ErrorMessage>}
     </div>
   )
 }
