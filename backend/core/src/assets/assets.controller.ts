@@ -16,6 +16,7 @@ export class AssetsController {
 
   @Get()
   @ApiOperation({ summary: "List assets", operationId: "list" })
+  @UseInterceptors(new TransformInterceptor(AssetDto))
   async list(): Promise<Asset[]> {
     return await this.assetsService.list()
   }
