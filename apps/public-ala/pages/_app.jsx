@@ -3,10 +3,42 @@ import App from "next/app"
 import Router from "next/router"
 import "@bloom-housing/ui-components/styles/index.scss"
 import "../styles/overrides.scss"
-import { addTranslation } from "@bloom-housing/ui-components"
+import {
+  addTranslation,
+  UserProvider,
+  ConfigProvider,
+  ApiClientProvider,
+  LoggedInUserIdleTimeout,
+} from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
+import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
+import ApplicationConductor, {
+  loadApplicationFromAutosave,
+  loadSavedListing,
+} from "../lib/ApplicationConductor"
 
 class MyApp extends App {
+  constructor(props) {
+    super(props)
+
+    // Load autosaved listing application, if any
+    const application = loadApplicationFromAutosave() || blankApplication()
+    const savedListing = loadSavedListing()
+    this.state = {
+      conductor: new ApplicationConductor(application, savedListing),
+      application: application,
+      listing: savedListing,
+    }
+  }
+
+  // This gets passed along through the context
+  syncApplication = (data) => {
+    this.setState({ application: data })
+  }
+  syncListing = (data) => {
+    this.setState({ listing: data })
+  }
+
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {} // you can add custom props that pass down to all pages here
 
@@ -72,7 +104,26 @@ class MyApp extends App {
       }
     }
 
-    return <Component {...pageProps} />
+    return (
+      <AppSubmissionContext.Provider
+        value={{
+          conductor: this.state.conductor,
+          application: this.state.application,
+          listing: this.state.listing,
+          syncApplication: this.syncApplication,
+          syncListing: this.syncListing,
+        }}
+      >
+        <ConfigProvider apiUrl={process.env.listingServiceUrl}>
+          <UserProvider>
+            <ApiClientProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => this.state.conductor.reset()} />
+              <Component {...pageProps} />
+            </ApiClientProvider>
+          </UserProvider>
+        </ConfigProvider>
+      </AppSubmissionContext.Provider>
+    )
   }
 }
 

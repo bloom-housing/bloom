@@ -141,7 +141,7 @@ export default class extends Component<ListingProps> {
               <p className="text-gray-700 text-base">{listing.developer}</p>
               <p className="text-xs">
                 <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
-                  View on Map
+                  {t("t.viewOnMap")}
                 </a>
               </p>
             </div>
@@ -165,7 +165,9 @@ export default class extends Component<ListingProps> {
 
                 return (
                   <>
-                    <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
+                    <h2 className="mt-4 mb-2">
+                      {t("listings.percentAMIUnit", { percent: percent })}
+                    </h2>
                     <GroupedTable
                       headers={unitSummariesHeaders}
                       data={groupedUnits}
@@ -187,7 +189,7 @@ export default class extends Component<ListingProps> {
           </div>
           <ListingDetails>
             <ListingDetailItem
-              imageAlt="eligibility-notebook"
+              imageAlt={t("listings.eligibilityNotebook")}
               imageSrc="/images/listing-eligibility.svg"
               title={t("listings.sections.eligibilityTitle")}
               subtitle={t("listings.sections.eligibilitySubtitle")}
@@ -243,14 +245,14 @@ export default class extends Component<ListingProps> {
             </ListingDetailItem>
 
             <ListingDetailItem
-              imageAlt="process-info"
+              imageAlt={t("listings.processInfo")}
               imageSrc="/images/listing-process.svg"
               title={t("listings.sections.processTitle")}
               subtitle={t("listings.sections.processSubtitle")}
               hideHeader={true}
               desktopClass="header-hidden"
             >
-              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 mb-5 md:ml-2 h-full md:border border-gray-400 bg-white">
+              <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
                   <ApplicationSection listing={listing} />
@@ -261,7 +263,7 @@ export default class extends Component<ListingProps> {
             </ListingDetailItem>
 
             <ListingDetailItem
-              imageAlt="features-cards"
+              imageAlt={t("listings.featuresCards")}
               imageSrc="/images/listing-features.svg"
               title={t("listings.sections.featuresTitle")}
               subtitle={t("listings.sections.featuresSubtitle")}
@@ -290,20 +292,22 @@ export default class extends Component<ListingProps> {
               </div>
             </ListingDetailItem>
 
-            <ListingDetailItem
-              imageAlt="neighborhood-buildings"
-              imageSrc="/images/listing-neighborhood.svg"
-              title={t("listings.sections.neighborhoodTitle")}
-              subtitle={t("listings.sections.neighborhoodSubtitle")}
-              desktopClass="bg-primary-lighter"
-            >
-              <div className="listing-detail-panel">
-                <ListingMap address={listing.buildingAddress} listing={listing} />
-              </div>
-            </ListingDetailItem>
+            {listing?.buildingAddress.latitude && listing?.buildingAddress.longitude && (
+              <ListingDetailItem
+                imageAlt={t("listings.neighborhoodBuildings")}
+                imageSrc="/images/listing-neighborhood.svg"
+                title={t("listings.sections.neighborhoodTitle")}
+                subtitle={t("listings.sections.neighborhoodSubtitle")}
+                desktopClass="bg-primary-lighter"
+              >
+                <div className="listing-detail-panel">
+                  <ListingMap address={listing.buildingAddress} listing={listing} />
+                </div>
+              </ListingDetailItem>
+            )}
 
             <ListingDetailItem
-              imageAlt="additional-information-envelope"
+              imageAlt={t("listings.additionalInformationEnvelope")}
               imageSrc="/images/listing-legal.svg"
               title={t("listings.sections.additionalInformationTitle")}
               subtitle={t("listings.sections.additionalInformationSubtitle")}

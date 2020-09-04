@@ -1,5 +1,6 @@
 .field {
   margin-bottom: 1.25rem;
+
   * > &:last-child {
     margin-bottom: 0;
   }
@@ -210,8 +211,8 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
+input[type=number] {
+  -moz-appearance:textfield;
 }
 
 .field-label {
@@ -237,6 +238,7 @@ input[type="number"] {
 .field--inline {
   display: inline-block;
 }
+
 .field--inline + .field--inline {
   margin-left: 1.5rem;
 }
