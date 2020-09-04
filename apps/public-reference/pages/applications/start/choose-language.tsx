@@ -13,17 +13,19 @@ import {
   ProgressNav,
   t,
   Form,
+  UserContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useEffect, useMemo, useState } from "react"
+import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
+import { useContext, useEffect, useState } from "react"
+import { resolversLibrary } from "../../../lib/resolversLibrary"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
   conductor.listing =
     response.data.listings.find((listing) => listing.id == listingId) || response.data.listings[2] // FIXME: temporary fallback
+  conductor.config = retrieveApplicationConfig() // TODO: load from backend
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
 }
@@ -32,11 +34,13 @@ export default () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
+  const userContext = useContext(UserContext)
   const { conductor, application } = context
 
   const listingId = router.query.listingId
 
   useEffect(() => {
+    conductor.resolvers = resolversLibrary(context, userContext)
     loadListing(listingId, setListing, conductor, context)
   }, [])
 
@@ -47,7 +51,8 @@ export default () => {
   const onSubmit = () => {
     conductor.sync()
 
-    router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
+    //    router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
   }
 
   return (

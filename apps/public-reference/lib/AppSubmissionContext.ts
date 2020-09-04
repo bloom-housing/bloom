@@ -1,6 +1,50 @@
 import React from "react"
 import ApplicationConductor from "./ApplicationConductor"
 
+export const retrieveApplicationConfig = () => {
+  // Note: this whole function will eventually be replaced with one that reads this from the backend.
+  return {
+    //    listing: {}, // TODO: actual listing object
+    //    status: "TODO: ENUM GOES HERE",
+    languages: ["en", "es"],
+    steps: [
+      {
+        name: "Choose Language", // not user-facing, only shows in partners; user text from the step itself
+        url: "/applications/start/choose-language",
+        nextUrl: "/applications/start/what-to-expect",
+      },
+      {
+        name: "What To Expect",
+        url: "/applications/start/what-to-expect",
+        skipIf: [{ condition: "requiresLogin", skipTo: "/applications/preferences/general" }],
+        nextUrl: "/applications/contact/name",
+      },
+      {
+        name: "Primary Applicant Name",
+        url: "/applications/contact/name",
+        nextUrl: "/applications/start/address",
+      },
+      // [...]
+      {
+        name: "Senior Building Preference",
+        url: "/applications/preferences/senior",
+        props: { minAge: 65 },
+        // this isn't conditional because the config object is on a per-listing basis
+        nextUrl: "/applications/preferences/livework",
+      },
+      {
+        name: "Live/Work Preference",
+        url: "/applications/preferences/livework",
+        skipIf: {
+          condition: "application.applicant.address.city != 'Correctville'",
+          skipTo: "/applications/start/what-to-expect",
+        },
+        nextUrl: "/applications/start/what-to-expect",
+      },
+    ],
+  }
+}
+
 export const blankApplication = () => {
   return {
     loaded: false,

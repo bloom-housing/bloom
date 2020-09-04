@@ -10,13 +10,14 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { useContext } from "react"
 
 export default () => {
-  const { application, listing } = useContext(AppSubmissionContext)
+  const { application, conductor, listing } = useContext(AppSubmissionContext)
+  conductor.currentStep = 1
   const currentPageStep = 1
 
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
-    Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
 
   return (
