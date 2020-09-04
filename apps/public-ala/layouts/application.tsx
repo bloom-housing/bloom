@@ -23,6 +23,7 @@ const Layout = (props) => {
           <title>{t("nav.siteTitle")}</title>
         </Head>
         <SiteHeader
+          skip={t("nav.skip")}
           logoSrc="/images/logo_glyph.svg"
           notice={
             <>
