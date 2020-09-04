@@ -15,7 +15,6 @@ export const PhoneField = (props: {
   control: any
   disabled?: boolean
 }) => {
-
   const labelClasses = ["label"]
   if (props.caps) labelClasses.push("field-label--caps")
   if (props.readerOnly) labelClasses.push("sr-only")

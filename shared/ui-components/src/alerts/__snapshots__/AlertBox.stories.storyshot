@@ -14,6 +14,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Alert 1`] = `
   >
     <div
       className="alert-box alert"
+      role="alert"
     >
       <span
         className="alert-box__icon"
@@ -71,6 +72,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Alert Invert 1`] = `
   >
     <div
       className="alert-box alert invert"
+      role="alert"
     >
       <span
         className="alert-box__icon"
@@ -128,6 +130,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Notice 1`] = `
   >
     <div
       className="alert-box primary"
+      role="alert"
     >
       <span
         className="alert-box__icon"
@@ -185,6 +188,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Notice Invert 1`] = `
   >
     <div
       className="alert-box primary invert"
+      role="alert"
     >
       <span
         className="alert-box__icon"
@@ -242,6 +246,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Success 1`] = `
   >
     <div
       className="alert-box success"
+      role="alert"
     >
       <span
         className="alert-box__icon"
@@ -299,6 +304,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Success Invert 1`] = `
   >
     <div
       className="alert-box success invert"
+      role="alert"
     >
       <span
         className="alert-box__icon"

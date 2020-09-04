@@ -5,16 +5,17 @@ https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
 import {
+  AlertBox,
   Button,
+  contactPreferencesKeys,
   ErrorMessage,
   Field,
-  FormCard,
-  ProgressNav,
-  t,
-  mergeDeep,
-  contactPreferencesKeys,
   FieldGroup,
   Form,
+  FormCard,
+  mergeDeep,
+  ProgressNav,
+  t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -39,6 +40,7 @@ export default () => {
       sendMailToMailingAddress: application.sendMailToMailingAddress,
       workInRegion: application.applicant.workInRegion,
     },
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     mergeDeep(application, data)
@@ -59,6 +61,9 @@ export default () => {
     conductor.sync()
 
     conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const noPhone = watch("applicant.noPhone", application.applicant.noPhone)
@@ -100,7 +105,13 @@ export default () => {
           </h2>
         </div>
 
-        <Form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <PhoneField
               name="applicant.phoneNumber"
@@ -282,7 +293,9 @@ export default () => {
           {(sendMailToMailingAddress || application.sendMailToMailingAddress) && (
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">{t("application.contact.mailingAddress")}</legend>
+                <legend className="field-label--caps">
+                  {t("application.contact.mailingAddress")}
+                </legend>
 
                 <p className="field-note mb-4">{t("application.contact.provideAMailingAddress")}</p>
 
@@ -351,7 +364,9 @@ export default () => {
           )}
           <div className="form-card__group border-b">
             <fieldset>
-              <legend className="field-label--caps">{t("application.contact.contactPreference")}</legend>
+              <legend className="field-label--caps">
+                {t("application.contact.contactPreference")}
+              </legend>
               <FieldGroup
                 name="contactPreferences"
                 fields={contactPreferencesOptions}
@@ -365,9 +380,7 @@ export default () => {
           </div>
 
           <div className="form-card__group">
-            <h3 className="field-label--caps">
-              {t("application.contact.doYouWorkIn")}
-            </h3>
+            <h3 className="field-label--caps">{t("application.contact.doYouWorkIn")}</h3>
 
             <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
@@ -411,7 +424,9 @@ export default () => {
             (!workInRegion && application.applicant.workInRegion == "yes")) && (
             <div className="form-card__group pt-0">
               <fieldset>
-                <legend className="field-label--caps">{t("application.contact.workAddress")}</legend>
+                <legend className="field-label--caps">
+                  {t("application.contact.workAddress")}
+                </legend>
 
                 <Field
                   id="workAddressStreet"
@@ -476,7 +491,6 @@ export default () => {
               </fieldset>
             </div>
           )}
-          
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

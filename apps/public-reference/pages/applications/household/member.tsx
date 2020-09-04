@@ -4,17 +4,18 @@ Add household members
 */
 import Router, { useRouter } from "next/router"
 import {
+  AlertBox,
   Button,
   DOBField,
-  Field,
-  FormCard,
-  ProgressNav,
-  t,
   ErrorMessage,
-  FormOptions,
+  Field,
   FieldGroup,
-  relationshipKeys,
   Form,
+  FormCard,
+  FormOptions,
+  ProgressNav,
+  relationshipKeys,
+  t,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
@@ -88,11 +89,16 @@ export default () => {
   }
 
   /* Form Handler */
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors, watch } = useForm({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
     Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
   const deleteMember = () => {
     if (member.id != undefined) {
@@ -154,16 +160,23 @@ export default () => {
         </div>
 
         {member && (
-          <Form className="" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-card__group border-b">
-              <fieldset>
-                <legend className="field-label--caps" htmlFor="firstName">{t("application.household.member.name")}</legend>
+          <>
+            {Object.entries(errors).length > 0 && (
+              <AlertBox type="alert" inverted>
+                {t("t.errorsToResolve")}
+              </AlertBox>
+            )}
+
+            <Form onSubmit={handleSubmit(onSubmit, onError)}>
+              <div className="form-card__group border-b">
+                <label className="field-label--caps" htmlFor="firstName">
+                  {t("application.household.member.name")}
+                </label>
 
                 <Field
                   name="firstName"
-                  label={t("application.name.firstName")}
                   placeholder={t("application.name.firstName")}
-                  readerOnly={true}
+                  controlClassName="mt-2"
                   defaultValue={member.firstName}
                   validation={{ required: true }}
                   error={errors.firstName}
@@ -173,61 +186,56 @@ export default () => {
 
                 <Field
                   name="middleName"
-                  label={t("application.name.middleName")}
                   placeholder={t("application.name.middleName")}
-                  readerOnly={true}
                   defaultValue={member.middleName}
                   register={register}
                 />
 
                 <Field
                   name="lastName"
-                  label={t("application.name.lastName")}
                   placeholder={t("application.name.lastName")}
-                  readerOnly={true}
                   defaultValue={member.lastName}
                   validation={{ required: true }}
                   error={errors.lastName}
                   errorMessage={t("application.name.lastNameError")}
                   register={register}
                 />
-              </fieldset>
-            </div>
+              </div>
 
-            <div className="form-card__group border-b">
-              <DOBField
-                applicant={member}
-                register={register}
-                error={errors}
-                watch={watch}
-                label={t("application.household.member.dateOfBirth")}
-              />
-            </div>
-
-            <div className="form-card__group border-b">
-              <fieldset>
-                <legend className="sr-only">{t("application.contact.doYouWorkIn")}</legend>
-                <FieldGroup
-                  name="sameAddress"
-                  groupLabel={t("application.household.member.haveSameAddress")}
-                  type="radio"
+              <div className="form-card__group border-b">
+                <DOBField
+                  applicant={member}
                   register={register}
-                  validation={{ required: true }}
-                  error={errors.sameAddress}
-                  errorMessage={t("application.form.errors.selectOption")}
-                  fields={sameAddressOptions}
+                  error={errors}
+                  watch={watch}
+                  label={t("application.household.member.dateOfBirth")}
                 />
+              </div>
+
+              <div className="form-card__group border-b">
+                <fieldset>
+                  <legend className="sr-only">{t("application.contact.doYouWorkIn")}</legend>
+                  <FieldGroup
+                    name="sameAddress"
+                    groupLabel={t("application.household.member.haveSameAddress")}
+                    type="radio"
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.sameAddress}
+                    errorMessage={t("application.form.errors.selectOption")}
+                    fields={sameAddressOptions}
+                  />
                 </fieldset>
 
                 {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
-                <div className="pt-8">
-                  <fieldset>
-                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
+                  <>
+                    <label className="field-label--caps" htmlFor="street">
+                      {t("application.contact.address")}
+                    </label>
 
                     <Field
                       id="addressStreet"
                       name="address.street"
-                      label={t("application.contact.streetAddress")}
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.address.street}
                       validation={{ required: true }}
@@ -261,7 +269,7 @@ export default () => {
                       <Select
                         id="addressState"
                         name="address.state"
-                        label={t("application.contact.state")}
+                        label="State"
                         defaultValue={member.address.state}
                         validation={{ required: true }}
                         error={errors.address?.state}
@@ -276,43 +284,44 @@ export default () => {
                     <Field
                       id="addressZipCode"
                       name="address.zipCode"
-                      label={t("application.contact.zip")}
-                      placeholder={t("application.contact.zipCode")}
+                      label="Zip"
+                      placeholder="Zipcode"
                       defaultValue={member.address.zipCode}
                       validation={{ required: true }}
                       error={errors.address?.zipCode}
                       errorMessage={t("application.contact.zipCodeError")}
                       register={register}
                     />
-                  </fieldset>
-                </div>
-              )}
-            </div>
+                  </>
+                )}
+              </div>
 
-            <div className="form-card__group border-b">
-              <fieldset>
-              <legend className="field-label--caps">{t("application.household.member.workInRegion")}</legend>
-              <FieldGroup
-                name="workInRegion"
-                groupNote={t("application.household.member.workInRegionNote")}
-                type="radio"
-                register={register}
-                validation={{ required: true }}
-                error={errors.workInRegion}
-                errorMessage={t("application.form.errors.selectOption")}
-                fields={workInRegionOptions}
-              />
-              </fieldset>
+              <div className="form-card__group border-b">
+                <fieldset>
+                  <legend className="field-label--caps">
+                    {t("application.household.member.workInRegion")}
+                  </legend>
+                  <FieldGroup
+                    name="workInRegion"
+                    groupNote={t("application.household.member.workInRegionNote")}
+                    type="radio"
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.workInRegion}
+                    errorMessage={t("application.form.errors.selectOption")}
+                    fields={workInRegionOptions}
+                  />
+                </fieldset>
 
-              {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
-                <div className="pt-8">
-                  <fieldset>
-                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
+                {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
+                  <>
+                    <label className="field-label--caps" htmlFor="street">
+                      {t("application.contact.address")}
+                    </label>
 
                     <Field
                       id="addressStreet"
                       name="workAddress.street"
-                      label={t("application.contact.streetAddress")}
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.workAddress.street}
                       validation={{ required: true }}
@@ -346,7 +355,7 @@ export default () => {
                       <Select
                         id="addressState"
                         name="workAddress.state"
-                        label={t("application.contact.state")}
+                        label="State"
                         defaultValue={member.workAddress.state}
                         validation={{ required: true }}
                         error={errors.workAddress?.state}
@@ -361,55 +370,63 @@ export default () => {
                     <Field
                       id="addressZipCode"
                       name="workAddress.zipCode"
-                      label={t("application.contact.zip")}
-                      placeholder={t("application.contact.zipCode")}
+                      label="Zip"
+                      placeholder="Zipcode"
                       defaultValue={member.workAddress.zipCode}
                       validation={{ required: true }}
                       error={errors.workAddress?.zipCode}
                       errorMessage={t("application.contact.zipCodeError")}
                       register={register}
                     />
-                  </fieldset>
+                  </>
+                )}
+              </div>
+
+              <div className="form-card__group">
+                <div className={"field " + (errors.relationship ? "error" : "")}>
+                  <label className="field-label--caps" htmlFor="relationship">
+                    {t("application.household.member.whatIsTheirRelationship")}
+                  </label>
+                  <div className="control">
+                    <select
+                      id="relationship"
+                      name="relationship"
+                      defaultValue={member.relationship}
+                      ref={register({ required: true })}
+                      className="w-full"
+                    >
+                      <FormOptions
+                        options={relationshipKeys}
+                        keyPrefix="application.form.options.relationship"
+                      />
+                    </select>
+                  </div>
+                  <ErrorMessage error={errors.relationship}>
+                    {t("application.form.errors.selectOption")}
+                  </ErrorMessage>
                 </div>
-              )}
-            </div>
-
-            <div className="form-card__group">
-              <Select
-                id="relationship"
-                name="relationship"
-                label={t("application.household.member.whatIsTheirRelationship")}
-                labelClassName={"field-label--caps"}
-                defaultValue={member.relationship}
-                validation={{ required: true }}
-                error={errors.relationship}
-                errorMessage={t("application.form.errors.selectOption")}
-                register={register}
-                controlClassName="control"
-                options={relationshipKeys}
-                keyPrefix="application.form.options.relationship"
-              />
-            </div>
-
-            <div className="form-card__pager">
-              <div className="form-card__pager-row primary">
-                <Button
-                  filled={true}
-                  className=""
-                  onClick={() => {
-                    //
-                  }}
-                >
-                  {saveText}
-                </Button>
               </div>
-              <div className="form-card__pager-row py-8">
-                <a href="#" className="lined text-tiny" onClick={deleteMember}>
-                  {cancelText}
-                </a>
+
+              <div className="form-card__pager">
+                <div className="form-card__pager-row primary">
+                  <Button
+                    filled={true}
+                    className=""
+                    onClick={() => {
+                      //
+                    }}
+                  >
+                    {saveText}
+                  </Button>
+                </div>
+                <div className="form-card__pager-row py-8">
+                  <a href="#" className="lined text-tiny" onClick={deleteMember}>
+                    {cancelText}
+                  </a>
+                </div>
               </div>
-            </div>
-          </Form>
+            </Form>
+          </>
         )}
       </FormCard>
     </FormsLayout>

@@ -4,7 +4,15 @@ If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
 import Link from "next/link"
-import { Button, ErrorMessage, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Button,
+  ErrorMessage,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -26,6 +34,7 @@ export default () => {
         application.accessibility.vision === false &&
         application.accessibility.hearing === false,
     },
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({
@@ -37,6 +46,9 @@ export default () => {
     })
 
     conductor.routeToNextOrReturnUrl("/applications/financial/vouchers")
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const adaNone = watch("none")
@@ -66,9 +78,15 @@ export default () => {
           <p className="field-note mt-5">{t("application.ada.subTitle")}</p>
         </div>
 
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
         <div className="form-card__group">
           <fieldset>
-           <legend className="sr-only">{t("application.ada.legend")}</legend>
+            <legend className="sr-only">{t("application.ada.legend")}</legend>
             <p className="field-note mb-4">{t("t.selectAllThatApply")}</p>
 
             <div className="field">
@@ -154,7 +172,7 @@ export default () => {
               <label htmlFor="none" className="font-semibold">
                 {t("t.no")}
               </label>
-            
+
               <ErrorMessage id="accessibilityCheckboxGroupError" error={errors.none}>
                 {t("application.form.errors.selectOption")}
               </ErrorMessage>
@@ -162,7 +180,7 @@ export default () => {
           </fieldset>
         </div>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
