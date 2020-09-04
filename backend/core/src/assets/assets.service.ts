@@ -3,6 +3,7 @@ import { Asset } from "../entity/asset.entity"
 import { AssetCreateDto } from "./asset.create.dto"
 import { plainToClass } from "class-transformer"
 import { AssetUpdateDto } from "./asset.update.dto"
+import { BaseEntity } from "typeorm"
 
 @Injectable()
 export class AssetsService {
@@ -41,3 +42,4 @@ export class AssetsService {
     return asset
   }
 }
+

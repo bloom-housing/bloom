@@ -6,7 +6,6 @@ import jp from "jsonpath"
 
 import { plainToClass } from "class-transformer"
 import { ListingCreateDto } from "./listing.create.dto"
-import { ListingExtendedDto } from "./listing.dto"
 import { Listing } from "../entity/listing.entity"
 import { ListingUpdateDto } from "./listings.update.dto"
 
@@ -16,7 +15,7 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<ListingExtendedDto> {
+  public async list(jsonpath?: string): Promise<any> {
     let listings = await Listing.find({
       relations: ["units", "preferences", "assets", "applicationMethods"],
     })
@@ -32,7 +31,7 @@ export class ListingsService {
       listing.urlSlug = listingUrlSlug(listing)
     })
 
-    const data: ListingExtendedDto = {
+    const data = {
       status: ListingsResponseStatus.ok,
       listings: listings,
       amiCharts: amiCharts,

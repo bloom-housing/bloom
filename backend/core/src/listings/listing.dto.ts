@@ -5,8 +5,8 @@ import { IsDefined, IsEnum, ValidateNested } from "class-validator"
 
 import { PreferenceDto } from "../preferences/preference.dto"
 import { AssetDto } from "../assets/asset.dto"
-import { ApplicationMethodDto } from "../application-methods/applicationMethod.dto"
-import { UnitDto } from "../units/units.dto"
+import { ApplicationMethodDto } from "../application-methods/application-method.dto"
+import { UnitDto } from "../units/unit.dto"
 import { OmitType } from "@nestjs/swagger"
 
 export class ListingDto extends OmitType(Listing, [

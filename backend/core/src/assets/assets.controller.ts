@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common"
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseInterceptors
+} from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
 import { AssetsService } from "./assets.service"
@@ -7,7 +17,7 @@ import { AssetCreateDto } from "./asset.create.dto"
 import { AssetUpdateDto } from "./asset.update.dto"
 import { AssetDto } from "./asset.dto"
 
-// TODO Add Admin role check
+
 @Controller("assets")
 @ApiTags("assets")
 @ApiBearerAuth()
@@ -28,8 +38,8 @@ export class AssetsController {
     return this.assetsService.create(asset)
   }
 
-  @Put()
-  @ApiOperation({ summary: "Create asset", operationId: "create" })
+  @Put(`:assetId`)
+  @ApiOperation({ summary: "Update asset", operationId: "create" })
   @UseInterceptors(new TransformInterceptor(AssetDto))
   async update(@Body() asset: AssetUpdateDto): Promise<AssetDto> {
     return this.assetsService.update(asset)
@@ -47,3 +57,5 @@ export class AssetsController {
     await this.assetsService.delete(assetId)
   }
 }
+
+
