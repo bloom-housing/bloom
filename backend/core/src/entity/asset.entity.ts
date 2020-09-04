@@ -32,16 +32,6 @@ export class Asset extends BaseEntity {
   @Column({ type: "text" })
   @Expose()
   @IsString()
-  referenceId: string
-
-  @Column({ type: "text" })
-  @Expose()
-  @IsString()
-  referenceType: string
-
-  @Column({ type: "text" })
-  @Expose()
-  @IsString()
   label: string
 
   @Column({ type: "text" })
