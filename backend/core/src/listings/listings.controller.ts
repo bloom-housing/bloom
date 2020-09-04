@@ -26,6 +26,7 @@ export class ListingsController {
   constructor(private readonly listingsService: ListingsService) {}
 
   @Get()
+  @ApiOperation({ summary: "List listings", operationId: "list" })
   @UseInterceptors(new TransformInterceptor(ListingExtendedDto))
   public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingExtendedDto> {
     return this.listingsService.list(jsonpath)
