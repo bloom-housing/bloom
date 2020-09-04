@@ -1,4 +1,4 @@
-import { ApplicationMethod } from "../entity/applicationMethod.entity"
+import { ApplicationMethod } from "../entity/application-method.entity"
 import { plainToClass } from "class-transformer"
 import { ApplicationMethodCreateDto } from "./application-method.create.dto"
 import { ApplicationMethodUpdateDto } from "./application-method.update.dto"

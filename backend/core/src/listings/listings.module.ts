@@ -5,7 +5,7 @@ import { ListingsController } from "./listings.controller"
 import { Listing } from "../entity/listing.entity"
 import { Unit } from "../entity/unit.entity"
 import { Asset } from "../entity/asset.entity"
-import { ApplicationMethod } from "../entity/applicationMethod.entity"
+import { ApplicationMethod } from "../entity/application-method.entity"
 import { Preference } from "../entity/preference.entity"
 
 @Module({

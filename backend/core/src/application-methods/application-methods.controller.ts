@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UseInterceptors } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
-import { ApplicationMethod } from "../entity/applicationMethod.entity"
+import { ApplicationMethod } from "../entity/application-method.entity"
 import { ApplicationMethodsService } from "./application-method.service"
 import { ApplicationMethodDto } from "./application-method.dto"
 import { ApplicationMethodCreateDto } from "./application-method.create.dto"
