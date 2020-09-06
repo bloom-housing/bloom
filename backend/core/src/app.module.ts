@@ -25,6 +25,7 @@ export function applicationSetup(app: INestApplication) {
       whitelist: true,
       // Automatically transform validated prop values into their specified types
       transform: true,
+      forbidNonWhitelisted: true,
     })
   )
   return app

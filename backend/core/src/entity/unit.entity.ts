@@ -8,7 +8,7 @@ import {
   BaseEntity,
 } from "typeorm"
 import { Listing } from "./listing.entity"
-import { IsDate, IsDateString, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsDate, IsDateString, IsNumber, IsNumberString, IsOptional, IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
 
 @Entity({ name: "units" })
@@ -38,14 +38,14 @@ class Unit extends BaseEntity {
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
-  @IsString()
+  @IsNumberString()
   annualIncomeMin: string | null
 
-  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
+  @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  monthlyIncomeMin: number | null
+  @IsNumberString()
+  monthlyIncomeMin: string | null
 
   @Column({ nullable: true, type: "numeric" })
   @Expose()
@@ -71,11 +71,11 @@ class Unit extends BaseEntity {
   @IsNumber()
   minOccupancy: number | null
 
-  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
+  @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  monthlyRent: number | null
+  @IsNumberString()
+  monthlyRent: string | null
 
   @Column({ nullable: true, type: "numeric" })
   @Expose()
