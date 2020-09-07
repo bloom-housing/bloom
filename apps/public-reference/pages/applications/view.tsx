@@ -7,7 +7,7 @@ import moment from "moment"
 import { FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
-import { useContext, useMemo, useState } from "react"
+import { useContext, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT } from "../../lib/constants"
 
