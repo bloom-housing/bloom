@@ -13,8 +13,8 @@ export interface ListingMapProps {
 export interface Viewport {
   width: string | number
   height: string | number
-  latitude: number
-  longitude: number
+  latitude?: number
+  longitude?: number
   zoom: number
 }
 
