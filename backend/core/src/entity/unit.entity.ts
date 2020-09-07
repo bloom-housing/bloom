@@ -8,7 +8,14 @@ import {
   BaseEntity,
 } from "typeorm"
 import { Listing } from "./listing.entity"
-import { IsDate, IsDateString, IsNumber, IsNumberString, IsOptional, IsString, IsUUID } from "class-validator"
+import {
+  IsDateString,
+  IsNumber,
+  IsNumberString,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from "class-validator"
 import { Expose } from "class-transformer"
 
 @Entity({ name: "units" })
