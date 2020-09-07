@@ -152,8 +152,6 @@
       "doYouWorkIn": "Do you work in <REGION>?",
       "doYouWorkInDescription": "TBD",
       "workAddress": "Work Address",
-      "yes": "Yes",
-      "no": "No",
       "radioError": "Please select an option."
     },
     "alternateContact": {
