@@ -13,8 +13,8 @@
     "latitude": null,
     "longitude": null
   },
-  "applicationDueDate": "2020-10-06T16:00:00.000-07:00",
-  "applicationOrganization": "Greystar",
+  "applicationDueDate": "2020-10-06T17:00:00.000-07:00",
+  "applicationOrganization": "Atlas BMR",
   "applicationPhone": "(510) 381-8407",
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
@@ -55,8 +55,8 @@
   "unitAmenities": "Refrigerator, stove, oven, dishwasher, microwave, washer and dryer, air conditioning",
   "attachments": [
     {
-      "fileUrl": "https://www.atlasoakland.com",
-      "type": 1
+      "fileUrl": "https://www.atlasoakland.com/bmr",
+      "type": 2
     }
   ],
   "applicationFee": "52.46",
