@@ -18,7 +18,7 @@ export default () => {
     return moment().format(DATE_FORMAT)
   }, [])
 
-  const [origin] = useState<string>(typeof window !== "undefined" ? window.location.origin : "")
+  const origin = typeof window !== "undefined" ? window.location.origin : ""
 
   return (
     <FormsLayout>
