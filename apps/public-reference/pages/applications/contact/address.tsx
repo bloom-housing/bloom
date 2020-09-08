@@ -27,7 +27,9 @@ import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/hel
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const currentPageSection = 1
+
+  conductor.stepTo("Primary Applicant Address")
 
   /* Form Handler */
   const { control, register, handleSubmit, setValue, trigger, watch, errors } = useForm<
@@ -59,7 +61,7 @@ export default () => {
     }
     conductor.sync()
 
-    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -77,9 +79,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

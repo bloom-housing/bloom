@@ -3,16 +3,16 @@ import { OnClientSide } from "../helpers/nextjs"
 import "./ProgressNav.scss"
 
 const ProgressNavItem = (props: {
-  step: number
-  currentPageStep: number
-  completedSteps: number
+  section: number
+  currentPageSection: number
+  completedSections: number
   label: string
 }) => {
   let bgColor = "is-disabled"
   if (OnClientSide()) {
-    if (props.step === props.currentPageStep) {
+    if (props.section === props.currentPageSection) {
       bgColor = "is-active"
-    } else if (props.completedSteps >= props.step) {
+    } else if (props.completedSections >= props.section) {
       bgColor = ""
     }
   }
@@ -25,19 +25,19 @@ const ProgressNavItem = (props: {
 }
 
 const ProgressNav = (props: {
-  currentPageStep: number
-  completedSteps: number
-  labels: string[]
+  currentPageSection: number
+  completedSections: number
+  labels?: string[]
 }) => {
   return (
     <ul className={!OnClientSide() ? "invisible" : "progress-nav"}>
-      {props.labels.map((label, i) => (
+      {(props.labels || []).map((label, i) => (
         <ProgressNavItem
           key={label}
-          // Steps are 1-indexed
-          step={i + 1}
-          currentPageStep={props.currentPageStep}
-          completedSteps={props.completedSteps}
+          // Sections are 1-indexed
+          section={i + 1}
+          currentPageSection={props.currentPageSection}
+          completedSections={props.completedSections}
           label={label}
         />
       ))}

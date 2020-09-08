@@ -21,7 +21,9 @@ import { useContext, useMemo } from "react"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const currentPageSection = 1
+
+  conductor.stepTo("Alternate Contact Name")
 
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
@@ -32,7 +34,7 @@ export default () => {
     application.alternateContact.lastName = data.lastName
     application.alternateContact.agency = data.agency
     conductor.sync()
-    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-contact")
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -42,9 +44,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
       <FormCard>

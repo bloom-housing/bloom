@@ -13,7 +13,7 @@ import ApplicationConductor from "../../../lib/ApplicationConductor"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 4
+  const currentPageSection = 4
 
   useEffect(() => {
     if (!application.preferences.none) {
@@ -25,7 +25,7 @@ export default () => {
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    conductor.completeStep(4)
+    conductor.completeSection(4)
     conductor.sync()
     conductor.routeToNextOrReturnUrl("/applications/review/demographics")
   }
@@ -34,9 +34,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

@@ -11,8 +11,9 @@ import { useContext } from "react"
 
 export default () => {
   const { application, conductor, listing } = useContext(AppSubmissionContext)
-  conductor.currentStep = 1
-  const currentPageStep = 1
+  const currentPageSection = 1
+
+  conductor.stepTo("What to Expect")
 
   /* Form Handler */
   const { handleSubmit } = useForm()
@@ -24,9 +25,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

@@ -22,20 +22,19 @@ import { useContext, useMemo, Fragment } from "react"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const currentPageSection = 1
+
+  conductor.stepTo("Alternate Contact Type")
+
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
-    conductor.completeStep(1)
+    if (data.type == "noContact") conductor.completeSection(1)
     conductor.sync()
-    if (data.type == "noContact") {
-      conductor.routeTo("/applications/household/live-alone")
-    } else {
-      conductor.routeTo("/applications/contact/alternate-contact-name")
-    }
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -47,9 +46,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
       <FormCard>

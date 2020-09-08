@@ -26,13 +26,13 @@ export default () => {
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
 
-  const currentPageStep = 5
+  const currentPageSection = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    application.completedStep = 5
+    application.completedSections = 5
     applicationsService
       .create({
         body: {
@@ -57,9 +57,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

@@ -13,7 +13,7 @@ import { useContext, useMemo } from "react"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 2
+  const currentPageSection = 2
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
@@ -29,9 +29,9 @@ export default () => {
         <h5 className="font-alt-sans text-center mb-5">LISTING</h5>
 
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

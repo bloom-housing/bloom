@@ -52,7 +52,7 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const currentPageStep = 3
+  const currentPageSection = 3
 
   /* Form Handler */
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
@@ -74,7 +74,7 @@ export default () => {
       const toSave = { income, incomePeriod }
       new FormStep(conductor).save(toSave)
 
-      conductor.completeStep(3)
+      conductor.completeSection(3)
       conductor.sync()
       conductor.routeToNextOrReturnUrl("/applications/preferences/select")
     }
@@ -95,9 +95,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

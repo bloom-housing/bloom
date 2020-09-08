@@ -32,26 +32,48 @@ export const loadSavedListing = () => {
 export default class ApplicationConductor {
   application = {} as Record<string, any>
   resolvers = {} as Record<string, any>
-  listing = {} as Listing
   returnToReview = false
   currentStep = 0
 
-  private _config = {} as Record<string, any>
+  private _config = { steps: [] } as Record<string, any>
+  private _listing = {} as Listing
 
   constructor(application, listing) {
     this.application = application
     this.listing = listing
   }
 
+  set listing(newListing) {
+    this._listing = newListing
+    if (this._listing?.applicationConfig) {
+      this.config = this._listing.applicationConfig
+    }
+  }
+
+  get listing() {
+    return this._listing
+  }
+
   set config(newConfig) {
     this._config = newConfig
+    this.listing.applicationConfig = { ...newConfig }
     this._config.steps = this._config.steps.map((step) => {
       return new StepDefinition(step, this)
     })
+    //    console.info("Config!", this._config)
   }
 
   get config() {
     return this._config
+  }
+
+  stepTo(stepName) {
+    const stepIndex = this.config.steps.findIndex((step) => step.name == stepName)
+    if (stepIndex >= 0) {
+      this.currentStep = stepIndex
+    } else {
+      console.error(`There is no step defined which matches ${stepName}`)
+    }
   }
 
   totalNumberOfSections() {
@@ -96,6 +118,7 @@ export default class ApplicationConductor {
   }
 
   nextOrReturnUrl(url?: string) {
+    //    console.info("Current Step!", this.currentStep)
     if (this.returnToReview) {
       return "/applications/review/summary"
     } else if (url) {

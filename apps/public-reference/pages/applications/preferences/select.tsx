@@ -21,7 +21,7 @@ import FormStep from "../../../src/forms/applications/FormStep"
 export default () => {
   const [showMore, setShowMore] = useState({})
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 4
+  const currentPageSection = 4
 
   const preferenceOptions = ["liveIn", "workIn"]
 
@@ -37,7 +37,7 @@ export default () => {
     if (data.none) {
       conductor.routeToNextOrReturnUrl("/applications/preferences/general")
     } else {
-      conductor.completeStep(4)
+      conductor.completeSection(4)
       conductor.sync()
       conductor.routeToNextOrReturnUrl("/applications/review/demographics")
     }
@@ -50,9 +50,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

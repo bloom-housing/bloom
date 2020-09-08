@@ -22,7 +22,9 @@ import { emailRegex } from "../../../lib/emailRegex"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const currentPageSection = 1
+
+  conductor.stepTo("Primary Applicant Name")
 
   /* Form Handler */
   const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
@@ -32,7 +34,7 @@ export default () => {
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
-    conductor.routeToNextOrReturnUrl("/applications/contact/address")
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -44,9 +46,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

@@ -22,7 +22,9 @@ let nextPageUrl
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [validateHousehold, setValidateHousehold] = useState(true)
-  const currentPageStep = 2
+  const currentPageSection = 2
+
+  conductor.stepTo("Live Alone")
 
   /* Form Handler */
   const { handleSubmit, register, errors, clearErrors } = useForm()
@@ -41,9 +43,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

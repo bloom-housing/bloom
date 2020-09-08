@@ -4,42 +4,57 @@ import ApplicationConductor from "./ApplicationConductor"
 export const retrieveApplicationConfig = () => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   return {
-    //    listing: {}, // TODO: actual listing object
-    //    status: "TODO: ENUM GOES HERE",
-    languages: ["en", "es"],
+    sections: ["You", "Household", "Income", "Preferences", "Review"],
+    languages: ["en", "zh"],
     steps: [
       {
-        name: "Choose Language", // not user-facing, only shows in partners; user text from the step itself
+        name: "Choose Language",
         url: "/applications/start/choose-language",
         nextUrl: "/applications/start/what-to-expect",
       },
+
       {
-        name: "What To Expect",
+        name: "What to Expect",
         url: "/applications/start/what-to-expect",
-        skipIf: [{ condition: "requiresLogin", skipTo: "/applications/preferences/general" }],
         nextUrl: "/applications/contact/name",
       },
+
       {
         name: "Primary Applicant Name",
         url: "/applications/contact/name",
-        nextUrl: "/applications/start/address",
+        nextUrl: "/applications/contact/address",
       },
-      // [...]
+
       {
-        name: "Senior Building Preference",
-        url: "/applications/preferences/senior",
-        props: { minAge: 65 },
-        // this isn't conditional because the config object is on a per-listing basis
-        nextUrl: "/applications/preferences/livework",
+        name: "Primary Applicant Address",
+        url: "/applications/contact/address",
+        nextUrl: "/applications/contact/alternate-contact-type",
       },
+
       {
-        name: "Live/Work Preference",
-        url: "/applications/preferences/livework",
-        skipIf: {
-          condition: "application.applicant.address.city != 'Correctville'",
-          skipTo: "/applications/start/what-to-expect",
-        },
-        nextUrl: "/applications/start/what-to-expect",
+        name: "Alternate Contact Type",
+        url: "/applications/contact/alternate-contact-type",
+        nextUrl: "/applications/contact/alternate-contact-name",
+      },
+
+      {
+        name: "Alternate Contact Name",
+        url: "/applications/contact/alternate-contact-name",
+        skipIf: [{ condition: "noAlternateContact", skipTo: "/applications/household/live-alone" }],
+        nextUrl: "/applications/contact/alternate-contact-contact",
+      },
+
+      {
+        name: "Alternate Contact Info",
+        url: "/applications/contact/alternate-contact-contact",
+        skipIf: [{ condition: "noAlternateContact", skipTo: "/applications/household/live-alone" }],
+        nextUrl: "/applications/household/live-alone",
+      },
+
+      {
+        name: "Live Alone",
+        url: "/applications/contact/household/live-alone",
+        nextUrl: "/applications/household/members-info",
       },
     ],
   }
@@ -48,7 +63,7 @@ export const retrieveApplicationConfig = () => {
 export const blankApplication = () => {
   return {
     loaded: false,
-    completedStep: 0,
+    completedSections: 0,
     applicant: {
       firstName: "",
       middleName: "",

@@ -73,7 +73,7 @@ export default () => {
   let memberId, member, saveText, cancelText
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
-  const currentPageStep = 2
+  const currentPageSection = 2
 
   if (router.query.memberId) {
     memberId = parseInt(router.query.memberId.toString())
@@ -114,9 +114,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
