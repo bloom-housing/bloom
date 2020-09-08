@@ -24,11 +24,13 @@ export default () => {
   const currentPageSection = 2
   application.householdSize = application.householdMembers.length + 1
 
+  conductor.stepTo("Add Members")
+
   /* Form Handler */
   const { errors, handleSubmit, register, clearErrors } = useForm()
   const onSubmit = (data) => {
     conductor.sync()
-    conductor.routeToNextOrReturnUrl("/applications/household/preferred-units")
+    conductor.routeToNextOrReturnUrl()
   }
 
   const onAddMember = () => {

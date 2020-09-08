@@ -1,6 +1,6 @@
 /*
 2.1a - Member Info
-A notice regarding adding househole members
+A notice regarding adding household members
 */
 import Link from "next/link"
 import Router from "next/router"
@@ -14,6 +14,8 @@ import { useContext, useMemo } from "react"
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageSection = 2
+
+  conductor.stepTo("Household Member Info")
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm({

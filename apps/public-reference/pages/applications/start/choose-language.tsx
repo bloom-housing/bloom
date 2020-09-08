@@ -13,13 +13,11 @@ import {
   ProgressNav,
   t,
   Form,
-  UserContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import { useContext, useEffect, useState } from "react"
-import { resolversLibrary } from "../../../lib/resolversLibrary"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
@@ -35,13 +33,11 @@ export default () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
-  const userContext = useContext(UserContext)
   const { conductor, application } = context
 
   const listingId = router.query.listingId
 
   useEffect(() => {
-    conductor.resolvers = resolversLibrary(context, userContext)
     loadListing(listingId, setListing, conductor, context)
   }, [])
 

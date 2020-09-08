@@ -115,6 +115,7 @@ export default class ApplicationConductor {
 
   routeToNextOrReturnUrl(url?: string) {
     Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
+    this.returnToReview = false
   }
 
   nextOrReturnUrl(url?: string) {

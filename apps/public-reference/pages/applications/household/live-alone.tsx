@@ -18,7 +18,6 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo, useState } from "react"
 
-let nextPageUrl
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const [validateHousehold, setValidateHousehold] = useState(true)
@@ -30,8 +29,7 @@ export default () => {
   const { handleSubmit, register, errors, clearErrors } = useForm()
   const onSubmit = () => {
     conductor.sync()
-
-    Router.push(nextPageUrl).then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
 
   const backUrl =
@@ -82,7 +80,6 @@ export default () => {
                 big={true}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  nextPageUrl = "/applications/household/preferred-units"
                   application.householdSize = 1
                   application.householdMembers = []
                   setValidateHousehold(true)
@@ -96,7 +93,7 @@ export default () => {
                 big={true}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  nextPageUrl = "/applications/household/members-info"
+                  if (application.householdSize == 1) application.householdSize = 0
                   setValidateHousehold(false)
                 }}
               >

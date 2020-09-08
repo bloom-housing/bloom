@@ -12,10 +12,19 @@ import {
   UserContext,
 } from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
+import { AppSubmissionContext } from "../lib/AppSubmissionContext"
+import { resolversLibrary } from "../lib/resolversLibrary"
 
 const Layout = (props) => {
-  const { profile, signOut } = useContext(UserContext)
+  const userContext = useContext(UserContext)
+  const { profile, signOut } = userContext
+  const applicationContext = useContext(AppSubmissionContext)
+
+  useEffect(() => {
+    applicationContext.conductor.resolvers = resolversLibrary(applicationContext, userContext)
+  })
+
   return (
     <div className="site-container">
       <div className="site-content">

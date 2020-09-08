@@ -53,8 +53,27 @@ export const retrieveApplicationConfig = () => {
 
       {
         name: "Live Alone",
-        url: "/applications/contact/household/live-alone",
+        url: "/applications/household/live-alone",
         nextUrl: "/applications/household/members-info",
+      },
+
+      {
+        name: "Household Member Info",
+        url: "/applications/household/members-info",
+        skipIf: [{ condition: "soloHousehold", skipTo: "/applications/household/preferred-units" }],
+        nextUrl: "/applications/household/add-members",
+      },
+
+      {
+        name: "Add Members",
+        url: "/applications/household/add-members",
+        nextUrl: "/applications/household/preferred-units",
+      },
+
+      {
+        name: "Preferred Unit Size",
+        url: "/applications/household/preferred-units",
+        nextUrl: "/applications/household/ada",
       },
     ],
   }
