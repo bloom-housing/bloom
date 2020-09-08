@@ -169,37 +169,42 @@ export default () => {
 
             <Form onSubmit={handleSubmit(onSubmit, onError)}>
               <div className="form-card__group border-b">
-                <label className="field-label--caps" htmlFor="firstName">
-                  {t("application.household.member.name")}
-                </label>
+                <fieldset>
+                  <legend  className="field-label--caps">{t("application.household.member.name")}</legend>
 
-                <Field
-                  name="firstName"
-                  placeholder={t("application.name.firstName")}
-                  controlClassName="mt-2"
-                  defaultValue={member.firstName}
-                  validation={{ required: true }}
-                  error={errors.firstName}
-                  errorMessage={t("application.name.firstNameError")}
-                  register={register}
-                />
+                  <Field
+                    name="firstName"
+                    label={t("application.name.firstName")}
+                    placeholder={t("application.name.firstName")}
+                    readerOnly={true}
+                    defaultValue={member.firstName}
+                    validation={{ required: true }}
+                    error={errors.firstName}
+                    errorMessage={t("application.name.firstNameError")}
+                    register={register}
+                  />
 
-                <Field
-                  name="middleName"
-                  placeholder={t("application.name.middleName")}
-                  defaultValue={member.middleName}
-                  register={register}
-                />
+                  <Field
+                    name="middleName"
+                    label={t("application.name.middleName")}
+                    readerOnly={true}
+                    placeholder={t("application.name.middleName")}
+                    defaultValue={member.middleName}
+                    register={register}
+                  />
 
-                <Field
-                  name="lastName"
-                  placeholder={t("application.name.lastName")}
-                  defaultValue={member.lastName}
-                  validation={{ required: true }}
-                  error={errors.lastName}
-                  errorMessage={t("application.name.lastNameError")}
-                  register={register}
-                />
+                  <Field
+                    name="lastName"
+                    placeholder={t("application.name.lastName")}
+                    label={t("application.name.lastName")}
+                    readerOnly={true}
+                    defaultValue={member.lastName}
+                    validation={{ required: true }}
+                    error={errors.lastName}
+                    errorMessage={t("application.name.lastNameError")}
+                    register={register}
+                  />
+                </fieldset>
               </div>
 
               <div className="form-card__group border-b">
@@ -214,10 +219,9 @@ export default () => {
 
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="sr-only">{t("application.contact.doYouWorkIn")}</legend>
+                  <legend className="field-label--caps">{t("application.household.member.haveSameAddress")}</legend>
                   <FieldGroup
                     name="sameAddress"
-                    groupLabel={t("application.household.member.haveSameAddress")}
                     type="radio"
                     register={register}
                     validation={{ required: true }}
@@ -228,10 +232,8 @@ export default () => {
                 </fieldset>
 
                 {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
-                  <>
-                    <label className="field-label--caps" htmlFor="street">
-                      {t("application.contact.address")}
-                    </label>
+                  <fieldset>
+                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
 
                     <Field
                       id="addressStreet"
@@ -292,7 +294,7 @@ export default () => {
                       errorMessage={t("application.contact.zipCodeError")}
                       register={register}
                     />
-                  </>
+                  </fieldset>
                 )}
               </div>
 
@@ -314,10 +316,8 @@ export default () => {
                 </fieldset>
 
                 {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
-                  <>
-                    <label className="field-label--caps" htmlFor="street">
-                      {t("application.contact.address")}
-                    </label>
+                  <fieldset>
+                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
 
                     <Field
                       id="addressStreet"
@@ -378,7 +378,7 @@ export default () => {
                       errorMessage={t("application.contact.zipCodeError")}
                       register={register}
                     />
-                  </>
+                  </fieldset>
                 )}
               </div>
 

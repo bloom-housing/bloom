@@ -92,13 +92,13 @@ export default () => {
             />
           </div>
           <div className="form-card__group border-b">
-            <label className="field-label--caps">
+            <h3 className="field-label--caps">
               {t("application.alternateContact.contact.emailAddressFormLabel")}
-            </label>
+            </h3>
             <Field
               id="emailAddress"
               name="emailAddress"
-              label={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
+              label={t("application.alternateContact.contact.emailAddressFormLabel")}
               readerOnly={true}
               placeholder={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
               defaultValue={application.alternateContact.emailAddress}

@@ -89,7 +89,6 @@ export default () => {
               <FieldGroup
                 type="checkbox"
                 name="preferredUnit"
-                groupLabel=""
                 groupNote={t("application.household.preferredUnit.optionsLabel")}
                 fields={preferredUnitOptions}
                 error={errors.preferredUnit}

@@ -380,12 +380,11 @@ export default () => {
           </div>
 
           <div className="form-card__group">
-            <h3 className="field-label--caps">{t("application.contact.doYouWorkIn")}</h3>
-
-            <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
-
             <fieldset>
-              <legend className="sr-only">{t("application.contact.doYouWorkIn")}</legend>
+              <legend className="field-label--caps">{t("application.contact.doYouWorkIn")}</legend>
+
+              <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
+
               <Field
                 type="radio"
                 id="workInRegionYes"

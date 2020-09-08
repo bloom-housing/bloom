@@ -242,7 +242,7 @@
         "updateHouseholdMember": "Update Household Member",
         "whatReletionship": "What is their relationship to you",
         "workInRegion": "Do they work in <REGION>?",
-        "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
+        "workInRegionNote": "TBD"
       },
       "membersInfo": {
         "title": "Before adding other people, make sure that they aren't named on any other application for this listing."
