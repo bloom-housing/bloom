@@ -37,6 +37,15 @@
 .view-item {
   @apply relative;
   @apply text-base;
+
+  &.is-flagged {
+    @apply bg-warn-light;
+    @apply -my-1;
+    @apply py-1;
+    @apply -ml-8;
+    @apply pl-8;
+    box-shadow: inset 2px 0px 0px 0px $tailwind-warn;
+  }
 }
 
 .view-item__label {
