@@ -1,6 +1,8 @@
 .drawer {
+  @apply flex;
   @apply bg-gray-200;
   @apply max-w-5xl;
+  flex-direction: column;
 
   &.is-left {
     @apply border-l;
@@ -10,13 +12,17 @@
     right: 0;
     bottom: 0;
     left: auto;
+    overflow-y: auto;
   }
 }
 
 .drawer__header {
+  @apply flex;
   @apply bg-white;
   @apply p-5;
   @apply border-b;
+  position: relative;
+  flex: 0 0 4.625rem;
 }
 
 .drawer__close {
@@ -32,10 +38,14 @@
 }
 
 .drawer__body {
-  @apply py-8;
+  overflow-y: auto;
+  position: relative;
+  flex: 1 1 auto;
 }
 
 .drawer__content {
   @apply m-auto;
   @apply px-4;
+  @apply py-8;
+  overflow-y: visible;
 }
