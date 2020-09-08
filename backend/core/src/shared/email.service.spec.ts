@@ -14,10 +14,11 @@ user.email = "test@xample.com"
 
 const listing = Object.assign({}, Archer) as any
 const application = {} as Application
+
 listing.applicationDueDate = moment().add(10, "days").format()
 application.listing = listing
 application.updatedAt = moment().toDate()
-application.application = {
+const applicationCreateDto = {
   applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
 }
 let sendMock
@@ -61,12 +62,15 @@ describe("EmailService", () => {
 
   describe("confirmation", () => {
     it("should generate html body", async () => {
-      await service.confirmation(listing, application)
+      await service.confirmation(listing, applicationCreateDto, "http://localhost:3000")
       expect(sendMock).toHaveBeenCalled()
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
       expect(sendMock.mock.calls[0][0].subject).toEqual("Your Application Confirmation")
       expect(sendMock.mock.calls[0][0].html).toMatch(
         /Applicants will be contacted by the agent in waitlist order until vacancies are filled/
+      )
+      expect(sendMock.mock.calls[0][0].html).toMatch(
+        /http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/
       )
     })
   })

@@ -37,14 +37,14 @@ export class EmailService {
     await this.send(user.email, "Welcome to Bloom", this.template("register-email")({ user: user }))
   }
 
-  public async confirmation(listing: Listing, application: ApplicationCreateDto) {
+  public async confirmation(listing: Listing, application: any, appUrl: string) {
     let whatToExpectText
-    const listingUrl = `${process.env.APP_URL}/listing/${listing.id}`
+    const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
 
     if (process.env.NODE_ENV == "production") {
       Logger.log(
-        `Preparing to send a confirmation email to ${application.application.applicant.emailAddress} from ${process.env.EMAIL_FROM_ADDRESS}...`
+        `Preparing to send a confirmation email to ${application.applicant.emailAddress} from ${process.env.EMAIL_FROM_ADDRESS}...`
       )
     }
 
@@ -62,12 +62,12 @@ export class EmailService {
       whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
     }
     const user = {
-      firstName: application.application.applicant.firstName,
-      middleName: application.application.applicant.middleName,
-      lastName: application.application.applicant.lastName,
+      firstName: application.applicant.firstName,
+      middleName: application.applicant.middleName,
+      lastName: application.applicant.lastName,
     }
     await this.send(
-      application.application.applicant.emailAddress,
+      application.applicant.emailAddress,
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
         listing: listing,

@@ -48,7 +48,7 @@ export class ApplicationsController {
   async create(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
     const application = await this.applicationsService.create(applicationCreateDto)
     const listing = await this.listingsService.findOne(application.listing.id)
-    this.emailService.confirmation(listing, application)
+    this.emailService.confirmation(listing, application.application, applicationCreateDto.appUrl)
     return application
   }
 
