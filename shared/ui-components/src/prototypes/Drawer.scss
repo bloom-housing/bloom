@@ -1,0 +1,41 @@
+.drawer {
+  @apply bg-gray-200;
+  @apply max-w-5xl;
+
+  &.is-left {
+    @apply border-l;
+    @apply w-full;
+    @apply fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+  }
+}
+
+.drawer__header {
+  @apply bg-white;
+  @apply p-5;
+  @apply border-b;
+}
+
+.drawer__close {
+  @apply absolute;
+  top: 1.625rem;
+  left: 1.5rem;
+}
+
+.drawer__title {
+  @apply font-alt-sans;
+  @apply text-xl;
+  @apply ml-10;
+}
+
+.drawer__body {
+  @apply py-8;
+}
+
+.drawer__content {
+  @apply m-auto;
+  @apply px-4;
+}

@@ -172,6 +172,56 @@ export const ViewSectionSingleColumn = () => (
     <h3 className="view-group__title">My Group</h3>
 
     <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
+      <p className="view-item">
+        <span className="view-item__label">First Name</span>
+        <span className="view-item__value">Lisa</span>
+      </p>
+
+      <p className="view-item">
+        <span className="view-item__label">Middle Name</span>
+        <span className="view-item__value">S</span>
+      </p>
+
+      <p className="view-item">
+        <span className="view-item__label">Last Name</span>
+        <span className="view-item__value">Jones</span>
+      </p>
+
+      <p className="view-item">
+        <span className="view-item__label">Date of Birth</span>
+        <span className="view-item__value">01/01/1985</span>
+      </p>
+
+      <p className="view-item">
+        <span className="view-item__label">Email</span>
+        <span className="view-item__value">lisa@gmail.com</span>
+      </p>
+
+      <p className="view-item">
+        <span className="view-item__label">Phone</span>
+        <span className="view-item__value">111-222-3333</span>
+        <span className="view-item__helper">Cell</span>
+      </p>
+
+      <p className="view-item">
+        <span className="view-item__label">Second Phone</span>
+        <span className="view-item__value">222-333-4444</span>
+        <span className="view-item__helper">Work</span>
+      </p>
+
+      <p className="view-item">
+        <span className="view-item__label">Perferred Contact</span>
+        <span className="view-item__value">Phone</span>
+      </p>
+    </div>
+  </div>
+)
+
+export const ViewSectionSingleColumnWarn = () => (
+  <div className="view-section">
+    <h3 className="view-group__title">My Group</h3>
+
+    <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
       <p className="view-item is-flagged">
         <span className="view-item__label">First Name</span>
         <span className="view-item__value">Lisa</span>
@@ -216,6 +266,7 @@ export const ViewSectionSingleColumn = () => (
     </div>
   </div>
 )
+
 
 export const ViewSectionTable = () => (
   <div className="view-section">

@@ -11,14 +11,6 @@
 
   li {
     @apply flex;
-
-    &.is-current {
-      a {
-        @apply border-b-2;
-        @apply border-primary;
-        @apply text-gray-900;
-      }
-    }
   }
 
   a {
@@ -36,6 +28,12 @@
       @apply border-b-2;
       @apply text-gray-900;
       @apply border-gray-450;
+    }
+
+    &.is-current {
+      @apply border-b-2;
+      @apply border-primary;
+      @apply text-gray-900;
     }
 
     .pill {

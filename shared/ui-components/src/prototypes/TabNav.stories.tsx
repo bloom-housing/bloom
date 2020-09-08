@@ -8,10 +8,19 @@ export default {
 }
 
 export const TabNav = () => (
-  <nav className="tab-nav">
+  <nav className="tab-nav" aria-label="Secondary navigation">
+    <ul>
+      <li><a href="#" className="is-current">Applications</a></li>
+      <li><a href="#">Flags</a></li>
+    </ul>
+  </nav>
+)
+
+export const TabNavCount = () => (
+  <nav className="tab-nav" aria-label="Secondary navigation">
     <ul>
       <li><a href="#">Applications</a></li>
-      <li className="is-current"><a href="#">Flags <span className="pill bg-gray-450 text-gray-900">22</span></a></li>
+      <li><a href="#" className="is-current">Flags <span className="pill bg-gray-450 text-gray-900">22</span></a></li>
     </ul>
   </nav>
 )

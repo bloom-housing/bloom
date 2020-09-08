@@ -1,5 +1,4 @@
-import React from "react"
-import Link from "next/link"
+import * as React from "react"
 
 const SimpleTable = () => (
   <table className="td-plain th-plain text-sm w-full">
