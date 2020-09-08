@@ -1,6 +1,6 @@
 {
   "id": "gyi1Wa3K902-MDXBf0Q62g",
-  "acceptingApplicationsAtLeasingAgent": true,
+  "acceptingApplicationsAtLeasingAgent": false,
   "acceptingApplicationsByPoBox": true,
   "acceptingOnlineApplications": true,
   "accessibility": "All common areas ADA accessible and homes ADA adaptable. All reasonable accommodations/modifications will be reviewed upon request.",
@@ -27,7 +27,7 @@
     "longitude": -122.269815
   },
   "buildingSelectionCriteria": null,
-  "costsNotIncluded": "PG&E, Cable/Internet, Personal Liability Insurance",
+  "costsNotIncluded": "Residents responsible for utilities: electric and cable/internet. Residents required to maintain a personal liability policy as outlined in the lease agreement. Rent is due by the 5th of each month and rent is considered late on the 6th of each month. Late fee is $100. Resident to pay $25 for each returned check or rejected electronic payment. Pet Deposit is $500 per pet. $60 monthly pet rent per pet.",
   "creditHistory": "We obtain a credit report on each applicant.  Our credit reporting agency evaluates credit (which may include rent payment history) as an indicator of future rent payment performance.  An unsatisfactory or insufficient finding will result in the requirement of an additional deposit, guarantor, or denial.  Applicants are responsible for ensuring their credit history is accurate.",
   "depositMax": "1,995",
   "depositMin": "600",
