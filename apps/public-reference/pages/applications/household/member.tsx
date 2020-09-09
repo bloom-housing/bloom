@@ -170,7 +170,9 @@ export default () => {
             <Form onSubmit={handleSubmit(onSubmit, onError)}>
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend  className="field-label--caps">{t("application.household.member.name")}</legend>
+                  <legend className="field-label--caps">
+                    {t("application.household.member.name")}
+                  </legend>
 
                   <Field
                     name="firstName"
@@ -219,7 +221,9 @@ export default () => {
 
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="field-label--caps">{t("application.household.member.haveSameAddress")}</legend>
+                  <legend className="field-label--caps">
+                    {t("application.household.member.haveSameAddress")}
+                  </legend>
                   <FieldGroup
                     name="sameAddress"
                     type="radio"
@@ -233,7 +237,9 @@ export default () => {
 
                 {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
                   <fieldset>
-                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
+                    <legend className="field-label--caps">
+                      {t("application.contact.address")}
+                    </legend>
 
                     <Field
                       id="addressStreet"
@@ -271,7 +277,7 @@ export default () => {
                       <Select
                         id="addressState"
                         name="address.state"
-                        label="State"
+                        label={t("application.contact.state")}
                         defaultValue={member.address.state}
                         validation={{ required: true }}
                         error={errors.address?.state}
@@ -286,8 +292,8 @@ export default () => {
                     <Field
                       id="addressZipCode"
                       name="address.zipCode"
-                      label="Zip"
-                      placeholder="Zipcode"
+                      label={t("application.contact.zip")}
+                      placeholder={t("application.contact.zipCode")}
                       defaultValue={member.address.zipCode}
                       validation={{ required: true }}
                       error={errors.address?.zipCode}
@@ -317,7 +323,9 @@ export default () => {
 
                 {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
                   <fieldset>
-                    <legend className="field-label--caps">{t("application.contact.address")}</legend>
+                    <legend className="field-label--caps">
+                      {t("application.contact.address")}
+                    </legend>
 
                     <Field
                       id="addressStreet"
@@ -355,7 +363,7 @@ export default () => {
                       <Select
                         id="addressState"
                         name="workAddress.state"
-                        label="State"
+                        label={t("application.contact.state")}
                         defaultValue={member.workAddress.state}
                         validation={{ required: true }}
                         error={errors.workAddress?.state}
@@ -370,8 +378,8 @@ export default () => {
                     <Field
                       id="addressZipCode"
                       name="workAddress.zipCode"
-                      label="Zip"
-                      placeholder="Zipcode"
+                      label={t("application.contact.zip")}
+                      placeholder={t("application.contact.zipCode")}
                       defaultValue={member.workAddress.zipCode}
                       validation={{ required: true }}
                       error={errors.workAddress?.zipCode}
