@@ -18,14 +18,14 @@ import { UnitsSummarized } from "@bloom-housing/core"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
-  IsDateString,
+  IsDateString, IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested,
+  ValidateNested
 } from "class-validator"
 
 export enum ListingStatus {
@@ -100,12 +100,12 @@ class Listing extends BaseEntity {
   @IsString()
   applicationOrganization: string | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: "jsonb", nullable: false })
   @Expose()
-  @IsOptional()
+  @IsDefined()
   @ValidateNested()
   @Type(() => Address)
-  applicationAddress: Address | null
+  applicationAddress: Address
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
@@ -113,12 +113,12 @@ class Listing extends BaseEntity {
   @IsBoolean()
   blankPaperApplicationCanBePickedUp: boolean | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: "jsonb", nullable: false })
   @Expose()
-  @IsOptional()
+  @IsDefined()
   @ValidateNested()
   @Type(() => Address)
-  buildingAddress: Address | null
+  buildingAddress: Address
 
   @Column({ type: "numeric", nullable: true })
   @Expose()
@@ -192,12 +192,12 @@ class Listing extends BaseEntity {
   @IsString()
   imageUrl: string | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: "jsonb", nullable: false })
   @Expose()
-  @IsOptional()
+  @IsDefined()
   @ValidateNested()
   @Type(() => Address)
-  leasingAgentAddress: Address | null
+  leasingAgentAddress: Address
 
   @Column({ type: "text", nullable: true })
   @Expose()
