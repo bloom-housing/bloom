@@ -1,8 +1,5 @@
 {
-  "id": "vWgL5K1EUG8q0SX-Dv5BA",
-  "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": false,
+  "id": "Uvbk5qurpB2WI9V6WnNdH",
   "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
   "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
   "applicationAddress": {
@@ -15,9 +12,28 @@
     "longitude": -121.910608
   },
   "applicationDueDate": "2019-11-01T09:00:00.000-07:00",
+  "applicationMethods": [
+    {
+      "type": "POBox",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "LeasingAgent"
+    },
+    {
+      "type": "PaperPickup"
+    }
+  ],
   "applicationOrganization": "98 Archer Street",
   "applicationPhone": "(408) 217-8562",
-  "blankPaperApplicationCanBePickedUp": true,
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+      "label": "building",
+      "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg"
+    }
+  ],
   "buildingAddress": {
     "city": "San Jose",
     "county": "San Jose",
@@ -34,7 +50,6 @@
   "depositMin": "719",
   "depositMax": "1140",
   "developer": "Charities Housing ",
-  "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
   "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
   "externalId": null,
   "waitlistMaxSize": 300,

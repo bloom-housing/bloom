@@ -1,15 +1,10 @@
-import { PickType } from "@nestjs/swagger"
-import { Application } from "../entity/application.entity"
-import { IsObject, IsString } from "class-validator"
-import { IdDto } from "../lib/id.dto"
+import { IsString, IsUUID } from "class-validator"
+import { Expose } from "class-transformer"
+import { ApplicationCreateDto } from "./application.create.dto"
 
-export class ApplicationUpdateDto extends PickType(Application, ["id"]) {
-  @IsObject()
-  application: any
-
-  @IsObject()
-  listing: IdDto
-
-  @IsObject()
-  user: IdDto
+export class ApplicationUpdateDto extends ApplicationCreateDto {
+  @Expose()
+  @IsString()
+  @IsUUID()
+  id: string
 }

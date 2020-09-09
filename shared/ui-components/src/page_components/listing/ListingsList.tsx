@@ -11,11 +11,15 @@ export interface ListingsProps {
   listings: Listing[]
 }
 
+const imageUrlFromListing = (listing: Listing) => {
+  return listing.assets.find((asset) => asset.label == "building")?.fileId
+}
+
 const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
   const listItems = listings.map((listing: Listing) => {
-    const imageUrl = listing.imageUrl || ""
+    const imageUrl = imageUrlFromListing(listing) || ""
     const unitSummariesHeaders = {
       unitType: t("t.unitType"),
       minimumIncome: t("t.minimumIncome"),

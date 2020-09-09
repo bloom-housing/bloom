@@ -16,6 +16,14 @@
   "applicationDueDate": "2037-12-19T17:00:00.000-07:00",
   "applicationOrganization": "Triton",
   "applicationPhone": "(650) 437-2039",
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "jsQvgvy6eJy56TNCFfQp8",
+      "label": "building",
+      "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png"
+    }
+  ],
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "Foster City",
@@ -31,7 +39,8 @@
   "depositMax": "800.0",
   "depositMin": "500.0",
   "developer": "Thompson Dorfman, LLC",
-  "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+  "householdSizeMin": 2,
+  "householdSizeMax": 3,
   "programRules": null,
   "externalId": null,
   "waitlistMaxSize": 100,
