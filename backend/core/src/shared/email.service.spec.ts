@@ -2,9 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { SendGridService, SendGridModule } from "@anchan828/nest-sendgrid"
 import { User } from "../entity/user.entity"
 import { EmailService } from "./email.service"
-import { Application } from "../entity/application.entity"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import moment from "moment"
 
 declare const expect: jest.Expect
 const user = new User()
@@ -13,11 +11,7 @@ user.lastName = "User"
 user.email = "test@xample.com"
 
 const listing = Object.assign({}, Archer) as any
-const application = {} as Application
 
-listing.applicationDueDate = moment().add(10, "days").format()
-application.listing = listing
-application.updatedAt = moment().toDate()
 const applicationCreateDto = {
   applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
 }
