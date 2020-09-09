@@ -37,7 +37,7 @@ beforeEach(() => {
 const renderComponent = () =>
   mount(
     <UserContext.Provider value={{ initialStateLoaded, profile }}>
-      <RequireLogin signInPath={"/sign-in"} {...props}>
+      <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
         <div id="child" />
       </RequireLogin>
     </UserContext.Provider>
