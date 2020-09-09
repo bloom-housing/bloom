@@ -1,9 +1,15 @@
 import { Component } from "react"
 import Head from "next/head"
 import { Listing } from "@bloom-housing/core"
-import { Hero, MarkdownSection, MetaTags, t, UrlAlert } from "@bloom-housing/ui-components"
+import {
+  LinkButton,
+  Hero,
+  MarkdownSection,
+  MetaTags,
+  t,
+  SiteAlert,
+} from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
-import PageContent from "../page_content/homepage.mdx"
 import axios from "axios"
 
 interface IndexProps {
@@ -43,8 +49,8 @@ export default class extends Component<IndexProps> {
         </Head>
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <div className="flex absolute w-full flex-col items-center">
-          <UrlAlert type="alert" urlParam="alert" className={alertClasses} />
-          <UrlAlert type="success" urlParam="success" className={alertClasses} timeout={30000} />
+          <SiteAlert type="alert" className={alertClasses} />
+          <SiteAlert type="success" className={alertClasses} timeout={30000} />
         </div>
         <Hero
           title={heroTitle}
@@ -54,7 +60,12 @@ export default class extends Component<IndexProps> {
         />
         <div className="homepage-extra">
           <MarkdownSection fullwidth={true}>
-            <PageContent />
+            <>
+              <p>{t("welcome.seeMoreOpportunities")}</p>
+              <LinkButton href="/additional-resources">
+                {t("welcome.viewAdditionalHousing")}
+              </LinkButton>
+            </>
           </MarkdownSection>
         </div>
       </Layout>

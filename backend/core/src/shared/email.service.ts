@@ -1,9 +1,11 @@
+import { ApplicationCreateDto } from "./../applications/application.create.dto"
 import { Injectable, Logger } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
 import Handlebars from "handlebars"
 import path from "path"
 import { User } from "../entity/user.entity"
+import { Listing } from "../entity/listing.entity"
 import Polyglot from "node-polyglot"
 import fs from "fs"
 
@@ -13,14 +15,15 @@ export class EmailService {
 
   constructor(private readonly sendGrid: SendGridService) {
     const polyglot = new Polyglot({
-      // TODO Add translations loaded from a file
-      phrases: { register: { welcome: "Welcome" } },
+      phrases: this.translations(),
     })
     this.polyglot = polyglot
 
     Handlebars.registerHelper("t", function (phrase: string, options?: any) {
       return polyglot.t(phrase, options)
     })
+    const parts = this.partials()
+    Handlebars.registerPartial(parts)
   }
 
   public async welcome(user: User) {
@@ -34,16 +37,71 @@ export class EmailService {
     await this.send(user.email, "Welcome to Bloom", this.template("register-email")({ user: user }))
   }
 
+  public async confirmation(listing: Listing, application: any, appUrl: string) {
+    let whatToExpectText
+    const listingUrl = `${appUrl}/listing/${listing.id}`
+    const compiledTemplate = this.template("confirmation")
+
+    if (process.env.NODE_ENV == "production") {
+      Logger.log(
+        `Preparing to send a confirmation email to ${application.applicant.emailAddress} from ${process.env.EMAIL_FROM_ADDRESS}...`
+      )
+    }
+
+    if (listing.applicationDueDate) {
+      if (!listing.waitlistMaxSize) {
+        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
+          lotteryDate: listing.applicationDueDate,
+        })
+      } else {
+        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.noLottery", {
+          lotteryDate: listing.applicationDueDate,
+        })
+      }
+    } else {
+      whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
+    }
+    const user = {
+      firstName: application.applicant.firstName,
+      middleName: application.applicant.middleName,
+      lastName: application.applicant.lastName,
+    }
+    await this.send(
+      application.applicant.emailAddress,
+      this.polyglot.t("confirmation.subject"),
+      compiledTemplate({
+        listing: listing,
+        listingUrl: listingUrl,
+        application: application.application,
+        whatToExpectText: whatToExpectText,
+        user: user,
+      })
+    )
+  }
+
   private template(view: string) {
     return Handlebars.compile(
-      fs.readFileSync(
-        path.join(
-          path.resolve(__dirname, "..", "..", "views").replace("/dist", ""),
-          `/${view}.hbs`
-        ),
-        "utf8"
-      )
+      fs.readFileSync(path.join(path.resolve(__dirname, "..", "views"), `/${view}.hbs`), "utf8")
     )
+  }
+
+  private partial(view: string) {
+    return fs.readFileSync(path.join(path.resolve(__dirname, "..", "views"), `/${view}`), "utf8")
+  }
+
+  private partials() {
+    const partials = {}
+    const dirName = path.resolve(__dirname, "..", "views/partials")
+
+    fs.readdirSync(dirName).forEach((filename) => {
+      partials[filename.slice(0, -4)] = this.partial("partials/" + filename)
+    })
+
+    return partials
+  }
+
+  private translations() {
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "locals/general.json"), "utf8"))
   }
 
   private async send(to: string, subject: string, body: string, retry?: number) {

@@ -19,13 +19,19 @@ import { ApplicationCreateDto } from "./application.create.dto"
 import { ApplicationUpdateDto } from "./application.update.dto"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
+import { EmailService } from "../shared/email.service"
+import { ListingsService } from "../listings/listings.service"
 
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class ApplicationsController {
-  constructor(private readonly applicationsService: ApplicationsService) {}
+  constructor(
+    private readonly applicationsService: ApplicationsService,
+    private emailService: EmailService,
+    private readonly listingsService: ListingsService
+  ) {}
 
   @Get()
   @UseGuards(DefaultAuthGuard)
@@ -40,7 +46,10 @@ export class ApplicationsController {
   @UseGuards(OptionalAuthGuard)
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async create(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
-    return await this.applicationsService.create(applicationCreateDto)
+    const application = await this.applicationsService.create(applicationCreateDto)
+    const listing = await this.listingsService.findOne(application.listing.id)
+    this.emailService.confirmation(listing, application.application, applicationCreateDto.appUrl)
+    return application
   }
 
   @Get(`:applicationId`)

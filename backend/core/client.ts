@@ -376,7 +376,7 @@ export interface Application {
   updatedAt: Date;
 
   /**  */
-  user: User;
+  user: CombinedUserTypes;
 
   /**  */
   listing: Listing;
@@ -591,6 +591,9 @@ export interface ApplicationCreateDto {
 
   /**  */
   user: IdDto;
+
+  /**  */
+  appUrl: string;
 }
 
 export interface ApplicationUpdateDto {
@@ -610,6 +613,7 @@ export enum EnumAttachmentType {
   'ApplicationDownload' = 'ApplicationDownload',
   'ExternalApplication' = 'ExternalApplication'
 }
+export type CombinedUserTypes = (User & any) | null;
 export enum EnumListingStatus {
   'active' = 'active',
   'pending' = 'pending'

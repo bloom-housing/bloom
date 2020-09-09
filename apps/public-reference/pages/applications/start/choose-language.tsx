@@ -12,6 +12,7 @@ import {
   FormCard,
   ProgressNav,
   t,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -73,7 +74,7 @@ export default () => {
         )}
 
         <div className="form-card__pager">
-          <form className="" onSubmit={handleSubmit(onSubmit)}>
+          <Form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__pager-row primary px-4">
               <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
                 {t("application.chooseLanguage.chooseYourLanguage")}
@@ -106,9 +107,9 @@ export default () => {
                 開始
               </Button>
             </div>
-          </form>
+          </Form>
 
-          <div className="form-card__pager-row primary px-4 border-t border-gray-450">
+          {/* <div className="form-card__pager-row primary px-4 border-t border-gray-450">
             <h2 className="form-card__title w-full border-none pt-0 mt-0">
               {t("application.chooseLanguage.haveAnAccount")}
             </h2>
@@ -116,9 +117,11 @@ export default () => {
             <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
 
             <div>
-              <LinkButton href="/sign-in">{t("nav.signIn")}</LinkButton>
+              <LinkButton href="/sign-in?redirectUrl=/applications/start/choose-language">
+                {t("nav.signIn")}
+              </LinkButton>
             </div>
-          </div>
+          </div> */}
         </div>
       </FormCard>
     </FormsLayout>
