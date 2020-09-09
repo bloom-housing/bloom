@@ -48,11 +48,11 @@ class Unit extends BaseEntity {
   @IsNumberString()
   annualIncomeMin: string | null
 
-  @Column({ nullable: true, type: "text" })
+  @Column({ nullable: true, type: "numeric" })
   @Expose()
   @IsOptional()
-  @IsNumberString()
-  monthlyIncomeMin: string | null
+  @IsNumber()
+  monthlyIncomeMin: number | null
 
   @Column({ nullable: true, type: "numeric" })
   @Expose()
@@ -78,11 +78,11 @@ class Unit extends BaseEntity {
   @IsNumber()
   minOccupancy: number | null
 
-  @Column({ nullable: true, type: "text" })
+  @Column({ nullable: true, type: "numeric" })
   @Expose()
   @IsOptional()
-  @IsNumberString()
-  monthlyRent: string | null
+  @IsNumber()
+  monthlyRent: number | null
 
   @Column({ nullable: true, type: "numeric" })
   @Expose()
