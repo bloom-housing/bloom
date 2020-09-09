@@ -28,7 +28,7 @@ const [apiUrl, userAndPassword, listingFilePath] = process.argv.slice(2)
 
 const instance = axios.create({
   baseURL: apiUrl,
-  timeout: 1000,
+  timeout: 10000,
 })
 
 serviceOptions.axios = instance
@@ -115,7 +115,7 @@ async function main() {
 
   serviceOptions.axios = axios.create({
     baseURL: apiUrl,
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
