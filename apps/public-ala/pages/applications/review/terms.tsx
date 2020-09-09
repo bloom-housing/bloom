@@ -40,6 +40,7 @@ export default () => {
           listing: {
             id: listing.id,
           },
+          appUrl: process.env.siteBaseUrl,
           ...(profile && {
             user: {
               id: profile.id,
