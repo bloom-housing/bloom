@@ -82,7 +82,9 @@ function reformatListing(listing, relationsKeys: string[]) {
       for (const obj of relationArr) {
         try {
           delete obj["id"]
-        } catch (e) {}
+        } catch (e) {
+          console.error(e)
+        }
         for (const key in obj) {
           if (obj[key] === null) {
             delete obj[key]
@@ -96,7 +98,9 @@ function reformatListing(listing, relationsKeys: string[]) {
   }
   try {
     delete listing["id"]
-  } catch (e) {}
+  } catch (e) {
+    console.error(e)
+  }
   return listing
 }
 

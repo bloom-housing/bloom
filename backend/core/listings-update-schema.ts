@@ -10,7 +10,7 @@ if (process.argv.length < 3) {
 
 const [listingFilePath] = process.argv.slice(2)
 
-async function convertApplicationMethods(listing: any) {
+function convertApplicationMethods(listing: any) {
   const applicationMethods: Array<ApplicationMethodCreateDto> = []
   if (listing.acceptsPostmarkedApplications) {
     applicationMethods.push(
@@ -77,7 +77,7 @@ async function convertApplicationMethods(listing: any) {
   return listing
 }
 
-async function convertImageUrl(listing) {
+function convertImageUrl(listing) {
   if (!("assets" in listing)) {
     listing.assets = []
   }
@@ -95,10 +95,10 @@ async function convertImageUrl(listing) {
   return listing
 }
 
-async function main() {
+function main() {
   const listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
-  let newListing = await convertApplicationMethods(listing)
-  newListing = await convertImageUrl(newListing)
+  let newListing = convertApplicationMethods(listing)
+  newListing = convertImageUrl(newListing)
   console.log(JSON.stringify(newListing, null, 2))
 }
 

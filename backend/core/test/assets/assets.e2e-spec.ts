@@ -1,15 +1,12 @@
 import { Test } from "@nestjs/testing"
-import { INestApplication } from "@nestjs/common"
+import { INestApplication, ValidationPipe } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
-import { applicationSetup } from "../../src/app.module"
+import { applicationSetup, AppModule } from "../../src/app.module"
 import { AssetsModule } from "../../src/assets/assets.module"
-import { AssetCreateDto } from "../../src/assets/asset.create.dto"
-import { plainToClass } from "class-transformer"
-import { validateOrReject, ValidationError } from "class-validator"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -20,8 +17,6 @@ const exampleAssetBody = {
   fileId:
     "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
   label: "building",
-  referenceId: "Uvbk5qurpB2WI9V6WnNdH",
-  referenceType: "Listing",
 }
 
 describe("Assets", () => {
@@ -29,7 +24,7 @@ describe("Assets", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AssetsModule, TypeOrmModule.forRoot(dbOptions)],
+      imports: [TypeOrmModule.forRoot(dbOptions), AssetsModule],
     }).compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)

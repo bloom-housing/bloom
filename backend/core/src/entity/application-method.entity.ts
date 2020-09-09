@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Listing, ListingStatus } from "./listing.entity"
+import { Listing } from "./listing.entity"
 import { Expose } from "class-transformer"
-import { IsBoolean, IsDateString, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsBoolean, IsDateString, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
 
 export enum ApplicationMethodType {
   Internal = "Internal",
