@@ -99,6 +99,10 @@ export default class extends Component<ListingProps> {
     })
     const metaImage = imageUrlFromListing(listing)
 
+    const householdMaximumIncomeSubheader = listing.units[0].bmrProgramChart
+      ? t("listings.forIncomeCalculationsBMR")
+      : t("listings.forIncomeCalculations")
+
     if (listing.buildingSelectionCriteria) {
       buildingSelectionCriteria = (
         <p>
@@ -202,7 +206,7 @@ export default class extends Component<ListingProps> {
               <ul>
                 <ListSection
                   title={t("listings.householdMaximumIncome")}
-                  subtitle={t("listings.forIncomeCalculations")}
+                  subtitle={householdMaximumIncomeSubheader}
                 >
                   <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>

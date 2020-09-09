@@ -107,7 +107,8 @@
       "updatedAt": "2019-07-10T16:43:16.766Z",
       "listingId": "jsQvgvy6eJy56TNCFfQp8",
       "amiChartId": 1,
-      "monthlyRentAsPercentOfIncome": null
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": true
     },
     {
       "id": "Vrfp_MFTbvyc6GG_wduj5",
