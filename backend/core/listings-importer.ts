@@ -73,7 +73,7 @@ async function uploadListing(listing, listingService) {
 
 function reformatListing(listing, relationsKeys: string[]) {
   relationsKeys.forEach((relation) => {
-    if (!(relation in listing)) {
+    if (!(relation in listing) || listing[relation] === null) {
       listing[relation] = []
     } else {
       // Replace nulls with undefined and remove id
