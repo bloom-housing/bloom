@@ -36,6 +36,10 @@ interface ListingProps {
   listing: Listing
 }
 
+const imageUrlFromListing = (listing: Listing) => {
+  return listing.assets.find((asset) => asset.label == "building")?.fileId
+}
+
 export default class extends Component<ListingProps> {
   public static async getInitialProps({ query }) {
     const listingId = query.id
@@ -96,7 +100,7 @@ export default class extends Component<ListingProps> {
       regionName: t("region.name"),
       listingName: listing.name,
     })
-    const metaImage = listing.imageUrl
+    const metaImage = imageUrlFromListing(listing)
 
     if (listing.buildingSelectionCriteria) {
       buildingSelectionCriteria = (
@@ -133,7 +137,7 @@ export default class extends Component<ListingProps> {
 
         <article className="flex flex-wrap relative max-w-5xl m-auto">
           <header className="image-card--leader">
-            <ImageCard title={listing.name} imageUrl={listing.imageUrl} />
+            <ImageCard title={listing.name} imageUrl={imageUrlFromListing(listing)} />
             <div className="p-3">
               <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
                 {oneLineAddress}
@@ -185,7 +189,10 @@ export default class extends Component<ListingProps> {
             )}
           </div>
           <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
-            <ApplicationSection listing={listing} />
+            <ApplicationSection
+              listing={listing}
+              internalFormRoute="applications/start/choose-language"
+            />
           </div>
           <ListingDetails>
             <ListingDetailItem
@@ -255,7 +262,10 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
-                  <ApplicationSection listing={listing} />
+                  <ApplicationSection
+                    listing={listing}
+                    internalFormRoute="applications/start/choose-language"
+                  />
                 </div>
                 <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />

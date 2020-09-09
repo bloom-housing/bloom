@@ -1,7 +1,8 @@
 import React, { useState } from "react"
-import { Listing, Attachment, AttachmentType } from "@bloom-housing/core"
+import { Listing, ApplicationMethod, ApplicationMethodType } from "@bloom-housing/core"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
+import { lRoute } from "../../../helpers/localeRoute"
 import { Button } from "../../../atoms/Button"
 import { LinkButton } from "../../../atoms/LinkButton"
 import { SidebarAddress } from "./SidebarAddress"
@@ -9,6 +10,19 @@ import { openDateState } from "../../../helpers/state"
 
 export interface ApplyProps {
   listing: Listing
+  internalFormRoute: string
+}
+
+const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+  return applicationMethods.some((method) => method.type == type)
+}
+
+const hasAnyMethods = (applicationMethods: ApplicationMethod[], types: ApplicationMethodType[]) => {
+  return applicationMethods.some((method) => types.some((type) => type == method.type))
+}
+
+const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+  return applicationMethods.find((method) => method.type == type)
 }
 
 const OrDivider = (props: { bgColor: string }) => (
@@ -27,7 +41,8 @@ const NumberedHeader = (props: { num: number; text: string }) => (
 )
 
 const Apply = (props: ApplyProps) => {
-  const { listing } = props
+  // /applications/start/choose-language
+  const { listing, internalFormRoute } = props
   let onlineApplicationUrl = ""
 
   const [showDownload, setShowDownload] = useState(false)
@@ -35,13 +50,12 @@ const Apply = (props: ApplyProps) => {
 
   const openDate = moment(listing.applicationOpenDate).format("MMMM D, YYYY")
 
-  if (listing.acceptingOnlineApplications) {
-    const onlineApplicationAttachment = listing.attachments.filter((attachment: Attachment) => {
-      return attachment.type == AttachmentType.ExternalApplication
-    })[0]
-    if (onlineApplicationAttachment) {
-      onlineApplicationUrl = onlineApplicationAttachment.fileUrl
-    }
+  if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
+    onlineApplicationUrl = lRoute(`${internalFormRoute}?listingId=${listing.id}`)
+  } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
+    onlineApplicationUrl =
+      getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
+        ?.externalReference || ""
   }
 
   return (
@@ -55,14 +69,14 @@ const Apply = (props: ApplyProps) => {
           </p>
         )}
         {!openDateState(listing) &&
-          ((listing.acceptingOnlineApplications && (
+          ((onlineApplicationUrl && (
             <>
               <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
                 {t("listings.apply.applyOnline")}
               </LinkButton>
             </>
           )) ||
-            (!listing.acceptingOnlineApplications && (
+            (!onlineApplicationUrl && (
               <>
                 <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
                 <Button filled className="w-full mb-2" onClick={toggleDownload}>
@@ -72,23 +86,23 @@ const Apply = (props: ApplyProps) => {
             )))}
 
         {showDownload &&
-          listing.attachments
-            .filter((attachment: Attachment) => {
-              return attachment.type == AttachmentType.ApplicationDownload
+          listing.applicationMethods
+            .filter((method: ApplicationMethod) => {
+              return method.type == ApplicationMethodType.FileDownload
             })
-            .map((attachment: Attachment) => (
-              <p key={attachment.fileUrl} className="text-center mt-2 mb-4 text-sm">
+            .map((method: ApplicationMethod) => (
+              <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
                 <a
-                  href={attachment.fileUrl}
+                  href={method.externalReference}
                   title={t("listings.apply.downloadApplication")}
                   target="_blank"
                 >
-                  {attachment.label}
+                  {method.label}
                 </a>
               </p>
             ))}
 
-        {listing.blankPaperApplicationCanBePickedUp && (
+        {hasMethod(listing.applicationMethods, ApplicationMethodType.PaperPickup) && (
           <>
             {!openDateState(listing) && <OrDivider bgColor="white" />}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
@@ -102,16 +116,20 @@ const Apply = (props: ApplyProps) => {
         )}
       </section>
 
-      {(listing.acceptingApplicationsByPoBox || listing.acceptingApplicationsAtLeasingAgent) && (
+      {hasAnyMethods(listing.applicationMethods, [
+        ApplicationMethodType.POBox,
+        ApplicationMethodType.LeasingAgent,
+      ]) && (
         <section className="aside-block bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
-          {listing.acceptingApplicationsByPoBox && (
+          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) && (
             <>
               <SubHeader text={t("listings.apply.sendByUsMail")} />
               <p className="text-gray-700">{listing.applicationOrganization}</p>
               <SidebarAddress address={listing.applicationAddress} />
               <p className="mt-4 text-tiny text-gray-750">
-                {listing.acceptsPostmarkedApplications
+                {getMethod(listing.applicationMethods, ApplicationMethodType.POBox)
+                  ?.acceptsPostmarkedApplications
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
                       applicationDueDate: moment(listing.applicationDueDate).format("MMM DD, YYYY"),
                       postmarkReceivedByDate: moment(
@@ -123,10 +141,11 @@ const Apply = (props: ApplyProps) => {
               </p>
             </>
           )}
-          {listing.acceptingApplicationsByPoBox && listing.acceptingApplicationsAtLeasingAgent && (
-            <OrDivider bgColor="gray-100" />
-          )}
-          {listing.acceptingApplicationsAtLeasingAgent && (
+          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) &&
+            hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
+              <OrDivider bgColor="gray-100" />
+            )}
+          {hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
             <>
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
