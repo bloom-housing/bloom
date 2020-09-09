@@ -20,8 +20,8 @@
     @apply py-3;
     @apply border-b-2;
     @apply text-gray-700;
+    @apply items-center;
     border-color: transparent;
-    align-items: center;
     line-height: 1.5rem;
 
     &:hover {

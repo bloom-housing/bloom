@@ -102,21 +102,21 @@ export const ViewSectionFourColumnsEdit = () => (
       </p>
 
       <p className="view-item">
-        <span className="info-item__label">Label</span>
-        <span className="info-item__value">Value</span>
-        <span className="info-item__helper">Helper</span>
+        <span className="view-item__label">Label</span>
+        <span className="view-item__value">Value</span>
+        <span className="view-item__helper">Helper</span>
       </p>
 
       <p className="view-item">
-        <span className="info-item__label">Label</span>
-        <span className="info-item__value">Value</span>
-        <span className="info-item__helper">Helper</span>
+        <span className="view-item__label">Label</span>
+        <span className="view-item__value">Value</span>
+        <span className="view-item__helper">Helper</span>
       </p>
 
       <p className="view-item">
-        <span className="info-item__label">Label</span>
-        <span className="info-item__value">Value</span>
-        <span className="info-item__helper">Helper</span>
+        <span className="view-item__label">Label</span>
+        <span className="view-item__value">Value</span>
+        <span className="view-item__helper">Helper</span>
       </p>
     </div>
   </div>
@@ -225,7 +225,7 @@ export const ViewSectionSingleColumnWarn = () => (
     </p>
     <div className="bg-primary-lighter my-4 p-4">
       <fieldset>
-        <legend className="field-note mb-4">Confirm this application is valid:</legend>
+        <legend className="field-note mb-4 text-gray-750">Confirm this application is valid:</legend>
         <div className="field-group--inline">
           <div className="field "><input type="radio" id="testvalidappkeep" name="testvalidapp" value="keep" /><label className="font-semibold" htmlFor="testvalidappkeep">Keep</label></div>
           <div className="field "><input type="radio" id="testvalidappremove" name="testvalidapp" value="remove" /><label className="font-semibold" htmlFor="testvalidappremove">Remove</label></div>

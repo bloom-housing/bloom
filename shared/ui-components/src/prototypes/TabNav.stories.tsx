@@ -20,7 +20,7 @@ export const TabNavCount = () => (
   <nav className="tab-nav" aria-label="Secondary navigation">
     <ul>
       <li><a href="#">Applications</a></li>
-      <li><a href="#" className="is-current">Flags <span className="pill bg-gray-450 text-gray-900">22</span></a></li>
+      <li><a href="#" className="is-current">Flags <span className="tag bg-gray-450 text-gray-900 ml-1">22</span></a></li>
     </ul>
   </nav>
 )

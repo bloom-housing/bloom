@@ -1,27 +1,28 @@
 .drawer {
   @apply flex;
+  @apply flex-col;
   @apply bg-gray-200;
   @apply max-w-5xl;
-  flex-direction: column;
+
 
   &.is-left {
     @apply border-l;
     @apply w-full;
     @apply fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: auto;
-    overflow-y: auto;
+    @apply top-0;
+    @apply right-0;
+    @apply bottom-0;
+    @apply left-auto;
+    @apply overflow-y-auto;
   }
 }
 
 .drawer__header {
   @apply flex;
+  @apply relative;
   @apply bg-white;
   @apply p-5;
   @apply border-b;
-  position: relative;
   flex: 0 0 4.625rem;
 }
 
@@ -38,8 +39,8 @@
 }
 
 .drawer__body {
-  overflow-y: auto;
-  position: relative;
+  @apply overflow-y-auto;
+  @apply relative;
   flex: 1 1 auto;
 }
 
@@ -47,5 +48,24 @@
   @apply m-auto;
   @apply px-4;
   @apply py-8;
-  overflow-y: visible;
+  @apply overflow-y-visible;
+}
+
+.drawer__wrapper {
+  @apply top-0;
+  @apply left-0;
+  @apply fixed;
+  @apply w-screen;
+  @apply h-screen;
+  @apply z-50;
+  @apply flex;
+
+  &.drawer__wrappe--backdrop:before {
+    content: "";
+    @apply absolute;
+    @apply w-full;
+    @apply h-full;
+    @apply bg-gray-900;
+    @apply bg-opacity-50;
+  }
 }
