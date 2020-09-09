@@ -219,6 +219,20 @@ export const ViewSectionSingleColumn = () => (
 
 export const ViewSectionSingleColumnWarn = () => (
   <div className="view-section">
+    <p className="view-item">
+      <span className="view-item__label">Application Number</span>
+      <span className="view-item__value">APP-0001002002</span>
+    </p>
+    <div className="bg-primary-lighter my-4 p-4">
+      <fieldset>
+        <legend className="field-note mb-4">Confirm this application is valid:</legend>
+        <div className="field-group--inline">
+          <div className="field "><input type="radio" id="testvalidappkeep" name="testvalidapp" value="keep" /><label className="font-semibold" htmlFor="testvalidappkeep">Keep</label></div>
+          <div className="field "><input type="radio" id="testvalidappremove" name="testvalidapp" value="remove" /><label className="font-semibold" htmlFor="testvalidappremove">Remove</label></div>
+        </div>
+      </fieldset>
+    </div>
+
     <h3 className="view-group__title">My Group</h3>
 
     <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">

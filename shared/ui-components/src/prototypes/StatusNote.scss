@@ -1,0 +1,9 @@
+.status-note {
+  @apply border;
+  @apply rounded-lg;
+  @apply p-4;
+  @apply bg-white;
+  @apply text-sm;
+  @apply text-gray-800;
+  @apply mb-4;
+}
