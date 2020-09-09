@@ -8,8 +8,8 @@ import supertest from "supertest"
 import { AuthModule } from "../../src/auth/auth.module"
 import { UserModule } from "../../src/user/user.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { ApplicationsModule } from "../../src/applications/applications.module"
 import { applicationSetup } from "../../src/app.module"
+import { ApplicationsModule } from "../../src/applications/applications.module"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -27,11 +27,11 @@ describe("Applications", () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
+        TypeOrmModule.forRoot(dbOptions),
         AuthModule,
         UserModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forRoot(dbOptions),
       ],
     }).compile()
     app = moduleRef.createNestApplication()

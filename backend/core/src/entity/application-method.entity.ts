@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { Listing, ListingStatus } from "./listing.entity"
 import { Expose } from "class-transformer"
-import { IsBoolean, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsBoolean, IsDateString, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
 
 export enum ApplicationMethodType {
   Internal = "Internal",
@@ -31,13 +31,13 @@ export class ApplicationMethod extends BaseEntity {
   @CreateDateColumn()
   @Expose()
   @IsString()
-  @IsUUID()
+  @IsDateString()
   createdAt: string
 
   @UpdateDateColumn()
   @Expose()
   @IsString()
-  @IsUUID()
+  @IsDateString()
   updatedAt: string
 
   @Column({

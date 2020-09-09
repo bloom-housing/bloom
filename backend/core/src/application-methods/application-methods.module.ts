@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { Application } from "../entity/application.entity"
 import { ApplicationMethodsService } from "./application-method.service"
 import { ApplicationMethodsController } from "./application-methods.controller"
+import { ApplicationMethod } from "../entity/application-method.entity"
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Application])],
+  imports: [TypeOrmModule.forFeature([ApplicationMethod])],
   providers: [ApplicationMethodsService],
   exports: [ApplicationMethodsService],
   controllers: [ApplicationMethodsController],

@@ -1,17 +1,8 @@
-import { IsObject, IsOptional, IsString } from "class-validator"
-import { IdDto } from "../lib/id.dto"
+import { OmitType } from "@nestjs/swagger"
+import { ApplicationDto } from "./applications.dto"
 
-export class ApplicationCreateDto {
-  @IsObject()
-  application: any
-
-  @IsObject()
-  listing: IdDto
-
-  @IsOptional()
-  @IsObject()
-  user?: IdDto
-
-  @IsString()
-  appUrl: string
-}
+export class ApplicationCreateDto extends OmitType(ApplicationDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+] as const) {}

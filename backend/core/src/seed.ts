@@ -43,12 +43,14 @@ async function bootstrap() {
     user: { id: user.id },
     listing: { id: listing.id },
     application: { foo: "bar" },
+    appUrl: "aaaa",
   }).save()
 
   await plainToClass(Application, {
     user: { id: user2.id },
     listing: { id: listing.id },
     application: { foo: "bar2" },
+    appUrl: "bbbb",
   }).save()
 
   await app.close()
