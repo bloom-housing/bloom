@@ -1,9 +1,5 @@
 {
   "id": "HOLNx_F7fUCeax5GCoIr5g",
-  "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": true,
-  "acceptingOnlineApplications": true,
-  "acceptsPostmarkedApplications": true,
   "postmarkedApplicationsReceivedByDate": "2020-10-08T16:00:00.000-07:00",
   "accessibility": "All common areas ADA accessible and homes ADA adaptable.",
   "amenities": "Fitness Center, Indoor/Outdoor Lounge, Social Lounge, Package Lockers, Indoor Bicyle Parking, On-site Composting, Green Roof Spaces",
@@ -18,7 +14,6 @@
   "applicationDueDate": "2020-10-08T16:00:00.000-07:00",
   "applicationOrganization": "Jones Berkeley BMR",
   "applicationPhone": "415-238-5026",
-  "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "county": "Alameda",
     "city": "Berkeley",
@@ -34,7 +29,6 @@
   "depositMax": "1,250",
   "depositMin": "500",
   "developer": "Shorenstein",
-  "imageUrl": "/images/jones.jpg",
   "programRules": "Rent shown is based on 2019 guidelines from the California Tax Credit Allocation Committee. These figures may change during lease up in Spring when the new 2020 rates go into effect. One two-bedroom unit at 30% AMI will have a preference for people who live or work in Alameda County.",
   "externalId": null,
   "waitlistMaxSize": 9999,
@@ -55,16 +49,6 @@
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
   "unitAmenities": "Refrigerator, washer/dryer, gas range, dishwasher, central AC/Heat, quartz countertops, wood flooring, carpeted bedroom",
-  "attachments": [
-    {
-      "fileUrl": "http://jonesberkeley.com/",
-      "type": 1
-    },
-    {
-      "fileUrl": "/applications/start/choose-language?listingId=HOLNx_F7fUCeax5GCoIr5g",
-      "type": 2
-    }
-  ],
   "applicationFee": "52.46",
   "criminalBackground": "No criminal background checks under Berkeley Fair Chance Ordinance",
   "leasingAgentEmail": "jonesberkeleybmr@greystar.com",
@@ -81,7 +65,7 @@
   "leasingAgentPhone": "415-238-5026",
   "leasingAgentTitle": "Management Coordinator",
   "rentalHistory": "Applicant must be able to provide sufficient residential information for at least the past two years to enable the Property Manager to adequately evaluate rental history and/or place of residence. If two years of prior residential information proves insufficient for obtaining adequate references, additional residential history may be requested. Negative rental history will be grounds for denial, including: Any evictions with an outstanding judgement, 4 or more evictions filings, 4 or more late payments being reported on the rental history report",
-  "preferences": null,
+  "preferences": [],
   "buildingTotalUnits": 170,
   "units": [
     {
@@ -180,7 +164,6 @@
       "amiChartId": 10,
       "monthlyRentAsPercentOfIncome": null
     },
-
     {
       "id": "baee2Aw7ik2QrScpb8sDLQ",
       "amiPercentage": "50",
@@ -301,7 +284,6 @@
       "amiChartId": 10,
       "monthlyRentAsPercentOfIncome": null
     },
-
     {
       "id": "PPxWLbsCOkSSQQlPCoJj5w",
       "amiPercentage": "50",
@@ -446,7 +428,6 @@
       "amiChartId": 10,
       "monthlyRentAsPercentOfIncome": null
     },
-
     {
       "id": "rVfljjqbGk6v7N_nKsA0lg",
       "amiPercentage": "50",
@@ -472,5 +453,37 @@
       "monthlyRentAsPercentOfIncome": null
     }
   ],
-  "unitsAvailable": 16
+  "unitsAvailable": 16,
+  "applicationMethods": [
+    {
+      "type": "LeasingAgent",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "POBox",
+      "acceptsPostmarkedApplications": false
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "fileId": "http://jonesberkeley.com/"
+    },
+    {
+      "type": "ExternalLink",
+      "acceptsPostmarkedApplications": false,
+      "fileId": "/applications/start/choose-language?listingId=HOLNx_F7fUCeax5GCoIr5g"
+    },
+    {
+      "type": "Internal",
+      "acceptsPostmarkedApplications": false
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/jones.jpg"
+    }
+  ]
 }

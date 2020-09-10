@@ -1,8 +1,5 @@
 {
   "id": "q3h9p31e",
-  "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": true,
-  "acceptingOnlineApplications": false,
   "accessibility": "All common areas ADA accessible and homes ADA adaptable. Features include outlet extenders, pullout breadboards, kickplates and cabinets, grab bar installation, and other reasonable accommodations upon request.",
   "amenities": "Fitness club, rooftop pool, spa, firepits, BBQ’s, a sky kitchen & lounge, a woof deck, paw spa, co-working spaces, wi-fi lounges, bike room and DIY space",
   "applicationAddress": {
@@ -16,7 +13,6 @@
   "applicationDueDate": "2020-10-01T17:00:00.000-07:00",
   "applicationOrganization": "",
   "applicationPhone": "510-747-5817",
-  "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "Oakland",
     "county": "Alameda",
@@ -32,7 +28,6 @@
   "depositMax": "3018",
   "depositMin": "500",
   "developer": "BXP MacArthur LLC, DBA The Skylyne at Temescal",
-  "imageUrl": "/images/skylyne.jpg",
   "programRules": null,
   "externalId": null,
   "waitlistMaxSize": 500,
@@ -53,13 +48,6 @@
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
   "unitAmenities": "Refrigerator, washer/dryer, stove/range, microwave, dishwasher, google nest thermostat for AC/Heat",
-  "attachments": [
-    {
-      "fileUrl": "https://theskylyne.com/assets/files/Application.pdf",
-      "label": "English",
-      "type": 1
-    }
-  ],
   "applicationFee": "50.94",
   "criminalBackground": "Criminal screening prohibited under City of Oakland Fair Chance Ordinance",
   "leasingAgentEmail": "TheSkylyneBMR@greystar.com",
@@ -1171,5 +1159,29 @@
       "monthlyRentAsPercentOfIncome": null
     }
   ],
-  "unitsAvailable": 45
+  "unitsAvailable": 45,
+  "applicationMethods": [
+    {
+      "type": "POBox",
+      "acceptsPostmarkedApplications": false
+    },
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": false
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "English",
+      "fileId": "https://theskylyne.com/assets/files/Application.pdf"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/skylyne.jpg"
+    }
+  ]
 }

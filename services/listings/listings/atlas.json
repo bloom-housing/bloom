@@ -1,8 +1,5 @@
 {
   "id": "gyi1Wa3K902-MDXBf0Q62g",
-  "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": true,
-  "acceptingOnlineApplications": true,
   "accessibility": "All common areas ADA accessible and homes ADA adaptable. All reasonable accommodations/modifications will be reviewed upon request.",
   "amenities": "Fitness center, pool, spa, firepits, BBQ’s, a sky kitchen & lounge, pet spa and relief area, co-working spaces, wi-fi lounges, bike room, onsite storage, chef’s kitchen, rooftop terrace, yoga studio, game room, 24-hour concierge",
   "applicationAddress": {
@@ -16,7 +13,6 @@
   "applicationDueDate": "2020-10-06T17:00:00.000-07:00",
   "applicationOrganization": "Atlas BMR",
   "applicationPhone": "(510) 381-8407",
-  "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "Oakland ",
     "county": "Alameda",
@@ -32,7 +28,6 @@
   "depositMax": "1,995",
   "depositMin": "600",
   "developer": "Carmel Partners",
-  "imageUrl": "/images/atlas.jpg",
   "programRules": null,
   "externalId": null,
   "waitlistMaxSize": 500,
@@ -53,12 +48,6 @@
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
   "unitAmenities": "Refrigerator, stove, oven, dishwasher, microwave, washer and dryer, air conditioning",
-  "attachments": [
-    {
-      "fileUrl": "https://www.atlasoakland.com/bmr",
-      "type": 2
-    }
-  ],
   "applicationFee": "52.46",
   "criminalBackground": "No criminal background checks under Oakland Fair Chance Ordinance",
   "leasingAgentEmail": "AtlasHousing@Greystar.com",
@@ -735,5 +724,28 @@
       "monthlyRentAsPercentOfIncome": null
     }
   ],
-  "unitsAvailable": 27
+  "unitsAvailable": 27,
+  "applicationMethods": [
+    {
+      "type": "POBox",
+      "acceptsPostmarkedApplications": false
+    },
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": false
+    },
+    {
+      "type": "ExternalLink",
+      "acceptsPostmarkedApplications": false,
+      "fileId": "https://www.atlasoakland.com/bmr"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/atlas.jpg"
+    }
+  ]
 }
