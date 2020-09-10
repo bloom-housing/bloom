@@ -41,6 +41,7 @@ module.exports = withCSS(
       withSass(
         withTM({
           env: {
+            backendApiBase: BACKEND_API_BASE,
             listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
             mapBoxToken: MAPBOX_TOKEN,
             housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
