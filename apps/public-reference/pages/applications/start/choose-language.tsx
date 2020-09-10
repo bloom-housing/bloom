@@ -43,7 +43,7 @@ export default () => {
 
   const currentPageStep = 1
 
-  const imageUrl = listing.assets ? imageUrlFromListing(listing) : ""
+  const imageUrl = listing?.assets ? imageUrlFromListing(listing) : ""
 
   /* Form Handler */
   const { handleSubmit } = useForm()
