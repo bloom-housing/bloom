@@ -13,14 +13,18 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Set up app-wide constants
+const BACKEND_API_BASE = process.env.BACKEND_API_BASE
 let LISTING_SERVICE_URL = "http://localhost:3001"
+
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
   // This is a value that can get set via a Netlify webhook for branch deploys
   LISTING_SERVICE_URL = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
 } else if (process.env.LISTING_SERVICE_URL) {
   LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL
 }
-console.log(`Using ${LISTING_SERVICE_URL} for the listing service.`)
+
+const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
+console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
 // Load the Tailwind theme and set up SASS vars
 const bloomTheme = require("./tailwind.config.js")
@@ -33,7 +37,8 @@ module.exports = withCSS(
     withSass(
       withTM({
         env: {
-          listingServiceUrl: LISTING_SERVICE_URL,
+          backendApiBase: BACKEND_API_BASE,
+          listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
         },
         sassLoaderOptions: {
           additionalData: tailwindVars,
