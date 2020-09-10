@@ -17,6 +17,8 @@ export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageSection = 2
 
+  conductor.stepTo("Preferred Unit Size")
+
   const backPath =
     application.householdSize > 1
       ? "/applications/household/add-members"
@@ -30,8 +32,7 @@ export default () => {
     application.preferredUnit = preferredUnit
 
     conductor.sync()
-
-    Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)

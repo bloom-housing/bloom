@@ -12,8 +12,10 @@ import { useContext } from "react"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 
 export default () => {
-  const { listing, application } = useContext(AppSubmissionContext)
+  const { conductor, listing, application } = useContext(AppSubmissionContext)
   const currentPageSection = 5
+
+  conductor.stepTo("Summary")
 
   /* Form Handler */
   const { handleSubmit } = useForm()

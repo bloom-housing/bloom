@@ -15,6 +15,8 @@ export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageSection = 4
 
+  conductor.stepTo("General Pool")
+
   useEffect(() => {
     if (!application.preferences.none) {
       // Only describe the General Pool if no preferences were selected
@@ -27,7 +29,7 @@ export default () => {
   const onSubmit = (data) => {
     conductor.completeSection(4)
     conductor.sync()
-    conductor.routeToNextOrReturnUrl("/applications/review/demographics")
+    conductor.routeToNextOrReturnUrl()
   }
 
   return (

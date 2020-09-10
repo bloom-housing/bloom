@@ -54,6 +54,8 @@ export default () => {
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
   const currentPageSection = 3
 
+  conductor.stepTo("Income")
+
   /* Form Handler */
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     defaultValues: {
@@ -76,7 +78,7 @@ export default () => {
 
       conductor.completeSection(3)
       conductor.sync()
-      conductor.routeToNextOrReturnUrl("/applications/preferences/select")
+      conductor.routeToNextOrReturnUrl()
     }
   }
   const onError = () => {

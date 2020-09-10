@@ -24,6 +24,8 @@ const Demographics = () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageSection = 5
 
+  conductor.stepTo("Demographics")
+
   /* Form Handler */
   const { register, handleSubmit } = useForm()
 
@@ -39,7 +41,7 @@ const Demographics = () => {
       },
     })
 
-    Router.push("/applications/review/summary").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
 
   const howDidYouHearOptions = useMemo(() => {

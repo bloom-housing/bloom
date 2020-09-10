@@ -12,8 +12,13 @@ const noAlternateContactResolver = (applicationContext) => {
 
 const soloHousehold = (applicationContext) => {
   return () => {
-    // console.info("size!", applicationContext.application.householdSize)
     return applicationContext.application.householdSize == 1
+  }
+}
+
+const preferencesSelected = (applicationContext) => {
+  return () => {
+    return !applicationContext.application.preferences.none
   }
 }
 
@@ -22,5 +27,6 @@ export const resolversLibrary = (applicationContext, userContext) => {
     requiresLogin: requiresLoginResolver(applicationContext, userContext),
     noAlternateContact: noAlternateContactResolver(applicationContext),
     soloHousehold: soloHousehold(applicationContext),
+    preferencesSelected: preferencesSelected(applicationContext),
   }
 }

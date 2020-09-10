@@ -24,6 +24,8 @@ export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageSection = 2
 
+  conductor.stepTo("ADA Household Members")
+
   /* Form Handler */
   const { register, handleSubmit, getValues, setValue, trigger, watch, errors } = useForm<
     Record<string, any>
@@ -45,7 +47,8 @@ export default () => {
       },
     })
 
-    conductor.routeToNextOrReturnUrl("/applications/financial/vouchers")
+    conductor.completeSection(2)
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)

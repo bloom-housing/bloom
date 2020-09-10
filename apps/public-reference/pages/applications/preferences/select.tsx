@@ -23,6 +23,8 @@ export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageSection = 4
 
+  conductor.stepTo("Preferences Introduction")
+
   const preferenceOptions = ["liveIn", "workIn"]
 
   const toggleShowMoreForOption = (option) =>
@@ -34,13 +36,11 @@ export default () => {
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ preferences: data })
-    if (data.none) {
-      conductor.routeToNextOrReturnUrl("/applications/preferences/general")
-    } else {
+    if (!data.none) {
       conductor.completeSection(4)
       conductor.sync()
-      conductor.routeToNextOrReturnUrl("/applications/review/demographics")
     }
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)

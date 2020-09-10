@@ -24,6 +24,8 @@ export default () => {
   const router = useRouter()
   const currentPageSection = 3
 
+  conductor.stepTo("Vouchers Subsidies")
+
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
@@ -35,7 +37,7 @@ export default () => {
     const toSave = { incomeVouchers: JSON.parse(incomeVouchers) }
     new FormStep(conductor).save(toSave)
 
-    router.push("/applications/financial/income").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)

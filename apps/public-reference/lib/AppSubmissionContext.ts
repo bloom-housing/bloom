@@ -75,6 +75,48 @@ export const retrieveApplicationConfig = () => {
         url: "/applications/household/preferred-units",
         nextUrl: "/applications/household/ada",
       },
+
+      {
+        name: "ADA Household Members",
+        url: "/applications/household/ada",
+        nextUrl: "/applications/financial/vouchers",
+      },
+
+      {
+        name: "Vouchers Subsidies",
+        url: "/applications/financial/vouchers",
+        nextUrl: "/applications/financial/income",
+      },
+
+      {
+        name: "Income",
+        url: "/applications/financial/income",
+        nextUrl: "/applications/preferences/select",
+      },
+
+      {
+        name: "Preferences Introduction",
+        url: "/applications/preferences/select",
+        nextUrl: "/applications/preferences/general",
+      },
+
+      {
+        name: "General Pool",
+        url: "/applications/preferences/general",
+        skipIf: [{ condition: "preferencesSelected", skipTo: "/applications/review/demographics" }],
+        nextUrl: "/applications/review/demographics",
+      },
+
+      {
+        name: "Demographics",
+        url: "/applications/review/demographics",
+        nextUrl: "/applications/review/summary",
+      },
+
+      {
+        name: "Summary",
+        url: "/applications/review/summary",
+      },
     ],
   }
 }
