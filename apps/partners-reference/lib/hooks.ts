@@ -6,7 +6,7 @@ import { ApplicationDto, ListingDto } from "@bloom-housing/backend-core/client"
 
 export function useListingsData() {
   const fetcher = (url) => fetch(url).then((r) => r.json())
-  const { data, error } = useSWR("http://localhost:3100", fetcher)
+  const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
   if (data && data.status == "ok") {
     console.log(`Listings Data Received: ${data.listings.length}`)
   }
@@ -20,8 +20,9 @@ export function useListingsData() {
 export function useApplicationsData() {
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
   const { applicationsService } = useContext(ApiClientContext)
+  const backendApplicationsEndpointUrl = process.env.backendApiBase + "/applications"
   const fetcher = (url) => applicationsService.list()
-  const { data, error } = useSWR("http://localhost:3100/applications", fetcher)
+  const { data, error } = useSWR(backendApplicationsEndpointUrl, fetcher)
   const applications: ApplicationDto[] = []
   if (listingDtos && data) {
     console.log(`Applications Data Received: ${data.length}`)
