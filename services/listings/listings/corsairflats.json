@@ -1,8 +1,5 @@
 {
   "id": "sz0UrxnBdAxHMdfgcgha8",
-  "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": true,
   "accessibility": "All units are fully adaptable for people with disabilities. All common areas are fully acccessible, and the building has elevator service to all floors.",
   "amenities": "Community Room, Courtyard",
   "applicationAddress": {
@@ -16,15 +13,23 @@
   "applicationDueDate": "2020-04-24T16:00:00.000-07:00",
   "applicationOrganization": "",
   "applicationPhone": "",
-  "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "city": "Alameda",
     "county": "Alameda",
     "street": "171 W Atlantic Avenue",
     "zipCode": "94501",
     "state": "CA",
-    "latitude": 37.779850,
-    "longitude": -122.293150
+    "latitude": 37.77985,
+    "longitude": -122.29315
+  },
+  "leasingAgentAddress": {
+    "street": "",
+    "city": "",
+    "state": "",
+    "zipCode": "",
+    "county": "Alameda",
+    "longitude": 0,
+    "latitude": 0
   },
   "buildingSelectionCriteria": null,
   "costsNotIncluded": "",
@@ -32,7 +37,6 @@
   "depositMax": "",
   "depositMin": "500",
   "developer": "Eden Housing",
-  "imageUrl": "/images/cosairflats.jpg",
   "programRules": "Rent shown is based on 2019 guidelines from the California Tax Credit Allocation Committee. These figures may change during lease up in Spring when the new 2020 rates go into effect. One two-bedroom unit at 30% AMI will have a preference for people who live or work in Alameda County.",
   "externalId": null,
   "waitlistMaxSize": 500,
@@ -53,30 +57,14 @@
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
   "unitAmenities": "Full size kitchen with stove, oven, refrigerator, garbage disposal. Ceiling fan and blinds",
-  "attachments": [
-    {
-      "fileUrl": "https://www.on-site.com/apply/property/320531",
-      "type": 2
-    }
-  ],
   "applicationFee": "35.0",
   "criminalBackground": "Applicants for the waitlist lottery will be screened based on the following criteria: Involvement in criminal activity on the part of any applicant household member which would adversely affect the health, safety or welfare of other residents.",
-  "leasingAgentEmail": "",
   "leasingAgentName": "Eden Housing Lease-Up Team",
-  "leasingAgentAddress": {
-    "city": null,
-    "street": null,
-    "zipCode": null,
-    "state": null,
-    "latitude": null,
-    "longitude": null
-  },
   "leasingAgentOfficeHours": "Please call for online support in applying — Telephone assistance is available Monday through Saturday, 10 AM to 4 PM from 4/6/2020 to 4/24/2020",
   "leasingAgentPhone": "510-499-2491",
   "leasingAgentTitle": "",
   "rentalHistory": "Applicants for the waitlist lottery will be screened based on the following criteria: A record of disturbance of neighbors, destruction of property, or living or housekeeping habits at prior residences which may adversely affect the health, safety or welfare of other residents, or cause damage to the apartment or development; A record of eviction from housing or termination from a residential program; An applicant's ability and willingness to comply with the terms of the Lease.",
-  "preferences": [
-    ],
+  "preferences": [],
   "buildingTotalUnits": 29,
   "units": [
     {
@@ -320,7 +308,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-       "id": "MFaowAxySJW3utZBPNxr11",
+      "id": "MFaowAxySJW3utZBPNxr11",
       "amiPercentage": "60",
       "annualIncomeMin": "33480",
       "monthlyIncomeMin": "2790",
@@ -630,7 +618,7 @@
       "listingId": "sz0UrxnBdAxHMdfgcgha8",
       "amiChartId": 5,
       "monthlyRentAsPercentOfIncome": null
-    },          
+    },
     {
       "id": "WLf6h7MeCnpB7EIE6EH_1",
       "amiPercentage": "30",
@@ -776,5 +764,20 @@
       "monthlyRentAsPercentOfIncome": null
     }
   ],
-  "unitsAvailable": 29
+  "unitsAvailable": 29,
+  "applicationMethods": [
+    {
+      "type": "ExternalLink",
+      "acceptsPostmarkedApplications": false,
+      "fileId": "https://www.on-site.com/apply/property/320531"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/cosairflats.jpg"
+    }
+  ]
 }

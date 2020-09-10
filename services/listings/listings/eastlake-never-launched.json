@@ -1,8 +1,5 @@
 {
   "id": "sz0UrxnBaSdgeSdfgcgha8",
-  "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": true,
   "accessibility": "This site is not wheelchair accessible, however, all Reasonable Accommodations will be considered.",
   "amenities": "On-site laundry",
   "applicationAddress": {
@@ -17,7 +14,6 @@
   "applicationOpenDate": "2020-06-09T00:00:00.000Z",
   "applicationOrganization": "",
   "applicationPhone": "",
-  "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "city": "Oakland",
     "county": "Alameda Listings Never Launched",
@@ -33,7 +29,6 @@
   "depositMax": "1811.00",
   "depositMin": "1811.00",
   "developer": "EBALDC",
-  "imageUrl": "/images/eastlake.jpg",
   "programRules": "Rent shown is based on 2019 guidelines from the California Tax Credit Allocation Committee. These figures may change during lease up in Spring when the new 2020 rates go into effect.",
   "externalId": null,
   "waitlistMaxSize": null,
@@ -54,12 +49,6 @@
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
   "unitAmenities": "Units include a full size kitchen with refrigerator, oven range and stove",
-  "attachments": [
-    {
-      "fileUrl": "https://www.ebaldchaf.com",
-      "type": 2
-    }
-  ],
   "applicationFee": "26.00",
   "criminalBackground": "Applicants will be denied for the following: 1) History of manufacturing methamphetamines on federal property and 2) Lifetime sex offender registration",
   "leasingAgentEmail": "iterriquez@ebaldc.org",
@@ -157,5 +146,20 @@
     "applicantsWillBeContacted": "Applicants will be contacted on a first come first serve basis until vacancies are filled.",
     "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
     "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents within 5 days of being contacted."
-  }
+  },
+  "applicationMethods": [
+    {
+      "type": "ExternalLink",
+      "acceptsPostmarkedApplications": false,
+      "fileId": "https://www.ebaldchaf.com"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/eastlake.jpg"
+    }
+  ]
 }
