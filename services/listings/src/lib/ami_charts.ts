@@ -7,6 +7,7 @@ import SanMateoCountyTCAC2019 from "../../ami_charts/SanMateoCountyTCAC2019.json
 import sanMateoHUD2020 from "../../ami_charts/SanMateoHUD2020.json"
 import SanMateoCountyTCAC2020 from "../../ami_charts/SanMateoCountyTCAC2020.json"
 import AlamedaCountyLIHTC2020 from "../../ami_charts/AlamedaCountyLIHTC2020.json"
+import OaklandFremontHUD2020 from "../../ami_charts/OaklandFremontHUD2020.json"
 
 export const amiCharts = {
   1: sanMateoHUD2019,
@@ -18,4 +19,5 @@ export const amiCharts = {
   7: sanMateoHUD2020,
   8: SanMateoCountyTCAC2020,
   9: AlamedaCountyLIHTC2020,
+  10: OaklandFremontHUD2020,
 }
