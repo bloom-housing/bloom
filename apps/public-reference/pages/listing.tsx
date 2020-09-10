@@ -25,6 +25,7 @@ import {
   PreferencesList,
   UnitTables,
   WhatToExpect,
+  imageUrlFromListing,
   getOccupancyDescription,
   groupNonReservedAndReservedSummaries,
   occupancyTable,
@@ -34,10 +35,6 @@ import Layout from "../layouts/application"
 
 interface ListingProps {
   listing: Listing
-}
-
-const imageUrlFromListing = (listing: Listing) => {
-  return listing.assets.find((asset) => asset.label == "building")?.fileId
 }
 
 export default class extends Component<ListingProps> {
