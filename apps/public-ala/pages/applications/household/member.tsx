@@ -284,7 +284,7 @@ export default () => {
                 )}
               </div>
 
-              <div className="form-card__group border-b">
+              {/* <div className="form-card__group border-b">
                 <label className="field-label--caps" htmlFor="firstName">
                   {t("application.household.member.workInRegion")}
                 </label>
@@ -389,7 +389,7 @@ export default () => {
                     />
                   </>
                 )}
-              </div>
+              </div> */}
 
               <div className="form-card__group">
                 <div className={"field " + (errors.relationship ? "error" : "")}>

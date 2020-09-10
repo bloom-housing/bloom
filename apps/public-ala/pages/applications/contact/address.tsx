@@ -360,7 +360,7 @@ export default () => {
               />
             </div>
           )}
-          <div className="form-card__group border-b">
+          <div className="form-card__group">
             <label className="field-label--caps mb-4" htmlFor="contactPreference">
               {t("application.contact.contactPreference")}
             </label>
@@ -394,6 +394,7 @@ export default () => {
             </div>
           </div>
 
+          {/* TODO: restore class 'border-b' to form-card__group div above when restoring this... 
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="street">
               {t("application.contact.doYouWorkIn")}
@@ -502,7 +503,7 @@ export default () => {
                 />
               </>
             )}
-          </div>
+          </div> */}
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

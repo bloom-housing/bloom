@@ -201,7 +201,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
         )}
       </div>
 
-      <h3 className="form--card__sub-header">
+      {/* <h3 className="form--card__sub-header">
         {t("t.preferences")}
         {editMode && <EditLink href="/applications/preferences/select" />}
       </h3>
@@ -223,7 +223,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               ))}
           </>
         )}
-      </div>
+      </div> */}
     </>
   )
 }

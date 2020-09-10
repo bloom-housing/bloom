@@ -51,9 +51,11 @@ const Demographics = () => {
     }))
   }, [register])
 
-  const backPath = application.preferences.none
+  const backPath = "/applications/financial/income"
+  /* const backPath = application.preferences.none
     ? "/applications/preferences/general"
     : "/applications/preferences/select"
+  */
 
   return (
     <FormsLayout>

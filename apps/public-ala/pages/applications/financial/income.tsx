@@ -78,7 +78,7 @@ export default () => {
 
       conductor.completeStep(3)
       conductor.sync()
-      conductor.routeToNextOrReturnUrl("/applications/preferences/select")
+      conductor.routeToNextOrReturnUrl("/applications/review/demographics")
     }
   }
   const onError = () => {
