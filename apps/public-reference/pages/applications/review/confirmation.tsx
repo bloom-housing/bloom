@@ -4,7 +4,7 @@ Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { Button, FormCard, t } from "@bloom-housing/ui-components"
+import { Button, FormCard, imageUrlFromListing, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { useContext } from "react"
@@ -12,6 +12,8 @@ import { useContext } from "react"
 export default () => {
   const { listing } = useContext(AppSubmissionContext)
   const router = useRouter()
+
+  const imageUrl = imageUrlFromListing(listing)
 
   return (
     <FormsLayout>
@@ -23,7 +25,7 @@ export default () => {
           </h2>
         </div>
 
-        {listing?.imageUrl && <img src={listing.imageUrl} alt={listing?.name} />}
+        {imageUrl && <img src={imageUrl} alt={listing?.name} />}
 
         <div className="form-card__group border-b text-center">
           <h3 className="form-card__paragraph-title">

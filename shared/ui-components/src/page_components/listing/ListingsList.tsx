@@ -76,4 +76,4 @@ const ListingsList = (props: ListingsProps) => {
   return <>{listItems}</>
 }
 
-export { ListingsList as default, ListingsList }
+export { ListingsList as default, ListingsList, imageUrlFromListing }
