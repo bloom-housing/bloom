@@ -66,7 +66,7 @@ class MyApp extends App {
     const signInMessage = "Login is required to view this page."
 
     return (
-      <ConfigProvider apiUrl={process.env.listingServiceUrl}>
+      <ConfigProvider apiUrl={process.env.backendApiBase}>
         <UserProvider>
           <RequireLogin signInPath="/sign-in" signInMessage={signInMessage}>
             <ApiClientProvider>
