@@ -9,20 +9,31 @@ import {
 } from "typeorm"
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
-import { IsJSON, IsString, IsUUID } from "class-validator"
+import { IsDateString, IsDefined, IsJSON, IsString, IsUUID } from "class-validator"
+import { Expose } from "class-transformer"
 
 @Entity({ name: "applications" })
 export class Application extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
+  @Expose()
   @IsString()
   @IsUUID()
   id: string
 
   @CreateDateColumn()
-  createdAt: Date
+  @Expose()
+  @IsDateString()
+  createdAt: string
 
   @UpdateDateColumn()
-  updatedAt: Date
+  @Expose()
+  @IsDateString()
+  updatedAt: string
+
+  @Column({ type: "text", nullable: false })
+  @Expose()
+  @IsString()
+  appUrl: string
 
   @ManyToOne((type) => User, (user) => user.applications, { nullable: true })
   user: User | null
@@ -31,6 +42,7 @@ export class Application extends BaseEntity {
   listing: Listing
 
   @Column({ type: "jsonb", nullable: true })
-  @IsJSON()
+  @Expose()
+  @IsDefined()
   application: any
 }

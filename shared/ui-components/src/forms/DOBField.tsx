@@ -25,7 +25,8 @@ const DOBField = (props: DOBFieldProps) => {
   const validateAge = (value: string) => {
     return (
       parseInt(value) > 1900 &&
-      moment(`${birthMonth}.${birthDay}.${value}`) < moment().subtract(atAge ? 18 : 0, "years")
+      moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") <
+        moment().subtract(atAge ? 18 : 0, "years")
     )
   }
 

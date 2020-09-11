@@ -10,6 +10,10 @@ import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { logger } from "./middleware/logger.middleware"
+import { AssetsModule } from "./assets/assets.module"
+import { PreferencesModule } from "./preferences/preferences.module"
+import { ApplicationMethodsModule } from "./application-methods/application-methods.module"
+import { UnitsModule } from "./units/units.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -21,6 +25,7 @@ export function applicationSetup(app: INestApplication) {
       whitelist: true,
       // Automatically transform validated prop values into their specified types
       transform: true,
+      forbidNonWhitelisted: true,
     })
   )
   return app
@@ -36,6 +41,10 @@ export function applicationSetup(app: INestApplication) {
     AuthModule,
     ListingsModule,
     ApplicationsModule,
+    AssetsModule,
+    PreferencesModule,
+    ApplicationMethodsModule,
+    UnitsModule,
   ],
 })
 export class AppModule {}

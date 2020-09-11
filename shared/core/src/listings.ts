@@ -1,16 +1,22 @@
+import { Asset } from "./assets"
 import { Unit, UnitsSummarized } from "./units"
 import { Address } from "./general"
 import { Preference } from "./preferences"
 
-export enum AttachmentType {
-  ApplicationDownload = 1,
-  ExternalApplication = 2,
+export enum ApplicationMethodType {
+  Internal = "Internal",
+  FileDownload = "FileDownload",
+  ExternalLink = "ExternalLink",
+  PaperPickup = "PaperPickup",
+  POBox = "POBox",
+  LeasingAgent = "LeasingAgent",
 }
 
-export interface Attachment {
-  label: string
-  fileUrl: string
-  type: AttachmentType
+export interface ApplicationMethod {
+  type: ApplicationMethodType
+  label?: string
+  externalReference?: string
+  acceptsPostmarkedApplications?: boolean
 }
 
 export interface WhatToExpect {
@@ -40,10 +46,6 @@ export interface HouseholdMember {
 }
 
 export interface Listing {
-  acceptingApplicationsAtLeasingAgent: boolean
-  acceptingApplicationsByPoBox: boolean
-  acceptingOnlineApplications: boolean
-  acceptsPostmarkedApplications: boolean
   applicationPickUpAddress?: Address
   applicationPickUpAddressOfficeHours?: string
   accessibility: string
@@ -53,8 +55,8 @@ export interface Listing {
   applicationFee: string
   applicationOrganization: string
   applicationAddress: Address
-  attachments: Attachment[]
-  blankPaperApplicationCanBePickedUp: boolean
+  applicationMethods: ApplicationMethod[]
+  assets: Asset[]
   buildingAddress: Address
   buildingTotalUnits: number
   buildingSelectionCriteria: string

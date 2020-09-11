@@ -1,9 +1,32 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "typeorm"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm"
 import { Unit } from "./unit.entity"
-import { Preference } from "./preference.entity"
-import { Attachment } from "./attachment.entity"
-import { Address, UnitsSummarized, WhatToExpect } from "@bloom-housing/core"
 import { Application } from "./application.entity"
+import { Asset } from "./asset.entity"
+import { ApplicationMethod } from "./application-method.entity"
+import { Address } from "../shared/dto/address.dto"
+import { WhatToExpect } from "../shared/dto/whatToExpect.dto"
+import { Preference } from "./preference.entity"
+import { UnitsSummarized } from "@bloom-housing/core"
+import { Expose, Type } from "class-transformer"
+import {
+  IsBoolean,
+  IsDateString,
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from "class-validator"
 
 export enum ListingStatus {
   active = "active",
@@ -12,117 +35,300 @@ export enum ListingStatus {
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
+  @Expose()
+  @IsString()
+  @IsUUID()
+  id: string
+
+  @CreateDateColumn()
+  @Expose()
+  createdAt: string
+
+  @UpdateDateColumn()
+  @Expose()
+  updatedAt: string
+
   @OneToMany((type) => Preference, (preference) => preference.listing)
   preferences: Preference[]
+
   @OneToMany((type) => Unit, (unit) => unit.listing)
   units: Unit[]
-  @OneToMany((type) => Attachment, (attachment) => attachment.listing)
-  attachments: Attachment[]
-  @PrimaryGeneratedColumn("uuid")
-  id: string
-  @Column({ type: "boolean", nullable: true })
-  acceptingApplicationsAtLeasingAgent: boolean
-  @Column({ type: "boolean", nullable: true })
-  acceptingApplicationsByPoBox: boolean
-  @Column({ type: "boolean", nullable: true })
-  acceptingOnlineApplications: boolean
-  @Column({ type: "boolean", nullable: true })
-  acceptsPostmarkedApplications: boolean
-  @Column({ type: "text", nullable: true })
-  accessibility: string
-  @Column({ type: "text", nullable: true })
-  amenities: string
-  @Column({ type: "text", nullable: true })
-  applicationDueDate: string
-  @Column({ type: "text", nullable: true })
-  applicationOpenDate?: string
-  @Column({ type: "text", nullable: true })
-  applicationFee: string
-  @Column({ type: "text", nullable: true })
-  applicationOrganization: string
-  @Column({ type: "jsonb", nullable: true })
-  applicationAddress: Address
-  @Column({ type: "boolean", nullable: true })
-  blankPaperApplicationCanBePickedUp: boolean
-  @Column({ type: "jsonb", nullable: true })
-  buildingAddress: Address
-  @Column({ type: "numeric", nullable: true })
-  buildingTotalUnits: number
-  @Column({ type: "text", nullable: true })
-  buildingSelectionCriteria: string
-  @Column({ type: "text", nullable: true })
-  costsNotIncluded: string
-  @Column({ type: "text", nullable: true })
-  creditHistory: string
-  @Column({ type: "text", nullable: true })
-  criminalBackground: string
-  @Column({ type: "text", nullable: true })
-  depositMin: string
-  @Column({ type: "text", nullable: true })
-  depositMax?: string
-  @Column({ type: "text", nullable: true })
-  developer: string
-  @Column({ type: "boolean", nullable: true })
-  disableUnitsAccordion?: boolean
-  @Column({ type: "numeric", nullable: true })
-  householdSizeMax?: number
-  @Column({ type: "numeric", nullable: true })
-  householdSizeMin?: number
-  @Column({ type: "text", nullable: true })
-  imageUrl?: string
-  @Column({ type: "jsonb", nullable: true })
-  leasingAgentAddress: Address
-  @Column({ type: "text", nullable: true })
-  leasingAgentEmail: string
-  @Column({ type: "text", nullable: true })
-  leasingAgentName: string
-  @Column({ type: "text", nullable: true })
-  leasingAgentOfficeHours: string
-  @Column({ type: "text", nullable: true })
-  leasingAgentPhone: string
-  @Column({ type: "text", nullable: true })
-  leasingAgentTitle: string
-  @Column({ type: "text", nullable: true })
-  name: string
-  @Column({ type: "text", nullable: true })
-  neighborhood: string
-  @Column({ type: "text", nullable: true })
-  petPolicy: string
-  @Column({ type: "text", nullable: true })
-  postmarkedApplicationsReceivedByDate: string
-  @Column({ type: "text", nullable: true })
-  programRules?: string
-  @Column({ type: "text", nullable: true })
-  rentalHistory: string
-  @Column({ type: "text", nullable: true })
-  requiredDocuments: string
-  @Column({ type: "text", nullable: true })
-  smokingPolicy: string
-  @Column({ type: "numeric", nullable: true })
-  unitsAvailable: number
-  @Column({ type: "text", nullable: true })
-  unitAmenities: string
-  // @Column({ nullable: true })
-  // unitsSummarized?: UnitsSummarized
-  @Column({ type: "numeric", nullable: true })
-  waitlistCurrentSize: number
-  @Column({ type: "numeric", nullable: true })
-  waitlistMaxSize: number
-  @Column({ type: "jsonb", nullable: true })
-  whatToExpect?: WhatToExpect
-  @Column({ type: "numeric", nullable: true })
-  yearBuilt: number
 
-  unitsSummarized?: UnitsSummarized
-  urlSlug?: string
+  @OneToMany((type) => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
+  applicationMethods: ApplicationMethod[]
+
+  @OneToMany((type) => Asset, (asset) => asset.listing)
+  assets: Asset[]
+
   @OneToMany((type) => Application, (application) => application.listing)
   applications: Application[]
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  accessibility: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  amenities: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  applicationDueDate: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  applicationOpenDate: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  applicationFee: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  applicationOrganization: string | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Address)
+  applicationAddress: Address | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  blankPaperApplicationCanBePickedUp: boolean | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Address)
+  buildingAddress: Address | null
+
+  @Column({ type: "numeric", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  buildingTotalUnits: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  buildingSelectionCriteria: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  costsNotIncluded: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  creditHistory: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  criminalBackground: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  depositMin: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  depositMax: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  developer: string | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  disableUnitsAccordion: boolean | null
+
+  @Column({ type: "numeric", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  householdSizeMax: number | null
+
+  @Column({ type: "numeric", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  householdSizeMin: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  imageUrl: string | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Address)
+  leasingAgentAddress: Address | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsEmail()
+  leasingAgentEmail: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  leasingAgentName: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  leasingAgentOfficeHours: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  leasingAgentPhone: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  leasingAgentTitle: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  name: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  neighborhood: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  petPolicy: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsDateString()
+  postmarkedApplicationsReceivedByDate: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  programRules: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  rentalHistory: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  requiredDocuments: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  smokingPolicy: string | null
+
+  @Column({ type: "numeric", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  unitsAvailable: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  unitAmenities: string | null
+
+  @Column({ type: "numeric", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  waitlistCurrentSize: number | null
+
+  @Column({ type: "numeric", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  waitlistMaxSize: number | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => WhatToExpect)
+  whatToExpect: WhatToExpect | null
+
+  @Column({ type: "numeric", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  yearBuilt: number | null
+
   @Column({
     type: "enum",
     enum: ListingStatus,
     default: ListingStatus.pending,
   })
+  @Expose()
+  @IsEnum(ListingStatus)
   status: ListingStatus
+
+  // # TODO
+  @Expose()
+  unitsSummarized?: UnitsSummarized
+
+  @Expose()
+  urlSlug?: string
 }
 
 export { Listing as default, Listing }

@@ -74,10 +74,10 @@ export class ApplicationsService {
   }
 
   async delete(applicationId: string) {
-    await Application.findOneOrFail({
+    const application = await Application.findOneOrFail({
       where: { id: applicationId, user: { id: this.request.user.id } },
       relations: ["user"],
     })
-    return await Application.delete({ id: applicationId })
+    return await Application.remove(application)
   }
 }
