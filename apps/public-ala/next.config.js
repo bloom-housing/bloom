@@ -21,6 +21,10 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 } else if (process.env.BACKEND_API_BASE) {
   BACKEND_API_BASE = process.env.BACKEND_API_BASE
 }
+
+// The base URL for the front end, which gets submitted with the application for email links
+const SITE_BASE_URL = process.env.SITE_BASE_URL
+
 const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
@@ -43,6 +47,7 @@ module.exports = withCSS(
           env: {
             backendApiBase: BACKEND_API_BASE,
             listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+            siteBaseUrl: SITE_BASE_URL,
             mapBoxToken: MAPBOX_TOKEN,
             housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
             gtmKey: process.env.GTM_KEY || null,
