@@ -414,7 +414,7 @@ export default () => {
               />
 
               <ErrorMessage error={errors.applicant?.workInRegion}>
-                {t("application.contact.radioError")}
+                {t("application.form.errors.selectOption")}
               </ErrorMessage>
             </fieldset>
           </div>

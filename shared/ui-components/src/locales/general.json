@@ -152,8 +152,7 @@
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
       "doYouWorkIn": "Do you work in <REGION>?",
       "doYouWorkInDescription": "TBD",
-      "workAddress": "Work Address",
-      "radioError": "Please select an option."
+      "workAddress": "Work Address"
     },
     "alternateContact": {
       "type": {
@@ -258,8 +257,7 @@
       "legend": "ADA Features",
       "mobility": "For Mobility Impairments",
       "vision": "For Vision Impairments",
-      "hearing": "For Hearing Impairments",
-      "no": "No"
+      "hearing": "For Hearing Impairments"
     },
     "preferences": {
       "title": "Your household may qualify for the following housing preferences.",
