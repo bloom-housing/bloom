@@ -20,4 +20,15 @@
 .stat-card__title {
   @apply text-lg;
   @apply font-alt-sans;
+
+  a {
+    @apply text-primary-dark;
+
+    &:after {
+      content: '\203A';
+      @apply text-2xl;
+      @apply px-2;
+      line-height: 1.4rem;
+    }
+  }
 }
