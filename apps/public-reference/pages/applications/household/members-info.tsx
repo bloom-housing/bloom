@@ -4,7 +4,7 @@ A notice regarding adding househole members
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -16,9 +16,14 @@ export default () => {
   const currentPageStep = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors } = useForm({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   return (
@@ -43,12 +48,15 @@ export default () => {
           <h2 className="form-card__title is-borderless mt-4">
             {t("application.household.membersInfo.title")}
           </h2>
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.household.membersInfo.subTitle")}
-          </h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
@@ -61,7 +69,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

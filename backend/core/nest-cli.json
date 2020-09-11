@@ -8,6 +8,10 @@
     "dtoFileNameSuffix": [
       "dto.ts",
       "entity.ts"
+    ],
+    "assets": [
+      { "include": "views/**/*.hbs", "outDir": "dist/src" },
+      { "include": "locals/*.json", "outDir": "dist/src" }
     ]
   }
 }

@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
+import { setSiteAlertMessage } from "../alerts/SiteAlert"
 import { UserContext } from "./UserContext"
 
 // See https://github.com/Microsoft/TypeScript/issues/14094
@@ -8,6 +9,7 @@ type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T
 
 type RequireLoginProps = {
   signInPath: string
+  signInMessage: string
 } & XOR<{ requireForRoutes?: string[] }, { skipForRoutes: string[] }>
 
 /**
@@ -16,7 +18,12 @@ type RequireLoginProps = {
  * Props can be specified with either a "whitelist" (list of routes to skip check for) or a "blacklist" (list of
  * routes to apply test on). If no list of routes is provided, then will always apply check.
  */
-const RequireLogin: FunctionComponent<RequireLoginProps> = ({ children, signInPath, ...rest }) => {
+const RequireLogin: FunctionComponent<RequireLoginProps> = ({
+  children,
+  signInPath,
+  signInMessage,
+  ...rest
+}) => {
   const router = useRouter()
   const { profile, initialStateLoaded } = useContext(UserContext)
 
@@ -37,9 +44,10 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({ children, signInPa
 
   useEffect(() => {
     if (loginRequiredForPath && initialStateLoaded && !profile) {
+      setSiteAlertMessage(signInMessage, "notice")
       router.push(signInPath)
     }
-  }, [loginRequiredForPath, initialStateLoaded, profile, router, signInPath])
+  }, [loginRequiredForPath, initialStateLoaded, profile, router, signInPath, signInMessage])
 
   if (loginRequiredForPath && !profile) {
     return null

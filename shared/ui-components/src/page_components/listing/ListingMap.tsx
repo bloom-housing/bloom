@@ -13,8 +13,8 @@ export interface ListingMapProps {
 export interface Viewport {
   width: string | number
   height: string | number
-  latitude: number
-  longitude: number
+  latitude?: number
+  longitude?: number
   zoom: number
 }
 
@@ -39,21 +39,23 @@ const ListingMap = (props: ListingMapProps) => {
         <h3 className="text-caps-tiny">{props.listing.name}</h3>
         <MultiLineAddress address={address} />
       </div>
-      <ReactMapGL
-        mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
-        onViewportChange={_onViewportChange}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
-        scrollZoom={false}
-        {...viewport}
-      >
-        <Marker
-          latitude={props.address.latitude}
-          longitude={props.address.longitude}
-          offsetTop={-20}
+      {props.address.latitude && props.address.longitude && (
+        <ReactMapGL
+          mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
+          onViewportChange={_onViewportChange}
+          mapStyle="mapbox://styles/mapbox/streets-v11"
+          scrollZoom={false}
+          {...viewport}
         >
-          <div className="pin"></div>
-        </Marker>
-      </ReactMapGL>
+          <Marker
+            latitude={props.address.latitude}
+            longitude={props.address.longitude}
+            offsetTop={-20}
+          >
+            <div className="pin"></div>
+          </Marker>
+        </ReactMapGL>
+      )}
     </div>
   )
 }

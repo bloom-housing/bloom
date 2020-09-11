@@ -3,14 +3,13 @@ import { getConnection } from "typeorm"
 import listingsSeeds from "../../../seeds.json"
 import { Listing } from "../../entity/listing.entity"
 import { Unit } from "../../entity/unit.entity"
-import { Attachment } from "../../entity/attachment.entity"
 import { Preference } from "../../entity/preference.entity"
 
 @Injectable()
 export class ListingsSeederService {
   async seed() {
-    const skipped = ["id", "units", "attachments", "preferences"]
-    const types = { units: Unit, attachments: Attachment, preferences: Preference }
+    const skipped = ["id", "units", "preferences"]
+    const types = { units: Unit, preferences: Preference }
 
     const connection = getConnection()
     const listings = listingsSeeds as any[]

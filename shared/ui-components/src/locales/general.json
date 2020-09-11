@@ -140,6 +140,7 @@
       "cityName": "City Name",
       "cityError": "Please enter a city",
       "contactPreference": "How do you prefer to be contacted?",
+      "preferredContactType": "Preferred Contact Type",
       "state": "State",
       "stateError": "Please enter a state",
       "zip": "Zip",
@@ -215,7 +216,9 @@
         "liveWithOtherPeople": "Other people will live with me"
       },
       "preferredUnit": {
+        "preferredUnitType": "Preferred Unit Type",
         "title": "What unit sizes are you interested in?",
+        "subTitle": "Your selected unit type will be subject to availability.",
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
@@ -241,8 +244,7 @@
         "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
       },
       "membersInfo": {
-        "title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
-        "subTitle": "If you include someone who has already applied, all of your applications will be disqualified."
+        "title": "Before adding other people, make sure that they aren't named on any other application for this listing."
       },
       "primaryApplicant": "Primary Applicant"
     },
@@ -286,7 +288,9 @@
       "terms": {
         "title": "Terms",
         "text": "This application must be submitted by %{applicationDueDate}.<br><br>Applicants will be contacted by the agent in the lottery rank and preference order until vacancies are filled.<br><br>All of the information that you have provided will be verified and you eligibility confirmed. Your application will be removed from the lottery if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing lottery preference that you have claimed, you will not receive the preference but will not be otherwise penalised.<br><br>All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.<br><br>Should your application be chosen from the lottery, be prepared to fill out a more detailed application and provide required supporting documents within 5 bussiness days of being contacted. For more information, please contact the developer or agent posted in the listing. Completing this lottery application does not entitle you to housing or indicate you are eligible for housing. All applicants will be screened as outlined in the property's Resident Selection Criteria.<br><br>You cannot change your online application after you submit.<br><br>I declare that foregoing is true and accurate, and acknowledge that any misstatement fraudulently or negligently made on this application will result in removal from the lottery.<br><br>",
-        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit."
+        "confirmCheckboxText": "I agree and understand that I cannot change anything after I submit.",
+        "agreeError": "You must agree to the terms in order to continue",
+        "submit": "Submit"
       },
       "demographics": {
         "title": "Help us ensure we are meeting our goal to serve all people.",
@@ -342,8 +346,8 @@
       },
       "confirmation": {
         "title": "Thanks. We have received your application for Alchemy by ",
-        "lotteryNumber": "Here's your lottery ticket number",
-        "pleaseWriteNumber": "Please write down your lottery number and keep it in a safe place. We have also emailed this number to you if you provided an email address.",
+        "lotteryNumber": "Here's your application confirmation number",
+        "pleaseWriteNumber": "Please write down your application number and keep it in a safe place. We have also emailed this number to you if you provided an email address.",
         "whatExpectTitle": "What to expect next",
         "whatExpectFirstParagraph": {
           "held": "The lottery will be held on ",
@@ -351,9 +355,9 @@
           "listing": "on the listing. ",
           "refer": "Please refer to the listing for the lottery results date."
         },
-        "whatExpectSecondparagraph": "Applicants will be contacted by the agent in lottery rank order until vacancies are filled. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted.",
+        "whatExpectSecondparagraph": "Applicants will be contacted in order until vacancies are filled. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
         "doNotSubmitTitle": "Do not submit another application for this listing.",
-        "needToUpdate": "If you need to update information on your application, do not apply again or both applications will be removed from the lottery. Contact the agent if you did not receive an email confirmation.",
+        "needToUpdate": "If you need to update information on your application, do not apply again. Contact the agent if you did not receive an email confirmation.",
         "createAccountTitle": "Would you like to create an account?",
         "createAccountParagraph": "Creating an account will save your information for future applications, and you can check the status of this application anytime.",
         "imdone": "No thanks, I'm done.",
@@ -469,9 +473,10 @@
   "footer": {
     "contact": "Contact",
     "disclaimer": "Disclaimer",
-    "forGeneralQuestions": "For general program inquiries, you may call MOHCD at 415-701-5500.",
+    "forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
     "giveFeedback": "Give Feedback",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "copyright": "Demonstration County © 2020 • All Rights Reserved"
   },
   "housingCounselors": {
     "subtitle": "Talk with a local housing counselor specific to your needs.",
@@ -633,7 +638,12 @@
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
     "downloadPdf": "Download PDF",
-    "rePricing": "Re-Pricing"
+    "rePricing": "Re-Pricing",
+    "eligibilityNotebook": "Eligibility Notebook",
+    "processInfo": "Process Info",
+    "featuresCards": "Features Cards",
+    "neighborhoodBuildings": "Neighborhood Buildings",
+    "additionalInformationEnvelope": "Additional Information Envelope"
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
@@ -684,14 +694,17 @@
     "built": "Built",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "day": "Day",
     "delete": "Delete",
     "deposit": "Deposit",
+    "errorsToResolve": "There are errors you'll need to resolve before moving on.",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
     "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
+    "month": "Month",
     "name": "Name",
     "neighborhood": "Neighborhood",
     "next": "Next",
@@ -702,6 +715,7 @@
     "or": "or",
     "petsPolicy": "Pets Policy",
     "phone": "Phone",
+    "email": "Email",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "preferences": "Preferences",
     "propertyAmenities": "Property Amenities",
@@ -717,6 +731,7 @@
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
     "viewOnMap": "View on Map",
+    "year": "Year",
     "yes": "Yes",
     "you": "You"
   },

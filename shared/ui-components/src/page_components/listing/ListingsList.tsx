@@ -11,11 +11,15 @@ export interface ListingsProps {
   listings: Listing[]
 }
 
+const imageUrlFromListing = (listing: Listing) => {
+  return listing?.assets?.find((asset) => asset.label == "building")?.fileId
+}
+
 const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
   const listItems = listings.map((listing: Listing) => {
-    const imageUrl = listing.imageUrl || ""
+    const imageUrl = imageUrlFromListing(listing) || ""
     const unitSummariesHeaders = {
       unitType: t("t.unitType"),
       minimumIncome: t("t.minimumIncome"),
@@ -30,11 +34,16 @@ const ListingsList = (props: ListingsProps) => {
       )
     }
 
+    // address as subtitle
+    const { street, city, state, zipCode } = listing?.buildingAddress || {}
+    const subtitle = `${street}, ${city} ${state}, ${zipCode}`
+
     return (
       <article key={listing.id} className="listings-row">
         <div className="listings-row_figure">
           <ImageCard
             title={listing.name}
+            subtitle={subtitle}
             imageUrl={imageUrl}
             href={`listing/id=${listing.id}`}
             as={`/listing/${listing.id}`}
@@ -67,4 +76,4 @@ const ListingsList = (props: ListingsProps) => {
   return <>{listItems}</>
 }
 
-export { ListingsList as default, ListingsList }
+export { ListingsList as default, ListingsList, imageUrlFromListing }

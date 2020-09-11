@@ -5,14 +5,17 @@ https://github.com/bloom-housing/bloom/issues/256
 */
 import Link from "next/link"
 import {
+  AlertBox,
   Button,
+  contactPreferencesKeys,
   ErrorMessage,
   Field,
+  Form,
   FormCard,
+  OnClientSide,
+  mergeDeep,
   ProgressNav,
   t,
-  mergeDeep,
-  contactPreferencesKeys,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -21,7 +24,7 @@ import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo, Fragment } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -33,11 +36,14 @@ export default () => {
   >({
     defaultValues: {
       "applicant.phoneNumber": application.applicant.phoneNumber,
-      noPhone: application.applicant.noPhone,
+      "applicant.noPhone": application.applicant.noPhone,
       additionalPhone: application.additionalPhone,
+      "applicant.phoneNumberType": application.applicant.phoneNumberType,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
-      workInRegion: application.applicant.workInRegion,
+      "applicant.workInRegion": application.applicant.workInRegion,
+      "applicant.address.state": application.applicant.address.state,
     },
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     mergeDeep(application, data)
@@ -59,15 +65,22 @@ export default () => {
 
     conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
   }
+  const onError = () => {
+    window.scrollTo(0, 0)
+  }
 
-  const noPhone = watch("applicant.noPhone") || false
-  const phoneNumber = watch("applicant.phoneNumber") as string
+  const noPhone: boolean = watch("applicant.noPhone", application.applicant.noPhone)
+  const phoneNumber: string = watch("applicant.phoneNumber", application.applicant.phoneNumber)
   const phonePresent = () => {
     return phoneNumber.replace(/[()\-_ ]/g, "").length > 0
   }
-  const additionalPhone = watch("additionalPhone")
-  const sendMailToMailingAddress = watch("sendMailToMailingAddress")
-  const workInRegion = watch("applicant.workInRegion")
+  const additionalPhone = watch("additionalPhone", application.additionalPhone)
+  const sendMailToMailingAddress = watch(
+    "sendMailToMailingAddress",
+    application.sendMailToMailingAddress
+  )
+  const workInRegion = watch("applicant.workInRegion", application.applicant.workInRegion)
+  const clientLoaded = OnClientSide()
 
   return (
     <FormsLayout>
@@ -94,52 +107,43 @@ export default () => {
           </h2>
         </div>
 
-        <form id="applications-address" onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="phoneNumber">
+            <label className="field-label--caps" htmlFor="applicant.phoneNumber">
               {t("application.contact.yourPhoneNumber")}
             </label>
 
             <PhoneField
               name="applicant.phoneNumber"
-              error={errors.applicant?.phoneNumber}
+              placeholder={clientLoaded && noPhone ? t("t.none") : null}
+              error={!noPhone ? errors.applicant?.phoneNumber : false}
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
               control={control}
               defaultValue={application.applicant.phoneNumber}
-              disabled={noPhone}
+              disabled={clientLoaded && noPhone}
             />
 
-            <div className={"field " + (errors.applicant?.phoneNumberType ? "error" : "")}>
-              <div className="control">
-                <select
-                  id="applicant.phoneNumberType"
-                  name="applicant.phoneNumberType"
-                  className="w-full"
-                  defaultValue={application.applicant.phoneNumberType}
-                  disabled={noPhone}
-                  ref={register({
-                    validate: {
-                      selectionMade: (v) => {
-                        const dropdown = document.querySelector<HTMLSelectElement>(
-                          "#applicant\\.phoneNumberType"
-                        )
-                        if (dropdown.disabled) return true
-                        return v != ""
-                      },
-                    },
-                  })}
-                >
-                  <option value="">What type of number is this?</option>
-                  <option>Work</option>
-                  <option>Home</option>
-                  <option>Cell</option>
-                </select>
-                <ErrorMessage error={errors.applicant?.phoneNumberType}>
-                  {t("application.contact.phoneNumberTypeError")}
-                </ErrorMessage>
-              </div>
-            </div>
+            <Select
+              id="applicant.phoneNumberType"
+              name="applicant.phoneNumberType"
+              placeholder={t("application.contact.phoneNumberTypes.prompt")}
+              label={t("application.contact.phoneNumberTypes.prompt")}
+              disabled={clientLoaded && noPhone}
+              validation={{ required: !noPhone }}
+              error={!noPhone && errors.applicant?.phoneNumberType}
+              errorMessage={t("application.contact.phoneNumberTypeError")}
+              register={register}
+              controlClassName="control"
+              options={phoneNumberKeys}
+              keyPrefix="application.contact.phoneNumberTypes"
+            />
 
             <div className="field">
               <input
@@ -147,14 +151,15 @@ export default () => {
                 id="noPhone"
                 name="applicant.noPhone"
                 defaultChecked={application.applicant.noPhone}
-                disabled={phonePresent()}
+                disabled={clientLoaded && phonePresent()}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setValue("phoneNumber", "")
+                    setValue("applicant.phoneNumber", "")
+                    setValue("additionalPhone", "")
                     setTimeout(() => {
-                      trigger("phoneNumber")
-                      trigger("phoneNumberType")
+                      trigger("applicant.phoneNumber")
+                      trigger("applicant.phoneNumberType")
                     }, 1)
                   }
                 }}
@@ -169,6 +174,7 @@ export default () => {
                 type="checkbox"
                 id="additionalPhone"
                 name="additionalPhone"
+                disabled={clientLoaded && noPhone}
                 defaultChecked={application.additionalPhone}
                 ref={register}
               />
@@ -226,6 +232,7 @@ export default () => {
             <Field
               id="addressStreet"
               name="applicant.address.street"
+              label={t("application.contact.streetAddress")}
               placeholder={t("application.contact.streetAddress")}
               defaultValue={application.applicant.address.street}
               validation={{ required: true }}
@@ -260,7 +267,6 @@ export default () => {
                 id="addressState"
                 name="applicant.address.state"
                 label={t("application.contact.state")}
-                defaultValue={application.applicant.address.state}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.state}
                 errorMessage={t("application.contact.stateError")}
@@ -296,7 +302,7 @@ export default () => {
             </div>
           </div>
 
-          {(sendMailToMailingAddress || application.sendMailToMailingAddress) && (
+          {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
             <div className="form-card__group border-b">
               <label className="field-label--caps" htmlFor="street">
                 {t("application.contact.mailingAddress")}
@@ -534,7 +540,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

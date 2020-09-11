@@ -3,33 +3,46 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import { Button, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Button,
+  DOBField,
+  Field,
+  Form,
+  FormCard,
+  OnClientSide,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useMemo } from "react"
-import { emailRegex } from "../../../lib/emailRegex"
+import { useContext } from "react"
+import { emailRegex } from "../../../lib/helpers"
+import { useEffect } from "react"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>({
-    defaultValues: {
-      "applicant.emailAddress": application.applicant.emailAddress,
-      noEmail: application.applicant.noEmail,
-    },
+  const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
+    Record<string, any>
+  >({
+    shouldFocusError: false,
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl("/applications/contact/address")
   }
+  const onError = () => {
+    window.scrollTo(0, 0)
+  }
 
-  const emailPresent = watch("applicant.emailAddress")
-  const noEmail = watch("noEmail")
+  const emailPresent = watch("applicant.emailAddress", application.applicant.emailAddress)
+  const noEmail = watch("applicant.noEmail", application.applicant.noEmail)
+  const clientLoaded = OnClientSide()
 
   return (
     <FormsLayout>
@@ -46,7 +59,13 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
         </div>
 
-        <form className="" onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
               {t("application.name.yourName")}
@@ -81,70 +100,15 @@ export default () => {
           </div>
 
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="birthMonth">
-              {t("application.name.yourDateOfBirth")}
-            </label>
-
-            <div className="field-group--dob">
-              <Field
-                name="applicant.birthMonth"
-                placeholder="MM"
-                defaultValue={
-                  "" +
-                  (application.applicant.birthMonth > 0 ? application.applicant.birthMonth : "")
-                }
-                error={errors.applicant?.birthMonth}
-                validation={{
-                  required: true,
-                  validate: {
-                    monthRange: (value) => parseInt(value) > 0 && parseInt(value) <= 12,
-                  },
-                }}
-                inputProps={{ maxLength: 2 }}
-                register={register}
-              />
-              <Field
-                name="applicant.birthDay"
-                placeholder="DD"
-                defaultValue={
-                  "" + (application.applicant.birthDay > 0 ? application.applicant.birthDay : "")
-                }
-                error={errors.applicant?.birthDay}
-                validation={{
-                  required: true,
-                  validate: {
-                    dayRange: (value) => parseInt(value) > 0 && parseInt(value) <= 31,
-                  },
-                }}
-                inputProps={{ maxLength: 2 }}
-                register={register}
-              />
-              <Field
-                name="applicant.birthYear"
-                placeholder="YYYY"
-                defaultValue={
-                  "" + (application.applicant.birthYear > 0 ? application.applicant.birthYear : "")
-                }
-                error={errors.applicant?.birthYear}
-                validation={{
-                  required: true,
-                  validate: {
-                    yearRange: (value) =>
-                      parseInt(value) > 1900 && parseInt(value) <= new Date().getFullYear() - 18,
-                  },
-                }}
-                inputProps={{ maxLength: 4 }}
-                register={register}
-              />
-            </div>
-
-            {(errors.applicant?.birthMonth ||
-              errors.applicant?.birthDay ||
-              errors.applicant?.birthYear) && (
-              <div className="field error">
-                <span className="error-message">{t("application.name.dateOfBirthError")}</span>
-              </div>
-            )}
+            <DOBField
+              applicant={application.applicant}
+              register={register}
+              error={errors.applicant}
+              name="applicant"
+              watch={watch}
+              atAge={true}
+              label={t("application.name.yourDateOfBirth")}
+            />
           </div>
 
           <div className="form-card__group">
@@ -157,13 +121,13 @@ export default () => {
             <Field
               type="email"
               name="applicant.emailAddress"
-              placeholder={noEmail ? t("t.none") : "example@web.com"}
+              placeholder={clientLoaded && noEmail ? t("t.none") : "example@web.com"}
               defaultValue={application.applicant.emailAddress}
-              validation={{ pattern: emailRegex }}
+              validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
               error={errors.applicant?.emailAddress}
               errorMessage={t("application.name.emailAddressError")}
               register={register}
-              disabled={noEmail}
+              disabled={clientLoaded && noEmail}
             />
 
             <div className="field">
@@ -171,12 +135,13 @@ export default () => {
                 type="checkbox"
                 id="noEmail"
                 name="applicant.noEmail"
-                defaultChecked={application.applicant.noEmail}
-                disabled={emailPresent.length > 0}
+                defaultChecked={clientLoaded && noEmail}
+                disabled={clientLoaded && emailPresent.length > 0}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setValue("emailAddress", "")
+                    setValue("applicant.emailAddress", "")
+                    clearErrors("applicant.emailAddress")
                   }
                 }}
               />
@@ -211,7 +176,7 @@ export default () => {
               </div>
             )}
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )

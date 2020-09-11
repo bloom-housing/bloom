@@ -5,10 +5,6 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Past Due 1`] = `
   application={
     Object {
       "listing": Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -21,10 +17,29 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Past Due 1`] = `
         },
         "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": "POBox",
+          },
+          Object {
+            "type": "LeasingAgent",
+          },
+          Object {
+            "type": "PaperPickup",
+          },
+        ],
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -45,7 +60,6 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Past Due 1`] = `
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -1194,10 +1208,6 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Pending 1`] = `
   application={
     Object {
       "listing": Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -1210,10 +1220,29 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Pending 1`] = `
         },
         "applicationDueDate": "2030-04-11T16:00:00+00:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": "POBox",
+          },
+          Object {
+            "type": "LeasingAgent",
+          },
+          Object {
+            "type": "PaperPickup",
+          },
+        ],
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -1234,7 +1263,6 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Pending 1`] = `
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -2390,10 +2418,6 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Submitted 1`] = `
   application={
     Object {
       "listing": Object {
-        "acceptingApplicationsAtLeasingAgent": true,
-        "acceptingApplicationsByPoBox": true,
-        "acceptingOnlineApplications": false,
-        "acceptsPostmarkedApplications": true,
         "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
         "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
         "applicationAddress": Object {
@@ -2406,10 +2430,29 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Submitted 1`] = `
         },
         "applicationDueDate": "2030-04-11T16:00:00+00:00",
         "applicationFee": "30.0",
+        "applicationMethods": Array [
+          Object {
+            "acceptsPostmarkedApplications": true,
+            "type": "POBox",
+          },
+          Object {
+            "type": "LeasingAgent",
+          },
+          Object {
+            "type": "PaperPickup",
+          },
+        ],
         "applicationOrganization": "98 Archer Street",
         "applicationPhone": "(408) 217-8562",
+        "assets": Array [
+          Object {
+            "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+            "label": "building",
+            "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+            "referenceType": "Listing",
+          },
+        ],
         "attachments": Array [],
-        "blankPaperApplicationCanBePickedUp": true,
         "buildingAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,
@@ -2430,7 +2473,6 @@ exports[`Storyshots PageComponents/DashBlocks App Status Item Submitted 1`] = `
         "groupId": 1,
         "hideUnitFeatures": false,
         "id": "Uvbk5qurpB2WI9V6WnNdH",
-        "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
         "leasingAgentAddress": Object {
           "city": "San Jose",
           "latitude": 37.36537,

@@ -17,7 +17,7 @@ export const dueSoon = () => {
   listing.applicationDueDate = moment().add(10, "days").format()
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   // @ts-ignore
-  return <ApplicationSection listing={listing} />
+  return <ApplicationSection listing={listing} internalFormRoute="/forms" />
 }
 
 /*
