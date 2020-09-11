@@ -114,7 +114,7 @@ class MyApp extends App {
           syncListing: this.syncListing,
         }}
       >
-        <ConfigProvider apiUrl={process.env.listingServiceUrl}>
+        <ConfigProvider apiUrl={process.env.backendApiBase}>
           <UserProvider>
             <ApiClientProvider>
               <LoggedInUserIdleTimeout onTimeout={() => this.state.conductor.reset()} />
