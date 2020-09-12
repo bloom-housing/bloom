@@ -149,7 +149,10 @@ class Unit extends BaseEntity {
     onUpdate: "CASCADE",
   })
   listing: Listing
+
   @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional()
   bmrProgramChart?: boolean
 }
 

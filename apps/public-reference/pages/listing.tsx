@@ -75,7 +75,9 @@ export default class extends Component<ListingProps> {
       })
       .sort()
     const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
-    const hmiData = listing.unitsSummarized.hmi.rows
+    const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
+      return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
+    })
     let groupedUnits: GroupedTableGroup[] = null
 
     if (amiValues.length == 1) {
