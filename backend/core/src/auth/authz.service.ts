@@ -3,6 +3,13 @@ import { newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../.."
 
+export enum authzActions {
+  create = "create",
+  read = "read",
+  update = "update",
+  delete = "delete",
+}
+
 @Injectable()
 export class AuthzService {
   /**

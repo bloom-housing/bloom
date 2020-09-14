@@ -1,5 +1,5 @@
 p, admin, application, true, .*
-p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)|(edit)|(delete)
+p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)|(update)|(delete)
 p, user, application, true, create
 
 g, admin, user

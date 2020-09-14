@@ -19,9 +19,9 @@ import { ApplicationCreateDto } from "./application.create.dto"
 import { ApplicationUpdateDto } from "./application.update.dto"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
-import AuthzGuard from "../auth/authz.guard"
+import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
-import { AuthzService } from "../auth/authz.service"
+import { authzActions, AuthzService } from "../auth/authz.service"
 import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { Application } from "../entity/application.entity"
@@ -43,10 +43,7 @@ export class ApplicationsController {
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async list(
-    @Request() req,
-    @Query() params: ApplicationsListQueryParams
-  ): Promise<Application[]> {
+  async list(@Request() req, @Query() params: ApplicationsListQueryParams): Promise<Application[]> {
     // TODO: Do we want to return all applications for admin users?
     return await this.applicationsService.list(params, req.user)
   }
@@ -58,7 +55,10 @@ export class ApplicationsController {
     @Request() req,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<Application> {
-    const application = await this.applicationsService.create({ ...applicationCreateDto, user: req.user })
+    const application = await this.applicationsService.create({
+      ...applicationCreateDto,
+      user: req.user,
+    })
     const listing = await this.listingsService.findOne(application.listing.id)
     await this.emailService.confirmation(
       listing,
@@ -76,7 +76,7 @@ export class ApplicationsController {
     @Param("applicationId") applicationId: string
   ): Promise<Application> {
     const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, "read")
+    await this.authorizeUserAction(req.user, app, authzActions.read)
     return app
   }
 
@@ -89,7 +89,7 @@ export class ApplicationsController {
     @Body() applicationUpdateDto: ApplicationUpdateDto
   ): Promise<Application> {
     const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, "edit")
+    await this.authorizeUserAction(req.user, app, authzActions.update)
     return this.applicationsService.update(applicationUpdateDto, app)
   }
 
@@ -97,7 +97,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
   async delete(@Request() req, @Param("applicationId") applicationId: string) {
     const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, "delete")
+    await this.authorizeUserAction(req.user, app, authzActions.delete)
     return this.applicationsService.delete(applicationId)
   }
 
