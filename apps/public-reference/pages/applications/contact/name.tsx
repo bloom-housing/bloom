@@ -136,7 +136,7 @@ export default () => {
                 id="noEmail"
                 name="applicant.noEmail"
                 defaultChecked={clientLoaded && noEmail}
-                disabled={clientLoaded && emailPresent?.length > 1}
+                disabled={clientLoaded && emailPresent?.length > 0}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
