@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Forms/DOBField Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <DOBField
+    applicant={
+      Object {
+        "birthDay": null,
+        "birthMonth": null,
+        "birthYear": null,
+      }
+    }
+    error={Object {}}
+    label="Date of Birth"
+    register={[Function]}
+    watch={[Function]}
+  >
+    <fieldset>
+      <legend
+        className="field-label--caps"
+      >
+        Date of Birth
+      </legend>
+      <div
+        className="field-group--dob"
+      >
+        <label
+          className="sr-only"
+          htmlFor="birthMonth"
+        >
+          Month
+        </label>
+        <Field
+          defaultValue=""
+          inputProps={
+            Object {
+              "maxLength": 2,
+            }
+          }
+          name="birthMonth"
+          placeholder="MM"
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "monthRange": [Function],
+              },
+            }
+          }
+        >
+          <div
+            className="field"
+          >
+            <div
+              className="control"
+            >
+              <input
+                className="input"
+                defaultValue=""
+                id="birthMonth"
+                maxLength={2}
+                name="birthMonth"
+                placeholder="MM"
+                type="text"
+              />
+            </div>
+            <ErrorMessage />
+          </div>
+        </Field>
+        <label
+          className="sr-only"
+          htmlFor="birthDay"
+        >
+          Day
+        </label>
+        <Field
+          defaultValue=""
+          inputProps={
+            Object {
+              "maxLength": 2,
+            }
+          }
+          name="birthDay"
+          placeholder="DD"
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "dayRange": [Function],
+              },
+            }
+          }
+        >
+          <div
+            className="field"
+          >
+            <div
+              className="control"
+            >
+              <input
+                className="input"
+                defaultValue=""
+                id="birthDay"
+                maxLength={2}
+                name="birthDay"
+                placeholder="DD"
+                type="text"
+              />
+            </div>
+            <ErrorMessage />
+          </div>
+        </Field>
+        <label
+          className="sr-only"
+          htmlFor="birthYear"
+        >
+          Year
+        </label>
+        <Field
+          defaultValue=""
+          inputProps={
+            Object {
+              "maxLength": 4,
+            }
+          }
+          name="birthYear"
+          placeholder="YYYY"
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "yearRange": [Function],
+              },
+            }
+          }
+        >
+          <div
+            className="field"
+          >
+            <div
+              className="control"
+            >
+              <input
+                className="input"
+                defaultValue=""
+                id="birthYear"
+                maxLength={4}
+                name="birthYear"
+                placeholder="YYYY"
+                type="text"
+              />
+            </div>
+            <ErrorMessage />
+          </div>
+        </Field>
+      </div>
+    </fieldset>
+  </DOBField>
+</div>
+`;

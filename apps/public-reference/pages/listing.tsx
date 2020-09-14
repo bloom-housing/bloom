@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
+import Markdown from "markdown-to-jsx"
 import { Listing } from "@bloom-housing/core"
 import {
   AdditionalFees,
@@ -25,6 +26,7 @@ import {
   PreferencesList,
   UnitTables,
   WhatToExpect,
+  imageUrlFromListing,
   getOccupancyDescription,
   groupNonReservedAndReservedSummaries,
   occupancyTable,
@@ -96,7 +98,7 @@ export default class extends Component<ListingProps> {
       regionName: t("region.name"),
       listingName: listing.name,
     })
-    const metaImage = listing.imageUrl
+    const metaImage = imageUrlFromListing(listing)
 
     if (listing.buildingSelectionCriteria) {
       buildingSelectionCriteria = (
@@ -133,7 +135,7 @@ export default class extends Component<ListingProps> {
 
         <article className="flex flex-wrap relative max-w-5xl m-auto">
           <header className="image-card--leader">
-            <ImageCard title={listing.name} imageUrl={listing.imageUrl} />
+            <ImageCard title={listing.name} imageUrl={imageUrlFromListing(listing)} />
             <div className="p-3">
               <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
                 {oneLineAddress}
@@ -185,7 +187,10 @@ export default class extends Component<ListingProps> {
             )}
           </div>
           <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
-            <ApplicationSection listing={listing} />
+            <ApplicationSection
+              listing={listing}
+              internalFormRoute="applications/start/choose-language"
+            />
           </div>
           <ListingDetails>
             <ListingDetailItem
@@ -255,7 +260,10 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
-                  <ApplicationSection listing={listing} />
+                  <ApplicationSection
+                    listing={listing}
+                    internalFormRoute="applications/start/choose-language"
+                  />
                 </div>
                 <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
@@ -315,12 +323,22 @@ export default class extends Component<ListingProps> {
               <div className="listing-detail-panel">
                 <div className="info-card">
                   <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
-                  <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
+                  <p className="text-sm text-gray-700">
+                    <Markdown
+                      children={listing.requiredDocuments}
+                      options={{ disableParsingRawHTML: true }}
+                    />
+                  </p>
                 </div>
                 {listing.programRules && (
                   <div className="info-card">
                     <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
-                    <p className="text-sm text-gray-700">{listing.programRules}</p>
+                    <p className="text-sm text-gray-700">
+                      <Markdown
+                        children={listing.programRules}
+                        options={{ disableParsingRawHTML: true }}
+                      />
+                    </p>
                   </div>
                 )}
               </div>

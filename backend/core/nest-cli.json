@@ -10,7 +10,9 @@
       "entity.ts"
     ],
     "assets": [
-      { "include": "auth/*.{conf,csv}", "outDir": "dist/src" }
+      { "include": "auth/*.{conf,csv}", "outDir": "dist/src" },
+      { "include": "views/**/*.hbs", "outDir": "dist/src" },
+      { "include": "locals/*.json", "outDir": "dist/src" }
     ]
   }
 }

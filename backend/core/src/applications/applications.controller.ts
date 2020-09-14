@@ -22,6 +22,9 @@ import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import AuthzGuard from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { AuthzService } from "../auth/authz.service"
+import { EmailService } from "../shared/email.service"
+import { ListingsService } from "../listings/listings.service"
+import { Application } from "../entity/application.entity"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -32,6 +35,8 @@ import { AuthzService } from "../auth/authz.service"
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
+    private readonly emailService: EmailService,
+    private readonly listingsService: ListingsService,
     private readonly authzService: AuthzService
   ) {}
 
@@ -41,7 +46,7 @@ export class ApplicationsController {
   async list(
     @Request() req,
     @Query() params: ApplicationsListQueryParams
-  ): Promise<ApplicationDto[]> {
+  ): Promise<Application[]> {
     // TODO: Do we want to return all applications for admin users?
     return await this.applicationsService.list(params, req.user)
   }
@@ -52,8 +57,15 @@ export class ApplicationsController {
   async create(
     @Request() req,
     @Body() applicationCreateDto: ApplicationCreateDto
-  ): Promise<ApplicationDto> {
-    return await this.applicationsService.create({ ...applicationCreateDto, user: req.user })
+  ): Promise<Application> {
+    const application = await this.applicationsService.create({ ...applicationCreateDto, user: req.user })
+    const listing = await this.listingsService.findOne(application.listing.id)
+    await this.emailService.confirmation(
+      listing,
+      application.application,
+      applicationCreateDto.appUrl
+    )
+    return application
   }
 
   @Get(`:applicationId`)
@@ -62,7 +74,7 @@ export class ApplicationsController {
   async retrieve(
     @Request() req,
     @Param("applicationId") applicationId: string
-  ): Promise<ApplicationDto> {
+  ): Promise<Application> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, "read")
     return app
@@ -75,7 +87,7 @@ export class ApplicationsController {
     @Request() req,
     @Param("applicationId") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
-  ): Promise<ApplicationDto> {
+  ): Promise<Application> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, "edit")
     return this.applicationsService.update(applicationUpdateDto, app)

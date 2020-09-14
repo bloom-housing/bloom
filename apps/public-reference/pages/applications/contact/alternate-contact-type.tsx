@@ -4,7 +4,16 @@ Type of alternate contact
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, ErrorMessage, Field, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Button,
+  ErrorMessage,
+  Field,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -15,9 +24,13 @@ export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageStep = 1
   /* Form Handler */
-  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>()
+  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
+    shouldFocusError: false,
+  })
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
+    application.alternateContact.otherType = data.otherType
+
     conductor.completeStep(1)
     conductor.sync()
     if (data.type == "noContact") {
@@ -26,8 +39,11 @@ export default () => {
       conductor.routeTo("/applications/contact/alternate-contact-name")
     }
   }
+  const onError = () => {
+    window.scrollTo(0, 0)
+  }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
-  const type = watch("type")
+  const type = watch("type", application.alternateContact.type)
 
   return (
     <FormsLayout>
@@ -42,7 +58,7 @@ export default () => {
         <p className="form-card__back">
           <strong>
             <Link href="/applications/contact/address">
-              <a>Back</a>
+              <a>{t("t.back")}</a>
             </Link>
           </strong>
         </p>
@@ -52,7 +68,14 @@ export default () => {
           </h2>
           <p className="field-note mt-4">{t("application.alternateContact.type.description")}</p>
         </div>
-        <form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit)}>
+
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
             <label className="field-label--caps" htmlFor="type">
               {t("application.alternateContact.type.label")}
@@ -115,7 +138,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
       </FormCard>
     </FormsLayout>
   )
