@@ -209,7 +209,7 @@ export default class extends Component<ListingProps> {
               <ul>
                 <ListSection
                   title={t("listings.householdMaximumIncome")}
-                  subtitle={t("listings.forIncomeCalculations")}
+                  subtitle={householdMaximumIncomeSubheader}
                 >
                   <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
