@@ -11,7 +11,7 @@
     "latitude": 37.87628,
     "longitude": -122.294873
   },
-  "applicationDueDate": "2020-10-08T16:00:00.000-07:00",
+  "applicationDueDate": "2020-10-13T17:00:00.000-07:00",
   "applicationOrganization": "Jones Berkeley BMR",
   "applicationPhone": "415-238-5026",
   "buildingAddress": {
@@ -29,7 +29,7 @@
   "depositMax": "1,250",
   "depositMin": "500",
   "developer": "Shorenstein",
-  "programRules": "Rent shown is based on 2019 guidelines from the California Tax Credit Allocation Committee. These figures may change during lease up in Spring when the new 2020 rates go into effect. One two-bedroom unit at 30% AMI will have a preference for people who live or work in Alameda County.",
+  "programRules": "[Inclusionary Housing/BMR Rental Program Guidelines and Operational Manual](https://www.cityofberkeley.info/uploadedFiles/Housing/Level_3_-_General/BMR%20Guidelines_Approved_08-25-19.pdf)",
   "externalId": null,
   "waitlistMaxSize": 9999,
   "name": "Jones Berkeley",
