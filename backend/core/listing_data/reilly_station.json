@@ -83,7 +83,6 @@
       "priorityType": "",
       "sqFeet": 608,
 
-
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -106,7 +105,6 @@
       "reservedType": null,
       "priorityType": "",
       "sqFeet": 608,
-
 
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -131,7 +129,6 @@
       "priorityType": "",
       "sqFeet": 608,
 
-
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -154,7 +151,6 @@
       "reservedType": null,
       "priorityType": "",
       "sqFeet": 608,
-
 
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -179,7 +175,6 @@
       "priorityType": "",
       "sqFeet": 608,
 
-
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -202,7 +197,6 @@
       "reservedType": null,
       "priorityType": "",
       "sqFeet": 608,
-
 
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -227,7 +221,6 @@
       "priorityType": "",
       "sqFeet": 608,
 
-
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -250,7 +243,6 @@
       "reservedType": null,
       "priorityType": "",
       "sqFeet": 608,
-
 
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -275,7 +267,6 @@
       "priorityType": "",
       "sqFeet": 608,
 
-
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -298,7 +289,6 @@
       "reservedType": null,
       "priorityType": "",
       "sqFeet": 608,
-
 
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -323,7 +313,6 @@
       "priorityType": "",
       "sqFeet": 608,
 
-
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -346,7 +335,6 @@
       "reservedType": null,
       "priorityType": "",
       "sqFeet": 608,
-
 
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1532,7 +1520,7 @@
     {
       "type": "ExternalLink",
       "acceptsPostmarkedApplications": false,
-      "fileId": "https://www.on-site.com/apply/property/341392"
+      "externalReference": "https://www.on-site.com/apply/property/341392"
     }
   ],
   "assets": [

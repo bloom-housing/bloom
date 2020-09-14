@@ -737,7 +737,7 @@
     {
       "type": "ExternalLink",
       "acceptsPostmarkedApplications": false,
-      "fileId": "https://www.atlasoakland.com/bmr"
+      "externalReference": "https://www.atlasoakland.com/bmr"
     }
   ],
   "assets": [

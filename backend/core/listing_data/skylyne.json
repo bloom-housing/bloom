@@ -1173,7 +1173,7 @@
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "English",
-      "fileId": "https://theskylyne.com/assets/files/Application.pdf"
+      "externalReference": "https://theskylyne.com/assets/files/Application.pdf"
     }
   ],
   "assets": [

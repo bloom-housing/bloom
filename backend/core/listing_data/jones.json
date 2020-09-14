@@ -466,12 +466,8 @@
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
-      "fileId": "http://jonesberkeley.com/"
-    },
-    {
-      "type": "ExternalLink",
-      "acceptsPostmarkedApplications": false,
-      "fileId": "/applications/start/choose-language?listingId=HOLNx_F7fUCeax5GCoIr5g"
+      "label": "English",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda.Common.Application.Main.pdf"
     },
     {
       "type": "Internal",
