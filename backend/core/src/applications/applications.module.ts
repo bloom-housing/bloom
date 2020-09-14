@@ -10,13 +10,7 @@ import { CsvBuilder } from "../services/csv-builder.service"
 
 @Module({
   imports: [TypeOrmModule.forFeature([Application])],
-  providers: [
-    ApplicationsService,
-    EmailService,
-    ListingsService,
-    CsvEncoder,
-    CsvBuilder,
-  ],
+  providers: [ApplicationsService, EmailService, ListingsService, CsvEncoder, CsvBuilder],
   exports: [ApplicationsService],
   controllers: [ApplicationsController],
 })
