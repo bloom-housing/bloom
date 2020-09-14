@@ -44,8 +44,11 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications", operationId: "list" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async list(@Request() req, @Query() params: ApplicationsListQueryParams): Promise<Application[]> {
-    // TODO: Do we want to return all applications for admin users?
-    return await this.applicationsService.list(params, req.user)
+    if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
+      return await this.applicationsService.list(params)
+    } else {
+      return await this.applicationsService.list(params, req.user)
+    }
   }
 
   @Post()
