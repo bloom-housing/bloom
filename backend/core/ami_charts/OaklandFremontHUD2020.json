@@ -18,25 +18,5 @@
     "percentOfAmi": 50,
     "householdSize": 4,
     "income": 65250
-  },
-  {
-    "percentOfAmi": 50,
-    "householdSize": 5,
-    "income": 70500
-  },
-  {
-    "percentOfAmi": 50,
-    "householdSize": 6,
-    "income": 75700
-  },
-  {
-    "percentOfAmi": 50,
-    "householdSize": 7,
-    "income": 80950
-  },
-  {
-    "percentOfAmi": 50,
-    "householdSize": 7,
-    "income": 86150
   }
 ]

@@ -32,6 +32,8 @@ const minMaxInCurrency = (minMax: MinMax): MinMaxCurrency => {
   return { min: usd.format(minMax.min), max: usd.format(minMax.max) }
 }
 
+const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
+
 const hmiData = (
   units: Units,
   byUnitType: UnitSummary[],
@@ -39,9 +41,10 @@ const hmiData = (
   amiPercentages: string[]
 ) => {
   const amiChartId = units[0].amiChartId
+  const bmrProgramChart = units[0].bmrProgramChart
   const amiChart = amiCharts[amiChartId] as AmiChartItem[]
   const hmiHeaders = {
-    householdSize: "Household Size",
+    householdSize: bmrProgramChart ? "Unit Type" : "Household Size",
   } as AnyDict
   const amiValues = amiPercentages
     .map((percent) => {
@@ -67,9 +70,9 @@ const hmiData = (
     })
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
-      const columns = {
-        householdSize: i + 1,
-      }
+      const columns = { householdSize: null }
+      columns["householdSize"] = i + 1
+
       let pushRow = false // row is valid if at least one column is filled
       amiValues.forEach((percent) => {
         const amiInfo = amiChart.find((item) => {
@@ -84,6 +87,9 @@ const hmiData = (
       })
 
       if (pushRow) {
+        if (bmrProgramChart) {
+          columns["householdSize"] = bmrHeaders[i]
+        }
         hmiRows.push(columns)
       }
     })
@@ -92,9 +98,8 @@ const hmiData = (
     hmiHeaders["maxIncomeYear"] = "Maximum Income/Year"
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
-      const columns = {
-        householdSize: i + 1,
-      }
+      const columns = { householdSize: null }
+      columns["householdSize"] = i + 1
 
       const amiInfo = amiChart.find((item) => {
         return item.householdSize == columns.householdSize && item.percentOfAmi == amiValues[0]
@@ -103,6 +108,9 @@ const hmiData = (
       if (amiInfo) {
         columns["maxIncomeMonth"] = usd.format(amiInfo.income / 12)
         columns["maxIncomeYear"] = usd.format(amiInfo.income)
+        if (bmrProgramChart) {
+          columns["householdSize"] = bmrHeaders[i]
+        }
         hmiRows.push(columns)
       }
     })

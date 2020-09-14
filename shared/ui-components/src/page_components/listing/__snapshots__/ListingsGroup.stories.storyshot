@@ -1179,6 +1179,7 @@ Credit recommendations other than an accept decision, will require a rental veri
             "amiPercentage": "80.0",
             "annualIncomeMax": "103350.0",
             "annualIncomeMin": "58152.0",
+            "bmrProgramChart": true,
             "createdAt": "2019-06-03T17:42:43.134Z",
             "floor": null,
             "id": "jBMnzuaeffeq_X0qrWi3j",
