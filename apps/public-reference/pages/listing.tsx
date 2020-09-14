@@ -76,7 +76,9 @@ export default class extends Component<ListingProps> {
       })
       .sort()
     const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
-    const hmiData = listing.unitsSummarized.hmi.rows
+    const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
+      return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
+    })
     let groupedUnits: GroupedTableGroup[] = null
 
     if (amiValues.length == 1) {
@@ -99,6 +101,10 @@ export default class extends Component<ListingProps> {
       listingName: listing.name,
     })
     const metaImage = imageUrlFromListing(listing)
+
+    const householdMaximumIncomeSubheader = listing.units[0].bmrProgramChart
+      ? t("listings.forIncomeCalculationsBMR")
+      : t("listings.forIncomeCalculations")
 
     if (listing.buildingSelectionCriteria) {
       buildingSelectionCriteria = (
@@ -203,7 +209,7 @@ export default class extends Component<ListingProps> {
               <ul>
                 <ListSection
                   title={t("listings.householdMaximumIncome")}
-                  subtitle={t("listings.forIncomeCalculations")}
+                  subtitle={householdMaximumIncomeSubheader}
                 >
                   <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
