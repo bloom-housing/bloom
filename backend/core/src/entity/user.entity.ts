@@ -10,7 +10,7 @@ import {
 import { Application } from "./application.entity"
 
 @Entity({ name: "user_accounts" })
-@Index("user_accounts_email_lower", { synchronize: false })
+@Index("user_accounts_email_unique_idx", { synchronize: false })
 class User {
   @PrimaryGeneratedColumn("uuid")
   id: string
