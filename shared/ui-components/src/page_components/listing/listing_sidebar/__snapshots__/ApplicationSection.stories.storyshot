@@ -3326,46 +3326,6 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
         >
           How to Apply
         </h2>
-        <NumberedHeader
-          num={1}
-          text="Get a Paper Application"
-        >
-          <div
-            className="text-serif-lg"
-          >
-            <span
-              className="text-primary pr-1"
-            >
-              1
-            </span>
-            Get a Paper Application
-          </div>
-        </NumberedHeader>
-        <Button
-          className="w-full mb-2"
-          filled={true}
-          onClick={[Function]}
-        >
-          <button
-            className="button is-filled w-full mb-2"
-            onClick={[Function]}
-          >
-            Download Application
-          </button>
-        </Button>
-        <OrDivider
-          bgColor="white"
-        >
-          <div
-            className="aside-block__divider"
-          >
-            <span
-              className="bg-white aside-block__conjunction"
-            >
-              or
-            </span>
-          </div>
-        </OrDivider>
         <SubHeader
           text="Pick up an application"
         >
