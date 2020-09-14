@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
+import Markdown from "markdown-to-jsx"
 import { Listing } from "@bloom-housing/core"
 import {
   AdditionalFees,
@@ -322,12 +323,22 @@ export default class extends Component<ListingProps> {
               <div className="listing-detail-panel">
                 <div className="info-card">
                   <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
-                  <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
+                  <p className="text-sm text-gray-700">
+                    <Markdown
+                      children={listing.requiredDocuments}
+                      options={{ disableParsingRawHTML: true }}
+                    />
+                  </p>
                 </div>
                 {listing.programRules && (
                   <div className="info-card">
                     <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
-                    <p className="text-sm text-gray-700">{listing.programRules}</p>
+                    <p className="text-sm text-gray-700">
+                      <Markdown
+                        children={listing.programRules}
+                        options={{ disableParsingRawHTML: true }}
+                      />
+                    </p>
                   </div>
                 )}
               </div>
