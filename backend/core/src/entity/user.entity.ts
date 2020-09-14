@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   Index,
   OneToMany,
-  Unique,
 } from "typeorm"
 import { Application } from "./application.entity"
 
@@ -17,7 +16,7 @@ class User {
   id: string
   @Column("varchar", { select: false })
   passwordHash: string
-  @Column("varchar", { unique: true })
+  @Column("varchar")
   email: string
   @Column("varchar")
   firstName: string
