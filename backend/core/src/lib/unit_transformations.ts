@@ -32,7 +32,7 @@ const minMaxInCurrency = (minMax: MinMax): MinMaxCurrency => {
   return { min: usd.format(minMax.min), max: usd.format(minMax.max) }
 }
 
-const bmrHearders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
+const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
 
 const hmiData = (
   units: Units,
@@ -88,7 +88,7 @@ const hmiData = (
 
       if (pushRow) {
         if (bmrProgramChart) {
-          columns["householdSize"] = bmrHearders[i]
+          columns["householdSize"] = bmrHeaders[i]
         }
         hmiRows.push(columns)
       }
@@ -109,7 +109,7 @@ const hmiData = (
         columns["maxIncomeMonth"] = usd.format(amiInfo.income / 12)
         columns["maxIncomeYear"] = usd.format(amiInfo.income)
         if (bmrProgramChart) {
-          columns["householdSize"] = bmrHearders[i]
+          columns["householdSize"] = bmrHeaders[i]
         }
         hmiRows.push(columns)
       }

@@ -9,6 +9,7 @@ import {
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import {
+  IsBoolean,
   IsDateString,
   IsNumber,
   IsNumberString,
@@ -153,7 +154,8 @@ class Unit extends BaseEntity {
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional()
-  bmrProgramChart?: boolean
+  @IsBoolean()
+  bmrProgramChart?: boolean | null
 }
 
 export { Unit as default, Unit }
