@@ -69,17 +69,14 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const noPhone: boolean = watch("applicant.noPhone", application.applicant.noPhone)
-  const phoneNumber: string = watch("applicant.phoneNumber", application.applicant.phoneNumber)
+  const noPhone: boolean = watch("applicant.noPhone")
+  const phoneNumber: string = watch("applicant.phoneNumber")
   const phonePresent = () => {
     return phoneNumber.replace(/[()\-_ ]/g, "").length > 0
   }
-  const additionalPhone = watch("additionalPhone", application.additionalPhone)
-  const sendMailToMailingAddress = watch(
-    "sendMailToMailingAddress",
-    application.sendMailToMailingAddress
-  )
-  const workInRegion = watch("applicant.workInRegion", application.applicant.workInRegion)
+  const additionalPhone = watch("additionalPhone")
+  const sendMailToMailingAddress = watch("sendMailToMailingAddress")
+  const workInRegion = watch("applicant.workInRegion")
   const clientLoaded = OnClientSide()
 
   return (
@@ -155,12 +152,10 @@ export default () => {
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setValue("applicant.phoneNumber", "")
+                    setValue("applicant.phoneNumberType", "")
                     setValue("additionalPhone", "")
-                    setTimeout(() => {
-                      trigger("applicant.phoneNumber")
-                      trigger("applicant.phoneNumberType")
-                    }, 1)
+                    setValue("additionalPhoneNumber", "")
+                    setValue("additionalPhoneNumberType", "")
                   }
                 }}
               />
@@ -177,6 +172,12 @@ export default () => {
                 disabled={clientLoaded && noPhone}
                 defaultChecked={application.additionalPhone}
                 ref={register}
+                onChange={(e) => {
+                  if (!e.target.checked) {
+                    setValue("additionalPhoneNumber", "")
+                    setValue("additionalPhoneNumberType", "")
+                  }
+                }}
               />
               <label htmlFor="additionalPhone" className="text-primary font-semibold">
                 {t("application.contact.additionalPhoneNumber")}

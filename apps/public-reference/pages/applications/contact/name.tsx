@@ -31,6 +31,10 @@ export default () => {
     Record<string, any>
   >({
     shouldFocusError: false,
+    defaultValues: {
+      "applicant.emailAddress": application.applicant.emailAddress,
+      "applicant.noEmail": application.applicant.noEmail,
+    },
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
@@ -40,9 +44,13 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const emailPresent = watch("applicant.emailAddress", application.applicant.emailAddress)
-  const noEmail = watch("applicant.noEmail", application.applicant.noEmail)
+  const emailPresent: string = watch("applicant.emailAddress")
+  const noEmail: boolean = watch("applicant.noEmail")
   const clientLoaded = OnClientSide()
+
+  {
+    clientLoaded && console.info("noEmail!", noEmail, application.applicant.noEmail)
+  }
 
   return (
     <FormsLayout>
@@ -138,12 +146,6 @@ export default () => {
                 defaultChecked={clientLoaded && noEmail}
                 disabled={clientLoaded && emailPresent?.length > 0}
                 ref={register}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setValue("applicant.emailAddress", "")
-                    clearErrors("applicant.emailAddress")
-                  }
-                }}
               />
               <label htmlFor="noEmail" className="text-primary font-semibold">
                 {t("application.name.noEmailAddress")}
