@@ -345,7 +345,7 @@
         }
       },
       "confirmation": {
-        "title": "Thanks. We have received your application for Alchemy by ",
+        "title": "Thanks. We have received your application for ",
         "lotteryNumber": "Here's your application confirmation number",
         "pleaseWriteNumber": "Please write down your application number and keep it in a safe place. We have also emailed this number to you if you provided an email address.",
         "whatExpectTitle": "What to expect next",
