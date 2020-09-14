@@ -51,7 +51,7 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          labels={["You", "Household", "Income", "Review"]}
         />
       </FormCard>
       <FormCard>

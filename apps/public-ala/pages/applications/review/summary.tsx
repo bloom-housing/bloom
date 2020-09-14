@@ -13,7 +13,7 @@ import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetai
 
 export default () => {
   const { listing, application } = useContext(AppSubmissionContext)
-  const currentPageStep = 5
+  const currentPageStep = 4
 
   /* Form Handler */
   const { handleSubmit } = useForm()
@@ -29,7 +29,7 @@ export default () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          labels={["You", "Household", "Income", "Review"]}
         />
       </FormCard>
 

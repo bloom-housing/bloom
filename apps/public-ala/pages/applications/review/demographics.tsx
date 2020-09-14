@@ -22,7 +22,7 @@ import FormStep from "../../../src/forms/applications/FormStep"
 
 const Demographics = () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 5
+  const currentPageStep = 4
 
   /* Form Handler */
   const { register, handleSubmit } = useForm()
@@ -63,7 +63,7 @@ const Demographics = () => {
         <ProgressNav
           currentPageStep={currentPageStep}
           completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          labels={["You", "Household", "Income", "Review"]}
         />
       </FormCard>
 
