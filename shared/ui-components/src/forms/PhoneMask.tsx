@@ -1,22 +1,24 @@
 import React from "react"
-import MaskedInput from "react-input-mask"
+import MaskedInput from "react-text-mask"
 
 export const PhoneMask = (props: any) => {
   const { value, onChange, name, disabled, placeholder } = props
+
   return (
     <MaskedInput
-      id={name}
-      name={name}
-      value={value}
-      type="text"
+      mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]}
       className="input"
+      type="tel"
       placeholder={placeholder || "(555) 555-5555"}
-      mask="(999) 999-9999"
+      guide={false}
+      id={name}
+      value={value}
+      name={name}
+      disabled={disabled}
       onChange={(e: any) => {
         e.persist()
-        onChange(e.target.value)
+        onChange(e)
       }}
-      disabled={disabled}
     />
   )
 }
