@@ -135,9 +135,9 @@ export default class ApplicationConductor {
   }
 
   determinePreviousUrl() {
-    const currentUrl = this.config.steps[this.currentStep].url
+    const currentUrl = this.config.steps[this.currentStep]?.url
     const previousStepDefinition = this.config.steps.find((step) => step.nextUrl == currentUrl)
 
-    return previousStepDefinition.url
+    return previousStepDefinition?.url || ""
   }
 }

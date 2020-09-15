@@ -24,6 +24,7 @@ import React, { useContext, useMemo, Fragment } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -86,13 +87,7 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href={conductor.determinePreviousUrl()}>
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink conductor={conductor} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
