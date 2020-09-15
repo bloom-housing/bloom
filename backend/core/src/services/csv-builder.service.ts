@@ -1,7 +1,5 @@
-import { Application } from "../entity/application.entity"
 import { CsvEncoder } from "./csv-encoder.service"
 import { Injectable } from "@nestjs/common"
-import { applicationFormattingMetadataAggregate } from "./application-formatting-metadata"
 
 export type FormattingMetadata = {
   label: string
@@ -22,6 +20,15 @@ export type FormattingMetadataAggregate = Array<FormattingMetadata | FormattingM
 export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
 export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
 export const streetFormatter = (obj?: { street: string; street2: string }) => {
+  if (!obj.street && !obj.street2) {
+    return ""
+  }
+  if (!obj.street) {
+    return obj.street2
+  }
+  if (!obj.street2) {
+    return obj.street
+  }
   return obj ? `${obj.street}, ${obj.street2}` : ""
 }
 export const dobFormatter = (obj?: { birthMonth: number; birthDay: number; birthYear: number }) => {
@@ -107,7 +114,6 @@ export class CsvBuilder {
     includeHeaders?: boolean
   ): string {
     const rows: Array<Array<string>> = []
-
     const headers = this.getHeaders(formattingMetadataAggregate)
     rows.push(headers)
     arr.forEach((item) => rows.push(this.flattenJson(item, formattingMetadataAggregate)))

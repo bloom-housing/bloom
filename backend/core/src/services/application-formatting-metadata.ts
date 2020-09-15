@@ -10,6 +10,12 @@ import {
 export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate = [
   { label: "Application Number", discriminator: "id", formatter: defaultFormatter },
   {
+    label: "Application Submission Date",
+    discriminator: "createdAt",
+    formatter: (createdAt: string) =>
+      new Date(createdAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
+  },
+  {
     label: "Primary Applicant First Name",
     discriminator: "application.applicant.firstName",
     formatter: defaultFormatter,
@@ -45,13 +51,8 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     formatter: defaultFormatter,
   },
   {
-    label: "Primary Applicant Additional Phone",
-    discriminator: "application.additionalPhoneNumber",
-    formatter: booleanFormatter,
-  },
-  {
     label: "Primary Applicant Additional Phone Type",
-    discriminator: "application.additionalPhoneNumberType",
+    discriminator: "application.applicant.additionalPhoneNumberType",
     formatter: defaultFormatter,
   },
   {
@@ -95,6 +96,11 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     formatter: defaultFormatter,
   },
   {
+    label: "Primary Applicant Mailing Zip",
+    discriminator: "application.mailingAddress.zip",
+    formatter: defaultFormatter,
+  },
+  {
     label: "Primary Applicant Work Street Address",
     discriminator: "application.applicant.workAddress.street",
     formatter: defaultFormatter,
@@ -115,13 +121,6 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     formatter: defaultFormatter,
   },
   {
-    label: "Application Submission Date",
-    discriminator: "createdAt",
-    formatter: (createdAt: string) => new Date(createdAt).toDateString(),
-  },
-  { label: "Application Submission Language", discriminator: "", formatter: () => `TBD` },
-  { label: "Application Submission Type", discriminator: "", formatter: () => `TBD` },
-  {
     label: "Alternate Contact First Name",
     discriminator: "application.alternateContact.firstName",
     formatter: defaultFormatter,
@@ -140,11 +139,6 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     label: "Alternate Contact Other",
     discriminator: "application.alternateContact.otherType",
     formatter: defaultFormatter,
-  },
-  {
-    label: "Alternate Contact Agency",
-    discriminator: "application.alternateContact.agency",
-    formatter: () => `TBD`,
   },
   {
     label: "Alternate Contact Email",
@@ -177,6 +171,36 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     formatter: defaultFormatter,
   },
   {
+    label: "Monthly Income",
+    discriminator: "application",
+    formatter: (application) => {
+      const incomeParsed = Number.parseFloat(application.income)
+      switch (application.incomePeriod) {
+        case "perYear":
+          return `${(incomeParsed / 12).toFixed(2)}`
+        case "perMonth":
+          return application.income
+        default:
+          return ""
+      }
+    },
+  },
+  {
+    label: "Annual Income",
+    discriminator: "application.income",
+    formatter: (application) => {
+      const incomeParsed = Number.parseFloat(application.income)
+      switch (application.incomePeriod) {
+        case "perYear":
+          return application.income
+        case "perMonth":
+          return `${(incomeParsed * 12).toFixed(2)}`
+        default:
+          return ""
+      }
+    },
+  },
+  {
     label: "Requested accessibility",
     discriminator: "application.accessibility",
     formatter: keysToJoinedStringFormatter,
@@ -184,12 +208,13 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
   {
     label: "Receives Vouchers or Subsidies",
     discriminator: "application.incomeVouchers",
-    formatter: defaultFormatter,
+    formatter: booleanFormatter,
   },
-  // TODO Include demographics
-  { label: "Requested ADA Unit", discriminator: "", formatter: () => `TBD` },
-  { label: "Claimed Live Work Preference", discriminator: "", formatter: () => `TBD` },
-  { label: "Opted Out Live Work Preference", discriminator: "", formatter: () => `TBD` },
+  {
+    label: "Requested unit type",
+    discriminator: "application.preferredUnit",
+    formatter: (unitTypes: string[]) => unitTypes.join(","),
+  },
   { label: "Household Size", discriminator: "householdSize", formatter: defaultFormatter },
   {
     type: "array",
