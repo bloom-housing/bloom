@@ -20,6 +20,7 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo } from "react"
 import Markdown from "markdown-to-jsx"
+import FormStep from "../../../src/forms/applications/FormStep"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -40,6 +41,7 @@ export default () => {
           listing: {
             id: listing.id,
           },
+          appUrl: window.location.origin,
           ...(profile && {
             user: {
               id: profile.id,
@@ -48,7 +50,7 @@ export default () => {
         },
       })
       .then((result) => {
-        conductor.sync()
+        new FormStep(conductor).save({ confirmationId: result.id })
         Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
       })
   }

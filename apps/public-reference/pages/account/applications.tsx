@@ -30,7 +30,8 @@ export default () => {
     const application = {} as Application
     listing.applicationDueDate = moment().add(10, "days").format()
     application.listing = listing
-    application.updatedAt = moment().toDate()
+    // TODO: Fix the types here (and probably this shouldn't come from the frontend anyway)
+    // application.updatedAt = moment().toDate()
     setApplications([application])
   }, [])
 

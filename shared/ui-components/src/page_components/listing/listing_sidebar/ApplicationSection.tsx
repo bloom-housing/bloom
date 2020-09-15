@@ -6,6 +6,7 @@ import { Waitlist } from "./Waitlist"
 
 export interface ApplicationSectionProps {
   listing: Listing
+  internalFormRoute: string
 }
 
 const showWaitlist = (listing: Listing) => {
@@ -31,7 +32,7 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
           <Waitlist listing={listing} />
         </section>
       )}
-      <Apply listing={listing} />
+      <Apply listing={listing} internalFormRoute={props.internalFormRoute} />
     </div>
   )
 }

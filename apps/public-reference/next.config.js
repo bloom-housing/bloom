@@ -14,14 +14,15 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Set up app-wide constants
-let LISTING_SERVICE_URL = "http://localhost:3100"
+let BACKEND_API_BASE = "http://localhost:3100"
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
   // This is a value that can get set via a Netlify webhook for branch deploys
-  LISTING_SERVICE_URL = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
-} else if (process.env.LISTING_SERVICE_URL) {
-  LISTING_SERVICE_URL = process.env.LISTING_SERVICE_URL
+  BACKEND_API_BASE = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
+} else if (process.env.BACKEND_API_BASE) {
+  BACKEND_API_BASE = process.env.BACKEND_API_BASE
 }
-console.log(`Using ${LISTING_SERVICE_URL} for the listing service.`)
+const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
+console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
 const MAPBOX_TOKEN =
   process.env.MAPBOX_TOKEN ||
@@ -40,7 +41,8 @@ module.exports = withCSS(
       withSass(
         withTM({
           env: {
-            listingServiceUrl: LISTING_SERVICE_URL,
+            backendApiBase: BACKEND_API_BASE,
+            listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
             mapBoxToken: MAPBOX_TOKEN,
             housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
             gtmKey: process.env.GTM_KEY || null,
@@ -53,7 +55,7 @@ module.exports = withCSS(
             // we fetch our list of listings, this allow us to dynamically generate the exported pages
             let listings = []
             try {
-              const response = await axios.get(LISTING_SERVICE_URL)
+              const response = await axios.get(BACKEND_API_BASE + LISTINGS_QUERY)
               listings = response.data.listings
             } catch (error) {
               console.log(error)
