@@ -22,6 +22,7 @@ export interface Unit {
   updatedAt: Date
   listingId: number
   amiChartId: number
+  bmrProgramChart?: boolean | null
   monthlyRentAsPercentOfIncome: number
 }
 

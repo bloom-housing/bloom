@@ -50,38 +50,6 @@
     }
   }
 
-  &.error {
-    label {
-      @apply text-red-700;
-    }
-
-    .control {
-      .input,
-      .prepend,
-      select {
-        @apply border-red-700;
-        @apply border-2;
-      }
-
-      .prepend {
-        @apply text-red-700;
-      }
-    }
-
-    .error-message {
-      @apply text-sm;
-      @apply text-red-700;
-    }
-
-    input[type="radio"] + label::before {
-      box-shadow: 0 0 0 2px #fff, 0 0 0 4px $tailwind-alert;
-    }
-
-    input[type="checkbox"] + label::before {
-      box-shadow: 0 0 0 1px #fff, 0 0 0 3px $tailwind-alert;
-    }
-  }
-
   input[type="checkbox"],
   input[type="radio"] {
     opacity: 0;
@@ -150,13 +118,13 @@
   }
 
   input[type="checkbox"]:disabled + label {
-    color: map-get($tailwind-gray, 600) !important;
+    color: map-get($tailwind-gray, 450) !important;
   }
 
   input[type="checkbox"]:disabled + label::before,
   input[type="radio"]:disabled + label::before {
-    background: map-get($tailwind-gray, 550);
-    box-shadow: 0 0 0 1px map-get($tailwind-gray, 600);
+    background: map-get($tailwind-gray, 400);
+    box-shadow: 0 0 0 1px map-get($tailwind-gray, 450);
     cursor: not-allowed;
   }
 
@@ -187,10 +155,51 @@
 
   input:disabled,
   select:disabled,
-  textarea:disabled {
+  textarea:disabled,
+  .control input:disabled,
+  .control select:disabled,
+  .control textarea:disabled {
     @apply bg-gray-400;
     cursor: not-allowed;
     @apply text-gray-700;
+    @apply border-gray-500; 
+  }
+
+  select:disabled,
+  .control select:disabled {
+    opacity: 1;
+  }
+
+  &.error {
+    label {
+      @apply text-red-700;
+    }
+
+    .control {
+      .input,
+      .prepend,
+      select {
+        @apply border-red-700;
+        @apply border-2;
+      }
+
+      .prepend {
+        @apply text-red-700;
+      }
+    }
+
+    .error-message {
+      @apply text-sm;
+      @apply text-red-700;
+    }
+
+    input[type="radio"] + label::before {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px $tailwind-alert;
+    }
+
+    input[type="checkbox"] + label::before {
+      box-shadow: 0 0 0 1px #fff, 0 0 0 3px $tailwind-alert;
+    }
   }
 }
 
@@ -274,10 +283,4 @@ input[type=number] {
   @apply text-tiny;
   @apply text-gray-700;
   @apply font-semibold;
-}
-
-button {
-  &.has-toggle {
-    @include has-toggle;
-  }
 }
