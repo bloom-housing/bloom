@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
+  imageUrlFromListing,
   LinkButton,
   FormCard,
   ProgressNav,
@@ -43,6 +44,8 @@ export default () => {
 
   const currentPageSection = 1
 
+  const imageUrl = listing?.assets ? imageUrlFromListing(listing) : ""
+
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
@@ -77,7 +80,7 @@ export default () => {
 
         {listing && (
           <div className="form-card__group p-0 m-0">
-            <ImageCard title={listing.name} imageUrl={listing.imageUrl || ""} listing={listing} />
+            <ImageCard title={listing.name} imageUrl={imageUrl} listing={listing} />
           </div>
         )}
 

@@ -19,10 +19,10 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "dev:app:public": "wait-on \"http://localhost:${PORT:-3100}/\" && cd apps/public-reference && yarn dev",
+    "dev:app:public": "wait-on \"http://localhost:${PORT:-3100}/listings\" && cd apps/public-reference && yarn dev",
     "test:app:public": "wait-on \"http://localhost:${PORT:-3101}/\" && cd apps/public-reference && yarn test",
     "build:app:public": "cd apps/public-reference && yarn build",
-    "dev:app:partners": "wait-on \"http://localhost:${PORT:-3100}/\" && cd apps/partners-reference && yarn dev",
+    "dev:app:partners": "wait-on \"http://localhost:${PORT:-3100}/listings\" && cd apps/partners-reference && yarn dev",
     "test:app:partners": "wait-on \"http://localhost:${PORT:-3101}/\" && cd apps/partners-reference && yarn test",
     "build:app:partners": "cd apps/partners-reference && yarn build",
     "dev:listings": "cd services/listings && yarn dev",

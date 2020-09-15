@@ -130,7 +130,7 @@ const summarizeUnits = (
         }
         summary.minIncomeRange = minMaxValue(
           summary.minIncomeRange as MinMax,
-          unit.monthlyIncomeMin
+          Number.parseFloat(unit.monthlyIncomeMin)
         )
 
         summary.occupancyRange = minMaxValue(
@@ -142,7 +142,10 @@ const summarizeUnits = (
           summary.rentAsPercentIncomeRange,
           unit.monthlyRentAsPercentOfIncome
         )
-        summary.rentRange = minMaxValue(summary.rentRange as MinMax, unit.monthlyRent)
+        summary.rentRange = minMaxValue(
+          summary.rentRange as MinMax,
+          Number.parseFloat(unit.monthlyRent)
+        )
         if (unit.floor) {
           summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
         }

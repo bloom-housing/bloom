@@ -140,6 +140,7 @@
       "cityName": "City Name",
       "cityError": "Please enter a city",
       "contactPreference": "How do you prefer to be contacted?",
+      "preferredContactType": "Preferred Contact Type",
       "state": "State",
       "stateError": "Please enter a state",
       "zip": "Zip",
@@ -215,6 +216,7 @@
         "liveWithOtherPeople": "Other people will live with me"
       },
       "preferredUnit": {
+        "preferredUnitType": "Preferred Unit Type",
         "title": "What unit sizes are you interested in?",
         "subTitle": "Your selected unit type will be subject to availability.",
         "optionsLabel": "Check all that apply:",
@@ -713,6 +715,7 @@
     "or": "or",
     "petsPolicy": "Pets Policy",
     "phone": "Phone",
+    "email": "Email",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "preferences": "Preferences",
     "propertyAmenities": "Property Amenities",

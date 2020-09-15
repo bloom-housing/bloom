@@ -40,6 +40,7 @@ export default () => {
           listing: {
             id: listing.id,
           },
+          appUrl: window.location.origin,
           ...(profile && {
             user: {
               id: profile.id,

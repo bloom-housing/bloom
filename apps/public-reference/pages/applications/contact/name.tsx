@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
 import { useContext } from "react"
-import { emailRegex } from "../../../lib/emailRegex"
+import { emailRegex } from "../../../lib/helpers"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)

@@ -32,7 +32,10 @@ export default () => {
   })
   const onSubmit = (data) => {
     application.alternateContact.type = data.type
+    application.alternateContact.otherType = data.otherType
+
     if (data.type == "noContact") conductor.completeSection(1)
+
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
@@ -40,7 +43,7 @@ export default () => {
     window.scrollTo(0, 0)
   }
   const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
-  const type = watch("type")
+  const type = watch("type", application.alternateContact.type)
 
   return (
     <FormsLayout>
