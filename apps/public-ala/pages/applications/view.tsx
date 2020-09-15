@@ -49,8 +49,8 @@ export default () => {
           <h3 className="form-card__paragraph-title">
             {t("application.confirmation.lotteryNumber")}
           </h3>
-          {/* TODO: replace with the number from backend */}
-          <p className="font-serif text-3xl my-0">#00545847</p>
+
+          <p className="font-serif text-3xl my-0">{application.confirmationId}</p>
         </div>
 
         <FormSummaryDetails application={application} editMode={false} />
