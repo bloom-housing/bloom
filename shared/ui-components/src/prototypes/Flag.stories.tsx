@@ -1,24 +1,27 @@
-import React from "react"
-
-import "./Flag.scss"
+import * as React from "react"
+import { Flag } from "./Flag"
 
 export default {
   title: "Prototypes/Flag",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
-export const Flag = () => (
-  <div className="flag">Senior Building</div>
+export const standard = () => <Flag>Flag</Flag>
+
+export const small = () => (
+  <Flag small={true}>
+    Small
+  </Flag>
 )
 
-export const FlagSmall = () => (
-  <div className="flag is-small">Senior Building</div>
+export const warning = () => (
+  <Flag warning={true}>
+    Warning
+  </Flag>
 )
 
-export const FlagWarn = () => (
-  <div className="flag is-warn">Senior Building</div>
-)
-
-export const FlagWarnSmall = () => (
-  <div className="flag is-small is-warn">Senior Building</div>
+export const SmallAndWarning = () => (
+  <Flag small={true} warning={true}>
+    Small and Warning
+  </Flag>
 )
