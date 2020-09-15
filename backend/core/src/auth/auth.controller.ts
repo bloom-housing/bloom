@@ -26,15 +26,6 @@ export class AuthController {
     return { accessToken }
   }
 
-  @Post("register")
-  @ApiOperation({ summary: "Register", operationId: "register" })
-  async register(@Body() params: CreateUserDto) {
-    const user = await this.userService.createUser(params)
-    const accessToken = this.authService.generateAccessToken(user)
-    this.emailService.welcome(user)
-    return { ...user, accessToken }
-  }
-
   @UseGuards(DefaultAuthGuard)
   @Post("token")
   @ApiOperation({ summary: "Token", operationId: "token" })
