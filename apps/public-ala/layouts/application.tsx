@@ -113,9 +113,7 @@ const Layout = (props) => {
           <a href="https://www.acgov.org/government/legal.htm" target="_blank">
             {t("footer.disclaimer")}
           </a>
-          <a href="https://www.acgov.org/government/legal.htm" target="_blank">
-            {t("footer.privacyPolicy")}
-          </a>
+          <LocalizedLink href="/privacy">{t("footer.privacyPolicy")}</LocalizedLink>
         </FooterNav>
         <FooterSection className="bg-black" small>
           <ExygyFooter />
