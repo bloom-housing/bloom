@@ -51,7 +51,7 @@ module.exports = {
       "attention-light": "#C8F1FF",
       royal: "#B85ED5",
       "royal-light": "#EED7F5",
-      splash: "#ce4a00",
+      splash: "#d54309",
       "splash-light": "#FFD2C0",
       "splash-lighter": "#FFF7F3",
       lush: "#99CD00",
