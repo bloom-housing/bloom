@@ -52,7 +52,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/alternate-contact-type">
+            <Link href={conductor.determinePreviousUrl()}>
               <a>{t("t.back")}</a>
             </Link>
           </strong>

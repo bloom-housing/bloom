@@ -119,7 +119,6 @@ export default class ApplicationConductor {
   }
 
   nextOrReturnUrl(url?: string) {
-    //    console.info("Current Step!", this.currentStep)
     if (this.returnToReview) {
       return "/applications/review/summary"
     } else if (url) {
@@ -133,5 +132,12 @@ export default class ApplicationConductor {
     const stepDefinition = this.config.steps.find((step) => step.url == url)
 
     return stepDefinition?.verifiedSkipToUrl() || url
+  }
+
+  determinePreviousUrl() {
+    const currentUrl = this.config.steps[this.currentStep].url
+    const previousStepDefinition = this.config.steps.find((step) => step.nextUrl == currentUrl)
+
+    return previousStepDefinition.url
   }
 }

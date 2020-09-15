@@ -36,4 +36,6 @@ export default class StepDefinition {
     }
     return foundSkipTo
   }
+
+  verifiedBackUrl() {}
 }

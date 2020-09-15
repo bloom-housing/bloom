@@ -54,7 +54,7 @@ export default () => {
       <FormCard>
         <p className="form-card__back">
           <strong>
-            <Link href="/applications/contact/address">
+            <Link href={conductor.determinePreviousUrl()}>
               <a>{t("t.back")}</a>
             </Link>
           </strong>
