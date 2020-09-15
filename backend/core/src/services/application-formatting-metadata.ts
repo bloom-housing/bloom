@@ -187,7 +187,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
   },
   {
     label: "Annual Income",
-    discriminator: "application.income",
+    discriminator: "application",
     formatter: (application) => {
       const incomeParsed = Number.parseFloat(application.income)
       switch (application.incomePeriod) {
@@ -215,7 +215,11 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     discriminator: "application.preferredUnit",
     formatter: (unitTypes: string[]) => unitTypes.join(","),
   },
-  { label: "Household Size", discriminator: "householdSize", formatter: defaultFormatter },
+  {
+    label: "Household Size",
+    discriminator: "application.householdSize",
+    formatter: defaultFormatter,
+  },
   {
     type: "array",
     size: 8,
