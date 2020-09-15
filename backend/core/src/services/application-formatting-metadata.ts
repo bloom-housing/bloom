@@ -51,8 +51,13 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     formatter: defaultFormatter,
   },
   {
+    label: "Primary Applicant Additional Phone",
+    discriminator: "application.additionalPhoneNumber",
+    formatter: defaultFormatter,
+  },
+  {
     label: "Primary Applicant Additional Phone Type",
-    discriminator: "application.applicant.additionalPhoneNumberType",
+    discriminator: "application.additionalPhoneNumberType",
     formatter: defaultFormatter,
   },
   {
