@@ -17,6 +17,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
   const [showMore, setShowMore] = useState({})
@@ -57,13 +58,7 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/financial/income">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink conductor={conductor} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.preferences.title")}</h2>

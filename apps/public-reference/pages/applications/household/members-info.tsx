@@ -2,14 +2,14 @@
 2.1a - Member Info
 A notice regarding adding household members
 */
+import { useContext } from "react"
 import Link from "next/link"
 import Router from "next/router"
 import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -39,13 +39,8 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/household/live-alone">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink conductor={conductor} />
+
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless mt-4">
             {t("application.household.membersInfo.title")}

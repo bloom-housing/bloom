@@ -2,6 +2,7 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+import React, { useContext } from "react"
 import Link from "next/link"
 import {
   AlertBox,
@@ -15,8 +16,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext, useMemo } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"

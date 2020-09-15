@@ -3,6 +3,7 @@
 Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
+import React, { useContext, Fragment } from "react"
 import Link from "next/link"
 import {
   AlertBox,
@@ -19,8 +20,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext, useMemo, Fragment } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"

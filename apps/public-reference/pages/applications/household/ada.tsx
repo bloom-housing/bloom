@@ -3,6 +3,7 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
+import { useContext } from "react"
 import Link from "next/link"
 import {
   AlertBox,
@@ -16,9 +17,8 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useMemo } from "react"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -67,13 +67,7 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/household/preferred-units">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink conductor={conductor} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.ada.title")}</h2>

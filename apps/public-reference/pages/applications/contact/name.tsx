@@ -3,6 +3,7 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
+import { useContext } from "react"
 import {
   AlertBox,
   Button,
@@ -17,7 +18,6 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
 import { emailRegex } from "../../../lib/helpers"
 
 export default () => {

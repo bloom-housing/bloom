@@ -2,8 +2,8 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+import { useContext } from "react"
 import Link from "next/link"
-import Router from "next/router"
 import {
   AlertBox,
   Button,
@@ -16,8 +16,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {

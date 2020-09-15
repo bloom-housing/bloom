@@ -2,15 +2,15 @@ import Link from "next/link"
 import { t } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../../../lib/ApplicationConductor"
 
-export const FormBackLink = (props: { conductor: ApplicationConductor }) => (
+const FormBackLink = (props: { conductor: ApplicationConductor }) => (
   <p className="form-card__back">
-    <strong>
-      {props.conductor.config.steps.length > 1 && (
+    {props.conductor.config.steps.length > 1 && (
+      <strong>
         <Link href={props.conductor.determinePreviousUrl()}>
           <a>{t("t.back")}</a>
         </Link>
-      )}
-    </strong>
+      </strong>
+    )}
   </p>
 )
 

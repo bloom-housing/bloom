@@ -2,7 +2,9 @@
 3.2 Income
 Total pre-tax household income from all sources
 */
+import { useContext, useState } from "react"
 import Link from "next/link"
+import { Listing } from "@bloom-housing/core"
 import {
   AlertBox,
   AlertNotice,
@@ -17,9 +19,8 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext, useState } from "react"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { Listing } from "@bloom-housing/core"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -104,13 +105,7 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/financial/vouchers">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink conductor={conductor} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

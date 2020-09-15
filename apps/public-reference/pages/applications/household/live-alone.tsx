@@ -2,6 +2,7 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
+import { useContext, useState } from "react"
 import Link from "next/link"
 import Router from "next/router"
 import {
@@ -15,8 +16,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo, useState } from "react"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
