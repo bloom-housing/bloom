@@ -135,9 +135,25 @@ export default class ApplicationConductor {
   }
 
   determinePreviousUrl() {
-    const currentUrl = this.config.steps[this.currentStep]?.url
-    const previousStepDefinition = this.config.steps.find((step) => step.nextUrl == currentUrl)
+    let currentUrl = this.config.steps[this.currentStep]?.url
+    let previousUrl = null
 
-    return previousStepDefinition?.url || ""
+    while (previousUrl == null) {
+      console.info("Iterating!", Date.now())
+      const previousStepDefinition = this.config.steps.find((step) => step.nextUrl == currentUrl)
+      if (previousStepDefinition) {
+        // If the previous step wants to skip, loop around to find the step before
+        // that, otherwise set previousUrl and break the loop
+        if (previousStepDefinition.verifiedSkipToUrl()) {
+          currentUrl = previousStepDefinition.url
+        } else {
+          previousUrl = previousStepDefinition.url
+        }
+      } else {
+        break
+      }
+    }
+
+    return previousUrl || ""
   }
 }

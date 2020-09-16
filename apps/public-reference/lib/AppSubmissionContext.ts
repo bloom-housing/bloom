@@ -67,6 +67,7 @@ export const retrieveApplicationConfig = () => {
       {
         name: "Add Members",
         url: "/applications/household/add-members",
+        skipIf: [{ condition: "soloHousehold", skipTo: "/applications/household/preferred-units" }],
         nextUrl: "/applications/household/preferred-units",
       },
 
