@@ -1,16 +1,15 @@
 import React from "react"
 
-import "./BreadCrumbs.scss"
+import { BreadCrumbs } from "./BreadCrumbs"
 
 export default {
   title: "Prototypes/BreadCrumbs",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
-export const BreadCrumbs = () => (
-  <nav className="breadcrumbs" aria-label="Breadcrumbs">
-    <ol>
-      <li>
+export const Default = () => (
+  <BreadCrumbs>
+    <li>
         <a href="#">One</a>
       </li>
       <li>
@@ -19,6 +18,5 @@ export const BreadCrumbs = () => (
       <li aria-current="page">
         <span>Three</span>
       </li>
-    </ol>
-  </nav>
+  </BreadCrumbs>
 )
