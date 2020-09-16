@@ -238,18 +238,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
         discriminator: "relationship",
         formatter: defaultFormatter,
       },
-      { label: "Household Date of Birth", discriminator: "", formatter: dobFormatter },
-      { label: "Household Email", discriminator: "email", formatter: defaultFormatter },
-      {
-        label: "Household Phone",
-        discriminator: "phoneNumber",
-        formatter: defaultFormatter,
-      },
-      {
-        label: "Household Phone Type",
-        discriminator: "phoneNumberType",
-        formatter: defaultFormatter,
-      },
+      { label: "Household Date of Birth", discriminator: ".", formatter: dobFormatter },
       {
         label: "Household Residence Street Address",
         discriminator: "address",

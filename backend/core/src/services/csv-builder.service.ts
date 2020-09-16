@@ -55,6 +55,9 @@ export class CsvBuilder {
   private retrieveValueByDiscriminator(obj, discriminator: string) {
     let value: any = obj
     for (const key of discriminator.split(".")) {
+      if (!key) {
+        continue
+      }
       value = value[key]
     }
     return value
