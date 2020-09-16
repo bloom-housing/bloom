@@ -18,11 +18,6 @@ export default () => {
 
   conductor.stepTo("Preferred Unit Size")
 
-  const backPath =
-    application.householdSize > 1
-      ? "/applications/household/add-members"
-      : "/applications/household/live-alone"
-
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {

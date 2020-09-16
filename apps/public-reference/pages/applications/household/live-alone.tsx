@@ -32,11 +32,6 @@ export default () => {
     conductor.routeToNextOrReturnUrl()
   }
 
-  //  const backUrl =
-  //    application.alternateContact.type == "noContact"
-  //      ? "/applications/contact/alternate-contact-type"
-  //      : "/applications/contact/alternate-contact-contact"
-
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
