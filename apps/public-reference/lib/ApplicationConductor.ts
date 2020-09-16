@@ -139,7 +139,6 @@ export default class ApplicationConductor {
     let previousUrl = null
 
     while (previousUrl == null) {
-      console.info("Iterating!", Date.now())
       const previousStepDefinition = this.config.steps.find((step) => step.nextUrl == currentUrl)
       if (previousStepDefinition) {
         // If the previous step wants to skip, loop around to find the step before
