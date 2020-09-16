@@ -20,7 +20,8 @@ export default () => {
   useEffect(() => {
     if (!application.preferences.none) {
       // Only describe the General Pool if no preferences were selected
-      Router.push("/applications/review/demographics")
+      // TODO: come up with a generic "skip" function for new page loads
+      conductor.routeToNextOrReturnUrl()
     }
   }, [application])
 
