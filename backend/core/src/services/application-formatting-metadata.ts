@@ -82,7 +82,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
   },
   {
     label: "Primary Applicant Residence Zip",
-    discriminator: "application.applicant.address.zip",
+    discriminator: "application.applicant.address.zipCode",
     formatter: defaultFormatter,
   },
   {
@@ -102,7 +102,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
   },
   {
     label: "Primary Applicant Mailing Zip",
-    discriminator: "application.mailingAddress.zip",
+    discriminator: "application.mailingAddress.zipCode",
     formatter: defaultFormatter,
   },
   {
@@ -122,7 +122,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
   },
   {
     label: "Primary Applicant Work Zip",
-    discriminator: "application.applicant.workAddress.zip",
+    discriminator: "application.applicant.workAddress.zipCode",
     formatter: defaultFormatter,
   },
   {
@@ -172,7 +172,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
   },
   {
     label: "Alternate Contact Zip",
-    discriminator: "application.alternateContact.mailingAddress.zip",
+    discriminator: "application.alternateContact.mailingAddress.zipCode",
     formatter: defaultFormatter,
   },
   {
@@ -267,7 +267,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
       },
       {
         label: "Household Residence Zip",
-        discriminator: "address.zip",
+        discriminator: "address.zipCode",
         formatter: defaultFormatter,
       },
       {
@@ -287,7 +287,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
       },
       {
         label: "Household Work Zip",
-        discriminator: "workAddress.zip",
+        discriminator: "workAddress.zipCode",
         formatter: defaultFormatter,
       },
     ],
