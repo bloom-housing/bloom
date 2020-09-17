@@ -84,6 +84,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -105,6 +108,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -122,6 +128,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       user: {
         id: user1Id,
@@ -141,6 +150,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -161,6 +173,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -189,6 +204,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -213,6 +231,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -232,6 +253,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "new bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -253,6 +277,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
@@ -272,6 +299,9 @@ describe("Applications", () => {
       },
       application: {
         foo: "new bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       appUrl: "",
     }
