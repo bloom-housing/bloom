@@ -3,6 +3,7 @@ import sanMateoHOME2019 from "../../ami_charts/SanMateoHOME2019.json"
 import sanMateoHERASpecial2019 from "../../ami_charts/SanMateoHERASpecial2019.json"
 import sanJoseTCAC2019 from "../../ami_charts/SanJoseTCAC2019.json"
 import AlamedaCountyTCAC2019 from "../../ami_charts/AlamedaCountyTCAC2019.json"
+import AlamedaCountyTCAC2020 from "../../ami_charts/AlamedaCountyTCAC2020.json"
 import SanMateoCountyTCAC2019 from "../../ami_charts/SanMateoCountyTCAC2019.json"
 import sanMateoHUD2020 from "../../ami_charts/SanMateoHUD2020.json"
 import SanMateoCountyTCAC2020 from "../../ami_charts/SanMateoCountyTCAC2020.json"
@@ -20,4 +21,5 @@ export const amiCharts = {
   8: SanMateoCountyTCAC2020,
   9: AlamedaCountyLIHTC2020,
   10: OaklandFremontHUD2020,
+  11: AlamedaCountyTCAC2020,
 }

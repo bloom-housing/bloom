@@ -1,0 +1,156 @@
+{
+  "id": "ab67b61190aa4a4db7547b0161854ff8",
+  "accessibility": "Monarch Homes has some units that are accessible for residents with mobility, hearing, and vision impairments. Some units include an audible and visual fire alarm and door chime, grab bars, adjustable shelving, easy to reach outlets, switches, counters, and appliances; and 36\" door width throughout unit. The building has an elevator with a generous waiting area on each residential floor, and laundry room with front loading washers and dryers. There is limited on-site parking. We will provide reasonable accommodations when requested, verified, and necessary.",
+  "amenities": "On-site proeprty management, on-site laundry, community room, exercise room, community garden, close to AC Transit bus lines",
+  "applicationAddress": {
+    "city": "",
+    "street": "",
+    "zipCode": "",
+    "state": "",
+    "latitude": null,
+    "longitude": null
+  },
+  "applicationDueDate": "2020-09-28T17:00:00.000Z",
+  "applicationOpenDate": "2020-06-09T00:00:00.000Z",
+  "applicationOrganization": "Satellite Affordable Housing Associates",
+  "applicationPhone": "510-629-9097",
+  "buildingAddress": {
+    "city": "Oakland",
+    "county": "Alameda",
+    "street": "3268 San Pablo Avenue",
+    "zipCode": "94608",
+    "state": "CA",
+    "latitude": 37.824174,
+    "longitude": -122.277135
+  },
+  "buildingSelectionCriteria": "https://www.sahahomes.org/properties/monarch-homes",
+  "costsNotIncluded": null,
+  "creditHistory": "",
+  "depositMax": "1811.00",
+  "depositMin": "1811.00",
+  "developer": "Satellite Affordable Housing Associates",
+  "programRules": "",
+  "externalId": null,
+  "waitlistMaxSize": 240,
+  "name": "Monarch Homes",
+  "neighborhood": "",
+  "waitlistCurrentSize": 0,
+  "petPolicy": "Certain pets are allowed. Residents must apply, the animal must be approved, and there is a $200 pet deposit. For more detailed information, request a copy of SAHA’s pet policy.",
+  "prioritiesDescriptor": "Monarch Homes has some units that are accessible for residents with mobility, hearing, and vision impairments. Some units include an audible and visual fire alarm and door chime, grab bars, adjustable shelving, easy to reach outlets, switches, counters, and appliances; and 36\" door width throughout unit. The building has an elevator with a generous waiting area on each residential floor, and laundry room with front loading washers and dryers. There is limited on-site parking. We will provide reasonable accommodations when requested, verified, and necessary. ",
+  "requiredDocuments": "",
+  "reservedCommunityMaximumAge": null,
+  "reservedCommunityMinimumAge": 62,
+  "reservedDescriptor": "All household members must be age 62 or older at the time of application. Reasonable accommodations can be requested for live-in aides of any age.",
+  "smokingPolicy": "Smoking is not allowed. For more detailed information, request to see a copy of SAHA’s Agreement Regarding No Smoking Policy",
+  "yearBuilt": 2020,
+  "createdAt": "2020-05-14T15:11:26.446-07:00",
+  "updatedAt": "2020-05-14T11:47:47.150-07:00",
+  "groupId": 1,
+  "hideUnitFeatures": false,
+  "disableUnitsAccordion": true,
+  "unitAmenities": "",
+  "applicationFee": "0.00",
+  "criminalBackground": "",
+  "leasingAgentEmail": "monarch@sahahomes.org",
+  "leasingAgentName": "Satellite Affordable Housing Associates",
+  "leasingAgentAddress": {
+    "city": "Oakland",
+    "street": "3268 San Pablo Ave",
+    "zipCode": "94608",
+    "state": "CA",
+    "latitude": 37.824174,
+    "longitude": -122.277135
+  },
+  "leasingAgentOfficeHours": "Monday - Friday, 9:00 am - 5:00 pm",
+  "leasingAgentPhone": "510-629-9097",
+  "leasingAgentTitle": "Property Management",
+  "rentalHistory": "",
+  "preferences": [
+    {
+      "ordinal": "1st",
+      "title": "Displaced Household",
+      "subtitle": "",
+      "description": "Displaced household means a household in which a least one adult member has been displaced from a housing unit in Oakland as a result of any of the following:City code enforcement activities, if the displacement has occurred within one year prior to the date of application.A City-sponsored or City-assisted development project, if the displacement has occurred within one year prior to the date of application.A no fault eviction from a rental unit in Oakland, if the eviction was completed eight (8) years or less prior to the date of application. For purposes of this paragraph, a no fault eviction means an eviction that is evidenced by an eviction notice from the property owner that does not state cause and that gives the tenant thirty (30) days or longer notice to vacate the unit; a no fault eviction shall include, but not be limited to an eviction as a result of an owner move-in under Municipal Code Subsection 8.22.360.A.8. or 8.22.360.A.9., owner repairs under Municipal Code Subsection 8.22.360.A.10., or owner removal of the unit from the rental market under Municipal Code Subsection 8.22.360.A.11. or Municipal Code Chapter 8.22, Article III, but shall not be limited only to evictions from units that are covered by any of the above laws.",
+      "links": []
+    },
+    {
+      "ordinal": "2st",
+      "title": "Neighborhood Residents",
+      "subtitle": "",
+      "description": "Neighborhood resident means a household with at least one adult member whose principal place of residence on the date of application is either within the Council District where the project is located or within a one mile radius of said project.",
+      "links": []
+    }
+  ],
+  "buildingTotalUnits": 50,
+  "applicationMethods": [
+    {
+      "type": "ExternalLink",
+      "acceptsPostmarkedApplications": false,
+      "externalReference": "https://www.rentcafe.com/onlineleasing/monarch-homes/guestlogin.aspx"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/monarch.jpg"
+    }
+  ],
+  "units": [
+    {
+      "id": "MFaowAxySJW3utZBPNxr2",
+      "amiPercentage": "50",
+      "annualIncomeMin": "0",
+      "monthlyIncomeMin": "0",
+      "floor": 2,
+      "annualIncomeMax": "$58,750",
+      "maxOccupancy": 3,
+      "minOccupancy": 1,
+      "monthlyRent": "1470.0",
+      "numBathrooms": 1,
+      "numBedrooms": 1,
+      "number": null,
+      "priorityType": null,
+      "reservedType": "senior",
+      "sqFeet": 449,
+      "status": "waitlist",
+      "unitType": "oneBdrm",
+      "createdAt": "2020-02-18T21:20:34.291Z",
+      "updatedAt": "2020-02-18T21:20:34.291Z",
+      "listingId": "ab67b61190aa4a4db7547b0161854ff8",
+      "amiChartId": 11,
+      "monthlyRentAsPercentOfIncome": null
+    },
+    {
+      "id": "MFaowAxySJW3utZBPNxr3",
+      "amiPercentage": "50",
+      "annualIncomeMin": "0",
+      "monthlyIncomeMin": "0",
+      "floor": 5,
+      "annualIncomeMax": "$58,750",
+      "maxOccupancy": 3,
+      "minOccupancy": 1,
+      "monthlyRent": "1470.0",
+      "numBathrooms": 1,
+      "numBedrooms": 1,
+      "number": null,
+      "priorityType": null,
+      "reservedType": "senior",
+      "sqFeet": 580,
+      "status": "waitlist",
+      "unitType": "oneBdrm",
+      "createdAt": "2020-02-18T21:20:34.291Z",
+      "updatedAt": "2020-02-18T21:20:34.291Z",
+      "listingId": "ab67b61190aa4a4db7547b0161854ff8",
+      "amiChartId": 11,
+      "monthlyRentAsPercentOfIncome": null
+    }
+  ],
+  "unitsAvailable": 24,
+  "whatToExpect": {
+    "applicantsWillBeContacted": "Applicants will be contacted on a first come first serve basis until vacancies are filled.",
+    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
+    "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents within 5 days of being contacted."
+  }
+}
