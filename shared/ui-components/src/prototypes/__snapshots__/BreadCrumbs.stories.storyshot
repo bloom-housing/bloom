@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/BreadCrumbs Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <BreadCrumbs>
+    <nav
+      aria-label="Breadcrumbs"
+      className="breadcrumbs"
+    >
+      <ol>
+        <li>
+          <a
+            href="#"
+          >
+            One
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+          >
+            Two
+          </a>
+        </li>
+        <li
+          aria-current="page"
+        >
+          <span>
+            Three
+          </span>
+        </li>
+      </ol>
+    </nav>
+  </BreadCrumbs>
+</div>
+`;

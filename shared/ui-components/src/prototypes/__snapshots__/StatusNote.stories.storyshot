@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/StatusNote Status Note 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="status-note"
+  >
+    <span
+      className="font-semibold mr-1"
+    >
+      You reviewed 07/15/2020 at 12:00pm.
+    </span>
+    <span>
+      Changed status of one application.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes/StatusNote Status Note Undo 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="status-note"
+  >
+    <span
+      className="font-semibold mr-1"
+    >
+      You reviewed 07/15/2020 at 12:00pm.
+    </span>
+    <span>
+      Changed status of one application.
+    </span>
+    <span
+      className="ml-auto"
+    >
+      <a
+        className="underline"
+        href="#"
+      >
+        Undo
+      </a>
+    </span>
+  </div>
+</div>
+`;

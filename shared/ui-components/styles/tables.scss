@@ -20,6 +20,30 @@ table {
     @apply border-b;
     @apply border-primary;
   }
+
+  &.th-plain {
+    thead tr {
+      background: transparent;
+    }
+
+    thead tr th {
+      @apply border-0;
+      @apply py-2;
+      background: transparent;
+    }
+  }
+
+  &.td-plain {
+    tr,
+    tr:nth-of-type(even) {
+      background: transparent;
+    }
+
+    tr td {
+      @apply border-b;
+      background: transparent;
+    }
+  }
 }
 
 table tr:nth-of-type(even) {
