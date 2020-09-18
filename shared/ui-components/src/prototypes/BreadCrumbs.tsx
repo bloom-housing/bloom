@@ -7,10 +7,8 @@ export interface BreadCrumbsProps {
 
 const BreadCrumbs = (props: BreadCrumbsProps) => (
   <nav className="breadcrumbs" aria-label="Breadcrumbs">
-    <ol>
-      {props.children}
-    </ol>
-   </nav>
+    <ol>{props.children}</ol>
+  </nav>
 )
 
 export { BreadCrumbs as default, BreadCrumbs }

@@ -8,7 +8,7 @@ const SimpleTable = () => (
         <th>Relationship</th>
         <th>DOB</th>
       </tr>
-    </thead> 
+    </thead>
     <tbody>
       <tr>
         <td className="px-5 py-3">Jim Halpert</td>

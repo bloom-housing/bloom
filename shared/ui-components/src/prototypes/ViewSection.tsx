@@ -28,9 +28,7 @@ const ViewSection = (props: ViewSectionProps) => {
         </header>
       )}
 
-      <div className={viewGridClasses.join(" ")}>
-        {props.children}
-      </div>
+      <div className={viewGridClasses.join(" ")}>{props.children}</div>
     </div>
   )
 }

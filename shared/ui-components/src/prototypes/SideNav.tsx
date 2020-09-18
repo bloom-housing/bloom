@@ -7,10 +7,8 @@ export interface SideNavProps {
 
 const SideNav = (props: SideNavProps) => (
   <nav className="side-nav" aria-label="Secondary navigation">
-    <ul>
-      {props.children}
-    </ul>
-   </nav>
+    <ul>{props.children}</ul>
+  </nav>
 )
 
 export { SideNav as default, SideNav }

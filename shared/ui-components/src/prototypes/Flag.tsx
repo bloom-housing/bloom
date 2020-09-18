@@ -12,11 +12,7 @@ const Flag = (props: FlagProps) => {
   if (props.warning) flagClasses.push("is-warning")
   if (props.small) flagClasses.push("is-small")
 
-  return (
-    <div className={flagClasses.join(" ")}>
-      {props.children}
-    </div>
-  )
+  return <div className={flagClasses.join(" ")}>{props.children}</div>
 }
 
 export { Flag as default, Flag }

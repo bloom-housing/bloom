@@ -22,9 +22,7 @@ const FieldSection = (props: FieldSectionProps) => {
         </header>
       )}
 
-      <div className={fieldGridClasses.join(" ")}>
-        {props.children}
-      </div>
+      <div className={fieldGridClasses.join(" ")}>{props.children}</div>
     </div>
   )
 }

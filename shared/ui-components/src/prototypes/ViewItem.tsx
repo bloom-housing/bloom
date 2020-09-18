@@ -18,7 +18,7 @@ const ViewItem = (props: ViewItemProps) => {
     <p className={viewItemClasses.join(" ")}>
       <span className="view-item__label">{props.label}</span>
       <span className="view-item__value">{props.value}</span>
-      {props.helper && (<span className="view-item__helper">{props.helper}</span>)}
+      {props.helper && <span className="view-item__helper">{props.helper}</span>}
     </p>
   )
 }

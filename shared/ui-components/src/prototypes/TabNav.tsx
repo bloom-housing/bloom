@@ -7,10 +7,8 @@ export interface TabNavProps {
 
 const TabNav = (props: TabNavProps) => (
   <nav className="tab-nav" aria-label="Secondary navigation">
-    <ul>
-      {props.children}
-    </ul>
-   </nav>
+    <ul>{props.children}</ul>
+  </nav>
 )
 
 export { TabNav as default, TabNav }

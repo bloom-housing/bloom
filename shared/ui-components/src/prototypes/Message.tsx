@@ -11,11 +11,7 @@ const Message = (props: MessageProps) => {
   const messageClasses = ["message"]
   if (props.warning) messageClasses.push("is-warning")
 
-  return (
-    <div className={messageClasses.join(" ")}>
-      {props.children}
-    </div>
-  )
+  return <div className={messageClasses.join(" ")}>{props.children}</div>
 }
 
 export { Message as default, Message }
