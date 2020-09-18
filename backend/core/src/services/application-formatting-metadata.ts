@@ -182,7 +182,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
       const incomeParsed = Number.parseFloat(application.income)
       switch (application.incomePeriod) {
         case "perYear":
-          return `${(incomeParsed / 12).toFixed(2)}`
+          return ""
         case "perMonth":
           return application.income
         default:
@@ -199,7 +199,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
         case "perYear":
           return application.income
         case "perMonth":
-          return `${(incomeParsed * 12).toFixed(2)}`
+          return ""
         default:
           return ""
       }
