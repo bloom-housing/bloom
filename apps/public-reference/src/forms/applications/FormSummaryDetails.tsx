@@ -90,7 +90,12 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
         </ReviewItem>
 
         {application.applicant.phoneNumber && (
-          <ReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
+          <ReviewItem
+            label={t("t.phone")}
+            sublabel={t(
+              `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
+            )}
+          >
             {application.applicant.phoneNumber}
           </ReviewItem>
         )}
