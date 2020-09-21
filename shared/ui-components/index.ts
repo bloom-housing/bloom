@@ -21,11 +21,13 @@ export * from "./src/footers/FooterSection/FooterSection"
 export * from "./src/footers/SiteFooter/SiteFooter"
 
 /* Forms */
+export * from "./src/forms/DOBField"
 export * from "./src/forms/ErrorMessage"
 export * from "./src/forms/Field"
 export * from "./src/forms/ProgressNav"
 export * from "./src/forms/HouseholdMemberForm"
 export * from "./src/forms/HouseholdSizeField"
+export * from "./src/forms/Form"
 
 /* Headers */
 export * from "./src/headers/Hero/Hero"
@@ -50,8 +52,13 @@ export * from "./src/lists/PreferencesList"
 export * from "./src/lists/ResponsiveContentList/ResponsiveContentList"
 
 /* Page Components */
+export * from "./src/page_components/AppStatusItem"
+export * from "./src/page_components/DashBlock"
+export * from "./src/page_components/DashBlocks"
+export * from "./src/page_components/HeaderBadge"
 export * from "./src/page_components/HousingCounselor"
 export * from "./src/page_components/UnitTables"
+export * from "./src/page_components/UserNav"
 export * from "./src/page_components/listing/AdditionalFees"
 export * from "./src/page_components/listing/ListingDetailHeader"
 export * from "./src/page_components/listing/ListingDetails"

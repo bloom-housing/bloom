@@ -7,15 +7,17 @@ import {
   Icon,
   LinkButton,
   UserContext,
+  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { emailRegex } from "../lib/emailRegex"
+import { emailRegex } from "../lib/helpers"
+import { useRedirectToPrevPage } from "../lib/hooks"
 
 export default () => {
   const { createUser } = useContext(UserContext)
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
-
+  const redirectToPrev = useRedirectToPrevPage()
   const onSubmit = async (data) => {
     try {
       const { birthDay, birthMonth, birthYear, ...rest } = data
@@ -23,6 +25,8 @@ export default () => {
         ...rest,
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })
+
+      redirectToPrev()
       console.log("Created user: %o", user)
     } catch (err) {
       // TODO: better error handling
@@ -42,7 +46,7 @@ export default () => {
           </p>
         </div>
 
-        <form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
               Your Name
@@ -135,7 +139,7 @@ export default () => {
               </Button>
             </div>
           </div>
-        </form>
+        </Form>
 
         <div className="form-card__group text-center">
           <h2 className="mb-6">Already have an account?</h2>

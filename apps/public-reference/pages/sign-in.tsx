@@ -3,20 +3,22 @@ import { useForm } from "react-hook-form"
 import {
   Button,
   Field,
+  Form,
   FormCard,
   Icon,
   LinkButton,
   UserContext,
   t,
   AlertBox,
-  UrlAlert,
+  SiteAlert,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { useRouter } from "next/router"
+import { useRedirectToPrevPage } from "../lib/hooks"
 
 const SignIn = () => {
   const { login } = useContext(UserContext)
-  const router = useRouter()
+  const redirectToPrev = useRedirectToPrevPage()
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
@@ -26,13 +28,10 @@ const SignIn = () => {
 
     try {
       const user = await login(email, password)
-      router.push(
-        `/?success=${encodeURIComponent(
-          t(`authentication.signIn.success`, { name: user.firstName })
-        )}`
-      )
+      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      redirectToPrev()
     } catch (err) {
-      const { status } = err.response
+      const { status } = err.response || {}
       if (status === 401) {
         setRequestError(`${t("authentication.signIn.error")}: ${err.message}`)
       } else {
@@ -56,9 +55,9 @@ const SignIn = () => {
             {requestError}
           </AlertBox>
         )}
-        <UrlAlert type="notice" urlParam="message" dismissable />
+        <SiteAlert type="notice" dismissable />
         <div className="form-card__group pt-0 border-b">
-          <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+          <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
               caps={true}
               name="email"
@@ -90,7 +89,7 @@ const SignIn = () => {
                 Sign In
               </Button>
             </div>
-          </form>
+          </Form>
         </div>
         <div className="form-card__group text-center">
           <h2 className="mb-6">Don't have an account?</h2>

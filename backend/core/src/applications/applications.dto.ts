@@ -1,6 +1,8 @@
-import { IsOptional, IsString } from "class-validator"
+import { IsDefined, IsOptional, IsString, ValidateNested } from "class-validator"
 import { IdDto } from "../lib/id.dto"
 import { Expose, Type } from "class-transformer"
+import { OmitType } from "@nestjs/swagger"
+import { Application } from "../entity/application.entity"
 
 export class ApplicationsListQueryParams {
   @IsOptional()
@@ -8,19 +10,16 @@ export class ApplicationsListQueryParams {
   listingId?: string
 }
 
-export class ApplicationDto {
+export class ApplicationDto extends OmitType(Application, ["listing", "user"] as const) {
   @Expose()
-  id: string
-  @Expose()
-  application: any
+  @IsOptional()
+  @ValidateNested()
   @Type(() => IdDto)
+  user?: IdDto
+
   @Expose()
-  user: IdDto
+  @IsDefined()
+  @ValidateNested()
   @Type(() => IdDto)
-  @Expose()
   listing: IdDto
-  @Expose()
-  createdAt: Date
-  @Expose()
-  updatedAt: Date
 }

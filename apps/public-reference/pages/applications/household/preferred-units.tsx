@@ -4,11 +4,10 @@ Applicant can designate which unit sizes they prefer
 */
 import Link from "next/link"
 import Router from "next/router"
-import { Button, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import { useContext, useMemo } from "react"
 import { CheckboxGroup } from "@bloom-housing/ui-components/src/forms/CheckboxGroup"
 import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -28,21 +27,24 @@ export default () => {
   const onSubmit = (data) => {
     const { preferredUnit } = data
 
-    new FormStep(conductor).save({
-      preferredUnit,
-    })
+    application.preferredUnit = preferredUnit
+
+    conductor.sync()
 
     Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
+  }
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const preferredUnitOptions = useMemo(() => {
     return preferredUnit?.map((item) => ({
       id: item.id,
       label: t(`application.household.preferredUnit.options.${item.id}`),
-      defaultChecked: item.checked,
+      defaultChecked: item.checked || application.preferredUnit.includes(item.id),
       register,
     }))
-  }, [])
+  }, [register, application.preferredUnit])
 
   return (
     <FormsLayout>
@@ -67,9 +69,16 @@ export default () => {
           <h2 className="form-card__title is-borderless">
             {t("application.household.preferredUnit.title")}
           </h2>
+          <p className="mt-4 field-note">{t("application.household.preferredUnit.subTitle")}</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {t("t.errorsToResolve")}
+          </AlertBox>
+        )}
+
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group is-borderless">
             <CheckboxGroup
               name="preferredUnit"
@@ -95,12 +104,12 @@ export default () => {
             </div>
           </div>
 
-          <div className="p-8 text-center">
+          {/* <div className="p-8 text-center">
             <Link href="/">
               <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
             </Link>
-          </div>
-        </form>
+          </div> */}
+        </Form>
       </FormCard>
     </FormsLayout>
   )

@@ -1,3 +1,5 @@
+@import "../../styles/mixins.scss";
+
 .button {
   @apply bg-white;
   @apply text-primary;
@@ -19,6 +21,11 @@
   &:hover {
     @apply bg-primary-dark;
     @apply text-white;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
   }
 
   &.is-filled,
@@ -101,5 +108,11 @@
       @apply text-primary-dark;
       background: transparent;
     }
+  }
+}
+
+button {
+  &.has-toggle {
+    @include has-toggle;
   }
 }

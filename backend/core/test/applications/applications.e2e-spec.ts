@@ -5,11 +5,12 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
+import { applicationSetup, AppModule } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { UserModule } from "../../src/user/user.module"
-import { ListingsModule } from "../../src/listings/listings.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
-import { applicationSetup } from "../../src/app.module"
+import { ListingsModule } from "../../src/listings/listings.module"
+import { ApplicationsController } from "../../src/applications/applications.controller"
+import { EmailService } from "../../src/shared/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -25,18 +26,19 @@ describe("Applications", () => {
   let listingId: any
 
   beforeAll(async () => {
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    const testEmailService = { confirmation: async () => {} }
+    /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
-      imports: [
-        AuthModule,
-        UserModule,
-        ListingsModule,
-        ApplicationsModule,
-        TypeOrmModule.forRoot(dbOptions),
-      ],
-    }).compile()
+      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, ListingsModule, ApplicationsModule],
+    })
+      .overrideProvider(EmailService)
+      .useValue(testEmailService)
+      .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
+
     let res = await supertest(app.getHttpServer())
       .post("/auth/login")
       .send({ email: "test@example.com", password: "abcdef" })
@@ -59,7 +61,7 @@ describe("Applications", () => {
       .expect(200)
     user2Id = res.body.id
 
-    res = await supertest(app.getHttpServer()).get("/").expect(200)
+    res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     listingId = res.body.listings[0].id
   })
 
@@ -82,7 +84,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const res = await supertest(app.getHttpServer())
       .post(`/applications`)
@@ -102,7 +108,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(201)
     expect(res.body).toEqual(expect.objectContaining(body))
@@ -118,10 +128,14 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
       user: {
         id: user1Id,
       },
+      appUrl: "",
     }
     const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(401)
   })
@@ -136,7 +150,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const res = await supertest(app.getHttpServer())
       .post(`/applications`)
@@ -155,7 +173,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
@@ -182,7 +204,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
@@ -205,7 +231,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
@@ -223,7 +253,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "new bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const putRes = await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)
@@ -243,7 +277,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
@@ -261,7 +299,11 @@ describe("Applications", () => {
       },
       application: {
         foo: "new bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
       },
+      appUrl: "",
     }
     const putRes = await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)

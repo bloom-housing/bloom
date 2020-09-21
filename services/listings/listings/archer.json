@@ -1,9 +1,5 @@
 {
   "id": "Uvbk5qurpB2WI9V6WnNdH",
-  "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": true,
-  "acceptingOnlineApplications": false,
-  "acceptsPostmarkedApplications": true,
   "postmarkedApplicationsReceivedByDate": "2019-12-05",
   "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
   "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
@@ -16,9 +12,28 @@
     "longitude": -121.91071
   },
   "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
+  "applicationMethods": [
+    {
+      "type": "POBox",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "LeasingAgent"
+    },
+    {
+      "type": "PaperPickup"
+    }
+  ],
   "applicationOrganization": "98 Archer Street",
   "applicationPhone": "(408) 217-8562",
-  "blankPaperApplicationCanBePickedUp": true,
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "Uvbk5qurpB2WI9V6WnNdH",
+      "label": "building",
+      "fileId": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg"
+    }
+  ],
   "buildingAddress": {
     "city": "San Jose",
     "street": "98 Archer Street",
@@ -32,7 +47,6 @@
   "creditHistory": "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   "depositMin": "1140.0",
   "developer": "Charities Housing ",
-  "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
   "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
   "externalId": null,
   "waitlistMaxSize": 300,

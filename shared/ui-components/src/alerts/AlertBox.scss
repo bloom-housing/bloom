@@ -10,10 +10,6 @@
   &.invert {
     @apply text-white;
 
-    svg use {
-      // fill: $white;
-    }
-
     .close {
       @apply text-white;
     }
@@ -42,11 +38,19 @@
       @apply bg-success;
     }
   }
+
+  &.warn {
+    @apply bg-warn-light;
+
+    &.invert {
+      @apply bg-warn;
+    }
+  }
 }
 
 .alert-box__body {
   @apply ml-2;
-  @apply font-bold;
+  @apply font-semibold;
   @apply text-tiny;
 }
 

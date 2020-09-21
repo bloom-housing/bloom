@@ -5,6 +5,7 @@ import { LanguageNav, t } from "@bloom-housing/ui-components"
 export interface SiteHeaderProps {
   logoSrc: string
   title: string
+  skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
 }
@@ -37,6 +38,14 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     this.handleMenuToggle = this.handleMenuToggle.bind(this)
   }
 
+  skipLink() {
+    return (
+      <a href="#main-content" className="navbar__skip-link">
+        {this.props.skip}
+      </a>
+    )
+  }
+
   noticeBar() {
     return (
       <div className="navbar-notice">
@@ -49,7 +58,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     return (
       <LocalizedLink className="navbar-item logo" href="/">
         <div className="logo__lockup">
-          <img className="logo__image" src={this.props.logoSrc} />
+          <img className="logo__image" src={this.props.logoSrc} alt={this.props.title} />
           <div className="logo__title">{this.props.title}</div>
         </div>
       </LocalizedLink>
@@ -94,7 +103,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     return (
       <>
         <LanguageNav items={this.languages} />
-
+        {this.skipLink()}
         {this.noticeBar()}
         <div className="navbar__wrapper">
           <nav className="navbar" role="navigation" aria-label="main navigation">

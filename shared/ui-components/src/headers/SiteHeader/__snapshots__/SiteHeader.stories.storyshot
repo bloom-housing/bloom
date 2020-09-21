@@ -6,6 +6,10 @@ exports[`Storyshots Headers/SiteHeader Standard 1`] = `
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
   title="Site Title Here"
 >
+  <a
+    className="navbar__skip-link"
+    href="#main-content"
+  />
   <div
     className="navbar-notice"
   >
@@ -75,7 +79,7 @@ exports[`Storyshots Headers/SiteHeader Standard 1`] = `
         </a>
       </div>
       <div
-        className="navbar-menu mt-3 md:mt-0"
+        className="navbar-menu md:mt-0"
         id="navbarMenuLinks"
       >
         <div
@@ -100,6 +104,10 @@ exports[`Storyshots Headers/SiteHeader With Dropdown And Button 1`] = `
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
   title="Site Title Here"
 >
+  <a
+    className="navbar__skip-link"
+    href="#main-content"
+  />
   <div
     className="navbar-notice"
   >
@@ -169,7 +177,7 @@ exports[`Storyshots Headers/SiteHeader With Dropdown And Button 1`] = `
         </a>
       </div>
       <div
-        className="navbar-menu mt-3 md:mt-0"
+        className="navbar-menu md:mt-0"
         id="navbarMenuLinks"
       >
         <div
