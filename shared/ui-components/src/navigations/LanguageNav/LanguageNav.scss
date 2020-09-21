@@ -15,15 +15,12 @@
   li {
     @apply py-2;
     @apply px-2;
-
     @apply text-gray-500;
     @apply font-semibold;
+    @apply cursor-pointer;
 
     &.is-active {
       @apply text-white;
     }
-    // a {
-
-    // }
   }
 }
