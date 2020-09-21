@@ -10,6 +10,6 @@ export const standard = () => <Tag>tag</Tag>
 
 export const success = () => (
   <Tag success={true}>
-    Warning
+    Success
   </Tag>
 )

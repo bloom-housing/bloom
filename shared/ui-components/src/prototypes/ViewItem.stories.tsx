@@ -10,7 +10,7 @@ export default {
 export const Default = () => (
   <ViewItem
     label="Label"
-    value="Value"
+    children="Value"
     helper="Helper"
   />
 )
@@ -18,14 +18,14 @@ export const Default = () => (
 export const NoHelper = () => (
   <ViewItem
     label="Address"
-    value="1112 Springfield St."
+    children="1112 Springfield St."
   />
 )
 
 export const Flagged = () => (
   <ViewItem
     label="Address"
-    value="1112 Springfield St."
+    children="1112 Springfield St."
     flagged={true}
   />
 )

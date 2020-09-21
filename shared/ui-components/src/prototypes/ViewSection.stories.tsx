@@ -17,44 +17,44 @@ export const FourColumns = () => (
   >
     <ViewItem
         label="First Name"
-        value="Lisa"
+        children="Lisa"
       />
 
       <ViewItem
         label="Middle Name"
-        value="S"
+        children="S"
       />
 
       <ViewItem
         label="Last Name"
-        value="Jones"
+        children="Jones"
       />
 
       <ViewItem
         label="Date of Birth"
-        value="01/01/1985"
+        children="01/01/1985"
       />
 
       <ViewItem
         label="Email"
-        value="lisa@gmail.com"
+        children="lisa@gmail.com"
       />
 
       <ViewItem
         label="Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Cell"
       />
 
       <ViewItem
         label="Second Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Work"
       />
 
       <ViewItem
         label="Perferred Contact"
-        value="Phone"
+        children="Phone"
       />
   </ViewSection>
 )
@@ -68,44 +68,44 @@ export const FourColumnsEdit = () => (
   >
     <ViewItem
       label="First Name"
-      value="Lisa"
+      children="Lisa"
     />
 
     <ViewItem
       label="Middle Name"
-      value="S"
+      children="S"
     />
 
     <ViewItem
       label="Last Name"
-      value="Jones"
+      children="Jones"
     />
 
     <ViewItem
       label="Date of Birth"
-      value="01/01/1985"
+      children="01/01/1985"
     />
 
     <ViewItem
       label="Email"
-      value="lisa@gmail.com"
+      children="lisa@gmail.com"
     />
 
     <ViewItem
       label="Phone"
-      value="111-222-3333"
+      children="111-222-3333"
       helper="Cell"
     />
 
     <ViewItem
       label="Second Phone"
-      value="111-222-3333"
+      children="111-222-3333"
       helper="Work"
     />
 
     <ViewItem
       label="Perferred Contact"
-      value="Phone"
+      children="Phone"
     />
   </ViewSection>
 )
@@ -121,29 +121,29 @@ export const Address = () => (
         <div className="view-subgrid md:grid md:grid-cols-4 md:gap-8">
           <ViewItem
             label="Street Address"
-            value="112 Springfield St."
+            children="112 Springfield St."
             className="md:col-span-3"
           />
 
           <ViewItem
             label="Apt Unit #"
-            value="1"
+            children="1"
           />
 
           <ViewItem
             label="City"
-            value="Oakland"
+            children="Oakland"
             className="md:col-span-2"
           />
 
           <ViewItem
             label="State"
-            value="CA"
+            children="CA"
           />
 
           <ViewItem
             label="Zip"
-            value="94577"
+            children="94577"
           />
         </div>
       </div>
@@ -158,44 +158,44 @@ export const ViewSectionSingleColumn = () => (
     <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
       <ViewItem
         label="First Name"
-        value="Lisa"
+        children="Lisa"
       />
 
       <ViewItem
         label="Middle Name"
-        value="S"
+        children="S"
       />
 
       <ViewItem
         label="Last Name"
-        value="Jones"
+        children="Jones"
       />
 
       <ViewItem
         label="Date of Birth"
-        value="01/01/1985"
+        children="01/01/1985"
       />
 
       <ViewItem
         label="Email"
-        value="lisa@gmail.com"
+        children="lisa@gmail.com"
       />
 
       <ViewItem
         label="Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Cell"
       />
 
       <ViewItem
         label="Second Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Work"
       />
 
       <ViewItem
         label="Perferred Contact"
-        value="Phone"
+        children="Phone"
       />
     </div>
   </div>
@@ -222,48 +222,48 @@ export const ViewSectionSingleColumnWarn = () => (
     <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
       <ViewItem
         label="First Name"
-        value="Lisa"
+        children="Lisa"
         flagged={true}
       />
 
       <ViewItem
         label="Middle Name"
-        value="S"
+        children="S"
         flagged={true}
       />
 
       <ViewItem
         label="Last Name"
-        value="Jones"
+        children="Jones"
         flagged={true}
       />
 
       <ViewItem
         label="Date of Birth"
-        value="01/01/1985"
+        children="01/01/1985"
         flagged={true}
       />
 
       <ViewItem
         label="Email"
-        value="lisa@gmail.com"
+        children="lisa@gmail.com"
       />
 
       <ViewItem
         label="Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Cell"
       />
 
       <ViewItem
         label="Second Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Work"
       />
 
       <ViewItem
         label="Perferred Contact"
-        value="Phone"
+        children="Phone"
       />
     </div>
   </div>

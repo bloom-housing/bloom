@@ -3,11 +3,9 @@ import "./FieldSection.scss"
 
 export interface FieldSectionProps {
   title?: string
-  edit?: string
   subtitle?: string
-  tinted?: boolean
   className?: string
-  children: React.ReactNode[]
+  children: React.ReactNode
 }
 
 const FieldSection = (props: FieldSectionProps) => {

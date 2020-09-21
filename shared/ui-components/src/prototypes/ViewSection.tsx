@@ -7,7 +7,7 @@ export interface ViewSectionProps {
   subtitle?: string
   tinted?: boolean
   className?: string
-  children: React.ReactNode[]
+  children: React.ReactNode
 }
 
 const ViewSection = (props: ViewSectionProps) => {
