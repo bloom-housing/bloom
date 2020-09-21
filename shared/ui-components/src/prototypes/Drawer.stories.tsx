@@ -29,7 +29,6 @@ export const Drawer = () => (
   </div>
 )
 
-
 export const DrawerBackground = () => (
   <div className="drawer__wrapper drawer__wrappe--backdrop">
     <div className="drawer is-left" aria-labelledby="Drawer Title" aria-describedby="Drawer description">

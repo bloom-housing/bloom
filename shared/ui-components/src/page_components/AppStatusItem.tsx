@@ -21,7 +21,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
   const { application, status, lotteryNumber, setDeletingApplication } = props
   const listing = application.listing
   const applicationDueDate = moment(listing.applicationDueDate)
-  // const editDate = moment(application.updatedAt)
+  const editDate = moment(application.updatedAt)
   let statusText = t("application.statuses." + status)
   const inProgress = status == "inProgress"
   const active = inProgress && moment() < applicationDueDate
@@ -97,7 +97,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
 
           <div className="status-item__meta">
             <p className="status-item__date">
-
+              {t("application.edited")}: {editDate.format("MMMM D, YYYY")}
             </p>
           </div>
         </footer>

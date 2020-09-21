@@ -269,7 +269,6 @@ export const ViewSectionSingleColumnWarn = () => (
   </div>
 )
 
-
 export const ViewSectionTable = () => (
   <div className="view-section">
     <header className="view-header">
