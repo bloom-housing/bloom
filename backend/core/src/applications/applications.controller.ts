@@ -26,7 +26,7 @@ import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { Application } from "../entity/application.entity"
 import { CsvBuilder } from "../services/csv-builder.service"
-import { applicationFormattingMetadataAggregate } from "../services/application-formatting-metadata"
+import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -58,7 +58,7 @@ export class ApplicationsController {
     const applications = await this.applicationsService.list({ listingId }, null)
     return this.csvBuilder.build(
       applications,
-      applicationFormattingMetadataAggregate,
+      applicationFormattingMetadataAggregateFactory,
       includeHeaders
     )
   }

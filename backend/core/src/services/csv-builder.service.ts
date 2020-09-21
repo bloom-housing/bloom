@@ -16,10 +16,14 @@ export type FormattingMetadataArray = {
 }
 
 export type FormattingMetadataAggregate = Array<FormattingMetadata | FormattingMetadataArray>
+export type FormattingMetadataAggregateFactory = () => FormattingMetadataAggregate
 
 export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
 export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
 export const streetFormatter = (obj?: { street: string; street2: string }) => {
+  if (!obj) {
+    return defaultFormatter(obj)
+  }
   if (!obj.street && !obj.street2) {
     return ""
   }
@@ -29,14 +33,14 @@ export const streetFormatter = (obj?: { street: string; street2: string }) => {
   if (!obj.street2) {
     return obj.street
   }
-  return obj ? `${obj.street}, ${obj.street2}` : ""
+  return `${obj.street}, ${obj.street2}`
 }
 export const dobFormatter = (obj?: { birthMonth: number; birthDay: number; birthYear: number }) => {
-  return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : ""
+  return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : defaultFormatter(obj)
 }
 export const keysToJoinedStringFormatter = (obj: any) => {
   if (!obj) {
-    return ""
+    return defaultFormatter(obj)
   }
   const keys = Object.keys(obj).filter((key) => obj[key])
   return keys.join(",")
@@ -70,7 +74,7 @@ export class CsvBuilder {
       try {
         value = this.retrieveValueByDiscriminator(obj, metadataObj.discriminator)
       } catch (e) {
-        value = metadataObj.type === "array" ? [] : ""
+        value = undefined
       }
       if (metadataObj.type === "array") {
         const metadataArray: FormattingMetadataArray = metadataObj as FormattingMetadataArray
@@ -112,36 +116,45 @@ export class CsvBuilder {
   }
 
   private normalizeMetadataArrays(
-    formattingMetadataAggregate: FormattingMetadataAggregate,
-    arr: any[]
+    arr: any[],
+    formattingMetadataAggregate: FormattingMetadataAggregate
   ) {
-    for (const metadata of formattingMetadataAggregate) {
-      if (metadata.type === "array") {
+    formattingMetadataAggregate
+      .filter((metadata) => metadata.type === "array")
+      .forEach((metadata) => {
         const md = metadata as FormattingMetadataArray
         if (md.size !== null) {
-          continue
+          return
         }
         md.size = Math.max(
           ...arr.map((item) => {
-            return this.retrieveValueByDiscriminator(item, md.discriminator).length
+            const value = this.retrieveValueByDiscriminator(item, md.discriminator)
+            if (!value || !Array.isArray(value)) {
+              return 0
+            }
+            return value.length
           })
         )
-      }
-    }
+      })
     return formattingMetadataAggregate
   }
 
-  build(
+  public build(
     arr: any[],
-    formattingMetadataAggregate: FormattingMetadataAggregate,
+    formattingMetadataAggregateFactory: FormattingMetadataAggregateFactory,
     includeHeaders?: boolean
   ): string {
-    formattingMetadataAggregate = this.normalizeMetadataArrays(formattingMetadataAggregate, arr)
+    const formattingMetadataAggregate = formattingMetadataAggregateFactory()
+    if (!formattingMetadataAggregate) {
+      return ""
+    }
+    const normalizedMetadataAggregate = this.normalizeMetadataArrays(
+      arr,
+      formattingMetadataAggregate
+    )
     const rows: Array<Array<string>> = []
-    const headers = this.getHeaders(formattingMetadataAggregate)
-    rows.push(headers)
-    arr.forEach((item) => rows.push(this.flattenJson(item, formattingMetadataAggregate)))
-
+    rows.push(this.getHeaders(normalizedMetadataAggregate))
+    arr.forEach((item) => rows.push(this.flattenJson(item, normalizedMetadataAggregate)))
     return this.csvEncoder.encode(rows, includeHeaders)
   }
 }
