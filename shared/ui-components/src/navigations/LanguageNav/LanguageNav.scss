@@ -16,13 +16,14 @@
     @apply py-2;
     @apply px-2;
 
-    a {
-      @apply text-gray-500;
-      @apply font-semibold;
+    @apply text-gray-500;
+    @apply font-semibold;
 
-      &.is-active {
-        @apply text-white;
-      }
+    &.is-active {
+      @apply text-white;
     }
+    // a {
+
+    // }
   }
 }

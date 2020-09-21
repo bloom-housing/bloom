@@ -88,14 +88,12 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
 
   languages = [
     {
-      name: "",
+      prefix: "",
       label: t("languages.english"),
-      path: "/",
     },
     {
-      name: "es",
+      prefix: "es",
       label: t("languages.spanish"),
-      path: "/es",
     },
   ]
 
