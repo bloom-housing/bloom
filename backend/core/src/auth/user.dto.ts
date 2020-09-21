@@ -4,5 +4,5 @@ import { Expose } from "class-transformer"
 
 export class RegisterResponseDto extends OmitType(User, ["passwordHash", "applications"] as const) {
   @Expose()
-  accesToken: string
+  accessToken: string
 }
