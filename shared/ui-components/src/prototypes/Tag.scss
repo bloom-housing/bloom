@@ -1,0 +1,18 @@
+.tag {
+  @apply px-3;
+  @apply py-1;
+  @apply bg-primary-light;
+  @apply text-primary;
+  @apply rounded-full;
+  @apply font-semibold;
+  @apply font-alt-sans;
+  @apply uppercase;
+  @apply tracking-widest;
+  @apply inline;
+  @apply text-sm;
+
+  &.is-success {
+    @apply text-white;
+    @apply bg-success;
+  }
+}
