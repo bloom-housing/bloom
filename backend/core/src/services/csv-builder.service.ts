@@ -12,7 +12,7 @@ export type FormattingMetadataArray = {
   discriminator: string
   type: string
   items: FormattingMetadata[]
-  size: number
+  size: number | null
 }
 
 export type FormattingMetadataAggregate = Array<FormattingMetadata | FormattingMetadataArray>
@@ -111,11 +111,32 @@ export class CsvBuilder {
     return headers
   }
 
+  private normalizeMetadataArrays(
+    formattingMetadataAggregate: FormattingMetadataAggregate,
+    arr: any[]
+  ) {
+    for (const metadata of formattingMetadataAggregate) {
+      if (metadata.type === "array") {
+        const md = metadata as FormattingMetadataArray
+        if (md.size !== null) {
+          continue
+        }
+        md.size = Math.max(
+          ...arr.map((item) => {
+            return this.retrieveValueByDiscriminator(item, md.discriminator).length
+          })
+        )
+      }
+    }
+    return formattingMetadataAggregate
+  }
+
   build(
     arr: any[],
     formattingMetadataAggregate: FormattingMetadataAggregate,
     includeHeaders?: boolean
   ): string {
+    formattingMetadataAggregate = this.normalizeMetadataArrays(formattingMetadataAggregate, arr)
     const rows: Array<Array<string>> = []
     const headers = this.getHeaders(formattingMetadataAggregate)
     rows.push(headers)

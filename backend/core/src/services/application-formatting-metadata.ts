@@ -141,6 +141,11 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
     formatter: defaultFormatter,
   },
   {
+    label: "Alternate Contact Agency",
+    discriminator: "application.alternateContact.agency",
+    formatter: defaultFormatter,
+  },
+  {
     label: "Alternate Contact Other",
     discriminator: "application.alternateContact.otherType",
     formatter: defaultFormatter,
@@ -227,7 +232,7 @@ export const applicationFormattingMetadataAggregate: FormattingMetadataAggregate
   },
   {
     type: "array",
-    size: 8,
+    size: null,
     discriminator: "application.householdMembers",
     items: [
       { label: "Household First Name", discriminator: "firstName", formatter: defaultFormatter },
