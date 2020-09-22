@@ -89,11 +89,11 @@ workflows:
       - build-partners:
           requires:
             - setup
-      - cypress/run:
-          requires:
-            - setup
-          executor: cypress-node
-          working_directory: apps/public-reference
-          yarn: true
-          start: yarn dev:all
-          wait-on: "http://localhost:3000"
+#      - cypress/run:
+#          requires:
+#            - setup
+#          executor: cypress-node
+#          working_directory: apps/public-reference
+#          yarn: true
+#          start: yarn dev:all
+#          wait-on: "http://localhost:3000"

@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/StatusBar Status Bar 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="status-bar"
+  >
+    <div
+      className="pr-2 mr-4 border-r border-gray-600"
+    >
+      <span>
+        Status:
+      </span>
+      <span
+        className="tag mx-2"
+      >
+        Draft
+      </span>
+    </div>
+    <div>
+      <span
+        className="mr-4"
+      >
+        Last Updated: August 1, 2020
+      </span>
+    </div>
+    <button
+      className="button is-small is-filled"
+    >
+      Save
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes/StatusBar Status Bar Submitted 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="status-bar"
+  >
+    <div
+      className="pr-2 mr-4 border-r border-gray-600"
+    >
+      <span>
+        Status:
+      </span>
+      <span
+        className="tag mx-2 bg-success text-white"
+      >
+        Submitted
+      </span>
+    </div>
+    <div>
+      <span
+        className="mr-4"
+      >
+        Last Updated: August 1, 2020
+      </span>
+    </div>
+    <button
+      className="button is-small"
+    >
+      Edit
+    </button>
+  </div>
+</div>
+`;

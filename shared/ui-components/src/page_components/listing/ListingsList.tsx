@@ -58,7 +58,7 @@ const ListingsList = (props: ListingsProps) => {
                 headers={unitSummariesHeaders}
                 data={unitSummaries}
                 responsiveCollapse={true}
-                cellClassName="p-3"
+                cellClassName="px-5 py-3"
               />
             )}
           </div>

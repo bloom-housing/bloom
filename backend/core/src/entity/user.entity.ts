@@ -12,7 +12,7 @@ import { Expose } from "class-transformer"
 import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
 
 @Entity({ name: "user_accounts" })
-@Index("user_accounts_email_lower", { synchronize: false })
+@Index("user_accounts_email_unique_idx", { synchronize: false })
 export class User {
   @PrimaryGeneratedColumn("uuid")
   @Expose()

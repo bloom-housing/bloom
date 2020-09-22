@@ -263,6 +263,12 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional()
   @IsString()
+  rentalAssistance: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
   rentalHistory: string | null
 
   @Column({ type: "text", nullable: true })
