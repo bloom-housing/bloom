@@ -28,7 +28,7 @@ export const Standard = () => (
 export const HasBackground = () => (
   <Drawer
     title="Drawer Title"
-    className="is-right has-backdrop"
+    className="is-right"
     ariaDescription="My Drawer"
     hasBackdrop={true}
   >
