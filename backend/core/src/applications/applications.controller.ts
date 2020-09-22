@@ -4,14 +4,17 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
+  ParseBoolPipe,
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common"
-import { ApplicationDto, ApplicationsListQueryParams } from "./applications.dto"
+import { ApplicationDto } from "./applications.dto"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { DefaultAuthGuard } from "../auth/default.guard"
@@ -22,6 +25,8 @@ import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { Application } from "../entity/application.entity"
+import { CsvBuilder } from "../services/csv-builder.service"
+import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -30,15 +35,32 @@ export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
     private readonly emailService: EmailService,
-    private readonly listingsService: ListingsService
+    private readonly listingsService: ListingsService,
+    private readonly csvBuilder: CsvBuilder
   ) {}
 
   @Get()
   @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "List applications", operationId: "list" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async list(@Query() params: ApplicationsListQueryParams): Promise<Application[]> {
-    return await this.applicationsService.list(params)
+  async list(@Query("listingId") listingId: string, @Req() request): Promise<Application[]> {
+    return await this.applicationsService.list({ listingId }, request.user)
+  }
+
+  @Get(`csv`)
+  @UseGuards(DefaultAuthGuard)
+  @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
+  @Header("Content-Type", "text/csv")
+  async listAsCsv(
+    @Query("listingId") listingId: string,
+    @Query("includeHeaders", ParseBoolPipe) includeHeaders: boolean
+  ): Promise<string> {
+    const applications = await this.applicationsService.list({ listingId }, null)
+    return this.csvBuilder.build(
+      applications,
+      applicationFormattingMetadataAggregateFactory,
+      includeHeaders
+    )
   }
 
   @Post()
@@ -48,7 +70,9 @@ export class ApplicationsController {
   async create(@Body() applicationCreateDto: ApplicationCreateDto): Promise<Application> {
     const application = await this.applicationsService.create(applicationCreateDto)
     const listing = await this.listingsService.findOne(application.listing.id)
-    await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
+    if (application.application.applicant.emailAddress) {
+      await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
+    }
     return application
   }
 

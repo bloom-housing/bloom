@@ -224,6 +224,15 @@ input[type=number] {
   -moz-appearance:textfield;
 }
 
+.field-group--inline {
+  @apply flex;
+
+  .field {
+    @apply mr-5;
+    @apply mb-0;
+  }
+}
+
 .field-label {
   @apply text-gray-750;
   @apply text-tiny;
