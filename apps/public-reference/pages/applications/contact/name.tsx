@@ -10,6 +10,7 @@ import {
   Field,
   Form,
   FormCard,
+  OnClientSide,
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
@@ -19,6 +20,7 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
 import { useContext } from "react"
 import { emailRegex } from "../../../lib/helpers"
+import { useEffect } from "react"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -29,6 +31,10 @@ export default () => {
     Record<string, any>
   >({
     shouldFocusError: false,
+    defaultValues: {
+      "applicant.emailAddress": application.applicant.emailAddress,
+      "applicant.noEmail": application.applicant.noEmail,
+    },
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
@@ -38,7 +44,13 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const noEmail: boolean = watch("applicant.noEmail", application.applicant.noEmail)
+  const emailPresent: string = watch("applicant.emailAddress")
+  const noEmail: boolean = watch("applicant.noEmail")
+  const clientLoaded = OnClientSide()
+
+  {
+    clientLoaded && console.info("noEmail!", noEmail, application.applicant.noEmail)
+  }
 
   return (
     <FormsLayout>
@@ -117,13 +129,13 @@ export default () => {
             <Field
               type="email"
               name="applicant.emailAddress"
-              placeholder={noEmail ? t("t.none") : "example@web.com"}
+              placeholder={clientLoaded && noEmail ? t("t.none") : "example@web.com"}
               defaultValue={application.applicant.emailAddress}
               validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
               error={errors.applicant?.emailAddress}
               errorMessage={t("application.name.emailAddressError")}
               register={register}
-              disabled={noEmail}
+              disabled={clientLoaded && noEmail}
             />
 
             <div className="field">
@@ -131,14 +143,9 @@ export default () => {
                 type="checkbox"
                 id="noEmail"
                 name="applicant.noEmail"
-                defaultChecked={application.applicant.noEmail}
+                defaultChecked={clientLoaded && noEmail}
+                disabled={clientLoaded && emailPresent?.length > 0}
                 ref={register}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setValue("applicant.emailAddress", "")
-                    clearErrors("applicant.emailAddress")
-                  }
-                }}
               />
               <label htmlFor="noEmail" className="text-primary font-semibold">
                 {t("application.name.noEmailAddress")}

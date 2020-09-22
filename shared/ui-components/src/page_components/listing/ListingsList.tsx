@@ -12,7 +12,7 @@ export interface ListingsProps {
 }
 
 const imageUrlFromListing = (listing: Listing) => {
-  return listing.assets.find((asset) => asset.label == "building")?.fileId
+  return listing?.assets?.find((asset) => asset.label == "building")?.fileId
 }
 
 const ListingsList = (props: ListingsProps) => {
@@ -58,7 +58,7 @@ const ListingsList = (props: ListingsProps) => {
                 headers={unitSummariesHeaders}
                 data={unitSummaries}
                 responsiveCollapse={true}
-                cellClassName="p-3"
+                cellClassName="px-5 py-3"
               />
             )}
           </div>
@@ -76,4 +76,4 @@ const ListingsList = (props: ListingsProps) => {
   return <>{listItems}</>
 }
 
-export { ListingsList as default, ListingsList }
+export { ListingsList as default, ListingsList, imageUrlFromListing }

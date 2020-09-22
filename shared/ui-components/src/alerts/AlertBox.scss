@@ -10,10 +10,6 @@
   &.invert {
     @apply text-white;
 
-    svg use {
-      // fill: $white;
-    }
-
     .close {
       @apply text-white;
     }
@@ -40,6 +36,14 @@
 
     &.invert {
       @apply bg-success;
+    }
+  }
+
+  &.warn {
+    @apply bg-warn-light;
+
+    &.invert {
+      @apply bg-warn;
     }
   }
 }

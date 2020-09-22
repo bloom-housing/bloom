@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/Message Standard 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Message>
+    <div
+      className="message"
+    >
+      Message
+    </div>
+  </Message>
+</div>
+`;
+
+exports[`Storyshots Prototypes/Message Warning 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Message
+    warning={true}
+  >
+    <div
+      className="message is-warning"
+    >
+      Warning
+    </div>
+  </Message>
+</div>
+`;

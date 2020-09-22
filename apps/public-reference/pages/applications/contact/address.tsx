@@ -12,6 +12,7 @@ import {
   Field,
   Form,
   FormCard,
+  OnClientSide,
   mergeDeep,
   ProgressNav,
   t,
@@ -34,10 +35,13 @@ export default () => {
     Record<string, any>
   >({
     defaultValues: {
-      noPhone: application.applicant.noPhone,
+      "applicant.phoneNumber": application.applicant.phoneNumber,
+      "applicant.noPhone": application.applicant.noPhone,
       additionalPhone: application.additionalPhone,
+      "applicant.phoneNumberType": application.applicant.phoneNumberType,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
-      workInRegion: application.applicant.workInRegion,
+      "applicant.workInRegion": application.applicant.workInRegion,
+      "applicant.address.state": application.applicant.address.state,
     },
     shouldFocusError: false,
   })
@@ -65,13 +69,15 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const noPhone = watch("applicant.noPhone", application.applicant.noPhone)
-  const additionalPhone = watch("additionalPhone", application.additionalPhone)
-  const sendMailToMailingAddress = watch(
-    "sendMailToMailingAddress",
-    application.sendMailToMailingAddress
-  )
-  const workInRegion = watch("applicant.workInRegion", application.applicant.workInRegion)
+  const noPhone: boolean = watch("applicant.noPhone")
+  const phoneNumber: string = watch("applicant.phoneNumber")
+  const phonePresent = () => {
+    return phoneNumber.replace(/[()\-_ ]/g, "").length > 0
+  }
+  const additionalPhone = watch("additionalPhone")
+  const sendMailToMailingAddress = watch("sendMailToMailingAddress")
+  const workInRegion = watch("applicant.workInRegion")
+  const clientLoaded = OnClientSide()
 
   return (
     <FormsLayout>
@@ -112,12 +118,13 @@ export default () => {
 
             <PhoneField
               name="applicant.phoneNumber"
+              placeholder={clientLoaded && noPhone ? t("t.none") : null}
               error={!noPhone ? errors.applicant?.phoneNumber : false}
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
               control={control}
               defaultValue={application.applicant.phoneNumber}
-              disabled={noPhone}
+              disabled={clientLoaded && noPhone}
             />
 
             <Select
@@ -125,8 +132,7 @@ export default () => {
               name="applicant.phoneNumberType"
               placeholder={t("application.contact.phoneNumberTypes.prompt")}
               label={t("application.contact.phoneNumberTypes.prompt")}
-              defaultValue={application.applicant.phoneNumberType}
-              disabled={noPhone}
+              disabled={clientLoaded && noPhone}
               validation={{ required: !noPhone }}
               error={!noPhone && errors.applicant?.phoneNumberType}
               errorMessage={t("application.contact.phoneNumberTypeError")}
@@ -142,14 +148,14 @@ export default () => {
                 id="noPhone"
                 name="applicant.noPhone"
                 defaultChecked={application.applicant.noPhone}
+                disabled={clientLoaded && phonePresent()}
                 ref={register}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setValue("phoneNumber", "")
-                    setTimeout(() => {
-                      trigger("phoneNumber")
-                      trigger("phoneNumberType")
-                    }, 1)
+                    setValue("applicant.phoneNumberType", "")
+                    setValue("additionalPhone", "")
+                    setValue("additionalPhoneNumber", "")
+                    setValue("additionalPhoneNumberType", "")
                   }
                 }}
               />
@@ -163,8 +169,15 @@ export default () => {
                 type="checkbox"
                 id="additionalPhone"
                 name="additionalPhone"
+                disabled={clientLoaded && noPhone}
                 defaultChecked={application.additionalPhone}
                 ref={register}
+                onChange={(e) => {
+                  if (!e.target.checked) {
+                    setValue("additionalPhoneNumber", "")
+                    setValue("additionalPhoneNumberType", "")
+                  }
+                }}
               />
               <label htmlFor="additionalPhone" className="text-primary font-semibold">
                 {t("application.contact.additionalPhoneNumber")}
@@ -182,27 +195,21 @@ export default () => {
                   controlClassName="control mt-2"
                 />
                 <div className={"field " + (errors.additionalPhoneNumberType ? "error" : "")}>
-                  <div className="control">
-                    <select
-                      id="additionalPhoneNumberType"
-                      name="additionalPhoneNumberType"
-                      className="w-full"
-                      defaultValue={application.additionalPhoneNumberType}
-                      ref={register({ required: true })}
-                    >
-                      {["prompt", "work", "home", "cell"].map((key) => (
-                        <option
-                          key={key}
-                          value={key === "prompt" ? "" : key[0].toUpperCase() + key.slice(1)}
-                        >
-                          {t(`application.contact.phoneNumberTypes.${key}`)}
-                        </option>
-                      ))}
-                    </select>
-                    <ErrorMessage error={errors?.additionalPhoneNumberType}>
-                      {t("application.contact.phoneNumberTypeError")}
-                    </ErrorMessage>
-                  </div>
+                  <Select
+                    id="additionalPhoneNumberType"
+                    name="additionalPhoneNumberType"
+                    defaultValue={application.additionalPhoneNumberType}
+                    validation={{ required: true }}
+                    error={errors?.additionalPhoneNumberType}
+                    errorMessage={t("application.contact.phoneNumberTypeError")}
+                    register={register}
+                    controlClassName="control"
+                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                    label={t("application.contact.phoneNumberTypes.prompt")}
+                    labelClassName={"sr-only"}
+                    options={phoneNumberKeys}
+                    keyPrefix="application.contact.phoneNumberTypes"
+                  />
                 </div>
               </>
             )}
@@ -255,7 +262,6 @@ export default () => {
                 id="addressState"
                 name="applicant.address.state"
                 label={t("application.contact.state")}
-                defaultValue={application.applicant.address.state}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.state}
                 errorMessage={t("application.contact.stateError")}
@@ -291,7 +297,7 @@ export default () => {
             </div>
           </div>
 
-          {(sendMailToMailingAddress || application.sendMailToMailingAddress) && (
+          {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
             <div className="form-card__group border-b">
               <label className="field-label--caps" htmlFor="street">
                 {t("application.contact.mailingAddress")}

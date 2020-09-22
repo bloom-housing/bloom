@@ -60,7 +60,7 @@
     "@types/node": "^12.12.54",
     "@types/node-polyglot": "^2.4.1",
     "@types/react-dom": "^16.9.5",
-    "@types/react-input-mask": "^2.0.5",
+    "@types/react-text-mask": "^5.4.6",
     "axios": "^0.19.2",
     "body-scroll-lock": "^3.0.3",
     "bulma": "^0.9.0",
@@ -73,9 +73,9 @@
     "react-dom": "^16.13.1",
     "react-focus-lock": "^2.4.1",
     "react-inlinesvg": "^2.0.1",
-    "react-input-mask": "^2.0.4",
     "react-map-gl": "^5.2.7",
     "react-media": "^1.10.0",
+    "react-text-mask": "^5.4.3",
     "tailwindcss": "^1.7",
     "typesafe-actions": "^5.1.0"
   }

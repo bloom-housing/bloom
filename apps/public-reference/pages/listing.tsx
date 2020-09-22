@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
+import Markdown from "markdown-to-jsx"
 import { Listing } from "@bloom-housing/core"
 import {
   AdditionalFees,
@@ -25,6 +26,7 @@ import {
   PreferencesList,
   UnitTables,
   WhatToExpect,
+  imageUrlFromListing,
   getOccupancyDescription,
   groupNonReservedAndReservedSummaries,
   occupancyTable,
@@ -34,10 +36,6 @@ import Layout from "../layouts/application"
 
 interface ListingProps {
   listing: Listing
-}
-
-const imageUrlFromListing = (listing: Listing) => {
-  return listing.assets.find((asset) => asset.label == "building")?.fileId
 }
 
 export default class extends Component<ListingProps> {
@@ -78,7 +76,9 @@ export default class extends Component<ListingProps> {
       })
       .sort()
     const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
-    const hmiData = listing.unitsSummarized.hmi.rows
+    const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
+      return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
+    })
     let groupedUnits: GroupedTableGroup[] = null
 
     if (amiValues.length == 1) {
@@ -101,6 +101,10 @@ export default class extends Component<ListingProps> {
       listingName: listing.name,
     })
     const metaImage = imageUrlFromListing(listing)
+
+    const householdMaximumIncomeSubheader = listing.units[0].bmrProgramChart
+      ? t("listings.forIncomeCalculationsBMR")
+      : t("listings.forIncomeCalculations")
 
     if (listing.buildingSelectionCriteria) {
       buildingSelectionCriteria = (
@@ -205,7 +209,7 @@ export default class extends Component<ListingProps> {
               <ul>
                 <ListSection
                   title={t("listings.householdMaximumIncome")}
-                  subtitle={t("listings.forIncomeCalculations")}
+                  subtitle={householdMaximumIncomeSubheader}
                 >
                   <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
@@ -220,7 +224,7 @@ export default class extends Component<ListingProps> {
 
                 <ListSection
                   title={t("listings.sections.rentalAssistanceTitle")}
-                  subtitle={t("listings.sections.rentalAssistanceSubtitle")}
+                  subtitle={listing.rentalAssistance || t("listings.sections.rentalAssistance")}
                 />
 
                 {preferencesSection}
@@ -325,12 +329,22 @@ export default class extends Component<ListingProps> {
               <div className="listing-detail-panel">
                 <div className="info-card">
                   <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
-                  <p className="text-sm text-gray-700">{listing.requiredDocuments}</p>
+                  <p className="text-sm text-gray-700">
+                    <Markdown
+                      children={listing.requiredDocuments}
+                      options={{ disableParsingRawHTML: true }}
+                    />
+                  </p>
                 </div>
                 {listing.programRules && (
                   <div className="info-card">
                     <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
-                    <p className="text-sm text-gray-700">{listing.programRules}</p>
+                    <p className="text-sm text-gray-700">
+                      <Markdown
+                        children={listing.programRules}
+                        options={{ disableParsingRawHTML: true }}
+                      />
+                    </p>
                   </div>
                 )}
               </div>

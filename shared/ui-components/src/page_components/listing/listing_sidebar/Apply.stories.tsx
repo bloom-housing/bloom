@@ -73,6 +73,29 @@ export const linkDirectlyToInternalApplication = () => {
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
+export const linkToInternalApplicationAndDownloads = () => {
+  const listingWithInternalAndDownload = Object.assign({}, listing)
+
+  const internalMethod: ApplicationMethod = {
+    type: "Internal",
+  }
+
+  const downloadMethod: ApplicationMethod = {
+    label: "English",
+    externalReference: "#english",
+    type: "FileDownload",
+  }
+
+  listingWithInternalAndDownload.applicationMethods = listingWithInternalAndDownload.applicationMethods.concat(
+    [internalMethod, downloadMethod]
+  )
+
+  /* eslint-disable @typescript-eslint/ban-ts-ignore */
+  // @ts-ignore
+  return <Apply listing={listingWithInternalAndDownload} internalFormRoute={internalFormRoute} />
+  /* eslint-enable @typescript-eslint/ban-ts-ignore */
+}
+
 export const linkDirectlyToExternalApplication = () => {
   const listingWithMethodLinks = Object.assign({}, listing)
 
