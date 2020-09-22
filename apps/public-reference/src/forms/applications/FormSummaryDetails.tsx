@@ -90,7 +90,12 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
         </ReviewItem>
 
         {application.applicant.phoneNumber && (
-          <ReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
+          <ReviewItem
+            label={t("t.phone")}
+            sublabel={t(
+              `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
+            )}
+          >
             {application.applicant.phoneNumber}
           </ReviewItem>
         )}
@@ -98,7 +103,9 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
         {application.additionalPhoneNumber && (
           <ReviewItem
             label={t("t.additionalPhone")}
-            sublabel={application.additionalPhoneNumberType}
+            sublabel={t(
+              `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
+            )}
           >
             {application.additionalPhoneNumber}
           </ReviewItem>
@@ -156,7 +163,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               )}
 
               {application.alternateContact.phoneNumber && (
-                <ReviewItem label={t("t.phone")} sublabel={application.applicant.phoneNumberType}>
+                <ReviewItem label={t("t.phone")}>
                   {application.alternateContact.phoneNumber}
                 </ReviewItem>
               )}
