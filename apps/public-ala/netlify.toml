@@ -1,5 +1,5 @@
 [build.environment]
 
-NODE_VERSION = "12.16.1"
+NODE_VERSION = "12.18.3"
 YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"

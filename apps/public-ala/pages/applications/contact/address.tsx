@@ -195,27 +195,21 @@ export default () => {
                   controlClassName="control mt-2"
                 />
                 <div className={"field " + (errors.additionalPhoneNumberType ? "error" : "")}>
-                  <div className="control">
-                    <select
-                      id="additionalPhoneNumberType"
-                      name="additionalPhoneNumberType"
-                      className="w-full"
-                      defaultValue={application.additionalPhoneNumberType}
-                      ref={register({ required: true })}
-                    >
-                      {["prompt", "work", "home", "cell"].map((key) => (
-                        <option
-                          key={key}
-                          value={key === "prompt" ? "" : key[0].toUpperCase() + key.slice(1)}
-                        >
-                          {t(`application.contact.phoneNumberTypes.${key}`)}
-                        </option>
-                      ))}
-                    </select>
-                    <ErrorMessage error={errors?.additionalPhoneNumberType}>
-                      {t("application.contact.phoneNumberTypeError")}
-                    </ErrorMessage>
-                  </div>
+                  <Select
+                    id="additionalPhoneNumberType"
+                    name="additionalPhoneNumberType"
+                    defaultValue={application.additionalPhoneNumberType}
+                    validation={{ required: true }}
+                    error={errors?.additionalPhoneNumberType}
+                    errorMessage={t("application.contact.phoneNumberTypeError")}
+                    register={register}
+                    controlClassName="control"
+                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                    label={t("application.contact.phoneNumberTypes.prompt")}
+                    labelClassName={"sr-only"}
+                    options={phoneNumberKeys}
+                    keyPrefix="application.contact.phoneNumberTypes"
+                  />
                 </div>
               </>
             )}

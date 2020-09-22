@@ -17,7 +17,7 @@ import { useContext } from "react"
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
   return (
-    <div className="site-container">
+    <div className="site-wrapper">
       <div className="site-content">
         <Head>
           <title>{t("nav.siteTitle")}</title>
