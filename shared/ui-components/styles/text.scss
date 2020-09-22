@@ -123,14 +123,12 @@ h1.title {
   @apply text-gray-700;
   @apply font-sans;
   @apply text-tiny;
-  @apply block;
 }
 
 .info-item__value {
   @apply font-alt-sans;
   @apply tracking-wide;
   @apply font-semibold;
-  @apply block;
 }
 
 .info-item__helper {

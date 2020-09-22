@@ -224,7 +224,7 @@ export default class extends Component<ListingProps> {
 
                 <ListSection
                   title={t("listings.sections.rentalAssistanceTitle")}
-                  subtitle={t("listings.sections.rentalAssistanceSubtitle")}
+                  subtitle={listing.rentalAssistance || t("listings.sections.rentalAssistance")}
                 />
 
                 {preferencesSection}
