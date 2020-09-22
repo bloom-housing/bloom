@@ -168,7 +168,9 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
                 </ReviewItem>
               )}
 
-              {application.alternateContact.mailingAddress && (
+              {Object.values(application.alternateContact.mailingAddress).some(
+                (value) => value !== ""
+              ) && (
                 <ReviewItem label={t("application.contact.address")}>
                   <MultiLineAddress address={application.alternateContact.mailingAddress} />
                 </ReviewItem>
