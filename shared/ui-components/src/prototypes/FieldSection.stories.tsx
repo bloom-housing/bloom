@@ -11,7 +11,6 @@ export default {
 export const FourColumns = () => (
   <FieldSection
     title="Section Title"
-    tinted={true}
     className="md:grid md:grid-cols-4 md:gap-8"
   >
     <div className="field">
