@@ -1,6 +1,6 @@
 [build.environment]
 
-NODE_VERSION = "12.18.3"
+NODE_VERSION = "12.18.4"
 YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"
 # reminder: URL should *not* have a trailing /
