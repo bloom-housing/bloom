@@ -15,7 +15,13 @@
 }
 
 .view-grid {
+  &.is-tinted {
+    @apply bg-primary-lighter;
+  }
 
+  &.is-inset {
+    @apply p-8;
+  }
 }
 
 .view-group__title {

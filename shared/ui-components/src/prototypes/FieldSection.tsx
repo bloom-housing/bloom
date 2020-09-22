@@ -5,11 +5,15 @@ export interface FieldSectionProps {
   title?: string
   subtitle?: string
   className?: string
+  tinted?: boolean
+  insetGrid?: boolean
   children: React.ReactNode
 }
 
 const FieldSection = (props: FieldSectionProps) => {
   const fieldGridClasses = ["field-grid"]
+  if (props.tinted) fieldGridClasses.push("is-tinted")
+  if (props.insetGrid) fieldGridClasses.push("p-8")
   if (props.className) fieldGridClasses.push(props.className)
 
   return (

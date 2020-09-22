@@ -134,20 +134,24 @@ export const FieldGroupAddress = () => (
 export const FieldSectionTable = () => (
   <FieldSection
     title="Section Title"
+    tinted={true}
   >
-    <div className="bg-primary-lighter mb-4">
-      <SimpleTable />
+    
+    <SimpleTable />
+
+    <div className="bg-white pt-4">
+      <button className="button is-small">Add Household Member</button>
     </div>
-    <button className="button is-small">Add Household Member</button>
   </FieldSection>
 )
 
 export const FieldSectionBlank = () => (
    <FieldSection
     title="Section Title"
-    >
-      <div className="bg-primary-lighter p-8">
-        <button className="button is-small">Add Household Member</button>
-      </div>
+    tinted={true}
+    insetGrid={true}
+   >
+    
+    <button className="button is-small">Add Household Member</button>
    </FieldSection>
 )
