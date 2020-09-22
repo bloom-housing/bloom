@@ -1,26 +1,26 @@
 import React from "react"
-import { FieldItem } from "./FieldItem"
+import { GridItem } from "./GridItem"
 import { Field } from "../forms/Field"
+import { FieldSection } from "./FieldSection"
 
 export default {
-  title: "Prototypes/FieldItem",
+  title: "Prototypes/GridItem",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 export const Default = () => (
-  <FieldItem
-  >
+  <GridItem>
     <Field
       label="Alpha"
       placeholder="Enter text"
       name="label1"
       register={() => {}}
     />
-  </FieldItem>
+  </GridItem>
 )
 
-export const FourColumns = () => (
-  <FieldItem
+export const TwoColumns = () => (
+  <GridItem
     className="md:col-span-2"
   >
     <Field
@@ -29,5 +29,5 @@ export const FourColumns = () => (
       name="label1"
       register={() => {}}
     />
-  </FieldItem>
+  </GridItem>
 )

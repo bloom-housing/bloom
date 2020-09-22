@@ -15,13 +15,7 @@
 }
 
 .view-grid {
-  @apply p-8;
 
-  &.demo {
-    .view-item {
-      @apply bg-white;
-    }
-  }
 }
 
 .view-group__title {

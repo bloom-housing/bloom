@@ -1,7 +1,7 @@
 import React from "react"
 import { SimpleTable } from "./SimpleTable"
 import { FieldSection } from "./FieldSection"
-import { FieldItem } from "./FieldItem"
+import { GridItem } from "./GridItem"
 import { Field } from "../forms/Field"
 
 export default {
@@ -80,7 +80,7 @@ export const FieldGroupAddress = () => (
     <div className="field-group md:col-span-3">
       <h3 className="field-group__title">My Group</h3>
       <div className="field-subgrid md:grid md:grid-cols-6 md:gap-8">
-        <FieldItem
+        <GridItem
           className="md:col-span-4"
         >
           <Field
@@ -89,9 +89,9 @@ export const FieldGroupAddress = () => (
             name="label1"
             register={() => {}}
           />
-        </FieldItem>
+        </GridItem>
 
-        <FieldItem
+        <GridItem
           className="md:col-span-2"
         >
           <Field
@@ -100,9 +100,9 @@ export const FieldGroupAddress = () => (
             name="label2"
             register={() => {}}
           />
-        </FieldItem>
+        </GridItem>
 
-        <FieldItem
+        <GridItem
           className="md:col-span-2"
         >
           <Field
@@ -111,7 +111,7 @@ export const FieldGroupAddress = () => (
             name="label3"
             register={() => {}}
           />
-        </FieldItem>
+        </GridItem>
 
         <Field
           label="State"
@@ -135,12 +135,10 @@ export const FieldSectionTable = () => (
   <FieldSection
     title="Section Title"
   >
-    <div className="bg-primary-lighter">
+    <div className="bg-primary-lighter mb-4">
       <SimpleTable />
     </div>
-    <div className="mt-4">
-      <button className="button is-small">Add Household Member</button>
-    </div>
+    <button className="button is-small">Add Household Member</button>
   </FieldSection>
 )
 

@@ -6,6 +6,7 @@ export interface ViewSectionProps {
   edit?: string
   subtitle?: string
   tinted?: boolean
+  insetGrid?: boolean
   className?: string
   children: React.ReactNode
 }
@@ -13,6 +14,7 @@ export interface ViewSectionProps {
 const ViewSection = (props: ViewSectionProps) => {
   const viewGridClasses = ["view-grid"]
   if (props.tinted) viewGridClasses.push("bg-primary-lighter")
+  if (props.insetGrid) viewGridClasses.push("p-8")
   if (props.className) viewGridClasses.push(props.className)
 
   return (
