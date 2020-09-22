@@ -3,9 +3,6 @@ import axios from "axios"
 import { serviceOptions } from "./client"
 import fs from "fs"
 import { ListingStatus } from "./src/entity/listing.entity"
-import { plainToClass } from "class-transformer"
-import { ListingDto } from "./src/listings/listing.dto"
-import { validate, validateSync } from "class-validator"
 
 // NOTE: unit's monthlyRent, floor and monthlyIncomeMin have been changed to type string
 // NOTE: in the DB and unit_transformations lib has been adjusted (verify correctness)
