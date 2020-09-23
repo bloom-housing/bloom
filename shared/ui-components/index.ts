@@ -46,6 +46,7 @@ export * from "./src/helpers/occupancyFormatting"
 export * from "./src/helpers/state"
 export * from "./src/helpers/tableSummaries"
 export * from "./src/helpers/translator"
+export * from "./src/helpers/useLanguageChange"
 
 /* Lists */
 export * from "./src/lists/PreferencesList"
