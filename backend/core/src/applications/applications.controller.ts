@@ -14,6 +14,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common"
+import type { Request as ExpressRequest } from "express"
 import { ApplicationDto } from "./applications.dto"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -48,7 +49,10 @@ export class ApplicationsController {
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async list(@Request() req, @Query("listingId") listingId: string): Promise<Application[]> {
+  async list(
+    @Request() req: ExpressRequest,
+    @Query("listingId") listingId: string
+  ): Promise<Application[]> {
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
       return await this.applicationsService.list({ listingId })
     } else {
@@ -75,13 +79,10 @@ export class ApplicationsController {
   @ApiOperation({ summary: "Create application", operationId: "create" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async create(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<Application> {
-    const application = await this.applicationsService.create({
-      ...applicationCreateDto,
-      user: req.user,
-    })
+    const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.application.applicant.emailAddress) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
@@ -93,7 +94,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async retrieve(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string
   ): Promise<Application> {
     const app = await this.applicationsService.findOne(applicationId)
@@ -105,7 +106,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "Update application by id", operationId: "update" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async update(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
   ): Promise<Application> {
@@ -116,7 +117,7 @@ export class ApplicationsController {
 
   @Delete(`:applicationId`)
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Request() req, @Param("applicationId") applicationId: string) {
+  async delete(@Request() req: ExpressRequest, @Param("applicationId") applicationId: string) {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.delete)
     return this.applicationsService.delete(applicationId)
@@ -126,7 +127,7 @@ export class ApplicationsController {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
       // eslint-disable-next-line @typescript-eslint/camelcase
-      user_id: app.user.id,
+      user_id: app.user?.id,
     })
   }
 }

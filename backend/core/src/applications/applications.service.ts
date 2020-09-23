@@ -24,8 +24,9 @@ export class ApplicationsService {
     })
   }
 
-  async create(applicationCreateDto: ApplicationCreateDto) {
+  async create(applicationCreateDto: ApplicationCreateDto, user?: User) {
     const application = plainToClass(Application, applicationCreateDto)
+    application.user = user
     await application.save()
     return application
   }

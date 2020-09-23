@@ -3,8 +3,8 @@ import { AuthzService } from "./authz.service"
 import { Reflector } from "@nestjs/core"
 
 const httpMethodsToAction = {
-  PUT: "edit",
-  PATCH: "edit",
+  PUT: "update",
+  PATCH: "update",
   DELETE: "delete",
   POST: "create",
   GET: "read",
