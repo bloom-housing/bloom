@@ -4,5 +4,4 @@ p, user, application, true, create
 p, anonymous, application, true, create
 
 g, admin, user
-g, user, visitor
-g, anonymous, visitor
+g, user, anonymous
