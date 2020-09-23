@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,6 +7,7 @@ import {
   Post,
   Put,
   UseInterceptors,
+  UseGuards,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { TransformInterceptor } from "../interceptors/transform.interceptor"
@@ -16,12 +16,15 @@ import { Asset } from "../entity/asset.entity"
 import { AssetCreateDto } from "./asset.create.dto"
 import { AssetUpdateDto } from "./asset.update.dto"
 import { AssetDto } from "./asset.dto"
-
-// TODO Add Admin role check
+import { AuthzGuard } from "../auth/authz.guard"
+import { DefaultAuthGuard } from "../auth/default.guard"
+import { ResourceType } from "../auth/resource_type.decorator"
 
 @Controller("assets")
 @ApiTags("assets")
 @ApiBearerAuth()
+@UseGuards(DefaultAuthGuard, AuthzGuard)
+@ResourceType("asset")
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
