@@ -1,6 +1,6 @@
 import * as React from "react"
 import { LocalizedLink } from "../../atoms/LocalizedLink"
-import { LanguageNav, t } from "@bloom-housing/ui-components"
+import { LanguageNav, LangItem } from "../../navigations/LanguageNav/LanguageNav"
 
 export interface SiteHeaderProps {
   logoSrc: string
@@ -8,6 +8,7 @@ export interface SiteHeaderProps {
   skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
+  languages: LangItem[]
 }
 
 export interface SiteHeaderState {
@@ -86,21 +87,10 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     )
   }
 
-  languages = [
-    {
-      prefix: "",
-      label: t("languages.english"),
-    },
-    {
-      prefix: "es",
-      label: t("languages.spanish"),
-    },
-  ]
-
   render() {
     return (
       <>
-        <LanguageNav items={this.languages} />
+        <LanguageNav items={this.props.languages} />
         {this.skipLink()}
         {this.noticeBar()}
         <div className="navbar__wrapper">

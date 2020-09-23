@@ -14,8 +14,25 @@ import {
 import SVG from "react-inlinesvg"
 import { useContext } from "react"
 
+interface Languages {
+  prefix: string
+  label: string
+}
+
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
+
+  const LANGUAGES: Languages[] = [
+    {
+      prefix: "",
+      label: t("languages.english"),
+    },
+    {
+      prefix: "es",
+      label: t("languages.spanish"),
+    },
+  ]
+
   return (
     <div className="site-wrapper">
       <div className="site-content">
@@ -27,6 +44,7 @@ const Layout = (props) => {
           logoSrc="/images/logo_glyph.svg"
           notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
           title={t("nav.siteTitle")}
+          languages={LANGUAGES}
         >
           <LocalizedLink href="/listings" className="navbar-item">
             {t("nav.listings")}
