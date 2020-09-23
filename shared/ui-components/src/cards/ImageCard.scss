@@ -2,6 +2,7 @@
 
 .image-card {
   @apply relative;
+  @include has-image-skeleton();
 
   img {
     @apply w-full;

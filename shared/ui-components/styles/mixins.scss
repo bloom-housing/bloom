@@ -44,3 +44,23 @@
     transform: rotate(0deg) translateY(2px);
   }
 }
+
+
+@mixin has-image-skeleton() {
+  @apply bg-gray-500;
+
+  &::before {
+    content: "";
+    width: 1px;
+    margin-left: -1px;
+    float: left;
+    height: 0;
+    padding-top: 591.44px / 1127.34px * 100%;
+  }
+  
+  &::after { /* to clear float */
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
