@@ -1,0 +1,35 @@
+.view-section {
+
+}
+
+.view-header {
+  @apply mb-6;
+  @apply flex;
+  @apply items-center;
+}
+
+.view-title {
+  @apply font-alt-sans;
+  @apply text-xl;
+  @apply inline-block;
+}
+
+.view-grid {
+  @apply p-8;
+
+  &.demo {
+    .view-item {
+      @apply bg-white;
+    }
+  }
+}
+
+.view-group__title {
+  @apply mb-4;
+  @apply text-gray-750;
+  @apply uppercase;
+  @apply font-alt-sans;
+  @apply font-bold;
+  @apply text-tiny;
+  @apply tracking-wider;
+}

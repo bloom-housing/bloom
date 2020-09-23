@@ -4,7 +4,9 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
+  ParseBoolPipe,
   Post,
   Put,
   Query,
@@ -12,7 +14,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common"
-import { ApplicationDto, ApplicationsListQueryParams } from "./applications.dto"
+import { ApplicationDto } from "./applications.dto"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ApplicationCreateDto } from "./application.create.dto"
@@ -25,6 +27,8 @@ import { authzActions, AuthzService } from "../auth/authz.service"
 import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { Application } from "../entity/application.entity"
+import { CsvBuilder } from "../services/csv-builder.service"
+import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -37,18 +41,34 @@ export class ApplicationsController {
     private readonly applicationsService: ApplicationsService,
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
-    private readonly authzService: AuthzService
+    private readonly authzService: AuthzService,
+    private readonly csvBuilder: CsvBuilder
   ) {}
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async list(@Request() req, @Query() params: ApplicationsListQueryParams): Promise<Application[]> {
+  async list(@Request() req, @Query("listingId") listingId: string): Promise<Application[]> {
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
-      return await this.applicationsService.list(params)
+      return await this.applicationsService.list({ listingId })
     } else {
-      return await this.applicationsService.list(params, req.user)
+      return await this.applicationsService.list({ listingId }, req.user)
     }
+  }
+
+  @Get(`csv`)
+  @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
+  @Header("Content-Type", "text/csv")
+  async listAsCsv(
+    @Query("listingId") listingId: string,
+    @Query("includeHeaders", ParseBoolPipe) includeHeaders: boolean
+  ): Promise<string> {
+    const applications = await this.applicationsService.list({ listingId }, null)
+    return this.csvBuilder.build(
+      applications,
+      applicationFormattingMetadataAggregateFactory,
+      includeHeaders
+    )
   }
 
   @Post()
@@ -63,11 +83,9 @@ export class ApplicationsController {
       user: req.user,
     })
     const listing = await this.listingsService.findOne(application.listing.id)
-    await this.emailService.confirmation(
-      listing,
-      application.application,
-      applicationCreateDto.appUrl
-    )
+    if (application.application.applicant.emailAddress) {
+      await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
+    }
     return application
   }
 

@@ -1,3 +1,5 @@
+@import "../../styles/mixins.scss";
+
 .button {
   @apply bg-white;
   @apply text-primary;
@@ -106,5 +108,11 @@
       @apply text-primary-dark;
       background: transparent;
     }
+  }
+}
+
+button {
+  &.has-toggle {
+    @include has-toggle;
   }
 }

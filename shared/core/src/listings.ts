@@ -84,6 +84,7 @@ export interface Listing {
   petPolicy: string
   postmarkedApplicationsReceivedByDate: string
   programRules?: string
+  rentalAssistance?: string
   rentalHistory: string
   requiredDocuments: string
   smokingPolicy: string

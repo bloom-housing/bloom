@@ -1,13 +1,16 @@
-import { Injectable } from "@nestjs/common"
+import { Inject, Injectable } from "@nestjs/common"
 import { Application } from "../entity/application.entity"
 import { ApplicationCreateDto } from "./application.create.dto"
 import { ApplicationUpdateDto } from "./application.update.dto"
 import { plainToClass } from "class-transformer"
 import { ApplicationsListQueryParams } from "./applications.dto"
-import { User } from "../.."
+import { User } from "../entity/user.entity"
+import { REQUEST } from "@nestjs/core"
 
 @Injectable()
 export class ApplicationsService {
+  constructor(@Inject(REQUEST) private readonly request: any) {}
+
   async list(params: ApplicationsListQueryParams, user?: User) {
     return Application.find({
       where: {
