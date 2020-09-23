@@ -75,13 +75,10 @@ export class ApplicationsController {
   @ApiOperation({ summary: "Create application", operationId: "create" })
   @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async create(
-    @Request() req,
+    @Request() req: any,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<Application> {
-    const application = await this.applicationsService.create({
-      ...applicationCreateDto,
-      user: req.user,
-    })
+    const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.application.applicant.emailAddress) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
@@ -126,7 +123,7 @@ export class ApplicationsController {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
       // eslint-disable-next-line @typescript-eslint/camelcase
-      user_id: app.user.id,
+      user_id: app.user ? app.user.id : undefined,
     })
   }
 }
