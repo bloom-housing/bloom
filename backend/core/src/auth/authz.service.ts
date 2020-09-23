@@ -38,10 +38,7 @@ export class AuthzService {
     // Get User roles and add them to our enforcer
     if (user) {
       await Promise.all(user.roles.map((r) => e.addRoleForUser(user.id, r)))
-    } else {
-      await e.addRoleForUser("anonymous", "visitor")
     }
-
     return e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
