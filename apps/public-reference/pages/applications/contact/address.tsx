@@ -431,7 +431,7 @@ export default () => {
 
             {(workInRegion == "yes" ||
               (!workInRegion && application.applicant.workInRegion == "yes")) && (
-              <div className="form-card__group pt-0">
+              <div className="form-card__group mx-0 px-0 mt-2">
                 <fieldset>
                   <legend className="field-label--caps">
                     {t("application.contact.workAddress")}
