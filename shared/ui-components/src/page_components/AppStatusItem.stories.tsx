@@ -10,7 +10,8 @@ export default {
 }
 
 const application = {} as Application
-listing.applicationDueDate = moment().add(10, "days").format()
+let days = 10
+listing.applicationDueDate = moment().add(days, "days").format()
 application.listing = listing
 application.updatedAt = moment().toDate()
 
