@@ -1,9 +1,9 @@
 import * as React from "react"
 import "./LanguageNav.scss"
 import { t } from "../../helpers/translator"
-import { useRouter } from "next/router"
+import { useLanguageChange } from "../../helpers/useLanguageChange"
 
-type LangItem = {
+export type LangItem = {
   prefix: string
   label: string
 }
@@ -14,13 +14,7 @@ export interface LanguageNavProps {
 
 const LanguageNav = ({ items }: LanguageNavProps) => {
   const routePrefix = t("config.routePrefix")
-  const router = useRouter()
-
-  function changeRoute(prefix: string) {
-    router.replace({
-      pathname: `${prefix === "" ? "" : `/${prefix}` + router.pathname}`,
-    })
-  }
+  const changeLanguage = useLanguageChange(items)
 
   return (
     <div className="language-bar">
@@ -30,7 +24,7 @@ const LanguageNav = ({ items }: LanguageNavProps) => {
             {items?.map((item) => (
               <li
                 key={item.prefix}
-                onClick={() => changeRoute(item.prefix)}
+                onClick={() => changeLanguage(item.prefix)}
                 className={routePrefix === item.prefix ? "is-active" : ""}
               >
                 {item.label}
