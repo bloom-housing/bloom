@@ -3,6 +3,7 @@ p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)|(update)|(delet
 p, anonymous, application, true, create
 
 p, admin, asset, true, .*
+p, admin, preference, true, .*
 
 g, admin, user
 g, user, anonymous

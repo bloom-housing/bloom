@@ -17,12 +17,14 @@ import { Preference } from "../entity/preference.entity"
 import { PreferenceCreateDto } from "../preferences/preference.create.dto"
 import { PreferenceUpdateDto } from "../preferences/preference.update.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
-
-// TODO Add Admin role check
+import { AuthzGuard } from "../auth/authz.guard"
+import { ResourceType } from "../auth/resource_type.decorator"
 
 @Controller("/preferences")
 @ApiTags("preferences")
 @ApiBearerAuth()
+@UseGuards(DefaultAuthGuard, AuthzGuard)
+@ResourceType("preference")
 export class PreferencesController {
   constructor(private readonly preferencesService: PreferencesService) {}
 
