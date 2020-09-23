@@ -5,15 +5,16 @@ import { ApplicationUpdateDto } from "./application.update.dto"
 import { plainToClass } from "class-transformer"
 import { REQUEST } from "@nestjs/core"
 import { ApplicationsListQueryParams } from "./applications.dto"
+import { User } from "../entity/user.entity"
 
 @Injectable()
 export class ApplicationsService {
   constructor(@Inject(REQUEST) private readonly request: any) {}
 
-  async list(params: ApplicationsListQueryParams) {
+  async list(params: ApplicationsListQueryParams, user?: User) {
     return Application.find({
       where: {
-        user: { id: this.request.user.id },
+        ...(user && { user: { id: user.id } }),
         // Workaround for params.listingId resulting in:
         // listing: {id: undefined}
         // and query responding with 0 applications.

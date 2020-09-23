@@ -11,6 +11,7 @@ export const PhoneField = (props: {
   label?: string
   caps?: boolean
   readerOnly?: boolean
+  placeholder?: string
   defaultValue?: string
   control: any
   disabled?: boolean
@@ -26,6 +27,7 @@ export const PhoneField = (props: {
         <Controller
           className="input"
           name={props.name}
+          placeholder={props.placeholder}
           defaultValue={props.defaultValue}
           disabled={props.disabled}
           as={PhoneMask}

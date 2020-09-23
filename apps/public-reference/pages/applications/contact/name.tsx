@@ -10,6 +10,7 @@ import {
   Field,
   Form,
   FormCard,
+  OnClientSide,
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
@@ -17,7 +18,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { emailRegex } from "../../../lib/helpers"
 
 export default () => {
@@ -29,6 +30,10 @@ export default () => {
     Record<string, any>
   >({
     shouldFocusError: false,
+    defaultValues: {
+      "applicant.emailAddress": application.applicant.emailAddress,
+      "applicant.noEmail": application.applicant.noEmail,
+    },
   })
   const onSubmit = (data) => {
     new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
@@ -38,7 +43,13 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const noEmail: boolean = watch("applicant.noEmail", application.applicant.noEmail)
+  const emailPresent: string = watch("applicant.emailAddress")
+  const noEmail: boolean = watch("applicant.noEmail")
+  const clientLoaded = OnClientSide()
+
+  {
+    clientLoaded && console.info("noEmail!", noEmail, application.applicant.noEmail)
+  }
 
   return (
     <FormsLayout>
@@ -121,7 +132,7 @@ export default () => {
             <Field
               type="email"
               name="applicant.emailAddress"
-              placeholder={noEmail ? t("t.none") : "example@web.com"}
+              placeholder={clientLoaded && noEmail ? t("t.none") : "example@web.com"}
               label={t("application.name.yourEmailAddress")}
               readerOnly={true}
               defaultValue={application.applicant.emailAddress}
@@ -129,7 +140,7 @@ export default () => {
               error={errors.applicant?.emailAddress}
               errorMessage={t("application.name.emailAddressError")}
               register={register}
-              disabled={noEmail}
+              disabled={clientLoaded && noEmail}
             />
 
             <Field
@@ -139,14 +150,9 @@ export default () => {
               label={t("application.name.noEmailAddress")}
               primary={true}
               register={register}
+              disabled={clientLoaded && emailPresent?.length > 0}
               inputProps={{
-                defaultChecked: application.applicant.noEmail,
-                onChange: (e) => {
-                  if (e.target.checked) {
-                    setValue("applicant.emailAddress", "")
-                    clearErrors("applicant.emailAddress")
-                  }
-                },
+                defaultChecked: clientLoaded && noEmail,
               }}
             />
           </div>

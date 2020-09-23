@@ -58,6 +58,10 @@ const Apply = (props: ApplyProps) => {
         ?.externalReference || ""
   }
 
+  const downloadMethods = listing.applicationMethods.filter((method: ApplicationMethod) => {
+    return method.type == ApplicationMethodType.FileDownload
+  })
+
   return (
     <>
       <section className="aside-block">
@@ -68,43 +72,46 @@ const Apply = (props: ApplyProps) => {
             {t("listings.apply.applicationWillBeAvailableOn", { openDate: openDate })}
           </p>
         )}
-        {!openDateState(listing) &&
-          ((onlineApplicationUrl && (
-            <>
-              <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
-                {t("listings.apply.applyOnline")}
-              </LinkButton>
-            </>
-          )) ||
-            (!onlineApplicationUrl && (
-              <>
-                <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
-                <Button filled className="w-full mb-2" onClick={toggleDownload}>
-                  {t("listings.apply.downloadApplication")}
-                </Button>
-              </>
-            )))}
+        {!openDateState(listing) && onlineApplicationUrl !== "" && (
+          <>
+            <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
+              {t("listings.apply.applyOnline")}
+            </LinkButton>
+          </>
+        )}
+        {!openDateState(listing) && downloadMethods.length > 0 && (
+          <>
+            {onlineApplicationUrl !== "" && <OrDivider bgColor="white" />}
+            <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
+            <Button
+              filled={onlineApplicationUrl === ""}
+              className="w-full mb-2"
+              onClick={toggleDownload}
+            >
+              {t("listings.apply.downloadApplication")}
+            </Button>
+          </>
+        )}
 
         {showDownload &&
-          listing.applicationMethods
-            .filter((method: ApplicationMethod) => {
-              return method.type == ApplicationMethodType.FileDownload
-            })
-            .map((method: ApplicationMethod) => (
-              <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
-                <a
-                  href={method.externalReference}
-                  title={t("listings.apply.downloadApplication")}
-                  target="_blank"
-                >
-                  {method.label}
-                </a>
-              </p>
-            ))}
+          downloadMethods.map((method: ApplicationMethod) => (
+            <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
+              <a
+                href={method.externalReference}
+                title={t("listings.apply.downloadApplication")}
+                target="_blank"
+              >
+                {method.label}
+              </a>
+            </p>
+          ))}
 
         {hasMethod(listing.applicationMethods, ApplicationMethodType.PaperPickup) && (
           <>
-            {!openDateState(listing) && <OrDivider bgColor="white" />}
+            {!openDateState(listing) &&
+              (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
+                <OrDivider bgColor="white" />
+              )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
               address={listing.applicationPickUpAddress || listing.leasingAgentAddress}

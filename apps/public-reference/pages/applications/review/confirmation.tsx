@@ -10,7 +10,7 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { useContext } from "react"
 
 export default () => {
-  const { listing } = useContext(AppSubmissionContext)
+  const { application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
 
   const imageUrl = imageUrlFromListing(listing)
@@ -31,8 +31,8 @@ export default () => {
           <h3 className="form-card__paragraph-title">
             {t("application.review.confirmation.lotteryNumber")}
           </h3>
-          {/* TODO: replace with real application number */}
-          <p className="font-serif text-3xl my-1">#00545847</p>
+
+          <p className="font-serif text-3xl my-1">{application.confirmationId}</p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>
 

@@ -39,12 +39,13 @@ export class EmailService {
 
   public async confirmation(listing: Listing, application: any, appUrl: string) {
     let whatToExpectText
+    const appData = application.application
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
 
     if (process.env.NODE_ENV == "production") {
       Logger.log(
-        `Preparing to send a confirmation email to ${application.applicant.emailAddress} from ${process.env.EMAIL_FROM_ADDRESS}...`
+        `Preparing to send a confirmation email to ${appData.applicant.emailAddress} from ${process.env.EMAIL_FROM_ADDRESS}...`
       )
     }
 
@@ -62,17 +63,17 @@ export class EmailService {
       whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
     }
     const user = {
-      firstName: application.applicant.firstName,
-      middleName: application.applicant.middleName,
-      lastName: application.applicant.lastName,
+      firstName: appData.applicant.firstName,
+      middleName: appData.applicant.middleName,
+      lastName: appData.applicant.lastName,
     }
     await this.send(
-      application.applicant.emailAddress,
+      appData.applicant.emailAddress,
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
         listing: listing,
         listingUrl: listingUrl,
-        application: application.application,
+        application: application,
         whatToExpectText: whatToExpectText,
         user: user,
       })

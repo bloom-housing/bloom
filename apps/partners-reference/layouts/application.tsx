@@ -12,7 +12,7 @@ import {
 import SVG from "react-inlinesvg"
 
 const Layout = (props) => (
-  <div className="site-container">
+  <div className="site-wrapper">
     <div className="site-content site-content--wide-content">
       <Head>
         <title>{t("nav.siteTitle")}</title>

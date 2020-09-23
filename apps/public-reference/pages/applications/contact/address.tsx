@@ -10,11 +10,12 @@ import {
   contactPreferencesKeys,
   ErrorMessage,
   Field,
-  FieldGroup,
   Form,
   FormCard,
+  OnClientSide,
   mergeDeep,
   ProgressNav,
+  FieldGroup,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -35,10 +36,13 @@ export default () => {
     Record<string, any>
   >({
     defaultValues: {
-      noPhone: application.applicant.noPhone,
+      "applicant.phoneNumber": application.applicant.phoneNumber,
+      "applicant.noPhone": application.applicant.noPhone,
       additionalPhone: application.additionalPhone,
+      "applicant.phoneNumberType": application.applicant.phoneNumberType,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
-      workInRegion: application.applicant.workInRegion,
+      "applicant.workInRegion": application.applicant.workInRegion,
+      "applicant.address.state": application.applicant.address.state,
     },
     shouldFocusError: false,
   })
@@ -66,13 +70,15 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const noPhone = watch("applicant.noPhone", application.applicant.noPhone)
-  const additionalPhone = watch("additionalPhone", application.additionalPhone)
-  const sendMailToMailingAddress = watch(
-    "sendMailToMailingAddress",
-    application.sendMailToMailingAddress
-  )
-  const workInRegion = watch("applicant.workInRegion", application.applicant.workInRegion)
+  const noPhone: boolean = watch("applicant.noPhone")
+  const phoneNumber: string = watch("applicant.phoneNumber")
+  const phonePresent = () => {
+    return phoneNumber.replace(/[()\-_ ]/g, "").length > 0
+  }
+  const additionalPhone = watch("additionalPhone")
+  const sendMailToMailingAddress = watch("sendMailToMailingAddress")
+  const workInRegion = watch("applicant.workInRegion")
+  const clientLoaded = OnClientSide()
 
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
@@ -114,15 +120,16 @@ export default () => {
         <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <PhoneField
-              name="applicant.phoneNumber"
               label={t("application.contact.yourPhoneNumber")}
               caps={true}
+              name="applicant.phoneNumber"
+              placeholder={clientLoaded && noPhone ? t("t.none") : null}
               error={!noPhone ? errors.applicant?.phoneNumber : false}
               errorMessage={t("application.contact.phoneNumberError")}
               controlClassName="control"
               control={control}
               defaultValue={application.applicant.phoneNumber}
-              disabled={noPhone}
+              disabled={clientLoaded && noPhone}
             />
 
             <Select
@@ -131,9 +138,9 @@ export default () => {
               placeholder={t("application.contact.phoneNumberTypes.prompt")}
               label={t("application.contact.phoneNumberTypes.prompt")}
               labelClassName="sr-only"
-              defaultValue={application.applicant.phoneNumberType}
-              disabled={noPhone}
+              disabled={clientLoaded && noPhone}
               validation={{ required: !noPhone }}
+              defaultValue={application.applicant.phoneNumberType}
               error={!noPhone && errors.applicant?.phoneNumberType}
               errorMessage={t("application.contact.phoneNumberTypeError")}
               register={register}
@@ -149,15 +156,15 @@ export default () => {
               label={t("application.contact.noPhoneNumber")}
               primary={true}
               register={register}
+              disabled={clientLoaded && phonePresent()}
               inputProps={{
                 defaultChecked: application.applicant.noPhone,
                 onChange: (e) => {
                   if (e.target.checked) {
-                    setValue("phoneNumber", "")
-                    setTimeout(() => {
-                      trigger("phoneNumber")
-                      trigger("phoneNumberType")
-                    }, 1)
+                    setValue("applicant.phoneNumberType", "")
+                    setValue("additionalPhone", "")
+                    setValue("additionalPhoneNumber", "")
+                    setValue("additionalPhoneNumberType", "")
                   }
                 },
               }}
@@ -168,10 +175,17 @@ export default () => {
               id="additionalPhone"
               name="additionalPhone"
               label={t("application.contact.additionalPhoneNumber")}
+              disabled={clientLoaded && noPhone}
               primary={true}
               register={register}
               inputProps={{
                 defaultChecked: application.additionalPhone,
+                onChange: (e) => {
+                  if (e.target.checked) {
+                    setValue("additionalPhoneNumber", "")
+                    setValue("additionalPhoneNumberType", "")
+                  }
+                },
               }}
             />
 
@@ -187,23 +201,22 @@ export default () => {
                   defaultValue={application.additionalPhoneNumber}
                   controlClassName="control"
                 />
-                <div className={"field " + (errors.additionalPhoneNumberType ? "error" : "")}>
-                  <Select
-                    id="additionalPhoneNumberType"
-                    name="additionalPhoneNumberType"
-                    defaultValue={application.additionalPhoneNumberType}
-                    validation={{ required: true }}
-                    error={errors?.additionalPhoneNumberType}
-                    errorMessage={t("application.contact.phoneNumberTypeError")}
-                    register={register}
-                    controlClassName="control"
-                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                    label={t("application.contact.phoneNumberTypes.prompt")}
-                    labelClassName={"sr-only"}
-                    options={phoneNumberKeys}
-                    keyPrefix="application.contact.phoneNumberTypes"
-                  />
-                </div>
+
+                <Select
+                  id="additionalPhoneNumberType"
+                  name="additionalPhoneNumberType"
+                  defaultValue={application.additionalPhoneNumberType}
+                  validation={{ required: true }}
+                  error={errors?.additionalPhoneNumberType}
+                  errorMessage={t("application.contact.phoneNumberTypeError")}
+                  register={register}
+                  controlClassName="control"
+                  placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                  label={t("application.contact.phoneNumberTypes.prompt")}
+                  labelClassName={"sr-only"}
+                  options={phoneNumberKeys}
+                  keyPrefix="application.contact.phoneNumberTypes"
+                />
               </>
             )}
           </div>
@@ -254,7 +267,6 @@ export default () => {
                   id="addressState"
                   name="applicant.address.state"
                   label={t("application.contact.state")}
-                  defaultValue={application.applicant.address.state}
                   validation={{ required: true }}
                   error={errors.applicant?.address?.state}
                   errorMessage={t("application.contact.stateError")}
@@ -290,7 +302,7 @@ export default () => {
             </fieldset>
           </div>
 
-          {(sendMailToMailingAddress || application.sendMailToMailingAddress) && (
+          {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
             <div className="form-card__group border-b">
               <fieldset>
                 <legend className="field-label--caps">
@@ -302,7 +314,6 @@ export default () => {
                 <Field
                   id="mailingAddressStreet"
                   name="mailingAddress.street"
-                  label={t("application.contact.streetAddress")}
                   placeholder={t("application.contact.streetAddress")}
                   defaultValue={application.mailingAddress.street}
                   validation={{ required: true }}
@@ -417,79 +428,78 @@ export default () => {
                 {t("application.form.errors.selectOption")}
               </ErrorMessage>
             </fieldset>
-          </div>
 
-          {(workInRegion == "yes" ||
-            (!workInRegion && application.applicant.workInRegion == "yes")) && (
-            <div className="form-card__group pt-0">
-              <fieldset>
-                <legend className="field-label--caps">
-                  {t("application.contact.workAddress")}
-                </legend>
+            {(workInRegion == "yes" ||
+              (!workInRegion && application.applicant.workInRegion == "yes")) && (
+              <div className="form-card__group pt-0">
+                <fieldset>
+                  <legend className="field-label--caps">
+                    {t("application.contact.workAddress")}
+                  </legend>
 
-                <Field
-                  id="workAddressStreet"
-                  name="applicant.workAddress.street"
-                  label={t("application.contact.streetAddress")}
-                  placeholder={t("application.contact.streetAddress")}
-                  defaultValue={application.applicant.workAddress.street}
-                  validation={{ required: true }}
-                  error={errors.applicant?.workAddress?.street}
-                  errorMessage={t("application.contact.streetError")}
-                  register={register}
-                />
-
-                <Field
-                  id="workAddressStreet2"
-                  name="applicant.workAddress.street2"
-                  label={t("application.contact.apt")}
-                  placeholder={t("application.contact.apt")}
-                  defaultValue={application.applicant.workAddress.street2}
-                  register={register}
-                />
-
-                <div className="flex max-w-2xl">
                   <Field
-                    id="workAddressCity"
-                    name="applicant.workAddress.city"
-                    label={t("application.contact.cityName")}
-                    placeholder={t("application.contact.cityName")}
-                    defaultValue={application.applicant.workAddress.city}
+                    id="workAddressStreet"
+                    name="applicant.workAddress.street"
+                    placeholder={t("application.contact.streetAddress")}
+                    defaultValue={application.applicant.workAddress.street}
                     validation={{ required: true }}
-                    error={errors.applicant?.workAddress?.city}
-                    errorMessage={t("application.contact.cityError")}
+                    error={errors.applicant?.workAddress?.street}
+                    errorMessage={t("application.contact.streetError")}
                     register={register}
                   />
 
-                  <Select
-                    id="workAddressState"
-                    name="applicant.workAddress.state"
-                    label={t("application.contact.state")}
-                    defaultValue={application.applicant.workAddress.state}
-                    validation={{ required: true }}
-                    error={errors.applicant?.workAddress?.state}
-                    errorMessage={t("application.contact.stateError")}
+                  <Field
+                    id="workAddressStreet2"
+                    name="applicant.workAddress.street2"
+                    label={t("application.contact.apt")}
+                    placeholder={t("application.contact.apt")}
+                    defaultValue={application.applicant.workAddress.street2}
                     register={register}
-                    controlClassName="control"
-                    options={stateKeys}
-                    keyPrefix="application.form.options.states"
                   />
-                </div>
 
-                <Field
-                  id="workAddressZipCode"
-                  name="applicant.workAddress.zipCode"
-                  label={t("application.contact.zip")}
-                  placeholder={t("application.contact.zipCode")}
-                  defaultValue={application.applicant.workAddress.zipCode}
-                  validation={{ required: true }}
-                  error={errors.applicant?.workAddress?.zipCode}
-                  errorMessage={t("application.contact.zipCodeError")}
-                  register={register}
-                />
-              </fieldset>
-            </div>
-          )}
+                  <div className="flex max-w-2xl">
+                    <Field
+                      id="workAddressCity"
+                      name="applicant.workAddress.city"
+                      label={t("application.contact.cityName")}
+                      placeholder={t("application.contact.cityName")}
+                      defaultValue={application.applicant.workAddress.city}
+                      validation={{ required: true }}
+                      error={errors.applicant?.workAddress?.city}
+                      errorMessage={t("application.contact.cityError")}
+                      register={register}
+                    />
+
+                    <Select
+                      id="workAddressState"
+                      name="applicant.workAddress.state"
+                      label={t("application.contact.state")}
+                      defaultValue={application.applicant.workAddress.state}
+                      validation={{ required: true }}
+                      error={errors.applicant?.workAddress?.state}
+                      errorMessage={t("application.contact.stateError")}
+                      register={register}
+                      controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="application.form.options.states"
+                    />
+                  </div>
+
+                  <Field
+                    id="workAddressZipCode"
+                    name="applicant.workAddress.zipCode"
+                    label={t("application.contact.zip")}
+                    placeholder={t("application.contact.zipCode")}
+                    defaultValue={application.applicant.workAddress.zipCode}
+                    validation={{ required: true }}
+                    error={errors.applicant?.workAddress?.zipCode}
+                    errorMessage={t("application.contact.zipCodeError")}
+                    register={register}
+                  />
+                </fieldset>
+              </div>
+            )}
+          </div>
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

@@ -31,5 +31,12 @@ module.exports = {
     "react/jsx-uses-vars": "warn",
     "react/jsx-uses-react": "warn",
   },
-  ignorePatterns: ["node_modules", "storybook-static", ".next", "dist", "migration/"],
+  ignorePatterns: [
+    "node_modules",
+    "storybook-static",
+    ".next",
+    "dist",
+    "migration/",
+    "**/*.stories.tsx",
+  ],
 }

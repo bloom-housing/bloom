@@ -263,7 +263,7 @@
       "title": "Your household may qualify for the following housing preferences.",
       "preamble": "If you qualify for this preference, you'll get a higher ranking.",
       "selectBelow": "If you have one of these housing preferences, select it below:",
-      "dontWant": "I don't want this lottery preference",
+      "dontWant": "I don't want this preference",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
       "liveIn": {
@@ -277,8 +277,8 @@
         "link": "http://domain.com"
       },
       "general": {
-        "title": "Based on the information you have entered, your household has not claimed any housing lottery preferences.",
-        "preamble": "You will be in the general lottery."
+        "title": "Based on the information you have entered, your household has not claimed any housing preferences.",
+        "preamble": "You will be in the general pool of applicants."
       }
     },
     "review": {
@@ -348,7 +348,7 @@
         }
       },
       "confirmation": {
-        "title": "Thanks. We have received your application for Alchemy by ",
+        "title": "Thanks. We have received your application for ",
         "lotteryNumber": "Here's your application confirmation number",
         "pleaseWriteNumber": "Please write down your application number and keep it in a safe place. We have also emailed this number to you if you provided an email address.",
         "whatExpectTitle": "What to expect next",
@@ -372,7 +372,7 @@
       "viewOriginalListing": "View the original listing",
       "informationSubmittedTitle": "Here's the information you submitted.",
       "submitted": "Submitted: ",
-      "lotteryNumber": "Your lottery number",
+      "lotteryNumber": "Your confirmation number",
       "preferences": "Preferences",
       "generalLottery": "Based on information you have entered, your household has not claimed any housing lottery preferences. You will be in the general lottery.",
       "printCopy": "Print a copy for your records"
@@ -381,7 +381,7 @@
       "income": {
         "title": "Let's move to income.",
         "instruction1": "Add up your total gross (pre-tax) household income from wages, benefits and other sources from all household members.",
-        "instruction2": "You only need to provide an estimated total right now. The actual total will be calculated if you are selected in the lottery.",
+        "instruction2": "You only need to provide an estimated total right now. The actual total will be calculated if you are selected.",
         "prompt": "What is your household total pre-tax income?",
         "placeholder": "Total all of your income sources",
         "incomeError": "Please enter a valid number greater than 0.",
@@ -447,7 +447,7 @@
       "submitted": "Submitted"
     },
     "viewApplication": "View Application",
-    "yourLotteryNumber": "Your lottery number is"
+    "yourLotteryNumber": "Your confirmation number is"
   },
   "authentication": {
     "timeout": {
@@ -558,6 +558,7 @@
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
     "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for %{units} units.",
     "forIncomeCalculations": "For income calculations, household size includes everyone (all ages) living in the unit.",
+    "forIncomeCalculationsBMR": "Income calculations are based on unit type",
     "hideClosedListings": "Hide Closed Listings",
     "householdMaximumIncome": "Household Maximum Income",
     "importantProgramRules": "Important Program Rules",
@@ -590,7 +591,7 @@
       "eligibilityTitle": "Eligibility",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "rentalAssistanceTitle": "Rental Assistance",
-      "rentalAssistanceSubtitle": "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+      "rentalAssistance": "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
       "housingPreferencesTitle": "Housing Preferences",
       "housingPreferencesSubtitle": "Preference holders will be given highest ranking.",
       "additionalEligibilityTitle": "Additional Eligibility Rules",
@@ -651,7 +652,7 @@
     "additionalInformationEnvelope": "Additional Information Envelope"
   },
   "lottery": {
-    "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority in the lottery.",
+    "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",
     "viewPreferenceList": "View Preference List"
   },
   "nav": {

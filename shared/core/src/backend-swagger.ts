@@ -507,6 +507,9 @@ export interface Listing {
   programRules: string;
 
   /**  */
+  rentalAssistance: string;
+
+  /**  */
   rentalHistory: string;
 
   /**  */
