@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common"
 
 @Injectable()
 export class OptionalAuthGuard extends DefaultAuthGuard {
-  handleRequest(err, user, info) {
-    return user ? user : null
+  handleRequest(err, user) {
+    return user
   }
 }
