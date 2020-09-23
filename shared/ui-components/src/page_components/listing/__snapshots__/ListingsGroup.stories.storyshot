@@ -82,6 +82,7 @@ exports[`Storyshots PageComponents/ListingGroup Show Listings Group 1`] = `
         "preferences": Array [],
         "prioritiesDescriptor": null,
         "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
+        "rentalAssistance": "Custom rental assistance",
         "rentalHistory": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
         "requiredDocuments": "Completed application and government issued IDs",
         "reservedCommunityMaximumAge": null,

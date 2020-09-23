@@ -1,10 +1,16 @@
-import { IsDefined, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsBoolean, IsDefined, IsOptional, IsString, ValidateNested } from "class-validator"
 import { IdDto } from "../lib/id.dto"
-import { Expose, Type } from "class-transformer"
+import { Expose, Transform, Type } from "class-transformer"
 import { OmitType } from "@nestjs/swagger"
 import { Application } from "../entity/application.entity"
 
 export class ApplicationsListQueryParams {
+  @IsOptional()
+  @IsString()
+  listingId?: string
+}
+
+export class ApplicationsCsvListQueryParams {
   @IsOptional()
   @IsString()
   listingId?: string

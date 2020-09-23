@@ -1296,6 +1296,9 @@ export interface Listing {
   programRules: string;
 
   /**  */
+  rentalAssistance: string;
+
+  /**  */
   rentalHistory: string;
 
   /**  */
@@ -1477,6 +1480,9 @@ export interface ListingDto {
   programRules: string;
 
   /**  */
+  rentalAssistance: string;
+
+  /**  */
   rentalHistory: string;
 
   /**  */
@@ -1642,6 +1648,9 @@ export interface ListingCreateDto {
   programRules: string;
 
   /**  */
+  rentalAssistance: string;
+
+  /**  */
   rentalHistory: string;
 
   /**  */
@@ -1789,6 +1798,9 @@ export interface ListingUpdateDto {
 
   /**  */
   programRules: string;
+
+  /**  */
+  rentalAssistance: string;
 
   /**  */
   rentalHistory: string;

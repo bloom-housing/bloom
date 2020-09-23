@@ -586,7 +586,7 @@
       "eligibilityTitle": "Eligibility",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "rentalAssistanceTitle": "Rental Assistance",
-      "rentalAssistanceSubtitle": "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+      "rentalAssistance": "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
       "housingPreferencesTitle": "Housing Preferences",
       "housingPreferencesSubtitle": "Preference holders will be given highest ranking.",
       "additionalEligibilityTitle": "Additional Eligibility Rules",
