@@ -2,7 +2,7 @@
 2.1a - Member Info
 A notice regarding adding household members
 */
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import Link from "next/link"
 import Router from "next/router"
 import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
@@ -16,6 +16,9 @@ export default () => {
   const currentPageSection = 2
 
   conductor.stepTo("Household Member Info")
+  useEffect(() => {
+    conductor.skipCurrentStepIfNeeded()
+  }, [application, conductor])
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm({

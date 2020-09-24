@@ -2,7 +2,7 @@
 2.2 - Add Members
 Add household members
 */
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import Link from "next/link"
 import Router from "next/router"
 import {
@@ -25,6 +25,9 @@ export default () => {
   application.householdSize = application.householdMembers.length + 1
 
   conductor.stepTo("Add Members")
+  useEffect(() => {
+    conductor.skipCurrentStepIfNeeded()
+  }, [application, conductor])
 
   /* Form Handler */
   const { errors, handleSubmit, register, clearErrors } = useForm()

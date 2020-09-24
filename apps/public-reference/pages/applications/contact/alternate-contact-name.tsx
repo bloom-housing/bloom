@@ -2,7 +2,7 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import Link from "next/link"
 import {
   AlertBox,
@@ -23,6 +23,9 @@ export default () => {
   const currentPageSection = 1
 
   conductor.stepTo("Alternate Contact Name")
+  useEffect(() => {
+    conductor.skipCurrentStepIfNeeded()
+  }, [application, conductor])
 
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({

@@ -98,7 +98,7 @@ export default class ApplicationConductor {
   application: Record<string, any> = {}
   steps: StepDefinition[] = []
   returnToReview = false
-  currentStep = 0
+  currentStepIndex = 0
 
   private _config: ApplicationFormConfig = {
     sections: [],
@@ -176,7 +176,7 @@ export default class ApplicationConductor {
   stepTo(stepName) {
     const stepIndex = this.steps.findIndex((step) => step.name === stepName)
     if (stepIndex >= 0) {
-      this.currentStep = stepIndex
+      this.currentStepIndex = stepIndex
     } else {
       console.error(`There is no step defined which matches ${stepName}`)
     }
@@ -201,8 +201,14 @@ export default class ApplicationConductor {
     }
   }
 
+  skipCurrentStepIfNeeded() {
+    if (this.steps[this.currentStepIndex]?.skipStep()) {
+      this.routeToNextOrReturnUrl()
+    }
+  }
+
   determineNextUrl() {
-    let i = this.currentStep + 1
+    let i = this.currentStepIndex + 1
     let nextUrl = ""
 
     while (i < this.steps.length) {
@@ -219,7 +225,7 @@ export default class ApplicationConductor {
   }
 
   determinePreviousUrl() {
-    let i = this.currentStep - 1
+    let i = this.currentStepIndex - 1
     let previousUrl = ""
 
     while (i >= 0) {

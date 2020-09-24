@@ -16,14 +16,9 @@ export default () => {
   const currentPageSection = 4
 
   conductor.stepTo("General Pool")
-
   useEffect(() => {
-    if (!application.preferences.none) {
-      // Only describe the General Pool if no preferences were selected
-      // TODO: come up with a generic "skip" function for new page loads
-      conductor.routeToNextOrReturnUrl()
-    }
-  }, [application])
+    conductor.skipCurrentStepIfNeeded()
+  }, [application, conductor])
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
