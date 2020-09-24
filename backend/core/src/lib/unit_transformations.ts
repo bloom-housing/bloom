@@ -21,7 +21,7 @@ const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number):
   if (!newMaxValue) {
     newMaxValue = newValue
   }
-  if (baseValue && baseValue.min && baseValue.max) {
+  if (baseValue && (baseValue.min || baseValue.min == 0) && baseValue.max) {
     return { min: Math.min(baseValue.min, newValue), max: Math.max(baseValue.max, newMaxValue) }
   } else {
     return { min: newValue, max: newMaxValue }
