@@ -27,7 +27,6 @@ import { ResourceType } from "../auth/resource_type.decorator"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
-import { Application } from "../entity/application.entity"
 import { CsvBuilder } from "../services/csv-builder.service"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 
@@ -52,7 +51,7 @@ export class ApplicationsController {
   async list(
     @Request() req: ExpressRequest,
     @Query("listingId") listingId: string
-  ): Promise<Application[]> {
+  ): Promise<ApplicationDto[]> {
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
       return await this.applicationsService.list({ listingId })
     } else {
@@ -81,7 +80,7 @@ export class ApplicationsController {
   async create(
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.application.applicant.emailAddress) {
@@ -96,7 +95,7 @@ export class ApplicationsController {
   async retrieve(
     @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.read)
     return app
@@ -109,7 +108,7 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.update)
     return this.applicationsService.update(applicationUpdateDto, app)
