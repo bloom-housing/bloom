@@ -174,7 +174,7 @@ export default class ApplicationConductor {
   }
 
   stepTo(stepName) {
-    const stepIndex = this.steps.findIndex((step) => step.name == stepName)
+    const stepIndex = this.steps.findIndex((step) => step.name === stepName)
     if (stepIndex >= 0) {
       this.currentStep = stepIndex
     } else {

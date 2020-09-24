@@ -33,7 +33,7 @@ export default () => {
     application.alternateContact.type = data.type
     application.alternateContact.otherType = data.otherType
 
-    if (data.type == "noContact") conductor.completeSection(1)
+    if (data.type === "noContact") conductor.completeSection(1)
 
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
