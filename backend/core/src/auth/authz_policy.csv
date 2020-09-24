@@ -7,5 +7,8 @@ p, admin, preference, true, .*
 p, admin, applicationMethod, true, .*
 p, admin, unit, true, .*
 
+p, admin, listing, true, .*
+p, anonymous, listing, true, read
+
 g, admin, user
 g, user, anonymous

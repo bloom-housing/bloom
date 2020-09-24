@@ -18,12 +18,15 @@ import { ListingDto, ListingExtendedDto } from "./listing.dto"
 import { ListingUpdateDto } from "./listings.update.dto"
 import { Listing } from "../entity/listing.entity"
 import { DefaultAuthGuard } from "../auth/default.guard"
-
-// TODO Add Admin role check
+import { ResourceType } from "../auth/resource_type.decorator"
+import { OptionalAuthGuard } from "../auth/optional-auth.guard"
+import { AuthzGuard } from "../auth/authz.guard"
 
 @Controller("listings")
 @ApiTags("listings")
 @ApiBearerAuth()
+@ResourceType("listing")
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 export class ListingsController {
   constructor(private readonly listingsService: ListingsService) {}
 
