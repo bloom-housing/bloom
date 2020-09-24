@@ -40,11 +40,11 @@ class Preference extends BaseEntity {
   @IsUUID()
   updatedAt: string
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional()
   @IsString()
-  ordinal: string | null
+  ordinal: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

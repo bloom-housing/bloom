@@ -60,4 +60,18 @@ export class User {
 
   @OneToMany((type) => Application, (application) => application.user)
   applications: Application[]
+  @Column("boolean", { default: false })
+  isAdmin: boolean
+
+  /**
+   * Array of roles this user can become. Logic is simple right now, but in theory this will expand to take into
+   * account membership in a domain (company-level or admin area level for example).
+   *
+   * In that case, this logic will likely be based on joined entities (another table/entity that keeps track of
+   * group membership, for example), and these relations will need to be loaded in order for the list of roles to
+   * work properly.
+   */
+  get roles(): string[] {
+    return ["user", ...(this.isAdmin ? ["admin"] : [])]
+  }
 }

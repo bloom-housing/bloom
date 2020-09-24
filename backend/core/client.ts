@@ -259,7 +259,7 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      listingId?: string;
+      listingId: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application[]> {
@@ -290,6 +290,29 @@ export class ApplicationsService {
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * List applications as csv
+   */
+  listAsCsv(
+    params: {
+      /**  */
+      listingId: string;
+      /**  */
+      includeHeaders: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = '/applications/csv';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { listingId: params['listingId'], includeHeaders: params['includeHeaders'] };
+      let data = null;
 
       configs.data = data;
       axios(configs, resolve, reject);
@@ -873,7 +896,7 @@ export interface PreferenceDto {
   updatedAt: string;
 
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
@@ -999,7 +1022,7 @@ export interface Preference {
   updatedAt: string;
 
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
@@ -1894,7 +1917,7 @@ export interface AssetUpdateDto {
 
 export interface PreferenceCreateDto {
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
@@ -1911,7 +1934,7 @@ export interface PreferenceCreateDto {
 
 export interface PreferenceUpdateDto {
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
