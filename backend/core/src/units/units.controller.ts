@@ -17,12 +17,14 @@ import { UnitDto } from "./unit.dto"
 import { UnitCreateDto } from "./unit.create.dto"
 import { UnitUpdateDto } from "./unit.update.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
-
-// TODO Add Admin role check
+import { AuthzGuard } from "../auth/authz.guard"
+import { ResourceType } from "../auth/resource_type.decorator"
 
 @Controller("/units")
 @ApiTags("units")
 @ApiBearerAuth()
+@UseGuards(DefaultAuthGuard, AuthzGuard)
+@ResourceType("unit")
 export class UnitsController {
   constructor(private readonly unitsService: UnitsService) {}
 
