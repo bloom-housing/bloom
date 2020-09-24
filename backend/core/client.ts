@@ -262,7 +262,7 @@ export class ApplicationsService {
       listingId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application[]> {
+  ): Promise<ApplicationDto[]> {
     return new Promise((resolve, reject) => {
       let url = '/applications';
 
@@ -283,7 +283,7 @@ export class ApplicationsService {
       body?: ApplicationCreateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = '/applications';
 
@@ -327,7 +327,7 @@ export class ApplicationsService {
       applicationId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
@@ -351,7 +351,7 @@ export class ApplicationsService {
       body?: ApplicationUpdateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
@@ -1009,6 +1009,9 @@ export interface User {
 
   /**  */
   applications: Application[];
+
+  /**  */
+  isAdmin: boolean;
 }
 
 export interface Preference {
@@ -1865,15 +1868,32 @@ export interface ListingUpdateDto {
   id: string;
 }
 
+export interface ApplicationDto {
+  /**  */
+  listing: IdDto;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: string;
+
+  /**  */
+  updatedAt: string;
+
+  /**  */
+  appUrl: string;
+
+  /**  */
+  application: object;
+}
+
 export interface ApplicationCreateDto {
   /**  */
   appUrl: string;
 
   /**  */
   application: object;
-
-  /**  */
-  user: IdDto;
 
   /**  */
   listing: IdDto;
@@ -1885,9 +1905,6 @@ export interface ApplicationUpdateDto {
 
   /**  */
   application: object;
-
-  /**  */
-  user: IdDto;
 
   /**  */
   listing: IdDto;
