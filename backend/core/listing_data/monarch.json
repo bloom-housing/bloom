@@ -68,28 +68,28 @@
   "rentalHistory": "Applicants with an eviction or unlawful detainer judgment date within the last five (5) years will be denied. Stipulations, dismissals, and cases without a final disposition are not a reason for denial. Management will verify residency with current and prior landlords for the past two (2) years. Management is specifically looking at payment history, incidents of damage and/or housekeeping issues, lease violations and eviction proceedings. If a negative landlord reference is received, the application will be denied. Lack of residential history does not necessarily disqualify you.",
   "preferences": [
     {
-      "ordinal": "1st",
+      "ordinal": "1",
       "title": "Displaced Household",
       "subtitle": "",
       "description": "Displaced household means a household in which a least one adult member has been displaced from a housing unit in Oakland as a result of any of the following:City code enforcement activities, if the displacement has occurred within one year prior to the date of application.A City-sponsored or City-assisted development project, if the displacement has occurred within one year prior to the date of application.A no fault eviction from a rental unit in Oakland, if the eviction was completed eight (8) years or less prior to the date of application. For purposes of this paragraph, a no fault eviction means an eviction that is evidenced by an eviction notice from the property owner that does not state cause and that gives the tenant thirty (30) days or longer notice to vacate the unit; a no fault eviction shall include, but not be limited to an eviction as a result of an owner move-in under Municipal Code Subsection 8.22.360.A.8. or 8.22.360.A.9., owner repairs under Municipal Code Subsection 8.22.360.A.10., or owner removal of the unit from the rental market under Municipal Code Subsection 8.22.360.A.11. or Municipal Code Chapter 8.22, Article III, but shall not be limited only to evictions from units that are covered by any of the above laws.",
       "links": []
     },
     {
-      "ordinal": "2nd",
+      "ordinal": "2",
       "title": "Neighborhood Residents",
       "subtitle": "",
       "description": "Neighborhood resident means a household with at least one adult member whose principal place of residence on the date of application is either within the Council District where the project is located or within a one mile radius of said project.",
       "links": []
     },
     {
-      "ordinal": "3rd",
+      "ordinal": "3",
       "title": "Oakland residents or Oakland workers",
       "subtitle": "",
       "description": "Oakland resident means a household with at least one adult member whose principal place of residence on the date of application is within the City of Oakland. 'Oakland worker' means a household with at least one adult member who is employed by an employer located within the City of Oakland, owns a business located within the City of Oakland, or participates in an education or job training program located within the City of Oakland.",
       "links": []
     },
     {
-      "ordinal": "4th",
+      "ordinal": "4",
       "title": "Alameda County residents or Alameda County workers",
       "subtitle": "",
       "description": "Alameda County resident means a household with at least one adult member whose principal place of residence on the date of application is within Alameda County. An 'Alameda County worker' means a household with at least one adult member who is employed by an employer located within Alameda County or owns a business located within Alameda County.",
