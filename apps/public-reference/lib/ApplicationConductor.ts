@@ -1,8 +1,11 @@
 import Router from "next/router"
 import { Listing } from "@bloom-housing/core"
-import { blankApplication } from "../lib/AppSubmissionContext"
-import StepDefinition from "../lib/StepDefinition"
-import { resolversLibrary } from "../lib/resolversLibrary"
+import { blankApplication } from "./AppSubmissionContext"
+import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
+import StepDefinition from "./StepDefinition"
+import AlternateContactStep from "./AlternateContactStep"
+import HouseholdMemberStep from "./HouseholdMemberStep"
+import SelectedPreferencesStep from "./SelectedPreferencesStep"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -30,13 +33,79 @@ export const loadSavedListing = () => {
 }
 
 export default class ApplicationConductor {
-  application = {} as Record<string, any>
-  resolvers = {} as Record<string, any>
+  static routes: Record<string, StepRoute> = {
+    "Choose Language": {
+      url: "/applications/start/choose-language",
+    },
+    "What to Expect": {
+      url: "/applications/start/what-to-expect",
+    },
+    "Primary Applicant Name": {
+      url: "/applications/contact/name",
+    },
+    "Primary Applicant Address": {
+      url: "/applications/contact/address",
+    },
+    "Alternate Contact Type": {
+      url: "/applications/contact/alternate-contact-type",
+    },
+    "Alternate Contact Name": {
+      url: "/applications/contact/alternate-contact-name",
+      definition: AlternateContactStep,
+    },
+    "Alternate Contact Info": {
+      url: "/applications/contact/alternate-contact-contact",
+      definition: AlternateContactStep,
+    },
+    "Live Alone": {
+      url: "/applications/household/live-alone",
+    },
+    "Household Member Info": {
+      url: "/applications/household/members-info",
+      definition: HouseholdMemberStep,
+    },
+    "Add Members": {
+      url: "/applications/household/add-members",
+      definition: HouseholdMemberStep,
+    },
+    "Preferred Unit Size": {
+      url: "/applications/household/preferred-units",
+    },
+    "ADA Household Members": {
+      url: "/applications/household/ada",
+    },
+    "Vouchers Subsidies": {
+      url: "/applications/financial/vouchers",
+    },
+    Income: {
+      url: "/applications/financial/income",
+    },
+    "Preferences Introduction": {
+      url: "/applications/preferences/select",
+    },
+    "General Pool": {
+      url: "/applications/preferences/general",
+      definition: SelectedPreferencesStep,
+    },
+    Demographics: {
+      url: "/applications/review/demographics",
+    },
+    Summary: {
+      url: "/applications/review/summary",
+    },
+  }
+
+  application: Record<string, any> = {}
+  steps: StepDefinition[] = []
   returnToReview = false
   currentStep = 0
 
-  private _config = { steps: [] } as Record<string, any>
-  private _listing = {} as Listing
+  private _config: ApplicationFormConfig = {
+    sections: [],
+    languages: [],
+    steps: [],
+  }
+  private _listing: Listing
 
   constructor(application, listing) {
     this.application = application
@@ -46,7 +115,7 @@ export default class ApplicationConductor {
   set listing(newListing) {
     this._listing = newListing
     if (this._listing?.applicationConfig) {
-      this.config = this._listing.applicationConfig
+      this.config = this._listing.applicationConfig as ApplicationFormConfig
     }
   }
 
@@ -57,27 +126,22 @@ export default class ApplicationConductor {
   set config(newConfig) {
     this._config = newConfig
     this.listing.applicationConfig = { ...newConfig }
-    this._config.steps = this._config.steps.map((step) => {
-      return new StepDefinition(step, this)
+    this.steps = this._config.steps.map((step) => {
+      const route = this.constructor["routes"][step.name] as StepRoute
+      if (route.definition) {
+        return new route.definition(this, step, route.url)
+      } else {
+        return new StepDefinition(this, step, route.url)
+      }
     })
-    //    console.info("Config!", this._config)
   }
 
   get config() {
     return this._config
   }
 
-  stepTo(stepName) {
-    const stepIndex = this.config.steps.findIndex((step) => step.name == stepName)
-    if (stepIndex >= 0) {
-      this.currentStep = stepIndex
-    } else {
-      console.error(`There is no step defined which matches ${stepName}`)
-    }
-  }
-
   totalNumberOfSections() {
-    return 5
+    return this.config.sections.length
   }
 
   completeSection(section) {
@@ -109,6 +173,15 @@ export default class ApplicationConductor {
     }
   }
 
+  stepTo(stepName) {
+    const stepIndex = this.steps.findIndex((step) => step.name == stepName)
+    if (stepIndex >= 0) {
+      this.currentStep = stepIndex
+    } else {
+      console.error(`There is no step defined which matches ${stepName}`)
+    }
+  }
+
   routeTo(url: string) {
     Router.push(url).then(() => window.scrollTo(0, 0))
   }
@@ -124,35 +197,41 @@ export default class ApplicationConductor {
     } else if (url) {
       return url
     } else {
-      return this.determineNextUrl(this.config.steps[this.currentStep].nextUrl)
+      return this.determineNextUrl()
     }
   }
 
-  determineNextUrl(url) {
-    const stepDefinition = this.config.steps.find((step) => step.url == url)
+  determineNextUrl() {
+    let i = this.currentStep + 1
+    let nextUrl = ""
 
-    return stepDefinition?.verifiedSkipToUrl() || url
-  }
-
-  determinePreviousUrl() {
-    let currentUrl = this.config.steps[this.currentStep]?.url
-    let previousUrl = null
-
-    while (previousUrl == null) {
-      const previousStepDefinition = this.config.steps.find((step) => step.nextUrl == currentUrl)
-      if (previousStepDefinition) {
-        // If the previous step wants to skip, loop around to find the step before
-        // that, otherwise set previousUrl and break the loop
-        if (previousStepDefinition.verifiedSkipToUrl()) {
-          currentUrl = previousStepDefinition.url
-        } else {
-          previousUrl = previousStepDefinition.url
-        }
-      } else {
+    while (i < this.steps.length) {
+      const nextStep = this.steps[i]
+      if (nextStep && !nextStep.skipStep()) {
+        nextUrl = nextStep.url
         break
+      } else {
+        i++
       }
     }
 
-    return previousUrl || ""
+    return nextUrl
+  }
+
+  determinePreviousUrl() {
+    let i = this.currentStep - 1
+    let previousUrl = ""
+
+    while (i >= 0) {
+      const previousStep = this.steps[i]
+      if (previousStep && !previousStep.skipStep()) {
+        previousUrl = previousStep.url
+        break
+      } else {
+        i--
+      }
+    }
+
+    return previousUrl
   }
 }

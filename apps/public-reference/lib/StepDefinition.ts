@@ -3,39 +3,20 @@ import ApplicationConductor from "./ApplicationConductor"
 export default class StepDefinition {
   conductor: ApplicationConductor
   step: Record<string, any>
+  url: string
 
-  constructor(step, conductor) {
+  constructor(conductor, step, url) {
     this.step = step
     this.conductor = conductor
+    this.url = url
   }
 
   get name() {
     return this.step.name
   }
 
-  get url() {
-    return this.step.url
+  // Override in subclasses
+  skipStep() {
+    return false
   }
-
-  get nextUrl() {
-    return this.step.nextUrl
-  }
-
-  verifiedSkipToUrl() {
-    const conditions = this.step.skipIf
-    let foundSkipTo = null
-
-    if (conditions) {
-      conditions.forEach((condition) => {
-        if (foundSkipTo) return
-
-        if (this.conductor.resolvers[condition.condition]()) {
-          foundSkipTo = condition.skipTo
-        }
-      })
-    }
-    return foundSkipTo
-  }
-
-  verifiedBackUrl() {}
 }
