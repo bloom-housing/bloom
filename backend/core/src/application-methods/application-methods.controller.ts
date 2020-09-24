@@ -17,12 +17,14 @@ import { ApplicationMethodDto } from "./application-method.dto"
 import { ApplicationMethodCreateDto } from "./application-method.create.dto"
 import { ApplicationMethodUpdateDto } from "./application-method.update.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
-
-// TODO Add Admin role check
+import { AuthzGuard } from "../auth/authz.guard"
+import { ResourceType } from "../auth/resource_type.decorator"
 
 @Controller("/applicationMethods")
 @ApiTags("applicationMethods")
 @ApiBearerAuth()
+@UseGuards(DefaultAuthGuard, AuthzGuard)
+@ResourceType("applicationMethod")
 export class ApplicationMethodsController {
   constructor(private readonly applicationMethodsService: ApplicationMethodsService) {}
 

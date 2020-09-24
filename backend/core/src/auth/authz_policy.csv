@@ -4,6 +4,7 @@ p, anonymous, application, true, create
 
 p, admin, asset, true, .*
 p, admin, preference, true, .*
+p, admin, applicationMethod, true, .*
 
 g, admin, user
 g, user, anonymous
