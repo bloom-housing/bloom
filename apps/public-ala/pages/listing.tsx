@@ -320,35 +320,39 @@ export default class extends Component<ListingProps> {
               </ListingDetailItem>
             )}
 
-            <ListingDetailItem
-              imageAlt={t("listings.additionalInformationEnvelope")}
-              imageSrc="/images/listing-legal.svg"
-              title={t("listings.sections.additionalInformationTitle")}
-              subtitle={t("listings.sections.additionalInformationSubtitle")}
-            >
-              <div className="listing-detail-panel">
-                <div className="info-card">
-                  <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
-                  <p className="text-sm text-gray-700">
-                    <Markdown
-                      children={listing.requiredDocuments}
-                      options={{ disableParsingRawHTML: true }}
-                    />
-                  </p>
+            {(listing.requiredDocuments || listing.programRules) && (
+              <ListingDetailItem
+                imageAlt={t("listings.additionalInformationEnvelope")}
+                imageSrc="/images/listing-legal.svg"
+                title={t("listings.sections.additionalInformationTitle")}
+                subtitle={t("listings.sections.additionalInformationSubtitle")}
+              >
+                <div className="listing-detail-panel">
+                  {listing.requiredDocuments && (
+                    <div className="info-card">
+                      <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
+                      <p className="text-sm text-gray-700">
+                        <Markdown
+                          children={listing.requiredDocuments}
+                          options={{ disableParsingRawHTML: true }}
+                        />
+                      </p>
+                    </div>
+                  )}
+                  {listing.programRules && (
+                    <div className="info-card">
+                      <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
+                      <p className="text-sm text-gray-700">
+                        <Markdown
+                          children={listing.programRules}
+                          options={{ disableParsingRawHTML: true }}
+                        />
+                      </p>
+                    </div>
+                  )}
                 </div>
-                {listing.programRules && (
-                  <div className="info-card">
-                    <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
-                    <p className="text-sm text-gray-700">
-                      <Markdown
-                        children={listing.programRules}
-                        options={{ disableParsingRawHTML: true }}
-                      />
-                    </p>
-                  </div>
-                )}
-              </div>
-            </ListingDetailItem>
+              </ListingDetailItem>
+            )}
           </ListingDetails>
         </article>
       </Layout>
