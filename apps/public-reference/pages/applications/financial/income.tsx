@@ -19,7 +19,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 type IncomeError = "low" | "high" | null
@@ -75,10 +74,9 @@ export default () => {
 
     if (!validationError) {
       const toSave = { income, incomePeriod }
-      new FormStep(conductor).save(toSave)
 
       conductor.completeSection(3)
-      conductor.sync()
+      conductor.currentStep.save(toSave)
       conductor.routeToNextOrReturnUrl()
     }
   }

@@ -17,7 +17,6 @@ import {
   howDidYouHear,
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 const Demographics = () => {
@@ -32,7 +31,7 @@ const Demographics = () => {
   const onSubmit = (data) => {
     const { ethnicity, gender, sexualOrientation, howDidYouHear } = data
 
-    new FormStep(conductor).save({
+    conductor.currentStep.save({
       demographics: {
         ethnicity,
         gender,
@@ -40,7 +39,6 @@ const Demographics = () => {
         howDidYouHear,
       },
     })
-
     conductor.routeToNextOrReturnUrl()
   }
 

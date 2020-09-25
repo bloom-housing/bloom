@@ -140,6 +140,10 @@ export default class ApplicationConductor {
     return this._config
   }
 
+  get currentStep() {
+    return this.steps[this.currentStepIndex]
+  }
+
   totalNumberOfSections() {
     return this.config.sections.length
   }
@@ -202,7 +206,7 @@ export default class ApplicationConductor {
   }
 
   skipCurrentStepIfNeeded() {
-    if (this.steps[this.currentStepIndex]?.skipStep()) {
+    if (this.currentStep?.skipStep()) {
       this.routeToNextOrReturnUrl()
     }
   }

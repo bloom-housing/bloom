@@ -17,7 +17,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
 import { emailRegex } from "../../../lib/helpers"
 
 export default () => {
@@ -33,7 +32,7 @@ export default () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
+    conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {

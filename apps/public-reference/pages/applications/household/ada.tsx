@@ -17,7 +17,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
@@ -39,15 +38,14 @@ export default () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save({
+    conductor.completeSection(2)
+    conductor.currentStep.save({
       accessibility: {
         mobility: data.mobility,
         vision: data.vision,
         hearing: data.hearing,
       },
     })
-
-    conductor.completeSection(2)
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {

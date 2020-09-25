@@ -16,7 +16,6 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
@@ -36,11 +35,11 @@ export default () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save({ preferences: data })
     if (!data.none) {
       conductor.completeSection(4)
-      conductor.sync()
     }
+
+    conductor.currentStep.save({ preferences: data })
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {

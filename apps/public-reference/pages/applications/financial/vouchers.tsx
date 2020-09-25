@@ -17,7 +17,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
@@ -36,8 +35,8 @@ export default () => {
   const onSubmit = (data) => {
     const { incomeVouchers } = data
     const toSave = { incomeVouchers: JSON.parse(incomeVouchers) }
-    new FormStep(conductor).save(toSave)
 
+    conductor.currentStep.save(toSave)
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
