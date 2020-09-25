@@ -30,12 +30,6 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
       <div
         className="field-group--dob"
       >
-        <label
-          className="sr-only"
-          htmlFor="birthMonth"
-        >
-          Month
-        </label>
         <Field
           defaultValue=""
           inputProps={
@@ -43,8 +37,10 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
               "maxLength": 2,
             }
           }
+          label="Month"
           name="birthMonth"
           placeholder="MM"
+          readerOnly={true}
           register={[Function]}
           validation={
             Object {
@@ -58,10 +54,18 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
           <div
             className="field"
           >
+            <label
+              className="label sr-only"
+              htmlFor="birthMonth"
+            >
+              Month
+            </label>
             <div
               className="control"
             >
               <input
+                aria-describedby="birthMonth-error"
+                aria-invalid={false}
                 className="input"
                 defaultValue=""
                 id="birthMonth"
@@ -71,15 +75,8 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
                 type="text"
               />
             </div>
-            <ErrorMessage />
           </div>
         </Field>
-        <label
-          className="sr-only"
-          htmlFor="birthDay"
-        >
-          Day
-        </label>
         <Field
           defaultValue=""
           inputProps={
@@ -87,8 +84,10 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
               "maxLength": 2,
             }
           }
+          label="Day"
           name="birthDay"
           placeholder="DD"
+          readerOnly={true}
           register={[Function]}
           validation={
             Object {
@@ -102,10 +101,18 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
           <div
             className="field"
           >
+            <label
+              className="label sr-only"
+              htmlFor="birthDay"
+            >
+              Day
+            </label>
             <div
               className="control"
             >
               <input
+                aria-describedby="birthDay-error"
+                aria-invalid={false}
                 className="input"
                 defaultValue=""
                 id="birthDay"
@@ -115,15 +122,8 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
                 type="text"
               />
             </div>
-            <ErrorMessage />
           </div>
         </Field>
-        <label
-          className="sr-only"
-          htmlFor="birthYear"
-        >
-          Year
-        </label>
         <Field
           defaultValue=""
           inputProps={
@@ -131,8 +131,10 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
               "maxLength": 4,
             }
           }
+          label="Year"
           name="birthYear"
           placeholder="YYYY"
+          readerOnly={true}
           register={[Function]}
           validation={
             Object {
@@ -146,10 +148,18 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
           <div
             className="field"
           >
+            <label
+              className="label sr-only"
+              htmlFor="birthYear"
+            >
+              Year
+            </label>
             <div
               className="control"
             >
               <input
+                aria-describedby="birthYear-error"
+                aria-invalid={false}
                 className="input"
                 defaultValue=""
                 id="birthYear"
@@ -159,7 +169,6 @@ exports[`Storyshots Forms/DOBField Default 1`] = `
                 type="text"
               />
             </div>
-            <ErrorMessage />
           </div>
         </Field>
       </div>
