@@ -2,10 +2,9 @@ import {
   booleanFormatter,
   defaultFormatter,
   dobFormatter,
-  FormattingMetadataAggregate,
-  FormattingMetadataAggregateFactory,
+  FormattingMetadataAggregateFactory, joinArrayFormatter,
   keysToJoinedStringFormatter,
-  streetFormatter,
+  streetFormatter
 } from "./csv-builder.service"
 
 export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAggregateFactory = () => {
@@ -65,7 +64,7 @@ export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAg
     {
       label: "Primary Applicant Preferred Contact Type",
       discriminator: "application.contactPreferences",
-      formatter: (contactPreferences: string[]) => contactPreferences.join(","),
+      formatter: joinArrayFormatter,
     },
     {
       label: "Primary Applicant Residence Street Address",
@@ -186,7 +185,6 @@ export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAg
       label: "Monthly Income",
       discriminator: "application",
       formatter: (application) => {
-        const incomeParsed = Number.parseFloat(application.income)
         switch (application.incomePeriod) {
           case "perYear":
             return ""
@@ -201,7 +199,6 @@ export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAg
       label: "Annual Income",
       discriminator: "application",
       formatter: (application) => {
-        const incomeParsed = Number.parseFloat(application.income)
         switch (application.incomePeriod) {
           case "perYear":
             return application.income
@@ -225,7 +222,7 @@ export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAg
     {
       label: "Requested unit type",
       discriminator: "application.preferredUnit",
-      formatter: (unitTypes: string[]) => unitTypes.join(","),
+      formatter: joinArrayFormatter,
     },
     {
       label: "Household Size",
