@@ -27,11 +27,9 @@
     @apply mb-0;
   }
 
-  &.is-tinted {
-    @apply bg-primary-lighter;
-  }
-
-  &.is-inset {
-    @apply p-8;
+  &.demo {
+    .field {
+      @apply bg-gray-200;
+    }
   }
 }

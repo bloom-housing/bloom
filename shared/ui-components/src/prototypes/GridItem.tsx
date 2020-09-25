@@ -6,7 +6,7 @@ export interface GridItemProps {
 }
 
 const GridItem = (props: GridItemProps) => {
-  const gridItemClasses = ["field-item"]
+  const gridItemClasses = ["grid-item"]
   if (props.className) gridItemClasses.push(props.className)
 
   return (

@@ -11,7 +11,7 @@ export interface FieldSectionProps {
 }
 
 const FieldSection = (props: FieldSectionProps) => {
-  const fieldGridClasses = ["field-grid"]
+  const fieldGridClasses = ["field-section__grid"]
   if (props.tinted) fieldGridClasses.push("is-tinted")
   if (props.insetGrid) fieldGridClasses.push("is-inset")
   if (props.className) fieldGridClasses.push(props.className)

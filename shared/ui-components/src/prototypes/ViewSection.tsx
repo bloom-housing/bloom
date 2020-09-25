@@ -20,8 +20,8 @@ const ViewSection = (props: ViewSectionProps) => {
   return (
     <div className="view-section">
       {props.title && (
-        <header className="view-header">
-          <h2 className="view-title">{props.title}</h2>
+        <header className="view-section__header">
+          <h2 className="view-section__title">{props.title}</h2>
           {props.edit && (
             <span className="ml-auto">
               <a className="edit-link">{props.edit}</a>
