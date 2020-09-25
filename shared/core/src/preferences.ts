@@ -4,7 +4,7 @@ export interface PreferenceLink {
 }
 
 export interface Preference {
-  ordinal: string
+  ordinal: number
   title: string
   subtitle?: string
   description?: string
