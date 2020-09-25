@@ -230,7 +230,7 @@ export interface Preference {
   id: string;
 
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;

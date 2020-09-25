@@ -24,6 +24,7 @@ export class ListingsService {
       .orderBy({
         "listings.id": "DESC",
         "units.max_occupancy": "ASC",
+        "preferences.ordinal": "ASC",
       })
       .getMany()
 
@@ -70,11 +71,15 @@ export class ListingsService {
   }
 
   async findOne(listingId: string) {
-    return await Listing.findOneOrFail({
-      where: {
-        id: listingId,
-      },
-      relations: ["units", "preferences", "assets", "applicationMethods"],
-    })
+    return await Listing.createQueryBuilder("listings")
+      .where("listings.id = :id", { id: listingId })
+      .leftJoinAndSelect("listings.units", "units")
+      .leftJoinAndSelect("listings.preferences", "preferences")
+      .leftJoinAndSelect("listings.assets", "assets")
+      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .orderBy({
+        "preferences.ordinal": "ASC",
+      })
+      .getOne()
   }
 }
