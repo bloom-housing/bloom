@@ -16,7 +16,14 @@
     @apply mt-2;
   }
 
+  label.sr-only + .control,
+  label.field-label--caps + .control {
+    @apply mt-0;
+  }
+
   .control {
+    position: relative;
+
     .input {
       @apply border;
       @apply border-gray-450;
@@ -67,7 +74,6 @@
   input[type="checkbox"] + label,
   input[type="radio"] + label {
     cursor: pointer;
-    font-weight: 400;
     margin-bottom: 0.5em;
     margin-left: 2rem;
     display: block;
@@ -240,17 +246,14 @@ input[type=number] {
 }
 
 .field-label--caps {
+  @apply font-sans;
   @apply uppercase;
   @apply text-gray-750;
   @apply tracking-widest;
   @apply font-semibold;
   @apply text-tiny;
-  @apply mb-2;
+  @apply mb-3;
   @apply inline-block;
-}
-
-.field-label--caps + .field-note {
-  @apply mt-2;
 }
 
 .field--inline {
@@ -266,11 +269,14 @@ input[type=number] {
   @apply flex-auto;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+}
 
-  &:first-child {
+.flex > .field,
+.field-group--dob .field {
+  &:first-of-type {
     margin-left: 0;
   }
-  &:last-child {
+  &:last-of-type {
     margin-right: 0;
   }
 }

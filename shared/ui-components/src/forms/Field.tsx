@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { ErrorMessage } from "./ErrorMessage"
 
 export interface FieldProps {
@@ -6,6 +6,8 @@ export interface FieldProps {
   errorMessage?: string
   controlClassName?: string
   caps?: boolean
+  primary?: boolean
+  readerOnly?: boolean
   type?: string
   id?: string
   name: string
@@ -24,28 +26,42 @@ const Field = (props: FieldProps) => {
   if (props.error) {
     classes.push("error")
   }
+
   const labelClasses = ["label"]
-  if (props.caps) {
-    labelClasses.push("field-label--caps")
-  }
+  if (props.caps) labelClasses.push("field-label--caps")
+  if (props.primary) labelClasses.push("text-primary")
+  if (props.readerOnly) labelClasses.push("sr-only")
+
   const controlClasses = ["control"]
   if (props.controlClassName) {
     controlClasses.push(props.controlClassName)
   }
 
+  const type = props.type || "text"
+  const isRadioOrCheckbox = ["radio", "checkbox"].includes(type)
+
+  const label = useMemo(
+    () => (
+      <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
+        {props.label}
+      </label>
+    ),
+    [props.label, props.id, props.name, labelClasses]
+  )
+
+  const idOrName = props.id || props.name
+
   return (
     <div className={classes.join(" ")}>
-      {props.label && (
-        <label className={labelClasses.join(" ")} htmlFor={props.name}>
-          {props.label}
-        </label>
-      )}
+      {!isRadioOrCheckbox && label}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
+          aria-describedby={`${idOrName}-error`}
+          aria-invalid={!!props.error || false}
           className="input"
-          type={props.type || "text"}
-          id={props.id || props.name}
+          type={type}
+          id={idOrName}
           name={props.name}
           defaultValue={props.defaultValue}
           placeholder={props.placeholder}
@@ -53,8 +69,13 @@ const Field = (props: FieldProps) => {
           disabled={props.disabled}
           {...props.inputProps}
         />
+        {isRadioOrCheckbox && label}
       </div>
-      <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>
+      {props.errorMessage && (
+        <ErrorMessage id={`${idOrName}-error`} error={props.error}>
+          {props.errorMessage}
+        </ErrorMessage>
+      )}
     </div>
   )
 }

@@ -6,12 +6,25 @@ interface FormOptionsProps {
   keyPrefix: string
 }
 
-interface CheckboxGroupItem {
+interface FieldGroupItem {
   id: string
   checked?: boolean
 }
 
-export const contactPreferencesKeys = ["email", "phone", "letter", "text"]
+export const contactPreferencesKeys: FieldGroupItem[] = [
+  {
+    id: "email",
+  },
+  {
+    id: "phone",
+  },
+  {
+    id: "letter",
+  },
+  {
+    id: "text",
+  },
+]
 
 export const relationshipKeys = [
   "",
@@ -119,9 +132,7 @@ export const sexualOrientation = [
   "notListed",
 ]
 
-export const phoneNumberKeys = ["work", "home", "cell"]
-
-export const howDidYouHear: CheckboxGroupItem[] = [
+export const howDidYouHear: FieldGroupItem[] = [
   {
     id: "alamedaCountyHCDWebsite",
   },
@@ -151,7 +162,9 @@ export const howDidYouHear: CheckboxGroupItem[] = [
   },
 ]
 
-export const preferredUnit: CheckboxGroupItem[] = [
+export const phoneNumberKeys = ["work", "home", "cell"]
+
+export const preferredUnit: FieldGroupItem[] = [
   {
     id: "studio",
   },

@@ -1,12 +1,13 @@
 import React from "react"
 
 const ErrorMessage = (props: {
+  id?: string
   error?: boolean
   children?: string | JSX.Element | JSX.Element[]
 }) => {
   if (props.error) {
     return (
-      <span className="error-message" aria-live="assertive">
+      <span id={props.id} className="error-message" aria-live="assertive">
         {props.children}
       </span>
     )

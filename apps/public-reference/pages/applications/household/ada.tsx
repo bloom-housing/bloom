@@ -85,94 +85,99 @@ export default () => {
         )}
 
         <div className="form-card__group">
-          <p className="field-note mb-4">{t("t.selectAllThatApply")}</p>
+          <fieldset>
+            <legend className="sr-only">{t("application.ada.legend")}</legend>
+            <p className="field-note mb-4">{t("t.selectAllThatApply")}</p>
 
-          <div className="field">
-            <input
-              type="checkbox"
-              id="mobility"
-              name="mobility"
-              defaultChecked={application.accessibility.mobility}
-              ref={register}
-              onChange={() => {
-                setTimeout(() => {
-                  setValue("none", false)
-                  trigger("none")
-                }, 1)
-              }}
-            />
-            <label htmlFor="mobility" className="font-semibold">
-              For Mobility Impairments
-            </label>
-          </div>
+            <div className="field">
+              <input
+                type="checkbox"
+                id="mobility"
+                name="mobility"
+                defaultChecked={application.accessibility.mobility}
+                ref={register}
+                onChange={() => {
+                  setTimeout(() => {
+                    setValue("none", false)
+                    trigger("none")
+                  }, 1)
+                }}
+              />
+              <label htmlFor="mobility" className="font-semibold">
+                For Mobility Impairments
+              </label>
+            </div>
 
-          <div className="field">
-            <input
-              type="checkbox"
-              id="vision"
-              name="vision"
-              defaultChecked={application.accessibility.vision}
-              ref={register}
-              onChange={() => {
-                setTimeout(() => {
-                  setValue("none", false)
-                  trigger("none")
-                }, 1)
-              }}
-            />
-            <label htmlFor="vision" className="font-semibold">
-              For Vision Impairments
-            </label>
-          </div>
+            <div className="field">
+              <input
+                type="checkbox"
+                id="vision"
+                name="vision"
+                defaultChecked={application.accessibility.vision}
+                ref={register}
+                onChange={() => {
+                  setTimeout(() => {
+                    setValue("none", false)
+                    trigger("none")
+                  }, 1)
+                }}
+              />
+              <label htmlFor="vision" className="font-semibold">
+                For Vision Impairments
+              </label>
+            </div>
 
-          <div className="field">
-            <input
-              type="checkbox"
-              id="hearing"
-              name="hearing"
-              defaultChecked={application.accessibility.hearing}
-              ref={register}
-              onChange={() => {
-                setTimeout(() => {
-                  setValue("none", false)
-                  trigger("none")
-                }, 1)
-              }}
-            />
-            <label htmlFor="hearing" className="font-semibold">
-              For Hearing Impairments
-            </label>
-          </div>
+            <div className="field">
+              <input
+                type="checkbox"
+                id="hearing"
+                name="hearing"
+                defaultChecked={application.accessibility.hearing}
+                ref={register}
+                onChange={() => {
+                  setTimeout(() => {
+                    setValue("none", false)
+                    trigger("none")
+                  }, 1)
+                }}
+              />
+              <label htmlFor="hearing" className="font-semibold">
+                For Hearing Impairments
+              </label>
+            </div>
 
-          <div className={"field " + (errors.none ? "error" : "")}>
-            <input
-              type="checkbox"
-              id="none"
-              name="none"
-              ref={register({
-                validate: {
-                  somethingIsChecked: (value) =>
-                    value || getValues("mobility") || getValues("vision") || getValues("hearing"),
-                },
-              })}
-              onChange={(e) => {
-                if (e.target.checked) {
-                  setValue("none", true)
-                  setValue("mobility", false)
-                  setValue("vision", false)
-                  setValue("hearing", false)
-                  trigger("none")
-                }
-              }}
-            />
-            <label htmlFor="none" className="font-semibold">
-              {t("t.no")}
-            </label>
+            <div className={"field " + (errors.none ? "error" : "")}>
+              <input
+                aria-describedby="accessibilityCheckboxGroupError"
+                aria-invalid={!!errors.none || false}
+                type="checkbox"
+                id="none"
+                name="none"
+                ref={register({
+                  validate: {
+                    somethingIsChecked: (value) =>
+                      value || getValues("mobility") || getValues("vision") || getValues("hearing"),
+                  },
+                })}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setValue("none", true)
+                    setValue("mobility", false)
+                    setValue("vision", false)
+                    setValue("hearing", false)
+                    trigger("none")
+                  }
+                }}
+              />
+              <label htmlFor="none" className="font-semibold">
+                {t("t.no")}
+              </label>
 
-            <ErrorMessage error={errors.none}>
-              {t("application.form.errors.selectOption")}
-            </ErrorMessage>
-          </div>
+              <ErrorMessage id="accessibilityCheckboxGroupError" error={errors.none}>
+                {t("application.form.errors.selectOption")}
+              </ErrorMessage>
+            </div>
+          </fieldset>
         </div>
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>

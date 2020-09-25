@@ -69,50 +69,57 @@ export default () => {
 
         <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
-            <label className="field-label--caps" htmlFor="firstName">
-              {t("application.alternateContact.name.alternateContactFormLabel")}
-            </label>
-            <Field
-              id="firstName"
-              name="firstName"
-              placeholder={t("application.alternateContact.name.firstNameFormPlaceholder")}
-              defaultValue={application.alternateContact.firstName}
-              validation={{ required: true }}
-              error={errors.firstName}
-              errorMessage={t("application.alternateContact.name.firstNameValidationErrorMessage")}
-              register={register}
-            />
-            <Field
-              id="lastName"
-              name="lastName"
-              placeholder={t("application.alternateContact.name.lastNameFormPlaceholder")}
-              defaultValue={application.alternateContact.lastName}
-              validation={{ required: true }}
-              error={errors.lastName}
-              errorMessage={t("application.alternateContact.name.lastNameValidationErrorMessage")}
-              register={register}
-            />
-            {application.alternateContact.type === "caseManager" && (
-              <>
-                <label className="field-label--caps mt-4" htmlFor="agency">
-                  {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                </label>
-                <Field
-                  id="agency"
-                  name="agency"
-                  placeholder={t(
-                    "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
-                  )}
-                  defaultValue={application.alternateContact.agency}
-                  validation={{ required: true }}
-                  error={errors.agency}
-                  errorMessage={t(
-                    "application.alternateContact.name.caseManagerAgencyValidationErrorMessage"
-                  )}
-                  register={register}
-                />
-              </>
-            )}
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.alternateContact.name.alternateContactFormLabel")}
+              </legend>
+              <Field
+                id="firstName"
+                name="firstName"
+                label={t("application.alternateContact.name.firstNameFormPlaceholder")}
+                readerOnly={true}
+                placeholder={t("application.alternateContact.name.firstNameFormPlaceholder")}
+                defaultValue={application.alternateContact.firstName}
+                validation={{ required: true }}
+                error={errors.firstName}
+                errorMessage={t(
+                  "application.alternateContact.name.firstNameValidationErrorMessage"
+                )}
+                register={register}
+              />
+              <Field
+                id="lastName"
+                name="lastName"
+                label={t("application.alternateContact.name.lastNameFormPlaceholder")}
+                readerOnly={true}
+                placeholder={t("application.alternateContact.name.lastNameFormPlaceholder")}
+                defaultValue={application.alternateContact.lastName}
+                validation={{ required: true }}
+                error={errors.lastName}
+                errorMessage={t("application.alternateContact.name.lastNameValidationErrorMessage")}
+                register={register}
+              />
+              {application.alternateContact.type === "caseManager" && (
+                <div className="mt-6">
+                  <Field
+                    id="agency"
+                    name="agency"
+                    label={t("application.alternateContact.name.caseManagerAgencyFormLabel")}
+                    caps={true}
+                    placeholder={t(
+                      "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
+                    )}
+                    defaultValue={application.alternateContact.agency}
+                    validation={{ required: true }}
+                    error={errors.agency}
+                    errorMessage={t(
+                      "application.alternateContact.name.caseManagerAgencyValidationErrorMessage"
+                    )}
+                    register={register}
+                  />
+                </div>
+              )}
+            </fieldset>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

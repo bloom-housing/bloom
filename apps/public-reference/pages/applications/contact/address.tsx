@@ -15,6 +15,7 @@ import {
   OnClientSide,
   mergeDeep,
   ProgressNav,
+  FieldGroup,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -79,6 +80,12 @@ export default () => {
   const workInRegion = watch("applicant.workInRegion")
   const clientLoaded = OnClientSide()
 
+  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
+    id: item.id,
+    label: t(`application.form.options.contact.${item.id}`),
+    defaultChecked: application?.contactPreferences?.includes(item.id) || false,
+  }))
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -112,11 +119,9 @@ export default () => {
 
         <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="applicant.phoneNumber">
-              {t("application.contact.yourPhoneNumber")}
-            </label>
-
             <PhoneField
+              label={t("application.contact.yourPhoneNumber")}
+              caps={true}
               name="applicant.phoneNumber"
               placeholder={clientLoaded && noPhone ? t("t.none") : null}
               error={!noPhone ? errors.applicant?.phoneNumber : false}
@@ -132,8 +137,10 @@ export default () => {
               name="applicant.phoneNumberType"
               placeholder={t("application.contact.phoneNumberTypes.prompt")}
               label={t("application.contact.phoneNumberTypes.prompt")}
+              labelClassName="sr-only"
               disabled={clientLoaded && noPhone}
               validation={{ required: !noPhone }}
+              defaultValue={application.applicant.phoneNumberType}
               error={!noPhone && errors.applicant?.phoneNumberType}
               errorMessage={t("application.contact.phoneNumberTypeError")}
               register={register}
@@ -142,209 +149,126 @@ export default () => {
               keyPrefix="application.contact.phoneNumberTypes"
             />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="noPhone"
-                name="applicant.noPhone"
-                defaultChecked={application.applicant.noPhone}
-                disabled={clientLoaded && phonePresent()}
-                ref={register}
-                onChange={(e) => {
+            <Field
+              type="checkbox"
+              id="noPhone"
+              name="applicant.noPhone"
+              label={t("application.contact.noPhoneNumber")}
+              primary={true}
+              register={register}
+              disabled={clientLoaded && phonePresent()}
+              inputProps={{
+                defaultChecked: application.applicant.noPhone,
+                onChange: (e) => {
                   if (e.target.checked) {
                     setValue("applicant.phoneNumberType", "")
                     setValue("additionalPhone", "")
                     setValue("additionalPhoneNumber", "")
                     setValue("additionalPhoneNumberType", "")
                   }
-                }}
-              />
-              <label htmlFor="noPhone" className="text-primary font-semibold">
-                {t("application.contact.noPhoneNumber")}
-              </label>
-            </div>
+                },
+              }}
+            />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="additionalPhone"
-                name="additionalPhone"
-                disabled={clientLoaded && noPhone}
-                defaultChecked={application.additionalPhone}
-                ref={register}
-                onChange={(e) => {
-                  if (!e.target.checked) {
+            <Field
+              type="checkbox"
+              id="additionalPhone"
+              name="additionalPhone"
+              label={t("application.contact.additionalPhoneNumber")}
+              disabled={clientLoaded && noPhone}
+              primary={true}
+              register={register}
+              inputProps={{
+                defaultChecked: application.additionalPhone,
+                onChange: (e) => {
+                  if (e.target.checked) {
                     setValue("additionalPhoneNumber", "")
                     setValue("additionalPhoneNumberType", "")
                   }
-                }}
-              />
-              <label htmlFor="additionalPhone" className="text-primary font-semibold">
-                {t("application.contact.additionalPhoneNumber")}
-              </label>
-            </div>
+                },
+              }}
+            />
 
             {additionalPhone && (
               <>
                 <PhoneField
                   name="additionalPhoneNumber"
+                  label={t("application.contact.yourAdditionalPhoneNumber")}
+                  caps={true}
                   error={errors.additionalPhoneNumber}
                   errorMessage={t("application.contact.phoneNumberError")}
                   control={control}
                   defaultValue={application.additionalPhoneNumber}
-                  controlClassName="control mt-2"
+                  controlClassName="control"
                 />
-                <div className={"field " + (errors.additionalPhoneNumberType ? "error" : "")}>
-                  <Select
-                    id="additionalPhoneNumberType"
-                    name="additionalPhoneNumberType"
-                    defaultValue={application.additionalPhoneNumberType}
-                    validation={{ required: true }}
-                    error={errors?.additionalPhoneNumberType}
-                    errorMessage={t("application.contact.phoneNumberTypeError")}
-                    register={register}
-                    controlClassName="control"
-                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                    label={t("application.contact.phoneNumberTypes.prompt")}
-                    labelClassName={"sr-only"}
-                    options={phoneNumberKeys}
-                    keyPrefix="application.contact.phoneNumberTypes"
-                  />
-                </div>
+
+                <Select
+                  id="additionalPhoneNumberType"
+                  name="additionalPhoneNumberType"
+                  defaultValue={application.additionalPhoneNumberType}
+                  validation={{ required: true }}
+                  error={errors?.additionalPhoneNumberType}
+                  errorMessage={t("application.contact.phoneNumberTypeError")}
+                  register={register}
+                  controlClassName="control"
+                  placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                  label={t("application.contact.phoneNumberTypes.prompt")}
+                  labelClassName={"sr-only"}
+                  options={phoneNumberKeys}
+                  keyPrefix="application.contact.phoneNumberTypes"
+                />
               </>
             )}
           </div>
 
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="street">
-              {t("application.contact.address")}
-            </label>
+            <fieldset>
+              <legend className="field-label--caps">{t("application.contact.address")}</legend>
 
-            <p className="field-note mb-4">
-              {t("application.contact.addressWhereYouCurrentlyLive")}
-            </p>
-
-            <Field
-              id="addressStreet"
-              name="applicant.address.street"
-              label={t("application.contact.streetAddress")}
-              placeholder={t("application.contact.streetAddress")}
-              defaultValue={application.applicant.address.street}
-              validation={{ required: true }}
-              error={errors.applicant?.address?.street}
-              errorMessage={t("application.contact.streetError")}
-              register={register}
-            />
-
-            <Field
-              id="addressStreet2"
-              name="applicant.address.street2"
-              label={t("application.contact.apt")}
-              placeholder={t("application.contact.apt")}
-              defaultValue={application.applicant.address.street2}
-              register={register}
-            />
-
-            <div className="flex max-w-2xl">
-              <Field
-                id="addressCity"
-                name="applicant.address.city"
-                label={t("application.contact.cityName")}
-                placeholder={t("application.contact.cityName")}
-                defaultValue={application.applicant.address.city}
-                validation={{ required: true }}
-                error={errors.applicant?.address?.city}
-                errorMessage={t("application.contact.cityError")}
-                register={register}
-              />
-
-              <Select
-                id="addressState"
-                name="applicant.address.state"
-                label={t("application.contact.state")}
-                validation={{ required: true }}
-                error={errors.applicant?.address?.state}
-                errorMessage={t("application.contact.stateError")}
-                register={register}
-                controlClassName="control"
-                options={stateKeys}
-                keyPrefix="application.form.options.states"
-              />
-            </div>
-            <Field
-              id="addressZipCode"
-              name="applicant.address.zipCode"
-              label={t("application.contact.zip")}
-              placeholder={t("application.contact.zipCode")}
-              defaultValue={application.applicant.address.zipCode}
-              validation={{ required: true }}
-              error={errors.applicant?.address?.zipCode}
-              errorMessage={t("application.contact.zipCodeError")}
-              register={register}
-            />
-
-            <div className="field">
-              <input
-                type="checkbox"
-                id="sendMailToMailingAddress"
-                name="sendMailToMailingAddress"
-                defaultChecked={application.sendMailToMailingAddress}
-                ref={register}
-              />
-              <label htmlFor="sendMailToMailingAddress" className="text-primary font-semibold">
-                {t("application.contact.sendMailToMailingAddress")}
-              </label>
-            </div>
-          </div>
-
-          {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
-            <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="street">
-                {t("application.contact.mailingAddress")}
-              </label>
-
-              <p className="field-note mb-4">{t("application.contact.provideAMailingAddress")}</p>
+              <p className="field-note mb-4">
+                {t("application.contact.addressWhereYouCurrentlyLive")}
+              </p>
 
               <Field
-                id="mailingAddressStreet"
-                name="mailingAddress.street"
+                id="addressStreet"
+                name="applicant.address.street"
+                label={t("application.contact.streetAddress")}
                 placeholder={t("application.contact.streetAddress")}
-                defaultValue={application.mailingAddress.street}
+                defaultValue={application.applicant.address.street}
                 validation={{ required: true }}
-                error={errors.mailingAddress?.street}
+                error={errors.applicant?.address?.street}
                 errorMessage={t("application.contact.streetError")}
                 register={register}
               />
 
               <Field
-                id="mailingAddressStreet2"
-                name="mailingAddress.street2"
+                id="addressStreet2"
+                name="applicant.address.street2"
                 label={t("application.contact.apt")}
                 placeholder={t("application.contact.apt")}
-                defaultValue={application.mailingAddress.street2}
+                defaultValue={application.applicant.address.street2}
                 register={register}
               />
 
               <div className="flex max-w-2xl">
                 <Field
-                  id="mailingAddressCity"
-                  name="mailingAddress.city"
+                  id="addressCity"
+                  name="applicant.address.city"
                   label={t("application.contact.cityName")}
                   placeholder={t("application.contact.cityName")}
-                  defaultValue={application.mailingAddress.city}
+                  defaultValue={application.applicant.address.city}
                   validation={{ required: true }}
-                  error={errors.mailingAddress?.city}
+                  error={errors.applicant?.address?.city}
                   errorMessage={t("application.contact.cityError")}
                   register={register}
                 />
 
                 <Select
-                  id="mailingAddressState"
-                  name="mailingAddress.state"
+                  id="addressState"
+                  name="applicant.address.state"
                   label={t("application.contact.state")}
-                  defaultValue={application.mailingAddress.state}
                   validation={{ required: true }}
-                  error={errors.mailingAddress?.state}
+                  error={errors.applicant?.address?.state}
                   errorMessage={t("application.contact.stateError")}
                   register={register}
                   controlClassName="control"
@@ -352,141 +276,81 @@ export default () => {
                   keyPrefix="application.form.options.states"
                 />
               </div>
-
               <Field
-                id="mailingAddressZipCode"
-                name="mailingAddress.zipCode"
+                id="addressZipCode"
+                name="applicant.address.zipCode"
                 label={t("application.contact.zip")}
                 placeholder={t("application.contact.zipCode")}
-                defaultValue={application.mailingAddress.zipCode}
+                defaultValue={application.applicant.address.zipCode}
                 validation={{ required: true }}
-                error={errors.mailingAddress?.zipCode}
+                error={errors.applicant?.address?.zipCode}
                 errorMessage={t("application.contact.zipCodeError")}
                 register={register}
               />
-            </div>
-          )}
-          <div className="form-card__group border-b">
-            <label className="field-label--caps mb-4" htmlFor="contactPreference">
-              {t("application.contact.contactPreference")}
-            </label>
-            <div className={"field " + (errors.contactPreferences ? "error" : "")}>
-              {contactPreferencesKeys.map((preference) => {
-                return (
-                  <Fragment key={preference}>
-                    <div className="field">
-                      <input
-                        type="checkbox"
-                        name="contactPreferences"
-                        id={"contactPreferences" + preference}
-                        value={preference}
-                        defaultChecked={application.contactPreferences.includes(preference)}
-                        ref={register({ required: true })}
-                      />
-                      <label
-                        htmlFor={"contactPreferences" + preference}
-                        className="font-semibold"
-                        key={preference}
-                      >
-                        {t("application.form.options.contact." + preference)}
-                      </label>
-                    </div>
-                  </Fragment>
-                )
-              })}
-              <ErrorMessage error={errors.contactPreferences}>
-                {t("application.form.errors.selectAtLeastOne")}
-              </ErrorMessage>
-            </div>
+
+              <Field
+                type="checkbox"
+                id="sendMailToMailingAddress"
+                name="sendMailToMailingAddress"
+                label={t("application.contact.sendMailToMailingAddress")}
+                primary={true}
+                register={register}
+                inputProps={{
+                  defaultChecked: application.sendMailToMailingAddress,
+                }}
+              />
+            </fieldset>
           </div>
 
-          <div className="form-card__group">
-            <label className="field-label--caps" htmlFor="street">
-              {t("application.contact.doYouWorkIn")}
-            </label>
+          {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
+            <div className="form-card__group border-b">
+              <fieldset>
+                <legend className="field-label--caps">
+                  {t("application.contact.mailingAddress")}
+                </legend>
 
-            <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
-
-            <div className={"field " + (errors.applicant?.workInRegion ? "error" : "")}>
-              <input
-                type="radio"
-                id="workInRegionYes"
-                name="applicant.workInRegion"
-                value="yes"
-                defaultChecked={application.applicant.workInRegion == "yes"}
-                ref={register({ required: true })}
-              />
-              <label className="font-semibold" htmlFor="workInRegionYes">
-                Yes
-              </label>
-            </div>
-            <div className={"field " + (errors.applicant?.workInRegion ? "error" : "")}>
-              <input
-                type="radio"
-                id="workInRegionNo"
-                name="applicant.workInRegion"
-                value="no"
-                defaultChecked={application.applicant.workInRegion == "no"}
-                ref={register({ required: true })}
-              />
-              <label className="font-semibold" htmlFor="workInRegionNo">
-                No
-              </label>
-
-              <ErrorMessage error={errors.applicant?.workInRegion}>
-                Please select an option
-              </ErrorMessage>
-            </div>
-
-            {(workInRegion == "yes" ||
-              (!workInRegion && application.applicant.workInRegion == "yes")) && (
-              <>
-                <div className="mt-8 mb-3">
-                  <label className="field-label--caps" htmlFor="street">
-                    {t("application.contact.workAddress")}
-                  </label>
-                </div>
+                <p className="field-note mb-4">{t("application.contact.provideAMailingAddress")}</p>
 
                 <Field
-                  id="workAddressStreet"
-                  name="applicant.workAddress.street"
+                  id="mailingAddressStreet"
+                  name="mailingAddress.street"
                   placeholder={t("application.contact.streetAddress")}
-                  defaultValue={application.applicant.workAddress.street}
+                  defaultValue={application.mailingAddress.street}
                   validation={{ required: true }}
-                  error={errors.applicant?.workAddress?.street}
+                  error={errors.mailingAddress?.street}
                   errorMessage={t("application.contact.streetError")}
                   register={register}
                 />
 
                 <Field
-                  id="workAddressStreet2"
-                  name="applicant.workAddress.street2"
+                  id="mailingAddressStreet2"
+                  name="mailingAddress.street2"
                   label={t("application.contact.apt")}
                   placeholder={t("application.contact.apt")}
-                  defaultValue={application.applicant.workAddress.street2}
+                  defaultValue={application.mailingAddress.street2}
                   register={register}
                 />
 
                 <div className="flex max-w-2xl">
                   <Field
-                    id="workAddressCity"
-                    name="applicant.workAddress.city"
+                    id="mailingAddressCity"
+                    name="mailingAddress.city"
                     label={t("application.contact.cityName")}
                     placeholder={t("application.contact.cityName")}
-                    defaultValue={application.applicant.workAddress.city}
+                    defaultValue={application.mailingAddress.city}
                     validation={{ required: true }}
-                    error={errors.applicant?.workAddress?.city}
+                    error={errors.mailingAddress?.city}
                     errorMessage={t("application.contact.cityError")}
                     register={register}
                   />
 
                   <Select
-                    id="workAddressState"
-                    name="applicant.workAddress.state"
+                    id="mailingAddressState"
+                    name="mailingAddress.state"
                     label={t("application.contact.state")}
-                    defaultValue={application.applicant.workAddress.state}
+                    defaultValue={application.mailingAddress.state}
                     validation={{ required: true }}
-                    error={errors.applicant?.workAddress?.state}
+                    error={errors.mailingAddress?.state}
                     errorMessage={t("application.contact.stateError")}
                     register={register}
                     controlClassName="control"
@@ -496,17 +360,144 @@ export default () => {
                 </div>
 
                 <Field
-                  id="workAddressZipCode"
-                  name="applicant.workAddress.zipCode"
+                  id="mailingAddressZipCode"
+                  name="mailingAddress.zipCode"
                   label={t("application.contact.zip")}
                   placeholder={t("application.contact.zipCode")}
-                  defaultValue={application.applicant.workAddress.zipCode}
+                  defaultValue={application.mailingAddress.zipCode}
                   validation={{ required: true }}
-                  error={errors.applicant?.workAddress?.zipCode}
+                  error={errors.mailingAddress?.zipCode}
                   errorMessage={t("application.contact.zipCodeError")}
                   register={register}
                 />
-              </>
+              </fieldset>
+            </div>
+          )}
+          <div className="form-card__group border-b">
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.contact.contactPreference")}
+              </legend>
+              <FieldGroup
+                name="contactPreferences"
+                fields={contactPreferencesOptions}
+                type="checkbox"
+                validation={{ required: true }}
+                error={errors?.contactPreferences}
+                errorMessage={t("application.form.errors.selectAtLeastOne")}
+                register={register}
+              />
+            </fieldset>
+          </div>
+
+          <div className="form-card__group">
+            <fieldset>
+              <legend className="field-label--caps">{t("application.contact.doYouWorkIn")}</legend>
+
+              <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
+
+              <Field
+                type="radio"
+                id="workInRegionYes"
+                name="applicant.workInRegion"
+                label={t("t.yes")}
+                register={register}
+                validation={{ required: true }}
+                error={errors?.applicant?.workInRegion}
+                inputProps={{
+                  value: "yes",
+                  defaultChecked: application.applicant.workInRegion == "yes",
+                }}
+              />
+
+              <Field
+                type="radio"
+                id="workInRegionNo"
+                name="applicant.workInRegion"
+                label={t("t.no")}
+                register={register}
+                validation={{ required: true }}
+                error={errors?.applicant?.workInRegion}
+                inputProps={{
+                  value: "no",
+                  defaultChecked: application.applicant.workInRegion == "no",
+                }}
+              />
+
+              <ErrorMessage error={errors.applicant?.workInRegion}>
+                {t("application.form.errors.selectOption")}
+              </ErrorMessage>
+            </fieldset>
+
+            {(workInRegion == "yes" ||
+              (!workInRegion && application.applicant.workInRegion == "yes")) && (
+              <div className="form-card__group mx-0 px-0 mt-2">
+                <fieldset>
+                  <legend className="field-label--caps">
+                    {t("application.contact.workAddress")}
+                  </legend>
+
+                  <Field
+                    id="workAddressStreet"
+                    name="applicant.workAddress.street"
+                    placeholder={t("application.contact.streetAddress")}
+                    defaultValue={application.applicant.workAddress.street}
+                    validation={{ required: true }}
+                    error={errors.applicant?.workAddress?.street}
+                    errorMessage={t("application.contact.streetError")}
+                    register={register}
+                  />
+
+                  <Field
+                    id="workAddressStreet2"
+                    name="applicant.workAddress.street2"
+                    label={t("application.contact.apt")}
+                    placeholder={t("application.contact.apt")}
+                    defaultValue={application.applicant.workAddress.street2}
+                    register={register}
+                  />
+
+                  <div className="flex max-w-2xl">
+                    <Field
+                      id="workAddressCity"
+                      name="applicant.workAddress.city"
+                      label={t("application.contact.cityName")}
+                      placeholder={t("application.contact.cityName")}
+                      defaultValue={application.applicant.workAddress.city}
+                      validation={{ required: true }}
+                      error={errors.applicant?.workAddress?.city}
+                      errorMessage={t("application.contact.cityError")}
+                      register={register}
+                    />
+
+                    <Select
+                      id="workAddressState"
+                      name="applicant.workAddress.state"
+                      label={t("application.contact.state")}
+                      defaultValue={application.applicant.workAddress.state}
+                      validation={{ required: true }}
+                      error={errors.applicant?.workAddress?.state}
+                      errorMessage={t("application.contact.stateError")}
+                      register={register}
+                      controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="application.form.options.states"
+                    />
+                  </div>
+
+                  <Field
+                    id="workAddressZipCode"
+                    name="applicant.workAddress.zipCode"
+                    label={t("application.contact.zip")}
+                    placeholder={t("application.contact.zipCode")}
+                    defaultValue={application.applicant.workAddress.zipCode}
+                    validation={{ required: true }}
+                    error={errors.applicant?.workAddress?.zipCode}
+                    errorMessage={t("application.contact.zipCodeError")}
+                    register={register}
+                  />
+                </fieldset>
+              </div>
             )}
           </div>
 

@@ -77,36 +77,39 @@ export default () => {
 
         <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
-            <label className="field-label--caps" htmlFor="type">
-              {t("application.alternateContact.type.label")}
-            </label>
-            <p className="field-note mt-2 mb-4">
-              {t("application.alternateContact.type.helperText")}
-            </p>
-            {options.map((option, i) => {
-              return (
-                <Fragment key={option}>
-                  <div className={"field " + (errors.type ? "error" : "")}>
-                    <input
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.alternateContact.type.label")}
+              </legend>
+              <p className="field-note mb-4">{t("application.alternateContact.type.helperText")}</p>
+              {options.map((option, i) => {
+                return (
+                  <Fragment key={option}>
+                    <Field
                       key={option}
                       type="radio"
                       id={"type" + option}
                       name="type"
-                      value={option}
-                      defaultChecked={application.alternateContact.type === option}
-                      ref={register({ required: true })}
+                      label={t("application.alternateContact.type.options." + option)}
+                      register={register}
+                      validation={{ required: true }}
+                      error={errors.type}
+                      inputProps={{
+                        value: option,
+                        defaultChecked: application.alternateContact.type === option,
+                      }}
                     />
-                    <label className="font-semibold" htmlFor={"type" + option}>
-                      {t("application.alternateContact.type.options." + option)}
-                    </label>
+
                     {option === "other" && type === "other" && (
                       <Field
                         controlClassName="mt-4"
                         id="otherType"
                         name="otherType"
+                        label={t("application.alternateContact.type.otherTypeFormPlaceholder")}
                         placeholder={t(
                           "application.alternateContact.type.otherTypeFormPlaceholder"
                         )}
+                        readerOnly={true}
                         defaultValue={application.alternateContact.otherType}
                         validation={{ required: true }}
                         error={errors.otherType}
@@ -121,10 +124,10 @@ export default () => {
                         {t("application.alternateContact.type.validationErrorMessage")}
                       </ErrorMessage>
                     )}
-                  </div>
-                </Fragment>
-              )
-            })}
+                  </Fragment>
+                )
+              })}
+            </fieldset>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

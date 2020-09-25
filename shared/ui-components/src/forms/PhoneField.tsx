@@ -9,13 +9,20 @@ export const PhoneField = (props: {
   controlClassName?: string
   name: string
   label?: string
+  caps?: boolean
+  readerOnly?: boolean
   placeholder?: string
   defaultValue?: string
   control: any
   disabled?: boolean
 }) => {
+  const labelClasses = ["label"]
+  if (props.caps) labelClasses.push("field-label--caps")
+  if (props.readerOnly) labelClasses.push("sr-only")
+
   return (
     <div className={"field " + (props.error ? "error" : "")}>
+      {props.label && <label className={labelClasses.join(" ")}>{props.label}</label>}
       <div className={props.controlClassName}>
         <Controller
           className="input"
