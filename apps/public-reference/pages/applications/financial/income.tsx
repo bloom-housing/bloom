@@ -9,6 +9,7 @@ import {
   Button,
   ErrorMessage,
   Field,
+  FieldGroup,
   Form,
   FormCard,
   ProgressNav,
@@ -64,6 +65,7 @@ export default () => {
   })
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
+    console.log(data)
     // Skip validation of total income if the applicant has income vouchers.
     const validationError = application.incomeVouchers
       ? null
@@ -90,6 +92,19 @@ export default () => {
       setValue("income", numericIncome.toFixed(2))
     }
   }
+
+  const incomePeriodValues = [
+    {
+      id: "incomePeriodMonthly",
+      value: "perMonth",
+      label: t("application.financial.income.perMonth"),
+    },
+    {
+      id: "incomePeriodYearly",
+      value: "perYear",
+      label: t("application.financial.income.perYear"),
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -151,54 +166,33 @@ export default () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
-            <p className="field-label mb-2">{t("application.financial.income.prompt")}</p>
+            <Field
+              id="income"
+              name="income"
+              type="number"
+              label={t("application.financial.income.prompt")}
+              caps={true}
+              placeholder={t("application.financial.income.placeholder")}
+              validation={{ required: true, min: 0.01 }}
+              error={errors.income}
+              register={register}
+              prepend="$"
+              errorMessage={t("application.financial.income.incomeError")}
+              inputProps={{ step: 0.01, onBlur: formatValue }}
+            />
 
-            <div className={`field ${errors.income ? "error" : ""}`}>
-              <Field
-                id="income"
-                name="income"
-                type="number"
-                placeholder={t("application.financial.income.placeholder")}
-                validation={{ required: true, min: 0.01 }}
-                error={errors.income}
+            <fieldset>
+              <legend className="sr-only">{t("application.financial.income.legend")}</legend>
+              <FieldGroup
+                type="radio"
+                name="incomePeriod"
+                error={errors.incomePeriod}
+                errorMessage={t("application.financial.income.periodError")}
                 register={register}
-                prepend="$"
-                errorMessage={t("application.financial.income.incomeError")}
-                inputProps={{ step: 0.01, onBlur: formatValue }}
+                validation={{ required: true }}
+                fields={incomePeriodValues}
               />
-            </div>
-
-            <div className={`field-group`}>
-              <div className={`field ${errors.incomePeriod ? "error" : ""}`}>
-                <input
-                  type="radio"
-                  id="incomePeriodMonthly"
-                  name="incomePeriod"
-                  value="perMonth"
-                  ref={register({ required: true })}
-                />
-                <label htmlFor="incomePeriodMonthly" className="font-semibold">
-                  {t("application.financial.income.perMonth")}
-                </label>
-              </div>
-
-              <div className={`field ${errors.incomePeriod ? "error" : ""}`}>
-                <input
-                  type="radio"
-                  id="incomePeriodYearly"
-                  name="incomePeriod"
-                  value="perYear"
-                  ref={register({ required: true })}
-                />
-                <label htmlFor="incomePeriodYearly" className="font-semibold">
-                  {t("application.financial.income.perYear")}
-                </label>
-              </div>
-
-              <ErrorMessage error={errors.incomePeriod}>
-                {t("application.financial.income.periodError")}
-              </ErrorMessage>
-            </div>
+            </fieldset>
           </div>
 
           <div className="form-card__pager">

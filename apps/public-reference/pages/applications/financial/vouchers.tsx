@@ -12,6 +12,7 @@ import {
   FormCard,
   ProgressNav,
   t,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -40,6 +41,19 @@ export default () => {
   const onError = () => {
     window.scrollTo(0, 0)
   }
+
+  const incomeVouchersValues = [
+    {
+      id: "incomeVouchersYes",
+      value: "true",
+      label: t("application.financial.vouchers.yes"),
+    },
+    {
+      id: "incomeVouchersNo",
+      value: "false",
+      label: t("application.financial.vouchers.no"),
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -89,39 +103,19 @@ export default () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
-            <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
-
-            <div className="field">
-              <input
+            <fieldset>
+              <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
+              <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
+              <FieldGroup
                 type="radio"
-                id="incomeVouchersYes"
                 name="incomeVouchers"
-                value="true"
-                ref={register({ required: true })}
+                error={errors.incomeVouchers}
+                errorMessage={t("application.financial.vouchers.error")}
+                register={register}
+                validation={{ required: true }}
+                fields={incomeVouchersValues}
               />
-
-              <label htmlFor="incomeVouchersYes" className="font-semibold">
-                {t("application.financial.vouchers.yes")}
-              </label>
-            </div>
-
-            <div className="field">
-              <input
-                type="radio"
-                id="incomeVouchersNo"
-                name="incomeVouchers"
-                value="false"
-                ref={register({ required: true })}
-              />
-
-              <label htmlFor="incomeVouchersNo" className="font-semibold">
-                {t("application.financial.vouchers.no")}
-              </label>
-            </div>
-
-            <ErrorMessage error={errors.incomeVouchers}>
-              {t("application.financial.vouchers.error")}
-            </ErrorMessage>
+            </fieldset>
           </div>
 
           <div className="form-card__pager">

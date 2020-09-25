@@ -18,9 +18,8 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { emailRegex } from "../../../lib/helpers"
-import { useEffect } from "react"
 
 export default () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
@@ -75,36 +74,42 @@ export default () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="firstName">
-              {t("application.name.yourName")}
-            </label>
+            <fieldset>
+              <legend className="field-label--caps">{t("application.name.yourName")}</legend>
 
-            <Field
-              name="applicant.firstName"
-              placeholder={t("application.name.firstName")}
-              defaultValue={application.applicant.firstName}
-              validation={{ required: true }}
-              error={errors.applicant?.firstName}
-              errorMessage={t("application.name.firstNameError")}
-              register={register}
-            />
+              <Field
+                name="applicant.firstName"
+                label={t("application.name.firstName")}
+                placeholder={t("application.name.firstName")}
+                readerOnly={true}
+                defaultValue={application.applicant.firstName}
+                validation={{ required: true }}
+                error={errors.applicant?.firstName}
+                errorMessage={t("application.name.firstNameError")}
+                register={register}
+              />
 
-            <Field
-              name="applicant.middleName"
-              placeholder={t("application.name.middleName")}
-              defaultValue={application.applicant.middleName}
-              register={register}
-            />
+              <Field
+                name="applicant.middleName"
+                label={t("application.name.middleName")}
+                placeholder={t("application.name.middleName")}
+                readerOnly={true}
+                defaultValue={application.applicant.middleName}
+                register={register}
+              />
 
-            <Field
-              name="applicant.lastName"
-              placeholder={t("application.name.lastName")}
-              defaultValue={application.applicant.lastName}
-              validation={{ required: true }}
-              error={errors.applicant?.lastName}
-              errorMessage={t("application.name.lastNameError")}
-              register={register}
-            />
+              <Field
+                name="applicant.lastName"
+                label={t("application.name.lastName")}
+                placeholder={t("application.name.lastName")}
+                readerOnly={true}
+                defaultValue={application.applicant.lastName}
+                validation={{ required: true }}
+                error={errors.applicant?.lastName}
+                errorMessage={t("application.name.lastNameError")}
+                register={register}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__group border-b">
@@ -120,9 +125,7 @@ export default () => {
           </div>
 
           <div className="form-card__group">
-            <label className="field-label--caps" htmlFor="emailAddress">
-              {t("application.name.yourEmailAddress")}
-            </label>
+            <h3 className="field-label--caps">{t("application.name.yourEmailAddress")}</h3>
 
             <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 
@@ -130,6 +133,8 @@ export default () => {
               type="email"
               name="applicant.emailAddress"
               placeholder={clientLoaded && noEmail ? t("t.none") : "example@web.com"}
+              label={t("application.name.yourEmailAddress")}
+              readerOnly={true}
               defaultValue={application.applicant.emailAddress}
               validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
               error={errors.applicant?.emailAddress}
@@ -138,19 +143,18 @@ export default () => {
               disabled={clientLoaded && noEmail}
             />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="noEmail"
-                name="applicant.noEmail"
-                defaultChecked={clientLoaded && noEmail}
-                disabled={clientLoaded && emailPresent?.length > 0}
-                ref={register}
-              />
-              <label htmlFor="noEmail" className="text-primary font-semibold">
-                {t("application.name.noEmailAddress")}
-              </label>
-            </div>
+            <Field
+              type="checkbox"
+              id="noEmail"
+              name="applicant.noEmail"
+              label={t("application.name.noEmailAddress")}
+              primary={true}
+              register={register}
+              disabled={clientLoaded && emailPresent?.length > 0}
+              inputProps={{
+                defaultChecked: clientLoaded && noEmail,
+              }}
+            />
           </div>
 
           <div className="form-card__pager">
