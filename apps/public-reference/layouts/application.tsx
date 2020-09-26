@@ -15,8 +15,7 @@ import SVG from "react-inlinesvg"
 import { useContext } from "react"
 
 const Layout = (props) => {
-  const userContext = useContext(UserContext)
-  const { profile, signOut } = userContext
+  const { profile, signOut } = useContext(UserContext)
 
   return (
     <div className="site-wrapper">
