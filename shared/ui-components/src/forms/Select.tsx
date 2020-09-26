@@ -32,7 +32,7 @@ export const Select = ({
   placeholder,
   register,
   validation,
-  disabled = false,
+  disabled,
   options,
   keyPrefix,
 }: SelectProps) => {

@@ -11,21 +11,18 @@
 
 // Adds full screen image to pseudo element
 @mixin overlay-image() {
+  @apply block;
+  @apply absolute;
+  @apply inset-0;
   content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   z-index: 2;
 }
 
 @mixin clearfix() {
   &::after {
+    @apply table;
+    @apply clear-both;
     content: "";
-    display: table;
-    clear: both;
   }
 }
 
@@ -42,5 +39,26 @@
   &[aria-expanded="true"]:after {
     @apply mr-5;
     transform: rotate(0deg) translateY(2px);
+  }
+}
+
+
+@mixin has-image-skeleton() {
+  @apply bg-gray-400;
+
+  &::before {
+    @apply float-left;
+    content: "";
+    width: 1px;
+    margin-left: -1px;
+    height: 0;
+    padding-top: 591.44px / 1127.34px * 100%;
+
+  }
+  
+  &::after { /* to clear float */
+    @apply table;
+    @apply clear-both;
+    content: "";
   }
 }

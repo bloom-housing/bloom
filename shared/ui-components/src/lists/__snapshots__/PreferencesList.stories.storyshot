@@ -12,7 +12,7 @@ exports[`Storyshots Listing/Preferences List Preferences 1`] = `
             "url": "https://domain.com",
           },
         ],
-        "ordinal": "1st",
+        "ordinal": 1,
         "subtitle": "Up to 56 units available",
         "title": "Certificate of Preference (COP)",
       },
@@ -28,12 +28,12 @@ exports[`Storyshots Listing/Preferences List Preferences 1`] = `
             "url": "https://domain.com/d",
           },
         ],
-        "ordinal": "2nd",
+        "ordinal": 2,
         "subtitle": "Up to 3 units available",
         "title": "Displaced Tenant Housing Preference (DTHP)",
       },
       Object {
-        "ordinal": "3rd",
+        "ordinal": 3,
         "title": "Classroom teachers who are employees of the San Mateo Foster City School District and San Mateo County Community College District",
       },
     ]

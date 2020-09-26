@@ -230,7 +230,7 @@ export interface Preference {
   id: string;
 
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
@@ -505,6 +505,9 @@ export interface Listing {
 
   /**  */
   programRules: string;
+
+  /**  */
+  rentalAssistance: string;
 
   /**  */
   rentalHistory: string;

@@ -4,11 +4,17 @@ Optional demographic questions
 */
 import { useContext, useMemo } from "react"
 import Link from "next/link"
-import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  Button,
+  FieldGroup,
+  Form,
+  FormCard,
+  ProgressNav,
+  Select,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { CheckboxGroup } from "@bloom-housing/ui-components/src/forms/CheckboxGroup"
 import {
   ethnicityKeys,
   raceKeys,
@@ -79,7 +85,7 @@ const Demographics = () => {
               label={t("application.review.demographics.ethnicityLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={ethnicityKeys}
               keyPrefix="application.review.demographics.ethnicityOptions"
@@ -91,7 +97,7 @@ const Demographics = () => {
               label={t("application.review.demographics.raceLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={raceKeys}
               keyPrefix="application.review.demographics.raceOptions"
@@ -105,7 +111,7 @@ const Demographics = () => {
               label={t("application.review.demographics.genderLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={genderKeys}
               keyPrefix="application.review.demographics.genderOptions"
@@ -119,7 +125,7 @@ const Demographics = () => {
               label={t("application.review.demographics.sexualOrientationLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={sexualOrientation}
               keyPrefix="application.review.demographics.sexualOrientationOptions"
@@ -127,11 +133,17 @@ const Demographics = () => {
           </div>
 
           <div className="form-card__group is-borderless">
-            <CheckboxGroup
-              name="howDidYouHear"
-              groupLabel={t("application.review.demographics.howDidYouHearLabel")}
-              fields={howDidYouHearOptions}
-            />
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.review.demographics.howDidYouHearLabel")}
+              </legend>
+              <FieldGroup
+                type="checkbox"
+                name="howDidYouHear"
+                fields={howDidYouHearOptions}
+                register={register}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__pager">

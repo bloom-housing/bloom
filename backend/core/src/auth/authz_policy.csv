@@ -1,0 +1,6 @@
+p, admin, application, true, .*
+p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)|(update)|(delete)
+p, anonymous, application, true, create
+
+g, admin, user
+g, user, anonymous

@@ -156,6 +156,7 @@ export const blankApplication = () => {
       howDidYouHear: "",
     },
     preferences: {} as Record<string, any>,
+    confirmationId: "",
   }
 }
 

@@ -10,7 +10,7 @@ import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { useContext } from "react"
 
 export default () => {
-  const { listing } = useContext(AppSubmissionContext)
+  const { application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
 
   const imageUrl = imageUrlFromListing(listing)
@@ -31,8 +31,8 @@ export default () => {
           <h3 className="form-card__paragraph-title">
             {t("application.review.confirmation.lotteryNumber")}
           </h3>
-          {/* TODO: replace with real application number */}
-          <p className="font-serif text-3xl my-1">#00545847</p>
+
+          <p className="font-serif text-3xl my-1">{application.confirmationId}</p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>
 
@@ -64,7 +64,7 @@ export default () => {
           )}
         </div>
 
-        {/* <div className="form-card__group">
+        <div className="form-card__group">
           <h3 className="form-card__paragraph-title">
             {t("application.review.confirmation.createAccountTitle")}
           </h3>
@@ -72,10 +72,10 @@ export default () => {
           <p className="field-note mt-1">
             {t("application.review.confirmation.createAccountParagraph")}
           </p>
-        </div> */}
+        </div>
 
         <div className="form-card__pager">
-          {/* <div className="form-card__pager-row primary">
+          <div className="form-card__pager-row primary">
             <Button
               filled={true}
               onClick={() => {
@@ -84,13 +84,13 @@ export default () => {
             >
               {t("application.form.general.createAccount")}
             </Button>
-          </div> */}
+          </div>
 
-          {/* <div className="form-card__pager-row py-6">
+          <div className="form-card__pager-row py-6">
             <a className="lined text-tiny" href="/">
               {t("application.review.confirmation.imdone")}
             </a>
-          </div> */}
+          </div>
 
           <div className="form-card__pager-row py-6">
             <Link href="/listings">

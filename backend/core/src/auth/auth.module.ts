@@ -11,6 +11,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { RevokedToken } from "../entity/revokedToken.entity"
 import { EmailService } from "../shared/email.service"
 import { SharedModule } from "../shared/shared.module"
+import { AuthzService } from "./authz.service"
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { SharedModule } from "../shared/shared.module"
     TypeOrmModule.forFeature([RevokedToken]),
     SharedModule,
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, EmailService],
+  providers: [LocalStrategy, JwtStrategy, AuthService, EmailService, AuthzService],
+  exports: [AuthzService],
   controllers: [AuthController],
 })
 export class AuthModule {}
