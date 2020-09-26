@@ -25,7 +25,7 @@ export default () => {
   conductor.stepTo("Alternate Contact Name")
   useEffect(() => {
     conductor.skipCurrentStepIfNeeded()
-  }, [application, conductor])
+  }, [conductor])
 
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({

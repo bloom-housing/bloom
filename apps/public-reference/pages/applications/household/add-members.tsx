@@ -27,7 +27,7 @@ export default () => {
   conductor.stepTo("Add Members")
   useEffect(() => {
     conductor.skipCurrentStepIfNeeded()
-  }, [application, conductor])
+  }, [conductor])
 
   /* Form Handler */
   const { errors, handleSubmit, register, clearErrors } = useForm()

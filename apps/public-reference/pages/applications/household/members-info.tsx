@@ -18,7 +18,7 @@ export default () => {
   conductor.stepTo("Household Member Info")
   useEffect(() => {
     conductor.skipCurrentStepIfNeeded()
-  }, [application, conductor])
+  }, [conductor])
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm({

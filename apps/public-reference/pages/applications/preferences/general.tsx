@@ -18,7 +18,7 @@ export default () => {
   conductor.stepTo("General Pool")
   useEffect(() => {
     conductor.skipCurrentStepIfNeeded()
-  }, [application, conductor])
+  }, [conductor])
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
