@@ -15,7 +15,8 @@
     "SFHousingUrl": "https://housing.sfgov.org"
   },
   "nav": {
-    "siteTitle": "Alameda County Housing Portal"
+    "siteTitle": "Alameda County Housing Portal",
+    "getFeedback": "We'd love to get <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>your feedback!</a> Participate in a feedback session and you could receive a gift card for your time.",
   },
   "pageTitle": {
     "additionalResources": "Additional Housing Opportunities"
