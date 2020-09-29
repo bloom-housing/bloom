@@ -1,7 +1,8 @@
 import React from "react"
-import { Field, t } from "@bloom-housing/ui-components"
 import { SimpleTable } from "./SimpleTable"
 import { FieldSection } from "./FieldSection"
+import { GridItem } from "./GridItem"
+import { Field } from "../forms/Field"
 
 export default {
   title: "Prototypes/FieldSection",
@@ -11,139 +12,146 @@ export default {
 export const FourColumns = () => (
   <FieldSection
     title="Section Title"
-    tinted={true}
     className="md:grid md:grid-cols-4 md:gap-8"
   >
-    <div className="field">
-      <label className="label" htmlFor="field-1">Label</label>
-      <div className="control">
-        <input className="input" id="field-1" placeholder="Enter text" />
-      </div>
-    </div>
+    <Field
+      label="Alpha"
+      placeholder="Enter text"
+      name="label1"
+      register={() => {}}
+    />
 
-    <div className="field">
-      <label className="label" htmlFor="field-2">Label</label>
-      <div className="control">
-        <input className="input" id="field-2" placeholder="Enter text" />
-      </div>
-    </div>
+    <Field
+      label="Beta"
+      placeholder="Enter text"
+      name="label2"
+      register={() => {}}
+    />
 
-    <div className="field">
-      <label className="label" htmlFor="field-3">Label</label>
-      <div className="control">
-        <input className="input" id="field-3" placeholder="Enter text" />
-      </div>
-    </div>
+    <Field
+      label="Gamma"
+      placeholder="Enter text"
+      name="label3"
+      register={() => {}}
+    />
 
-    <div className="field">
-      <label className="label" htmlFor="field-4">Label</label>
-      <div className="control">
-        <input className="input" id="field-4" placeholder="Enter text" />
-      </div>
-    </div>
+    <Field
+      label="Delta"
+      placeholder="Enter text"
+      name="label4"
+      register={() => {}}
+    />
 
-    <div className="field">
-      <label className="label" htmlFor="field-5">Label</label>
-      <div className="control">
-        <input className="input" id="field-5" placeholder="Enter text" />
-      </div>
-    </div>
+    <Field
+      label="Epsilon"
+      placeholder="Enter text"
+      name="label5"
+      register={() => {}}
+    />
 
-    <div className="field">
-      <label className="label" htmlFor="field-6">Label</label>
-      <div className="control">
-        <input className="input" id="field-6" placeholder="Enter text" />
-      </div>
-    </div>
+    <Field
+      label="Zeta"
+      placeholder="Enter text"
+      name="label6"
+      register={() => {}}
+    />
 
-    <div className="field">
-      <label className="label" htmlFor="field-7">Label</label>
-      <div className="control">
-        <input className="input" id="field-7" placeholder="Enter text" />
-      </div>
-    </div>
+    <Field
+      label="Eta"
+      placeholder="Enter text"
+      name="label7"
+      register={() => {}}
+    />
 
-    <div className="field">
-      <label className="label" htmlFor="field-8">Label</label>
-      <div className="control">
-        <input className="input" id="field-8" placeholder="Enter text" />
+    <Field
+      label="Theta"
+      placeholder="Enter text"
+      name="label8"
+      register={() => {}}
+    />
+  </FieldSection>
+)
+
+export const FieldGroupAddress = () => (
+  <FieldSection
+    title="Section Title"
+    className="md:grid md:grid-cols-4 md:gap-8"
+  >
+    <div className="field-group md:col-span-3">
+      <h3 className="field-group__title">My Group</h3>
+      <div className="field-subgrid md:grid md:grid-cols-6 md:gap-8">
+        <GridItem
+          className="md:col-span-4"
+        >
+          <Field
+            label="Street Address"
+            placeholder="Enter text"
+            name="label1"
+            register={() => {}}
+          />
+        </GridItem>
+
+        <GridItem
+          className="md:col-span-2"
+        >
+          <Field
+            label="Address 2"
+            placeholder="Enter text"
+            name="label2"
+            register={() => {}}
+          />
+        </GridItem>
+
+        <GridItem
+          className="md:col-span-2"
+        >
+          <Field
+            label="City"
+            placeholder="Enter text"
+            name="label3"
+            register={() => {}}
+          />
+        </GridItem>
+
+        <Field
+          label="State"
+          placeholder="Enter text"
+          name="label4"
+          register={() => {}}
+        />
+
+        <Field
+          label="Zip"
+          placeholder="Enter text"
+          name="label5"
+          register={() => {}}
+        />
       </div>
     </div>
   </FieldSection>
 )
 
-export const FieldGroupAddress = () => (
-  <div className="field-section">
-    <header className="field-section__header">
-      <h2 className="field-section__title">My Section</h2>
-    </header>  
-
-    <div className="field-grid md:grid md:grid-cols-4 md:gap-8">
-      <div className="field-group md:col-span-3">
-        <h3 className="field-group__title">My Group</h3>
-        <div className="field-subgrid md:grid md:grid-cols-6 md:gap-8">
-          <div className="field md:col-span-4">
-            <label className="label" htmlFor="field-0">Address 1</label>
-            <div className="control">
-              <input className="input" id="field-0" placeholder="Enter text" />
-            </div>
-          </div>
-
-          <div className="field md:col-span-2">
-            <label className="label" htmlFor="field-1">Address 2</label>
-            <div className="control">
-              <input className="input" id="field-1" placeholder="Enter text" />
-            </div>
-          </div>
-
-          <div className="field md:col-span-2">
-            <label className="label" htmlFor="field-2">City</label>
-            <div className="control">
-              <input className="input" id="field-2" placeholder="Enter text" />
-            </div>
-          </div>
-
-          <div className="field">
-            <label className="label" htmlFor="field-3">State</label>
-            <div className="control">
-              <input className="input" id="field-3" placeholder="Enter text" />
-            </div>
-          </div>
-
-          <div className="field">
-            <label className="label" htmlFor="field-4">Zip</label>
-            <div className="control">
-              <input className="input" id="field-4" placeholder="Enter text" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-)
-
 export const FieldSectionTable = () => (
-  <div className="field-section">
-    <header className="field-section__header">
-      <h2 className="field-section__title">My Section</h2>
-    </header>
+  <FieldSection
+    title="Section Title"
+    tinted={true}
+  >
+    
+    <SimpleTable />
 
-    <div className="field-grid bg-primary-lighter mb-4">
-      <SimpleTable />
-    </div> 
-
-    <button className="button is-small">Add Household Member</button>
-  </div>
+    <div className="bg-white pt-4">
+      <button className="button is-small">Add Household Member</button>
+    </div>
+  </FieldSection>
 )
 
 export const FieldSectionBlank = () => (
-  <div className="field-section">
-    <header className="field-section__header">
-      <h2 className="field-section__title">My Section</h2>
-    </header>
-
-    <div className="field-grid bg-primary-lighter p-8">
-      <button className="button is-small">Add Household Member</button>
-    </div> 
-  </div>
+   <FieldSection
+    title="Section Title"
+    tinted={true}
+    insetGrid={true}
+   >
+    
+    <button className="button is-small">Add Household Member</button>
+   </FieldSection>
 )

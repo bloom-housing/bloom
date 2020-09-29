@@ -5,7 +5,7 @@
   @apply max-w-5xl;
 
 
-  &.is-left {
+  &.is-right {
     @apply border-l;
     @apply w-full;
     @apply fixed;
@@ -60,7 +60,7 @@
   @apply z-50;
   @apply flex;
 
-  &.drawer__wrappe--backdrop:before {
+  &.has-backdrop:before {
     content: "";
     @apply absolute;
     @apply w-full;

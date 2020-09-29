@@ -2,25 +2,25 @@
 
 }
 
-.view-header {
+.view-section__header {
   @apply mb-6;
   @apply flex;
   @apply items-center;
 }
 
-.view-title {
+.view-section__title {
   @apply font-alt-sans;
   @apply text-xl;
   @apply inline-block;
 }
 
 .view-grid {
-  @apply p-8;
+  &.is-tinted {
+    @apply bg-primary-lighter;
+  }
 
-  &.demo {
-    .view-item {
-      @apply bg-white;
-    }
+  &.is-inset {
+    @apply p-8;
   }
 }
 
