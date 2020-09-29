@@ -1,4 +1,6 @@
 import React from "react"
+import { Tag } from "./Tag"
+import { Button } from "../atoms/Button"
 
 import "./StatusBar.scss"
 
@@ -7,18 +9,37 @@ export default {
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
+const handleClick = (e: React.MouseEvent) => {
+  alert(`You clicked me! Event: ${e.type}`)
+}
+
 export const StatusBar = () => (
   <div className="status-bar">
-     <div className="pr-2 mr-4 border-r border-gray-600"><span>Status:</span><span className="tag mx-2">Draft</span></div>
+     <div className="pr-2 mr-4 border-r border-gray-600"><span className="mr-2">Status:</span>
+       <Tag 
+         pillStyle={true}>
+          Draft
+        </Tag>
+     </div>
      <div><span className="mr-4">Last Updated: August 1, 2020</span></div>
-     <button className="button is-small is-filled">Save</button>
+     <Button small={true} filled={true} onClick={handleClick}>
+       Save
+     </Button>
   </div>
 )
 
 export const StatusBarSubmitted = () => (
   <div className="status-bar">
-     <div className="pr-2 mr-4 border-r border-gray-600"><span>Status:</span><span className="tag mx-2 bg-success text-white">Submitted</span></div>
+     <div className="pr-2 mr-4 border-r border-gray-600"><span className="mr-2">Status:</span>
+       <Tag 
+         pillStyle={true} 
+         success={true}>
+          Success
+        </Tag>
+     </div>
      <div><span className="mr-4">Last Updated: August 1, 2020</span></div>
-     <button className="button is-small">Edit</button>
+     <Button small={true} onClick={handleClick}>
+       Edit
+     </Button>
   </div>
 )

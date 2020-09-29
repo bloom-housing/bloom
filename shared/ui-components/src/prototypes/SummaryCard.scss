@@ -1,4 +1,4 @@
-.stat-card {
+.summary-card {
   @apply rounded-lg;
   @apply border-solid;
   @apply border;
@@ -11,13 +11,13 @@
   }
 }
 
-.stat-card__header {
+.summary-card__header {
   @apply px-5;
   @apply py-4;
   @apply rounded-t-lg;
 }
 
-.stat-card__title {
+.summary-card__title {
   @apply text-lg;
   @apply font-alt-sans;
 

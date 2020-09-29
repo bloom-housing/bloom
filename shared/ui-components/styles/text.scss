@@ -163,18 +163,6 @@ h1.title {
   @apply mr-2;
 }
 
-.tag {
-  @apply px-2;
-  @apply py-1;
-  @apply bg-primary-light;
-  @apply text-primary;
-  @apply rounded-full;
-  @apply font-semibold;
-  @apply font-alt-sans;
-  @apply uppercase;
-  @apply tracking-widest;
-}
-
 .icon-item {
   @apply block;
 }
