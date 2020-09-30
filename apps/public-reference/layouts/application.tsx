@@ -14,24 +14,14 @@ import {
 import SVG from "react-inlinesvg"
 import { useContext } from "react"
 
-interface Languages {
-  prefix: string
-  label: string
-}
-
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
 
-  const LANGUAGES: Languages[] = [
-    {
-      prefix: "",
-      label: t("languages.english"),
-    },
-    {
-      prefix: "es",
-      label: t("languages.spanish"),
-    },
-  ]
+  const LANGUAGES =
+    process.env.languages?.split(",")?.map((item) => ({
+      prefix: item === "en" ? "" : item,
+      label: t(`languages.${item}`),
+    })) || []
 
   return (
     <div className="site-wrapper">
