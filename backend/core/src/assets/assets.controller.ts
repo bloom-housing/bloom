@@ -6,6 +6,7 @@ import { ResourceType } from "../auth/resource_type.decorator"
 import { AssetCreateDto } from "./asset.create.dto"
 import AuthzGuard from "../auth/authz.guard"
 import { DefaultAuthGuard } from "../auth/default.guard"
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger"
 
 @Crud({
   model: {
@@ -24,6 +25,8 @@ import { DefaultAuthGuard } from "../auth/default.guard"
 })
 @Controller("assets")
 @ResourceType("asset")
+@ApiTags("assets")
+@ApiBearerAuth()
 @UseGuards(DefaultAuthGuard, AuthzGuard)
 export class AssetsController {
   constructor(public service: AssetsService) {}

@@ -7,6 +7,7 @@ import { Unit } from "../entity/unit.entity"
 import { UnitCreateDto } from "./unit.create.dto"
 import { UnitsService } from "./units.service"
 import { DefaultAuthGuard } from "../auth/default.guard"
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger"
 
 @Crud({
   model: {
@@ -25,6 +26,8 @@ import { DefaultAuthGuard } from "../auth/default.guard"
 })
 @Controller("units")
 @ResourceType("unit")
+@ApiTags("units")
+@ApiBearerAuth()
 @UseGuards(DefaultAuthGuard, AuthzGuard)
 export class UnitsController {
   constructor(public service: UnitsService) {}

@@ -1,15 +1,15 @@
-import {
-  Controller,
-  UseGuards,
-} from "@nestjs/common"
+import { Controller, UseGuards } from "@nestjs/common"
 
 import { DefaultAuthGuard } from "../auth/default.guard"
-import { Crud } from "@nestjsx/crud"
+import {
+  Crud,
+} from "@nestjsx/crud"
 import { ResourceType } from "../auth/resource_type.decorator"
 import AuthzGuard from "../auth/authz.guard"
 import { ApplicationMethod } from "../entity/application-method.entity"
 import { ApplicationMethodCreateDto } from "./application-method.create.dto"
 import { ApplicationMethodsService } from "./application-method.service"
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 
 @Crud({
   model: {
@@ -27,6 +27,8 @@ import { ApplicationMethodsService } from "./application-method.service"
   },
 })
 @Controller("applicationMethods")
+@ApiTags("applicationMethods")
+@ApiBearerAuth()
 @ResourceType("application-method")
 @UseGuards(DefaultAuthGuard, AuthzGuard)
 export class ApplicationMethodsController {
