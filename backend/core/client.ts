@@ -390,13 +390,96 @@ export class ApplicationsService {
 
 export class AssetsService {
   /**
-   * List assets
+   * Retrieve one Asset
    */
-  list(options: IRequestOptions = {}): Promise<Asset[]> {
+  getOneBaseAssetsControllerAsset(
+    params: {
+      /**  */
+      id: string;
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
     return new Promise((resolve, reject) => {
-      let url = '/assets';
+      let url = '/assets/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { fields: params['fields'], join: params['join'], cache: params['cache'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update one Asset
+   */
+  updateOneBaseAssetsControllerAsset(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: Asset;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = '/assets/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('patch', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Replace one Asset
+   */
+  replaceOneBaseAssetsControllerAsset(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: Asset;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = '/assets/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete one Asset
+   */
+  deleteOneBaseAssetsControllerAsset(
+    params: {
+      /**  */
+      id: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = '/assets/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
       let data = null;
 
@@ -405,15 +488,65 @@ export class AssetsService {
     });
   }
   /**
-   * Create asset
+   * Retrieve many Asset
    */
-  create(
+  getManyBaseAssetsControllerAsset(
+    params: {
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds search condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#search" target="_blank">Docs</a> */
+      s?: string;
+      /** Adds filter condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#filter" target="_blank">Docs</a> */
+      filter?: any | null[];
+      /** Adds OR condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#or" target="_blank">Docs</a> */
+      or?: any | null[];
+      /** Adds sort by field. <a href="https://github.com/nestjsx/crud/wiki/Requests#sort" target="_blank">Docs</a> */
+      sort?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Limit amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#limit" target="_blank">Docs</a> */
+      limit?: number;
+      /** Offset amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#offset" target="_blank">Docs</a> */
+      offset?: number;
+      /** Page portion of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#page" target="_blank">Docs</a> */
+      page?: number;
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any | null> {
+    return new Promise((resolve, reject) => {
+      let url = '/assets';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = {
+        fields: params['fields'],
+        s: params['s'],
+        filter: params['filter'],
+        or: params['or'],
+        sort: params['sort'],
+        join: params['join'],
+        limit: params['limit'],
+        offset: params['offset'],
+        page: params['page'],
+        cache: params['cache']
+      };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create one Asset
+   */
+  createOneBaseAssetsControllerAsset(
     params: {
       /** requestBody */
       body?: AssetCreateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<AssetDto> {
+  ): Promise<Asset> {
     return new Promise((resolve, reject) => {
       let url = '/assets';
 
@@ -426,17 +559,96 @@ export class AssetsService {
     });
   }
   /**
-   * Update asset
+   * Create many Asset
    */
-  update(
+  createManyBaseAssetsControllerAsset(
     params: {
       /** requestBody */
-      body?: AssetUpdateDto;
+      body?: CreateManyAssetDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<AssetDto> {
+  ): Promise<Asset[]> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
+      let url = '/assets/bulk';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class PreferencesService {
+  /**
+   * Retrieve one Preference
+   */
+  getOneBasePreferencesControllerPreference(
+    params: {
+      /**  */
+      id: string;
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Preference> {
+    return new Promise((resolve, reject) => {
+      let url = '/preferences/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { fields: params['fields'], join: params['join'], cache: params['cache'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update one Preference
+   */
+  updateOneBasePreferencesControllerPreference(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: Preference;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Preference> {
+    return new Promise((resolve, reject) => {
+      let url = '/preferences/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('patch', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Replace one Preference
+   */
+  replaceOneBasePreferencesControllerPreference(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: Preference;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Preference> {
+    return new Promise((resolve, reject) => {
+      let url = '/preferences/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -447,40 +659,18 @@ export class AssetsService {
     });
   }
   /**
-   * Get asset by id
+   * Delete one Preference
    */
-  retrieve(
+  deleteOneBasePreferencesControllerPreference(
     params: {
       /**  */
-      assetId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AssetDto> {
-    return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
-      url = url.replace('{assetId}', params['assetId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete asset by id
-   */
-  delete(
-    params: {
-      /**  */
-      assetId: string;
+      id: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
-      url = url.replace('{assetId}', params['assetId'] + '');
+      let url = '/preferences/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
@@ -490,18 +680,50 @@ export class AssetsService {
       axios(configs, resolve, reject);
     });
   }
-}
-
-export class PreferencesService {
   /**
-   * List preferences
+   * Retrieve many Preference
    */
-  list(options: IRequestOptions = {}): Promise<Preference[]> {
+  getManyBasePreferencesControllerPreference(
+    params: {
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds search condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#search" target="_blank">Docs</a> */
+      s?: string;
+      /** Adds filter condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#filter" target="_blank">Docs</a> */
+      filter?: any | null[];
+      /** Adds OR condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#or" target="_blank">Docs</a> */
+      or?: any | null[];
+      /** Adds sort by field. <a href="https://github.com/nestjsx/crud/wiki/Requests#sort" target="_blank">Docs</a> */
+      sort?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Limit amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#limit" target="_blank">Docs</a> */
+      limit?: number;
+      /** Offset amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#offset" target="_blank">Docs</a> */
+      offset?: number;
+      /** Page portion of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#page" target="_blank">Docs</a> */
+      page?: number;
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any | null> {
     return new Promise((resolve, reject) => {
       let url = '/preferences';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
+      configs.params = {
+        fields: params['fields'],
+        s: params['s'],
+        filter: params['filter'],
+        or: params['or'],
+        sort: params['sort'],
+        join: params['join'],
+        limit: params['limit'],
+        offset: params['offset'],
+        page: params['page'],
+        cache: params['cache']
+      };
       let data = null;
 
       configs.data = data;
@@ -509,9 +731,9 @@ export class PreferencesService {
     });
   }
   /**
-   * Create preference
+   * Create one Preference
    */
-  create(
+  createOneBasePreferencesControllerPreference(
     params: {
       /** requestBody */
       body?: PreferenceCreateDto;
@@ -530,17 +752,96 @@ export class PreferencesService {
     });
   }
   /**
-   * Update preference
+   * Create many Preference
    */
-  update(
+  createManyBasePreferencesControllerPreference(
     params: {
       /** requestBody */
-      body?: PreferenceUpdateDto;
+      body?: CreateManyPreferenceDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<Preference[]> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
+      let url = '/preferences/bulk';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class ApplicationMethodsService {
+  /**
+   * Retrieve one ApplicationMethod
+   */
+  getOneBaseApplicationMethodsControllerApplicationMethod(
+    params: {
+      /**  */
+      id: string;
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = '/applicationMethods/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { fields: params['fields'], join: params['join'], cache: params['cache'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update one ApplicationMethod
+   */
+  updateOneBaseApplicationMethodsControllerApplicationMethod(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: ApplicationMethod;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = '/applicationMethods/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('patch', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Replace one ApplicationMethod
+   */
+  replaceOneBaseApplicationMethodsControllerApplicationMethod(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: ApplicationMethod;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = '/applicationMethods/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -551,40 +852,18 @@ export class PreferencesService {
     });
   }
   /**
-   * Get preference by id
+   * Delete one ApplicationMethod
    */
-  retrieve(
+  deleteOneBaseApplicationMethodsControllerApplicationMethod(
     params: {
       /**  */
-      preferenceId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Preference> {
-    return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
-      url = url.replace('{preferenceId}', params['preferenceId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete preference by id
-   */
-  delete(
-    params: {
-      /**  */
-      preferenceId: string;
+      id: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
-      url = url.replace('{preferenceId}', params['preferenceId'] + '');
+      let url = '/applicationMethods/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
@@ -594,18 +873,50 @@ export class PreferencesService {
       axios(configs, resolve, reject);
     });
   }
-}
-
-export class ApplicationMethodsService {
   /**
-   * List applicationMethods
+   * Retrieve many ApplicationMethod
    */
-  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
+  getManyBaseApplicationMethodsControllerApplicationMethod(
+    params: {
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds search condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#search" target="_blank">Docs</a> */
+      s?: string;
+      /** Adds filter condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#filter" target="_blank">Docs</a> */
+      filter?: any | null[];
+      /** Adds OR condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#or" target="_blank">Docs</a> */
+      or?: any | null[];
+      /** Adds sort by field. <a href="https://github.com/nestjsx/crud/wiki/Requests#sort" target="_blank">Docs</a> */
+      sort?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Limit amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#limit" target="_blank">Docs</a> */
+      limit?: number;
+      /** Offset amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#offset" target="_blank">Docs</a> */
+      offset?: number;
+      /** Page portion of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#page" target="_blank">Docs</a> */
+      page?: number;
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any | null> {
     return new Promise((resolve, reject) => {
       let url = '/applicationMethods';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
+      configs.params = {
+        fields: params['fields'],
+        s: params['s'],
+        filter: params['filter'],
+        or: params['or'],
+        sort: params['sort'],
+        join: params['join'],
+        limit: params['limit'],
+        offset: params['offset'],
+        page: params['page'],
+        cache: params['cache']
+      };
       let data = null;
 
       configs.data = data;
@@ -613,9 +924,9 @@ export class ApplicationMethodsService {
     });
   }
   /**
-   * Create applicationMethod
+   * Create one ApplicationMethod
    */
-  create(
+  createOneBaseApplicationMethodsControllerApplicationMethod(
     params: {
       /** requestBody */
       body?: ApplicationMethodCreateDto;
@@ -634,17 +945,96 @@ export class ApplicationMethodsService {
     });
   }
   /**
-   * Update applicationMethod
+   * Create many ApplicationMethod
    */
-  update(
+  createManyBaseApplicationMethodsControllerApplicationMethod(
     params: {
       /** requestBody */
-      body?: ApplicationMethodUpdateDto;
+      body?: CreateManyApplicationMethodDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
+  ): Promise<ApplicationMethod[]> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
+      let url = '/applicationMethods/bulk';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class UnitsService {
+  /**
+   * Retrieve one Unit
+   */
+  getOneBaseUnitsControllerUnit(
+    params: {
+      /**  */
+      id: string;
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Unit> {
+    return new Promise((resolve, reject) => {
+      let url = '/units/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { fields: params['fields'], join: params['join'], cache: params['cache'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update one Unit
+   */
+  updateOneBaseUnitsControllerUnit(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: Unit;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Unit> {
+    return new Promise((resolve, reject) => {
+      let url = '/units/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('patch', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Replace one Unit
+   */
+  replaceOneBaseUnitsControllerUnit(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: Unit;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Unit> {
+    return new Promise((resolve, reject) => {
+      let url = '/units/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -655,40 +1045,18 @@ export class ApplicationMethodsService {
     });
   }
   /**
-   * Get applicationMethod by id
+   * Delete one Unit
    */
-  retrieve(
+  deleteOneBaseUnitsControllerUnit(
     params: {
       /**  */
-      applicationMethodId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
-      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete applicationMethod by id
-   */
-  delete(
-    params: {
-      /**  */
-      applicationMethodId: string;
+      id: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
-      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
+      let url = '/units/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
@@ -698,18 +1066,50 @@ export class ApplicationMethodsService {
       axios(configs, resolve, reject);
     });
   }
-}
-
-export class UnitsService {
   /**
-   * List units
+   * Retrieve many Unit
    */
-  list(options: IRequestOptions = {}): Promise<Unit[]> {
+  getManyBaseUnitsControllerUnit(
+    params: {
+      /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
+      fields?: any | null[];
+      /** Adds search condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#search" target="_blank">Docs</a> */
+      s?: string;
+      /** Adds filter condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#filter" target="_blank">Docs</a> */
+      filter?: any | null[];
+      /** Adds OR condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#or" target="_blank">Docs</a> */
+      or?: any | null[];
+      /** Adds sort by field. <a href="https://github.com/nestjsx/crud/wiki/Requests#sort" target="_blank">Docs</a> */
+      sort?: any | null[];
+      /** Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a> */
+      join?: any | null[];
+      /** Limit amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#limit" target="_blank">Docs</a> */
+      limit?: number;
+      /** Offset amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#offset" target="_blank">Docs</a> */
+      offset?: number;
+      /** Page portion of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#page" target="_blank">Docs</a> */
+      page?: number;
+      /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
+      cache?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any | null> {
     return new Promise((resolve, reject) => {
       let url = '/units';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
+      configs.params = {
+        fields: params['fields'],
+        s: params['s'],
+        filter: params['filter'],
+        or: params['or'],
+        sort: params['sort'],
+        join: params['join'],
+        limit: params['limit'],
+        offset: params['offset'],
+        page: params['page'],
+        cache: params['cache']
+      };
       let data = null;
 
       configs.data = data;
@@ -717,9 +1117,9 @@ export class UnitsService {
     });
   }
   /**
-   * Create unit
+   * Create one Unit
    */
-  create(
+  createOneBaseUnitsControllerUnit(
     params: {
       /** requestBody */
       body?: UnitCreateDto;
@@ -738,65 +1138,21 @@ export class UnitsService {
     });
   }
   /**
-   * Update unit
+   * Create many Unit
    */
-  update(
+  createManyBaseUnitsControllerUnit(
     params: {
       /** requestBody */
-      body?: UnitUpdateDto;
+      body?: CreateManyUnitDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Unit> {
+  ): Promise<Unit[]> {
     return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
+      let url = '/units/bulk';
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get unit by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      unitId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Unit> {
-    return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
-      url = url.replace('{unitId}', params['unitId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete unit by id
-   */
-  delete(
-    params: {
-      /**  */
-      unitId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
-      url = url.replace('{unitId}', params['unitId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
 
       configs.data = data;
       axios(configs, resolve, reject);
@@ -1014,6 +1370,23 @@ export interface User {
   isAdmin: boolean;
 }
 
+export interface GetManyPreferenceResponseDto {
+  /**  */
+  data: Preference[];
+
+  /**  */
+  count: number;
+
+  /**  */
+  total: number;
+
+  /**  */
+  page: number;
+
+  /**  */
+  pageCount: number;
+}
+
 export interface Preference {
   /**  */
   id: string;
@@ -1041,6 +1414,23 @@ export interface Preference {
 
   /**  */
   listing: Listing;
+}
+
+export interface GetManyUnitResponseDto {
+  /**  */
+  data: Unit[];
+
+  /**  */
+  count: number;
+
+  /**  */
+  total: number;
+
+  /**  */
+  page: number;
+
+  /**  */
+  pageCount: number;
 }
 
 export interface Unit {
@@ -1114,6 +1504,23 @@ export interface Unit {
   bmrProgramChart: boolean;
 }
 
+export interface GetManyApplicationMethodResponseDto {
+  /**  */
+  data: ApplicationMethod[];
+
+  /**  */
+  count: number;
+
+  /**  */
+  total: number;
+
+  /**  */
+  page: number;
+
+  /**  */
+  pageCount: number;
+}
+
 export interface ApplicationMethod {
   /**  */
   id: string;
@@ -1138,6 +1545,23 @@ export interface ApplicationMethod {
 
   /**  */
   listing: Listing;
+}
+
+export interface GetManyAssetResponseDto {
+  /**  */
+  data: Asset[];
+
+  /**  */
+  count: number;
+
+  /**  */
+  total: number;
+
+  /**  */
+  page: number;
+
+  /**  */
+  pageCount: number;
 }
 
 export interface Asset {
@@ -1921,15 +2345,9 @@ export interface AssetCreateDto {
   fileId: string;
 }
 
-export interface AssetUpdateDto {
+export interface CreateManyAssetDto {
   /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-
-  /**  */
-  id: string;
+  bulk: AssetCreateDto[];
 }
 
 export interface PreferenceCreateDto {
@@ -1949,24 +2367,9 @@ export interface PreferenceCreateDto {
   links: PreferenceLink[];
 }
 
-export interface PreferenceUpdateDto {
+export interface CreateManyPreferenceDto {
   /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  links: PreferenceLink[];
-
-  /**  */
-  id: string;
+  bulk: PreferenceCreateDto[];
 }
 
 export interface ApplicationMethodCreateDto {
@@ -1983,21 +2386,9 @@ export interface ApplicationMethodCreateDto {
   acceptsPostmarkedApplications: boolean;
 }
 
-export interface ApplicationMethodUpdateDto {
+export interface CreateManyApplicationMethodDto {
   /**  */
-  type: EnumApplicationMethodUpdateDtoType;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-
-  /**  */
-  id: string;
+  bulk: ApplicationMethodCreateDto[];
 }
 
 export interface UnitCreateDto {
@@ -2059,66 +2450,9 @@ export interface UnitCreateDto {
   bmrProgramChart: boolean;
 }
 
-export interface UnitUpdateDto {
+export interface CreateManyUnitDto {
   /**  */
-  amiPercentage: string;
-
-  /**  */
-  annualIncomeMin: string;
-
-  /**  */
-  monthlyIncomeMin: string;
-
-  /**  */
-  floor: number;
-
-  /**  */
-  annualIncomeMax: string;
-
-  /**  */
-  maxOccupancy: number;
-
-  /**  */
-  minOccupancy: number;
-
-  /**  */
-  monthlyRent: string;
-
-  /**  */
-  numBathrooms: number;
-
-  /**  */
-  numBedrooms: number;
-
-  /**  */
-  number: string;
-
-  /**  */
-  priorityType: string;
-
-  /**  */
-  reservedType: string;
-
-  /**  */
-  sqFeet: number;
-
-  /**  */
-  status: string;
-
-  /**  */
-  unitType: string;
-
-  /**  */
-  amiChartId: number;
-
-  /**  */
-  monthlyRentAsPercentOfIncome: number;
-
-  /**  */
-  bmrProgramChart: boolean;
-
-  /**  */
-  id: string;
+  bulk: UnitCreateDto[];
 }
 export enum EnumApplicationMethodDtoType {
   'Internal' = 'Internal',
@@ -2162,14 +2496,6 @@ export enum EnumListingUpdateDtoStatus {
   'pending' = 'pending'
 }
 export enum EnumApplicationMethodCreateDtoType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
-}
-export enum EnumApplicationMethodUpdateDtoType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
