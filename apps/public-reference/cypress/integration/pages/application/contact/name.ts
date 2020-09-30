@@ -1,50 +1,65 @@
 describe("Form contact/name", function () {
-  it("Renders the /contact/name form", function () {
+  beforeEach(() => {
     cy.visit("/applications/contact/name")
+  })
+
+  it("Renders the /contact/name form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", "/applications/contact/name")
   })
 
   it("Should display initial form errors", function () {
     // try to trigger form
-    cy.get("button").contains("Next").click()
+    cy.goNext()
 
     // check errors
-    cy.get('span[id="applicant.firstName-error"]').contains("Please enter a First Name")
-    cy.get('span[id="applicant.lastName-error"]').contains("Please enter a Last Name")
-    cy.get(".error-message").contains("Please enter a valid Date of Birth")
-    cy.get('span[id="applicant.emailAddress-error"]').contains("Please enter an email address")
+    cy.getByID("applicant.firstName-error")
+      .should("be.visible")
+      .and("contain", "Please enter a First Name")
+
+    cy.getByID("applicant.lastName-error")
+      .should("be.visible")
+      .and("contain", "Please enter a Last Name")
+
+    cy.get(".error-message")
+      .should("be.visible")
+      .and("contain", "Please enter a valid Date of Birth")
+
+    cy.getByID("applicant.emailAddress-error")
+      .should("be.visible")
+      .and("contain", "Please enter an email address")
   })
 
   it("Should test incorrect email value", function () {
-    cy.reload()
+    cy.getByID("applicant.emailAddress").type("test")
 
-    cy.get("input[id='applicant.emailAddress']").type("test")
-    cy.get("button").contains("Next").click()
-    cy.get('span[id="applicant.emailAddress-error"]').contains("Please enter an email address")
+    cy.goNext()
+
+    cy.getByID("applicant.emailAddress-error")
+      .should("be.visible")
+      .and("contain", "Please enter an email address")
   })
 
-  it("Should not notify email error when checkbox is selected", function () {
-    cy.reload()
+  it("Shouldn't notify email error when checkbox is selected", function () {
+    cy.getByID("noEmail").check()
 
-    cy.get("input[id='noEmail']").check()
-    cy.get("button").contains("Next").click()
-    cy.get('span[id="applicant.emailAddress-error"]').should("not.exist")
+    cy.goNext()
+
+    cy.getByID("applicant.emailAddress-error").should("not.exist")
   })
 
   it("should save form values", function () {
-    cy.reload()
+    cy.getByID("applicant.firstName").type("Name")
+    cy.getByID("applicant.middleName").type("Middle Name")
+    cy.getByID("applicant.lastName").type("Last Name")
+    cy.getByID("applicant.birthMonth").type("07")
+    cy.getByID("applicant.birthDay").type("17")
+    cy.getByID("applicant.birthYear").type("1996")
+    cy.getByID("applicant.emailAddress").type("test@bloom.com")
 
-    cy.get("input[id='applicant.firstName']").type("Name")
-    cy.get("input[id='applicant.middleName']").type("Middle Name")
-    cy.get("input[id='applicant.lastName']").type("Middle Name")
-    cy.get("input[id='applicant.birthMonth']").type("07")
-    cy.get("input[id='applicant.birthDay']").type("17")
-    cy.get("input[id='applicant.birthYear']").type("1996")
-    cy.get("input[id='applicant.emailAddress']").type("test@bloom.com")
+    cy.goNext()
 
-    cy.get("button").contains("Next").click()
-
+    // no errors should be visible
     cy.get(".error-message").should("not.exist")
   })
 })
