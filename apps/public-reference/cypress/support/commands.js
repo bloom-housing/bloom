@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -23,3 +25,11 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("getByID", (id, ...args) => {
+  return cy.get(`#${CSS.escape(id)}`, ...args)
+})
+
+Cypress.Commands.add("goNext", () => {
+  return cy.get("button").contains("Next").click()
+})
