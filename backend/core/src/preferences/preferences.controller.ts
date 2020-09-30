@@ -1,6 +1,3 @@
-
-// TODO Add Admin role check
-
 import { Controller, UseGuards } from "@nestjs/common"
 import { Crud } from "@nestjsx/crud"
 import { Preference } from "../entity/preference.entity"
