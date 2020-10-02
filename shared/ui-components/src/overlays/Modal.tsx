@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent, createRef } from "react"
-import Icon from "../icons/Icon"
+import { Icon } from "../icons/Icon"
 import "./Modal.scss"
 import useKeyPress from "../helpers/useKeyPress"
 import { useOutsideClick } from "../helpers/useOutsideClick"
