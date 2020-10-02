@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/ui-components",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "description": "Shared user interface components for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared/ui-components",
   "main": "index.js",
@@ -52,8 +52,8 @@
     "webpack": "^4.44.1"
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^0.2.15",
-    "@bloom-housing/core": "^0.2.15",
+    "@bloom-housing/backend-core": "^0.2.16",
+    "@bloom-housing/core": "^0.2.16",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jwt-decode": "^2.2.1",
     "@types/markdown-to-jsx": "^6.11.2",
