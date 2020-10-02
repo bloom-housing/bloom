@@ -4,9 +4,9 @@ import "./Tag.scss"
 export interface TagProps {
   children: React.ReactNode
   success?: boolean
-  warning?:boolean
-  small?:boolean
-  pillStyle?:boolean
+  warning?: boolean
+  small?: boolean
+  pillStyle?: boolean
 }
 
 const Tag = (props: TagProps) => {
