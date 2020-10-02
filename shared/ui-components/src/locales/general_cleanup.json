@@ -406,12 +406,6 @@
     "dueToHighCallVolume": "Due to high call volume you may hear a message.",
     "officeHours": "Office Hours"
   },
-  "listingsForRent": {
-    "callout": {
-      "title": "See more listings from our community partners.",
-      "button": "View opportunities"
-    }
-  },
   "listings": {
     "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
