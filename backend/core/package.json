@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Marcin Jedras <marcin.jedras@exygy.com>",
   "private": false,
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@anchan828/nest-sendgrid": "^0.3.19",
-    "@bloom-housing/core": "^0.2.14",
+    "@bloom-housing/core": "^0.2.15",
     "@nestjs/cli": "^7.5.1",
     "@nestjs/common": "^7.4.2",
     "@nestjs/core": "^7.4.2",
