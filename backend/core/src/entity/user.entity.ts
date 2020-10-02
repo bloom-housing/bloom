@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../entity/application.entity"
-import { Expose } from "class-transformer"
+import { Exclude, Expose } from "class-transformer"
 import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
 
 @Entity({ name: "user_accounts" })
@@ -20,6 +20,7 @@ export class User {
   id: string
 
   @Column("varchar", { select: false })
+  @Exclude()
   passwordHash: string
 
   @Column("varchar")

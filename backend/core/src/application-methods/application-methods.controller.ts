@@ -1,9 +1,7 @@
 import { Controller, UseGuards } from "@nestjs/common"
 
 import { DefaultAuthGuard } from "../auth/default.guard"
-import {
-  Crud,
-} from "@nestjsx/crud"
+import { Crud } from "@nestjsx/crud"
 import { ResourceType } from "../auth/resource_type.decorator"
 import AuthzGuard from "../auth/authz.guard"
 import { ApplicationMethod } from "../entity/application-method.entity"

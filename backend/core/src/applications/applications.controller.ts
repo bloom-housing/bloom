@@ -29,104 +29,93 @@ import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { CsvBuilder } from "../services/csv-builder.service"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from "@nestjsx/crud"
+import { Preference } from "../entity/preference.entity"
+import { PreferenceCreateDto } from "../preferences/preference.create.dto"
+import { DefaultAuthGuard } from "../auth/default.guard"
+import { Application } from "../entity/application.entity"
+import { IsBoolean } from "class-validator"
+import { Expose } from "class-transformer"
 
+export class ApplicationsListAsCsvOptions {
+  @Expose()
+  @IsBoolean()
+  includeHeaders: boolean
+}
+
+@Crud({
+  model: {
+    type: Application,
+  },
+  dto: {
+    create: ApplicationCreateDto,
+  },
+  params: {
+    id: {
+      field: "id",
+      type: "uuid",
+      primary: true,
+    },
+  },
+  query: {
+    join: {
+      user: {
+        eager: false,
+      },
+    },
+  },
+})
 @Controller("applications")
+@ResourceType("application")
 @ApiTags("applications")
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
-@ResourceType("application")
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(DefaultAuthGuard, AuthzGuard)
 export class ApplicationsController {
   constructor(
-    private readonly applicationsService: ApplicationsService,
+    public readonly service: ApplicationsService,
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
     private readonly authzService: AuthzService,
     private readonly csvBuilder: CsvBuilder
   ) {}
 
-  @Get()
-  @ApiOperation({ summary: "List applications", operationId: "list" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async list(
-    @Request() req: ExpressRequest,
-    @Query("listingId") listingId: string
-  ): Promise<ApplicationDto[]> {
-    if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
-      return await this.applicationsService.list({ listingId })
-    } else {
-      return await this.applicationsService.list({ listingId }, req.user)
-    }
+  get base(): CrudController<Application> {
+    return this
   }
 
-  @Get(`csv`)
+  @Post(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(
-    @Query("listingId") listingId: string,
-    @Query("includeHeaders", ParseBoolPipe) includeHeaders: boolean
+    @ParsedRequest() crudRequest: CrudRequest,
+    @ParsedBody() options: ApplicationsListAsCsvOptions
   ): Promise<string> {
-    const applications = await this.applicationsService.list({ listingId }, null)
+    const response = await this.base.getManyBase(crudRequest)
+    const applications = Array.isArray(response) ? response : response.data
     return this.csvBuilder.build(
       applications,
       applicationFormattingMetadataAggregateFactory,
-      includeHeaders
+      options.includeHeaders
     )
   }
 
-  @Post()
-  @ApiOperation({ summary: "Create application", operationId: "create" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async create(
-    @Request() req: ExpressRequest,
-    @Body() applicationCreateDto: ApplicationCreateDto
-  ): Promise<ApplicationDto> {
-    const application = await this.applicationsService.create(applicationCreateDto, req.user)
+  @Override()
+  async createOne(
+    @ParsedRequest() crudRequest: CrudRequest,
+    @ParsedBody() dto: ApplicationCreateDto
+  ) {
+    const application = await this.base.createOneBase(crudRequest, dto as Application)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.application.applicant.emailAddress) {
-      await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
+      await this.emailService.confirmation(listing, application, dto.appUrl)
     }
     return application
-  }
-
-  @Get(`:applicationId`)
-  @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async retrieve(
-    @Request() req: ExpressRequest,
-    @Param("applicationId") applicationId: string
-  ): Promise<ApplicationDto> {
-    const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, authzActions.read)
-    return app
-  }
-
-  @Put(`:applicationId`)
-  @ApiOperation({ summary: "Update application by id", operationId: "update" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
-  async update(
-    @Request() req: ExpressRequest,
-    @Param("applicationId") applicationId: string,
-    @Body() applicationUpdateDto: ApplicationUpdateDto
-  ): Promise<ApplicationDto> {
-    const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, authzActions.update)
-    return this.applicationsService.update(applicationUpdateDto, app)
-  }
-
-  @Delete(`:applicationId`)
-  @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Request() req: ExpressRequest, @Param("applicationId") applicationId: string) {
-    const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, authzActions.delete)
-    return this.applicationsService.delete(applicationId)
-  }
-
-  private authorizeUserAction(user, app, action) {
-    return this.authzService.canOrThrow(user, "application", action, {
-      ...app,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      user_id: app.user?.id,
-    })
   }
 }

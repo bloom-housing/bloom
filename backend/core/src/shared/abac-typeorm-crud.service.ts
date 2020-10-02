@@ -15,10 +15,10 @@ export abstract class ABACTypeOrmCrudService<T extends UserRelation> extends Typ
   readonly count: Repository<T>["count"]
 
   protected constructor(
-    protected readonly repo: Repository<T>,
+    public readonly repo: Repository<T>,
     public readonly req,
-    private readonly authzService: AuthzService,
-    private readonly type: string
+    public readonly authzService: AuthzService,
+    public readonly type: string
   ) {
     super(repo)
   }
@@ -31,49 +31,76 @@ export abstract class ABACTypeOrmCrudService<T extends UserRelation> extends Typ
     }
   }
 
-  private assertPermissions(req, obj, type, action) {
-    return this.authzService.canOrThrow(req.user, type, action, this.getAccessObject(req, obj))
+  private async assertPermissions(req, obj, type, action) {
+    return await this.authzService.canOrThrow(
+      req.user,
+      type,
+      action,
+      this.getAccessObject(req, obj)
+    )
+  }
+
+  addUserEagerJoin(crudReq: CrudRequest): CrudRequest {
+    crudReq.parsed.join.push({
+      field: "user",
+    })
+    return crudReq
   }
 
   async getMany(crudReq: CrudRequest): Promise<GetManyDefaultResponse<T> | T[]> {
+    crudReq = this.addUserEagerJoin(crudReq)
     const objects = await super.getMany(crudReq)
     if (Array.isArray(objects)) {
-      objects.map((obj) => this.assertPermissions(this.req, obj, this.type, authzActions.read))
+      await Promise.all(
+        objects.map(async (obj) =>
+          this.assertPermissions(this.req, obj, this.type, authzActions.read)
+        )
+      )
     } else {
-      objects.data.map((obj) => this.assertPermissions(this.req, obj, this.type, authzActions.read))
+      await Promise.all(
+        objects.data.map(
+          async (obj) => await this.assertPermissions(this.req, obj, this.type, authzActions.read)
+        )
+      )
     }
     return objects
   }
 
   async getOne(crudReq: CrudRequest): Promise<T> {
+    crudReq = this.addUserEagerJoin(crudReq)
     const obj = await super.getOne(crudReq)
-    this.assertPermissions(this.req, obj, this.type, authzActions.read)
+    await this.assertPermissions(this.req, obj, this.type, authzActions.read)
     return obj
   }
 
   createOne(crudReq: CrudRequest, dto: DeepPartial<T>): Promise<T> {
+    crudReq = this.addUserEagerJoin(crudReq)
     return super.createOne(crudReq, dto)
   }
 
   createMany(crudReq: CrudRequest, dto: CreateManyDto<DeepPartial<T>>): Promise<T[]> {
+    crudReq = this.addUserEagerJoin(crudReq)
     return super.createMany(crudReq, dto)
   }
 
   async updateOne(crudReq: CrudRequest, dto: DeepPartial<T>): Promise<T> {
+    crudReq = this.addUserEagerJoin(crudReq)
     const obj = await super.getOne(crudReq)
-    this.assertPermissions(this.req, obj, this.type, authzActions.update)
+    await this.assertPermissions(this.req, obj, this.type, authzActions.update)
     return super.updateOne(crudReq, dto)
   }
 
   async replaceOne(crudReq: CrudRequest, dto: DeepPartial<T>): Promise<T> {
+    crudReq = this.addUserEagerJoin(crudReq)
     const obj = await super.getOne(crudReq)
-    this.assertPermissions(this.req, obj, this.type, authzActions.update)
+    await this.assertPermissions(this.req, obj, this.type, authzActions.update)
     return super.replaceOne(crudReq, dto)
   }
 
   async deleteOne(crudReq: CrudRequest): Promise<void | T> {
+    crudReq = this.addUserEagerJoin(crudReq)
     const obj = await super.getOne(crudReq)
-    this.assertPermissions(this.req, obj, this.type, authzActions.delete)
+    await this.assertPermissions(this.req, obj, this.type, authzActions.delete)
     return super.deleteOne(crudReq)
   }
 }

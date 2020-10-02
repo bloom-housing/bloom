@@ -10,7 +10,7 @@ import {
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
 import { IsDateString, IsDefined, IsJSON, IsString, IsUUID } from "class-validator"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
 
 export class Applicant {
@@ -78,6 +78,11 @@ export class ApplicationData {
   preferredUnit: Array<string>
   // TODO Type
   preferences: Array<string>
+}
+
+export class UserDto {
+  @Expose()
+  id: string
 }
 
 @Entity({ name: "applications" })
