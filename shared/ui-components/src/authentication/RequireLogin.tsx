@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { setSiteAlertMessage } from "../alerts/SiteAlert"
+import { setSiteAlertMessage } from "../notifications/SiteAlert"
 import { UserContext } from "./UserContext"
 
 // See https://github.com/Microsoft/TypeScript/issues/14094
