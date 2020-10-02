@@ -1,0 +1,179 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/SummaryCard Summary Card 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="summary-card"
+  >
+    <header
+      className="summary-card__header"
+    >
+      <h2
+        className="summary-card__title"
+      >
+        <a
+          href="#"
+        >
+          My Property
+        </a>
+      </h2>
+    </header>
+    <SimpleTable>
+      <table
+        className="td-plain th-plain text-sm w-full"
+      >
+        <thead>
+          <tr>
+            <th>
+              Name
+            </th>
+            <th>
+              Relationship
+            </th>
+            <th>
+              DOB
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              className="px-5 py-3"
+            >
+              Jim Halpert
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              Husband
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              05/01/1985
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="px-5 py-3"
+            >
+              Michael Scott
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              Friend
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              05/01/1975
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </SimpleTable>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes/SummaryCard Summary Card Heading 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="summary-card"
+  >
+    <header
+      className="summary-card__header bg-gray-100 border-b mb-2"
+    >
+      <h2
+        className="summary-card__title"
+      >
+        <a
+          href="#"
+        >
+          My Property
+        </a>
+      </h2>
+      <p
+        className="text-sm mt-3"
+      >
+        <span>
+          1 Polk St, San Francisco, CA 94102
+        </span>
+        <span
+          className="ml-4 pl-4 border-l border-gray-600"
+        >
+          Waitlist: 353
+        </span>
+      </p>
+    </header>
+    <SimpleTable>
+      <table
+        className="td-plain th-plain text-sm w-full"
+      >
+        <thead>
+          <tr>
+            <th>
+              Name
+            </th>
+            <th>
+              Relationship
+            </th>
+            <th>
+              DOB
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              className="px-5 py-3"
+            >
+              Jim Halpert
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              Husband
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              05/01/1985
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="px-5 py-3"
+            >
+              Michael Scott
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              Friend
+            </td>
+            <td
+              className="px-5 py-3"
+            >
+              05/01/1975
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </SimpleTable>
+  </div>
+</div>
+`;

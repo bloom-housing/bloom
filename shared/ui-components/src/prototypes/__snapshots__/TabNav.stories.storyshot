@@ -61,12 +61,16 @@ exports[`Storyshots Prototypes/TabNav Tab Nav Count 1`] = `
             className="is-current"
             href="#"
           >
-            Flags 
-            <span
-              className="tag bg-gray-450 text-gray-900 ml-1"
+            Flags
+            <Tag
+              pillStyle={true}
             >
-              22
-            </span>
+              <div
+                className="tag is-pill"
+              >
+                22
+              </div>
+            </Tag>
           </a>
         </li>
       </ul>

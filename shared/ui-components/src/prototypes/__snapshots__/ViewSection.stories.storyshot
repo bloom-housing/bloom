@@ -8,133 +8,167 @@ exports[`Storyshots Prototypes/ViewSection Address 1`] = `
     }
   }
 >
-  <div
-    className="view-section"
+  <ViewSection
+    className="md:grid md:grid-cols-1 gap-y-4"
+    insetGrid={true}
+    tinted={true}
+    title="Section Title"
   >
-    <header
-      className="view-header"
-    >
-      <h2
-        className="view-title"
-      >
-        My Section
-      </h2>
-    </header>
     <div
-      className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter"
+      className="view-section"
     >
-      <div
-        className="view-group"
+      <header
+        className="view-section__header"
       >
-        <h3
-          className="view-group__title"
+        <h2
+          className="view-section__title"
         >
-          Residence Address
-        </h3>
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="view-grid is-tinted is-inset md:grid md:grid-cols-1 gap-y-4"
+      >
         <div
-          className="view-subgrid md:grid md:grid-cols-4 md:gap-8"
+          className="view-group"
         >
-          <ViewItem
-            className="md:col-span-3"
-            label="Street Address"
-            value="112 Springfield St."
+          <h3
+            className="view-group__title"
           >
-            <p
-              className="view-item md:col-span-3"
-            >
-              <span
-                className="view-item__label"
-              >
-                Street Address
-              </span>
-              <span
-                className="view-item__value"
-              >
-                112 Springfield St.
-              </span>
-            </p>
-          </ViewItem>
-          <ViewItem
-            label="Apt Unit #"
-            value="1"
+            Residence Address
+          </h3>
+          <div
+            className="view-subgrid md:grid md:grid-cols-4 md:gap-8"
           >
-            <p
-              className="view-item"
+            <GridItem
+              className="md:col-span-3"
             >
-              <span
-                className="view-item__label"
+              <div
+                className="grid-item md:col-span-3"
               >
-                Apt Unit #
-              </span>
-              <span
-                className="view-item__value"
+                <ViewItem
+                  label="Street Address"
+                >
+                  <p
+                    className="view-item"
+                  >
+                    <span
+                      className="view-item__label"
+                    >
+                      Street Address
+                    </span>
+                    <span
+                      className="view-item__value"
+                    >
+                      112 Springfield St.
+                    </span>
+                  </p>
+                </ViewItem>
+              </div>
+            </GridItem>
+            <GridItem>
+              <div
+                className="grid-item"
               >
-                1
-              </span>
-            </p>
-          </ViewItem>
-          <ViewItem
-            className="md:col-span-2"
-            label="City"
-            value="Oakland"
-          >
-            <p
-              className="view-item md:col-span-2"
+                <ViewItem
+                  label="Apt Unit #"
+                >
+                  <p
+                    className="view-item"
+                  >
+                    <span
+                      className="view-item__label"
+                    >
+                      Apt Unit #
+                    </span>
+                    <span
+                      className="view-item__value"
+                    >
+                      1
+                    </span>
+                  </p>
+                </ViewItem>
+              </div>
+            </GridItem>
+            <GridItem
+              className="md:col-span-2"
             >
-              <span
-                className="view-item__label"
+              <div
+                className="grid-item md:col-span-2"
               >
-                City
-              </span>
-              <span
-                className="view-item__value"
+                <ViewItem
+                  label="City"
+                >
+                  <p
+                    className="view-item"
+                  >
+                    <span
+                      className="view-item__label"
+                    >
+                      City
+                    </span>
+                    <span
+                      className="view-item__value"
+                    >
+                      Oakland
+                    </span>
+                  </p>
+                </ViewItem>
+              </div>
+            </GridItem>
+            <GridItem>
+              <div
+                className="grid-item"
               >
-                Oakland
-              </span>
-            </p>
-          </ViewItem>
-          <ViewItem
-            label="State"
-            value="CA"
-          >
-            <p
-              className="view-item"
-            >
-              <span
-                className="view-item__label"
+                <ViewItem
+                  label="State"
+                >
+                  <p
+                    className="view-item"
+                  >
+                    <span
+                      className="view-item__label"
+                    >
+                      State
+                    </span>
+                    <span
+                      className="view-item__value"
+                    >
+                      CA
+                    </span>
+                  </p>
+                </ViewItem>
+              </div>
+            </GridItem>
+            <GridItem>
+              <div
+                className="grid-item"
               >
-                State
-              </span>
-              <span
-                className="view-item__value"
-              >
-                CA
-              </span>
-            </p>
-          </ViewItem>
-          <ViewItem
-            label="Zip"
-            value="94577"
-          >
-            <p
-              className="view-item"
-            >
-              <span
-                className="view-item__label"
-              >
-                Zip
-              </span>
-              <span
-                className="view-item__value"
-              >
-                94577
-              </span>
-            </p>
-          </ViewItem>
+                <ViewItem
+                  label="Zip"
+                >
+                  <p
+                    className="view-item"
+                  >
+                    <span
+                      className="view-item__label"
+                    >
+                      Zip
+                    </span>
+                    <span
+                      className="view-item__value"
+                    >
+                      94577
+                    </span>
+                  </p>
+                </ViewItem>
+              </div>
+            </GridItem>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ViewSection>
 </div>
 `;
 
@@ -148,6 +182,7 @@ exports[`Storyshots Prototypes/ViewSection Four Columns 1`] = `
 >
   <ViewSection
     className="md:grid md:grid-cols-4 md:gap-8"
+    insetGrid={true}
     tinted={true}
     title="Section Title"
   >
@@ -155,181 +190,221 @@ exports[`Storyshots Prototypes/ViewSection Four Columns 1`] = `
       className="view-section"
     >
       <header
-        className="view-header"
+        className="view-section__header"
       >
         <h2
-          className="view-title"
+          className="view-section__title"
         >
           Section Title
         </h2>
       </header>
       <div
-        className="view-grid bg-primary-lighter md:grid md:grid-cols-4 md:gap-8"
+        className="view-grid is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
       >
-        <ViewItem
-          label="First Name"
-          value="Lisa"
-        >
-          <p
-            className="view-item"
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="First Name"
             >
-              First Name
-            </span>
-            <span
-              className="view-item__value"
-            >
-              Lisa
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Middle Name"
-          value="S"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  First Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Lisa
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Middle Name"
             >
-              Middle Name
-            </span>
-            <span
-              className="view-item__value"
-            >
-              S
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Last Name"
-          value="Jones"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Middle Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  S
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Last Name"
             >
-              Last Name
-            </span>
-            <span
-              className="view-item__value"
-            >
-              Jones
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Date of Birth"
-          value="01/01/1985"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Last Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Jones
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Date of Birth"
             >
-              Date of Birth
-            </span>
-            <span
-              className="view-item__value"
-            >
-              01/01/1985
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Email"
-          value="lisa@gmail.com"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Date of Birth
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  01/01/1985
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Email"
             >
-              Email
-            </span>
-            <span
-              className="view-item__value"
-            >
-              lisa@gmail.com
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          helper="Cell"
-          label="Phone"
-          value="111-222-3333"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Email
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  lisa@gmail.com
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              helper="Cell"
+              label="Phone"
             >
-              Phone
-            </span>
-            <span
-              className="view-item__value"
-            >
-              111-222-3333
-            </span>
-            <span
-              className="view-item__helper"
-            >
-              Cell
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          helper="Work"
-          label="Second Phone"
-          value="111-222-3333"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Cell
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              helper="Work"
+              label="Second Phone"
             >
-              Second Phone
-            </span>
-            <span
-              className="view-item__value"
-            >
-              111-222-3333
-            </span>
-            <span
-              className="view-item__helper"
-            >
-              Work
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Perferred Contact"
-          value="Phone"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Second Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Work
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Perferred Contact"
             >
-              Perferred Contact
-            </span>
-            <span
-              className="view-item__value"
-            >
-              Phone
-            </span>
-          </p>
-        </ViewItem>
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Perferred Contact
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Phone
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
       </div>
     </div>
   </ViewSection>
@@ -347,6 +422,7 @@ exports[`Storyshots Prototypes/ViewSection Four Columns Edit 1`] = `
   <ViewSection
     className="md:grid md:grid-cols-4 md:gap-8"
     edit="Edit"
+    insetGrid={true}
     tinted={true}
     title="Section Title"
   >
@@ -354,10 +430,10 @@ exports[`Storyshots Prototypes/ViewSection Four Columns Edit 1`] = `
       className="view-section"
     >
       <header
-        className="view-header"
+        className="view-section__header"
       >
         <h2
-          className="view-title"
+          className="view-section__title"
         >
           Section Title
         </h2>
@@ -372,172 +448,212 @@ exports[`Storyshots Prototypes/ViewSection Four Columns Edit 1`] = `
         </span>
       </header>
       <div
-        className="view-grid bg-primary-lighter md:grid md:grid-cols-4 md:gap-8"
+        className="view-grid is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
       >
-        <ViewItem
-          label="First Name"
-          value="Lisa"
-        >
-          <p
-            className="view-item"
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="First Name"
             >
-              First Name
-            </span>
-            <span
-              className="view-item__value"
-            >
-              Lisa
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Middle Name"
-          value="S"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  First Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Lisa
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Middle Name"
             >
-              Middle Name
-            </span>
-            <span
-              className="view-item__value"
-            >
-              S
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Last Name"
-          value="Jones"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Middle Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  S
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Last Name"
             >
-              Last Name
-            </span>
-            <span
-              className="view-item__value"
-            >
-              Jones
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Date of Birth"
-          value="01/01/1985"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Last Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Jones
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Date of Birth"
             >
-              Date of Birth
-            </span>
-            <span
-              className="view-item__value"
-            >
-              01/01/1985
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Email"
-          value="lisa@gmail.com"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Date of Birth
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  01/01/1985
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Email"
             >
-              Email
-            </span>
-            <span
-              className="view-item__value"
-            >
-              lisa@gmail.com
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          helper="Cell"
-          label="Phone"
-          value="111-222-3333"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Email
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  lisa@gmail.com
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              helper="Cell"
+              label="Phone"
             >
-              Phone
-            </span>
-            <span
-              className="view-item__value"
-            >
-              111-222-3333
-            </span>
-            <span
-              className="view-item__helper"
-            >
-              Cell
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          helper="Work"
-          label="Second Phone"
-          value="111-222-3333"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Cell
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              helper="Work"
+              label="Second Phone"
             >
-              Second Phone
-            </span>
-            <span
-              className="view-item__value"
-            >
-              111-222-3333
-            </span>
-            <span
-              className="view-item__helper"
-            >
-              Work
-            </span>
-          </p>
-        </ViewItem>
-        <ViewItem
-          label="Perferred Contact"
-          value="Phone"
-        >
-          <p
-            className="view-item"
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Second Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Work
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
+        <GridItem>
+          <div
+            className="grid-item"
           >
-            <span
-              className="view-item__label"
+            <ViewItem
+              label="Perferred Contact"
             >
-              Perferred Contact
-            </span>
-            <span
-              className="view-item__value"
-            >
-              Phone
-            </span>
-          </p>
-        </ViewItem>
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Perferred Contact
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Phone
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </GridItem>
       </div>
     </div>
   </ViewSection>
@@ -552,183 +668,188 @@ exports[`Storyshots Prototypes/ViewSection View Section Single Column 1`] = `
     }
   }
 >
-  <div
-    className="view-section"
+  <ViewSection
+    insetGrid={true}
+    tinted={true}
   >
-    <h3
-      className="view-group__title"
-    >
-      My Group
-    </h3>
     <div
-      className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter"
+      className="view-section"
     >
-      <ViewItem
-        label="First Name"
-        value="Lisa"
+      <div
+        className="view-grid is-tinted is-inset"
       >
-        <p
-          className="view-item"
+        <div
+          className="view-group"
         >
-          <span
-            className="view-item__label"
+          <h3
+            className="view-group__title"
           >
-            First Name
-          </span>
-          <span
-            className="view-item__value"
+            My Group
+          </h3>
+          <div
+            className="view-subgrid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter"
           >
-            Lisa
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        label="Middle Name"
-        value="S"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Middle Name
-          </span>
-          <span
-            className="view-item__value"
-          >
-            S
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        label="Last Name"
-        value="Jones"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Last Name
-          </span>
-          <span
-            className="view-item__value"
-          >
-            Jones
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        label="Date of Birth"
-        value="01/01/1985"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Date of Birth
-          </span>
-          <span
-            className="view-item__value"
-          >
-            01/01/1985
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        label="Email"
-        value="lisa@gmail.com"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Email
-          </span>
-          <span
-            className="view-item__value"
-          >
-            lisa@gmail.com
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        helper="Cell"
-        label="Phone"
-        value="111-222-3333"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Phone
-          </span>
-          <span
-            className="view-item__value"
-          >
-            111-222-3333
-          </span>
-          <span
-            className="view-item__helper"
-          >
-            Cell
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        helper="Work"
-        label="Second Phone"
-        value="111-222-3333"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Second Phone
-          </span>
-          <span
-            className="view-item__value"
-          >
-            111-222-3333
-          </span>
-          <span
-            className="view-item__helper"
-          >
-            Work
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        label="Perferred Contact"
-        value="Phone"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Perferred Contact
-          </span>
-          <span
-            className="view-item__value"
-          >
-            Phone
-          </span>
-        </p>
-      </ViewItem>
+            <ViewItem
+              label="First Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  First Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Lisa
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              label="Middle Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Middle Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  S
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              label="Last Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Last Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Jones
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              label="Date of Birth"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Date of Birth
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  01/01/1985
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              label="Email"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Email
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  lisa@gmail.com
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              helper="Cell"
+              label="Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Cell
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              helper="Work"
+              label="Second Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Second Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Work
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              label="Perferred Contact"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Perferred Contact
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Phone
+                </span>
+              </p>
+            </ViewItem>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </ViewSection>
 </div>
 `;
 
@@ -740,248 +861,254 @@ exports[`Storyshots Prototypes/ViewSection View Section Single Column Warn 1`] =
     }
   }
 >
-  <div
-    className="view-section"
-  >
-    <p
-      className="view-item"
-    >
-      <span
-        className="view-item__label"
-      >
-        Application Number
-      </span>
-      <span
-        className="view-item__value"
-      >
-        APP-0001002002
-      </span>
-    </p>
+  <ViewSection>
     <div
-      className="bg-primary-lighter my-4 p-4"
+      className="view-section"
     >
-      <fieldset>
-        <legend
-          className="field-note mb-4 text-gray-750"
+      <div
+        className="view-grid"
+      >
+        <ViewItem
+          label="Application Number"
         >
-          Confirm this application is valid:
-        </legend>
+          <p
+            className="view-item"
+          >
+            <span
+              className="view-item__label"
+            >
+              Application Number
+            </span>
+            <span
+              className="view-item__value"
+            >
+              APP-0001002002
+            </span>
+          </p>
+        </ViewItem>
         <div
-          className="field-group--inline"
+          className="view-group bg-primary-lighter my-4 p-4"
         >
-          <div
-            className="field "
-          >
-            <input
-              id="testvalidappkeep"
-              name="testvalidapp"
-              type="radio"
-              value="keep"
-            />
-            <label
-              className="font-semibold"
-              htmlFor="testvalidappkeep"
+          <fieldset>
+            <legend
+              className="field-note mb-4 text-gray-750"
             >
-              Keep
-            </label>
-          </div>
-          <div
-            className="field "
-          >
-            <input
-              id="testvalidappremove"
-              name="testvalidapp"
-              type="radio"
-              value="remove"
-            />
-            <label
-              className="font-semibold"
-              htmlFor="testvalidappremove"
+              Confirm this application is valid:
+            </legend>
+            <div
+              className="field-group--inline"
             >
-              Remove
-            </label>
+              <div
+                className="field "
+              >
+                <input
+                  id="testvalidappkeep"
+                  name="testvalidapp"
+                  type="radio"
+                  value="keep"
+                />
+                <label
+                  className="font-semibold"
+                  htmlFor="testvalidappkeep"
+                >
+                  Keep
+                </label>
+              </div>
+              <div
+                className="field "
+              >
+                <input
+                  id="testvalidappremove"
+                  name="testvalidapp"
+                  type="radio"
+                  value="remove"
+                />
+                <label
+                  className="font-semibold"
+                  htmlFor="testvalidappremove"
+                >
+                  Remove
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div
+          className="view-group"
+        >
+          <h3
+            className="view-group__title"
+          >
+            My Group
+          </h3>
+          <div
+            className="view-subgrid p-8 md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter"
+          >
+            <ViewItem
+              flagged={true}
+              label="First Name"
+            >
+              <p
+                className="view-item is-flagged"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  First Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Lisa
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              flagged={true}
+              label="Middle Name"
+            >
+              <p
+                className="view-item is-flagged"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Middle Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  S
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              flagged={true}
+              label="Last Name"
+            >
+              <p
+                className="view-item is-flagged"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Last Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Jones
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              flagged={true}
+              label="Date of Birth"
+            >
+              <p
+                className="view-item is-flagged"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Date of Birth
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  01/01/1985
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              label="Email"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Email
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  lisa@gmail.com
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              helper="Cell"
+              label="Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Cell
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              helper="Work"
+              label="Second Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Second Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Work
+                </span>
+              </p>
+            </ViewItem>
+            <ViewItem
+              label="Perferred Contact"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Perferred Contact
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Phone
+                </span>
+              </p>
+            </ViewItem>
           </div>
         </div>
-      </fieldset>
+      </div>
     </div>
-    <h3
-      className="view-group__title"
-    >
-      My Group
-    </h3>
-    <div
-      className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter"
-    >
-      <ViewItem
-        flagged={true}
-        label="First Name"
-        value="Lisa"
-      >
-        <p
-          className="view-item is-flagged"
-        >
-          <span
-            className="view-item__label"
-          >
-            First Name
-          </span>
-          <span
-            className="view-item__value"
-          >
-            Lisa
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        flagged={true}
-        label="Middle Name"
-        value="S"
-      >
-        <p
-          className="view-item is-flagged"
-        >
-          <span
-            className="view-item__label"
-          >
-            Middle Name
-          </span>
-          <span
-            className="view-item__value"
-          >
-            S
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        flagged={true}
-        label="Last Name"
-        value="Jones"
-      >
-        <p
-          className="view-item is-flagged"
-        >
-          <span
-            className="view-item__label"
-          >
-            Last Name
-          </span>
-          <span
-            className="view-item__value"
-          >
-            Jones
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        flagged={true}
-        label="Date of Birth"
-        value="01/01/1985"
-      >
-        <p
-          className="view-item is-flagged"
-        >
-          <span
-            className="view-item__label"
-          >
-            Date of Birth
-          </span>
-          <span
-            className="view-item__value"
-          >
-            01/01/1985
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        label="Email"
-        value="lisa@gmail.com"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Email
-          </span>
-          <span
-            className="view-item__value"
-          >
-            lisa@gmail.com
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        helper="Cell"
-        label="Phone"
-        value="111-222-3333"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Phone
-          </span>
-          <span
-            className="view-item__value"
-          >
-            111-222-3333
-          </span>
-          <span
-            className="view-item__helper"
-          >
-            Cell
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        helper="Work"
-        label="Second Phone"
-        value="111-222-3333"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Second Phone
-          </span>
-          <span
-            className="view-item__value"
-          >
-            111-222-3333
-          </span>
-          <span
-            className="view-item__helper"
-          >
-            Work
-          </span>
-        </p>
-      </ViewItem>
-      <ViewItem
-        label="Perferred Contact"
-        value="Phone"
-      >
-        <p
-          className="view-item"
-        >
-          <span
-            className="view-item__label"
-          >
-            Perferred Contact
-          </span>
-          <span
-            className="view-item__value"
-          >
-            Phone
-          </span>
-        </p>
-      </ViewItem>
-    </div>
-  </div>
+  </ViewSection>
 </div>
 `;
 
@@ -993,77 +1120,83 @@ exports[`Storyshots Prototypes/ViewSection View Section Table 1`] = `
     }
   }
 >
-  <div
-    className="view-section"
+  <ViewSection
+    insetGrid={true}
+    tinted={true}
+    title="Section Title"
   >
-    <header
-      className="view-header"
-    >
-      <h2
-        className="view-title"
-      >
-        My Section
-      </h2>
-    </header>
     <div
-      className="view-grid bg-primary-lighter"
+      className="view-section"
     >
-      <SimpleTable>
-        <table
-          className="td-plain th-plain text-sm w-full"
+      <header
+        className="view-section__header"
+      >
+        <h2
+          className="view-section__title"
         >
-          <thead>
-            <tr>
-              <th>
-                Name
-              </th>
-              <th>
-                Relationship
-              </th>
-              <th>
-                DOB
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                className="px-5 py-3"
-              >
-                Jim Halpert
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                Husband
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                05/01/1985
-              </td>
-            </tr>
-            <tr>
-              <td
-                className="px-5 py-3"
-              >
-                Michael Scott
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                Friend
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                05/01/1975
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </SimpleTable>
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="view-grid is-tinted is-inset"
+      >
+        <SimpleTable>
+          <table
+            className="td-plain th-plain text-sm w-full"
+          >
+            <thead>
+              <tr>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Relationship
+                </th>
+                <th>
+                  DOB
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  className="px-5 py-3"
+                >
+                  Jim Halpert
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  Husband
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  05/01/1985
+                </td>
+              </tr>
+              <tr>
+                <td
+                  className="px-5 py-3"
+                >
+                  Michael Scott
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  Friend
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  05/01/1975
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </SimpleTable>
+      </div>
     </div>
-  </div>
+  </ViewSection>
 </div>
 `;
