@@ -8,131 +8,215 @@ exports[`Storyshots Prototypes/FieldSection Field Group Address 1`] = `
     }
   }
 >
-  <div
-    className="field-section"
+  <FieldSection
+    className="md:grid md:grid-cols-4 md:gap-8"
+    title="Section Title"
   >
-    <header
-      className="field-section__header"
-    >
-      <h2
-        className="field-section__title"
-      >
-        My Section
-      </h2>
-    </header>
     <div
-      className="field-grid md:grid md:grid-cols-4 md:gap-8"
+      className="field-section"
     >
-      <div
-        className="field-group md:col-span-3"
+      <header
+        className="field-section__header"
       >
-        <h3
-          className="field-group__title"
+        <h2
+          className="field-section__title"
         >
-          My Group
-        </h3>
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="field-section__grid md:grid md:grid-cols-4 md:gap-8"
+      >
         <div
-          className="field-subgrid md:grid md:grid-cols-6 md:gap-8"
+          className="field-group md:col-span-3"
         >
-          <div
-            className="field md:col-span-4"
+          <h3
+            className="field-group__title"
           >
-            <label
-              className="label"
-              htmlFor="field-0"
-            >
-              Address 1
-            </label>
-            <div
-              className="control"
-            >
-              <input
-                className="input"
-                id="field-0"
-                placeholder="Enter text"
-              />
-            </div>
-          </div>
+            My Group
+          </h3>
           <div
-            className="field md:col-span-2"
+            className="field-subgrid md:grid md:grid-cols-6 md:gap-8"
           >
-            <label
-              className="label"
-              htmlFor="field-1"
+            <GridItem
+              className="md:col-span-4"
             >
-              Address 2
-            </label>
-            <div
-              className="control"
+              <div
+                className="grid-item md:col-span-4"
+              >
+                <Field
+                  label="Street Address"
+                  name="label1"
+                  placeholder="Enter text"
+                  register={[Function]}
+                >
+                  <div
+                    className="field"
+                  >
+                    <label
+                      className="label"
+                      htmlFor="label1"
+                    >
+                      Street Address
+                    </label>
+                    <div
+                      className="control"
+                    >
+                      <input
+                        aria-describedby="label1-error"
+                        aria-invalid={false}
+                        className="input"
+                        id="label1"
+                        name="label1"
+                        placeholder="Enter text"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                </Field>
+              </div>
+            </GridItem>
+            <GridItem
+              className="md:col-span-2"
             >
-              <input
-                className="input"
-                id="field-1"
-                placeholder="Enter text"
-              />
-            </div>
-          </div>
-          <div
-            className="field md:col-span-2"
-          >
-            <label
-              className="label"
-              htmlFor="field-2"
+              <div
+                className="grid-item md:col-span-2"
+              >
+                <Field
+                  label="Address 2"
+                  name="label2"
+                  placeholder="Enter text"
+                  register={[Function]}
+                >
+                  <div
+                    className="field"
+                  >
+                    <label
+                      className="label"
+                      htmlFor="label2"
+                    >
+                      Address 2
+                    </label>
+                    <div
+                      className="control"
+                    >
+                      <input
+                        aria-describedby="label2-error"
+                        aria-invalid={false}
+                        className="input"
+                        id="label2"
+                        name="label2"
+                        placeholder="Enter text"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                </Field>
+              </div>
+            </GridItem>
+            <GridItem
+              className="md:col-span-2"
             >
-              City
-            </label>
-            <div
-              className="control"
+              <div
+                className="grid-item md:col-span-2"
+              >
+                <Field
+                  label="City"
+                  name="label3"
+                  placeholder="Enter text"
+                  register={[Function]}
+                >
+                  <div
+                    className="field"
+                  >
+                    <label
+                      className="label"
+                      htmlFor="label3"
+                    >
+                      City
+                    </label>
+                    <div
+                      className="control"
+                    >
+                      <input
+                        aria-describedby="label3-error"
+                        aria-invalid={false}
+                        className="input"
+                        id="label3"
+                        name="label3"
+                        placeholder="Enter text"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                </Field>
+              </div>
+            </GridItem>
+            <Field
+              label="State"
+              name="label4"
+              placeholder="Enter text"
+              register={[Function]}
             >
-              <input
-                className="input"
-                id="field-2"
-                placeholder="Enter text"
-              />
-            </div>
-          </div>
-          <div
-            className="field"
-          >
-            <label
-              className="label"
-              htmlFor="field-3"
+              <div
+                className="field"
+              >
+                <label
+                  className="label"
+                  htmlFor="label4"
+                >
+                  State
+                </label>
+                <div
+                  className="control"
+                >
+                  <input
+                    aria-describedby="label4-error"
+                    aria-invalid={false}
+                    className="input"
+                    id="label4"
+                    name="label4"
+                    placeholder="Enter text"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </Field>
+            <Field
+              label="Zip"
+              name="label5"
+              placeholder="Enter text"
+              register={[Function]}
             >
-              State
-            </label>
-            <div
-              className="control"
-            >
-              <input
-                className="input"
-                id="field-3"
-                placeholder="Enter text"
-              />
-            </div>
-          </div>
-          <div
-            className="field"
-          >
-            <label
-              className="label"
-              htmlFor="field-4"
-            >
-              Zip
-            </label>
-            <div
-              className="control"
-            >
-              <input
-                className="input"
-                id="field-4"
-                placeholder="Enter text"
-              />
-            </div>
+              <div
+                className="field"
+              >
+                <label
+                  className="label"
+                  htmlFor="label5"
+                >
+                  Zip
+                </label>
+                <div
+                  className="control"
+                >
+                  <input
+                    aria-describedby="label5-error"
+                    aria-invalid={false}
+                    className="input"
+                    id="label5"
+                    name="label5"
+                    placeholder="Enter text"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </Field>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </FieldSection>
 </div>
 `;
 
@@ -144,129 +228,8 @@ exports[`Storyshots Prototypes/FieldSection Field Section Blank 1`] = `
     }
   }
 >
-  <div
-    className="field-section"
-  >
-    <header
-      className="field-section__header"
-    >
-      <h2
-        className="field-section__title"
-      >
-        My Section
-      </h2>
-    </header>
-    <div
-      className="field-grid bg-primary-lighter p-8"
-    >
-      <button
-        className="button is-small"
-      >
-        Add Household Member
-      </button>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Storyshots Prototypes/FieldSection Field Section Table 1`] = `
-<div
-  style={
-    Object {
-      "padding": "1rem",
-    }
-  }
->
-  <div
-    className="field-section"
-  >
-    <header
-      className="field-section__header"
-    >
-      <h2
-        className="field-section__title"
-      >
-        My Section
-      </h2>
-    </header>
-    <div
-      className="field-grid bg-primary-lighter mb-4"
-    >
-      <SimpleTable>
-        <table
-          className="td-plain th-plain text-sm w-full"
-        >
-          <thead>
-            <tr>
-              <th>
-                Name
-              </th>
-              <th>
-                Relationship
-              </th>
-              <th>
-                DOB
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                className="px-5 py-3"
-              >
-                Jim Halpert
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                Husband
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                05/01/1985
-              </td>
-            </tr>
-            <tr>
-              <td
-                className="px-5 py-3"
-              >
-                Michael Scott
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                Friend
-              </td>
-              <td
-                className="px-5 py-3"
-              >
-                05/01/1975
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </SimpleTable>
-    </div>
-    <button
-      className="button is-small"
-    >
-      Add Household Member
-    </button>
-  </div>
-</div>
-`;
-
-exports[`Storyshots Prototypes/FieldSection Four Columns 1`] = `
-<div
-  style={
-    Object {
-      "padding": "1rem",
-    }
-  }
->
   <FieldSection
-    className="md:grid md:grid-cols-4 md:gap-8"
+    insetGrid={true}
     tinted={true}
     title="Section Title"
   >
@@ -283,160 +246,383 @@ exports[`Storyshots Prototypes/FieldSection Four Columns 1`] = `
         </h2>
       </header>
       <div
-        className="field-grid md:grid md:grid-cols-4 md:gap-8"
+        className="field-section__grid is-tinted is-inset"
       >
-        <div
-          className="field"
+        <button
+          className="button is-small"
         >
-          <label
-            className="label"
-            htmlFor="field-1"
-          >
-            Label
-          </label>
-          <div
-            className="control"
-          >
-            <input
-              className="input"
-              id="field-1"
-              placeholder="Enter text"
-            />
-          </div>
-        </div>
-        <div
-          className="field"
+          Add Household Member
+        </button>
+      </div>
+    </div>
+  </FieldSection>
+</div>
+`;
+
+exports[`Storyshots Prototypes/FieldSection Field Section Table 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <FieldSection
+    tinted={true}
+    title="Section Title"
+  >
+    <div
+      className="field-section"
+    >
+      <header
+        className="field-section__header"
+      >
+        <h2
+          className="field-section__title"
         >
-          <label
-            className="label"
-            htmlFor="field-2"
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="field-section__grid is-tinted"
+      >
+        <SimpleTable>
+          <table
+            className="td-plain th-plain text-sm w-full"
           >
-            Label
-          </label>
-          <div
-            className="control"
-          >
-            <input
-              className="input"
-              id="field-2"
-              placeholder="Enter text"
-            />
-          </div>
-        </div>
+            <thead>
+              <tr>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Relationship
+                </th>
+                <th>
+                  DOB
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  className="px-5 py-3"
+                >
+                  Jim Halpert
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  Husband
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  05/01/1985
+                </td>
+              </tr>
+              <tr>
+                <td
+                  className="px-5 py-3"
+                >
+                  Michael Scott
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  Friend
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  05/01/1975
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </SimpleTable>
         <div
-          className="field"
+          className="bg-white pt-4"
         >
-          <label
-            className="label"
-            htmlFor="field-3"
+          <button
+            className="button is-small"
           >
-            Label
-          </label>
-          <div
-            className="control"
-          >
-            <input
-              className="input"
-              id="field-3"
-              placeholder="Enter text"
-            />
-          </div>
+            Add Household Member
+          </button>
         </div>
-        <div
-          className="field"
+      </div>
+    </div>
+  </FieldSection>
+</div>
+`;
+
+exports[`Storyshots Prototypes/FieldSection Four Columns 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <FieldSection
+    className="md:grid md:grid-cols-4 md:gap-8"
+    title="Section Title"
+  >
+    <div
+      className="field-section"
+    >
+      <header
+        className="field-section__header"
+      >
+        <h2
+          className="field-section__title"
         >
-          <label
-            className="label"
-            htmlFor="field-4"
-          >
-            Label
-          </label>
-          <div
-            className="control"
-          >
-            <input
-              className="input"
-              id="field-4"
-              placeholder="Enter text"
-            />
-          </div>
-        </div>
-        <div
-          className="field"
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="field-section__grid md:grid md:grid-cols-4 md:gap-8"
+      >
+        <Field
+          label="Alpha"
+          name="label1"
+          placeholder="Enter text"
+          register={[Function]}
         >
-          <label
-            className="label"
-            htmlFor="field-5"
-          >
-            Label
-          </label>
           <div
-            className="control"
+            className="field"
           >
-            <input
-              className="input"
-              id="field-5"
-              placeholder="Enter text"
-            />
+            <label
+              className="label"
+              htmlFor="label1"
+            >
+              Alpha
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label1-error"
+                aria-invalid={false}
+                className="input"
+                id="label1"
+                name="label1"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
           </div>
-        </div>
-        <div
-          className="field"
+        </Field>
+        <Field
+          label="Beta"
+          name="label2"
+          placeholder="Enter text"
+          register={[Function]}
         >
-          <label
-            className="label"
-            htmlFor="field-6"
-          >
-            Label
-          </label>
           <div
-            className="control"
+            className="field"
           >
-            <input
-              className="input"
-              id="field-6"
-              placeholder="Enter text"
-            />
+            <label
+              className="label"
+              htmlFor="label2"
+            >
+              Beta
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label2-error"
+                aria-invalid={false}
+                className="input"
+                id="label2"
+                name="label2"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
           </div>
-        </div>
-        <div
-          className="field"
+        </Field>
+        <Field
+          label="Gamma"
+          name="label3"
+          placeholder="Enter text"
+          register={[Function]}
         >
-          <label
-            className="label"
-            htmlFor="field-7"
-          >
-            Label
-          </label>
           <div
-            className="control"
+            className="field"
           >
-            <input
-              className="input"
-              id="field-7"
-              placeholder="Enter text"
-            />
+            <label
+              className="label"
+              htmlFor="label3"
+            >
+              Gamma
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label3-error"
+                aria-invalid={false}
+                className="input"
+                id="label3"
+                name="label3"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
           </div>
-        </div>
-        <div
-          className="field"
+        </Field>
+        <Field
+          label="Delta"
+          name="label4"
+          placeholder="Enter text"
+          register={[Function]}
         >
-          <label
-            className="label"
-            htmlFor="field-8"
-          >
-            Label
-          </label>
           <div
-            className="control"
+            className="field"
           >
-            <input
-              className="input"
-              id="field-8"
-              placeholder="Enter text"
-            />
+            <label
+              className="label"
+              htmlFor="label4"
+            >
+              Delta
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label4-error"
+                aria-invalid={false}
+                className="input"
+                id="label4"
+                name="label4"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
           </div>
-        </div>
+        </Field>
+        <Field
+          label="Epsilon"
+          name="label5"
+          placeholder="Enter text"
+          register={[Function]}
+        >
+          <div
+            className="field"
+          >
+            <label
+              className="label"
+              htmlFor="label5"
+            >
+              Epsilon
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label5-error"
+                aria-invalid={false}
+                className="input"
+                id="label5"
+                name="label5"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
+          </div>
+        </Field>
+        <Field
+          label="Zeta"
+          name="label6"
+          placeholder="Enter text"
+          register={[Function]}
+        >
+          <div
+            className="field"
+          >
+            <label
+              className="label"
+              htmlFor="label6"
+            >
+              Zeta
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label6-error"
+                aria-invalid={false}
+                className="input"
+                id="label6"
+                name="label6"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
+          </div>
+        </Field>
+        <Field
+          label="Eta"
+          name="label7"
+          placeholder="Enter text"
+          register={[Function]}
+        >
+          <div
+            className="field"
+          >
+            <label
+              className="label"
+              htmlFor="label7"
+            >
+              Eta
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label7-error"
+                aria-invalid={false}
+                className="input"
+                id="label7"
+                name="label7"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
+          </div>
+        </Field>
+        <Field
+          label="Theta"
+          name="label8"
+          placeholder="Enter text"
+          register={[Function]}
+        >
+          <div
+            className="field"
+          >
+            <label
+              className="label"
+              htmlFor="label8"
+            >
+              Theta
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="label8-error"
+                aria-invalid={false}
+                className="input"
+                id="label8"
+                name="label8"
+                placeholder="Enter text"
+                type="text"
+              />
+            </div>
+          </div>
+        </Field>
       </div>
     </div>
   </FieldSection>
