@@ -19,19 +19,22 @@ const Drawer = (props: DrawerProps) => {
   if (props.hasBackdrop) drawerWrapperClasses.push("has-backdrop")
 
   return (
-    <div className={drawerWrapperClasses.join(" ")} role="dialog" aria-labelledby={props.title} aria-describedby={props.ariaDescription}>
+    <div
+      className={drawerWrapperClasses.join(" ")}
+      role="dialog"
+      aria-labelledby={props.title}
+      aria-describedby={props.ariaDescription}
+    >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
-          {props.title && (<h1 className="drawer__title">{props.title}</h1>)}
+          {props.title && <h1 className="drawer__title">{props.title}</h1>}
           <button className="drawer__close" aria-label="Close" tabIndex={0}>
             <Icon size="medium" symbol="close" />
           </button>
         </header>
-      
+
         <div className="drawer__body">
-          <div className="drawer__content">
-            {props.children}
-          </div>
+          <div className="drawer__content">{props.children}</div>
         </div>
       </div>
     </div>
