@@ -1,6 +1,6 @@
 import React from "react"
 import App from "next/app"
-import "@bloom-housing/ui-components/styles/index.scss"
+import "@bloom-housing/ui-components/src/global/index.scss"
 import {
   addTranslation,
   ConfigProvider,
