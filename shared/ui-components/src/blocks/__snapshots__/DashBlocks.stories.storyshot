@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots PageComponents/DashBlocks With Two Blocks 1`] = `
+exports[`Storyshots Blocks/Dash Blocks With Two Blocks 1`] = `
 <DashBlocks>
   <div
     className="dash-blocks"

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Cards/ImageCard Image With Title 1`] = `
+exports[`Storyshots Blocks/Image Card Image With Title 1`] = `
 <div
   style={
     Object {
@@ -37,7 +37,7 @@ exports[`Storyshots Cards/ImageCard Image With Title 1`] = `
 </div>
 `;
 
-exports[`Storyshots Cards/ImageCard Image With Title And Subtitle 1`] = `
+exports[`Storyshots Blocks/Image Card Image With Title And Subtitle 1`] = `
 <div
   style={
     Object {
@@ -80,7 +80,7 @@ exports[`Storyshots Cards/ImageCard Image With Title And Subtitle 1`] = `
 </div>
 `;
 
-exports[`Storyshots Cards/ImageCard With Link 1`] = `
+exports[`Storyshots Blocks/Image Card With Link 1`] = `
 <div
   style={
     Object {

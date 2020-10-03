@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Headers/PageHeader With Subtitle 1`] = `
+exports[`Storyshots Headers/Page Header With Subtitle 1`] = `
 <PageHeader
   subtitle="Here is a subtitle"
 >
@@ -26,7 +26,7 @@ exports[`Storyshots Headers/PageHeader With Subtitle 1`] = `
 </PageHeader>
 `;
 
-exports[`Storyshots Headers/PageHeader With Text Content 1`] = `
+exports[`Storyshots Headers/Page Header With Text Content 1`] = `
 <PageHeader>
   <header
     className="page-header bg-primary-lighter"

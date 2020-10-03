@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots PageComponents/ListingGroup Show Listings Group 1`] = `
+exports[`Storyshots Listing/Listing Group Show Listings Group 1`] = `
 <ListingsGroup
   header="Header"
   hideButtonText="Hide"

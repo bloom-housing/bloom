@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Alerts/AlertBox Alert Box Alert 1`] = `
+exports[`Storyshots Notifications/Alert Box Alert Box Alert 1`] = `
 <div
   style={
     Object {
@@ -57,7 +57,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Alert 1`] = `
 </div>
 `;
 
-exports[`Storyshots Alerts/AlertBox Alert Box Alert Invert 1`] = `
+exports[`Storyshots Notifications/Alert Box Alert Box Alert Invert 1`] = `
 <div
   style={
     Object {
@@ -116,7 +116,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Alert Invert 1`] = `
 </div>
 `;
 
-exports[`Storyshots Alerts/AlertBox Alert Box Notice 1`] = `
+exports[`Storyshots Notifications/Alert Box Alert Box Notice 1`] = `
 <div
   style={
     Object {
@@ -173,7 +173,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Notice 1`] = `
 </div>
 `;
 
-exports[`Storyshots Alerts/AlertBox Alert Box Notice Invert 1`] = `
+exports[`Storyshots Notifications/Alert Box Alert Box Notice Invert 1`] = `
 <div
   style={
     Object {
@@ -232,7 +232,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Notice Invert 1`] = `
 </div>
 `;
 
-exports[`Storyshots Alerts/AlertBox Alert Box Success 1`] = `
+exports[`Storyshots Notifications/Alert Box Alert Box Success 1`] = `
 <div
   style={
     Object {
@@ -289,7 +289,7 @@ exports[`Storyshots Alerts/AlertBox Alert Box Success 1`] = `
 </div>
 `;
 
-exports[`Storyshots Alerts/AlertBox Alert Box Success Invert 1`] = `
+exports[`Storyshots Notifications/Alert Box Alert Box Success Invert 1`] = `
 <div
   style={
     Object {

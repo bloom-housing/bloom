@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Atoms/LinkButton Filled 1`] = `
+exports[`Storyshots Actions/Link Button Filled 1`] = `
 <LinkButton
   filled={true}
   href="#"
@@ -25,7 +25,7 @@ exports[`Storyshots Atoms/LinkButton Filled 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms/LinkButton Regular Case 1`] = `
+exports[`Storyshots Actions/Link Button Regular Case 1`] = `
 <LinkButton
   href="#"
   normalCase={true}
@@ -50,7 +50,7 @@ exports[`Storyshots Atoms/LinkButton Regular Case 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms/LinkButton Small 1`] = `
+exports[`Storyshots Actions/Link Button Small 1`] = `
 <LinkButton
   href="#"
   small={true}
@@ -75,7 +75,7 @@ exports[`Storyshots Atoms/LinkButton Small 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms/LinkButton Small And Filled 1`] = `
+exports[`Storyshots Actions/Link Button Small And Filled 1`] = `
 <LinkButton
   filled={true}
   href="#"
@@ -101,7 +101,7 @@ exports[`Storyshots Atoms/LinkButton Small And Filled 1`] = `
 </LinkButton>
 `;
 
-exports[`Storyshots Atoms/LinkButton Standard 1`] = `
+exports[`Storyshots Actions/Link Button Standard 1`] = `
 <LinkButton
   href="#"
 >
