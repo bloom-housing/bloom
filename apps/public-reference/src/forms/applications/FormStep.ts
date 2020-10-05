@@ -17,5 +17,9 @@ export default class {
       }
     }
     this.conductor.sync()
+
+    if (typeof window != "undefined" && window.Cypress) {
+      window.submissionContext = this.application
+    }
   }
 }
