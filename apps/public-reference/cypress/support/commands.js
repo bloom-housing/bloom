@@ -33,3 +33,7 @@ Cypress.Commands.add("getByID", (id, ...args) => {
 Cypress.Commands.add("goNext", () => {
   return cy.get("button").contains("Next").click()
 })
+
+Cypress.Commands.add("getSubmissionContext", () => {
+  return cy.window().its("submissionContext")
+})

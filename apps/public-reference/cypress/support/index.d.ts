@@ -6,5 +6,6 @@ declare namespace Cypress {
      */
     getByID(value: string): Chainable<Element>
     goNext(): Chainable<Element>
+    getSubmissionContext(): Chainable
   }
 }
