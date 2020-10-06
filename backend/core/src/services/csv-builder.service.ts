@@ -38,6 +38,7 @@ export const streetFormatter = (obj?: { street: string; street2: string }) => {
 export const dobFormatter = (obj?: { birthMonth: number; birthDay: number; birthYear: number }) => {
   return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : defaultFormatter(obj)
 }
+export const joinArrayFormatter = (obj?: string[]) => (obj ? obj.join(",") : "")
 export const keysToJoinedStringFormatter = (obj: any) => {
   if (!obj) {
     return defaultFormatter(obj)
