@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Listing/Preferences List Preferences 1`] = `
+exports[`Storyshots Lists/Preferences List Preferences 1`] = `
 <PreferencesList
   preferences={
     Array [

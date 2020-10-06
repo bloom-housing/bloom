@@ -1,5 +1,5 @@
 import React from "react"
-import { ErrorMessage } from "./ErrorMessage"
+import { ErrorMessage } from "../notifications/ErrorMessage"
 import { FormOptions } from "../helpers/formOptions"
 
 interface SelectProps {

@@ -3,8 +3,8 @@ import { Listing, ApplicationMethod, ApplicationMethodType } from "@bloom-housin
 import moment from "moment"
 import { t } from "../../../helpers/translator"
 import { lRoute } from "../../../helpers/localeRoute"
-import { Button } from "../../../atoms/Button"
-import { LinkButton } from "../../../atoms/LinkButton"
+import { Button } from "../../../actions/Button"
+import { LinkButton } from "../../../actions/LinkButton"
 import { SidebarAddress } from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 
