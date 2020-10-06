@@ -20,7 +20,6 @@ body {
 }
 
 main {
-
 }
 
 .site-wrapper {
@@ -33,7 +32,7 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  
+
   main {
     flex: 1;
     display: flex;
@@ -65,7 +64,7 @@ main {
 @import "tables.scss";
 @import "homepage.scss";
 @import "print.scss";
-@import "ag_grid.scss";
+@import "vendor/ag_grid.scss";
 /* ***********/
 /* Additional stylesheets are contained within individual component folders */
 /* ***********/

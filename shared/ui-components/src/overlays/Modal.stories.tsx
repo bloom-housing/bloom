@@ -4,7 +4,7 @@ import { Modal } from "./Modal"
 import SVG from "react-inlinesvg"
 
 export default {
-  title: "Modal/Modal",
+  title: "Overlays/Modal",
   decorators: [
     (storyFn: any) => (
       <div style={{ padding: "1rem" }}>
