@@ -2,20 +2,16 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
-import Link from "next/link"
 import Router from "next/router"
 import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, listing, application } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("summary")
   const currentPageSection = 5
-
-  conductor.stepTo("Summary")
 
   /* Form Handler */
   const { handleSubmit } = useForm()

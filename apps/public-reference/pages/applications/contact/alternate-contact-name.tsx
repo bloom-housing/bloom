@@ -2,8 +2,6 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-import { useContext, useEffect } from "react"
-import Link from "next/link"
 import {
   AlertBox,
   Button,
@@ -15,17 +13,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("alternateContactName")
   const currentPageSection = 1
-
-  conductor.stepTo("Alternate Contact Name")
-  useEffect(() => {
-    conductor.skipCurrentStepIfNeeded()
-  }, [conductor])
 
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({

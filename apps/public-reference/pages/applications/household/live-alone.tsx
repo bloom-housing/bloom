@@ -2,9 +2,7 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
-import { useContext, useState } from "react"
-import Link from "next/link"
-import Router from "next/router"
+import { useState } from "react"
 import {
   Button,
   FormCard,
@@ -15,15 +13,13 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("liveAlone")
   const [validateHousehold, setValidateHousehold] = useState(true)
   const currentPageSection = 2
-
-  conductor.stepTo("Live Alone")
 
   /* Form Handler */
   const { handleSubmit, register, errors, clearErrors } = useForm()
@@ -83,7 +79,7 @@ export default () => {
                 big={true}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  if (application.householdSize == 1) application.householdSize = 0
+                  if (application.householdSize === 1) application.householdSize = 0
                   setValidateHousehold(false)
                 }}
               >

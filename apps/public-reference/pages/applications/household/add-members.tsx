@@ -2,8 +2,6 @@
 2.2 - Add Members
 Add household members
 */
-import { useContext, useEffect } from "react"
-import Link from "next/link"
 import Router from "next/router"
 import {
   Button,
@@ -16,23 +14,20 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("addMembers")
   const currentPageSection = 2
-  application.householdSize = application.householdMembers.length + 1
-
-  conductor.stepTo("Add Members")
-  useEffect(() => {
-    conductor.skipCurrentStepIfNeeded()
-  }, [conductor])
+  const householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
   const { errors, handleSubmit, register, clearErrors } = useForm()
   const onSubmit = (data) => {
-    conductor.sync()
+    conductor.currentStep.save({
+      householdSize: application.householdMembers.length + 1,
+    })
     conductor.routeToNextOrReturnUrl()
   }
 
@@ -75,7 +70,7 @@ export default () => {
           <div>
             <HouseholdSizeField
               listing={listing}
-              householdSize={application.householdSize}
+              householdSize={householdSize}
               validate={true}
               register={register}
               error={errors.householdSize}

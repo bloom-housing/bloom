@@ -34,63 +34,63 @@ export const loadSavedListing = () => {
 
 export default class ApplicationConductor {
   static routes: Record<string, StepRoute> = {
-    "Choose Language": {
+    chooseLanguage: {
       url: "/applications/start/choose-language",
     },
-    "What to Expect": {
+    whatToExpect: {
       url: "/applications/start/what-to-expect",
     },
-    "Primary Applicant Name": {
+    primaryApplicantName: {
       url: "/applications/contact/name",
     },
-    "Primary Applicant Address": {
+    primaryApplicantAddress: {
       url: "/applications/contact/address",
     },
-    "Alternate Contact Type": {
+    alternateContactType: {
       url: "/applications/contact/alternate-contact-type",
     },
-    "Alternate Contact Name": {
+    alternateContactName: {
       url: "/applications/contact/alternate-contact-name",
       definition: AlternateContactStep,
     },
-    "Alternate Contact Info": {
+    alternateContactInfo: {
       url: "/applications/contact/alternate-contact-contact",
       definition: AlternateContactStep,
     },
-    "Live Alone": {
+    liveAlone: {
       url: "/applications/household/live-alone",
     },
-    "Household Member Info": {
+    householdMemberInfo: {
       url: "/applications/household/members-info",
       definition: HouseholdMemberStep,
     },
-    "Add Members": {
+    addMembers: {
       url: "/applications/household/add-members",
       definition: HouseholdMemberStep,
     },
-    "Preferred Unit Size": {
+    preferredUnitSize: {
       url: "/applications/household/preferred-units",
     },
-    "ADA Household Members": {
+    adaHouseholdMembers: {
       url: "/applications/household/ada",
     },
-    "Vouchers Subsidies": {
+    vouchersSubsidies: {
       url: "/applications/financial/vouchers",
     },
-    Income: {
+    income: {
       url: "/applications/financial/income",
     },
-    "Preferences Introduction": {
+    preferencesIntroduction: {
       url: "/applications/preferences/select",
     },
-    "General Pool": {
+    generalPool: {
       url: "/applications/preferences/general",
       definition: SelectedPreferencesStep,
     },
-    Demographics: {
+    demographics: {
       url: "/applications/review/demographics",
     },
-    Summary: {
+    summary: {
       url: "/applications/review/summary",
     },
   }
@@ -177,7 +177,7 @@ export default class ApplicationConductor {
     }
   }
 
-  stepTo(stepName) {
+  stepTo(stepName: string) {
     const stepIndex = this.steps.findIndex((step) => step.name === stepName)
     if (stepIndex >= 0) {
       this.currentStepIndex = stepIndex

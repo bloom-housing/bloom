@@ -2,8 +2,7 @@
 5.1 Demographics
 Optional demographic questions
 */
-import { useContext, useMemo } from "react"
-import Link from "next/link"
+import { useMemo } from "react"
 import {
   Button,
   FieldGroup,
@@ -22,14 +21,12 @@ import {
   sexualOrientation,
   howDidYouHear,
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 const Demographics = () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("demographics")
   const currentPageSection = 5
-
-  conductor.stepTo("Demographics")
 
   /* Form Handler */
   const { register, handleSubmit } = useForm()

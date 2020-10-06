@@ -8,58 +8,58 @@ export const retrieveApplicationConfig = () => {
     languages: ["en", "zh"],
     steps: [
       {
-        name: "Choose Language",
+        name: "chooseLanguage",
       },
       {
-        name: "What to Expect",
+        name: "whatToExpect",
       },
       {
-        name: "Primary Applicant Name",
+        name: "primaryApplicantName",
       },
       {
-        name: "Primary Applicant Address",
+        name: "primaryApplicantAddress",
       },
       {
-        name: "Alternate Contact Type",
+        name: "alternateContactType",
       },
       {
-        name: "Alternate Contact Name",
+        name: "alternateContactName",
       },
       {
-        name: "Alternate Contact Info",
+        name: "alternateContactInfo",
       },
       {
-        name: "Live Alone",
+        name: "liveAlone",
       },
       {
-        name: "Household Member Info",
+        name: "householdMemberInfo",
       },
       {
-        name: "Add Members",
+        name: "addMembers",
       },
       {
-        name: "Preferred Unit Size",
+        name: "preferredUnitSize",
       },
       {
-        name: "ADA Household Members",
+        name: "adaHouseholdMembers",
       },
       {
-        name: "Vouchers Subsidies",
+        name: "vouchersSubsidies",
       },
       {
-        name: "Income",
+        name: "income",
       },
       {
-        name: "Preferences Introduction",
+        name: "preferencesIntroduction",
       },
       {
-        name: "General Pool",
+        name: "generalPool",
       },
       {
-        name: "Demographics",
+        name: "demographics",
       },
       {
-        name: "Summary",
+        name: "summary",
       },
     ],
   }

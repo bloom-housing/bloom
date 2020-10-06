@@ -17,10 +17,10 @@ export default class StepDefinition {
     return this.step.name
   }
 
-  save(formData) {
+  save(formData: Record<string, any>) {
     // Pull in all the form values that match application fields
     for (const [key, value] of Object.entries(formData)) {
-      if (typeof this.application[key] != "undefined") {
+      if (typeof this.application[key] !== "undefined") {
         this.application[key] = value
       }
     }

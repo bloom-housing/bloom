@@ -2,13 +2,9 @@
 3.1 Vouchers Subsidies
 Question asks if anyone on the application receives a housing voucher or subsidy.
 */
-import { useContext } from "react"
-import Link from "next/link"
-import { useRouter } from "next/router"
 import {
   AlertBox,
   Button,
-  ErrorMessage,
   Form,
   FormCard,
   ProgressNav,
@@ -17,15 +13,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const router = useRouter()
+  const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
   const currentPageSection = 3
-
-  conductor.stepTo("Vouchers Subsidies")
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm({

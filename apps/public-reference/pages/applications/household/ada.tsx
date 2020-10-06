@@ -3,8 +3,6 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
-import { useContext } from "react"
-import Link from "next/link"
 import {
   AlertBox,
   Button,
@@ -16,14 +14,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
   const currentPageSection = 2
-
-  conductor.stepTo("ADA Household Members")
 
   /* Form Handler */
   const { register, handleSubmit, getValues, setValue, trigger, watch, errors } = useForm<

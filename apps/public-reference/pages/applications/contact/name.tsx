@@ -3,7 +3,6 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import { useContext } from "react"
 import {
   AlertBox,
   Button,
@@ -17,14 +16,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { emailRegex } from "../../../lib/helpers"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const currentPageSection = 1
-
-  conductor.stepTo("Primary Applicant Name")
 
   /* Form Handler */
   const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<

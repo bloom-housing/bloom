@@ -2,8 +2,6 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
-import { useContext } from "react"
-import Link from "next/link"
 import {
   AlertBox,
   Button,
@@ -15,15 +13,13 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("preferredUnitSize")
   const currentPageSection = 2
-
-  conductor.stepTo("Preferred Unit Size")
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()

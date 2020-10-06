@@ -2,14 +2,12 @@
 3.2 Income
 Total pre-tax household income from all sources
 */
-import { useContext, useState } from "react"
-import Link from "next/link"
+import { useState } from "react"
 import { Listing } from "@bloom-housing/core"
 import {
   AlertBox,
   AlertNotice,
   Button,
-  ErrorMessage,
   Field,
   FieldGroup,
   Form,
@@ -19,8 +17,8 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -51,11 +49,9 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
 }
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
   const currentPageSection = 3
-
-  conductor.stepTo("Income")
 
   /* Form Handler */
   const { register, handleSubmit, errors, getValues, setValue } = useForm({

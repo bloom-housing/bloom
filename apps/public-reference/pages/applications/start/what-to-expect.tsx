@@ -2,18 +2,14 @@
 0.2 - What To Expect
 A notice regarding application process and rules
 */
-import Router from "next/router"
 import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { application, conductor, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("whatToExpect")
   const currentPageSection = 1
-
-  conductor.stepTo("What to Expect")
 
   /* Form Handler */
   const { handleSubmit } = useForm()

@@ -2,9 +2,8 @@
 4.1 Preferences Introduction
 Instructions on how preferences work and their value
 */
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import Link from "next/link"
 import {
   AlertBox,
   Button,
@@ -15,15 +14,13 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
+  const { conductor, application, listing } = useFormConductor("preferencesIntroduction")
   const [showMore, setShowMore] = useState({})
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
   const currentPageSection = 4
-
-  conductor.stepTo("Preferences Introduction")
 
   const preferenceOptions = ["liveIn", "workIn"]
 
