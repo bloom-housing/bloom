@@ -2,9 +2,10 @@ import {
   booleanFormatter,
   defaultFormatter,
   dobFormatter,
-  FormattingMetadataAggregateFactory, joinArrayFormatter,
+  FormattingMetadataAggregateFactory,
+  joinArrayFormatter,
   keysToJoinedStringFormatter,
-  streetFormatter
+  streetFormatter,
 } from "./csv-builder.service"
 
 export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAggregateFactory = () => {
