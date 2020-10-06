@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Blocks/Housing Counselor With All Fields 1`] = `
+<HousingCounselor
+  counselor={
+    Object {
+      "address": "123 Main St",
+      "citystate": "San Francisco, CA",
+      "languages": Array [
+        "English",
+      ],
+      "name": "Counselor Name",
+      "phone": "123-456-7890",
+      "website": "www.counselor.org",
+    }
+  }
+>
+  <div
+    className="resource-item text-base"
+  >
+    <h3
+      className="font-sans text-lg"
+    >
+      <a
+        href="www.counselor.org"
+        target="_blank"
+      >
+        Counselor Name
+      </a>
+    </h3>
+    <p
+      className="text-sm text-gray-800 pb-2"
+    >
+      Language Services: 
+      <span
+        className="pill"
+        key="English"
+      >
+        English
+      </span>
+    </p>
+    <p
+      className="icon-item pb-2"
+    >
+      123 Main St
+       
+      <br />
+       
+      San Francisco, CA
+    </p>
+    <a
+      className="icon-item pb-1"
+      href="tel:+1123-456-7890"
+    >
+      Call 123-456-7890
+    </a>
+    <a
+      className="icon-item"
+      href="www.counselor.org"
+    >
+      Visit Counselor Name
+    </a>
+  </div>
+</HousingCounselor>
+`;
+
+exports[`Storyshots Blocks/Housing Counselor With Multiple Languages 1`] = `
+<HousingCounselor
+  counselor={
+    Object {
+      "languages": Array [
+        "English",
+        "Spanish",
+        "Chinese",
+      ],
+      "name": "Counselor Name",
+    }
+  }
+>
+  <div
+    className="resource-item text-base"
+  >
+    <h3
+      className="font-sans text-lg"
+    >
+      <a
+        target="_blank"
+      >
+        Counselor Name
+      </a>
+    </h3>
+    <p
+      className="text-sm text-gray-800 pb-2"
+    >
+      Language Services: 
+      <span
+        className="pill"
+        key="English"
+      >
+        English
+      </span>
+      <span
+        className="pill"
+        key="Spanish"
+      >
+        Spanish
+      </span>
+      <span
+        className="pill"
+        key="Chinese"
+      >
+        Chinese
+      </span>
+    </p>
+  </div>
+</HousingCounselor>
+`;
+
+exports[`Storyshots Blocks/Housing Counselor With Only Required Fields 1`] = `
+<HousingCounselor
+  counselor={
+    Object {
+      "languages": Array [
+        "English",
+      ],
+      "name": "Counselor Name",
+    }
+  }
+>
+  <div
+    className="resource-item text-base"
+  >
+    <h3
+      className="font-sans text-lg"
+    >
+      <a
+        target="_blank"
+      >
+        Counselor Name
+      </a>
+    </h3>
+    <p
+      className="text-sm text-gray-800 pb-2"
+    >
+      Language Services: 
+      <span
+        className="pill"
+        key="English"
+      >
+        English
+      </span>
+    </p>
+  </div>
+</HousingCounselor>
+`;

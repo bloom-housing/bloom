@@ -1,5 +1,5 @@
 import * as React from "react"
-import Icon from "../atoms/Icon"
+import { Icon } from "../icons/Icon"
 import "./Drawer.scss"
 
 export interface DrawerProps {

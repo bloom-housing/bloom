@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { ErrorMessage } from "./ErrorMessage"
+import { ErrorMessage } from "../notifications/ErrorMessage"
 
 export interface FieldProps {
   error?: boolean
