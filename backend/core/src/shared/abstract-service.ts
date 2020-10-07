@@ -2,9 +2,20 @@ import { Repository } from "typeorm"
 import { ClassType } from "class-transformer/ClassTransformer"
 import { plainToClass } from "class-transformer"
 import { NotFoundException } from "@nestjs/common"
+import { FindConditions } from "typeorm/find-options/FindConditions"
+import { ObjectLiteral } from "typeorm/common/ObjectLiteral"
 
 export interface GenericUpdateDto {
   id: string
+}
+
+export interface QueryOneOptions<T> {
+  where: FindConditions<T>[] | FindConditions<T> | ObjectLiteral | string
+}
+
+export interface QueryManyOptions<T = any> extends QueryOneOptions<T> {
+  skip?: number
+  take?: number
 }
 
 export abstract class AbstractService<T, TCreateDto, TUpdateDto extends GenericUpdateDto> {
@@ -14,8 +25,8 @@ export abstract class AbstractService<T, TCreateDto, TUpdateDto extends GenericU
     return this.repository.target as ClassType<T>
   }
 
-  async list(): Promise<T[]> {
-    return this.repository.find()
+  async list(queryManyOptions?: QueryManyOptions<T>): Promise<T[]> {
+    return this.repository.find(queryManyOptions)
   }
 
   async create(dto: TCreateDto): Promise<T> {
@@ -23,12 +34,8 @@ export abstract class AbstractService<T, TCreateDto, TUpdateDto extends GenericU
     return await this.repository.save(obj)
   }
 
-  async findOne(objId: string): Promise<T> {
-    const obj = await this.repository.findOne({
-      where: {
-        id: objId,
-      },
-    })
+  async findOne(queryOneOptions: QueryOneOptions<T>): Promise<T> {
+    const obj = await this.repository.findOne(queryOneOptions)
     if (!obj) {
       throw new NotFoundException()
     }
