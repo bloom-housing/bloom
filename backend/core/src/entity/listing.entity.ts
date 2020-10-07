@@ -19,6 +19,7 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDateString,
+  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -31,6 +32,36 @@ import {
 export enum ListingStatus {
   active = "active",
   pending = "pending",
+}
+
+export enum ListingEventType {
+  openHouse = "openHouse",
+  publicLottery = "publicLottery",
+}
+
+export class ListingEvent {
+  @Expose()
+  @IsDefined()
+  @IsEnum(ListingEventType)
+  type: ListingEventType
+
+  @Expose()
+  @IsDateString()
+  startTime: string
+
+  @Expose()
+  @IsDateString()
+  endTime: string
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  url?: string | null
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  note?: string | null
 }
 
 @Entity({ name: "listings" })
@@ -335,6 +366,13 @@ class Listing extends BaseEntity {
 
   @Expose()
   urlSlug?: string
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => ListingEvent)
+  events?: ListingEvent[] | null
 }
 
 export { Listing as default, Listing }
