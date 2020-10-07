@@ -1,6 +1,6 @@
 describe("Form contact/name", function () {
   beforeEach(() => {
-    cy.fixture("name.json").as("valuesJSON")
+    cy.fixture("application/name.json").as("valuesJSON")
     cy.visit("/applications/contact/name")
   })
 
