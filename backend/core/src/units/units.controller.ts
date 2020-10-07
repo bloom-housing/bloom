@@ -19,8 +19,6 @@ import { DefaultAuthGuard } from "../auth/default.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import AuthzGuard from "../auth/authz.guard"
 
-// TODO Add Admin role check
-
 @Controller("/units")
 @ApiTags("units")
 @ApiBearerAuth()
