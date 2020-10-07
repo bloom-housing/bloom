@@ -7,6 +7,7 @@ export const PhoneField = (props: {
   error?: boolean
   errorMessage?: string
   controlClassName?: string
+  id?: string
   name: string
   label?: string
   caps?: boolean
@@ -26,6 +27,7 @@ export const PhoneField = (props: {
       <div className={props.controlClassName}>
         <Controller
           className="input"
+          id={props.id}
           name={props.name}
           placeholder={props.placeholder}
           defaultValue={props.defaultValue}
@@ -44,7 +46,9 @@ export const PhoneField = (props: {
             },
           }}
         />
-        <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>
+        <ErrorMessage id={`${props.id}-error`} error={props.error}>
+          {props.errorMessage}
+        </ErrorMessage>
       </div>
     </div>
   )
