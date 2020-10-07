@@ -15,7 +15,7 @@ import { CreateUserDto } from "../user/createUser.dto"
 import { DefaultAuthGuard } from "./default.guard"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { LoginDto, LoginResponseDto } from "./login.dto"
-import { TransformInterceptor } from "../interceptors/transform.interceptor"
+import { TransformResponseInterceptor } from "../interceptors/transform-response-interceptor.service"
 import { RegisterResponseDto } from "./user.dto"
 
 @Controller("auth")
@@ -38,7 +38,7 @@ export class AuthController {
 
   @Post("register")
   @ApiOperation({ summary: "Register", operationId: "register" })
-  @UseInterceptors(new TransformInterceptor(RegisterResponseDto))
+  @UseInterceptors(new TransformResponseInterceptor(RegisterResponseDto))
   async register(@Body() params: CreateUserDto) {
     const user = await this.userService.createUser(params)
     const accessToken = this.authService.generateAccessToken(user)

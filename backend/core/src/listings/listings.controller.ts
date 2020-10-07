@@ -12,7 +12,7 @@ import {
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { TransformInterceptor } from "../interceptors/transform.interceptor"
+import { TransformResponseInterceptor } from "../interceptors/transform-response-interceptor.service"
 import { ListingCreateDto } from "./listing.create.dto"
 import { ListingDto, ListingExtendedDto } from "./listing.dto"
 import { ListingUpdateDto } from "./listings.update.dto"
@@ -29,7 +29,7 @@ export class ListingsController {
 
   @Get()
   @ApiOperation({ summary: "List listings", operationId: "list" })
-  @UseInterceptors(new TransformInterceptor(ListingExtendedDto))
+  @UseInterceptors(new TransformResponseInterceptor(ListingExtendedDto))
   public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingExtendedDto> {
     return this.listingsService.list(jsonpath)
   }
@@ -37,7 +37,7 @@ export class ListingsController {
   @Post()
   @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Create listing", operationId: "create" })
-  @UseInterceptors(new TransformInterceptor(ListingDto))
+  @UseInterceptors(new TransformResponseInterceptor(ListingDto))
   async create(@Body() listingDto: ListingCreateDto): Promise<Listing> {
     return this.listingsService.create(listingDto)
   }
@@ -45,7 +45,7 @@ export class ListingsController {
   @Get(`:listingId`)
   @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(new TransformInterceptor(ListingDto))
+  @UseInterceptors(new TransformResponseInterceptor(ListingDto))
   async retrieve(@Param("listingId") listingId: string): Promise<Listing> {
     return await this.listingsService.findOne(listingId)
   }
@@ -53,7 +53,7 @@ export class ListingsController {
   @Put(`:listingId`)
   @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Update listing by id", operationId: "update" })
-  @UseInterceptors(new TransformInterceptor(ListingDto))
+  @UseInterceptors(new TransformResponseInterceptor(ListingDto))
   async update(
     @Param("listingId") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto

@@ -20,7 +20,7 @@ import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ApplicationCreateDto } from "./application.create.dto"
 import { ApplicationUpdateDto } from "./application.update.dto"
-import { TransformInterceptor } from "../interceptors/transform.interceptor"
+import { TransformResponseInterceptor } from "../interceptors/transform-response-interceptor.service"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
@@ -47,7 +47,7 @@ export class ApplicationsController {
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
+  @UseInterceptors(new TransformResponseInterceptor(ApplicationDto))
   async list(
     @Request() req: ExpressRequest,
     @Query("listingId") listingId: string
@@ -76,7 +76,7 @@ export class ApplicationsController {
 
   @Post()
   @ApiOperation({ summary: "Create application", operationId: "create" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
+  @UseInterceptors(new TransformResponseInterceptor(ApplicationDto))
   async create(
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
@@ -91,7 +91,7 @@ export class ApplicationsController {
 
   @Get(`:applicationId`)
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
+  @UseInterceptors(new TransformResponseInterceptor(ApplicationDto))
   async retrieve(
     @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string
@@ -103,7 +103,7 @@ export class ApplicationsController {
 
   @Put(`:applicationId`)
   @ApiOperation({ summary: "Update application by id", operationId: "update" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
+  @UseInterceptors(new TransformResponseInterceptor(ApplicationDto))
   async update(
     @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string,
