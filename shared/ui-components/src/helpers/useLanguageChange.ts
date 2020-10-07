@@ -12,7 +12,7 @@ export function useLanguageChange(languages: LangItem[]) {
     let newPath = pathname
 
     const pathIncludesLang = languages.filter((item) => {
-      const pattern = new RegExp(`(/${item.prefix}/$)|(/${item.prefix}$)|(/${item.prefix}/)`, "gm")
+      const pattern = new RegExp(`^/(${item.prefix})(/|$)`, "gm")
 
       return item.prefix !== "" && pattern.test(pathname)
     })
