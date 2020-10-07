@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Modal/Modal Basic Modal 1`] = `
+exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
 <div
   style={
     Object {
@@ -479,7 +479,7 @@ exports[`Storyshots Modal/Modal Basic Modal 1`] = `
 </div>
 `;
 
-exports[`Storyshots Modal/Modal Full Screen Modal 1`] = `
+exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
 <div
   style={
     Object {
@@ -959,7 +959,7 @@ exports[`Storyshots Modal/Modal Full Screen Modal 1`] = `
 </div>
 `;
 
-exports[`Storyshots Modal/Modal Success Failure Modal 1`] = `
+exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
 <div
   style={
     Object {

@@ -1,15 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Headers/SiteHeader Standard 1`] = `
+exports[`Storyshots Headers/Site Header Standard 1`] = `
 <SiteHeader
   logoSrc="/images/logo_glyph.svg"
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+  skip="Skip to content"
   title="Site Title Here"
 >
   <a
     className="navbar__skip-link"
     href="#main-content"
-  />
+  >
+    Skip to content
+  </a>
   <div
     className="navbar-notice"
   >
@@ -47,6 +50,7 @@ exports[`Storyshots Headers/SiteHeader Standard 1`] = `
                 className="logo__lockup"
               >
                 <img
+                  alt="Site Title Here"
                   className="logo__image"
                   src="/images/logo_glyph.svg"
                 />
@@ -98,16 +102,19 @@ exports[`Storyshots Headers/SiteHeader Standard 1`] = `
 </SiteHeader>
 `;
 
-exports[`Storyshots Headers/SiteHeader With Dropdown And Button 1`] = `
+exports[`Storyshots Headers/Site Header With Dropdown And Button 1`] = `
 <SiteHeader
   logoSrc="/images/logo_glyph.svg"
   notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+  skip="Skip to content"
   title="Site Title Here"
 >
   <a
     className="navbar__skip-link"
     href="#main-content"
-  />
+  >
+    Skip to content
+  </a>
   <div
     className="navbar-notice"
   >
@@ -145,6 +152,7 @@ exports[`Storyshots Headers/SiteHeader With Dropdown And Button 1`] = `
                 className="logo__lockup"
               >
                 <img
+                  alt="Site Title Here"
                   className="logo__image"
                   src="/images/logo_glyph.svg"
                 />
