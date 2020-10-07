@@ -64,7 +64,7 @@ export default () => {
           )}
         </div>
 
-        {/* <div className="form-card__group">
+        <div className="form-card__group">
           <h3 className="form-card__paragraph-title">
             {t("application.review.confirmation.createAccountTitle")}
           </h3>
@@ -72,10 +72,10 @@ export default () => {
           <p className="field-note mt-1">
             {t("application.review.confirmation.createAccountParagraph")}
           </p>
-        </div> */}
+        </div>
 
         <div className="form-card__pager">
-          {/* <div className="form-card__pager-row primary">
+          <div className="form-card__pager-row primary">
             <Button
               filled={true}
               onClick={() => {
@@ -84,13 +84,13 @@ export default () => {
             >
               {t("application.form.general.createAccount")}
             </Button>
-          </div> */}
+          </div>
 
-          {/* <div className="form-card__pager-row py-6">
+          <div className="form-card__pager-row py-6">
             <a className="lined text-tiny" href="/">
               {t("application.review.confirmation.imdone")}
             </a>
-          </div> */}
+          </div>
 
           <div className="form-card__pager-row py-6">
             <Link href="/listings">

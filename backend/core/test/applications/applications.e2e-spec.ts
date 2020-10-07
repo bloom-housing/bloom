@@ -25,6 +25,21 @@ describe("Applications", () => {
   let user2AccessToken: string
   let listingId: any
 
+  const getTestAppBody: () => any = () => {
+    return {
+      listing: {
+        id: listingId,
+      },
+      application: {
+        foo: "bar",
+        applicant: {
+          emailAddress: "test@example.com",
+        },
+      },
+      appUrl: "",
+    }
+  }
+
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
     const testEmailService = { confirmation: async () => {} }
@@ -75,21 +90,7 @@ describe("Applications", () => {
   })
 
   it(`/POST `, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      user: {
-        id: user1Id,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
+    const body = getTestAppBody()
     const res = await supertest(app.getHttpServer())
       .post(`/applications`)
       .send(body)
@@ -101,19 +102,26 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("id")
   })
 
+  it(`/GET by id`, async () => {
+    const body = getTestAppBody()
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications`)
+      .send(body)
+      .set("Authorization", `Bearer ${user1AccessToken}`)
+      .expect(201)
+    expect(createRes.body).toEqual(expect.objectContaining(body))
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/${createRes.body.id}`)
+      .set("Authorization", `Bearer ${user1AccessToken}`)
+      .expect(200)
+    expect(res.body.id === createRes.body.id)
+  })
+
   it(`/POST unauthenticated`, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
+    const body = getTestAppBody()
     const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(201)
     expect(res.body).toEqual(expect.objectContaining(body))
     expect(res.body).toHaveProperty("createdAt")
@@ -121,64 +129,8 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("id")
   })
 
-  it(`/POST unauthenticated post disallowed to specify user`, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      user: {
-        id: user1Id,
-      },
-      appUrl: "",
-    }
-    const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(401)
-  })
-
-  it(`/POST user 1 unauthorized to create application for user 2`, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      user: {
-        id: user2Id,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
-    const res = await supertest(app.getHttpServer())
-      .post(`/applications`)
-      .send(body)
-      .set("Authorization", `Bearer ${user1AccessToken}`)
-      .expect(401)
-  })
-
   it(`/DELETE `, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      user: {
-        id: user1Id,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
+    const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
       .send(body)
@@ -188,28 +140,14 @@ describe("Applications", () => {
       .delete(`/applications/${createRes.body.id}`)
       .set("Authorization", `Bearer ${user1AccessToken}`)
       .expect(200)
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .get(`/applications/${createRes.body.id}`)
       .set("Authorization", `Bearer ${user1AccessToken}`)
       .expect(404)
   })
 
   it(`/DELETE user 2 unauthorized to delete user 1 application`, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      user: {
-        id: user1Id,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
+    const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
       .send(body)
@@ -218,47 +156,19 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .delete(`/applications/${createRes.body.id}`)
       .set("Authorization", `Bearer ${user2AccessToken}`)
-      .expect(404)
+      .expect(403)
   })
 
   it(`/PUT `, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      user: {
-        id: user1Id,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
+    const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
       .send(body)
       .set("Authorization", `Bearer ${user1AccessToken}`)
       .expect(201)
     expect(createRes.body).toEqual(expect.objectContaining(body))
-    const newBody = {
-      id: createRes.body.id,
-      user: {
-        id: user1Id,
-      },
-      listing: {
-        id: listingId,
-      },
-      application: {
-        foo: "new bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
+    const newBody = getTestAppBody()
+    newBody.id = createRes.body.id
     const putRes = await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)
       .send(newBody)
@@ -268,48 +178,20 @@ describe("Applications", () => {
   })
 
   it(`/PUT user 2 unauthorized to edit user 1 application`, async () => {
-    const body = {
-      listing: {
-        id: listingId,
-      },
-      user: {
-        id: user1Id,
-      },
-      application: {
-        foo: "bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
+    const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications`)
       .send(body)
       .set("Authorization", `Bearer ${user1AccessToken}`)
       .expect(201)
     expect(createRes.body).toEqual(expect.objectContaining(body))
-    const newBody = {
-      id: createRes.body.id,
-      user: {
-        id: user1Id,
-      },
-      listing: {
-        id: listingId,
-      },
-      application: {
-        foo: "new bar",
-        applicant: {
-          emailAddress: "test@example.com",
-        },
-      },
-      appUrl: "",
-    }
-    const putRes = await supertest(app.getHttpServer())
+    const newBody = getTestAppBody()
+    newBody.id = createRes.body.id
+    await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)
       .send(newBody)
       .set("Authorization", `Bearer ${user2AccessToken}`)
-      .expect(401)
+      .expect(403)
   })
 
   afterEach(() => {

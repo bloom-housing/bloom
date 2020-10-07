@@ -131,6 +131,7 @@
       "phoneNumberError": "Please enter a phone number",
       "noPhoneNumber": "I don't have a telephone number",
       "phoneNumberTypeError": "Please enter a phone number type",
+      "yourAdditionalPhoneNumber": "Your Second Phone Number",
       "additionalPhoneNumber": "I have an additional phone number",
       "address": "Address",
       "addressWhereYouCurrentlyLive": "We need the address where you currently live. If you are homeless, enter either the shelter address or an address close to where you stay.",
@@ -219,6 +220,7 @@
         "preferredUnitType": "Preferred Unit Type",
         "title": "What unit sizes are you interested in?",
         "subTitle": "Your selected unit type will be subject to availability.",
+        "legend": "Preferred unit type",
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
@@ -241,7 +243,7 @@
         "updateHouseholdMember": "Update Household Member",
         "whatReletionship": "What is their relationship to you",
         "workInRegion": "Do they work in <REGION>?",
-        "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
+        "workInRegionNote": "TBD"
       },
       "membersInfo": {
         "title": "Before adding other people, make sure that they aren't named on any other application for this listing."
@@ -252,6 +254,7 @@
       "label": "ADA Accessible Units",
       "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
       "subTitle": "If you are selected for a unit, the property will work to accommodate your need to the best of their ability. Should your application be chosen, be prepared to provide supporting documentation from your physician.",
+      "legend": "ADA Features",
       "mobility": "For Mobility Impairments",
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
@@ -382,6 +385,7 @@
         "prompt": "What is your household total pre-tax income?",
         "placeholder": "Total all of your income sources",
         "incomeError": "Please enter a valid number greater than 0.",
+        "legend": "Income frequency",
         "perMonth": "per month",
         "perYear": "per year",
         "periodError": "Please select one of the options above.",
@@ -410,6 +414,7 @@
           "strong": "Rental subsidies",
           "text": "like VASH, HSA, HOPWA, Catholic Charities, AIDS Foundation, etc."
         },
+        "legend": "Housing vouchers, nontaxable income or rental subsidies",
         "prompt": "Please select one.",
         "yes": "Yes",
         "no": "No",

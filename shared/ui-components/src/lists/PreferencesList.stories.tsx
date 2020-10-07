@@ -1,11 +1,11 @@
 import * as React from "react"
 
-import "../cards/InfoCard.scss"
+import "../blocks/InfoCard.scss"
 import { PreferencesList } from "./PreferencesList"
 import Gish from "@bloom-housing/listings-service/listings/gish.json"
 
 export default {
-  title: "Listing/Preferences List",
+  title: "Lists/Preferences List",
 }
 
 const listing = Object.assign({}, Gish) as any

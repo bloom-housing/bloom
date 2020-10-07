@@ -4,12 +4,19 @@ Applicant can designate which unit sizes they prefer
 */
 import Link from "next/link"
 import Router from "next/router"
-import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Button,
+  FieldGroup,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { useContext, useMemo } from "react"
-import { CheckboxGroup } from "@bloom-housing/ui-components/src/forms/CheckboxGroup"
 import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import FormStep from "../../../src/forms/applications/FormStep"
 
@@ -37,14 +44,11 @@ export default () => {
     window.scrollTo(0, 0)
   }
 
-  const preferredUnitOptions = useMemo(() => {
-    return preferredUnit?.map((item) => ({
-      id: item.id,
-      label: t(`application.household.preferredUnit.options.${item.id}`),
-      defaultChecked: item.checked || application.preferredUnit.includes(item.id),
-      register,
-    }))
-  }, [register, application.preferredUnit])
+  const preferredUnitOptions = preferredUnit?.map((item) => ({
+    id: item.id,
+    label: t(`application.household.preferredUnit.options.${item.id}`),
+    defaultChecked: item.checked || application.preferredUnit.includes(item.id),
+  }))
 
   return (
     <FormsLayout>
@@ -80,15 +84,19 @@ export default () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group is-borderless">
-            <CheckboxGroup
-              name="preferredUnit"
-              groupLabel=""
-              groupNote={t("application.household.preferredUnit.optionsLabel")}
-              fields={preferredUnitOptions}
-              error={errors.preferredUnit}
-              errorMessage={t("application.form.errors.selectAtLeastOne")}
-              required
-            />
+            <fieldset>
+              <legend className="sr-only">{t("application.household.preferredUnit.legend")}</legend>
+              <FieldGroup
+                type="checkbox"
+                name="preferredUnit"
+                groupNote={t("application.household.preferredUnit.optionsLabel")}
+                fields={preferredUnitOptions}
+                error={errors.preferredUnit}
+                errorMessage={t("application.form.errors.selectAtLeastOne")}
+                validation={{ required: true }}
+                register={register}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__pager">

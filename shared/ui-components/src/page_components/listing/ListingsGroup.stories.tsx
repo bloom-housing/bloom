@@ -6,7 +6,7 @@ import Triton from "@bloom-housing/listings-service/listings/triton-test.json"
 import { Listing } from "@bloom-housing/core"
 
 export default {
-  title: "PageComponents/ListingGroup",
+  title: "Listing/Listing Group",
 }
 
 const archer = Object.assign({}, Archer) as any

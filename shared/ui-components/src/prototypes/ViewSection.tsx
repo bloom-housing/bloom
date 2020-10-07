@@ -6,20 +6,22 @@ export interface ViewSectionProps {
   edit?: string
   subtitle?: string
   tinted?: boolean
+  insetGrid?: boolean
   className?: string
-  children: React.ReactNode[]
+  children: React.ReactNode
 }
 
 const ViewSection = (props: ViewSectionProps) => {
   const viewGridClasses = ["view-grid"]
-  if (props.tinted) viewGridClasses.push("bg-primary-lighter")
+  if (props.tinted) viewGridClasses.push("is-tinted")
+  if (props.insetGrid) viewGridClasses.push("is-inset")
   if (props.className) viewGridClasses.push(props.className)
 
   return (
     <div className="view-section">
       {props.title && (
-        <header className="view-header">
-          <h2 className="view-title">{props.title}</h2>
+        <header className="view-section__header">
+          <h2 className="view-section__title">{props.title}</h2>
           {props.edit && (
             <span className="ml-auto">
               <a className="edit-link">{props.edit}</a>

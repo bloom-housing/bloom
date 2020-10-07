@@ -12,6 +12,7 @@ import {
   UserContext,
   ApiClientContext,
   ErrorMessage,
+  FieldGroup,
   Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -55,6 +56,13 @@ export default () => {
       })
   }
 
+  const agreeField = [
+    {
+      id: "agree",
+      label: t("application.review.terms.confirmCheckboxText"),
+    },
+  ]
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -74,23 +82,17 @@ export default () => {
             <Markdown options={{ disableParsingRawHTML: false }}>
               {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
             </Markdown>
-            <div className={`field mt-4 ${errors?.agree ? "error" : ""}`}>
-              <div>
-                <input
-                  className="inline-block"
-                  type="checkbox"
-                  id="agree"
-                  name="agree"
-                  ref={register({ required: true })}
-                />
-                <label htmlFor="agree" className="font-semibold">
-                  {t("application.review.terms.confirmCheckboxText")}
-                </label>
-              </div>
 
-              <ErrorMessage error={errors?.agree}>
-                {t("application.review.terms.agreeError")}
-              </ErrorMessage>
+            <div className="mt-4">
+              <FieldGroup
+                name="agree"
+                type="checkbox"
+                fields={agreeField}
+                register={register}
+                validation={{ required: true }}
+                error={errors.agree}
+                errorMessage={t("application.review.terms.agreeError")}
+              />
             </div>
           </div>
           <div className="form-card__pager">

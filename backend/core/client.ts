@@ -259,10 +259,10 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      listingId?: string;
+      listingId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application[]> {
+  ): Promise<ApplicationDto[]> {
     return new Promise((resolve, reject) => {
       let url = '/applications';
 
@@ -283,13 +283,36 @@ export class ApplicationsService {
       body?: ApplicationCreateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = '/applications';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * List applications as csv
+   */
+  listAsCsv(
+    params: {
+      /**  */
+      listingId: string;
+      /**  */
+      includeHeaders: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = '/applications/csv';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { listingId: params['listingId'], includeHeaders: params['includeHeaders'] };
+      let data = null;
 
       configs.data = data;
       axios(configs, resolve, reject);
@@ -304,7 +327,7 @@ export class ApplicationsService {
       applicationId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
@@ -328,7 +351,7 @@ export class ApplicationsService {
       body?: ApplicationUpdateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Application> {
+  ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
@@ -873,7 +896,7 @@ export interface PreferenceDto {
   updatedAt: string;
 
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
@@ -986,6 +1009,9 @@ export interface User {
 
   /**  */
   applications: Application[];
+
+  /**  */
+  isAdmin: boolean;
 }
 
 export interface Preference {
@@ -999,7 +1025,7 @@ export interface Preference {
   updatedAt: string;
 
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
@@ -1842,15 +1868,32 @@ export interface ListingUpdateDto {
   id: string;
 }
 
+export interface ApplicationDto {
+  /**  */
+  listing: IdDto;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: string;
+
+  /**  */
+  updatedAt: string;
+
+  /**  */
+  appUrl: string;
+
+  /**  */
+  application: object;
+}
+
 export interface ApplicationCreateDto {
   /**  */
   appUrl: string;
 
   /**  */
   application: object;
-
-  /**  */
-  user: IdDto;
 
   /**  */
   listing: IdDto;
@@ -1862,9 +1905,6 @@ export interface ApplicationUpdateDto {
 
   /**  */
   application: object;
-
-  /**  */
-  user: IdDto;
 
   /**  */
   listing: IdDto;
@@ -1894,7 +1934,7 @@ export interface AssetUpdateDto {
 
 export interface PreferenceCreateDto {
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;
@@ -1911,7 +1951,7 @@ export interface PreferenceCreateDto {
 
 export interface PreferenceUpdateDto {
   /**  */
-  ordinal: string;
+  ordinal: number;
 
   /**  */
   title: string;

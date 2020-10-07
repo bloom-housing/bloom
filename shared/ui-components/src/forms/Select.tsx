@@ -1,5 +1,5 @@
 import React from "react"
-import { ErrorMessage } from "./ErrorMessage"
+import { ErrorMessage } from "../notifications/ErrorMessage"
 import { FormOptions } from "../helpers/formOptions"
 
 interface SelectProps {
@@ -32,7 +32,7 @@ export const Select = ({
   placeholder,
   register,
   validation,
-  disabled = false,
+  disabled,
   options,
   keyPrefix,
 }: SelectProps) => {
