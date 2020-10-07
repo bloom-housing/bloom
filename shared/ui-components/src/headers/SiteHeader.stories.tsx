@@ -12,6 +12,7 @@ export const standard = () => (
     logoSrc="/images/logo_glyph.svg"
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
     title="Site Title Here"
+    skip="Skip to content"
   >
     <a href="#" className="navbar-item">
       Hello World
@@ -24,6 +25,7 @@ export const withDropdownAndButton = () => (
     logoSrc="/images/logo_glyph.svg"
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
     title="Site Title Here"
+    skip="Skip to content"
   >
     <a href="#" className="navbar-item">
       Hello World

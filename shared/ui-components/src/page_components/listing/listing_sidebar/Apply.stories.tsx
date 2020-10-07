@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Apply } from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import { ApplicationMethod, Listing } from "@bloom-housing/core"
+import { ApplicationMethod, ApplicationMethodType, Listing } from "@bloom-housing/core"
 
 export default {
   title: "Listing Sidebar/Apply",
@@ -38,12 +38,12 @@ export const showsMultipleDownloadURLs = () => {
   const testMethod1: ApplicationMethod = {
     label: "English",
     externalReference: "#english",
-    type: "FileDownload",
+    type: ApplicationMethodType.FileDownload,
   }
   const testMethod2: ApplicationMethod = {
     label: "Spanish",
     externalReference: "#spanish",
-    type: "FileDownload",
+    type: ApplicationMethodType.FileDownload,
   }
 
   listingWithDownloadMethods.applicationMethods = listingWithDownloadMethods.applicationMethods.concat(
@@ -60,7 +60,7 @@ export const linkDirectlyToInternalApplication = () => {
   const listingWithInternalLink = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
-    type: "Internal",
+    type: ApplicationMethodType.Internal,
   }
 
   listingWithInternalLink.applicationMethods = listingWithInternalLink.applicationMethods.concat([
@@ -77,13 +77,13 @@ export const linkToInternalApplicationAndDownloads = () => {
   const listingWithInternalAndDownload = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
-    type: "Internal",
+    type: ApplicationMethodType.Internal,
   }
 
   const downloadMethod: ApplicationMethod = {
     label: "English",
     externalReference: "#english",
-    type: "FileDownload",
+    type: ApplicationMethodType.FileDownload,
   }
 
   listingWithInternalAndDownload.applicationMethods = listingWithInternalAndDownload.applicationMethods.concat(
@@ -102,7 +102,7 @@ export const linkDirectlyToExternalApplication = () => {
   const externalMethod: ApplicationMethod = {
     label: "External",
     externalReference: "https://icann.org",
-    type: "ExternalLink",
+    type: ApplicationMethodType.ExternalLink,
   }
 
   listingWithMethodLinks.applicationMethods = listingWithMethodLinks.applicationMethods.concat([

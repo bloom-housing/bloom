@@ -13,7 +13,7 @@ const application = {} as Application
 let days = 10
 listing.applicationDueDate = moment().add(days, "days").format()
 application.listing = listing
-application.updatedAt = moment().toDate()
+application.updatedAt = moment().format()
 
 export const AppStatusItemPending = () => (
   <AppStatusItem
