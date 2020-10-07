@@ -7,6 +7,7 @@ import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
 import { applicationSetup, AppModule } from "../../src/app.module"
 import { AssetsModule } from "../../src/assets/assets.module"
+import { AuthModule } from "../../src/auth/auth.module"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -21,6 +22,7 @@ const exampleAssetBody = {
 
 describe("Assets", () => {
   let app: INestApplication
+  let userAccessToken: string
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -29,15 +31,24 @@ describe("Assets", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
+    const res = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: "admin@example.com", password: "abcdef" })
+      .expect(201)
+    userAccessToken = res.body.accessToken
   })
 
   it(`should create and retrieve an assset using /assets POST and GET`, async () => {
     let res = await supertest(app.getHttpServer())
       .post(`/assets`)
       .send(exampleAssetBody)
+      .set("Authorization", `Bearer ${userAccessToken}`)
       .expect(201)
     expect(res.body).toEqual(expect.objectContaining(exampleAssetBody))
-    res = await supertest(app.getHttpServer()).get(`/assets/${res.body.id}`).expect(200)
+    res = await supertest(app.getHttpServer())
+      .get(`/assets/${res.body.id}`)
+      .set("Authorization", `Bearer ${userAccessToken}`)
+      .expect(200)
     expect(res.body).toEqual(expect.objectContaining(exampleAssetBody))
     expect(res.body).toHaveProperty("id")
   })
@@ -46,20 +57,34 @@ describe("Assets", () => {
     const postRes = await supertest(app.getHttpServer())
       .post(`/assets`)
       .send(exampleAssetBody)
+      .set("Authorization", `Bearer ${userAccessToken}`)
       .expect(201)
     expect(postRes.body).toEqual(expect.objectContaining(exampleAssetBody))
-    await supertest(app.getHttpServer()).get(`/assets/${postRes.body.id}`).expect(200)
-    await supertest(app.getHttpServer()).delete(`/assets/${postRes.body.id}`).expect(200)
-    await supertest(app.getHttpServer()).get(`/assets/${postRes.body.id}`).expect(404)
+    await supertest(app.getHttpServer())
+      .get(`/assets/${postRes.body.id}`)
+      .set("Authorization", `Bearer ${userAccessToken}`)
+      .expect(200)
+    await supertest(app.getHttpServer())
+      .delete(`/assets/${postRes.body.id}`)
+      .set("Authorization", `Bearer ${userAccessToken}`)
+      .expect(200)
+    await supertest(app.getHttpServer())
+      .get(`/assets/${postRes.body.id}`)
+      .set("Authorization", `Bearer ${userAccessToken}`)
+      .expect(404)
   })
 
   it(`should create and list an asset using /assets POST and GET`, async () => {
     const postRes = await supertest(app.getHttpServer())
       .post(`/assets`)
       .send(exampleAssetBody)
+      .set("Authorization", `Bearer ${userAccessToken}`)
       .expect(201)
     expect(postRes.body).toEqual(expect.objectContaining(exampleAssetBody))
-    const listRes = await supertest(app.getHttpServer()).get(`/assets/`).expect(200)
+    const listRes = await supertest(app.getHttpServer())
+      .get(`/assets/`)
+      .set("Authorization", `Bearer ${userAccessToken}`)
+      .expect(200)
     expect(Array.isArray(listRes.body)).toBe(true)
     const filteredList = listRes.body.filter((value) => postRes.body.id === value.id)
     expect(filteredList.length).toEqual(1)
