@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Forms/DOBField Default 1`] = `
+exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
 <div
   style={
     Object {

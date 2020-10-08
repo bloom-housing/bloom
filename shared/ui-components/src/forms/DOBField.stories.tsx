@@ -4,7 +4,7 @@ import { DOBField } from "./DOBField"
 import { HouseholdMember } from "@bloom-housing/core"
 
 export default {
-  title: "Forms/DOBField",
+  title: "Forms/Date of Birth Field",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 

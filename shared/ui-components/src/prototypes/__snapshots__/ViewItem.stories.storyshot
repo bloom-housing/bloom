@@ -11,7 +11,6 @@ exports[`Storyshots Prototypes/ViewItem Default 1`] = `
   <ViewItem
     helper="Helper"
     label="Label"
-    value="Value"
   >
     <p
       className="view-item"
@@ -47,7 +46,6 @@ exports[`Storyshots Prototypes/ViewItem Flagged 1`] = `
   <ViewItem
     flagged={true}
     label="Address"
-    value="1112 Springfield St."
   >
     <p
       className="view-item is-flagged"
@@ -77,7 +75,6 @@ exports[`Storyshots Prototypes/ViewItem No Helper 1`] = `
 >
   <ViewItem
     label="Address"
-    value="1112 Springfield St."
   >
     <p
       className="view-item"

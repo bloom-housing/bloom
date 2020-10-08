@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Headers/Page Header With Subtitle 1`] = `
+<PageHeader
+  subtitle="Here is a subtitle"
+>
+  <header
+    className="page-header bg-primary-lighter"
+  >
+    <hgroup
+      className="page-header__group"
+    >
+      <h1
+        className="page-header__title"
+      >
+        Hello World
+      </h1>
+      <p
+        className="page-header__lead"
+      >
+         
+        Here is a subtitle
+      </p>
+    </hgroup>
+  </header>
+</PageHeader>
+`;
+
+exports[`Storyshots Headers/Page Header With Text Content 1`] = `
+<PageHeader>
+  <header
+    className="page-header bg-primary-lighter"
+  >
+    <hgroup
+      className="page-header__group"
+    >
+      <h1
+        className="page-header__title"
+      >
+        Hello World
+      </h1>
+    </hgroup>
+  </header>
+</PageHeader>
+`;
