@@ -1,3 +1,5 @@
+import StepDefinition from "./StepDefinition"
+
 export interface StepRoute {
   url: string
   definition?: typeof StepDefinition
