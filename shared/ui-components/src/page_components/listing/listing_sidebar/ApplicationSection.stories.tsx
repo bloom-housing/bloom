@@ -12,9 +12,10 @@ export default {
 
 export const dueSoon = () => {
   const listing = Object.assign({}, Archer) as any
+  const days = 10
   listing.applicationOpenDate = ""
   listing.waitlistCurrentSize = 0
-  listing.applicationDueDate = moment().add(10, "days").format()
+  listing.applicationDueDate = moment().add(days, "days").format()
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   // @ts-ignore
   return <ApplicationSection listing={listing} internalFormRoute="/forms" />

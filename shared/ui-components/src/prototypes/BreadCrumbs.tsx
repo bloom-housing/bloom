@@ -2,7 +2,7 @@ import * as React from "react"
 import "./BreadCrumbs.scss"
 
 export interface BreadCrumbsProps {
-  children: React.ReactNode[]
+  children: React.ReactNode
 }
 
 const BreadCrumbs = (props: BreadCrumbsProps) => (

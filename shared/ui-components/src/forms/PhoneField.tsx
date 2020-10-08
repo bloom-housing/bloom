@@ -1,5 +1,5 @@
 import React from "react"
-import { ErrorMessage } from "./ErrorMessage"
+import { ErrorMessage } from "../notifications/ErrorMessage"
 import { PhoneMask } from "./PhoneMask"
 import { Controller } from "react-hook-form"
 

@@ -1,5 +1,5 @@
 import React from "react"
-
+import { Tag } from "./Tag"
 import { TabNav } from "./TabNav"
 
 export default {
@@ -24,7 +24,12 @@ export const TabNavCount = () => (
       <a href="#">Applications</a>
     </li>
     <li>
-      <a href="#" className="is-current">Flags <span className="tag bg-gray-450 text-gray-900 ml-1">22</span></a>
+      <a href="#" className="is-current">Flags 
+        <Tag 
+         pillStyle={true}>
+          22
+        </Tag>
+      </a>
     </li>
   </TabNav>
 )

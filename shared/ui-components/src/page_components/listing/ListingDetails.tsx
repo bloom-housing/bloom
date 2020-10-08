@@ -4,7 +4,7 @@ import {
   ResponsiveContentItem,
   ResponsiveContentItemHeader,
   ResponsiveContentItemBody,
-} from "../../lists/ResponsiveContentList/ResponsiveContentList"
+} from "../../sections/ResponsiveContentList"
 import { ListingDetailHeader, ListingDetailHeaderProps } from "./ListingDetailHeader"
 
 export const ListingDetails = (props: any) => (
