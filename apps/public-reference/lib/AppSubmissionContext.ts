@@ -61,6 +61,9 @@ export const retrieveApplicationConfig = () => {
       {
         name: "summary",
       },
+      {
+        name: "terms",
+      },
     ],
   }
 }
@@ -165,6 +168,6 @@ export const AppSubmissionContext = React.createContext({
   application: blankApplication(),
   listing: null,
   /* eslint-disable */
-  syncApplication: (data) => {},
-  syncListing: (data) => {},
+  syncApplication: (data) => { },
+  syncListing: (data) => { },
 })

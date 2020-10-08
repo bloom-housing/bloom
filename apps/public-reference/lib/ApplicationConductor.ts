@@ -93,6 +93,9 @@ export default class ApplicationConductor {
     summary: {
       url: "/applications/review/summary",
     },
+    terms: {
+      url: "/applications/review/terms",
+    },
   }
 
   application: Record<string, any> = {}
