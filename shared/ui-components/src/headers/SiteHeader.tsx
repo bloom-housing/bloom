@@ -20,7 +20,7 @@ export interface NavbarDropdownProps {
 
 export const NavbarDropdown = (props: NavbarDropdownProps) => {
   return (
-    <div className="navbar-item has-dropdown is-hoverable">
+    <div className="navbar-item has-dropdown is-hoverable" tabIndex={0}>
       <a className="navbar-link">{props.menuTitle}</a>
 
       <div className="navbar-dropdown">{props.children}</div>
