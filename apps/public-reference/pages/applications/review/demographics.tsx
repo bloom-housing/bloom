@@ -65,7 +65,7 @@ const Demographics = () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink conductor={conductor} />
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

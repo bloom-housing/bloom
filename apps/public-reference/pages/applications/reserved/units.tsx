@@ -37,7 +37,7 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink conductor={conductor} />
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <h2 className="form-card__title is-borderless">Reserved Unit Conditionals</h2>
 

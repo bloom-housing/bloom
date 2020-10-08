@@ -1,12 +1,11 @@
 import Link from "next/link"
 import { OnClientSide, t } from "@bloom-housing/ui-components"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 
-const FormBackLink = (props: { conductor: ApplicationConductor }) => (
+const FormBackLink = (props: { url: string }) => (
   <p className="form-card__back">
-    {OnClientSide() && props.conductor.config.steps.length > 1 && (
+    {OnClientSide() && props.url && (
       <strong>
-        <Link href={props.conductor.determinePreviousUrl()}>
+        <Link href={props.url}>
           <a>{t("t.back")}</a>
         </Link>
       </strong>
