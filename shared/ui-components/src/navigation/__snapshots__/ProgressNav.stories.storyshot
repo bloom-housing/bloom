@@ -9,8 +9,8 @@ exports[`Storyshots Navigation/Progress Nav Default 1`] = `
   }
 >
   <ProgressNav
-    completedSteps={1}
-    currentPageStep={2}
+    completedSections={1}
+    currentPageSection={2}
     labels={
       Array [
         "You",
@@ -25,11 +25,11 @@ exports[`Storyshots Navigation/Progress Nav Default 1`] = `
       className="progress-nav"
     >
       <ProgressNavItem
-        completedSteps={1}
-        currentPageStep={2}
+        completedSections={1}
+        currentPageSection={2}
         key="You"
         label="You"
-        step={1}
+        section={1}
       >
         <li
           className="progress-nav__item "
@@ -42,11 +42,11 @@ exports[`Storyshots Navigation/Progress Nav Default 1`] = `
         </li>
       </ProgressNavItem>
       <ProgressNavItem
-        completedSteps={1}
-        currentPageStep={2}
+        completedSections={1}
+        currentPageSection={2}
         key="Household"
         label="Household"
-        step={2}
+        section={2}
       >
         <li
           className="progress-nav__item is-active"
@@ -59,11 +59,11 @@ exports[`Storyshots Navigation/Progress Nav Default 1`] = `
         </li>
       </ProgressNavItem>
       <ProgressNavItem
-        completedSteps={1}
-        currentPageStep={2}
+        completedSections={1}
+        currentPageSection={2}
         key="Income"
         label="Income"
-        step={3}
+        section={3}
       >
         <li
           className="progress-nav__item is-disabled"
@@ -76,11 +76,11 @@ exports[`Storyshots Navigation/Progress Nav Default 1`] = `
         </li>
       </ProgressNavItem>
       <ProgressNavItem
-        completedSteps={1}
-        currentPageStep={2}
+        completedSections={1}
+        currentPageSection={2}
         key="Preferences"
         label="Preferences"
-        step={4}
+        section={4}
       >
         <li
           className="progress-nav__item is-disabled"
@@ -93,11 +93,11 @@ exports[`Storyshots Navigation/Progress Nav Default 1`] = `
         </li>
       </ProgressNavItem>
       <ProgressNavItem
-        completedSteps={1}
-        currentPageStep={2}
+        completedSections={1}
+        currentPageSection={2}
         key="Review"
         label="Review"
-        step={5}
+        section={5}
       >
         <li
           className="progress-nav__item is-disabled"
