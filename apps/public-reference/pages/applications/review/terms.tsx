@@ -2,7 +2,6 @@
 5.3 Terms
 View of application terms with checkbox
 */
-import Link from "next/link"
 import Router from "next/router"
 import {
   Button,
@@ -11,30 +10,27 @@ import {
   t,
   UserContext,
   ApiClientContext,
-  ErrorMessage,
   FieldGroup,
   Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
 import React, { useContext, useMemo } from "react"
 import Markdown from "markdown-to-jsx"
-import FormStep from "../../../src/forms/applications/FormStep"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("terms")
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
 
-  const currentPageStep = 5
+  const currentPageSection = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    application.completedStep = 5
+    application.completedSections = 5
     applicationsService
       .create({
         body: {
@@ -51,7 +47,7 @@ export default () => {
         },
       })
       .then((result) => {
-        new FormStep(conductor).save({ confirmationId: result.id })
+        conductor.currentStep.save({ confirmationId: result.id })
         Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
       })
   }
@@ -67,9 +63,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

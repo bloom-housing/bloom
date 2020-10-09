@@ -9,8 +9,8 @@ export default {
 
 export const Default = () => (
   <ProgressNav
-    currentPageStep={2}
-    completedSteps={1}
+    currentPageSection={2}
+    completedSections={1}
     labels={["You", "Household", "Income", "Preferences", "Review"]}
   />
 )

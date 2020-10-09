@@ -50,6 +50,7 @@ export interface Listing {
   applicationPickUpAddressOfficeHours?: string
   accessibility: string
   amenities: string
+  applicationConfig: Record<string, any>
   applicationDueDate: string
   applicationOpenDate?: string
   applicationFee: string

@@ -16,14 +16,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useEffect } from "react"
 import { emailRegex } from "../../../lib/helpers"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const { conductor, application, listing } = useFormConductor("primaryApplicantName")
+  const currentPageSection = 1
 
   /* Form Handler */
   const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
@@ -36,8 +34,8 @@ export default () => {
     },
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
-    conductor.routeToNextOrReturnUrl("/applications/contact/address")
+    conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -55,9 +53,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

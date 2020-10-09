@@ -3,7 +3,6 @@
 Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
-import Link from "next/link"
 import {
   AlertBox,
   Button,
@@ -20,16 +19,16 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext, blankApplication } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext, useMemo, Fragment } from "react"
+import { blankApplication } from "../../../lib/AppSubmissionContext"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
+  const currentPageSection = 1
 
   /* Form Handler */
   const { control, register, handleSubmit, setValue, trigger, watch, errors } = useForm<
@@ -64,7 +63,7 @@ export default () => {
     }
     conductor.sync()
 
-    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-type")
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -90,20 +89,14 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/contact/name">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

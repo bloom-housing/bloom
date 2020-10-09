@@ -2,8 +2,6 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
-import Link from "next/link"
-import Router from "next/router"
 import {
   AlertBox,
   Button,
@@ -15,19 +13,13 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext, useMemo } from "react"
 import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
-import FormStep from "../../../src/forms/applications/FormStep"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 2
-
-  const backPath =
-    application.householdSize > 1
-      ? "/applications/household/add-members"
-      : "/applications/household/live-alone"
+  const { conductor, application, listing } = useFormConductor("preferredUnitSize")
+  const currentPageSection = 2
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
@@ -37,8 +29,7 @@ export default () => {
     application.preferredUnit = preferredUnit
 
     conductor.sync()
-
-    Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -54,20 +45,14 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href={backPath}>
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

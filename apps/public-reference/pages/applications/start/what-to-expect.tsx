@@ -2,30 +2,28 @@
 0.2 - What To Expect
 A notice regarding application process and rules
 */
-import Router from "next/router"
 import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const { conductor, application, listing } = useFormConductor("whatToExpect")
+  const currentPageSection = 1
 
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
-    Router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
 
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
