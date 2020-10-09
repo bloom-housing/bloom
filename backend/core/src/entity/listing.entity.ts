@@ -19,7 +19,6 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDateString,
-  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -28,40 +27,11 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
+import { ListingEvent } from "./listing-event.entity"
 
 export enum ListingStatus {
   active = "active",
   pending = "pending",
-}
-
-export enum ListingEventType {
-  openHouse = "openHouse",
-  publicLottery = "publicLottery",
-}
-
-export class ListingEvent {
-  @Expose()
-  @IsDefined()
-  @IsEnum(ListingEventType)
-  type: ListingEventType
-
-  @Expose()
-  @IsDateString()
-  startTime: string
-
-  @Expose()
-  @IsDateString()
-  endTime: string
-
-  @Expose()
-  @IsOptional()
-  @IsString()
-  url?: string | null
-
-  @Expose()
-  @IsOptional()
-  @IsString()
-  note?: string | null
 }
 
 @Entity({ name: "listings" })
@@ -91,6 +61,9 @@ class Listing extends BaseEntity {
 
   @OneToMany((type) => Asset, (asset) => asset.listing)
   assets: Asset[]
+
+  @OneToMany((type) => ListingEvent, (listingEvent) => listingEvent.listing)
+  events: ListingEvent[]
 
   @OneToMany((type) => Application, (application) => application.listing)
   applications: Application[]
@@ -154,8 +127,8 @@ class Listing extends BaseEntity {
   @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  buildingTotalUnits: number | null
+  @IsString()
+  buildingTotalUnits: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -317,8 +290,8 @@ class Listing extends BaseEntity {
   @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  unitsAvailable: number | null
+  @IsString()
+  unitsAvailable: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -329,14 +302,14 @@ class Listing extends BaseEntity {
   @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  waitlistCurrentSize: number | null
+  @IsString()
+  waitlistCurrentSize: string | null
 
   @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  waitlistMaxSize: number | null
+  @IsString()
+  waitlistMaxSize: string | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -348,8 +321,8 @@ class Listing extends BaseEntity {
   @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  yearBuilt: number | null
+  @IsString()
+  yearBuilt: string | null
 
   @Column({
     type: "enum",
@@ -366,13 +339,6 @@ class Listing extends BaseEntity {
 
   @Expose()
   urlSlug?: string
-
-  @Column({ type: "jsonb", nullable: true })
-  @Expose()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => ListingEvent)
-  events?: ListingEvent[] | null
 }
 
 export { Listing as default, Listing }

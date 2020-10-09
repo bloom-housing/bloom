@@ -2,7 +2,7 @@ import { OmitType } from "@nestjs/swagger"
 import { ListingDto } from "./listing.dto"
 import { Expose, Type } from "class-transformer"
 import { IdDto } from "../lib/id.dto"
-import { IsDate, IsDateString, IsDefined, ValidateNested } from "class-validator"
+import { IsDefined, ValidateNested } from "class-validator"
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
@@ -12,6 +12,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "assets",
   "preferences",
   "units",
+  "events",
 ] as const) {
   @Expose()
   @IsDefined()
@@ -33,4 +34,9 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ each: true })
   @Type((unit) => IdDto)
   units: IdDto[]
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type((unit) => IdDto)
+  events: IdDto[]
 }
