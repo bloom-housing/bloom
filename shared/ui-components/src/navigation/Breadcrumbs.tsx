@@ -1,5 +1,5 @@
 import React from "react"
-import LocalizedLink from "../actions/LocalizedLink"
+import { LocalizedLink } from "../actions/LocalizedLink"
 import "./Breadcrumbs.scss"
 
 export interface BreadcrumbsProps {
@@ -8,7 +8,11 @@ export interface BreadcrumbsProps {
 
 const BreadcrumbLink = (props: { href: string; children: React.ReactNode; current?: boolean }) => (
   <li>
-    <LocalizedLink className={props.current ? "is-active" : undefined} aria={props.current ? { "aria-current": "page" } : undefined} href={props.href}>
+    <LocalizedLink
+      className={props.current ? "is-active" : undefined}
+      aria={props.current ? { "aria-current": "page" } : undefined}
+      href={props.href}
+    >
       {props.children}
     </LocalizedLink>
   </li>

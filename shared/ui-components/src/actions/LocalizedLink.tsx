@@ -22,7 +22,9 @@ const LocalizedLink = (props: LocalizedLinkProps) => {
 
   return (
     <Link {...localizedProps}>
-      <a className={props.className} {...ariaAttributes}>{props.children}</a>
+      <a className={props.className} {...ariaAttributes}>
+        {props.children}
+      </a>
     </Link>
   )
 }
