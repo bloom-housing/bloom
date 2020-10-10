@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Navigation/Breadcrumbs Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Breadcrumbs>
+    <nav
+      aria-label="Breadcrumb"
+      className="breadcrumbs"
+    >
+      <ol>
+        <BreadcrumbLink
+          href="#"
+        >
+          <li>
+            <LocalizedLink
+              href="#"
+            >
+              <Link
+                href="#"
+              >
+                <a
+                  href="/#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  One
+                </a>
+              </Link>
+            </LocalizedLink>
+          </li>
+        </BreadcrumbLink>
+        <BreadcrumbLink
+          href="#"
+        >
+          <li>
+            <LocalizedLink
+              href="#"
+            >
+              <Link
+                href="#"
+              >
+                <a
+                  href="/#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Two
+                </a>
+              </Link>
+            </LocalizedLink>
+          </li>
+        </BreadcrumbLink>
+        <BreadcrumbLink
+          current={true}
+          href="#"
+        >
+          <li>
+            <LocalizedLink
+              aria={
+                Object {
+                  "aria-current": "page",
+                }
+              }
+              className="is-active"
+              href="#"
+            >
+              <Link
+                href="#"
+              >
+                <a
+                  aria-current="page"
+                  className="is-active"
+                  href="/#"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  Three
+                </a>
+              </Link>
+            </LocalizedLink>
+          </li>
+        </BreadcrumbLink>
+      </ol>
+    </nav>
+  </Breadcrumbs>
+</div>
+`;
