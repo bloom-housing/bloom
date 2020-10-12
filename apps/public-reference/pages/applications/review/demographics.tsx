@@ -2,21 +2,18 @@
 5.1 Demographics
 Optional demographic questions
 */
-import Link from "next/link"
-import Router from "next/router"
+import { useMemo } from "react"
 import {
   Button,
+  FieldGroup,
+  Form,
   FormCard,
   ProgressNav,
-  t,
-  FieldGroup,
   Select,
-  Form,
+  t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext, useMemo } from "react"
 import {
   ethnicityKeys,
   raceKeys,
@@ -24,11 +21,12 @@ import {
   sexualOrientation,
   howDidYouHear,
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
-import FormStep from "../../../src/forms/applications/FormStep"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 const Demographics = () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 5
+  const { conductor, application, listing } = useFormConductor("demographics")
+  const currentPageSection = 5
 
   /* Form Handler */
   const { register, handleSubmit } = useForm()
@@ -36,7 +34,7 @@ const Demographics = () => {
   const onSubmit = (data) => {
     const { ethnicity, gender, sexualOrientation, howDidYouHear } = data
 
-    new FormStep(conductor).save({
+    conductor.currentStep.save({
       demographics: {
         ethnicity,
         gender,
@@ -44,8 +42,7 @@ const Demographics = () => {
         howDidYouHear,
       },
     })
-
-    Router.push("/applications/review/summary").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
 
   const howDidYouHearOptions = useMemo(() => {
@@ -57,28 +54,18 @@ const Demographics = () => {
     }))
   }, [register])
 
-  const backPath = application.preferences.none
-    ? "/applications/preferences/general"
-    : "/applications/preferences/select"
-
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href={backPath}>
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

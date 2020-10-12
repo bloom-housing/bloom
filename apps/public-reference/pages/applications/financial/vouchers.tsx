@@ -2,12 +2,9 @@
 3.1 Vouchers Subsidies
 Question asks if anyone on the application receives a housing voucher or subsidy.
 */
-import Link from "next/link"
-import { useRouter } from "next/router"
 import {
   AlertBox,
   Button,
-  ErrorMessage,
   Form,
   FormCard,
   ProgressNav,
@@ -16,14 +13,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
-import FormStep from "../../../src/forms/applications/FormStep"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const router = useRouter()
-  const currentPageStep = 3
+  const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
+  const currentPageSection = 3
 
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm({
@@ -34,9 +29,9 @@ export default () => {
   const onSubmit = (data) => {
     const { incomeVouchers } = data
     const toSave = { incomeVouchers: JSON.parse(incomeVouchers) }
-    new FormStep(conductor).save(toSave)
 
-    router.push("/applications/financial/income").then(() => window.scrollTo(0, 0))
+    conductor.currentStep.save(toSave)
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -59,20 +54,14 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/household/ada">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

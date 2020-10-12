@@ -50,7 +50,7 @@ export class AssetsController {
   @ApiOperation({ summary: "Get asset by id", operationId: "retrieve" })
   @UseInterceptors(new TransformInterceptor(AssetDto))
   async retrieve(@Param("assetId") assetId: string): Promise<AssetDto> {
-    return await this.assetsService.findOne(assetId)
+    return await this.assetsService.findOne({ where: { id: assetId } })
   }
   @Delete(`:assetId`)
   @ApiOperation({ summary: "Delete asset by id", operationId: "delete" })

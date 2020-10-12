@@ -17,14 +17,15 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useEffect, useMemo, useState } from "react"
+import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
+import { useContext, useEffect, useState } from "react"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
   conductor.listing =
     response.data.listings.find((listing) => listing.id == listingId) || response.data.listings[2] // FIXME: temporary fallback
+  const applicationConfig = retrieveApplicationConfig() // TODO: load from backend
+  conductor.config = applicationConfig
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
 }
@@ -41,7 +42,7 @@ export default () => {
     loadListing(listingId, setListing, conductor, context)
   }, [])
 
-  const currentPageStep = 1
+  const currentPageSection = 1
 
   const imageUrl = listing?.assets ? imageUrlFromListing(listing) : ""
 
@@ -49,17 +50,24 @@ export default () => {
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     conductor.sync()
-
-    router.push("/applications/start/what-to-expect").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
 
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={
+            listing?.applicationConfig.sections || [
+              "You",
+              "Household",
+              "Income",
+              "Preferences",
+              "Review",
+            ]
+          }
         />
       </FormCard>
 
@@ -79,36 +87,44 @@ export default () => {
         <div className="form-card__pager">
           <Form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__pager-row primary px-4">
-              <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
-                {t("application.chooseLanguage.chooseYourLanguage")}
-              </h3>
+              {listing?.applicationConfig.languages.length > 1 && (
+                <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
+                  {t("application.chooseLanguage.chooseYourLanguage")}
+                </h3>
+              )}
 
-              <Button
-                className="mx-1"
-                onClick={() => {
-                  // Set the language in the context here...
-                }}
-              >
-                Begin
-              </Button>
+              {listing?.applicationConfig.languages.some((lang) => lang == "en") && (
+                <Button
+                  className="mx-1"
+                  onClick={() => {
+                    // Set the language in the context here...
+                  }}
+                >
+                  Begin
+                </Button>
+              )}
 
-              <Button
-                className="mx-1"
-                onClick={() => {
-                  //
-                }}
-              >
-                Empezar
-              </Button>
+              {listing?.applicationConfig.languages.some((lang) => lang == "es") && (
+                <Button
+                  className="mx-1"
+                  onClick={() => {
+                    //
+                  }}
+                >
+                  Empezar
+                </Button>
+              )}
 
-              <Button
-                className="mx-1"
-                onClick={() => {
-                  //
-                }}
-              >
-                開始
-              </Button>
+              {listing?.applicationConfig.languages.some((lang) => lang == "zh") && (
+                <Button
+                  className="mx-1"
+                  onClick={() => {
+                    //
+                  }}
+                >
+                  開始
+                </Button>
+              )}
             </div>
           </Form>
 
