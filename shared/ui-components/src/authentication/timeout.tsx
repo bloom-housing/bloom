@@ -2,9 +2,9 @@ import React, { createElement, FunctionComponent, useContext, useEffect, useStat
 import { useRouter } from "next/router"
 import UserContext from "./UserContext"
 import { ConfigContext } from "../config"
-import { Modal } from "../modals/Modal"
-import { setSiteAlertMessage } from "../alerts/SiteAlert"
-import { AlertTypes } from "../alerts/alertTypes"
+import { Modal } from "../overlays/Modal"
+import { setSiteAlertMessage } from "../notifications/SiteAlert"
+import { AlertTypes } from "../notifications/alertTypes"
 import { t } from "../helpers/translator"
 
 const PROMPT_TIMEOUT = 60000

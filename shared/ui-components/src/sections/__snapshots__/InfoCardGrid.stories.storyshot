@@ -1,0 +1,219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Sections/Info Card Grid Three Columns 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <InfoCardGrid
+    subtitle="Other rental housing funded by the City, as well as lists developed each month by community nonprofit agencies."
+    title="Rentals"
+  >
+    <section
+      className="info-cards"
+    >
+      <header
+        className="info-cards__header"
+      >
+        <h2
+          className="info-cards__title"
+        >
+          Rentals
+        </h2>
+        <p
+          className="info-cards__subtitle"
+        >
+          Other rental housing funded by the City, as well as lists developed each month by community nonprofit agencies.
+        </p>
+      </header>
+      <div
+        className="info-cards__grid"
+      >
+        <InfoCard
+          className="is-normal-primary-lighter"
+          externalHref="http://google.com"
+          title="My Card"
+        >
+          <div
+            className="info-card is-normal-primary-lighter"
+          >
+            <h4
+              className="info-card__title"
+            >
+              <a
+                href="http://google.com"
+                target="_blank"
+              >
+                My Card
+              </a>
+            </h4>
+            <div
+              className="markdown"
+            >
+              <Markdown
+                options={
+                  Object {
+                    "disableParsingRawHTML": true,
+                    "namedCodesToUnicode": Object {
+                      "amp": "&",
+                      "apos": "'",
+                      "gt": ">",
+                      "lt": "<",
+                      "nbsp": " ",
+                      "quot": "“",
+                    },
+                    "overrides": Object {},
+                    "slugify": [Function],
+                  }
+                }
+              >
+                <div
+                  key="outer"
+                >
+                  <p
+                    key="0"
+                  >
+                    Paragraph content
+                  </p>
+                  <hr
+                    key="1"
+                  />
+                  <p
+                    key="2"
+                  >
+                    More content
+                  </p>
+                </div>
+              </Markdown>
+            </div>
+          </div>
+        </InfoCard>
+        <InfoCard
+          className="is-normal-primary-lighter"
+          externalHref="http://google.com"
+          title="My Card"
+        >
+          <div
+            className="info-card is-normal-primary-lighter"
+          >
+            <h4
+              className="info-card__title"
+            >
+              <a
+                href="http://google.com"
+                target="_blank"
+              >
+                My Card
+              </a>
+            </h4>
+            <div
+              className="markdown"
+            >
+              <Markdown
+                options={
+                  Object {
+                    "disableParsingRawHTML": true,
+                    "namedCodesToUnicode": Object {
+                      "amp": "&",
+                      "apos": "'",
+                      "gt": ">",
+                      "lt": "<",
+                      "nbsp": " ",
+                      "quot": "“",
+                    },
+                    "overrides": Object {},
+                    "slugify": [Function],
+                  }
+                }
+              >
+                <div
+                  key="outer"
+                >
+                  <h3
+                    id="header-3"
+                    key="0"
+                  >
+                    Header 3
+                  </h3>
+                  <ul
+                    key="1"
+                  >
+                    <li
+                      key="0"
+                    >
+                      A list
+                    </li>
+                    <li
+                      key="1"
+                    >
+                      of items
+                    </li>
+                  </ul>
+                </div>
+              </Markdown>
+            </div>
+          </div>
+        </InfoCard>
+        <InfoCard
+          className="is-normal-primary-lighter"
+          externalHref="http://google.com"
+          title="My Card"
+        >
+          <div
+            className="info-card is-normal-primary-lighter"
+          >
+            <h4
+              className="info-card__title"
+            >
+              <a
+                href="http://google.com"
+                target="_blank"
+              >
+                My Card
+              </a>
+            </h4>
+            <ExpandableText>
+              <div
+                className="expandable-text undefined"
+              >
+                <Markdown
+                  options={
+                    Object {
+                      "disableParsingRawHTML": true,
+                      "namedCodesToUnicode": Object {
+                        "amp": "&",
+                        "apos": "'",
+                        "gt": ">",
+                        "lt": "<",
+                        "nbsp": " ",
+                        "quot": "“",
+                      },
+                      "overrides": Object {},
+                      "slugify": [Function],
+                    }
+                  }
+                >
+                  <p
+                    key="0"
+                  >
+                    Text within 
+                    <em
+                      key="1"
+                    >
+                      another
+                    </em>
+                     component…
+                  </p>
+                </Markdown>
+              </div>
+            </ExpandableText>
+          </div>
+        </InfoCard>
+      </div>
+    </section>
+  </InfoCardGrid>
+</div>
+`;

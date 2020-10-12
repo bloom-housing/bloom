@@ -3,7 +3,6 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
-import Link from "next/link"
 import {
   AlertBox,
   Button,
@@ -15,14 +14,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext, useMemo } from "react"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 2
+  const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
+  const currentPageSection = 2
 
   /* Form Handler */
   const { register, handleSubmit, getValues, setValue, trigger, watch, errors } = useForm<
@@ -37,15 +34,15 @@ export default () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save({
+    conductor.completeSection(2)
+    conductor.currentStep.save({
       accessibility: {
         mobility: data.mobility,
         vision: data.vision,
         hearing: data.hearing,
       },
     })
-
-    conductor.routeToNextOrReturnUrl("/applications/financial/vouchers")
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -57,20 +54,14 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/household/preferred-units">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.ada.title")}</h2>

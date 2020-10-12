@@ -55,7 +55,7 @@ export class PreferencesController {
   @ApiOperation({ summary: "Get preference by id", operationId: "retrieve" })
   @UseInterceptors(new TransformInterceptor(PreferenceDto))
   async retrieve(@Param("preferenceId") preferenceId: string): Promise<Preference> {
-    return await this.preferencesService.findOne(preferenceId)
+    return await this.preferencesService.findOne({ where: { id: preferenceId } })
   }
 
   @Delete(`:preferenceId`)

@@ -3,7 +3,7 @@ import "./ViewItem.scss"
 
 export interface ViewItemProps {
   label?: string
-  value?: string
+  children: React.ReactNode
   helper?: string
   flagged?: boolean
   className?: string
@@ -17,7 +17,7 @@ const ViewItem = (props: ViewItemProps) => {
   return (
     <p className={viewItemClasses.join(" ")}>
       <span className="view-item__label">{props.label}</span>
-      <span className="view-item__value">{props.value}</span>
+      <span className="view-item__value">{props.children}</span>
       {props.helper && <span className="view-item__helper">{props.helper}</span>}
     </p>
   )

@@ -55,7 +55,7 @@ export class UnitsController {
   @ApiOperation({ summary: "Get unit by id", operationId: "retrieve" })
   @UseInterceptors(new TransformInterceptor(UnitDto))
   async retrieve(@Param("unitId") unitId: string): Promise<Unit> {
-    return await this.unitsService.findOne(unitId)
+    return await this.unitsService.findOne({ where: { id: unitId } })
   }
 
   @Delete(`:unitId`)

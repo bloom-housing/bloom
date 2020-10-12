@@ -2,6 +2,7 @@ import React from "react"
 import Link from "next/link"
 import { SimpleTable } from "./SimpleTable"
 import { ViewItem } from "./ViewItem"
+import { GridItem } from "./GridItem"
 import { ViewSection } from "./ViewSection"
 
 export default {
@@ -13,49 +14,66 @@ export const FourColumns = () => (
   <ViewSection
     title="Section Title"
     tinted={true}
+    insetGrid={true}
     className="md:grid md:grid-cols-4 md:gap-8"
   >
-    <ViewItem
+    <GridItem>
+      <ViewItem
         label="First Name"
-        value="Lisa"
+        children="Lisa"
       />
+    </GridItem>
 
+    <GridItem>
       <ViewItem
         label="Middle Name"
-        value="S"
+        children="S"
       />
+    </GridItem>
 
+    <GridItem>
       <ViewItem
         label="Last Name"
-        value="Jones"
+        children="Jones"
       />
+    </GridItem>
 
+    <GridItem>
       <ViewItem
         label="Date of Birth"
-        value="01/01/1985"
+        children="01/01/1985"
       />
+    </GridItem>
 
+    <GridItem>
       <ViewItem
         label="Email"
-        value="lisa@gmail.com"
+        children="lisa@gmail.com"
       />
+    </GridItem>
 
+    <GridItem>
       <ViewItem
         label="Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Cell"
       />
+    </GridItem>
 
+    <GridItem>
       <ViewItem
         label="Second Phone"
-        value="111-222-3333"
+        children="111-222-3333"
         helper="Work"
       />
+    </GridItem>
 
+    <GridItem>
       <ViewItem
         label="Perferred Contact"
-        value="Phone"
+        children="Phone"
       />
+    </GridItem>
   </ViewSection>
 )
 
@@ -64,150 +82,186 @@ export const FourColumnsEdit = () => (
     title="Section Title"
     edit="Edit"
     tinted={true}
+    insetGrid={true}
     className="md:grid md:grid-cols-4 md:gap-8"
   >
-    <ViewItem
-      label="First Name"
-      value="Lisa"
-    />
+    <GridItem>
+      <ViewItem
+        label="First Name"
+        children="Lisa"
+      />
+    </GridItem>
 
-    <ViewItem
-      label="Middle Name"
-      value="S"
-    />
+    <GridItem>
+      <ViewItem
+        label="Middle Name"
+        children="S"
+      />
+    </GridItem>
 
-    <ViewItem
-      label="Last Name"
-      value="Jones"
-    />
+    <GridItem>
+      <ViewItem
+        label="Last Name"
+        children="Jones"
+      />
+    </GridItem>
 
-    <ViewItem
-      label="Date of Birth"
-      value="01/01/1985"
-    />
+    <GridItem>
+      <ViewItem
+        label="Date of Birth"
+        children="01/01/1985"
+      />
+    </GridItem>
 
-    <ViewItem
-      label="Email"
-      value="lisa@gmail.com"
-    />
+    <GridItem>
+      <ViewItem
+        label="Email"
+        children="lisa@gmail.com"
+      />
+    </GridItem>
 
-    <ViewItem
-      label="Phone"
-      value="111-222-3333"
-      helper="Cell"
-    />
+    <GridItem>
+      <ViewItem
+        label="Phone"
+        children="111-222-3333"
+        helper="Cell"
+      />
+    </GridItem>
 
-    <ViewItem
-      label="Second Phone"
-      value="111-222-3333"
-      helper="Work"
-    />
+    <GridItem>
+      <ViewItem
+        label="Second Phone"
+        children="111-222-3333"
+        helper="Work"
+      />
+    </GridItem>
 
-    <ViewItem
-      label="Perferred Contact"
-      value="Phone"
-    />
+    <GridItem>
+      <ViewItem
+        label="Perferred Contact"
+        children="Phone"
+      />
+    </GridItem>
   </ViewSection>
 )
 
 export const Address = () => (
-  <div className="view-section">
-    <header className="view-header">
-      <h2 className="view-title">My Section</h2>
-    </header>  
-    <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
-      <div className="view-group">
-        <h3 className="view-group__title">Residence Address</h3>
-        <div className="view-subgrid md:grid md:grid-cols-4 md:gap-8">
+    <ViewSection
+      title="Section Title"
+      tinted={true}
+      insetGrid={true}
+      className="md:grid md:grid-cols-1 gap-y-4"
+    >
+
+    <div className="view-group">
+      <h3 className="view-group__title">Residence Address</h3>
+      <div className="view-subgrid md:grid md:grid-cols-4 md:gap-8">
+        <GridItem
+          className="md:col-span-3"
+        >
           <ViewItem
             label="Street Address"
-            value="112 Springfield St."
-            className="md:col-span-3"
+            children="112 Springfield St."
+            
           />
+        </GridItem>
 
+        <GridItem>
           <ViewItem
             label="Apt Unit #"
-            value="1"
+            children="1"
           />
+        </GridItem>
 
+        <GridItem
+          className="md:col-span-2"
+        >
           <ViewItem
             label="City"
-            value="Oakland"
-            className="md:col-span-2"
+            children="Oakland"
           />
+        </GridItem>
 
+        <GridItem>
           <ViewItem
             label="State"
-            value="CA"
+            children="CA"
           />
+        </GridItem>
 
+        <GridItem>
           <ViewItem
             label="Zip"
-            value="94577"
+            children="94577"
           />
-        </div>
+        </GridItem>
       </div>
     </div>
-  </div>
+  </ViewSection>
 )
 
 export const ViewSectionSingleColumn = () => (
-  <div className="view-section">
-    <h3 className="view-group__title">My Group</h3>
+  <ViewSection
+    tinted={true}
+    insetGrid={true}
+  >
+    <div className="view-group">
+      <h3 className="view-group__title">My Group</h3>
+      <div className="view-subgrid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
+        <ViewItem
+          label="First Name"
+          children="Lisa"
+        />
 
-    <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
-      <ViewItem
-        label="First Name"
-        value="Lisa"
-      />
+        <ViewItem
+          label="Middle Name"
+          children="S"
+        />
 
-      <ViewItem
-        label="Middle Name"
-        value="S"
-      />
+        <ViewItem
+          label="Last Name"
+          children="Jones"
+        />
 
-      <ViewItem
-        label="Last Name"
-        value="Jones"
-      />
+        <ViewItem
+          label="Date of Birth"
+          children="01/01/1985"
+        />
 
-      <ViewItem
-        label="Date of Birth"
-        value="01/01/1985"
-      />
+        <ViewItem
+          label="Email"
+          children="lisa@gmail.com"
+        />
 
-      <ViewItem
-        label="Email"
-        value="lisa@gmail.com"
-      />
+        <ViewItem
+          label="Phone"
+          children="111-222-3333"
+          helper="Cell"
+        />
 
-      <ViewItem
-        label="Phone"
-        value="111-222-3333"
-        helper="Cell"
-      />
+        <ViewItem
+          label="Second Phone"
+          children="111-222-3333"
+          helper="Work"
+        />
 
-      <ViewItem
-        label="Second Phone"
-        value="111-222-3333"
-        helper="Work"
-      />
-
-      <ViewItem
-        label="Perferred Contact"
-        value="Phone"
-      />
+        <ViewItem
+          label="Perferred Contact"
+          children="Phone"
+        />
+      </div>
     </div>
-  </div>
+  </ViewSection>
 )
 
 export const ViewSectionSingleColumnWarn = () => (
-  <div className="view-section">
-    <p className="view-item">
-      <span className="view-item__label">Application Number</span>
-      <span className="view-item__value">APP-0001002002</span>
-    </p>
-    <div className="bg-primary-lighter my-4 p-4">
+  <ViewSection>
+    <ViewItem
+      label="Application Number"
+      children="APP-0001002002"
+    />
+
+    <div className="view-group bg-primary-lighter my-4 p-4">
       <fieldset>
         <legend className="field-note mb-4 text-gray-750">Confirm this application is valid:</legend>
         <div className="field-group--inline">
@@ -217,67 +271,65 @@ export const ViewSectionSingleColumnWarn = () => (
       </fieldset>
     </div>
 
-    <h3 className="view-group__title">My Group</h3>
+    <div className="view-group">
+      <h3 className="view-group__title">My Group</h3>
+      <div className="view-subgrid p-8 md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
+        <ViewItem
+          label="First Name"
+          children="Lisa"
+          flagged={true}
+        />
 
-    <div className="view-grid md:grid md:grid-cols-1 gap-y-4 bg-primary-lighter">
-      <ViewItem
-        label="First Name"
-        value="Lisa"
-        flagged={true}
-      />
+        <ViewItem
+          label="Middle Name"
+          children="S"
+          flagged={true}
+        />
 
-      <ViewItem
-        label="Middle Name"
-        value="S"
-        flagged={true}
-      />
+        <ViewItem
+          label="Last Name"
+          children="Jones"
+          flagged={true}
+        />
 
-      <ViewItem
-        label="Last Name"
-        value="Jones"
-        flagged={true}
-      />
+        <ViewItem
+          label="Date of Birth"
+          children="01/01/1985"
+          flagged={true}
+        />
 
-      <ViewItem
-        label="Date of Birth"
-        value="01/01/1985"
-        flagged={true}
-      />
+        <ViewItem
+          label="Email"
+          children="lisa@gmail.com"
+        />
 
-      <ViewItem
-        label="Email"
-        value="lisa@gmail.com"
-      />
+        <ViewItem
+          label="Phone"
+          children="111-222-3333"
+          helper="Cell"
+        />
 
-      <ViewItem
-        label="Phone"
-        value="111-222-3333"
-        helper="Cell"
-      />
+        <ViewItem
+          label="Second Phone"
+          children="111-222-3333"
+          helper="Work"
+        />
 
-      <ViewItem
-        label="Second Phone"
-        value="111-222-3333"
-        helper="Work"
-      />
-
-      <ViewItem
-        label="Perferred Contact"
-        value="Phone"
-      />
+        <ViewItem
+          label="Perferred Contact"
+          children="Phone"
+        />
+      </div>
     </div>
-  </div>
+  </ViewSection>
 )
 
-
 export const ViewSectionTable = () => (
-  <div className="view-section">
-    <header className="view-header">
-      <h2 className="view-title">My Section</h2>
-    </header>
-
-    <div className="view-grid bg-primary-lighter">
-      <SimpleTable />
-    </div> 
-  </div>
+  <ViewSection
+    title="Section Title"
+    tinted={true}
+    insetGrid={true}
+  >
+   <SimpleTable />
+  </ViewSection>
 )

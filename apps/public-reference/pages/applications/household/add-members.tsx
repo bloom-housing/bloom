@@ -2,7 +2,6 @@
 2.2 - Add Members
 Add household members
 */
-import Link from "next/link"
 import Router from "next/router"
 import {
   Button,
@@ -15,20 +14,21 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 2
-  application.householdSize = application.householdMembers.length + 1
+  const { conductor, application, listing } = useFormConductor("addMembers")
+  const currentPageSection = 2
+  const householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
   const { errors, handleSubmit, register, clearErrors } = useForm()
   const onSubmit = (data) => {
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl("/applications/household/preferred-units")
+    conductor.currentStep.save({
+      householdSize: application.householdMembers.length + 1,
+    })
+    conductor.routeToNextOrReturnUrl()
   }
 
   const onAddMember = () => {
@@ -51,20 +51,15 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/household/members-info">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
+
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">
             {t("application.household.addMembers.title")}
@@ -75,7 +70,7 @@ export default () => {
           <div>
             <HouseholdSizeField
               listing={listing}
-              householdSize={application.householdSize}
+              householdSize={householdSize}
               validate={true}
               register={register}
               error={errors.householdSize}

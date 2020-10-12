@@ -2,8 +2,6 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-import Link from "next/link"
-import Router from "next/router"
 import {
   AlertBox,
   Button,
@@ -15,13 +13,12 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const { conductor, application, listing } = useFormConductor("alternateContactName")
+  const currentPageSection = 1
 
   /* Form Handler */
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
@@ -32,7 +29,7 @@ export default () => {
     application.alternateContact.lastName = data.lastName
     application.alternateContact.agency = data.agency
     conductor.sync()
-    conductor.routeToNextOrReturnUrl("/applications/contact/alternate-contact-contact")
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -42,19 +39,14 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/contact/alternate-contact-type">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
+
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {t("application.alternateContact.name.title")}

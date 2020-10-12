@@ -2,12 +2,12 @@
 3.2 Income
 Total pre-tax household income from all sources
 */
-import Link from "next/link"
+import { useState } from "react"
+import { Listing } from "@bloom-housing/core"
 import {
   AlertBox,
   AlertNotice,
   Button,
-  ErrorMessage,
   Field,
   FieldGroup,
   Form,
@@ -17,10 +17,8 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext, useState } from "react"
-import FormStep from "../../../src/forms/applications/FormStep"
-import { Listing } from "@bloom-housing/core"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -51,9 +49,9 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
 }
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const currentPageStep = 3
+  const currentPageSection = 3
 
   /* Form Handler */
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
@@ -74,11 +72,10 @@ export default () => {
 
     if (!validationError) {
       const toSave = { income, incomePeriod }
-      new FormStep(conductor).save(toSave)
 
-      conductor.completeStep(3)
-      conductor.sync()
-      conductor.routeToNextOrReturnUrl("/applications/preferences/select")
+      conductor.completeSection(3)
+      conductor.currentStep.save(toSave)
+      conductor.routeToNextOrReturnUrl()
     }
   }
   const onError = () => {
@@ -110,20 +107,14 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/financial/vouchers">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

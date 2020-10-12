@@ -1,5 +1,5 @@
 import React from "react"
-import { ErrorMessage } from "./ErrorMessage"
+import { ErrorMessage } from "../notifications/ErrorMessage"
 import t from "../helpers/translator"
 import Field from "./Field"
 import { HouseholdMember } from "@bloom-housing/core"

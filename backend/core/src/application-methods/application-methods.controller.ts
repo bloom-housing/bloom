@@ -57,7 +57,7 @@ export class ApplicationMethodsController {
   async retrieve(
     @Param("applicationMethodId") applicationMethodId: string
   ): Promise<ApplicationMethod> {
-    return await this.applicationMethodsService.findOne(applicationMethodId)
+    return await this.applicationMethodsService.findOne({ where: { id: applicationMethodId } })
   }
 
   @Delete(`:applicationMethodId`)

@@ -24,6 +24,8 @@ const mockUser: User = {
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2020-01-01"),
   applications: [],
+  isAdmin: false,
+  roles: ["user"],
 }
 
 let initialStateLoaded = false

@@ -2,7 +2,7 @@ import * as React from "react"
 import "./TabNav.scss"
 
 export interface TabNavProps {
-  children: React.ReactNode[]
+  children: React.ReactNode
 }
 
 const TabNav = (props: TabNavProps) => (
