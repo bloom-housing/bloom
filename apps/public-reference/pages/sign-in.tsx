@@ -1,3 +1,4 @@
+import Router from "next/router"
 import { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import {
@@ -14,11 +15,9 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { useRedirectToPrevPage } from "../lib/hooks"
 
 const SignIn = () => {
   const { login } = useContext(UserContext)
-  const redirectToPrev = useRedirectToPrevPage()
   /* Form Handler */
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
@@ -27,9 +26,8 @@ const SignIn = () => {
     const { email, password } = data
 
     try {
-      const user = await login(email, password)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
-      redirectToPrev()
+      await login(email, password)
+      Router.push("/account/dashboard").then(() => window.scrollTo(0, 0))
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {

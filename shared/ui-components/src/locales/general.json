@@ -460,6 +460,9 @@
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "success": "Welcome back, %{name}!"
+    },
+    "signOut": {
+      "success": "You have successfully logged out of your account."
     }
   },
   "config": {
