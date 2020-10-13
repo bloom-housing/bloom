@@ -515,6 +515,14 @@
     }
   },
   "listings": {
+    "openHouseEvent": {
+      "header": "Open Houses",
+      "seeVideo": "See Video"
+    },
+    "publicLottery": {
+      "header": "Public Lottery",
+      "seeVideo": "See Video"
+    },
     "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",

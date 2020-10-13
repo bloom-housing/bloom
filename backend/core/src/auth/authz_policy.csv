@@ -2,5 +2,14 @@ p, admin, application, true, .*
 p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)|(update)|(delete)
 p, anonymous, application, true, create
 
+p, admin, asset, true, .*
+p, admin, preference, true, .*
+p, admin, applicationMethod, true, .*
+p, admin, unit, true, .*
+p, admin, listingEvent, true, .*
+
+p, admin, listing, true, .*
+p, anonymous, listing, true, read
+
 g, admin, user
 g, user, anonymous
