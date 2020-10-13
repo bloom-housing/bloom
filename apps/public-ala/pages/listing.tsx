@@ -244,11 +244,13 @@ export default class extends Component<ListingProps> {
                         {listing.rentalHistory}
                       </ExpandableText>
                     </InfoCard>
-                    <InfoCard title={t("listings.criminalBackground")}>
-                      <ExpandableText className="text-sm text-gray-700">
-                        {listing.criminalBackground}
-                      </ExpandableText>
-                    </InfoCard>
+                    {listing.criminalBackground && (
+                      <InfoCard title={t("listings.criminalBackground")}>
+                        <ExpandableText className="text-sm text-gray-700">
+                          {listing.criminalBackground}
+                        </ExpandableText>
+                      </InfoCard>
+                    )}
                     {buildingSelectionCriteria}
                   </>
                 </ListSection>
