@@ -1,7 +1,7 @@
-describe("application/contact/name", function () {
+describe("applications/contact/name", function () {
   beforeEach(() => {
     cy.loadConfig()
-    cy.fixture("application/name.json").as("data")
+    cy.fixture("applications/name.json").as("data")
     cy.visit("/applications/contact/name")
   })
 
