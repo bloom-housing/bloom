@@ -5,7 +5,7 @@ import {
   UseGuards,
   Body,
   HttpCode,
-  UseInterceptors,
+  UseInterceptors, ClassSerializerInterceptor
 } from "@nestjs/common"
 import { LocalAuthGuard } from "./local-auth.guard"
 import { AuthService } from "./auth.service"
