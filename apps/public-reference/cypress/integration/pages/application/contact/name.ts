@@ -1,5 +1,6 @@
 describe("Form contact/name", function () {
   beforeEach(() => {
+    cy.loadConfig()
     cy.fixture("application/name.json").as("valuesJSON")
     cy.visit("/applications/contact/name")
   })
@@ -50,8 +51,11 @@ describe("Form contact/name", function () {
     // no errors should be visible
     cy.get(".error-message").should("not.exist")
 
+    // check next route
+    cy.isNextRoute("primaryApplicantName")
+
     // check context values
-    cy.getSubmissionContext().its("applicant").should("deep.include", {
+    cy.getSubmissionContext().its("applicant").should("deep.nested.include", {
       birthDay: this.valuesJSON["applicant.birthDay"],
       birthMonth: this.valuesJSON["applicant.birthMonth"],
       birthYear: this.valuesJSON["applicant.birthYear"],
@@ -60,7 +64,5 @@ describe("Form contact/name", function () {
       lastName: this.valuesJSON["applicant.lastName"],
       middleName: this.valuesJSON["applicant.middleName"],
     })
-
-    // TODO: check next step (when steps config will be ready)
   })
 })

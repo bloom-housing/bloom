@@ -25,6 +25,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import * as routes from "../fixtures/routes.json"
 
 Cypress.Commands.add("getByID", (id, ...args) => {
   return cy.get(`#${CSS.escape(id)}`, ...args)
@@ -34,6 +35,29 @@ Cypress.Commands.add("goNext", () => {
   return cy.get("button").contains("Next").click()
 })
 
+Cypress.Commands.add("loadConfig", () => {
+  cy.fixture("applicationConfig.json").then((applicationConfig) => {
+    sessionStorage.setItem("bloom-app-autosave", JSON.stringify(applicationConfig))
+  })
+
+  cy.fixture("listing.json").then((listingData) => {
+    sessionStorage.setItem("bloom-app-listing", JSON.stringify(listingData))
+  })
+})
+
 Cypress.Commands.add("getSubmissionContext", () => {
-  return cy.window().its("submissionContext")
+  const config = sessionStorage.getItem("bloom-app-autosave")
+  return JSON.parse(config)
+})
+
+Cypress.Commands.add("isNextRoute", (currentStep) => {
+  cy.fixture("listing.json").then((listingData) => {
+    const steps = listingData.applicationConfig.steps
+
+    const nextRouteIndex = steps.findIndex((item) => item.name === currentStep) + 1
+    const nextRouteName = steps[nextRouteIndex] ? steps[nextRouteIndex].name : ""
+    const nextRoutePath = routes[nextRouteName]
+
+    cy.location("pathname").should("include", nextRoutePath)
+  })
 })

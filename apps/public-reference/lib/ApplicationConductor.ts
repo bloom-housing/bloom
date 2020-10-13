@@ -194,10 +194,6 @@ export default class ApplicationConductor {
   }
 
   routeToNextOrReturnUrl(url?: string) {
-    if (typeof window != "undefined" && window.Cypress) {
-      window.submissionContext = this.application
-    }
-
     Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
     this.returnToReview = false
   }
