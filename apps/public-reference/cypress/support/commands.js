@@ -50,7 +50,15 @@ Cypress.Commands.add("getSubmissionContext", () => {
   return JSON.parse(config)
 })
 
-Cypress.Commands.add("isNextRoute", (currentStep) => {
+Cypress.Commands.add("checkErrorAlert", (command) => {
+  cy.get(".alert-box").should(command)
+})
+
+Cypress.Commands.add("checkErrorMessages", (command) => {
+  cy.get(".error-message").should(command)
+})
+
+Cypress.Commands.add("isNextRouteValid", (currentStep) => {
   cy.fixture("listing.json").then((listingData) => {
     const steps = listingData.applicationConfig.steps
 
