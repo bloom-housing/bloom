@@ -1,11 +1,11 @@
-describe("Form contact/name", function () {
+describe("application/contact/name", function () {
   beforeEach(() => {
     cy.loadConfig()
-    cy.fixture("application/name.json").as("valuesJSON")
+    cy.fixture("application/name.json").as("data")
     cy.visit("/applications/contact/name")
   })
 
-  it("Renders the /contact/name form", function () {
+  it("Should render form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", "/applications/contact/name")
   })
@@ -14,6 +14,8 @@ describe("Form contact/name", function () {
     // try to trigger form
     cy.goNext()
 
+    cy.checkErrorAlert("be.visible")
+
     // check errors
     cy.getByID("applicant.firstName-error").should("be.visible").and("not.to.be.empty")
     cy.getByID("applicant.lastName-error").should("be.visible").and("not.to.be.empty")
@@ -21,7 +23,7 @@ describe("Form contact/name", function () {
     cy.getByID("applicant.emailAddress-error").should("be.visible").and("not.to.be.empty")
   })
 
-  it("Should test incorrect email value", function () {
+  it("Should show error for incorrect email", function () {
     cy.getByID("applicant.emailAddress").type("test")
 
     cy.goNext()
@@ -37,32 +39,33 @@ describe("Form contact/name", function () {
     cy.getByID("applicant.emailAddress-error").should("not.exist")
   })
 
-  it("should save form values and redirect to the next step", function () {
-    cy.getByID("applicant.firstName").type(this.valuesJSON["applicant.firstName"])
-    cy.getByID("applicant.middleName").type(this.valuesJSON["applicant.middleName"])
-    cy.getByID("applicant.lastName").type(this.valuesJSON["applicant.lastName"])
-    cy.getByID("applicant.birthMonth").type(this.valuesJSON["applicant.birthMonth"])
-    cy.getByID("applicant.birthDay").type(this.valuesJSON["applicant.birthDay"])
-    cy.getByID("applicant.birthYear").type(this.valuesJSON["applicant.birthYear"])
-    cy.getByID("applicant.emailAddress").type(this.valuesJSON["applicant.emailAddress"])
+  it("Should save form values and redirect to the next step", function () {
+    cy.getByID("applicant.firstName").type(this.data["applicant.firstName"])
+    cy.getByID("applicant.middleName").type(this.data["applicant.middleName"])
+    cy.getByID("applicant.lastName").type(this.data["applicant.lastName"])
+    cy.getByID("applicant.birthMonth").type(this.data["applicant.birthMonth"])
+    cy.getByID("applicant.birthDay").type(this.data["applicant.birthDay"])
+    cy.getByID("applicant.birthYear").type(this.data["applicant.birthYear"])
+    cy.getByID("applicant.emailAddress").type(this.data["applicant.emailAddress"])
 
     cy.goNext()
 
     // no errors should be visible
-    cy.get(".error-message").should("not.exist")
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
 
     // check next route
-    cy.isNextRoute("primaryApplicantName")
+    cy.isNextRouteValid("primaryApplicantName")
 
     // check context values
     cy.getSubmissionContext().its("applicant").should("deep.nested.include", {
-      birthDay: this.valuesJSON["applicant.birthDay"],
-      birthMonth: this.valuesJSON["applicant.birthMonth"],
-      birthYear: this.valuesJSON["applicant.birthYear"],
-      emailAddress: this.valuesJSON["applicant.emailAddress"],
-      firstName: this.valuesJSON["applicant.firstName"],
-      lastName: this.valuesJSON["applicant.lastName"],
-      middleName: this.valuesJSON["applicant.middleName"],
+      birthDay: this.data["applicant.birthDay"],
+      birthMonth: this.data["applicant.birthMonth"],
+      birthYear: this.data["applicant.birthYear"],
+      emailAddress: this.data["applicant.emailAddress"],
+      firstName: this.data["applicant.firstName"],
+      lastName: this.data["applicant.lastName"],
+      middleName: this.data["applicant.middleName"],
     })
   })
 })
