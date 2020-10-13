@@ -49,7 +49,7 @@ export class ListingEventsController {
   @Get(`:listingEventId`)
   @ApiOperation({ summary: "Get listingEvent by id", operationId: "retrieve" })
   async retrieve(@Param("listingEventId") listingEventId: string): Promise<ListingEventDto> {
-    return await this.listingEventsService.findOne(listingEventId)
+    return await this.listingEventsService.findOne({ where: { id: listingEventId } })
   }
 
   @Delete(`:listingEventId`)
