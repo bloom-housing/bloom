@@ -10,13 +10,13 @@ export default {
 export const Default = () => (
   <BreadCrumbs>
     <li>
-        <a href="#">One</a>
-      </li>
-      <li>
-        <a href="#">Two</a>
-      </li>
-      <li aria-current="page">
-        <span>Three</span>
-      </li>
+      <a href="#">One</a>
+    </li>
+    <li>
+      <a href="#">Two</a>
+    </li>
+    <li aria-current="page">
+      <span>Three</span>
+    </li>
   </BreadCrumbs>
 )

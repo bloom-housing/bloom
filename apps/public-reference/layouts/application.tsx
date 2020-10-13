@@ -16,6 +16,7 @@ import { useContext } from "react"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
+
   return (
     <div className="site-wrapper">
       <div className="site-content">
@@ -37,7 +38,7 @@ const Layout = (props) => {
               {t("nav.getAssistance")}
             </LocalizedLink>
           )}
-          {/* <UserNav signedIn={!!profile} signOut={signOut}>
+          <UserNav signedIn={!!profile} signOut={signOut}>
             <LocalizedLink href="/account/dashboard" className="navbar-item">
               {t("nav.myDashboard")}
             </LocalizedLink>
@@ -47,7 +48,7 @@ const Layout = (props) => {
             <LocalizedLink href="/account/settings" className="navbar-item">
               {t("nav.accountSettings")}
             </LocalizedLink>
-          </UserNav> */}
+          </UserNav>
         </SiteHeader>
         <main id="main-content">{props.children}</main>
       </div>

@@ -49,7 +49,7 @@ export class PreferencesController {
   @Get(`:preferenceId`)
   @ApiOperation({ summary: "Get preference by id", operationId: "retrieve" })
   async retrieve(@Param("preferenceId") preferenceId: string): Promise<PreferenceDto> {
-    return await this.preferencesService.findOne(preferenceId)
+    return await this.preferencesService.findOne({ where: { id: preferenceId } })
   }
 
   @Delete(`:preferenceId`)

@@ -1,0 +1,38 @@
+.tag {
+  @apply py-3;
+  @apply px-5;
+  @apply text-white;
+  @apply text-tiny;
+  @apply bg-primary;
+  @apply rounded-md;
+  @apply inline;
+
+  &.is-pill {
+    @apply px-3;
+    @apply py-1;
+    @apply bg-primary-light;
+    @apply text-primary-dark;
+    @apply rounded-full;
+    @apply font-semibold;
+    @apply font-alt-sans;
+    @apply uppercase;
+    @apply tracking-widest;
+    @apply inline;
+    @apply text-sm;
+  }
+
+  &.is-warning {
+    @apply bg-splash-dark;
+  }
+
+  &.is-success {
+    @apply text-white;
+    @apply bg-success;
+  }
+
+  &.is-small {
+    @apply text-sm;
+    @apply py-2;
+    @apply px-4;
+  }
+}

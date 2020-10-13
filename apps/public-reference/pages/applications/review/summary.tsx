@@ -2,34 +2,27 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
-import Link from "next/link"
-import Router from "next/router"
 import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { listing, application } = useContext(AppSubmissionContext)
-  const currentPageStep = 5
+  const { conductor, application, listing } = useFormConductor("summary")
+  const currentPageSection = 5
 
   /* Form Handler */
   const { handleSubmit } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-
-    Router.push("/applications/review/terms").then(() => window.scrollTo(0, 0))
-  }
+  const onSubmit = (data) => conductor.routeToNextOrReturnUrl()
 
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 

@@ -1,9 +1,9 @@
 import * as React from "react"
-import { ImageCard } from "../../cards/ImageCard"
+import { ImageCard } from "../../blocks/ImageCard"
 import { Listing } from "@bloom-housing/core"
-import { LinkButton } from "../../atoms/LinkButton"
+import { LinkButton } from "../../actions/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
-import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
+import { GroupedTable, GroupedTableGroup } from "../../tables/standard/GroupedTable"
 import { t } from "../../helpers/translator"
 import "./ListingsList.scss"
 

@@ -1,7 +1,7 @@
 import React from "react"
 import App from "next/app"
 import Router from "next/router"
-import "@bloom-housing/ui-components/styles/index.scss"
+import "@bloom-housing/ui-components/src/global/index.scss"
 import {
   addTranslation,
   UserProvider,

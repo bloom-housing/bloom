@@ -2,7 +2,6 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-import Link from "next/link"
 import {
   AlertBox,
   Button,
@@ -14,16 +13,16 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import React, { useContext, useMemo } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const { conductor, application, listing } = useFormConductor("alternateContactInfo")
+  const currentPageSection = 1
+
   /* Form Handler */
   const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
     shouldFocusError: false,
@@ -35,8 +34,9 @@ export default () => {
     application.alternateContact.mailingAddress.state = data.mailingAddress.state
     application.alternateContact.mailingAddress.zipCode = data.mailingAddress.zipCode
     application.alternateContact.mailingAddress.city = data.mailingAddress.city
+    conductor.completeSection(1)
     conductor.sync()
-    conductor.routeToNextOrReturnUrl("/applications/household/live-alone")
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -46,19 +46,14 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/contact/alternate-contact-name">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
+
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {t("application.alternateContact.contact.title")}
@@ -83,70 +78,75 @@ export default () => {
             <PhoneField
               name="phoneNumber"
               label={t("application.alternateContact.contact.phoneNumberFormLabel")}
+              readerOnly={true}
               error={errors.phoneNumber}
               errorMessage={t("application.contact.phoneNumberError")}
-              controlClassName="control mt-2"
+              controlClassName="control"
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
             />
           </div>
           <div className="form-card__group border-b">
-            <label className="field-label--caps">
+            <h3 className="field-label--caps">
               {t("application.alternateContact.contact.emailAddressFormLabel")}
-            </label>
+            </h3>
             <Field
-              controlClassName="mt-2"
               id="emailAddress"
               name="emailAddress"
+              label={t("application.alternateContact.contact.emailAddressFormLabel")}
+              readerOnly={true}
               placeholder={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
               defaultValue={application.alternateContact.emailAddress}
               register={register}
             />
           </div>
           <div className="form-card__group">
-            <label className="field-label--caps">
-              {t("application.alternateContact.contact.contactMailingAddressLabel")}
-            </label>
-            <p className="field-note my-2">
-              {t("application.alternateContact.contact.contactMailingAddressHelperText")}
-            </p>
-            <Field
-              id="mailingAddress.street"
-              name="mailingAddress.street"
-              placeholder={t("application.alternateContact.contact.streetFormPlaceholder")}
-              defaultValue={application.alternateContact.mailingAddress.street}
-              register={register}
-            />
-
-            <div className="flex max-w-2xl">
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.alternateContact.contact.contactMailingAddressLabel")}
+              </legend>
+              <p className="field-note mb-4">
+                {t("application.alternateContact.contact.contactMailingAddressHelperText")}
+              </p>
               <Field
-                id="mailingAddress.city"
-                name="mailingAddress.city"
-                label={t("application.alternateContact.contact.cityFormLabel")}
-                placeholder={t("application.alternateContact.contact.cityFormPlaceholder")}
-                defaultValue={application.alternateContact.mailingAddress.city}
+                id="mailingAddress.street"
+                name="mailingAddress.street"
+                label={t("application.alternateContact.contact.streetFormPlaceholder")}
+                placeholder={t("application.alternateContact.contact.streetFormPlaceholder")}
+                defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}
               />
 
-              <Select
-                id="mailingAddress.state"
-                name="mailingAddress.state"
-                label={t("application.alternateContact.contact.stateFormPlaceholder")}
-                defaultValue={application.alternateContact.mailingAddress.state}
+              <div className="flex max-w-2xl">
+                <Field
+                  id="mailingAddress.city"
+                  name="mailingAddress.city"
+                  label={t("application.alternateContact.contact.cityFormLabel")}
+                  placeholder={t("application.alternateContact.contact.cityFormPlaceholder")}
+                  defaultValue={application.alternateContact.mailingAddress.city}
+                  register={register}
+                />
+
+                <Select
+                  id="mailingAddress.state"
+                  name="mailingAddress.state"
+                  label={t("application.alternateContact.contact.stateFormLabel")}
+                  defaultValue={application.alternateContact.mailingAddress.state}
+                  register={register}
+                  controlClassName="control"
+                  options={stateKeys}
+                  keyPrefix="application.form.options.states"
+                />
+              </div>
+              <Field
+                id="mailingAddress.zipCode"
+                name="mailingAddress.zipCode"
+                label={t("application.alternateContact.contact.zipcodeFormLabel")}
+                placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
+                defaultValue={application.alternateContact.mailingAddress.zipCode}
                 register={register}
-                controlClassName="control"
-                options={stateKeys}
-                keyPrefix="application.form.options.states"
               />
-            </div>
-            <Field
-              id="mailingAddress.zipCode"
-              name="mailingAddress.zipCode"
-              label={t("application.alternateContact.contact.zipcodeFormLabel")}
-              placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
-              defaultValue={application.alternateContact.mailingAddress.zipCode}
-              register={register}
-            />
+            </fieldset>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

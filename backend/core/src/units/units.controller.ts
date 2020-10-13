@@ -49,7 +49,7 @@ export class UnitsController {
   @Get(`:unitId`)
   @ApiOperation({ summary: "Get unit by id", operationId: "retrieve" })
   async retrieve(@Param("unitId") unitId: string): Promise<UnitDto> {
-    return await this.unitsService.findOne(unitId)
+    return await this.unitsService.findOne({ where: { id: unitId } })
   }
 
   @Delete(`:unitId`)
