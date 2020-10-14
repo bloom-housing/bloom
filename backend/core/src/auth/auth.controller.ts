@@ -4,8 +4,8 @@ import {
   Post,
   UseGuards,
   Body,
-  HttpCode,
   UseInterceptors,
+  ClassSerializerInterceptor,
 } from "@nestjs/common"
 import { LocalAuthGuard } from "./local-auth.guard"
 import { AuthService } from "./auth.service"
@@ -15,11 +15,11 @@ import { CreateUserDto } from "../user/createUser.dto"
 import { DefaultAuthGuard } from "./default.guard"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { LoginDto, LoginResponseDto } from "./login.dto"
-import { TransformInterceptor } from "../interceptors/transform.interceptor"
 import { RegisterResponseDto } from "./user.dto"
 
 @Controller("auth")
 @ApiTags("auth")
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -33,17 +33,17 @@ export class AuthController {
   @ApiOperation({ summary: "Login", operationId: "login" })
   login(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return { accessToken }
+    return new LoginResponseDto({ accessToken })
   }
 
   @Post("register")
   @ApiOperation({ summary: "Register", operationId: "register" })
-  @UseInterceptors(new TransformInterceptor(RegisterResponseDto))
   async register(@Body() params: CreateUserDto) {
     const user = await this.userService.createUser(params)
     const accessToken = this.authService.generateAccessToken(user)
+    // noinspection ES6MissingAwait
     this.emailService.welcome(user)
-    return { ...user, accessToken }
+    return new RegisterResponseDto({ ...user, accessToken })
   }
 
   @UseGuards(DefaultAuthGuard)
@@ -51,6 +51,6 @@ export class AuthController {
   @ApiOperation({ summary: "Token", operationId: "token" })
   token(@Request() req) {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return { accessToken }
+    return new LoginResponseDto({ accessToken })
   }
 }
