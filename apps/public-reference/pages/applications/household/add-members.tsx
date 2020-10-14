@@ -88,7 +88,7 @@ export default () => {
         </Form>
         <div className="form-card__group pt-0 mt-0">
           <div className="text-center">
-            <Button onClick={onAddMember}>
+            <Button id="btn-add-member" onClick={onAddMember}>
               {t("application.household.addMembers.addHouseholdMember")}
             </Button>
           </div>
@@ -96,6 +96,7 @@ export default () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Button
+              id="btn-add-done"
               filled={true}
               className=""
               onClick={() => {
