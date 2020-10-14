@@ -3,6 +3,7 @@ import "./Button.scss"
 
 export interface ButtonProps {
   children: React.ReactNode
+  id?: string
   className?: string
   big?: boolean
   filled?: boolean
@@ -20,7 +21,7 @@ const Button = (props: ButtonProps) => {
   if (props.className) buttonClasses.push(props.className)
 
   return (
-    <button className={buttonClasses.join(" ")} onClick={props.onClick}>
+    <button id={props.id} className={buttonClasses.join(" ")} onClick={props.onClick}>
       {props.children}
     </button>
   )
