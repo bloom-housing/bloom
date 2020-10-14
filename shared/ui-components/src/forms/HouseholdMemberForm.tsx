@@ -25,7 +25,7 @@ const HouseholdMemberForm = (props: { member: HouseholdMember; type: string }) =
         {member.firstName} {member.lastName}
       </p>
       <h4 className="info-item__label">{type}</h4>
-      <a className="edit-link info-item__link" href="#" onClick={editMember}>
+      <a id="edit-member" className="edit-link info-item__link" href="#" onClick={editMember}>
         {t("label.edit")}
       </a>
     </div>
