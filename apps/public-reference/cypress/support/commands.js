@@ -35,9 +35,22 @@ Cypress.Commands.add("goNext", () => {
   return cy.get("button").contains("Next").click()
 })
 
-Cypress.Commands.add("loadConfig", () => {
+Cypress.Commands.add("loadConfig", (initialValues) => {
   cy.fixture("applicationConfig.json").then((applicationConfig) => {
-    sessionStorage.setItem("bloom-app-autosave", JSON.stringify(applicationConfig))
+    // const keysToReplace = initialValues && Object.keys(initialValues)
+
+    // function replacer(key) {
+    //   if (initialValues && keysToReplace && keysToReplace.includes(key)) {
+    //     return {
+    //       [key]: initialValues[key],
+    //     }
+    //   }
+    // }
+
+    // const values = JSON.stringify(applicationConfig, replacer)
+    const values = JSON.stringify(applicationConfig)
+
+    sessionStorage.setItem("bloom-app-autosave", values)
   })
 
   cy.fixture("listing.json").then((listingData) => {
