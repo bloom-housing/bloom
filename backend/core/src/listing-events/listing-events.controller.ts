@@ -1,5 +1,6 @@
 import {
-  Body, ClassSerializerInterceptor,
+  Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -7,7 +8,7 @@ import {
   Post,
   Put,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { DefaultAuthGuard } from "../auth/default.guard"
@@ -43,13 +44,16 @@ export class ListingEventsController {
   @Put(`:listingEventId`)
   @ApiOperation({ summary: "Update listingEvent", operationId: "update" })
   async update(@Body() listingEvent: ListingEventUpdateDto): Promise<ListingEventDto> {
-    return plainToClass(ListingEventDto, this.listingEventsService.update(listingEvent))
+    return plainToClass(ListingEventDto, await this.listingEventsService.update(listingEvent))
   }
 
   @Get(`:listingEventId`)
   @ApiOperation({ summary: "Get listingEvent by id", operationId: "retrieve" })
   async retrieve(@Param("listingEventId") listingEventId: string): Promise<ListingEventDto> {
-    return plainToClass(ListingEventDto, await this.listingEventsService.findOne(listingEventId))
+    return plainToClass(
+      ListingEventDto,
+      await this.listingEventsService.findOne({ where: { id: listingEventId } })
+    )
   }
 
   @Delete(`:listingEventId`)
