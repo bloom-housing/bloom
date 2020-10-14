@@ -174,6 +174,7 @@ export default () => {
                   </legend>
 
                   <Field
+                    id="firstName"
                     name="firstName"
                     label={t("application.name.firstName")}
                     placeholder={t("application.name.firstName")}
@@ -186,6 +187,7 @@ export default () => {
                   />
 
                   <Field
+                    id="middleName"
                     name="middleName"
                     label={t("application.name.middleName")}
                     readerOnly={true}
@@ -195,6 +197,7 @@ export default () => {
                   />
 
                   <Field
+                    id="lastName"
                     name="lastName"
                     placeholder={t("application.name.lastName")}
                     label={t("application.name.lastName")}
@@ -328,7 +331,7 @@ export default () => {
                     </legend>
 
                     <Field
-                      id="addressStreet"
+                      id="workAddress.street"
                       name="workAddress.street"
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.workAddress.street}
@@ -339,7 +342,7 @@ export default () => {
                     />
 
                     <Field
-                      id="addressStreet2"
+                      id="workAddress.street2"
                       name="workAddress.street2"
                       label={t("application.contact.apt")}
                       placeholder={t("application.contact.apt")}
@@ -349,7 +352,7 @@ export default () => {
 
                     <div className="flex max-w-2xl">
                       <Field
-                        id="addressCity"
+                        id="workAddress.city"
                         name="workAddress.city"
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
@@ -361,7 +364,7 @@ export default () => {
                       />
 
                       <Select
-                        id="addressState"
+                        id="workAddress.state"
                         name="workAddress.state"
                         label={t("application.contact.state")}
                         defaultValue={member.workAddress.state}
@@ -376,7 +379,7 @@ export default () => {
                     </div>
 
                     <Field
-                      id="addressZipCode"
+                      id="workAddress.zipCode"
                       name="workAddress.zipCode"
                       label={t("application.contact.zip")}
                       placeholder={t("application.contact.zipCode")}
@@ -409,7 +412,7 @@ export default () => {
                       />
                     </select>
                   </div>
-                  <ErrorMessage error={errors.relationship}>
+                  <ErrorMessage id="relationship-error" error={errors.relationship}>
                     {t("application.form.errors.selectOption")}
                   </ErrorMessage>
                 </div>
@@ -418,6 +421,7 @@ export default () => {
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
                   <Button
+                    id="save-member"
                     filled={true}
                     className=""
                     onClick={() => {
@@ -428,7 +432,7 @@ export default () => {
                   </Button>
                 </div>
                 <div className="form-card__pager-row py-8">
-                  <a href="#" className="lined text-tiny" onClick={deleteMember}>
+                  <a id="cancel-add" href="#" className="lined text-tiny" onClick={deleteMember}>
                     {cancelText}
                   </a>
                 </div>
