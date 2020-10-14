@@ -29,13 +29,14 @@ import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { CsvBuilder } from "../services/csv-builder.service"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
+import { plainToClass } from "class-transformer"
 
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
 @ResourceType("application")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
@@ -47,16 +48,17 @@ export class ApplicationsController {
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async list(
     @Request() req: ExpressRequest,
     @Query("listingId") listingId: string
   ): Promise<ApplicationDto[]> {
+    let response: ApplicationDto[] = []
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
-      return await this.applicationsService.list({ listingId })
+      response = await this.applicationsService.list({ listingId })
     } else {
-      return await this.applicationsService.list({ listingId }, req.user)
+      response = await this.applicationsService.list({ listingId }, req.user)
     }
+    return plainToClass(ApplicationDto, response)
   }
 
   @Get(`csv`)
@@ -86,7 +88,7 @@ export class ApplicationsController {
     if (application.application.applicant.emailAddress) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
     }
-    return application
+    return plainToClass(ApplicationDto, application)
   }
 
   @Get(`:applicationId`)
@@ -98,7 +100,7 @@ export class ApplicationsController {
   ): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.read)
-    return app
+    return plainToClass(ApplicationDto, app)
   }
 
   @Put(`:applicationId`)
@@ -111,7 +113,10 @@ export class ApplicationsController {
   ): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.update)
-    return this.applicationsService.update(applicationUpdateDto, app)
+    return plainToClass(
+      ApplicationDto,
+      await this.applicationsService.update(applicationUpdateDto, app)
+    )
   }
 
   @Delete(`:applicationId`)
