@@ -15,6 +15,8 @@ import { PreferencesModule } from "./preferences/preferences.module"
 import { ApplicationMethodsModule } from "./application-methods/application-methods.module"
 import { UnitsModule } from "./units/units.module"
 import { ListingEventsModule } from "./listing-events/listing-events.module"
+import { ConfigModule } from "@nestjs/config"
+import Joi from "@hapi/joi"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -34,6 +36,21 @@ export function applicationSetup(app: INestApplication) {
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationOptions: {
+        allowUnknown: true,
+        abortEarly: true,
+      },
+      validationSchema: Joi.object({
+        PORT: Joi.number().default(3100).required(),
+        NODE_ENV: Joi.string().valid("development", "staging", "production").default("development"),
+        APP_SECRET: Joi.string().required().min(16),
+        EMAIL_API_KEY: Joi.string().required(),
+        EMAIL_FROM_ADDRESS: Joi.string().required(),
+        DATABASE_URL: Joi.string().required(),
+      }),
+    }),
     TypeOrmModule.forRoot({
       ...dbOptions,
       autoLoadEntities: true,

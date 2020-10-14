@@ -5,6 +5,7 @@ import { Logger, ValidationPipe } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { getConnection } from "typeorm"
+import { ConfigService } from "@nestjs/config"
 
 let app
 async function bootstrap() {
@@ -35,7 +36,8 @@ async function bootstrap() {
     .build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup("docs", app, document)
-  await app.listen(process.env.PORT || 3001)
+  const configService: ConfigService = app.get(ConfigService)
+  await app.listen(configService.get<number>("PORT"))
 }
 bootstrap()
 
