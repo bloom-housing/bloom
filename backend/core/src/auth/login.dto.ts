@@ -1,4 +1,5 @@
 import { IsEmail, IsString } from "class-validator"
+import { Expose } from "class-transformer"
 
 export class LoginDto {
   @IsEmail()
@@ -9,6 +10,9 @@ export class LoginDto {
 }
 
 export class LoginResponseDto {
-  @IsString()
+  @Expose()
   accessToken: string
+  constructor(loginResponseDto: Partial<LoginResponseDto>) {
+    Object.assign(this, loginResponseDto)
+  }
 }
