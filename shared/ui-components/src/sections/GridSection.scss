@@ -1,5 +1,13 @@
 .grid-section {
+  .grid-item {
+    @apply mb-4;
+
+    @screen md {
+      @apply mb-0;
+    }
+  }
 }
+
 .grid-section + .grid-section {
   @apply mt-12;
 }
