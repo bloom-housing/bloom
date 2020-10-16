@@ -27,6 +27,22 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import * as routes from "../fixtures/routes.json"
 
+const setProperty = (obj, path, value) => {
+  if (Object(obj) !== obj) return obj
+
+  if (!Array.isArray(path)) path = path.toString().match(/[^.[\]]+/g) || []
+  path
+    .slice(0, -1)
+    .reduce(
+      (a, c, i) =>
+        Object(a[c]) === a[c]
+          ? a[c]
+          : (a[c] = Math.abs(path[i + 1]) >> 0 === +path[i + 1] ? [] : {}),
+      obj
+    )[path[path.length - 1]] = value
+  return obj
+}
+
 Cypress.Commands.add("getByID", (id, ...args) => {
   return cy.get(`#${CSS.escape(id)}`, ...args)
 })
@@ -41,7 +57,15 @@ Cypress.Commands.add("goToReview", () => {
 
 Cypress.Commands.add("loadConfig", (initialValues) => {
   cy.fixture("applicationConfig.json").then((applicationConfig) => {
-    const values = JSON.stringify(applicationConfig)
+    const config = applicationConfig
+
+    if (initialValues) {
+      Object.keys(initialValues).forEach((item) => {
+        setProperty(config, item, initialValues[item])
+      })
+    }
+
+    const values = JSON.stringify(config)
 
     sessionStorage.setItem("bloom-app-autosave", values)
   })
