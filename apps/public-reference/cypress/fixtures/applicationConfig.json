@@ -38,9 +38,7 @@
   "additionalPhone":false,
   "additionalPhoneNumber":"",
   "additionalPhoneNumberType":"",
-  "contactPreferences":[
-     
-  ],
+  "contactPreferences":[],
   "householdSize":0,
   "housingStatus":"",
   "sendMailToMailingAddress":false,
@@ -81,20 +79,14 @@
   "incomeVouchers":null,
   "income":null,
   "incomePeriod":null,
-  "householdMembers":[
-     
-  ],
-  "preferredUnit":[
-     
-  ],
+  "householdMembers":[],
+  "preferredUnit":[],
   "demographics":{
      "ethnicity":"",
      "gender":"",
      "sexualOrientation":"",
      "howDidYouHear":""
   },
-  "preferences":{
-     
-  },
+  "preferences":{},
   "confirmationId":""
 }
