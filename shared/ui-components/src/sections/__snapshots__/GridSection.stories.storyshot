@@ -1,0 +1,1625 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Sections/Grid Section Address 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <GridSection
+    className="gap-y-4"
+    grid={false}
+    inset={true}
+    tinted={true}
+    title="Section Title"
+  >
+    <section
+      className="grid-section"
+    >
+      <header
+        className="grid-section__header"
+      >
+        <h2
+          className="grid-section__title"
+        >
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="grid-section__inner is-tinted is-inset gap-y-4"
+      >
+        <GridSection
+          columns={4}
+          subtitle="Residence Address"
+        >
+          <section
+            className="grid-section"
+          >
+            <header
+              className="grid-section__header mb-0"
+            >
+              <h3
+                className="grid-section__subtitle"
+              >
+                Residence Address
+              </h3>
+            </header>
+            <div
+              className="grid-section__inner md:grid md:grid-cols-4 md:gap-8"
+            >
+              <GridCell
+                span={3}
+              >
+                <article
+                  className="grid-item md:col-span-3"
+                >
+                  <ViewItem
+                    label="Street Address"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Street Address
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        112 Springfield St.
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Apt Unit #"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Apt Unit #
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        1
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell
+                span={2}
+              >
+                <article
+                  className="grid-item md:col-span-2"
+                >
+                  <ViewItem
+                    label="City"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        City
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        Oakland
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="State"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        State
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        CA
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Zip"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Zip
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        94577
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+            </div>
+          </section>
+        </GridSection>
+        <GridSection
+          columns={4}
+          subtitle="Work Address"
+        >
+          <section
+            className="grid-section"
+          >
+            <header
+              className="grid-section__header mb-0"
+            >
+              <h3
+                className="grid-section__subtitle"
+              >
+                Work Address
+              </h3>
+            </header>
+            <div
+              className="grid-section__inner md:grid md:grid-cols-4 md:gap-8"
+            >
+              <GridCell
+                span={3}
+              >
+                <article
+                  className="grid-item md:col-span-3"
+                >
+                  <ViewItem
+                    label="Street Address"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Street Address
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        112 Springfield St.
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Apt Unit #"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Apt Unit #
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        1
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell
+                span={2}
+              >
+                <article
+                  className="grid-item md:col-span-2"
+                >
+                  <ViewItem
+                    label="City"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        City
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        Oakland
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="State"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        State
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        CA
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Zip"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Zip
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        94577
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+            </div>
+          </section>
+        </GridSection>
+      </div>
+    </section>
+  </GridSection>
+</div>
+`;
+
+exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <GridSection
+    subtitle="Subsection Title"
+    title="Section Title"
+  >
+    <section
+      className="grid-section"
+    >
+      <header
+        className="grid-section__header mb-0"
+      >
+        <h2
+          className="grid-section__title"
+        >
+          Section Title
+        </h2>
+        <h3
+          className="grid-section__subtitle mt-4"
+        >
+          Subsection Title
+        </h3>
+      </header>
+      <div
+        className="grid-section__inner md:grid md:grid-cols-3 md:gap-8"
+      >
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="First Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  First Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Lisa
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Middle Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Middle Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  S
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Last Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Last Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Jones
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Date of Birth"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Date of Birth
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  01/01/1985
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Email"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Email
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  lisa@gmail.com
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              helper="Cell"
+              label="Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Cell
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              helper="Work"
+              label="Second Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Second Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Work
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Perferred Contact"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Perferred Contact
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Phone
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+      </div>
+    </section>
+  </GridSection>
+</div>
+`;
+
+exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <GridSection
+    columns={4}
+    edit="Edit"
+    inset={true}
+    subtitle="Subsection Title"
+    tinted={true}
+    title="Very Long Section Title That Wraps on Mobile"
+  >
+    <section
+      className="grid-section"
+    >
+      <header
+        className="grid-section__header"
+      >
+        <h2
+          className="grid-section__title"
+        >
+          Very Long Section Title That Wraps on Mobile
+        </h2>
+        <span
+          className="ml-auto"
+        >
+          <a
+            className="edit-link"
+          >
+            Edit
+          </a>
+        </span>
+        <h3
+          className="grid-section__subtitle mt-4"
+        >
+          Subsection Title
+        </h3>
+      </header>
+      <div
+        className="grid-section__inner is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
+      >
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="First Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  First Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Lisa
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Middle Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Middle Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  S
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Last Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Last Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Jones
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Date of Birth"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Date of Birth
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  01/01/1985
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Email"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Email
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  lisa@gmail.com
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              helper="Cell"
+              label="Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Cell
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              helper="Work"
+              label="Second Phone"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Second Phone
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  111-222-3333
+                </span>
+                <span
+                  className="view-item__helper"
+                >
+                  Work
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Perferred Contact"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Perferred Contact
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Phone
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+      </div>
+    </section>
+  </GridSection>
+</div>
+`;
+
+exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <GridSection
+    grid={false}
+    inset={true}
+    tinted={true}
+  >
+    <section
+      className="grid-section"
+    >
+      <div
+        className="grid-section__inner is-tinted is-inset"
+      >
+        <GridSection
+          className="md:gap-y-2"
+          columns={1}
+          subtitle="My Group"
+        >
+          <section
+            className="grid-section"
+          >
+            <header
+              className="grid-section__header mb-0"
+            >
+              <h3
+                className="grid-section__subtitle"
+              >
+                My Group
+              </h3>
+            </header>
+            <div
+              className="grid-section__inner md:grid md:grid-cols-1 md:gap-8 md:gap-y-2"
+            >
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="First Name"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        First Name
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        Lisa
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Middle Name"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Middle Name
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        S
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Last Name"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Last Name
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        Jones
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Date of Birth"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Date of Birth
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        01/01/1985
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Email"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Email
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        lisa@gmail.com
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    helper="Cell"
+                    label="Phone"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Phone
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        111-222-3333
+                      </span>
+                      <span
+                        className="view-item__helper"
+                      >
+                        Cell
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    helper="Work"
+                    label="Second Phone"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Second Phone
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        111-222-3333
+                      </span>
+                      <span
+                        className="view-item__helper"
+                      >
+                        Work
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Preferred Contact"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Preferred Contact
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        Phone
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+            </div>
+          </section>
+        </GridSection>
+      </div>
+    </section>
+  </GridSection>
+</div>
+`;
+
+exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <GridSection
+    grid={false}
+  >
+    <section
+      className="grid-section"
+    >
+      <div
+        className="grid-section__inner"
+      >
+        <ViewItem
+          label="Application Number"
+        >
+          <p
+            className="view-item"
+          >
+            <span
+              className="view-item__label"
+            >
+              Application Number
+            </span>
+            <span
+              className="view-item__value"
+            >
+              APP-0001002002
+            </span>
+          </p>
+        </ViewItem>
+        <GridSection
+          grid={false}
+          tinted={true}
+        >
+          <section
+            className="grid-section"
+          >
+            <div
+              className="grid-section__inner is-tinted"
+            >
+              <div
+                className="my-4 p-4"
+              >
+                <fieldset>
+                  <legend
+                    className="field-note mb-4 text-gray-750"
+                  >
+                    Confirm this application is valid:
+                  </legend>
+                  <div
+                    className="field-group--inline"
+                  >
+                    <div
+                      className="field "
+                    >
+                      <input
+                        id="testvalidappkeep"
+                        name="testvalidapp"
+                        type="radio"
+                        value="keep"
+                      />
+                      <label
+                        className="font-semibold"
+                        htmlFor="testvalidappkeep"
+                      >
+                        Keep
+                      </label>
+                    </div>
+                    <div
+                      className="field "
+                    >
+                      <input
+                        id="testvalidappremove"
+                        name="testvalidapp"
+                        type="radio"
+                        value="remove"
+                      />
+                      <label
+                        className="font-semibold"
+                        htmlFor="testvalidappremove"
+                      >
+                        Remove
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </section>
+        </GridSection>
+        <GridSection
+          className="md:gap-y-4"
+          columns={1}
+          inset={true}
+          subtitle="My Group"
+          tinted={true}
+        >
+          <section
+            className="grid-section"
+          >
+            <header
+              className="grid-section__header mb-0"
+            >
+              <h3
+                className="grid-section__subtitle"
+              >
+                My Group
+              </h3>
+            </header>
+            <div
+              className="grid-section__inner is-tinted is-inset md:grid md:grid-cols-1 md:gap-8 md:gap-y-4"
+            >
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    flagged={true}
+                    label="First Name"
+                  >
+                    <p
+                      className="view-item is-flagged"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        First Name
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        Lisa
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    flagged={true}
+                    label="Middle Name"
+                  >
+                    <p
+                      className="view-item is-flagged"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Middle Name
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        S
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    flagged={true}
+                    label="Last Name"
+                  >
+                    <p
+                      className="view-item is-flagged"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Last Name
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        Jones
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    flagged={true}
+                    label="Date of Birth"
+                  >
+                    <p
+                      className="view-item is-flagged"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Date of Birth
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        01/01/1985
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    label="Email"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Email
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        lisa@gmail.com
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    helper="Cell"
+                    label="Phone"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Phone
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        111-222-3333
+                      </span>
+                      <span
+                        className="view-item__helper"
+                      >
+                        Cell
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <ViewItem
+                    helper="Work"
+                    label="Second Phone"
+                  >
+                    <p
+                      className="view-item"
+                    >
+                      <span
+                        className="view-item__label"
+                      >
+                        Second Phone
+                      </span>
+                      <span
+                        className="view-item__value"
+                      >
+                        111-222-3333
+                      </span>
+                      <span
+                        className="view-item__helper"
+                      >
+                        Work
+                      </span>
+                    </p>
+                  </ViewItem>
+                </article>
+              </GridCell>
+              <ViewItem
+                label="Preferred Contact"
+              >
+                <p
+                  className="view-item"
+                >
+                  <span
+                    className="view-item__label"
+                  >
+                    Preferred Contact
+                  </span>
+                  <span
+                    className="view-item__value"
+                  >
+                    Phone
+                  </span>
+                </p>
+              </ViewItem>
+            </div>
+          </section>
+        </GridSection>
+      </div>
+    </section>
+  </GridSection>
+</div>
+`;
+
+exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <GridSection
+    grid={false}
+    inset={true}
+    tinted={true}
+    title="Section Title"
+  >
+    <section
+      className="grid-section"
+    >
+      <header
+        className="grid-section__header"
+      >
+        <h2
+          className="grid-section__title"
+        >
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="grid-section__inner is-tinted is-inset"
+      >
+        <SimpleTable>
+          <table
+            className="td-plain th-plain text-sm w-full"
+          >
+            <thead>
+              <tr>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Relationship
+                </th>
+                <th>
+                  DOB
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  className="px-5 py-3"
+                >
+                  Jim Halpert
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  Husband
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  05/01/1985
+                </td>
+              </tr>
+              <tr>
+                <td
+                  className="px-5 py-3"
+                >
+                  Michael Scott
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  Friend
+                </td>
+                <td
+                  className="px-5 py-3"
+                >
+                  05/01/1975
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </SimpleTable>
+      </div>
+    </section>
+  </GridSection>
+</div>
+`;
+
+exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <GridSection
+    columns={2}
+    title="Section Title"
+  >
+    <section
+      className="grid-section"
+    >
+      <header
+        className="grid-section__header"
+      >
+        <h2
+          className="grid-section__title"
+        >
+          Section Title
+        </h2>
+      </header>
+      <div
+        className="grid-section__inner md:grid md:grid-cols-2 md:gap-8"
+      >
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="First Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  First Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Lisa
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Middle Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Middle Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  S
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Last Name"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Last Name
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  Jones
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+        <GridCell>
+          <article
+            className="grid-item"
+          >
+            <ViewItem
+              label="Date of Birth"
+            >
+              <p
+                className="view-item"
+              >
+                <span
+                  className="view-item__label"
+                >
+                  Date of Birth
+                </span>
+                <span
+                  className="view-item__value"
+                >
+                  01/01/1985
+                </span>
+              </p>
+            </ViewItem>
+          </article>
+        </GridCell>
+      </div>
+    </section>
+  </GridSection>
+</div>
+`;
