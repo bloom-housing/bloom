@@ -1,7 +1,9 @@
 {
   "applicant.phoneNumber": "4444444444",
+  "applicant.phoneNumberFormatted": "(444) 444-4444",
   "applicant.phoneNumberType": "work",
   "additionalPhoneNumber": "4444444444",
+  "additionalPhoneNumberFormatted": "(444) 444-4444",
   "additionalPhoneNumberType": "home",
   "addressStreet": "Street",
   "addressStreet2": "Street 2",
@@ -18,5 +20,6 @@
   "workAddressStreet2": "Work Street 2",
   "workAddressCity": "Warsaw",
   "workAddressState": "AL",
-  "workAddressZipCode": "90210"
+  "workAddressZipCode": "90210",
+  "workInRegion": "yes"
 }

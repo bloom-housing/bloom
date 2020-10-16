@@ -1,13 +1,14 @@
 describe("applications/contact/address", function () {
+  const route = "/applications/contact/address"
   beforeEach(() => {
     cy.loadConfig()
     cy.fixture("applications/address.json").as("data")
-    cy.visit("/applications/contact/address")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "/applications/contact/address")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {
@@ -81,18 +82,9 @@ describe("applications/contact/address", function () {
 
     // check context values
     cy.getSubmissionContext().should("deep.nested.include", {
-      phoneNumber: this.data["applicant.phoneNumber"],
-      phoneNumberType: this.data["applicant.phoneNumberType"],
       additionalPhone: true,
-      additionalPhoneNumber: this.data["additionalPhoneNumber"],
+      additionalPhoneNumber: this.data["additionalPhoneNumberFormatted"],
       additionalPhoneNumberType: this.data["additionalPhoneNumberType"],
-      address: {
-        street: this.data["addressStreet"],
-        street2: this.data["addressStreet2"],
-        city: this.data["addressCity"],
-        state: this.data["addressState"],
-        zipCode: this.data["addressZipCode"],
-      },
       sendMailToMailingAddress: true,
       mailingAddress: {
         street: this.data["mailingAddressStreet"],
@@ -102,14 +94,34 @@ describe("applications/contact/address", function () {
         zipCode: this.data["mailingAddressZipCode"],
       },
       contactPreferences: [this.data["contactPreferences"]],
-      workInRegion: true,
-      workAddress: {
-        street: this.data["workAddressStreet"],
-        street2: this.data["workAddressStreet2"],
-        city: this.data["workAddressCity"],
-        state: this.data["workAddressState"],
-        zipCode: this.data["workAddressZipCode"],
-      },
     })
+
+    cy.getSubmissionContext()
+      .its("applicant")
+      .should("deep.nested.include", {
+        phoneNumber: this.data["applicant.phoneNumberFormatted"],
+        phoneNumberType: this.data["applicant.phoneNumberType"],
+        address: {
+          street: this.data["addressStreet"],
+          street2: this.data["addressStreet2"],
+          city: this.data["addressCity"],
+          state: this.data["addressState"],
+          zipCode: this.data["addressZipCode"],
+          county: "",
+          latitude: null,
+          longitude: null,
+        },
+        workAddress: {
+          street: this.data["workAddressStreet"],
+          street2: this.data["workAddressStreet2"],
+          city: this.data["workAddressCity"],
+          state: this.data["workAddressState"],
+          zipCode: this.data["workAddressZipCode"],
+          county: "",
+          latitude: null,
+          longitude: null,
+        },
+        workInRegion: this.data["workInRegion"],
+      })
   })
 })
