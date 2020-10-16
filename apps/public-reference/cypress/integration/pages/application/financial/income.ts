@@ -1,16 +1,22 @@
 describe("applications/financial/income", function () {
+  const route = "applications/financial/income"
+
   beforeEach(() => {
-    cy.loadConfig()
     cy.fixture("applications/income.json").as("data")
-    cy.visit("/applications/financial/income")
   })
 
   it("Should render form", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/financial/income")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
     cy.goNext()
 
     cy.checkErrorAlert("be.visible")
@@ -20,6 +26,9 @@ describe("applications/financial/income", function () {
   })
 
   it("should display error when income is lower than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
     cy.getByID("income").type(this.data["incomeLower"])
     cy.getByID("incomePeriodMonthly").check()
 
@@ -29,6 +38,9 @@ describe("applications/financial/income", function () {
   })
 
   it("should display error when income is higher than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
     cy.getByID("income").type(this.data["incomeHigher"])
     cy.getByID("incomePeriodMonthly").check()
 
@@ -37,9 +49,27 @@ describe("applications/financial/income", function () {
     cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
   })
 
-  // TODO: do not validate income when user has voucher
+  it("Should do not check income when user selected voucher in the previous step", function () {
+    cy.loadConfig({
+      incomeVouchers: true,
+    })
+    cy.visit(route)
+
+    cy.getByID("income").type(this.data["incomeLower"])
+    cy.getByID("incomePeriodMonthly").check()
+
+    cy.goNext()
+
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+
+    cy.isNextRouteValid("income")
+  })
 
   it("Should save form values and redirect to the next step", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
     cy.getByID("income").type(this.data["income"])
     cy.getByID("incomePeriodMonthly").check()
 
