@@ -1,0 +1,8 @@
+{
+  "income": "3000.00",
+  "incomePeriod": "perMonth",
+  "incomeLower": "1.00",
+  "incomeHigher": "30000000.00",
+  "incomeTooLowErrorText": "Your household income is too low.",
+  "incomeTooHighErrorText": "Your household income is too high."
+}
