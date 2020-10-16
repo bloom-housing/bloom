@@ -1,12 +1,14 @@
 describe("applications/preferences/select", function () {
+  const route = "/applications/preferences/select"
+
   beforeEach(() => {
     cy.loadConfig()
-    cy.visit("/applications/preferences/select")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/preferences/select")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {

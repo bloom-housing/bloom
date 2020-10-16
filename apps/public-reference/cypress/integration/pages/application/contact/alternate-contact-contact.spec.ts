@@ -1,13 +1,14 @@
 describe("applications/contact/alternate-contact-contact", function () {
+  const route = "/applications/contact/alternate-contact-contact"
   beforeEach(() => {
     cy.loadConfig()
     cy.fixture("applications/alternate-contact-contact.json").as("data")
-    cy.visit("/applications/contact/alternate-contact-contact")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/contact/alternate-contact-contact")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {

@@ -1,12 +1,14 @@
 describe("applications/financial/vouchers", function () {
+  const route = "/applications/financial/vouchers"
+
   beforeEach(() => {
     cy.loadConfig()
-    cy.visit("/applications/financial/vouchers")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/financial/vouchers")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {

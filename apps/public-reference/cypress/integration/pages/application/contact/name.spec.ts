@@ -1,13 +1,15 @@
 describe("applications/contact/name", function () {
+  const route = "/applications/contact/name"
+
   beforeEach(() => {
     cy.loadConfig()
     cy.fixture("applications/name.json").as("data")
-    cy.visit("/applications/contact/name")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "/applications/contact/name")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {

@@ -1,16 +1,18 @@
 describe("applications/review/terms", function () {
+  const route = "/applications/review/terms"
+
   function submitApplication() {
     cy.get("button").contains("Submit").click()
   }
 
   beforeEach(() => {
     cy.loadConfig()
-    cy.visit("/applications/review/terms")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/review/terms")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {

@@ -1,13 +1,15 @@
 describe("applications/household/ada", function () {
+  const route = "/applications/household/ada"
+
   beforeEach(() => {
     cy.loadConfig()
     cy.fixture("applications/ada.json").as("data")
-    cy.visit("/applications/household/ada")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/household/ada")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {

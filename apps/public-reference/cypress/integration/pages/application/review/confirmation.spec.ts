@@ -1,7 +1,9 @@
 describe("applications/review/confirmation", function () {
+  const route = "/applications/review/confirmation"
+
   beforeEach(() => {
     cy.loadConfig()
-    cy.visit("/applications/review/confirmation")
+    cy.visit(route)
   })
 
   it("Should redirect to create account page", function () {

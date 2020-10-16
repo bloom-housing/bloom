@@ -1,12 +1,14 @@
 describe("applications/household/live-alone", function () {
+  const route = "/applications/household/live-alone"
+
   beforeEach(() => {
     cy.loadConfig()
-    cy.visit("/applications/household/live-alone")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/household/live-alone")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should move to preferred-units and save members value", function () {

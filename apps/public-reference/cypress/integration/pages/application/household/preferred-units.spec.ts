@@ -1,12 +1,14 @@
 describe("applications/household/preferred-units", function () {
+  const route = "/applications/household/preferred-units"
+
   beforeEach(() => {
     cy.loadConfig()
-    cy.visit("/applications/household/preferred-units")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/household/preferred-units")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {

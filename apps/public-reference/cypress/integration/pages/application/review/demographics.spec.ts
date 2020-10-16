@@ -1,13 +1,15 @@
 describe("applications/review/demographics", function () {
+  const route = "/applications/review/demographics"
+
   beforeEach(() => {
     cy.loadConfig()
     cy.fixture("applications/demographics.json").as("data")
-    cy.visit("/applications/review/demographics")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/review/demographics")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should save form values and redirect to the next step", function () {
