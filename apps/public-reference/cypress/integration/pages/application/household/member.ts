@@ -1,13 +1,15 @@
 describe("applications/household/member", function () {
+  const route = "/applications/household/member"
+
   beforeEach(() => {
     cy.loadConfig()
     cy.fixture("applications/member.json").as("data")
-    cy.visit("/applications/household/member")
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "/applications/household/member")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should display initial form errors", function () {
@@ -89,36 +91,38 @@ describe("applications/household/member", function () {
 
     cy.location("pathname").should("include", "/applications/household/add-members")
 
-    // TODO: fix issue with test this object
-    // cy.getSubmissionContext().should("deep.nested.include", {
-    //   householdMembers: [
-    //     {
-    //       id: 0,
-    //       sameAddress: "no",
-    //       workInRegion: "yes",
-    //       firstName: this.data["firstName"],
-    //       middleName: this.data["middleName"],
-    //       lastName: this.data["lastName"],
-    //       birthMonth: this.data["birthMonth"],
-    //       birthDay: this.data["birthDay"],
-    //       birthYear: this.data["birthYear"],
-    //       relationship: this.data["relationship"],
-    //       workAddress: {
-    //         city: this.data["workAddress.city"],
-    //         state: this.data["workAddress.state"],
-    //         street: this.data["workAddress.street"],
-    //         street2: this.data["workAddress.street2"],
-    //         zipCode: this.data["workAddress.zipCode"],
-    //       },
-    //       address: {
-    //         city: this.data["addressCity"],
-    //         state: this.data["addressState"],
-    //         street: this.data["addressStreet"],
-    //         street2: this.data["addressStreet2"],
-    //         zipCode: this.data["addressZipCode"],
-    //       },
-    //     },
-    //   ],
-    // })
+    cy.getSubmissionContext()
+      .its("householdMembers")
+      .should("deep.nested.include", {
+        address: {
+          city: this.data["addressCity"],
+          state: this.data["addressState"],
+          street: this.data["addressStreet"],
+          street2: this.data["addressStreet2"],
+          zipCode: this.data["addressZipCode"],
+        },
+        birthDay: this.data["birthDay"],
+        birthMonth: this.data["birthMonth"],
+        birthYear: this.data["birthYear"],
+        emailAddress: "",
+        firstName: this.data["firstName"],
+        id: 0,
+        lastName: this.data["lastName"],
+        middleName: this.data["middleName"],
+        noEmail: null,
+        noPhone: null,
+        phoneNumber: "",
+        phoneNumberType: "",
+        relationship: this.data["relationship"],
+        sameAddress: "no",
+        workAddress: {
+          city: this.data["workAddress.city"],
+          state: this.data["workAddress.state"],
+          street: this.data["workAddress.street"],
+          street2: this.data["workAddress.street2"],
+          zipCode: this.data["workAddress.zipCode"],
+        },
+        workInRegion: "yes",
+      })
   })
 })
