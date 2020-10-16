@@ -22,6 +22,7 @@ export interface Headers {
 export interface BasicTableProps {
   headers: Headers
   data: Array<Record<string, any>>
+  tableClassName?: string
   cellClassName?: string
   responsiveCollapse?: boolean
 }
@@ -56,6 +57,9 @@ export const BasicTable = (props: BasicTableProps) => {
   const tableClasses = ["w-full", "text-sm"]
   if (props.responsiveCollapse) {
     tableClasses.push("responsive-collapse")
+  }
+  if (props.tableClassName) {
+    tableClasses.push(props.tableClassName)
   }
 
   return (
