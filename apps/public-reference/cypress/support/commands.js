@@ -35,19 +35,12 @@ Cypress.Commands.add("goNext", () => {
   return cy.get("button").contains("Next").click()
 })
 
+Cypress.Commands.add("goToReview", () => {
+  return cy.get("button").contains("Save and return to review").click()
+})
+
 Cypress.Commands.add("loadConfig", (initialValues) => {
   cy.fixture("applicationConfig.json").then((applicationConfig) => {
-    // const keysToReplace = initialValues && Object.keys(initialValues)
-
-    // function replacer(key) {
-    //   if (initialValues && keysToReplace && keysToReplace.includes(key)) {
-    //     return {
-    //       [key]: initialValues[key],
-    //     }
-    //   }
-    // }
-
-    // const values = JSON.stringify(applicationConfig, replacer)
     const values = JSON.stringify(applicationConfig)
 
     sessionStorage.setItem("bloom-app-autosave", values)
@@ -71,11 +64,11 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
   cy.get(".error-message").should(command)
 })
 
-Cypress.Commands.add("isNextRouteValid", (currentStep) => {
+Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
   cy.fixture("listing.json").then((listingData) => {
     const steps = listingData.applicationConfig.steps
 
-    const nextRouteIndex = steps.findIndex((item) => item.name === currentStep) + 1
+    const nextRouteIndex = steps.findIndex((item) => item.name === currentStep) + 1 + skip
     const nextRouteName = steps[nextRouteIndex] ? steps[nextRouteIndex].name : ""
     const nextRoutePath = routes[nextRouteName]
 
