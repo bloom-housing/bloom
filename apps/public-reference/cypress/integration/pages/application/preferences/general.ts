@@ -1,13 +1,20 @@
 describe("applications/preferences/general", function () {
-  // TODO: Define initial value - in /preferences/select to none
+  const route = "/applications/preferences/general"
+
   beforeEach(() => {
-    cy.loadConfig()
-    cy.visit("/applications/preferences/general")
+    cy.loadConfig({
+      preferences: {
+        liveIn: false,
+        none: true,
+        workIn: false,
+      },
+    })
+    cy.visit(route)
   })
 
   it("Should render form", function () {
     cy.get("form").should("be.visible")
-    cy.location("pathname").should("include", "applications/preferences/general")
+    cy.location("pathname").should("include", route)
   })
 
   it("Should move to next step after 'Next' click", function () {
