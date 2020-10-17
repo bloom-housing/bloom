@@ -13,7 +13,6 @@ import {
   ExpandableText,
   GroupedTable,
   GroupedTableGroup,
-  Headers,
   InfoCard,
   ImageCard,
   LeasingAgent,
@@ -24,6 +23,7 @@ import {
   MetaTags,
   OneLineAddress,
   PreferencesList,
+  TableHeaders,
   UnitTables,
   WhatToExpect,
   imageUrlFromListing,
@@ -75,7 +75,7 @@ export default class extends Component<ListingProps> {
         return percentInt
       })
       .sort()
-    const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
+    const hmiHeaders = listing.unitsSummarized.hmi.columns as TableHeaders
     const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
       return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
     })

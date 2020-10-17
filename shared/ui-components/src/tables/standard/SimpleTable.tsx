@@ -1,7 +1,12 @@
 import * as React from "react"
-import { BasicTable } from "./BasicTable"
+import { TableHeaders, BasicTable } from "./BasicTable"
 
-const SimpleTable = (props: any) => {
+interface SimpleTableProps {
+  headers: TableHeaders
+  data: Record<string, any>[]
+}
+
+const SimpleTable = (props: SimpleTableProps) => {
   return (
     <BasicTable
       headers={props.headers}
