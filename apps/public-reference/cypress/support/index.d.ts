@@ -8,7 +8,7 @@ declare namespace Cypress {
     goNext(): Chainable<Element>
     goToReview(): Chainable<Element>
     getSubmissionContext(): Chainable
-    loadConfig(initialValues?: Record<string, any>): Chainable
+    loadConfig(initialValues?: Record<string, any>, configFile?: string): Chainable
     isNextRouteValid(currentStep: string, skip?: number): Chainable
     checkErrorAlert(command: string): Chainable
     checkErrorMessages(command: string): Chainable
