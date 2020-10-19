@@ -8,7 +8,7 @@ import {
 } from "react"
 import Router, { useRouter } from "next/router"
 import { createAction, createReducer } from "typesafe-actions"
-import { User, CreateUserDto } from "@bloom-housing/backend-core"
+import { User } from "@bloom-housing/backend-core"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
 import {
   createAxiosInstance,
@@ -19,10 +19,11 @@ import {
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
 import { t } from "@bloom-housing/ui-components"
+import { UserCreateDto } from "@bloom-housing/backend-core/client"
 // External interface this context provides
 type ContextProps = {
   login: (email: string, password: string) => Promise<User>
-  createUser: (user: CreateUserDto) => Promise<User>
+  createUser: (user: UserCreateDto) => Promise<User>
   signOut: () => void
   // True when an API request is processing
   loading: boolean
