@@ -32,11 +32,12 @@ const Demographics = () => {
   const { register, handleSubmit } = useForm()
 
   const onSubmit = (data) => {
-    const { ethnicity, gender, sexualOrientation, howDidYouHear } = data
+    const { ethnicity, race, gender, sexualOrientation, howDidYouHear } = data
 
     conductor.currentStep.save({
       demographics: {
         ethnicity,
+        race,
         gender,
         sexualOrientation,
         howDidYouHear,
