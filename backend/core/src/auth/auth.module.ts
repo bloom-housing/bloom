@@ -1,6 +1,5 @@
-import { Module } from "@nestjs/common"
+import { forwardRef, Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
-import { UserModule } from "../user/user.module"
 import { LocalStrategy } from "./local.strategy"
 import { JwtStrategy } from "./jwt.strategy"
 import { AuthController } from "./auth.controller"
@@ -8,16 +7,17 @@ import { PassportModule } from "@nestjs/passport"
 import { AuthService } from "./auth.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { RevokedToken } from "../entity/revokedToken.entity"
-import { EmailService } from "../shared/email.service"
 import { SharedModule } from "../shared/shared.module"
 import { AuthzService } from "./authz.service"
-import { ConfigService } from "@nestjs/config"
+import { ConfigModule, ConfigService } from "@nestjs/config"
+import { UserModule } from "../user/user.module"
+import Joi from "@hapi/joi"
 
 @Module({
   imports: [
-    UserModule,
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.registerAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>("APP_SECRET"),
@@ -28,9 +28,15 @@ import { ConfigService } from "@nestjs/config"
     }),
     TypeOrmModule.forFeature([RevokedToken]),
     SharedModule,
+    forwardRef(() => UserModule),
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        APP_SECRET: Joi.string().required().min(16),
+      }),
+    }),
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, EmailService, AuthzService],
-  exports: [AuthzService],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService],
+  exports: [AuthzService, AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}

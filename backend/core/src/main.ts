@@ -19,6 +19,9 @@ async function bootstrap() {
       whitelist: true,
       // Automatically transform validated prop values into their specified types
       transform: true,
+      transformOptions: {
+        excludeExtraneousValues: true,
+      },
     })
   )
 

@@ -12,6 +12,7 @@ import { ListingsService } from "../listings/listings.service"
 import { ApplicationsService } from "../applications/applications.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
+import { ConfigModule } from "@nestjs/config"
 
 @Module({})
 export class SeederModule {
@@ -21,6 +22,7 @@ export class SeederModule {
       module: SeederModule,
       imports: [
         UserModule,
+        ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot({
           ...dbConfig,
         }),

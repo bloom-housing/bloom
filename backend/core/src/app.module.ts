@@ -37,17 +37,11 @@ export function applicationSetup(app: INestApplication) {
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-      validationOptions: {
-        allowUnknown: true,
-        abortEarly: true,
-      },
       validationSchema: Joi.object({
         PORT: Joi.number().default(3100).required(),
-        NODE_ENV: Joi.string().valid("development", "staging", "production").default("development"),
-        APP_SECRET: Joi.string().required().min(16),
-        EMAIL_API_KEY: Joi.string().required(),
-        EMAIL_FROM_ADDRESS: Joi.string().required(),
+        NODE_ENV: Joi.string()
+          .valid("development", "staging", "production", "test")
+          .default("development"),
         DATABASE_URL: Joi.string().required(),
       }),
     }),
