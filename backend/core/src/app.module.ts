@@ -14,6 +14,7 @@ import { AssetsModule } from "./assets/assets.module"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { ApplicationMethodsModule } from "./application-methods/application-methods.module"
 import { UnitsModule } from "./units/units.module"
+import { ListingEventsModule } from "./listing-events/listing-events.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -45,6 +46,7 @@ export function applicationSetup(app: INestApplication) {
     PreferencesModule,
     ApplicationMethodsModule,
     UnitsModule,
+    ListingEventsModule,
   ],
 })
 export class AppModule {}

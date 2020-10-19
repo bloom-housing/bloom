@@ -45,6 +45,19 @@ export interface HouseholdMember {
   workAddress?: Address
 }
 
+export enum ListingEventType {
+  openHouse = "openHouse",
+  publicLottery = "publicLottery",
+}
+
+export interface ListingEvent {
+  type: ListingEventType
+  startTime: string
+  endTime: string
+  url?: string | null
+  note?: string | null
+}
+
 export interface Listing {
   applicationPickUpAddress?: Address
   applicationPickUpAddressOfficeHours?: string
@@ -98,4 +111,5 @@ export interface Listing {
   waitlistMaxSize: number
   whatToExpect?: WhatToExpect
   yearBuilt: number
+  events?: ListingEvent[] | null
 }

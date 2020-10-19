@@ -21,6 +21,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect("listings.events", "events")
       .orderBy({
         "listings.id": "DESC",
         "units.max_occupancy": "ASC",
@@ -77,6 +78,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect("listings.events", "events")
       .orderBy({
         "preferences.ordinal": "ASC",
       })
