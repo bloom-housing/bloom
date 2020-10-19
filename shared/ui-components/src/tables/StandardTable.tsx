@@ -26,7 +26,7 @@ export const Cell = (props: {
 
 export interface StandardTableProps {
   headers: TableHeaders
-  data: Record<string, any>[]
+  data: Record<string, React.ReactNode>[]
   tableClassName?: string
   cellClassName?: string
   responsiveCollapse?: boolean
@@ -40,8 +40,8 @@ export const StandardTable = (props: StandardTableProps) => {
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
-  const body = data.map((row: Record<string, any>) => {
-    const rowKey = row["id"] || (process.env.NODE_ENV === "test" ? "" : nanoid())
+  const body = data.map((row: Record<string, React.ReactNode>) => {
+    const rowKey = (row["id"] as string) || (process.env.NODE_ENV === "test" ? "" : nanoid())
     const cols = Object.keys(headers).map((colKey) => {
       const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
       const header = headers[colKey]
