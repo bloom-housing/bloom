@@ -1,9 +1,9 @@
 import React from "react"
 
-import { SimpleTable } from "./SimpleTable"
+import { MinimalTable } from "./MinimalTable"
 
 export default {
-  title: "Tables/SimpleTable",
+  title: "Tables/MinimalTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
@@ -33,4 +33,4 @@ while (i > 0) {
   i--
 }
 
-export const Default = () => <SimpleTable headers={headers} data={data} />
+export const Default = () => <MinimalTable headers={headers} data={data} />

@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import { SimpleTable } from "../tables/standard/SimpleTable"
+import { MinimalTable } from "../tables/MinimalTable"
 import { ViewItem } from "../prototypes/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
 
@@ -282,6 +282,6 @@ const data = [
 
 export const GridSectionTable = () => (
   <GridSection title="Section Title" grid={false} tinted={true} inset={true}>
-    <SimpleTable headers={headers} data={data} />
+    <MinimalTable headers={headers} data={data} />
   </GridSection>
 )

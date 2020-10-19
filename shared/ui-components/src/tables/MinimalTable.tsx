@@ -1,14 +1,14 @@
 import * as React from "react"
-import { TableHeaders, BasicTable } from "./BasicTable"
+import { TableHeaders, StandardTable } from "./StandardTable"
 
-interface SimpleTableProps {
+interface MinimalTableProps {
   headers: TableHeaders
   data: Record<string, any>[]
 }
 
-const SimpleTable = (props: SimpleTableProps) => {
+const MinimalTable = (props: MinimalTableProps) => {
   return (
-    <BasicTable
+    <StandardTable
       headers={props.headers}
       data={props.data}
       tableClassName="td-plain th-plain"
@@ -17,4 +17,4 @@ const SimpleTable = (props: SimpleTableProps) => {
   )
 }
 
-export { SimpleTable as default, SimpleTable }
+export { MinimalTable as default, MinimalTable }

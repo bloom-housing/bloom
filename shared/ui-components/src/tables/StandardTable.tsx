@@ -24,7 +24,7 @@ export const Cell = (props: {
   </td>
 )
 
-export interface BasicTableProps {
+export interface StandardTableProps {
   headers: TableHeaders
   data: Record<string, any>[]
   tableClassName?: string
@@ -32,7 +32,7 @@ export interface BasicTableProps {
   responsiveCollapse?: boolean
 }
 
-export const BasicTable = (props: BasicTableProps) => {
+export const StandardTable = (props: StandardTableProps) => {
   const { headers, data, cellClassName } = props
 
   const headerLabels = Object.values(headers).map((col) => {

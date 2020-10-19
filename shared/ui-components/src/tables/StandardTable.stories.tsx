@@ -1,9 +1,9 @@
 import React from "react"
 
-import { BasicTable } from "./BasicTable"
+import { StandardTable } from "./StandardTable"
 
 export default {
-  title: "Tables/BasicTable",
+  title: "Tables/StandardTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
@@ -33,4 +33,4 @@ while (i > 0) {
   i--
 }
 
-export const Default = () => <BasicTable headers={headers} data={data} />
+export const Default = () => <StandardTable headers={headers} data={data} />

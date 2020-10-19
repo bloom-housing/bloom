@@ -8,7 +8,7 @@ import {
   AdditionalFees,
   ApplicationSection,
   ApplicationStatus,
-  BasicTable,
+  StandardTable,
   Description,
   ExpandableText,
   getOccupancyDescription,
@@ -267,11 +267,11 @@ export default class extends Component<ListingProps> {
                   title={t("listings.householdMaximumIncome")}
                   subtitle={householdMaximumIncomeSubheader}
                 >
-                  <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
+                  <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
 
                 <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
-                  <BasicTable
+                  <StandardTable
                     headers={occupancyHeaders}
                     data={occupancyData}
                     responsiveCollapse={false}

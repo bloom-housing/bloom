@@ -78,6 +78,7 @@ export * from "./src/page_components/listing/ListingDetails"
 export * from "./src/page_components/listing/ListingMap"
 export * from "./src/page_components/listing/ListingsGroup"
 export * from "./src/page_components/listing/ListingsList"
+export * from "./src/page_components/listing/UnitTables"
 export * from "./src/page_components/listing/listing_sidebar/ApplicationSection"
 export * from "./src/page_components/listing/listing_sidebar/Apply"
 export * from "./src/page_components/listing/listing_sidebar/LeasingAgent"
@@ -97,9 +98,8 @@ export * from "./src/sections/MarkdownSection"
 export * from "./src/sections/ResponsiveContentList"
 
 /* Tables */
-export * from "./src/tables/standard/BasicTable"
-export * from "./src/tables/standard/GroupedTable"
-export * from "./src/tables/UnitTables"
+export * from "./src/tables/StandardTable"
+export * from "./src/tables/GroupedTable"
 
 /* Text */
 export * from "./src/text/Description"

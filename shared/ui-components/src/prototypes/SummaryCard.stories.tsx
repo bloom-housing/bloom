@@ -1,5 +1,5 @@
 import React from "react"
-import { SimpleTable } from "../tables/standard/SimpleTable"
+import { MinimalTable } from "../tables/MinimalTable"
 
 import "./SummaryCard.scss"
 
@@ -15,7 +15,7 @@ export const SummaryCard = () => (
         <a href="#">My Property</a>
       </h2>
     </header>
-    <SimpleTable />
+    <MinimalTable />
   </div>
 )
 
@@ -30,6 +30,6 @@ export const SummaryCardHeading = () => (
         <span className="ml-4 pl-4 border-l border-gray-600">Waitlist: 353</span>
       </p>
     </header>
-    <SimpleTable />
+    <MinimalTable />
   </div>
 )

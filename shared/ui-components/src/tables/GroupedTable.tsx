@@ -1,6 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { HeaderCell, Row, Cell, BasicTableProps } from "./BasicTable"
+import { HeaderCell, Row, Cell, StandardTableProps } from "./StandardTable"
 
 export interface GroupedTableGroup {
   header?: string | JSX.Element
@@ -8,7 +8,7 @@ export interface GroupedTableGroup {
   data: Array<Record<string, any>>
 }
 
-export interface GroupedTableProps extends BasicTableProps {
+export interface GroupedTableProps extends StandardTableProps {
   data: GroupedTableGroup[]
 }
 
