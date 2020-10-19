@@ -162,7 +162,7 @@ export default class extends Component<ListingProps> {
       )
     }
 
-    if (listing.preferences) {
+    if (listing.preferences && listing.preferences.length > 0) {
       preferencesSection = (
         <ListSection
           title={t("listings.sections.housingPreferencesTitle")}
