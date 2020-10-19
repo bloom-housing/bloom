@@ -9,13 +9,15 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { RevokedToken } from "../entity/revokedToken.entity"
 import { SharedModule } from "../shared/shared.module"
 import { AuthzService } from "./authz.service"
-import { ConfigService } from "@nestjs/config"
+import { ConfigModule, ConfigService } from "@nestjs/config"
 import { UserModule } from "../user/user.module"
+import Joi from "@hapi/joi"
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.registerAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>("APP_SECRET"),
@@ -27,6 +29,11 @@ import { UserModule } from "../user/user.module"
     TypeOrmModule.forFeature([RevokedToken]),
     SharedModule,
     forwardRef(() => UserModule),
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        APP_SECRET: Joi.string().required().min(16),
+      }),
+    }),
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService],
   exports: [AuthzService, AuthService],

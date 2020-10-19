@@ -24,7 +24,7 @@ describe("Listings", () => {
   let app
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [ListingsModule, TypeOrmModule.forRoot(dbOptions)],
+      imports: [TypeOrmModule.forRoot(dbOptions), ListingsModule],
     }).compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)

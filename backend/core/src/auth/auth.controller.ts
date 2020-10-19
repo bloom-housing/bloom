@@ -27,7 +27,7 @@ export class AuthController {
   @Post("login")
   @ApiBody({ type: LoginDto })
   @ApiOperation({ summary: "Login", operationId: "login" })
-  async login(@Request() req): Promise<LoginResponseDto> {
+  login(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
     return plainToClass(LoginResponseDto, { accessToken })
   }
@@ -35,7 +35,7 @@ export class AuthController {
   @UseGuards(DefaultAuthGuard)
   @Post("token")
   @ApiOperation({ summary: "Token", operationId: "token" })
-  async token(@Request() req): Promise<LoginResponseDto> {
+  token(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
     return plainToClass(LoginResponseDto, { accessToken })
   }

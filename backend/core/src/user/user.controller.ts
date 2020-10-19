@@ -1,40 +1,66 @@
-import { Controller, Request, Get, UseGuards, Post, Body } from "@nestjs/common"
+import {
+  Controller,
+  Request,
+  Get,
+  UseGuards,
+  Post,
+  Body,
+  Put,
+  NotFoundException,
+} from "@nestjs/common"
 import { DefaultAuthGuard } from "../auth/default.guard"
 import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger"
-import { CreateUserDto } from "./createUser.dto"
-import { RegisterResponseDto } from "../auth/user.dto"
+import { UserCreateDto, UserDto, UserDtoWithAccessToken, UserUpdateDto } from "./user.dto"
 import { plainToClass } from "class-transformer"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email.service"
-import { User } from "../entity/user.entity"
+import { ResourceType } from "../auth/resource_type.decorator"
+import AuthzGuard from "../auth/authz.guard"
+import { authzActions, AuthzService } from "../auth/authz.service"
 
 @Controller("user")
 @ApiBearerAuth()
+@ResourceType("user")
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly authzService: AuthzService
   ) {}
 
-  @UseGuards(DefaultAuthGuard)
-  @Get("profile")
-  profile(@Request() req): User {
-    return req.user
+  @UseGuards(DefaultAuthGuard, AuthzGuard)
+  @Get()
+  profile(@Request() req): UserDto {
+    return plainToClass(UserDto, req.user, { excludeExtraneousValues: true })
   }
 
-  @Post("create")
-  @ApiOperation({ summary: "Create", operationId: "create" })
-  async create(@Body() params: CreateUserDto): Promise<RegisterResponseDto> {
-    const user = await this.userService.createUser(params)
+  @Post()
+  @ApiOperation({ summary: "Create user", operationId: "create" })
+  async create(@Body() dto: UserCreateDto): Promise<UserDtoWithAccessToken> {
+    const user = await this.userService.createUser(dto)
     const accessToken = this.authService.generateAccessToken(user)
     // noinspection ES6MissingAwait
     this.emailService.welcome(user)
     return plainToClass(
-      RegisterResponseDto,
+      UserDtoWithAccessToken,
       { ...user, accessToken },
       { excludeExtraneousValues: true }
     )
+  }
+
+  @Put(":id")
+  @UseGuards(DefaultAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "Update user", operationId: "update" })
+  async update(@Body() dto: UserUpdateDto): Promise<UserDto> {
+    const user = await this.userService.find({ id: dto.id })
+    if (!user) {
+      throw new NotFoundException()
+    }
+    await this.authzService.canOrThrow(user, "user", authzActions.update, {
+      ...dto,
+    })
+    return await this.userService.update(dto)
   }
 }
