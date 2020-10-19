@@ -1,13 +1,39 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 
 import Head from "next/head"
-import { PageHeader, MetaTags, t } from "@bloom-housing/ui-components"
+import { Field, PageHeader, MetaTags, t } from "@bloom-housing/ui-components"
 import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
-
+import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 
 export default function ApplicationsList() {
+  const { register, handleSubmit, watch } = useForm()
+
+  const [gridApi, setGridApi] = useState(null)
+  const [gridColumnApi, setGridColumnApi] = useState(null)
+
+  const filterField = watch("filter-input", "")
+
+  const onGridReady = (params) => {
+    setGridApi(params.api)
+    setGridColumnApi(params.columnApi)
+  }
+
+  const onBtNext = () => {
+    gridApi.paginationGoToNextPage()
+  }
+
+  const onBtPrevious = () => {
+    gridApi.paginationGoToPreviousPage()
+  }
+
+  useEffect(() => {
+    if (!gridApi) return
+
+    gridApi.setQuickFilter(filterField)
+  }, [gridApi, filterField])
+
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
@@ -373,12 +399,12 @@ export default function ApplicationsList() {
   // };
 
   // const onBtNext = () => {
-  //   this.gridApi.paginationGoToNextPage();
-  // };
+  //   this.gridApi.paginationGoToNextPage()
+  // }
 
   // const onBtPrevious = () => {
-  //   this.gridApi.paginationGoToPreviousPage();
-  // };
+  //   this.gridApi.paginationGoToPreviousPage()
+  // }
 
   // const onBtPageFive = () => {
   //   this.gridApi.paginationGoToPage(4);
@@ -398,6 +424,8 @@ export default function ApplicationsList() {
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
+            <Field name="filter-input" register={register} placeholder="Filter" />
+
             <AgGridReact
               defaultColDef={defaultColDef}
               columnDefs={columnDefs}
@@ -408,12 +436,13 @@ export default function ApplicationsList() {
               suppressPaginationPanel={true}
               paginationPageSize={8}
               suppressScrollOnNewData={true}
+              onGridReady={onGridReady}
             ></AgGridReact>
 
             <div className="data-pager">
               <button
                 className="button data-pager__previous data-pager__control"
-                onClick={() => this.onBtPrevious()}
+                onClick={onBtPrevious}
               >
                 Previous
               </button>
@@ -455,10 +484,7 @@ export default function ApplicationsList() {
                 </span>
               </div>
 
-              <button
-                className="button data-pager__next data-pager__control"
-                onClick={() => this.onBtNext()}
-              >
+              <button className="button data-pager__next data-pager__control" onClick={onBtNext}>
                 Next
               </button>
             </div>
