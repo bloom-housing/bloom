@@ -1,15 +1,4 @@
-import {
-  Body,
-  ClassSerializerInterceptor,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseGuards,
-  UseInterceptors,
-} from "@nestjs/common"
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ApplicationMethodsService } from "./application-method.service"
 import { ApplicationMethodDto } from "./application-method.dto"
@@ -18,21 +7,20 @@ import { ApplicationMethodUpdateDto } from "./application-method.update.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
-import { plainToClass } from "class-transformer"
+import { mapTo } from "../shared/mapTo"
 
 @Controller("/applicationMethods")
 @ApiTags("applicationMethods")
 @ApiBearerAuth()
 @ResourceType("applicationMethod")
 @UseGuards(DefaultAuthGuard, AuthzGuard)
-@UseInterceptors(ClassSerializerInterceptor)
 export class ApplicationMethodsController {
   constructor(private readonly applicationMethodsService: ApplicationMethodsService) {}
 
   @Get()
   @ApiOperation({ summary: "List applicationMethods", operationId: "list" })
   async list(): Promise<ApplicationMethodDto[]> {
-    return plainToClass(ApplicationMethodDto, await this.applicationMethodsService.list())
+    return mapTo(ApplicationMethodDto, await this.applicationMethodsService.list())
   }
 
   @Post()
@@ -40,7 +28,7 @@ export class ApplicationMethodsController {
   async create(
     @Body() applicationMethod: ApplicationMethodCreateDto
   ): Promise<ApplicationMethodDto> {
-    return plainToClass(
+    return mapTo(
       ApplicationMethodDto,
       await this.applicationMethodsService.create(applicationMethod)
     )
@@ -51,7 +39,7 @@ export class ApplicationMethodsController {
   async update(
     @Body() applicationMethod: ApplicationMethodUpdateDto
   ): Promise<ApplicationMethodDto> {
-    return plainToClass(
+    return mapTo(
       ApplicationMethodDto,
       await this.applicationMethodsService.update(applicationMethod)
     )
@@ -62,7 +50,7 @@ export class ApplicationMethodsController {
   async retrieve(
     @Param("applicationMethodId") applicationMethodId: string
   ): Promise<ApplicationMethodDto> {
-    return plainToClass(
+    return mapTo(
       ApplicationMethodDto,
       await this.applicationMethodsService.findOne({ where: { id: applicationMethodId } })
     )

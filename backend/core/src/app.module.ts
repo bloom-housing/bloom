@@ -1,4 +1,9 @@
-import { INestApplication, Module, ValidationPipe } from "@nestjs/common"
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  Module,
+  ValidationPipe,
+} from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
@@ -17,11 +22,15 @@ import { UnitsModule } from "./units/units.module"
 import { ListingEventsModule } from "./listing-events/listing-events.module"
 import { ConfigModule } from "@nestjs/config"
 import Joi from "@hapi/joi"
+import { Reflector } from "@nestjs/core"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
   app.use(logger)
   app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector), { excludeExtraneousValues: true })
+  )
   app.useGlobalPipes(
     new ValidationPipe({
       // Only allow props through that have been specified in the appropriate DTO

@@ -8,6 +8,7 @@ import { plainToClass } from "class-transformer"
 import { ListingCreateDto } from "./listing.create.dto"
 import { Listing } from "../entity/listing.entity"
 import { ListingUpdateDto } from "./listings.update.dto"
+import { ListingExtendedDto } from "./listing.dto"
 
 export enum ListingsResponseStatus {
   ok = "ok",
@@ -15,7 +16,7 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<any> {
+  public async list(jsonpath?: string): Promise<ListingExtendedDto> {
     let listings = await Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.units", "units")
       .leftJoinAndSelect("listings.preferences", "preferences")
