@@ -4,9 +4,11 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { User } from "../entity/user.entity"
 import { UserController } from "./user.controller"
 import { PassportModule } from "@nestjs/passport"
+import { AuthModule } from "../auth/auth.module"
+import { SharedModule } from "../shared/shared.module"
 
 @Module({
-  imports: [PassportModule, TypeOrmModule.forFeature([User])],
+  imports: [PassportModule, TypeOrmModule.forFeature([User]), AuthModule, SharedModule],
   providers: [UserService],
   exports: [UserService],
   controllers: [UserController],

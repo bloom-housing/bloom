@@ -9,9 +9,4 @@ export class RegisterResponseDto extends OmitType(User, ["passwordHash", "applic
   @Exclude()
   @ApiHideProperty()
   passwordHash
-
-  constructor(registerResponseDto: Partial<RegisterResponseDto>) {
-    super()
-    Object.assign(this, registerResponseDto)
-  }
 }

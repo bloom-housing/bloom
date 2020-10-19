@@ -1,6 +1,5 @@
-import { Module } from "@nestjs/common"
+import { forwardRef, Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
-import { UserModule } from "../user/user.module"
 import { LocalStrategy } from "./local.strategy"
 import { JwtStrategy } from "./jwt.strategy"
 import { AuthController } from "./auth.controller"
@@ -8,14 +7,13 @@ import { PassportModule } from "@nestjs/passport"
 import { AuthService } from "./auth.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { RevokedToken } from "../entity/revokedToken.entity"
-import { EmailService } from "../shared/email.service"
 import { SharedModule } from "../shared/shared.module"
 import { AuthzService } from "./authz.service"
 import { ConfigService } from "@nestjs/config"
+import { UserModule } from "../user/user.module"
 
 @Module({
   imports: [
-    UserModule,
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -28,9 +26,10 @@ import { ConfigService } from "@nestjs/config"
     }),
     TypeOrmModule.forFeature([RevokedToken]),
     SharedModule,
+    forwardRef(() => UserModule),
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, EmailService, AuthzService],
-  exports: [AuthzService],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService],
+  exports: [AuthzService, AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}
