@@ -1,22 +1,14 @@
-import {
-  Controller,
-  Request,
-  Post,
-  UseGuards,
-  UseInterceptors,
-  ClassSerializerInterceptor,
-} from "@nestjs/common"
+import { Controller, Request, Post, UseGuards } from "@nestjs/common"
 import { LocalAuthGuard } from "./local-auth.guard"
 import { AuthService } from "./auth.service"
 import { DefaultAuthGuard } from "./default.guard"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { LoginDto, LoginResponseDto } from "./login.dto"
-import { plainToClass } from "class-transformer"
+import { mapTo } from "../shared/mapTo"
 import { UserService } from "../user/user.service"
 
 @Controller("auth")
 @ApiTags("auth")
-@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
     private readonly userService: UserService,
@@ -29,7 +21,7 @@ export class AuthController {
   @ApiOperation({ summary: "Login", operationId: "login" })
   login(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return plainToClass(LoginResponseDto, { accessToken })
+    return mapTo(LoginResponseDto, { accessToken })
   }
 
   @UseGuards(DefaultAuthGuard)
@@ -37,6 +29,6 @@ export class AuthController {
   @ApiOperation({ summary: "Token", operationId: "token" })
   token(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return plainToClass(LoginResponseDto, { accessToken })
+    return mapTo(LoginResponseDto, { accessToken })
   }
 }
