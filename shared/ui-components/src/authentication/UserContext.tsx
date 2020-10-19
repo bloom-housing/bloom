@@ -155,7 +155,7 @@ export const UserProvider: FunctionComponent = ({ children }) => {
         dispatch(stopLoading())
       }
     },
-    createUser: async (user: CreateUserDto) => {
+    createUser: async (user: UserCreateDto) => {
       dispatch(startLoading())
       try {
         const { accessToken, user: profile } = await register(apiUrl, user)
