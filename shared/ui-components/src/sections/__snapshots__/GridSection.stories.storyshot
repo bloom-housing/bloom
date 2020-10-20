@@ -1434,61 +1434,242 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
       <div
         className="grid-section__inner is-tinted is-inset"
       >
-        <SimpleTable>
-          <table
-            className="td-plain th-plain text-sm w-full"
+        <MinimalTable
+          data={
+            Array [
+              Object {
+                "dob": "05/01/1985",
+                "name": "Jim Halpert",
+                "relationship": "Husband",
+              },
+              Object {
+                "dob": "05/01/1975",
+                "name": "Michael Scott",
+                "relationship": "Friend",
+              },
+              Object {
+                "dob": "05/01/1985",
+                "name": "Jim Halpert",
+                "relationship": "Husband",
+              },
+            ]
+          }
+          headers={
+            Object {
+              "dob": "Date of Birth",
+              "name": "Name",
+              "relationship": "Relationship",
+            }
+          }
+        >
+          <Component
+            cellClassName="px-5 py-3"
+            data={
+              Array [
+                Object {
+                  "dob": "05/01/1985",
+                  "name": "Jim Halpert",
+                  "relationship": "Husband",
+                },
+                Object {
+                  "dob": "05/01/1975",
+                  "name": "Michael Scott",
+                  "relationship": "Friend",
+                },
+                Object {
+                  "dob": "05/01/1985",
+                  "name": "Jim Halpert",
+                  "relationship": "Husband",
+                },
+              ]
+            }
+            headers={
+              Object {
+                "dob": "Date of Birth",
+                "name": "Name",
+                "relationship": "Relationship",
+              }
+            }
+            tableClassName="td-plain th-plain"
           >
-            <thead>
-              <tr>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Relationship
-                </th>
-                <th>
-                  DOB
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td
-                  className="px-5 py-3"
-                >
-                  Jim Halpert
-                </td>
-                <td
-                  className="px-5 py-3"
-                >
-                  Husband
-                </td>
-                <td
-                  className="px-5 py-3"
-                >
-                  05/01/1985
-                </td>
-              </tr>
-              <tr>
-                <td
-                  className="px-5 py-3"
-                >
-                  Michael Scott
-                </td>
-                <td
-                  className="px-5 py-3"
-                >
-                  Friend
-                </td>
-                <td
-                  className="px-5 py-3"
-                >
-                  05/01/1975
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </SimpleTable>
+            <div
+              style={
+                Object {
+                  "overflowX": "auto",
+                }
+              }
+            >
+              <table
+                className="w-full text-sm td-plain th-plain"
+              >
+                <thead>
+                  <Component>
+                    <tr>
+                      <Component
+                        key=""
+                      >
+                        <th>
+                          Name
+                        </th>
+                      </Component>
+                      <Component
+                        key=""
+                      >
+                        <th>
+                          Relationship
+                        </th>
+                      </Component>
+                      <Component
+                        key=""
+                      >
+                        <th>
+                          Date of Birth
+                        </th>
+                      </Component>
+                    </tr>
+                  </Component>
+                </thead>
+                <tbody>
+                  <Component
+                    id="row-"
+                    key=""
+                  >
+                    <tr
+                      id="row-"
+                    >
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Name"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Name"
+                        >
+                          Jim Halpert
+                        </td>
+                      </Component>
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Relationship"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Relationship"
+                        >
+                          Husband
+                        </td>
+                      </Component>
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Date of Birth"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Date of Birth"
+                        >
+                          05/01/1985
+                        </td>
+                      </Component>
+                    </tr>
+                  </Component>
+                  <Component
+                    id="row-"
+                    key=""
+                  >
+                    <tr
+                      id="row-"
+                    >
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Name"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Name"
+                        >
+                          Michael Scott
+                        </td>
+                      </Component>
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Relationship"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Relationship"
+                        >
+                          Friend
+                        </td>
+                      </Component>
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Date of Birth"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Date of Birth"
+                        >
+                          05/01/1975
+                        </td>
+                      </Component>
+                    </tr>
+                  </Component>
+                  <Component
+                    id="row-"
+                    key=""
+                  >
+                    <tr
+                      id="row-"
+                    >
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Name"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Name"
+                        >
+                          Jim Halpert
+                        </td>
+                      </Component>
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Relationship"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Relationship"
+                        >
+                          Husband
+                        </td>
+                      </Component>
+                      <Component
+                        className="px-5 py-3"
+                        headerLabel="Date of Birth"
+                        key=""
+                      >
+                        <td
+                          className="px-5 py-3"
+                          data-label="Date of Birth"
+                        >
+                          05/01/1985
+                        </td>
+                      </Component>
+                    </tr>
+                  </Component>
+                </tbody>
+              </table>
+            </div>
+          </Component>
+        </MinimalTable>
       </div>
     </section>
   </GridSection>

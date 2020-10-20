@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import { SimpleTable } from "../prototypes/SimpleTable"
+import { MinimalTable } from "../tables/MinimalTable"
 import { ViewItem } from "../prototypes/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
 
@@ -256,8 +256,32 @@ export const GridSectionSingleColumnWarn = () => (
   </GridSection>
 )
 
+const headers = {
+  name: "Name",
+  relationship: "Relationship",
+  dob: "Date of Birth",
+}
+
+const data = [
+  {
+    name: "Jim Halpert",
+    relationship: "Husband",
+    dob: "05/01/1985",
+  },
+  {
+    name: "Michael Scott",
+    relationship: "Friend",
+    dob: "05/01/1975",
+  },
+  {
+    name: "Jim Halpert",
+    relationship: "Husband",
+    dob: "05/01/1985",
+  },
+]
+
 export const GridSectionTable = () => (
   <GridSection title="Section Title" grid={false} tinted={true} inset={true}>
-    <SimpleTable />
+    <MinimalTable headers={headers} data={data} />
   </GridSection>
 )

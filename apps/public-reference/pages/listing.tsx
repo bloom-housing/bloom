@@ -8,14 +8,13 @@ import {
   AdditionalFees,
   ApplicationSection,
   ApplicationStatus,
-  BasicTable,
+  StandardTable,
   Description,
   ExpandableText,
   getOccupancyDescription,
   GroupedTable,
   GroupedTableGroup,
   groupNonReservedAndReservedSummaries,
-  Headers,
   ImageCard,
   imageUrlFromListing,
   InfoCard,
@@ -28,6 +27,7 @@ import {
   occupancyTable,
   OneLineAddress,
   PreferencesList,
+  TableHeaders,
   t,
   UnitTables,
   WhatToExpect,
@@ -121,7 +121,7 @@ export default class extends Component<ListingProps> {
         return percentInt
       })
       .sort()
-    const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
+    const hmiHeaders = listing.unitsSummarized.hmi.columns as TableHeaders
     const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
       return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
     })
@@ -267,11 +267,11 @@ export default class extends Component<ListingProps> {
                   title={t("listings.householdMaximumIncome")}
                   subtitle={householdMaximumIncomeSubheader}
                 >
-                  <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
+                  <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
 
                 <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
-                  <BasicTable
+                  <StandardTable
                     headers={occupancyHeaders}
                     data={occupancyData}
                     responsiveCollapse={false}
