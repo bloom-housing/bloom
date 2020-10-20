@@ -5,7 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
-import { applicationSetup, AppModule } from "../../src/app.module"
+import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"

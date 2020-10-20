@@ -30,7 +30,7 @@ export class EmailService {
   }
 
   public async welcome(user: User) {
-    if (this.configService.get<string>("NODE_ENV") == "production") {
+    if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
         `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
           "EMAIL_FROM_ADDRESS"
