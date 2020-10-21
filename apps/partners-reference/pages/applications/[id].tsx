@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 
 import Head from "next/head"
-import { Field, PageHeader, MetaTags, t } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../lib/hooks"
-import Layout from "../layouts/application"
+import {
+  Field,
+  PageHeader,
+  MetaTags,
+  t,
+  Button,
+  ApiClientContext,
+} from "@bloom-housing/ui-components"
+import { useApplicationsData } from "../../lib/hooks"
+import Layout from "../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 
 export default function ApplicationsList() {
   const { register, handleSubmit, watch } = useForm()
+  const { applicationsService } = useContext(ApiClientContext)
 
   const [gridApi, setGridApi] = useState(null)
   const [gridColumnApi, setGridColumnApi] = useState(null)
@@ -26,6 +34,12 @@ export default function ApplicationsList() {
 
   const onBtPrevious = () => {
     gridApi.paginationGoToPreviousPage()
+  }
+
+  const onExport = async () => {
+    const file = await applicationsService.listAsCsv()
+
+    console.log("export...", file)
   }
 
   useEffect(() => {
@@ -425,6 +439,7 @@ export default function ApplicationsList() {
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <Field name="filter-input" register={register} placeholder="Filter" />
+            <Button onClick={onExport}>Export</Button>
 
             <AgGridReact
               defaultColDef={defaultColDef}
