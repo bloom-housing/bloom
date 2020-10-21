@@ -14,8 +14,9 @@ const handleClick = (e: React.MouseEvent) => {
 }
 
 export const StatusBar = () => (
-  <div className="status-bar">
-    <div className="status-bar__status justify-self-end">
+  <div className="status-bar grid grid-cols-4 gap-4">
+    <div className="status-bar__note col-span-3"></div>
+    <div className="status-bar__status">
       <Tag pillStyle={true}>
         Draft
       </Tag>
@@ -24,8 +25,8 @@ export const StatusBar = () => (
 )
 
 export const StatusBarSubmitted = () => (
-  <div className="status-bar justify-between">
-    <div className="status-bar__note">Last Updated: August 1, 2020</div>
+  <div className="status-bar grid grid-cols-4 gap-4">
+    <div className="status-bar__note col-span-3">Lottery ranking generated. 07/15/2020 at 11:45am <span className="status-bar__action"><a className="underline" href="#">Status History</a></span></div>
 
     <div className="status-bar__status">
       <Tag pillStyle={true} success={true}>

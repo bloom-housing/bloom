@@ -6,6 +6,7 @@
   @apply bg-primary;
   @apply rounded-md;
   @apply inline;
+  @apply text-center;
 
   &.is-pill {
     @apply px-4;
@@ -19,6 +20,7 @@
     @apply tracking-widest;
     @apply inline;
     @apply text-sm;
+    @apply leading-4;
 
     &.is-small {
       @apply text-2xs;

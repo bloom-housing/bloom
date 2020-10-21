@@ -6,5 +6,13 @@
 }
 
 .status-bar__status {
-  margin-left: auto;
+  .tag {
+    @apply block;
+  }
+}
+
+.status-bar__action {
+  @apply ml-4;
+  @apply pl-4;
+  @apply border-l;
 }

@@ -15,33 +15,33 @@ const handleClick = (e: React.MouseEvent) => {
 
 export const StatusAside = () => (
   <div className="status-aside">
-    <div className="status-aside__buttons mb-4 pb-6 border-b">
+    <div className="status-aside__buttons">
       <div className="button-group grid grid-cols-2 gap-2">
-          <div className="button-group__item">
+        <div className="button-group__item">
           <Button small={true} onClick={handleClick}>
             Save
           </Button>
-          </div>
-          <div className="button-group__item">
+        </div>
+        <div className="button-group__item">
           <Button small={true} className="is-secondary" onClick={handleClick}>
             Preview
           </Button>
-          </div>
-          <div className="button-group__item col-span-2">
+        </div>
+        <div className="button-group__item col-span-2">
           <Button small={true} filled={true} onClick={handleClick}>
             Submit
           </Button>
-          </div>
+        </div>
       </div>
     </div>
 
     <div className="status-aside__messages">
-      <h3 className="font-alt-sans text-lg pt-2">Status History</h3>
+      <h3 className="status-aside__title">Status History</h3>
       <ul className="status-messages">
-        <li className="status-message border-b">
+        <li className="status-message">
           <div className="status-message__status">
             <Tag pillStyle={true} success={true} small={true}>
-            Submitted
+              Submitted
             </Tag>
 
             <span className="status-message__time">
@@ -51,10 +51,10 @@ export const StatusAside = () => (
 
           <div className="status-message__note">Changed status of one application.</div>
         </li>
-        <li className="status-message border-b">
+        <li className="status-message">
           <div className="status-message__status">
             <Tag pillStyle={true} small={true}>
-            Draft
+              Draft
             </Tag>
 
             <span className="status-message__time">
@@ -69,11 +69,13 @@ export const StatusAside = () => (
 
 export const StatusAsideLast = () => (
   <div className="status-aside">
-    <div className="status-aside__buttons mb-4 pb-6 border-b">
-      <div className="button-group flex flex-col">
-        <Button small={true} className="is-secondary" onClick={handleClick}>
-          Edit
-        </Button>
+    <div className="status-aside__buttons">
+      <div className="button-group">
+        <div className="button-group__item">
+          <Button small={true} className="is-secondary" onClick={handleClick}>
+            Edit
+          </Button>
+        </div>
       </div>
     </div>
 
@@ -90,7 +92,7 @@ export const StatusAsideLast = () => (
 export const StatusAsideMinimumal = () => (
   <div className="status-aside">
     <ul className="status-messages">
-      <li className="status-message flex">
+      <li className="status-message">
         <div className="status-message__note text-center">Last Updated: August 1, 2020</div>
       </li>
     </ul>
