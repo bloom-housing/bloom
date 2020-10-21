@@ -1,32 +1,38 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
 
-export const Row = (props: any) => (
+export interface TableHeaders {
+  [key: string]: string
+}
+
+export const Row = (props: { id?: string; className?: string; children: React.ReactNode }) => (
   <tr id={props.id} className={props.className}>
     {props.children}
   </tr>
 )
 
-export const HeaderCell = (props: any) => <th>{props.children}</th>
+export const HeaderCell = (props: { children: React.ReactNode }) => <th>{props.children}</th>
 
-export const Cell = (props: any) => (
+export const Cell = (props: {
+  headerLabel?: string
+  className?: string
+  colSpan?: number
+  children: React.ReactNode
+}) => (
   <td data-label={props.headerLabel} className={props.className || "p-5"} colSpan={props.colSpan}>
     {props.children}
   </td>
 )
 
-export interface Headers {
-  [key: string]: string
-}
-
-export interface BasicTableProps {
-  headers: Headers
-  data: Array<Record<string, any>>
+export interface StandardTableProps {
+  headers: TableHeaders
+  data: Record<string, React.ReactNode>[]
+  tableClassName?: string
   cellClassName?: string
   responsiveCollapse?: boolean
 }
 
-export const BasicTable = (props: BasicTableProps) => {
+export const StandardTable = (props: StandardTableProps) => {
   const { headers, data, cellClassName } = props
 
   const headerLabels = Object.values(headers).map((col) => {
@@ -34,8 +40,8 @@ export const BasicTable = (props: BasicTableProps) => {
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
-  const body = data.map((row: any) => {
-    const rowKey = row["id"] || (process.env.NODE_ENV === "test" ? "" : nanoid())
+  const body = data.map((row: Record<string, React.ReactNode>) => {
+    const rowKey = (row["id"] as string) || (process.env.NODE_ENV === "test" ? "" : nanoid())
     const cols = Object.keys(headers).map((colKey) => {
       const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
       const header = headers[colKey]
@@ -56,6 +62,9 @@ export const BasicTable = (props: BasicTableProps) => {
   const tableClasses = ["w-full", "text-sm"]
   if (props.responsiveCollapse) {
     tableClasses.push("responsive-collapse")
+  }
+  if (props.tableClassName) {
+    tableClasses.push(props.tableClassName)
   }
 
   return (

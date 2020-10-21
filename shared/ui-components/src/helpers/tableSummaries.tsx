@@ -1,7 +1,7 @@
 import * as React from "react"
 import { t } from "./translator"
 import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/core"
-import { GroupedTableGroup } from "../tables/standard/GroupedTable"
+import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
   const unitSummaries = summaries.map((unitSummary) => {

@@ -2,10 +2,10 @@ import * as React from "react"
 import { nanoid } from "nanoid"
 import { MinMax, UnitSummary, Unit } from "@bloom-housing/core"
 
-import { BasicTable } from "./standard/BasicTable"
-import { t } from "../helpers/translator"
-import { numberOrdinal } from "../helpers/numberOrdinal"
-import { capitalize } from "../helpers/capitalize"
+import { StandardTable } from "../../tables/StandardTable"
+import { t } from "../../helpers/translator"
+import { numberOrdinal } from "../../helpers/numberOrdinal"
+import { capitalize } from "../../helpers/capitalize"
 
 const formatRange = (range: MinMax, ordinalize?: boolean) => {
   let min: string | number = range.min
@@ -99,7 +99,7 @@ const UnitTables = (props: UnitTablesProps) => {
               </h3>
             </button>
             <div className="unit-table hidden">
-              <BasicTable headers={unitsHeaders} data={unitsFormatted} />
+              <StandardTable headers={unitsHeaders} data={unitsFormatted} />
             </div>
           </div>
         )

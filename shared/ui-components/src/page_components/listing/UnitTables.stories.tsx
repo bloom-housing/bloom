@@ -1,13 +1,16 @@
 import * as React from "react"
 
 import { UnitTables } from "./UnitTables"
-import { BasicTable } from "./standard/BasicTable"
-import { GroupedTable } from "./standard/GroupedTable"
+import { StandardTable } from "../../tables/StandardTable"
+import { GroupedTable } from "../../tables/GroupedTable"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import { unitSummariesTable, groupNonReservedAndReservedSummaries } from "../helpers/tableSummaries"
+import {
+  unitSummariesTable,
+  groupNonReservedAndReservedSummaries,
+} from "../../helpers/tableSummaries"
 
 export default {
-  title: "Tables/Unit Summary Tables",
+  title: "Listing/Unit Summary Tables",
 }
 
 const archer = Object.assign({}, Archer) as any
@@ -178,7 +181,7 @@ export const unitsSummaries = () => {
         return (
           <div>
             <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
-            <BasicTable
+            <StandardTable
               headers={unitSummariesHeaders}
               // @ts-ignore
               data={unitSummariesTable(byAMI.byNonReservedUnitType)}

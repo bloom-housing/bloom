@@ -7,9 +7,11 @@ export interface LocalizedLinkProps {
   as?: string
   className?: string
   children?: any
+  aria?: Record<string, string>
 }
 
 const LocalizedLink = (props: LocalizedLinkProps) => {
+  const ariaAttributes = props.aria || {}
   const localizedProps: LocalizedLinkProps = { href: "" }
   if (props.as) {
     localizedProps.as = lRoute(props.as)
@@ -20,7 +22,9 @@ const LocalizedLink = (props: LocalizedLinkProps) => {
 
   return (
     <Link {...localizedProps}>
-      <a className={props.className}>{props.children}</a>
+      <a className={props.className} {...ariaAttributes}>
+        {props.children}
+      </a>
     </Link>
   )
 }
