@@ -51,6 +51,7 @@ export class Demographics {
   gender: string
   sexualOrientation: string
   howDidYouHear: string
+  race: string
 }
 
 export class ApplicationData {

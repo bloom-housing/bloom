@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import React, { useContext } from "react"
 import { useForm } from "react-hook-form"
 import {
   Button,
@@ -22,7 +22,7 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { birthDay, birthMonth, birthYear, ...rest } = data
-      const user = await createUser({
+      await createUser({
         ...rest,
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })
