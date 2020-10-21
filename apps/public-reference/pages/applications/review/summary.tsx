@@ -2,6 +2,7 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
+import React from "react"
 import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -14,7 +15,7 @@ export default () => {
 
   /* Form Handler */
   const { handleSubmit } = useForm()
-  const onSubmit = (data) => conductor.routeToNextOrReturnUrl()
+  const onSubmit = () => conductor.routeToNextOrReturnUrl()
 
   return (
     <FormsLayout>

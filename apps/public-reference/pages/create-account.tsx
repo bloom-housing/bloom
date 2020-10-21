@@ -16,6 +16,7 @@ import { useRedirectToPrevPage } from "../lib/hooks"
 export default () => {
   const { createUser } = useContext(UserContext)
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const redirectToPrev = useRedirectToPrevPage()
   const onSubmit = async (data) => {
@@ -26,8 +27,7 @@ export default () => {
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })
 
-      redirectToPrev()
-      console.log("Created user: %o", user)
+      await redirectToPrev()
     } catch (err) {
       // TODO: better error handling
       const messages = err.response && err.response.data && err.response.data.message

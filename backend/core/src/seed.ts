@@ -9,9 +9,13 @@ import { ListingsService } from "./listings/listings.service"
 import { User } from "./entity/user.entity"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
+import yargs from "yargs"
+
+const argv = yargs.scriptName("seed").options({
+  test: { type: "boolean", default: false },
+}).argv
 
 async function bootstrap() {
-  const argv = require("yargs").argv
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const listingsSeederService = app.get<ListingsSeederService>(ListingsSeederService)
@@ -72,4 +76,4 @@ async function bootstrap() {
 
   await app.close()
 }
-bootstrap()
+void bootstrap()

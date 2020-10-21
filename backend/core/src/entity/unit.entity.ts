@@ -145,7 +145,7 @@ class Unit extends BaseEntity {
   @IsNumber()
   monthlyRentAsPercentOfIncome: number | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.units, {
+  @ManyToOne(() => Listing, (listing) => listing.units, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

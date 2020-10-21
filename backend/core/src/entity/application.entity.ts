@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
-import { IsDateString, IsDefined, IsJSON, IsString, IsUUID } from "class-validator"
+import { IsDateString, IsDefined, IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
 
@@ -103,10 +103,10 @@ export class Application extends BaseEntity {
   @IsString()
   appUrl: string
 
-  @ManyToOne((type) => User, (user) => user.applications, { nullable: true })
+  @ManyToOne(() => User, (user) => user.applications, { nullable: true })
   user: User | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.applications)
+  @ManyToOne(() => Listing, (listing) => listing.applications)
   listing: Listing
 
   @Column({ type: "jsonb", nullable: true })

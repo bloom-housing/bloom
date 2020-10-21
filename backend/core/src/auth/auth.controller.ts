@@ -42,7 +42,7 @@ export class AuthController {
     const user = await this.userService.createUser(params)
     const accessToken = this.authService.generateAccessToken(user)
     // noinspection ES6MissingAwait
-    this.emailService.welcome(user)
+    void this.emailService.welcome(user)
     return new RegisterResponseDto({ ...user, accessToken })
   }
 

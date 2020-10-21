@@ -37,6 +37,6 @@ async function bootstrap() {
   SwaggerModule.setup("docs", app, document)
   await app.listen(process.env.PORT || 3001)
 }
-bootstrap()
+void bootstrap()
 
 export default app

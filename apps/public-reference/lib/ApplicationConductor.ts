@@ -1,3 +1,7 @@
+// Using the router this way is being deprecated in Next (in favor of `useRouter` hook), but since this conductor
+// class isn't a component, it's hard to add a hook... for now we'll just leave this code, but it'll likely need to
+// get changed at some point.
+// eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/core"
 import { blankApplication } from "./AppSubmissionContext"
@@ -24,8 +28,7 @@ export const loadSavedListing = () => {
   if (typeof window != "undefined") {
     const savedListing = window.sessionStorage.getItem("bloom-app-listing")
     if (savedListing) {
-      const listing = JSON.parse(savedListing)
-      return listing
+      return JSON.parse(savedListing)
     }
   }
 
@@ -190,12 +193,12 @@ export default class ApplicationConductor {
   }
 
   routeTo(url: string) {
-    Router.push(url).then(() => window.scrollTo(0, 0))
+    void Router.push(url).then(() => window.scrollTo(0, 0))
   }
 
   routeToNextOrReturnUrl(url?: string) {
-    Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
     this.returnToReview = false
+    void Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
   }
 
   nextOrReturnUrl(url?: string) {

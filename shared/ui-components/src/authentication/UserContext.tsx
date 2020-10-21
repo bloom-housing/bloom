@@ -6,7 +6,6 @@ import {
   useEffect,
   useContext,
 } from "react"
-import Router, { useRouter } from "next/router"
 import { createAction, createReducer } from "typesafe-actions"
 import { User, CreateUserDto } from "@bloom-housing/backend-core"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
@@ -17,8 +16,8 @@ import {
   register,
   scheduleTokenRefresh,
 } from "./api_requests"
-import { ConfigContext } from "../config/ConfigContext"
-import { t } from "@bloom-housing/ui-components"
+import { ConfigContext } from "../config"
+
 // External interface this context provides
 type ContextProps = {
   login: (email: string, password: string) => Promise<User>
@@ -115,9 +114,9 @@ export const UserProvider: FunctionComponent = ({ children }) => {
           dispatch(stopLoading())
         }
       }
-      loadProfile()
+      void loadProfile()
     }
-  }, [state.profile, state.accessToken])
+  }, [state.profile, state.accessToken, apiUrl])
 
   // On initial load/reload, check localStorage to see if we have a token available
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Listing, ListingStatus } from "../entity/listing.entity"
+import { Listing } from "../entity/listing.entity"
 import { ListingsResponseStatus } from "./listings.service"
 import { Expose, Type } from "class-transformer"
 import { IsDefined, IsEnum, ValidateNested } from "class-validator"

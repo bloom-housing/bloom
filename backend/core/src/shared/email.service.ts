@@ -1,4 +1,3 @@
-import { ApplicationCreateDto } from "./../applications/application.create.dto"
 import { Injectable, Logger } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
@@ -114,16 +113,16 @@ export class EmailService {
         html: body,
       },
       false,
-      (error, info) => {
+      (error) => {
         if (error instanceof ResponseError) {
-          const { message, code, response } = error
-          const { headers, body } = response
+          const { response } = error
+          const { body } = response
           console.error(`Error sending email to: ${to}! Error body: ${body}`)
           if (!retry) {
             retry = 3
           }
           // Retries, if sending failed
-          this.send(to, subject, body, retry - 1)
+          void this.send(to, subject, body, retry - 1)
         }
       }
     )

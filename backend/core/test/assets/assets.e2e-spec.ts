@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing"
-import { INestApplication, ValidationPipe } from "@nestjs/common"
-import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
+import { INestApplication } from "@nestjs/common"
+import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")

@@ -17,26 +17,26 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((applicationMethods) => IdDto)
+  @Type(() => IdDto)
   applicationMethods: IdDto[]
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((asset) => IdDto)
+  @Type(() => IdDto)
   assets: IdDto[]
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((preference) => IdDto)
+  @Type(() => IdDto)
   preferences: IdDto[]
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((unit) => IdDto)
+  @Type(() => IdDto)
   units: IdDto[]
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((unit) => IdDto)
+  @Type(() => IdDto)
   events: IdDto[]
 }

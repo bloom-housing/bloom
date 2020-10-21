@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer"
-import { IsUUID, ValidateNested } from "class-validator"
+import { IsUUID } from "class-validator"
 import { ListingCreateDto } from "./listing.create.dto"
 
 export class ListingUpdateDto extends ListingCreateDto {

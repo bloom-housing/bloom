@@ -12,7 +12,7 @@ const SALT_SIZE = SCRYPT_KEYLEN
 const generateSalt = (size = SALT_SIZE) => randomBytes(size)
 
 const hashPassword = (password: string, salt: Buffer) =>
-  new Promise((resolve, reject) =>
+  new Promise<string>((resolve, reject) =>
     scrypt(password, salt, SCRYPT_KEYLEN, (err, key) =>
       err ? reject(err) : resolve(key.toString("hex"))
     )

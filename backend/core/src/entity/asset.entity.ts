@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
-import { IsDateString, IsObject, IsString, IsUUID } from "class-validator"
+import { IsDateString, IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
 
 @Entity({ name: "assets" })
@@ -39,6 +39,6 @@ export class Asset extends BaseEntity {
   @IsString()
   fileId: string
 
-  @ManyToOne((type) => Listing, (listing) => listing.assets, { nullable: true })
+  @ManyToOne(() => Listing, (listing) => listing.assets, { nullable: true })
   listing: Listing | null
 }

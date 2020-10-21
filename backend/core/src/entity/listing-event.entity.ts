@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { Expose } from "class-transformer"
 import { IsDateString, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
-import { Listing, ListingStatus } from "./listing.entity"
+import { Listing } from "./listing.entity"
 
 export enum ListingEventType {
   openHouse = "openHouse",
@@ -67,7 +67,7 @@ export class ListingEvent extends BaseEntity {
   @IsString()
   note?: string | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.events, {
+  @ManyToOne(() => Listing, (listing) => listing.events, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
