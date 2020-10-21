@@ -1,5 +1,4 @@
 import React from "react"
-import { SimpleTable } from "../tables/standard/SimpleTable"
 import { FieldSection } from "./FieldSection"
 import { GridItem } from "./GridItem"
 import { Field } from "../forms/Field"

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { MinimalTable } from "../tables/MinimalTable"
 import { ViewItem } from "../prototypes/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
+import { Field } from "../forms/Field"
 
 export default {
   title: "Sections/Grid Section",
@@ -108,6 +109,26 @@ export const FourColumnsEdit = () => (
   </GridSection>
 )
 
+export const FourColumnsFields = () => (
+  <GridSection title="Section Title" columns={4}>
+    <Field label="Alpha" placeholder="Enter text" name="label1" register={() => {}} />
+
+    <Field label="Beta" placeholder="Enter text" name="label2" register={() => {}} />
+
+    <Field label="Gamma" placeholder="Enter text" name="label3" register={() => {}} />
+
+    <Field label="Delta" placeholder="Enter text" name="label4" register={() => {}} />
+
+    <Field label="Epsilon" placeholder="Enter text" name="label5" register={() => {}} />
+
+    <Field label="Zeta" placeholder="Enter text" name="label6" register={() => {}} />
+
+    <Field label="Eta" placeholder="Enter text" name="label7" register={() => {}} />
+
+    <Field label="Theta" placeholder="Enter text" name="label8" register={() => {}} />
+  </GridSection>
+)
+
 export const Address = () => (
   <GridSection title="Section Title" tinted={true} inset={true} grid={false} className="gap-y-4">
     <GridSection subtitle="Residence Address" columns={4}>
@@ -152,6 +173,28 @@ export const Address = () => (
       <GridCell>
         <ViewItem label="Zip" children="94577" />
       </GridCell>
+    </GridSection>
+  </GridSection>
+)
+
+export const AddressFields = () => (
+  <GridSection title="Section Title" grid={false} className="mt-8">
+    <GridSection title="My Group" columns={6}>
+      <GridCell span={4}>
+        <Field label="Street Address" placeholder="Enter text" name="label1" register={() => {}} />
+      </GridCell>
+
+      <GridCell span={2}>
+        <Field label="Address 2" placeholder="Enter text" name="label2" register={() => {}} />
+      </GridCell>
+
+      <GridCell span={2}>
+        <Field label="City" placeholder="Enter text" name="label3" register={() => {}} />
+      </GridCell>
+
+      <Field label="State" placeholder="Enter text" name="label4" register={() => {}} />
+
+      <Field label="Zip" placeholder="Enter text" name="label5" register={() => {}} />
     </GridSection>
   </GridSection>
 )
