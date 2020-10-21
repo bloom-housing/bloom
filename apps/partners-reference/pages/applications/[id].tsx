@@ -37,9 +37,13 @@ export default function ApplicationsList() {
   }
 
   const onExport = async () => {
-    const file = await applicationsService.listAsCsv()
+    const content = await applicationsService.listAsCsv()
 
-    console.log("export...", file)
+    const fileLink = document.createElement("a")
+    fileLink.href = "data:text/csv;charset=utf-8," + encodeURI(content)
+    fileLink.target = "_blank"
+    fileLink.download = "appplications.csv"
+    fileLink.click()
   }
 
   useEffect(() => {
@@ -438,70 +442,93 @@ export default function ApplicationsList() {
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
-            <Field name="filter-input" register={register} placeholder="Filter" />
-            <Button onClick={onExport}>Export</Button>
-
-            <AgGridReact
-              defaultColDef={defaultColDef}
-              columnDefs={columnDefs}
-              rowData={applicationDtos}
-              domLayout={"autoHeight"}
-              headerHeight={83}
-              rowHeight={58}
-              suppressPaginationPanel={true}
-              paginationPageSize={8}
-              suppressScrollOnNewData={true}
-              onGridReady={onGridReady}
-            ></AgGridReact>
-
-            <div className="data-pager">
-              <button
-                className="button data-pager__previous data-pager__control"
-                onClick={onBtPrevious}
-              >
-                Previous
-              </button>
-
-              <div className="data-pager__control-group">
-                <span className="data-pager__control">
-                  <span className="field-label" id="lbTotalPages">
-                    12
-                  </span>
-                  <span className="field-label">Total Applications</span>
-                </span>
-
-                <span className="field data-pager__control">
-                  <label className="field-label font-sans" htmlFor="page-size">
-                    Show
-                  </label>
-                  <select onChange={() => this.onPageSizeChanged()} name="page-size" id="page-size">
-                    <option value="10" selected>
-                      8
-                    </option>
-                    <option value="100">100</option>
-                    <option value="500">500</option>
-                    <option value="1000">1000</option>
-                  </select>
-                </span>
-
-                <span className="field data-pager__control">
-                  <label className="field-label font-sans" htmlFor="page-jump">
-                    Jump to
-                  </label>
-                  <select onChange={() => this.onPageSizeChanged()} name="page-jump" id="page-jump">
-                    <option value="2" selected>
-                      2
-                    </option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                </span>
+            <div className="flex justify-between">
+              <div className="max-w-3xl">
+                <Field name="filter-input" register={register} placeholder="Filter" />
               </div>
 
-              <button className="button data-pager__next data-pager__control" onClick={onBtNext}>
-                Next
-              </button>
+              <div className="flex-row">
+                <Button className="mx-1" onClick={() => false}>
+                  Add Application
+                </Button>
+
+                <Button className="mx-1" onClick={onExport}>
+                  Export
+                </Button>
+              </div>
+            </div>
+
+            <div className="applications-table mt-5">
+              <AgGridReact
+                defaultColDef={defaultColDef}
+                columnDefs={columnDefs}
+                rowData={applicationDtos}
+                domLayout={"autoHeight"}
+                headerHeight={83}
+                rowHeight={58}
+                suppressPaginationPanel={true}
+                paginationPageSize={8}
+                suppressScrollOnNewData={true}
+                onGridReady={onGridReady}
+              ></AgGridReact>
+
+              <div className="data-pager">
+                <button
+                  className="button data-pager__previous data-pager__control"
+                  onClick={onBtPrevious}
+                >
+                  Previous
+                </button>
+
+                <div className="data-pager__control-group">
+                  <span className="data-pager__control">
+                    <span className="field-label" id="lbTotalPages">
+                      12
+                    </span>
+                    <span className="field-label">Total Applications</span>
+                  </span>
+
+                  <span className="field data-pager__control">
+                    <label className="field-label font-sans" htmlFor="page-size">
+                      Show
+                    </label>
+                    <select
+                      onChange={() => this.onPageSizeChanged()}
+                      name="page-size"
+                      id="page-size"
+                    >
+                      <option value="10" selected>
+                        8
+                      </option>
+                      <option value="100">100</option>
+                      <option value="500">500</option>
+                      <option value="1000">1000</option>
+                    </select>
+                  </span>
+
+                  <span className="field data-pager__control">
+                    <label className="field-label font-sans" htmlFor="page-jump">
+                      Jump to
+                    </label>
+                    <select
+                      onChange={() => this.onPageSizeChanged()}
+                      name="page-jump"
+                      id="page-jump"
+                    >
+                      <option value="2" selected>
+                        2
+                      </option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </span>
+                </div>
+
+                <button className="button data-pager__next data-pager__control" onClick={onBtNext}>
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </article>
