@@ -2,4 +2,9 @@
   @apply flex;
   @apply text-sm;
   @apply items-center;
+  @apply py-4;
+}
+
+.status-bar__status {
+  margin-left: auto;
 }

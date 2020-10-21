@@ -1,0 +1,31 @@
+.status-aside__button-group {
+
+}
+
+.status-message {
+  @apply flex;
+  @apply flex-col;
+  @apply py-4;
+  @apply text-sm;
+  @apply text-gray-800;
+}
+
+.status-message__status {
+  @apply flex;
+  @apply justify-between;
+}
+
+.status-message__note {
+
+}
+
+.status-message__status + .status-message__note {
+  @apply mt-3;
+}
+
+.button-group__item {
+  .button {
+    display: block;
+    width: 100%;
+  }
+}
