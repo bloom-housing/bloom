@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ApplicationMethodsService } from "./application-method.service"
-import { ApplicationMethodDto } from "./application-method.dto"
-import { ApplicationMethodCreateDto } from "./application-method.create.dto"
-import { ApplicationMethodUpdateDto } from "./application-method.update.dto"
+import {
+  ApplicationMethodCreateDto,
+  ApplicationMethodDto,
+  ApplicationMethodUpdateDto,
+} from "./application-method.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"

@@ -13,11 +13,9 @@ import {
   UseGuards,
 } from "@nestjs/common"
 import type { Request as ExpressRequest } from "express"
-import { ApplicationDto } from "./applications.dto"
+import { ApplicationDto } from "./application.dto"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { ApplicationCreateDto } from "./application.create.dto"
-import { ApplicationUpdateDto } from "./application.update.dto"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
@@ -27,6 +25,7 @@ import { ListingsService } from "../listings/listings.service"
 import { CsvBuilder } from "../services/csv-builder.service"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 import { mapTo } from "../shared/mapTo"
+import { ApplicationCreateDto, ApplicationUpdateDto } from "./application.dto"
 
 @Controller("applications")
 @ApiTags("applications")

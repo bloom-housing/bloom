@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common"
 import { PreferencesService } from "../preferences/preferences.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { PreferenceDto } from "../preferences/preference.dto"
-import { PreferenceCreateDto } from "../preferences/preference.create.dto"
-import { PreferenceUpdateDto } from "../preferences/preference.update.dto"
+import {
+  PreferenceCreateDto,
+  PreferenceDto,
+  PreferenceUpdateDto,
+} from "../preferences/preference.dto"
 import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
