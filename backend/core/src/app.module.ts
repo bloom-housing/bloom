@@ -1,4 +1,9 @@
-import { INestApplication, Module, ValidationPipe } from "@nestjs/common"
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  Module,
+  ValidationPipe,
+} from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
@@ -15,11 +20,17 @@ import { PreferencesModule } from "./preferences/preferences.module"
 import { ApplicationMethodsModule } from "./application-methods/application-methods.module"
 import { UnitsModule } from "./units/units.module"
 import { ListingEventsModule } from "./listing-events/listing-events.module"
+import { ConfigModule } from "@nestjs/config"
+import Joi from "@hapi/joi"
+import { Reflector } from "@nestjs/core"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
   app.use(logger)
   app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector), { excludeExtraneousValues: true })
+  )
   app.useGlobalPipes(
     new ValidationPipe({
       // Only allow props through that have been specified in the appropriate DTO
@@ -34,6 +45,15 @@ export function applicationSetup(app: INestApplication) {
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        PORT: Joi.number().default(3100).required(),
+        NODE_ENV: Joi.string()
+          .valid("development", "staging", "production", "test")
+          .default("development"),
+        DATABASE_URL: Joi.string().required(),
+      }),
+    }),
     TypeOrmModule.forRoot({
       ...dbOptions,
       autoLoadEntities: true,
