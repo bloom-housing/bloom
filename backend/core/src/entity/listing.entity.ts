@@ -28,6 +28,10 @@ import {
   ValidateNested,
 } from "class-validator"
 import { ListingEvent } from "./listing-event.entity"
+import { transformUnits } from "../lib/unit_transformations"
+import { amiCharts } from "../lib/ami_charts"
+import { listingUrlSlug } from "../lib/url_helper"
+import { ApiProperty } from "@nestjs/swagger"
 
 export enum ListingStatus {
   active = "active",
@@ -333,12 +337,19 @@ class Listing extends BaseEntity {
   @IsEnum(ListingStatus)
   status: ListingStatus
 
-  // # TODO
   @Expose()
-  unitsSummarized?: UnitsSummarized
+  @ApiProperty()
+  get unitsSummarized(): UnitsSummarized | undefined {
+    if (this.units.length > 0) {
+      return transformUnits(this.units, amiCharts)
+    }
+  }
 
   @Expose()
-  urlSlug?: string
+  @ApiProperty()
+  get urlSlug(): string | undefined {
+    return listingUrlSlug(this)
+  }
 }
 
 export { Listing as default, Listing }
