@@ -15,7 +15,7 @@ import {
 import Layout from "../../layouts/application"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import moment from "moment"
-import { Application } from "@bloom-housing/backend-core/client"
+import { ApplicationDto } from "@bloom-housing/core"
 
 export default () => {
   const { applicationsService } = useContext(ApiClientContext)
@@ -27,7 +27,7 @@ export default () => {
     //   setApplications(apps)
     // })
     const listing = Object.assign({}, Archer) as any
-    const application = {} as Application
+    const application = {} as ApplicationDto
     listing.applicationDueDate = moment().add(10, "days").format()
     application.listing = listing
     // TODO: Fix the types here (and probably this shouldn't come from the frontend anyway)

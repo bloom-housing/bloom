@@ -2,7 +2,7 @@ import React from "react"
 import { mount } from "enzyme"
 import { RequireLogin } from "../../src/authentication/RequireLogin"
 import { UserContext } from "../../src/authentication/UserContext"
-import { User } from "@bloom-housing/backend-core"
+import { UserDto } from "@bloom-housing/core"
 
 let mockPathname: string
 const mockPush = jest.fn()
@@ -14,7 +14,7 @@ jest.mock("next/router", () => ({
   }),
 }))
 
-const mockUser: User = {
+const mockUser: UserDto = {
   id: "123",
   email: "test@test.com",
   passwordHash: "123",
@@ -24,7 +24,6 @@ const mockUser: User = {
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2020-01-01"),
   applications: [],
-  isAdmin: false,
   roles: ["user"],
 }
 

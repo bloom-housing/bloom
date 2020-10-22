@@ -1,24 +1,24 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
   BaseEntity,
+  Column,
   CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Unit } from "./unit.entity"
+import { Unit, UnitsSummarized } from "./unit.entity"
 import { Application } from "./application.entity"
 import { Asset } from "./asset.entity"
 import { ApplicationMethod } from "./application-method.entity"
 import { Address } from "../shared/dto/address.dto"
 import { WhatToExpect } from "../shared/dto/whatToExpect.dto"
 import { Preference } from "./preference.entity"
-import { UnitsSummarized } from "@bloom-housing/core"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDateString,
+  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -32,6 +32,23 @@ import { ListingEvent } from "./listing-event.entity"
 export enum ListingStatus {
   active = "active",
   pending = "pending",
+}
+
+export class AmiChartItem {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  percentOfAmi: number
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  householdSize: number
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  income: number
 }
 
 @Entity({ name: "listings" })
@@ -333,12 +350,14 @@ class Listing extends BaseEntity {
   @IsEnum(ListingStatus)
   status: ListingStatus
 
-  // # TODO
   @Expose()
   unitsSummarized?: UnitsSummarized
 
   @Expose()
   urlSlug?: string
+
+  @Expose()
+  applicationConfig?: object
 }
 
 export { Listing as default, Listing }

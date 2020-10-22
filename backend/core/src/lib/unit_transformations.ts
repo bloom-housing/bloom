@@ -1,11 +1,5 @@
-import {
-  UnitsSummarized,
-  UnitSummary,
-  MinMax,
-  MinMaxCurrency,
-  AmiChartItem,
-} from "@bloom-housing/core"
-import { Unit } from "../entity/unit.entity"
+import { MinMax, MinMaxCurrency, Unit, UnitsSummarized, UnitSummary } from "../entity/unit.entity"
+import { AmiChartItem } from "../.."
 
 type AnyDict = { [key: string]: any }
 type Units = Unit[]
@@ -22,14 +16,18 @@ const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number):
     newMaxValue = newValue
   }
   if (baseValue && (baseValue.min || baseValue.min == 0) && baseValue.max) {
-    return { min: Math.min(baseValue.min, newValue), max: Math.max(baseValue.max, newMaxValue) }
+    return {
+      type: "generic",
+      min: Math.min(baseValue.min, newValue),
+      max: Math.max(baseValue.max, newMaxValue),
+    }
   } else {
-    return { min: newValue, max: newMaxValue }
+    return { type: "generic", min: newValue, max: newMaxValue }
   }
 }
 
 const minMaxInCurrency = (minMax: MinMax): MinMaxCurrency => {
-  return { min: usd.format(minMax.min), max: usd.format(minMax.max) }
+  return { type: "currency", min: usd.format(minMax.min), max: usd.format(minMax.max) }
 }
 
 const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]

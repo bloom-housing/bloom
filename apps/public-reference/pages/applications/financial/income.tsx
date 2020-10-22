@@ -3,7 +3,7 @@
 Total pre-tax household income from all sources
 */
 import { useState } from "react"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 import {
   AlertBox,
   AlertNotice,
@@ -23,13 +23,13 @@ import { useFormConductor } from "../../../lib/hooks"
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
 
-function verifyIncome(listing: Listing, income: number, period: IncomePeriod): IncomeError {
+function verifyIncome(listing: ListingDto, income: number, period: IncomePeriod): IncomeError {
   // Look through all the units on this listing to see what the absolute max/min income requirements are.
   const [annualMin, annualMax, monthlyMin] = listing.units.reduce(
     ([aMin, aMax, mMin], unit) => [
       Math.min(aMin, parseFloat(unit.annualIncomeMin)),
       Math.max(aMax, parseFloat(unit.annualIncomeMax)),
-      Math.min(mMin, unit.monthlyIncomeMin),
+      Math.min(mMin, parseFloat(unit.monthlyIncomeMin)),
     ],
     [Infinity, 0, Infinity]
   )

@@ -1,23 +1,196 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
   BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import {
+  IsArray,
   IsBoolean,
   IsDateString,
+  IsDefined,
   IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
   IsUUID,
+  ValidateNested,
 } from "class-validator"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
+
+export class BaseMinMax {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  type: "generic" | "currency"
+}
+
+export class MinMax extends BaseMinMax {
+  @Expose()
+  @IsDefined()
+  @IsNumber()
+  min: number
+
+  @Expose()
+  @IsDefined()
+  @IsNumber()
+  max: number
+}
+
+export class MinMaxCurrency extends BaseMinMax {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  min: string
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  max: string
+}
+
+export const MinMaxDiscriminator = {
+  property: "type",
+  subTypes: [
+    { value: MinMax, name: "generic" },
+    { value: MinMaxCurrency, name: "currency" },
+  ],
+}
+
+export class UnitSummary {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  unitType: string
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => BaseMinMax, {
+    keepDiscriminatorProperty: true,
+    discriminator: MinMaxDiscriminator,
+  })
+  minIncomeRange: MinMax | MinMaxCurrency
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  occupancyRange: MinMax
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  rentAsPercentIncomeRange: MinMax
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => BaseMinMax, {
+    keepDiscriminatorProperty: true,
+    discriminator: MinMaxDiscriminator,
+  })
+  rentRange: MinMax | MinMaxCurrency
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  totalAvailable: number
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  areaRange: MinMax
+
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  floorRange?: MinMax
+}
+
+export class UnitSummaryByReservedType {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  reservedType: string
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byUnitType: UnitSummary[]
+}
+
+export class UnitSummaryByAMI {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  percent: string
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byNonReservedUnitType: UnitSummary[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummaryByReservedType)
+  byReservedType: UnitSummaryByReservedType[]
+}
+
+export class UnitsSummarized {
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  unitTypes: string[]
+
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  reservedTypes: string[]
+
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  priorityTypes: string[]
+
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  amiPercentages: string[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byUnitType: UnitSummary[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byNonReservedUnitType: UnitSummary[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummaryByReservedType)
+  byReservedType: UnitSummaryByReservedType[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummaryByAMI)
+  byAMI: UnitSummaryByAMI[]
+
+  @Expose()
+  hmi: { [key: string]: any }
+}
 
 @Entity({ name: "units" })
 class Unit extends BaseEntity {

@@ -19,7 +19,7 @@ import {
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
 import { t } from "@bloom-housing/ui-components"
-import { UserCreateDto } from "@bloom-housing/backend-core/client"
+import { UserCreateDto } from "@bloom-housing/core"
 // External interface this context provides
 type ContextProps = {
   login: (email: string, password: string) => Promise<User>

@@ -2,7 +2,7 @@ import { useContext } from "react"
 import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
-import { ApplicationDto, ListingDto } from "@bloom-housing/backend-core/client"
+import { ApplicationDto, ListingDto } from "@bloom-housing/core"
 
 export function useListingsData() {
   const fetcher = (url) => fetch(url).then((r) => r.json())
