@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Header,
   Param,
   ParseBoolPipe,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -22,10 +24,9 @@ import { ResourceType } from "../auth/resource_type.decorator"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
-import { CsvBuilder } from "../services/csv-builder.service"
-import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 import { mapTo } from "../shared/mapTo"
 import { ApplicationCreateDto, ApplicationUpdateDto } from "./application.dto"
+import { Pagination } from "nestjs-typeorm-paginate"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -37,38 +38,37 @@ export class ApplicationsController {
     private readonly applicationsService: ApplicationsService,
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
-    private readonly authzService: AuthzService,
-    private readonly csvBuilder: CsvBuilder
+    private readonly authzService: AuthzService
   ) {}
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
   async list(
     @Request() req: ExpressRequest,
-    @Query("listingId") listingId: string
-  ): Promise<ApplicationDto[]> {
-    let response: ApplicationDto[] = []
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query("limit", new DefaultValuePipe(20), ParseIntPipe) limit?: number,
+    @Query("listingId", new DefaultValuePipe(null)) listingId?: string | null
+  ): Promise<Pagination<ApplicationDto>> {
+    let response: Pagination<ApplicationDto> | ApplicationDto[]
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
-      response = await this.applicationsService.list({ listingId })
+      response = await this.applicationsService.listPaginated({ limit, page }, listingId)
     } else {
-      response = await this.applicationsService.list({ listingId }, req.user)
+      response = await this.applicationsService.listPaginated({ limit, page }, listingId, req.user)
     }
-    return mapTo(ApplicationDto, response)
+    return {
+      ...response,
+      items: response.items.map((i) => mapTo(ApplicationDto, i)),
+    }
   }
 
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(
-    @Query("listingId") listingId: string,
-    @Query("includeHeaders", ParseBoolPipe) includeHeaders: boolean
+    @Query("listingId", new DefaultValuePipe(null)) listingId: string | null,
+    @Query("includeHeaders", new DefaultValuePipe(false), ParseBoolPipe) includeHeaders: boolean
   ): Promise<string> {
-    const applications = await this.applicationsService.list({ listingId }, null)
-    return this.csvBuilder.build(
-      applications,
-      applicationFormattingMetadataAggregateFactory,
-      includeHeaders
-    )
+    return await this.applicationsService.listAsCsv(listingId, includeHeaders, null)
   }
 
   @Post()

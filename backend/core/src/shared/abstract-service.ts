@@ -6,6 +6,8 @@ import { FindConditions } from "typeorm/find-options/FindConditions"
 import { ObjectLiteral } from "typeorm/common/ObjectLiteral"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type"
+import { IPaginationOptions, paginate, Pagination } from "nestjs-typeorm-paginate"
+import { IsDefined, IsNumber, Max, Min } from "class-validator"
 
 export interface GenericUpdateDto {
   id: string
