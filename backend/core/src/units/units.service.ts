@@ -1,7 +1,6 @@
 import { Unit } from "../entity/unit.entity"
-import { UnitCreateDto } from "./unit.create.dto"
-import { UnitUpdateDto } from "./unit.update.dto"
 import { AbstractServiceFactory } from "../shared/abstract-service"
+import { UnitCreateDto, UnitUpdateDto } from "./unit.dto"
 
 export class UnitsService extends AbstractServiceFactory<Unit, UnitCreateDto, UnitUpdateDto>(
   Unit

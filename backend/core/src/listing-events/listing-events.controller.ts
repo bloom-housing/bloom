@@ -3,10 +3,8 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
-import { ListingEventDto } from "./listing-events.dto"
+import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-events.dto"
 import { ListingEventsService } from "./listing-events.service"
-import { ListingEventCreateDto } from "./listing-events.create.dto"
-import { ListingEventUpdateDto } from "./listing-events.update.dto"
 import { mapTo } from "../shared/mapTo"
 
 @Controller("/listingEvents")

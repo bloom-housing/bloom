@@ -5,10 +5,8 @@ import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
 
 import { plainToClass } from "class-transformer"
-import { ListingCreateDto } from "./listing.create.dto"
 import { Listing } from "../entity/listing.entity"
-import { ListingUpdateDto } from "./listings.update.dto"
-import { ListingExtendedDto } from "./listing.dto"
+import { ListingCreateDto, ListingExtendedDto, ListingUpdateDto } from "./listing.dto"
 
 export enum ListingsResponseStatus {
   ok = "ok",
