@@ -7,6 +7,23 @@ exports[`Storyshots Headers/Site Header Standard 1`] = `
   skip="Skip to content"
   title="Site Title Here"
 >
+  <LanguageNav>
+    <div
+      className="language-bar"
+    >
+      <div
+        className="language-bar__inner"
+      >
+        <nav
+          className="language-nav"
+        >
+          <ul
+            className="language-nav__list"
+          />
+        </nav>
+      </div>
+    </div>
+  </LanguageNav>
   <a
     className="navbar__skip-link"
     href="#main-content"
@@ -109,6 +126,23 @@ exports[`Storyshots Headers/Site Header With Dropdown And Button 1`] = `
   skip="Skip to content"
   title="Site Title Here"
 >
+  <LanguageNav>
+    <div
+      className="language-bar"
+    >
+      <div
+        className="language-bar__inner"
+      >
+        <nav
+          className="language-nav"
+        >
+          <ul
+            className="language-nav__list"
+          />
+        </nav>
+      </div>
+    </div>
+  </LanguageNav>
   <a
     className="navbar__skip-link"
     href="#main-content"
