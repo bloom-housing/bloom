@@ -1,15 +1,15 @@
 import * as React from "react"
 import moment from "moment"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 import { Apply } from "./Apply"
 import { Waitlist } from "./Waitlist"
 
 export interface ApplicationSectionProps {
-  listing: Listing
+  listing: ListingDto
   internalFormRoute: string
 }
 
-const showWaitlist = (listing: Listing) => {
+const showWaitlist = (listing: ListingDto) => {
   const hasWaitlist =
     !isNaN(listing.waitlistMaxSize) && listing.waitlistMaxSize - listing.waitlistCurrentSize > 0
 

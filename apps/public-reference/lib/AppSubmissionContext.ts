@@ -1,5 +1,6 @@
 import React from "react"
 import ApplicationConductor from "./ApplicationConductor"
+import { ApplicationData } from "@bloom-housing/core"
 
 export const retrieveApplicationConfig = () => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.

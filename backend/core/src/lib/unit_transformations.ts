@@ -1,7 +1,7 @@
 import { MinMax, MinMaxCurrency, Unit, UnitsSummarized, UnitSummary } from "../entity/unit.entity"
 import { AmiChartItem } from "../.."
 
-type AnyDict = { [key: string]: any }
+export type AnyDict = { [key: string]: any }
 type Units = Unit[]
 
 const usd = new Intl.NumberFormat("en-US", {
@@ -11,23 +11,22 @@ const usd = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 })
 
-const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number): MinMax => {
+const minMaxValue = (baseValue: MinMaxCurrency, newValue: number, newMaxValue?: number): MinMax => {
   if (!newMaxValue) {
     newMaxValue = newValue
   }
-  if (baseValue && (baseValue.min || baseValue.min == 0) && baseValue.max) {
+  if (baseValue && (baseValue.min || parseFloat(baseValue.min) == 0) && baseValue.max) {
     return {
-      type: "generic",
-      min: Math.min(baseValue.min, newValue),
-      max: Math.max(baseValue.max, newMaxValue),
+      min: Math.min(parseFloat(baseValue.min), newValue),
+      max: Math.max(parseFloat(baseValue.max), newMaxValue),
     }
   } else {
-    return { type: "generic", min: newValue, max: newMaxValue }
+    return { min: newValue, max: newMaxValue }
   }
 }
 
-const minMaxInCurrency = (minMax: MinMax): MinMaxCurrency => {
-  return { type: "currency", min: usd.format(minMax.min), max: usd.format(minMax.max) }
+const minMaxInCurrency = (minMax: MinMaxCurrency): MinMaxCurrency => {
+  return { min: usd.format(parseFloat(minMax.min)), max: usd.format(parseFloat(minMax.max)) }
 }
 
 const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
@@ -135,7 +134,7 @@ const summarizeUnits = (
           summary.totalAvailable = 0
         }
         summary.minIncomeRange = minMaxValue(
-          summary.minIncomeRange as MinMax,
+          summary.minIncomeRange,
           Number.parseFloat(unit.monthlyIncomeMin)
         )
 

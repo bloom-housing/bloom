@@ -1,9 +1,9 @@
 import * as React from "react"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 import { t } from "../../helpers/translator"
 
 export interface AdditionalFeesProps {
-  listing: Listing
+  listing: ListingDto
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => (
@@ -23,7 +23,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => (
             ? `$${props.listing.depositMin} – $${props.listing.depositMax}`
             : `$${props.listing.depositMin}`}
         </div>
-        <div>{props.listing.depositMaxExtraText || t("listings.depositOrMonthsRent")}</div>
+        <div>{t("listings.depositOrMonthsRent")}</div>
       </div>
     </div>
 

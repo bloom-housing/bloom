@@ -13,11 +13,11 @@ import {
   IsBoolean,
   IsDateString,
   IsDefined,
-  IsNumber,
+  IsNumber, IsObject,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested,
+  ValidateNested
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
@@ -114,6 +114,16 @@ export class Applicant {
   @IsDefined()
   @IsBoolean()
   workInRegion: boolean
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  workAddress: Address
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  address: Address
 }
 
 export class AlternateContact {
@@ -204,9 +214,9 @@ export class Demographics {
 
 export class HouseholdMember {
   @Expose()
-  @IsDefined()
+  @IsOptional()
   @IsNumber()
-  id: number
+  id?: number
 
   @Expose()
   @IsDefined()
@@ -297,16 +307,6 @@ export class ApplicationData {
 
   @Expose()
   @IsDefined()
-  @ValidateNested()
-  address: Address
-
-  @Expose()
-  @IsDefined()
-  @ValidateNested()
-  workAddress: Address
-
-  @Expose()
-  @IsDefined()
   @IsBoolean()
   additionalPhone: boolean
 
@@ -393,8 +393,8 @@ export class ApplicationData {
 
   @Expose()
   @IsDefined()
-  @IsString({ each: true })
-  preferences: Array<string>
+  @IsObject()
+  preferences: Record<string, any>
 }
 
 @Entity({ name: "applications" })

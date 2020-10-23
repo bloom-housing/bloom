@@ -1,9 +1,9 @@
 import * as React from "react"
 import { t } from "../../../helpers/translator"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 
 interface WhatToExpectProps {
-  listing: Listing
+  listing: ListingDto
 }
 
 const WhatToExpect = (props: WhatToExpectProps) => {

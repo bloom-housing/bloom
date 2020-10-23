@@ -28,6 +28,10 @@ import {
   ValidateNested,
 } from "class-validator"
 import { ListingEvent } from "./listing-event.entity"
+import { transformUnits } from "../lib/unit_transformations"
+import { amiCharts } from "../lib/ami_charts"
+import { listingUrlSlug } from "../lib/url_helper"
+import { ApiProperty } from "@nestjs/swagger"
 
 export enum ListingStatus {
   active = "active",
@@ -141,11 +145,11 @@ class Listing extends BaseEntity {
   @Type(() => Address)
   buildingAddress: Address | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  buildingTotalUnits: string | null
+  @IsNumber()
+  buildingTotalUnits: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -195,13 +199,13 @@ class Listing extends BaseEntity {
   @IsBoolean()
   disableUnitsAccordion: boolean | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
   householdSizeMax: number | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -304,11 +308,11 @@ class Listing extends BaseEntity {
   @IsString()
   smokingPolicy: string | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  unitsAvailable: string | null
+  @IsNumber()
+  unitsAvailable: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -316,17 +320,17 @@ class Listing extends BaseEntity {
   @IsString()
   unitAmenities: string | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  waitlistCurrentSize: string | null
+  @IsNumber()
+  waitlistCurrentSize: number | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  waitlistMaxSize: string | null
+  @IsNumber()
+  waitlistMaxSize: number | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -335,11 +339,11 @@ class Listing extends BaseEntity {
   @Type(() => WhatToExpect)
   whatToExpect: WhatToExpect | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  yearBuilt: string | null
+  @IsNumber()
+  yearBuilt: number | null
 
   @Column({
     type: "enum",
@@ -351,10 +355,18 @@ class Listing extends BaseEntity {
   status: ListingStatus
 
   @Expose()
-  unitsSummarized?: UnitsSummarized
+  @ApiProperty()
+  get unitsSummarized(): UnitsSummarized | undefined {
+    if (this.units.length > 0) {
+      return transformUnits(this.units, amiCharts)
+    }
+  }
 
   @Expose()
-  urlSlug?: string
+  @ApiProperty()
+  get urlSlug(): string | undefined {
+    return listingUrlSlug(this)
+  }
 
   @Expose()
   applicationConfig?: object

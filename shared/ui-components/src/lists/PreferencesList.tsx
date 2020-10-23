@@ -1,10 +1,10 @@
 import * as React from "react"
-import { Preference, PreferenceLink } from "@bloom-housing/core"
+import { PreferenceDto, PreferenceLink } from "@bloom-housing/core"
 import "./PreferencesList.scss"
 import { locale } from "../helpers/translator"
 
 export interface PreferencesListProps {
-  preferences: Preference[]
+  preferences: PreferenceDto[]
 }
 
 const getOrdinal = (n: number) => {
@@ -18,7 +18,7 @@ const getOrdinal = (n: number) => {
 }
 
 const PreferencesList = (props: PreferencesListProps) => {
-  const preferences = props.preferences.map((preference: Preference, index: number) => {
+  const preferences = props.preferences.map((preference: PreferenceDto, index: number) => {
     const itemClasses = ["preferences-list__item", "info-card"]
 
     if (!preference.subtitle && !preference.description && !preference.links) {

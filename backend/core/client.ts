@@ -999,6 +999,99 @@ export interface LoginResponseDto {
   accessToken: string;
 }
 
+export interface MinMax {
+  /**  */
+  min: number;
+
+  /**  */
+  max: number;
+
+  /**  */
+  type: object;
+}
+
+export interface UnitSummary {
+  /**  */
+  unitType: string;
+
+  /**  */
+  minIncomeRange: object;
+
+  /**  */
+  occupancyRange: MinMax;
+
+  /**  */
+  rentAsPercentIncomeRange: MinMax;
+
+  /**  */
+  rentRange: object;
+
+  /**  */
+  totalAvailable: number;
+
+  /**  */
+  areaRange: MinMax;
+
+  /**  */
+  floorRange?: MinMax;
+}
+
+export interface UnitSummaryByReservedType {
+  /**  */
+  reservedType: string;
+
+  /**  */
+  byUnitType: UnitSummary[];
+}
+
+export interface UnitSummaryByAMI {
+  /**  */
+  percent: string;
+
+  /**  */
+  byNonReservedUnitType: UnitSummary[];
+
+  /**  */
+  byReservedType: UnitSummaryByReservedType[];
+}
+
+export interface HMI {
+  /**  */
+  columns: object;
+
+  /**  */
+  rows: object[];
+}
+
+export interface UnitsSummarized {
+  /**  */
+  unitTypes: string[];
+
+  /**  */
+  reservedTypes: string[];
+
+  /**  */
+  priorityTypes: string[];
+
+  /**  */
+  amiPercentages: string[];
+
+  /**  */
+  byUnitType: UnitSummary[];
+
+  /**  */
+  byNonReservedUnitType: UnitSummary[];
+
+  /**  */
+  byReservedType: UnitSummaryByReservedType[];
+
+  /**  */
+  byAMI: UnitSummaryByAMI[];
+
+  /**  */
+  hmi: HMI;
+}
+
 export interface ApplicationMethodDto {
   /**  */
   id: string;
@@ -1417,89 +1510,13 @@ export interface WhatToExpect {
   bePreparedIfChosen: string;
 }
 
-export interface MinMax {
-  /**  */
-  min: number;
-
-  /**  */
-  max: number;
-
-  /**  */
-  type: object;
-}
-
-export interface UnitSummary {
-  /**  */
-  unitType: string;
-
-  /**  */
-  minIncomeRange: object;
-
-  /**  */
-  occupancyRange: MinMax;
-
-  /**  */
-  rentAsPercentIncomeRange: MinMax;
-
-  /**  */
-  rentRange: object;
-
-  /**  */
-  totalAvailable: number;
-
-  /**  */
-  areaRange: MinMax;
-
-  /**  */
-  floorRange?: MinMax;
-}
-
-export interface UnitSummaryByReservedType {
-  /**  */
-  reservedType: string;
-
-  /**  */
-  byUnitType: UnitSummary[];
-}
-
-export interface UnitSummaryByAMI {
-  /**  */
-  percent: string;
-
-  /**  */
-  byNonReservedUnitType: UnitSummary[];
-
-  /**  */
-  byReservedType: UnitSummaryByReservedType[];
-}
-
-export interface UnitsSummarized {
-  /**  */
-  unitTypes: string[];
-
-  /**  */
-  reservedTypes: string[];
-
-  /**  */
-  priorityTypes: string[];
-
-  /**  */
-  amiPercentages: string[];
-
-  /**  */
-  byUnitType: UnitSummary[];
-
-  /**  */
-  byNonReservedUnitType: UnitSummary[];
-
-  /**  */
-  byReservedType: UnitSummaryByReservedType[];
-
-  /**  */
-  byAMI: UnitSummaryByAMI[];
-}
-
 export interface Listing {
+  /**  */
+  unitsSummarized: UnitsSummarized;
+
+  /**  */
+  urlSlug: string;
+
   /**  */
   id: string;
 
@@ -1555,7 +1572,7 @@ export interface Listing {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: string;
+  buildingTotalUnits: number;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1636,31 +1653,25 @@ export interface Listing {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: string;
+  unitsAvailable: number;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: string;
+  waitlistCurrentSize: number;
 
   /**  */
-  waitlistMaxSize: string;
+  waitlistMaxSize: number;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: string;
+  yearBuilt: number;
 
   /**  */
   status: EnumListingStatus;
-
-  /**  */
-  unitsSummarized?: UnitsSummarized;
-
-  /**  */
-  urlSlug?: string;
 
   /**  */
   applicationConfig?: object;
@@ -1702,6 +1713,12 @@ export interface Applicant {
 
   /**  */
   workInRegion: boolean;
+
+  /**  */
+  workAddress: Address;
+
+  /**  */
+  address: Address;
 }
 
 export interface AlternateContact {
@@ -1760,7 +1777,7 @@ export interface Demographics {
 
 export interface HouseholdMember {
   /**  */
-  id: number;
+  id?: number;
 
   /**  */
   address: Address;
@@ -1816,12 +1833,6 @@ export interface ApplicationData {
   applicant: Applicant;
 
   /**  */
-  address: Address;
-
-  /**  */
-  workAddress: Address;
-
-  /**  */
   additionalPhone: boolean;
 
   /**  */
@@ -1873,7 +1884,7 @@ export interface ApplicationData {
   preferredUnit: string[];
 
   /**  */
-  preferences: string[];
+  preferences: object;
 }
 
 export interface Application {
@@ -1900,6 +1911,12 @@ export interface Application {
 }
 
 export interface ListingDto {
+  /**  */
+  unitsSummarized: UnitsSummarized;
+
+  /**  */
+  urlSlug: string;
+
   /**  */
   applicationMethods: ApplicationMethodDto[];
 
@@ -1955,7 +1972,7 @@ export interface ListingDto {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: string;
+  buildingTotalUnits: number;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -2036,31 +2053,25 @@ export interface ListingDto {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: string;
+  unitsAvailable: number;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: string;
+  waitlistCurrentSize: number;
 
   /**  */
-  waitlistMaxSize: string;
+  waitlistMaxSize: number;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: string;
+  yearBuilt: number;
 
   /**  */
   status: EnumListingDtoStatus;
-
-  /**  */
-  unitsSummarized?: UnitsSummarized;
-
-  /**  */
-  urlSlug?: string;
 
   /**  */
   applicationConfig?: object;
@@ -2084,6 +2095,12 @@ export interface IdDto {
 
 export interface ListingCreateDto {
   /**  */
+  unitsSummarized: UnitsSummarized;
+
+  /**  */
+  urlSlug: string;
+
+  /**  */
   applicationMethods: IdDto[];
 
   /**  */
@@ -2129,7 +2146,7 @@ export interface ListingCreateDto {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: string;
+  buildingTotalUnits: number;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -2210,31 +2227,25 @@ export interface ListingCreateDto {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: string;
+  unitsAvailable: number;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: string;
+  waitlistCurrentSize: number;
 
   /**  */
-  waitlistMaxSize: string;
+  waitlistMaxSize: number;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: string;
+  yearBuilt: number;
 
   /**  */
   status: EnumListingCreateDtoStatus;
-
-  /**  */
-  unitsSummarized?: UnitsSummarized;
-
-  /**  */
-  urlSlug?: string;
 
   /**  */
   applicationConfig?: object;
@@ -2242,6 +2253,12 @@ export interface ListingCreateDto {
 
 export interface ListingUpdateDto {
   /**  */
+  unitsSummarized: UnitsSummarized;
+
+  /**  */
+  urlSlug: string;
+
+  /**  */
   applicationMethods: IdDto[];
 
   /**  */
@@ -2287,7 +2304,7 @@ export interface ListingUpdateDto {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: string;
+  buildingTotalUnits: number;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -2368,31 +2385,25 @@ export interface ListingUpdateDto {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: string;
+  unitsAvailable: number;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: string;
+  waitlistCurrentSize: number;
 
   /**  */
-  waitlistMaxSize: string;
+  waitlistMaxSize: number;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: string;
+  yearBuilt: number;
 
   /**  */
   status: EnumListingUpdateDtoStatus;
-
-  /**  */
-  unitsSummarized?: UnitsSummarized;
-
-  /**  */
-  urlSlug?: string;
 
   /**  */
   applicationConfig?: object;

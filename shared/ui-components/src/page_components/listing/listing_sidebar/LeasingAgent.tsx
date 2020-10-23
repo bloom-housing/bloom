@@ -2,11 +2,11 @@ import * as React from "react"
 import { SidebarAddress } from "./SidebarAddress"
 import { t } from "../../../helpers/translator"
 import { Icon } from "../../../icons/Icon"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 import { openDateState } from "../../../helpers/state"
 
 interface LeasingAgentProps {
-  listing: Listing
+  listing: ListingDto
 }
 
 const LeasingAgent = (props: LeasingAgentProps) => {

@@ -21,15 +21,9 @@ import {
   ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
+import { AnyDict } from "../lib/unit_transformations"
 
-export class BaseMinMax {
-  @Expose()
-  @IsDefined()
-  @IsString()
-  type: "generic" | "currency"
-}
-
-export class MinMax extends BaseMinMax {
+export class MinMax {
   @Expose()
   @IsDefined()
   @IsNumber()
@@ -41,7 +35,7 @@ export class MinMax extends BaseMinMax {
   max: number
 }
 
-export class MinMaxCurrency extends BaseMinMax {
+export class MinMaxCurrency {
   @Expose()
   @IsDefined()
   @IsString()
@@ -53,14 +47,6 @@ export class MinMaxCurrency extends BaseMinMax {
   max: string
 }
 
-export const MinMaxDiscriminator = {
-  property: "type",
-  subTypes: [
-    { value: MinMax, name: "generic" },
-    { value: MinMaxCurrency, name: "currency" },
-  ],
-}
-
 export class UnitSummary {
   @Expose()
   @IsDefined()
@@ -70,11 +56,7 @@ export class UnitSummary {
   @Expose()
   @IsDefined()
   @ValidateNested()
-  @Type(() => BaseMinMax, {
-    keepDiscriminatorProperty: true,
-    discriminator: MinMaxDiscriminator,
-  })
-  minIncomeRange: MinMax | MinMaxCurrency
+  minIncomeRange: MinMaxCurrency
 
   @Expose()
   @IsDefined()
@@ -89,11 +71,7 @@ export class UnitSummary {
   @Expose()
   @IsDefined()
   @ValidateNested()
-  @Type(() => BaseMinMax, {
-    keepDiscriminatorProperty: true,
-    discriminator: MinMaxDiscriminator,
-  })
-  rentRange: MinMax | MinMaxCurrency
+  rentRange: MinMaxCurrency
 
   @Expose()
   @IsDefined()
@@ -143,6 +121,11 @@ export class UnitSummaryByAMI {
   byReservedType: UnitSummaryByReservedType[]
 }
 
+export class HMI {
+  columns: AnyDict
+  rows: AnyDict[]
+}
+
 export class UnitsSummarized {
   @Expose()
   @IsDefined()
@@ -189,7 +172,7 @@ export class UnitsSummarized {
   byAMI: UnitSummaryByAMI[]
 
   @Expose()
-  hmi: { [key: string]: any }
+  hmi: HMI
 }
 
 @Entity({ name: "units" })

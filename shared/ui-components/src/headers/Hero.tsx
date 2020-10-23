@@ -1,6 +1,6 @@
 import * as React from "react"
 import { LinkButton } from "../actions/LinkButton"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 import moment from "moment"
 import { t } from "../helpers/translator"
 import { openDateState } from "../helpers/state"
@@ -11,11 +11,11 @@ export interface HeroProps {
   backgroundImage?: string
   buttonTitle: string
   buttonLink: string
-  listings?: Listing[]
+  listings?: ListingDto[]
   children?: JSX.Element
 }
 
-const listingOpen = (listing: Listing) => {
+const listingOpen = (listing: ListingDto) => {
   return moment() < moment(listing.applicationDueDate)
 }
 

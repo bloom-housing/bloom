@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ImageCard } from "../../blocks/ImageCard"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 import { LinkButton } from "../../actions/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
@@ -8,17 +8,17 @@ import { t } from "../../helpers/translator"
 import "./ListingsList.scss"
 
 export interface ListingsProps {
-  listings: Listing[]
+  listings: ListingDto[]
 }
 
-const imageUrlFromListing = (listing: Listing) => {
+const imageUrlFromListing = (listing: ListingDto) => {
   return listing?.assets?.find((asset) => asset.label == "building")?.fileId
 }
 
 const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
-  const listItems = listings.map((listing: Listing) => {
+  const listItems = listings.map((listing: ListingDto) => {
     const imageUrl = imageUrlFromListing(listing) || ""
     const unitSummariesHeaders = {
       unitType: t("t.unitType"),

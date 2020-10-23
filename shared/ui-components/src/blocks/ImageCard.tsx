@@ -2,7 +2,7 @@ import * as React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { ApplicationStatus } from "../notifications/ApplicationStatus"
 import "./ImageCard.scss"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 
 export interface ImageCardProps {
   imageUrl: string
@@ -10,7 +10,7 @@ export interface ImageCardProps {
   title: string
   href?: string
   as?: string
-  listing?: Listing
+  listing?: ListingDto
 }
 
 const ImageCard = (props: ImageCardProps) => {
