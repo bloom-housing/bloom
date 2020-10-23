@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react"
-
+import { useRouter } from "next/router"
+import moment from "moment"
 import Head from "next/head"
 import {
   Field,
@@ -15,8 +16,11 @@ import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 
 export default function ApplicationsList() {
+  const router = useRouter()
   const { register, handleSubmit, watch } = useForm()
   const { applicationsService } = useContext(ApiClientContext)
+
+  const { listingId } = router.query
 
   const [gridApi, setGridApi] = useState(null)
   const [gridColumnApi, setGridColumnApi] = useState(null)
@@ -38,11 +42,13 @@ export default function ApplicationsList() {
 
   const onExport = async () => {
     const content = await applicationsService.listAsCsv()
+    const now = new Date()
+    const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
 
     const fileLink = document.createElement("a")
     fileLink.href = "data:text/csv;charset=utf-8," + encodeURI(content)
     fileLink.target = "_blank"
-    fileLink.download = "appplications.csv"
+    fileLink.download = `appplications-${listingId}-${dateString}.csv`
     fileLink.click()
   }
 
