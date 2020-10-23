@@ -11,5 +11,14 @@ describe("applications/review/summary", function () {
 
     cy.getByID("applicantName").should("include.text", this.data.you.name)
     cy.getByID("applicantbirthDay").should("include.text", this.data.you.dateOfBirth)
+
+    cy.getByID("applicantPhone").should("include.text", this.data.you.workPhone)
+    cy.getByID("applicantPhone").should("include.text", this.data.you.workPhoneLabel)
+
+    cy.getByID("applicantPhone").should("include.text", this.data.you.workPhone)
+    cy.getByID("applicantPhone").should("include.text", this.data.you.workPhoneLabel)
+
+    cy.getByID("applicantAdditionalPhone").should("include.text", this.data.you.homePhone)
+    cy.getByID("applicantAdditionalPhone").should("include.text", this.data.you.homePhoneLabel)
   })
 })

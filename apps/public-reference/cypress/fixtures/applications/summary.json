@@ -3,7 +3,9 @@
     "name": "First Name Middle Name Last Name",
     "dateOfBirth": "07/17/1996",
     "workPhone": "(444) 444-4444",
+    "workPhoneLabel": "Work",
     "homePhone": "(555) 555-5555",
+    "homePhoneLabel": "Home",
     "email": "test@bloom.com",
     "address": {
       "street": "Street",
