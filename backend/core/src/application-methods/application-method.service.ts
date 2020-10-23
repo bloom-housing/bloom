@@ -1,19 +1,9 @@
-import { InjectRepository } from "@nestjs/typeorm"
-import { AbstractService } from "../shared/abstract-service"
 import { ApplicationMethod } from "../entity/application-method.entity"
-import { ApplicationMethodCreateDto } from "./application-method.create.dto"
-import { ApplicationMethodUpdateDto } from "./application-method.update.dto"
-import { Repository } from "typeorm"
+import { AbstractServiceFactory } from "../shared/abstract-service"
+import { ApplicationMethodCreateDto, ApplicationMethodUpdateDto } from "./application-method.dto"
 
-export class ApplicationMethodsService extends AbstractService<
+export class ApplicationMethodsService extends AbstractServiceFactory<
   ApplicationMethod,
   ApplicationMethodCreateDto,
   ApplicationMethodUpdateDto
-> {
-  constructor(
-    @InjectRepository(ApplicationMethod)
-    protected readonly repository: Repository<ApplicationMethod>
-  ) {
-    super(repository)
-  }
-}
+>(ApplicationMethod) {}

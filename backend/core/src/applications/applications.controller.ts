@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -12,15 +11,11 @@ import {
   Query,
   Request,
   UseGuards,
-  UseInterceptors,
 } from "@nestjs/common"
 import type { Request as ExpressRequest } from "express"
-import { ApplicationDto } from "./applications.dto"
+import { ApplicationDto } from "./application.dto"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { ApplicationCreateDto } from "./application.create.dto"
-import { ApplicationUpdateDto } from "./application.update.dto"
-import { TransformInterceptor } from "../interceptors/transform.interceptor"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
@@ -29,11 +24,12 @@ import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { CsvBuilder } from "../services/csv-builder.service"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
+import { mapTo } from "../shared/mapTo"
+import { ApplicationCreateDto, ApplicationUpdateDto } from "./application.dto"
 
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
 @ResourceType("application")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 export class ApplicationsController {
@@ -47,16 +43,17 @@ export class ApplicationsController {
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async list(
     @Request() req: ExpressRequest,
     @Query("listingId") listingId: string
   ): Promise<ApplicationDto[]> {
+    let response: ApplicationDto[] = []
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
-      return await this.applicationsService.list({ listingId })
+      response = await this.applicationsService.list({ listingId })
     } else {
-      return await this.applicationsService.list({ listingId }, req.user)
+      response = await this.applicationsService.list({ listingId }, req.user)
     }
+    return mapTo(ApplicationDto, response)
   }
 
   @Get(`csv`)
@@ -76,7 +73,6 @@ export class ApplicationsController {
 
   @Post()
   @ApiOperation({ summary: "Create application", operationId: "create" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async create(
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
@@ -86,24 +82,22 @@ export class ApplicationsController {
     if (application.application.applicant.emailAddress) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
     }
-    return application
+    return mapTo(ApplicationDto, application)
   }
 
   @Get(`:applicationId`)
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async retrieve(
     @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string
   ): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.read)
-    return app
+    return mapTo(ApplicationDto, app)
   }
 
   @Put(`:applicationId`)
   @ApiOperation({ summary: "Update application by id", operationId: "update" })
-  @UseInterceptors(new TransformInterceptor(ApplicationDto))
   async update(
     @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string,
@@ -111,7 +105,7 @@ export class ApplicationsController {
   ): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.update)
-    return this.applicationsService.update(applicationUpdateDto, app)
+    return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto, app))
   }
 
   @Delete(`:applicationId`)
@@ -119,7 +113,7 @@ export class ApplicationsController {
   async delete(@Request() req: ExpressRequest, @Param("applicationId") applicationId: string) {
     const app = await this.applicationsService.findOne(applicationId)
     await this.authorizeUserAction(req.user, app, authzActions.delete)
-    return this.applicationsService.delete(applicationId)
+    await this.applicationsService.delete(applicationId)
   }
 
   private authorizeUserAction(user, app, action) {

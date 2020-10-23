@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 
 export class PreferenceLink {
   @Expose()
@@ -40,10 +40,10 @@ class Preference extends BaseEntity {
   @IsUUID()
   updatedAt: string
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
+  @IsNumber()
   ordinal: number | null
 
   @Column({ type: "text", nullable: true })

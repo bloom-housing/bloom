@@ -2,9 +2,9 @@ import { ExtractJwt, Strategy } from "passport-jwt"
 import { PassportStrategy } from "@nestjs/passport"
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { Request } from "express"
-import { secretKey } from "./constants"
 import { UserService } from "../user/user.service"
 import { AuthService } from "./auth.service"
+import { ConfigService } from "@nestjs/config"
 
 function extractTokenFromAuthHeader(req: Request) {
   const authHeader = req.get("Authorization")
@@ -13,12 +13,16 @@ function extractTokenFromAuthHeader(req: Request) {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private userService: UserService, private authService: AuthService) {
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+    private configService: ConfigService
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: true,
       ignoreExpiration: false,
-      secretOrKey: secretKey,
+      secretOrKey: configService.get<string>("APP_SECRET"),
     })
   }
 
