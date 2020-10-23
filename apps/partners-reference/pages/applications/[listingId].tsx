@@ -449,7 +449,7 @@ export default function ApplicationsList() {
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <div className="flex justify-between">
-              <div className="max-w-3xl">
+              <div className="w-56">
                 <Field name="filter-input" register={register} placeholder="Filter" />
               </div>
 
