@@ -8,7 +8,7 @@ export interface SiteHeaderProps {
   skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
-  languages: LangItem[]
+  languages?: LangItem[]
 }
 
 export interface SiteHeaderState {
@@ -90,7 +90,8 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   render() {
     return (
       <>
-        <LanguageNav items={this.props.languages} />
+        {this.props.languages && <LanguageNav items={this.props.languages} />}
+
         {this.skipLink()}
         {this.noticeBar()}
         <div className="navbar__wrapper">
