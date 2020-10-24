@@ -1,7 +1,7 @@
 import React from "react"
 import Link from "next/link"
 import { MinimalTable } from "../tables/MinimalTable"
-import { ViewItem } from "../prototypes/ViewItem"
+import { ViewItem } from "../blocks/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
 import { Field } from "../forms/Field"
 
