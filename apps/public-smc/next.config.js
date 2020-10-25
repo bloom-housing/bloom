@@ -84,6 +84,7 @@ module.exports = withCSS(
               "/": { page: "/" },
               "/listings": { page: "/listings" },
               "/housing-counselors": { page: "/HousingCounselors" },
+              "/additional-resources": { page: "/AdditionalResources" },
             })
             const languages = ["es"] // add new language codes here
             const languagePaths = {}
@@ -104,6 +105,14 @@ module.exports = withCSS(
               "/additional-resources": { page: "/AdditionalResources" },
               "/disclaimer": { page: "/disclaimer" },
               "/privacy": { page: "/privacy" },
+              "/applications/start/choose-language": {
+                page: "/applications/start/choose-language",
+              },
+              "/sign-in": { page: "/sign-in" },
+              "/create-account": { page: "/create-account" },
+              "/account/applications": { page: "/account/applications" },
+              "/account/dashboard": { page: "/account/dashboard" },
+              "/account/settings": { page: "/account/settings" },
             })
           },
         })
