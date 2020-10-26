@@ -52,6 +52,13 @@ export default function ApplicationsList() {
     fileLink.click()
   }
 
+  const onSelectionChanged = () => {
+    const row = gridApi.getSelectedRows()
+    const rowId = row[0].id
+
+    router.push(`${window.location.pathname}/${rowId}`)
+  }
+
   useEffect(() => {
     if (!gridApi) return
 
@@ -402,7 +409,7 @@ export default function ApplicationsList() {
   ]
 
   const { applicationDtos, appsLoading, appsError } = useApplicationsData(
-    "DDD0C6ED-960A-487D-ACD1-F4B971FEA0BC"
+    "ddd0c6ed-960a-487d-acd1-f4b971fea0bc"
   ) // TODO: pass listing ID
   if (appsError) return "An error has occurred."
   if (appsLoading) return "Loading..."
@@ -479,6 +486,8 @@ export default function ApplicationsList() {
                 paginationPageSize={8}
                 suppressScrollOnNewData={true}
                 onGridReady={onGridReady}
+                rowSelection={"single"}
+                onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
 
               <div className="data-pager">
