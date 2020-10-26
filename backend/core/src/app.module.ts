@@ -21,7 +21,7 @@ import { ApplicationMethodsModule } from "./application-methods/application-meth
 import { UnitsModule } from "./units/units.module"
 import { ListingEventsModule } from "./listing-events/listing-events.module"
 import { ConfigModule } from "@nestjs/config"
-import Joi from "@hapi/joi"
+import Joi from "joi"
 import { Reflector } from "@nestjs/core"
 
 export function applicationSetup(app: INestApplication) {
