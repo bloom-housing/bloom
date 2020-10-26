@@ -10,8 +10,8 @@ import {
   Button,
   ApiClientContext,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../../lib/hooks"
-import Layout from "../../layouts/application"
+import { useApplicationsData } from "../lib/hooks"
+import Layout from "../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 
@@ -20,7 +20,7 @@ export default function ApplicationsList() {
   const { register, handleSubmit, watch } = useForm()
   const { applicationsService } = useContext(ApiClientContext)
 
-  const { listingId } = router.query
+  const listingId = router.query.listingId as string
 
   const [gridApi, setGridApi] = useState(null)
   const [gridColumnApi, setGridColumnApi] = useState(null)
@@ -401,7 +401,9 @@ export default function ApplicationsList() {
     },
   ]
 
-  const { applicationDtos, appsLoading, appsError } = useApplicationsData()
+  const { applicationDtos, appsLoading, appsError } = useApplicationsData(
+    "DDD0C6ED-960A-487D-ACD1-F4B971FEA0BC"
+  ) // TODO: pass listing ID
   if (appsError) return "An error has occurred."
   if (appsLoading) return "Loading..."
 
@@ -445,6 +447,7 @@ export default function ApplicationsList() {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>Applications Received</PageHeader>
+      {console.log(applicationDtos)}
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">

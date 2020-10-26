@@ -8,7 +8,8 @@ export function useListingsData() {
   const fetcher = (url) => fetch(url).then((r) => r.json())
   const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
   if (data && data.status == "ok") {
-    console.log(`Listings Data Received: ${data.listings.length}`)
+    console.log(data)
+    console.log(`Listings Data Received: ${data.listings}`)
   }
   return {
     listingDtos: data,
@@ -17,12 +18,14 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData() {
+export function useApplicationsData(listingId?: string) {
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
   const { applicationsService } = useContext(ApiClientContext)
   const backendApplicationsEndpointUrl = process.env.backendApiBase + "/applications"
-  const fetcher = (url) => applicationsService.list()
+  const params = listingId ? { listingId } : {}
+  const fetcher = (url) => applicationsService.list(params)
   const { data, error } = useSWR(backendApplicationsEndpointUrl, fetcher)
+
   const applications: ApplicationDto[] = []
   if (listingDtos && data) {
     console.log(`Applications Data Received: ${data.length}`)

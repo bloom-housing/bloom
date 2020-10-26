@@ -259,7 +259,7 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      listingId: string;
+      listingId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationDto[]> {

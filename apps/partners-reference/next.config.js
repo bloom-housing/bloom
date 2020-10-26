@@ -48,7 +48,7 @@ module.exports = withCSS(
           // we fetch our list of listings, this allow us to dynamically generate the exported pages
           let listings = []
           try {
-            const response = await axios.get(LISTING_SERVICE_URL)
+            const response = await axios.get(BACKEND_API_BASE + LISTINGS_QUERY)
             listings = response.data.listings
           } catch (error) {
             console.log(error)
@@ -58,14 +58,9 @@ module.exports = withCSS(
           const listingPaths = listings.reduce(
             (listingPaths, listing) =>
               Object.assign({}, listingPaths, {
-                [`/listing/${listing.id}/${listing.urlSlug}`]: {
-                  page: "/listing",
+                [`/listings/${listing.id}/applications`]: {
+                  page: "/applications",
                   query: { id: listing.id },
-                },
-                // Create a redirect so that the base ID redirects to the ID with URL slug
-                [`/listing/${listing.id}`]: {
-                  page: "/redirect",
-                  query: { to: `/listing/${listing.id}/${listing.urlSlug}` },
                 },
               }),
             {}
