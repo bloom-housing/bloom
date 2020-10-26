@@ -1,4 +1,4 @@
-import React, { ReactNode, Fragment } from "react"
+import React, { ReactNode, Fragment, useEffect, useState } from "react"
 import Link from "next/link"
 import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Address } from "@bloom-housing/core"
@@ -63,6 +63,15 @@ const reformatAddress = (address: Address) => {
 }
 
 const FormSummaryDetails = ({ application, editMode = false }) => {
+  // fix for rehydration
+  const [hasMounted, setHasMounted] = useState(false)
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
+  if (!hasMounted) {
+    return null
+  }
+
   const alternateContactName = () => {
     switch (application.alternateContact.type) {
       case "other":
@@ -84,12 +93,12 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       </h3>
 
       <div className="form-card__group mx-0">
-        <ReviewItem label={t("t.name")} id="applicantName">
+        <ReviewItem id="applicantName" label={t("t.name")}>
           {application.applicant.firstName} {application.applicant.middleName}{" "}
           {application.applicant.lastName}
         </ReviewItem>
 
-        <ReviewItem label={t("application.household.member.dateOfBirth")} id="applicantbirthDay">
+        <ReviewItem id="applicantbirthDay" label={t("application.household.member.dateOfBirth")}>
           {application.applicant.birthMonth}/{application.applicant.birthDay}/
           {application.applicant.birthYear}
         </ReviewItem>
@@ -282,7 +291,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
             {Object.entries(application.preferences)
               .filter((option) => option[0] != "none" && option[1])
               .map((option) => (
-                <ReviewItem label={t("application.preferences.youHaveClaimed")}>
+                <ReviewItem key={option[0]} label={t("application.preferences.youHaveClaimed")}>
                   {t(`application.preferences.${option[0]}.label`)}
                 </ReviewItem>
               ))}
