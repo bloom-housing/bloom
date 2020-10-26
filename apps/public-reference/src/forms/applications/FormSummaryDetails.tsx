@@ -163,7 +163,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
       {application.alternateContact.type !== "" &&
         application.alternateContact.type !== "noContact" && (
-          <>
+          <div id="alternateContact">
             <h3 className="form--card__sub-header">
               {t("application.alternateContact.type.label")}
               {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
@@ -197,11 +197,11 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
                 </ReviewItem>
               )}
             </div>
-          </>
+          </div>
         )}
 
       {application.householdSize > 1 && (
-        <>
+        <div id="householdMembers">
           <h3 className="form--card__sub-header">
             {t("application.household.householdMembers")}
             {editMode && <EditLink href="/applications/household/add-members" />}
@@ -229,74 +229,80 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
 
-      <h3 className="form--card__sub-header">
-        {t("application.review.householdDetails")}
-        {editMode && <EditLink href="/applications/household/preferred-units" />}
-      </h3>
+      <div id="householdDetails">
+        <h3 className="form--card__sub-header">
+          {t("application.review.householdDetails")}
+          {editMode && <EditLink href="/applications/household/preferred-units" />}
+        </h3>
 
-      <div className="form-card__group mx-0">
-        {application.preferredUnit && (
-          <ReviewItem
-            id="householdUnitType"
-            label={t("application.household.preferredUnit.preferredUnitType")}
-          >
-            {application.preferredUnit
-              .map((item) => t(`application.household.preferredUnit.options.${item}`))
-              .join(", ")}
+        <div className="form-card__group mx-0">
+          {application.preferredUnit && (
+            <ReviewItem
+              id="householdUnitType"
+              label={t("application.household.preferredUnit.preferredUnitType")}
+            >
+              {application.preferredUnit
+                .map((item) => t(`application.household.preferredUnit.options.${item}`))
+                .join(", ")}
+            </ReviewItem>
+          )}
+          <ReviewItem id="householdAda" label={t("application.ada.label")}>
+            {accessibilityLabels(application.accessibility).map((item) => (
+              <Fragment key={item}>
+                {item}
+                <br />
+              </Fragment>
+            ))}
           </ReviewItem>
-        )}
-        <ReviewItem id="householdAda" label={t("application.ada.label")}>
-          {accessibilityLabels(application.accessibility).map((item) => (
-            <Fragment key={item}>
-              {item}
-              <br />
-            </Fragment>
-          ))}
-        </ReviewItem>
+        </div>
       </div>
 
-      <h3 className="form--card__sub-header">
-        {t("t.income")}
-        {editMode && <EditLink href="/applications/financial/vouchers" />}
-      </h3>
+      <div id="income">
+        <h3 className="form--card__sub-header">
+          {t("t.income")}
+          {editMode && <EditLink href="/applications/financial/vouchers" />}
+        </h3>
 
-      <div className="form-card__group border-b mx-0">
-        <ReviewItem id="incomeVouchers" label={t("application.review.voucherOrSubsidy")}>
-          {application.incomeVouchers ? t("t.yes") : t("t.no")}
-        </ReviewItem>
-
-        {application.incomePeriod && (
-          <ReviewItem id="incomeValue" label={t("t.income")}>
-            ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+        <div className="form-card__group border-b mx-0">
+          <ReviewItem id="incomeVouchers" label={t("application.review.voucherOrSubsidy")}>
+            {application.incomeVouchers ? t("t.yes") : t("t.no")}
           </ReviewItem>
-        )}
+
+          {application.incomePeriod && (
+            <ReviewItem id="incomeValue" label={t("t.income")}>
+              ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+            </ReviewItem>
+          )}
+        </div>
       </div>
 
-      <h3 className="form--card__sub-header">
-        {t("t.preferences")}
-        {editMode && <EditLink href="/applications/preferences/select" />}
-      </h3>
+      <div id="preferences">
+        <h3 className="form--card__sub-header">
+          {t("t.preferences")}
+          {editMode && <EditLink href="/applications/preferences/select" />}
+        </h3>
 
-      <div id="preferences" className="form-card__group border-b mx-0">
-        {application.preferences.none ? (
-          <p className="field-note text-black">
-            {t("application.preferences.general.title")}{" "}
-            {t("application.preferences.general.preamble")}
-          </p>
-        ) : (
-          <>
-            {Object.entries(application.preferences)
-              .filter((option) => option[0] != "none" && option[1])
-              .map((option) => (
-                <ReviewItem key={option[0]} label={t("application.preferences.youHaveClaimed")}>
-                  {t(`application.preferences.${option[0]}.label`)}
-                </ReviewItem>
-              ))}
-          </>
-        )}
+        <div id="preferences" className="form-card__group border-b mx-0">
+          {application.preferences.none ? (
+            <p className="field-note text-black">
+              {t("application.preferences.general.title")}{" "}
+              {t("application.preferences.general.preamble")}
+            </p>
+          ) : (
+            <>
+              {Object.entries(application.preferences)
+                .filter((option) => option[0] != "none" && option[1])
+                .map((option) => (
+                  <ReviewItem key={option[0]} label={t("application.preferences.youHaveClaimed")}>
+                    {t(`application.preferences.${option[0]}.label`)}
+                  </ReviewItem>
+                ))}
+            </>
+          )}
+        </div>
       </div>
     </>
   )

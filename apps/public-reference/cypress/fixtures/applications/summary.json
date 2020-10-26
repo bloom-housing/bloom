@@ -26,6 +26,7 @@
   },
   "alternateContact": {
     "name": "Alternate Name Alternate Last Name",
+    "agency": "Agency Name",
     "email": "test2@bloom.com",
     "phone": "(666) 666-6666",
     "address": {
@@ -48,7 +49,10 @@
   },
   "income": {
     "vouchers": "No",
-    "income": "$3000.00 per month"
+    "incomeValue": "$3000.00 per month"
   },
-  "prefences": ["Live in <REGION> Preference", "Work in <REGION> Preference"]
+  "prefences": {
+    "region": "Live in <REGION> Preference",
+    "work": "Work in <REGION> Preference"
+  }
 }
