@@ -4,9 +4,8 @@ import SVG from "react-inlinesvg"
 
 import { Drawer } from "./Drawer"
 import { FieldSection } from "./FieldSection"
-import { ViewSection } from "./ViewSection"
+import { GridSection, GridCell } from "../sections/GridSection"
 import { ViewItem } from "./ViewItem"
-import { GridItem } from "./GridItem"
 import { Field } from "../forms/Field"
 
 export default {

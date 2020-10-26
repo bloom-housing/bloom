@@ -148,7 +148,7 @@ const summarizeUnits = (
         )
         summary.rentAsPercentIncomeRange = minMaxValue(
           summary.rentAsPercentIncomeRange,
-          unit.monthlyRentAsPercentOfIncome
+          parseFloat(unit.monthlyRentAsPercentOfIncome)
         )
         summary.rentRange = minMaxValue(
           summary.rentRange as MinMax,
@@ -157,7 +157,7 @@ const summarizeUnits = (
         if (unit.floor) {
           summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
         }
-        summary.areaRange = minMaxValue(summary.areaRange, unit.sqFeet)
+        summary.areaRange = minMaxValue(summary.areaRange, parseFloat(unit.sqFeet))
         if (unit.status == "available") {
           summary.totalAvailable += 1
         }

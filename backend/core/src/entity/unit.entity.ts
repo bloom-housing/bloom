@@ -55,7 +55,7 @@ class Unit extends BaseEntity {
   @IsNumberString()
   monthlyIncomeMin: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -67,13 +67,13 @@ class Unit extends BaseEntity {
   @IsString()
   annualIncomeMax: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
   maxOccupancy: number | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -85,13 +85,13 @@ class Unit extends BaseEntity {
   @IsNumberString()
   monthlyRent: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
   numBathrooms: number | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -118,8 +118,8 @@ class Unit extends BaseEntity {
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  sqFeet: number | null
+  @IsString()
+  sqFeet: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
@@ -133,7 +133,7 @@ class Unit extends BaseEntity {
   @IsString()
   unitType: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -142,8 +142,8 @@ class Unit extends BaseEntity {
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  monthlyRentAsPercentOfIncome: number | null
+  @IsString()
+  monthlyRentAsPercentOfIncome: string | null
 
   @ManyToOne((type) => Listing, (listing) => listing.units, {
     onDelete: "CASCADE",

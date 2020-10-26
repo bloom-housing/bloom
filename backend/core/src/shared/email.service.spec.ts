@@ -3,6 +3,7 @@ import { SendGridService, SendGridModule } from "@anchan828/nest-sendgrid"
 import { User } from "../entity/user.entity"
 import { EmailService } from "./email.service"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
+import { ConfigModule } from "@nestjs/config"
 
 declare const expect: jest.Expect
 const user = new User()
@@ -27,6 +28,7 @@ describe("EmailService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        ConfigModule,
         SendGridModule.forRoot({
           apikey: "SG.fake",
         }),

@@ -102,30 +102,9 @@ export class AuthService {
     });
   }
   /**
-   * Register
-   */
-  register(
-    params: {
-      /** requestBody */
-      body?: CreateUserDto;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = '/auth/register';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
    * Token
    */
-  token(options: IRequestOptions = {}): Promise<any> {
+  token(options: IRequestOptions = {}): Promise<LoginResponseDto> {
     return new Promise((resolve, reject) => {
       let url = '/auth/token';
 
@@ -146,7 +125,7 @@ export class ListingsService {
   list(
     params: {
       /**  */
-      jsonpath: string;
+      jsonpath?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ListingExtendedDto> {
@@ -170,7 +149,7 @@ export class ListingsService {
       body?: ListingCreateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<ListingDto> {
     return new Promise((resolve, reject) => {
       let url = '/listings';
 
@@ -191,7 +170,7 @@ export class ListingsService {
       listingId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<ListingDto> {
     return new Promise((resolve, reject) => {
       let url = '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
@@ -215,7 +194,7 @@ export class ListingsService {
       body?: ListingUpdateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<ListingDto> {
     return new Promise((resolve, reject) => {
       let url = '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
@@ -392,7 +371,7 @@ export class AssetsService {
   /**
    * List assets
    */
-  list(options: IRequestOptions = {}): Promise<Asset[]> {
+  list(options: IRequestOptions = {}): Promise<AssetDto[]> {
     return new Promise((resolve, reject) => {
       let url = '/assets';
 
@@ -496,7 +475,7 @@ export class PreferencesService {
   /**
    * List preferences
    */
-  list(options: IRequestOptions = {}): Promise<Preference[]> {
+  list(options: IRequestOptions = {}): Promise<PreferenceDto[]> {
     return new Promise((resolve, reject) => {
       let url = '/preferences';
 
@@ -517,7 +496,7 @@ export class PreferencesService {
       body?: PreferenceCreateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<PreferenceDto> {
     return new Promise((resolve, reject) => {
       let url = '/preferences';
 
@@ -538,7 +517,7 @@ export class PreferencesService {
       body?: PreferenceUpdateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<PreferenceDto> {
     return new Promise((resolve, reject) => {
       let url = '/preferences/{preferenceId}';
 
@@ -559,7 +538,7 @@ export class PreferencesService {
       preferenceId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<PreferenceDto> {
     return new Promise((resolve, reject) => {
       let url = '/preferences/{preferenceId}';
       url = url.replace('{preferenceId}', params['preferenceId'] + '');
@@ -600,7 +579,7 @@ export class ApplicationMethodsService {
   /**
    * List applicationMethods
    */
-  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
+  list(options: IRequestOptions = {}): Promise<ApplicationMethodDto[]> {
     return new Promise((resolve, reject) => {
       let url = '/applicationMethods';
 
@@ -621,7 +600,7 @@ export class ApplicationMethodsService {
       body?: ApplicationMethodCreateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
+  ): Promise<ApplicationMethodDto> {
     return new Promise((resolve, reject) => {
       let url = '/applicationMethods';
 
@@ -642,7 +621,7 @@ export class ApplicationMethodsService {
       body?: ApplicationMethodUpdateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
+  ): Promise<ApplicationMethodDto> {
     return new Promise((resolve, reject) => {
       let url = '/applicationMethods/{applicationMethodId}';
 
@@ -663,7 +642,7 @@ export class ApplicationMethodsService {
       applicationMethodId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
+  ): Promise<ApplicationMethodDto> {
     return new Promise((resolve, reject) => {
       let url = '/applicationMethods/{applicationMethodId}';
       url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
@@ -704,7 +683,7 @@ export class UnitsService {
   /**
    * List units
    */
-  list(options: IRequestOptions = {}): Promise<Unit[]> {
+  list(options: IRequestOptions = {}): Promise<UnitDto[]> {
     return new Promise((resolve, reject) => {
       let url = '/units';
 
@@ -725,7 +704,7 @@ export class UnitsService {
       body?: UnitCreateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Unit> {
+  ): Promise<UnitDto> {
     return new Promise((resolve, reject) => {
       let url = '/units';
 
@@ -746,7 +725,7 @@ export class UnitsService {
       body?: UnitUpdateDto;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Unit> {
+  ): Promise<UnitDto> {
     return new Promise((resolve, reject) => {
       let url = '/units/{unitId}';
 
@@ -767,7 +746,7 @@ export class UnitsService {
       unitId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Unit> {
+  ): Promise<UnitDto> {
     return new Promise((resolve, reject) => {
       let url = '/units/{unitId}';
       url = url.replace('{unitId}', params['unitId'] + '');
@@ -804,20 +783,114 @@ export class UnitsService {
   }
 }
 
-export interface LoginDto {
-  /**  */
-  email: string;
+export class ListingEventsService {
+  /**
+   * List listingEvents
+   */
+  list(options: IRequestOptions = {}): Promise<ListingEventDto[]> {
+    return new Promise((resolve, reject) => {
+      let url = '/listingEvents';
 
-  /**  */
-  password: string;
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create listingEvent
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ListingEventCreateDto;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingEventDto> {
+    return new Promise((resolve, reject) => {
+      let url = '/listingEvents';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update listingEvent
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ListingEventUpdateDto;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingEventDto> {
+    return new Promise((resolve, reject) => {
+      let url = '/listingEvents/{listingEventId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get listingEvent by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      listingEventId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingEventDto> {
+    return new Promise((resolve, reject) => {
+      let url = '/listingEvents/{listingEventId}';
+      url = url.replace('{listingEventId}', params['listingEventId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete listingEvent by id
+   */
+  delete(
+    params: {
+      /**  */
+      listingEventId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = '/listingEvents/{listingEventId}';
+      url = url.replace('{listingEventId}', params['listingEventId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
-export interface LoginResponseDto {
+export interface UserDto {
   /**  */
-  accessToken: string;
-}
+  id: string;
 
-export interface CreateUserDto {
   /**  */
   email: string;
 
@@ -831,10 +904,98 @@ export interface CreateUserDto {
   lastName: string;
 
   /**  */
-  dob: Date;
+  dob: string;
+
+  /**  */
+  createdAt: string;
+
+  /**  */
+  updatedAt: string;
+}
+
+export interface UserCreateDto {
+  /**  */
+  password: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: string;
+}
+
+export interface UserDtoWithAccessToken {
+  /**  */
+  id: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: string;
+
+  /**  */
+  createdAt: string;
+
+  /**  */
+  updatedAt: string;
+
+  /**  */
+  accessToken: string;
+}
+
+export interface UserUpdateDto {
+  /**  */
+  id: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: string;
+
+  /**  */
+  createdAt: string;
+
+  /**  */
+  updatedAt: string;
+}
+
+export interface LoginDto {
+  /**  */
+  email: string;
 
   /**  */
   password: string;
+}
+
+export interface LoginResponseDto {
+  /**  */
+  accessToken: string;
 }
 
 export interface ApplicationMethodDto {
@@ -979,6 +1140,32 @@ export interface UnitDto {
   bmrProgramChart: boolean;
 }
 
+export interface ListingEventDto {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  type: EnumListingEventDtoType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url: string;
+
+  /**  */
+  note: string;
+}
+
 export interface User {
   /**  */
   id: string;
@@ -999,13 +1186,13 @@ export interface User {
   lastName: string;
 
   /**  */
-  dob: Date;
+  dob: string;
 
   /**  */
-  createdAt: Date;
+  createdAt: string;
 
   /**  */
-  updatedAt: Date;
+  updatedAt: string;
 
   /**  */
   applications: Application[];
@@ -1160,6 +1347,35 @@ export interface Asset {
   listing: CombinedListingTypes;
 }
 
+export interface ListingEvent {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  type: EnumListingEventType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url: string;
+
+  /**  */
+  note: string;
+
+  /**  */
+  listing: Listing;
+}
+
 export interface Address {
   /**  */
   placeName: string;
@@ -1223,6 +1439,9 @@ export interface Listing {
   assets: Asset[];
 
   /**  */
+  events: ListingEvent[];
+
+  /**  */
   applications: Application[];
 
   /**  */
@@ -1253,7 +1472,7 @@ export interface Listing {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits: string;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1334,22 +1553,22 @@ export interface Listing {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable: string;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize: string;
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize: string;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt: string;
 
   /**  */
   status: EnumListingStatus;
@@ -1398,6 +1617,9 @@ export interface ListingDto {
   units: UnitDto[];
 
   /**  */
+  events: ListingEventDto[];
+
+  /**  */
   id: string;
 
   /**  */
@@ -1437,7 +1659,7 @@ export interface ListingDto {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits: string;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1518,22 +1740,22 @@ export interface ListingDto {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable: string;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize: string;
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize: string;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt: string;
 
   /**  */
   status: EnumListingDtoStatus;
@@ -1575,6 +1797,9 @@ export interface ListingCreateDto {
   units: IdDto[];
 
   /**  */
+  events: IdDto[];
+
+  /**  */
   applications: Application[];
 
   /**  */
@@ -1605,7 +1830,7 @@ export interface ListingCreateDto {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits: string;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1686,22 +1911,22 @@ export interface ListingCreateDto {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable: string;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize: string;
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize: string;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt: string;
 
   /**  */
   status: EnumListingCreateDtoStatus;
@@ -1727,6 +1952,9 @@ export interface ListingUpdateDto {
   units: IdDto[];
 
   /**  */
+  events: IdDto[];
+
+  /**  */
   applications: Application[];
 
   /**  */
@@ -1757,7 +1985,7 @@ export interface ListingUpdateDto {
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits: string;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1838,22 +2066,22 @@ export interface ListingUpdateDto {
   smokingPolicy: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable: string;
 
   /**  */
   unitAmenities: string;
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize: string;
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize: string;
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt: string;
 
   /**  */
   status: EnumListingUpdateDtoStatus;
@@ -2120,6 +2348,43 @@ export interface UnitUpdateDto {
   /**  */
   id: string;
 }
+
+export interface ListingEventCreateDto {
+  /**  */
+  type: EnumListingEventCreateDtoType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url: string;
+
+  /**  */
+  note: string;
+}
+
+export interface ListingEventUpdateDto {
+  /**  */
+  type: EnumListingEventUpdateDtoType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url: string;
+
+  /**  */
+  note: string;
+
+  /**  */
+  id: string;
+}
 export enum EnumApplicationMethodDtoType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -2127,6 +2392,10 @@ export enum EnumApplicationMethodDtoType {
   'PaperPickup' = 'PaperPickup',
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
+}
+export enum EnumListingEventDtoType {
+  'openHouse' = 'openHouse',
+  'publicLottery' = 'publicLottery'
 }
 export enum EnumApplicationMethodType {
   'Internal' = 'Internal',
@@ -2137,6 +2406,10 @@ export enum EnumApplicationMethodType {
   'LeasingAgent' = 'LeasingAgent'
 }
 export type CombinedListingTypes = (Listing & any) | null;
+export enum EnumListingEventType {
+  'openHouse' = 'openHouse',
+  'publicLottery' = 'publicLottery'
+}
 export type CombinedApplicationAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
@@ -2176,4 +2449,12 @@ export enum EnumApplicationMethodUpdateDtoType {
   'PaperPickup' = 'PaperPickup',
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
+}
+export enum EnumListingEventCreateDtoType {
+  'openHouse' = 'openHouse',
+  'publicLottery' = 'publicLottery'
+}
+export enum EnumListingEventUpdateDtoType {
+  'openHouse' = 'openHouse',
+  'publicLottery' = 'publicLottery'
 }
