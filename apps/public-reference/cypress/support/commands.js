@@ -55,7 +55,7 @@ Cypress.Commands.add("goToReview", () => {
   return cy.get("button").contains("Save and return to review").click()
 })
 
-Cypress.Commands.add("loadConfig", (initialValues, configFile = "applicationConfig.json") => {
+Cypress.Commands.add("loadConfig", (initialValues, configFile = "applicationConfigBlank.json") => {
   cy.fixture(configFile).then((applicationConfig) => {
     const config = applicationConfig
 
