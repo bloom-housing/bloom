@@ -56,7 +56,7 @@ export class UnitSummary {
   @Expose()
   @IsDefined()
   @ValidateNested()
-  minIncomeRange: MinMaxCurrency
+  minIncomeRange?: MinMaxCurrency
 
   @Expose()
   @IsDefined()
@@ -71,7 +71,7 @@ export class UnitSummary {
   @Expose()
   @IsDefined()
   @ValidateNested()
-  rentRange: MinMaxCurrency
+  rentRange?: MinMaxCurrency
 
   @Expose()
   @IsDefined()
