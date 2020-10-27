@@ -239,11 +239,11 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      page: number;
+      page?: number;
       /**  */
-      limit: number;
+      limit?: number;
       /**  */
-      listingId: string;
+      listingId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplicationDto> {
@@ -285,9 +285,9 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId: string;
+      listingId?: string;
       /**  */
-      includeHeaders: boolean;
+      includeHeaders?: boolean;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -2140,7 +2140,7 @@ export interface PaginationMeta {
 
 export interface PaginatedApplicationDto {
   /**  */
-  items: ApplicationDto;
+  items: ApplicationDto[];
 
   /**  */
   meta: PaginationMeta;

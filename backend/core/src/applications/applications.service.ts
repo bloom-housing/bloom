@@ -1,12 +1,16 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { Application } from "../entity/application.entity"
 import { plainToClass } from "class-transformer"
-import { ApplicationCreateDto, ApplicationUpdateDto } from "./application.dto"
+import {
+  ApplicationCreateDto,
+  ApplicationsListQueryParams,
+  ApplicationUpdateDto,
+} from "./application.dto"
 import { User } from "../entity/user.entity"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { IPaginationOptions, paginate } from "nestjs-typeorm-paginate"
+import { paginate } from "nestjs-typeorm-paginate"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 import { CsvBuilder } from "../services/csv-builder.service"
 
@@ -40,21 +44,23 @@ export class ApplicationsService {
     )
   }
 
-  async listPaginated(
-    paginationOptions: IPaginationOptions,
-    listingId: string | null,
-    user?: User
-  ) {
-    return paginate(this.repository, paginationOptions, {
-      where: {
-        ...(user && { user: { id: user.id } }),
-        // Workaround for params.listingId resulting in:
-        // listing: {id: undefined}
-        // and query responding with 0 applications.
-        ...(listingId && { listing: { id: listingId } }),
-      },
-      relations: ["listing", "user"],
-    })
+  async listPaginated(params: ApplicationsListQueryParams, user?: User) {
+    return paginate(
+      this.repository,
+      { limit: params.limit, page: params.page },
+      {
+        where: {
+          ...(user && { user: { id: user.id } }),
+          // Workaround for params.listingId resulting in:
+          // listing: {id: undefined}
+          // and query responding with 0 applications.
+          ...(params.listingId && {
+            listing: { id: params.listingId },
+          }),
+        },
+        relations: ["listing", "user"],
+      }
+    )
   }
 
   async create(applicationCreateDto: ApplicationCreateDto, user?: User) {

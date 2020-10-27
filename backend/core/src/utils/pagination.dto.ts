@@ -1,7 +1,8 @@
 import { ClassType } from "class-transformer/ClassTransformer"
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
-import { Expose } from "class-transformer"
+import { Exclude, Expose, Transform, Type } from "class-transformer"
+import { IsNumber, IsOptional } from "class-validator"
 
 export class PaginationMeta implements IPaginationMeta {
   @Expose()
@@ -16,17 +17,49 @@ export class PaginationMeta implements IPaginationMeta {
   totalPages: number
 }
 
-abstract class Pagination<T> {
-  @Expose()
+export interface Pagination<T> {
   items: T[]
-  @Expose()
   meta: PaginationMeta
 }
 
 export function PaginationFactory<T>(classType: ClassType<T>): ClassType<Pagination<T>> {
-  class PaginationHost extends Pagination<T> {
-    @ApiProperty({ type: () => classType })
+  class PaginationHost implements Pagination<T> {
+    @ApiProperty({ type: () => classType, isArray: true })
+    @Expose()
+    @Type(() => classType)
     items: T[]
+    @Expose()
+    meta: PaginationMeta
   }
   return PaginationHost
+}
+
+export class PaginationQueryParams {
+  @Expose()
+  @ApiPropertyOptional({
+    type: Number,
+    example: 1,
+    required: false,
+    default: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
+    toClassOnly: true,
+  })
+  page?: number
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Number,
+    example: 10,
+    required: false,
+    default: 10,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Transform((value: string | undefined) => (value ? parseInt(value) : 10), {
+    toClassOnly: true,
+  })
+  limit?: number
 }

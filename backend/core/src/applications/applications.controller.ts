@@ -1,13 +1,10 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Delete,
   Get,
   Header,
   Param,
-  ParseBoolPipe,
-  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -24,7 +21,14 @@ import { authzActions, AuthzService } from "../auth/authz.service"
 import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { mapTo } from "../shared/mapTo"
-import { ApplicationCreateDto, ApplicationDto, ApplicationUpdateDto, PaginatedApplicationDto } from "./application.dto"
+import {
+  ApplicationCreateDto,
+  ApplicationDto,
+  ApplicationsCsvListQueryParams,
+  ApplicationsListQueryParams,
+  ApplicationUpdateDto,
+  PaginatedApplicationDto,
+} from "./application.dto"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -43,30 +47,26 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications", operationId: "list" })
   async list(
     @Request() req: ExpressRequest,
-    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page?: number,
-    @Query("limit", new DefaultValuePipe(20), ParseIntPipe) limit?: number,
-    @Query("listingId", new DefaultValuePipe(null)) listingId?: string | null
+    @Query() queryParams: ApplicationsListQueryParams
   ): Promise<PaginatedApplicationDto> {
     let response: PaginatedApplicationDto | ApplicationDto[]
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
-      response = await this.applicationsService.listPaginated({ limit, page }, listingId)
+      response = await this.applicationsService.listPaginated(queryParams)
     } else {
-      response = await this.applicationsService.listPaginated({ limit, page }, listingId, req.user)
+      response = await this.applicationsService.listPaginated(queryParams, req.user)
     }
-    return {
-      ...response,
-      items: response.items.map((i) => mapTo(ApplicationDto, i)),
-    }
+    return mapTo(PaginatedApplicationDto, response)
   }
 
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
-  async listAsCsv(
-    @Query("listingId", new DefaultValuePipe(null)) listingId: string | null,
-    @Query("includeHeaders", new DefaultValuePipe(false), ParseBoolPipe) includeHeaders: boolean
-  ): Promise<string> {
-    return await this.applicationsService.listAsCsv(listingId, includeHeaders, null)
+  async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
+    return await this.applicationsService.listAsCsv(
+      queryParams.listingId,
+      queryParams.includeHeaders,
+      null
+    )
   }
 
   @Post()
