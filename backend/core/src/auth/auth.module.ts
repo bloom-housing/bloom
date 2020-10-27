@@ -11,7 +11,7 @@ import { SharedModule } from "../shared/shared.module"
 import { AuthzService } from "./authz.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { UserModule } from "../user/user.module"
-import Joi from "@hapi/joi"
+import Joi from "joi"
 
 @Module({
   imports: [
