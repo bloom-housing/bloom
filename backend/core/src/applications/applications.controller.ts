@@ -15,7 +15,6 @@ import {
   UseGuards,
 } from "@nestjs/common"
 import type { Request as ExpressRequest } from "express"
-import { ApplicationDto } from "./application.dto"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
@@ -25,8 +24,7 @@ import { authzActions, AuthzService } from "../auth/authz.service"
 import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { mapTo } from "../shared/mapTo"
-import { ApplicationCreateDto, ApplicationUpdateDto } from "./application.dto"
-import { Pagination } from "nestjs-typeorm-paginate"
+import { ApplicationCreateDto, ApplicationDto, ApplicationUpdateDto, PaginatedApplicationDto } from "./application.dto"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -48,8 +46,8 @@ export class ApplicationsController {
     @Query("page", new DefaultValuePipe(1), ParseIntPipe) page?: number,
     @Query("limit", new DefaultValuePipe(20), ParseIntPipe) limit?: number,
     @Query("listingId", new DefaultValuePipe(null)) listingId?: string | null
-  ): Promise<Pagination<ApplicationDto>> {
-    let response: Pagination<ApplicationDto> | ApplicationDto[]
+  ): Promise<PaginatedApplicationDto> {
+    let response: PaginatedApplicationDto | ApplicationDto[]
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
       response = await this.applicationsService.listPaginated({ limit, page }, listingId)
     } else {

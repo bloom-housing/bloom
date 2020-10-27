@@ -3,6 +3,7 @@ import { IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-v
 import { Application } from "../entity/application.entity"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IdDto } from "../lib/id.dto"
+import { PaginationFactory } from "../utils/pagination.dto"
 
 export class ApplicationsListQueryParams {
   @IsOptional()
@@ -27,6 +28,8 @@ export class ApplicationDto extends OmitType(Application, ["listing", "user"] as
   @ApiHideProperty()
   user
 }
+
+export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
 
 export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",

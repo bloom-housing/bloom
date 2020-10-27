@@ -3,8 +3,6 @@
 /* eslint-disable */
 import axiosStatic, { AxiosInstance } from 'axios';
 
-const basePath = '';
-
 export interface IRequestOptions {
   headers?: any;
   baseURL?: string;
@@ -44,7 +42,6 @@ export function axios(configs: IRequestConfig, resolve: (p: any) => void, reject
 }
 
 export function getConfigs(method: string, contentType: string, url: string, options: any): IRequestConfig {
-  url = basePath + url;
   const configs: IRequestConfig = { ...options, method, url };
   configs.headers = {
     ...options.headers,
@@ -52,6 +49,8 @@ export function getConfigs(method: string, contentType: string, url: string, opt
   };
   return configs;
 }
+
+const basePath = '';
 
 export interface IList<T> extends Array<T> {}
 export interface List<T> extends Array<T> {}
@@ -69,11 +68,13 @@ export class ListResultDto<T> implements IListResult<T> {
 }
 
 export interface IPagedResult<T> extends IListResult<T> {
-  totalCount: number;
+  totalCount?: number;
+  items?: T[];
 }
 
 export class PagedResultDto<T> implements IPagedResult<T> {
-  totalCount!: number;
+  totalCount?: number;
+  items?: T[];
 }
 
 // customer definition
@@ -91,7 +92,7 @@ export class AuthService {
     options: IRequestOptions = {}
   ): Promise<LoginResponseDto> {
     return new Promise((resolve, reject) => {
-      let url = '/auth/login';
+      let url = basePath + '/auth/login';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -106,7 +107,7 @@ export class AuthService {
    */
   token(options: IRequestOptions = {}): Promise<LoginResponseDto> {
     return new Promise((resolve, reject) => {
-      let url = '/auth/token';
+      let url = basePath + '/auth/token';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -130,7 +131,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<ListingExtendedDto> {
     return new Promise((resolve, reject) => {
-      let url = '/listings';
+      let url = basePath + '/listings';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { jsonpath: params['jsonpath'] };
@@ -151,7 +152,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<ListingDto> {
     return new Promise((resolve, reject) => {
-      let url = '/listings';
+      let url = basePath + '/listings';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -172,7 +173,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<ListingDto> {
     return new Promise((resolve, reject) => {
-      let url = '/listings/{listingId}';
+      let url = basePath + '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -196,7 +197,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<ListingDto> {
     return new Promise((resolve, reject) => {
-      let url = '/listings/{listingId}';
+      let url = basePath + '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
@@ -218,7 +219,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/listings/{listingId}';
+      let url = basePath + '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -238,15 +239,19 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
+      page: number;
+      /**  */
+      limit: number;
+      /**  */
       listingId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationDto[]> {
+  ): Promise<PaginatedApplicationDto> {
     return new Promise((resolve, reject) => {
-      let url = '/applications';
+      let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { listingId: params['listingId'] };
+      configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
       let data = null;
 
       configs.data = data;
@@ -264,7 +269,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
-      let url = '/applications';
+      let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -287,7 +292,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/csv';
+      let url = basePath + '/applications/csv';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { listingId: params['listingId'], includeHeaders: params['includeHeaders'] };
@@ -308,7 +313,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/{applicationId}';
+      let url = basePath + '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -332,7 +337,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationDto> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/{applicationId}';
+      let url = basePath + '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
@@ -354,7 +359,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/{applicationId}';
+      let url = basePath + '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -373,7 +378,7 @@ export class AssetsService {
    */
   list(options: IRequestOptions = {}): Promise<AssetDto[]> {
     return new Promise((resolve, reject) => {
-      let url = '/assets';
+      let url = basePath + '/assets';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -394,7 +399,7 @@ export class AssetsService {
     options: IRequestOptions = {}
   ): Promise<AssetDto> {
     return new Promise((resolve, reject) => {
-      let url = '/assets';
+      let url = basePath + '/assets';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -415,7 +420,7 @@ export class AssetsService {
     options: IRequestOptions = {}
   ): Promise<AssetDto> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
+      let url = basePath + '/assets/{assetId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -436,7 +441,7 @@ export class AssetsService {
     options: IRequestOptions = {}
   ): Promise<AssetDto> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
+      let url = basePath + '/assets/{assetId}';
       url = url.replace('{assetId}', params['assetId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -458,7 +463,7 @@ export class AssetsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
+      let url = basePath + '/assets/{assetId}';
       url = url.replace('{assetId}', params['assetId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -477,7 +482,7 @@ export class PreferencesService {
    */
   list(options: IRequestOptions = {}): Promise<PreferenceDto[]> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences';
+      let url = basePath + '/preferences';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -498,7 +503,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<PreferenceDto> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences';
+      let url = basePath + '/preferences';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -519,7 +524,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<PreferenceDto> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
+      let url = basePath + '/preferences/{preferenceId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -540,7 +545,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<PreferenceDto> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
+      let url = basePath + '/preferences/{preferenceId}';
       url = url.replace('{preferenceId}', params['preferenceId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -562,7 +567,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
+      let url = basePath + '/preferences/{preferenceId}';
       url = url.replace('{preferenceId}', params['preferenceId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -581,7 +586,7 @@ export class ApplicationMethodsService {
    */
   list(options: IRequestOptions = {}): Promise<ApplicationMethodDto[]> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods';
+      let url = basePath + '/applicationMethods';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -602,7 +607,7 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationMethodDto> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods';
+      let url = basePath + '/applicationMethods';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -623,7 +628,7 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationMethodDto> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -644,7 +649,7 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationMethodDto> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
       url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -666,7 +671,7 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
       url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -685,7 +690,7 @@ export class UnitsService {
    */
   list(options: IRequestOptions = {}): Promise<UnitDto[]> {
     return new Promise((resolve, reject) => {
-      let url = '/units';
+      let url = basePath + '/units';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -706,7 +711,7 @@ export class UnitsService {
     options: IRequestOptions = {}
   ): Promise<UnitDto> {
     return new Promise((resolve, reject) => {
-      let url = '/units';
+      let url = basePath + '/units';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -727,7 +732,7 @@ export class UnitsService {
     options: IRequestOptions = {}
   ): Promise<UnitDto> {
     return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
+      let url = basePath + '/units/{unitId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -748,7 +753,7 @@ export class UnitsService {
     options: IRequestOptions = {}
   ): Promise<UnitDto> {
     return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
+      let url = basePath + '/units/{unitId}';
       url = url.replace('{unitId}', params['unitId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -770,7 +775,7 @@ export class UnitsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
+      let url = basePath + '/units/{unitId}';
       url = url.replace('{unitId}', params['unitId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -789,7 +794,7 @@ export class ListingEventsService {
    */
   list(options: IRequestOptions = {}): Promise<ListingEventDto[]> {
     return new Promise((resolve, reject) => {
-      let url = '/listingEvents';
+      let url = basePath + '/listingEvents';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -810,7 +815,7 @@ export class ListingEventsService {
     options: IRequestOptions = {}
   ): Promise<ListingEventDto> {
     return new Promise((resolve, reject) => {
-      let url = '/listingEvents';
+      let url = basePath + '/listingEvents';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -831,7 +836,7 @@ export class ListingEventsService {
     options: IRequestOptions = {}
   ): Promise<ListingEventDto> {
     return new Promise((resolve, reject) => {
-      let url = '/listingEvents/{listingEventId}';
+      let url = basePath + '/listingEvents/{listingEventId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -852,7 +857,7 @@ export class ListingEventsService {
     options: IRequestOptions = {}
   ): Promise<ListingEventDto> {
     return new Promise((resolve, reject) => {
-      let url = '/listingEvents/{listingEventId}';
+      let url = basePath + '/listingEvents/{listingEventId}';
       url = url.replace('{listingEventId}', params['listingEventId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -874,7 +879,7 @@ export class ListingEventsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/listingEvents/{listingEventId}';
+      let url = basePath + '/listingEvents/{listingEventId}';
       url = url.replace('{listingEventId}', params['listingEventId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -898,7 +903,7 @@ export interface UserDto {
   firstName: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
   lastName: string;
@@ -924,7 +929,7 @@ export interface UserCreateDto {
   firstName: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
   lastName: string;
@@ -944,7 +949,7 @@ export interface UserDtoWithAccessToken {
   firstName: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
   lastName: string;
@@ -970,7 +975,7 @@ export interface UserUpdateDto {
   firstName: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
   lastName: string;
@@ -1122,7 +1127,7 @@ export interface UnitDto {
   reservedType: string;
 
   /**  */
-  sqFeet: number;
+  sqFeet: string;
 
   /**  */
   status: string;
@@ -1134,10 +1139,10 @@ export interface UnitDto {
   amiChartId: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: number;
+  monthlyRentAsPercentOfIncome: string;
 
   /**  */
-  bmrProgramChart: boolean;
+  bmrProgramChart?: boolean;
 }
 
 export interface ListingEventDto {
@@ -1160,10 +1165,10 @@ export interface ListingEventDto {
   endTime: Date;
 
   /**  */
-  url: string;
+  url?: string;
 
   /**  */
-  note: string;
+  note?: string;
 }
 
 export interface User {
@@ -1180,7 +1185,7 @@ export interface User {
   firstName: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
   lastName: string;
@@ -1280,7 +1285,7 @@ export interface Unit {
   reservedType: string;
 
   /**  */
-  sqFeet: number;
+  sqFeet: string;
 
   /**  */
   status: string;
@@ -1292,13 +1297,13 @@ export interface Unit {
   amiChartId: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: number;
+  monthlyRentAsPercentOfIncome: string;
 
   /**  */
   listing: Listing;
 
   /**  */
-  bmrProgramChart: boolean;
+  bmrProgramChart?: boolean;
 }
 
 export interface ApplicationMethod {
@@ -1367,10 +1372,10 @@ export interface ListingEvent {
   endTime: Date;
 
   /**  */
-  url: string;
+  url?: string;
 
   /**  */
-  note: string;
+  note?: string;
 
   /**  */
   listing: Listing;
@@ -1378,13 +1383,13 @@ export interface ListingEvent {
 
 export interface Address {
   /**  */
-  placeName: string;
+  placeName?: string;
 
   /**  */
   city: string;
 
   /**  */
-  county: string;
+  county?: string;
 
   /**  */
   state: string;
@@ -1393,16 +1398,16 @@ export interface Address {
   street: string;
 
   /**  */
-  street2: string;
+  street2?: string;
 
   /**  */
   zipCode: string;
 
   /**  */
-  latitude: number;
+  latitude?: number;
 
   /**  */
-  longitude: number;
+  longitude?: number;
 }
 
 export interface WhatToExpect {
@@ -1574,10 +1579,10 @@ export interface Listing {
   status: EnumListingStatus;
 
   /**  */
-  unitsSummarized: object;
+  unitsSummarized?: object;
 
   /**  */
-  urlSlug: string;
+  urlSlug?: string;
 }
 
 export interface Application {
@@ -1761,10 +1766,10 @@ export interface ListingDto {
   status: EnumListingDtoStatus;
 
   /**  */
-  unitsSummarized: object;
+  unitsSummarized?: object;
 
   /**  */
-  urlSlug: string;
+  urlSlug?: string;
 }
 
 export interface ListingExtendedDto {
@@ -1932,10 +1937,10 @@ export interface ListingCreateDto {
   status: EnumListingCreateDtoStatus;
 
   /**  */
-  unitsSummarized: object;
+  unitsSummarized?: object;
 
   /**  */
-  urlSlug: string;
+  urlSlug?: string;
 }
 
 export interface ListingUpdateDto {
@@ -2087,10 +2092,10 @@ export interface ListingUpdateDto {
   status: EnumListingUpdateDtoStatus;
 
   /**  */
-  unitsSummarized: object;
+  unitsSummarized?: object;
 
   /**  */
-  urlSlug: string;
+  urlSlug?: string;
 
   /**  */
   id: string;
@@ -2114,6 +2119,31 @@ export interface ApplicationDto {
 
   /**  */
   application: object;
+}
+
+export interface PaginationMeta {
+  /**  */
+  currentPage: number;
+
+  /**  */
+  itemCount: number;
+
+  /**  */
+  itemsPerPage: number;
+
+  /**  */
+  totalItems: number;
+
+  /**  */
+  totalPages: number;
+}
+
+export interface PaginatedApplicationDto {
+  /**  */
+  items: ApplicationDto;
+
+  /**  */
+  meta: PaginationMeta;
 }
 
 export interface ApplicationCreateDto {
@@ -2269,7 +2299,7 @@ export interface UnitCreateDto {
   reservedType: string;
 
   /**  */
-  sqFeet: number;
+  sqFeet: string;
 
   /**  */
   status: string;
@@ -2281,10 +2311,10 @@ export interface UnitCreateDto {
   amiChartId: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: number;
+  monthlyRentAsPercentOfIncome: string;
 
   /**  */
-  bmrProgramChart: boolean;
+  bmrProgramChart?: boolean;
 }
 
 export interface UnitUpdateDto {
@@ -2328,7 +2358,7 @@ export interface UnitUpdateDto {
   reservedType: string;
 
   /**  */
-  sqFeet: number;
+  sqFeet: string;
 
   /**  */
   status: string;
@@ -2340,10 +2370,10 @@ export interface UnitUpdateDto {
   amiChartId: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: number;
+  monthlyRentAsPercentOfIncome: string;
 
   /**  */
-  bmrProgramChart: boolean;
+  bmrProgramChart?: boolean;
 
   /**  */
   id: string;
@@ -2360,10 +2390,10 @@ export interface ListingEventCreateDto {
   endTime: Date;
 
   /**  */
-  url: string;
+  url?: string;
 
   /**  */
-  note: string;
+  note?: string;
 }
 
 export interface ListingEventUpdateDto {
@@ -2377,10 +2407,10 @@ export interface ListingEventUpdateDto {
   endTime: Date;
 
   /**  */
-  url: string;
+  url?: string;
 
   /**  */
-  note: string;
+  note?: string;
 
   /**  */
   id: string;
