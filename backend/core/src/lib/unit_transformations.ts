@@ -11,14 +11,14 @@ const usd = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 })
 
-const minMaxValue = (baseValue: MinMaxCurrency, newValue: number, newMaxValue?: number): MinMax => {
+const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number): MinMax => {
   if (!newMaxValue) {
     newMaxValue = newValue
   }
-  if (baseValue && (baseValue.min || parseFloat(baseValue.min) == 0) && baseValue.max) {
+  if (baseValue && (baseValue.min || baseValue.min == 0) && baseValue.max) {
     return {
-      min: Math.min(parseFloat(baseValue.min), newValue),
-      max: Math.max(parseFloat(baseValue.max), newMaxValue),
+      min: Math.min(baseValue.min, newValue),
+      max: Math.max(baseValue.max, newMaxValue),
     }
   } else {
     return { min: newValue, max: newMaxValue }
@@ -133,10 +133,17 @@ const summarizeUnits = (
         if (!summary.totalAvailable) {
           summary.totalAvailable = 0
         }
-        summary.minIncomeRange = minMaxValue(
-          summary.minIncomeRange,
-          Number.parseFloat(unit.monthlyIncomeMin)
+        const minIncomeRange = minMaxValue(
+          {
+            min: parseFloat(summary.minIncomeRange.min),
+            max: parseFloat(summary.minIncomeRange.max),
+          },
+          parseFloat(unit.monthlyIncomeMin)
         )
+        summary.minIncomeRange = {
+          min: minIncomeRange.min.toPrecision(2),
+          max: minIncomeRange.max.toPrecision(2),
+        }
 
         summary.occupancyRange = minMaxValue(
           summary.occupancyRange,
@@ -147,10 +154,17 @@ const summarizeUnits = (
           summary.rentAsPercentIncomeRange,
           parseFloat(unit.monthlyRentAsPercentOfIncome)
         )
-        summary.rentRange = minMaxValue(
-          summary.rentRange as MinMax,
+        const rentRange = minMaxValue(
+          {
+            min: parseFloat(summary.rentRange.min),
+            max: parseFloat(summary.rentRange.max),
+          },
           Number.parseFloat(unit.monthlyRent)
         )
+        summary.rentRange = {
+          min: rentRange.min.toPrecision(2),
+          max: rentRange.max.toPrecision(2),
+        }
         if (unit.floor) {
           summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
         }
@@ -163,10 +177,10 @@ const summarizeUnits = (
       }, summary)
 
       if (finalSummary.minIncomeRange) {
-        finalSummary.minIncomeRange = minMaxInCurrency(finalSummary.minIncomeRange as MinMax)
+        finalSummary.minIncomeRange = minMaxInCurrency(finalSummary.minIncomeRange)
       }
       if (finalSummary.rentRange) {
-        finalSummary.rentRange = minMaxInCurrency(finalSummary.rentRange as MinMax)
+        finalSummary.rentRange = minMaxInCurrency(finalSummary.rentRange)
       }
 
       return finalSummary

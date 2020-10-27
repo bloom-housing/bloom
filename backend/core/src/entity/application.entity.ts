@@ -13,11 +13,12 @@ import {
   IsBoolean,
   IsDateString,
   IsDefined,
-  IsNumber, IsObject,
+  IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"

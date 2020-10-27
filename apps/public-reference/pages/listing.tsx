@@ -8,7 +8,8 @@ import {
   ListingEvent,
   EnumListingEventType,
   ListingEventDto,
-  EnumListingEventCreateDtoType, EnumListingEventDtoType
+  EnumListingEventCreateDtoType,
+  EnumListingEventDtoType,
 } from "@bloom-housing/core"
 import {
   AdditionalFees,
@@ -186,12 +187,16 @@ export default class extends Component<ListingProps> {
 
     let openHouseEvent: ListingEventDto | null = null
     if (Array.isArray(listing.events)) {
-      openHouseEvent = listing.events.find((event) => event.type === EnumListingEventDtoType.openHouse)
+      openHouseEvent = listing.events.find(
+        (event) => event.type === EnumListingEventDtoType.openHouse
+      )
     }
 
     let publicLottery: ListingEventDto | null = null
     if (Array.isArray(listing.events)) {
-      publicLottery = listing.events.find((event) => event.type === EnumListingEventDtoType.publicLottery)
+      publicLottery = listing.events.find(
+        (event) => event.type === EnumListingEventDtoType.publicLottery
+      )
     }
 
     return (

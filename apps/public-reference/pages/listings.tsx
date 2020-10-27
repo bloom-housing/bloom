@@ -10,7 +10,7 @@ import {
   openDateState,
   t,
 } from "@bloom-housing/ui-components"
-import { ListingDto } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/backend-core/client"
 import Layout from "../layouts/application"
 
 export interface ListingsProps {
