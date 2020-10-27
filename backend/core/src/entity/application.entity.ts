@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
-import { IsDateString, IsDefined, IsJSON, IsString, IsUUID } from "class-validator"
+import { IsDate, IsDateString, IsDefined, IsJSON, IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
 
@@ -91,13 +91,13 @@ export class Application extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
-  createdAt: string
+  @IsDate()
+  createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
-  updatedAt: string
+  @IsDate()
+  updatedAt: Date
 
   @Column({ type: "text", nullable: false })
   @Expose()

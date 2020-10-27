@@ -10,7 +10,7 @@ import {
 import { Listing } from "./listing.entity"
 import {
   IsBoolean,
-  IsDateString,
+  IsDate,
   IsNumber,
   IsNumberString,
   IsOptional,
@@ -29,12 +29,12 @@ class Unit extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
+  @IsDate()
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
+  @IsDate()
   updatedAt: Date
 
   @Column({ nullable: true, type: "text" })
