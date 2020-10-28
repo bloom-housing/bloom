@@ -19,6 +19,8 @@ export * from "./src/config"
 
 /* Elements */
 export * from "./src/elements/MetaTags"
+export * from "./src/elements/Tag"
+export * from "./src/elements/ViewItem"
 
 /* Footers */
 export * from "./src/footers/ExygyFooter"
@@ -95,6 +97,7 @@ export * from "./src/sections/InfoCardGrid"
 export * from "./src/sections/ListSection"
 export * from "./src/sections/MarkdownSection"
 export * from "./src/sections/ResponsiveContentList"
+export * from "./src/sections/GridSection"
 
 /* Tables */
 export * from "./src/tables/standard/BasicTable"

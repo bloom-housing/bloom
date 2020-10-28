@@ -45,3 +45,17 @@ export function useApplicationsData(listingId?: string) {
     appsError: listingsError || error,
   }
 }
+
+export function useSingleApplicationData(applicationId: string) {
+  const { applicationsService } = useContext(ApiClientContext)
+  const backendSingleApplicationsEndpointUrl = `${process.env.backendApiBase}/applications/${applicationId}`
+
+  const fetcher = () => applicationsService.retrieve({ applicationId })
+  const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
+
+  return {
+    applicationDto: data,
+    applicationLoading: !error && !data,
+    applicationError: error,
+  }
+}
