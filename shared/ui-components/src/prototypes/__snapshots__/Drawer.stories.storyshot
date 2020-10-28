@@ -384,26 +384,26 @@ exports[`Storyshots Prototypes/Drawer Drawer View Test 1`] = `
             <section
               className="border rounded-md p-8 bg-white mb-8"
             >
-              <ViewSection
-                className="md:grid md:grid-cols-4 md:gap-8"
-                insetGrid={true}
+              <GridSection
+                columns={4}
+                inset={true}
                 tinted={true}
                 title="Section Title"
               >
-                <div
-                  className="view-section"
+                <section
+                  className="grid-section"
                 >
                   <header
-                    className="view-section__header"
+                    className="grid-section__header"
                   >
                     <h2
-                      className="view-section__title"
+                      className="grid-section__title"
                     >
                       Section Title
                     </h2>
                   </header>
                   <div
-                    className="view-grid is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
+                    className="grid-section__inner is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
                   >
                     <ViewItem
                       label="First Name"
@@ -562,8 +562,8 @@ exports[`Storyshots Prototypes/Drawer Drawer View Test 1`] = `
                       </p>
                     </ViewItem>
                   </div>
-                </div>
-              </ViewSection>
+                </section>
+              </GridSection>
             </section>
           </div>
         </div>

@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
-import { IsDateString, IsObject, IsString, IsUUID } from "class-validator"
+import { IsDate, IsDateString, IsObject, IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
 
 @Entity({ name: "assets" })
@@ -21,13 +21,13 @@ export class Asset extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
-  createdAt: string
+  @IsDate()
+  createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
-  updatedAt: string
+  @IsDate()
+  updatedAt: Date
 
   @Column({ type: "text" })
   @Expose()

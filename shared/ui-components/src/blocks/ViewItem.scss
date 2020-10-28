@@ -1,6 +1,11 @@
 .view-item {
   @apply relative;
   @apply text-base;
+  @apply mb-4;
+
+  &:last-of-type {
+    @apply mb-0;
+  }
 
   &.is-flagged {
     @apply bg-warn-light;
@@ -9,6 +14,12 @@
     @apply -ml-8;
     @apply pl-8;
     box-shadow: inset 2px 0px 0px 0px $tailwind-warn;
+  }
+
+  .edit-link {
+    @apply absolute;
+    right: 0;
+    top: 0;
   }
 }
 

@@ -3,7 +3,7 @@ import { TableHeaders, StandardTable } from "./StandardTable"
 
 interface MinimalTableProps {
   headers: TableHeaders
-  data: Record<string, any>[]
+  data: Record<string, React.ReactNode>[]
 }
 
 const MinimalTable = (props: MinimalTableProps) => {

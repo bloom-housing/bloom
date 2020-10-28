@@ -909,13 +909,13 @@ export interface UserDto {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export interface UserCreateDto {
@@ -935,7 +935,7 @@ export interface UserCreateDto {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 }
 
 export interface UserDtoWithAccessToken {
@@ -955,13 +955,13 @@ export interface UserDtoWithAccessToken {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   accessToken: string;
@@ -981,13 +981,13 @@ export interface UserUpdateDto {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export interface LoginDto {
@@ -1008,10 +1008,10 @@ export interface ApplicationMethodDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   type: EnumApplicationMethodDtoType;
@@ -1031,10 +1031,10 @@ export interface AssetDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   label: string;
@@ -1056,10 +1056,10 @@ export interface PreferenceDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   ordinal: number;
@@ -1191,13 +1191,13 @@ export interface User {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   applications: Application[];
@@ -1211,10 +1211,10 @@ export interface Preference {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   ordinal: number;
@@ -1311,10 +1311,10 @@ export interface ApplicationMethod {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   type: EnumApplicationMethodType;
@@ -1337,10 +1337,10 @@ export interface Asset {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   label: string;
@@ -1423,13 +1423,19 @@ export interface WhatToExpect {
 
 export interface Listing {
   /**  */
+  unitsSummarized: object;
+
+  /**  */
+  urlSlug: string;
+
+  /**  */
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   preferences: Preference[];
@@ -1577,12 +1583,6 @@ export interface Listing {
 
   /**  */
   status: EnumListingStatus;
-
-  /**  */
-  unitsSummarized?: object;
-
-  /**  */
-  urlSlug?: string;
 }
 
 export interface Application {
@@ -1590,10 +1590,10 @@ export interface Application {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   appUrl: string;
@@ -1609,6 +1609,12 @@ export interface Application {
 }
 
 export interface ListingDto {
+  /**  */
+  unitsSummarized: object;
+
+  /**  */
+  urlSlug: string;
+
   /**  */
   applicationMethods: ApplicationMethodDto[];
 
@@ -1628,10 +1634,10 @@ export interface ListingDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   applications: Application[];
@@ -1764,12 +1770,6 @@ export interface ListingDto {
 
   /**  */
   status: EnumListingDtoStatus;
-
-  /**  */
-  unitsSummarized?: object;
-
-  /**  */
-  urlSlug?: string;
 }
 
 export interface ListingExtendedDto {
@@ -1789,6 +1789,12 @@ export interface IdDto {
 }
 
 export interface ListingCreateDto {
+  /**  */
+  unitsSummarized: object;
+
+  /**  */
+  urlSlug: string;
+
   /**  */
   applicationMethods: IdDto[];
 
@@ -1935,15 +1941,15 @@ export interface ListingCreateDto {
 
   /**  */
   status: EnumListingCreateDtoStatus;
-
-  /**  */
-  unitsSummarized?: object;
-
-  /**  */
-  urlSlug?: string;
 }
 
 export interface ListingUpdateDto {
+  /**  */
+  unitsSummarized: object;
+
+  /**  */
+  urlSlug: string;
+
   /**  */
   applicationMethods: IdDto[];
 
@@ -2092,12 +2098,6 @@ export interface ListingUpdateDto {
   status: EnumListingUpdateDtoStatus;
 
   /**  */
-  unitsSummarized?: object;
-
-  /**  */
-  urlSlug?: string;
-
-  /**  */
   id: string;
 }
 
@@ -2109,10 +2109,10 @@ export interface ApplicationDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   appUrl: string;
