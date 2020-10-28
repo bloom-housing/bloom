@@ -6,10 +6,11 @@
   @apply bg-primary;
   @apply rounded-md;
   @apply inline;
+  @apply text-center;
 
   &.is-pill {
-    @apply px-3;
-    @apply py-1;
+    @apply px-4;
+    @apply py-2;
     @apply bg-primary-light;
     @apply text-primary-dark;
     @apply rounded-full;
@@ -19,6 +20,14 @@
     @apply tracking-widest;
     @apply inline;
     @apply text-sm;
+    @apply leading-4;
+
+    &.is-small {
+      @apply text-2xs;
+      @apply py-1;
+      @apply px-3;
+      @apply leading-3;
+    }
   }
 
   &.is-warning {

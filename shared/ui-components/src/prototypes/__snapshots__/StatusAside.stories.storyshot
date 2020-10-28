@@ -1,0 +1,220 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/StatusAside Status Aside 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="status-aside"
+  >
+    <div
+      className="status-aside__buttons"
+    >
+      <div
+        className="button-group grid grid-cols-2 gap-2"
+      >
+        <div
+          className="button-group__item"
+        >
+          <Button
+            onClick={[Function]}
+            small={true}
+          >
+            <button
+              className="button is-small"
+              onClick={[Function]}
+            >
+              Save
+            </button>
+          </Button>
+        </div>
+        <div
+          className="button-group__item"
+        >
+          <Button
+            className="is-secondary"
+            onClick={[Function]}
+            small={true}
+          >
+            <button
+              className="button is-small is-secondary"
+              onClick={[Function]}
+            >
+              Preview
+            </button>
+          </Button>
+        </div>
+        <div
+          className="button-group__item col-span-2"
+        >
+          <Button
+            filled={true}
+            onClick={[Function]}
+            small={true}
+          >
+            <button
+              className="button is-filled is-small"
+              onClick={[Function]}
+            >
+              Submit
+            </button>
+          </Button>
+        </div>
+      </div>
+    </div>
+    <div
+      className="status-aside__messages"
+    >
+      <h3
+        className="status-aside__title"
+      >
+        Status History
+      </h3>
+      <ul
+        className="status-messages"
+      >
+        <li
+          className="status-message"
+        >
+          <div
+            className="status-message__status"
+          >
+            <Tag
+              pillStyle={true}
+              small={true}
+              success={true}
+            >
+              <div
+                className="tag is-success is-small is-pill"
+              >
+                Submitted
+              </div>
+            </Tag>
+            <span
+              className="status-message__time"
+            >
+              01/01/21
+            </span>
+          </div>
+          <div
+            className="status-message__note"
+          >
+            Changed status of one application.
+          </div>
+        </li>
+        <li
+          className="status-message"
+        >
+          <div
+            className="status-message__status"
+          >
+            <Tag
+              pillStyle={true}
+              small={true}
+            >
+              <div
+                className="tag is-small is-pill"
+              >
+                Draft
+              </div>
+            </Tag>
+            <span
+              className="status-message__time"
+            >
+              01/01/21
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes/StatusAside Status Aside Last 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="status-aside"
+  >
+    <div
+      className="status-aside__buttons"
+    >
+      <div
+        className="button-group"
+      >
+        <div
+          className="button-group__item"
+        >
+          <Button
+            className="is-secondary"
+            onClick={[Function]}
+            small={true}
+          >
+            <button
+              className="button is-small is-secondary"
+              onClick={[Function]}
+            >
+              Edit
+            </button>
+          </Button>
+        </div>
+      </div>
+    </div>
+    <div
+      className="status-aside__messages"
+    >
+      <ul
+        className="status-messages"
+      >
+        <li
+          className="status-message"
+        >
+          <div
+            className="status-message__note text-center"
+          >
+            Last Updated: August 1, 2020
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes/StatusAside Status Aside Minimumal 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="status-aside"
+  >
+    <ul
+      className="status-messages"
+    >
+      <li
+        className="status-message"
+      >
+        <div
+          className="status-message__note text-center"
+        >
+          Last Updated: August 1, 2020
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

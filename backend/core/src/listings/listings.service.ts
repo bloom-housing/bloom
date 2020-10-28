@@ -32,13 +32,6 @@ export class ListingsService {
       listings = jp.query(listings, jsonpath)
     }
 
-    listings.forEach((listing) => {
-      if (listing.units.length) {
-        listing.unitsSummarized = transformUnits(listing.units, amiCharts)
-      }
-      listing.urlSlug = listingUrlSlug(listing)
-    })
-
     const data = {
       status: ListingsResponseStatus.ok,
       listings: listings,
