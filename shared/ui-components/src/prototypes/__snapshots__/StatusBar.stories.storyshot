@@ -9,16 +9,14 @@ exports[`Storyshots Prototypes/StatusBar Status Bar 1`] = `
   }
 >
   <div
-    className="status-bar"
+    className="status-bar grid grid-cols-4 gap-4"
   >
     <div
-      className="pr-2 mr-4 border-r border-gray-600"
+      className="status-bar__note col-span-3"
+    />
+    <div
+      className="status-bar__status"
     >
-      <span
-        className="mr-2"
-      >
-        Status:
-      </span>
       <Tag
         pillStyle={true}
       >
@@ -29,25 +27,6 @@ exports[`Storyshots Prototypes/StatusBar Status Bar 1`] = `
         </div>
       </Tag>
     </div>
-    <div>
-      <span
-        className="mr-4"
-      >
-        Last Updated: August 1, 2020
-      </span>
-    </div>
-    <Button
-      filled={true}
-      onClick={[Function]}
-      small={true}
-    >
-      <button
-        className="button is-filled is-small"
-        onClick={[Function]}
-      >
-        Save
-      </button>
-    </Button>
   </div>
 </div>
 `;
@@ -61,16 +40,26 @@ exports[`Storyshots Prototypes/StatusBar Status Bar Submitted 1`] = `
   }
 >
   <div
-    className="status-bar"
+    className="status-bar grid grid-cols-4 gap-4"
   >
     <div
-      className="pr-2 mr-4 border-r border-gray-600"
+      className="status-bar__note col-span-3"
     >
+      Lottery ranking generated. 07/15/2020 at 11:45am 
       <span
-        className="mr-2"
+        className="status-bar__action"
       >
-        Status:
+        <a
+          className="underline"
+          href="#"
+        >
+          Status History
+        </a>
       </span>
+    </div>
+    <div
+      className="status-bar__status"
+    >
       <Tag
         pillStyle={true}
         success={true}
@@ -82,24 +71,6 @@ exports[`Storyshots Prototypes/StatusBar Status Bar Submitted 1`] = `
         </div>
       </Tag>
     </div>
-    <div>
-      <span
-        className="mr-4"
-      >
-        Last Updated: August 1, 2020
-      </span>
-    </div>
-    <Button
-      onClick={[Function]}
-      small={true}
-    >
-      <button
-        className="button is-small"
-        onClick={[Function]}
-      >
-        Edit
-      </button>
-    </Button>
   </div>
 </div>
 `;
