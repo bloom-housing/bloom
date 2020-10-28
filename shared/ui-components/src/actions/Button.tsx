@@ -11,13 +11,18 @@ export interface ButtonProps {
   small?: boolean
 }
 
+export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
+  const classNames = ["button"]
+  if (props.filled) classNames.push("is-filled")
+  if (props.normalCase) classNames.push("is-normal-case")
+  if (props.small) classNames.push("is-small")
+  if (props.big) classNames.push("is-big")
+  if (props.className) classNames.push(props.className)
+  return classNames
+}
+
 const Button = (props: ButtonProps) => {
-  const buttonClasses = ["button"]
-  if (props.filled) buttonClasses.push("is-filled")
-  if (props.normalCase) buttonClasses.push("is-normal-case")
-  if (props.small) buttonClasses.push("is-small")
-  if (props.big) buttonClasses.push("is-big")
-  if (props.className) buttonClasses.push(props.className)
+  const buttonClasses = buttonClassesForProps(props)
 
   return (
     <button className={buttonClasses.join(" ")} onClick={props.onClick}>
