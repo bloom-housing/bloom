@@ -18,10 +18,12 @@ import { EmailService } from "../shared/email.service"
 import { ResourceType } from "../auth/resource_type.decorator"
 import AuthzGuard from "../auth/authz.guard"
 import { authzActions, AuthzService } from "../auth/authz.service"
+import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 
 @Controller("user")
 @ApiBearerAuth()
 @ResourceType("user")
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -30,7 +32,6 @@ export class UserController {
     private readonly authzService: AuthzService
   ) {}
 
-  @UseGuards(DefaultAuthGuard, AuthzGuard)
   @Get()
   profile(@Request() req): UserDto {
     return plainToClass(UserDto, req.user, { excludeExtraneousValues: true })
@@ -51,7 +52,6 @@ export class UserController {
   }
 
   @Put(":id")
-  @UseGuards(DefaultAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Update user", operationId: "update" })
   async update(@Body() dto: UserUpdateDto): Promise<UserDto> {
     const user = await this.userService.find({ id: dto.id })
