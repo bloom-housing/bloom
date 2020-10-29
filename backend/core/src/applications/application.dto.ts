@@ -1,19 +1,40 @@
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
-import { IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { ApiHideProperty, ApiProperty, OmitType } from "@nestjs/swagger"
+import { IsBoolean, IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { Application } from "../entity/application.entity"
-import { Exclude, Expose, Type } from "class-transformer"
+import { Exclude, Expose, Transform, Type } from "class-transformer"
 import { IdDto } from "../lib/id.dto"
+import { PaginationFactory, PaginationQueryParams } from "../utils/pagination.dto"
 
-export class ApplicationsListQueryParams {
+export class ApplicationsListQueryParams extends PaginationQueryParams {
+  @ApiProperty({
+    type: String,
+    example: "listingId",
+    required: false,
+  })
   @IsOptional()
   @IsString()
   listingId?: string
 }
 
 export class ApplicationsCsvListQueryParams {
+  @ApiProperty({
+    type: String,
+    example: "listingId",
+    required: false,
+  })
   @IsOptional()
   @IsString()
   listingId?: string
+
+  @ApiProperty({
+    type: Boolean,
+    example: true,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
+  includeHeaders?: boolean
 }
 
 export class ApplicationDto extends OmitType(Application, ["listing", "user"] as const) {
@@ -27,6 +48,8 @@ export class ApplicationDto extends OmitType(Application, ["listing", "user"] as
   @ApiHideProperty()
   user
 }
+
+export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
 
 export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",

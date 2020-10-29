@@ -239,15 +239,19 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      listingId: string;
+      page?: number;
+      /**  */
+      limit?: number;
+      /**  */
+      listingId?: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationDto[]> {
+  ): Promise<PaginatedApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { listingId: params['listingId'] };
+      configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
       let data = null;
 
       configs.data = data;
@@ -281,9 +285,9 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId: string;
+      listingId?: string;
       /**  */
-      includeHeaders: boolean;
+      includeHeaders?: boolean;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -2115,6 +2119,31 @@ export interface ApplicationDto {
 
   /**  */
   application: object;
+}
+
+export interface PaginationMeta {
+  /**  */
+  currentPage: number;
+
+  /**  */
+  itemCount: number;
+
+  /**  */
+  itemsPerPage: number;
+
+  /**  */
+  totalItems: number;
+
+  /**  */
+  totalPages: number;
+}
+
+export interface PaginatedApplicationDto {
+  /**  */
+  items: ApplicationDto[];
+
+  /**  */
+  meta: PaginationMeta;
 }
 
 export interface ApplicationCreateDto {

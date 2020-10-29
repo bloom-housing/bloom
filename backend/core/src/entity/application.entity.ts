@@ -82,7 +82,7 @@ export class ApplicationData {
 }
 
 @Entity({ name: "applications" })
-export class Application extends BaseEntity {
+export class Application {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString()
