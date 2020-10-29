@@ -10,7 +10,7 @@ import {
 import { Unit, UnitsSummarized } from "./unit.entity"
 import { Application } from "./application.entity"
 import { Asset } from "./asset.entity"
-import { ApplicationMethod } from "./application-method.entity"
+import { ApplicationMethod, ApplicationMethodType } from "./application-method.entity"
 import { Address } from "../shared/dto/address.dto"
 import { WhatToExpect } from "../shared/dto/whatToExpect.dto"
 import { Preference } from "./preference.entity"
@@ -354,6 +354,7 @@ class Listing extends BaseEntity {
   })
   @Expose()
   @IsEnum(ListingStatus)
+  @ApiProperty({ enum: ListingStatus, enumName: "ListingStatus" })
   status: ListingStatus
 
   @Expose()

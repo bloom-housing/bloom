@@ -7,7 +7,7 @@ import { PreferenceDto } from "../preferences/preference.dto"
 import { AssetDto } from "../assets/asset.dto"
 import { ApplicationMethodDto } from "../application-methods/application-method.dto"
 import { UnitDto } from "../units/unit.dto"
-import { OmitType } from "@nestjs/swagger"
+import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { ListingEventDto } from "../listing-events/listing-events.dto"
 import { IdDto } from "../lib/id.dto"
 
@@ -50,6 +50,7 @@ export class ListingDto extends OmitType(Listing, [
 export class ListingExtendedDto {
   @Expose()
   @IsEnum(ListingsResponseStatus)
+  @ApiProperty({ enum: ListingsResponseStatus, enumName: "ListingsResponseStatus" })
   status: ListingsResponseStatus
   @Expose()
   @ValidateNested({ each: true })

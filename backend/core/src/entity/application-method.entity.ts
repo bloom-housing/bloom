@@ -8,8 +8,9 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsBoolean, IsDate, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
+import { ApiProperty } from "@nestjs/swagger"
 
 export enum ApplicationMethodType {
   Internal = "Internal",
@@ -45,6 +46,7 @@ export class ApplicationMethod extends BaseEntity {
   @Expose()
   @IsString()
   @IsEnum(ApplicationMethodType)
+  @ApiProperty({ enum: ApplicationMethodType, enumName: "ApplicationMethodType" })
   type: ApplicationMethodType
 
   @Column({ type: "text", nullable: true })

@@ -1103,6 +1103,9 @@ export interface UnitsSummarized {
 
 export interface ApplicationMethodDto {
   /**  */
+  type: ApplicationMethodType;
+
+  /**  */
   id: string;
 
   /**  */
@@ -1110,9 +1113,6 @@ export interface ApplicationMethodDto {
 
   /**  */
   updatedAt: Date;
-
-  /**  */
-  type: EnumApplicationMethodDtoType;
 
   /**  */
   label: string;
@@ -1245,6 +1245,9 @@ export interface UnitDto {
 
 export interface ListingEventDto {
   /**  */
+  type: ListingEventType;
+
+  /**  */
   id: string;
 
   /**  */
@@ -1252,9 +1255,6 @@ export interface ListingEventDto {
 
   /**  */
   updatedAt: Date;
-
-  /**  */
-  type: EnumListingEventDtoType;
 
   /**  */
   startTime: Date;
@@ -1406,6 +1406,9 @@ export interface Unit {
 
 export interface ApplicationMethod {
   /**  */
+  type: ApplicationMethodType;
+
+  /**  */
   id: string;
 
   /**  */
@@ -1413,9 +1416,6 @@ export interface ApplicationMethod {
 
   /**  */
   updatedAt: Date;
-
-  /**  */
-  type: EnumApplicationMethodType;
 
   /**  */
   label: string;
@@ -1452,6 +1452,9 @@ export interface Asset {
 
 export interface ListingEvent {
   /**  */
+  type: ListingEventType;
+
+  /**  */
   id: string;
 
   /**  */
@@ -1459,9 +1462,6 @@ export interface ListingEvent {
 
   /**  */
   updatedAt: Date;
-
-  /**  */
-  type: EnumListingEventType;
 
   /**  */
   startTime: Date;
@@ -1520,6 +1520,9 @@ export interface WhatToExpect {
 }
 
 export interface Listing {
+  /**  */
+  status: ListingStatus;
+
   /**  */
   unitsSummarized: UnitsSummarized;
 
@@ -1678,9 +1681,6 @@ export interface Listing {
 
   /**  */
   yearBuilt: number;
-
-  /**  */
-  status: EnumListingStatus;
 
   /**  */
   applicationConfig?: object;
@@ -1921,6 +1921,9 @@ export interface Application {
 
 export interface ListingDto {
   /**  */
+  status: ListingStatus;
+
+  /**  */
   unitsSummarized: UnitsSummarized;
 
   /**  */
@@ -2080,15 +2083,12 @@ export interface ListingDto {
   yearBuilt: number;
 
   /**  */
-  status: EnumListingDtoStatus;
-
-  /**  */
   applicationConfig?: object;
 }
 
 export interface ListingExtendedDto {
   /**  */
-  status: EnumListingExtendedDtoStatus;
+  status: ListingsResponseStatus;
 
   /**  */
   listings: ListingDto[];
@@ -2104,6 +2104,9 @@ export interface IdDto {
 
 export interface ListingCreateDto {
   /**  */
+  status: ListingStatus;
+
+  /**  */
   unitsSummarized: UnitsSummarized;
 
   /**  */
@@ -2252,9 +2255,6 @@ export interface ListingCreateDto {
 
   /**  */
   yearBuilt: number;
-
-  /**  */
-  status: EnumListingCreateDtoStatus;
 
   /**  */
   applicationConfig?: object;
@@ -2262,6 +2262,9 @@ export interface ListingCreateDto {
 
 export interface ListingUpdateDto {
   /**  */
+  status: ListingStatus;
+
+  /**  */
   unitsSummarized: UnitsSummarized;
 
   /**  */
@@ -2410,9 +2413,6 @@ export interface ListingUpdateDto {
 
   /**  */
   yearBuilt: number;
-
-  /**  */
-  status: EnumListingUpdateDtoStatus;
 
   /**  */
   applicationConfig?: object;
@@ -2549,7 +2549,7 @@ export interface PreferenceUpdateDto {
 
 export interface ApplicationMethodCreateDto {
   /**  */
-  type: EnumApplicationMethodCreateDtoType;
+  type: ApplicationMethodType;
 
   /**  */
   label: string;
@@ -2563,7 +2563,7 @@ export interface ApplicationMethodCreateDto {
 
 export interface ApplicationMethodUpdateDto {
   /**  */
-  type: EnumApplicationMethodUpdateDtoType;
+  type: ApplicationMethodType;
 
   /**  */
   label: string;
@@ -2701,7 +2701,7 @@ export interface UnitUpdateDto {
 
 export interface ListingEventCreateDto {
   /**  */
-  type: EnumListingEventCreateDtoType;
+  type: ListingEventType;
 
   /**  */
   startTime: Date;
@@ -2718,7 +2718,7 @@ export interface ListingEventCreateDto {
 
 export interface ListingEventUpdateDto {
   /**  */
-  type: EnumListingEventUpdateDtoType;
+  type: ListingEventType;
 
   /**  */
   startTime: Date;
@@ -2735,7 +2735,17 @@ export interface ListingEventUpdateDto {
   /**  */
   id: string;
 }
-export enum EnumApplicationMethodDtoType {
+
+export enum ListingsResponseStatus {
+  'ok' = 'ok'
+}
+
+export enum ListingStatus {
+  'active' = 'active',
+  'pending' = 'pending'
+}
+
+export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
@@ -2743,69 +2753,15 @@ export enum EnumApplicationMethodDtoType {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
 }
-export enum EnumListingEventDtoType {
+
+export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
-}
-export enum EnumApplicationMethodType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
 }
 export type CombinedListingTypes = (Listing & any) | null;
-export enum EnumListingEventType {
-  'openHouse' = 'openHouse',
-  'publicLottery' = 'publicLottery'
-}
 export type CombinedApplicationAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
-export enum EnumListingStatus {
-  'active' = 'active',
-  'pending' = 'pending'
-}
 export type CombinedWorkAddressTypes = (Address & any) | null;
 export type CombinedUserTypes = (User & any) | null;
-export enum EnumListingDtoStatus {
-  'active' = 'active',
-  'pending' = 'pending'
-}
-export enum EnumListingExtendedDtoStatus {
-  'ok' = 'ok'
-}
-export enum EnumListingCreateDtoStatus {
-  'active' = 'active',
-  'pending' = 'pending'
-}
-export enum EnumListingUpdateDtoStatus {
-  'active' = 'active',
-  'pending' = 'pending'
-}
-export enum EnumApplicationMethodCreateDtoType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
-}
-export enum EnumApplicationMethodUpdateDtoType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
-}
-export enum EnumListingEventCreateDtoType {
-  'openHouse' = 'openHouse',
-  'publicLottery' = 'publicLottery'
-}
-export enum EnumListingEventUpdateDtoType {
-  'openHouse' = 'openHouse',
-  'publicLottery' = 'publicLottery'
-}
