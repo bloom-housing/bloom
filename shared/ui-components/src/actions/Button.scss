@@ -38,13 +38,21 @@
     }
   }
 
+  &.is-success {
+    @apply bg-success;
+    @apply border-success;
+    @apply text-white;
+    &:hover {
+      @apply border-success-light;
+    }
+  }
+
   &.is-alert {
     @apply bg-alert;
     @apply border-alert;
     @apply text-white;
-
     &:hover {
-      @apply bg-alert;
+      @apply border-alert-light;
     }
   }
 
@@ -108,6 +116,10 @@
       @apply text-primary-dark;
       background: transparent;
     }
+  }
+
+  &.is-fullwidth {
+    @apply w-full;
   }
 }
 

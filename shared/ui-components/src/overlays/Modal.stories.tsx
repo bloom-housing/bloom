@@ -2,6 +2,7 @@ import React from "react"
 import "./Modal.scss"
 import { Modal } from "./Modal"
 import SVG from "react-inlinesvg"
+import { Button } from "../actions/Button"
 
 export default {
   title: "Overlays/Modal",
@@ -26,8 +27,12 @@ export const BasicModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      { label: "Cancel", onClick: noop, type: "cancel" },
-      { label: "Submit", onClick: noop, type: "primary" },
+      <Button onClick={noop} primary={true}>
+        Submit
+      </Button>,
+      <Button onClick={noop} secondary={true}>
+        Cancel
+      </Button>,
     ]}
   >
     Modal Content
@@ -41,8 +46,12 @@ export const FullScreenModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      { label: "Cancel", onClick: noop, type: "cancel" },
-      { label: "Submit", onClick: noop, type: "primary" },
+      <Button onClick={noop} primary={true}>
+        Submit
+      </Button>,
+      <Button onClick={noop} secondary={true}>
+        Cancel
+      </Button>,
     ]}
     fullScreen
   >
@@ -57,8 +66,12 @@ export const SuccessFailureModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      { label: "Cancel", onClick: noop, type: "failure" },
-      { label: "Submit", onClick: noop, type: "success" },
+      <Button onClick={noop} success={true}>
+        Submit
+      </Button>,
+      <Button onClick={noop} alert={true}>
+        Cancel
+      </Button>,
     ]}
   >
     Modal Content
