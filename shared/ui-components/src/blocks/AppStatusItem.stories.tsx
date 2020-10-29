@@ -13,7 +13,7 @@ const application = {} as ApplicationDto
 let days = 10
 listing.applicationDueDate = moment().add(days, "days").format()
 application.listing = listing
-application.updatedAt = moment().format()
+application.updatedAt = new Date()
 
 export const AppStatusItemPending = () => (
   <AppStatusItem
@@ -36,7 +36,7 @@ export const AppStatusItemSubmitted = () => (
   ></AppStatusItem>
 )
 
-const application2 = {} as Application
+const application2 = {} as ApplicationDto
 const listing2 = Object.assign({}, Archer) as any
 application2.listing = listing2
 

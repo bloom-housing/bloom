@@ -385,7 +385,7 @@ export class Application {
   @ManyToOne((type) => User, (user) => user.applications, { nullable: true })
   user: User | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.applications)
+  @ManyToOne((type) => Listing, (listing) => listing.applications, { eager: true })
   listing: Listing
 
   @Column({ type: "jsonb", nullable: true })

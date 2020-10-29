@@ -1024,7 +1024,7 @@ export interface UnitSummary {
   unitType: string;
 
   /**  */
-  minIncomeRange?: MinMaxCurrency;
+  minIncomeRange: MinMaxCurrency;
 
   /**  */
   occupancyRange: MinMax;
@@ -1033,7 +1033,7 @@ export interface UnitSummary {
   rentAsPercentIncomeRange: MinMax;
 
   /**  */
-  rentRange?: MinMaxCurrency;
+  rentRange: MinMaxCurrency;
 
   /**  */
   totalAvailable: number;
@@ -1786,7 +1786,7 @@ export interface Demographics {
 
 export interface HouseholdMember {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   address: Address;
@@ -1825,16 +1825,16 @@ export interface HouseholdMember {
   noPhone: boolean;
 
   /**  */
-  sameAddress?: boolean;
+  sameAddress: boolean;
 
   /**  */
-  relationship?: string;
+  relationship: string;
 
   /**  */
-  workInRegion?: boolean;
+  workInRegion: boolean;
 
   /**  */
-  workAddress?: Address;
+  workAddress: CombinedWorkAddressTypes;
 }
 
 export interface ApplicationData {
@@ -2423,7 +2423,7 @@ export interface ListingUpdateDto {
 
 export interface ApplicationDto {
   /**  */
-  listing: IdDto;
+  listing: ListingDto;
 
   /**  */
   id: string;
@@ -2474,7 +2474,7 @@ export interface ApplicationCreateDto {
   application: ApplicationData;
 
   /**  */
-  listing: IdDto;
+  listing: ListingDto;
 }
 
 export interface ApplicationUpdateDto {
@@ -2485,7 +2485,7 @@ export interface ApplicationUpdateDto {
   application: ApplicationData;
 
   /**  */
-  listing: IdDto;
+  listing: ListingDto;
 
   /**  */
   id: string;
@@ -2768,6 +2768,7 @@ export enum EnumListingStatus {
   'active' = 'active',
   'pending' = 'pending'
 }
+export type CombinedWorkAddressTypes = (Address & any) | null;
 export type CombinedUserTypes = (User & any) | null;
 export enum EnumListingDtoStatus {
   'active' = 'active',

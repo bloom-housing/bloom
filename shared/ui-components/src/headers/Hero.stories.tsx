@@ -3,7 +3,7 @@ import * as React from "react"
 import { Hero } from "./Hero"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import Triton from "@bloom-housing/listings-service/listings/triton-test.json"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 
 export default {
   title: "Headers/Hero",
@@ -11,7 +11,7 @@ export default {
 
 const archer = Object.assign({}, Archer) as any
 const triton = Object.assign({}, Triton) as any
-const listings = [archer, triton] as Listing[]
+const listings = [archer, triton] as ListingDto[]
 
 export const withListings = () => (
   <Hero

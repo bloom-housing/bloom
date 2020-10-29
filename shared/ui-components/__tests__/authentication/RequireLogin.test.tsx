@@ -17,18 +17,15 @@ jest.mock("next/router", () => ({
 const mockUser: UserDto = {
   id: "123",
   email: "test@test.com",
-  passwordHash: "123",
   firstName: "Test",
   lastName: "User",
   dob: new Date("2020-01-01"),
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2020-01-01"),
-  applications: [],
-  roles: ["user"],
 }
 
 let initialStateLoaded = false
-let profile: User | undefined
+let profile: UserDto | undefined
 let props = {}
 
 beforeEach(() => {

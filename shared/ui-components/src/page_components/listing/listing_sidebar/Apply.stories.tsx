@@ -2,7 +2,10 @@ import * as React from "react"
 
 import { Apply } from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import { ApplicationMethod, ApplicationMethodType, Listing } from "@bloom-housing/core"
+import {
+  ApplicationMethodDto,
+  EnumApplicationMethodDtoType,
+} from "@bloom-housing/core"
 
 export default {
   title: "Listing Sidebar/Apply",
@@ -35,15 +38,23 @@ export const acceptsPostmarkedApplications = () => {
 export const showsMultipleDownloadURLs = () => {
   const listingWithDownloadMethods = Object.assign({}, listing)
 
-  const testMethod1: ApplicationMethod = {
+  const testMethod1: ApplicationMethodDto = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
-    type: ApplicationMethodType.FileDownload,
+    type: EnumApplicationMethodDtoType.FileDownload,
   }
-  const testMethod2: ApplicationMethod = {
+  const testMethod2: ApplicationMethodDto = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "Spanish",
     externalReference: "#spanish",
-    type: ApplicationMethodType.FileDownload,
+    type: EnumApplicationMethodDtoType.FileDownload,
   }
 
   listingWithDownloadMethods.applicationMethods = listingWithDownloadMethods.applicationMethods.concat(
@@ -59,8 +70,14 @@ export const showsMultipleDownloadURLs = () => {
 export const linkDirectlyToInternalApplication = () => {
   const listingWithInternalLink = Object.assign({}, listing)
 
-  const internalMethod: ApplicationMethod = {
-    type: ApplicationMethodType.Internal,
+  const internalMethod: ApplicationMethodDto = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    externalReference: "",
+    id: "",
+    label: "",
+    updatedAt: new Date(),
+    type: EnumApplicationMethodDtoType.Internal,
   }
 
   listingWithInternalLink.applicationMethods = listingWithInternalLink.applicationMethods.concat([
@@ -76,14 +93,24 @@ export const linkDirectlyToInternalApplication = () => {
 export const linkToInternalApplicationAndDownloads = () => {
   const listingWithInternalAndDownload = Object.assign({}, listing)
 
-  const internalMethod: ApplicationMethod = {
-    type: ApplicationMethodType.Internal,
+  const internalMethod: ApplicationMethodDto = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    externalReference: "",
+    id: "",
+    label: "",
+    updatedAt: new Date(),
+    type: EnumApplicationMethodDtoType.Internal,
   }
 
-  const downloadMethod: ApplicationMethod = {
+  const downloadMethod: ApplicationMethodDto = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
-    type: ApplicationMethodType.FileDownload,
+    type: EnumApplicationMethodDtoType.FileDownload,
   }
 
   listingWithInternalAndDownload.applicationMethods = listingWithInternalAndDownload.applicationMethods.concat(
@@ -99,7 +126,11 @@ export const linkToInternalApplicationAndDownloads = () => {
 export const linkDirectlyToExternalApplication = () => {
   const listingWithMethodLinks = Object.assign({}, listing)
 
-  const externalMethod: ApplicationMethod = {
+  const externalMethod: ApplicationMethodDto = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "External",
     externalReference: "https://icann.org",
     type: ApplicationMethodType.ExternalLink,

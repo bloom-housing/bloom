@@ -6,9 +6,7 @@ import {
   useEffect,
   useContext,
 } from "react"
-import Router, { useRouter } from "next/router"
 import { createAction, createReducer } from "typesafe-actions"
-import { User } from "@bloom-housing/backend-core"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
 import {
   createAxiosInstance,
@@ -18,16 +16,15 @@ import {
   scheduleTokenRefresh,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
-import { t } from "@bloom-housing/ui-components"
-import { UserCreateDto } from "@bloom-housing/core"
+import { UserCreateDto, UserDto } from "@bloom-housing/core"
 // External interface this context provides
 type ContextProps = {
-  login: (email: string, password: string) => Promise<User>
-  createUser: (user: UserCreateDto) => Promise<User>
+  login: (email: string, password: string) => Promise<UserDto>
+  createUser: (user: UserCreateDto) => Promise<UserDto>
   signOut: () => void
   // True when an API request is processing
   loading: boolean
-  profile?: User
+  profile?: UserDto
   accessToken?: string
   initialStateLoaded: boolean
 }
@@ -38,7 +35,7 @@ type UserState = {
   initialStateLoaded: boolean
   storageType: string
   accessToken?: string
-  profile?: User
+  profile?: UserDto
   refreshTimer?: number
 }
 
@@ -52,7 +49,7 @@ const saveToken = createAction("SAVE_TOKEN")<{
 }>()
 const startLoading = createAction("START_LOADING")()
 const stopLoading = createAction("STOP_LOADING")()
-const saveProfile = createAction("SAVE_PROFILE")<User>()
+const saveProfile = createAction("SAVE_PROFILE")<UserDto>()
 const signOut = createAction("SIGN_OUT")()
 
 const reducer = createReducer(
