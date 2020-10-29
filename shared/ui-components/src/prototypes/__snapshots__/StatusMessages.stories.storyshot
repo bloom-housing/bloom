@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/StatusMessages Status Messages 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <ul
+    className="status-messages"
+  >
+    <li
+      className="status-message"
+    >
+      <div
+        className="status-message__status"
+      >
+        <Tag
+          pillStyle={true}
+          small={true}
+          success={true}
+        >
+          <div
+            className="tag is-success is-small is-pill"
+          >
+            Submitted
+          </div>
+        </Tag>
+        <span
+          className="status-message__time"
+        >
+          01/01/21
+        </span>
+      </div>
+      <div
+        className="status-message__note"
+      >
+        Changed status of one application.
+      </div>
+    </li>
+    <li
+      className="status-message"
+    >
+      <div
+        className="status-message__status"
+      >
+        <Tag
+          pillStyle={true}
+          small={true}
+        >
+          <div
+            className="tag is-small is-pill"
+          >
+            Draft
+          </div>
+        </Tag>
+        <span
+          className="status-message__time"
+        >
+          01/01/21
+        </span>
+      </div>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Storyshots Prototypes/StatusMessages Status Messages Blank 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <ul
+    className="status-messages"
+  >
+    <li
+      className="status-message"
+    >
+      <div
+        className="status-message__note text-center"
+      >
+        Last Updated: August 1, 2020
+      </div>
+    </li>
+  </ul>
+</div>
+`;

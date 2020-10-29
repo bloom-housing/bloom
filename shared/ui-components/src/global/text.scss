@@ -114,35 +114,6 @@ h1.title {
   }
 }
 
-.info-item {
-  @apply relative;
-  @apply text-base;
-}
-
-.info-item__label {
-  @apply text-gray-700;
-  @apply font-sans;
-  @apply text-tiny;
-}
-
-.info-item__value {
-  @apply font-alt-sans;
-  @apply tracking-wide;
-  @apply font-semibold;
-}
-
-.info-item__helper {
-  @apply text-gray-700;
-  @apply font-sans;
-  @apply text-tiny;
-}
-
-.info-item__link {
-  @apply absolute;
-  right: 0;
-  top: 0;
-}
-
 .edit-link {
   @apply underline;
   @apply font-alt-sans;

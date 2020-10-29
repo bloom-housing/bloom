@@ -9,16 +9,14 @@ import {
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import {
-  IsArray,
   IsBoolean,
-  IsDateString,
-  IsDefined,
+  IsDate, IsDefined,
   IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested,
+  ValidateNested
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { AnyDict } from "../lib/unit_transformations"
@@ -185,12 +183,12 @@ class Unit extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
+  @IsDate()
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
+  @IsDate()
   updatedAt: Date
 
   @Column({ nullable: true, type: "text" })

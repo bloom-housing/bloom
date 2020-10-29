@@ -26,7 +26,7 @@ export const register = async (apiBase: string, data: UserCreateDto) => {
 }
 
 export const getProfile = async (client: AxiosInstance) => {
-  const res = await client.get<User>("/user/profile")
+  const res = await client.get<User>("/user")
   return res.data
 }
 

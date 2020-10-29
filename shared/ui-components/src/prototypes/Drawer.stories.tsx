@@ -5,7 +5,7 @@ import SVG from "react-inlinesvg"
 import { Drawer } from "./Drawer"
 import { FieldSection } from "./FieldSection"
 import { GridSection, GridCell } from "../sections/GridSection"
-import { ViewItem } from "./ViewItem"
+import { ViewItem } from "../blocks/ViewItem"
 import { Field } from "../forms/Field"
 
 export default {
@@ -63,12 +63,7 @@ export const DrawerFieldTest = () => (
 export const DrawerViewTest = () => (
   <Drawer title="Drawer Title" className="is-right" ariaDescription="My Drawer">
     <section className="border rounded-md p-8 bg-white mb-8">
-      <ViewSection
-        title="Section Title"
-        tinted={true}
-        insetGrid={true}
-        className="md:grid md:grid-cols-4 md:gap-8"
-      >
+      <GridSection title="Section Title" tinted={true} inset={true} columns={4}>
         <ViewItem label="First Name" children="Lisa" />
 
         <ViewItem label="Middle Name" children="S" />
@@ -84,7 +79,7 @@ export const DrawerViewTest = () => (
         <ViewItem label="Second Phone" children="111-222-3333" helper="Work" />
 
         <ViewItem label="Perferred Contact" children="Phone" />
-      </ViewSection>
+      </GridSection>
     </section>
   </Drawer>
 )

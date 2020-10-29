@@ -5,14 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  BaseEntity,
 } from "typeorm"
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
 import {
   IsBoolean,
-  IsDateString,
   IsDefined,
+  IsDate,
   IsNumber,
   IsObject,
   IsOptional,
@@ -408,13 +407,13 @@ export class Application {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
-  createdAt: string
+  @IsDate()
+  createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
-  updatedAt: string
+  @IsDate()
+  updatedAt: Date
 
   @Column({ type: "text", nullable: false })
   @Expose()

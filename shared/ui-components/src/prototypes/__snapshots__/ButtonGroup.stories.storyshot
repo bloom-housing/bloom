@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Prototypes/ButtonGroup Button Group 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="button-group grid grid-cols-2 gap-2"
+  >
+    <div
+      className="button-group__item"
+    >
+      <Button
+        onClick={[Function]}
+        small={true}
+      >
+        <button
+          className="button is-small"
+          onClick={[Function]}
+        >
+          Save
+        </button>
+      </Button>
+    </div>
+    <div
+      className="button-group__item"
+    >
+      <Button
+        className="is-secondary"
+        onClick={[Function]}
+        small={true}
+      >
+        <button
+          className="button is-small is-secondary"
+          onClick={[Function]}
+        >
+          Preview
+        </button>
+      </Button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Prototypes/ButtonGroup Button Group Stack 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <div
+    className="button-group grid grid-cols-2 gap-2"
+  >
+    <div
+      className="button-group__item"
+    >
+      <Button
+        onClick={[Function]}
+        small={true}
+      >
+        <button
+          className="button is-small"
+          onClick={[Function]}
+        >
+          Save
+        </button>
+      </Button>
+    </div>
+    <div
+      className="button-group__item"
+    >
+      <Button
+        className="is-secondary"
+        onClick={[Function]}
+        small={true}
+      >
+        <button
+          className="button is-small is-secondary"
+          onClick={[Function]}
+        >
+          Preview
+        </button>
+      </Button>
+    </div>
+    <div
+      className="button-group__item col-span-2"
+    >
+      <Button
+        filled={true}
+        onClick={[Function]}
+        small={true}
+      >
+        <button
+          className="button is-filled is-small"
+          onClick={[Function]}
+        >
+          Submit
+        </button>
+      </Button>
+    </div>
+  </div>
+</div>
+`;

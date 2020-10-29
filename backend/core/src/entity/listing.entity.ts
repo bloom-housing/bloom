@@ -17,6 +17,7 @@ import { Preference } from "./preference.entity"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
+  IsDate,
   IsDateString,
   IsDefined,
   IsEmail,
@@ -65,11 +66,12 @@ class Listing extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  createdAt: string
+  @IsDate()
+  createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  updatedAt: string
+  updatedAt: Date
 
   @OneToMany((type) => Preference, (preference) => preference.listing)
   preferences: Preference[]

@@ -14,8 +14,8 @@ async function bootstrap() {
   const argv = require("yargs").argv
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
+  const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
   const listingsSeederService = app.get<ListingsSeederService>(ListingsSeederService)
-  const appRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
   await listingsSeederService.seed()
 
   const userService = app.get<UserService>(UserService)
@@ -63,7 +63,7 @@ async function bootstrap() {
     application: { foo: "bar" },
     appUrl: "aaaa",
   })
-  await appRepo.save(application)
+  await applicationRepo.save(application)
 
   application = plainToClass(Application, {
     user: { id: user2.id },
@@ -71,7 +71,7 @@ async function bootstrap() {
     application: { foo: "bar2" },
     appUrl: "bbbb",
   })
-  await appRepo.save(application)
+  await applicationRepo.save(application)
 
   await app.close()
 }
