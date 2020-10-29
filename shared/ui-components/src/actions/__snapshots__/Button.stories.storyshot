@@ -20,7 +20,7 @@ exports[`Storyshots Actions/Button Filled 1`] = `
   onClick={[Function]}
 >
   <button
-    className="button is-filled"
+    className="button is-primary"
     onClick={[Function]}
   >
     Filled Button
@@ -76,7 +76,7 @@ exports[`Storyshots Actions/Button Small And Filled 1`] = `
   small={true}
 >
   <button
-    className="button is-filled is-small"
+    className="button is-primary is-small"
     onClick={[Function]}
   >
     Small and Filled Button

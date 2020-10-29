@@ -6,14 +6,14 @@ exports[`Storyshots Actions/Link Button Filled 1`] = `
   href="#"
 >
   <LocalizedLink
-    className="button is-filled"
+    className="button is-primary"
     href="#"
   >
     <Link
       href="#"
     >
       <a
-        className="button is-filled"
+        className="button is-primary"
         href="/#"
         onClick={[Function]}
         onMouseEnter={[Function]}
@@ -82,14 +82,14 @@ exports[`Storyshots Actions/Link Button Small And Filled 1`] = `
   small={true}
 >
   <LocalizedLink
-    className="button is-filled is-small"
+    className="button is-primary is-small"
     href="#"
   >
     <Link
       href="#"
     >
       <a
-        className="button is-filled is-small"
+        className="button is-primary is-small"
         href="/#"
         onClick={[Function]}
         onMouseEnter={[Function]}

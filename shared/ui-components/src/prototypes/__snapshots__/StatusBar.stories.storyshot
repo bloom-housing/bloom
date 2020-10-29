@@ -42,7 +42,7 @@ exports[`Storyshots Prototypes/StatusBar Status Bar 1`] = `
       small={true}
     >
       <button
-        className="button is-filled is-small"
+        className="button is-primary is-small"
         onClick={[Function]}
       >
         Save

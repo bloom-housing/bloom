@@ -3828,7 +3828,7 @@ exports[`Storyshots Listing Sidebar/Apply Link Directly To External Application 
       href="https://icann.org"
     >
       <a
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         href="https://icann.org"
       >
         Apply Online
@@ -5219,14 +5219,14 @@ exports[`Storyshots Listing Sidebar/Apply Link Directly To Internal Application 
       href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
     >
       <LocalizedLink
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
       >
         <Link
           href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
         >
           <a
-            className="button is-filled w-full mb-2"
+            className="button is-primary w-full mb-2"
             href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
             onClick={[Function]}
             onMouseEnter={[Function]}
@@ -6626,14 +6626,14 @@ exports[`Storyshots Listing Sidebar/Apply Link To Internal Application And Downl
       href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
     >
       <LocalizedLink
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
       >
         <Link
           href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
         >
           <a
-            className="button is-filled w-full mb-2"
+            className="button is-primary w-full mb-2"
             href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
             onClick={[Function]}
             onMouseEnter={[Function]}
@@ -8090,7 +8090,7 @@ exports[`Storyshots Listing Sidebar/Apply Shows Multiple Download UR Ls 1`] = `
       onClick={[Function]}
     >
       <button
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         onClick={[Function]}
       >
         Download Application
