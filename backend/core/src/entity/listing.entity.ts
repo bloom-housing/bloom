@@ -76,7 +76,7 @@ class Listing extends BaseEntity {
   @OneToMany((type) => Preference, (preference) => preference.listing)
   preferences: Preference[]
 
-  @OneToMany((type) => Unit, (unit) => unit.listing)
+  @OneToMany((type) => Unit, (unit) => unit.listing, { eager: true })
   units: Unit[]
 
   @OneToMany((type) => ApplicationMethod, (applicationMethod) => applicationMethod.listing)

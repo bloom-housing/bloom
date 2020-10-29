@@ -194,7 +194,7 @@ export class HouseholdMember {
   @Expose()
   @IsOptional()
   @IsNumber()
-  id: number | null
+  id?: number | null
 
   @Expose()
   @IsDefined()
@@ -249,23 +249,23 @@ export class HouseholdMember {
   @Expose()
   @IsOptional()
   @IsBoolean()
-  sameAddress: boolean | null
+  sameAddress?: boolean | null
 
   @Expose()
   @IsOptional()
   @IsString()
-  relationship: string | null
+  relationship?: string | null
 
   @Expose()
   @IsOptional()
   @IsBoolean()
-  workInRegion: boolean | null
+  workInRegion?: boolean | null
 
   @Expose()
   @IsOptional()
   @ValidateNested()
   @Type(() => Address)
-  workAddress: Address | null
+  workAddress?: Address | null
 }
 
 export class ApplicationData {
@@ -385,7 +385,7 @@ export class Application {
   @ManyToOne((type) => User, (user) => user.applications, { nullable: true })
   user: User | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.applications, { eager: true })
+  @ManyToOne((type) => Listing, (listing) => listing.applications)
   listing: Listing
 
   @Column({ type: "jsonb", nullable: true })

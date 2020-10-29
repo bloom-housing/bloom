@@ -3,14 +3,7 @@ import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
 import Markdown from "markdown-to-jsx"
-import {
-  ListingDto,
-  ListingEvent,
-  EnumListingEventType,
-  ListingEventDto,
-  EnumListingEventCreateDtoType,
-  EnumListingEventDtoType,
-} from "@bloom-housing/core"
+import { ListingDto, ListingEventDto, ListingEventType } from "@bloom-housing/core"
 import {
   AdditionalFees,
   ApplicationSection,
@@ -187,16 +180,12 @@ export default class extends Component<ListingProps> {
 
     let openHouseEvent: ListingEventDto | null = null
     if (Array.isArray(listing.events)) {
-      openHouseEvent = listing.events.find(
-        (event) => event.type === EnumListingEventDtoType.openHouse
-      )
+      openHouseEvent = listing.events.find((event) => event.type === ListingEventType.openHouse)
     }
 
     let publicLottery: ListingEventDto | null = null
     if (Array.isArray(listing.events)) {
-      publicLottery = listing.events.find(
-        (event) => event.type === EnumListingEventDtoType.publicLottery
-      )
+      publicLottery = listing.events.find((event) => event.type === ListingEventType.publicLottery)
     }
 
     return (

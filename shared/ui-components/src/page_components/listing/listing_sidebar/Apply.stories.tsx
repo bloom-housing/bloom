@@ -4,7 +4,7 @@ import { Apply } from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import {
   ApplicationMethodDto,
-  EnumApplicationMethodDtoType,
+  ApplicationMethodType,
 } from "@bloom-housing/core"
 
 export default {
@@ -45,7 +45,7 @@ export const showsMultipleDownloadURLs = () => {
     updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
-    type: EnumApplicationMethodDtoType.FileDownload,
+    type: ApplicationMethodType.FileDownload,
   }
   const testMethod2: ApplicationMethodDto = {
     acceptsPostmarkedApplications: false,
@@ -54,7 +54,7 @@ export const showsMultipleDownloadURLs = () => {
     updatedAt: new Date(),
     label: "Spanish",
     externalReference: "#spanish",
-    type: EnumApplicationMethodDtoType.FileDownload,
+    type: ApplicationMethodType.FileDownload,
   }
 
   listingWithDownloadMethods.applicationMethods = listingWithDownloadMethods.applicationMethods.concat(
@@ -77,7 +77,7 @@ export const linkDirectlyToInternalApplication = () => {
     id: "",
     label: "",
     updatedAt: new Date(),
-    type: EnumApplicationMethodDtoType.Internal,
+    type: ApplicationMethodType.Internal,
   }
 
   listingWithInternalLink.applicationMethods = listingWithInternalLink.applicationMethods.concat([
@@ -100,7 +100,7 @@ export const linkToInternalApplicationAndDownloads = () => {
     id: "",
     label: "",
     updatedAt: new Date(),
-    type: EnumApplicationMethodDtoType.Internal,
+    type: ApplicationMethodType.Internal,
   }
 
   const downloadMethod: ApplicationMethodDto = {
@@ -110,7 +110,7 @@ export const linkToInternalApplicationAndDownloads = () => {
     updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
-    type: EnumApplicationMethodDtoType.FileDownload,
+    type: ApplicationMethodType.FileDownload,
   }
 
   listingWithInternalAndDownload.applicationMethods = listingWithInternalAndDownload.applicationMethods.concat(

@@ -1786,7 +1786,7 @@ export interface Demographics {
 
 export interface HouseholdMember {
   /**  */
-  id: number;
+  id?: number;
 
   /**  */
   address: Address;
@@ -1825,16 +1825,16 @@ export interface HouseholdMember {
   noPhone: boolean;
 
   /**  */
-  sameAddress: boolean;
+  sameAddress?: boolean;
 
   /**  */
-  relationship: string;
+  relationship?: string;
 
   /**  */
-  workInRegion: boolean;
+  workInRegion?: boolean;
 
   /**  */
-  workAddress: CombinedWorkAddressTypes;
+  workAddress?: CombinedWorkAddressTypes;
 }
 
 export interface ApplicationData {
@@ -2468,24 +2468,24 @@ export interface PaginatedApplicationDto {
 
 export interface ApplicationCreateDto {
   /**  */
+  listing: IdDto;
+
+  /**  */
   appUrl: string;
 
   /**  */
   application: ApplicationData;
-
-  /**  */
-  listing: ListingDto;
 }
 
 export interface ApplicationUpdateDto {
   /**  */
+  listing: IdDto;
+
+  /**  */
   appUrl: string;
 
   /**  */
   application: ApplicationData;
-
-  /**  */
-  listing: ListingDto;
 
   /**  */
   id: string;

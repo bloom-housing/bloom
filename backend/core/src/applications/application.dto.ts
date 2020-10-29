@@ -56,7 +56,14 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",
   "createdAt",
   "updatedAt",
-] as const) {}
+  "listing",
+] as const) {
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => IdDto)
+  listing: IdDto
+}
 
 export class ApplicationUpdateDto extends ApplicationCreateDto {
   @Expose()
