@@ -10,13 +10,14 @@ import {
 import { Listing } from "./listing.entity"
 import {
   IsBoolean,
-  IsDate, IsDefined,
+  IsDate,
+  IsDefined,
   IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { AnyDict } from "../lib/unit_transformations"
@@ -52,23 +53,27 @@ export class UnitSummary {
   unitType: string
 
   @Expose()
-  @IsDefined()
+  @IsOptional()
   @ValidateNested()
+  @Type(() => MinMaxCurrency)
   minIncomeRange?: MinMaxCurrency
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => MinMax)
   occupancyRange: MinMax
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => MinMax)
   rentAsPercentIncomeRange: MinMax
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => MinMaxCurrency)
   rentRange?: MinMaxCurrency
 
   @Expose()
@@ -79,11 +84,13 @@ export class UnitSummary {
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => MinMax)
   areaRange: MinMax
 
   @Expose()
   @IsOptional()
   @ValidateNested()
+  @Type(() => MinMax)
   floorRange?: MinMax
 }
 

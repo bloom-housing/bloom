@@ -29,7 +29,7 @@ describe("Applications", () => {
     return {
       appUrl: "",
       listing: {
-        id: "",
+        id: listingId,
       },
       application: {
         applicant: {

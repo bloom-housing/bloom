@@ -24,190 +24,168 @@ import { Address } from "../shared/dto/address.dto"
 
 export class HousingCounselor {
   @Expose()
-  @IsDefined()
   @IsString()
   name: string
 
   @Expose()
-  @IsDefined()
   @IsString({ each: true })
   languages: string[]
 
   @Expose()
   @IsOptional()
   @IsString()
-  address?: string
+  address: string | null
 
   @Expose()
   @IsOptional()
   @IsString()
-  citystate?: string
+  citystate: string | null
 
   @Expose()
   @IsOptional()
   @IsString()
-  phone?: string
+  phone: string | null
 
   @Expose()
   @IsOptional()
   @IsString()
-  website?: string
+  website: string | null
 }
 
 export class Applicant {
   @Expose()
-  @IsDefined()
   @IsString()
   firstName: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   middleName: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   lastName: string
 
   @Expose()
-  @IsDefined()
   @IsNumber()
   birthMonth: number
 
   @Expose()
-  @IsDefined()
   @IsNumber()
   birthDay: number
 
   @Expose()
-  @IsDefined()
   @IsNumber()
   birthYear: number
 
   @Expose()
-  @IsDefined()
   @IsString()
   emailAddress: string
 
   @Expose()
-  @IsDefined()
   @IsBoolean()
   noEmail: boolean
 
   @Expose()
-  @IsDefined()
   @IsString()
   phoneNumber: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   phoneNumberType: string
 
   @Expose()
-  @IsDefined()
   @IsBoolean()
   noPhone: boolean
 
   @Expose()
-  @IsDefined()
+  @IsOptional()
   @IsBoolean()
-  workInRegion: boolean
+  workInRegion: boolean | null
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Address)
   workAddress: Address
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Address)
   address: Address
 }
 
 export class AlternateContact {
   @Expose()
-  @IsDefined()
   @IsString()
   type: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   otherType: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   firstName: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   lastName: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   agency: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   phoneNumber: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   emailAddress: string
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Address)
   mailingAddress: Address
 }
 
 export class Accessibility {
   @Expose()
-  @IsDefined()
+  @IsOptional()
   @IsBoolean()
-  mobility: boolean
+  mobility: boolean | null
 
   @Expose()
-  @IsDefined()
+  @IsOptional()
   @IsBoolean()
-  vision: boolean
+  vision: boolean | null
 
   @Expose()
-  @IsDefined()
+  @IsOptional()
   @IsBoolean()
-  hearing: boolean
+  hearing: boolean | null
 }
 
 export class Demographics {
   @Expose()
-  @IsDefined()
   @IsString()
   ethnicity: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   gender: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   sexualOrientation: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   howDidYouHear: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   race: string
 }
@@ -216,178 +194,162 @@ export class HouseholdMember {
   @Expose()
   @IsOptional()
   @IsNumber()
-  id?: number
+  id: number | null
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Address)
   address: Address
 
   @Expose()
-  @IsDefined()
   @IsString()
   firstName: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   middleName: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   lastName: string
 
   @Expose()
-  @IsDefined()
   @IsNumber()
   birthMonth: number
 
   @Expose()
-  @IsDefined()
   @IsNumber()
   birthDay: number
 
   @Expose()
-  @IsDefined()
   @IsNumber()
   birthYear: number
 
   @Expose()
-  @IsDefined()
   @IsString()
   emailAddress: string
 
   @Expose()
-  @IsDefined()
   @IsBoolean()
   noEmail: boolean
 
   @Expose()
-  @IsDefined()
   @IsString()
   phoneNumber: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   phoneNumberType: string
 
   @Expose()
-  @IsDefined()
   @IsBoolean()
   noPhone: boolean
 
   @Expose()
   @IsOptional()
   @IsBoolean()
-  sameAddress?: boolean
+  sameAddress: boolean | null
 
   @Expose()
   @IsOptional()
   @IsString()
-  relationship?: string
+  relationship: string | null
 
   @Expose()
   @IsOptional()
   @IsBoolean()
-  workInRegion?: boolean
+  workInRegion: boolean | null
 
   @Expose()
   @IsOptional()
   @ValidateNested()
-  workAddress?: Address
+  @Type(() => Address)
+  workAddress: Address | null
 }
 
 export class ApplicationData {
   @Expose()
-  @IsDefined()
   @ValidateNested()
+  @Type(() => Applicant)
   applicant: Applicant
 
   @Expose()
-  @IsDefined()
   @IsBoolean()
   additionalPhone: boolean
 
   @Expose()
-  @IsDefined()
   @IsString()
   additionalPhoneNumber: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   additionalPhoneNumberType: string
 
   @Expose()
-  @IsDefined()
   @IsString({ each: true })
   contactPreferences: Array<string>
 
   @Expose()
-  @IsDefined()
   @IsNumber()
   householdSize: number
 
   @Expose()
-  @IsDefined()
   @IsString()
   housingStatus: string
 
   @Expose()
-  @IsDefined()
   @IsBoolean()
   sendMailToMailingAddress: boolean
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Address)
   mailingAddress: Address
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Address)
   alternateAddress: Address
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => AlternateContact)
   alternateContact: AlternateContact
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Accessibility)
   accessibility: Accessibility
 
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => Demographics)
   demographics: Demographics
 
   @Expose()
-  @IsDefined()
   @IsString()
   incomeVouchers: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   income: string
 
   @Expose()
-  @IsDefined()
   @IsString()
   incomePeriod: string
 
   @Expose()
-  @IsDefined()
   @ValidateNested({ each: true })
   @Type(() => HouseholdMember)
   householdMembers: Array<HouseholdMember>
 
   @Expose()
-  @IsDefined()
   @IsString({ each: true })
   preferredUnit: Array<string>
 
@@ -430,5 +392,6 @@ export class Application {
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => ApplicationData)
   application: ApplicationData
 }

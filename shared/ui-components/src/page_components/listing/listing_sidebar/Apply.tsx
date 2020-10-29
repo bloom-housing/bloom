@@ -1,10 +1,5 @@
 import React, { useState } from "react"
-import {
-  EnumApplicationMethodType,
-  ListingDto,
-  ApplicationMethodDto,
-  EnumApplicationMethodDtoType,
-} from "@bloom-housing/core"
+import { ListingDto, ApplicationMethodDto, EnumApplicationMethodDtoType } from "@bloom-housing/core"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
 import { lRoute } from "../../../helpers/localeRoute"
@@ -129,9 +124,7 @@ const Apply = (props: ApplyProps) => {
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
               address={listing.leasingAgentAddress}
-              officeHours={
-                listing.leasingAgentOfficeHours
-              }
+              officeHours={listing.leasingAgentOfficeHours}
             />
           </>
         )}
