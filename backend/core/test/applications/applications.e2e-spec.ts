@@ -12,7 +12,6 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import { EmailService } from "../../src/shared/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { ApplicationDto } from "../../src/applications/application.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -121,7 +120,6 @@ describe("Applications", () => {
         preferredUnit: ["a", "b"],
         preferences: {},
       },
-      user: null,
     }
   }
 
@@ -162,8 +160,7 @@ describe("Applications", () => {
       .post(`/applications`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
-      .expect(201)
-    expect(res.body).toEqual(expect.objectContaining<ApplicationDto>(body))
+    expect(res.body).toEqual(expect.objectContaining(body))
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
