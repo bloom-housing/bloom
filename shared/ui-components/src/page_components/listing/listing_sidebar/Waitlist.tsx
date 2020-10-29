@@ -1,6 +1,6 @@
 import * as React from "react"
 import { t } from "../../../helpers/translator"
-import { Listing } from "@bloom-housing/core"
+import { ListingDto } from "@bloom-housing/core"
 
 const WaitlistItem = (props: { className?: string; value: number; text: string }) => (
   <li className={`uppercase text-gray-800 text-tiny ${props.className}`}>
@@ -10,7 +10,7 @@ const WaitlistItem = (props: { className?: string; value: number; text: string }
 )
 
 export interface WaitlistProps {
-  listing: Listing
+  listing: ListingDto
 }
 
 const Waitlist = (props: WaitlistProps) => {

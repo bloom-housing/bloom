@@ -1,5 +1,10 @@
 import React, { useState } from "react"
-import { Listing, ApplicationMethod, ApplicationMethodType } from "@bloom-housing/core"
+import {
+  EnumApplicationMethodType,
+  ListingDto,
+  ApplicationMethodDto,
+  EnumApplicationMethodDtoType,
+} from "@bloom-housing/core"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
 import { lRoute } from "../../../helpers/localeRoute"
@@ -9,19 +14,28 @@ import { SidebarAddress } from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 
 export interface ApplyProps {
-  listing: Listing
+  listing: ListingDto
   internalFormRoute: string
 }
 
-const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+const hasMethod = (
+  applicationMethods: ApplicationMethodDto[],
+  type: EnumApplicationMethodDtoType
+) => {
   return applicationMethods.some((method) => method.type == type)
 }
 
-const hasAnyMethods = (applicationMethods: ApplicationMethod[], types: ApplicationMethodType[]) => {
+const hasAnyMethods = (
+  applicationMethods: ApplicationMethodDto[],
+  types: EnumApplicationMethodDtoType[]
+) => {
   return applicationMethods.some((method) => types.some((type) => type == method.type))
 }
 
-const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+const getMethod = (
+  applicationMethods: ApplicationMethodDto[],
+  type: EnumApplicationMethodDtoType
+) => {
   return applicationMethods.find((method) => method.type == type)
 }
 
@@ -50,16 +64,16 @@ const Apply = (props: ApplyProps) => {
 
   const openDate = moment(listing.applicationOpenDate).format("MMMM D, YYYY")
 
-  if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
+  if (hasMethod(listing.applicationMethods, EnumApplicationMethodDtoType.Internal)) {
     onlineApplicationUrl = lRoute(`${internalFormRoute}?listingId=${listing.id}`)
-  } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
+  } else if (hasMethod(listing.applicationMethods, EnumApplicationMethodDtoType.ExternalLink)) {
     onlineApplicationUrl =
-      getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
+      getMethod(listing.applicationMethods, EnumApplicationMethodDtoType.ExternalLink)
         ?.externalReference || ""
   }
 
-  const downloadMethods = listing.applicationMethods.filter((method: ApplicationMethod) => {
-    return method.type == ApplicationMethodType.FileDownload
+  const downloadMethods = listing.applicationMethods.filter((method: ApplicationMethodDto) => {
+    return method.type == EnumApplicationMethodDtoType.FileDownload
   })
 
   return (
@@ -94,7 +108,7 @@ const Apply = (props: ApplyProps) => {
         )}
 
         {showDownload &&
-          downloadMethods.map((method: ApplicationMethod) => (
+          downloadMethods.map((method: ApplicationMethodDto) => (
             <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
               <a
                 href={method.externalReference}
@@ -106,7 +120,7 @@ const Apply = (props: ApplyProps) => {
             </p>
           ))}
 
-        {hasMethod(listing.applicationMethods, ApplicationMethodType.PaperPickup) && (
+        {hasMethod(listing.applicationMethods, EnumApplicationMethodDtoType.PaperPickup) && (
           <>
             {!openDateState(listing) &&
               (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
@@ -124,18 +138,18 @@ const Apply = (props: ApplyProps) => {
       </section>
 
       {hasAnyMethods(listing.applicationMethods, [
-        ApplicationMethodType.POBox,
-        ApplicationMethodType.LeasingAgent,
+        EnumApplicationMethodDtoType.POBox,
+        EnumApplicationMethodDtoType.LeasingAgent,
       ]) && (
         <section className="aside-block bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) && (
+          {hasMethod(listing.applicationMethods, EnumApplicationMethodDtoType.POBox) && (
             <>
               <SubHeader text={t("listings.apply.sendByUsMail")} />
               <p className="text-gray-700">{listing.applicationOrganization}</p>
               <SidebarAddress address={listing.applicationAddress} />
               <p className="mt-4 text-tiny text-gray-750">
-                {getMethod(listing.applicationMethods, ApplicationMethodType.POBox)
+                {getMethod(listing.applicationMethods, EnumApplicationMethodDtoType.POBox)
                   ?.acceptsPostmarkedApplications
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
                       applicationDueDate: moment(listing.applicationDueDate).format("MMM DD, YYYY"),
@@ -148,11 +162,11 @@ const Apply = (props: ApplyProps) => {
               </p>
             </>
           )}
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) &&
-            hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
+          {hasMethod(listing.applicationMethods, EnumApplicationMethodDtoType.POBox) &&
+            hasMethod(listing.applicationMethods, EnumApplicationMethodDtoType.LeasingAgent) && (
               <OrDivider bgColor="gray-100" />
             )}
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
+          {hasMethod(listing.applicationMethods, EnumApplicationMethodDtoType.LeasingAgent) && (
             <>
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress

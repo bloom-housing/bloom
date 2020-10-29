@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ImageCard } from "../../blocks/ImageCard"
-import { ListingDto } from "@bloom-housing/core"
+import { AssetDto, ListingDto } from "@bloom-housing/core"
 import { LinkButton } from "../../actions/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
@@ -12,7 +12,7 @@ export interface ListingsProps {
 }
 
 const imageUrlFromListing = (listing: ListingDto) => {
-  return listing?.assets?.find((asset) => asset.label == "building")?.fileId
+  return listing?.assets?.find((asset: AssetDto) => asset.label == "building")?.fileId
 }
 
 const ListingsList = (props: ListingsProps) => {

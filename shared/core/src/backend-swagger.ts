@@ -239,15 +239,19 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      listingId: string;
+      page?: number;
+      /**  */
+      limit?: number;
+      /**  */
+      listingId?: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationDto[]> {
+  ): Promise<PaginatedApplicationDto> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { listingId: params['listingId'] };
+      configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
       let data = null;
 
       configs.data = data;
@@ -281,9 +285,9 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId: string;
+      listingId?: string;
       /**  */
-      includeHeaders: boolean;
+      includeHeaders?: boolean;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -905,13 +909,13 @@ export interface UserDto {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export interface UserCreateDto {
@@ -931,7 +935,7 @@ export interface UserCreateDto {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 }
 
 export interface UserDtoWithAccessToken {
@@ -951,13 +955,13 @@ export interface UserDtoWithAccessToken {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   accessToken: string;
@@ -977,13 +981,13 @@ export interface UserUpdateDto {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export interface LoginDto {
@@ -999,15 +1003,20 @@ export interface LoginResponseDto {
   accessToken: string;
 }
 
+export interface MinMaxCurrency {
+  /**  */
+  min: string;
+
+  /**  */
+  max: string;
+}
+
 export interface MinMax {
   /**  */
   min: number;
 
   /**  */
   max: number;
-
-  /**  */
-  type: object;
 }
 
 export interface UnitSummary {
@@ -1015,7 +1024,7 @@ export interface UnitSummary {
   unitType: string;
 
   /**  */
-  minIncomeRange: object;
+  minIncomeRange?: MinMaxCurrency;
 
   /**  */
   occupancyRange: MinMax;
@@ -1024,7 +1033,7 @@ export interface UnitSummary {
   rentAsPercentIncomeRange: MinMax;
 
   /**  */
-  rentRange: object;
+  rentRange?: MinMaxCurrency;
 
   /**  */
   totalAvailable: number;
@@ -1097,10 +1106,10 @@ export interface ApplicationMethodDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   type: EnumApplicationMethodDtoType;
@@ -1120,10 +1129,10 @@ export interface AssetDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   label: string;
@@ -1145,10 +1154,10 @@ export interface PreferenceDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   ordinal: number;
@@ -1280,13 +1289,13 @@ export interface User {
   lastName: string;
 
   /**  */
-  dob: string;
+  dob: Date;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   applications: Application[];
@@ -1300,10 +1309,10 @@ export interface Preference {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   ordinal: number;
@@ -1400,10 +1409,10 @@ export interface ApplicationMethod {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   type: EnumApplicationMethodType;
@@ -1426,10 +1435,10 @@ export interface Asset {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   label: string;
@@ -1521,10 +1530,10 @@ export interface Listing {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   preferences: Preference[];
@@ -1892,10 +1901,10 @@ export interface Application {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   appUrl: string;
@@ -1936,10 +1945,10 @@ export interface ListingDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   applications: Application[];
@@ -2420,16 +2429,41 @@ export interface ApplicationDto {
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   appUrl: string;
 
   /**  */
   application: ApplicationData;
+}
+
+export interface PaginationMeta {
+  /**  */
+  currentPage: number;
+
+  /**  */
+  itemCount: number;
+
+  /**  */
+  itemsPerPage: number;
+
+  /**  */
+  totalItems: number;
+
+  /**  */
+  totalPages: number;
+}
+
+export interface PaginatedApplicationDto {
+  /**  */
+  items: ApplicationDto[];
+
+  /**  */
+  meta: PaginationMeta;
 }
 
 export interface ApplicationCreateDto {
