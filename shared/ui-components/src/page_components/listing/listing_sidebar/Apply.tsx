@@ -114,9 +114,9 @@ const Apply = (props: ApplyProps) => {
               )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
-              address={listing.applicationPickUpAddress || listing.leasingAgentAddress}
+              address={listing.leasingAgentAddress}
               officeHours={
-                listing.applicationPickUpAddressOfficeHours || listing.leasingAgentOfficeHours
+                listing.leasingAgentOfficeHours
               }
             />
           </>
