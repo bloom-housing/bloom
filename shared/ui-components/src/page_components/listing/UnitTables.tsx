@@ -1,6 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { MinMax, UnitSummary, UnitDto } from "@bloom-housing/core"
+import { MinMax, UnitSummary, Unit } from "@bloom-housing/core"
 
 import { StandardTable } from "../../tables/StandardTable"
 import { t } from "../../helpers/translator"
@@ -27,13 +27,13 @@ const formatRange = (range: MinMax, ordinalize?: boolean) => {
   }
 }
 
-const unitsLabel = (units: UnitDto[]): string => {
+const unitsLabel = (units: Unit[]): string => {
   const label = units.length > 1 ? t("listings.units") : t("listings.unit")
   return `${units.length} ${label}`
 }
 
 interface UnitTablesProps {
-  units: UnitDto[]
+  units: Unit[]
   unitSummaries: UnitSummary[]
   disableAccordion?: boolean
 }
@@ -61,10 +61,10 @@ const UnitTables = (props: UnitTablesProps) => {
     <>
       {unitSummaries.map((unitSummary: UnitSummary) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
-        const units = props.units.filter((unit: UnitDto) => unit.unitType == unitSummary.unitType)
+        const units = props.units.filter((unit: Unit) => unit.unitType == unitSummary.unitType)
         const unitsFormatted = [] as Array<Record<string, string | JSX.Element>>
         let floorSection
-        units.forEach((unit: UnitDto) => {
+        units.forEach((unit: Unit) => {
           unitsFormatted.push({
             number: unit.number,
             sqFeet: (

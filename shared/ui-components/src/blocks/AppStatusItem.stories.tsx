@@ -2,14 +2,14 @@ import React from "react"
 import { AppStatusItem } from "./AppStatusItem"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import moment from "moment"
-import { ApplicationDto } from "@bloom-housing/core"
+import { Application } from "@bloom-housing/core"
 const listing = Object.assign({}, Archer) as any
 
 export default {
   title: "Blocks/Application Status Item",
 }
 
-const application = {} as ApplicationDto
+const application = {} as Application
 let days = 10
 listing.applicationDueDate = moment().add(days, "days").format()
 application.listing = listing
@@ -36,7 +36,7 @@ export const AppStatusItemSubmitted = () => (
   ></AppStatusItem>
 )
 
-const application2 = {} as ApplicationDto
+const application2 = {} as Application
 const listing2 = Object.assign({}, Archer) as any
 application2.listing = listing2
 

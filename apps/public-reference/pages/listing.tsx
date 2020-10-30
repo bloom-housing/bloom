@@ -3,7 +3,7 @@ import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
 import Markdown from "markdown-to-jsx"
-import { ListingDto, ListingEventDto, ListingEventType } from "@bloom-housing/core"
+import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/core"
 import {
   AdditionalFees,
   ApplicationSection,
@@ -36,10 +36,10 @@ import Layout from "../layouts/application"
 import moment from "moment"
 
 interface ListingProps {
-  listing: ListingDto
+  listing: Listing
 }
 
-const EventDateSection = (props: { event: ListingEventDto }) => {
+const EventDateSection = (props: { event: ListingEvent }) => {
   return (
     <p className="text text-gray-800 pb-3 flex justify-between items-center">
       <span className="inline-block">{moment(props.event.startTime).format("MMMM d, YYYY")}</span>
@@ -52,7 +52,7 @@ const EventDateSection = (props: { event: ListingEventDto }) => {
   )
 }
 
-const OpenHouseEventSection = (props: { openHouseEvent: ListingEventDto }) => {
+const OpenHouseEventSection = (props: { openHouseEvent: ListingEvent }) => {
   return (
     <section className="aside-block bg-primary-lighter border-t">
       <h4 className="text-caps-tiny">{t("listings.openHouseEvent.header")}</h4>
@@ -69,7 +69,7 @@ const OpenHouseEventSection = (props: { openHouseEvent: ListingEventDto }) => {
   )
 }
 
-const PublicLotteryEvent = (props: { publicLottery: ListingEventDto }) => {
+const PublicLotteryEvent = (props: { publicLottery: ListingEvent }) => {
   return (
     <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
       <h4 className="text-caps-underline">{t("listings.publicLottery.header")}</h4>
@@ -178,12 +178,12 @@ export default class extends Component<ListingProps> {
       )
     }
 
-    let openHouseEvent: ListingEventDto | null = null
+    let openHouseEvent: ListingEvent | null = null
     if (Array.isArray(listing.events)) {
       openHouseEvent = listing.events.find((event) => event.type === ListingEventType.openHouse)
     }
 
-    let publicLottery: ListingEventDto | null = null
+    let publicLottery: ListingEvent | null = null
     if (Array.isArray(listing.events)) {
       publicLottery = listing.events.find((event) => event.type === ListingEventType.publicLottery)
     }

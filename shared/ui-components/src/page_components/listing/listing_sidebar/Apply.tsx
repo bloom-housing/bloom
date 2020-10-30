@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { ListingDto, ApplicationMethodDto, ApplicationMethodType } from "@bloom-housing/core"
+import { Listing, ApplicationMethod, ApplicationMethodType } from "@bloom-housing/core"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
 import { lRoute } from "../../../helpers/localeRoute"
@@ -9,22 +9,19 @@ import { SidebarAddress } from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 
 export interface ApplyProps {
-  listing: ListingDto
+  listing: Listing
   internalFormRoute: string
 }
 
-const hasMethod = (applicationMethods: ApplicationMethodDto[], type: ApplicationMethodType) => {
+const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
   return applicationMethods.some((method) => method.type == type)
 }
 
-const hasAnyMethods = (
-  applicationMethods: ApplicationMethodDto[],
-  types: ApplicationMethodType[]
-) => {
+const hasAnyMethods = (applicationMethods: ApplicationMethod[], types: ApplicationMethodType[]) => {
   return applicationMethods.some((method) => types.some((type) => type == method.type))
 }
 
-const getMethod = (applicationMethods: ApplicationMethodDto[], type: ApplicationMethodType) => {
+const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
   return applicationMethods.find((method) => method.type == type)
 }
 
@@ -61,7 +58,7 @@ const Apply = (props: ApplyProps) => {
         ?.externalReference || ""
   }
 
-  const downloadMethods = listing.applicationMethods.filter((method: ApplicationMethodDto) => {
+  const downloadMethods = listing.applicationMethods.filter((method: ApplicationMethod) => {
     return method.type == ApplicationMethodType.FileDownload
   })
 
@@ -97,7 +94,7 @@ const Apply = (props: ApplyProps) => {
         )}
 
         {showDownload &&
-          downloadMethods.map((method: ApplicationMethodDto) => (
+          downloadMethods.map((method: ApplicationMethod) => (
             <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
               <a
                 href={method.externalReference}

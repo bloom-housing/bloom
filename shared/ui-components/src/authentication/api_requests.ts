@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios"
 import { getTokenTtl } from "./token"
-import { UserCreateDto, UserDto } from "@bloom-housing/core"
+import { UserCreate, User } from "@bloom-housing/core"
 
 export const renewToken = async (client: AxiosInstance) => {
   const res = await client.post<{ accessToken: string }>("auth/token")
@@ -17,15 +17,15 @@ export const login = async (apiBase: string, email: string, password: string) =>
   return accessToken
 }
 
-export const register = async (apiBase: string, data: UserCreateDto) => {
-  const res = await axios.post<{ accessToken: string } & UserDto>(`${apiBase}/auth/register`, data)
+export const register = async (apiBase: string, data: UserCreate) => {
+  const res = await axios.post<{ accessToken: string } & User>(`${apiBase}/auth/register`, data)
   const { accessToken, ...rest } = res.data
-  const user = rest as UserDto
+  const user = rest as User
   return { accessToken, user }
 }
 
 export const getProfile = async (client: AxiosInstance) => {
-  const res = await client.get<UserDto>("/user")
+  const res = await client.get<User>("/user")
   return res.data
 }
 

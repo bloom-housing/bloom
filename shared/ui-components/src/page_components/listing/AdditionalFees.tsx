@@ -1,9 +1,9 @@
 import * as React from "react"
-import { ListingDto } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 import { t } from "../../helpers/translator"
 
 export interface AdditionalFeesProps {
-  listing: ListingDto
+  listing: Listing
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => (

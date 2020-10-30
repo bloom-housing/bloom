@@ -3,7 +3,7 @@ import * as React from "react"
 import { Apply } from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import {
-  ApplicationMethodDto,
+  ApplicationMethod,
   ApplicationMethodType,
 } from "@bloom-housing/core"
 
@@ -38,7 +38,7 @@ export const acceptsPostmarkedApplications = () => {
 export const showsMultipleDownloadURLs = () => {
   const listingWithDownloadMethods = Object.assign({}, listing)
 
-  const testMethod1: ApplicationMethodDto = {
+  const testMethod1: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
     createdAt: new Date(),
     id: "",
@@ -47,7 +47,7 @@ export const showsMultipleDownloadURLs = () => {
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
   }
-  const testMethod2: ApplicationMethodDto = {
+  const testMethod2: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
     createdAt: new Date(),
     id: "",
@@ -70,7 +70,7 @@ export const showsMultipleDownloadURLs = () => {
 export const linkDirectlyToInternalApplication = () => {
   const listingWithInternalLink = Object.assign({}, listing)
 
-  const internalMethod: ApplicationMethodDto = {
+  const internalMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
     createdAt: new Date(),
     externalReference: "",
@@ -93,7 +93,7 @@ export const linkDirectlyToInternalApplication = () => {
 export const linkToInternalApplicationAndDownloads = () => {
   const listingWithInternalAndDownload = Object.assign({}, listing)
 
-  const internalMethod: ApplicationMethodDto = {
+  const internalMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
     createdAt: new Date(),
     externalReference: "",
@@ -103,7 +103,7 @@ export const linkToInternalApplicationAndDownloads = () => {
     type: ApplicationMethodType.Internal,
   }
 
-  const downloadMethod: ApplicationMethodDto = {
+  const downloadMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
     createdAt: new Date(),
     id: "",
@@ -126,7 +126,7 @@ export const linkToInternalApplicationAndDownloads = () => {
 export const linkDirectlyToExternalApplication = () => {
   const listingWithMethodLinks = Object.assign({}, listing)
 
-  const externalMethod: ApplicationMethodDto = {
+  const externalMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
     createdAt: new Date(),
     id: "",

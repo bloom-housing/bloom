@@ -10,12 +10,12 @@ import {
   openDateState,
   t,
 } from "@bloom-housing/ui-components"
-import { ListingDto } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 import Layout from "../layouts/application"
 
 export interface ListingsProps {
-  openListings: ListingDto[]
-  closedListings: ListingDto[]
+  openListings: Listing[]
+  closedListings: Listing[]
 }
 export default class extends Component<ListingsProps> {
   public static async getInitialProps() {
@@ -25,14 +25,14 @@ export default class extends Component<ListingsProps> {
     try {
       const response = await axios.get(process.env.listingServiceUrl)
       const nowTime = moment()
-      openListings = response.data.listings.filter((listing: ListingDto) => {
+      openListings = response.data.listings.filter((listing: Listing) => {
         return (
           openDateState(listing) ||
           nowTime <= moment(listing.applicationDueDate) ||
           listing.applicationDueDate == null
         )
       })
-      closedListings = response.data.listings.filter((listing: ListingDto) => {
+      closedListings = response.data.listings.filter((listing: Listing) => {
         return nowTime > moment(listing.applicationDueDate)
       })
     } catch (error) {

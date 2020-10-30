@@ -1,8 +1,8 @@
 import * as React from "react"
 import { t } from "./translator"
-import { ListingDto } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 
-export const occupancyTable = (listing: ListingDto) => {
+export const occupancyTable = (listing: Listing) => {
   let occupancyData = [] as any
 
   if (listing.unitsSummarized) {
@@ -31,7 +31,7 @@ export const occupancyTable = (listing: ListingDto) => {
   return occupancyData
 }
 
-export const getOccupancyDescription = (listing: ListingDto) => {
+export const getOccupancyDescription = (listing: Listing) => {
   const unitsSummarized = listing.unitsSummarized
   if (unitsSummarized && unitsSummarized.unitTypes.includes("SRO")) {
     return unitsSummarized.unitTypes.length == 1

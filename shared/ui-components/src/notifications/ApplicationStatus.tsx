@@ -1,13 +1,13 @@
 import * as React from "react"
 import moment from "moment"
 import { t } from "../helpers/translator"
-import { ListingDto } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 import { openDateState } from "../helpers/state"
 import { Icon } from "../icons/Icon"
 import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
-  listing: ListingDto
+  listing: Listing
   vivid?: boolean
 }
 

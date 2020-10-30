@@ -1,12 +1,12 @@
 import React, { useState } from "react"
-import { ListingDto } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 import { ListingsList } from "./ListingsList"
 import { Button } from "../../actions/Button"
 import { Icon } from "../../icons/Icon"
 import "./ListingsGroup.scss"
 
 export interface ListingsGroupProps {
-  listings: ListingDto[]
+  listings: Listing[]
   header: string
   info?: string
   showButtonText: string

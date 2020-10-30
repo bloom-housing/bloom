@@ -1,5 +1,5 @@
 import Router from "next/router"
-import { ListingDto } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 import { blankApplication } from "./AppSubmissionContext"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
@@ -108,7 +108,7 @@ export default class ApplicationConductor {
     languages: [],
     steps: [],
   }
-  private _listing: ListingDto
+  private _listing: Listing
 
   constructor(application, listing) {
     this.application = application
@@ -172,7 +172,7 @@ export default class ApplicationConductor {
 
   reset() {
     this.application = blankApplication()
-    this.listing = {} as ListingDto
+    this.listing = {} as Listing
 
     if (typeof window != "undefined") {
       window.sessionStorage.removeItem("bloom-app-autosave")

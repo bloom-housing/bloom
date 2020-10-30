@@ -1,6 +1,6 @@
 import { Component } from "react"
 import Head from "next/head"
-import { ListingDto } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/core"
 import {
   LinkButton,
   Hero,
@@ -13,7 +13,7 @@ import Layout from "../layouts/application"
 import axios from "axios"
 
 interface IndexProps {
-  listings: ListingDto[]
+  listings: Listing[]
 }
 
 export default class extends Component<IndexProps> {

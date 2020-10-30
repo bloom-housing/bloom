@@ -18,6 +18,7 @@ import { EmailService } from "../shared/email.service"
 import { ResourceType } from "../auth/resource_type.decorator"
 import AuthzGuard from "../auth/authz.guard"
 import { authzActions, AuthzService } from "../auth/authz.service"
+import { mapTo } from "../shared/mapTo"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -33,7 +34,7 @@ export class UserController {
   @UseGuards(DefaultAuthGuard, AuthzGuard)
   @Get()
   profile(@Request() req): UserDto {
-    return plainToClass(UserDto, req.user, { excludeExtraneousValues: true })
+    return mapTo(UserDto, req.user)
   }
 
   @Post()
@@ -43,11 +44,7 @@ export class UserController {
     const accessToken = this.authService.generateAccessToken(user)
     // noinspection ES6MissingAwait
     this.emailService.welcome(user)
-    return plainToClass(
-      UserDtoWithAccessToken,
-      { ...user, accessToken },
-      { excludeExtraneousValues: true }
-    )
+    return mapTo(UserDtoWithAccessToken, { ...user, accessToken })
   }
 
   @Put(":id")
@@ -61,6 +58,6 @@ export class UserController {
     await this.authzService.canOrThrow(user, "user", authzActions.update, {
       ...dto,
     })
-    return await this.userService.update(dto)
+    return mapTo(UserDto, await this.userService.update(dto))
   }
 }

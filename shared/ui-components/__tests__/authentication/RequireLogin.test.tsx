@@ -2,7 +2,7 @@ import React from "react"
 import { mount } from "enzyme"
 import { RequireLogin } from "../../src/authentication/RequireLogin"
 import { UserContext } from "../../src/authentication/UserContext"
-import { UserDto } from "@bloom-housing/core"
+import { User } from "@bloom-housing/core"
 
 let mockPathname: string
 const mockPush = jest.fn()
@@ -14,7 +14,7 @@ jest.mock("next/router", () => ({
   }),
 }))
 
-const mockUser: UserDto = {
+const mockUser: User = {
   id: "123",
   email: "test@test.com",
   firstName: "Test",
@@ -25,7 +25,7 @@ const mockUser: UserDto = {
 }
 
 let initialStateLoaded = false
-let profile: UserDto | undefined
+let profile: User | undefined
 let props = {}
 
 beforeEach(() => {

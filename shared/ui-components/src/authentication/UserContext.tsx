@@ -16,15 +16,15 @@ import {
   scheduleTokenRefresh,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
-import { UserCreateDto, UserDto } from "@bloom-housing/core"
+import { UserCreate, User } from "@bloom-housing/core"
 // External interface this context provides
 type ContextProps = {
-  login: (email: string, password: string) => Promise<UserDto>
-  createUser: (user: UserCreateDto) => Promise<UserDto>
+  login: (email: string, password: string) => Promise<User>
+  createUser: (user: UserCreate) => Promise<User>
   signOut: () => void
   // True when an API request is processing
   loading: boolean
-  profile?: UserDto
+  profile?: User
   accessToken?: string
   initialStateLoaded: boolean
 }
@@ -35,7 +35,7 @@ type UserState = {
   initialStateLoaded: boolean
   storageType: string
   accessToken?: string
-  profile?: UserDto
+  profile?: User
   refreshTimer?: number
 }
 
@@ -49,7 +49,7 @@ const saveToken = createAction("SAVE_TOKEN")<{
 }>()
 const startLoading = createAction("START_LOADING")()
 const stopLoading = createAction("STOP_LOADING")()
-const saveProfile = createAction("SAVE_PROFILE")<UserDto>()
+const saveProfile = createAction("SAVE_PROFILE")<User>()
 const signOut = createAction("SIGN_OUT")()
 
 const reducer = createReducer(
@@ -152,7 +152,7 @@ export const UserProvider: FunctionComponent = ({ children }) => {
         dispatch(stopLoading())
       }
     },
-    createUser: async (user: UserCreateDto) => {
+    createUser: async (user: UserCreate) => {
       dispatch(startLoading())
       try {
         const { accessToken, user: profile } = await register(apiUrl, user)
