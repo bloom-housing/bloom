@@ -58,7 +58,7 @@ export class User {
   @IsDateString()
   updatedAt: Date
 
-  @OneToMany((type) => Application, (application) => application.user)
+  @OneToMany(() => Application, (application) => application.user)
   applications: Application[]
   @Column("boolean", { default: false })
   isAdmin: boolean

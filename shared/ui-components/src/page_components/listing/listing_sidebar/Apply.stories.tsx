@@ -18,10 +18,7 @@ export const hardApplicationDeadline = () => {
   listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
   listing.applicationMethods[0].acceptsPostmarkedApplications = false
 
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <Apply listing={listing} internalFormRoute={internalFormRoute} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const acceptsPostmarkedApplications = () => {
@@ -29,10 +26,7 @@ export const acceptsPostmarkedApplications = () => {
   listing.applicationMethods[0].acceptsPostmarkedApplications = true
   listing.postmarkedApplicationsReceivedByDate = "2021-12-05"
 
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <Apply listing={listing} internalFormRoute={internalFormRoute} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const showsMultipleDownloadURLs = () => {
@@ -61,10 +55,7 @@ export const showsMultipleDownloadURLs = () => {
     [testMethod1, testMethod2]
   )
 
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <Apply listing={listingWithDownloadMethods} internalFormRoute={internalFormRoute} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const linkDirectlyToInternalApplication = () => {
@@ -84,10 +75,7 @@ export const linkDirectlyToInternalApplication = () => {
     internalMethod,
   ])
 
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <Apply listing={listingWithInternalLink} internalFormRoute={internalFormRoute} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const linkToInternalApplicationAndDownloads = () => {
@@ -117,10 +105,7 @@ export const linkToInternalApplicationAndDownloads = () => {
     [internalMethod, downloadMethod]
   )
 
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <Apply listing={listingWithInternalAndDownload} internalFormRoute={internalFormRoute} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const linkDirectlyToExternalApplication = () => {
@@ -140,8 +125,5 @@ export const linkDirectlyToExternalApplication = () => {
     externalMethod,
   ])
 
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <Apply listing={listingWithMethodLinks} internalFormRoute={internalFormRoute} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }

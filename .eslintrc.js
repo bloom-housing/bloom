@@ -27,9 +27,20 @@ module.exports = {
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "react/jsx-uses-vars": "warn",
     "react/jsx-uses-react": "warn",
+    "@typescript-eslint/restrict-template-expressions": ["error", {
+      allowNumber: true, allowAny: true
+    }],
+    // These rules catches various usecases of variables typed as "any", since they won't be flagged by the TS
+    // compiler and thus are potential sources of issues. The current codebase has too many uses of `any` to make
+    // these effective rules though, so disabling them for now.
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
   },
   ignorePatterns: [
     "node_modules",
@@ -38,5 +49,6 @@ module.exports = {
     "dist",
     "migration/",
     "**/*.stories.tsx",
+    "**/.eslintrc.js"
   ],
 }

@@ -2,6 +2,7 @@
 4.3 General Pool
 If all preferences are opted out the applicant is shown a screen confirming their placement in the General Pool
 */
+import React from "react"
 import { useForm } from "react-hook-form"
 import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -13,8 +14,8 @@ export default () => {
   const currentPageSection = 4
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
+  const { handleSubmit } = useForm()
+  const onSubmit = () => {
     conductor.completeSection(4)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()

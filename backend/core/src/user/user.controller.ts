@@ -11,7 +11,6 @@ import {
 import { DefaultAuthGuard } from "../auth/default.guard"
 import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger"
 import { UserCreateDto, UserDto, UserDtoWithAccessToken, UserUpdateDto } from "./user.dto"
-import { plainToClass } from "class-transformer"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email.service"
@@ -43,7 +42,7 @@ export class UserController {
     const user = await this.userService.createUser(dto)
     const accessToken = this.authService.generateAccessToken(user)
     // noinspection ES6MissingAwait
-    this.emailService.welcome(user)
+    void this.emailService.welcome(user)
     return mapTo(UserDtoWithAccessToken, { ...user, accessToken })
   }
 

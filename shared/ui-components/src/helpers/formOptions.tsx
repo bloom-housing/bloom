@@ -183,17 +183,16 @@ export const preferredUnit: FieldGroupItem[] = [
 ]
 
 export const FormOptions = (props: FormOptionsProps) => {
-  const keyPrefix = props.keyPrefix
-  const options = props.options.map((option, key) => {
+  const options = props.options.map((option) => {
     if (option == "") {
       return (
-        <option value="" key={keyPrefix + key}>
+        <option value="" key="select-one">
           {t("t.selectOne")}
         </option>
       )
     } else {
       return (
-        <option value={option} key={keyPrefix + key}>
+        <option value={option} key={option}>
           {t(`${props.keyPrefix}.${option}`)}
         </option>
       )

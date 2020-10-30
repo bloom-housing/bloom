@@ -113,9 +113,9 @@ export const UserProvider: FunctionComponent = ({ children }) => {
           dispatch(stopLoading())
         }
       }
-      loadProfile()
+      void loadProfile()
     }
-  }, [state.profile, state.accessToken])
+  }, [state.profile, state.accessToken, apiUrl])
 
   // On initial load/reload, check localStorage to see if we have a token available
   useEffect(() => {

@@ -14,4 +14,4 @@ async function codeGen() {
   content = content.replace(/(\w+)Dto/g, "$1")
   fs.writeFileSync("./client.ts", content)
 }
-codeGen()
+void codeGen()

@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import React, { useContext } from "react"
 import { useForm } from "react-hook-form"
 import {
   Button,
@@ -16,18 +16,18 @@ import { useRedirectToPrevPage } from "../lib/hooks"
 export default () => {
   const { createUser } = useContext(UserContext)
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const redirectToPrev = useRedirectToPrevPage()
   const onSubmit = async (data) => {
     try {
       const { birthDay, birthMonth, birthYear, ...rest } = data
-      const user = await createUser({
+      await createUser({
         ...rest,
         dob: `${birthYear}-${birthMonth}-${birthDay}`,
       })
 
-      redirectToPrev()
-      console.log("Created user: %o", user)
+      await redirectToPrev()
     } catch (err) {
       // TODO: better error handling
       const messages = err.response && err.response.data && err.response.data.message

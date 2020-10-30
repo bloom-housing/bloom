@@ -10,11 +10,6 @@ export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
-  const defaultColDef = {
-    resizable: true,
-    maxWidth: 300,
-  }
-
   const columnDefs = [
     {
       headerName: "Name",
@@ -65,7 +60,7 @@ export default function ListingsList() {
               suppressPaginationPanel={true}
               paginationPageSize={8}
               suppressScrollOnNewData={true}
-            ></AgGridReact>
+            />
           </div>
         </article>
       </section>

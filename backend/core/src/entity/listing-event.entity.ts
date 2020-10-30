@@ -67,7 +67,7 @@ export class ListingEvent extends BaseEntity {
   @IsString()
   note?: string | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.events, {
+  @ManyToOne(() => Listing, (listing) => listing.events, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
