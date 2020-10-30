@@ -1,23 +1,10 @@
-import React, { useState, useEffect, useContext, useMemo } from "react"
+import React, { useMemo } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
-import {
-  Field,
-  PageHeader,
-  MetaTags,
-  t,
-  Button,
-  Tag,
-  GridSection,
-  ViewItem,
-  GridCell,
-  ApiClientContext,
-} from "@bloom-housing/ui-components"
+import { PageHeader, t, Tag, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import { useForm } from "react-hook-form"
-import { AgGridReact } from "ag-grid-react"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -28,6 +15,7 @@ export default function ApplicationsList() {
     applicationId
   )
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const application = applicationDto.application as Record<string, any>
 
   const applicationDate = useMemo(() => {
@@ -42,14 +30,6 @@ export default function ApplicationsList() {
       time,
     }
   }, [applicationDto])
-
-  const [hasMounted, setHasMounted] = React.useState(false)
-  React.useEffect(() => {
-    setHasMounted(true)
-  }, [])
-  if (!hasMounted) {
-    return null
-  }
 
   return (
     <Layout>
