@@ -2,6 +2,7 @@ import React, { createElement, FunctionComponent, useContext, useEffect, useStat
 import { useRouter } from "next/router"
 import UserContext from "./UserContext"
 import { ConfigContext } from "../config"
+import { Button } from "../actions/Button"
 import { Modal } from "../overlays/Modal"
 import { setSiteAlertMessage } from "../notifications/SiteAlert"
 import { AlertTypes } from "../notifications/alertTypes"
@@ -79,14 +80,15 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
   })
 
   const modalActions = [
-    {
-      label: promptAction,
-      type: "primary" as const,
-      onClick: () => {
+    <Button
+      primary={true}
+      onClick={() => {
         clearTimeout(promptTimeout)
         setPromptTimeout(undefined)
-      },
-    },
+      }}
+    >
+      {promptAction}
+    </Button>,
   ]
 
   return (

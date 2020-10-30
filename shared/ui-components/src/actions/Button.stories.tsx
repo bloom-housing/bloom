@@ -24,9 +24,33 @@ export const big = () => (
   </Button>
 )
 
-export const filled = () => (
+export const filledOrPrimary = () => (
   <Button filled={true} onClick={handleClick}>
-    Filled Button
+    Filled/Primary Button
+  </Button>
+)
+
+export const secondary = () => (
+  <Button secondary={true} onClick={handleClick}>
+    Secondary Button
+  </Button>
+)
+
+export const success = () => (
+  <Button success={true} onClick={handleClick}>
+    Success Button
+  </Button>
+)
+
+export const alert = () => (
+  <Button alert={true} onClick={handleClick}>
+    Alert Button
+  </Button>
+)
+
+export const warning = () => (
+  <Button warning={true} onClick={handleClick}>
+    Warning Button
   </Button>
 )
 
@@ -36,9 +60,21 @@ export const SmallAndFilled = () => (
   </Button>
 )
 
-export const RegularCase = () => (
+export const NormalCase = () => (
   <Button normalCase={true} onClick={handleClick}>
     Button (Normal Case)
+  </Button>
+)
+
+export const borderless = () => (
+  <Button borderless={true} onClick={handleClick}>
+    Borderless Button
+  </Button>
+)
+
+export const unstyled = () => (
+  <Button unstyled={true} onClick={handleClick}>
+    Unstyled Button
   </Button>
 )
 

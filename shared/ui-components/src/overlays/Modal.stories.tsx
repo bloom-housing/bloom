@@ -30,7 +30,7 @@ export const BasicModal = () => (
       <Button onClick={noop} primary={true}>
         Submit
       </Button>,
-      <Button onClick={noop} secondary={true}>
+      <Button onClick={noop} borderless={true}>
         Cancel
       </Button>,
     ]}
@@ -49,7 +49,7 @@ export const FullScreenModal = () => (
       <Button onClick={noop} primary={true}>
         Submit
       </Button>,
-      <Button onClick={noop} secondary={true}>
+      <Button onClick={noop} borderless={true}>
         Cancel
       </Button>,
     ]}

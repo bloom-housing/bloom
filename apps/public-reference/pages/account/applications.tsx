@@ -3,6 +3,7 @@ import Head from "next/head"
 import {
   ApiClientContext,
   AppStatusItem,
+  Button,
   DashBlock,
   DashBlocks,
   HeaderBadge,
@@ -42,17 +43,9 @@ export default () => {
     </div>
   )
   const modalActions = [
-    {
-      label: t("t.cancel"),
-      type: "cancel" as const,
-      onClick: () => {
-        setDeletingApplication(null)
-      },
-    },
-    {
-      label: t("t.delete"),
-      type: "primary" as const,
-      onClick: () => {
+    <Button
+      primary={true}
+      onClick={() => {
         // applicationsService.delete(deletingApplication.id).then(() => {
         const newApplications = [...applications]
         const deletedAppIndex = applications.indexOf(deletingApplication, 0)
@@ -60,8 +53,18 @@ export default () => {
         setDeletingApplication(null)
         setApplications(newApplications)
         // })
-      },
-    },
+      }}
+    >
+      {t("t.delete")}
+    </Button>,
+    <Button
+      borderless={true}
+      onClick={() => {
+        setDeletingApplication(null)
+      }}
+    >
+      {t("t.cancel")}
+    </Button>,
   ]
   return (
     <>
