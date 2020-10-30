@@ -68,7 +68,7 @@ It provides:
 ```typescript
 type ContextProps = {
   login: (email: string, password: string) => Promise<void>
-  createUser: (user: CreateUserDto) => Promise<User>
+  createUser: (user: UserCreateDto) => Promise<User>
   signOut: () => void
   // True when an API request is processing
   loading: boolean
