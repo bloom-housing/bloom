@@ -10,6 +10,7 @@ import {
   ViewItem,
   GridCell,
   MinimalTable,
+  InlineButton,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
@@ -38,6 +39,14 @@ export default function ApplicationsList() {
     }
   }, [applicationDto])
 
+  const applicationUpdated = useMemo(() => {
+    if (!applicationDto) return null
+
+    const momentDate = moment(applicationDto.updatedAt)
+
+    return momentDate.format("MMMM DD, YYYY")
+  }, [applicationDto])
+
   const annualIncome = useMemo(() => {
     if (!application) return null
 
@@ -47,18 +56,18 @@ export default function ApplicationsList() {
   }, [application])
 
   const householdMembersHeaders = {
-    name: "Name",
-    relationship: "Relationship",
-    birth: "Date of birth",
-    street: "Street",
-    city: "City",
-    state: "State",
+    name: t("t.name"),
+    relationship: t("t.relationship"),
+    birth: t("application.household.member.dateOfBirth"),
+    street: t("t.street"),
+    city: t("application.contact.city"),
+    state: t("application.contact.state"),
   }
 
   const householdMembersData = useMemo(() => {
     return application?.householdMembers.map((item) => ({
       name: `${item.firstName} ${item.middleName} ${item.lastName}`,
-      relationship: item.relationship,
+      relationship: t(`application.form.options.relationship.${item.relationship}`),
       birth: `${item.birthMonth}/${item.birthDay}/${item.birthYear}`,
       street: item.street,
       city: item.city,
@@ -68,10 +77,10 @@ export default function ApplicationsList() {
 
   const accessibilityLabels = (accessibility) => {
     const labels = []
-    if (accessibility.mobility) labels.push("Mobility Impairments")
-    if (accessibility.vision) labels.push("Vision Impairments")
-    if (accessibility.hearing) labels.push("Hearing Impairments")
-    if (labels.length === 0) labels.push("No")
+    if (accessibility.mobility) labels.push(t("application.ada.mobility"))
+    if (accessibility.vision) labels.push(t("application.ada.vision"))
+    if (accessibility.hearing) labels.push(t("application.ada.hearing"))
+    if (labels.length === 0) labels.push(t("t.no"))
 
     return labels
   }
@@ -89,8 +98,9 @@ export default function ApplicationsList() {
       {console.log(applicationDto)}
 
       <section className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-        <button onClick={() => router.back()}>Back</button>
+        <InlineButton onClick={() => router.back()}>{t("t.back")}</InlineButton>
 
+        {/* TODO:hardcoded until we get information from the backend */}
         <Tag success pillStyle>
           Submitted
         </Tag>
@@ -100,34 +110,47 @@ export default function ApplicationsList() {
         <section className="bg-primary-lighter">
           <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">
             <div className="info-card md:w-9/12">
-              {/*  w-full */}
-              <GridSection className="bg-primary-lighter" title="Application Data" inset>
+              <GridSection
+                className="bg-primary-lighter"
+                title={t("application.details.applicationData")}
+                inset
+              >
                 <GridCell>
-                  <ViewItem label="Application Number">{applicationDto.id}</ViewItem>
+                  <ViewItem label={t("application.details.number")}>
+                    {application.confirmationId}
+                  </ViewItem>
+                </GridCell>
+
+                {/* TODO:hardcoded until we get information from the backend */}
+                <GridCell>
+                  <ViewItem label={t("application.details.type")}>Electronic</ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label="Application Submission Type">Electronic</ViewItem>
+                  <ViewItem label={t("application.details.submittedDate")}>
+                    {applicationDate.date}
+                  </ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label="Application Submitted Date">{applicationDate.date}</ViewItem>
+                  <ViewItem label={t("application.details.timeDate")}>
+                    {applicationDate.time}
+                  </ViewItem>
+                </GridCell>
+
+                {/* TODO:hardcoded until we get information from the backend */}
+                <GridCell>
+                  <ViewItem label={t("application.details.language")}>English</ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label="Application Time Date">{applicationDate.time}</ViewItem>
+                  <ViewItem label={t("application.details.totalSize")}>
+                    {application.householdSize}
+                  </ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label="Application Language">English</ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label="Total Household Size">{application.householdSize}</ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label="Submitted By">
+                  <ViewItem label={t("application.details.submittedBy")}>
                     {application.applicant.firstName} {application.applicant.middleName}{" "}
                     {application.applicant.lastName}
                   </ViewItem>
@@ -137,35 +160,49 @@ export default function ApplicationsList() {
               {/* alternate contact */}
               {application.alternateContact.type !== "" &&
                 application.alternateContact.type !== "noContact" && (
-                  <GridSection className="bg-primary-lighter" title="Alternate Contact" inset>
+                  <GridSection
+                    className="bg-primary-lighter"
+                    title={t("application.alternateContact.type.label")}
+                    inset
+                  >
                     <GridCell>
-                      <ViewItem label="First Name">
+                      <ViewItem label={t("application.name.firstName")}>
                         {application.alternateContact.firstName}
                       </ViewItem>
                     </GridCell>
 
                     <GridCell>
-                      <ViewItem label="Last Name">{application.alternateContact.lastName}</ViewItem>
-                    </GridCell>
-
-                    <GridCell>
-                      <ViewItem label="Relationship">{application.alternateContact.type}</ViewItem>
-                    </GridCell>
-
-                    <GridCell>
-                      <ViewItem label="Agency if Applicable">
-                        {application.alternateContact.agency.length
-                          ? application.alternateContact.agency
-                          : "None"}
+                      <ViewItem label={t("application.name.lastName")}>
+                        {application.alternateContact.lastName}
                       </ViewItem>
                     </GridCell>
 
                     <GridCell>
-                      <ViewItem label="Email">{application.alternateContact.emailAddress}</ViewItem>
+                      <ViewItem label={t("t.relationship")}>
+                        {t(
+                          `application.alternateContact.type.options.${application.alternateContact.type}`
+                        )}
+                      </ViewItem>
                     </GridCell>
 
                     <GridCell>
-                      <ViewItem label="Phone">{application.alternateContact.phoneNumber}</ViewItem>
+                      <ViewItem label={t("application.details.agency")}>
+                        {application.alternateContact.agency.length
+                          ? application.alternateContact.agency
+                          : t("t.none")}
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.email")}>
+                        {application.alternateContact.emailAddress}
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.phone")}>
+                        {application.alternateContact.phoneNumber}
+                      </ViewItem>
                     </GridCell>
                   </GridSection>
                 )}
@@ -174,7 +211,7 @@ export default function ApplicationsList() {
               {application.householdSize > 1 && (
                 <GridSection
                   className="bg-primary-lighter"
-                  title="Household Members"
+                  title={t("application.household.householdMembers")}
                   grid={false}
                   tinted
                   inset
@@ -184,9 +221,13 @@ export default function ApplicationsList() {
               )}
 
               {/* household details */}
-              <GridSection className="bg-primary-lighter" title="Household Details" inset>
+              <GridSection
+                className="bg-primary-lighter"
+                title={t("application.review.householdDetails")}
+                inset
+              >
                 <GridCell>
-                  <ViewItem label="ADA Priorities Selected">
+                  <ViewItem label={t("application.details.adaPriorities")}>
                     {accessibilityLabels(application.accessibility).map((item) => (
                       <Fragment key={item}>
                         {item}
@@ -198,26 +239,36 @@ export default function ApplicationsList() {
               </GridSection>
 
               {/* TODO: check live/work place */}
-              <GridSection className="bg-primary-lighter" title="Application Preferences" inset>
+              <GridSection
+                className="bg-primary-lighter"
+                title={t("application.details.preferences")}
+                inset
+              >
                 <GridCell>
-                  <ViewItem label="Live or Work in Alameda County"></ViewItem>
+                  <ViewItem label={t("application.details.workInAlameda")}></ViewItem>
                 </GridCell>
               </GridSection>
 
-              <GridSection className="bg-primary-lighter" title="Declared Household Income" inset>
+              <GridSection
+                className="bg-primary-lighter"
+                title={t("application.details.householdIncome")}
+                inset
+              >
                 <GridCell>
-                  <ViewItem label="Annual Income">{annualIncome}</ViewItem>
+                  <ViewItem label={t("application.details.annualIncome")}>{annualIncome}</ViewItem>
                 </GridCell>
                 <GridCell>
-                  <ViewItem label="Housing Voucher or Subsidy">
-                    {application.incomeVouchers ? "Yes" : "No"}
+                  <ViewItem label={t("application.details.vouchers")}>
+                    {application.incomeVouchers ? t("t.yes") : t("t.no")}
                   </ViewItem>
                 </GridCell>
               </GridSection>
             </div>
 
             <div className="md:w-3/12">
-              <p className="text-base text-center">Last updated August 1, 2020</p>
+              <p className="text-base text-center">
+                {t("t.lastUpdated")} {applicationUpdated}
+              </p>
             </div>
           </div>
         </section>
