@@ -1,6 +1,6 @@
-import { useState, useContext } from "react"
+import React, { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
-import Router from "next/router"
+import { useRouter } from "next/router"
 import {
   Button,
   Field,
@@ -14,7 +14,9 @@ import FormsLayout from "../layouts/forms"
 export default () => {
   const { login } = useContext(UserContext)
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
+  const router = useRouter()
   const [requestError, setRequestError] = useState<string>()
 
   const onSubmit = async (data: { email: string; password: string }) => {
@@ -22,7 +24,7 @@ export default () => {
 
     try {
       await login(email, password)
-      Router.push("/")
+      await router.push("/")
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {

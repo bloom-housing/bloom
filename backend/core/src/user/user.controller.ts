@@ -42,7 +42,7 @@ export class UserController {
     const user = await this.userService.createUser(dto)
     const accessToken = this.authService.generateAccessToken(user)
     // noinspection ES6MissingAwait
-    this.emailService.welcome(user)
+    void this.emailService.welcome(user)
     return plainToClass(
       UserDtoWithAccessToken,
       { ...user, accessToken },

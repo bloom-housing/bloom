@@ -6,7 +6,6 @@ import {
   useEffect,
   useContext,
 } from "react"
-import Router, { useRouter } from "next/router"
 import { createAction, createReducer } from "typesafe-actions"
 import { User } from "@bloom-housing/backend-core"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
@@ -116,9 +115,9 @@ export const UserProvider: FunctionComponent = ({ children }) => {
           dispatch(stopLoading())
         }
       }
-      loadProfile()
+      void loadProfile()
     }
-  }, [state.profile, state.accessToken])
+  }, [state.profile, state.accessToken, apiUrl])
 
   // On initial load/reload, check localStorage to see if we have a token available
   useEffect(() => {

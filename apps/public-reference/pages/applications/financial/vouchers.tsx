@@ -2,6 +2,7 @@
 3.1 Vouchers Subsidies
 Question asks if anyone on the application receives a housing voucher or subsidy.
 */
+import React from "react"
 import {
   AlertBox,
   Button,
@@ -21,6 +22,7 @@ export default () => {
   const currentPageSection = 3
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
     shouldFocusError: false,

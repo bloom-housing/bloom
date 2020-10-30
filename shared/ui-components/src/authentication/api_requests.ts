@@ -59,7 +59,7 @@ export const scheduleTokenRefresh = (
           onRefresh(newToken)
         }
       }
-      run()
+      void run()
     }, Math.max(ttl - 60000, 0)) as unknown) as number
   }
 }

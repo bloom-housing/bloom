@@ -5,7 +5,9 @@ import { UserContext } from "./UserContext"
 
 // See https://github.com/Microsoft/TypeScript/issues/14094
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
-type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U
+type XOR<T, U> = T | U extends Record<string, unknown>
+  ? (Without<T, U> & U) | (Without<U, T> & T)
+  : T | U
 
 type RequireLoginProps = {
   signInPath: string
@@ -45,7 +47,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   useEffect(() => {
     if (loginRequiredForPath && initialStateLoaded && !profile) {
       setSiteAlertMessage(signInMessage, "notice")
-      router.push(signInPath)
+      void router.push(signInPath)
     }
   }, [loginRequiredForPath, initialStateLoaded, profile, router, signInPath, signInMessage])
 

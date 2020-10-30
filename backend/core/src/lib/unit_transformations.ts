@@ -66,7 +66,7 @@ const hmiData = (
   //    year) per household size.
   if (amiValues.length > 1) {
     amiValues.forEach((percent) => {
-      hmiHeaders["ami" + percent] = `${percent}% AMI Units`
+      hmiHeaders[`ami${percent}`] = `${percent}% AMI Units`
     })
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
@@ -79,10 +79,10 @@ const hmiData = (
           return item.householdSize == columns.householdSize && item.percentOfAmi == percent
         })
         if (amiInfo) {
-          columns["ami" + percent] = usd.format(amiInfo.income)
+          columns[`ami${percent}`] = usd.format(amiInfo.income)
           pushRow = true
         } else {
-          columns["ami" + percent] = ""
+          columns[`ami${percent}`] = ""
         }
       })
 

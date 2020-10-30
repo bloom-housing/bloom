@@ -8,6 +8,7 @@ import {
   unitSummariesTable,
   groupNonReservedAndReservedSummaries,
 } from "../../helpers/tableSummaries"
+import { UnitSummary } from "@bloom-housing/core"
 
 export default {
   title: "Listing/Unit Summary Tables",
@@ -16,7 +17,12 @@ export default {
 const archer = Object.assign({}, Archer) as any
 
 // copied from listings service output
-const summaries = {
+const summaries: {
+  byUnitType: UnitSummary[],
+  byUnitTypeWithoutFloor: UnitSummary[],
+  amiPercentages: string[],
+  [key: string]: any
+} = {
   unitTypes: ["studio"],
   reservedTypes: ["senior"],
   priorityTypes: [],
@@ -133,26 +139,17 @@ const summaries = {
 }
 
 export const unitsList = () => {
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const unitsListWithoutFloor = () => {
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <UnitTables units={archer.units} unitSummaries={summaries.byUnitTypeWithoutFloor} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const unitsListWithDisabledAccordion = () => {
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
-    // @ts-ignore
     <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} disableAccordion={true} />
   )
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 const unitSummariesHeaders = {
@@ -170,11 +167,10 @@ const amiValues = summaries.amiPercentages
   .sort()
 
 export const unitsSummaries = () => {
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
     <div>
       {amiValues.map((percent) => {
-        const byAMI = summaries.byAMI.find((item) => {
+        const byAMI = summaries.byAMI.find((item: { percent: string }) => {
           return parseInt(item.percent, 10) == percent
         })
 
@@ -183,7 +179,6 @@ export const unitsSummaries = () => {
             <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
             <StandardTable
               headers={unitSummariesHeaders}
-              // @ts-ignore
               data={unitSummariesTable(byAMI.byNonReservedUnitType)}
               responsiveCollapse={true}
             />
@@ -192,21 +187,18 @@ export const unitsSummaries = () => {
       })}
     </div>
   )
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }
 
 export const unitsSummariesGroupedByReservedTypes = () => {
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
   return (
     <div>
       {amiValues.map((percent) => {
-        const byAMI = summaries.byAMI.find((item) => {
+        const byAMI = summaries.byAMI.find((item: { percent: string }) => {
           return parseInt(item.percent, 10) == percent
         })
 
         if (byAMI) {
           const groupedUnits = groupNonReservedAndReservedSummaries(
-            // @ts-ignore
             byAMI.byNonReservedUnitType,
             byAMI.byReservedType
           )
@@ -227,5 +219,4 @@ export const unitsSummariesGroupedByReservedTypes = () => {
       })}
     </div>
   )
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }

@@ -23,7 +23,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
   let statusText = t("application.statuses." + status)
   const inProgress = status == "inProgress"
   const active = inProgress && moment() < applicationDueDate
-  let statusClassNames
+  let statusClassNames = ""
 
   if (inProgress && moment() > applicationDueDate) {
     statusClassNames = "is-past-due"
@@ -44,7 +44,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
         <section className="status-item__content">
           <div className="status-item__details">
             <p className="status-item__address">
-              <MultiLineAddress address={listing.buildingAddress as Address}></MultiLineAddress>
+              <MultiLineAddress address={listing.buildingAddress as Address} />
             </p>
             {lotteryNumber && (
               <p className="status-item__number">

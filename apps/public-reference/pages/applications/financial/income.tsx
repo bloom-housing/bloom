@@ -2,7 +2,7 @@
 3.2 Income
 Total pre-tax household income from all sources
 */
-import { useState } from "react"
+import React, { useState } from "react"
 import { Listing } from "@bloom-housing/core"
 import {
   AlertBox,
@@ -54,6 +54,7 @@ export default () => {
   const currentPageSection = 3
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     defaultValues: {
       income: application.income,

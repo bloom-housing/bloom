@@ -39,6 +39,6 @@ export class Asset extends BaseEntity {
   @IsString()
   fileId: string
 
-  @ManyToOne((type) => Listing, (listing) => listing.assets, { nullable: true })
+  @ManyToOne(() => Listing, (listing) => listing.assets, { nullable: true })
   listing: Listing | null
 }

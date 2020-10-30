@@ -1,6 +1,6 @@
 import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import UserContext from "./UserContext"
+import { UserContext } from "./UserContext"
 import { ConfigContext } from "../config"
 import { Modal } from "../overlays/Modal"
 import { setSiteAlertMessage } from "../notifications/SiteAlert"
@@ -71,9 +71,9 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
           setPromptTimeout(undefined)
           await onTimeout()
           setSiteAlertMessage(alertMessage, alertType)
-          router.push(redirectPath)
+          return router.push(redirectPath)
         }
-        timeoutAction()
+        void timeoutAction()
       }, PROMPT_TIMEOUT) as unknown) as number
     )
   })

@@ -3,24 +3,22 @@
 Ask housing applicant if their current is temporary or homeless
 */
 import Link from "next/link"
-import Router from "next/router"
+import { useRouter } from "next/router"
 import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import React, { useContext } from "react"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application } = useContext(AppSubmissionContext)
+  const router = useRouter()
   const currentPageSection = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-
-    Router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
+  const { handleSubmit } = useForm()
+  const onSubmit = () => {
+    void router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
   }
 
   return (

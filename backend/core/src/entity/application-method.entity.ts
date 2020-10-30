@@ -64,6 +64,6 @@ export class ApplicationMethod extends BaseEntity {
   @IsOptional()
   @IsBoolean()
   acceptsPostmarkedApplications: boolean | null
-  @ManyToOne((type) => Listing, (listing) => listing.applicationMethods)
+  @ManyToOne(() => Listing, (listing) => listing.applicationMethods)
   listing: Listing
 }

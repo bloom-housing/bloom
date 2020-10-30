@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState, Fragment } from "react"
+import React, { useEffect, useState, Fragment } from "react"
 import Head from "next/head"
 import {
-  ApiClientContext,
   AppStatusItem,
   DashBlock,
   DashBlocks,
@@ -18,7 +17,6 @@ import moment from "moment"
 import { Application } from "@bloom-housing/backend-core/client"
 
 export default () => {
-  const { applicationsService } = useContext(ApiClientContext)
   const [applications, setApplications] = useState([])
   const [deletingApplication, setDeletingApplication] = useState(null)
 
@@ -72,7 +70,7 @@ export default () => {
           ariaDescription={t("application.deleteThisApplication")}
           actions={modalActions}
           fullScreen
-        ></Modal>
+        />
         <Layout>
           <Head>
             <title>{t("nav.myApplications")}</title>
@@ -83,13 +81,13 @@ export default () => {
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
                   <Fragment>
-                    {applications.map((application, i) => (
+                    {applications.map((application) => (
                       <AppStatusItem
                         key={application.id}
                         status="inProgress"
                         application={application}
                         setDeletingApplication={setDeletingApplication}
-                      ></AppStatusItem>
+                      />
                     ))}
                     {applications.length == 0 && noApplicationsSection}
                   </Fragment>

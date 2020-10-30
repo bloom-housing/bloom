@@ -33,6 +33,7 @@ function httpsPost({ body, ...options }) {
 
 // Currently not used in the Heroku Review App process
 // …but it might come in handy later
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getBranchNameFromGit() {
   const git = require("simple-git/promise")
   const statusSummary = await git(__dirname).status()
@@ -63,5 +64,5 @@ async function pingNetlify(buildHook, currentBranch) {
 
 // ** Main Process **
 if (process.env.NETLIFY_BUILD_HOOK) {
-  pingNetlify(process.env.NETLIFY_BUILD_HOOK, getBranchNameFromHerokuEnvVar())
+  void pingNetlify(process.env.NETLIFY_BUILD_HOOK, getBranchNameFromHerokuEnvVar())
 }

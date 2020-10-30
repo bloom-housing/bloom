@@ -56,22 +56,22 @@ class Listing extends BaseEntity {
   @Expose()
   updatedAt: Date
 
-  @OneToMany((type) => Preference, (preference) => preference.listing)
+  @OneToMany(() => Preference, (preference) => preference.listing)
   preferences: Preference[]
 
-  @OneToMany((type) => Unit, (unit) => unit.listing)
+  @OneToMany(() => Unit, (unit) => unit.listing)
   units: Unit[]
 
-  @OneToMany((type) => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
+  @OneToMany(() => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
   applicationMethods: ApplicationMethod[]
 
-  @OneToMany((type) => Asset, (asset) => asset.listing)
+  @OneToMany(() => Asset, (asset) => asset.listing)
   assets: Asset[]
 
-  @OneToMany((type) => ListingEvent, (listingEvent) => listingEvent.listing)
+  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing)
   events: ListingEvent[]
 
-  @OneToMany((type) => Application, (application) => application.listing)
+  @OneToMany(() => Application, (application) => application.listing)
   applications: Application[]
 
   @Column({ type: "text", nullable: true })

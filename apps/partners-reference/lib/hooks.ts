@@ -21,7 +21,7 @@ export function useApplicationsData() {
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
   const { applicationsService } = useContext(ApiClientContext)
   const backendApplicationsEndpointUrl = process.env.backendApiBase + "/applications"
-  const fetcher = (url) => applicationsService.list()
+  const fetcher = () => applicationsService.list()
   const { data, error } = useSWR(backendApplicationsEndpointUrl, fetcher)
   const applications: ApplicationDto[] = []
   if (listingDtos && data) {

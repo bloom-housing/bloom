@@ -1,6 +1,6 @@
 import { codegen } from "swagger-axios-codegen"
 
-codegen({
+void codegen({
   methodNameMode: "operationId",
   remoteUrl: "http://localhost:3100/docs-json",
   outputDir: ".",

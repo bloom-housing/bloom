@@ -11,8 +11,8 @@ export interface Address {
 }
 
 export interface MinMax {
-  min: number
-  max: number
+  min: number | null
+  max: number | null
 }
 
 export interface MinMaxCurrency {

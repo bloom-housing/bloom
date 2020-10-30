@@ -3,6 +3,7 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
+import React from "react"
 import {
   AlertBox,
   Button,
@@ -24,9 +25,8 @@ export default () => {
   const currentPageSection = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
-    Record<string, any>
-  >({
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit, watch, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,

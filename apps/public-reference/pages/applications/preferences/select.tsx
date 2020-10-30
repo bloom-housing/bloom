@@ -2,7 +2,7 @@
 4.1 Preferences Introduction
 Instructions on how preferences work and their value
 */
-import { useState } from "react"
+import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AlertBox,
@@ -28,6 +28,7 @@ export default () => {
     setShowMore({ ...showMore, [option]: !showMore[option] })
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm({
     shouldFocusError: false,
   })
@@ -38,9 +39,6 @@ export default () => {
 
     conductor.currentStep.save({ preferences: data })
     conductor.routeToNextOrReturnUrl()
-  }
-  const onError = () => {
-    window.scrollTo(0, 0)
   }
 
   return (
@@ -85,7 +83,7 @@ export default () => {
                   onChange={() => {
                     setTimeout(() => {
                       setValue("none", false)
-                      trigger("none")
+                      void trigger("none")
                     }, 1)
                   }}
                 />
@@ -143,7 +141,7 @@ export default () => {
                     preferenceOptions.forEach((option) => {
                       setValue(option, false)
                     })
-                    trigger("none")
+                    void trigger("none")
                   }
                 }}
               />
