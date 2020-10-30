@@ -154,6 +154,7 @@ export const blankApplication = () => {
     preferredUnit: [],
     demographics: {
       ethnicity: "",
+      race: "",
       gender: "",
       sexualOrientation: "",
       howDidYouHear: "",

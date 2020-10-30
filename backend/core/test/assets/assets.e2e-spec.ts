@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication, ValidationPipe } from "@nestjs/common"
-import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
+import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
@@ -9,6 +9,7 @@ import { applicationSetup } from "../../src/app.module"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
+import { ConfigModule } from "@nestjs/config"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

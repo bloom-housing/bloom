@@ -15,7 +15,6 @@ export default function ApplicationsList() {
     applicationId
   )
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const application = applicationDto.application as Record<string, any>
 
   const applicationDate = useMemo(() => {

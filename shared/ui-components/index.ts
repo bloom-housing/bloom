@@ -12,6 +12,7 @@ export * from "./src/blocks/FormCard"
 export * from "./src/blocks/HousingCounselor"
 export * from "./src/blocks/ImageCard"
 export * from "./src/blocks/InfoCard"
+export * from "./src/blocks/ViewItem"
 
 /* Contexts */
 export * from "./src/authentication"
@@ -20,7 +21,6 @@ export * from "./src/config"
 /* Elements */
 export * from "./src/elements/MetaTags"
 export * from "./src/elements/Tag"
-export * from "./src/elements/ViewItem"
 
 /* Footers */
 export * from "./src/footers/ExygyFooter"
@@ -80,6 +80,7 @@ export * from "./src/page_components/listing/ListingDetails"
 export * from "./src/page_components/listing/ListingMap"
 export * from "./src/page_components/listing/ListingsGroup"
 export * from "./src/page_components/listing/ListingsList"
+export * from "./src/page_components/listing/UnitTables"
 export * from "./src/page_components/listing/listing_sidebar/ApplicationSection"
 export * from "./src/page_components/listing/listing_sidebar/Apply"
 export * from "./src/page_components/listing/listing_sidebar/LeasingAgent"
@@ -100,9 +101,8 @@ export * from "./src/sections/ResponsiveContentList"
 export * from "./src/sections/GridSection"
 
 /* Tables */
-export * from "./src/tables/standard/BasicTable"
-export * from "./src/tables/standard/GroupedTable"
-export * from "./src/tables/UnitTables"
+export * from "./src/tables/StandardTable"
+export * from "./src/tables/GroupedTable"
 
 /* Text */
 export * from "./src/text/Description"

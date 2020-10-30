@@ -28,11 +28,11 @@ export function useApplicationsData(listingId?: string) {
 
   const applications: ApplicationDto[] = []
   if (listingDtos && data) {
-    console.log(`Applications Data Received: ${data.length}`)
+    console.log(`Applications Data Received: ${data.items.length}`)
     const listings: Record<string, ListingDto> = Object.fromEntries(
       listingDtos.listings.map((e) => [e.id, e])
     )
-    data.forEach((application) => {
+    data.items.forEach((application) => {
       const app: ApplicationDto = application
       app.listing = listings[application.listing.id]
       applications.push(app)

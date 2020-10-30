@@ -8,8 +8,8 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Expose } from "class-transformer"
-import { IsDateString, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
-import { Listing, ListingStatus } from "./listing.entity"
+import { IsDate, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
+import { Listing } from "./listing.entity"
 
 export enum ListingEventType {
   openHouse = "openHouse",
@@ -26,14 +26,12 @@ export class ListingEvent extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
-  @IsUUID()
+  @IsDate()
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
-  @IsUUID()
+  @IsDate()
   updatedAt: Date
 
   @Column({
@@ -47,12 +45,12 @@ export class ListingEvent extends BaseEntity {
 
   @Column()
   @Expose()
-  @IsDateString()
+  @IsDate()
   startTime: Date
 
   @Column()
   @Expose()
-  @IsDateString()
+  @IsDate()
   endTime: Date
 
   @Column({ type: "text", nullable: true })

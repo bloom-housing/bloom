@@ -5,14 +5,14 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
-import { applicationSetup, AppModule } from "../../src/app.module"
+import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { ApplicationsController } from "../../src/applications/applications.controller"
 import { EmailService } from "../../src/shared/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
+import { ApplicationDto } from "../../src/applications/application.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -67,8 +67,8 @@ describe("Applications", () => {
       .get(`/applications`)
       .set(...setAuthorization(user1AccessToken))
       .expect(200)
-    expect(Array.isArray(res.body)).toBe(true)
-    expect(res.body.length).toBe(1)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
   })
 
   it(`/POST `, async () => {
@@ -78,7 +78,7 @@ describe("Applications", () => {
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
-    expect(res.body).toEqual(expect.objectContaining(body))
+    expect(res.body).toEqual(expect.objectContaining<ApplicationDto>(body))
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
