@@ -92,3 +92,10 @@ details.disclosure {
 .shadow-left {
   box-shadow: -3px 0px 3px -1px rgba(0, 0, 0, 0.1);
 }
+
+// temp global style until status bar component
+.status-bar__status {
+  .tag.is-pill {
+    @apply block;
+  }
+}

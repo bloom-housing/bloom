@@ -91,9 +91,11 @@ export default function ApplicationsList() {
       <section className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
         <button onClick={() => router.back()}>Back</button>
 
-        <Tag success pillStyle>
-          Submitted
-        </Tag>
+        <div className="status-bar__status md:pl-4 md:w-3/12">
+          <Tag success pillStyle>
+            Submitted
+          </Tag>
+        </div>
       </section>
 
       {applicationDto && (
