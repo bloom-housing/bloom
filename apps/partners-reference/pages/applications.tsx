@@ -56,7 +56,7 @@ export default function ApplicationsList() {
     const row = gridApi.getSelectedRows()
     const rowId = row[0].id
 
-    router.push(`${window.location.pathname}/${rowId}`)
+    router.push(`applications/${rowId}`)
   }
 
   useEffect(() => {

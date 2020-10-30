@@ -1,12 +1,27 @@
-import React from "react"
+import React, { useState } from "react"
 import Head from "next/head"
 import { PageHeader, MetaTags, t } from "@bloom-housing/ui-components"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts/application"
+import { useRouter } from "next/router"
 
 import { AgGridReact } from "ag-grid-react"
 
 export default function ListingsList() {
+  const router = useRouter()
+  const [gridApi, setGridApi] = useState(null)
+
+  const onGridReady = (params) => {
+    setGridApi(params.api)
+  }
+
+  const onSelectionChanged = () => {
+    const row = gridApi.getSelectedRows()
+    const rowId = row[0].id
+
+    router.push(`/listings/${rowId}/applications`)
+  }
+
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
@@ -65,6 +80,9 @@ export default function ListingsList() {
               suppressPaginationPanel={true}
               paginationPageSize={8}
               suppressScrollOnNewData={true}
+              rowSelection={"single"}
+              onGridReady={onGridReady}
+              onSelectionChanged={onSelectionChanged}
             ></AgGridReact>
           </div>
         </article>
