@@ -117,6 +117,7 @@ export class ApplicationsController {
   private authorizeUserAction(user, app, action) {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       user_id: app.user?.id,
     })
   }
