@@ -28,7 +28,7 @@ export default function ApplicationsList() {
     applicationId
   )
 
-  const { application } = applicationDto || {}
+  const application = applicationDto.application as Record<string, any>
 
   const applicationDate = useMemo(() => {
     if (!applicationDto) return null
