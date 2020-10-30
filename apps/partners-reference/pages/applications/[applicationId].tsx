@@ -43,6 +43,14 @@ export default function ApplicationsList() {
     }
   }, [applicationDto])
 
+  const [hasMounted, setHasMounted] = React.useState(false)
+  React.useEffect(() => {
+    setHasMounted(true)
+  }, [])
+  if (!hasMounted) {
+    return null
+  }
+
   return (
     <Layout>
       <Head>
@@ -97,6 +105,42 @@ export default function ApplicationsList() {
                 </ViewItem>
               </GridCell>
             </GridSection>
+
+            {/* alternate contact */}
+            {application.alternateContact.type !== "" &&
+              application.alternateContact.type !== "noContact" && (
+                <GridSection className="bg-primary-lighter" title="Alternate Contact">
+                  <GridCell>
+                    <ViewItem label="First Name">{application.alternateContact.firstName}</ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label="Last Name">{application.alternateContact.lastName}</ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label="Relationship">{application.alternateContact.type}</ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label="Agency if Applicable">
+                      {application.alternateContact.agency.length
+                        ? application.alternateContact.agency
+                        : "None"}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label="Email">{application.alternateContact.emailAddress}</ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label="Phone">{application.alternateContact.phoneNumber}</ViewItem>
+                  </GridCell>
+                </GridSection>
+              )}
+
+            {/* household members */}
           </div>
 
           <span>Last updated August 1, 2020</span>
