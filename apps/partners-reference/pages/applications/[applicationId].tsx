@@ -101,9 +101,11 @@ export default function ApplicationsList() {
         <InlineButton onClick={() => router.back()}>{t("t.back")}</InlineButton>
 
         {/* TODO:hardcoded until we get information from the backend */}
-        <Tag success pillStyle>
-          Submitted
-        </Tag>
+        <div className="status-bar__status md:pl-4 md:w-3/12">
+          <Tag success pillStyle>
+            Submitted
+          </Tag>
+        </div>
       </section>
 
       {applicationDto && (
