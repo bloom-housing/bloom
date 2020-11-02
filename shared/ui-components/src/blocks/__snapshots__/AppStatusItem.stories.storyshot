@@ -2351,7 +2351,7 @@ exports[`Storyshots Blocks/Application Status Item App Status Item Pending 1`] =
             className="status-item__status"
           >
             <span
-              className="status-item__label undefined"
+              className="status-item__label "
             >
               Status
               : 
