@@ -2,7 +2,6 @@ import { Test, TestingModule } from "@nestjs/testing"
 import {
   CsvBuilder,
   defaultFormatter,
-  FormattingMetadataAggregate,
   FormattingMetadataAggregateFactory,
 } from "./csv-builder.service"
 import { CsvEncoder } from "./csv-encoder.service"

@@ -2,7 +2,7 @@
 3.2 Income
 Total pre-tax household income from all sources
 */
-import { useState } from "react"
+import React, { useState } from "react"
 import { Listing } from "@bloom-housing/core"
 import {
   AlertBox,
@@ -29,7 +29,7 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
     ([aMin, aMax, mMin], unit) => [
       Math.min(aMin, parseFloat(unit.annualIncomeMin)),
       Math.max(aMax, parseFloat(unit.annualIncomeMax)),
-      Math.min(mMin, unit.monthlyIncomeMin),
+      Math.min(mMin, parseFloat(unit.monthlyIncomeMin)),
     ],
     [Infinity, 0, Infinity]
   )
@@ -54,6 +54,7 @@ export default () => {
   const currentPageSection = 3
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     defaultValues: {
       income: application.income,

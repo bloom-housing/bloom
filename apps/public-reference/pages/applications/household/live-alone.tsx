@@ -2,7 +2,7 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
-import { useState } from "react"
+import React, { useState } from "react"
 import {
   Button,
   FormCard,
@@ -22,6 +22,7 @@ export default () => {
   const currentPageSection = 2
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, clearErrors } = useForm()
   const onSubmit = () => {
     conductor.sync()

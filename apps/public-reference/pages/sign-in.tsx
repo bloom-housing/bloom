@@ -1,5 +1,5 @@
-import Router from "next/router"
-import { useState, useContext } from "react"
+import React, { useState, useContext } from "react"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
   Button,
@@ -19,7 +19,11 @@ import FormsLayout from "../layouts/forms"
 const SignIn = () => {
   const { login } = useContext(UserContext)
   /* Form Handler */
+  // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
+  // https://github.com/react-hook-form/react-hook-form/issues/2887
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
+  const router = useRouter()
   const [requestError, setRequestError] = useState<string>()
 
   const onSubmit = async (data: { email: string; password: string }) => {
@@ -28,7 +32,8 @@ const SignIn = () => {
     try {
       const user = await login(email, password)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
-      Router.push("/account/dashboard").then(() => window.scrollTo(0, 0))
+      await router.push("/account/dashboard")
+      window.scrollTo(0, 0)
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {

@@ -22,7 +22,7 @@ const getText = (text: string, expanded: boolean, maxLength: number) => {
   return position > 0 ? text.substring(0, position) + "..." : text.substring(0, maxLength) + "..."
 }
 
-const moreLessButton = (expanded: boolean, setExpanded: Function) => {
+const moreLessButton = (expanded: boolean, setExpanded: (newValue: boolean) => void) => {
   return (
     <span className="button-toggle" onClick={() => setExpanded(!expanded)}>
       {expanded ? t("label.less") : t("label.more")}

@@ -2,6 +2,7 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+import React from "react"
 import {
   AlertBox,
   Button,
@@ -24,7 +25,8 @@ export default () => {
   const currentPageSection = 1
 
   /* Form Handler */
-  const { control, register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { control, register, handleSubmit, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {

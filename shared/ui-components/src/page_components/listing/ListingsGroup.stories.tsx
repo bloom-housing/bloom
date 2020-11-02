@@ -14,8 +14,6 @@ const triton = Object.assign({}, Triton) as any
 const listings = [archer, triton] as Listing[]
 
 export const showListingsGroup = () => {
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return (
     <ListingsGroup
       listings={listings}
@@ -24,5 +22,4 @@ export const showListingsGroup = () => {
       hideButtonText="Hide"
     />
   )
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }

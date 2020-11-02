@@ -2,6 +2,7 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
+import React from "react"
 import {
   AlertBox,
   Button,
@@ -22,6 +23,7 @@ export default () => {
   const currentPageSection = 2
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     const { preferredUnit } = data
