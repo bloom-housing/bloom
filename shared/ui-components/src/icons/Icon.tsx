@@ -5,6 +5,7 @@ export interface IconProps {
   size: string
   symbol: string
   white?: boolean
+  className?: string
 }
 
 const Icon = (props: IconProps) => {
@@ -13,6 +14,10 @@ const Icon = (props: IconProps) => {
 
   if (props.white) {
     wrapperClasses.push("ui-white")
+  }
+
+  if (props.className) {
+    wrapperClasses.push(props.className)
   }
 
   return (

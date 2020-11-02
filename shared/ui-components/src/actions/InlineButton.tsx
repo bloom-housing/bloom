@@ -1,5 +1,6 @@
 import * as React from "react"
 import "./InlineButton.scss"
+import { Icon } from "@bloom-housing/ui-components"
 
 export interface InlineButtonProps {
   children: React.ReactNode
@@ -14,7 +15,8 @@ const InlineButton = (props: InlineButtonProps) => {
 
   return (
     <button className={buttonClasses.join(" ")} onClick={props.onClick}>
-      {props.children}
+      {props.arrow && <Icon className="inline-button__icon" size="tiny" symbol="arrow-back" />}
+      <span className="inline-button__content">{props.children}</span>
     </button>
   )
 }

@@ -3,5 +3,9 @@
 .inline-button {
   @apply text-primary;
   @apply font-semibold;
-  @apply text-base;
+  @apply text-tiny;
+
+  &__icon {
+    @apply mr-1;
+  }
 }
