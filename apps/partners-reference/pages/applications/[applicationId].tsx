@@ -270,9 +270,13 @@ export default function ApplicationsList() {
             </div>
 
             <div className="md:w-3/12">
-              <p className="text-base text-center">
-                {t("t.lastUpdated")} {applicationUpdated}
-              </p>
+              <ul className="status-messages">
+                <li className="status-message">
+                  <div className="status-message__note text-center">
+                    {t("t.lastUpdated")} {applicationUpdated}
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
