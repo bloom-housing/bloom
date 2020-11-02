@@ -372,7 +372,7 @@ class Listing extends BaseEntity {
   }
 
   @Expose()
-  applicationConfig?: object
+  applicationConfig?: Record<string, unknown>
 }
 
 export { Listing as default, Listing }
