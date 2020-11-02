@@ -9,7 +9,6 @@ import { applicationSetup } from "../../src/app.module"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { ConfigModule } from "@nestjs/config"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

@@ -12,7 +12,6 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import { EmailService } from "../../src/shared/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { ApplicationDto } from "../../src/applications/application.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -27,16 +26,100 @@ describe("Applications", () => {
 
   const getTestAppBody: () => any = () => {
     return {
+      appUrl: "",
       listing: {
         id: listingId,
       },
       application: {
-        foo: "bar",
         applicant: {
-          emailAddress: "test@example.com",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          birthMonth: 0,
+          birthDay: 0,
+          birthYear: 0,
+          emailAddress: "",
+          noEmail: false,
+          phoneNumber: "",
+          phoneNumberType: "",
+          noPhone: false,
+          workInRegion: null,
+          address: {
+            street: "",
+            street2: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            county: "",
+            latitude: null,
+            longitude: null,
+          },
+          workAddress: {
+            street: "",
+            street2: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            county: "",
+            latitude: null,
+            longitude: null,
+          },
         },
+        additionalPhone: true,
+        additionalPhoneNumber: "12345",
+        additionalPhoneNumberType: "cell",
+        contactPreferences: ["a", "b"],
+        householdSize: 1,
+        housingStatus: "status",
+        sendMailToMailingAddress: true,
+        mailingAddress: {
+          street: "",
+          street2: "",
+          city: "",
+          state: "",
+          zipCode: "",
+        },
+        alternateAddress: {
+          street: "",
+          street2: "",
+          city: "",
+          state: "",
+          zipCode: "",
+        },
+        alternateContact: {
+          type: "",
+          otherType: "",
+          firstName: "",
+          lastName: "",
+          agency: "",
+          phoneNumber: "",
+          emailAddress: "",
+          mailingAddress: {
+            street: "",
+            city: "",
+            state: "",
+            zipCode: "",
+          },
+        },
+        accessibility: {
+          mobility: null,
+          vision: null,
+          hearing: null,
+        },
+        demographics: {
+          ethnicity: "",
+          race: "",
+          gender: "",
+          sexualOrientation: "",
+          howDidYouHear: "",
+        },
+        incomeVouchers: "",
+        income: "100.00",
+        incomePeriod: "",
+        householdMembers: [],
+        preferredUnit: ["a", "b"],
+        preferences: {},
       },
-      appUrl: "",
     }
   }
 
@@ -77,8 +160,7 @@ describe("Applications", () => {
       .post(`/applications`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
-      .expect(201)
-    expect(res.body).toEqual(expect.objectContaining<ApplicationDto>(body))
+    expect(res.body).toEqual(expect.objectContaining(body))
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")

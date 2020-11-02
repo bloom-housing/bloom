@@ -49,7 +49,7 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Query() queryParams: ApplicationsListQueryParams
   ): Promise<PaginatedApplicationDto> {
-    let response: PaginatedApplicationDto | ApplicationDto[]
+    let response: PaginatedApplicationDto
     if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
       response = await this.applicationsService.listPaginated(queryParams)
     } else {
@@ -117,7 +117,6 @@ export class ApplicationsController {
   private authorizeUserAction(user, app, action) {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
-      // eslint-disable-next-line @typescript-eslint/camelcase
       user_id: app.user?.id,
     })
   }

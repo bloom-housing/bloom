@@ -69,7 +69,7 @@ class Preference extends BaseEntity {
   @Type(() => PreferenceLink)
   links: PreferenceLink[] | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.preferences, {
+  @ManyToOne(() => Listing, (listing) => listing.preferences, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

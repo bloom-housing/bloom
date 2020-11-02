@@ -42,6 +42,6 @@ async function bootstrap() {
   const configService: ConfigService = app.get(ConfigService)
   await app.listen(configService.get<number>("PORT"))
 }
-bootstrap()
+void bootstrap()
 
 export default app

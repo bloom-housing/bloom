@@ -3,6 +3,7 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
+import React from "react"
 import {
   AlertBox,
   Button,
@@ -22,7 +23,8 @@ export default () => {
   const currentPageSection = 2
 
   /* Form Handler */
-  const { register, handleSubmit, getValues, setValue, trigger, watch, errors } = useForm<
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit, getValues, setValue, trigger, errors } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -47,8 +49,6 @@ export default () => {
   const onError = () => {
     window.scrollTo(0, 0)
   }
-
-  const adaNone = watch("none")
 
   return (
     <FormsLayout>
@@ -90,7 +90,7 @@ export default () => {
                 onChange={() => {
                   setTimeout(() => {
                     setValue("none", false)
-                    trigger("none")
+                    void trigger("none")
                   }, 1)
                 }}
               />
@@ -109,7 +109,7 @@ export default () => {
                 onChange={() => {
                   setTimeout(() => {
                     setValue("none", false)
-                    trigger("none")
+                    void trigger("none")
                   }, 1)
                 }}
               />
@@ -128,7 +128,7 @@ export default () => {
                 onChange={() => {
                   setTimeout(() => {
                     setValue("none", false)
-                    trigger("none")
+                    void trigger("none")
                   }, 1)
                 }}
               />
@@ -156,7 +156,7 @@ export default () => {
                     setValue("mobility", false)
                     setValue("vision", false)
                     setValue("hearing", false)
-                    trigger("none")
+                    void trigger("none")
                   }
                 }}
               />

@@ -14,16 +14,20 @@ import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
+import { ColumnApi, GridApi } from "ag-grid-community"
 
 export default function ApplicationsList() {
   const router = useRouter()
-  const { register, handleSubmit, watch } = useForm()
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch } = useForm()
+
   const { applicationsService } = useContext(ApiClientContext)
 
-  const listingId = router.query.listingId as string
+  const listingId = router.query.id as string
 
-  const [gridApi, setGridApi] = useState(null)
-  const [gridColumnApi, setGridColumnApi] = useState(null)
+  const [gridApi, setGridApi] = useState<GridApi>(null)
+  const [gridColumnApi, setGridColumnApi] = useState<ColumnApi>(null)
 
   const filterField = watch("filter-input", "")
 
@@ -56,7 +60,7 @@ export default function ApplicationsList() {
     const row = gridApi.getSelectedRows()
     const rowId = row[0].id
 
-    router.push(`applications/${rowId}`)
+    void router.push(`applications/${rowId}`)
   }
 
   useEffect(() => {
@@ -408,9 +412,7 @@ export default function ApplicationsList() {
     },
   ]
 
-  const { applicationDtos, appsLoading, appsError } = useApplicationsData(
-    "ddd0c6ed-960a-487d-acd1-f4b971fea0bc"
-  ) // TODO: pass listing ID
+  const { applications, appsLoading, appsError } = useApplicationsData(listingId)
   if (appsError) return "An error has occurred."
   if (appsLoading) return "Loading..."
 
@@ -454,7 +456,7 @@ export default function ApplicationsList() {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>Applications Received</PageHeader>
-      {console.log(applicationDtos)}
+      {console.log(applications)}
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
@@ -478,7 +480,7 @@ export default function ApplicationsList() {
               <AgGridReact
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
-                rowData={applicationDtos}
+                rowData={applications}
                 domLayout={"autoHeight"}
                 headerHeight={83}
                 rowHeight={58}
@@ -510,11 +512,7 @@ export default function ApplicationsList() {
                     <label className="field-label font-sans" htmlFor="page-size">
                       Show
                     </label>
-                    <select
-                      onChange={() => this.onPageSizeChanged()}
-                      name="page-size"
-                      id="page-size"
-                    >
+                    <select onChange={() => false} name="page-size" id="page-size">
                       <option value="10" selected>
                         8
                       </option>
@@ -528,11 +526,7 @@ export default function ApplicationsList() {
                     <label className="field-label font-sans" htmlFor="page-jump">
                       Jump to
                     </label>
-                    <select
-                      onChange={() => this.onPageSizeChanged()}
-                      name="page-jump"
-                      id="page-jump"
-                    >
+                    <select onChange={() => false} name="page-jump" id="page-jump">
                       <option value="2" selected>
                         2
                       </option>

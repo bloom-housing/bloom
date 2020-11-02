@@ -6,10 +6,11 @@ import Layout from "../layouts/application"
 import { useRouter } from "next/router"
 
 import { AgGridReact } from "ag-grid-react"
+import { GridApi } from "ag-grid-community"
 
 export default function ListingsList() {
   const router = useRouter()
-  const [gridApi, setGridApi] = useState(null)
+  const [gridApi, setGridApi] = useState<GridApi>(null)
 
   const onGridReady = (params) => {
     setGridApi(params.api)
@@ -19,16 +20,11 @@ export default function ListingsList() {
     const row = gridApi.getSelectedRows()
     const rowId = row[0].id
 
-    router.push(`/listings/${rowId}/applications`)
+    void router.push(`/listings/${rowId}/applications`)
   }
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
-
-  const defaultColDef = {
-    resizable: true,
-    maxWidth: 300,
-  }
 
   const columnDefs = [
     {
@@ -60,6 +56,39 @@ export default function ListingsList() {
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
   if (listingsError) return "An error has occurred."
   if (listingsLoading) return "Loading..."
+
+  // DEMO custom pagination
+  // const onGridReady = params => {
+  //   this.gridApi = params.api;
+  //   this.gridColumnApi = params.columnApi;
+  // };
+
+  // const onPaginationChanged = () => {
+  //   console.log('onPaginationPageLoaded');
+  //   if (this.gridApi) {
+  //     setText('#lbLastPageFound', this.gridApi.paginationIsLastPageFound());
+  //     setText('#lbPageSize', this.gridApi.paginationGetPageSize());
+  //     setText('#lbCurrentPage', this.gridApi.paginationGetCurrentPage() + 1);
+  //     setText('#lbTotalPages', this.gridApi.paginationGetTotalPages());
+  //     setLastButtonDisabled(!this.gridApi.paginationIsLastPageFound());
+  //   }
+  // };
+
+  // const onBtNext = () => {
+  //   this.gridApi.paginationGoToNextPage()
+  // }
+
+  // const onBtPrevious = () => {
+  //   this.gridApi.paginationGoToPreviousPage()
+  // }
+
+  // const onBtPageFive = () => {
+  //   this.gridApi.paginationGoToPage(4);
+  // };
+
+  // const onBtPageFifty = () => {
+  //   this.gridApi.paginationGoToPage(49);
+  // };
 
   return (
     <Layout>
