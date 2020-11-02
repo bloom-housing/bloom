@@ -1,25 +1,25 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
   BaseEntity,
+  Column,
   CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Unit } from "./unit.entity"
+import { Unit, UnitsSummarized } from "./unit.entity"
 import { Application } from "./application.entity"
 import { Asset } from "./asset.entity"
 import { ApplicationMethod } from "./application-method.entity"
 import { Address } from "../shared/dto/address.dto"
 import { WhatToExpect } from "../shared/dto/whatToExpect.dto"
 import { Preference } from "./preference.entity"
-import { UnitsSummarized } from "@bloom-housing/core"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDate,
   IsDateString,
+  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -37,6 +37,23 @@ import { ApiProperty } from "@nestjs/swagger"
 export enum ListingStatus {
   active = "active",
   pending = "pending",
+}
+
+export class AmiChartItem {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  percentOfAmi: number
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  householdSize: number
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  income: number
 }
 
 @Entity({ name: "listings" })
@@ -59,7 +76,7 @@ class Listing extends BaseEntity {
   @OneToMany(() => Preference, (preference) => preference.listing)
   preferences: Preference[]
 
-  @OneToMany(() => Unit, (unit) => unit.listing)
+  @OneToMany(() => Unit, (unit) => unit.listing, { eager: true })
   units: Unit[]
 
   @OneToMany(() => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
@@ -130,11 +147,11 @@ class Listing extends BaseEntity {
   @Type(() => Address)
   buildingAddress: Address | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  buildingTotalUnits: string | null
+  @IsNumber()
+  buildingTotalUnits: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -184,13 +201,13 @@ class Listing extends BaseEntity {
   @IsBoolean()
   disableUnitsAccordion: boolean | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
   householdSizeMax: number | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -293,11 +310,11 @@ class Listing extends BaseEntity {
   @IsString()
   smokingPolicy: string | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  unitsAvailable: string | null
+  @IsNumber()
+  unitsAvailable: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -305,17 +322,17 @@ class Listing extends BaseEntity {
   @IsString()
   unitAmenities: string | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  waitlistCurrentSize: string | null
+  @IsNumber()
+  waitlistCurrentSize: number | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  waitlistMaxSize: string | null
+  @IsNumber()
+  waitlistMaxSize: number | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -324,11 +341,11 @@ class Listing extends BaseEntity {
   @Type(() => WhatToExpect)
   whatToExpect: WhatToExpect | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  yearBuilt: string | null
+  @IsNumber()
+  yearBuilt: number | null
 
   @Column({
     type: "enum",
@@ -337,6 +354,7 @@ class Listing extends BaseEntity {
   })
   @Expose()
   @IsEnum(ListingStatus)
+  @ApiProperty({ enum: ListingStatus, enumName: "ListingStatus" })
   status: ListingStatus
 
   @Expose()
@@ -352,6 +370,9 @@ class Listing extends BaseEntity {
   get urlSlug(): string | undefined {
     return listingUrlSlug(this)
   }
+
+  @Expose()
+  applicationConfig?: Record<string, unknown>
 }
 
 export { Listing as default, Listing }

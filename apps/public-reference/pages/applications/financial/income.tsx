@@ -29,7 +29,7 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
     ([aMin, aMax, mMin], unit) => [
       Math.min(aMin, parseFloat(unit.annualIncomeMin)),
       Math.max(aMax, parseFloat(unit.annualIncomeMax)),
-      Math.min(mMin, unit.monthlyIncomeMin),
+      Math.min(mMin, parseFloat(unit.monthlyIncomeMin)),
     ],
     [Infinity, 0, Infinity]
   )

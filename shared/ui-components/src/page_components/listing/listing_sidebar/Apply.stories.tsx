@@ -2,7 +2,10 @@ import * as React from "react"
 
 import { Apply } from "./Apply"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
-import { ApplicationMethod, ApplicationMethodType, Listing } from "@bloom-housing/core"
+import {
+  ApplicationMethod,
+  ApplicationMethodType,
+} from "@bloom-housing/core"
 
 export default {
   title: "Listing Sidebar/Apply",
@@ -30,11 +33,19 @@ export const showsMultipleDownloadURLs = () => {
   const listingWithDownloadMethods = Object.assign({}, listing)
 
   const testMethod1: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
   }
   const testMethod2: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "Spanish",
     externalReference: "#spanish",
     type: ApplicationMethodType.FileDownload,
@@ -51,6 +62,12 @@ export const linkDirectlyToInternalApplication = () => {
   const listingWithInternalLink = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    externalReference: "",
+    id: "",
+    label: "",
+    updatedAt: new Date(),
     type: ApplicationMethodType.Internal,
   }
 
@@ -65,10 +82,20 @@ export const linkToInternalApplicationAndDownloads = () => {
   const listingWithInternalAndDownload = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    externalReference: "",
+    id: "",
+    label: "",
+    updatedAt: new Date(),
     type: ApplicationMethodType.Internal,
   }
 
   const downloadMethod: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
@@ -85,6 +112,10 @@ export const linkDirectlyToExternalApplication = () => {
   const listingWithMethodLinks = Object.assign({}, listing)
 
   const externalMethod: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    createdAt: new Date(),
+    id: "",
+    updatedAt: new Date(),
     label: "External",
     externalReference: "https://icann.org",
     type: ApplicationMethodType.ExternalLink,

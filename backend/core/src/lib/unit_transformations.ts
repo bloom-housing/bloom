@@ -1,13 +1,7 @@
-import {
-  UnitsSummarized,
-  UnitSummary,
-  MinMax,
-  MinMaxCurrency,
-  AmiChartItem,
-} from "@bloom-housing/core"
-import { Unit } from "../entity/unit.entity"
+import { MinMax, MinMaxCurrency, Unit, UnitsSummarized, UnitSummary } from "../entity/unit.entity"
+import { AmiChartItem } from "../.."
 
-type AnyDict = { [key: string]: any }
+export type AnyDict = { [key: string]: any }
 type Units = Unit[]
 
 const usd = new Intl.NumberFormat("en-US", {
@@ -22,14 +16,17 @@ const minMaxValue = (baseValue: MinMax, newValue: number, newMaxValue?: number):
     newMaxValue = newValue
   }
   if (baseValue && (baseValue.min || baseValue.min == 0) && baseValue.max) {
-    return { min: Math.min(baseValue.min, newValue), max: Math.max(baseValue.max, newMaxValue) }
+    return {
+      min: Math.min(baseValue.min, newValue),
+      max: Math.max(baseValue.max, newMaxValue),
+    }
   } else {
     return { min: newValue, max: newMaxValue }
   }
 }
 
-const minMaxInCurrency = (minMax: MinMax): MinMaxCurrency => {
-  return { min: usd.format(minMax.min), max: usd.format(minMax.max) }
+const minMaxInCurrency = (minMax: MinMaxCurrency): MinMaxCurrency => {
+  return { min: usd.format(parseFloat(minMax.min)), max: usd.format(parseFloat(minMax.max)) }
 }
 
 const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
@@ -136,10 +133,17 @@ const summarizeUnits = (
         if (!summary.totalAvailable) {
           summary.totalAvailable = 0
         }
-        summary.minIncomeRange = minMaxValue(
-          summary.minIncomeRange as MinMax,
-          Number.parseFloat(unit.monthlyIncomeMin)
+        const minIncomeRange = minMaxValue(
+          {
+            min: parseFloat(summary.minIncomeRange?.min),
+            max: parseFloat(summary.minIncomeRange?.max),
+          },
+          parseFloat(unit.monthlyIncomeMin)
         )
+        summary.minIncomeRange = {
+          min: minIncomeRange.min.toPrecision(2),
+          max: minIncomeRange.max.toPrecision(2),
+        }
 
         summary.occupancyRange = minMaxValue(
           summary.occupancyRange,
@@ -150,10 +154,17 @@ const summarizeUnits = (
           summary.rentAsPercentIncomeRange,
           parseFloat(unit.monthlyRentAsPercentOfIncome)
         )
-        summary.rentRange = minMaxValue(
-          summary.rentRange as MinMax,
+        const rentRange = minMaxValue(
+          {
+            min: parseFloat(summary.rentRange?.min),
+            max: parseFloat(summary.rentRange?.max),
+          },
           Number.parseFloat(unit.monthlyRent)
         )
+        summary.rentRange = {
+          min: rentRange.min.toPrecision(2),
+          max: rentRange.max.toPrecision(2),
+        }
         if (unit.floor) {
           summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
         }
@@ -166,10 +177,10 @@ const summarizeUnits = (
       }, summary)
 
       if (finalSummary.minIncomeRange) {
-        finalSummary.minIncomeRange = minMaxInCurrency(finalSummary.minIncomeRange as MinMax)
+        finalSummary.minIncomeRange = minMaxInCurrency(finalSummary.minIncomeRange)
       }
       if (finalSummary.rentRange) {
-        finalSummary.rentRange = minMaxInCurrency(finalSummary.rentRange as MinMax)
+        finalSummary.rentRange = minMaxInCurrency(finalSummary.rentRange)
       }
 
       return finalSummary

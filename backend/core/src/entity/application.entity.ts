@@ -5,80 +5,358 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  BaseEntity,
 } from "typeorm"
 import { User } from "./user.entity"
 import { Listing } from "./listing.entity"
-import { IsDate, IsDateString, IsDefined, IsJSON, IsString, IsUUID } from "class-validator"
-import { Expose } from "class-transformer"
+import {
+  IsBoolean,
+  IsDefined,
+  IsDate,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from "class-validator"
+import { Expose, Type } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
 
+export class HousingCounselor {
+  @Expose()
+  @IsString()
+  name: string
+
+  @Expose()
+  @IsString({ each: true })
+  languages: string[]
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  address: string | null
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  citystate: string | null
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  phone: string | null
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  website: string | null
+}
+
 export class Applicant {
+  @Expose()
+  @IsString()
   firstName: string
+
+  @Expose()
+  @IsString()
   middleName: string
+
+  @Expose()
+  @IsString()
   lastName: string
+
+  @Expose()
+  @IsNumber()
   birthMonth: number
+
+  @Expose()
+  @IsNumber()
   birthDay: number
+
+  @Expose()
+  @IsNumber()
   birthYear: number
+
+  @Expose()
+  @IsString()
   emailAddress: string
+
+  @Expose()
+  @IsBoolean()
   noEmail: boolean
+
+  @Expose()
+  @IsString()
   phoneNumber: string
+
+  @Expose()
+  @IsString()
   phoneNumberType: string
+
+  @Expose()
+  @IsBoolean()
   noPhone: boolean
-  // TODO Type? Was null
-  workInRegion: boolean
+
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  workInRegion: boolean | null
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Address)
+  workAddress: Address
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Address)
+  address: Address
 }
 
 export class AlternateContact {
+  @Expose()
+  @IsString()
   type: string
+
+  @Expose()
+  @IsString()
   otherType: string
+
+  @Expose()
+  @IsString()
   firstName: string
+
+  @Expose()
+  @IsString()
   lastName: string
+
+  @Expose()
+  @IsString()
   agency: string
+
+  @Expose()
+  @IsString()
   phoneNumber: string
+
+  @Expose()
+  @IsString()
   emailAddress: string
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Address)
   mailingAddress: Address
 }
 
 export class Accessibility {
-  mobility: boolean
-  vision: boolean
-  hearing: boolean
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  mobility: boolean | null
+
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  vision: boolean | null
+
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  hearing: boolean | null
 }
 
 export class Demographics {
+  @Expose()
+  @IsString()
   ethnicity: string
+
+  @Expose()
+  @IsString()
   gender: string
+
+  @Expose()
+  @IsString()
   sexualOrientation: string
+
+  @Expose()
+  @IsString()
   howDidYouHear: string
+
+  @Expose()
+  @IsString()
   race: string
 }
 
-export class ApplicationData {
-  applicant: Applicant
+export class HouseholdMember {
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  id?: number | null
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Address)
   address: Address
-  workAddress: Address
+
+  @Expose()
+  @IsString()
+  firstName: string
+
+  @Expose()
+  @IsString()
+  middleName: string
+
+  @Expose()
+  @IsString()
+  lastName: string
+
+  @Expose()
+  @IsNumber()
+  birthMonth: number
+
+  @Expose()
+  @IsNumber()
+  birthDay: number
+
+  @Expose()
+  @IsNumber()
+  birthYear: number
+
+  @Expose()
+  @IsString()
+  emailAddress: string
+
+  @Expose()
+  @IsBoolean()
+  noEmail: boolean
+
+  @Expose()
+  @IsString()
+  phoneNumber: string
+
+  @Expose()
+  @IsString()
+  phoneNumberType: string
+
+  @Expose()
+  @IsBoolean()
+  noPhone: boolean
+
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  sameAddress?: boolean | null
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  relationship?: string | null
+
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  workInRegion?: boolean | null
+
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Address)
+  workAddress?: Address | null
+}
+
+export class ApplicationData {
+  @Expose()
+  @ValidateNested()
+  @Type(() => Applicant)
+  applicant: Applicant
+
+  @Expose()
+  @IsBoolean()
   additionalPhone: boolean
+
+  @Expose()
+  @IsString()
   additionalPhoneNumber: string
+
+  @Expose()
+  @IsString()
   additionalPhoneNumberType: string
+
+  @Expose()
+  @IsString({ each: true })
   contactPreferences: Array<string>
+
+  @Expose()
+  @IsNumber()
   householdSize: number
+
+  @Expose()
+  @IsString()
   housingStatus: string
+
+  @Expose()
+  @IsBoolean()
   sendMailToMailingAddress: boolean
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Address)
   mailingAddress: Address
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Address)
   alternateAddress: Address
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AlternateContact)
   alternateContact: AlternateContact
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Accessibility)
   accessibility: Accessibility
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Demographics)
   demographics: Demographics
+
+  @Expose()
+  @IsString()
   incomeVouchers: string
+
+  @Expose()
+  @IsString()
   income: string
+
+  @Expose()
+  @IsString()
   incomePeriod: string
-  // TODO Type
-  householdMembers: Array<string>
-  // TODO Type
+
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => HouseholdMember)
+  householdMembers: Array<HouseholdMember>
+
+  @Expose()
+  @IsString({ each: true })
   preferredUnit: Array<string>
-  // TODO Type
-  preferences: Array<string>
+
+  @Expose()
+  @IsDefined()
+  @IsObject()
+  preferences: Record<string, any>
 }
 
 @Entity({ name: "applications" })
@@ -113,5 +391,7 @@ export class Application {
   @Column({ type: "jsonb", nullable: true })
   @Expose()
   @IsDefined()
-  application: any
+  @ValidateNested()
+  @Type(() => ApplicationData)
+  application: ApplicationData
 }

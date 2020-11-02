@@ -1,4 +1,3 @@
-import { NestFactory } from "@nestjs/core"
 import { SeederModule } from "./seeder/seeder.module"
 import { ListingsSeederService } from "./seeder/listings-seeder/listings-seeder.service"
 import { UserService } from "./user/user.service"
@@ -9,6 +8,7 @@ import { User } from "./entity/user.entity"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { UserCreateDto } from "./user/user.dto"
+import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
 
 const argv = yargs.scriptName("seed").options({

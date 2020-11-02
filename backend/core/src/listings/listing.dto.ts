@@ -1,13 +1,13 @@
 import { Listing } from "../entity/listing.entity"
 import { ListingsResponseStatus } from "./listings.service"
-import { Expose, Type } from "class-transformer"
+import { Exclude, Expose, Type } from "class-transformer"
 import { IsDefined, IsEnum, IsUUID, ValidateNested } from "class-validator"
 
 import { PreferenceDto } from "../preferences/preference.dto"
 import { AssetDto } from "../assets/asset.dto"
 import { ApplicationMethodDto } from "../application-methods/application-method.dto"
 import { UnitDto } from "../units/unit.dto"
-import { OmitType } from "@nestjs/swagger"
+import { ApiHideProperty, ApiProperty, OmitType } from "@nestjs/swagger"
 import { ListingEventDto } from "../listing-events/listing-events.dto"
 import { IdDto } from "../lib/id.dto"
 
@@ -17,6 +17,7 @@ export class ListingDto extends OmitType(Listing, [
   "preferences",
   "units",
   "events",
+  "applications",
 ] as const) {
   @Expose()
   @IsDefined()
@@ -45,11 +46,16 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ each: true })
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
+
+  @Exclude()
+  @ApiHideProperty()
+  applications
 }
 
 export class ListingExtendedDto {
   @Expose()
   @IsEnum(ListingsResponseStatus)
+  @ApiProperty({ enum: ListingsResponseStatus, enumName: "ListingsResponseStatus" })
   status: ListingsResponseStatus
   @Expose()
   @ValidateNested({ each: true })

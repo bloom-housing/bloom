@@ -2,7 +2,7 @@ import { useContext } from "react"
 import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
-import { ApplicationDto, ListingDto } from "@bloom-housing/backend-core/client"
+import { Application, Listing } from "@bloom-housing/core"
 
 export function useListingsData() {
   const fetcher = (url) => fetch(url).then((r) => r.json())
@@ -23,21 +23,21 @@ export function useApplicationsData() {
   const backendApplicationsEndpointUrl = process.env.backendApiBase + "/applications"
   const fetcher = () => applicationsService.list()
   const { data, error } = useSWR(backendApplicationsEndpointUrl, fetcher)
-  const applications: ApplicationDto[] = []
+  const applications: Application[] = []
   if (listingDtos && data) {
     console.log(`Applications Data Received: ${data.items.length}`)
-    const listings: Record<string, ListingDto> = Object.fromEntries(
+    const listings: Record<string, Listing> = Object.fromEntries(
       listingDtos.listings.map((e) => [e.id, e])
     )
     data.items.forEach((application) => {
-      const app: ApplicationDto = application
+      const app: Application = application
       app.listing = listings[application.listing.id]
       applications.push(app)
       console.log(`Assigned ${listings[application.listing.id].name} to ${application.id}`)
     })
   }
   return {
-    applicationDtos: applications,
+    applications: applications,
     appsLoading: listingsLoading || (!error && !data),
     appsError: listingsError || error,
   }

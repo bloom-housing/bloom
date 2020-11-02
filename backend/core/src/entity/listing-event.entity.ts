@@ -10,6 +10,7 @@ import {
 import { Expose } from "class-transformer"
 import { IsDate, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
 import { Listing } from "./listing.entity"
+import { ApiProperty } from "@nestjs/swagger"
 
 export enum ListingEventType {
   openHouse = "openHouse",
@@ -41,6 +42,7 @@ export class ListingEvent extends BaseEntity {
   @Expose()
   @IsDefined()
   @IsEnum(ListingEventType)
+  @ApiProperty({ enum: ListingEventType, enumName: "ListingEventType" })
   type: ListingEventType
 
   @Column()
