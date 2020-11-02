@@ -9,6 +9,7 @@ export interface ButtonProps {
   normalCase?: boolean
   onClick: (e: React.MouseEvent) => void
   small?: boolean
+  disabled?: boolean
 }
 
 const Button = (props: ButtonProps) => {
@@ -20,7 +21,7 @@ const Button = (props: ButtonProps) => {
   if (props.className) buttonClasses.push(props.className)
 
   return (
-    <button className={buttonClasses.join(" ")} onClick={props.onClick}>
+    <button className={buttonClasses.join(" ")} onClick={props.onClick} disabled={props.disabled}>
       {props.children}
     </button>
   )

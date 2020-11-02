@@ -2,7 +2,6 @@ import { useContext } from "react"
 import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
-import { Application, Listing } from "@bloom-housing/core"
 
 export function useListingsData() {
   const fetcher = (url) => fetch(url).then((r) => r.json())
@@ -18,28 +17,19 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData(listingId?: string) {
-  const { listingDtos, listingsLoading, listingsError } = useListingsData()
+export function useApplicationsData(pageIndex: number, limit = 10, listingId: string) {
   const { applicationsService } = useContext(ApiClientContext)
-  const backendApplicationsEndpointUrl = process.env.backendApiBase + "/applications"
-  const params = listingId ? { listingId } : {}
-  const fetcher = () => applicationsService.list(params)
-  const { data, error } = useSWR(backendApplicationsEndpointUrl, fetcher)
-  const applications: Application[] = []
-  // if (listingDtos && data) {
-  //   console.log(`Applications Data Received: ${data.items.length}`)
-  //   const listings: Record<string, Listing> = Object.fromEntries(
-  //     listingDtos.listings.map((e) => [e.id, e])
-  //   )
-  //   data.items.forEach((application) => {
-  //     const app: Application = application
-  //     app.listing = listings[application.listing.id]
-  //     applications.push(app)
-  //     console.log(`Assigned ${listings[application.listing.id].name} to ${application.id}`)
-  //   })
-  // }
+  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}`
+  const fetcher = () =>
+    applicationsService.list({
+      listingId,
+      page: pageIndex,
+      limit,
+    })
+  const { data, error } = useSWR(endpoint, fetcher)
+
   return {
-    applications: data?.items,
+    appsData: data,
     appsLoading: !error && !data,
     appsError: error,
   }

@@ -14,34 +14,46 @@ import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { ColumnApi, GridApi } from "ag-grid-community"
+import { GridApi } from "ag-grid-community"
 
 export default function ApplicationsList() {
   const router = useRouter()
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
-
+  const [gridApi, setGridApi] = useState<GridApi>(null)
   const { applicationsService } = useContext(ApiClientContext)
+
+  const filterField = watch("filter-input", "")
+  const pageSize = watch("page-size", 8)
 
   const listingId = router.query.id as string
 
-  const [gridApi, setGridApi] = useState<GridApi>(null)
-  const [gridColumnApi, setGridColumnApi] = useState<ColumnApi>(null)
+  const [pageIndex, setPageIndex] = useState(1)
 
-  const filterField = watch("filter-input", "")
+  const { appsData, appsLoading, appsError } = useApplicationsData(pageIndex, pageSize, listingId)
+
+  // reset page to 1 when user change limit
+  useEffect(() => {
+    setPageIndex(1)
+  }, [pageSize])
+
+  // fetch data
+  const applications = appsData?.items || []
+  const appsMeta = appsData?.meta
+
+  const pageSizeOptions = ["8", "100", "500", "1000"]
+  const pageJumpOptions = Array.from(Array(appsMeta?.totalPages).keys())?.map((item) => item + 1)
 
   const onGridReady = (params) => {
     setGridApi(params.api)
-    setGridColumnApi(params.columnApi)
   }
 
   const onBtNext = () => {
-    gridApi.paginationGoToNextPage()
+    setPageIndex(pageIndex + 1)
   }
 
   const onBtPrevious = () => {
-    gridApi.paginationGoToPreviousPage()
+    setPageIndex(pageIndex - 1)
   }
 
   const onExport = async () => {
@@ -412,51 +424,16 @@ export default function ApplicationsList() {
     },
   ]
 
-  const { applications, appsLoading, appsError } = useApplicationsData(listingId)
-  if (appsError) return "An error has occurred."
-  if (appsLoading) return "Loading..."
-
-  // DEMO custom pagination
-  // const onGridReady = params => {
-  //   this.gridApi = params.api;
-  //   this.gridColumnApi = params.columnApi;
-  // };
-
-  // const onPaginationChanged = () => {
-  //   console.log('onPaginationPageLoaded');
-  //   if (this.gridApi) {
-  //     setText('#lbLastPageFound', this.gridApi.paginationIsLastPageFound());
-  //     setText('#lbPageSize', this.gridApi.paginationGetPageSize());
-  //     setText('#lbCurrentPage', this.gridApi.paginationGetCurrentPage() + 1);
-  //     setText('#lbTotalPages', this.gridApi.paginationGetTotalPages());
-  //     setLastButtonDisabled(!this.gridApi.paginationIsLastPageFound());
-  //   }
-  // };
-
-  // const onBtNext = () => {
-  //   this.gridApi.paginationGoToNextPage()
-  // }
-
-  // const onBtPrevious = () => {
-  //   this.gridApi.paginationGoToPreviousPage()
-  // }
-
-  // const onBtPageFive = () => {
-  //   this.gridApi.paginationGoToPage(4);
-  // };
-
-  // const onBtPageFifty = () => {
-  //   this.gridApi.paginationGoToPage(49);
-  // };
-
   return (
     <Layout>
+      {console.log(appsLoading, appsError)}
+
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>Applications Received</PageHeader>
-      {console.log(applications)}
+
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
@@ -493,17 +470,18 @@ export default function ApplicationsList() {
               ></AgGridReact>
 
               <div className="data-pager">
-                <button
-                  className="button data-pager__previous data-pager__control"
+                <Button
+                  className="data-pager__previous data-pager__control"
                   onClick={onBtPrevious}
+                  disabled={pageIndex === 1}
                 >
-                  Previous
-                </button>
+                  {t("t.previous")}
+                </Button>
 
                 <div className="data-pager__control-group">
                   <span className="data-pager__control">
                     <span className="field-label" id="lbTotalPages">
-                      12
+                      {appsMeta?.totalItems}
                     </span>
                     <span className="field-label">Total Applications</span>
                   </span>
@@ -512,13 +490,10 @@ export default function ApplicationsList() {
                     <label className="field-label font-sans" htmlFor="page-size">
                       Show
                     </label>
-                    <select onChange={() => false} name="page-size" id="page-size">
-                      <option value="10" selected>
-                        8
-                      </option>
-                      <option value="100">100</option>
-                      <option value="500">500</option>
-                      <option value="1000">1000</option>
+                    <select name="page-size" id="page-size" ref={register} defaultValue={8}>
+                      {pageSizeOptions.map((item) => (
+                        <option value={item}>{item}</option>
+                      ))}
                     </select>
                   </span>
 
@@ -526,20 +501,30 @@ export default function ApplicationsList() {
                     <label className="field-label font-sans" htmlFor="page-jump">
                       Jump to
                     </label>
-                    <select onChange={() => false} name="page-jump" id="page-jump">
-                      <option value="2" selected>
-                        2
-                      </option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
+                    <select
+                      name="page-jump"
+                      id="page-jump"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setPageIndex(parseInt(e.target.value))
+                      }
+                      value={pageIndex}
+                    >
+                      {pageJumpOptions.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
                     </select>
                   </span>
                 </div>
 
-                <button className="button data-pager__next data-pager__control" onClick={onBtNext}>
-                  Next
-                </button>
+                <Button
+                  className="data-pager__next data-pager__control"
+                  onClick={onBtNext}
+                  disabled={appsMeta?.totalPages === pageIndex}
+                >
+                  {t("t.next")}
+                </Button>
               </div>
             </div>
           </div>
