@@ -3,6 +3,7 @@ import "./Modal.scss"
 import { Modal } from "./Modal"
 import SVG from "react-inlinesvg"
 import { Button } from "../actions/Button"
+import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Overlays/Modal",
@@ -27,10 +28,10 @@ export const BasicModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      <Button onClick={noop} primary={true}>
+      <Button onClick={noop} type={AppearanceStyleType.primary}>
         Submit
       </Button>,
-      <Button onClick={noop} borderless={true}>
+      <Button onClick={noop} type={AppearanceStyleType.secondary} border={AppearanceBorderType.borderless}>
         Cancel
       </Button>,
     ]}
@@ -46,10 +47,10 @@ export const FullScreenModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      <Button onClick={noop} primary={true}>
+      <Button onClick={noop} type={AppearanceStyleType.primary}>
         Submit
       </Button>,
-      <Button onClick={noop} borderless={true}>
+      <Button onClick={noop} type={AppearanceStyleType.secondary} border={AppearanceBorderType.borderless}>
         Cancel
       </Button>,
     ]}
@@ -66,10 +67,10 @@ export const SuccessFailureModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      <Button onClick={noop} success={true}>
+      <Button onClick={noop} type={AppearanceStyleType.success}>
         Submit
       </Button>,
-      <Button onClick={noop} alert={true}>
+      <Button onClick={noop} type={AppearanceStyleType.alert}>
         Cancel
       </Button>,
     ]}
