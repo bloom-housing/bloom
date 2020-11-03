@@ -3402,11 +3402,33 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
           >
             Office Hours
           </h3>
-          <p
-            className="text-gray-800"
+          <div
+            className="text-gray-800 markdown"
           >
-            Monday, Tuesday & Friday, 9:00AM - 5:00PM
-          </p>
+            <Markdown
+              options={
+                Object {
+                  "disableParsingRawHTML": true,
+                  "namedCodesToUnicode": Object {
+                    "amp": "&",
+                    "apos": "'",
+                    "gt": ">",
+                    "lt": "<",
+                    "nbsp": " ",
+                    "quot": "“",
+                  },
+                  "overrides": Object {},
+                  "slugify": [Function],
+                }
+              }
+            >
+              <span
+                key="outer"
+              >
+                Monday, Tuesday & Friday, 9:00AM - 5:00PM
+              </span>
+            </Markdown>
+          </div>
         </SidebarAddress>
       </section>
       <section
@@ -3591,11 +3613,33 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
           >
             Office Hours
           </h3>
-          <p
-            className="text-gray-800"
+          <div
+            className="text-gray-800 markdown"
           >
-            Monday, Tuesday & Friday, 9:00AM - 5:00PM
-          </p>
+            <Markdown
+              options={
+                Object {
+                  "disableParsingRawHTML": true,
+                  "namedCodesToUnicode": Object {
+                    "amp": "&",
+                    "apos": "'",
+                    "gt": ">",
+                    "lt": "<",
+                    "nbsp": " ",
+                    "quot": "“",
+                  },
+                  "overrides": Object {},
+                  "slugify": [Function],
+                }
+              }
+            >
+              <span
+                key="outer"
+              >
+                Monday, Tuesday & Friday, 9:00AM - 5:00PM
+              </span>
+            </Markdown>
+          </div>
         </SidebarAddress>
       </section>
     </Apply>
