@@ -360,7 +360,7 @@ class Listing extends BaseEntity {
   @Expose()
   @ApiProperty()
   get unitsSummarized(): UnitsSummarized | undefined {
-    if (this.units.length > 0) {
+    if (Array.isArray(this.units) && this.units.length > 0) {
       return transformUnits(this.units, amiCharts)
     }
   }
