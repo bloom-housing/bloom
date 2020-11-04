@@ -7,6 +7,7 @@ import { PaginationFactory, PaginationQueryParams } from "../utils/pagination.dt
 import { ListingDto } from "../listings/listing.dto"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
+  @Expose()
   @ApiProperty({
     type: String,
     example: "listingId",
@@ -18,6 +19,7 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
 }
 
 export class ApplicationsCsvListQueryParams {
+  @Expose()
   @ApiProperty({
     type: String,
     example: "listingId",
@@ -27,6 +29,7 @@ export class ApplicationsCsvListQueryParams {
   @IsString()
   listingId?: string
 
+  @Expose()
   @ApiProperty({
     type: Boolean,
     example: true,
