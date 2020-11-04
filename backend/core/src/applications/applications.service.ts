@@ -45,22 +45,25 @@ export class ApplicationsService {
   }
 
   async listPaginated(params: ApplicationsListQueryParams, user?: User) {
-    return paginate(
-      this.repository,
-      { limit: params.limit, page: params.page },
-      {
-        where: {
-          ...(user && { user: { id: user.id } }),
-          // Workaround for params.listingId resulting in:
-          // listing: {id: undefined}
-          // and query responding with 0 applications.
-          ...(params.listingId && {
-            listing: { id: params.listingId },
-          }),
-        },
-        relations: ["listing", "user"],
-      }
-    )
+    const qb = this.repository.createQueryBuilder("application")
+    qb.leftJoinAndSelect("application.user", "user")
+    qb.leftJoinAndSelect("application.listing", "listing")
+
+    if (user) {
+      qb.andWhere("user.id = :userId", { userId: user.id })
+    }
+
+    if (params.listingId) {
+      qb.andWhere("listing.id = :listingId", { listingId: params.listingId })
+    }
+
+    if (params.search) {
+      qb.andWhere("to_tsvector('english', application) @@ to_tsquery(:search)", {
+        search: params.search,
+      })
+    }
+
+    return paginate(qb, { limit: params.limit, page: params.page })
   }
 
   async create(applicationCreateDto: ApplicationCreateDto, user?: User) {

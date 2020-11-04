@@ -244,6 +244,8 @@ export class ApplicationsService {
       limit?: number;
       /**  */
       listingId?: string;
+      /**  */
+      search?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -251,7 +253,12 @@ export class ApplicationsService {
       let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
+      configs.params = {
+        page: params['page'],
+        limit: params['limit'],
+        listingId: params['listingId'],
+        search: params['search']
+      };
       let data = null;
 
       configs.data = data;
