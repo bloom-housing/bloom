@@ -75,7 +75,6 @@ export const blankApplication = () => {
     completedSections: 0,
     submissionType: ApplicationSubmissionType.electronical,
     language: Language.en,
-    submittedBy: "",
     acceptedTerms: false,
     status: ApplicationStatus.submitted,
     applicant: {
@@ -163,7 +162,7 @@ export const blankApplication = () => {
       race: "",
       gender: "",
       sexualOrientation: "",
-      howDidYouHear: "",
+      howDidYouHear: [],
     },
     preferences: {} as Record<string, any>,
     confirmationId: "",

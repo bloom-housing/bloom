@@ -34,6 +34,10 @@ export default () => {
     },
   })
   const onSubmit = (data) => {
+    // FIXME
+    data.applicant.birthDay = parseInt(data.applicant.birthDay)
+    data.applicant.birthMonth = parseInt(data.applicant.birthMonth)
+    data.applicant.birthYear = parseInt(data.applicant.birthYear)
     conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl()
   }

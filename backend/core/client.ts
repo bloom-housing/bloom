@@ -1837,7 +1837,7 @@ export interface Applicant {
   noPhone: boolean;
 
   /**  */
-  workInRegion: boolean;
+  workInRegion: string;
 
   /**  */
   workAddress: Address;
@@ -1894,7 +1894,7 @@ export interface Demographics {
   sexualOrientation: string;
 
   /**  */
-  howDidYouHear: string;
+  howDidYouHear: string[];
 
   /**  */
   race: string;
@@ -1941,13 +1941,13 @@ export interface HouseholdMember {
   noPhone: boolean;
 
   /**  */
-  sameAddress?: boolean;
+  sameAddress?: string;
 
   /**  */
   relationship?: string;
 
   /**  */
-  workInRegion?: boolean;
+  workInRegion?: string;
 
   /**  */
   workAddress?: CombinedWorkAddressTypes;
@@ -2003,7 +2003,7 @@ export interface ApplicationData {
   demographics: Demographics;
 
   /**  */
-  incomeVouchers: string;
+  incomeVouchers: boolean;
 
   /**  */
   income: string;
@@ -2022,9 +2022,6 @@ export interface ApplicationData {
 
   /**  */
   acceptedTerms: boolean;
-
-  /**  */
-  submittedBy: string;
 }
 
 export interface Application {

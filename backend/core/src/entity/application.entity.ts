@@ -19,6 +19,7 @@ import {
   IsUUID,
   ValidateNested,
   IsEnum,
+  IsIn,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
@@ -96,12 +97,14 @@ export class Applicant {
   birthYear: number
 
   @Expose()
+  @IsOptional()
   @IsString()
-  emailAddress: string
+  emailAddress: string | null
 
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noEmail: boolean
+  noEmail: boolean | null
 
   @Expose()
   @IsString()
@@ -112,13 +115,14 @@ export class Applicant {
   phoneNumberType: string
 
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noPhone: boolean
+  noPhone: boolean | null
 
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  workInRegion: boolean | null
+  @IsIn(["yes", "no"])
+  workInRegion: string | null
 
   @Expose()
   @IsDefined()
@@ -139,8 +143,9 @@ export class AlternateContact {
   type: string
 
   @Expose()
+  @IsOptional()
   @IsString()
-  otherType: string
+  otherType: string | null
 
   @Expose()
   @IsString()
@@ -151,6 +156,7 @@ export class AlternateContact {
   lastName: string
 
   @Expose()
+  @IsOptional()
   @IsString()
   agency: string
 
@@ -200,8 +206,8 @@ export class Demographics {
   sexualOrientation: string
 
   @Expose()
-  @IsString()
-  howDidYouHear: string
+  @IsString({ each: true })
+  howDidYouHear: string[]
 
   @Expose()
   @IsString()
@@ -249,8 +255,9 @@ export class HouseholdMember {
   emailAddress: string
 
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noEmail: boolean
+  noEmail: boolean | null
 
   @Expose()
   @IsString()
@@ -261,13 +268,14 @@ export class HouseholdMember {
   phoneNumberType: string
 
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noPhone: boolean
+  noPhone: boolean | null
 
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  sameAddress?: boolean | null
+  @IsIn(["yes", "no"])
+  sameAddress?: string | null
 
   @Expose()
   @IsOptional()
@@ -276,8 +284,8 @@ export class HouseholdMember {
 
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  workInRegion?: boolean | null
+  @IsIn(["yes", "no"])
+  workInRegion?: string | null
 
   @Expose()
   @IsOptional()
@@ -351,8 +359,8 @@ export class ApplicationData {
   demographics: Demographics
 
   @Expose()
-  @IsString()
-  incomeVouchers: string
+  @IsBoolean()
+  incomeVouchers: boolean
 
   @Expose()
   @IsString()
@@ -395,11 +403,6 @@ export class ApplicationData {
   @IsOptional()
   @IsBoolean()
   acceptedTerms: boolean | null
-
-  @Expose()
-  @IsOptional()
-  @IsString()
-  submittedBy: string
 }
 
 @Entity({ name: "applications" })
