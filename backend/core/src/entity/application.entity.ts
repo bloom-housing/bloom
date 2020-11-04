@@ -7,7 +7,7 @@ import {
   ManyToOne,
 } from "typeorm"
 import { User } from "./user.entity"
-import { Listing } from "./listing.entity"
+import { Listing, ListingStatus } from "./listing.entity"
 import {
   IsBoolean,
   IsDefined,
@@ -18,9 +18,12 @@ import {
   IsString,
   IsUUID,
   ValidateNested,
+  IsEnum,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
+import { ApplicationMethodType } from "./application-method.entity"
+import { ApiProperty } from "@nestjs/swagger"
 
 export class HousingCounselor {
   @Expose()
@@ -359,6 +362,22 @@ export class ApplicationData {
   preferences: Record<string, any>
 }
 
+export enum ApplicationStatus {
+  draft = "draft",
+  submitted = "submitted",
+  removed = "removed",
+}
+
+export enum ApplicationSubmissionType {
+  paper = "paper",
+  electronical = "electronical",
+}
+
+export enum Language {
+  en = "en",
+  es = "es",
+}
+
 @Entity({ name: "applications" })
 export class Application {
   @PrimaryGeneratedColumn("uuid")
@@ -394,4 +413,32 @@ export class Application {
   @ValidateNested()
   @Type(() => ApplicationData)
   application: ApplicationData
+
+  @Column({
+    type: "enum",
+    enum: ApplicationStatus,
+    nullable: false,
+    default: ApplicationStatus.submitted,
+  })
+  @Expose()
+  @IsEnum(ApplicationStatus)
+  @ApiProperty({ enum: ApplicationStatus, enumName: "ApplicationStatus" })
+  status: ApplicationStatus
+
+  @Column({ type: "enum", enum: Language, nullable: false, default: Language.en })
+  @Expose()
+  @IsEnum(Language)
+  @ApiProperty({ enum: Language, enumName: "Language" })
+  language: Language
+
+  @Column({
+    type: "enum",
+    enum: ApplicationSubmissionType,
+    nullable: false,
+    default: ApplicationSubmissionType.electronical,
+  })
+  @Expose()
+  @IsEnum(ApplicationSubmissionType)
+  @ApiProperty({ enum: ApplicationSubmissionType, enumName: "ApplicationSubmissionType" })
+  submissionType: ApplicationSubmissionType
 }

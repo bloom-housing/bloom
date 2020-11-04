@@ -2014,6 +2014,15 @@ export interface ApplicationData {
 
 export interface Application {
   /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
+  /**  */
   listing: Listing;
 
   /**  */
@@ -2059,6 +2068,15 @@ export interface PaginatedApplication {
 
 export interface ApplicationCreate {
   /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
+  /**  */
   listing: Id;
 
   /**  */
@@ -2069,6 +2087,15 @@ export interface ApplicationCreate {
 }
 
 export interface ApplicationUpdate {
+  /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
   /**  */
   listing: Id;
 
@@ -2353,4 +2380,19 @@ export type CombinedApplicationAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export enum ApplicationStatus {
+  'draft' = 'draft',
+  'submitted' = 'submitted',
+  'removed' = 'removed'
+}
+
+export enum Language {
+  'en' = 'en',
+  'es' = 'es'
+}
+
+export enum ApplicationSubmissionType {
+  'paper' = 'paper',
+  'electronical' = 'electronical'
+}
 export type CombinedWorkAddressTypes = (Address & any) | null;
