@@ -21,7 +21,9 @@
       "workInAlameda": "Live or Work in Alameda County",
       "householdIncome": "Declared Household Income",
       "annualIncome": "Annual Income",
-      "vouchers": "Housing Voucher or Subsidy"
+      "vouchers": "Housing Voucher or Subsidy",
+      "preferredContact": "Preferred Contact",
+      "residenceAddress": "Residence Address"
     },
     "form": {
       "errors": {
@@ -126,7 +128,8 @@
       "yourName": "Your Name",
       "firstName": "First Name",
       "firstNameError": "Please enter a First Name",
-      "middleName": "Middle Name (optional)",
+      "middleNameOptional": "Middle Name (optional)",
+      "middleName": "Middle Name",
       "lastName": "Last Name",
       "lastNameError": "Please enter a Last Name",
       "yourDateOfBirth": "Your Date of Birth",
@@ -758,6 +761,7 @@
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "secondPhone": "Second Phone",
     "seeListing": "See Listing",
     "selectAllThatApply": "Please select all that apply.",
     "selectOne": "Select One",
