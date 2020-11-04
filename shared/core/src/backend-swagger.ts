@@ -1955,6 +1955,15 @@ export interface HouseholdMember {
 
 export interface ApplicationData {
   /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
+  /**  */
   applicant: Applicant;
 
   /**  */
@@ -2010,18 +2019,15 @@ export interface ApplicationData {
 
   /**  */
   preferences: object;
+
+  /**  */
+  acceptedTerms: boolean;
+
+  /**  */
+  submittedBy: string;
 }
 
 export interface Application {
-  /**  */
-  status: ApplicationStatus;
-
-  /**  */
-  language: Language;
-
-  /**  */
-  submissionType: ApplicationSubmissionType;
-
   /**  */
   listing: Listing;
 
@@ -2068,15 +2074,6 @@ export interface PaginatedApplication {
 
 export interface ApplicationCreate {
   /**  */
-  status: ApplicationStatus;
-
-  /**  */
-  language: Language;
-
-  /**  */
-  submissionType: ApplicationSubmissionType;
-
-  /**  */
   listing: Id;
 
   /**  */
@@ -2087,15 +2084,6 @@ export interface ApplicationCreate {
 }
 
 export interface ApplicationUpdate {
-  /**  */
-  status: ApplicationStatus;
-
-  /**  */
-  language: Language;
-
-  /**  */
-  submissionType: ApplicationSubmissionType;
-
   /**  */
   listing: Id;
 
