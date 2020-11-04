@@ -14,6 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
+import Link from "next/link"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -121,7 +122,7 @@ export default function ApplicationsList() {
               >
                 <GridCell>
                   <ViewItem label={t("application.details.number")}>
-                    {application.confirmationId}
+                    <Link href={`/applications/${applicationDto.id}`}>{applicationDto.id}</Link>
                   </ViewItem>
                 </GridCell>
 
@@ -159,6 +160,133 @@ export default function ApplicationsList() {
                     {application.applicant.lastName}
                   </ViewItem>
                 </GridCell>
+              </GridSection>
+
+              {console.log(application)}
+
+              <GridSection
+                className="bg-primary-lighter"
+                title={t("application.household.primaryApplicant")}
+                inset
+                grid={false}
+              >
+                <GridSection columns={4}>
+                  <GridCell>
+                    <ViewItem label={t("application.name.firstName")}>
+                      {application.applicant.firstName}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.name.middleName")}>
+                      {application.applicant.middleName}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.name.lastName")}>
+                      {application.applicant.lastName}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.household.member.dateOfBirth")}>
+                      {application.applicant.birthMonth}/{application.applicant.birthDay}/
+                      {application.applicant.birthYear}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("t.email")}>{application.applicant.emailAddress}</ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("t.phone")}>{application.applicant.phoneNumber}</ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("t.secondPhone")}>
+                      {application.applicant.additionalPhoneNumber
+                        ? application.applicant.additionalPhoneNumber
+                        : t("t.none")}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell span={2}>
+                    <ViewItem label={t("application.details.preferredContact")}>
+                      {application.contactPreferences.map((item) => (
+                        <span key={item}>
+                          {t(`application.form.options.contact.${item}`)}
+                          <br />
+                        </span>
+                      ))}
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
+
+                <GridSection subtitle={t("application.details.residenceAddress")} columns={4}>
+                  <GridCell>
+                    <ViewItem label={t("application.contact.streetAddress")}>
+                      {application.applicant.address.street}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell span={3}>
+                    <ViewItem label={t("application.contact.apt")}>
+                      {application.applicant.address.street2}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.contact.city")}>
+                      {application.applicant.address.city}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.contact.state")}>
+                      {application.applicant.address.state}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.contact.zip")}>
+                      {application.applicant.address.zipCode}
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
+
+                <GridSection subtitle={t("application.contact.mailingAddress")} columns={4}>
+                  <GridCell>
+                    <ViewItem label={t("application.contact.streetAddress")}>
+                      {application.mailingAddress.street}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell span={3}>
+                    <ViewItem label={t("application.contact.apt")}>
+                      {application.mailingAddress.street2}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.contact.city")}>
+                      {application.mailingAddress.city}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.contact.state")}>
+                      {application.mailingAddress.state}
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.contact.zip")}>
+                      {application.mailingAddress.zipCode}
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
               </GridSection>
 
               {/* alternate contact */}
