@@ -17,14 +17,15 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData(pageIndex: number, limit = 10, listingId: string) {
+export function useApplicationsData(pageIndex: number, limit = 10, listingId: string, search = "") {
   const { applicationsService } = useContext(ApiClientContext)
-  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}`
+  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}&search=${search}`
   const fetcher = () =>
     applicationsService.list({
       listingId,
       page: pageIndex,
       limit,
+      search,
     })
   const { data, error } = useSWR(endpoint, fetcher)
 
