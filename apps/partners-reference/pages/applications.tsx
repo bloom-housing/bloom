@@ -57,7 +57,9 @@ export default function ApplicationsList() {
   }
 
   const onExport = async () => {
-    const content = await applicationsService.listAsCsv()
+    if (!listingId) return
+
+    const content = await applicationsService.listAsCsv({ listingId, includeHeaders: true })
     const now = new Date()
     const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
 
