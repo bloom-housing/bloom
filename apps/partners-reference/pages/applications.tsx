@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
@@ -9,6 +9,7 @@ import {
   t,
   Button,
   ApiClientContext,
+  debounce,
 } from "@bloom-housing/ui-components"
 import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
@@ -24,18 +25,37 @@ export default function ApplicationsList() {
   const { applicationsService } = useContext(ApiClientContext)
 
   const filterField = watch("filter-input", "")
+  const [delayedFilterValue, setDelayedFilterValue] = useState(filterField)
+
   const pageSize = watch("page-size", 8)
 
   const listingId = router.query.id as string
 
   const [pageIndex, setPageIndex] = useState(1)
 
-  const { appsData, appsLoading, appsError } = useApplicationsData(pageIndex, pageSize, listingId)
+  const { appsData, appsLoading, appsError } = useApplicationsData(
+    pageIndex,
+    pageSize,
+    listingId,
+    delayedFilterValue
+  )
+
+  function fetchFilteredResults(value: string) {
+    setDelayedFilterValue(value)
+  }
+
+  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
 
   // reset page to 1 when user change limit
   useEffect(() => {
     setPageIndex(1)
   }, [pageSize])
+
+  // fetch filtered data
+  useEffect(() => {
+    setPageIndex(1)
+    debounceFilter.current(filterField)
+  }, [filterField])
 
   // fetch data
   const applications = appsData?.items || []
@@ -76,12 +96,6 @@ export default function ApplicationsList() {
 
     void router.push(`applications/${rowId}`)
   }
-
-  useEffect(() => {
-    if (!gridApi) return
-
-    gridApi.setQuickFilter(filterField)
-  }, [gridApi, filterField])
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
@@ -476,6 +490,7 @@ export default function ApplicationsList() {
                   className="data-pager__previous data-pager__control"
                   onClick={onBtPrevious}
                   disabled={pageIndex === 1}
+                  filled={pageIndex !== 1}
                 >
                   {t("t.previous")}
                 </Button>
@@ -524,6 +539,7 @@ export default function ApplicationsList() {
                   className="data-pager__next data-pager__control"
                   onClick={onBtNext}
                   disabled={appsMeta?.totalPages === pageIndex}
+                  filled={appsMeta?.totalPages !== pageIndex}
                 >
                   {t("t.next")}
                 </Button>
