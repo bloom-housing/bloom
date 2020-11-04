@@ -33,12 +33,7 @@ export default function ApplicationsList() {
 
   const [pageIndex, setPageIndex] = useState(1)
 
-  const { appsData, appsLoading, appsError } = useApplicationsData(
-    pageIndex,
-    pageSize,
-    listingId,
-    delayedFilterValue
-  )
+  const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
@@ -442,13 +437,11 @@ export default function ApplicationsList() {
 
   return (
     <Layout>
-      {console.log(appsLoading, appsError)}
-
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>Applications Received</PageHeader>
+      <PageHeader>{t("applications.applicationsReceived")}</PageHeader>
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -460,11 +453,11 @@ export default function ApplicationsList() {
 
               <div className="flex-row">
                 <Button className="mx-1" onClick={() => false}>
-                  Add Application
+                  {t("applications.addApplication")}
                 </Button>
 
                 <Button className="mx-1" onClick={onExport}>
-                  Export
+                  {t("t.export")}
                 </Button>
               </div>
             </div>
@@ -500,12 +493,12 @@ export default function ApplicationsList() {
                     <span className="field-label" id="lbTotalPages">
                       {appsMeta?.totalItems}
                     </span>
-                    <span className="field-label">Total Applications</span>
+                    <span className="field-label">{t("applications.totalApplications")}</span>
                   </span>
 
                   <span className="field data-pager__control">
                     <label className="field-label font-sans" htmlFor="page-size">
-                      Show
+                      {t("t.show")}
                     </label>
                     <select name="page-size" id="page-size" ref={register} defaultValue={8}>
                       {pageSizeOptions.map((item) => (
@@ -516,7 +509,7 @@ export default function ApplicationsList() {
 
                   <span className="field data-pager__control">
                     <label className="field-label font-sans" htmlFor="page-jump">
-                      Jump to
+                      {t("t.jumpTo")}
                     </label>
                     <select
                       name="page-jump"

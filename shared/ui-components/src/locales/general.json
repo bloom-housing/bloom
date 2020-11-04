@@ -5,6 +5,11 @@
     "myApplications": "My Applications",
     "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
   },
+  "applications": {
+    "totalApplications": "Total Applications",
+    "addApplication": "Add Application",
+    "applicationsReceived": "Applications Received"
+  },
   "application": {
     "details": {
       "applicationData": "Application Data",
@@ -736,9 +741,11 @@
     "delete": "Delete",
     "deposit": "Deposit",
     "errorsToResolve": "There are errors you'll need to resolve before moving on.",
+    "export": "Export",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
+    "jumpTo": "Jump to",
     "loginIsRequired": "Login is required to view this page.",
     "lastUpdated": "Last updated",
     "menu": "Menu",
@@ -765,6 +772,7 @@
     "seeListing": "See Listing",
     "selectAllThatApply": "Please select all that apply.",
     "selectOne": "Select One",
+    "show": "Show",
     "skipToMainContent": "Skip to main content",
     "smokingPolicy": "Smoking Policy",
     "street": "Street",
