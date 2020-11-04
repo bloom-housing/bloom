@@ -28,6 +28,10 @@
     box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
   }
 
+  &:disabled {
+    pointer-events: none
+  }
+
   &.is-filled,
   &.is-primary {
     @apply bg-primary-dark;
