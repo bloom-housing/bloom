@@ -2,7 +2,14 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
-import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  ProgressNav,
+  t,
+  Form,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
@@ -45,7 +52,7 @@ export default () => {
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

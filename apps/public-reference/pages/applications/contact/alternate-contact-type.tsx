@@ -4,6 +4,7 @@ Type of alternate contact
 */
 import { Fragment } from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   ErrorMessage,
@@ -123,7 +124,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

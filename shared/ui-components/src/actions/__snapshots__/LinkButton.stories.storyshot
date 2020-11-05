@@ -2,7 +2,7 @@
 
 exports[`Storyshots Actions/Link Button Filled 1`] = `
 <LinkButton
-  filled={true}
+  type={AppearanceStyleType.primary}
   href="#"
 >
   <LocalizedLink
@@ -77,7 +77,7 @@ exports[`Storyshots Actions/Link Button Small 1`] = `
 
 exports[`Storyshots Actions/Link Button Small And Filled 1`] = `
 <LinkButton
-  filled={true}
+  type={AppearanceStyleType.primary}
   href="#"
   small={true}
 >

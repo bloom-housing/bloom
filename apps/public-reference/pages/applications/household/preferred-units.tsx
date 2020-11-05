@@ -3,6 +3,7 @@
 Applicant can designate which unit sizes they prefer
 */
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   FieldGroup,
@@ -87,7 +88,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

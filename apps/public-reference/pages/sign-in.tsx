@@ -2,6 +2,7 @@ import Router from "next/router"
 import { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import {
+  AppearanceStyleType,
   Button,
   Field,
   Form,
@@ -80,7 +81,7 @@ const SignIn = () => {
 
             <div className="text-center mt-6">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

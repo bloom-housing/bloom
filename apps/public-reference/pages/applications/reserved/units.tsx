@@ -4,7 +4,14 @@ Unlike Reserved Community Buildings which are 100% reserved, in the event that t
 */
 import { useContext } from "react"
 import Link from "next/link"
-import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  ProgressNav,
+  t,
+  Form,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -47,7 +54,7 @@ export default () => {
           (FORM)
           <div className="text-center mt-6">
             <Button
-              filled={true}
+              type={AppearanceStyleType.primary}
               onClick={() => {
                 //
               }}

@@ -3824,7 +3824,7 @@ exports[`Storyshots Listing Sidebar/Apply Link Directly To External Application 
     </h2>
     <LinkButton
       className="w-full mb-2"
-      filled={true}
+      type={AppearanceStyleType.primary}
       href="https://icann.org"
     >
       <a
@@ -5215,7 +5215,7 @@ exports[`Storyshots Listing Sidebar/Apply Link Directly To Internal Application 
     </h2>
     <LinkButton
       className="w-full mb-2"
-      filled={true}
+      type={AppearanceStyleType.primary}
       href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
     >
       <LocalizedLink
@@ -6622,7 +6622,7 @@ exports[`Storyshots Listing Sidebar/Apply Link To Internal Application And Downl
     </h2>
     <LinkButton
       className="w-full mb-2"
-      filled={true}
+      type={AppearanceStyleType.primary}
       href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
     >
       <LocalizedLink
@@ -8086,7 +8086,7 @@ exports[`Storyshots Listing Sidebar/Apply Shows Multiple Download UR Ls 1`] = `
     </NumberedHeader>
     <Button
       className="w-full mb-2"
-      filled={true}
+      type={AppearanceStyleType.primary}
       onClick={[Function]}
     >
       <button

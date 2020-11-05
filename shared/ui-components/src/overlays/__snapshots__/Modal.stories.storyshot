@@ -13,13 +13,14 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
       Array [
         <Button
           onClick={[Function]}
-          primary={true}
+          type="is-primary"
         >
           Submit
         </Button>,
         <Button
+          border="is-borderless"
           onClick={[Function]}
-          secondary={true}
+          type="is-secondary"
         >
           Cancel
         </Button>,
@@ -95,7 +96,7 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                         class="grid-item"
                       >
                         <button
-                          class="button is-secondary"
+                          class="button is-secondary is-borderless"
                         >
                           Cancel
                         </button>
@@ -231,7 +232,7 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                             class="grid-item"
                           >
                             <button
-                              class="button is-secondary"
+                              class="button is-secondary is-borderless"
                             >
                               Cancel
                             </button>
@@ -334,7 +335,7 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                               class="grid-item"
                             >
                               <button
-                                class="button is-secondary"
+                                class="button is-secondary is-borderless"
                               >
                                 Cancel
                               </button>
@@ -434,7 +435,7 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                           >
                             <Button
                               onClick={[Function]}
-                              primary={true}
+                              type="is-primary"
                             >
                               <button
                                 className="button is-primary"
@@ -452,11 +453,12 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                             className="grid-item"
                           >
                             <Button
+                              border="is-borderless"
                               onClick={[Function]}
-                              secondary={true}
+                              type="is-secondary"
                             >
                               <button
-                                className="button is-secondary"
+                                className="button is-secondary is-borderless"
                                 onClick={[Function]}
                               >
                                 Cancel
@@ -532,13 +534,14 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
       Array [
         <Button
           onClick={[Function]}
-          primary={true}
+          type="is-primary"
         >
           Submit
         </Button>,
         <Button
+          border="is-borderless"
           onClick={[Function]}
-          secondary={true}
+          type="is-secondary"
         >
           Cancel
         </Button>,
@@ -615,7 +618,7 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                         class="grid-item"
                       >
                         <button
-                          class="button is-secondary"
+                          class="button is-secondary is-borderless"
                         >
                           Cancel
                         </button>
@@ -751,7 +754,7 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                             class="grid-item"
                           >
                             <button
-                              class="button is-secondary"
+                              class="button is-secondary is-borderless"
                             >
                               Cancel
                             </button>
@@ -854,7 +857,7 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                               class="grid-item"
                             >
                               <button
-                                class="button is-secondary"
+                                class="button is-secondary is-borderless"
                               >
                                 Cancel
                               </button>
@@ -954,7 +957,7 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                           >
                             <Button
                               onClick={[Function]}
-                              primary={true}
+                              type="is-primary"
                             >
                               <button
                                 className="button is-primary"
@@ -972,11 +975,12 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                             className="grid-item"
                           >
                             <Button
+                              border="is-borderless"
                               onClick={[Function]}
-                              secondary={true}
+                              type="is-secondary"
                             >
                               <button
-                                className="button is-secondary"
+                                className="button is-secondary is-borderless"
                                 onClick={[Function]}
                               >
                                 Cancel
@@ -1052,13 +1056,13 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
       Array [
         <Button
           onClick={[Function]}
-          success={true}
+          type="is-success"
         >
           Submit
         </Button>,
         <Button
-          alert={true}
           onClick={[Function]}
+          type="is-alert"
         >
           Cancel
         </Button>,
@@ -1473,7 +1477,7 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                           >
                             <Button
                               onClick={[Function]}
-                              success={true}
+                              type="is-success"
                             >
                               <button
                                 className="button is-success"
@@ -1491,8 +1495,8 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                             className="grid-item"
                           >
                             <Button
-                              alert={true}
                               onClick={[Function]}
+                              type="is-alert"
                             >
                               <button
                                 className="button is-alert"

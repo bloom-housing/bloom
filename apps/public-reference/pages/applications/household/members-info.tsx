@@ -3,7 +3,15 @@
 A notice regarding adding household members
 */
 import Router from "next/router"
-import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  AlertBox,
+  Button,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -53,7 +61,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

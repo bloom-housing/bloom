@@ -15,13 +15,13 @@ export const small = () => (
 )
 
 export const filled = () => (
-  <LinkButton filled={true} href="#">
+  <LinkButton type={AppearanceStyleType.primary} href="#">
     Filled LinkButton
   </LinkButton>
 )
 
 export const SmallAndFilled = () => (
-  <LinkButton small={true} filled={true} href="#">
+  <LinkButton small={true} type={AppearanceStyleType.primary} href="#">
     Small and Filled LinkButton
   </LinkButton>
 )

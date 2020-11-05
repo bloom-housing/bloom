@@ -4,6 +4,7 @@ Add household members
 */
 import Router, { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
@@ -417,8 +418,7 @@ export default () => {
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
                   <Button
-                    filled={true}
-                    className=""
+                    type={AppearanceStyleType.primary}
                     onClick={() => {
                       //
                     }}

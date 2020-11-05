@@ -5,6 +5,7 @@ import { ViewItem } from "../prototypes/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
 import { Field } from "../forms/Field"
 import { Button } from "../actions/Button"
+import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Sections/Grid Section",
@@ -343,7 +344,7 @@ export const ButtonGrid = () => (
       </Button>
     </GridCell>
     <GridCell span={2}>
-      <Button filled={true} fullWidth={true} onClick={() => {}}>
+      <Button type={AppearanceStyleType.primary} fullWidth={true} onClick={() => {}}>
         I'm a Button!
       </Button>
     </GridCell>

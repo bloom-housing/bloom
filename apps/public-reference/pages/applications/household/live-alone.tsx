@@ -4,12 +4,13 @@ Asks whether the applicant will be adding any additional household members
 */
 import { useState } from "react"
 import {
+  AppearanceSizeType,
   Button,
+  Form,
   FormCard,
+  HouseholdSizeField,
   ProgressNav,
   t,
-  HouseholdSizeField,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -63,7 +64,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row">
               <Button
-                big={true}
+                size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {
                   application.householdSize = 1
@@ -76,7 +77,7 @@ export default () => {
             </div>
             <div className="form-card__pager-row">
               <Button
-                big={true}
+                size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {
                   if (application.householdSize === 1) application.householdSize = 0

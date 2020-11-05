@@ -7,6 +7,7 @@ import { Button } from "../../../actions/Button"
 import { LinkButton } from "../../../actions/LinkButton"
 import { SidebarAddress } from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
+import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 
 export interface ApplyProps {
   listing: Listing
@@ -84,7 +85,7 @@ const Apply = (props: ApplyProps) => {
             {onlineApplicationUrl !== "" && <OrDivider bgColor="white" />}
             <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
             <Button
-              filled={onlineApplicationUrl === ""}
+              type={onlineApplicationUrl === "" ? AppearanceStyleType.primary : undefined}
               className="w-full mb-2"
               onClick={toggleDownload}
             >

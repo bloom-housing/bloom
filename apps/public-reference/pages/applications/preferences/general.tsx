@@ -3,7 +3,14 @@
 If all preferences are opted out the applicant is shown a screen confirming their placement in the General Pool
 */
 import { useForm } from "react-hook-form"
-import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  ProgressNav,
+  t,
+  Form,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
@@ -45,7 +52,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -57,7 +64,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

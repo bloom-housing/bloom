@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState, Fragment } from "react"
 import Head from "next/head"
 import {
+  AppearanceBorderType,
+  AppearanceStyleType,
   ApiClientContext,
   AppStatusItem,
   Button,
@@ -44,7 +46,7 @@ export default () => {
   )
   const modalActions = [
     <Button
-      primary={true}
+      type={AppearanceStyleType.primary}
       onClick={() => {
         // applicationsService.delete(deletingApplication.id).then(() => {
         const newApplications = [...applications]
@@ -58,7 +60,8 @@ export default () => {
       {t("t.delete")}
     </Button>,
     <Button
-      borderless={true}
+      type={AppearanceStyleType.secondary}
+      border={AppearanceBorderType.borderless}
       onClick={() => {
         setDeletingApplication(null)
       }}

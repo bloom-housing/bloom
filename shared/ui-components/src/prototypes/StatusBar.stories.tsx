@@ -3,6 +3,8 @@ import { Tag } from "./Tag"
 import { Button } from "../actions/Button"
 
 import "./StatusBar.scss"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
+import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Prototypes/StatusBar",
@@ -22,7 +24,11 @@ export const StatusBar = () => (
     <div>
       <span className="mr-4">Last Updated: August 1, 2020</span>
     </div>
-    <Button small={true} filled={true} onClick={handleClick}>
+    <Button
+      size={AppearanceSizeType.small}
+      type={AppearanceStyleType.primary}
+      onClick={handleClick}
+    >
       Save
     </Button>
   </div>
@@ -39,7 +45,7 @@ export const StatusBarSubmitted = () => (
     <div>
       <span className="mr-4">Last Updated: August 1, 2020</span>
     </div>
-    <Button small={true} onClick={handleClick}>
+    <Button size={AppearanceSizeType.small} onClick={handleClick}>
       Edit
     </Button>
   </div>

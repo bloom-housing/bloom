@@ -617,9 +617,9 @@ exports[`Storyshots Sections/Grid Section Button Grid 1`] = `
             className="grid-item md:col-span-2"
           >
             <Button
-              filled={true}
               fullWidth={true}
               onClick={[Function]}
+              type="is-primary"
             >
               <button
                 className="button is-primary is-fullwidth"

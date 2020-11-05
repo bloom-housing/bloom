@@ -7,6 +7,7 @@ import { Modal } from "../overlays/Modal"
 import { setSiteAlertMessage } from "../notifications/SiteAlert"
 import { AlertTypes } from "../notifications/alertTypes"
 import { t } from "../helpers/translator"
+import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 const PROMPT_TIMEOUT = 60000
 const events = ["mousemove", "keypress", "scroll"]
@@ -81,7 +82,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
 
   const modalActions = [
     <Button
-      primary={true}
+      type={AppearanceStyleType.primary}
       onClick={() => {
         clearTimeout(promptTimeout)
         setPromptTimeout(undefined)

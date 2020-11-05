@@ -16,7 +16,7 @@ exports[`Storyshots Actions/Button Big 1`] = `
 
 exports[`Storyshots Actions/Button Filled 1`] = `
 <Button
-  filled={true}
+  type={AppearanceStyleType.primary}
   onClick={[Function]}
 >
   <button
@@ -71,7 +71,7 @@ exports[`Storyshots Actions/Button Small 1`] = `
 
 exports[`Storyshots Actions/Button Small And Filled 1`] = `
 <Button
-  filled={true}
+  type={AppearanceStyleType.primary}
   onClick={[Function]}
   small={true}
 >
