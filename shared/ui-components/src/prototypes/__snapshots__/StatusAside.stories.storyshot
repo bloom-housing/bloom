@@ -22,7 +22,7 @@ exports[`Storyshots Prototypes/StatusAside Status Aside 1`] = `
         >
           <Button
             onClick={[Function]}
-            small={true}
+            size="is-small"
           >
             <button
               className="button is-small"
@@ -38,7 +38,7 @@ exports[`Storyshots Prototypes/StatusAside Status Aside 1`] = `
           <Button
             className="is-secondary"
             onClick={[Function]}
-            small={true}
+            size="is-small"
           >
             <button
               className="button is-small is-secondary"
@@ -52,12 +52,12 @@ exports[`Storyshots Prototypes/StatusAside Status Aside 1`] = `
           className="button-group__item col-span-2"
         >
           <Button
-            filled={true}
             onClick={[Function]}
-            small={true}
+            size="is-small"
+            type="is-primary"
           >
             <button
-              className="button is-filled is-small"
+              className="button is-primary is-small"
               onClick={[Function]}
             >
               Submit
@@ -158,7 +158,7 @@ exports[`Storyshots Prototypes/StatusAside Status Aside Last 1`] = `
           <Button
             className="is-secondary"
             onClick={[Function]}
-            small={true}
+            size="is-small"
           >
             <button
               className="button is-small is-secondary"

@@ -10,7 +10,7 @@
   @apply border-primary;
 
   &.is-warning {
-    @apply bg-splash-lighter;
-    @apply border-splash;
+    @apply bg-accent-warm-lighter;
+    @apply border-accent-warm;
   }
 }

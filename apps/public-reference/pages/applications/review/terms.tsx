@@ -4,6 +4,7 @@ View of application terms with checkbox
 */
 import { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   Button,
   FormCard,
   ProgressNav,
@@ -96,7 +97,7 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true} onClick={() => false}>
+              <Button type={AppearanceStyleType.primary} onClick={() => false}>
                 {t("application.review.terms.submit")}
               </Button>
             </div>

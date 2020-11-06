@@ -3828,11 +3828,11 @@ exports[`Storyshots Listing Sidebar/Apply Link Directly To External Application 
     </h2>
     <LinkButton
       className="w-full mb-2"
-      filled={true}
       href="https://icann.org"
+      type="is-primary"
     >
       <a
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         href="https://icann.org"
       >
         Apply Online
@@ -5225,18 +5225,18 @@ exports[`Storyshots Listing Sidebar/Apply Link Directly To Internal Application 
     </h2>
     <LinkButton
       className="w-full mb-2"
-      filled={true}
       href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
+      type="is-primary"
     >
       <LocalizedLink
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
       >
         <Link
           href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
         >
           <a
-            className="button is-filled w-full mb-2"
+            className="button is-primary w-full mb-2"
             href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
             onClick={[Function]}
             onMouseEnter={[Function]}
@@ -6642,18 +6642,18 @@ exports[`Storyshots Listing Sidebar/Apply Link To Internal Application And Downl
     </h2>
     <LinkButton
       className="w-full mb-2"
-      filled={true}
       href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
+      type="is-primary"
     >
       <LocalizedLink
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
       >
         <Link
           href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
         >
           <a
-            className="button is-filled w-full mb-2"
+            className="button is-primary w-full mb-2"
             href="/applications/start/choose-language?listingId=Uvbk5qurpB2WI9V6WnNdH"
             onClick={[Function]}
             onMouseEnter={[Function]}
@@ -6693,7 +6693,6 @@ exports[`Storyshots Listing Sidebar/Apply Link To Internal Application And Downl
     </NumberedHeader>
     <Button
       className="w-full mb-2"
-      filled={false}
       onClick={[Function]}
     >
       <button
@@ -8114,11 +8113,11 @@ exports[`Storyshots Listing Sidebar/Apply Shows Multiple Download UR Ls 1`] = `
     </NumberedHeader>
     <Button
       className="w-full mb-2"
-      filled={true}
       onClick={[Function]}
+      type="is-primary"
     >
       <button
-        className="button is-filled w-full mb-2"
+        className="button is-primary w-full mb-2"
         onClick={[Function]}
       >
         Download Application

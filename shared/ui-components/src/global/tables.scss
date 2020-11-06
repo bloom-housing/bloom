@@ -58,17 +58,17 @@ td.reserved {
   @apply leading-tight;
   @apply py-2;
   @apply text-gray-750;
-  @apply bg-splash-lighter;
+  @apply bg-accent-warm-lighter;
   @apply tracking-widest;
   @apply pl-2;
   @apply border-l-8;
   @apply border-b;
   @apply border-t;
   @apply border-solid;
-  @apply border-splash;
+  @apply border-accent-warm;
 
   .reserved-icon {
-    @apply text-splash;
+    @apply text-accent-warm;
     @apply text-sm;
   }
 }
@@ -76,7 +76,7 @@ td.reserved {
 tr.group-reserved td:first-of-type {
   @apply border-l-8;
   @apply border-solid;
-  @apply border-splash;
+  @apply border-accent-warm;
 }
 
 /* Hat tip to this CSS solution:
@@ -123,6 +123,6 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
   tr.group-reserved td {
     @apply border-l-8;
     @apply border-solid;
-    @apply border-splash;
+    @apply border-accent-warm;
   }
 }

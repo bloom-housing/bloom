@@ -11,16 +11,19 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
   <Component
     actions={
       Array [
-        Object {
-          "label": "Cancel",
-          "onClick": [Function],
-          "type": "cancel",
-        },
-        Object {
-          "label": "Submit",
-          "onClick": [Function],
-          "type": "primary",
-        },
+        <Button
+          onClick={[Function]}
+          type="is-primary"
+        >
+          Submit
+        </Button>,
+        <Button
+          border="is-borderless"
+          onClick={[Function]}
+          type="is-secondary"
+        >
+          Cancel
+        </Button>,
       ]
     }
     ariaDescription="Modal description"
@@ -74,28 +77,32 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                 <footer
                   class="modal__footer bg-primary-lighter"
                 >
-                  <div
-                    class="modal__button-group"
+                  <section
+                    class="grid-section"
                   >
                     <div
-                      class="modal__button_item"
+                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                     >
-                      <button
-                        class="button cancel"
+                      <article
+                        class="grid-item"
                       >
-                        Cancel
-                      </button>
-                    </div>
-                    <div
-                      class="modal__button_item"
-                    >
-                      <button
-                        class="button primary"
+                        <button
+                          class="button is-primary"
+                        >
+                          Submit
+                        </button>
+                      </article>
+                      <article
+                        class="grid-item"
                       >
-                        Submit
-                      </button>
+                        <button
+                          class="button is-secondary is-borderless"
+                        >
+                          Cancel
+                        </button>
+                      </article>
                     </div>
-                  </div>
+                  </section>
                 </footer>
                 <button
                   aria-label="Close"
@@ -206,28 +213,32 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                     <footer
                       class="modal__footer bg-primary-lighter"
                     >
-                      <div
-                        class="modal__button-group"
+                      <section
+                        class="grid-section"
                       >
                         <div
-                          class="modal__button_item"
+                          class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                         >
-                          <button
-                            class="button cancel"
+                          <article
+                            class="grid-item"
                           >
-                            Cancel
-                          </button>
-                        </div>
-                        <div
-                          class="modal__button_item"
-                        >
-                          <button
-                            class="button primary"
+                            <button
+                              class="button is-primary"
+                            >
+                              Submit
+                            </button>
+                          </article>
+                          <article
+                            class="grid-item"
                           >
-                            Submit
-                          </button>
+                            <button
+                              class="button is-secondary is-borderless"
+                            >
+                              Cancel
+                            </button>
+                          </article>
                         </div>
-                      </div>
+                      </section>
                     </footer>
                     <button
                       aria-label="Close"
@@ -305,28 +316,32 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                       <footer
                         class="modal__footer bg-primary-lighter"
                       >
-                        <div
-                          class="modal__button-group"
+                        <section
+                          class="grid-section"
                         >
                           <div
-                            class="modal__button_item"
+                            class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                           >
-                            <button
-                              class="button cancel"
+                            <article
+                              class="grid-item"
                             >
-                              Cancel
-                            </button>
-                          </div>
-                          <div
-                            class="modal__button_item"
-                          >
-                            <button
-                              class="button primary"
+                              <button
+                                class="button is-primary"
+                              >
+                                Submit
+                              </button>
+                            </article>
+                            <article
+                              class="grid-item"
                             >
-                              Submit
-                            </button>
+                              <button
+                                class="button is-secondary is-borderless"
+                              >
+                                Cancel
+                              </button>
+                            </article>
                           </div>
-                        </div>
+                        </section>
                       </footer>
                       <button
                         aria-label="Close"
@@ -401,32 +416,59 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
                 <footer
                   className="modal__footer bg-primary-lighter"
                 >
-                  <div
-                    className="modal__button-group"
+                  <GridSection
+                    columns={4}
+                    reverse={true}
+                    tightSpacing={true}
                   >
-                    <div
-                      className="modal__button_item"
-                      key="Cancel"
+                    <section
+                      className="grid-section"
                     >
-                      <button
-                        className="button cancel"
-                        onClick={[Function]}
+                      <div
+                        className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                       >
-                        Cancel
-                      </button>
-                    </div>
-                    <div
-                      className="modal__button_item"
-                      key="Submit"
-                    >
-                      <button
-                        className="button primary"
-                        onClick={[Function]}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
+                        <GridCell
+                          key="0"
+                        >
+                          <article
+                            className="grid-item"
+                          >
+                            <Button
+                              onClick={[Function]}
+                              type="is-primary"
+                            >
+                              <button
+                                className="button is-primary"
+                                onClick={[Function]}
+                              >
+                                Submit
+                              </button>
+                            </Button>
+                          </article>
+                        </GridCell>
+                        <GridCell
+                          key="1"
+                        >
+                          <article
+                            className="grid-item"
+                          >
+                            <Button
+                              border="is-borderless"
+                              onClick={[Function]}
+                              type="is-secondary"
+                            >
+                              <button
+                                className="button is-secondary is-borderless"
+                                onClick={[Function]}
+                              >
+                                Cancel
+                              </button>
+                            </Button>
+                          </article>
+                        </GridCell>
+                      </div>
+                    </section>
+                  </GridSection>
                 </footer>
                 <button
                   aria-label="Close"
@@ -490,16 +532,19 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
   <Component
     actions={
       Array [
-        Object {
-          "label": "Cancel",
-          "onClick": [Function],
-          "type": "cancel",
-        },
-        Object {
-          "label": "Submit",
-          "onClick": [Function],
-          "type": "primary",
-        },
+        <Button
+          onClick={[Function]}
+          type="is-primary"
+        >
+          Submit
+        </Button>,
+        <Button
+          border="is-borderless"
+          onClick={[Function]}
+          type="is-secondary"
+        >
+          Cancel
+        </Button>,
       ]
     }
     ariaDescription="Modal description"
@@ -554,28 +599,32 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                 <footer
                   class="modal__footer bg-primary-lighter"
                 >
-                  <div
-                    class="modal__button-group"
+                  <section
+                    class="grid-section"
                   >
                     <div
-                      class="modal__button_item"
+                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                     >
-                      <button
-                        class="button cancel"
+                      <article
+                        class="grid-item"
                       >
-                        Cancel
-                      </button>
-                    </div>
-                    <div
-                      class="modal__button_item"
-                    >
-                      <button
-                        class="button primary"
+                        <button
+                          class="button is-primary"
+                        >
+                          Submit
+                        </button>
+                      </article>
+                      <article
+                        class="grid-item"
                       >
-                        Submit
-                      </button>
+                        <button
+                          class="button is-secondary is-borderless"
+                        >
+                          Cancel
+                        </button>
+                      </article>
                     </div>
-                  </div>
+                  </section>
                 </footer>
                 <button
                   aria-label="Close"
@@ -686,28 +735,32 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                     <footer
                       class="modal__footer bg-primary-lighter"
                     >
-                      <div
-                        class="modal__button-group"
+                      <section
+                        class="grid-section"
                       >
                         <div
-                          class="modal__button_item"
+                          class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                         >
-                          <button
-                            class="button cancel"
+                          <article
+                            class="grid-item"
                           >
-                            Cancel
-                          </button>
-                        </div>
-                        <div
-                          class="modal__button_item"
-                        >
-                          <button
-                            class="button primary"
+                            <button
+                              class="button is-primary"
+                            >
+                              Submit
+                            </button>
+                          </article>
+                          <article
+                            class="grid-item"
                           >
-                            Submit
-                          </button>
+                            <button
+                              class="button is-secondary is-borderless"
+                            >
+                              Cancel
+                            </button>
+                          </article>
                         </div>
-                      </div>
+                      </section>
                     </footer>
                     <button
                       aria-label="Close"
@@ -785,28 +838,32 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                       <footer
                         class="modal__footer bg-primary-lighter"
                       >
-                        <div
-                          class="modal__button-group"
+                        <section
+                          class="grid-section"
                         >
                           <div
-                            class="modal__button_item"
+                            class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                           >
-                            <button
-                              class="button cancel"
+                            <article
+                              class="grid-item"
                             >
-                              Cancel
-                            </button>
-                          </div>
-                          <div
-                            class="modal__button_item"
-                          >
-                            <button
-                              class="button primary"
+                              <button
+                                class="button is-primary"
+                              >
+                                Submit
+                              </button>
+                            </article>
+                            <article
+                              class="grid-item"
                             >
-                              Submit
-                            </button>
+                              <button
+                                class="button is-secondary is-borderless"
+                              >
+                                Cancel
+                              </button>
+                            </article>
                           </div>
-                        </div>
+                        </section>
                       </footer>
                       <button
                         aria-label="Close"
@@ -881,32 +938,59 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
                 <footer
                   className="modal__footer bg-primary-lighter"
                 >
-                  <div
-                    className="modal__button-group"
+                  <GridSection
+                    columns={4}
+                    reverse={true}
+                    tightSpacing={true}
                   >
-                    <div
-                      className="modal__button_item"
-                      key="Cancel"
+                    <section
+                      className="grid-section"
                     >
-                      <button
-                        className="button cancel"
-                        onClick={[Function]}
+                      <div
+                        className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                       >
-                        Cancel
-                      </button>
-                    </div>
-                    <div
-                      className="modal__button_item"
-                      key="Submit"
-                    >
-                      <button
-                        className="button primary"
-                        onClick={[Function]}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
+                        <GridCell
+                          key="0"
+                        >
+                          <article
+                            className="grid-item"
+                          >
+                            <Button
+                              onClick={[Function]}
+                              type="is-primary"
+                            >
+                              <button
+                                className="button is-primary"
+                                onClick={[Function]}
+                              >
+                                Submit
+                              </button>
+                            </Button>
+                          </article>
+                        </GridCell>
+                        <GridCell
+                          key="1"
+                        >
+                          <article
+                            className="grid-item"
+                          >
+                            <Button
+                              border="is-borderless"
+                              onClick={[Function]}
+                              type="is-secondary"
+                            >
+                              <button
+                                className="button is-secondary is-borderless"
+                                onClick={[Function]}
+                              >
+                                Cancel
+                              </button>
+                            </Button>
+                          </article>
+                        </GridCell>
+                      </div>
+                    </section>
+                  </GridSection>
                 </footer>
                 <button
                   aria-label="Close"
@@ -970,16 +1054,18 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
   <Component
     actions={
       Array [
-        Object {
-          "label": "Cancel",
-          "onClick": [Function],
-          "type": "failure",
-        },
-        Object {
-          "label": "Submit",
-          "onClick": [Function],
-          "type": "success",
-        },
+        <Button
+          onClick={[Function]}
+          type="is-success"
+        >
+          Submit
+        </Button>,
+        <Button
+          onClick={[Function]}
+          type="is-alert"
+        >
+          Cancel
+        </Button>,
       ]
     }
     ariaDescription="Modal description"
@@ -1033,28 +1119,32 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                 <footer
                   class="modal__footer bg-primary-lighter"
                 >
-                  <div
-                    class="modal__button-group"
+                  <section
+                    class="grid-section"
                   >
                     <div
-                      class="modal__button_item"
+                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                     >
-                      <button
-                        class="button failure"
+                      <article
+                        class="grid-item"
                       >
-                        Cancel
-                      </button>
-                    </div>
-                    <div
-                      class="modal__button_item"
-                    >
-                      <button
-                        class="button success"
+                        <button
+                          class="button is-success"
+                        >
+                          Submit
+                        </button>
+                      </article>
+                      <article
+                        class="grid-item"
                       >
-                        Submit
-                      </button>
+                        <button
+                          class="button is-alert"
+                        >
+                          Cancel
+                        </button>
+                      </article>
                     </div>
-                  </div>
+                  </section>
                 </footer>
                 <button
                   aria-label="Close"
@@ -1165,28 +1255,32 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                     <footer
                       class="modal__footer bg-primary-lighter"
                     >
-                      <div
-                        class="modal__button-group"
+                      <section
+                        class="grid-section"
                       >
                         <div
-                          class="modal__button_item"
+                          class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                         >
-                          <button
-                            class="button failure"
+                          <article
+                            class="grid-item"
                           >
-                            Cancel
-                          </button>
-                        </div>
-                        <div
-                          class="modal__button_item"
-                        >
-                          <button
-                            class="button success"
+                            <button
+                              class="button is-success"
+                            >
+                              Submit
+                            </button>
+                          </article>
+                          <article
+                            class="grid-item"
                           >
-                            Submit
-                          </button>
+                            <button
+                              class="button is-alert"
+                            >
+                              Cancel
+                            </button>
+                          </article>
                         </div>
-                      </div>
+                      </section>
                     </footer>
                     <button
                       aria-label="Close"
@@ -1264,28 +1358,32 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                       <footer
                         class="modal__footer bg-primary-lighter"
                       >
-                        <div
-                          class="modal__button-group"
+                        <section
+                          class="grid-section"
                         >
                           <div
-                            class="modal__button_item"
+                            class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                           >
-                            <button
-                              class="button failure"
+                            <article
+                              class="grid-item"
                             >
-                              Cancel
-                            </button>
-                          </div>
-                          <div
-                            class="modal__button_item"
-                          >
-                            <button
-                              class="button success"
+                              <button
+                                class="button is-success"
+                              >
+                                Submit
+                              </button>
+                            </article>
+                            <article
+                              class="grid-item"
                             >
-                              Submit
-                            </button>
+                              <button
+                                class="button is-alert"
+                              >
+                                Cancel
+                              </button>
+                            </article>
                           </div>
-                        </div>
+                        </section>
                       </footer>
                       <button
                         aria-label="Close"
@@ -1360,32 +1458,58 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                 <footer
                   className="modal__footer bg-primary-lighter"
                 >
-                  <div
-                    className="modal__button-group"
+                  <GridSection
+                    columns={4}
+                    reverse={true}
+                    tightSpacing={true}
                   >
-                    <div
-                      className="modal__button_item"
-                      key="Cancel"
+                    <section
+                      className="grid-section"
                     >
-                      <button
-                        className="button failure"
-                        onClick={[Function]}
+                      <div
+                        className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                       >
-                        Cancel
-                      </button>
-                    </div>
-                    <div
-                      className="modal__button_item"
-                      key="Submit"
-                    >
-                      <button
-                        className="button success"
-                        onClick={[Function]}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
+                        <GridCell
+                          key="0"
+                        >
+                          <article
+                            className="grid-item"
+                          >
+                            <Button
+                              onClick={[Function]}
+                              type="is-success"
+                            >
+                              <button
+                                className="button is-success"
+                                onClick={[Function]}
+                              >
+                                Submit
+                              </button>
+                            </Button>
+                          </article>
+                        </GridCell>
+                        <GridCell
+                          key="1"
+                        >
+                          <article
+                            className="grid-item"
+                          >
+                            <Button
+                              onClick={[Function]}
+                              type="is-alert"
+                            >
+                              <button
+                                className="button is-alert"
+                                onClick={[Function]}
+                              >
+                                Cancel
+                              </button>
+                            </Button>
+                          </article>
+                        </GridCell>
+                      </div>
+                    </section>
+                  </GridSection>
                 </footer>
                 <button
                   aria-label="Close"
