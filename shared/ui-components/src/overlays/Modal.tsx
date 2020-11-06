@@ -17,7 +17,7 @@ export type ModalProps = {
   fullScreen?: boolean
   // The "x" will only show if onClose is provided
   onClose?: () => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const Modal: FunctionComponent<ModalProps> = ({
