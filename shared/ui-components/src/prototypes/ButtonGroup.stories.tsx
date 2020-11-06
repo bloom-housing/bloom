@@ -1,3 +1,4 @@
+import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
 import React from "react"
 import { Button } from "../actions/Button"
 
@@ -15,12 +16,12 @@ const handleClick = (e: React.MouseEvent) => {
 export const ButtonGroup = () => (
   <div className="button-group grid grid-cols-2 gap-2">
     <div className="button-group__item">
-      <Button small={true} onClick={handleClick}>
+      <Button size={AppearanceSizeType.small} onClick={handleClick}>
         Save
       </Button>
     </div>
     <div className="button-group__item">
-      <Button small={true} className="is-secondary" onClick={handleClick}>
+      <Button size={AppearanceSizeType.small} className="is-secondary" onClick={handleClick}>
         Preview
       </Button>
     </div>
@@ -30,17 +31,21 @@ export const ButtonGroup = () => (
 export const ButtonGroupStack = () => (
   <div className="button-group grid grid-cols-2 gap-2">
     <div className="button-group__item">
-      <Button small={true} onClick={handleClick}>
+      <Button size={AppearanceSizeType.small} onClick={handleClick}>
         Save
       </Button>
     </div>
     <div className="button-group__item">
-      <Button small={true} className="is-secondary" onClick={handleClick}>
+      <Button size={AppearanceSizeType.small} className="is-secondary" onClick={handleClick}>
         Preview
       </Button>
     </div>
     <div className="button-group__item col-span-2">
-      <Button small={true} filled={true} onClick={handleClick}>
+      <Button
+        size={AppearanceSizeType.small}
+        type={AppearanceStyleType.primary}
+        onClick={handleClick}
+      >
         Submit
       </Button>
     </div>

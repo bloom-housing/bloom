@@ -27,13 +27,6 @@ exports[`Storyshots Prototypes/StatusBar Status Bar 1`] = `
         </div>
       </Tag>
     </div>
-    <div>
-      <span
-        className="mr-4"
-      >
-        Last Updated: August 1, 2020
-      </span>
-    </div>
     <Button
       onClick={[Function]}
       size="is-small"
@@ -64,7 +57,8 @@ exports[`Storyshots Prototypes/StatusBar Status Bar Submitted 1`] = `
     <div
       className="status-bar__note col-span-3"
     >
-      Lottery ranking generated. 07/15/2020 at 11:45am 
+      Lottery ranking generated. 07/15/2020 at 11:45am
+       
       <span
         className="status-bar__action"
       >
