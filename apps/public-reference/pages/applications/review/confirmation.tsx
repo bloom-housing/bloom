@@ -1,6 +1,6 @@
 /*
 5.4 Confirmation
-Application confirmation with lottery number (confirmation number) 
+Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
+import React, { useContext } from "react"
 
 export default () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -85,7 +85,7 @@ export default () => {
             <Button
               type={AppearanceStyleType.primary}
               onClick={() => {
-                router.push("/create-account").then(() => window.scrollTo(0, 0))
+                void router.push("/create-account").then(() => window.scrollTo(0, 0))
               }}
             >
               {t("application.form.general.createAccount")}

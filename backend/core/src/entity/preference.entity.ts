@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 
 export class PreferenceLink {
   @Expose()
@@ -30,15 +30,13 @@ class Preference extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsString()
-  @IsUUID()
-  createdAt: string
+  @IsDate()
+  createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsString()
-  @IsUUID()
-  updatedAt: string
+  @IsDate()
+  updatedAt: Date
 
   @Column({ type: "integer", nullable: true })
   @Expose()
@@ -71,7 +69,7 @@ class Preference extends BaseEntity {
   @Type(() => PreferenceLink)
   links: PreferenceLink[] | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.preferences, {
+  @ManyToOne(() => Listing, (listing) => listing.preferences, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

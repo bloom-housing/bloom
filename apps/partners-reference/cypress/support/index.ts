@@ -32,6 +32,7 @@ type UserFields = {
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable {
       /**
        * Login to the app using the specified email/password

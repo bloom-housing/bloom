@@ -351,7 +351,7 @@ export default function ApplicationsList() {
     },
   ]
 
-  const { applicationDtos, appsLoading, appsError } = useApplicationsData()
+  const { applications, appsLoading, appsError } = useApplicationsData()
   if (appsError) return "An error has occurred."
   if (appsLoading) return "Loading..."
 
@@ -401,7 +401,7 @@ export default function ApplicationsList() {
             <AgGridReact
               defaultColDef={defaultColDef}
               columnDefs={columnDefs}
-              rowData={applicationDtos}
+              rowData={applications}
               domLayout={"autoHeight"}
               headerHeight={83}
               rowHeight={58}

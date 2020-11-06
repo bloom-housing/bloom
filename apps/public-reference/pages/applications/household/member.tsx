@@ -2,7 +2,7 @@
 2.2 - Add Members
 Add household members
 */
-import Router, { useRouter } from "next/router"
+import { useRouter } from "next/router"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -22,7 +22,7 @@ import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
+import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
@@ -89,13 +89,14 @@ export default () => {
   }
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
-    Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -105,7 +106,7 @@ export default () => {
       application.householdMembers.splice(member.id, 1)
       conductor.sync()
     }
-    Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
 
   const sameAddress = watch("sameAddress")

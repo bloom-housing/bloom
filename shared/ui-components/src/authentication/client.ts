@@ -1,4 +1,4 @@
-import { ApplicationsService, serviceOptions } from "@bloom-housing/backend-core/client"
+import { ApplicationsService, serviceOptions } from "@bloom-housing/core"
 import { useAuthenticatedClient } from "./useAuthenticatedClient"
 import { createContext, createElement, FunctionComponent, useContext } from "react"
 import axiosStatic from "axios"

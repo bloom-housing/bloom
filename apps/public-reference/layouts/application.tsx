@@ -1,5 +1,5 @@
-import * as React from "react"
-import Router from "next/router"
+import React, { useContext } from "react"
+import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   LocalizedLink,
@@ -14,10 +14,10 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
-import { useContext } from "react"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
+  const router = useRouter()
 
   return (
     <div className="site-wrapper">
@@ -42,12 +42,11 @@ const Layout = (props) => {
           )}
           <UserNav
             signedIn={!!profile}
-            signOut={() => {
+            signOut={async () => {
               setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
-              Router.push("/sign-in").then(() => {
-                signOut()
-                window.scrollTo(0, 0)
-              })
+              await router.push("/sign-in")
+              signOut()
+              window.scrollTo(0, 0)
             }}
           >
             <LocalizedLink href="/account/dashboard" className="navbar-item">

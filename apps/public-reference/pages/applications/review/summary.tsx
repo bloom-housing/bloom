@@ -2,6 +2,7 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
+import React from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -21,7 +22,7 @@ export default () => {
 
   /* Form Handler */
   const { handleSubmit } = useForm()
-  const onSubmit = (data) => conductor.routeToNextOrReturnUrl()
+  const onSubmit = () => conductor.routeToNextOrReturnUrl()
 
   return (
     <FormsLayout>

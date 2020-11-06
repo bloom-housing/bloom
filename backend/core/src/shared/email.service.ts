@@ -121,16 +121,16 @@ export class EmailService {
         html: body,
       },
       false,
-      (error, info) => {
+      (error) => {
         if (error instanceof ResponseError) {
-          const { message, code, response } = error
-          const { headers, body } = response
+          const { response } = error
+          const { body } = response
           console.error(`Error sending email to: ${to}! Error body: ${body}`)
           if (!retry) {
             retry = 3
           }
           // Retries, if sending failed
-          this.send(to, subject, body, retry - 1)
+          void this.send(to, subject, body, retry - 1)
         }
       }
     )

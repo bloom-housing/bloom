@@ -8,6 +8,30 @@ export default {
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
+const headers = {
+  name: "Name",
+  relationship: "Relationship",
+  dob: "Date of Birth",
+}
+
+const data = [
+  {
+    name: "Jim Halpert",
+    relationship: "Husband",
+    dob: "05/01/1985",
+  },
+  {
+    name: "Michael Scott",
+    relationship: "Friend",
+    dob: "05/01/1975",
+  },
+  {
+    name: "Jim Halpert",
+    relationship: "Husband",
+    dob: "05/01/1985",
+  },
+]
+
 export const SummaryCard = () => (
   <div className="summary-card">
     <header className="summary-card__header">
@@ -15,7 +39,7 @@ export const SummaryCard = () => (
         <a href="#">My Property</a>
       </h2>
     </header>
-    <MinimalTable />
+    <MinimalTable headers={headers} data={data} />
   </div>
 )
 
@@ -30,6 +54,6 @@ export const SummaryCardHeading = () => (
         <span className="ml-4 pl-4 border-l border-gray-600">Waitlist: 353</span>
       </p>
     </header>
-    <MinimalTable />
+    <MinimalTable headers={headers} data={data} />
   </div>
 )

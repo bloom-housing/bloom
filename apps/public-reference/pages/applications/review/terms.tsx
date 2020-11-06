@@ -2,7 +2,7 @@
 5.3 Terms
 View of application terms with checkbox
 */
-import Router from "next/router"
+import { useRouter } from "next/router"
 import {
   AppearanceStyleType,
   Button,
@@ -16,7 +16,7 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import React, { useContext, useMemo } from "react"
+import React, { useContext } from "react"
 import Markdown from "markdown-to-jsx"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -24,13 +24,15 @@ export default () => {
   const { conductor, application, listing } = useFormConductor("terms")
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
+  const router = useRouter()
 
   const currentPageSection = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     application.completedSections = 5
     applicationsService
       .create({
@@ -49,8 +51,9 @@ export default () => {
       })
       .then((result) => {
         conductor.currentStep.save({ confirmationId: result.id })
-        Router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
+        return router.push("/applications/review/confirmation").then(() => window.scrollTo(0, 0))
       })
+      .catch((err) => console.error(`Error creating application: ${err}`))
   }
 
   const agreeField = [

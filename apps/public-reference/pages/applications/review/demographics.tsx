@@ -2,7 +2,7 @@
 5.1 Demographics
 Optional demographic questions
 */
-import { useMemo } from "react"
+import React, { useMemo } from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -30,6 +30,7 @@ const Demographics = () => {
   const currentPageSection = 5
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit } = useForm()
 
   const onSubmit = (data) => {

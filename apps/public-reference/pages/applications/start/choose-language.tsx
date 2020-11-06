@@ -18,7 +18,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
-import { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
@@ -39,8 +39,8 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
-    loadListing(listingId, setListing, conductor, context)
-  }, [])
+    void loadListing(listingId, setListing, conductor, context)
+  }, [conductor, context, listingId])
 
   const currentPageSection = 1
 
