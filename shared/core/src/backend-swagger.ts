@@ -1375,6 +1375,12 @@ export interface Listing {
   blankPaperApplicationCanBePickedUp: boolean;
 
   /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
+
+  /**  */
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
@@ -1546,6 +1552,12 @@ export interface ListingCreate {
   blankPaperApplicationCanBePickedUp: boolean;
 
   /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
+
+  /**  */
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
@@ -1699,6 +1711,12 @@ export interface ListingUpdate {
 
   /**  */
   blankPaperApplicationCanBePickedUp: boolean;
+
+  /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
 
   /**  */
   buildingAddress: CombinedBuildingAddressTypes;
@@ -2357,6 +2375,7 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery'
 }
 export type CombinedApplicationAddressTypes = (Address & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
