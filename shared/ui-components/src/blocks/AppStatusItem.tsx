@@ -44,7 +44,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
         <section className="status-item__content">
           <div className="status-item__details">
             <p className="status-item__address">
-              <MultiLineAddress address={listing.buildingAddress as Address} />
+              <MultiLineAddress address={listing.property.buildingAddress as Address} />
             </p>
             {lotteryNumber && (
               <p className="status-item__number">

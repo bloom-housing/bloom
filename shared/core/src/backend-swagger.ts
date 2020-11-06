@@ -1401,58 +1401,58 @@ export interface Unit {
   updatedAt: Date;
 
   /**  */
-  amiPercentage: string;
+  amiPercentage?: string;
 
   /**  */
-  annualIncomeMin: string;
+  annualIncomeMin?: string;
 
   /**  */
-  monthlyIncomeMin: string;
+  monthlyIncomeMin?: string;
 
   /**  */
-  floor: number;
+  floor?: number;
 
   /**  */
-  annualIncomeMax: string;
+  annualIncomeMax?: string;
 
   /**  */
-  maxOccupancy: number;
+  maxOccupancy?: number;
 
   /**  */
-  minOccupancy: number;
+  minOccupancy?: number;
 
   /**  */
-  monthlyRent: string;
+  monthlyRent?: string;
 
   /**  */
-  numBathrooms: number;
+  numBathrooms?: number;
 
   /**  */
-  numBedrooms: number;
+  numBedrooms?: number;
 
   /**  */
-  number: string;
+  number?: string;
 
   /**  */
-  priorityType: string;
+  priorityType?: string;
 
   /**  */
-  reservedType: string;
+  reservedType?: string;
 
   /**  */
-  sqFeet: string;
+  sqFeet?: string;
 
   /**  */
-  status: string;
+  status?: string;
 
   /**  */
-  unitType: string;
+  unitType?: string;
 
   /**  */
-  amiChartId: number;
+  amiChartId?: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: string;
+  monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean;
@@ -2316,58 +2316,58 @@ export interface ApplicationMethodUpdate {
 
 export interface UnitCreate {
   /**  */
-  amiPercentage: string;
+  amiPercentage?: string;
 
   /**  */
-  annualIncomeMin: string;
+  annualIncomeMin?: string;
 
   /**  */
-  monthlyIncomeMin: string;
+  monthlyIncomeMin?: string;
 
   /**  */
-  floor: number;
+  floor?: number;
 
   /**  */
-  annualIncomeMax: string;
+  annualIncomeMax?: string;
 
   /**  */
-  maxOccupancy: number;
+  maxOccupancy?: number;
 
   /**  */
-  minOccupancy: number;
+  minOccupancy?: number;
 
   /**  */
-  monthlyRent: string;
+  monthlyRent?: string;
 
   /**  */
-  numBathrooms: number;
+  numBathrooms?: number;
 
   /**  */
-  numBedrooms: number;
+  numBedrooms?: number;
 
   /**  */
-  number: string;
+  number?: string;
 
   /**  */
-  priorityType: string;
+  priorityType?: string;
 
   /**  */
-  reservedType: string;
+  reservedType?: string;
 
   /**  */
-  sqFeet: string;
+  sqFeet?: string;
 
   /**  */
-  status: string;
+  status?: string;
 
   /**  */
-  unitType: string;
+  unitType?: string;
 
   /**  */
-  amiChartId: number;
+  amiChartId?: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: string;
+  monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean;
@@ -2375,58 +2375,58 @@ export interface UnitCreate {
 
 export interface UnitUpdate {
   /**  */
-  amiPercentage: string;
+  amiPercentage?: string;
 
   /**  */
-  annualIncomeMin: string;
+  annualIncomeMin?: string;
 
   /**  */
-  monthlyIncomeMin: string;
+  monthlyIncomeMin?: string;
 
   /**  */
-  floor: number;
+  floor?: number;
 
   /**  */
-  annualIncomeMax: string;
+  annualIncomeMax?: string;
 
   /**  */
-  maxOccupancy: number;
+  maxOccupancy?: number;
 
   /**  */
-  minOccupancy: number;
+  minOccupancy?: number;
 
   /**  */
-  monthlyRent: string;
+  monthlyRent?: string;
 
   /**  */
-  numBathrooms: number;
+  numBathrooms?: number;
 
   /**  */
-  numBedrooms: number;
+  numBedrooms?: number;
 
   /**  */
-  number: string;
+  number?: string;
 
   /**  */
-  priorityType: string;
+  priorityType?: string;
 
   /**  */
-  reservedType: string;
+  reservedType?: string;
 
   /**  */
-  sqFeet: string;
+  sqFeet?: string;
 
   /**  */
-  status: string;
+  status?: string;
 
   /**  */
-  unitType: string;
+  unitType?: string;
 
   /**  */
-  amiChartId: number;
+  amiChartId?: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: string;
+  monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean;

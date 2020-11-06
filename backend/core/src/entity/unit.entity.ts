@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Listing } from "./listing.entity"
 import {
   IsBoolean,
   IsDate,
@@ -22,6 +21,7 @@ import {
 import { Expose, Type } from "class-transformer"
 import { AnyDict } from "../lib/unit_transformations"
 import { Property } from "./property.entity"
+import { ApiProperty } from "@nestjs/swagger"
 
 export class MinMax {
   @Expose()
@@ -203,109 +203,109 @@ class Unit extends BaseEntity {
   @Expose()
   @IsOptional()
   @IsString()
-  amiPercentage: string | null
+  amiPercentage?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsNumberString()
-  annualIncomeMin: string | null
+  annualIncomeMin?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsNumberString()
-  monthlyIncomeMin: string | null
+  monthlyIncomeMin?: string | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  floor: number | null
+  floor?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  annualIncomeMax: string | null
+  annualIncomeMax?: string | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  maxOccupancy: number | null
+  maxOccupancy?: number | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  minOccupancy: number | null
+  minOccupancy?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsNumberString()
-  monthlyRent: string | null
+  monthlyRent?: string | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  numBathrooms: number | null
+  numBathrooms?: number | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  numBedrooms: number | null
+  numBedrooms?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  number: string | null
+  number?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  priorityType: string | null
+  priorityType?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  reservedType: string | null
+  reservedType?: string | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
   @IsString()
-  sqFeet: string | null
+  sqFeet?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  status: string | null
+  status?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  unitType: string | null
+  unitType?: string | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  amiChartId: number | null
+  amiChartId?: number | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
   @IsString()
-  monthlyRentAsPercentOfIncome: string | null
+  monthlyRentAsPercentOfIncome?: string | null
 
   @ManyToOne(() => Property, (property) => property.units, {
     onDelete: "CASCADE",

@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { SendGridService, SendGridModule } from "@anchan828/nest-sendgrid"
 import { User } from "../entity/user.entity"
 import { EmailService } from "./email.service"
-import Archer from "@bloom-housing/listings-service/listings/archer.json"
+import { ArcherListing } from "@bloom-housing/ui-components"
 import { ConfigModule } from "@nestjs/config"
 
 declare const expect: jest.Expect
@@ -11,7 +11,7 @@ user.firstName = "Test"
 user.lastName = "User"
 user.email = "test@xample.com"
 
-const listing = Object.assign({}, Archer) as any
+const listing = Object.assign({}, ArcherListing)
 
 const application = {
   application: {
