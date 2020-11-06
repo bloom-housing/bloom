@@ -2,8 +2,8 @@
 
 exports[`Storyshots Actions/Link Button Filled 1`] = `
 <LinkButton
-  type={AppearanceStyleType.primary}
   href="#"
+  type="is-primary"
 >
   <LocalizedLink
     className="button is-primary"
@@ -53,7 +53,7 @@ exports[`Storyshots Actions/Link Button Regular Case 1`] = `
 exports[`Storyshots Actions/Link Button Small 1`] = `
 <LinkButton
   href="#"
-  small={true}
+  size="is-small"
 >
   <LocalizedLink
     className="button is-small"
@@ -77,9 +77,9 @@ exports[`Storyshots Actions/Link Button Small 1`] = `
 
 exports[`Storyshots Actions/Link Button Small And Filled 1`] = `
 <LinkButton
-  type={AppearanceStyleType.primary}
   href="#"
-  small={true}
+  size="is-small"
+  type="is-primary"
 >
   <LocalizedLink
     className="button is-primary is-small"

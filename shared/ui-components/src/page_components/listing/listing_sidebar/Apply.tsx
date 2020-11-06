@@ -75,7 +75,11 @@ const Apply = (props: ApplyProps) => {
         )}
         {!openDateState(listing) && onlineApplicationUrl !== "" && (
           <>
-            <LinkButton filled className="w-full mb-2" href={onlineApplicationUrl}>
+            <LinkButton
+              type={AppearanceStyleType.primary}
+              className="w-full mb-2"
+              href={onlineApplicationUrl}
+            >
               {t("listings.apply.applyOnline")}
             </LinkButton>
           </>
