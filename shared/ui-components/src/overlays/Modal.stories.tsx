@@ -1,6 +1,6 @@
 import React from "react"
 import "./Modal.scss"
-import { Modal } from "./Modal"
+import { Modal } from "./Overlay"
 import SVG from "react-inlinesvg"
 import { Button } from "../actions/Button"
 import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
@@ -31,7 +31,11 @@ export const BasicModal = () => (
       <Button onClick={noop} type={AppearanceStyleType.primary}>
         Submit
       </Button>,
-      <Button onClick={noop} type={AppearanceStyleType.secondary} border={AppearanceBorderType.borderless}>
+      <Button
+        onClick={noop}
+        type={AppearanceStyleType.secondary}
+        border={AppearanceBorderType.borderless}
+      >
         Cancel
       </Button>,
     ]}
@@ -50,7 +54,11 @@ export const FullScreenModal = () => (
       <Button onClick={noop} type={AppearanceStyleType.primary}>
         Submit
       </Button>,
-      <Button onClick={noop} type={AppearanceStyleType.secondary} border={AppearanceBorderType.borderless}>
+      <Button
+        onClick={noop}
+        type={AppearanceStyleType.secondary}
+        border={AppearanceBorderType.borderless}
+      >
         Cancel
       </Button>,
     ]}

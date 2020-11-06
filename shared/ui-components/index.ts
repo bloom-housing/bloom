@@ -73,7 +73,7 @@ export * from "./src/notifications/ErrorMessage"
 export * from "./src/notifications"
 
 /* Overlays */
-export { Modal } from "./src/overlays/Modal"
+export * from "./src/overlays/Overlay"
 
 /* Page Components */
 export * from "./src/page_components/listing/AdditionalFees"
