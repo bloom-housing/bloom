@@ -16,7 +16,8 @@ export enum ListingsResponseStatus {
 export class ListingsService {
   public async list(jsonpath?: string): Promise<ListingExtendedDto> {
     let listings = await Listing.createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.units", "units")
+      .leftJoinAndSelect("listings.property", "property")
+      .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
@@ -66,7 +67,8 @@ export class ListingsService {
   async findOne(listingId: string) {
     return await Listing.createQueryBuilder("listings")
       .where("listings.id = :id", { id: listingId })
-      .leftJoinAndSelect("listings.units", "units")
+      .leftJoinAndSelect("listings.property", "property")
+      .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")

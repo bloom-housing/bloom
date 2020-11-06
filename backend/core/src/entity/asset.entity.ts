@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
-import { IsDate, IsDateString, IsObject, IsString, IsUUID } from "class-validator"
+import { IsDate, IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
 
 @Entity({ name: "assets" })

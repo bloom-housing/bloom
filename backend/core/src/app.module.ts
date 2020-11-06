@@ -23,6 +23,8 @@ import { ListingEventsModule } from "./listing-events/listing-events.module"
 import { ConfigModule } from "@nestjs/config"
 import Joi from "joi"
 import { Reflector } from "@nestjs/core"
+import { PropertyGroupsModule } from "./property-groups/property-groups.module"
+import { PropertiesModule } from "./property/properties.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -67,6 +69,8 @@ export function applicationSetup(app: INestApplication) {
     ApplicationMethodsModule,
     UnitsModule,
     ListingEventsModule,
+    PropertiesModule,
+    PropertyGroupsModule,
   ],
 })
 export class AppModule {}

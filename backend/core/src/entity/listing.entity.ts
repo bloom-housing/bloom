@@ -3,11 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Unit, UnitsSummarized } from "./unit.entity"
 import { Application } from "./application.entity"
 import { Asset } from "./asset.entity"
 import { ApplicationMethod } from "./application-method.entity"
@@ -29,10 +29,9 @@ import {
   ValidateNested,
 } from "class-validator"
 import { ListingEvent } from "./listing-event.entity"
-import { transformUnits } from "../lib/unit_transformations"
-import { amiCharts } from "../lib/ami_charts"
 import { listingUrlSlug } from "../lib/url_helper"
 import { ApiProperty } from "@nestjs/swagger"
+import { Property } from "./property.entity"
 
 export enum ListingStatus {
   active = "active",
@@ -76,9 +75,6 @@ class Listing extends BaseEntity {
   @OneToMany(() => Preference, (preference) => preference.listing)
   preferences: Preference[]
 
-  @OneToMany(() => Unit, (unit) => unit.listing, { eager: true })
-  units: Unit[]
-
   @OneToMany(() => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
   applicationMethods: ApplicationMethod[]
 
@@ -91,28 +87,21 @@ class Listing extends BaseEntity {
   @OneToMany(() => Application, (application) => application.listing)
   applications: Application[]
 
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
-  accessibility: string | null
+  @ManyToOne(() => Property, (property) => property.listings, { nullable: false })
+  property: Property
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional()
   @IsString()
-  amenities: string | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
+  // TODO Change to date
   applicationDueDate: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional()
   @IsString()
+  // TODO Change to date
   applicationOpenDate: string | null
 
   @Column({ type: "text", nullable: true })
@@ -134,12 +123,6 @@ class Listing extends BaseEntity {
   @Type(() => Address)
   applicationAddress: Address | null
 
-  @Column({ type: "boolean", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsBoolean()
-  blankPaperApplicationCanBePickedUp: boolean | null
-
   @Column({ type: "jsonb", nullable: true })
   @Expose()
   @IsOptional()
@@ -152,19 +135,6 @@ class Listing extends BaseEntity {
   @IsOptional()
   @IsString()
   applicationPickUpAddressOfficeHours: string | null
-
-  @Column({ type: "jsonb", nullable: true })
-  @Expose()
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Address)
-  buildingAddress: Address | null
-
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  buildingTotalUnits: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -202,35 +172,11 @@ class Listing extends BaseEntity {
   @IsString()
   depositMax: string | null
 
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
-  developer: string | null
-
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional()
   @IsBoolean()
   disableUnitsAccordion: boolean | null
-
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  householdSizeMax: number | null
-
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  householdSizeMin: number | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
-  imageUrl: string | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -278,18 +224,6 @@ class Listing extends BaseEntity {
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  neighborhood: string | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
-  petPolicy: string | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
   @IsDateString()
   postmarkedApplicationsReceivedByDate: string | null
 
@@ -317,24 +251,6 @@ class Listing extends BaseEntity {
   @IsString()
   requiredDocuments: string | null
 
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
-  smokingPolicy: string | null
-
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  unitsAvailable: number | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
-  unitAmenities: string | null
-
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
@@ -354,12 +270,6 @@ class Listing extends BaseEntity {
   @Type(() => WhatToExpect)
   whatToExpect: WhatToExpect | null
 
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  yearBuilt: number | null
-
   @Column({
     type: "enum",
     enum: ListingStatus,
@@ -369,14 +279,6 @@ class Listing extends BaseEntity {
   @IsEnum(ListingStatus)
   @ApiProperty({ enum: ListingStatus, enumName: "ListingStatus" })
   status: ListingStatus
-
-  @Expose()
-  @ApiProperty()
-  get unitsSummarized(): UnitsSummarized | undefined {
-    if (Array.isArray(this.units) && this.units.length > 0) {
-      return transformUnits(this.units, amiCharts)
-    }
-  }
 
   @Expose()
   @ApiProperty()

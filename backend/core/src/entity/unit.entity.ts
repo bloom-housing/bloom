@@ -21,6 +21,7 @@ import {
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { AnyDict } from "../lib/unit_transformations"
+import { Property } from "./property.entity"
 
 export class MinMax {
   @Expose()
@@ -306,11 +307,11 @@ class Unit extends BaseEntity {
   @IsString()
   monthlyRentAsPercentOfIncome: string | null
 
-  @ManyToOne(() => Listing, (listing) => listing.units, {
+  @ManyToOne(() => Property, (property) => property.units, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  listing: Listing
+  property: Property
 
   @Column({ type: "boolean", nullable: true })
   @Expose()

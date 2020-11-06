@@ -1,15 +1,15 @@
 import { SeederModule } from "./seeder/seeder.module"
-import { ListingsSeederService } from "./seeder/listings-seeder/listings-seeder.service"
-import { UserService } from "./user/user.service"
-import { plainToClass } from "class-transformer"
-import { Application } from "./entity/application.entity"
-import { ListingsService } from "./listings/listings.service"
-import { User } from "./entity/user.entity"
-import { Repository } from "typeorm"
-import { getRepositoryToken } from "@nestjs/typeorm"
-import { UserCreateDto } from "./user/user.dto"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
+import { listingSeed1, seedListing } from "./seeds/listings"
+import { UserService } from "./user/user.service"
+import { plainToClass } from "class-transformer"
+import { UserCreateDto } from "./user/user.dto"
+import { Repository } from "typeorm"
+import { getRepositoryToken } from "@nestjs/typeorm"
+import { User } from "./entity/user.entity"
+import { Application } from "./entity/application.entity"
+import { ListingsService } from "./listings/listings.service"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -17,10 +17,9 @@ const argv = yargs.scriptName("seed").options({
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
+  await seedListing(app, listingSeed1)
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
-  const listingsSeederService = app.get<ListingsSeederService>(ListingsSeederService)
-  await listingsSeederService.seed()
 
   const userService = app.get<UserService>(UserService)
   const user = await userService.createUser(

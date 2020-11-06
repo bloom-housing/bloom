@@ -10,12 +10,13 @@ import { UnitDto } from "../units/unit.dto"
 import { ApiHideProperty, ApiProperty, OmitType } from "@nestjs/swagger"
 import { ListingEventDto } from "../listing-events/listing-events.dto"
 import { IdDto } from "../lib/id.dto"
+import { PropertyDto } from "../property/property.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationMethods",
   "assets",
   "preferences",
-  "units",
+  "property",
   "events",
   "applications",
 ] as const) {
@@ -38,11 +39,13 @@ export class ListingDto extends OmitType(Listing, [
   preferences: PreferenceDto[]
 
   @Expose()
-  @ValidateNested({ each: true })
-  @Type(() => UnitDto)
-  units: UnitDto[]
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => PropertyDto)
+  property: PropertyDto
 
   @Expose()
+  @IsDefined()
   @ValidateNested({ each: true })
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
@@ -72,33 +75,34 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "applicationMethods",
   "assets",
   "preferences",
-  "units",
+  "property",
   "events",
+  "applications",
 ] as const) {
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((applicationMethods) => IdDto)
+  @Type(() => IdDto)
   applicationMethods: IdDto[]
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((asset) => IdDto)
+  @Type(() => IdDto)
   assets: IdDto[]
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((preference) => IdDto)
+  @Type(() => IdDto)
   preferences: IdDto[]
   @Expose()
   @IsDefined()
-  @ValidateNested({ each: true })
-  @Type((unit) => IdDto)
-  units: IdDto[]
+  @ValidateNested()
+  @Type(() => IdDto)
+  property: IdDto
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type((unit) => IdDto)
+  @Type(() => IdDto)
   events: IdDto[]
 }
 

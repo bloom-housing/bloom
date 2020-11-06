@@ -899,6 +899,214 @@ export class ListingEventsService {
   }
 }
 
+export class PropertiesService {
+  /**
+   * List properties
+   */
+  list(options: IRequestOptions = {}): Promise<Property[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/properties';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create property
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: PropertyCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Property> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/properties';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update property
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: PropertyUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Property> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/properties/{propertyId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get property by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      propertyId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Property> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/properties/{propertyId}';
+      url = url.replace('{propertyId}', params['propertyId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete property by id
+   */
+  delete(
+    params: {
+      /**  */
+      propertyId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/properties/{propertyId}';
+      url = url.replace('{propertyId}', params['propertyId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class PropertyGroupsService {
+  /**
+   * List propertyGroups
+   */
+  list(options: IRequestOptions = {}): Promise<PropertyGroup[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/propertyGroups';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create propertyGroup
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: PropertyGroupCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PropertyGroup> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/propertyGroups';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update propertyGroup
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: PropertyGroupUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PropertyGroup> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/propertyGroups/{propertyGroupId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get propertyGroup by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      propertyGroupId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PropertyGroup> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/propertyGroups/{propertyGroupId}';
+      url = url.replace('{propertyGroupId}', params['propertyGroupId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete propertyGroup by id
+   */
+  delete(
+    params: {
+      /**  */
+      propertyGroupId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/propertyGroups/{propertyGroupId}';
+      url = url.replace('{propertyGroupId}', params['propertyGroupId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface User {
   /**  */
   id: string;
@@ -1010,6 +1218,80 @@ export interface LoginResponse {
   accessToken: string;
 }
 
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  label: string;
+
+  /**  */
+  externalReference: string;
+
+  /**  */
+  acceptsPostmarkedApplications: boolean;
+}
+
+export interface Asset {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  label: string;
+
+  /**  */
+  fileId: string;
+}
+
+export interface PreferenceLink {
+  /**  */
+  title: string;
+
+  /**  */
+  url: string;
+}
+
+export interface Preference {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  ordinal: number;
+
+  /**  */
+  title: string;
+
+  /**  */
+  subtitle: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  links: PreferenceLink[];
+}
+
 export interface MinMaxCurrency {
   /**  */
   min: string;
@@ -1108,80 +1390,6 @@ export interface UnitsSummarized {
   hmi: HMI;
 }
 
-export interface ApplicationMethod {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface Asset {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
-export interface PreferenceLink {
-  /**  */
-  title: string;
-
-  /**  */
-  url: string;
-}
-
-export interface Preference {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  links: PreferenceLink[];
-}
-
 export interface Unit {
   /**  */
   id: string;
@@ -1250,32 +1458,6 @@ export interface Unit {
   bmrProgramChart?: boolean;
 }
 
-export interface ListingEvent {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
-}
-
 export interface Address {
   /**  */
   placeName?: string;
@@ -1305,41 +1487,12 @@ export interface Address {
   longitude?: number;
 }
 
-export interface WhatToExpect {
-  /**  */
-  applicantsWillBeContacted: string;
-
-  /**  */
-  allInfoWillBeVerified: string;
-
-  /**  */
-  bePreparedIfChosen: string;
-}
-
-export interface Listing {
-  /**  */
-  status: ListingStatus;
-
+export interface Property {
   /**  */
   unitsSummarized: UnitsSummarized;
 
   /**  */
-  urlSlug: string;
-
-  /**  */
-  applicationMethods: ApplicationMethod[];
-
-  /**  */
-  assets: Asset[];
-
-  /**  */
-  preferences: Preference[];
-
-  /**  */
   units: Unit[];
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   id: string;
@@ -1357,6 +1510,108 @@ export interface Listing {
   amenities: string;
 
   /**  */
+  buildingAddress: CombinedBuildingAddressTypes;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  yearBuilt: number;
+}
+
+export interface ListingEvent {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+}
+
+export interface WhatToExpect {
+  /**  */
+  applicantsWillBeContacted: string;
+
+  /**  */
+  allInfoWillBeVerified: string;
+
+  /**  */
+  bePreparedIfChosen: string;
+}
+
+export interface Listing {
+  /**  */
+  status: ListingStatus;
+
+  /**  */
+  urlSlug: string;
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: Asset[];
+
+  /**  */
+  preferences: Preference[];
+
+  /**  */
+  property: Property;
+
+  /**  */
+  events: ListingEvent[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
   applicationDueDate: string;
 
   /**  */
@@ -1372,19 +1627,10 @@ export interface Listing {
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  blankPaperApplicationCanBePickedUp: boolean;
-
-  /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  buildingAddress: CombinedBuildingAddressTypes;
-
-  /**  */
-  buildingTotalUnits: number;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1405,19 +1651,7 @@ export interface Listing {
   depositMax: string;
 
   /**  */
-  developer: string;
-
-  /**  */
   disableUnitsAccordion: boolean;
-
-  /**  */
-  householdSizeMax: number;
-
-  /**  */
-  householdSizeMin: number;
-
-  /**  */
-  imageUrl: string;
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
@@ -1441,12 +1675,6 @@ export interface Listing {
   name: string;
 
   /**  */
-  neighborhood: string;
-
-  /**  */
-  petPolicy: string;
-
-  /**  */
   postmarkedApplicationsReceivedByDate: string;
 
   /**  */
@@ -1462,15 +1690,6 @@ export interface Listing {
   requiredDocuments: string;
 
   /**  */
-  smokingPolicy: string;
-
-  /**  */
-  unitsAvailable: number;
-
-  /**  */
-  unitAmenities: string;
-
-  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -1478,9 +1697,6 @@ export interface Listing {
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
-
-  /**  */
-  yearBuilt: number;
 
   /**  */
   applicationConfig?: object;
@@ -1507,9 +1723,6 @@ export interface ListingCreate {
   status: ListingStatus;
 
   /**  */
-  unitsSummarized: UnitsSummarized;
-
-  /**  */
   urlSlug: string;
 
   /**  */
@@ -1522,16 +1735,10 @@ export interface ListingCreate {
   preferences: Id[];
 
   /**  */
-  units: Id[];
+  property: Id;
 
   /**  */
   events: Id[];
-
-  /**  */
-  accessibility: string;
-
-  /**  */
-  amenities: string;
 
   /**  */
   applicationDueDate: string;
@@ -1549,19 +1756,10 @@ export interface ListingCreate {
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  blankPaperApplicationCanBePickedUp: boolean;
-
-  /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  buildingAddress: CombinedBuildingAddressTypes;
-
-  /**  */
-  buildingTotalUnits: number;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1582,19 +1780,7 @@ export interface ListingCreate {
   depositMax: string;
 
   /**  */
-  developer: string;
-
-  /**  */
   disableUnitsAccordion: boolean;
-
-  /**  */
-  householdSizeMax: number;
-
-  /**  */
-  householdSizeMin: number;
-
-  /**  */
-  imageUrl: string;
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
@@ -1618,12 +1804,6 @@ export interface ListingCreate {
   name: string;
 
   /**  */
-  neighborhood: string;
-
-  /**  */
-  petPolicy: string;
-
-  /**  */
   postmarkedApplicationsReceivedByDate: string;
 
   /**  */
@@ -1639,15 +1819,6 @@ export interface ListingCreate {
   requiredDocuments: string;
 
   /**  */
-  smokingPolicy: string;
-
-  /**  */
-  unitsAvailable: number;
-
-  /**  */
-  unitAmenities: string;
-
-  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -1655,9 +1826,6 @@ export interface ListingCreate {
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
-
-  /**  */
-  yearBuilt: number;
 
   /**  */
   applicationConfig?: object;
@@ -1668,9 +1836,6 @@ export interface ListingUpdate {
   status: ListingStatus;
 
   /**  */
-  unitsSummarized: UnitsSummarized;
-
-  /**  */
   urlSlug: string;
 
   /**  */
@@ -1683,16 +1848,10 @@ export interface ListingUpdate {
   preferences: Id[];
 
   /**  */
-  units: Id[];
+  property: Id;
 
   /**  */
   events: Id[];
-
-  /**  */
-  accessibility: string;
-
-  /**  */
-  amenities: string;
 
   /**  */
   applicationDueDate: string;
@@ -1710,19 +1869,10 @@ export interface ListingUpdate {
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  blankPaperApplicationCanBePickedUp: boolean;
-
-  /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  buildingAddress: CombinedBuildingAddressTypes;
-
-  /**  */
-  buildingTotalUnits: number;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -1743,19 +1893,7 @@ export interface ListingUpdate {
   depositMax: string;
 
   /**  */
-  developer: string;
-
-  /**  */
   disableUnitsAccordion: boolean;
-
-  /**  */
-  householdSizeMax: number;
-
-  /**  */
-  householdSizeMin: number;
-
-  /**  */
-  imageUrl: string;
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
@@ -1779,12 +1917,6 @@ export interface ListingUpdate {
   name: string;
 
   /**  */
-  neighborhood: string;
-
-  /**  */
-  petPolicy: string;
-
-  /**  */
   postmarkedApplicationsReceivedByDate: string;
 
   /**  */
@@ -1800,15 +1932,6 @@ export interface ListingUpdate {
   requiredDocuments: string;
 
   /**  */
-  smokingPolicy: string;
-
-  /**  */
-  unitsAvailable: number;
-
-  /**  */
-  unitAmenities: string;
-
-  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -1816,9 +1939,6 @@ export interface ListingUpdate {
 
   /**  */
   whatToExpect: CombinedWhatToExpectTypes;
-
-  /**  */
-  yearBuilt: number;
 
   /**  */
   applicationConfig?: object;
@@ -2352,6 +2472,133 @@ export interface ListingEventUpdate {
   id: string;
 }
 
+export interface PropertyCreate {
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingAddress: CombinedBuildingAddressTypes;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  yearBuilt: number;
+
+  /**  */
+  units: Unit[];
+}
+
+export interface PropertyUpdate {
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingAddress: CombinedBuildingAddressTypes;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  yearBuilt: number;
+
+  /**  */
+  units: Unit[];
+
+  /**  */
+  id: string;
+}
+
+export interface PropertyGroup {
+  /**  */
+  properties: Id[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+}
+
+export interface PropertyGroupCreate {
+  /**  */
+  name: string;
+
+  /**  */
+  properties: Id[];
+}
+
+export interface PropertyGroupUpdate {
+  /**  */
+  name: string;
+
+  /**  */
+  properties: Id[];
+
+  /**  */
+  id: string;
+}
+
 export enum ListingsResponseStatus {
   'ok' = 'ok'
 }
@@ -2369,14 +2616,13 @@ export enum ApplicationMethodType {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
 }
-
+export type CombinedBuildingAddressTypes = (Address & any) | null;
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
 }
 export type CombinedApplicationAddressTypes = (Address & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (Address & any) | null;
-export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export type CombinedWorkAddressTypes = (Address & any) | null;

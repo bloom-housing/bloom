@@ -31,7 +31,7 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["listing", "user"],
+      relations: ["listing", "user", "listing.property"],
     })
   }
 
@@ -48,6 +48,7 @@ export class ApplicationsService {
     const qb = this.repository.createQueryBuilder("application")
     qb.leftJoinAndSelect("application.user", "user")
     qb.leftJoinAndSelect("application.listing", "listing")
+    qb.leftJoinAndSelect("listing.property", "property")
 
     if (user) {
       qb.andWhere("user.id = :userId", { userId: user.id })
@@ -78,7 +79,7 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
-      relations: ["listing", "user"],
+      relations: ["listing", "user", "listing.property"],
     })
   }
 
@@ -87,7 +88,7 @@ export class ApplicationsService {
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
-        relations: ["listing", "user"],
+        relations: ["listing", "user", "listing.property"],
       }))
     Object.assign(application, applicationUpdateDto)
     await this.repository.save(application)
