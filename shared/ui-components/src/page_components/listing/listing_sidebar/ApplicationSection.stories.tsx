@@ -1,7 +1,7 @@
 import * as React from "react"
 import moment from "moment"
 import { ApplicationSection } from "./ApplicationSection"
-import {ArcherListing} from "../../../../archer-listing"
+import {ArcherListing} from "@bloom-housing/core/src/archer-listing"
 import { Listing } from "@bloom-housing/core"
 
 export default {

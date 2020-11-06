@@ -1,6 +1,6 @@
 import React from "react"
 import { AppStatusItem } from "./AppStatusItem"
-import { ArcherListing } from "../../archer-listing"
+import { ArcherListing } from "@bloom-housing/core/src/archer-listing"
 import moment from "moment"
 import { Application, Listing } from "@bloom-housing/core"
 const listing = Object.assign({}, ArcherListing) as Listing

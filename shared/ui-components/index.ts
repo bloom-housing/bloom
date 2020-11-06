@@ -106,4 +106,4 @@ export * from "./src/tables/GroupedTable"
 export * from "./src/text/Description"
 
 /* Archer listing */
-export * from "./archer-listing"
+export * from "@bloom-housing/core/src/archer-listing"

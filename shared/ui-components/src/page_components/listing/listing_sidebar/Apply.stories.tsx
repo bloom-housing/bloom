@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { Apply } from "./Apply"
-import {ArcherListing} from "../../../../archer-listing"
+import {ArcherListing} from "@bloom-housing/core/src/archer-listing"
 import {
   ApplicationMethod,
   ApplicationMethodType, Listing
