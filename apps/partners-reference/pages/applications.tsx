@@ -15,25 +15,24 @@ import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { GridApi } from "ag-grid-community"
 
-export default function ApplicationsList() {
+const ApplicationsList = () => {
+  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+  const metaImage = "" // TODO: replace with hero image
+
   const router = useRouter()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
-  const [gridApi, setGridApi] = useState<GridApi>(null)
-  const { applicationsService } = useContext(ApiClientContext)
 
   const filterField = watch("filter-input", "")
   const [delayedFilterValue, setDelayedFilterValue] = useState(filterField)
 
   const pageSize = watch("page-size", 8)
-
-  const listingId = router.query.id as string
-
   const [pageIndex, setPageIndex] = useState(1)
 
+  const listingId = router.query.id as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+  const { applicationsService } = useContext(ApiClientContext)
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
@@ -52,17 +51,13 @@ export default function ApplicationsList() {
     debounceFilter.current(filterField)
   }, [filterField])
 
-  // fetch data
   const applications = appsData?.items || []
   const appsMeta = appsData?.meta
 
   const pageSizeOptions = ["8", "100", "500", "1000"]
   const pageJumpOptions = Array.from(Array(appsMeta?.totalPages).keys())?.map((item) => item + 1)
 
-  const onGridReady = (params) => {
-    setGridApi(params.api)
-  }
-
+  // action buttons
   const onBtNext = () => {
     setPageIndex(pageIndex + 1)
   }
@@ -85,15 +80,26 @@ export default function ApplicationsList() {
     fileLink.click()
   }
 
-  const onSelectionChanged = () => {
-    const row = gridApi.getSelectedRows()
-    const rowId = row[0].id
+  // ag grid settings
+  class formatLinkCell {
+    linkWithId: HTMLAnchorElement
 
-    void router.push(`applications/${rowId}`)
+    init(params) {
+      this.linkWithId = document.createElement("a")
+      this.linkWithId.setAttribute("href", `/applications/${params.value}`)
+      this.linkWithId.innerText = params.value
+    }
+
+    getGui() {
+      return this.linkWithId
+    }
   }
 
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
+  const gridOptions = {
+    components: {
+      formatLinkCell: formatLinkCell,
+    },
+  }
 
   const defaultColDef = {
     resizable: true,
@@ -107,10 +113,15 @@ export default function ApplicationsList() {
       sortable: true,
       filter: false,
       pinned: "left",
-      autoSizeColumn: true,
       width: 200,
       minWidth: 150,
       sort: "asc",
+      valueFormatter: ({ value }) => {
+        const date = moment(value).format("MM/DD/YYYY")
+        const time = moment(value).format("HH:mm:ssA")
+
+        return `${date} ${t("t.at")} ${time}`
+      },
     },
     {
       headerName: "First Name",
@@ -118,7 +129,6 @@ export default function ApplicationsList() {
       sortable: true,
       filter: false,
       pinned: "left",
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -128,7 +138,6 @@ export default function ApplicationsList() {
       sortable: true,
       filter: "agTextColumnFilter",
       pinned: "left",
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -140,6 +149,7 @@ export default function ApplicationsList() {
       width: 150,
       minWidth: 120,
       type: "rightAligned",
+      cellRenderer: "formatLinkCell",
     },
     {
       headerName: "Household Size",
@@ -166,6 +176,7 @@ export default function ApplicationsList() {
       filter: false,
       width: 120,
       minWidth: 100,
+      valueFormatter: (data) => (data.value ? t("t.yes") : t("t.no")),
     },
     {
       headerName: "Preference Claimed",
@@ -300,7 +311,6 @@ export default function ApplicationsList() {
       field: "application.alternateContact.firstName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -309,7 +319,6 @@ export default function ApplicationsList() {
       field: "application.alternateContact.lastName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -334,7 +343,6 @@ export default function ApplicationsList() {
       field: "application.householdMember.firstName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -343,7 +351,6 @@ export default function ApplicationsList() {
       field: "application.householdMember.lastName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -464,6 +471,7 @@ export default function ApplicationsList() {
 
             <div className="applications-table mt-5">
               <AgGridReact
+                gridOptions={gridOptions}
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
                 rowData={applications}
@@ -474,8 +482,6 @@ export default function ApplicationsList() {
                 paginationPageSize={8}
                 suppressScrollOnNewData={true}
                 onGridReady={onGridReady}
-                rowSelection={"single"}
-                onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
 
               <div className="data-pager">
@@ -502,7 +508,9 @@ export default function ApplicationsList() {
                     </label>
                     <select name="page-size" id="page-size" ref={register} defaultValue={8}>
                       {pageSizeOptions.map((item) => (
-                        <option value={item}>{item}</option>
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
                       ))}
                     </select>
                   </span>
@@ -544,3 +552,5 @@ export default function ApplicationsList() {
     </Layout>
   )
 }
+
+export default ApplicationsList
