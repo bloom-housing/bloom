@@ -30,6 +30,11 @@
       "preferredContact": "Preferred Contact",
       "residenceAddress": "Residence Address"
     },
+    "new": {
+      "dateSubmitted": "Date Submitted",
+      "timeSubmitted": "Time Submitted",
+      "languageSubmittedIn": "Language Submitted In"
+    },
     "form": {
       "errors": {
         "selectOption": "Please select one of the options above.",
