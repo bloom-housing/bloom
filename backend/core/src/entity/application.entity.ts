@@ -121,8 +121,8 @@ export class Applicant {
 
   @Expose()
   @IsOptional()
-  @IsIn(["yes", "no"])
-  workInRegion: string | null
+  @IsBoolean()
+  workInRegion: boolean | null
 
   @Expose()
   @IsDefined()
@@ -274,8 +274,8 @@ export class HouseholdMember {
 
   @Expose()
   @IsOptional()
-  @IsIn(["yes", "no"])
-  sameAddress?: string | null
+  @IsBoolean()
+  sameAddress?: boolean | null
 
   @Expose()
   @IsOptional()
@@ -284,8 +284,8 @@ export class HouseholdMember {
 
   @Expose()
   @IsOptional()
-  @IsIn(["yes", "no"])
-  workInRegion?: string | null
+  @IsBoolean()
+  workInRegion?: boolean | null
 
   @Expose()
   @IsOptional()
