@@ -1,10 +1,6 @@
 @import "../global/mixins.scss";
 
 .button {
-  @apply bg-white;
-  @apply text-primary;
-  @apply border-2;
-  @apply border-primary;
   @apply rounded;
   @apply px-6;
   @apply py-4;
@@ -18,14 +14,9 @@
   @apply font-bold;
   @apply leading-snug;
 
-  &:hover {
-    @apply bg-primary-dark;
-    @apply text-white;
-  }
-
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-accent-cool;
   }
 
   &:disabled {
@@ -33,26 +24,6 @@
     @apply bg-white;
     @apply border-gray-450;
     @apply text-gray-450;
-  }
-
-  &.is-filled,
-  &.is-primary {
-    @apply bg-primary-dark;
-    @apply text-white;
-
-    &:hover {
-      @apply bg-primary-darker;
-    }
-  }
-
-  &.is-alert {
-    @apply bg-alert;
-    @apply border-alert;
-    @apply text-white;
-
-    &:hover {
-      @apply bg-alert;
-    }
   }
 
   &.is-secondary {
@@ -78,16 +49,6 @@
 
   &.is-normal-case {
     @apply normal-case;
-  }
-
-  &.is-borderless {
-    @apply text-primary-darker;
-    border-color: transparent;
-    background: transparent;
-
-    &:hover {
-      @apply text-primary-darker;
-    }
   }
 
   &.is-unstyled {
@@ -126,6 +87,13 @@
       background: transparent;
     }
   }
+
+  &.is-fullwidth {
+    @apply w-full;
+  }
+
+  @include filled-appearances;
+  @include outlined-appearances;
 }
 
 button {

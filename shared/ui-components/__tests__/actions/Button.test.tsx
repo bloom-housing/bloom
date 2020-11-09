@@ -1,6 +1,7 @@
 import React from "react"
 import { shallow } from "enzyme"
 import { Button } from "../../src/actions/Button"
+import { AppearanceSizeType } from "../../src/global/AppearanceTypes"
 
 const handleClick = (e: React.MouseEvent) => {
   alert(`You clicked me! Event: ${e.type}`)
@@ -8,7 +9,7 @@ const handleClick = (e: React.MouseEvent) => {
 
 test("shows small button", () => {
   const wrapper = shallow(
-    <Button small={true} onClick={handleClick}>
+    <Button size={AppearanceSizeType.small} onClick={handleClick}>
       Small Button
     </Button>
   )

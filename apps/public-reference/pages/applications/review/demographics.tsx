@@ -4,6 +4,7 @@ Optional demographic questions
 */
 import React, { useMemo } from "react"
 import {
+  AppearanceStyleType,
   Button,
   FieldGroup,
   Form,
@@ -148,7 +149,7 @@ const Demographics = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

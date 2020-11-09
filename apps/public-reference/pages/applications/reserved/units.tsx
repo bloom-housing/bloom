@@ -3,7 +3,14 @@
 Unlike Reserved Community Buildings which are 100% reserved, in the event that there a mix of reserved and non reserved units ask a question after collecting household information.
 */
 import React, { useContext } from "react"
-import { Button, FormCard, ProgressNav, Form } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  ProgressNav,
+  t,
+  Form,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -46,7 +53,7 @@ export default () => {
           (FORM)
           <div className="text-center mt-6">
             <Button
-              filled={true}
+              type={AppearanceStyleType.primary}
               onClick={() => {
                 //
               }}

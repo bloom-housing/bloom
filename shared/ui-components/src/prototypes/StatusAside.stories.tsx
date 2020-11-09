@@ -1,6 +1,7 @@
 import React from "react"
 import { Tag } from "./Tag"
 import { Button } from "../actions/Button"
+import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
 
 import "./StatusAside.scss"
 
@@ -18,17 +19,21 @@ export const StatusAside = () => (
     <div className="status-aside__buttons">
       <div className="button-group grid grid-cols-2 gap-2">
         <div className="button-group__item">
-          <Button small={true} onClick={handleClick}>
+          <Button size={AppearanceSizeType.small} onClick={handleClick}>
             Save
           </Button>
         </div>
         <div className="button-group__item">
-          <Button small={true} className="is-secondary" onClick={handleClick}>
+          <Button size={AppearanceSizeType.small} className="is-secondary" onClick={handleClick}>
             Preview
           </Button>
         </div>
         <div className="button-group__item col-span-2">
-          <Button small={true} filled={true} onClick={handleClick}>
+          <Button
+            size={AppearanceSizeType.small}
+            type={AppearanceStyleType.primary}
+            onClick={handleClick}
+          >
             Submit
           </Button>
         </div>
@@ -44,9 +49,7 @@ export const StatusAside = () => (
               Submitted
             </Tag>
 
-            <span className="status-message__time">
-             01/01/21
-            </span>
+            <span className="status-message__time">01/01/21</span>
           </div>
 
           <div className="status-message__note">Changed status of one application.</div>
@@ -57,9 +60,7 @@ export const StatusAside = () => (
               Draft
             </Tag>
 
-            <span className="status-message__time">
-             01/01/21
-            </span>
+            <span className="status-message__time">01/01/21</span>
           </div>
         </li>
       </ul>
@@ -72,7 +73,7 @@ export const StatusAsideLast = () => (
     <div className="status-aside__buttons">
       <div className="button-group">
         <div className="button-group__item">
-          <Button small={true} className="is-secondary" onClick={handleClick}>
+          <Button size={AppearanceSizeType.small} className="is-secondary" onClick={handleClick}>
             Edit
           </Button>
         </div>

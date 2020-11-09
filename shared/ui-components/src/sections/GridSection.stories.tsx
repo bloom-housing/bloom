@@ -4,6 +4,8 @@ import { MinimalTable } from "../tables/MinimalTable"
 import { ViewItem } from "../blocks/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
 import { Field } from "../forms/Field"
+import { Button } from "../actions/Button"
+import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Sections/Grid Section",
@@ -326,5 +328,25 @@ const data = [
 export const GridSectionTable = () => (
   <GridSection title="Section Title" grid={false} tinted={true} inset={true}>
     <MinimalTable headers={headers} data={data} />
+  </GridSection>
+)
+
+export const ButtonGrid = () => (
+  <GridSection columns={2} tightSpacing={true}>
+    <GridCell>
+      <Button fullWidth={true} onClick={() => {}}>
+        I'm a Button!
+      </Button>
+    </GridCell>
+    <GridCell>
+      <Button fullWidth={true} onClick={() => {}}>
+        Another Button
+      </Button>
+    </GridCell>
+    <GridCell span={2}>
+      <Button type={AppearanceStyleType.primary} fullWidth={true} onClick={() => {}}>
+        I'm a Button!
+      </Button>
+    </GridCell>
   </GridSection>
 )

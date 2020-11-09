@@ -33,64 +33,6 @@
   @apply rounded-b;
 }
 
-// Buttons stack with no column classes
-.modal__button-group {
-  @screen md {
-    @apply flex;
-    @apply justify-end;
-  }
-
-  .modal__button_item {
-    @screen md {
-      @apply ml-4;
-    }
-  }
-
-  button,
-  .button {
-    @apply block;
-    @apply w-full;
-    @apply mt-0;
-    @apply mb-1;
-    @apply mx-auto;
-
-    &.primary {
-      @apply bg-primary-dark;
-      @apply text-white;
-      &:hover {
-        @apply bg-primary-darker;
-      }
-    }
-
-    &.success {
-      @apply bg-success;
-      @apply border-success;
-      @apply text-white;
-      &:hover {
-        @apply border-success-light;
-      }
-    }
-
-    &.failure {
-      @apply bg-alert;
-      @apply border-alert;
-      @apply text-white;
-      &:hover {
-        @apply border-alert-light;
-      }
-    }
-
-    &.cancel {
-      @apply text-primary-dark;
-      border-color: transparent;
-      background: transparent;
-      &:hover {
-        @apply text-primary-darker;
-      }
-    }
-  }
-}
-
 .modal__close {
   @apply absolute;
   top: 1.5rem;
@@ -127,4 +69,3 @@
     @apply bg-opacity-50;
   }
 }
-
