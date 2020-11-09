@@ -481,7 +481,6 @@ const ApplicationsList = () => {
                 suppressPaginationPanel={true}
                 paginationPageSize={8}
                 suppressScrollOnNewData={true}
-                onGridReady={onGridReady}
               ></AgGridReact>
 
               <div className="data-pager">
@@ -489,7 +488,6 @@ const ApplicationsList = () => {
                   className="data-pager__previous data-pager__control"
                   onClick={onBtPrevious}
                   disabled={pageIndex === 1}
-                  filled={pageIndex !== 1}
                 >
                   {t("t.previous")}
                 </Button>
@@ -540,7 +538,6 @@ const ApplicationsList = () => {
                   className="data-pager__next data-pager__control"
                   onClick={onBtNext}
                   disabled={appsMeta?.totalPages === pageIndex}
-                  filled={appsMeta?.totalPages !== pageIndex}
                 >
                   {t("t.next")}
                 </Button>
