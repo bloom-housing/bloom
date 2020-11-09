@@ -14,7 +14,6 @@ import {
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import Link from "next/link"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -25,7 +24,7 @@ export default function ApplicationsList() {
     applicationId
   )
 
-  const application = applicationDto?.application as Record<string, any>
+  const application = applicationDto?.application
 
   const applicationDate = useMemo(() => {
     if (!applicationDto) return null
@@ -52,7 +51,9 @@ export default function ApplicationsList() {
     if (!application) return null
 
     const { income, incomePeriod } = application
-    const annual = incomePeriod === "perMonth" ? income * 12 : income
+    const numericIncome = parseFloat(income)
+
+    const annual = incomePeriod === "perMonth" ? numericIncome * 12 : numericIncome
     return `${annual.toFixed(2)}`
   }, [application])
 
@@ -70,9 +71,9 @@ export default function ApplicationsList() {
       name: `${item.firstName} ${item.middleName} ${item.lastName}`,
       relationship: t(`application.form.options.relationship.${item.relationship}`),
       birth: `${item.birthMonth}/${item.birthDay}/${item.birthYear}`,
-      street: item.street,
-      city: item.city,
-      state: item.state,
+      street: item.address.street,
+      city: item.address.city,
+      state: item.address.state,
     }))
   }, [application])
 
@@ -121,9 +122,7 @@ export default function ApplicationsList() {
                 inset
               >
                 <GridCell>
-                  <ViewItem label={t("application.details.number")}>
-                    <Link href={`/applications/${applicationDto.id}`}>{applicationDto.id}</Link>
-                  </ViewItem>
+                  <ViewItem label={t("application.details.number")}>{applicationDto.id}</ViewItem>
                 </GridCell>
 
                 {/* TODO:hardcoded until we get information from the backend */}
@@ -143,6 +142,8 @@ export default function ApplicationsList() {
                   </ViewItem>
                 </GridCell>
 
+                {console.log(application)}
+
                 {/* TODO:hardcoded until we get information from the backend */}
                 <GridCell>
                   <ViewItem label={t("application.details.language")}>English</ViewItem>
@@ -161,8 +162,6 @@ export default function ApplicationsList() {
                   </ViewItem>
                 </GridCell>
               </GridSection>
-
-              {console.log(application)}
 
               <GridSection
                 className="bg-primary-lighter"
@@ -206,8 +205,8 @@ export default function ApplicationsList() {
 
                   <GridCell>
                     <ViewItem label={t("t.secondPhone")}>
-                      {application.applicant.additionalPhoneNumber
-                        ? application.applicant.additionalPhoneNumber
+                      {application.additionalPhoneNumber
+                        ? application.additionalPhoneNumber
                         : t("t.none")}
                     </ViewItem>
                   </GridCell>
@@ -370,14 +369,22 @@ export default function ApplicationsList() {
                 </GridCell>
               </GridSection>
 
-              {/* TODO: check live/work place */}
+              {/* TODO
+                We don't store information about applicant county, only workInRegion, so we can't detect if applicant live in specific county
+              */}
               <GridSection
                 className="bg-primary-lighter"
                 title={t("application.details.preferences")}
                 inset
               >
                 <GridCell>
-                  <ViewItem label={t("application.details.workInAlameda")}></ViewItem>
+                  <ViewItem
+                    label={`${t("application.details.liveOrWorkIn")} ${t(
+                      "application.details.countyName"
+                    )}`}
+                  >
+                    {application.applicant.workInRegion ? t("t.yes") : t("t.no")}
+                  </ViewItem>
                 </GridCell>
               </GridSection>
 
