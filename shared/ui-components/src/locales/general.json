@@ -23,7 +23,7 @@
       "agency": "Agency if Applicable",
       "adaPriorities": "ADA Priorities Selected",
       "preferences": "Application Preferences",
-      "workInAlameda": "Live or Work in Alameda County",
+      "liveOrWorkIn": "Live or Work in",
       "householdIncome": "Declared Household Income",
       "annualIncome": "Annual Income",
       "vouchers": "Housing Voucher or Subsidy",
@@ -729,6 +729,7 @@
     "name": "Local Region"
   },
   "t": {
+    "at": "at",
     "additionalPhone": "Additional Phone",
     "area": "area",
     "accessibility": "Accessibility",

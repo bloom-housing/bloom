@@ -1,5 +1,10 @@
 {
   "welcome": {
     "seeRentalListings": "Browse Rentals"
+  },
+  "application": {
+    "details": {
+      "countyName": "Alameda County"
+    }
   }
 }
