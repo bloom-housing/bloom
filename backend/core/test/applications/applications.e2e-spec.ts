@@ -142,7 +142,7 @@ describe("Applications", () => {
     user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    listingId = res.body.listings[0].id
+    listingId = res.body[0].id
   })
 
   it(`/GET `, async () => {

@@ -6,7 +6,7 @@ import jp from "jsonpath"
 
 import { plainToClass } from "class-transformer"
 import { Listing } from "../entity/listing.entity"
-import { ListingCreateDto, ListingExtendedDto, ListingUpdateDto } from "./listing.dto"
+import { ListingCreateDto, ListingDto, ListingExtendedDto, ListingUpdateDto } from "./listing.dto"
 
 export enum ListingsResponseStatus {
   ok = "ok",
@@ -14,7 +14,7 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<ListingExtendedDto> {
+  public async list(jsonpath?: string): Promise<Listing[]> {
     let listings = await Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.units", "units")
@@ -33,13 +33,7 @@ export class ListingsService {
       listings = jp.query(listings, jsonpath)
     }
 
-    const data = {
-      status: ListingsResponseStatus.ok,
-      listings: listings,
-      amiCharts: amiCharts,
-    }
-
-    return data
+    return listings
   }
 
   async create(listingDto: ListingCreateDto) {

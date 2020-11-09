@@ -129,7 +129,7 @@ export class ListingsService {
       jsonpath?: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ListingExtended> {
+  ): Promise<Listing[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/listings';
 
@@ -1392,9 +1392,6 @@ export interface UnitsSummarized {
 
 export interface Unit {
   /**  */
-  amiPercentage?: string;
-
-  /**  */
   id: string;
 
   /**  */
@@ -1402,6 +1399,9 @@ export interface Unit {
 
   /**  */
   updatedAt: Date;
+
+  /**  */
+  amiPercentage?: string;
 
   /**  */
   annualIncomeMin?: string;
@@ -1700,17 +1700,6 @@ export interface Listing {
 
   /**  */
   applicationConfig?: object;
-}
-
-export interface ListingExtended {
-  /**  */
-  status: ListingsResponseStatus;
-
-  /**  */
-  listings: Listing[];
-
-  /**  */
-  amiCharts: object;
 }
 
 export interface Id {
@@ -2597,10 +2586,6 @@ export interface PropertyGroupUpdate {
 
   /**  */
   id: string;
-}
-
-export enum ListingsResponseStatus {
-  'ok' = 'ok'
 }
 
 export enum ListingStatus {

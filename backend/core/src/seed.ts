@@ -58,7 +58,7 @@ async function bootstrap() {
   await userRepo.save(admin)
 
   const listingsService = app.get<ListingsService>(ListingsService)
-  const listing = (await listingsService.list()).listings[0]
+  const listing = (await listingsService.list())[0]
 
   let application = plainToClass(Application, {
     user: { id: user.id },

@@ -24,8 +24,8 @@ export class ListingsController {
     required: false,
     type: String,
   })
-  public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingExtendedDto> {
-    return mapTo(ListingExtendedDto, await this.listingsService.list(jsonpath))
+  public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingDto[]> {
+    return mapTo(ListingDto, await this.listingsService.list(jsonpath))
   }
 
   @Post()
