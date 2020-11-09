@@ -20,6 +20,7 @@ import { Preference } from "../entity/preference.entity"
 import { Property } from "../entity/property.entity"
 import { Asset } from "../entity/asset.entity"
 import { ListingEvent } from "../entity/listing-event.entity"
+import { AmiChart } from "../entity/ami-chart.entity"
 
 @Module({})
 export class SeederModule {
@@ -44,6 +45,7 @@ export class SeederModule {
           Preference,
           ApplicationMethod,
           ListingEvent,
+          AmiChart,
         ]),
       ],
       providers: [UserService, ListingsService, ApplicationsService, CsvBuilder, CsvEncoder],

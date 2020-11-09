@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -16,6 +17,7 @@ import { Unit, UnitsSummarized } from "./unit.entity"
 import { transformUnits } from "../lib/unit_transformations"
 import { amiCharts } from "../lib/ami_charts"
 import { PropertyGroup } from "./property-group.entity"
+import { AmiChart } from "./ami-chart.entity"
 
 @Entity()
 export class Property {
@@ -43,6 +45,9 @@ export class Property {
 
   @ManyToMany(() => PropertyGroup)
   propertyGroups: PropertyGroup[]
+
+  @ManyToOne(() => AmiChart, (amiChart) => amiChart.properties, { eager: true, nullable: true })
+  amiChart: AmiChart | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

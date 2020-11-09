@@ -10,7 +10,7 @@ import { IPaginationOptions, paginate, Pagination } from "nestjs-typeorm-paginat
 import { IsDefined, IsNumber, Max, Min } from "class-validator"
 
 export interface GenericUpdateDto {
-  id: string
+  id?: string
 }
 
 export interface QueryOneOptions<T> {
