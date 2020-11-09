@@ -99,7 +99,8 @@ export default function ApplicationsList() {
       {console.log(applicationError)}
       {console.log(applicationDto)}
 
-      <section className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
+      <section className="border-t bg-white">
+        <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
         <InlineButton arrow onClick={() => router.back()}>
           {t("t.back")}
         </InlineButton>
@@ -109,6 +110,7 @@ export default function ApplicationsList() {
           <Tag success pillStyle>
             Submitted
           </Tag>
+        </div>
         </div>
       </section>
 
@@ -407,7 +409,7 @@ export default function ApplicationsList() {
             <div className="md:w-3/12">
               <ul className="status-messages">
                 <li className="status-message">
-                  <div className="status-message__note text-center">
+                  <div className="status-message__note text-tiny text-center pt-2">
                     {t("t.lastUpdated")} {applicationUpdated}
                   </div>
                 </li>
