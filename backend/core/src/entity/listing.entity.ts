@@ -145,6 +145,19 @@ class Listing extends BaseEntity {
   @IsOptional()
   @ValidateNested()
   @Type(() => Address)
+  applicationPickUpAddress: Address | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  applicationPickUpAddressOfficeHours: string | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Address)
   buildingAddress: Address | null
 
   @Column({ type: "integer", nullable: true })
