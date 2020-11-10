@@ -1,12 +1,9 @@
 import { Injectable } from "@nestjs/common"
-import { amiCharts } from "../lib/ami_charts"
-import { transformUnits } from "../lib/unit_transformations"
-import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
 
 import { plainToClass } from "class-transformer"
 import { Listing } from "../entity/listing.entity"
-import { ListingCreateDto, ListingDto, ListingExtendedDto, ListingUpdateDto } from "./listing.dto"
+import { ListingCreateDto, ListingUpdateDto } from "./listing.dto"
 
 export enum ListingsResponseStatus {
   ok = "ok",

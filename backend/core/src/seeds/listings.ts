@@ -17,6 +17,7 @@ import { Asset } from "../entity/asset.entity"
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/ami-chart.dto"
 import { AmiChart } from "../entity/ami-chart.entity"
+import { SanMateoHUD2019 } from "./ami-charts"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
@@ -152,7 +153,6 @@ export const listingSeed1: ListingSeed = {
       sqFeet: "750",
       status: "available",
       unitType: "oneBdrm",
-      amiChartId: 1,
       monthlyRentAsPercentOfIncome: null,
     },
     {
@@ -172,7 +172,6 @@ export const listingSeed1: ListingSeed = {
       sqFeet: "1304",
       status: "available",
       unitType: "threeBdrm",
-      amiChartId: 1,
       monthlyRentAsPercentOfIncome: null,
     },
   ],
@@ -341,14 +340,5 @@ export const listingSeed1: ListingSeed = {
     // totalUnits: 2,
     status: ListingStatus.active,
   },
-  amiChart: {
-    name: "Test ami chart",
-    items: [
-      {
-        percentOfAmi: 50,
-        householdSize: 50,
-        income: 50,
-      },
-    ],
-  },
+  amiChart: SanMateoHUD2019,
 }

@@ -15,7 +15,6 @@ import { Address } from "../shared/dto/address.dto"
 import { ApiProperty } from "@nestjs/swagger"
 import { Unit, UnitsSummarized } from "./unit.entity"
 import { transformUnits } from "../lib/unit_transformations"
-import { amiCharts } from "../lib/ami_charts"
 import { PropertyGroup } from "./property-group.entity"
 import { AmiChart } from "./ami-chart.entity"
 
@@ -131,8 +130,8 @@ export class Property {
   @Expose()
   @ApiProperty()
   get unitsSummarized(): UnitsSummarized | undefined {
-    if (Array.isArray(this.units) && this.units.length > 0) {
-      return transformUnits(this.units, amiCharts)
+    if (this.amiChart && Array.isArray(this.units) && this.units.length > 0) {
+      return transformUnits(this.units, this.amiChart.items)
     }
   }
 }
