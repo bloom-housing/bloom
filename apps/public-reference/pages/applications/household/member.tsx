@@ -89,14 +89,10 @@ export default () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm({
+  const { register, control, handleSubmit, errors, watch } = useForm({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    // FIXME
-    data.birthDay = parseInt(data.birthDay)
-    data.birthMonth = parseInt(data.birthMonth)
-    data.birthYear = parseInt(data.birthYear)
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
     void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
@@ -216,7 +212,7 @@ export default () => {
               <div className="form-card__group border-b">
                 <DOBField
                   applicant={member}
-                  register={register}
+                  control={control}
                   error={errors}
                   watch={watch}
                   label={t("application.household.member.dateOfBirth")}

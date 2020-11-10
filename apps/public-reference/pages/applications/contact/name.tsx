@@ -26,7 +26,7 @@ export default () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch, errors } = useForm<Record<string, any>>({
+  const { register, control, handleSubmit, watch, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
@@ -34,10 +34,6 @@ export default () => {
     },
   })
   const onSubmit = (data) => {
-    // FIXME
-    data.applicant.birthDay = parseInt(data.applicant.birthDay)
-    data.applicant.birthMonth = parseInt(data.applicant.birthMonth)
-    data.applicant.birthYear = parseInt(data.applicant.birthYear)
     conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
     conductor.routeToNextOrReturnUrl()
   }
@@ -117,7 +113,7 @@ export default () => {
           <div className="form-card__group border-b">
             <DOBField
               applicant={application.applicant}
-              register={register}
+              control={control}
               error={errors.applicant}
               name="applicant"
               watch={watch}
