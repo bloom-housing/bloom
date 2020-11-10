@@ -1,5 +1,6 @@
 import {
   ClassSerializerInterceptor,
+  DynamicModule,
   INestApplication,
   Module,
   ValidationPipe,
@@ -8,7 +9,6 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../ormconfig")
 import { AuthModule } from "./auth/auth.module"
 
 import { ListingsModule } from "./listings/listings.module"
@@ -43,30 +43,35 @@ export function applicationSetup(app: INestApplication) {
   return app
 }
 
-@Module({
-  imports: [
-    ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        PORT: Joi.number().default(3100).required(),
-        NODE_ENV: Joi.string()
-          .valid("development", "staging", "production", "test")
-          .default("development"),
-        DATABASE_URL: Joi.string().required(),
-      }),
-    }),
-    TypeOrmModule.forRoot({
-      ...dbOptions,
-      autoLoadEntities: true,
-    }),
-    UserModule,
-    AuthModule,
-    ListingsModule,
-    ApplicationsModule,
-    AssetsModule,
-    PreferencesModule,
-    ApplicationMethodsModule,
-    UnitsModule,
-    ListingEventsModule,
-  ],
-})
-export class AppModule {}
+@Module({})
+export class AppModule {
+  static register(dbOptions): DynamicModule {
+    return {
+      module: AppModule,
+      imports: [
+        ConfigModule.forRoot({
+          validationSchema: Joi.object({
+            PORT: Joi.number().default(3100).required(),
+            NODE_ENV: Joi.string()
+              .valid("development", "staging", "production", "test")
+              .default("development"),
+            DATABASE_URL: Joi.string().required(),
+          }),
+        }),
+        TypeOrmModule.forRoot({
+          ...dbOptions,
+          autoLoadEntities: true,
+        }),
+        UserModule,
+        AuthModule,
+        ListingsModule,
+        ApplicationsModule,
+        AssetsModule,
+        PreferencesModule,
+        ApplicationMethodsModule,
+        UnitsModule,
+        ListingEventsModule,
+      ],
+    }
+  }
+}

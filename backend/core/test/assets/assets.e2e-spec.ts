@@ -23,7 +23,7 @@ const exampleAssetBody = {
 
 describe("Assets", () => {
   let app: INestApplication
-  let userAccessToken: string
+  let adminAccessToken: string
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -33,19 +33,19 @@ describe("Assets", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
-    userAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
 
   it(`should create and retrieve an assset using /assets POST and GET`, async () => {
     let res = await supertest(app.getHttpServer())
       .post(`/assets`)
       .send(exampleAssetBody)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(201)
     expect(res.body).toEqual(expect.objectContaining(exampleAssetBody))
     res = await supertest(app.getHttpServer())
       .get(`/assets/${res.body.id}`)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(res.body).toEqual(expect.objectContaining(exampleAssetBody))
     expect(res.body).toHaveProperty("id")
@@ -55,20 +55,20 @@ describe("Assets", () => {
     const postRes = await supertest(app.getHttpServer())
       .post(`/assets`)
       .send(exampleAssetBody)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(201)
     expect(postRes.body).toEqual(expect.objectContaining(exampleAssetBody))
     await supertest(app.getHttpServer())
       .get(`/assets/${postRes.body.id}`)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     await supertest(app.getHttpServer())
       .delete(`/assets/${postRes.body.id}`)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     await supertest(app.getHttpServer())
       .get(`/assets/${postRes.body.id}`)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(404)
   })
 
@@ -76,12 +76,12 @@ describe("Assets", () => {
     const postRes = await supertest(app.getHttpServer())
       .post(`/assets`)
       .send(exampleAssetBody)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(201)
     expect(postRes.body).toEqual(expect.objectContaining(exampleAssetBody))
     const listRes = await supertest(app.getHttpServer())
       .get(`/assets/`)
-      .set(...setAuthorization(userAccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(Array.isArray(listRes.body)).toBe(true)
     const filteredList = listRes.body.filter((value) => postRes.body.id === value.id)

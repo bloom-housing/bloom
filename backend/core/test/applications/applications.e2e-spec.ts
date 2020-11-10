@@ -29,6 +29,7 @@ describe("Applications", () => {
   let app: INestApplication
   let user1AccessToken: string
   let user2AccessToken: string
+  let adminAccessToken: string
   let listingId: any
 
   const getTestAppBody: () => ApplicationCreate = () => {
@@ -152,6 +153,8 @@ describe("Applications", () => {
 
     user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     listingId = res.body.listings[0].id
   })
@@ -213,7 +216,7 @@ describe("Applications", () => {
       .expect(201)
     await supertest(app.getHttpServer())
       .delete(`/applications/${createRes.body.id}`)
-      .set(...setAuthorization(user1AccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     await supertest(app.getHttpServer())
       .get(`/applications/${createRes.body.id}`)
@@ -247,7 +250,7 @@ describe("Applications", () => {
     const putRes = await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)
       .send(newBody)
-      .set(...setAuthorization(user1AccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(putRes.body).toEqual(expect.objectContaining(newBody))
   })
