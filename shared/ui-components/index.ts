@@ -51,6 +51,7 @@ export * from "./src/helpers/occupancyFormatting"
 export * from "./src/helpers/state"
 export * from "./src/helpers/tableSummaries"
 export * from "./src/helpers/translator"
+export * from "./src/helpers/transformInputValue"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"

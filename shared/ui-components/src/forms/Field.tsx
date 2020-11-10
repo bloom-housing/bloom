@@ -64,7 +64,7 @@ const Field = (props: FieldProps) => {
           name={props.name}
           defaultValue={props.defaultValue}
           placeholder={props.placeholder}
-          ref={props.register(props.validation)}
+          ref={props.register ? props.register(props.validation) : null}
           disabled={props.disabled}
           {...props.inputProps}
         />
