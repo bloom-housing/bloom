@@ -2,11 +2,12 @@ import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
+import dbOptions = require("../../ormconfig.test")
+
 import supertest from "supertest"
 import { applicationSetup, AppModule } from "../../src/app.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { User } from "../.."
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -30,7 +31,7 @@ describe("Authz", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule.register(dbOptions)],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -168,7 +169,9 @@ describe("Authz", () => {
     })
     it("should allow anonymous user to GET listings by ID", async () => {
       const res = await supertest(app.getHttpServer()).get(listingsEndpoint).expect(200)
-      await supertest(app.getHttpServer()).get(`${listingsEndpoint}/${res.body[0].id}`).expect(200)
+      await supertest(app.getHttpServer())
+        .get(`${listingsEndpoint}/${res.body.listings[0].id}`)
+        .expect(200)
     })
     it(`should not allow normal/anonymous user to DELETE listings`, async () => {
       // anonymous
