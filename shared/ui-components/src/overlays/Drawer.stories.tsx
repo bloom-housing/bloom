@@ -1,15 +1,15 @@
-import React from "react"
+import React, { useState } from "react"
 import { Icon } from "../icons/Icon"
 import SVG from "react-inlinesvg"
 
 import { Drawer } from "./Drawer"
-import { FieldSection } from "./FieldSection"
 import { GridSection, GridCell } from "../sections/GridSection"
 import { ViewItem } from "../blocks/ViewItem"
 import { Field } from "../forms/Field"
+import { Button } from "../actions/Button"
 
 export default {
-  title: "Prototypes/Drawer",
+  title: "Overlays/Drawer",
   decorators: [
     (storyFn: any) => (
       <div>
@@ -20,13 +20,31 @@ export default {
   ],
 }
 
-export const Standard = () => (
-  <Drawer title="Drawer Title" className="is-right" ariaDescription="My Drawer">
-    <section className="border rounded-md p-8 bg-white mb-8">
-      <p>Test</p>
-    </section>
-  </Drawer>
-)
+export const Standard = () => {
+  const [drawerState, setDrawerState] = useState(false)
+  return (
+    <>
+      <Drawer
+        open={drawerState}
+        title="Drawer Title"
+        onClose={() => setDrawerState(!drawerState)}
+        className="is-right"
+        ariaDescription="My Drawer"
+      >
+        <section className="border rounded-md p-8 bg-white mb-8">
+          <p>Test</p>
+        </section>
+      </Drawer>
+      <Button
+        onClick={() => {
+          setDrawerState(true)
+        }}
+      >
+        Open Drawer
+      </Button>
+    </>
+  )
+}
 
 export const HasBackground = () => (
   <Drawer title="Drawer Title" className="is-right" ariaDescription="My Drawer" hasBackdrop={true}>
@@ -37,9 +55,9 @@ export const HasBackground = () => (
 )
 
 export const DrawerFieldTest = () => (
-  <Drawer title="Drawer Title" className="is-right" ariaDescription="My Drawer">
+  <Drawer open={true} title="Drawer Title" className="is-right" ariaDescription="My Drawer">
     <section className="border p-8 bg-white mb-8">
-      <FieldSection title="Section Title" className="md:grid md:grid-cols-4 md:gap-8">
+      <GridSection title="Section Title" columns={4}>
         <Field label="Alpha" placeholder="Enter text" name="label1" register={() => {}} />
 
         <Field label="Beta" placeholder="Enter text" name="label2" register={() => {}} />
@@ -55,13 +73,13 @@ export const DrawerFieldTest = () => (
         <Field label="Eta" placeholder="Enter text" name="label7" register={() => {}} />
 
         <Field label="Theta" placeholder="Enter text" name="label8" register={() => {}} />
-      </FieldSection>
+      </GridSection>
     </section>
   </Drawer>
 )
 
 export const DrawerViewTest = () => (
-  <Drawer title="Drawer Title" className="is-right" ariaDescription="My Drawer">
+  <Drawer open={true} title="Drawer Title" className="is-right" ariaDescription="My Drawer">
     <section className="border rounded-md p-8 bg-white mb-8">
       <GridSection title="Section Title" tinted={true} inset={true} columns={4}>
         <ViewItem label="First Name" children="Lisa" />

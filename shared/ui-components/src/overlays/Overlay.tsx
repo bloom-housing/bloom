@@ -5,39 +5,19 @@ import { useOutsideClick } from "../helpers/useOutsideClick"
 import { createPortal } from "react-dom"
 import FocusLock from "react-focus-lock"
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock"
+import { CSSTransition } from "react-transition-group"
 
 export type OverlayProps = {
-  open: boolean
-  ariaLabel: string
-  ariaDescription: string
+  open?: boolean
+  ariaLabel?: string
+  ariaDescription?: string
   className?: string
   backdrop?: boolean
   onClose?: () => void
   children: React.ReactNode
 }
 
-export const Overlay = (props: OverlayProps) => {
-  const documentAvailable = typeof document !== "undefined"
-  const overlayRoot = useState<Element | null>(
-    documentAvailable ? document.querySelector("#__next") : null
-  )[0]
-  const elForPortal = useState<Element | null>(
-    documentAvailable ? document.createElement("div") : null
-  )[0]
-
-  // append overlay to the root of app
-  useEffect(() => {
-    if (!(open && overlayRoot && elForPortal)) return
-
-    overlayRoot.appendChild(elForPortal)
-    disableBodyScroll(elForPortal)
-
-    return () => {
-      enableBodyScroll(elForPortal)
-      overlayRoot.removeChild(elForPortal)
-    }
-  }, [elForPortal, overlayRoot, props.open])
-
+const OverlayInner = (props: OverlayProps) => {
   // close overlay on click outside overlay content
   const overlayInnerRef = createRef<HTMLDivElement>()
   useOutsideClick({
@@ -56,21 +36,66 @@ export const Overlay = (props: OverlayProps) => {
   if (props.className) classNames.push(props.className)
 
   return (
+    <div
+      className={classNames.join(" ")}
+      role="dialog"
+      aria-labelledby={props.ariaLabel}
+      aria-describedby={props.ariaDescription}
+    >
+      <div className="fixed-overlay__inner" ref={overlayInnerRef}>
+        <FocusLock>{props.children}</FocusLock>
+      </div>
+    </div>
+  )
+}
+
+export const Overlay = (props: OverlayProps) => {
+  const documentAvailable = typeof document !== "undefined"
+  const overlayRoot = useState<Element | null>(
+    documentAvailable ? document.querySelector("#__next") : null
+  )[0]
+  const elForPortal = useState<Element | null>(
+    documentAvailable ? document.createElement("div") : null
+  )[0]
+
+  // append overlay to the root of app
+  useEffect(() => {
+    if (!(overlayRoot && elForPortal)) return
+
+    overlayRoot.appendChild(elForPortal)
+
+    return () => {
+      overlayRoot.removeChild(elForPortal)
+    }
+  }, [elForPortal, overlayRoot])
+
+  // disable body scrolling when the overlay is open
+  useEffect(() => {
+    if (!(overlayRoot && elForPortal)) return
+
+    if (props.open) {
+      disableBodyScroll(elForPortal)
+    }
+
+    return () => {
+      if (!props.open) {
+        enableBodyScroll(elForPortal)
+      }
+    }
+  }, [elForPortal, overlayRoot, props.open])
+
+  return (
     elForPortal &&
-    open &&
     createPortal(
-      <FocusLock>
-        <div
-          className={classNames.join(" ")}
-          role="dialog"
-          aria-labelledby={props.ariaLabel}
-          aria-describedby={props.ariaDescription}
-        >
-          <div className="fixed-overlay__inner" ref={overlayInnerRef}>
-            {props.children}
-          </div>
-        </div>
-      </FocusLock>,
+      <CSSTransition
+        in={props.open}
+        timeout={250}
+        classNames="overlay-effect"
+        mountOnEnter
+        unmountOnExit
+      >
+        <OverlayInner {...props}>{props.children}</OverlayInner>
+      </CSSTransition>,
       elForPortal
     )
   )

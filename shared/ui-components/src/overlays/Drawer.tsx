@@ -1,34 +1,32 @@
 import * as React from "react"
-import { Icon } from "../icons/Icon"
 import "./Drawer.scss"
+import { Icon } from "../icons/Icon"
+import { Overlay, OverlayProps } from "./Overlay"
 
-export interface DrawerProps {
+export interface DrawerProps extends OverlayProps {
   title?: string
   subtitle?: string
   className?: string
-  ariaDescription?: string
-  children: React.ReactNode
-  hasBackdrop?: boolean
+  actions?: React.ReactNode[]
 }
 
 const Drawer = (props: DrawerProps) => {
   const drawerClasses = ["drawer"]
   if (props.className) drawerClasses.push(props.className)
 
-  const drawerWrapperClasses = ["drawer__wrapper"]
-  if (props.hasBackdrop) drawerWrapperClasses.push("has-backdrop")
-
   return (
-    <div
-      className={drawerWrapperClasses.join(" ")}
-      role="dialog"
-      aria-labelledby={props.title}
-      aria-describedby={props.ariaDescription}
+    <Overlay
+      ariaLabel={props.ariaLabel || props.title}
+      ariaDescription={props.ariaDescription}
+      open={props.open}
+      onClose={props.onClose}
+      backdrop={props.backdrop}
+      className="has-fullsize-inner"
     >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
           {props.title && <h1 className="drawer__title">{props.title}</h1>}
-          <button className="drawer__close" aria-label="Close" tabIndex={0}>
+          <button onClick={props.onClose} className="drawer__close" aria-label="Close" tabIndex={0}>
             <Icon size="medium" symbol="close" />
           </button>
         </header>
@@ -37,7 +35,7 @@ const Drawer = (props: DrawerProps) => {
           <div className="drawer__content">{props.children}</div>
         </div>
       </div>
-    </div>
+    </Overlay>
   )
 }
 

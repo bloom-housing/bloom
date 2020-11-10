@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 import { UserContext } from "./UserContext"
 import { ConfigContext } from "../config"
 import { Button } from "../actions/Button"
-import { Overlay } from "../overlays/Overlay"
 import { Modal } from "../overlays/Modal"
 import { setSiteAlertMessage } from "../notifications/SiteAlert"
 import { AlertTypes } from "../notifications/alertTypes"
@@ -94,11 +93,15 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
   ]
 
   return (
-    <Overlay open={Boolean(promptTimeout)} ariaLabel={promptTitle} ariaDescription={promptText}>
-      <Modal title={promptTitle} actions={modalActions} hideCloseIcon>
-        {promptText}
-      </Modal>
-    </Overlay>
+    <Modal
+      open={Boolean(promptTimeout)}
+      title={promptTitle}
+      ariaDescription={promptText}
+      actions={modalActions}
+      hideCloseIcon
+    >
+      {promptText}
+    </Modal>
   )
 }
 
