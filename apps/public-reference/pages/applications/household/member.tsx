@@ -93,10 +93,6 @@ export default () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    // FIXME
-    data.birthDay = parseInt(data.birthDay)
-    data.birthMonth = parseInt(data.birthMonth)
-    data.birthYear = parseInt(data.birthYear)
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
     void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
