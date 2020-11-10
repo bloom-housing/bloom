@@ -38,7 +38,7 @@ const DOBField = (props: DOBFieldProps) => {
       <div className="field-group--dob">
         <Controller
           name={fieldName("birthMonth")}
-          defaultValue={applicant.birthMonth > 0 ? applicant.birthMonth.toString() : ""}
+          defaultValue={applicant.birthMonth > 0 ? applicant.birthMonth : ""}
           control={props.control}
           rules={{
             required: true,
@@ -48,6 +48,7 @@ const DOBField = (props: DOBFieldProps) => {
           }}
           render={(props) => (
             <Field
+              type="number"
               register={null}
               name={props.name}
               label={t("t.month")}
@@ -66,7 +67,7 @@ const DOBField = (props: DOBFieldProps) => {
 
         <Controller
           name={fieldName("birthDay")}
-          defaultValue={applicant.birthDay > 0 ? applicant.birthDay.toString() : ""}
+          defaultValue={applicant.birthDay > 0 ? applicant.birthDay : ""}
           control={props.control}
           rules={{
             required: true,
@@ -94,7 +95,7 @@ const DOBField = (props: DOBFieldProps) => {
 
         <Controller
           name={fieldName("birthYear")}
-          defaultValue={applicant.birthYear > 0 ? applicant.birthYear.toString() : ""}
+          defaultValue={applicant.birthYear > 0 ? applicant.birthYear : ""}
           control={props.control}
           rules={{
             required: true,
