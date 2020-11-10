@@ -239,16 +239,16 @@ export class HouseholdMember {
   lastName: string
 
   @Expose()
-  @IsNumber()
-  birthMonth: number
+  @IsString()
+  birthMonth: string
 
   @Expose()
-  @IsNumber()
-  birthDay: number
+  @IsString()
+  birthDay: string
 
   @Expose()
-  @IsNumber()
-  birthYear: number
+  @IsString()
+  birthYear: string
 
   @Expose()
   @IsString()
