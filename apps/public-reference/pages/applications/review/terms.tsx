@@ -32,7 +32,10 @@ export default () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = () => {
+  const onSubmit = (data) => {
+    const acceptedTerms = data.agree === "agree"
+    conductor.currentStep.save({ acceptedTerms })
+    application.acceptedTerms = acceptedTerms
     application.completedSections = 5
     applicationsService
       .create({

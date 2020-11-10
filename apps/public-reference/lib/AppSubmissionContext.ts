@@ -1,6 +1,6 @@
 import React from "react"
 import ApplicationConductor from "./ApplicationConductor"
-import { ApplicationData } from "@bloom-housing/core"
+import { ApplicationStatus, ApplicationSubmissionType, Language } from "@bloom-housing/core"
 
 export const retrieveApplicationConfig = () => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
@@ -73,6 +73,10 @@ export const blankApplication = () => {
   return {
     loaded: false,
     completedSections: 0,
+    submissionType: ApplicationSubmissionType.electronical,
+    language: Language.en,
+    acceptedTerms: false,
+    status: ApplicationStatus.submitted,
     applicant: {
       firstName: "",
       middleName: "",
@@ -158,7 +162,7 @@ export const blankApplication = () => {
       race: "",
       gender: "",
       sexualOrientation: "",
-      howDidYouHear: "",
+      howDidYouHear: [],
     },
     preferences: {} as Record<string, any>,
     confirmationId: "",
