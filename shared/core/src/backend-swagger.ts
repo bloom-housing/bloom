@@ -1837,7 +1837,7 @@ export interface Applicant {
   noPhone: boolean;
 
   /**  */
-  workInRegion: string;
+  workInRegion: boolean;
 
   /**  */
   workAddress: Address;
@@ -1941,13 +1941,13 @@ export interface HouseholdMember {
   noPhone: boolean;
 
   /**  */
-  sameAddress?: string;
+  sameAddress?: boolean;
 
   /**  */
   relationship?: string;
 
   /**  */
-  workInRegion?: string;
+  workInRegion?: boolean;
 
   /**  */
   workAddress?: CombinedWorkAddressTypes;
