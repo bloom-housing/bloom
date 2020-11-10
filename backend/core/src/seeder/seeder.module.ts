@@ -13,6 +13,8 @@ import { ApplicationsService } from "../applications/applications.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
 import { ConfigModule } from "@nestjs/config"
+import { CsvBuilder } from "../services/csv-builder.service"
+import { CsvEncoder } from "../services/csv-encoder.service"
 
 @Module({})
 export class SeederModule {
@@ -28,7 +30,14 @@ export class SeederModule {
         }),
         TypeOrmModule.forFeature([Listing, Unit, Application, User]),
       ],
-      providers: [ListingsSeederService, UserService, ListingsService, ApplicationsService],
+      providers: [
+        ListingsSeederService,
+        UserService,
+        ListingsService,
+        ApplicationsService,
+        CsvBuilder,
+        CsvEncoder,
+      ],
     }
   }
 }

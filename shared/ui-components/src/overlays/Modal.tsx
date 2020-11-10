@@ -6,22 +6,18 @@ import { useOutsideClick } from "../helpers/useOutsideClick"
 import { createPortal } from "react-dom"
 import FocusLock from "react-focus-lock"
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock"
-
-type ModalAction = {
-  label: string
-  onClick: () => void
-  type: "primary" | "success" | "failure" | "cancel"
-}
+import { GridCell, GridSection } from "../sections/GridSection"
 
 export type ModalProps = {
   open: boolean
   title: string
   ariaDescription: string
-  actions: ModalAction[]
+  actions: React.ReactNode[]
   className?: string
   fullScreen?: boolean
   // The "x" will only show if onClose is provided
   onClose?: () => void
+  children?: React.ReactNode
 }
 
 export const Modal: FunctionComponent<ModalProps> = ({
@@ -106,15 +102,12 @@ export const Modal: FunctionComponent<ModalProps> = ({
             </section>
 
             <footer className="modal__footer bg-primary-lighter">
-              <div className="modal__button-group">
-                {actions.map(({ label, onClick, type }) => (
-                  <div className="modal__button_item" key={label}>
-                    <button className={`button ${type}`} onClick={onClick}>
-                      {label}
-                    </button>
-                  </div>
-                ))}
-              </div>
+              <GridSection columns={4} reverse={true} tightSpacing={true}>
+                {actions &&
+                  actions.map((action: React.ReactNode, index: number) => (
+                    <GridCell key={index}>{action}</GridCell>
+                  ))}
+              </GridSection>
             </footer>
 
             {onClose && (

@@ -2,8 +2,17 @@
 2.1a - Member Info
 A notice regarding adding household members
 */
-import Router from "next/router"
-import { AlertBox, Button, Form, FormCard, ProgressNav, t } from "@bloom-housing/ui-components"
+import React from "react"
+import { useRouter } from "next/router"
+import {
+  AppearanceStyleType,
+  AlertBox,
+  Button,
+  Form,
+  FormCard,
+  ProgressNav,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -11,14 +20,15 @@ import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
   const { conductor, application, listing } = useFormConductor("householdMemberInfo")
+  const router = useRouter()
   const currentPageSection = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm({
+  const { handleSubmit, errors } = useForm({
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
-    Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+  const onSubmit = () => {
+    void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -53,7 +63,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

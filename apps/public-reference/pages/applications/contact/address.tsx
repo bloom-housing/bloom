@@ -3,7 +3,9 @@
 Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
+import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   contactPreferencesKeys,
@@ -31,20 +33,21 @@ export default () => {
   const currentPageSection = 1
 
   /* Form Handler */
-  const { control, register, handleSubmit, setValue, trigger, watch, errors } = useForm<
-    Record<string, any>
-  >({
-    defaultValues: {
-      "applicant.phoneNumber": application.applicant.phoneNumber,
-      "applicant.noPhone": application.applicant.noPhone,
-      additionalPhone: application.additionalPhone,
-      "applicant.phoneNumberType": application.applicant.phoneNumberType,
-      sendMailToMailingAddress: application.sendMailToMailingAddress,
-      "applicant.workInRegion": application.applicant.workInRegion,
-      "applicant.address.state": application.applicant.address.state,
-    },
-    shouldFocusError: false,
-  })
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { control, register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>(
+    {
+      defaultValues: {
+        "applicant.phoneNumber": application.applicant.phoneNumber,
+        "applicant.noPhone": application.applicant.noPhone,
+        additionalPhone: application.additionalPhone,
+        "applicant.phoneNumberType": application.applicant.phoneNumberType,
+        sendMailToMailingAddress: application.sendMailToMailingAddress,
+        "applicant.workInRegion": application.applicant.workInRegion,
+        "applicant.address.state": application.applicant.address.state,
+      },
+      shouldFocusError: false,
+    }
+  )
   const onSubmit = (data) => {
     mergeDeep(application, data)
     if (application.applicant.noPhone) {
@@ -497,7 +500,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -509,7 +512,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

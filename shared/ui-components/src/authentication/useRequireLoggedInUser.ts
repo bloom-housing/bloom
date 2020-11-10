@@ -11,7 +11,7 @@ function useRequireLoggedInUser(redirectPath: string) {
   const router = useRouter()
 
   if (initialStateLoaded && !profile) {
-    router.push(redirectPath)
+    void router.push(redirectPath)
   }
   return profile
 }

@@ -5,8 +5,6 @@ import { ApplicationStatus } from "./ApplicationStatus"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import SVG from "react-inlinesvg"
 
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-// @ts-ignore
 export default {
   component: ApplicationStatus,
   title: "Notifications/Application Status",
@@ -19,7 +17,6 @@ export default {
     ),
   ],
 }
-/* eslint-enable @typescript-eslint/ban-ts-ignore */
 
 const listing = Object.assign({}, Archer) as any
 listing.applicationOpenDate = ""

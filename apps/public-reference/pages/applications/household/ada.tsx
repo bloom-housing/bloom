@@ -3,7 +3,9 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
+import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   ErrorMessage,
@@ -22,7 +24,8 @@ export default () => {
   const currentPageSection = 2
 
   /* Form Handler */
-  const { register, handleSubmit, getValues, setValue, trigger, watch, errors } = useForm<
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit, getValues, setValue, trigger, errors } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -47,8 +50,6 @@ export default () => {
   const onError = () => {
     window.scrollTo(0, 0)
   }
-
-  const adaNone = watch("none")
 
   return (
     <FormsLayout>
@@ -90,7 +91,7 @@ export default () => {
                 onChange={() => {
                   setTimeout(() => {
                     setValue("none", false)
-                    trigger("none")
+                    void trigger("none")
                   }, 1)
                 }}
               />
@@ -109,7 +110,7 @@ export default () => {
                 onChange={() => {
                   setTimeout(() => {
                     setValue("none", false)
-                    trigger("none")
+                    void trigger("none")
                   }, 1)
                 }}
               />
@@ -128,7 +129,7 @@ export default () => {
                 onChange={() => {
                   setTimeout(() => {
                     setValue("none", false)
-                    trigger("none")
+                    void trigger("none")
                   }, 1)
                 }}
               />
@@ -156,7 +157,7 @@ export default () => {
                     setValue("mobility", false)
                     setValue("vision", false)
                     setValue("hearing", false)
-                    trigger("none")
+                    void trigger("none")
                   }
                 }}
               />
@@ -175,7 +176,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -187,7 +188,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

@@ -120,7 +120,7 @@
 
   input[type="radio"]:focus + label::before,
   input[type="checkbox"]:focus + label::before {
-    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-attention, 0 0 3px 4px $tailwind-attention;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-accent-cool, 0 0 3px 4px $tailwind-accent-cool;
   }
 
   input[type="checkbox"]:disabled + label {
@@ -216,7 +216,7 @@ select {
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-attention;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-accent-cool;
   }
 }
 

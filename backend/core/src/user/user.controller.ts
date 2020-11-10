@@ -8,10 +8,8 @@ import {
   Put,
   NotFoundException,
 } from "@nestjs/common"
-import { DefaultAuthGuard } from "../auth/default.guard"
 import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger"
 import { UserCreateDto, UserDto, UserDtoWithAccessToken, UserUpdateDto } from "./user.dto"
-import { plainToClass } from "class-transformer"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email.service"
@@ -19,6 +17,7 @@ import { ResourceType } from "../auth/resource_type.decorator"
 import AuthzGuard from "../auth/authz.guard"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
+import { mapTo } from "../shared/mapTo"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -34,7 +33,7 @@ export class UserController {
 
   @Get()
   profile(@Request() req): UserDto {
-    return plainToClass(UserDto, req.user, { excludeExtraneousValues: true })
+    return mapTo(UserDto, req.user)
   }
 
   @Post()
@@ -43,12 +42,8 @@ export class UserController {
     const user = await this.userService.createUser(dto)
     const accessToken = this.authService.generateAccessToken(user)
     // noinspection ES6MissingAwait
-    this.emailService.welcome(user)
-    return plainToClass(
-      UserDtoWithAccessToken,
-      { ...user, accessToken },
-      { excludeExtraneousValues: true }
-    )
+    void this.emailService.welcome(user)
+    return mapTo(UserDtoWithAccessToken, { ...user, accessToken })
   }
 
   @Put(":id")
@@ -61,6 +56,6 @@ export class UserController {
     await this.authzService.canOrThrow(user, "user", authzActions.update, {
       ...dto,
     })
-    return await this.userService.update(dto)
+    return mapTo(UserDto, await this.userService.update(dto))
   }
 }

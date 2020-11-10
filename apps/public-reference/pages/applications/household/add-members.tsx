@@ -2,8 +2,10 @@
 2.2 - Add Members
 Add household members
 */
-import Router from "next/router"
+import React from "react"
+import { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   Button,
   FormCard,
   HouseholdMemberForm,
@@ -19,12 +21,14 @@ import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
   const { conductor, application, listing } = useFormConductor("addMembers")
+  const router = useRouter()
   const currentPageSection = 2
   const householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register, clearErrors } = useForm()
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     conductor.currentStep.save({
       householdSize: application.householdMembers.length + 1,
     })
@@ -32,16 +36,16 @@ export default () => {
   }
 
   const onAddMember = () => {
-    Router.push("/applications/household/member").then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/member").then(() => window.scrollTo(0, 0))
   }
 
   const applicant = application.applicant
 
-  const membersSection = application.householdMembers.map((member, key) => {
+  const membersSection = application.householdMembers.map((member) => {
     return (
       <HouseholdMemberForm
         member={member}
-        key={"member" + key}
+        key={member}
         type={t("application.household.householdMember")}
       />
     )
@@ -96,11 +100,11 @@ export default () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Button
-              filled={true}
+              type={AppearanceStyleType.primary}
               className=""
               onClick={() => {
                 conductor.returnToReview = false
-                handleSubmit(onSubmit)()
+                void handleSubmit(onSubmit)()
               }}
             >
               {t("application.household.addMembers.done")}
@@ -110,10 +114,11 @@ export default () => {
           {conductor.canJumpForwardToReview() && (
             <div className="form-card__pager-row">
               <Button
-                className="button is-unstyled mb-4"
+                unstyled={true}
+                className="mb-4"
                 onClick={() => {
                   conductor.returnToReview = true
-                  handleSubmit(onSubmit)()
+                  void handleSubmit(onSubmit)()
                 }}
               >
                 {t("application.form.general.saveAndReturn")}
