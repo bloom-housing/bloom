@@ -7,7 +7,7 @@ import {
   ManyToOne,
 } from "typeorm"
 import { User } from "./user.entity"
-import { Listing } from "./listing.entity"
+import { Listing, ListingStatus } from "./listing.entity"
 import {
   IsBoolean,
   IsDefined,
@@ -18,9 +18,28 @@ import {
   IsString,
   IsUUID,
   ValidateNested,
+  IsEnum,
+  IsIn,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { Address } from "../shared/dto/address.dto"
+import { ApiProperty } from "@nestjs/swagger"
+
+export enum ApplicationStatus {
+  draft = "draft",
+  submitted = "submitted",
+  removed = "removed",
+}
+
+export enum ApplicationSubmissionType {
+  paper = "paper",
+  electronical = "electronical",
+}
+
+export enum Language {
+  en = "en",
+  es = "es",
+}
 
 export class HousingCounselor {
   @Expose()
@@ -66,24 +85,26 @@ export class Applicant {
   lastName: string
 
   @Expose()
-  @IsNumber()
-  birthMonth: number
-
-  @Expose()
-  @IsNumber()
-  birthDay: number
-
-  @Expose()
-  @IsNumber()
-  birthYear: number
+  @IsString()
+  birthMonth: string
 
   @Expose()
   @IsString()
-  emailAddress: string
+  birthDay: string
 
   @Expose()
+  @IsString()
+  birthYear: string
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  emailAddress: string | null
+
+  @Expose()
+  @IsOptional()
   @IsBoolean()
-  noEmail: boolean
+  noEmail: boolean | null
 
   @Expose()
   @IsString()
@@ -94,13 +115,14 @@ export class Applicant {
   phoneNumberType: string
 
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noPhone: boolean
+  noPhone: boolean | null
 
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  workInRegion: boolean | null
+  @IsIn(["yes", "no"])
+  workInRegion: string | null
 
   @Expose()
   @IsDefined()
@@ -121,8 +143,9 @@ export class AlternateContact {
   type: string
 
   @Expose()
+  @IsOptional()
   @IsString()
-  otherType: string
+  otherType: string | null
 
   @Expose()
   @IsString()
@@ -133,6 +156,7 @@ export class AlternateContact {
   lastName: string
 
   @Expose()
+  @IsOptional()
   @IsString()
   agency: string
 
@@ -182,8 +206,8 @@ export class Demographics {
   sexualOrientation: string
 
   @Expose()
-  @IsString()
-  howDidYouHear: string
+  @IsString({ each: true })
+  howDidYouHear: string[]
 
   @Expose()
   @IsString()
@@ -231,8 +255,9 @@ export class HouseholdMember {
   emailAddress: string
 
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noEmail: boolean
+  noEmail: boolean | null
 
   @Expose()
   @IsString()
@@ -243,13 +268,14 @@ export class HouseholdMember {
   phoneNumberType: string
 
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noPhone: boolean
+  noPhone: boolean | null
 
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  sameAddress?: boolean | null
+  @IsIn(["yes", "no"])
+  sameAddress?: string | null
 
   @Expose()
   @IsOptional()
@@ -258,8 +284,8 @@ export class HouseholdMember {
 
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  workInRegion?: boolean | null
+  @IsIn(["yes", "no"])
+  workInRegion?: string | null
 
   @Expose()
   @IsOptional()
@@ -333,8 +359,8 @@ export class ApplicationData {
   demographics: Demographics
 
   @Expose()
-  @IsString()
-  incomeVouchers: string
+  @IsBoolean()
+  incomeVouchers: boolean
 
   @Expose()
   @IsString()
@@ -357,6 +383,26 @@ export class ApplicationData {
   @IsDefined()
   @IsObject()
   preferences: Record<string, any>
+
+  @Expose()
+  @IsEnum(ApplicationStatus)
+  @ApiProperty({ enum: ApplicationStatus, enumName: "ApplicationStatus" })
+  status: ApplicationStatus
+
+  @Expose()
+  @IsEnum(Language)
+  @ApiProperty({ enum: Language, enumName: "Language" })
+  language: Language
+
+  @Expose()
+  @IsEnum(ApplicationSubmissionType)
+  @ApiProperty({ enum: ApplicationSubmissionType, enumName: "ApplicationSubmissionType" })
+  submissionType: ApplicationSubmissionType
+
+  @Expose()
+  @IsOptional()
+  @IsBoolean()
+  acceptedTerms: boolean | null
 }
 
 @Entity({ name: "applications" })

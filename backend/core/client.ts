@@ -1844,7 +1844,7 @@ export interface Applicant {
   noPhone: boolean;
 
   /**  */
-  workInRegion: boolean;
+  workInRegion: string;
 
   /**  */
   workAddress: Address;
@@ -1901,7 +1901,7 @@ export interface Demographics {
   sexualOrientation: string;
 
   /**  */
-  howDidYouHear: string;
+  howDidYouHear: string[];
 
   /**  */
   race: string;
@@ -1948,19 +1948,28 @@ export interface HouseholdMember {
   noPhone: boolean;
 
   /**  */
-  sameAddress?: boolean;
+  sameAddress?: string;
 
   /**  */
   relationship?: string;
 
   /**  */
-  workInRegion?: boolean;
+  workInRegion?: string;
 
   /**  */
   workAddress?: CombinedWorkAddressTypes;
 }
 
 export interface ApplicationData {
+  /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
   /**  */
   applicant: Applicant;
 
@@ -2001,7 +2010,7 @@ export interface ApplicationData {
   demographics: Demographics;
 
   /**  */
-  incomeVouchers: string;
+  incomeVouchers: boolean;
 
   /**  */
   income: string;
@@ -2017,6 +2026,9 @@ export interface ApplicationData {
 
   /**  */
   preferences: object;
+
+  /**  */
+  acceptedTerms: boolean;
 }
 
 export interface Application {
@@ -2360,4 +2372,19 @@ export type CombinedApplicationAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export enum ApplicationStatus {
+  'draft' = 'draft',
+  'submitted' = 'submitted',
+  'removed' = 'removed'
+}
+
+export enum Language {
+  'en' = 'en',
+  'es' = 'es'
+}
+
+export enum ApplicationSubmissionType {
+  'paper' = 'paper',
+  'electronical' = 'electronical'
+}
 export type CombinedWorkAddressTypes = (Address & any) | null;

@@ -65,9 +65,9 @@ class Member implements HouseholdMember {
     latitude: null,
     longitude: null,
   }
-  sameAddress?: boolean
+  sameAddress?: string
   relationship?: string
-  workInRegion?: boolean
+  workInRegion?: string
 }
 
 export default () => {
