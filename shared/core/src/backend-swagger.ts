@@ -1942,13 +1942,13 @@ export interface HouseholdMember {
   lastName: string;
 
   /**  */
-  birthMonth: number;
+  birthMonth: string;
 
   /**  */
-  birthDay: number;
+  birthDay: string;
 
   /**  */
-  birthYear: number;
+  birthYear: string;
 
   /**  */
   emailAddress: string;

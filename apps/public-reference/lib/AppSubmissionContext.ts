@@ -81,9 +81,9 @@ export const blankApplication = () => {
       firstName: "",
       middleName: "",
       lastName: "",
-      birthMonth: 0,
-      birthDay: 0,
-      birthYear: 0,
+      birthMonth: "",
+      birthDay: "",
+      birthYear: "",
       emailAddress: "",
       noEmail: false,
       phoneNumber: "",
@@ -174,6 +174,6 @@ export const AppSubmissionContext = React.createContext({
   application: blankApplication(),
   listing: null,
   /* eslint-disable */
-  syncApplication: (data) => { },
-  syncListing: (data) => { },
+  syncApplication: (data) => {},
+  syncListing: (data) => {},
 })
