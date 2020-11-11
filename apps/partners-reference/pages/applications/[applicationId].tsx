@@ -101,16 +101,16 @@ export default function ApplicationsList() {
 
       <section className="border-t bg-white">
         <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-        <InlineButton arrow onClick={() => router.back()}>
-          {t("t.back")}
-        </InlineButton>
+          <InlineButton arrow onClick={() => router.back()}>
+            {t("t.back")}
+          </InlineButton>
 
-        {/* TODO:hardcoded until we get information from the backend */}
-        <div className="status-bar__status md:pl-4 md:w-3/12">
-          <Tag success pillStyle>
-            Submitted
-          </Tag>
-        </div>
+          {/* TODO:hardcoded until we get information from the backend */}
+          <div className="status-bar__status md:pl-4 md:w-3/12">
+            <Tag success pillStyle>
+              Submitted
+            </Tag>
+          </div>
         </div>
       </section>
 
