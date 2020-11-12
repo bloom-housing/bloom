@@ -73,10 +73,11 @@ const ApplicationsList = () => {
     const now = new Date()
     const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
 
+    const blob = new Blob([content], { type: "text/csv" })
     const fileLink = document.createElement("a")
-    fileLink.href = "data:text/csv;charset=utf-8," + encodeURI(content)
-    fileLink.target = "_blank"
-    fileLink.download = `appplications-${listingId}-${dateString}.csv`
+    fileLink.setAttribute("download", `appplications-${listingId}-${dateString}.csv`)
+    fileLink.href = URL.createObjectURL(blob)
+
     fileLink.click()
   }
 
