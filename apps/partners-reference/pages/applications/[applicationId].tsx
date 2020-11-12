@@ -94,11 +94,11 @@ export default function ApplicationsList() {
       </Head>
       {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
       <PageHeader>
-        <p>
+        <p className="font-sans font-semibold uppercase text-3xl">
           {application.applicant.firstName} {application.applicant.lastName}
         </p>
 
-        <p className="text-base">{applicationDto.id}</p>
+        <p className="font-sans text-base mt-1">{applicationDto.id}</p>
       </PageHeader>
 
       <section className="border-t bg-white">
