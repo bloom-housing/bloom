@@ -6,16 +6,16 @@ import {
   ApplicationMethodDto,
   ApplicationMethodUpdateDto,
 } from "./application-method.dto"
-import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
+import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 
 @Controller("/applicationMethods")
 @ApiTags("applicationMethods")
 @ApiBearerAuth()
 @ResourceType("applicationMethod")
-@UseGuards(DefaultAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 export class ApplicationMethodsController {
   constructor(private readonly applicationMethodsService: ApplicationMethodsService) {}
 
