@@ -3,16 +3,59 @@
   @apply flex-col;
   @apply bg-gray-200;
   @apply max-w-5xl;
+  @apply border-l;
+  @apply w-full;
+  @apply absolute;
+  @apply top-0;
+  @apply right-0;
+  @apply bottom-0;
+  @apply left-auto;
+  @apply overflow-y-auto;
+}
 
-  &.is-right {
-    @apply border-l;
+.fixed-overlay.has-drawer {
+  &.overlay-effect-enter,
+  &.overlay-effect-exit-active {
+    .fixed-overlay__inner {
+      opacity: 0.5;
+      transform: translate(100px, 0px);
+    }
+  }
+  &.overlay-effect-exit-active {
+    .fixed-overlay__inner {
+      opacity: 0;
+    }
+  }
+  &.overlay-effect-enter-active {
+    .fixed-overlay__inner {
+      opacity: 1;
+      transform: translate(0px, 0px);
+    }
+  }
+
+  .fixed-overlay__inner {
     @apply w-full;
-    @apply fixed;
-    @apply top-0;
-    @apply right-0;
-    @apply bottom-0;
-    @apply left-auto;
-    @apply overflow-y-auto;
+    @apply h-full;
+    @apply max-w-5xl;
+    @apply mr-0;
+  }
+
+  &.is-direction-left {
+    .fixed-overlay__inner {
+      @apply ml-0;
+      @apply mr-auto;
+    }
+    &.overlay-effect-enter,
+    &.overlay-effect-exit-active {
+      .fixed-overlay__inner {
+        transform: translate(-100px, 0px);
+      }
+    }
+    &.overlay-effect-enter-active {
+      .fixed-overlay__inner {
+        transform: translate(0px, 0px);
+      }
+    }
   }
 }
 
@@ -40,12 +83,13 @@
 .drawer__body {
   @apply overflow-y-auto;
   @apply relative;
-  flex: 1 1 auto;
+  //  flex: 1 1 auto;
 }
 
 .drawer__content {
   @apply m-auto;
   @apply px-4;
-  @apply py-8;
+  @apply pt-8;
+  @apply pb-4;
   @apply overflow-y-visible;
 }

@@ -1,3 +1,5 @@
+@import "../global/mixins.scss";
+
 .fixed-overlay {
   @apply top-0;
   @apply left-0;
@@ -15,11 +17,8 @@
     @apply bg-gray-900;
     @apply bg-opacity-50;
     transition-property: background-color;
-    transition-duration: 0.25s;
-    transition-timing-function: ease-in-out;
-    @media (prefers-reduced-motion: reduce) {
-      transition-duration: 0s;
-    }
+
+    @include transition-timing;
   }
 
   &.overlay-effect-enter,
@@ -41,42 +40,12 @@
       @apply bg-opacity-50;
     }
   }
-
-  &.has-fullsize-inner {
-    &.overlay-effect-enter,
-    &.overlay-effect-exit-active {
-      .fixed-overlay__inner {
-        opacity: 0.5;
-        transform: translate(25px, 0px);
-      }
-    }
-    &.overlay-effect-exit-active {
-      .fixed-overlay__inner {
-        opacity: 0;
-      }
-    }
-    &.overlay-effect-enter-active {
-      .fixed-overlay__inner {
-        opacity: 1;
-        transform: translate(0px, 0px);
-      }
-    }
-  }
 }
 
 .fixed-overlay__inner {
   transition-property: transform, opacity;
-  transition-duration: 0.25s;
-  transition-timing-function: ease-in-out;
   transform: translate(0px, 0px);
   margin: auto;
 
-  .has-fullsize-inner > & {
-    height: 100%;
-    width: 100%;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition-duration: 0s;
-  }
+  @include transition-timing;
 }

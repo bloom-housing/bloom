@@ -3,10 +3,16 @@ import "./Drawer.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
 
+export enum DrawerSide {
+  left = "left",
+  right = "right",
+}
+
 export interface DrawerProps extends OverlayProps {
   title?: string
   subtitle?: string
   className?: string
+  direction?: DrawerSide
   actions?: React.ReactNode[]
 }
 
@@ -21,7 +27,7 @@ const Drawer = (props: DrawerProps) => {
       open={props.open}
       onClose={props.onClose}
       backdrop={props.backdrop}
-      className="has-fullsize-inner"
+      className={"has-drawer" + (props.direction == DrawerSide.left ? " is-direction-left" : "")}
     >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
@@ -34,6 +40,8 @@ const Drawer = (props: DrawerProps) => {
         <div className="drawer__body">
           <div className="drawer__content">{props.children}</div>
         </div>
+
+        {props.actions && <div className="p-4 flex gap-4">{props.actions}</div>}
       </div>
     </Overlay>
   )

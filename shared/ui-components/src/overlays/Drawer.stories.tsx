@@ -2,11 +2,12 @@ import React, { useState } from "react"
 import { Icon } from "../icons/Icon"
 import SVG from "react-inlinesvg"
 
-import { Drawer } from "./Drawer"
+import { Drawer, DrawerSide } from "./Drawer"
 import { GridSection, GridCell } from "../sections/GridSection"
 import { ViewItem } from "../blocks/ViewItem"
 import { Field } from "../forms/Field"
 import { Button } from "../actions/Button"
+import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Overlays/Drawer",
@@ -28,10 +29,21 @@ export const Standard = () => {
         open={drawerState}
         title="Drawer Title"
         onClose={() => setDrawerState(!drawerState)}
-        className="is-right"
         ariaDescription="My Drawer"
+        actions={[
+          <Button onClick={() => setDrawerState(!drawerState)} type={AppearanceStyleType.primary}>
+            Submit
+          </Button>,
+          <Button
+            onClick={() => setDrawerState(!drawerState)}
+            type={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+          >
+            Cancel
+          </Button>,
+        ]}
       >
-        <section className="border rounded-md p-8 bg-white mb-8">
+        <section className="border rounded-md p-8 bg-white">
           <p>Test</p>
         </section>
       </Drawer>
@@ -46,16 +58,48 @@ export const Standard = () => {
   )
 }
 
-export const HasBackground = () => (
-  <Drawer title="Drawer Title" className="is-right" ariaDescription="My Drawer" hasBackdrop={true}>
-    <section className="border rounded-md p-8 bg-white mb-8">
-      <p>Test</p>
-    </section>
-  </Drawer>
-)
+export const StandardOnLeft = () => {
+  const [drawerState, setDrawerState] = useState(false)
+  return (
+    <>
+      <Drawer
+        open={drawerState}
+        title="Drawer Title"
+        onClose={() => setDrawerState(!drawerState)}
+        ariaDescription="My Drawer"
+        direction={DrawerSide.left}
+        actions={[
+          <Button onClick={() => setDrawerState(!drawerState)} type={AppearanceStyleType.primary}>
+            Submit
+          </Button>,
+          <Button
+            onClick={() => setDrawerState(!drawerState)}
+            type={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+          >
+            Cancel
+          </Button>,
+        ]}
+      >
+        <section className="border rounded-md p-8 bg-white">
+          <p>Test</p>
+        </section>
+      </Drawer>
+      <div class="text-right">
+        <Button
+          onClick={() => {
+            setDrawerState(true)
+          }}
+        >
+          Open Drawer
+        </Button>
+      </div>
+    </>
+  )
+}
 
 export const DrawerFieldTest = () => (
-  <Drawer open={true} title="Drawer Title" className="is-right" ariaDescription="My Drawer">
+  <Drawer open={true} title="Drawer Title" ariaDescription="My Drawer">
     <section className="border p-8 bg-white mb-8">
       <GridSection title="Section Title" columns={4}>
         <Field label="Alpha" placeholder="Enter text" name="label1" register={() => {}} />
@@ -79,7 +123,7 @@ export const DrawerFieldTest = () => (
 )
 
 export const DrawerViewTest = () => (
-  <Drawer open={true} title="Drawer Title" className="is-right" ariaDescription="My Drawer">
+  <Drawer open={true} title="Drawer Title" ariaDescription="My Drawer">
     <section className="border rounded-md p-8 bg-white mb-8">
       <GridSection title="Section Title" tinted={true} inset={true} columns={4}>
         <ViewItem label="First Name" children="Lisa" />
