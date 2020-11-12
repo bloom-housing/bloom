@@ -464,7 +464,7 @@ const ApplicationsList = () => {
                   {t("applications.addApplication")}
                 </Button>
 
-                <Button className="mx-1" onClick={onExport}>
+                <Button className="mx-1" onClick={() => onExport()}>
                   {t("t.export")}
                 </Button>
               </div>
