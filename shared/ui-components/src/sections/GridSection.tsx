@@ -24,6 +24,8 @@ export interface GridSectionProps {
   columns?: number
   inset?: boolean
   className?: string
+  tightSpacing?: boolean
+  reverse?: boolean
   children: React.ReactNode
 }
 
@@ -34,7 +36,13 @@ const GridSection = (props: GridSectionProps) => {
   if (props.inset) gridClasses.push("is-inset")
   if (grid) {
     const columns = props.columns || 3
-    gridClasses.push(`md:grid md:grid-cols-${columns} md:gap-8`)
+    gridClasses.push(`md:grid md:grid-cols-${columns}`)
+    if (props.tightSpacing) {
+      gridClasses.push("md:gap-2")
+    } else {
+      gridClasses.push("md:gap-8")
+    }
+    if (props.reverse) gridClasses.push("is-reversed")
   }
   if (props.className) gridClasses.push(props.className)
 

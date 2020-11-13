@@ -1,4 +1,5 @@
 import * as React from "react"
+import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
 
 import { LinkButton } from "./LinkButton"
 
@@ -9,19 +10,19 @@ export default {
 export const standard = () => <LinkButton href="#">LinkButton w/Link</LinkButton>
 
 export const small = () => (
-  <LinkButton small={true} href="#">
+  <LinkButton size={AppearanceSizeType.small} href="#">
     Small LinkButton
   </LinkButton>
 )
 
 export const filled = () => (
-  <LinkButton filled={true} href="#">
+  <LinkButton type={AppearanceStyleType.primary} href="#">
     Filled LinkButton
   </LinkButton>
 )
 
 export const SmallAndFilled = () => (
-  <LinkButton small={true} filled={true} href="#">
+  <LinkButton size={AppearanceSizeType.small} type={AppearanceStyleType.primary} href="#">
     Small and Filled LinkButton
   </LinkButton>
 )

@@ -39,7 +39,9 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
-    void loadListing(listingId, setListing, conductor, context)
+    if (!context.listing) {
+      void loadListing(listingId, setListing, conductor, context)
+    }
   }, [conductor, context, listingId])
 
   const currentPageSection = 1

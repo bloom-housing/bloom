@@ -4,6 +4,7 @@ Question asks if anyone on the application receives a housing voucher or subsidy
 */
 import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   Form,
@@ -112,7 +113,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   // Do nothing - handled by React Hook Forms
                 }}

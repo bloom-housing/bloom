@@ -6,16 +6,16 @@ import {
   PreferenceDto,
   PreferenceUpdateDto,
 } from "../preferences/preference.dto"
-import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
+import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 
 @Controller("/preferences")
 @ApiTags("preferences")
 @ApiBearerAuth()
 @ResourceType("preference")
-@UseGuards(DefaultAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 export class PreferencesController {
   constructor(private readonly preferencesService: PreferencesService) {}
 

@@ -241,7 +241,7 @@ exports[`Storyshots Headers/Site Header With Dropdown And Button 1`] = `
             >
               <Button
                 onClick={[Function]}
-                small={true}
+                size="is-small"
               >
                 <button
                   className="button is-small"

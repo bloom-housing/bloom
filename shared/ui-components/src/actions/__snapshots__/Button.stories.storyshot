@@ -16,11 +16,11 @@ exports[`Storyshots Actions/Button Big 1`] = `
 
 exports[`Storyshots Actions/Button Filled 1`] = `
 <Button
-  filled={true}
+  type={AppearanceStyleType.primary}
   onClick={[Function]}
 >
   <button
-    className="button is-filled"
+    className="button is-primary"
     onClick={[Function]}
   >
     Filled Button
@@ -71,12 +71,12 @@ exports[`Storyshots Actions/Button Small 1`] = `
 
 exports[`Storyshots Actions/Button Small And Filled 1`] = `
 <Button
-  filled={true}
+  type={AppearanceStyleType.primary}
   onClick={[Function]}
   small={true}
 >
   <button
-    className="button is-filled is-small"
+    className="button is-primary is-small"
     onClick={[Function]}
   >
     Small and Filled Button
