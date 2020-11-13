@@ -6,7 +6,7 @@ describe("applications/review/terms", function () {
   }
 
   beforeEach(() => {
-    cy.loadConfig()
+    cy.loadConfig({}, "applicationConfigFilled.json")
     cy.visit(route)
   })
 

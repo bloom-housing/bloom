@@ -110,7 +110,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           </ViewItem>
         )}
 
-        <ViewItem label={t("application.contact.address")}>
+        <ViewItem id="applicantAddress" label={t("application.contact.address")}>
           <MultiLineAddress address={reformatAddress(application.applicant.address)} />
         </ViewItem>
 

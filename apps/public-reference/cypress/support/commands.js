@@ -26,6 +26,9 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import * as routes from "../fixtures/routes.json"
+import * as listingConfig from "../fixtures/listingConfig.json"
+
+const listingsUrl = "http://localhost:3100/listings"
 
 const setProperty = (obj, path, value) => {
   if (Object(obj) !== obj) return obj
@@ -70,8 +73,12 @@ Cypress.Commands.add("loadConfig", (initialValues, configFile = "applicationConf
     sessionStorage.setItem("bloom-app-autosave", values)
   })
 
-  cy.fixture("listing.json").then((listingData) => {
-    sessionStorage.setItem("bloom-app-listing", JSON.stringify(listingData))
+  // it loads the first listing from the backend and merge with sample configuration
+  cy.request("GET", listingsUrl).then((res) => {
+    const listing = res.body.listings[0]
+
+    const completeListingData = { ...listing, ...listingConfig }
+    sessionStorage.setItem("bloom-app-listing", JSON.stringify(completeListingData))
   })
 })
 
