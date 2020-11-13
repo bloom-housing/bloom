@@ -1,13 +1,13 @@
 import {
+  AmiChartItem,
+  MinMax,
+  MinMaxCurrency,
   Unit,
   UnitsSummarized,
   UnitSummary,
-  MinMax,
-  MinMaxCurrency,
-  AmiChartItem,
 } from "@bloom-housing/core"
 
-type AnyDict = { [key: string]: any }
+type AnyDict = Record<string, any>
 type Units = Unit[]
 
 const usd = new Intl.NumberFormat("en-US", {
@@ -48,8 +48,7 @@ const hmiData = (
   } as AnyDict
   const amiValues = amiPercentages
     .map((percent) => {
-      const percentInt = parseInt(percent, 10)
-      return percentInt
+      return parseInt(percent, 10)
     })
     .sort()
   let maxHousehold = 0
@@ -66,7 +65,7 @@ const hmiData = (
   //    year) per household size.
   if (amiValues.length > 1) {
     amiValues.forEach((percent) => {
-      hmiHeaders["ami" + percent] = `${percent}% AMI Units`
+      hmiHeaders[`ami${percent}`] = `${percent}% AMI Units`
     })
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
@@ -79,10 +78,10 @@ const hmiData = (
           return item.householdSize == columns.householdSize && item.percentOfAmi == percent
         })
         if (amiInfo) {
-          columns["ami" + percent] = usd.format(amiInfo.income)
+          columns[`ami${percent}`] = usd.format(amiInfo.income)
           pushRow = true
         } else {
-          columns["ami" + percent] = ""
+          columns[`ami${percent}`] = ""
         }
       })
 

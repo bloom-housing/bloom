@@ -2,14 +2,15 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
-import { useState } from "react"
+import React, { useState } from "react"
 import {
+  AppearanceSizeType,
   Button,
+  Form,
   FormCard,
+  HouseholdSizeField,
   ProgressNav,
   t,
-  HouseholdSizeField,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -22,6 +23,7 @@ export default () => {
   const currentPageSection = 2
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, clearErrors } = useForm()
   const onSubmit = () => {
     conductor.sync()
@@ -64,7 +66,7 @@ export default () => {
             <div className="form-card__pager-row">
               <Button
                 id="btn-live-alone"
-                big={true}
+                size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {
                   application.householdSize = 1
@@ -78,7 +80,7 @@ export default () => {
             <div className="form-card__pager-row">
               <Button
                 id="btn-with-people"
-                big={true}
+                size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {
                   if (application.householdSize === 1) application.householdSize = 0

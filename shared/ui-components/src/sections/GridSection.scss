@@ -48,4 +48,8 @@
   &.is-inset {
     @apply p-8;
   }
+
+  &.is-reversed {
+    direction: rtl;
+  }
 }

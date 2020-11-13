@@ -2,7 +2,9 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   Form,
@@ -21,7 +23,8 @@ export default () => {
   const currentPageSection = 1
 
   /* Form Handler */
-  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
@@ -116,7 +119,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -128,7 +131,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

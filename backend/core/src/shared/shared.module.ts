@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common"
 import { SendGridModule } from "@anchan828/nest-sendgrid"
 import { EmailService } from "./email.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
-import Joi from "@hapi/joi"
+import Joi from "joi"
 
 @Module({
   imports: [

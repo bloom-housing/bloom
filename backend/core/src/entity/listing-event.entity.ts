@@ -8,8 +8,9 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Expose } from "class-transformer"
-import { IsDateString, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
-import { Listing, ListingStatus } from "./listing.entity"
+import { IsDate, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
+import { Listing } from "./listing.entity"
+import { ApiProperty } from "@nestjs/swagger"
 
 export enum ListingEventType {
   openHouse = "openHouse",
@@ -26,14 +27,12 @@ export class ListingEvent extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
-  @IsUUID()
+  @IsDate()
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
-  @IsUUID()
+  @IsDate()
   updatedAt: Date
 
   @Column({
@@ -43,16 +42,17 @@ export class ListingEvent extends BaseEntity {
   @Expose()
   @IsDefined()
   @IsEnum(ListingEventType)
+  @ApiProperty({ enum: ListingEventType, enumName: "ListingEventType" })
   type: ListingEventType
 
   @Column()
   @Expose()
-  @IsDateString()
+  @IsDate()
   startTime: Date
 
   @Column()
   @Expose()
-  @IsDateString()
+  @IsDate()
   endTime: Date
 
   @Column({ type: "text", nullable: true })
@@ -67,7 +67,7 @@ export class ListingEvent extends BaseEntity {
   @IsString()
   note?: string | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.events, {
+  @ManyToOne(() => Listing, (listing) => listing.events, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

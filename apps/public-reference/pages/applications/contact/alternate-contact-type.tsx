@@ -2,8 +2,9 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-import { Fragment } from "react"
+import React, { Fragment } from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   ErrorMessage,
@@ -23,6 +24,7 @@ export default () => {
   const currentPageSection = 1
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
@@ -123,7 +125,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

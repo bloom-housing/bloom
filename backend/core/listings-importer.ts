@@ -56,7 +56,7 @@ async function uploadEntity(entityKey, entityService, listing) {
   return listing
 }
 
-async function uploadListing(listing, listingService) {
+async function uploadListing(listing) {
   try {
     return await listingsService.create({
       body: listing,
@@ -125,8 +125,8 @@ async function main() {
   listing = await uploadEntity("units", unitsService, listing)
   listing = await uploadEntity("applicationMethods", applicatonMethodsService, listing)
   listing = await uploadEntity("preferences", preferencesService, listing)
-  const newListing = await uploadListing(listing, listingsService)
+  const newListing = await uploadListing(listing)
   console.log(newListing)
 }
 
-main()
+void main()

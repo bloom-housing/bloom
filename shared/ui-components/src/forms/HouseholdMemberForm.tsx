@@ -2,6 +2,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import { HouseholdMember } from "@bloom-housing/core"
 import { t } from "../helpers/translator"
+import { ViewItem } from "../blocks/ViewItem"
 
 const HouseholdMemberForm = (props: { member: HouseholdMember; type: string }) => {
   const { member, type } = props
@@ -9,26 +10,23 @@ const HouseholdMemberForm = (props: { member: HouseholdMember; type: string }) =
 
   const editMember = () => {
     if (member.id != undefined && member.id >= 0) {
-      router
+      void router
         .push({
           pathname: "/applications/household/member",
           query: { memberId: member.id },
         })
         .then(() => window.scrollTo(0, 0))
     } else {
-      router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
+      void router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
     }
   }
   return (
-    <div className="info-item mb-4 pb-4 border-b text-left">
-      <p className="info-item__value">
-        {member.firstName} {member.lastName}
-      </p>
-      <h4 className="info-item__label">{type}</h4>
-      <a id="edit-member" className="edit-link info-item__link" href="#" onClick={editMember}>
+    <ViewItem helper={type} className="pb-4 border-b text-left">
+      {member.firstName} {member.lastName}
+      <a id="edit-member" className="edit-link" href="#" onClick={editMember}>
         {t("label.edit")}
       </a>
-    </div>
+    </ViewItem>
   )
 }
 

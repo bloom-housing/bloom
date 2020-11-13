@@ -18,7 +18,7 @@ export interface FieldProps {
   validation?: Record<string, any>
   disabled?: boolean
   prepend?: string
-  inputProps?: object
+  inputProps?: Record<string, unknown>
 }
 
 const Field = (props: FieldProps) => {
@@ -26,11 +26,6 @@ const Field = (props: FieldProps) => {
   if (props.error) {
     classes.push("error")
   }
-
-  const labelClasses = ["label"]
-  if (props.caps) labelClasses.push("field-label--caps")
-  if (props.primary) labelClasses.push("text-primary")
-  if (props.readerOnly) labelClasses.push("sr-only")
 
   const controlClasses = ["control"]
   if (props.controlClassName) {
@@ -40,14 +35,18 @@ const Field = (props: FieldProps) => {
   const type = props.type || "text"
   const isRadioOrCheckbox = ["radio", "checkbox"].includes(type)
 
-  const label = useMemo(
-    () => (
+  const label = useMemo(() => {
+    const labelClasses = ["label"]
+    if (props.caps) labelClasses.push("field-label--caps")
+    if (props.primary) labelClasses.push("text-primary")
+    if (props.readerOnly) labelClasses.push("sr-only")
+
+    return (
       <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
         {props.label}
       </label>
-    ),
-    [props.label, props.id, props.name, labelClasses]
-  )
+    )
+  }, [props.caps, props.primary, props.readerOnly, props.id, props.name, props.label])
 
   const idOrName = props.id || props.name
 

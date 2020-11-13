@@ -1,30 +1,7 @@
 import React, { ReactNode, Fragment, useEffect, useState } from "react"
 import Link from "next/link"
-import { MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
 import { Address } from "@bloom-housing/core"
-
-const ReviewItem = (props: {
-  id?: string
-  label: string
-  sublabel?: string
-  children?: ReactNode
-}) => (
-  <p id={props.id} className="info-item mb-4">
-    <span className="info-item__label">{props.label}</span>
-    {props.children && (
-      <>
-        <br />
-        <span className="info-item__value">{props.children}</span>
-      </>
-    )}
-    {props.sublabel && (
-      <>
-        <br />
-        <span className="info-item__helper">{props.sublabel}</span>
-      </>
-    )}
-  </p>
-)
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">
@@ -93,71 +70,71 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       </h3>
 
       <div className="form-card__group mx-0">
-        <ReviewItem id="applicantName" label={t("t.name")}>
+        <ViewItem id="applicantName" label={t("t.name")}>
           {application.applicant.firstName} {application.applicant.middleName}{" "}
           {application.applicant.lastName}
-        </ReviewItem>
+        </ViewItem>
 
-        <ReviewItem id="applicantbirthDay" label={t("application.household.member.dateOfBirth")}>
+        <ViewItem id="applicantbirthDay" label={t("application.household.member.dateOfBirth")}>
           {application.applicant.birthMonth}/{application.applicant.birthDay}/
           {application.applicant.birthYear}
-        </ReviewItem>
+        </ViewItem>
 
         {application.applicant.phoneNumber && (
-          <ReviewItem
+          <ViewItem
             id="applicantPhone"
             label={t("t.phone")}
-            sublabel={t(
+            helper={t(
               `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
             )}
           >
             {application.applicant.phoneNumber}
-          </ReviewItem>
+          </ViewItem>
         )}
 
         {application.additionalPhoneNumber && (
-          <ReviewItem
+          <ViewItem
             id="applicantAdditionalPhone"
             label={t("t.additionalPhone")}
-            sublabel={t(
+            helper={t(
               `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
             )}
           >
             {application.additionalPhoneNumber}
-          </ReviewItem>
+          </ViewItem>
         )}
 
         {application.applicant.emailAddress && (
-          <ReviewItem id="applicantEmail" label={t("label.email")}>
+          <ViewItem id="applicantEmail" label={t("label.email")}>
             {application.applicant.emailAddress}
-          </ReviewItem>
+          </ViewItem>
         )}
 
-        <ReviewItem id="applicantAddress" label={t("application.contact.address")}>
+        <ViewItem label={t("application.contact.address")}>
           <MultiLineAddress address={reformatAddress(application.applicant.address)} />
-        </ReviewItem>
+        </ViewItem>
 
         {application.sendMailToMailingAddress && (
-          <ReviewItem id="applicantMailingAddress" label={t("application.contact.mailingAddress")}>
+          <ViewItem id="applicantMailingAddress" label={t("application.contact.mailingAddress")}>
             <MultiLineAddress address={reformatAddress(application.mailingAddress)} />
-          </ReviewItem>
+          </ViewItem>
         )}
 
         {application.applicant.workInRegion === "yes" && (
-          <ReviewItem id="applicantWorkAddress" label={t("application.contact.workAddress")}>
+          <ViewItem id="applicantWorkAddress" label={t("application.contact.workAddress")}>
             <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
-          </ReviewItem>
+          </ViewItem>
         )}
 
         {application.contactPreferences && (
-          <ReviewItem
+          <ViewItem
             id="applicantPreferredContactType"
             label={t("application.contact.preferredContactType")}
           >
             {application.contactPreferences
               ?.map((item) => t(`application.form.options.contact.${item}`))
               .join(", ")}
-          </ReviewItem>
+          </ViewItem>
         )}
       </div>
 
@@ -173,28 +150,28 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               <p className="field-note mb-5">
                 {t(`application.alternateContact.type.description`)}
               </p>
-              <ReviewItem id="alternateName" label={t("t.name")} sublabel={alternateContactName()}>
+              <ViewItem id="alternateName" label={t("t.name")} helper={alternateContactName()}>
                 {application.alternateContact.firstName} {application.alternateContact.lastName}
-              </ReviewItem>
+              </ViewItem>
 
               {application.alternateContact.emailAddress && (
-                <ReviewItem id="alternateEmail" label={t("t.email")}>
+                <ViewItem id="alternateEmail" label={t("t.email")}>
                   {application.alternateContact.emailAddress}
-                </ReviewItem>
+                </ViewItem>
               )}
 
               {application.alternateContact.phoneNumber && (
-                <ReviewItem id="alternatePhone" label={t("t.phone")}>
+                <ViewItem id="alternatePhone" label={t("t.phone")}>
                   {application.alternateContact.phoneNumber}
-                </ReviewItem>
+                </ViewItem>
               )}
 
               {Object.values(application.alternateContact.mailingAddress).some(
                 (value) => value !== ""
               ) && (
-                <ReviewItem id="alternateMailingAddress" label={t("application.contact.address")}>
+                <ViewItem id="alternateMailingAddress" label={t("application.contact.address")}>
                   <MultiLineAddress address={application.alternateContact.mailingAddress} />
-                </ReviewItem>
+                </ViewItem>
               )}
             </div>
           </div>
@@ -210,20 +187,20 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           <div id="members" className="form-card__group info-group mx-0">
             {application.householdMembers.map((member) => (
               <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
-                <p className="info-item__value">
+                <ViewItem>
                   {member.firstName} {member.lastName}
-                </p>
+                </ViewItem>
                 <div>
-                  <ReviewItem label={t("application.household.member.dateOfBirth")}>
+                  <ViewItem label={t("application.household.member.dateOfBirth")}>
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
-                  </ReviewItem>
+                  </ViewItem>
                   {member.sameAddress === "no" && (
-                    <ReviewItem label={t("application.contact.address")}>
+                    <ViewItem label={t("application.contact.address")}>
                       <MultiLineAddress address={reformatAddress(member.address)} />
-                    </ReviewItem>
+                    </ViewItem>
                   )}
                   {member.sameAddress !== "no" && (
-                    <ReviewItem label={t("application.review.sameAddressAsApplicant")}></ReviewItem>
+                    <ViewItem label={t("application.review.sameAddressAsApplicant")}></ViewItem>
                   )}
                 </div>
               </div>
@@ -240,46 +217,42 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
         <div className="form-card__group mx-0">
           {application.preferredUnit && (
-            <ReviewItem
+            <ViewItem
               id="householdUnitType"
               label={t("application.household.preferredUnit.preferredUnitType")}
             >
               {application.preferredUnit
                 .map((item) => t(`application.household.preferredUnit.options.${item}`))
                 .join(", ")}
-            </ReviewItem>
+            </ViewItem>
           )}
-          <ReviewItem id="householdAda" label={t("application.ada.label")}>
+          <ViewItem id="householdAda" label={t("application.ada.label")}>
             {accessibilityLabels(application.accessibility).map((item) => (
               <Fragment key={item}>
                 {item}
                 <br />
               </Fragment>
             ))}
-          </ReviewItem>
+          </ViewItem>
         </div>
-      </div>
 
-      <div id="income">
         <h3 className="form--card__sub-header">
           {t("t.income")}
           {editMode && <EditLink href="/applications/financial/vouchers" />}
         </h3>
 
         <div className="form-card__group border-b mx-0">
-          <ReviewItem id="incomeVouchers" label={t("application.review.voucherOrSubsidy")}>
+          <ViewItem id="incomeVouchers" label={t("application.review.voucherOrSubsidy")}>
             {application.incomeVouchers ? t("t.yes") : t("t.no")}
-          </ReviewItem>
+          </ViewItem>
 
           {application.incomePeriod && (
-            <ReviewItem id="incomeValue" label={t("t.income")}>
+            <ViewItem id="incomeValue" label={t("t.income")}>
               ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
-            </ReviewItem>
+            </ViewItem>
           )}
         </div>
-      </div>
 
-      <div id="preferences">
         <h3 className="form--card__sub-header">
           {t("t.preferences")}
           {editMode && <EditLink href="/applications/preferences/select" />}
@@ -296,9 +269,9 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               {Object.entries(application.preferences)
                 .filter((option) => option[0] != "none" && option[1])
                 .map((option) => (
-                  <ReviewItem key={option[0]} label={t("application.preferences.youHaveClaimed")}>
+                  <ViewItem label={t("application.preferences.youHaveClaimed")}>
                     {t(`application.preferences.${option[0]}.label`)}
-                  </ReviewItem>
+                  </ViewItem>
                 ))}
             </>
           )}

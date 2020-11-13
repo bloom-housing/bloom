@@ -3,7 +3,9 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
+import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
@@ -24,9 +26,8 @@ export default () => {
   const currentPageSection = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
-    Record<string, any>
-  >({
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit, watch, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
@@ -159,7 +160,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -171,7 +172,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

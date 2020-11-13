@@ -29,21 +29,18 @@ export class ListingsController {
   }
 
   @Post()
-  @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Create listing", operationId: "create" })
   async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
     return mapTo(ListingDto, await this.listingsService.create(listingDto))
   }
 
   @Get(`:listingId`)
-  @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
     return mapTo(ListingDto, await this.listingsService.findOne(listingId))
   }
 
   @Put(`:listingId`)
-  @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Update listing by id", operationId: "update" })
   async update(
     @Param("listingId") listingId: string,
@@ -53,7 +50,6 @@ export class ListingsController {
   }
 
   @Delete(`:listingId`)
-  @UseGuards(DefaultAuthGuard)
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   async delete(@Param("listingId") listingId: string) {
     await this.listingsService.delete(listingId)

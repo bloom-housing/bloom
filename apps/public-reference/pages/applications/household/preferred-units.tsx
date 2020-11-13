@@ -2,7 +2,9 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
+import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   FieldGroup,
@@ -22,6 +24,7 @@ export default () => {
   const currentPageSection = 2
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     const { preferredUnit } = data
@@ -87,7 +90,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

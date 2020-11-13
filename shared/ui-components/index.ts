@@ -12,6 +12,7 @@ export * from "./src/blocks/FormCard"
 export * from "./src/blocks/HousingCounselor"
 export * from "./src/blocks/ImageCard"
 export * from "./src/blocks/InfoCard"
+export * from "./src/blocks/ViewItem"
 
 /* Contexts */
 export * from "./src/authentication"
@@ -32,6 +33,9 @@ export * from "./src/forms/HouseholdSizeField"
 export * from "./src/forms/FieldGroup"
 export * from "./src/forms/Select"
 export * from "./src/forms/Form"
+
+/* Global */
+export * from "./src/global/AppearanceTypes"
 
 /* Headers */
 export * from "./src/headers/Hero"

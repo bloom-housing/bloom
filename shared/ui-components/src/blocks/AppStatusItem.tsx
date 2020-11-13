@@ -3,9 +3,8 @@ import "./AppStatusItem.scss"
 import moment from "moment"
 import { MultiLineAddress } from "../helpers/address"
 import { t } from "../helpers/translator"
-import { Application } from "@bloom-housing/backend-core/client"
+import { Application, Address } from "@bloom-housing/core"
 import { LocalizedLink } from "../actions/LocalizedLink"
-import { Address } from "@bloom-housing/core"
 
 // TODO status and lotteryNumber should be loaded from Application
 interface AppStatusItemProps {
@@ -23,7 +22,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
   let statusText = t("application.statuses." + status)
   const inProgress = status == "inProgress"
   const active = inProgress && moment() < applicationDueDate
-  let statusClassNames
+  let statusClassNames = ""
 
   if (inProgress && moment() > applicationDueDate) {
     statusClassNames = "is-past-due"
@@ -44,7 +43,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
         <section className="status-item__content">
           <div className="status-item__details">
             <p className="status-item__address">
-              <MultiLineAddress address={listing.buildingAddress as Address}></MultiLineAddress>
+              <MultiLineAddress address={listing.buildingAddress as Address} />
             </p>
             {lotteryNumber && (
               <p className="status-item__number">

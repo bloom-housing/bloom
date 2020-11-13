@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { SiteHeader, NavbarDropdown } from "./SiteHeader"
 import { Button } from "../actions/Button"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 
 export default {
   title: "Headers/Site Header",
@@ -44,7 +45,7 @@ export const withDropdownAndButton = () => (
     <div className="navbar-item">
       <div className="buttons">
         <Button
-          small={true}
+          size={AppearanceSizeType.small}
           onClick={() => {
             alert("Hello!")
           }}

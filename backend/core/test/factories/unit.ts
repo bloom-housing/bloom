@@ -1,17 +1,20 @@
 import { Factory } from "fishery"
 import { nanoid } from "nanoid"
 import { Unit } from "../../src/entity/unit.entity"
+import { BaseEntity } from "typeorm"
 
-export default Factory.define<Unit>(({ sequence, factories }) => ({
+type NonDbUnit = Omit<Unit, keyof BaseEntity>
+
+export default Factory.define<NonDbUnit>(() => ({
   id: nanoid(),
   amiPercentage: "80.0",
   annualIncomeMin: "58152.0",
-  monthlyIncomeMin: 4858.0,
+  monthlyIncomeMin: "4858.0",
   floor: 2,
   annualIncomeMax: "103350.0",
   maxOccupancy: 2,
   minOccupancy: 1,
-  monthlyRent: 2429.0,
+  monthlyRent: "2429.0",
   numBathrooms: 1,
   numBedrooms: null,
   number: "265",

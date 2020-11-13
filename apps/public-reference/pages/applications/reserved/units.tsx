@@ -2,20 +2,26 @@
 2.6.c Reserved Unit Conditionals
 Unlike Reserved Community Buildings which are 100% reserved, in the event that there a mix of reserved and non reserved units ask a question after collecting household information.
 */
-import { useContext } from "react"
-import Link from "next/link"
-import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import React, { useContext } from "react"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  ProgressNav,
+  t,
+  Form,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application } = useContext(AppSubmissionContext)
   const currentPageSection = 2
 
   /* Form Handler */
-  const { register, handleSubmit, errors } = useForm()
+  const { handleSubmit } = useForm()
   const onSubmit = (data) => {
     console.log(data)
 
@@ -47,7 +53,7 @@ export default () => {
           (FORM)
           <div className="text-center mt-6">
             <Button
-              filled={true}
+              type={AppearanceStyleType.primary}
               onClick={() => {
                 //
               }}

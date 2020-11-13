@@ -1,5 +1,6 @@
 import React from "react"
 import ApplicationConductor from "./ApplicationConductor"
+import { ApplicationStatus, ApplicationSubmissionType, Language } from "@bloom-housing/core"
 
 export const retrieveApplicationConfig = () => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
@@ -72,13 +73,17 @@ export const blankApplication = () => {
   return {
     loaded: false,
     completedSections: 0,
+    submissionType: ApplicationSubmissionType.electronical,
+    language: Language.en,
+    acceptedTerms: false,
+    status: ApplicationStatus.submitted,
     applicant: {
       firstName: "",
       middleName: "",
       lastName: "",
-      birthMonth: 0,
-      birthDay: 0,
-      birthYear: 0,
+      birthMonth: "",
+      birthDay: "",
+      birthYear: "",
       emailAddress: "",
       noEmail: false,
       phoneNumber: "",
@@ -157,7 +162,7 @@ export const blankApplication = () => {
       race: "",
       gender: "",
       sexualOrientation: "",
-      howDidYouHear: "",
+      howDidYouHear: [],
     },
     preferences: {} as Record<string, any>,
     confirmationId: "",
@@ -169,6 +174,6 @@ export const AppSubmissionContext = React.createContext({
   application: blankApplication(),
   listing: null,
   /* eslint-disable */
-  syncApplication: (data) => { },
-  syncListing: (data) => { },
+  syncApplication: (data) => {},
+  syncListing: (data) => {},
 })

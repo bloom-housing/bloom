@@ -52,7 +52,7 @@ a {
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 3px 4px $tailwind-attention;
+    box-shadow: 0 0 3px 4px $tailwind-accent-cool;
   }
 
   &.lined {
@@ -112,35 +112,6 @@ h1.title {
     @apply border-0;
     @apply mb-0;
   }
-}
-
-.info-item {
-  @apply relative;
-  @apply text-base;
-}
-
-.info-item__label {
-  @apply text-gray-700;
-  @apply font-sans;
-  @apply text-tiny;
-}
-
-.info-item__value {
-  @apply font-alt-sans;
-  @apply tracking-wide;
-  @apply font-semibold;
-}
-
-.info-item__helper {
-  @apply text-gray-700;
-  @apply font-sans;
-  @apply text-tiny;
-}
-
-.info-item__link {
-  @apply absolute;
-  right: 0;
-  top: 0;
 }
 
 .edit-link {

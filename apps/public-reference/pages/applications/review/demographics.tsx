@@ -2,8 +2,9 @@
 5.1 Demographics
 Optional demographic questions
 */
-import { useMemo } from "react"
+import React, { useMemo } from "react"
 import {
+  AppearanceStyleType,
   Button,
   FieldGroup,
   Form,
@@ -29,6 +30,7 @@ const Demographics = () => {
   const currentPageSection = 5
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit } = useForm()
 
   const onSubmit = (data) => {
@@ -147,7 +149,7 @@ const Demographics = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}
