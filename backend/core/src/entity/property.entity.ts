@@ -10,12 +10,12 @@ import {
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { Listing } from "./listing.entity"
-import { Address } from "../shared/dto/address.dto"
 import { ApiProperty } from "@nestjs/swagger"
 import { Unit, UnitsSummarized } from "./unit.entity"
 import { transformUnits } from "../lib/unit_transformations"
 import { amiCharts } from "../lib/ami_charts"
 import { PropertyGroup } from "./property-group.entity"
+import { Address } from "../shared/entities/address.entity"
 
 @Entity()
 export class Property {

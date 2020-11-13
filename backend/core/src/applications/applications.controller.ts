@@ -28,7 +28,7 @@ import {
   ApplicationsListQueryParams,
   ApplicationUpdateDto,
   PaginatedApplicationDto,
-} from "./application.dto"
+} from "./dto/application.dto"
 
 @Controller("applications")
 @ApiTags("applications")

@@ -8,10 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Application } from "./application.entity"
+import { Application } from "../applications/entities/application.entity"
 import { Asset } from "./asset.entity"
 import { ApplicationMethod } from "./application-method.entity"
-import { Address } from "../shared/dto/address.dto"
 import { WhatToExpect } from "../shared/dto/whatToExpect.dto"
 import { Preference } from "./preference.entity"
 import { Expose, Type } from "class-transformer"
@@ -32,6 +31,7 @@ import { ListingEvent } from "./listing-event.entity"
 import { listingUrlSlug } from "../lib/url_helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "./property.entity"
+import { Address } from "../shared/entities/address.entity"
 
 export enum ListingStatus {
   active = "active",

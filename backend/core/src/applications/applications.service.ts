@@ -1,11 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common"
-import { Application } from "../entity/application.entity"
+import { Application } from "./entities/application.entity"
 import { plainToClass } from "class-transformer"
 import {
   ApplicationCreateDto,
   ApplicationsListQueryParams,
   ApplicationUpdateDto,
-} from "./application.dto"
+} from "./dto/application.dto"
 import { User } from "../entity/user.entity"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"

@@ -10,7 +10,11 @@ export const ArcherListing: Listing = {
   disableUnitsAccordion: false,
   events: [],
   urlSlug: "listing-slug-abcdef",
-  whatToExpect: "What to expect",
+  whatToExpect: {
+    applicantsWillBeContacted: "Applicant will be contacted.",
+    allInfoWillBeVerified: "All info will be verified.",
+    bePreparedIfChosen: "Be prepared if chosen.",
+  },
   status: ListingStatus.active,
   postmarkedApplicationsReceivedByDate: "2019-12-05",
   applicationAddress: {

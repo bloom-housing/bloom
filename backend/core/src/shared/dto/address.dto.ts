@@ -1,75 +1,21 @@
 import { Expose } from "class-transformer"
-import { IsDate, IsDefined, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
-import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { IsOptional, IsUUID } from "class-validator"
+import { OmitType } from "@nestjs/swagger"
+import { Address } from "../entities/address.entity"
 
-export class Address {
-  @PrimaryGeneratedColumn("uuid")
+export class AddressUpdateDto extends OmitType(Address, ["id", "createdAt", "updatedAt"]) {
   @Expose()
-  @IsString()
+  @IsOptional()
   @IsUUID()
-  id: string
+  id?: string
 
-  @CreateDateColumn()
-  @Expose()
-  @IsDate()
-  createdAt: Date
-
-  @UpdateDateColumn()
-  @Expose()
-  @IsDate()
-  updatedAt: Date
-
-  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  placeName?: string
+  @IsUUID()
+  createdAt?: Date
 
-  @Column()
-  @Expose()
-  @IsDefined()
-  @IsString()
-  city: string
-
-  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  county?: string
-
-  @Column()
-  @Expose()
-  @IsDefined()
-  @IsString()
-  state: string
-
-  @Column()
-  @Expose()
-  @IsDefined()
-  @IsString()
-  street: string
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsString()
-  street2?: string
-
-  @Column()
-  @Expose()
-  @IsDefined()
-  @IsString()
-  zipCode: string
-
-  @Column({ type: "number", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  latitude?: number
-
-  @Column({ type: "number", nullable: true })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  longitude?: number
+  @IsUUID()
+  updatedAt?: Date
 }
