@@ -2,16 +2,16 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nes
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { UnitsService } from "./units.service"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "./unit.dto"
-import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
+import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 
 @Controller("/units")
 @ApiTags("units")
 @ApiBearerAuth()
 @ResourceType("unit")
-@UseGuards(DefaultAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 export class UnitsController {
   constructor(private readonly unitsService: UnitsService) {}
 

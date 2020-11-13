@@ -1,8 +1,9 @@
 p, admin, application, true, .*
-p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)|(update)|(delete)
+p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)
 p, anonymous, application, true, create
 
 p, user, user, !r.obj || (r.sub == r.obj.id), (read)|(update)
+p, anonymous, user, true, create
 
 p, admin, asset, true, .*
 p, admin, preference, true, .*

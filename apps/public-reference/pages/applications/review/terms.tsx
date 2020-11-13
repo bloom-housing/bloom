@@ -4,6 +4,7 @@ View of application terms with checkbox
 */
 import { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   Button,
   FormCard,
   ProgressNav,
@@ -31,7 +32,10 @@ export default () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
-  const onSubmit = () => {
+  const onSubmit = (data) => {
+    const acceptedTerms = data.agree === "agree"
+    conductor.currentStep.save({ acceptedTerms })
+    application.acceptedTerms = acceptedTerms
     application.completedSections = 5
     applicationsService
       .create({
@@ -96,7 +100,7 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button filled={true} onClick={() => false}>
+              <Button type={AppearanceStyleType.primary} onClick={() => false}>
                 {t("application.review.terms.submit")}
               </Button>
             </div>

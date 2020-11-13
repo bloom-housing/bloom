@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common"
-import { Application } from "../entity/application.entity"
+import { Application, ApplicationStatus } from "../entity/application.entity"
 import { plainToClass } from "class-transformer"
 import {
   ApplicationCreateDto,
