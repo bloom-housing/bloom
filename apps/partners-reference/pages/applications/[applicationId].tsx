@@ -107,10 +107,11 @@ export default function ApplicationsList() {
             {t("t.back")}
           </InlineButton>
 
-          {/* TODO:hardcoded until we get information from the backend */}
           <div className="status-bar__status md:pl-4 md:w-3/12">
             <Tag success pillStyle>
-              Submitted
+              {application.status
+                ? t(`application.details.applicationStatus.${application.status}`)
+                : t(`application.details.applicationStatus.submitted`)}
             </Tag>
           </div>
         </div>
@@ -128,10 +129,13 @@ export default function ApplicationsList() {
                 <ViewItem label={t("application.details.number")}>{applicationDto.id}</ViewItem>
               </GridCell>
 
-              {/* TODO:hardcoded until we get information from the backend */}
-              <GridCell>
-                <ViewItem label={t("application.details.type")}>Electronic</ViewItem>
-              </GridCell>
+              {application.submissionType && (
+                <GridCell>
+                  <ViewItem label={t("application.details.type")}>
+                    {t(`application.details.submissionType.${application.submissionType}`)}
+                  </ViewItem>
+                </GridCell>
+              )}
 
               <GridCell>
                 <ViewItem label={t("application.details.submittedDate")}>
@@ -145,10 +149,13 @@ export default function ApplicationsList() {
                 </ViewItem>
               </GridCell>
 
-              {/* TODO:hardcoded until we get information from the backend */}
-              <GridCell>
-                <ViewItem label={t("application.details.language")}>English</ViewItem>
-              </GridCell>
+              {application.language && (
+                <GridCell>
+                  <ViewItem label={t("application.details.language")}>
+                    {t(`languages.${application.language}`)}
+                  </ViewItem>
+                </GridCell>
+              )}
 
               <GridCell>
                 <ViewItem label={t("application.details.totalSize")}>
@@ -163,6 +170,8 @@ export default function ApplicationsList() {
                 </ViewItem>
               </GridCell>
             </GridSection>
+
+            {console.log(application)}
 
             <GridSection
               className="bg-primary-lighter"
@@ -317,13 +326,15 @@ export default function ApplicationsList() {
                     </ViewItem>
                   </GridCell>
 
-                  <GridCell>
-                    <ViewItem label={t("application.details.agency")}>
-                      {application.alternateContact.agency.length
-                        ? application.alternateContact.agency
-                        : t("t.none")}
-                    </ViewItem>
-                  </GridCell>
+                  {
+                    <GridCell>
+                      <ViewItem label={t("application.details.agency")}>
+                        {application.alternateContact.agency?.length
+                          ? application.alternateContact.agency
+                          : t("t.none")}
+                      </ViewItem>
+                    </GridCell>
+                  }
 
                   <GridCell>
                     <ViewItem label={t("t.email")}>
