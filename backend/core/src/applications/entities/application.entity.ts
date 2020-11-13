@@ -8,8 +8,7 @@ import { ApplicationData } from "./application-data.entity"
 
 @Entity({ name: "applications" })
 export class Application extends AbstractEntity {
-
-  @Column({ type: "text", nullable: false })
+  @Column({ type: "text" })
   @Expose()
   @IsString()
   appUrl: string

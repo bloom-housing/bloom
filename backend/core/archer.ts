@@ -2,6 +2,7 @@ import { ApplicationMethodType, Listing, ListingStatus } from "@bloom-housing/co
 
 export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
+  blankPaperApplicationCanBePickedUp: true,
   applicationConfig: undefined,
   applicationOpenDate: "2019-12-31T15:22:57.000-07:00",
   applicationPickUpAddress: undefined,

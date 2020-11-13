@@ -4,6 +4,7 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDefined,
+  IsIn,
   IsNumber,
   IsOptional,
   IsString,
@@ -30,18 +31,18 @@ export class Applicant extends AbstractEntity {
 
   @Column()
   @Expose()
-  @IsNumber()
-  birthMonth: number
+  @IsString()
+  birthMonth: string
 
   @Column()
   @Expose()
-  @IsNumber()
-  birthDay: number
+  @IsString()
+  birthDay: string
 
   @Column()
   @Expose()
-  @IsNumber()
-  birthYear: number
+  @IsString()
+  birthYear: string
 
   @Column()
   @Expose()
@@ -68,11 +69,11 @@ export class Applicant extends AbstractEntity {
   @IsBoolean()
   noPhone: boolean
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  workInRegion: boolean | null
+  @IsIn(["yes", "no"])
+  workInRegion: string | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()

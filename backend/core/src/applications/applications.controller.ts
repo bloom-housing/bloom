@@ -75,6 +75,7 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<ApplicationDto> {
+    console.log(applicationCreateDto)
     const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.application.applicant.emailAddress) {

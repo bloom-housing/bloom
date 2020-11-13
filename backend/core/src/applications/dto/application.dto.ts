@@ -82,6 +82,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   @Expose()
   @IsDefined()
   @ValidateNested()
+  @Type(() => ApplicationDataCreateDto)
   application: ApplicationDataCreateDto
 }
 

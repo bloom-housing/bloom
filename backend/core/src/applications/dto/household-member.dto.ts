@@ -1,15 +1,16 @@
-import { OmitType } from "@nestjs/swagger"
-import { Applicant } from "../entities/applicant.entity"
-import { Expose, Type } from "class-transformer"
+import { ApiHideProperty, OmitType } from "@nestjs/swagger"
+import { Exclude, Expose, Type } from "class-transformer"
 import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { AddressUpdateDto } from "../../shared/dto/address.dto"
+import { HouseholdMember } from "../entities/household-member.entity"
 
-export class ApplicantUpdateDto extends OmitType(Applicant, [
+export class HouseholdMemberUpdateDto extends OmitType(HouseholdMember, [
   "id",
   "createdAt",
   "updatedAt",
   "address",
   "workAddress",
+  "applicationData"
 ] as const) {
   @Expose()
   @IsOptional()
@@ -37,4 +38,8 @@ export class ApplicantUpdateDto extends OmitType(Applicant, [
   @ValidateNested()
   @Type(() => AddressUpdateDto)
   workAddress: AddressUpdateDto
+
+  @Exclude()
+  @ApiHideProperty()
+  applicationData
 }

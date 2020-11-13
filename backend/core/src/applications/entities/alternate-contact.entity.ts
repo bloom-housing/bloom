@@ -1,7 +1,7 @@
 import { Column, Entity, OneToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDefined, IsString, ValidateNested } from "class-validator"
+import { IsDefined, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 
 @Entity()
@@ -11,10 +11,11 @@ export class AlternateContact extends AbstractEntity {
   @IsString()
   type: string
 
-  @Column()
+  @Column({ nullable: true })
   @Expose()
+  @IsOptional()
   @IsString()
-  otherType: string
+  otherType: string | null
 
   @Column()
   @Expose()
@@ -26,10 +27,11 @@ export class AlternateContact extends AbstractEntity {
   @IsString()
   lastName: string
 
-  @Column()
+  @Column({ nullable: true })
   @Expose()
+  @IsOptional()
   @IsString()
-  agency: string
+  agency: string | null
 
   @Column()
   @Expose()

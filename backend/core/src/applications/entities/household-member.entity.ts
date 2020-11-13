@@ -1,18 +1,16 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose, Type } from "class-transformer"
-import { IsBoolean, IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsBoolean, IsDefined, IsIn, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationData } from "./application-data.entity"
 
 @Entity()
 export class HouseholdMember extends AbstractEntity {
-  @Column({ type: "integer", nullable: true })
+  @Column()
   @Expose()
-  @IsOptional()
   @IsNumber()
-    // TODO Add on frontend
-  orderId?: number | null
+  orderId: number
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
@@ -39,28 +37,29 @@ export class HouseholdMember extends AbstractEntity {
 
   @Column()
   @Expose()
-  @IsNumber()
-  birthMonth: number
+  @IsString()
+  birthMonth: string
 
   @Column()
   @Expose()
-  @IsNumber()
-  birthDay: number
+  @IsString()
+  birthDay: string
 
   @Column()
   @Expose()
-  @IsNumber()
-  birthYear: number
+  @IsString()
+  birthYear: string
 
   @Column()
   @Expose()
   @IsString()
   emailAddress: string
 
-  @Column()
+  @Column({ nullable: true, type: "boolean" })
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noEmail: boolean
+  noEmail: boolean | null
 
   @Column()
   @Expose()
@@ -72,16 +71,17 @@ export class HouseholdMember extends AbstractEntity {
   @IsString()
   phoneNumberType: string
 
-  @Column()
+  @Column({ nullable: true, type: "boolean" })
   @Expose()
+  @IsOptional()
   @IsBoolean()
-  noPhone: boolean
+  noPhone: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional()
-  @IsBoolean()
-  sameAddress?: boolean | null
+  @IsIn(["yes", "no"])
+  sameAddress?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -91,8 +91,8 @@ export class HouseholdMember extends AbstractEntity {
 
   @Column({ type: "boolean", nullable: true })
   @IsOptional()
-  @IsBoolean()
-  workInRegion?: boolean | null
+  @IsIn(["yes", "no"])
+  workInRegion?: string | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
@@ -105,3 +105,4 @@ export class HouseholdMember extends AbstractEntity {
   @ManyToOne(() => ApplicationData, (applicationData) => applicationData.householdMembers)
   applicationData: ApplicationData
 }
+

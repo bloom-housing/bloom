@@ -2,7 +2,16 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Applicant } from "./applicant.entity"
 import { Expose, Type } from "class-transformer"
-import { IsBoolean, IsDefined, IsEnum, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from "class-validator"
+import {
+  IsBoolean,
+  IsDefined,
+  IsEnum,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 import { AlternateContact } from "./alternate-contact.entity"
 import { Accessibility } from "./accessibility.entity"
@@ -112,8 +121,8 @@ export class ApplicationData extends AbstractEntity {
 
   @Column()
   @Expose()
-  @IsString()
-  incomeVouchers: string
+  @IsBoolean()
+  incomeVouchers: boolean
 
   @Column()
   @Expose()
@@ -151,16 +160,19 @@ export class ApplicationData extends AbstractEntity {
   @ApiProperty({ enum: ApplicationStatus, enumName: "ApplicationStatus" })
   status: ApplicationStatus
 
+  @Column({ enum: Language })
   @Expose()
   @IsEnum(Language)
   @ApiProperty({ enum: Language, enumName: "Language" })
   language: Language
 
+  @Column({ enum: ApplicationSubmissionType })
   @Expose()
   @IsEnum(ApplicationSubmissionType)
   @ApiProperty({ enum: ApplicationSubmissionType, enumName: "ApplicationSubmissionType" })
   submissionType: ApplicationSubmissionType
 
+  @Column({ enum: ApplicationSubmissionType })
   @Expose()
   @IsOptional()
   @IsBoolean()
