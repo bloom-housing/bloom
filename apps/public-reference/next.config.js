@@ -111,9 +111,6 @@ module.exports = withCSS(
               "/applications/preferences/select": {
                 page: "/applications/preferences/select",
               },
-              "/applications/household/select": {
-                page: "/applications/household/select",
-              },
               "/applications/household/ada": {
                 page: "/applications/household/ada",
               },
@@ -140,9 +137,6 @@ module.exports = withCSS(
               },
               "/applications/financial/vouchers": {
                 page: "/applications/financial/vouchers",
-              },
-              "/applications/contact/vouchers": {
-                page: "/applications/contact/vouchers",
               },
               "/applications/contact/address": {
                 page: "/applications/contact/address",
