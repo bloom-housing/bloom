@@ -1,9 +1,6 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-// Use require because of the CommonJS/AMD style export.
-// See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
@@ -12,6 +9,16 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import { EmailService } from "../../src/shared/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
+import {
+  Application,
+  ApplicationCreate,
+  ApplicationStatus,
+  ApplicationSubmissionType,
+  Language,
+} from "@bloom-housing/core"
+// Use require because of the CommonJS/AMD style export.
+// See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
+import dbOptions = require("../../ormconfig.test")
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -22,22 +29,27 @@ describe("Applications", () => {
   let app: INestApplication
   let user1AccessToken: string
   let user2AccessToken: string
+  let adminAccessToken: string
   let listingId: any
 
-  const getTestAppBody: () => any = () => {
+  const getTestAppBody: () => ApplicationCreate = () => {
     return {
       appUrl: "",
       listing: {
         id: listingId,
       },
       application: {
+        language: Language.en,
+        status: ApplicationStatus.submitted,
+        submissionType: ApplicationSubmissionType.electronical,
+        acceptedTerms: false,
         applicant: {
           firstName: "",
           middleName: "",
           lastName: "",
-          birthMonth: 0,
-          birthDay: 0,
-          birthYear: 0,
+          birthMonth: "",
+          birthDay: "",
+          birthYear: "",
           emailAddress: "",
           noEmail: false,
           phoneNumber: "",
@@ -111,9 +123,9 @@ describe("Applications", () => {
           race: "",
           gender: "",
           sexualOrientation: "",
-          howDidYouHear: "",
+          howDidYouHear: [],
         },
-        incomeVouchers: "",
+        incomeVouchers: true,
         income: "100.00",
         incomePeriod: "",
         householdMembers: [],
@@ -140,6 +152,8 @@ describe("Applications", () => {
     user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
 
     user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
+
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     listingId = res.body.listings[0].id
@@ -202,7 +216,7 @@ describe("Applications", () => {
       .expect(201)
     await supertest(app.getHttpServer())
       .delete(`/applications/${createRes.body.id}`)
-      .set(...setAuthorization(user1AccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     await supertest(app.getHttpServer())
       .get(`/applications/${createRes.body.id}`)
@@ -231,12 +245,12 @@ describe("Applications", () => {
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
     expect(createRes.body).toEqual(expect.objectContaining(body))
-    const newBody = getTestAppBody()
+    const newBody = getTestAppBody() as Application
     newBody.id = createRes.body.id
     const putRes = await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)
       .send(newBody)
-      .set(...setAuthorization(user1AccessToken))
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(putRes.body).toEqual(expect.objectContaining(newBody))
   })
@@ -249,7 +263,7 @@ describe("Applications", () => {
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
     expect(createRes.body).toEqual(expect.objectContaining(body))
-    const newBody = getTestAppBody()
+    const newBody = getTestAppBody() as Application
     newBody.id = createRes.body.id
     await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)

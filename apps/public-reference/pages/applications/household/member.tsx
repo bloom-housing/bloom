@@ -4,6 +4,7 @@ Add household members
 */
 import { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
@@ -64,9 +65,9 @@ class Member implements HouseholdMember {
     latitude: null,
     longitude: null,
   }
-  sameAddress?: boolean
+  sameAddress?: string
   relationship?: string
-  workInRegion?: boolean
+  workInRegion?: string
 }
 
 export default () => {
@@ -418,8 +419,7 @@ export default () => {
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
                   <Button
-                    filled={true}
-                    className=""
+                    type={AppearanceStyleType.primary}
                     onClick={() => {
                       //
                     }}

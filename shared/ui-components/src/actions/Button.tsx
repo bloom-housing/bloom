@@ -1,23 +1,37 @@
 import * as React from "react"
 import "./Button.scss"
+import {
+  AppearanceStyleType,
+  AppearanceSizeType,
+  AppearanceBorderType,
+} from "../global/AppearanceTypes"
 
 export interface ButtonProps {
   children: React.ReactNode
-  className?: string
-  big?: boolean
-  filled?: boolean
-  normalCase?: boolean
   onClick: (e: React.MouseEvent) => void
-  small?: boolean
+  type?: AppearanceStyleType
+  border?: AppearanceBorderType
+  size?: AppearanceSizeType
+  normalCase?: boolean
+  unstyled?: boolean
+  fullWidth?: boolean
+  className?: string
+}
+
+export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
+  const classNames = ["button"]
+  if (props.type) classNames.push(props.type)
+  if (props.border) classNames.push(props.border)
+  if (props.size) classNames.push(props.size)
+  if (props.normalCase) classNames.push("is-normal-case")
+  if (props.unstyled) classNames.push("is-unstyled")
+  if (props.fullWidth) classNames.push("is-fullwidth")
+  if (props.className) classNames.push(props.className)
+  return classNames
 }
 
 const Button = (props: ButtonProps) => {
-  const buttonClasses = ["button"]
-  if (props.filled) buttonClasses.push("is-filled")
-  if (props.normalCase) buttonClasses.push("is-normal-case")
-  if (props.small) buttonClasses.push("is-small")
-  if (props.big) buttonClasses.push("is-big")
-  if (props.className) buttonClasses.push(props.className)
+  const buttonClasses = buttonClassesForProps(props)
 
   return (
     <button className={buttonClasses.join(" ")} onClick={props.onClick}>

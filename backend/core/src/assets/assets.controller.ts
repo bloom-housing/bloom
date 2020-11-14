@@ -3,15 +3,15 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { AssetsService } from "./assets.service"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "./asset.dto"
 import { AuthzGuard } from "../auth/authz.guard"
-import { DefaultAuthGuard } from "../auth/default.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
+import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 
 @Controller("assets")
 @ApiTags("assets")
 @ApiBearerAuth()
 @ResourceType("asset")
-@UseGuards(DefaultAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 

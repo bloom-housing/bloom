@@ -145,6 +145,19 @@ class Listing extends BaseEntity {
   @IsOptional()
   @ValidateNested()
   @Type(() => Address)
+  applicationPickUpAddress: Address | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  applicationPickUpAddressOfficeHours: string | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Address)
   buildingAddress: Address | null
 
   @Column({ type: "integer", nullable: true })
@@ -360,7 +373,7 @@ class Listing extends BaseEntity {
   @Expose()
   @ApiProperty()
   get unitsSummarized(): UnitsSummarized | undefined {
-    if (this.units.length > 0) {
+    if (Array.isArray(this.units) && this.units.length > 0) {
       return transformUnits(this.units, amiCharts)
     }
   }

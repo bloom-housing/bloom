@@ -34,6 +34,9 @@ export * from "./src/forms/FieldGroup"
 export * from "./src/forms/Select"
 export * from "./src/forms/Form"
 
+/* Global */
+export * from "./src/global/AppearanceTypes"
+
 /* Headers */
 export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"

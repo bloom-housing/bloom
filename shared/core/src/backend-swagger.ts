@@ -244,6 +244,8 @@ export class ApplicationsService {
       limit?: number;
       /**  */
       listingId?: string;
+      /**  */
+      search?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -251,7 +253,12 @@ export class ApplicationsService {
       let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
+      configs.params = {
+        page: params['page'],
+        limit: params['limit'],
+        listingId: params['listingId'],
+        search: params['search']
+      };
       let data = null;
 
       configs.data = data;
@@ -1368,6 +1375,12 @@ export interface Listing {
   blankPaperApplicationCanBePickedUp: boolean;
 
   /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
+
+  /**  */
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
@@ -1539,6 +1552,12 @@ export interface ListingCreate {
   blankPaperApplicationCanBePickedUp: boolean;
 
   /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
+
+  /**  */
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
@@ -1694,6 +1713,12 @@ export interface ListingUpdate {
   blankPaperApplicationCanBePickedUp: boolean;
 
   /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
+
+  /**  */
   buildingAddress: CombinedBuildingAddressTypes;
 
   /**  */
@@ -1813,13 +1838,13 @@ export interface Applicant {
   lastName: string;
 
   /**  */
-  birthMonth: number;
+  birthMonth: string;
 
   /**  */
-  birthDay: number;
+  birthDay: string;
 
   /**  */
-  birthYear: number;
+  birthYear: string;
 
   /**  */
   emailAddress: string;
@@ -1837,7 +1862,7 @@ export interface Applicant {
   noPhone: boolean;
 
   /**  */
-  workInRegion: boolean;
+  workInRegion: string;
 
   /**  */
   workAddress: Address;
@@ -1894,7 +1919,7 @@ export interface Demographics {
   sexualOrientation: string;
 
   /**  */
-  howDidYouHear: string;
+  howDidYouHear: string[];
 
   /**  */
   race: string;
@@ -1917,13 +1942,13 @@ export interface HouseholdMember {
   lastName: string;
 
   /**  */
-  birthMonth: number;
+  birthMonth: string;
 
   /**  */
-  birthDay: number;
+  birthDay: string;
 
   /**  */
-  birthYear: number;
+  birthYear: string;
 
   /**  */
   emailAddress: string;
@@ -1941,19 +1966,28 @@ export interface HouseholdMember {
   noPhone: boolean;
 
   /**  */
-  sameAddress?: boolean;
+  sameAddress?: string;
 
   /**  */
   relationship?: string;
 
   /**  */
-  workInRegion?: boolean;
+  workInRegion?: string;
 
   /**  */
   workAddress?: CombinedWorkAddressTypes;
 }
 
 export interface ApplicationData {
+  /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
   /**  */
   applicant: Applicant;
 
@@ -1994,7 +2028,7 @@ export interface ApplicationData {
   demographics: Demographics;
 
   /**  */
-  incomeVouchers: string;
+  incomeVouchers: boolean;
 
   /**  */
   income: string;
@@ -2010,6 +2044,9 @@ export interface ApplicationData {
 
   /**  */
   preferences: object;
+
+  /**  */
+  acceptedTerms: boolean;
 }
 
 export interface Application {
@@ -2350,7 +2387,23 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery'
 }
 export type CombinedApplicationAddressTypes = (Address & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export enum ApplicationStatus {
+  'draft' = 'draft',
+  'submitted' = 'submitted',
+  'removed' = 'removed'
+}
+
+export enum Language {
+  'en' = 'en',
+  'es' = 'es'
+}
+
+export enum ApplicationSubmissionType {
+  'paper' = 'paper',
+  'electronical' = 'electronical'
+}
 export type CombinedWorkAddressTypes = (Address & any) | null;

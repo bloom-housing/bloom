@@ -5,6 +5,7 @@ Add household members
 import React from "react"
 import { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   Button,
   FormCard,
   HouseholdMemberForm,
@@ -99,7 +100,7 @@ export default () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Button
-              filled={true}
+              type={AppearanceStyleType.primary}
               className=""
               onClick={() => {
                 conductor.returnToReview = false
@@ -113,7 +114,8 @@ export default () => {
           {conductor.canJumpForwardToReview() && (
             <div className="form-card__pager-row">
               <Button
-                className="button is-unstyled mb-4"
+                unstyled={true}
+                className="mb-4"
                 onClick={() => {
                   conductor.returnToReview = true
                   void handleSubmit(onSubmit)()

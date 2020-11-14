@@ -4,6 +4,7 @@ Optional demographic questions
 */
 import React, { useMemo } from "react"
 import {
+  AppearanceStyleType,
   Button,
   FieldGroup,
   Form,
@@ -30,7 +31,14 @@ const Demographics = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      ethnicity: application.demographics.ethnicity,
+      race: application.demographics.race,
+      gender: application.demographics.gender,
+      sexualOrientation: application.demographics.sexualOrientation,
+    },
+  })
 
   const onSubmit = (data) => {
     const { ethnicity, race, gender, sexualOrientation, howDidYouHear } = data
@@ -51,13 +59,14 @@ const Demographics = () => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
-      defaultChecked: item.checked,
+      defaultChecked: item.checked || application.demographics.howDidYouHear.includes(item.id),
       register,
     }))
-  }, [register])
+  }, [register, application])
 
   return (
     <FormsLayout>
+      {console.log(application)}
       <FormCard header={listing?.name}>
         <ProgressNav
           currentPageSection={currentPageSection}
@@ -148,7 +157,7 @@ const Demographics = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}
