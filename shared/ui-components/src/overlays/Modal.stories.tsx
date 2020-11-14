@@ -64,7 +64,7 @@ export const TransparentOverlayModal = () => (
     open={true}
     title="Modal Title"
     ariaDescription="Modal description"
-    onClose={noop}
+    hideCloseIcon
     actions={[
       <Button onClick={noop} type={AppearanceStyleType.primary}>
         Submit

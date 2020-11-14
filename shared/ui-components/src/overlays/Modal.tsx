@@ -50,7 +50,7 @@ export const Modal = (props: ModalProps) => {
 
         <ModalFooter actions={props.actions} />
 
-        {props.hideCloseIcon && (
+        {!props.hideCloseIcon && (
           <button className="modal__close" aria-label="Close" onClick={props.onClose} tabIndex={0}>
             <Icon size="medium" symbol="close" />
           </button>

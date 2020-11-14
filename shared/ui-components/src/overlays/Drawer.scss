@@ -80,6 +80,16 @@
   @apply ml-10;
 }
 
+.is-direction-left {
+  .drawer__title {
+    @apply ml-0;
+  }
+  .drawer__close {
+    left: auto;
+    right: 1.5rem;
+  }
+}
+
 .drawer__body {
   @apply overflow-y-auto;
   @apply relative;
