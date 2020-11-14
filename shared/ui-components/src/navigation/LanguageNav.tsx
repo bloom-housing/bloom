@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./LanguageNav.scss"
-import { t } from "../../helpers/translator"
-import { useLanguageChange } from "../../helpers/useLanguageChange"
+import { t } from "../helpers/translator"
+import { useLanguageChange } from "../helpers/useLanguageChange"
 
 export type LangItem = {
   prefix: string

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { LangItem } from "../navigations/LanguageNav/LanguageNav"
+import { LangItem } from "../navigation/LanguageNav"
 
 export function useLanguageChange(languages: LangItem[]) {
   const router = useRouter()
@@ -26,7 +26,7 @@ export function useLanguageChange(languages: LangItem[]) {
       newPath = `/${prefix + pathname}`
     }
 
-    router.replace({
+    void router.replace({
       pathname: newPath,
     })
   }

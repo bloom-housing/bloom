@@ -1,6 +1,6 @@
 import * as React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
-import { LanguageNav, LangItem } from "../navigations/LanguageNav/LanguageNav"
+import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 
 export interface SiteHeaderProps {
   logoSrc: string
