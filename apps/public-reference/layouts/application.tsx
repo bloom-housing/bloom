@@ -19,6 +19,12 @@ const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
   const router = useRouter()
 
+  const LANGUAGES =
+    process.env.languages?.split(",")?.map((item) => ({
+      prefix: item === "en" ? "" : item,
+      label: t(`languages.${item}`),
+    })) || []
+
   return (
     <div className="site-wrapper">
       <div className="site-content">
@@ -30,6 +36,7 @@ const Layout = (props) => {
           logoSrc="/images/logo_glyph.svg"
           notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
           title={t("nav.siteTitle")}
+          languages={LANGUAGES}
         >
           <LocalizedLink href="/listings" className="navbar-item">
             {t("nav.listings")}
