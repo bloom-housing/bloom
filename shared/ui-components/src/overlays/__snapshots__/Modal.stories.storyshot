@@ -206,6 +206,21 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                         </div>
                       </section>
                     </footer>
+                    <button
+                      aria-label="Close"
+                      class="modal__close"
+                      tabindex="0"
+                    >
+                      <span
+                        class="ui-icon ui-medium"
+                      >
+                        <svg>
+                          <use
+                            xlink:href="#i-close"
+                          />
+                        </svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
                 <div
@@ -359,6 +374,21 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                                   </div>
                                 </section>
                               </footer>
+                              <button
+                                aria-label="Close"
+                                class="modal__close"
+                                tabindex="0"
+                              >
+                                <span
+                                  class="ui-icon ui-medium"
+                                >
+                                  <svg>
+                                    <use
+                                      xlink:href="#i-close"
+                                    />
+                                  </svg>
+                                </span>
+                              </button>
                             </div>
                           </div>
                         }
@@ -440,6 +470,21 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                                     </div>
                                   </section>
                                 </footer>
+                                <button
+                                  aria-label="Close"
+                                  class="modal__close"
+                                  tabindex="0"
+                                >
+                                  <span
+                                    class="ui-icon ui-medium"
+                                  >
+                                    <svg>
+                                      <use
+                                        xlink:href="#i-close"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
                               </div>
                             </div>
                           }
@@ -567,6 +612,27 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                               </GridSection>
                             </footer>
                           </ModalFooter>
+                          <button
+                            aria-label="Close"
+                            className="modal__close"
+                            onClick={[Function]}
+                            tabIndex={0}
+                          >
+                            <Icon
+                              size="medium"
+                              symbol="close"
+                            >
+                              <span
+                                className="ui-icon ui-medium"
+                              >
+                                <svg>
+                                  <use
+                                    xlinkHref="#i-close"
+                                  />
+                                </svg>
+                              </span>
+                            </Icon>
+                          </button>
                         </div>
                       </div>
                       <div
@@ -630,7 +696,7 @@ exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
     }
     ariaDescription="Modal description"
     backdrop={false}
-    onClose={[Function]}
+    hideCloseIcon={true}
     open={true}
     title="Modal Title"
   >
@@ -638,7 +704,6 @@ exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
       ariaDescription="Modal description"
       ariaLabel="Modal Title"
       backdrop={false}
-      onClose={[Function]}
       open={true}
     >
       <Portal
@@ -755,7 +820,6 @@ exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
               ariaDescription="Modal description"
               ariaLabel="Modal Title"
               backdrop={false}
-              onClose={[Function]}
               open={true}
             >
               <div
