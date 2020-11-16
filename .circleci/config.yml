@@ -94,5 +94,5 @@ workflows:
           executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
-          start: yarn dev:all
+          start: yarn test:backend:core:dbsetup && yarn dev:all
           wait-on: "http://localhost:3000"
