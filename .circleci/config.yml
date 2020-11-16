@@ -93,6 +93,8 @@ workflows:
             - setup
           pre-steps:
             - run:
+                requires:
+                  - setup
                 command: yarn test:backend:core:dbsetup
                 environment:
                   APP_SECRET: "CI-LONG-SECRET-KEY"
