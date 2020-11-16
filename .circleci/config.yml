@@ -92,7 +92,7 @@ workflows:
           requires:
             - setup
           executor: cypress-node
-          working_directory: apps/public-reference
+          # working_directory: apps/public-reference
           yarn: true
-          start: yarn test:backend:core:dbsetup && yarn dev:all
+          start: yarn test:backend:core:dbsetup && cd apps/public-reference yarn dev:all
           wait-on: "http://localhost:3000"
