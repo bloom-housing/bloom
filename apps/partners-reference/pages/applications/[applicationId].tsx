@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from "react"
+import React, { Fragment, useMemo, useCallback } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
@@ -85,6 +85,53 @@ export default function ApplicationsList() {
     return labels
   }
 
+  const addressCols = useCallback(
+    (isMailingAddress) => (
+      <>
+        <GridCell>
+          <ViewItem label={t("application.contact.streetAddress")}>
+            {isMailingAddress
+              ? application.mailingAddress.street
+              : application.applicant.address.street}
+          </ViewItem>
+        </GridCell>
+
+        <GridCell span={3}>
+          <ViewItem label={t("application.contact.apt")}>
+            {isMailingAddress
+              ? application.mailingAddress.street2
+              : application.applicant.address.street2}
+          </ViewItem>
+        </GridCell>
+
+        <GridCell>
+          <ViewItem label={t("application.contact.city")}>
+            {isMailingAddress
+              ? application.mailingAddress.city
+              : application.applicant.address.city}
+          </ViewItem>
+        </GridCell>
+
+        <GridCell>
+          <ViewItem label={t("application.contact.state")}>
+            {isMailingAddress
+              ? application.mailingAddress.state
+              : application.applicant.address.state}
+          </ViewItem>
+        </GridCell>
+
+        <GridCell>
+          <ViewItem label={t("application.contact.zip")}>
+            {isMailingAddress
+              ? application.mailingAddress.zipCode
+              : application.applicant.address.zipCode}
+          </ViewItem>
+        </GridCell>
+      </>
+    ),
+    [application]
+  )
+
   if (!applicationDto) return null
 
   return (
@@ -149,13 +196,13 @@ export default function ApplicationsList() {
                 </ViewItem>
               </GridCell>
 
-              {application.language && (
-                <GridCell>
-                  <ViewItem label={t("application.details.language")}>
-                    {t(`languages.${application.language}`)}
-                  </ViewItem>
-                </GridCell>
-              )}
+              <GridCell>
+                <ViewItem label={t("application.details.language")}>
+                  {application.language
+                    ? t(`languages.${application.language}`)
+                    : t("languages.en")}
+                </ViewItem>
+              </GridCell>
 
               <GridCell>
                 <ViewItem label={t("application.details.totalSize")}>
@@ -170,8 +217,6 @@ export default function ApplicationsList() {
                 </ViewItem>
               </GridCell>
             </GridSection>
-
-            {console.log(application)}
 
             <GridSection
               className="bg-primary-lighter"
@@ -234,67 +279,11 @@ export default function ApplicationsList() {
               </GridSection>
 
               <GridSection subtitle={t("application.details.residenceAddress")} columns={4}>
-                <GridCell>
-                  <ViewItem label={t("application.contact.streetAddress")}>
-                    {application.applicant.address.street}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell span={3}>
-                  <ViewItem label={t("application.contact.apt")}>
-                    {application.applicant.address.street2}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.contact.city")}>
-                    {application.applicant.address.city}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.contact.state")}>
-                    {application.applicant.address.state}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.contact.zip")}>
-                    {application.applicant.address.zipCode}
-                  </ViewItem>
-                </GridCell>
+                {addressCols(false)}
               </GridSection>
 
               <GridSection subtitle={t("application.contact.mailingAddress")} columns={4}>
-                <GridCell>
-                  <ViewItem label={t("application.contact.streetAddress")}>
-                    {application.mailingAddress.street}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell span={3}>
-                  <ViewItem label={t("application.contact.apt")}>
-                    {application.mailingAddress.street2}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.contact.city")}>
-                    {application.mailingAddress.city}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.contact.state")}>
-                    {application.mailingAddress.state}
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.contact.zip")}>
-                    {application.mailingAddress.zipCode}
-                  </ViewItem>
-                </GridCell>
+                {addressCols(application.sendMailToMailingAddress)}
               </GridSection>
             </GridSection>
 
@@ -381,9 +370,6 @@ export default function ApplicationsList() {
               </GridCell>
             </GridSection>
 
-            {/* TODO
-                We don't store information about applicant county, only workInRegion, so we can't detect if applicant live in specific county
-              */}
             <GridSection
               className="bg-primary-lighter"
               title={t("application.details.preferences")}
@@ -395,7 +381,9 @@ export default function ApplicationsList() {
                     "application.details.countyName"
                   )}`}
                 >
-                  {application.applicant.workInRegion ? t("t.yes") : t("t.no")}
+                  {application.preferences.liveIn || application.preferences.workIn
+                    ? t("t.yes")
+                    : t("t.no")}
                 </ViewItem>
               </GridCell>
             </GridSection>
