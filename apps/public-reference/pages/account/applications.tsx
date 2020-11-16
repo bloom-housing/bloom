@@ -75,7 +75,7 @@ export default () => {
           title={t("application.deleteThisApplication")}
           ariaDescription={t("application.deleteThisApplication")}
           actions={modalActions}
-          fullScreen
+          hideCloseIcon
         />
         <Layout>
           <Head>

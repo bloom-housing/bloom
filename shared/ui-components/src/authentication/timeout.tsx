@@ -98,7 +98,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
       title={promptTitle}
       ariaDescription={promptText}
       actions={modalActions}
-      fullScreen
+      hideCloseIcon
     >
       {promptText}
     </Modal>

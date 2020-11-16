@@ -56,6 +56,7 @@ export * from "./src/helpers/occupancyFormatting"
 export * from "./src/helpers/state"
 export * from "./src/helpers/tableSummaries"
 export * from "./src/helpers/translator"
+export * from "./src/helpers/useLanguageChange"
 export * from "./src/helpers/debounce"
 
 /* Icons */
@@ -67,6 +68,7 @@ export * from "./src/lists/PreferencesList"
 
 /* Navigation */
 export * from "./src/navigation/FooterNav"
+export * from "./src/navigation/LanguageNav"
 export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/UserNav"
 
@@ -76,7 +78,9 @@ export * from "./src/notifications/ErrorMessage"
 export * from "./src/notifications"
 
 /* Overlays */
-export { Modal } from "./src/overlays/Modal"
+export * from "./src/overlays/Overlay"
+export * from "./src/overlays/Modal"
+export * from "./src/overlays/Drawer"
 
 /* Page Components */
 export * from "./src/page_components/listing/AdditionalFees"
