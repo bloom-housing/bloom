@@ -117,6 +117,7 @@ export default () => {
               register={register}
               error={errors.applicant}
               name="applicant"
+              id="applicant.dateOfBirth"
               watch={watch}
               atAge={true}
               label={t("application.name.yourDateOfBirth")}

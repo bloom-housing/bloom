@@ -13,7 +13,7 @@ const Form = ({ id, children, className, onSubmit }: FormProps) => {
   }
 
   return (
-    <form id={id} className={className} onSubmit={onSubmit} onKeyPress={onKeyPress}>
+    <form id={id} className={className} onSubmit={onSubmit} onKeyPress={onKeyPress} noValidate>
       {children}
     </form>
   )

@@ -7,6 +7,7 @@ import {
 } from "../global/AppearanceTypes"
 
 export interface ButtonProps {
+  id?: string
   children: React.ReactNode
   onClick: (e: React.MouseEvent) => void
   type?: AppearanceStyleType
@@ -34,7 +35,7 @@ const Button = (props: ButtonProps) => {
   const buttonClasses = buttonClassesForProps(props)
 
   return (
-    <button className={buttonClasses.join(" ")} onClick={props.onClick}>
+    <button id={props.id} className={buttonClasses.join(" ")} onClick={props.onClick}>
       {props.children}
     </button>
   )
