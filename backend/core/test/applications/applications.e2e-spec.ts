@@ -130,7 +130,11 @@ describe("Applications", () => {
         incomePeriod: "",
         householdMembers: [],
         preferredUnit: ["a", "b"],
-        preferences: {},
+        preferences: {
+          liveIn: false,
+          none: false,
+          workIn: false,
+        },
       },
     }
   }
