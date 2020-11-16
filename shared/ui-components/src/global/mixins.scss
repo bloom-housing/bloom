@@ -166,3 +166,9 @@
     transition-duration: 0s;
   }
 }
+
+@mixin ellipsis() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

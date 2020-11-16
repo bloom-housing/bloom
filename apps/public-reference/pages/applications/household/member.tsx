@@ -191,9 +191,9 @@ export default () => {
                   <Field
                     id="middleName"
                     name="middleName"
-                    label={t("application.name.middleName")}
+                    label={t("application.name.middleNameOptional")}
                     readerOnly={true}
-                    placeholder={t("application.name.middleName")}
+                    placeholder={t("application.name.middleNameOptional")}
                     defaultValue={member.middleName}
                     register={register}
                   />

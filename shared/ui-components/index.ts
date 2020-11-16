@@ -3,6 +3,7 @@ export * from "./src/actions/Button"
 export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
+export * from "./src/actions/InlineButton"
 
 /* Blocks */
 export * from "./src/blocks/AppStatusItem"
@@ -20,6 +21,7 @@ export * from "./src/config"
 
 /* Elements */
 export * from "./src/elements/MetaTags"
+export * from "./src/elements/Tag"
 
 /* Footers */
 export * from "./src/footers/ExygyFooter"
@@ -55,6 +57,7 @@ export * from "./src/helpers/state"
 export * from "./src/helpers/tableSummaries"
 export * from "./src/helpers/translator"
 export * from "./src/helpers/useLanguageChange"
+export * from "./src/helpers/debounce"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
@@ -104,10 +107,12 @@ export * from "./src/sections/InfoCardGrid"
 export * from "./src/sections/ListSection"
 export * from "./src/sections/MarkdownSection"
 export * from "./src/sections/ResponsiveContentList"
+export * from "./src/sections/GridSection"
 
 /* Tables */
 export * from "./src/tables/StandardTable"
 export * from "./src/tables/GroupedTable"
+export * from "./src/tables/MinimalTable"
 
 /* Text */
 export * from "./src/text/Description"

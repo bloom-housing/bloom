@@ -17,6 +17,7 @@ export interface ButtonProps {
   unstyled?: boolean
   fullWidth?: boolean
   className?: string
+  disabled?: boolean
 }
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
@@ -35,7 +36,12 @@ const Button = (props: ButtonProps) => {
   const buttonClasses = buttonClassesForProps(props)
 
   return (
-    <button id={props.id} className={buttonClasses.join(" ")} onClick={props.onClick}>
+    <button
+      id={props.id}
+      className={buttonClasses.join(" ")}
+      onClick={props.onClick}
+      disabled={props.disabled}
+    >
       {props.children}
     </button>
   )

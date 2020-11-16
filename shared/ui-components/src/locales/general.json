@@ -5,7 +5,40 @@
     "myApplications": "My Applications",
     "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
   },
+  "applications": {
+    "totalApplications": "Total Applications",
+    "addApplication": "Add Application",
+    "applicationsReceived": "Applications Received"
+  },
   "application": {
+    "details": {
+      "applicationData": "Application Data",
+      "number": "Application Number",
+      "type": "Application Submission Type",
+      "submittedDate": "Application Submitted Date",
+      "timeDate": "Application Time Date",
+      "language": "Application Language",
+      "totalSize": "Total Household Size",
+      "submittedBy": "Submitted By",
+      "agency": "Agency if Applicable",
+      "adaPriorities": "ADA Priorities Selected",
+      "preferences": "Application Preferences",
+      "liveOrWorkIn": "Live or Work in",
+      "householdIncome": "Declared Household Income",
+      "annualIncome": "Annual Income",
+      "vouchers": "Housing Voucher or Subsidy",
+      "preferredContact": "Preferred Contact",
+      "residenceAddress": "Residence Address",
+      "submissionType": {
+        "electronical": "Electronical",
+        "paper": "Paper"
+      },
+      "applicationStatus": {
+        "draft": "Draft",
+        "submitted": "Submitted",
+        "removed": "Removed"
+      }
+    },
     "form": {
       "errors": {
         "selectOption": "Please select one of the options above.",
@@ -109,7 +142,8 @@
       "yourName": "Your Name",
       "firstName": "First Name",
       "firstNameError": "Please enter a First Name",
-      "middleName": "Middle Name (optional)",
+      "middleNameOptional": "Middle Name (optional)",
+      "middleName": "Middle Name",
       "lastName": "Last Name",
       "lastNameError": "Please enter a Last Name",
       "yourDateOfBirth": "Your Date of Birth",
@@ -138,6 +172,7 @@
       "streetAddress": "Street Address",
       "streetError": "Please enter an address",
       "apt": "Apt or Unit #",
+      "city": "City",
       "cityName": "City Name",
       "cityError": "Please enter a city",
       "contactPreference": "How do you prefer to be contacted?",
@@ -703,6 +738,7 @@
     "name": "Local Region"
   },
   "t": {
+    "at": "at",
     "additionalPhone": "Additional Phone",
     "area": "area",
     "accessibility": "Accessibility",
@@ -715,10 +751,13 @@
     "delete": "Delete",
     "deposit": "Deposit",
     "errorsToResolve": "There are errors you'll need to resolve before moving on.",
+    "export": "Export",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
+    "jumpTo": "Jump to",
     "loginIsRequired": "Login is required to view this page.",
+    "lastUpdated": "Last updated",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "month": "Month",
@@ -733,17 +772,22 @@
     "petsPolicy": "Pets Policy",
     "phone": "Phone",
     "email": "Email",
+    "previous": "Previous",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "preferences": "Preferences",
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "secondPhone": "Second Phone",
     "seeListing": "See Listing",
     "selectAllThatApply": "Please select all that apply.",
     "selectOne": "Select One",
+    "show": "Show",
     "skipToMainContent": "Skip to main content",
     "smokingPolicy": "Smoking Policy",
+    "street": "Street",
     "sqFeet": "sqft",
+    "relationship": "Relationship",
     "unitAmenities": "Unit Amenities",
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
