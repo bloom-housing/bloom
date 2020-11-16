@@ -1978,6 +1978,17 @@ export interface HouseholdMember {
   workAddress?: CombinedWorkAddressTypes;
 }
 
+export interface ApplicationPreferences {
+  /**  */
+  liveIn: boolean;
+
+  /**  */
+  none: boolean;
+
+  /**  */
+  workIn: boolean;
+}
+
 export interface ApplicationData {
   /**  */
   status: ApplicationStatus;
@@ -2043,7 +2054,7 @@ export interface ApplicationData {
   preferredUnit: string[];
 
   /**  */
-  preferences: object;
+  preferences: ApplicationPreferences;
 
   /**  */
   acceptedTerms: boolean;
