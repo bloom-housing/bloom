@@ -82,11 +82,15 @@
   "householdMembers":[],
   "preferredUnit":[],
   "demographics":{
+     "race": "",
      "ethnicity":"",
      "gender":"",
      "sexualOrientation":"",
      "howDidYouHear":""
   },
   "preferences":{},
-  "confirmationId":""
+  "confirmationId":"",
+  "status": "",
+  "submissionType": "",
+  "language": ""
 }

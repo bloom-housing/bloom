@@ -119,6 +119,7 @@
      "twoBedroom"
   ],
   "demographics":{
+     "race": "white",
      "ethnicity":"hispanicLatino",
      "gender":"female",
      "sexualOrientation":"bisexual",
@@ -132,5 +133,8 @@
      "liveIn":true,
      "workIn":true
   },
-  "confirmationId":""
+  "confirmationId":"",
+  "status": "submitted",
+  "submissionType": "electronical",
+  "language": "en"
 }
