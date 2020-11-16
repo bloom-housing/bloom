@@ -113,7 +113,7 @@ export default () => {
                       />
                     )}
                     {i === options.length - 1 && (
-                      <ErrorMessage id="type-error" error={errors.type}>
+                      <ErrorMessage error={errors.type}>
                         {t("application.alternateContact.type.validationErrorMessage")}
                       </ErrorMessage>
                     )}

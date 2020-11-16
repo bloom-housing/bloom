@@ -79,7 +79,6 @@ export default () => {
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
             </label>
             <PhoneField
-              id="phoneNumber"
               name="phoneNumber"
               label={t("application.alternateContact.contact.phoneNumberFormLabel")}
               readerOnly={true}

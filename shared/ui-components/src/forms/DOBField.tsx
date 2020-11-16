@@ -12,11 +12,10 @@ export interface DOBFieldProps {
   applicant: HouseholdMember
   atAge?: boolean
   name?: string
-  id?: string
 }
 
 const DOBField = (props: DOBFieldProps) => {
-  const { applicant, error, register, watch, atAge, name, id } = props
+  const { applicant, error, register, watch, atAge, name } = props
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
   }
@@ -31,7 +30,7 @@ const DOBField = (props: DOBFieldProps) => {
   }
 
   return (
-    <fieldset id={id}>
+    <fieldset>
       <legend className="field-label--caps">{props.label}</legend>
 
       <div className="field-group--dob">
@@ -87,9 +86,7 @@ const DOBField = (props: DOBFieldProps) => {
 
       {(error?.birthMonth || error?.birthDay || error?.birthYear) && (
         <div className="field error">
-          <span id={`${id}-error`} className="error-message">
-            {t("application.name.dateOfBirthError")}
-          </span>
+          <span className="error-message">{t("application.name.dateOfBirthError")}</span>
         </div>
       )}
     </fieldset>

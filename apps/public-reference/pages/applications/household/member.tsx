@@ -176,7 +176,6 @@ export default () => {
                   </legend>
 
                   <Field
-                    id="firstName"
                     name="firstName"
                     label={t("application.name.firstName")}
                     placeholder={t("application.name.firstName")}
@@ -189,7 +188,6 @@ export default () => {
                   />
 
                   <Field
-                    id="middleName"
                     name="middleName"
                     label={t("application.name.middleName")}
                     readerOnly={true}
@@ -199,7 +197,6 @@ export default () => {
                   />
 
                   <Field
-                    id="lastName"
                     name="lastName"
                     placeholder={t("application.name.lastName")}
                     label={t("application.name.lastName")}
@@ -215,7 +212,6 @@ export default () => {
 
               <div className="form-card__group border-b">
                 <DOBField
-                  id="applicant.member.dateOfBirth"
                   applicant={member}
                   register={register}
                   error={errors}
@@ -333,7 +329,7 @@ export default () => {
                     </legend>
 
                     <Field
-                      id="workAddress.street"
+                      id="addressStreet"
                       name="workAddress.street"
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.workAddress.street}
@@ -344,7 +340,7 @@ export default () => {
                     />
 
                     <Field
-                      id="workAddress.street2"
+                      id="addressStreet2"
                       name="workAddress.street2"
                       label={t("application.contact.apt")}
                       placeholder={t("application.contact.apt")}
@@ -354,7 +350,7 @@ export default () => {
 
                     <div className="flex max-w-2xl">
                       <Field
-                        id="workAddress.city"
+                        id="addressCity"
                         name="workAddress.city"
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
@@ -366,7 +362,7 @@ export default () => {
                       />
 
                       <Select
-                        id="workAddress.state"
+                        id="addressState"
                         name="workAddress.state"
                         label={t("application.contact.state")}
                         defaultValue={member.workAddress.state}
@@ -381,7 +377,7 @@ export default () => {
                     </div>
 
                     <Field
-                      id="workAddress.zipCode"
+                      id="addressZipCode"
                       name="workAddress.zipCode"
                       label={t("application.contact.zip")}
                       placeholder={t("application.contact.zipCode")}
@@ -414,7 +410,7 @@ export default () => {
                       />
                     </select>
                   </div>
-                  <ErrorMessage id="relationship-error" error={errors.relationship}>
+                  <ErrorMessage error={errors.relationship}>
                     {t("application.form.errors.selectOption")}
                   </ErrorMessage>
                 </div>
@@ -423,7 +419,6 @@ export default () => {
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
                   <Button
-                    id="save-member"
                     type={AppearanceStyleType.primary}
                     onClick={() => {
                       //
@@ -433,7 +428,7 @@ export default () => {
                   </Button>
                 </div>
                 <div className="form-card__pager-row py-8">
-                  <a id="cancel-add" href="#" className="lined text-tiny" onClick={deleteMember}>
+                  <a href="#" className="lined text-tiny" onClick={deleteMember}>
                     {cancelText}
                   </a>
                 </div>

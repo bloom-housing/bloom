@@ -118,7 +118,6 @@ export default () => {
             <PhoneField
               label={t("application.contact.yourPhoneNumber")}
               caps={true}
-              id="applicant.phoneNumber"
               name="applicant.phoneNumber"
               placeholder={clientLoaded && noPhone ? t("t.none") : null}
               error={!noPhone ? errors.applicant?.phoneNumber : false}
@@ -189,7 +188,6 @@ export default () => {
             {additionalPhone && (
               <>
                 <PhoneField
-                  id="additionalPhoneNumber"
                   name="additionalPhoneNumber"
                   label={t("application.contact.yourAdditionalPhoneNumber")}
                   caps={true}
@@ -422,10 +420,7 @@ export default () => {
                 }}
               />
 
-              <ErrorMessage
-                id="applicant.workInRegion-error"
-                error={errors.applicant?.workInRegion}
-              >
+              <ErrorMessage error={errors.applicant?.workInRegion}>
                 {t("application.form.errors.selectOption")}
               </ErrorMessage>
             </fieldset>

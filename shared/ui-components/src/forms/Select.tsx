@@ -58,11 +58,7 @@ export const Select = ({
           <FormOptions options={options} keyPrefix={keyPrefix} />
         </select>
       </div>
-      {error && errorMessage && (
-        <ErrorMessage id={`${id}-error`} error={error}>
-          {errorMessage}
-        </ErrorMessage>
-      )}
+      {error && errorMessage && <ErrorMessage error={error}>{errorMessage}</ErrorMessage>}
     </div>
   )
 }

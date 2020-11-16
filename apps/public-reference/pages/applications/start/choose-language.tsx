@@ -97,7 +97,7 @@ export default () => {
 
               {listing?.applicationConfig.languages.some((lang) => lang == "en") && (
                 <Button
-                  className="language-select mx-1"
+                  className="mx-1"
                   onClick={() => {
                     // Set the language in the context here...
                   }}
@@ -108,7 +108,7 @@ export default () => {
 
               {listing?.applicationConfig.languages.some((lang) => lang == "es") && (
                 <Button
-                  className="language-select mx-1"
+                  className="mx-1"
                   onClick={() => {
                     //
                   }}
@@ -119,7 +119,7 @@ export default () => {
 
               {listing?.applicationConfig.languages.some((lang) => lang == "zh") && (
                 <Button
-                  className="language-select mx-1"
+                  className="mx-1"
                   onClick={() => {
                     //
                   }}

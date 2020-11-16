@@ -38,9 +38,7 @@ export default () => {
             {t("application.review.confirmation.lotteryNumber")}
           </h3>
 
-          <p id="confirmationId" className="font-serif text-3xl my-1">
-            {application.confirmationId}
-          </p>
+          <p className="font-serif text-3xl my-1">{application.confirmationId}</p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>
 

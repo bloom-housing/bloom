@@ -2,7 +2,6 @@ import * as React from "react"
 import "./ViewItem.scss"
 
 export interface ViewItemProps {
-  id?: string
   label?: string
   children?: React.ReactNode
   helper?: string
@@ -19,7 +18,7 @@ const ViewItem = (props: ViewItemProps) => {
   if (!props.label) valueClassName += " pt-0"
 
   return (
-    <p id={props.id} className={viewItemClasses.join(" ")}>
+    <p className={viewItemClasses.join(" ")}>
       {props.label && <span className="view-item__label">{props.label}</span>}
       {props.children && <span className={valueClassName}>{props.children}</span>}
       {props.helper && <span className="view-item__helper">{props.helper}</span>}
