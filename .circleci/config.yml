@@ -68,22 +68,11 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:partners
-  dev-all:
-    executor: standard-node
-    steps:
-      - run:
-          name: Run Dev
-          command: yarn dev:all
-          environment:
-            APP_SECRET: "CI-LONG-SECRET-KEY"
 workflows:
   version: 2
   build:
     jobs:
       - setup
-      - dev-all:
-          requires:
-            - setup
       - lint:
           requires:
             - setup
@@ -101,9 +90,9 @@ workflows:
             - setup
       - cypress/run:
           requires:
-            - dev-all
+            - setup
           executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
-          # start: yarn dev:all
+          start: yarn dev:all
           wait-on: "http://localhost:3000"
