@@ -49,23 +49,3 @@
   @apply justify-center;
   min-height: 12rem;
 }
-
-// Fixed backdrop for a full screen modal (covers up remaining content)
-.modal__wrapper {
-  @apply top-0;
-  @apply left-0;
-  @apply fixed;
-  @apply w-screen;
-  @apply h-screen;
-  @apply z-50;
-  @apply flex;
-
-  &.modal__wrapper--backdrop:before {
-    content: "";
-    @apply absolute;
-    @apply w-full;
-    @apply h-full;
-    @apply bg-gray-900;
-    @apply bg-opacity-50;
-  }
-}

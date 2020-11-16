@@ -77,7 +77,7 @@
     @apply bg-success;
     @apply border-success;
     @apply text-white;
-    
+
     &:hover {
       @apply bg-success-dark;
     }
@@ -87,7 +87,7 @@
     @apply bg-alert;
     @apply border-alert;
     @apply text-white;
-    
+
     &:hover {
       @apply bg-alert-dark;
       @apply border-alert-dark;
@@ -98,7 +98,7 @@
     @apply bg-warn;
     @apply border-warn;
     @apply text-gray-800;
-    
+
     &:hover {
       @apply text-white;
       @apply bg-warn-dark;
@@ -134,7 +134,7 @@
 
     &.is-success {
       @apply text-success;
-      
+
       &:hover {
         @apply text-white;
       }
@@ -142,7 +142,7 @@
 
     &.is-alert {
       @apply text-alert;
-      
+
       &:hover {
         @apply text-white;
       }
@@ -150,10 +150,19 @@
 
     &.is-warning {
       @apply text-gray-800;
-      
+
       &:hover {
         @apply text-white;
       }
     }
+  }
+}
+
+@mixin transition-timing {
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.475, 0.335, 0.43, 0.94);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0s;
   }
 }
