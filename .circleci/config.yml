@@ -81,7 +81,9 @@ workflows:
   build:
     jobs:
       - setup
-      - dev-all
+      - dev-all:
+          requires:
+            - setup
       - lint:
           requires:
             - setup
