@@ -1,0 +1,51 @@
+@import "../global/mixins.scss";
+
+.fixed-overlay {
+  @apply top-0;
+  @apply left-0;
+  @apply fixed;
+  @apply w-screen;
+  @apply h-screen;
+  @apply z-50;
+  @apply flex;
+
+  &.is-backdrop:before {
+    content: "";
+    @apply absolute;
+    @apply w-full;
+    @apply h-full;
+    @apply bg-gray-900;
+    @apply bg-opacity-50;
+    transition-property: background-color;
+
+    @include transition-timing;
+  }
+
+  &.overlay-effect-enter,
+  &.overlay-effect-exit-active {
+    .fixed-overlay__inner {
+      opacity: 0;
+      transform: translate(0px, 14px);
+    }
+    &.is-backdrop:before {
+      @apply bg-opacity-0;
+    }
+  }
+  &.overlay-effect-enter-active {
+    .fixed-overlay__inner {
+      opacity: 1;
+      transform: translate(0px, 0px);
+    }
+    &.is-backdrop:before {
+      @apply bg-opacity-50;
+    }
+  }
+}
+
+.fixed-overlay__inner {
+  transition-property: transform, opacity;
+  transform: translate(0px, 0px);
+  margin: auto;
+
+  @include transition-timing;
+}

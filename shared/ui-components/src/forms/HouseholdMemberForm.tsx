@@ -23,7 +23,7 @@ const HouseholdMemberForm = (props: { member: HouseholdMember; type: string }) =
   return (
     <ViewItem helper={type} className="pb-4 border-b text-left">
       {member.firstName} {member.lastName}
-      <a className="edit-link" href="#" onClick={editMember}>
+      <a id="edit-member" className="edit-link" href="#" onClick={editMember}>
         {t("label.edit")}
       </a>
     </ViewItem>

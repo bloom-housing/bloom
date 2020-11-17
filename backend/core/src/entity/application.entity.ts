@@ -294,6 +294,20 @@ export class HouseholdMember {
   workAddress?: Address | null
 }
 
+export class ApplicationPreferences {
+  @Expose()
+  @IsBoolean()
+  liveIn: boolean
+
+  @Expose()
+  @IsBoolean()
+  none: boolean
+
+  @Expose()
+  @IsBoolean()
+  workIn: boolean
+}
+
 export class ApplicationData {
   @Expose()
   @ValidateNested()
@@ -381,8 +395,9 @@ export class ApplicationData {
 
   @Expose()
   @IsDefined()
-  @IsObject()
-  preferences: Record<string, any>
+  @ValidateNested()
+  @Type(() => ApplicationPreferences)
+  preferences: ApplicationPreferences
 
   @Expose()
   @IsEnum(ApplicationStatus)

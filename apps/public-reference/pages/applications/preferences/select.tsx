@@ -154,7 +154,7 @@ export default () => {
                 {t("application.preferences.stillHaveOpportunity")}
               </p>
 
-              <ErrorMessage error={errors.none}>
+              <ErrorMessage id="preferences-error" error={errors.none}>
                 {t("application.form.errors.selectOption")}
               </ErrorMessage>
             </div>

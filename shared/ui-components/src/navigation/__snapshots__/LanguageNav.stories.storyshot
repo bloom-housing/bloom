@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots LanguageNav Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <LanguageNav
+    items={
+      Array [
+        Object {
+          "label": "English",
+          "prefix": "",
+        },
+        Object {
+          "label": "Spanish",
+          "prefix": "es",
+        },
+      ]
+    }
+  >
+    <div
+      className="language-bar"
+    >
+      <div
+        className="language-bar__inner"
+      >
+        <nav
+          className="language-nav"
+        >
+          <ul
+            className="language-nav__list"
+          >
+            <li
+              className="is-active"
+              key=""
+              onClick={[Function]}
+            >
+              English
+            </li>
+            <li
+              className=""
+              key="es"
+              onClick={[Function]}
+            >
+              Spanish
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </LanguageNav>
+</div>
+`;

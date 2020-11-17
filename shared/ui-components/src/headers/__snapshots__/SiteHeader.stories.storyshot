@@ -258,3 +258,162 @@ exports[`Storyshots Headers/Site Header With Dropdown And Button 1`] = `
   </div>
 </SiteHeader>
 `;
+
+exports[`Storyshots Headers/Site Header With Language Navigation 1`] = `
+<SiteHeader
+  languages={
+    Array [
+      Object {
+        "label": "English",
+        "prefix": "",
+      },
+      Object {
+        "label": "Spanish",
+        "prefix": "es",
+      },
+    ]
+  }
+  logoSrc="/images/logo_glyph.svg"
+  notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+  skip="Skip to content"
+  title="Site Title Here"
+>
+  <LanguageNav
+    items={
+      Array [
+        Object {
+          "label": "English",
+          "prefix": "",
+        },
+        Object {
+          "label": "Spanish",
+          "prefix": "es",
+        },
+      ]
+    }
+  >
+    <div
+      className="language-bar"
+    >
+      <div
+        className="language-bar__inner"
+      >
+        <nav
+          className="language-nav"
+        >
+          <ul
+            className="language-nav__list"
+          >
+            <li
+              className="is-active"
+              key=""
+              onClick={[Function]}
+            >
+              English
+            </li>
+            <li
+              className=""
+              key="es"
+              onClick={[Function]}
+            >
+              Spanish
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </LanguageNav>
+  <a
+    className="navbar__skip-link"
+    href="#main-content"
+  >
+    Skip to content
+  </a>
+  <div
+    className="navbar-notice"
+  >
+    <div
+      className="navbar-notice__text"
+    >
+      This is a preview of our new website. We're just getting started. We'd love to get your feedback.
+    </div>
+  </div>
+  <div
+    className="navbar__wrapper"
+  >
+    <nav
+      aria-label="main navigation"
+      className="navbar"
+      role="navigation"
+    >
+      <div
+        className="navbar-brand"
+      >
+        <LocalizedLink
+          className="navbar-item logo"
+          href="/"
+        >
+          <Link
+            href="/"
+          >
+            <a
+              className="navbar-item logo"
+              href="/"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              <div
+                className="logo__lockup"
+              >
+                <img
+                  alt="Site Title Here"
+                  className="logo__image"
+                  src="/images/logo_glyph.svg"
+                />
+                <div
+                  className="logo__title"
+                >
+                  Site Title Here
+                </div>
+              </div>
+            </a>
+          </Link>
+        </LocalizedLink>
+        <a
+          aria-expanded="false"
+          aria-label="menu"
+          className="navbar-burger burger"
+          data-target="navbarMenuLinks"
+          onClick={[Function]}
+          role="button"
+        >
+          <span
+            aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+          />
+        </a>
+      </div>
+      <div
+        className="navbar-menu md:mt-0"
+        id="navbarMenuLinks"
+      >
+        <div
+          className="navbar-end"
+        >
+          <a
+            className="navbar-item"
+            href="#"
+          >
+            Hello World
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</SiteHeader>
+`;

@@ -3,9 +3,8 @@ import "./AppStatusItem.scss"
 import moment from "moment"
 import { MultiLineAddress } from "../helpers/address"
 import { t } from "../helpers/translator"
-import { Application } from "@bloom-housing/core"
+import { Application, Address } from "@bloom-housing/core"
 import { LocalizedLink } from "../actions/LocalizedLink"
-import { Address } from "@bloom-housing/core"
 
 // TODO status and lotteryNumber should be loaded from Application
 interface AppStatusItemProps {

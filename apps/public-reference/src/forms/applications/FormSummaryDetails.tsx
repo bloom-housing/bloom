@@ -1,4 +1,4 @@
-import React, { ReactNode, Fragment } from "react"
+import React, { ReactNode, Fragment, useEffect, useState } from "react"
 import Link from "next/link"
 import { MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
 import { Address } from "@bloom-housing/core"
@@ -40,6 +40,15 @@ const reformatAddress = (address: Address) => {
 }
 
 const FormSummaryDetails = ({ application, editMode = false }) => {
+  // fix for rehydration
+  const [hasMounted, setHasMounted] = useState(false)
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
+  if (!hasMounted) {
+    return null
+  }
+
   const alternateContactName = () => {
     switch (application.alternateContact.type) {
       case "other":
@@ -61,18 +70,19 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       </h3>
 
       <div className="form-card__group mx-0">
-        <ViewItem label={t("t.name")}>
+        <ViewItem id="applicantName" label={t("t.name")}>
           {application.applicant.firstName} {application.applicant.middleName}{" "}
           {application.applicant.lastName}
         </ViewItem>
 
-        <ViewItem label={t("application.household.member.dateOfBirth")}>
+        <ViewItem id="applicantbirthDay" label={t("application.household.member.dateOfBirth")}>
           {application.applicant.birthMonth}/{application.applicant.birthDay}/
           {application.applicant.birthYear}
         </ViewItem>
 
         {application.applicant.phoneNumber && (
           <ViewItem
+            id="applicantPhone"
             label={t("t.phone")}
             helper={t(
               `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
@@ -84,6 +94,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
         {application.additionalPhoneNumber && (
           <ViewItem
+            id="applicantAdditionalPhone"
             label={t("t.additionalPhone")}
             helper={t(
               `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
@@ -94,27 +105,32 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
         )}
 
         {application.applicant.emailAddress && (
-          <ViewItem label={t("label.email")}>{application.applicant.emailAddress}</ViewItem>
+          <ViewItem id="applicantEmail" label={t("label.email")}>
+            {application.applicant.emailAddress}
+          </ViewItem>
         )}
 
-        <ViewItem label={t("application.contact.address")}>
+        <ViewItem id="applicantAddress" label={t("application.contact.address")}>
           <MultiLineAddress address={reformatAddress(application.applicant.address)} />
         </ViewItem>
 
         {application.sendMailToMailingAddress && (
-          <ViewItem label={t("application.contact.mailingAddress")}>
+          <ViewItem id="applicantMailingAddress" label={t("application.contact.mailingAddress")}>
             <MultiLineAddress address={reformatAddress(application.mailingAddress)} />
           </ViewItem>
         )}
 
         {application.applicant.workInRegion === "yes" && (
-          <ViewItem label={t("application.contact.workAddress")}>
+          <ViewItem id="applicantWorkAddress" label={t("application.contact.workAddress")}>
             <MultiLineAddress address={reformatAddress(application.applicant.workAddress)} />
           </ViewItem>
         )}
 
         {application.contactPreferences && (
-          <ViewItem label={t("application.contact.preferredContactType")}>
+          <ViewItem
+            id="applicantPreferredContactType"
+            label={t("application.contact.preferredContactType")}
+          >
             {application.contactPreferences
               ?.map((item) => t(`application.form.options.contact.${item}`))
               .join(", ")}
@@ -124,7 +140,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
       {application.alternateContact.type !== "" &&
         application.alternateContact.type !== "noContact" && (
-          <>
+          <div id="alternateContact">
             <h3 className="form--card__sub-header">
               {t("application.alternateContact.type.label")}
               {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
@@ -134,39 +150,41 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               <p className="field-note mb-5">
                 {t(`application.alternateContact.type.description`)}
               </p>
-              <ViewItem label={t("t.name")} helper={alternateContactName()}>
+              <ViewItem id="alternateName" label={t("t.name")} helper={alternateContactName()}>
                 {application.alternateContact.firstName} {application.alternateContact.lastName}
               </ViewItem>
 
               {application.alternateContact.emailAddress && (
-                <ViewItem label={t("t.email")}>
+                <ViewItem id="alternateEmail" label={t("t.email")}>
                   {application.alternateContact.emailAddress}
                 </ViewItem>
               )}
 
               {application.alternateContact.phoneNumber && (
-                <ViewItem label={t("t.phone")}>{application.alternateContact.phoneNumber}</ViewItem>
+                <ViewItem id="alternatePhone" label={t("t.phone")}>
+                  {application.alternateContact.phoneNumber}
+                </ViewItem>
               )}
 
               {Object.values(application.alternateContact.mailingAddress).some(
                 (value) => value !== ""
               ) && (
-                <ViewItem label={t("application.contact.address")}>
+                <ViewItem id="alternateMailingAddress" label={t("application.contact.address")}>
                   <MultiLineAddress address={application.alternateContact.mailingAddress} />
                 </ViewItem>
               )}
             </div>
-          </>
+          </div>
         )}
 
       {application.householdSize > 1 && (
-        <>
+        <div id="householdMembers">
           <h3 className="form--card__sub-header">
             {t("application.household.householdMembers")}
             {editMode && <EditLink href="/applications/household/add-members" />}
           </h3>
 
-          <div className="form-card__group info-group mx-0">
+          <div id="members" className="form-card__group info-group mx-0">
             {application.householdMembers.map((member) => (
               <div className="info-group__item" key={`${member.firstName} - ${member.lastName}`}>
                 <ViewItem>
@@ -188,71 +206,76 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
 
-      <h3 className="form--card__sub-header">
-        {t("application.review.householdDetails")}
-        {editMode && <EditLink href="/applications/household/preferred-units" />}
-      </h3>
+      <div id="householdDetails">
+        <h3 className="form--card__sub-header">
+          {t("application.review.householdDetails")}
+          {editMode && <EditLink href="/applications/household/preferred-units" />}
+        </h3>
 
-      <div className="form-card__group mx-0">
-        {application.preferredUnit && (
-          <ViewItem label={t("application.household.preferredUnit.preferredUnitType")}>
-            {application.preferredUnit
-              .map((item) => t(`application.household.preferredUnit.options.${item}`))
-              .join(", ")}
+        <div className="form-card__group mx-0">
+          {application.preferredUnit && (
+            <ViewItem
+              id="householdUnitType"
+              label={t("application.household.preferredUnit.preferredUnitType")}
+            >
+              {application.preferredUnit
+                .map((item) => t(`application.household.preferredUnit.options.${item}`))
+                .join(", ")}
+            </ViewItem>
+          )}
+          <ViewItem id="householdAda" label={t("application.ada.label")}>
+            {accessibilityLabels(application.accessibility).map((item) => (
+              <Fragment key={item}>
+                {item}
+                <br />
+              </Fragment>
+            ))}
           </ViewItem>
-        )}
-        <ViewItem label={t("application.ada.label")}>
-          {accessibilityLabels(application.accessibility).map((item) => (
-            <Fragment key={item}>
-              {item}
-              <br />
-            </Fragment>
-          ))}
-        </ViewItem>
-      </div>
+        </div>
 
-      <h3 className="form--card__sub-header">
-        {t("t.income")}
-        {editMode && <EditLink href="/applications/financial/vouchers" />}
-      </h3>
+        <h3 className="form--card__sub-header">
+          {t("t.income")}
+          {editMode && <EditLink href="/applications/financial/vouchers" />}
+        </h3>
 
-      <div className="form-card__group border-b mx-0">
-        <ViewItem label={t("application.review.voucherOrSubsidy")}>
-          {application.incomeVouchers ? t("t.yes") : t("t.no")}
-        </ViewItem>
-
-        {application.incomePeriod && (
-          <ViewItem label={t("t.income")}>
-            ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+        <div className="form-card__group border-b mx-0">
+          <ViewItem id="incomeVouchers" label={t("application.review.voucherOrSubsidy")}>
+            {application.incomeVouchers ? t("t.yes") : t("t.no")}
           </ViewItem>
-        )}
-      </div>
 
-      <h3 className="form--card__sub-header">
-        {t("t.preferences")}
-        {editMode && <EditLink href="/applications/preferences/select" />}
-      </h3>
+          {application.incomePeriod && (
+            <ViewItem id="incomeValue" label={t("t.income")}>
+              ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+            </ViewItem>
+          )}
+        </div>
 
-      <div className="form-card__group border-b mx-0">
-        {application.preferences.none ? (
-          <p className="field-note text-black">
-            {t("application.preferences.general.title")}{" "}
-            {t("application.preferences.general.preamble")}
-          </p>
-        ) : (
-          <>
-            {Object.entries(application.preferences)
-              .filter((option) => option[0] != "none" && option[1])
-              .map((option) => (
-                <ViewItem label={t("application.preferences.youHaveClaimed")}>
-                  {t(`application.preferences.${option[0]}.label`)}
-                </ViewItem>
-              ))}
-          </>
-        )}
+        <h3 className="form--card__sub-header">
+          {t("t.preferences")}
+          {editMode && <EditLink href="/applications/preferences/select" />}
+        </h3>
+
+        <div id="preferences" className="form-card__group border-b mx-0">
+          {application.preferences.none ? (
+            <p className="field-note text-black">
+              {t("application.preferences.general.title")}{" "}
+              {t("application.preferences.general.preamble")}
+            </p>
+          ) : (
+            <>
+              {Object.entries(application.preferences)
+                .filter((option) => option[0] != "none" && option[1])
+                .map((option) => (
+                  <ViewItem label={t("application.preferences.youHaveClaimed")}>
+                    {t(`application.preferences.${option[0]}.label`)}
+                  </ViewItem>
+                ))}
+            </>
+          )}
+        </div>
       </div>
     </>
   )
