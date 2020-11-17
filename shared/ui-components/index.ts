@@ -21,7 +21,6 @@ export * from "./src/config"
 
 /* Elements */
 export * from "./src/elements/MetaTags"
-export * from "./src/elements/Tag"
 
 /* Footers */
 export * from "./src/footers/ExygyFooter"
@@ -116,3 +115,4 @@ export * from "./src/tables/MinimalTable"
 
 /* Text */
 export * from "./src/text/Description"
+export * from "./src/text/Tag"
