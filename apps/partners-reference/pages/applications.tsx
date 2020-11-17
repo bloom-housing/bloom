@@ -1,15 +1,105 @@
-import React from "react"
-
+import React, { useState, useEffect, useContext, useRef } from "react"
+import { useRouter } from "next/router"
+import moment from "moment"
 import Head from "next/head"
-import { PageHeader, MetaTags, t } from "@bloom-housing/ui-components"
+import {
+  Field,
+  PageHeader,
+  MetaTags,
+  t,
+  Button,
+  ApiClientContext,
+  debounce,
+} from "@bloom-housing/ui-components"
 import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
-
+import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 
-export default function ApplicationsList() {
+const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
+
+  const router = useRouter()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch } = useForm()
+
+  const filterField = watch("filter-input", "")
+  const [delayedFilterValue, setDelayedFilterValue] = useState(filterField)
+
+  const pageSize = watch("page-size", 8)
+  const [pageIndex, setPageIndex] = useState(1)
+
+  const listingId = router.query.id as string
+  const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+  const { applicationsService } = useContext(ApiClientContext)
+
+  function fetchFilteredResults(value: string) {
+    setDelayedFilterValue(value)
+  }
+
+  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
+
+  // reset page to 1 when user change limit
+  useEffect(() => {
+    setPageIndex(1)
+  }, [pageSize])
+
+  // fetch filtered data
+  useEffect(() => {
+    setPageIndex(1)
+    debounceFilter.current(filterField)
+  }, [filterField])
+
+  const applications = appsData?.items || []
+  const appsMeta = appsData?.meta
+
+  const pageSizeOptions = ["8", "100", "500", "1000"]
+  const pageJumpOptions = Array.from(Array(appsMeta?.totalPages).keys())?.map((item) => item + 1)
+
+  // action buttons
+  const onBtNext = () => {
+    setPageIndex(pageIndex + 1)
+  }
+
+  const onBtPrevious = () => {
+    setPageIndex(pageIndex - 1)
+  }
+
+  const onExport = async () => {
+    console.log("exporting...")
+    const content = await applicationsService.listAsCsv({ listingId, includeHeaders: true })
+    const now = new Date()
+    const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
+
+    const blob = new Blob([content], { type: "text/csv" })
+    const fileLink = document.createElement("a")
+    fileLink.setAttribute("download", `appplications-${listingId}-${dateString}.csv`)
+    fileLink.href = URL.createObjectURL(blob)
+
+    fileLink.click()
+  }
+
+  // ag grid settings
+  class formatLinkCell {
+    linkWithId: HTMLAnchorElement
+
+    init(params) {
+      this.linkWithId = document.createElement("a")
+      this.linkWithId.setAttribute("href", `/applications/${params.value}`)
+      this.linkWithId.innerText = params.value
+    }
+
+    getGui() {
+      return this.linkWithId
+    }
+  }
+
+  const gridOptions = {
+    components: {
+      formatLinkCell: formatLinkCell,
+    },
+  }
 
   const defaultColDef = {
     resizable: true,
@@ -23,10 +113,26 @@ export default function ApplicationsList() {
       sortable: true,
       filter: false,
       pinned: "left",
-      autoSizeColumn: true,
       width: 200,
       minWidth: 150,
       sort: "asc",
+      valueFormatter: ({ value }) => {
+        const date = moment(value).format("MM/DD/YYYY")
+        const time = moment(value).format("HH:mm:ssA")
+
+        return `${date} ${t("t.at")} ${time}`
+      },
+    },
+    {
+      headerName: "Application Number",
+      field: "id",
+      sortable: false,
+      filter: false,
+      width: 150,
+      minWidth: 120,
+      pinned: "left",
+      type: "rightAligned",
+      cellRenderer: "formatLinkCell",
     },
     {
       headerName: "First Name",
@@ -34,7 +140,6 @@ export default function ApplicationsList() {
       sortable: true,
       filter: false,
       pinned: "left",
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -44,18 +149,8 @@ export default function ApplicationsList() {
       sortable: true,
       filter: "agTextColumnFilter",
       pinned: "left",
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
-    },
-    {
-      headerName: "Application Number",
-      field: "id",
-      sortable: false,
-      filter: false,
-      width: 150,
-      minWidth: 120,
-      type: "rightAligned",
     },
     {
       headerName: "Household Size",
@@ -82,6 +177,7 @@ export default function ApplicationsList() {
       filter: false,
       width: 120,
       minWidth: 100,
+      valueFormatter: (data) => (data.value ? t("t.yes") : t("t.no")),
     },
     {
       headerName: "Preference Claimed",
@@ -216,7 +312,6 @@ export default function ApplicationsList() {
       field: "application.alternateContact.firstName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -225,7 +320,6 @@ export default function ApplicationsList() {
       field: "application.alternateContact.lastName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -250,7 +344,6 @@ export default function ApplicationsList() {
       field: "application.householdMember.firstName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -259,7 +352,6 @@ export default function ApplicationsList() {
       field: "application.householdMember.lastName",
       sortable: false,
       filter: false,
-      autoSizeColumn: true,
       width: 125,
       minWidth: 100,
     },
@@ -351,116 +443,106 @@ export default function ApplicationsList() {
     },
   ]
 
-  const { applications, appsLoading, appsError } = useApplicationsData()
-  if (appsError) return "An error has occurred."
-  if (appsLoading) return "Loading..."
-
-  // DEMO custom pagination
-  // const onGridReady = params => {
-  //   this.gridApi = params.api;
-  //   this.gridColumnApi = params.columnApi;
-  // };
-
-  // const onPaginationChanged = () => {
-  //   console.log('onPaginationPageLoaded');
-  //   if (this.gridApi) {
-  //     setText('#lbLastPageFound', this.gridApi.paginationIsLastPageFound());
-  //     setText('#lbPageSize', this.gridApi.paginationGetPageSize());
-  //     setText('#lbCurrentPage', this.gridApi.paginationGetCurrentPage() + 1);
-  //     setText('#lbTotalPages', this.gridApi.paginationGetTotalPages());
-  //     setLastButtonDisabled(!this.gridApi.paginationIsLastPageFound());
-  //   }
-  // };
-
-  // const onBtNext = () => {
-  //   this.gridApi.paginationGoToNextPage();
-  // };
-
-  // const onBtPrevious = () => {
-  //   this.gridApi.paginationGoToPreviousPage();
-  // };
-
-  // const onBtPageFive = () => {
-  //   this.gridApi.paginationGoToPage(4);
-  // };
-
-  // const onBtPageFifty = () => {
-  //   this.gridApi.paginationGoToPage(49);
-  // };
-
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>Applications Received</PageHeader>
+      <PageHeader>{t("applications.applicationsReceived")}</PageHeader>
+
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
-            <AgGridReact
-              defaultColDef={defaultColDef}
-              columnDefs={columnDefs}
-              rowData={applications}
-              domLayout={"autoHeight"}
-              headerHeight={83}
-              rowHeight={58}
-              suppressPaginationPanel={true}
-              paginationPageSize={8}
-              suppressScrollOnNewData={true}
-            ></AgGridReact>
-
-            <div className="data-pager">
-              <button
-                className="button data-pager__previous data-pager__control"
-                onClick={() => this.onBtPrevious()}
-              >
-                Previous
-              </button>
-
-              <div className="data-pager__control-group">
-                <span className="data-pager__control">
-                  <span className="field-label" id="lbTotalPages">
-                    12
-                  </span>
-                  <span className="field-label">Total Applications</span>
-                </span>
-
-                <span className="field data-pager__control">
-                  <label className="field-label font-sans" htmlFor="page-size">
-                    Show
-                  </label>
-                  <select onChange={() => this.onPageSizeChanged()} name="page-size" id="page-size">
-                    <option value="10" selected>
-                      8
-                    </option>
-                    <option value="100">100</option>
-                    <option value="500">500</option>
-                    <option value="1000">1000</option>
-                  </select>
-                </span>
-
-                <span className="field data-pager__control">
-                  <label className="field-label font-sans" htmlFor="page-jump">
-                    Jump to
-                  </label>
-                  <select onChange={() => this.onPageSizeChanged()} name="page-jump" id="page-jump">
-                    <option value="2" selected>
-                      2
-                    </option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                </span>
+            <div className="flex justify-between">
+              <div className="w-56">
+                <Field name="filter-input" register={register} placeholder="Filter" />
               </div>
 
-              <button
-                className="button data-pager__next data-pager__control"
-                onClick={() => this.onBtNext()}
-              >
-                Next
-              </button>
+              <div className="flex-row">
+                <Button className="mx-1" onClick={() => false}>
+                  {t("applications.addApplication")}
+                </Button>
+
+                <Button className="mx-1" onClick={() => onExport()}>
+                  {t("t.export")}
+                </Button>
+              </div>
+            </div>
+
+            <div className="applications-table mt-5">
+              <AgGridReact
+                gridOptions={gridOptions}
+                defaultColDef={defaultColDef}
+                columnDefs={columnDefs}
+                rowData={applications}
+                domLayout={"autoHeight"}
+                headerHeight={83}
+                rowHeight={58}
+                suppressPaginationPanel={true}
+                paginationPageSize={8}
+                suppressScrollOnNewData={true}
+              ></AgGridReact>
+
+              <div className="data-pager">
+                <Button
+                  className="data-pager__previous data-pager__control"
+                  onClick={onBtPrevious}
+                  disabled={pageIndex === 1}
+                >
+                  {t("t.previous")}
+                </Button>
+
+                <div className="data-pager__control-group">
+                  <span className="data-pager__control">
+                    <span className="field-label" id="lbTotalPages">
+                      {appsMeta?.totalItems}
+                    </span>
+                    <span className="field-label">{t("applications.totalApplications")}</span>
+                  </span>
+
+                  <span className="field data-pager__control">
+                    <label className="field-label font-sans" htmlFor="page-size">
+                      {t("t.show")}
+                    </label>
+                    <select name="page-size" id="page-size" ref={register} defaultValue={8}>
+                      {pageSizeOptions.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </span>
+
+                  <span className="field data-pager__control">
+                    <label className="field-label font-sans" htmlFor="page-jump">
+                      {t("t.jumpTo")}
+                    </label>
+                    <select
+                      name="page-jump"
+                      id="page-jump"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setPageIndex(parseInt(e.target.value))
+                      }
+                      value={pageIndex}
+                    >
+                      {pageJumpOptions.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </span>
+                </div>
+
+                <Button
+                  className="data-pager__next data-pager__control"
+                  onClick={onBtNext}
+                  disabled={appsMeta?.totalPages === pageIndex}
+                >
+                  {t("t.next")}
+                </Button>
+              </div>
             </div>
           </div>
         </article>
@@ -468,3 +550,5 @@ export default function ApplicationsList() {
     </Layout>
   )
 }
+
+export default ApplicationsList

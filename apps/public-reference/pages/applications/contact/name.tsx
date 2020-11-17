@@ -90,8 +90,8 @@ export default () => {
 
               <Field
                 name="applicant.middleName"
-                label={t("application.name.middleName")}
-                placeholder={t("application.name.middleName")}
+                label={t("application.name.middleNameOptional")}
+                placeholder={t("application.name.middleNameOptional")}
                 readerOnly={true}
                 defaultValue={application.applicant.middleName}
                 register={register}
@@ -117,6 +117,7 @@ export default () => {
               register={register}
               error={errors.applicant}
               name="applicant"
+              id="applicant.dateOfBirth"
               watch={watch}
               atAge={true}
               label={t("application.name.yourDateOfBirth")}

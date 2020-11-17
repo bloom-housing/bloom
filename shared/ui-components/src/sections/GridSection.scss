@@ -1,6 +1,7 @@
 .grid-section {
   .grid-item {
     @apply mb-4;
+    overflow-wrap: break-word; // temp fix
 
     @screen md {
       @apply mb-0;
@@ -9,7 +10,7 @@
 }
 
 .grid-section + .grid-section {
-  @apply mt-12;
+  @apply mt-6;
 }
 
 .grid-section__header {
@@ -35,9 +36,10 @@
   @apply uppercase;
   @apply font-alt-sans;
   @apply font-bold;
-  @apply text-tiny;
-  @apply tracking-wider;
+  @apply text-sm;
+  @apply tracking-widest;
   @apply w-full;
+  @apply mt-4;
 }
 
 .grid-section__inner {

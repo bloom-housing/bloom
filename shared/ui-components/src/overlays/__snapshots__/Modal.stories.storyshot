@@ -8,527 +8,26 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
     }
   }
 >
-  <Component
-    actions={
-      Array [
-        <Button
-          onClick={[Function]}
-          type="is-primary"
-        >
-          Submit
-        </Button>,
-        <Button
-          border="is-borderless"
-          onClick={[Function]}
-          type="is-secondary"
-        >
-          Cancel
-        </Button>,
-      ]
-    }
-    ariaDescription="Modal description"
-    onClose={[Function]}
-    open={true}
-    title="Modal Title"
+  <Button
+    onClick={[Function]}
   >
-    <Portal
-      containerInfo={
-        <div>
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="0"
-          />
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="1"
-          />
-          <div
-            data-focus-lock-disabled="false"
-          >
-            <div
-              aria-describedby="Modal description"
-              aria-labelledby="Modal Title"
-              class="modal__wrapper"
-              role="dialog"
-            >
-              <div
-                class="modal"
-              >
-                <header
-                  class="modal__inner"
-                >
-                  <h1
-                    class="modal__title"
-                  >
-                    Modal Title
-                  </h1>
-                </header>
-                <section
-                  class="modal__inner"
-                >
-                  <p
-                    class="c-steel"
-                  >
-                    Modal Content
-                  </p>
-                </section>
-                <footer
-                  class="modal__footer bg-primary-lighter"
-                >
-                  <section
-                    class="grid-section"
-                  >
-                    <div
-                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                    >
-                      <article
-                        class="grid-item"
-                      >
-                        <button
-                          class="button is-primary"
-                        >
-                          Submit
-                        </button>
-                      </article>
-                      <article
-                        class="grid-item"
-                      >
-                        <button
-                          class="button is-secondary is-borderless"
-                        >
-                          Cancel
-                        </button>
-                      </article>
-                    </div>
-                  </section>
-                </footer>
-                <button
-                  aria-label="Close"
-                  class="modal__close"
-                  tabindex="0"
-                >
-                  <span
-                    class="ui-icon ui-medium"
-                  >
-                    <svg>
-                      <use
-                        xlink:href="#i-close"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="0"
-          />
-        </div>
-      }
+    <button
+      className="button"
+      onClick={[Function]}
     >
-      <ForwardRef>
-        <ForwardRef
-          as="div"
-          autoFocus={true}
-          crossFrame={true}
-          disabled={false}
-          lockProps={Object {}}
-          noFocusGuards={false}
-          persistentFocus={false}
-          returnFocus={false}
-          sideCar={[Function]}
-        >
-          <div
-            data-focus-guard={true}
-            key="guard-first"
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={0}
-          />
-          <div
-            data-focus-guard={true}
-            key="guard-nearest"
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={1}
-          />
-          <SideEffect(FocusWatcher)
-            autoFocus={true}
-            crossFrame={true}
-            disabled={false}
-            id={Object {}}
-            observed={
-              <div
-                data-focus-lock-disabled="false"
-              >
-                <div
-                  aria-describedby="Modal description"
-                  aria-labelledby="Modal Title"
-                  class="modal__wrapper"
-                  role="dialog"
-                >
-                  <div
-                    class="modal"
-                  >
-                    <header
-                      class="modal__inner"
-                    >
-                      <h1
-                        class="modal__title"
-                      >
-                        Modal Title
-                      </h1>
-                    </header>
-                    <section
-                      class="modal__inner"
-                    >
-                      <p
-                        class="c-steel"
-                      >
-                        Modal Content
-                      </p>
-                    </section>
-                    <footer
-                      class="modal__footer bg-primary-lighter"
-                    >
-                      <section
-                        class="grid-section"
-                      >
-                        <div
-                          class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                        >
-                          <article
-                            class="grid-item"
-                          >
-                            <button
-                              class="button is-primary"
-                            >
-                              Submit
-                            </button>
-                          </article>
-                          <article
-                            class="grid-item"
-                          >
-                            <button
-                              class="button is-secondary is-borderless"
-                            >
-                              Cancel
-                            </button>
-                          </article>
-                        </div>
-                      </section>
-                    </footer>
-                    <button
-                      aria-label="Close"
-                      class="modal__close"
-                      tabindex="0"
-                    >
-                      <span
-                        class="ui-icon ui-medium"
-                      >
-                        <svg>
-                          <use
-                            xlink:href="#i-close"
-                          />
-                        </svg>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            }
-            onActivation={[Function]}
-            onDeactivation={[Function]}
-            persistentFocus={false}
-            returnFocus={[Function]}
-            shards={Array []}
-            sideCar={
-              Object {
-                "assignMedium": [Function],
-                "assignSyncMedium": [Function],
-                "options": Object {
-                  "async": true,
-                  "ssr": false,
-                },
-                "read": [Function],
-                "useMedium": [Function],
-              }
-            }
-          >
-            <FocusWatcher
-              autoFocus={true}
-              crossFrame={true}
-              disabled={false}
-              id={Object {}}
-              observed={
-                <div
-                  data-focus-lock-disabled="false"
-                >
-                  <div
-                    aria-describedby="Modal description"
-                    aria-labelledby="Modal Title"
-                    class="modal__wrapper"
-                    role="dialog"
-                  >
-                    <div
-                      class="modal"
-                    >
-                      <header
-                        class="modal__inner"
-                      >
-                        <h1
-                          class="modal__title"
-                        >
-                          Modal Title
-                        </h1>
-                      </header>
-                      <section
-                        class="modal__inner"
-                      >
-                        <p
-                          class="c-steel"
-                        >
-                          Modal Content
-                        </p>
-                      </section>
-                      <footer
-                        class="modal__footer bg-primary-lighter"
-                      >
-                        <section
-                          class="grid-section"
-                        >
-                          <div
-                            class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                          >
-                            <article
-                              class="grid-item"
-                            >
-                              <button
-                                class="button is-primary"
-                              >
-                                Submit
-                              </button>
-                            </article>
-                            <article
-                              class="grid-item"
-                            >
-                              <button
-                                class="button is-secondary is-borderless"
-                              >
-                                Cancel
-                              </button>
-                            </article>
-                          </div>
-                        </section>
-                      </footer>
-                      <button
-                        aria-label="Close"
-                        class="modal__close"
-                        tabindex="0"
-                      >
-                        <span
-                          class="ui-icon ui-medium"
-                        >
-                          <svg>
-                            <use
-                              xlink:href="#i-close"
-                            />
-                          </svg>
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              }
-              onActivation={[Function]}
-              onDeactivation={[Function]}
-              persistentFocus={false}
-              returnFocus={[Function]}
-              shards={Array []}
-              sideCar={
-                Object {
-                  "assignMedium": [Function],
-                  "assignSyncMedium": [Function],
-                  "options": Object {
-                    "async": true,
-                    "ssr": false,
-                  },
-                  "read": [Function],
-                  "useMedium": [Function],
-                }
-              }
-            />
-          </SideEffect(FocusWatcher)>
-          <div
-            data-focus-lock-disabled={false}
-            onBlur={[Function]}
-            onFocus={[Function]}
-          >
-            <div
-              aria-describedby="Modal description"
-              aria-labelledby="Modal Title"
-              className="modal__wrapper"
-              role="dialog"
-            >
-              <div
-                className="modal"
-              >
-                <header
-                  className="modal__inner"
-                >
-                  <h1
-                    className="modal__title"
-                  >
-                    Modal Title
-                  </h1>
-                </header>
-                <section
-                  className="modal__inner"
-                >
-                  <p
-                    className="c-steel"
-                  >
-                    Modal Content
-                  </p>
-                </section>
-                <footer
-                  className="modal__footer bg-primary-lighter"
-                >
-                  <GridSection
-                    columns={4}
-                    reverse={true}
-                    tightSpacing={true}
-                  >
-                    <section
-                      className="grid-section"
-                    >
-                      <div
-                        className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                      >
-                        <GridCell
-                          key="0"
-                        >
-                          <article
-                            className="grid-item"
-                          >
-                            <Button
-                              onClick={[Function]}
-                              type="is-primary"
-                            >
-                              <button
-                                className="button is-primary"
-                                onClick={[Function]}
-                              >
-                                Submit
-                              </button>
-                            </Button>
-                          </article>
-                        </GridCell>
-                        <GridCell
-                          key="1"
-                        >
-                          <article
-                            className="grid-item"
-                          >
-                            <Button
-                              border="is-borderless"
-                              onClick={[Function]}
-                              type="is-secondary"
-                            >
-                              <button
-                                className="button is-secondary is-borderless"
-                                onClick={[Function]}
-                              >
-                                Cancel
-                              </button>
-                            </Button>
-                          </article>
-                        </GridCell>
-                      </div>
-                    </section>
-                  </GridSection>
-                </footer>
-                <button
-                  aria-label="Close"
-                  className="modal__close"
-                  onClick={[Function]}
-                  tabIndex={0}
-                >
-                  <Icon
-                    size="medium"
-                    symbol="close"
-                  >
-                    <span
-                      className="ui-icon ui-medium"
-                    >
-                      <svg>
-                        <use
-                          xlinkHref="#i-close"
-                        />
-                      </svg>
-                    </span>
-                  </Icon>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            data-focus-guard={true}
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={0}
-          />
-        </ForwardRef>
-      </ForwardRef>
-    </Portal>
-  </Component>
-  <InlineSVG
-    cacheRequests={true}
-    src="/images/icons.svg"
-    uniquifyIDs={false}
+      Open Modal
+    </button>
+  </Button>
+  <div
+    style={
+      Object {
+        "height": "1000px",
+      }
+    }
   />
-</div>
-`;
-
-exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
-<div
-  style={
-    Object {
-      "padding": "1rem",
-    }
-  }
->
+  <div>
+    …
+  </div>
   <Component
     actions={
       Array [
@@ -548,492 +47,44 @@ exports[`Storyshots Overlays/Modal Full Screen Modal 1`] = `
       ]
     }
     ariaDescription="Modal description"
-    fullScreen={true}
     onClose={[Function]}
-    open={true}
+    open={false}
     title="Modal Title"
   >
-    <Portal
-      containerInfo={
-        <div>
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="0"
-          />
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="1"
-          />
-          <div
-            data-focus-lock-disabled="false"
-          >
-            <div
-              aria-describedby="Modal description"
-              aria-labelledby="Modal Title"
-              class="modal__wrapper modal__wrapper--backdrop"
-              role="dialog"
-            >
-              <div
-                class="modal"
-              >
-                <header
-                  class="modal__inner"
-                >
-                  <h1
-                    class="modal__title"
-                  >
-                    Modal Title
-                  </h1>
-                </header>
-                <section
-                  class="modal__inner"
-                >
-                  <p
-                    class="c-steel"
-                  >
-                    Modal Content
-                  </p>
-                </section>
-                <footer
-                  class="modal__footer bg-primary-lighter"
-                >
-                  <section
-                    class="grid-section"
-                  >
-                    <div
-                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                    >
-                      <article
-                        class="grid-item"
-                      >
-                        <button
-                          class="button is-primary"
-                        >
-                          Submit
-                        </button>
-                      </article>
-                      <article
-                        class="grid-item"
-                      >
-                        <button
-                          class="button is-secondary is-borderless"
-                        >
-                          Cancel
-                        </button>
-                      </article>
-                    </div>
-                  </section>
-                </footer>
-                <button
-                  aria-label="Close"
-                  class="modal__close"
-                  tabindex="0"
-                >
-                  <span
-                    class="ui-icon ui-medium"
-                  >
-                    <svg>
-                      <use
-                        xlink:href="#i-close"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="0"
-          />
-        </div>
-      }
+    <Component
+      ariaDescription="Modal description"
+      ariaLabel="Modal Title"
+      onClose={[Function]}
+      open={false}
     >
-      <ForwardRef>
-        <ForwardRef
-          as="div"
-          autoFocus={true}
-          crossFrame={true}
-          disabled={false}
-          lockProps={Object {}}
-          noFocusGuards={false}
-          persistentFocus={false}
-          returnFocus={false}
-          sideCar={[Function]}
+      <Portal
+        containerInfo={<div />}
+      >
+        <CSSTransition
+          classNames="overlay-effect"
+          in={false}
+          mountOnEnter={true}
+          timeout={250}
+          unmountOnExit={true}
         >
-          <div
-            data-focus-guard={true}
-            key="guard-first"
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={0}
+          <Transition
+            appear={false}
+            enter={true}
+            exit={true}
+            in={false}
+            mountOnEnter={true}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={250}
+            unmountOnExit={true}
           />
-          <div
-            data-focus-guard={true}
-            key="guard-nearest"
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={1}
-          />
-          <SideEffect(FocusWatcher)
-            autoFocus={true}
-            crossFrame={true}
-            disabled={false}
-            id={Object {}}
-            observed={
-              <div
-                data-focus-lock-disabled="false"
-              >
-                <div
-                  aria-describedby="Modal description"
-                  aria-labelledby="Modal Title"
-                  class="modal__wrapper modal__wrapper--backdrop"
-                  role="dialog"
-                >
-                  <div
-                    class="modal"
-                  >
-                    <header
-                      class="modal__inner"
-                    >
-                      <h1
-                        class="modal__title"
-                      >
-                        Modal Title
-                      </h1>
-                    </header>
-                    <section
-                      class="modal__inner"
-                    >
-                      <p
-                        class="c-steel"
-                      >
-                        Modal Content
-                      </p>
-                    </section>
-                    <footer
-                      class="modal__footer bg-primary-lighter"
-                    >
-                      <section
-                        class="grid-section"
-                      >
-                        <div
-                          class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                        >
-                          <article
-                            class="grid-item"
-                          >
-                            <button
-                              class="button is-primary"
-                            >
-                              Submit
-                            </button>
-                          </article>
-                          <article
-                            class="grid-item"
-                          >
-                            <button
-                              class="button is-secondary is-borderless"
-                            >
-                              Cancel
-                            </button>
-                          </article>
-                        </div>
-                      </section>
-                    </footer>
-                    <button
-                      aria-label="Close"
-                      class="modal__close"
-                      tabindex="0"
-                    >
-                      <span
-                        class="ui-icon ui-medium"
-                      >
-                        <svg>
-                          <use
-                            xlink:href="#i-close"
-                          />
-                        </svg>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            }
-            onActivation={[Function]}
-            onDeactivation={[Function]}
-            persistentFocus={false}
-            returnFocus={[Function]}
-            shards={Array []}
-            sideCar={
-              Object {
-                "assignMedium": [Function],
-                "assignSyncMedium": [Function],
-                "options": Object {
-                  "async": true,
-                  "ssr": false,
-                },
-                "read": [Function],
-                "useMedium": [Function],
-              }
-            }
-          >
-            <FocusWatcher
-              autoFocus={true}
-              crossFrame={true}
-              disabled={false}
-              id={Object {}}
-              observed={
-                <div
-                  data-focus-lock-disabled="false"
-                >
-                  <div
-                    aria-describedby="Modal description"
-                    aria-labelledby="Modal Title"
-                    class="modal__wrapper modal__wrapper--backdrop"
-                    role="dialog"
-                  >
-                    <div
-                      class="modal"
-                    >
-                      <header
-                        class="modal__inner"
-                      >
-                        <h1
-                          class="modal__title"
-                        >
-                          Modal Title
-                        </h1>
-                      </header>
-                      <section
-                        class="modal__inner"
-                      >
-                        <p
-                          class="c-steel"
-                        >
-                          Modal Content
-                        </p>
-                      </section>
-                      <footer
-                        class="modal__footer bg-primary-lighter"
-                      >
-                        <section
-                          class="grid-section"
-                        >
-                          <div
-                            class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                          >
-                            <article
-                              class="grid-item"
-                            >
-                              <button
-                                class="button is-primary"
-                              >
-                                Submit
-                              </button>
-                            </article>
-                            <article
-                              class="grid-item"
-                            >
-                              <button
-                                class="button is-secondary is-borderless"
-                              >
-                                Cancel
-                              </button>
-                            </article>
-                          </div>
-                        </section>
-                      </footer>
-                      <button
-                        aria-label="Close"
-                        class="modal__close"
-                        tabindex="0"
-                      >
-                        <span
-                          class="ui-icon ui-medium"
-                        >
-                          <svg>
-                            <use
-                              xlink:href="#i-close"
-                            />
-                          </svg>
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              }
-              onActivation={[Function]}
-              onDeactivation={[Function]}
-              persistentFocus={false}
-              returnFocus={[Function]}
-              shards={Array []}
-              sideCar={
-                Object {
-                  "assignMedium": [Function],
-                  "assignSyncMedium": [Function],
-                  "options": Object {
-                    "async": true,
-                    "ssr": false,
-                  },
-                  "read": [Function],
-                  "useMedium": [Function],
-                }
-              }
-            />
-          </SideEffect(FocusWatcher)>
-          <div
-            data-focus-lock-disabled={false}
-            onBlur={[Function]}
-            onFocus={[Function]}
-          >
-            <div
-              aria-describedby="Modal description"
-              aria-labelledby="Modal Title"
-              className="modal__wrapper modal__wrapper--backdrop"
-              role="dialog"
-            >
-              <div
-                className="modal"
-              >
-                <header
-                  className="modal__inner"
-                >
-                  <h1
-                    className="modal__title"
-                  >
-                    Modal Title
-                  </h1>
-                </header>
-                <section
-                  className="modal__inner"
-                >
-                  <p
-                    className="c-steel"
-                  >
-                    Modal Content
-                  </p>
-                </section>
-                <footer
-                  className="modal__footer bg-primary-lighter"
-                >
-                  <GridSection
-                    columns={4}
-                    reverse={true}
-                    tightSpacing={true}
-                  >
-                    <section
-                      className="grid-section"
-                    >
-                      <div
-                        className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                      >
-                        <GridCell
-                          key="0"
-                        >
-                          <article
-                            className="grid-item"
-                          >
-                            <Button
-                              onClick={[Function]}
-                              type="is-primary"
-                            >
-                              <button
-                                className="button is-primary"
-                                onClick={[Function]}
-                              >
-                                Submit
-                              </button>
-                            </Button>
-                          </article>
-                        </GridCell>
-                        <GridCell
-                          key="1"
-                        >
-                          <article
-                            className="grid-item"
-                          >
-                            <Button
-                              border="is-borderless"
-                              onClick={[Function]}
-                              type="is-secondary"
-                            >
-                              <button
-                                className="button is-secondary is-borderless"
-                                onClick={[Function]}
-                              >
-                                Cancel
-                              </button>
-                            </Button>
-                          </article>
-                        </GridCell>
-                      </div>
-                    </section>
-                  </GridSection>
-                </footer>
-                <button
-                  aria-label="Close"
-                  className="modal__close"
-                  onClick={[Function]}
-                  tabIndex={0}
-                >
-                  <Icon
-                    size="medium"
-                    symbol="close"
-                  >
-                    <span
-                      className="ui-icon ui-medium"
-                    >
-                      <svg>
-                        <use
-                          xlinkHref="#i-close"
-                        />
-                      </svg>
-                    </span>
-                  </Icon>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            data-focus-guard={true}
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={0}
-          />
-        </ForwardRef>
-      </ForwardRef>
-    </Portal>
+        </CSSTransition>
+      </Portal>
+    </Component>
   </Component>
   <InlineSVG
     cacheRequests={true}
@@ -1073,163 +124,36 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
     open={true}
     title="Modal Title"
   >
-    <Portal
-      containerInfo={
-        <div>
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="0"
-          />
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="1"
-          />
-          <div
-            data-focus-lock-disabled="false"
-          >
+    <Component
+      ariaDescription="Modal description"
+      ariaLabel="Modal Title"
+      onClose={[Function]}
+      open={true}
+    >
+      <Portal
+        containerInfo={
+          <div>
             <div
               aria-describedby="Modal description"
               aria-labelledby="Modal Title"
-              class="modal__wrapper"
+              class="fixed-overlay is-backdrop"
               role="dialog"
             >
               <div
-                class="modal"
-              >
-                <header
-                  class="modal__inner"
-                >
-                  <h1
-                    class="modal__title"
-                  >
-                    Modal Title
-                  </h1>
-                </header>
-                <section
-                  class="modal__inner"
-                >
-                  <p
-                    class="c-steel"
-                  >
-                    Modal Content
-                  </p>
-                </section>
-                <footer
-                  class="modal__footer bg-primary-lighter"
-                >
-                  <section
-                    class="grid-section"
-                  >
-                    <div
-                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                    >
-                      <article
-                        class="grid-item"
-                      >
-                        <button
-                          class="button is-success"
-                        >
-                          Submit
-                        </button>
-                      </article>
-                      <article
-                        class="grid-item"
-                      >
-                        <button
-                          class="button is-alert"
-                        >
-                          Cancel
-                        </button>
-                      </article>
-                    </div>
-                  </section>
-                </footer>
-                <button
-                  aria-label="Close"
-                  class="modal__close"
-                  tabindex="0"
-                >
-                  <span
-                    class="ui-icon ui-medium"
-                  >
-                    <svg>
-                      <use
-                        xlink:href="#i-close"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            data-focus-guard="true"
-            style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-            tabindex="0"
-          />
-        </div>
-      }
-    >
-      <ForwardRef>
-        <ForwardRef
-          as="div"
-          autoFocus={true}
-          crossFrame={true}
-          disabled={false}
-          lockProps={Object {}}
-          noFocusGuards={false}
-          persistentFocus={false}
-          returnFocus={false}
-          sideCar={[Function]}
-        >
-          <div
-            data-focus-guard={true}
-            key="guard-first"
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={0}
-          />
-          <div
-            data-focus-guard={true}
-            key="guard-nearest"
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={1}
-          />
-          <SideEffect(FocusWatcher)
-            autoFocus={true}
-            crossFrame={true}
-            disabled={false}
-            id={Object {}}
-            observed={
-              <div
-                data-focus-lock-disabled="false"
+                class="fixed-overlay__inner"
               >
                 <div
-                  aria-describedby="Modal description"
-                  aria-labelledby="Modal Title"
-                  class="modal__wrapper"
-                  role="dialog"
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="1"
+                />
+                <div
+                  data-focus-lock-disabled="false"
                 >
                   <div
                     class="modal"
@@ -1299,260 +223,954 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                     </button>
                   </div>
                 </div>
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
               </div>
-            }
-            onActivation={[Function]}
-            onDeactivation={[Function]}
-            persistentFocus={false}
-            returnFocus={[Function]}
-            shards={Array []}
-            sideCar={
-              Object {
-                "assignMedium": [Function],
-                "assignSyncMedium": [Function],
-                "options": Object {
-                  "async": true,
-                  "ssr": false,
-                },
-                "read": [Function],
-                "useMedium": [Function],
-              }
-            }
+            </div>
+          </div>
+        }
+      >
+        <CSSTransition
+          classNames="overlay-effect"
+          in={true}
+          mountOnEnter={true}
+          timeout={250}
+          unmountOnExit={true}
+        >
+          <Transition
+            appear={false}
+            enter={true}
+            exit={true}
+            in={true}
+            mountOnEnter={true}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={250}
+            unmountOnExit={true}
           >
-            <FocusWatcher
-              autoFocus={true}
-              crossFrame={true}
-              disabled={false}
-              id={Object {}}
-              observed={
+            <OverlayInner
+              ariaDescription="Modal description"
+              ariaLabel="Modal Title"
+              onClose={[Function]}
+              open={true}
+            >
+              <div
+                aria-describedby="Modal description"
+                aria-labelledby="Modal Title"
+                className="fixed-overlay is-backdrop"
+                role="dialog"
+              >
+                <div
+                  className="fixed-overlay__inner"
+                >
+                  <ForwardRef>
+                    <ForwardRef
+                      as="div"
+                      autoFocus={true}
+                      crossFrame={true}
+                      disabled={false}
+                      lockProps={Object {}}
+                      noFocusGuards={false}
+                      persistentFocus={false}
+                      returnFocus={false}
+                      sideCar={[Function]}
+                    >
+                      <div
+                        data-focus-guard={true}
+                        key="guard-first"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                      <div
+                        data-focus-guard={true}
+                        key="guard-nearest"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={1}
+                      />
+                      <SideEffect(FocusWatcher)
+                        autoFocus={true}
+                        crossFrame={true}
+                        disabled={false}
+                        id={Object {}}
+                        observed={
+                          <div
+                            data-focus-lock-disabled="false"
+                          >
+                            <div
+                              class="modal"
+                            >
+                              <header
+                                class="modal__inner"
+                              >
+                                <h1
+                                  class="modal__title"
+                                >
+                                  Modal Title
+                                </h1>
+                              </header>
+                              <section
+                                class="modal__inner"
+                              >
+                                <p
+                                  class="c-steel"
+                                >
+                                  Modal Content
+                                </p>
+                              </section>
+                              <footer
+                                class="modal__footer bg-primary-lighter"
+                              >
+                                <section
+                                  class="grid-section"
+                                >
+                                  <div
+                                    class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
+                                  >
+                                    <article
+                                      class="grid-item"
+                                    >
+                                      <button
+                                        class="button is-success"
+                                      >
+                                        Submit
+                                      </button>
+                                    </article>
+                                    <article
+                                      class="grid-item"
+                                    >
+                                      <button
+                                        class="button is-alert"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </article>
+                                  </div>
+                                </section>
+                              </footer>
+                              <button
+                                aria-label="Close"
+                                class="modal__close"
+                                tabindex="0"
+                              >
+                                <span
+                                  class="ui-icon ui-medium"
+                                >
+                                  <svg>
+                                    <use
+                                      xlink:href="#i-close"
+                                    />
+                                  </svg>
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        }
+                        onActivation={[Function]}
+                        onDeactivation={[Function]}
+                        persistentFocus={false}
+                        returnFocus={[Function]}
+                        shards={Array []}
+                        sideCar={
+                          Object {
+                            "assignMedium": [Function],
+                            "assignSyncMedium": [Function],
+                            "options": Object {
+                              "async": true,
+                              "ssr": false,
+                            },
+                            "read": [Function],
+                            "useMedium": [Function],
+                          }
+                        }
+                      >
+                        <FocusWatcher
+                          autoFocus={true}
+                          crossFrame={true}
+                          disabled={false}
+                          id={Object {}}
+                          observed={
+                            <div
+                              data-focus-lock-disabled="false"
+                            >
+                              <div
+                                class="modal"
+                              >
+                                <header
+                                  class="modal__inner"
+                                >
+                                  <h1
+                                    class="modal__title"
+                                  >
+                                    Modal Title
+                                  </h1>
+                                </header>
+                                <section
+                                  class="modal__inner"
+                                >
+                                  <p
+                                    class="c-steel"
+                                  >
+                                    Modal Content
+                                  </p>
+                                </section>
+                                <footer
+                                  class="modal__footer bg-primary-lighter"
+                                >
+                                  <section
+                                    class="grid-section"
+                                  >
+                                    <div
+                                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
+                                    >
+                                      <article
+                                        class="grid-item"
+                                      >
+                                        <button
+                                          class="button is-success"
+                                        >
+                                          Submit
+                                        </button>
+                                      </article>
+                                      <article
+                                        class="grid-item"
+                                      >
+                                        <button
+                                          class="button is-alert"
+                                        >
+                                          Cancel
+                                        </button>
+                                      </article>
+                                    </div>
+                                  </section>
+                                </footer>
+                                <button
+                                  aria-label="Close"
+                                  class="modal__close"
+                                  tabindex="0"
+                                >
+                                  <span
+                                    class="ui-icon ui-medium"
+                                  >
+                                    <svg>
+                                      <use
+                                        xlink:href="#i-close"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                          }
+                          onActivation={[Function]}
+                          onDeactivation={[Function]}
+                          persistentFocus={false}
+                          returnFocus={[Function]}
+                          shards={Array []}
+                          sideCar={
+                            Object {
+                              "assignMedium": [Function],
+                              "assignSyncMedium": [Function],
+                              "options": Object {
+                                "async": true,
+                                "ssr": false,
+                              },
+                              "read": [Function],
+                              "useMedium": [Function],
+                            }
+                          }
+                        />
+                      </SideEffect(FocusWatcher)>
+                      <div
+                        data-focus-lock-disabled={false}
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                      >
+                        <div
+                          className="modal"
+                        >
+                          <ModalHeader
+                            title="Modal Title"
+                          >
+                            <header
+                              className="modal__inner"
+                            >
+                              <h1
+                                className="modal__title"
+                              >
+                                Modal Title
+                              </h1>
+                            </header>
+                          </ModalHeader>
+                          <section
+                            className="modal__inner"
+                          >
+                            <p
+                              className="c-steel"
+                            >
+                              Modal Content
+                            </p>
+                          </section>
+                          <ModalFooter
+                            actions={
+                              Array [
+                                <Button
+                                  onClick={[Function]}
+                                  type="is-success"
+                                >
+                                  Submit
+                                </Button>,
+                                <Button
+                                  onClick={[Function]}
+                                  type="is-alert"
+                                >
+                                  Cancel
+                                </Button>,
+                              ]
+                            }
+                          >
+                            <footer
+                              className="modal__footer bg-primary-lighter"
+                            >
+                              <GridSection
+                                columns={4}
+                                reverse={true}
+                                tightSpacing={true}
+                              >
+                                <section
+                                  className="grid-section"
+                                >
+                                  <div
+                                    className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
+                                  >
+                                    <GridCell
+                                      key="0"
+                                    >
+                                      <article
+                                        className="grid-item"
+                                      >
+                                        <Button
+                                          onClick={[Function]}
+                                          type="is-success"
+                                        >
+                                          <button
+                                            className="button is-success"
+                                            onClick={[Function]}
+                                          >
+                                            Submit
+                                          </button>
+                                        </Button>
+                                      </article>
+                                    </GridCell>
+                                    <GridCell
+                                      key="1"
+                                    >
+                                      <article
+                                        className="grid-item"
+                                      >
+                                        <Button
+                                          onClick={[Function]}
+                                          type="is-alert"
+                                        >
+                                          <button
+                                            className="button is-alert"
+                                            onClick={[Function]}
+                                          >
+                                            Cancel
+                                          </button>
+                                        </Button>
+                                      </article>
+                                    </GridCell>
+                                  </div>
+                                </section>
+                              </GridSection>
+                            </footer>
+                          </ModalFooter>
+                          <button
+                            aria-label="Close"
+                            className="modal__close"
+                            onClick={[Function]}
+                            tabIndex={0}
+                          >
+                            <Icon
+                              size="medium"
+                              symbol="close"
+                            >
+                              <span
+                                className="ui-icon ui-medium"
+                              >
+                                <svg>
+                                  <use
+                                    xlinkHref="#i-close"
+                                  />
+                                </svg>
+                              </span>
+                            </Icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        data-focus-guard={true}
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                    </ForwardRef>
+                  </ForwardRef>
+                </div>
+              </div>
+            </OverlayInner>
+          </Transition>
+        </CSSTransition>
+      </Portal>
+    </Component>
+  </Component>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component
+    actions={
+      Array [
+        <Button
+          onClick={[Function]}
+          type="is-primary"
+        >
+          Submit
+        </Button>,
+        <Button
+          border="is-borderless"
+          onClick={[Function]}
+          type="is-secondary"
+        >
+          Cancel
+        </Button>,
+      ]
+    }
+    ariaDescription="Modal description"
+    backdrop={false}
+    hideCloseIcon={true}
+    open={true}
+    title="Modal Title"
+  >
+    <Component
+      ariaDescription="Modal description"
+      ariaLabel="Modal Title"
+      backdrop={false}
+      open={true}
+    >
+      <Portal
+        containerInfo={
+          <div>
+            <div
+              aria-describedby="Modal description"
+              aria-labelledby="Modal Title"
+              class="fixed-overlay"
+              role="dialog"
+            >
+              <div
+                class="fixed-overlay__inner"
+              >
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="1"
+                />
                 <div
                   data-focus-lock-disabled="false"
                 >
                   <div
-                    aria-describedby="Modal description"
-                    aria-labelledby="Modal Title"
-                    class="modal__wrapper"
-                    role="dialog"
+                    class="modal"
                   >
-                    <div
-                      class="modal"
+                    <header
+                      class="modal__inner"
                     >
-                      <header
-                        class="modal__inner"
+                      <h1
+                        class="modal__title"
                       >
-                        <h1
-                          class="modal__title"
-                        >
-                          Modal Title
-                        </h1>
-                      </header>
+                        Modal Title
+                      </h1>
+                    </header>
+                    <section
+                      class="modal__inner"
+                    >
+                      <p
+                        class="c-steel"
+                      >
+                        Modal Content
+                      </p>
+                    </section>
+                    <footer
+                      class="modal__footer bg-primary-lighter"
+                    >
                       <section
-                        class="modal__inner"
+                        class="grid-section"
                       >
-                        <p
-                          class="c-steel"
+                        <div
+                          class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
                         >
-                          Modal Content
-                        </p>
-                      </section>
-                      <footer
-                        class="modal__footer bg-primary-lighter"
-                      >
-                        <section
-                          class="grid-section"
-                        >
-                          <div
-                            class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
+                          <article
+                            class="grid-item"
                           >
-                            <article
-                              class="grid-item"
+                            <button
+                              class="button is-primary"
                             >
-                              <button
-                                class="button is-success"
-                              >
-                                Submit
-                              </button>
-                            </article>
-                            <article
-                              class="grid-item"
+                              Submit
+                            </button>
+                          </article>
+                          <article
+                            class="grid-item"
+                          >
+                            <button
+                              class="button is-secondary is-borderless"
                             >
-                              <button
-                                class="button is-alert"
-                              >
-                                Cancel
-                              </button>
-                            </article>
-                          </div>
-                        </section>
-                      </footer>
-                      <button
-                        aria-label="Close"
-                        class="modal__close"
-                        tabindex="0"
-                      >
-                        <span
-                          class="ui-icon ui-medium"
-                        >
-                          <svg>
-                            <use
-                              xlink:href="#i-close"
-                            />
-                          </svg>
-                        </span>
-                      </button>
-                    </div>
+                              Cancel
+                            </button>
+                          </article>
+                        </div>
+                      </section>
+                    </footer>
                   </div>
                 </div>
-              }
-              onActivation={[Function]}
-              onDeactivation={[Function]}
-              persistentFocus={false}
-              returnFocus={[Function]}
-              shards={Array []}
-              sideCar={
-                Object {
-                  "assignMedium": [Function],
-                  "assignSyncMedium": [Function],
-                  "options": Object {
-                    "async": true,
-                    "ssr": false,
-                  },
-                  "read": [Function],
-                  "useMedium": [Function],
-                }
-              }
-            />
-          </SideEffect(FocusWatcher)>
-          <div
-            data-focus-lock-disabled={false}
-            onBlur={[Function]}
-            onFocus={[Function]}
-          >
-            <div
-              aria-describedby="Modal description"
-              aria-labelledby="Modal Title"
-              className="modal__wrapper"
-              role="dialog"
-            >
-              <div
-                className="modal"
-              >
-                <header
-                  className="modal__inner"
-                >
-                  <h1
-                    className="modal__title"
-                  >
-                    Modal Title
-                  </h1>
-                </header>
-                <section
-                  className="modal__inner"
-                >
-                  <p
-                    className="c-steel"
-                  >
-                    Modal Content
-                  </p>
-                </section>
-                <footer
-                  className="modal__footer bg-primary-lighter"
-                >
-                  <GridSection
-                    columns={4}
-                    reverse={true}
-                    tightSpacing={true}
-                  >
-                    <section
-                      className="grid-section"
-                    >
-                      <div
-                        className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
-                      >
-                        <GridCell
-                          key="0"
-                        >
-                          <article
-                            className="grid-item"
-                          >
-                            <Button
-                              onClick={[Function]}
-                              type="is-success"
-                            >
-                              <button
-                                className="button is-success"
-                                onClick={[Function]}
-                              >
-                                Submit
-                              </button>
-                            </Button>
-                          </article>
-                        </GridCell>
-                        <GridCell
-                          key="1"
-                        >
-                          <article
-                            className="grid-item"
-                          >
-                            <Button
-                              onClick={[Function]}
-                              type="is-alert"
-                            >
-                              <button
-                                className="button is-alert"
-                                onClick={[Function]}
-                              >
-                                Cancel
-                              </button>
-                            </Button>
-                          </article>
-                        </GridCell>
-                      </div>
-                    </section>
-                  </GridSection>
-                </footer>
-                <button
-                  aria-label="Close"
-                  className="modal__close"
-                  onClick={[Function]}
-                  tabIndex={0}
-                >
-                  <Icon
-                    size="medium"
-                    symbol="close"
-                  >
-                    <span
-                      className="ui-icon ui-medium"
-                    >
-                      <svg>
-                        <use
-                          xlinkHref="#i-close"
-                        />
-                      </svg>
-                    </span>
-                  </Icon>
-                </button>
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
               </div>
             </div>
           </div>
-          <div
-            data-focus-guard={true}
-            style={
-              Object {
-                "height": "0px",
-                "left": "1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "fixed",
-                "top": "1px",
-                "width": "1px",
-              }
-            }
-            tabIndex={0}
-          />
-        </ForwardRef>
-      </ForwardRef>
-    </Portal>
+        }
+      >
+        <CSSTransition
+          classNames="overlay-effect"
+          in={true}
+          mountOnEnter={true}
+          timeout={250}
+          unmountOnExit={true}
+        >
+          <Transition
+            appear={false}
+            enter={true}
+            exit={true}
+            in={true}
+            mountOnEnter={true}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={250}
+            unmountOnExit={true}
+          >
+            <OverlayInner
+              ariaDescription="Modal description"
+              ariaLabel="Modal Title"
+              backdrop={false}
+              open={true}
+            >
+              <div
+                aria-describedby="Modal description"
+                aria-labelledby="Modal Title"
+                className="fixed-overlay"
+                role="dialog"
+              >
+                <div
+                  className="fixed-overlay__inner"
+                >
+                  <ForwardRef>
+                    <ForwardRef
+                      as="div"
+                      autoFocus={true}
+                      crossFrame={true}
+                      disabled={false}
+                      lockProps={Object {}}
+                      noFocusGuards={false}
+                      persistentFocus={false}
+                      returnFocus={false}
+                      sideCar={[Function]}
+                    >
+                      <div
+                        data-focus-guard={true}
+                        key="guard-first"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                      <div
+                        data-focus-guard={true}
+                        key="guard-nearest"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={1}
+                      />
+                      <SideEffect(FocusWatcher)
+                        autoFocus={true}
+                        crossFrame={true}
+                        disabled={false}
+                        id={Object {}}
+                        observed={
+                          <div
+                            data-focus-lock-disabled="false"
+                          >
+                            <div
+                              class="modal"
+                            >
+                              <header
+                                class="modal__inner"
+                              >
+                                <h1
+                                  class="modal__title"
+                                >
+                                  Modal Title
+                                </h1>
+                              </header>
+                              <section
+                                class="modal__inner"
+                              >
+                                <p
+                                  class="c-steel"
+                                >
+                                  Modal Content
+                                </p>
+                              </section>
+                              <footer
+                                class="modal__footer bg-primary-lighter"
+                              >
+                                <section
+                                  class="grid-section"
+                                >
+                                  <div
+                                    class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
+                                  >
+                                    <article
+                                      class="grid-item"
+                                    >
+                                      <button
+                                        class="button is-primary"
+                                      >
+                                        Submit
+                                      </button>
+                                    </article>
+                                    <article
+                                      class="grid-item"
+                                    >
+                                      <button
+                                        class="button is-secondary is-borderless"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </article>
+                                  </div>
+                                </section>
+                              </footer>
+                            </div>
+                          </div>
+                        }
+                        onActivation={[Function]}
+                        onDeactivation={[Function]}
+                        persistentFocus={false}
+                        returnFocus={[Function]}
+                        shards={Array []}
+                        sideCar={
+                          Object {
+                            "assignMedium": [Function],
+                            "assignSyncMedium": [Function],
+                            "options": Object {
+                              "async": true,
+                              "ssr": false,
+                            },
+                            "read": [Function],
+                            "useMedium": [Function],
+                          }
+                        }
+                      >
+                        <FocusWatcher
+                          autoFocus={true}
+                          crossFrame={true}
+                          disabled={false}
+                          id={Object {}}
+                          observed={
+                            <div
+                              data-focus-lock-disabled="false"
+                            >
+                              <div
+                                class="modal"
+                              >
+                                <header
+                                  class="modal__inner"
+                                >
+                                  <h1
+                                    class="modal__title"
+                                  >
+                                    Modal Title
+                                  </h1>
+                                </header>
+                                <section
+                                  class="modal__inner"
+                                >
+                                  <p
+                                    class="c-steel"
+                                  >
+                                    Modal Content
+                                  </p>
+                                </section>
+                                <footer
+                                  class="modal__footer bg-primary-lighter"
+                                >
+                                  <section
+                                    class="grid-section"
+                                  >
+                                    <div
+                                      class="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
+                                    >
+                                      <article
+                                        class="grid-item"
+                                      >
+                                        <button
+                                          class="button is-primary"
+                                        >
+                                          Submit
+                                        </button>
+                                      </article>
+                                      <article
+                                        class="grid-item"
+                                      >
+                                        <button
+                                          class="button is-secondary is-borderless"
+                                        >
+                                          Cancel
+                                        </button>
+                                      </article>
+                                    </div>
+                                  </section>
+                                </footer>
+                              </div>
+                            </div>
+                          }
+                          onActivation={[Function]}
+                          onDeactivation={[Function]}
+                          persistentFocus={false}
+                          returnFocus={[Function]}
+                          shards={Array []}
+                          sideCar={
+                            Object {
+                              "assignMedium": [Function],
+                              "assignSyncMedium": [Function],
+                              "options": Object {
+                                "async": true,
+                                "ssr": false,
+                              },
+                              "read": [Function],
+                              "useMedium": [Function],
+                            }
+                          }
+                        />
+                      </SideEffect(FocusWatcher)>
+                      <div
+                        data-focus-lock-disabled={false}
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                      >
+                        <div
+                          className="modal"
+                        >
+                          <ModalHeader
+                            title="Modal Title"
+                          >
+                            <header
+                              className="modal__inner"
+                            >
+                              <h1
+                                className="modal__title"
+                              >
+                                Modal Title
+                              </h1>
+                            </header>
+                          </ModalHeader>
+                          <section
+                            className="modal__inner"
+                          >
+                            <p
+                              className="c-steel"
+                            >
+                              Modal Content
+                            </p>
+                          </section>
+                          <ModalFooter
+                            actions={
+                              Array [
+                                <Button
+                                  onClick={[Function]}
+                                  type="is-primary"
+                                >
+                                  Submit
+                                </Button>,
+                                <Button
+                                  border="is-borderless"
+                                  onClick={[Function]}
+                                  type="is-secondary"
+                                >
+                                  Cancel
+                                </Button>,
+                              ]
+                            }
+                          >
+                            <footer
+                              className="modal__footer bg-primary-lighter"
+                            >
+                              <GridSection
+                                columns={4}
+                                reverse={true}
+                                tightSpacing={true}
+                              >
+                                <section
+                                  className="grid-section"
+                                >
+                                  <div
+                                    className="grid-section__inner md:grid md:grid-cols-4 md:gap-2 is-reversed"
+                                  >
+                                    <GridCell
+                                      key="0"
+                                    >
+                                      <article
+                                        className="grid-item"
+                                      >
+                                        <Button
+                                          onClick={[Function]}
+                                          type="is-primary"
+                                        >
+                                          <button
+                                            className="button is-primary"
+                                            onClick={[Function]}
+                                          >
+                                            Submit
+                                          </button>
+                                        </Button>
+                                      </article>
+                                    </GridCell>
+                                    <GridCell
+                                      key="1"
+                                    >
+                                      <article
+                                        className="grid-item"
+                                      >
+                                        <Button
+                                          border="is-borderless"
+                                          onClick={[Function]}
+                                          type="is-secondary"
+                                        >
+                                          <button
+                                            className="button is-secondary is-borderless"
+                                            onClick={[Function]}
+                                          >
+                                            Cancel
+                                          </button>
+                                        </Button>
+                                      </article>
+                                    </GridCell>
+                                  </div>
+                                </section>
+                              </GridSection>
+                            </footer>
+                          </ModalFooter>
+                        </div>
+                      </div>
+                      <div
+                        data-focus-guard={true}
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                    </ForwardRef>
+                  </ForwardRef>
+                </div>
+              </div>
+            </OverlayInner>
+          </Transition>
+        </CSSTransition>
+      </Portal>
+    </Component>
   </Component>
   <InlineSVG
     cacheRequests={true}

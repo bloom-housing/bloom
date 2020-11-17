@@ -7,7 +7,6 @@ import {
   IsDefined,
   IsEnum,
   IsNumber,
-  IsObject,
   IsOptional,
   IsString,
   ValidateNested,
@@ -18,6 +17,7 @@ import { Accessibility } from "./accessibility.entity"
 import { Demographics } from "./demographics.entity"
 import { HouseholdMember } from "./household-member.entity"
 import { ApiProperty } from "@nestjs/swagger"
+import { ApplicationPreferences } from "./application-preferences.entity"
 
 export enum ApplicationStatus {
   draft = "draft",
@@ -148,12 +148,11 @@ export class ApplicationData extends AbstractEntity {
   @IsString({ each: true })
   preferredUnit: string[]
 
-  // TODO Make preferences easy to work with SQL
-  @Column({ type: "jsonb" })
   @Expose()
   @IsDefined()
-  @IsObject()
-  preferences: Record<string, any>
+  @ValidateNested()
+  @Type(() => ApplicationPreferences)
+  preferences: ApplicationPreferences
 
   @Expose()
   @IsEnum(ApplicationStatus)

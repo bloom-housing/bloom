@@ -1,0 +1,11 @@
+@import "../global/mixins.scss";
+
+.inline-button {
+  @apply text-primary;
+  @apply font-semibold;
+  @apply text-tiny;
+
+  &__icon {
+    @apply mr-1;
+  }
+}

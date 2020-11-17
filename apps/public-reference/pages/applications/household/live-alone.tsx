@@ -65,6 +65,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row">
               <Button
+                id="btn-live-alone"
                 size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {
@@ -78,6 +79,7 @@ export default () => {
             </div>
             <div className="form-card__pager-row">
               <Button
+                id="btn-with-people"
                 size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {

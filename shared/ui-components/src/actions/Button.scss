@@ -19,6 +19,13 @@
     box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-accent-cool;
   }
 
+  &:disabled {
+    pointer-events: none;
+    @apply bg-white;
+    @apply border-gray-450;
+    @apply text-gray-450;
+  }
+
   &.is-secondary {
     @apply border-gray-700;
     @apply text-gray-700;

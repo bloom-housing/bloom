@@ -165,7 +165,11 @@ export const blankApplication = () => {
       sexualOrientation: "",
       howDidYouHear: [],
     },
-    preferences: {} as Record<string, any>,
+    preferences: {
+      liveIn: false,
+      none: false,
+      workIn: false,
+    },
     confirmationId: "",
   }
 }

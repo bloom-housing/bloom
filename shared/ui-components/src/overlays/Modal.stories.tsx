@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import "./Modal.scss"
 import { Modal } from "./Modal"
 import SVG from "react-inlinesvg"
@@ -21,40 +21,63 @@ const noop = () => {
   // intentionally blank
 }
 
-export const BasicModal = () => (
-  <Modal
-    open={true}
-    title="Modal Title"
-    ariaDescription="Modal description"
-    onClose={noop}
-    actions={[
-      <Button onClick={noop} type={AppearanceStyleType.primary}>
-        Submit
-      </Button>,
-      <Button onClick={noop} type={AppearanceStyleType.secondary} border={AppearanceBorderType.borderless}>
-        Cancel
-      </Button>,
-    ]}
-  >
-    Modal Content
-  </Modal>
-)
+export const BasicModal = () => {
+  const [openModal, setOpenModal] = useState(false)
 
-export const FullScreenModal = () => (
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setOpenModal(!openModal)
+        }}
+      >
+        Open Modal
+      </Button>
+      <div style={{ height: "1000px" }}></div>
+      <div>…</div>
+      <Modal
+        open={openModal}
+        title="Modal Title"
+        ariaDescription="Modal description"
+        onClose={() => setOpenModal(!openModal)}
+        actions={[
+          <Button onClick={() => setOpenModal(!openModal)} type={AppearanceStyleType.primary}>
+            Submit
+          </Button>,
+          <Button
+            onClick={() => setOpenModal(!openModal)}
+            type={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+          >
+            Cancel
+          </Button>,
+        ]}
+      >
+        Modal Content
+      </Modal>
+    </>
+  )
+}
+
+export const TransparentOverlayModal = () => (
   <Modal
     open={true}
     title="Modal Title"
     ariaDescription="Modal description"
-    onClose={noop}
+    hideCloseIcon
     actions={[
       <Button onClick={noop} type={AppearanceStyleType.primary}>
         Submit
       </Button>,
-      <Button onClick={noop} type={AppearanceStyleType.secondary} border={AppearanceBorderType.borderless}>
+      <Button
+        onClick={noop}
+        type={AppearanceStyleType.secondary}
+        border={AppearanceBorderType.borderless}
+      >
         Cancel
       </Button>,
     ]}
-    fullScreen
+    backdrop={false}
   >
     Modal Content
   </Modal>

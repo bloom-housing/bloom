@@ -8,6 +8,7 @@ import { AccessbilityUpdateDto } from "./accessibility.dto"
 import { AlternateContactUpdateDto } from "./alternate-contact.dto"
 import { ApplicantUpdateDto } from "./applicant.dto"
 import { HouseholdMemberUpdateDto } from "./household-member.dto"
+import { ApplicationPreferencesUpdateDto } from "./application-preferences.dto"
 
 export class ApplicationDataCreateDto extends OmitType(ApplicationData, [
   "id",
@@ -20,6 +21,7 @@ export class ApplicationDataCreateDto extends OmitType(ApplicationData, [
   "accessibility",
   "demographics",
   "householdMembers",
+  "preferences",
 ]) {
   @Expose()
   @ValidateNested()
@@ -61,4 +63,10 @@ export class ApplicationDataCreateDto extends OmitType(ApplicationData, [
   @ValidateNested({ each: true })
   @Type(() => HouseholdMemberUpdateDto)
   householdMembers: HouseholdMemberUpdateDto[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => ApplicationPreferencesUpdateDto)
+  preferences: ApplicationPreferencesUpdateDto
 }
