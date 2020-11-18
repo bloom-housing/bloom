@@ -534,9 +534,11 @@ const ApplicationsList = () => {
     const householdCols = []
     // householdSize property includes primary applicant, so we have to exclude it
     for (let i = 0; i < maxHouseholdSize - 1; i++) {
+      const householdIndex = i + 1
+
       householdCols.push(
         {
-          headerName: `Household First Name ${i + 1}`,
+          headerName: `Household First Name ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
@@ -545,7 +547,7 @@ const ApplicationsList = () => {
           valueFormatter: ({ value }) => (value[i] ? value[i].firstName : ""),
         },
         {
-          headerName: `Household Last Name ${i + 1}`,
+          headerName: `Household Last Name ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
@@ -554,7 +556,7 @@ const ApplicationsList = () => {
           valueFormatter: ({ value }) => (value[i] ? value[i].lastName : ""),
         },
         {
-          headerName: `Household Relationship ${i + 1}`,
+          headerName: `Household Relationship ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
@@ -564,7 +566,7 @@ const ApplicationsList = () => {
             value[i] ? t(`application.form.options.relationship.${value[i].relationship}`) : "",
         },
         {
-          headerName: `Household DOB ${i + 1}`,
+          headerName: `Household DOB ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
@@ -574,7 +576,7 @@ const ApplicationsList = () => {
             value[i] ? `${value[i].birthMonth}/${value[i].birthDay}/${value[i].birthYear}` : "",
         },
         {
-          headerName: `Household Street Address ${i + 1}`,
+          headerName: `Household Street Address ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
@@ -583,7 +585,7 @@ const ApplicationsList = () => {
           valueFormatter: ({ value }) => (value[i] ? value[i].address.street : ""),
         },
         {
-          headerName: `Household City ${i + 1}`,
+          headerName: `Household City ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
@@ -592,7 +594,7 @@ const ApplicationsList = () => {
           valueFormatter: ({ value }) => (value[i] ? value[i].address.city : ""),
         },
         {
-          headerName: `Household State ${i + 1}`,
+          headerName: `Household State ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
@@ -601,7 +603,7 @@ const ApplicationsList = () => {
           valueFormatter: ({ value }) => (value[i] ? value[i].address.state : ""),
         },
         {
-          headerName: `Household Zip ${i + 1}`,
+          headerName: `Household Zip ${householdIndex}`,
           field: "application.householdMembers",
           sortable: false,
           filter: false,
