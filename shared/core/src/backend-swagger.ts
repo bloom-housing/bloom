@@ -1991,6 +1991,9 @@ export interface ApplicationPreferences {
 
 export interface ApplicationData {
   /**  */
+  incomePeriod: IncomePeriod;
+
+  /**  */
   status: ApplicationStatus;
 
   /**  */
@@ -2043,9 +2046,6 @@ export interface ApplicationData {
 
   /**  */
   income: string;
-
-  /**  */
-  incomePeriod: string;
 
   /**  */
   householdMembers: HouseholdMember[];
@@ -2402,6 +2402,11 @@ export type CombinedApplicationPickUpAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export enum IncomePeriod {
+  'perMonth' = 'perMonth',
+  'perYear' = 'perYear'
+}
+
 export enum ApplicationStatus {
   'draft' = 'draft',
   'submitted' = 'submitted',

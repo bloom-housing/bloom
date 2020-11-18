@@ -7,13 +7,12 @@ import {
   ManyToOne,
 } from "typeorm"
 import { User } from "./user.entity"
-import { Listing, ListingStatus } from "./listing.entity"
+import { Listing } from "./listing.entity"
 import {
   IsBoolean,
   IsDefined,
   IsDate,
   IsNumber,
-  IsObject,
   IsOptional,
   IsString,
   IsUUID,
@@ -39,6 +38,11 @@ export enum ApplicationSubmissionType {
 export enum Language {
   en = "en",
   es = "es",
+}
+
+export enum IncomePeriod {
+  perMonth = "perMonth",
+  perYear = "perYear",
 }
 
 export class HousingCounselor {
@@ -381,8 +385,9 @@ export class ApplicationData {
   income: string
 
   @Expose()
-  @IsString()
-  incomePeriod: string
+  @IsEnum(IncomePeriod)
+  @ApiProperty({ enum: IncomePeriod, enumName: "IncomePeriod" })
+  incomePeriod: IncomePeriod
 
   @Expose()
   @ValidateNested({ each: true })
