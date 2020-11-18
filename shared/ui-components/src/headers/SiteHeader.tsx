@@ -1,5 +1,6 @@
 import * as React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
+import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 
 export interface SiteHeaderProps {
   logoSrc: string
@@ -7,6 +8,7 @@ export interface SiteHeaderProps {
   skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
+  languages?: LangItem[]
 }
 
 export interface SiteHeaderState {
@@ -31,7 +33,9 @@ export const NavbarDropdown = (props: NavbarDropdownProps) => {
 class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   constructor(props: SiteHeaderProps) {
     super(props)
-    this.state = { active: false }
+    this.state = {
+      active: false,
+    }
     this.handleMenuToggle = this.handleMenuToggle.bind(this)
   }
 
@@ -86,6 +90,8 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   render() {
     return (
       <>
+        {this.props.languages && <LanguageNav items={this.props.languages} />}
+
         {this.skipLink()}
         {this.noticeBar()}
         <div className="navbar__wrapper">

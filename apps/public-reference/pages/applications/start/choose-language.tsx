@@ -38,7 +38,9 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
-    void loadListing(listingId, setListing, conductor, context)
+    if (!context.listing) {
+      void loadListing(listingId, setListing, conductor, context)
+    }
   }, [conductor, context, listingId])
 
   const currentPageSection = 1
@@ -94,7 +96,7 @@ export default () => {
 
               {listing?.applicationConfig.languages.some((lang) => lang == "en") && (
                 <Button
-                  className="mx-1"
+                  className="language-select mx-1"
                   onClick={() => {
                     // Set the language in the context here...
                   }}
@@ -105,7 +107,7 @@ export default () => {
 
               {listing?.applicationConfig.languages.some((lang) => lang == "es") && (
                 <Button
-                  className="mx-1"
+                  className="language-select mx-1"
                   onClick={() => {
                     //
                   }}
@@ -116,7 +118,7 @@ export default () => {
 
               {listing?.applicationConfig.languages.some((lang) => lang == "zh") && (
                 <Button
-                  className="mx-1"
+                  className="language-select mx-1"
                   onClick={() => {
                     //
                   }}

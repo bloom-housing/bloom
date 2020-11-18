@@ -2,13 +2,13 @@ import { useContext } from "react"
 import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
-import { Application, Listing } from "@bloom-housing/core"
 
 export function useListingsData() {
   const fetcher = (url) => fetch(url).then((r) => r.json())
   const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
   if (data && data.status == "ok") {
-    console.log(`Listings Data Received: ${data.listings.length}`)
+    console.log(data)
+    console.log(`Listings Data Received: ${data.listings}`)
   }
   return {
     listingDtos: data,
@@ -17,28 +17,35 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData() {
-  const { listingDtos, listingsLoading, listingsError } = useListingsData()
+export function useApplicationsData(pageIndex: number, limit = 10, listingId: string, search = "") {
   const { applicationsService } = useContext(ApiClientContext)
-  const backendApplicationsEndpointUrl = process.env.backendApiBase + "/applications"
-  const fetcher = () => applicationsService.list()
-  const { data, error } = useSWR(backendApplicationsEndpointUrl, fetcher)
-  const applications: Application[] = []
-  if (listingDtos && data) {
-    console.log(`Applications Data Received: ${data.items.length}`)
-    const listings: Record<string, Listing> = Object.fromEntries(
-      listingDtos.listings.map((e) => [e.id, e])
-    )
-    data.items.forEach((application) => {
-      const app: Application = application
-      app.listing = listings[application.listing.id]
-      applications.push(app)
-      console.log(`Assigned ${listings[application.listing.id].name} to ${application.id}`)
+  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}&search=${search}`
+  const fetcher = () =>
+    applicationsService.list({
+      listingId,
+      page: pageIndex,
+      limit,
+      search,
     })
-  }
+  const { data, error } = useSWR(endpoint, fetcher)
+
   return {
-    applications: applications,
-    appsLoading: listingsLoading || (!error && !data),
-    appsError: listingsError || error,
+    appsData: data,
+    appsLoading: !error && !data,
+    appsError: error,
+  }
+}
+
+export function useSingleApplicationData(applicationId: string) {
+  const { applicationsService } = useContext(ApiClientContext)
+  const backendSingleApplicationsEndpointUrl = `${process.env.backendApiBase}/applications/${applicationId}`
+
+  const fetcher = () => applicationsService.retrieve({ applicationId })
+  const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
+
+  return {
+    applicationDto: data,
+    applicationLoading: !error && !data,
+    applicationError: error,
   }
 }

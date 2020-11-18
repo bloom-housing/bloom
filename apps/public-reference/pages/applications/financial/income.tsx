@@ -5,6 +5,7 @@ Total pre-tax household income from all sources
 import React, { useState } from "react"
 import { Listing } from "@bloom-housing/core"
 import {
+  AppearanceStyleType,
   AlertBox,
   AlertNotice,
   Button,
@@ -190,7 +191,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -202,7 +203,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

@@ -5,6 +5,7 @@ https://github.com/bloom-housing/bloom/issues/256
 */
 import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   contactPreferencesKeys,
@@ -117,6 +118,7 @@ export default () => {
             <PhoneField
               label={t("application.contact.yourPhoneNumber")}
               caps={true}
+              id="applicant.phoneNumber"
               name="applicant.phoneNumber"
               placeholder={clientLoaded && noPhone ? t("t.none") : null}
               error={!noPhone ? errors.applicant?.phoneNumber : false}
@@ -187,6 +189,7 @@ export default () => {
             {additionalPhone && (
               <>
                 <PhoneField
+                  id="additionalPhoneNumber"
                   name="additionalPhoneNumber"
                   label={t("application.contact.yourAdditionalPhoneNumber")}
                   caps={true}
@@ -419,7 +422,10 @@ export default () => {
                 }}
               />
 
-              <ErrorMessage error={errors.applicant?.workInRegion}>
+              <ErrorMessage
+                id="applicant.workInRegion-error"
+                error={errors.applicant?.workInRegion}
+              >
                 {t("application.form.errors.selectOption")}
               </ErrorMessage>
             </fieldset>
@@ -499,7 +505,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -511,7 +517,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

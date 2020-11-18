@@ -4,7 +4,13 @@ Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { Button, FormCard, imageUrlFromListing, t } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  imageUrlFromListing,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import React, { useContext } from "react"
@@ -32,7 +38,9 @@ export default () => {
             {t("application.review.confirmation.lotteryNumber")}
           </h3>
 
-          <p className="font-serif text-3xl my-1">{application.confirmationId}</p>
+          <p id="confirmationId" className="font-serif text-3xl my-1">
+            {application.confirmationId}
+          </p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>
 
@@ -77,7 +85,7 @@ export default () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Button
-              filled={true}
+              type={AppearanceStyleType.primary}
               onClick={() => {
                 void router.push("/create-account").then(() => window.scrollTo(0, 0))
               }}

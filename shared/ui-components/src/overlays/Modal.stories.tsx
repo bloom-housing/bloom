@@ -1,7 +1,9 @@
-import React from "react"
+import React, { useState } from "react"
 import "./Modal.scss"
 import { Modal } from "./Modal"
 import SVG from "react-inlinesvg"
+import { Button } from "../actions/Button"
+import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Overlays/Modal",
@@ -19,32 +21,63 @@ const noop = () => {
   // intentionally blank
 }
 
-export const BasicModal = () => (
-  <Modal
-    open={true}
-    title="Modal Title"
-    ariaDescription="Modal description"
-    onClose={noop}
-    actions={[
-      { label: "Cancel", onClick: noop, type: "cancel" },
-      { label: "Submit", onClick: noop, type: "primary" },
-    ]}
-  >
-    Modal Content
-  </Modal>
-)
+export const BasicModal = () => {
+  const [openModal, setOpenModal] = useState(false)
 
-export const FullScreenModal = () => (
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setOpenModal(!openModal)
+        }}
+      >
+        Open Modal
+      </Button>
+      <div style={{ height: "1000px" }}></div>
+      <div>…</div>
+      <Modal
+        open={openModal}
+        title="Modal Title"
+        ariaDescription="Modal description"
+        onClose={() => setOpenModal(!openModal)}
+        actions={[
+          <Button onClick={() => setOpenModal(!openModal)} type={AppearanceStyleType.primary}>
+            Submit
+          </Button>,
+          <Button
+            onClick={() => setOpenModal(!openModal)}
+            type={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+          >
+            Cancel
+          </Button>,
+        ]}
+      >
+        Modal Content
+      </Modal>
+    </>
+  )
+}
+
+export const TransparentOverlayModal = () => (
   <Modal
     open={true}
     title="Modal Title"
     ariaDescription="Modal description"
-    onClose={noop}
+    hideCloseIcon
     actions={[
-      { label: "Cancel", onClick: noop, type: "cancel" },
-      { label: "Submit", onClick: noop, type: "primary" },
+      <Button onClick={noop} type={AppearanceStyleType.primary}>
+        Submit
+      </Button>,
+      <Button
+        onClick={noop}
+        type={AppearanceStyleType.secondary}
+        border={AppearanceBorderType.borderless}
+      >
+        Cancel
+      </Button>,
     ]}
-    fullScreen
+    backdrop={false}
   >
     Modal Content
   </Modal>
@@ -57,8 +90,12 @@ export const SuccessFailureModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      { label: "Cancel", onClick: noop, type: "failure" },
-      { label: "Submit", onClick: noop, type: "success" },
+      <Button onClick={noop} type={AppearanceStyleType.success}>
+        Submit
+      </Button>,
+      <Button onClick={noop} type={AppearanceStyleType.alert}>
+        Cancel
+      </Button>,
     ]}
   >
     Modal Content

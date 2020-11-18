@@ -5,6 +5,7 @@ https://github.com/bloom-housing/bloom/issues/255
 */
 import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
@@ -89,8 +90,8 @@ export default () => {
 
               <Field
                 name="applicant.middleName"
-                label={t("application.name.middleName")}
-                placeholder={t("application.name.middleName")}
+                label={t("application.name.middleNameOptional")}
+                placeholder={t("application.name.middleNameOptional")}
                 readerOnly={true}
                 defaultValue={application.applicant.middleName}
                 register={register}
@@ -116,6 +117,7 @@ export default () => {
               register={register}
               error={errors.applicant}
               name="applicant"
+              id="applicant.dateOfBirth"
               watch={watch}
               atAge={true}
               label={t("application.name.yourDateOfBirth")}
@@ -158,7 +160,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -170,7 +172,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

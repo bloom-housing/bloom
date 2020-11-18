@@ -6,10 +6,11 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { getConnection } from "typeorm"
 import { ConfigService } from "@nestjs/config"
+import dbOptions = require("../ormconfig")
 
 let app
 async function bootstrap() {
-  app = await NestFactory.create(AppModule)
+  app = await NestFactory.create(AppModule.register(dbOptions))
   app.enableCors()
   app.use(logger)
   app.useGlobalFilters(new EntityNotFoundExceptionFilter())

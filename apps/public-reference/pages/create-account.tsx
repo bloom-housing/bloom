@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import { useForm } from "react-hook-form"
 import {
+  AppearanceStyleType,
   Button,
   Field,
   FormCard,
@@ -130,7 +131,7 @@ export default () => {
 
             <div className="text-center mt-10">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   console.info("button has been clicked!")
                 }}

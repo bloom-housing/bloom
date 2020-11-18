@@ -70,12 +70,21 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "createdAt",
   "updatedAt",
   "listing",
+  "user",
 ] as const) {
   @Expose()
   @IsDefined()
   @ValidateNested()
   @Type(() => IdDto)
   listing: IdDto
+
+  @Exclude()
+  @ApiHideProperty()
+  user
+
+  @Exclude()
+  @ApiHideProperty()
+  status
 }
 
 export class ApplicationUpdateDto extends ApplicationCreateDto {
