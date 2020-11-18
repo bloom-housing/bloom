@@ -8,15 +8,23 @@ exports[`Storyshots Prototypes/Tag Pill 1`] = `
     }
   }
 >
-  <Tag
-    pillStyle={true}
+  <div
+    style={
+      Object {
+        "padding": "1rem",
+      }
+    }
   >
-    <div
-      className="tag is-pill"
+    <Tag
+      pillStyle={true}
     >
-      Success
-    </div>
-  </Tag>
+      <div
+        className="tag is-pill"
+      >
+        Success
+      </div>
+    </Tag>
+  </div>
 </div>
 `;
 
@@ -28,16 +36,24 @@ exports[`Storyshots Prototypes/Tag Pill And Success 1`] = `
     }
   }
 >
-  <Tag
-    pillStyle={true}
-    success={true}
+  <div
+    style={
+      Object {
+        "padding": "1rem",
+      }
+    }
   >
-    <div
-      className="tag is-success is-pill"
+    <Tag
+      pillStyle={true}
+      success={true}
     >
-      Pill Success
-    </div>
-  </Tag>
+      <div
+        className="tag is-success is-pill"
+      >
+        Pill Success
+      </div>
+    </Tag>
+  </div>
 </div>
 `;
 
@@ -49,15 +65,23 @@ exports[`Storyshots Prototypes/Tag Small 1`] = `
     }
   }
 >
-  <Tag
-    small={true}
+  <div
+    style={
+      Object {
+        "padding": "1rem",
+      }
+    }
   >
-    <div
-      className="tag is-small"
+    <Tag
+      small={true}
     >
-      Warning
-    </div>
-  </Tag>
+      <div
+        className="tag is-small"
+      >
+        Warning
+      </div>
+    </Tag>
+  </div>
 </div>
 `;
 
@@ -69,13 +93,21 @@ exports[`Storyshots Prototypes/Tag Standard 1`] = `
     }
   }
 >
-  <Tag>
-    <div
-      className="tag"
-    >
-      Tag
-    </div>
-  </Tag>
+  <div
+    style={
+      Object {
+        "padding": "1rem",
+      }
+    }
+  >
+    <Tag>
+      <div
+        className="tag"
+      >
+        Tag
+      </div>
+    </Tag>
+  </div>
 </div>
 `;
 
@@ -87,15 +119,23 @@ exports[`Storyshots Prototypes/Tag Success 1`] = `
     }
   }
 >
-  <Tag
-    success={true}
+  <div
+    style={
+      Object {
+        "padding": "1rem",
+      }
+    }
   >
-    <div
-      className="tag is-success"
+    <Tag
+      success={true}
     >
-      Success
-    </div>
-  </Tag>
+      <div
+        className="tag is-success"
+      >
+        Success
+      </div>
+    </Tag>
+  </div>
 </div>
 `;
 
@@ -107,14 +147,22 @@ exports[`Storyshots Prototypes/Tag Warning 1`] = `
     }
   }
 >
-  <Tag
-    warning={true}
+  <div
+    style={
+      Object {
+        "padding": "1rem",
+      }
+    }
   >
-    <div
-      className="tag is-warning"
+    <Tag
+      warning={true}
     >
-      Warning
-    </div>
-  </Tag>
+      <div
+        className="tag is-warning"
+      >
+        Warning
+      </div>
+    </Tag>
+  </div>
 </div>
 `;
