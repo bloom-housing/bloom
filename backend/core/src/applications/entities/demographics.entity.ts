@@ -20,7 +20,7 @@ export class Demographics extends AbstractEntity {
   @IsString()
   sexualOrientation: string
 
-  @Column({ array: true, type: 'text' })
+  @Column({ array: true, type: "text" })
   @Expose()
   @IsString({ each: true })
   howDidYouHear: string[]
