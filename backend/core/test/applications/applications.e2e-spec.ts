@@ -14,6 +14,7 @@ import {
   ApplicationCreate,
   ApplicationStatus,
   ApplicationSubmissionType,
+  IncomePeriod,
   Language,
 } from "@bloom-housing/core"
 // Use require because of the CommonJS/AMD style export.
@@ -30,7 +31,7 @@ describe("Applications", () => {
   let user1AccessToken: string
   let user2AccessToken: string
   let adminAccessToken: string
-  let listingId: any
+  let listingId: string
 
   const getTestAppBody: () => ApplicationCreate = () => {
     return {
@@ -127,7 +128,7 @@ describe("Applications", () => {
         },
         incomeVouchers: true,
         income: "100.00",
-        incomePeriod: "",
+        incomePeriod: IncomePeriod.perYear,
         householdMembers: [],
         preferredUnit: ["a", "b"],
         preferences: {
