@@ -8,6 +8,7 @@ import { Listing } from "../entity/listing.entity"
 import Polyglot from "node-polyglot"
 import fs from "fs"
 import { ConfigService } from "@nestjs/config"
+import { Application } from "../applications/entities/application.entity"
 
 @Injectable()
 export class EmailService {
@@ -22,7 +23,10 @@ export class EmailService {
     })
     this.polyglot = polyglot
 
-    Handlebars.registerHelper("t", function (phrase: string, options?: any) {
+    Handlebars.registerHelper("t", function (
+      phrase: string,
+      options?: number | Polyglot.InterpolationOptions
+    ) {
       return polyglot.t(phrase, options)
     })
     const parts = this.partials()
@@ -42,16 +46,15 @@ export class EmailService {
     await this.send(user.email, "Welcome to Bloom", this.template("register-email")({ user: user }))
   }
 
-  public async confirmation(listing: Listing, application: any, appUrl: string) {
+  public async confirmation(listing: Listing, application: Application, appUrl: string) {
     let whatToExpectText
-    const appData = application.application
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
         `Preparing to send a confirmation email to ${
-          appData.applicant.emailAddress
+          application.applicant.emailAddress
         } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
       )
     }
@@ -70,12 +73,12 @@ export class EmailService {
       whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
     }
     const user = {
-      firstName: appData.applicant.firstName,
-      middleName: appData.applicant.middleName,
-      lastName: appData.applicant.lastName,
+      firstName: application.applicant.firstName,
+      middleName: application.applicant.middleName,
+      lastName: application.applicant.lastName,
     }
     await this.send(
-      appData.applicant.emailAddress,
+      application.applicant.emailAddress,
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
         listing: listing,

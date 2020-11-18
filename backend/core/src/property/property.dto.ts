@@ -3,13 +3,13 @@ import { Exclude, Expose, Type } from "class-transformer"
 import { IsDefined, IsString, IsUUID, ValidateNested } from "class-validator"
 import { Property } from "../entity/property.entity"
 import { UnitDto } from "../units/unit.dto"
-import { AddressUpdateDto } from "../shared/dto/address.dto"
+import { AddressDto, AddressUpdateDto } from "../shared/dto/address.dto"
 
 export class PropertyDto extends OmitType(Property, [
   "listings",
   "units",
   "propertyGroups",
-  "buildingAddress"
+  "buildingAddress",
 ] as const) {
   @Exclude()
   @ApiHideProperty()
@@ -28,7 +28,7 @@ export class PropertyDto extends OmitType(Property, [
   @Expose()
   @IsDefined()
   @ValidateNested()
-  buildingAddress: AddressUpdateDto
+  buildingAddress: AddressDto
 }
 
 export class PropertyCreateDto extends OmitType(PropertyDto, [
@@ -36,10 +36,16 @@ export class PropertyCreateDto extends OmitType(PropertyDto, [
   "createdAt",
   "updatedAt",
   "unitsSummarized",
+  "buildingAddress",
 ] as const) {
   @Exclude()
   @ApiHideProperty()
   unitsSummarized
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  buildingAddress: AddressUpdateDto
 }
 
 export class PropertyUpdateDto extends PropertyCreateDto {

@@ -2,7 +2,6 @@ import { ApplicationMethodType, Listing, ListingStatus } from "@bloom-housing/co
 
 export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
-  blankPaperApplicationCanBePickedUp: true,
   applicationConfig: undefined,
   applicationOpenDate: "2019-12-31T15:22:57.000-07:00",
   applicationPickUpAddress: undefined,
@@ -140,6 +139,9 @@ export const ArcherListing: Listing = {
       "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
     buildingTotalUnits: 35,
     buildingAddress: {
+      id: "buildingId",
+      createdAt: new Date(),
+      updatedAt: new Date(),
       city: "San Jose",
       street: "98 Archer Street",
       zipCode: "95112",

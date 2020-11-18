@@ -2,7 +2,21 @@ import { OmitType } from "@nestjs/swagger"
 import { Applicant } from "../entities/applicant.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
-import { AddressUpdateDto } from "../../shared/dto/address.dto"
+import { AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
+
+export class ApplicantDto extends OmitType(Applicant, ["address", "workAddress"] as const) {
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AddressDto)
+  address: AddressDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AddressDto)
+  workAddress: AddressDto
+}
 
 export class ApplicantUpdateDto extends OmitType(Applicant, [
   "id",

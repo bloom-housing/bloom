@@ -3,6 +3,8 @@ import { IsOptional, IsUUID } from "class-validator"
 import { OmitType } from "@nestjs/swagger"
 import { Address } from "../entities/address.entity"
 
+export class AddressDto extends OmitType(Address, []) {}
+
 export class AddressUpdateDto extends OmitType(Address, ["id", "createdAt", "updatedAt"]) {
   @Expose()
   @IsOptional()

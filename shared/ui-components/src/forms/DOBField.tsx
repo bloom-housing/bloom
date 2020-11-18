@@ -1,15 +1,18 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMemberUpdate } from "@bloom-housing/core"
 import moment from "moment"
 
 export interface DOBFieldProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   label: string
-  register: any // comes from React Hook Form
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  register: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   watch: any // comes from React Hook Form
-  applicant: HouseholdMember
+  applicant: HouseholdMemberUpdate
   atAge?: boolean
   name?: string
   id?: string

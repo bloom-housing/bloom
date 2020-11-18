@@ -3,6 +3,8 @@ import { Expose } from "class-transformer"
 import { IsOptional, IsUUID } from "class-validator"
 import { ApplicationPreferences } from "../entities/application-preferences.entity"
 
+export class ApplicationPreferencesDto extends OmitType(ApplicationPreferences, [] as const) {}
+
 export class ApplicationPreferencesUpdateDto extends OmitType(ApplicationPreferences, [
   "id",
   "createdAt",

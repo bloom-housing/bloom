@@ -137,6 +137,9 @@ export const ArcherListing: Listing = {
       "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
     buildingTotalUnits: 35,
     buildingAddress: {
+      id: "buildingId",
+      createdAt: new Date(),
+      updatedAt: new Date(),
       city: "San Jose",
       street: "98 Archer Street",
       zipCode: "95112",

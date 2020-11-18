@@ -9,12 +9,11 @@ import { CsvBuilder } from "../services/csv-builder.service"
 import { SharedModule } from "../shared/shared.module"
 import { ListingsModule } from "../listings/listings.module"
 import { Address } from "../shared/entities/address.entity"
-import { ApplicationData } from "./entities/application-data.entity"
 import { Applicant } from "./entities/applicant.entity"
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Application, ApplicationData, Applicant, Address]),
+    TypeOrmModule.forFeature([Application, Applicant, Address]),
     AuthModule,
     SharedModule,
     ListingsModule,
