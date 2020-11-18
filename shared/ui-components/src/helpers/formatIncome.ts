@@ -1,4 +1,4 @@
-type IncomePeriod = "perMonth" | "perYear"
+import { IncomePeriod } from "@bloom-housing/core"
 
 export function formatIncome(value: number, period: IncomePeriod, returnType: IncomePeriod) {
   const usd = new Intl.NumberFormat("en-US", {
