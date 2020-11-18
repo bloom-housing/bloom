@@ -1627,9 +1627,6 @@ export interface Listing {
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  blankPaperApplicationCanBePickedUp: boolean;
-
-  /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
@@ -1748,9 +1745,6 @@ export interface ListingCreate {
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  blankPaperApplicationCanBePickedUp: boolean;
-
-  /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
@@ -1864,7 +1858,7 @@ export interface ListingUpdate {
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  blankPaperApplicationCanBePickedUp: boolean;
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
