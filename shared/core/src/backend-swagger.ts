@@ -2637,7 +2637,6 @@ export enum ListingEventType {
 }
 export type CombinedApplicationAddressTypes = (Address & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (Address & any) | null;
-export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum ApplicationStatus {
