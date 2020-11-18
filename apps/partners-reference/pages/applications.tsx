@@ -118,7 +118,7 @@ const ApplicationsList = () => {
       sort: "asc",
       valueFormatter: ({ value }) => {
         const date = moment(value).format("MM/DD/YYYY")
-        const time = moment(value).format("HH:mm:ssA")
+        const time = moment(value).format("HH:mm:ss A")
 
         return `${date} ${t("t.at")} ${time}`
       },
@@ -169,6 +169,7 @@ const ApplicationsList = () => {
       width: 180,
       minWidth: 150,
       type: "rightAligned",
+      valueFormatter: (data) => `$${data.value}`,
     },
     {
       headerName: "Requested ADA",
