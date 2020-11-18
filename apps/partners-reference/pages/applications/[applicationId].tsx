@@ -251,7 +251,9 @@ export default function ApplicationsList() {
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label={t("t.email")}>{application.applicant.emailAddress}</ViewItem>
+                  <ViewItem label={t("t.email")} truncated>
+                    {application.applicant.emailAddress}
+                  </ViewItem>
                 </GridCell>
 
                 <GridCell>
