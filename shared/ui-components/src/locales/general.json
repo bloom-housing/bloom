@@ -492,6 +492,8 @@
       "signOutMessage": "We care about your security. We logged you out due to inactivity. Please sign in to continue."
     },
     "signIn": {
+      "loginError": "Please enter your login email",
+      "passwordError": "Please enter your login password",
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "success": "Welcome back, %{name}!"
