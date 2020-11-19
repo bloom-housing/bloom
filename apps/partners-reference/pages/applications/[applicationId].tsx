@@ -19,6 +19,7 @@ enum AddressColsType {
   "residence" = "residence",
   "mailing" = "mailing",
   "work" = "work",
+  "alternateAddress" = "alternateAddress",
 }
 
 export default function ApplicationsList() {
@@ -120,6 +121,12 @@ export default function ApplicationsList() {
           } else {
             address[item] = t("t.n/a")
           }
+        }
+
+        if (type === AddressColsType.alternateAddress) {
+          address[item] = application.alternateContact.mailingAddress[item]
+            ? application.alternateContact.mailingAddress[item]
+            : t("t.n/a")
         }
       })
 
@@ -339,48 +346,55 @@ export default function ApplicationsList() {
                   className="bg-primary-lighter"
                   title={t("application.alternateContact.type.label")}
                   inset
+                  grid={false}
                 >
-                  <GridCell>
-                    <ViewItem label={t("application.name.firstName")}>
-                      {application.alternateContact.firstName}
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("application.name.lastName")}>
-                      {application.alternateContact.lastName}
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("t.relationship")}>
-                      {t(
-                        `application.alternateContact.type.options.${application.alternateContact.type}`
-                      )}
-                    </ViewItem>
-                  </GridCell>
-
-                  {
+                  <GridSection columns={3}>
                     <GridCell>
-                      <ViewItem label={t("application.details.agency")}>
-                        {application.alternateContact.agency?.length
-                          ? application.alternateContact.agency
-                          : t("t.none")}
+                      <ViewItem label={t("application.name.firstName")}>
+                        {application.alternateContact.firstName}
                       </ViewItem>
                     </GridCell>
-                  }
 
-                  <GridCell>
-                    <ViewItem label={t("t.email")}>
-                      {application.alternateContact.emailAddress}
-                    </ViewItem>
-                  </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("application.name.lastName")}>
+                        {application.alternateContact.lastName}
+                      </ViewItem>
+                    </GridCell>
 
-                  <GridCell>
-                    <ViewItem label={t("t.phone")}>
-                      {application.alternateContact.phoneNumber}
-                    </ViewItem>
-                  </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("t.relationship")}>
+                        {t(
+                          `application.alternateContact.type.options.${application.alternateContact.type}`
+                        )}
+                      </ViewItem>
+                    </GridCell>
+
+                    {
+                      <GridCell>
+                        <ViewItem label={t("application.details.agency")}>
+                          {application.alternateContact.agency?.length
+                            ? application.alternateContact.agency
+                            : t("t.none")}
+                        </ViewItem>
+                      </GridCell>
+                    }
+
+                    <GridCell>
+                      <ViewItem label={t("t.email")}>
+                        {application.alternateContact.emailAddress}
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.phone")}>
+                        {application.alternateContact.phoneNumber}
+                      </ViewItem>
+                    </GridCell>
+                  </GridSection>
+
+                  <GridSection subtitle={t("application.contact.address")} columns={4}>
+                    {addressCols(AddressColsType.alternateAddress)}
+                  </GridSection>
                 </GridSection>
               )}
 
@@ -444,6 +458,18 @@ export default function ApplicationsList() {
               <GridCell>
                 <ViewItem label={t("application.details.vouchers")}>
                   {application.incomeVouchers ? t("t.yes") : t("t.no")}
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+
+            <GridSection
+              className="bg-primary-lighter"
+              title={t("application.review.terms.title")}
+              inset
+            >
+              <GridCell>
+                <ViewItem label={t("application.details.signatureOnTerms")}>
+                  {application.acceptedTerms ? t("t.yes") : t("t.no")}
                 </ViewItem>
               </GridCell>
             </GridSection>

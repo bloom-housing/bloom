@@ -30,6 +30,7 @@
       "preferredContact": "Preferred Contact",
       "residenceAddress": "Residence Address",
       "workInRegion": "Work in Region",
+      "signatureOnTerms": "Signature on Terms of Agreement",
       "submissionType": {
         "electronical": "Electronical",
         "paper": "Paper"
