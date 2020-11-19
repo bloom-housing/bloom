@@ -16,6 +16,7 @@ import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
+import { IncomePeriod } from "@bloom-housing/core"
 
 const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
@@ -94,62 +95,10 @@ const ApplicationsList = () => {
       return this.linkWithId
     }
   }
-  class formatIncomeAnnualCell {
-    incomeUsd: HTMLSpanElement
-
-    init(params) {
-      this.incomeUsd = document.createElement("span")
-      this.incomeUsd.innerText = formatIncome(
-        params.value,
-        params.data.application.incomePeriod,
-        "perYear"
-      )
-    }
-
-    getGui() {
-      return this.incomeUsd
-    }
-  }
-
-  class formatIncomeMonthlyCell {
-    incomeUsd: HTMLSpanElement
-
-    init(params) {
-      this.incomeUsd = document.createElement("span")
-      this.incomeUsd.innerText = formatIncome(
-        params.value,
-        params.data.application.incomePeriod,
-        "perMonth"
-      )
-    }
-
-    getGui() {
-      return this.incomeUsd
-    }
-  }
-
-  class formatAltContactRelationshipCell {
-    relationship: HTMLSpanElement
-
-    init({ data, value }) {
-      this.relationship = document.createElement("span")
-      this.relationship.innerText =
-        value === "other"
-          ? data.application.alternateContact.otherType
-          : t(`application.alternateContact.type.options.${value}`)
-    }
-
-    getGui() {
-      return this.relationship
-    }
-  }
 
   const gridOptions = {
     components: {
       formatLinkCell: formatLinkCell,
-      formatIncomeAnnualCell: formatIncomeAnnualCell,
-      formatIncomeMonthlyCell: formatIncomeMonthlyCell,
-      formatAltContactRelationshipCell: formatAltContactRelationshipCell,
     },
   }
 
@@ -235,7 +184,8 @@ const ApplicationsList = () => {
         width: 180,
         minWidth: 150,
         type: "rightAligned",
-        cellRenderer: "formatIncomeAnnualCell",
+        valueFormatter: ({ data, value }) =>
+          formatIncome(value, data.application.incomePeriod, IncomePeriod.perYear),
       },
       {
         headerName: "Declared Monthly Income",
@@ -245,7 +195,8 @@ const ApplicationsList = () => {
         width: 180,
         minWidth: 150,
         type: "rightAligned",
-        cellRenderer: "formatIncomeMonthlyCell",
+        valueFormatter: ({ data, value }) =>
+          formatIncome(value, data.application.incomePeriod, IncomePeriod.perMonth),
       },
       {
         headerName: "Subsidy or Voucher",
@@ -386,6 +337,13 @@ const ApplicationsList = () => {
         filter: false,
         width: 175,
         minWidth: 150,
+        valueFormatter: function ({ data, value }) {
+          return `${
+            data.application.sendMailToMailingAddress
+              ? value
+              : data.application.applicant.address.street
+          }`
+        },
       },
       {
         headerName: "Mailing City",
@@ -394,6 +352,13 @@ const ApplicationsList = () => {
         filter: false,
         width: 150,
         minWidth: 120,
+        valueFormatter: function ({ data, value }) {
+          return `${
+            data.application.sendMailToMailingAddress
+              ? value
+              : data.application.applicant.address.city
+          }`
+        },
       },
       {
         headerName: "Mailing State",
@@ -402,6 +367,13 @@ const ApplicationsList = () => {
         filter: false,
         width: 120,
         minWidth: 100,
+        valueFormatter: function ({ data, value }) {
+          return `${
+            data.application.sendMailToMailingAddress
+              ? value
+              : data.application.applicant.address.state
+          }`
+        },
       },
       {
         headerName: "Mailing Zip",
@@ -410,6 +382,13 @@ const ApplicationsList = () => {
         filter: false,
         width: 120,
         minWidth: 100,
+        valueFormatter: function ({ data, value }) {
+          return `${
+            data.application.sendMailToMailingAddress
+              ? value
+              : data.application.applicant.address.zipCode
+          }`
+        },
       },
       {
         headerName: "Work Street Address",
@@ -466,7 +445,10 @@ const ApplicationsList = () => {
         filter: false,
         width: 125,
         minWidth: 100,
-        cellRenderer: "formatAltContactRelationshipCell",
+        valueFormatter: ({ data, value }) =>
+          value == "other"
+            ? data.application.alternateContact.otherType
+            : t(`application.alternateContact.type.options.${value}`),
       },
       {
         headerName: "Alt Contact Agency",
@@ -475,10 +457,7 @@ const ApplicationsList = () => {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) => {
-          console.log(value)
-          return value?.length ? value : t("t.none")
-        },
+        valueFormatter: ({ value }) => (value?.length ? value : t("t.none")),
       },
       {
         headerName: "Alt Contact Email",
