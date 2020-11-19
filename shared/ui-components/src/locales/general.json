@@ -29,6 +29,7 @@
       "vouchers": "Housing Voucher or Subsidy",
       "preferredContact": "Preferred Contact",
       "residenceAddress": "Residence Address",
+      "workInRegion": "Work in Region",
       "submissionType": {
         "electronical": "Electronical",
         "paper": "Paper"
@@ -761,6 +762,7 @@
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "month": "Month",
+    "n/a": "n/a",
     "name": "Name",
     "neighborhood": "Neighborhood",
     "next": "Next",
