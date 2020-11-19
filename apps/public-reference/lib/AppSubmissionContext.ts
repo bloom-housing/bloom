@@ -3,6 +3,10 @@ import ApplicationConductor from "./ApplicationConductor"
 import { ApplicationStatus, ApplicationSubmissionType, Language } from "@bloom-housing/core"
 
 export const retrieveApplicationConfig = () => {
+  // TODO https://github.com/bloom-housing/bloom/issues/747 Make sure all the
+  //  ApplicationFormConfig columns are filled in each listing row
+  //  once moving this config from frontend to the DB.
+
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   return {
     sections: ["You", "Household", "Income", "Preferences", "Review"],

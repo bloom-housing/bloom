@@ -120,8 +120,8 @@ export default class ApplicationConductor {
 
   set listing(newListing) {
     this._listing = newListing
-    if (this._listing?.applicationConfig) {
-      this.config = this._listing.applicationConfig as ApplicationFormConfig
+    if (this._listing?.applicationFormConfig) {
+      this.config = this._listing.applicationFormConfig as ApplicationFormConfig
     }
   }
 
@@ -131,7 +131,7 @@ export default class ApplicationConductor {
 
   set config(newConfig) {
     this._config = newConfig
-    this.listing.applicationConfig = { ...newConfig }
+    this.listing.applicationFormConfig = { ...newConfig }
     this.steps = this._config.steps.map((step) => {
       const route = this.constructor["routes"][step.name] as StepRoute
       if (route.definition) {

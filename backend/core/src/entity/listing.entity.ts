@@ -33,6 +33,7 @@ import { transformUnits } from "../lib/unit_transformations"
 import { amiCharts } from "../lib/ami_charts"
 import { listingUrlSlug } from "../lib/url_helper"
 import { ApiProperty } from "@nestjs/swagger"
+import { ApplicationFormConfig } from "../listings/application-form-config"
 
 export enum ListingStatus {
   active = "active",
@@ -384,8 +385,14 @@ class Listing extends BaseEntity {
     return listingUrlSlug(this)
   }
 
+  @Column({
+    type: "jsonb",
+    nullable: true,
+  })
   @Expose()
-  applicationConfig?: Record<string, unknown>
+  @IsOptional()
+  @Type(() => ApplicationFormConfig)
+  applicationFormConfig?: ApplicationFormConfig | null
 }
 
 export { Listing as default, Listing }

@@ -1316,6 +1316,8 @@ export interface WhatToExpect {
   bePreparedIfChosen: string;
 }
 
+export interface ApplicationFormConfig {}
+
 export interface Listing {
   /**  */
   status: ListingStatus;
@@ -1483,7 +1485,7 @@ export interface Listing {
   yearBuilt: number;
 
   /**  */
-  applicationConfig?: object;
+  applicationFormConfig?: CombinedApplicationFormConfigTypes;
 }
 
 export interface ListingExtended {
@@ -1660,7 +1662,7 @@ export interface ListingCreate {
   yearBuilt: number;
 
   /**  */
-  applicationConfig?: object;
+  applicationFormConfig?: CombinedApplicationFormConfigTypes;
 }
 
 export interface ListingUpdate {
@@ -1821,7 +1823,7 @@ export interface ListingUpdate {
   yearBuilt: number;
 
   /**  */
-  applicationConfig?: object;
+  applicationFormConfig?: CombinedApplicationFormConfigTypes;
 
   /**  */
   id: string;
@@ -2402,6 +2404,7 @@ export type CombinedApplicationPickUpAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export type CombinedApplicationFormConfigTypes = (ApplicationFormConfig & any) | null;
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'
