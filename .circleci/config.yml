@@ -105,5 +105,5 @@ workflows:
           executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
-          start: yarn dev:all
+          start: "cd ../../backend/core && yarn dev"
           wait-on: "http://localhost:3000"
