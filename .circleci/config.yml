@@ -15,6 +15,16 @@ executors:
   cypress-node:
     docker:
       - image: "cypress/base:12.18.2"
+        environment:
+          POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom
+          APP_SECRET: "CI-LONG-SECRET-KEY"
+          # DB URL for migration and seeds:
+          DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
+          # DB URL for the jest tests per ormconfig.test.ts
+          TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
 
 jobs:
   setup:
@@ -95,5 +105,5 @@ workflows:
           executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
-          start: APP_SECRET="CI-LONG-SECRET-KEY" DATABASE_URL="postgres://bloom-ci@localhost:5432/bloom" TEST_DATABASE_URL="postgres://bloom-ci@localhost:5432/bloom" yarn dev:all
+          start: yarn dev:all
           wait-on: "http://localhost:3000"
