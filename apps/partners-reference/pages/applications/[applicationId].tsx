@@ -15,6 +15,12 @@ import {
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
 
+enum AddressColsType {
+  "residence" = "residence",
+  "mailing" = "mailing",
+  "work" = "work",
+}
+
 export default function ApplicationsList() {
   const router = useRouter()
 
@@ -86,49 +92,61 @@ export default function ApplicationsList() {
   }
 
   const addressCols = useCallback(
-    (isMailingAddress) => (
-      <>
-        <GridCell>
-          <ViewItem label={t("application.contact.streetAddress")}>
-            {isMailingAddress
-              ? application.mailingAddress.street
-              : application.applicant.address.street}
-          </ViewItem>
-        </GridCell>
+    (type: AddressColsType) => {
+      const address = {
+        city: "",
+        state: "",
+        street: "",
+        street2: "",
+        zipCode: "",
+      }
 
-        <GridCell span={3}>
-          <ViewItem label={t("application.contact.apt")}>
-            {isMailingAddress
-              ? application.mailingAddress.street2
-              : application.applicant.address.street2}
-          </ViewItem>
-        </GridCell>
+      Object.keys(address).forEach((item) => {
+        if (type === AddressColsType.residence) {
+          address[item] = application.applicant.address[item]
+        }
 
-        <GridCell>
-          <ViewItem label={t("application.contact.city")}>
-            {isMailingAddress
-              ? application.mailingAddress.city
-              : application.applicant.address.city}
-          </ViewItem>
-        </GridCell>
+        if (type === AddressColsType.mailing) {
+          if (application.sendMailToMailingAddress) {
+            address[item] = application.mailingAddress[item]
+          } else {
+            address[item] = application.applicant.address[item]
+          }
+        }
 
-        <GridCell>
-          <ViewItem label={t("application.contact.state")}>
-            {isMailingAddress
-              ? application.mailingAddress.state
-              : application.applicant.address.state}
-          </ViewItem>
-        </GridCell>
+        if (type === AddressColsType.work) {
+          if (application.applicant.workInRegion === "yes") {
+            address[item] = application.applicant.workAddress[item]
+          } else {
+            address[item] = t("t.n/a")
+          }
+        }
+      })
 
-        <GridCell>
-          <ViewItem label={t("application.contact.zip")}>
-            {isMailingAddress
-              ? application.mailingAddress.zipCode
-              : application.applicant.address.zipCode}
-          </ViewItem>
-        </GridCell>
-      </>
-    ),
+      return (
+        <>
+          <GridCell>
+            <ViewItem label={t("application.contact.streetAddress")}>{address.street}</ViewItem>
+          </GridCell>
+
+          <GridCell span={3}>
+            <ViewItem label={t("application.contact.apt")}>{address.street2}</ViewItem>
+          </GridCell>
+
+          <GridCell>
+            <ViewItem label={t("application.contact.city")}>{address.city}</ViewItem>
+          </GridCell>
+
+          <GridCell>
+            <ViewItem label={t("application.contact.state")}>{address.state}</ViewItem>
+          </GridCell>
+
+          <GridCell>
+            <ViewItem label={t("application.contact.zip")}>{address.zipCode}</ViewItem>
+          </GridCell>
+        </>
+      )
+    },
     [application]
   )
 
@@ -224,7 +242,7 @@ export default function ApplicationsList() {
               inset
               grid={false}
             >
-              <GridSection columns={4}>
+              <GridSection columns={3}>
                 <GridCell>
                   <ViewItem label={t("application.name.firstName")}>
                     {application.applicant.firstName}
@@ -257,18 +275,33 @@ export default function ApplicationsList() {
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label={t("t.phone")}>{application.applicant.phoneNumber}</ViewItem>
+                  <ViewItem
+                    label={t("t.phone")}
+                    helper={t(
+                      `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
+                    )}
+                  >
+                    {application.applicant.phoneNumber}
+                  </ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label={t("t.secondPhone")}>
+                  <ViewItem
+                    label={t("t.secondPhone")}
+                    helper={
+                      application.additionalPhoneNumber &&
+                      t(
+                        `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
+                      )
+                    }
+                  >
                     {application.additionalPhoneNumber
                       ? application.additionalPhoneNumber
                       : t("t.none")}
                   </ViewItem>
                 </GridCell>
 
-                <GridCell span={2}>
+                <GridCell>
                   <ViewItem label={t("application.details.preferredContact")}>
                     {application.contactPreferences.map((item) => (
                       <span key={item}>
@@ -278,14 +311,24 @@ export default function ApplicationsList() {
                     ))}
                   </ViewItem>
                 </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.details.workInRegion")}>
+                    {application.applicant.workInRegion === "yes" ? t("t.yes") : t("t.no")}
+                  </ViewItem>
+                </GridCell>
               </GridSection>
 
               <GridSection subtitle={t("application.details.residenceAddress")} columns={4}>
-                {addressCols(false)}
+                {addressCols(AddressColsType.residence)}
               </GridSection>
 
               <GridSection subtitle={t("application.contact.mailingAddress")} columns={4}>
-                {addressCols(application.sendMailToMailingAddress)}
+                {addressCols(AddressColsType.mailing)}
+              </GridSection>
+
+              <GridSection subtitle={t("application.contact.workAddress")} columns={4}>
+                {addressCols(AddressColsType.work)}
               </GridSection>
             </GridSection>
 
