@@ -124,11 +124,11 @@ export default function ApplicationsList() {
 
       return (
         <>
-          <GridCell>
+          <GridCell span={2}>
             <ViewItem label={t("application.contact.streetAddress")}>{address.street}</ViewItem>
           </GridCell>
 
-          <GridCell span={3}>
+          <GridCell>
             <ViewItem label={t("application.contact.apt")}>{address.street2}</ViewItem>
           </GridCell>
 
@@ -318,15 +318,15 @@ export default function ApplicationsList() {
                 </GridCell>
               </GridSection>
 
-              <GridSection subtitle={t("application.details.residenceAddress")} columns={4}>
+              <GridSection subtitle={t("application.details.residenceAddress")} columns={3}>
                 {addressCols(AddressColsType.residence)}
               </GridSection>
 
-              <GridSection subtitle={t("application.contact.mailingAddress")} columns={4}>
+              <GridSection subtitle={t("application.contact.mailingAddress")} columns={3}>
                 {addressCols(AddressColsType.mailing)}
               </GridSection>
 
-              <GridSection subtitle={t("application.contact.workAddress")} columns={4}>
+              <GridSection subtitle={t("application.contact.workAddress")} columns={3}>
                 {addressCols(AddressColsType.work)}
               </GridSection>
             </GridSection>
@@ -384,7 +384,7 @@ export default function ApplicationsList() {
                     </GridCell>
                   </GridSection>
 
-                  <GridSection subtitle={t("application.contact.address")} columns={4}>
+                  <GridSection subtitle={t("application.contact.address")} columns={3}>
                     {addressCols(AddressColsType.alternateAddress)}
                   </GridSection>
                 </GridSection>
