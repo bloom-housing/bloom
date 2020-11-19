@@ -11,9 +11,11 @@ import {
   GridCell,
   MinimalTable,
   InlineButton,
+  formatIncome,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
+import { IncomePeriod } from "@bloom-housing/core"
 
 enum AddressColsType {
   "residence" = "residence",
@@ -51,16 +53,6 @@ export default function ApplicationsList() {
 
     return momentDate.format("MMMM DD, YYYY")
   }, [applicationDto])
-
-  const annualIncome = useMemo(() => {
-    if (!application) return null
-
-    const { income, incomePeriod } = application
-    const numericIncome = parseFloat(income)
-
-    const annual = incomePeriod === "perMonth" ? numericIncome * 12 : numericIncome
-    return `${annual.toFixed(2)}`
-  }, [application])
 
   const householdMembersHeaders = {
     name: t("t.name"),
@@ -416,6 +408,7 @@ export default function ApplicationsList() {
               className="bg-primary-lighter"
               title={t("application.review.householdDetails")}
               inset
+              columns={3}
             >
               <GridCell>
                 <ViewItem label={t("application.details.adaPriorities")}>
@@ -453,8 +446,29 @@ export default function ApplicationsList() {
               inset
             >
               <GridCell>
-                <ViewItem label={t("application.details.annualIncome")}>{annualIncome}</ViewItem>
+                <ViewItem label={t("application.details.annualIncome")}>
+                  {application.incomePeriod === "perYear"
+                    ? formatIncome(
+                        parseFloat(application.income),
+                        application.incomePeriod,
+                        IncomePeriod.perYear
+                      )
+                    : t("t.n/a")}
+                </ViewItem>
               </GridCell>
+
+              <GridCell>
+                <ViewItem label={t("application.details.monthlyIncome")}>
+                  {application.incomePeriod === "perMonth"
+                    ? formatIncome(
+                        parseFloat(application.income),
+                        application.incomePeriod,
+                        IncomePeriod.perMonth
+                      )
+                    : t("t.n/a")}
+                </ViewItem>
+              </GridCell>
+
               <GridCell>
                 <ViewItem label={t("application.details.vouchers")}>
                   {application.incomeVouchers ? t("t.yes") : t("t.no")}
@@ -466,6 +480,7 @@ export default function ApplicationsList() {
               className="bg-primary-lighter"
               title={t("application.review.terms.title")}
               inset
+              grid={false}
             >
               <GridCell>
                 <ViewItem label={t("application.details.signatureOnTerms")}>
