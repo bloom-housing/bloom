@@ -1,8 +1,5 @@
 {
-  "id": "94b31440-f90e-0138-65f9-2683e7458fb7",
-  "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": false,
+  "id": "6b172ba0-0cf8-0139-7cff-2683e7458fb7",
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, Laundry",
   "applicationAddress": {
@@ -16,7 +13,6 @@
   "applicationDueDate": "2019-12-09T12:58:21.000-07:00",
   "applicationOrganization": "35 East Gish Road",
   "applicationPhone": "(408) 436-8972",
-  "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "city": "San Jose",
     "street": "35 East Gish Road",
@@ -105,7 +101,7 @@
   "disableUnitsAccordion": true,
   "units": [
     {
-      "id": "94b31470-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b172bf0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "25628.0",
       "monthlyIncomeMin": "2135.0",
@@ -129,7 +125,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b314a0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b172c10-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "25628.0",
       "monthlyIncomeMin": "2135.0",
@@ -153,7 +149,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b314b0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b172c30-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "25628.0",
       "monthlyIncomeMin": "2135.0",
@@ -177,7 +173,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b314d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b172c50-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "25628.0",
       "monthlyIncomeMin": "2135.0",
@@ -201,7 +197,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b314e0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b172c70-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "25628.0",
       "monthlyIncomeMin": "2135.0",
@@ -229,9 +225,10 @@
   "unitsAvailable": 0,
   "applicationMethods": [
     {
-      "type": "ExternalLink",
+      "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
-      "externalReference": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing"
+      "externalReference": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing",
+      "label": "English"
     }
   ],
   "assets": [

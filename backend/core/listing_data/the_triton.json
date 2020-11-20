@@ -1,8 +1,5 @@
 {
-  "id": "94b35630-f90e-0138-65f9-2683e7458fb7",
-  "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": false,
+  "id": "6b1761f0-0cf8-0139-7cff-2683e7458fb7",
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
   "applicationDueDate": "2020-05-28T00:00:00.000Z",
@@ -16,7 +13,6 @@
     "longitude": -122.2704286
   },
   "applicationPhone": "(650) 437-2039",
-  "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "Foster City",
     "county": "San Mateo",
@@ -68,13 +64,12 @@
   "leasingAgentTitle": "Business Manager",
   "rentalHistory": "No evictions.",
   "buildingTotalUnits": 48,
-  "acceptsPostmarkedApplications": false,
   "postmarkedApplicationsReceivedByDate": null,
   "totalUnits": 5,
   "unitsAvailable": 0,
   "units": [
     {
-      "id": "94b35670-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b176230-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "84696.0",
       "monthlyIncomeMin": "7058.0",
@@ -98,7 +93,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b356d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b176250-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "80.0",
       "annualIncomeMin": "58152.0",
       "monthlyIncomeMin": "4858.0",
@@ -122,7 +117,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b356f0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b176270-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "80.0",
       "annualIncomeMin": "58152.0",
       "monthlyIncomeMin": "4858.0",
@@ -146,7 +141,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b35700-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b176280-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "80.0",
       "annualIncomeMin": "58152.0",
       "monthlyIncomeMin": "4858.0",
@@ -170,7 +165,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b35720-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b1762a0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "50.0",
       "annualIncomeMin": "38952.0",
       "monthlyIncomeMin": "3246.0",
@@ -210,9 +205,14 @@
   ],
   "applicationMethods": [
     {
-      "type": "ExternalLink",
+      "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
-      "externalReference": "https://bit.ly/2wH6dLF"
+      "externalReference": "https://bit.ly/2wH6dLF",
+      "label": "English"
+    },
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": false
     }
   ],
   "assets": [

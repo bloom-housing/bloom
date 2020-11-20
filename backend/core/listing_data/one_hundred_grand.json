@@ -1,8 +1,5 @@
 {
-  "id": "94b29420-f90e-0138-65f9-2683e7458fb7",
-  "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": false,
+  "id": "6b157e60-0cf8-0139-7cff-2683e7458fb7",
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spafitness center, clubhouse, business center, heated pool & spa, outdoor BBQ’s, courtyard w/ fireplace",
   "applicationDueDate": "2020-08-10T17:00:00.000-07:00",
@@ -17,7 +14,6 @@
     "longitude": -122.268743
   },
   "applicationPhone": "(650) 350-1099",
-  "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "city": "Foster City",
     "county": "San Mateo",
@@ -70,13 +66,12 @@
   "leasingAgentTitle": "Assistant Community Manager",
   "rentalHistory": "Our credit reporting agency also reviews eviction and court databases to search for both eviction filings and judgements within the past 24 months and may include rent payment history as an indicator of future rent payment performance. Applicants are responsible for ensuring their rental history is accurate. No Fault or Dismissed evictions will not be held against the household. If a household does not meet the rental or credit criteria it could result in the denial of their application. Mitigating Circumstances will be considered on a case-by-case basis.",
   "buildingTotalUnits": 1,
-  "acceptsPostmarkedApplications": false,
   "postmarkedApplicationsReceivedByDate": null,
   "totalUnits": 166,
   "unitsAvailable": 1,
   "units": [
     {
-      "id": "94b29480-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b159210-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "80.0",
       "annualIncomeMin": "70704.0",
       "monthlyIncomeMin": "5892.0",
@@ -167,9 +162,10 @@
   ],
   "applicationMethods": [
     {
-      "type": "ExternalLink",
+      "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
-      "externalReference": "https://100grandapts.com/bmr.php"
+      "externalReference": "https://100grandapts.com/bmr.php",
+      "label": "English"
     }
   ],
   "assets": [

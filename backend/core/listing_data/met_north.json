@@ -1,8 +1,5 @@
 {
-  "id": "94b2a090-f90e-0138-65f9-2683e7458fb7",
-  "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": true,
-  "acceptingOnlineApplications": true,
+  "id": "6b15b0f0-0cf8-0139-7cff-2683e7458fb7",
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, laundry room, playground, bbq outside area, resident services",
   "applicationDueDate": "2019-11-14T15:00:00.000-07:00",
@@ -17,7 +14,6 @@
     "longitude": -121.86262929333333
   },
   "applicationPhone": "(408) 982-3840",
-  "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "San Jose",
     "county": "San Jose",
@@ -72,13 +68,12 @@
   "leasingAgentTitle": null,
   "rentalHistory": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   "buildingTotalUnits": 70,
-  "acceptsPostmarkedApplications": true,
   "postmarkedApplicationsReceivedByDate": "2019-11-18T00:00:00+00:00",
   "totalUnits": 86,
   "unitsAvailable": 0,
   "units": [
     {
-      "id": "94b2a0d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b140-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -102,7 +97,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a100-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b1a0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -126,7 +121,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a120-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b1c0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -150,7 +145,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a140-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b1e0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -174,7 +169,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a150-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b200-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -198,7 +193,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a170-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b210-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -222,7 +217,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a190-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b230-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -246,7 +241,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a1a0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b250-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -270,7 +265,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a1c0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b270-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -294,7 +289,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a1e0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b280-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -318,7 +313,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a1f0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b2a0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -342,7 +337,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a210-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b2c0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -366,7 +361,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a230-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b2e0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -390,7 +385,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a240-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b320-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -414,7 +409,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a260-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b340-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -438,7 +433,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a280-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b380-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "37224.0",
       "monthlyIncomeMin": "3102.0",
@@ -462,7 +457,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a2d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15b3b0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -486,7 +481,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a2f0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bf00-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -510,7 +505,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a300-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bf30-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -534,7 +529,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a310-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bf70-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -558,7 +553,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a330-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bf80-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -582,7 +577,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a350-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bfa0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -606,7 +601,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a370-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bfc0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -630,7 +625,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a380-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bfe0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -654,7 +649,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a3a0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15bff0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -678,7 +673,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a3b0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c010-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -702,7 +697,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a3d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c030-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -726,7 +721,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a3f0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c050-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "24072.0",
       "monthlyIncomeMin": "2006.0",
@@ -750,7 +745,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a400-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c060-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -774,7 +769,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a420-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c080-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -798,7 +793,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a430-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c0a0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -822,7 +817,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a450-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c0c0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -846,7 +841,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a460-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c0e0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -870,7 +865,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a470-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c0f0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -894,7 +889,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a490-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c110-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "33600.0",
       "monthlyIncomeMin": "2800.0",
@@ -918,7 +913,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a4b0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c130-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -942,7 +937,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a4c0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c140-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -966,7 +961,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a4e0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c160-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -990,7 +985,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a500-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c180-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -1014,7 +1009,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a510-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c1a0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -1038,7 +1033,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a530-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c1b0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -1062,7 +1057,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a540-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c1d0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -1086,7 +1081,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a560-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c1f0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "21744.0",
       "monthlyIncomeMin": "1812.0",
@@ -1110,7 +1105,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a570-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c210-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1134,7 +1129,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a5b0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c220-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1158,7 +1153,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a5d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c240-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1182,7 +1177,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a5f0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c260-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1206,7 +1201,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a600-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c290-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1230,7 +1225,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a620-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c2b0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1254,7 +1249,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a630-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c2c0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1278,7 +1273,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a650-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c390-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1302,7 +1297,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a660-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c3b0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1326,7 +1321,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a680-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c3d0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1350,7 +1345,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a690-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c3f0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1374,7 +1369,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a6a0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c400-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1398,7 +1393,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a6c0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c420-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1422,7 +1417,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a6e0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c440-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1446,7 +1441,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a6f0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c460-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1470,7 +1465,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a710-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c470-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "45.0",
       "annualIncomeMin": "28128.0",
       "monthlyIncomeMin": "2344.0",
@@ -1494,7 +1489,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a730-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c480-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1518,7 +1513,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a740-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15c4a0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1542,7 +1537,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a760-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cd40-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1566,7 +1561,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a780-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cd60-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1590,7 +1585,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a790-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cd70-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1614,7 +1609,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a7b0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cd90-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1638,7 +1633,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a7d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cdb0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1662,7 +1657,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a7e0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cdd0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1686,7 +1681,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a800-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cdf0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1710,7 +1705,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a820-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15ce00-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1734,7 +1729,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a830-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15ce20-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1758,7 +1753,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a850-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15ce40-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1782,7 +1777,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a870-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15ce60-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1806,7 +1801,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a880-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15ce70-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1830,7 +1825,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a8a0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15ce90-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "18240.0",
       "monthlyIncomeMin": "1520.0",
@@ -1854,7 +1849,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a8b0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cea0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -1878,7 +1873,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a8d0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cec0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -1902,7 +1897,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a8e0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cee0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -1926,7 +1921,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a900-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cef0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -1950,7 +1945,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a910-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cf10-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -1974,7 +1969,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a920-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cf40-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -1998,7 +1993,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2a9e0-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cf60-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -2022,7 +2017,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2aa00-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cf80-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -2046,7 +2041,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2aa20-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cfa0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -2070,7 +2065,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2aa30-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cfc0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -2094,7 +2089,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2aa50-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cfd0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -2118,7 +2113,7 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": "94b2aa60-f90e-0138-65f9-2683e7458fb7",
+      "id": "6b15cff0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "30.0",
       "annualIncomeMin": "17256.0",
       "monthlyIncomeMin": "1438.0",
@@ -2147,9 +2142,22 @@
   ],
   "applicationMethods": [
     {
-      "type": "ExternalLink",
+      "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
-      "externalReference": "http://bit.ly/2MTa79o"
+      "externalReference": "http://bit.ly/2MTa79o",
+      "label": "English"
+    },
+    {
+      "type": "LeasingAgent",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "POBox",
+      "acceptsPostmarkedApplications": false
+    },
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": false
     }
   ],
   "assets": [
