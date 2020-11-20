@@ -24,7 +24,12 @@ const Layout = (props) => (
       <title>{t("nav.siteTitle")}</title>
     </Head>
     <WelcomeHeader />
-    <SiteHeader logoSrc="/images/logo_glyph.svg" notice={notice} title={t("nav.siteTitle")}>
+    <SiteHeader
+      skip={t("nav.skip")}
+      logoSrc="/images/logo_glyph.svg"
+      notice={notice}
+      title={t("nav.siteTitle")}
+    >
       <LocalizedLink href="/listings" className="navbar-item">
         {t("nav.listings")}
       </LocalizedLink>
