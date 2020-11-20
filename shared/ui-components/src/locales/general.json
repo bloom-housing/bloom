@@ -494,8 +494,10 @@
     "signIn": {
       "loginError": "Please enter your login email",
       "passwordError": "Please enter your login password",
+      "cantFindAccount": "We couldn't find an account with that email address/password.",
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
+      "forgotPassword": "Forgot password?",
       "success": "Welcome back, %{name}!"
     },
     "signOut": {

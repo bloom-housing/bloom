@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useContext } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import Link from "next/link"
@@ -36,7 +36,9 @@ export default () => {
         console.warn(err.message)
         setError("authentication", {
           type: "manual",
-          message: `${t("authentication.signIn.error")}`,
+          message: `${t("authentication.signIn.cantFindAccount")} ${t(
+            "authentication.signIn.errorGenericMessage"
+          )}`,
         })
       } else {
         console.error(err)
@@ -85,7 +87,7 @@ export default () => {
 
             <aside className="float-right font-bold">
               <Link href="/forgot-password">
-                <a>Forgot password?</a>
+                <a>{t("authentication.signIn.forgotPassword")}</a>
               </Link>
             </aside>
 
