@@ -484,7 +484,15 @@ export default function ApplicationsList() {
             >
               <GridCell>
                 <ViewItem label={t("application.details.signatureOnTerms")}>
-                  {application.acceptedTerms ? t("t.yes") : t("t.no")}
+                  {(() => {
+                    if (typeof application.acceptedTerms == "undefined") {
+                      return t("t.n/a")
+                    } else if (application.acceptedTerms) {
+                      return t("t.yes")
+                    } else {
+                      return t("t.no")
+                    }
+                  })()}
                 </ViewItem>
               </GridCell>
             </GridSection>
