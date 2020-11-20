@@ -14,6 +14,8 @@ export function getColDefs(maxHouseholdSize: number) {
       minWidth: 150,
       sort: "asc",
       valueFormatter: ({ value }) => {
+        if (!value) return ""
+
         const date = moment(value).format("MM/DD/YYYY")
         const time = moment(value).format("HH:mm:ss A")
 
@@ -66,8 +68,13 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 180,
       minWidth: 150,
       type: "rightAligned",
-      valueFormatter: ({ data, value }) =>
-        formatIncome(value, data.application.incomePeriod, IncomePeriod.perYear),
+      valueFormatter: ({ data, value }) => {
+        if (!value) return ""
+
+        return data.application.incomePeriod === IncomePeriod.perYear
+          ? formatIncome(value, data.application.incomePeriod, IncomePeriod.perYear)
+          : t("t.n/a")
+      },
     },
     {
       headerName: t("applications.table.declaredMonthlyIncome"),
@@ -77,8 +84,13 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 180,
       minWidth: 150,
       type: "rightAligned",
-      valueFormatter: ({ data, value }) =>
-        formatIncome(value, data.application.incomePeriod, IncomePeriod.perMonth),
+      valueFormatter: ({ data, value }) => {
+        if (!value) return ""
+
+        return data.application.incomePeriod === IncomePeriod.perMonth
+          ? formatIncome(value, data.application.incomePeriod, IncomePeriod.perMonth)
+          : t("t.n/a")
+      },
     },
     {
       headerName: t("applications.table.subsidyOrVoucher"),
@@ -87,7 +99,11 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 120,
       minWidth: 100,
-      valueFormatter: (data) => (data.value ? t("t.yes") : t("t.no")),
+      valueFormatter: (data) => {
+        if (!data.value) return ""
+
+        return data.value ? t("t.yes") : t("t.no")
+      },
     },
     {
       headerName: t("applications.table.requestAda"),
@@ -97,6 +113,8 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 120,
       minWidth: 100,
       valueFormatter: (data) => {
+        if (!data.value) return ""
+
         const posiviveValues = Object.entries(data.value).reduce((acc, curr) => {
           if (curr[1]) {
             acc.push(t(`application.ada.${curr[0]}`))
@@ -116,6 +134,8 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 150,
       minWidth: 100,
       valueFormatter: (data) => {
+        if (!data.value) return ""
+
         const posiviveValues = Object.entries(data.value).reduce((acc, curr) => {
           if (curr[0] !== "none" && curr[1]) {
             acc.push(t(`application.preferences.options.${curr[0]}`))
@@ -134,7 +154,10 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 150,
       minWidth: 100,
-      valueFormatter: ({ value }) => `${value.birthMonth}/${value.birthDay}/${value.birthYear}`,
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return `${value.birthMonth}/${value.birthDay}/${value.birthYear}`
+      },
     },
     {
       headerName: t("t.email"),
@@ -159,7 +182,10 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 150,
       minWidth: 100,
-      valueFormatter: ({ value }) => t(`application.contact.phoneNumberTypes.${value}`),
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return t(`application.contact.phoneNumberTypes.${value}`)
+      },
     },
     {
       headerName: t("t.additionalPhone"),
@@ -168,7 +194,10 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 150,
       minWidth: 100,
-      valueFormatter: ({ value }) => (value ? value : t("t.none")),
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return value ? value : t("t.none")
+      },
     },
     {
       headerName: t("applications.table.additionalPhoneType"),
@@ -177,8 +206,10 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 150,
       minWidth: 100,
-      valueFormatter: ({ value }) =>
-        value ? t(`application.contact.phoneNumberTypes.${value}`) : t("t.none"),
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return value ? t(`application.contact.phoneNumberTypes.${value}`) : t("t.none")
+      },
     },
     {
       headerName: t("applications.table.residenceStreet"),
@@ -220,6 +251,7 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 175,
       minWidth: 150,
       valueFormatter: function ({ data, value }) {
+        if (!value) return ""
         return `${
           data.application.sendMailToMailingAddress
             ? value
@@ -235,6 +267,8 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 150,
       minWidth: 120,
       valueFormatter: function ({ data, value }) {
+        if (!value) return ""
+
         return `${
           data.application.sendMailToMailingAddress
             ? value
@@ -250,6 +284,8 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 120,
       minWidth: 100,
       valueFormatter: function ({ data, value }) {
+        if (!value) return ""
+
         return `${
           data.application.sendMailToMailingAddress
             ? value
@@ -265,6 +301,8 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 120,
       minWidth: 100,
       valueFormatter: function ({ data, value }) {
+        if (!value) return ""
+
         return `${
           data.application.sendMailToMailingAddress
             ? value
@@ -327,10 +365,13 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 125,
       minWidth: 100,
-      valueFormatter: ({ data, value }) =>
-        value == "other"
+      valueFormatter: ({ data, value }) => {
+        if (!value) return ""
+
+        return value == "other"
           ? data.application.alternateContact.otherType
-          : t(`application.alternateContact.type.options.${value}`),
+          : t(`application.alternateContact.type.options.${value}`)
+      },
     },
     {
       headerName: t("applications.table.altContactAgency"),
@@ -339,7 +380,10 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 125,
       minWidth: 100,
-      valueFormatter: ({ value }) => (value?.length ? value : t("t.none")),
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return value?.length ? value : t("t.none")
+      },
     },
     {
       headerName: t("applications.table.altContactEmail"),
@@ -405,7 +449,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) => (value[i] ? value[i].firstName : ""),
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? value[i].firstName : ""
+        },
       },
       {
         headerName: `${t("applications.table.householdLastName")} ${householdIndex}`,
@@ -414,7 +462,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) => (value[i] ? value[i].lastName : ""),
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? value[i].lastName : ""
+        },
       },
       {
         headerName: `${t("applications.table.householdRelationship")} ${householdIndex}`,
@@ -423,8 +475,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) =>
-          value[i] ? t(`application.form.options.relationship.${value[i].relationship}`) : "",
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? t(`application.form.options.relationship.${value[i].relationship}`) : ""
+        },
       },
       {
         headerName: `${t("applications.table.householdDob")} ${householdIndex}`,
@@ -433,8 +488,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) =>
-          value[i] ? `${value[i].birthMonth}/${value[i].birthDay}/${value[i].birthYear}` : "",
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? `${value[i].birthMonth}/${value[i].birthDay}/${value[i].birthYear}` : ""
+        },
       },
       {
         headerName: `${t("applications.table.householdStreetAddress")} ${householdIndex}`,
@@ -443,7 +501,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) => (value[i] ? value[i].address.street : ""),
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? value[i].address.street : ""
+        },
       },
       {
         headerName: `${t("applications.table.householdCity")} ${householdIndex}`,
@@ -452,7 +514,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) => (value[i] ? value[i].address.city : ""),
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? value[i].address.city : ""
+        },
       },
       {
         headerName: `${t("applications.table.householdState")} ${householdIndex}`,
@@ -461,7 +527,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) => (value[i] ? value[i].address.state : ""),
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? value[i].address.state : ""
+        },
       },
       {
         headerName: `${t("applications.table.householdZip")} ${householdIndex}`,
@@ -470,7 +540,11 @@ export function getColDefs(maxHouseholdSize: number) {
         filter: false,
         width: 125,
         minWidth: 100,
-        valueFormatter: ({ value }) => (value[i] ? value[i].address.zipCode : ""),
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          return value[i] ? value[i].address.zipCode : ""
+        },
       }
     )
   }
