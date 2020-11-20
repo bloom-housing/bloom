@@ -124,11 +124,11 @@ export default function ApplicationsList() {
 
       return (
         <>
-          <GridCell span={2}>
+          <GridCell>
             <ViewItem label={t("application.contact.streetAddress")}>{address.street}</ViewItem>
           </GridCell>
 
-          <GridCell>
+          <GridCell span={2}>
             <ViewItem label={t("application.contact.apt")}>{address.street2}</ViewItem>
           </GridCell>
 
@@ -250,7 +250,9 @@ export default function ApplicationsList() {
 
                 <GridCell>
                   <ViewItem label={t("application.name.middleName")}>
-                    {application.applicant.middleName}
+                    {application.applicant.middleName
+                      ? application.applicant.middleName
+                      : t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
@@ -373,7 +375,9 @@ export default function ApplicationsList() {
 
                     <GridCell>
                       <ViewItem label={t("t.email")}>
-                        {application.alternateContact.emailAddress}
+                        {application.alternateContact.emailAddress
+                          ? application.alternateContact.emailAddress
+                          : t("t.n/a")}
                       </ViewItem>
                     </GridCell>
 
