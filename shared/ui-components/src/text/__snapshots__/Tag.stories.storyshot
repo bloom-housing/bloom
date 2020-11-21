@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Prototypes/Tag Pill 1`] = `
+exports[`Storyshots Text/Tag Pill 1`] = `
 <div
   style={
     Object {
@@ -11,16 +11,16 @@ exports[`Storyshots Prototypes/Tag Pill 1`] = `
   <Tag
     pillStyle={true}
   >
-    <div
+    <span
       className="tag is-pill"
     >
-      Success
-    </div>
+      Pill Style
+    </span>
   </Tag>
 </div>
 `;
 
-exports[`Storyshots Prototypes/Tag Pill And Success 1`] = `
+exports[`Storyshots Text/Tag Pill And Success 1`] = `
 <div
   style={
     Object {
@@ -30,18 +30,18 @@ exports[`Storyshots Prototypes/Tag Pill And Success 1`] = `
 >
   <Tag
     pillStyle={true}
-    success={true}
+    type="is-success"
   >
-    <div
+    <span
       className="tag is-success is-pill"
     >
       Pill Success
-    </div>
+    </span>
   </Tag>
 </div>
 `;
 
-exports[`Storyshots Prototypes/Tag Small 1`] = `
+exports[`Storyshots Text/Tag Pill Small 1`] = `
 <div
   style={
     Object {
@@ -50,18 +50,39 @@ exports[`Storyshots Prototypes/Tag Small 1`] = `
   }
 >
   <Tag
-    small={true}
+    pillStyle={true}
+    size="is-small"
   >
-    <div
-      className="tag is-small"
+    <span
+      className="tag is-small is-pill"
     >
-      Warning
-    </div>
+      Pill Small
+    </span>
   </Tag>
 </div>
 `;
 
-exports[`Storyshots Prototypes/Tag Standard 1`] = `
+exports[`Storyshots Text/Tag Small 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Tag
+    size="is-small"
+  >
+    <span
+      className="tag is-small"
+    >
+      Warning
+    </span>
+  </Tag>
+</div>
+`;
+
+exports[`Storyshots Text/Tag Standard 1`] = `
 <div
   style={
     Object {
@@ -70,16 +91,16 @@ exports[`Storyshots Prototypes/Tag Standard 1`] = `
   }
 >
   <Tag>
-    <div
+    <span
       className="tag"
     >
       Tag
-    </div>
+    </span>
   </Tag>
 </div>
 `;
 
-exports[`Storyshots Prototypes/Tag Success 1`] = `
+exports[`Storyshots Text/Tag Success 1`] = `
 <div
   style={
     Object {
@@ -88,18 +109,18 @@ exports[`Storyshots Prototypes/Tag Success 1`] = `
   }
 >
   <Tag
-    success={true}
+    type="is-success"
   >
-    <div
+    <span
       className="tag is-success"
     >
       Success
-    </div>
+    </span>
   </Tag>
 </div>
 `;
 
-exports[`Storyshots Prototypes/Tag Warning 1`] = `
+exports[`Storyshots Text/Tag Warning 1`] = `
 <div
   style={
     Object {
@@ -108,13 +129,13 @@ exports[`Storyshots Prototypes/Tag Warning 1`] = `
   }
 >
   <Tag
-    warning={true}
+    type="is-warning"
   >
-    <div
+    <span
       className="tag is-warning"
     >
       Warning
-    </div>
+    </span>
   </Tag>
 </div>
 `;

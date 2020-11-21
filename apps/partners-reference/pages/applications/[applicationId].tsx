@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
 import {
+  AppearanceStyleType,
   PageHeader,
   t,
   Tag,
@@ -155,7 +156,7 @@ export default function ApplicationsList() {
           </InlineButton>
 
           <div className="status-bar__status md:pl-4 md:w-3/12">
-            <Tag success pillStyle>
+            <Tag type={AppearanceStyleType.success} pillStyle>
               {application.status
                 ? t(`application.details.applicationStatus.${application.status}`)
                 : t(`application.details.applicationStatus.submitted`)}
