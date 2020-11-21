@@ -10,7 +10,6 @@ import {
   Form,
   FormCard,
   Icon,
-  ErrorMessage,
   UserContext,
   t,
 } from "@bloom-housing/ui-components"
@@ -36,9 +35,7 @@ export default () => {
         console.warn(err.message)
         setError("authentication", {
           type: "manual",
-          message: `${t("authentication.signIn.cantFindAccount")} ${t(
-            "authentication.signIn.errorGenericMessage"
-          )}`,
+          message: t("authentication.signIn.cantFindAccount"),
         })
       } else {
         console.error(err)
@@ -65,7 +62,7 @@ export default () => {
         </div>
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {errors.authentication ? errors.authentication.message : t("t.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -104,14 +101,6 @@ export default () => {
                 onChange: () => clearErrors("authentication"),
               }}
             />
-
-            {errors.authentication && (
-              <div className="field error text-center my-8">
-                <ErrorMessage error={errors.authentication}>
-                  {errors.authentication?.message}
-                </ErrorMessage>
-              </div>
-            )}
 
             <div className="text-center mt-6">
               <Button
