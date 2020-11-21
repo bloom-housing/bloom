@@ -27,24 +27,9 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import * as routes from "../fixtures/routes.json"
 import * as listingConfig from "../fixtures/listingConfig.json"
+import { setProperty } from "./helpers"
 
 const listingsUrl = "http://localhost:3100/listings"
-
-const setProperty = (obj, path, value) => {
-  if (Object(obj) !== obj) return obj
-
-  if (!Array.isArray(path)) path = path.toString().match(/[^.[\]]+/g) || []
-  path
-    .slice(0, -1)
-    .reduce(
-      (a, c, i) =>
-        Object(a[c]) === a[c]
-          ? a[c]
-          : (a[c] = Math.abs(path[i + 1]) >> 0 === +path[i + 1] ? [] : {}),
-      obj
-    )[path[path.length - 1]] = value
-  return obj
-}
 
 Cypress.Commands.add("getByID", (id, ...args) => {
   return cy.get(`#${CSS.escape(id)}`, ...args)
@@ -99,6 +84,7 @@ Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
   cy.fixture("listing.json").then((listingData) => {
     const steps = listingData.applicationConfig.steps
 
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     const nextRouteIndex = steps.findIndex((item) => item.name === currentStep) + 1 + skip
     const nextRouteName = steps[nextRouteIndex] ? steps[nextRouteIndex].name : ""
     const nextRoutePath = routes[nextRouteName]
