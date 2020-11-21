@@ -1,17 +1,34 @@
 import * as React from "react"
 
+import { withKnobs, text, select } from "@storybook/addon-knobs"
+
 import { Button } from "../actions/Button"
-import { AppearanceBorderType, AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
+import {
+  AppearanceBorderType,
+  AppearanceSizeType,
+  AppearanceStyleType,
+} from "../global/AppearanceTypes"
 
 export default {
   title: "Actions/Button",
+  decorators: [withKnobs],
 }
 
 const handleClick = (e: React.MouseEvent) => {
   alert(`You clicked me! Event: ${e.type}`)
 }
 
-export const standard = () => <Button onClick={handleClick}>Button Component</Button>
+const StyleTypeStory = { ...AppearanceStyleType, default: undefined }
+
+export const standard = () => {
+  const styleSelect = select("Appearance Style", StyleTypeStory, undefined)
+
+  return (
+    <Button type={styleSelect} onClick={handleClick}>
+      {text("Label", "Hello Storybook")}
+    </Button>
+  )
+}
 
 export const small = () => (
   <Button size={AppearanceSizeType.small} onClick={handleClick}>
@@ -80,19 +97,31 @@ export const borderless = () => (
 )
 
 export const successOutline = () => (
-  <Button type={AppearanceStyleType.success} border={AppearanceBorderType.outlined} onClick={handleClick}>
+  <Button
+    type={AppearanceStyleType.success}
+    border={AppearanceBorderType.outlined}
+    onClick={handleClick}
+  >
     Outlined Success Button
   </Button>
 )
 
 export const alertOutlined = () => (
-  <Button type={AppearanceStyleType.alert} border={AppearanceBorderType.outlined} onClick={handleClick}>
+  <Button
+    type={AppearanceStyleType.alert}
+    border={AppearanceBorderType.outlined}
+    onClick={handleClick}
+  >
     Outlined Alert Button
   </Button>
 )
 
 export const warningOutline = () => (
-  <Button type={AppearanceStyleType.warning} border={AppearanceBorderType.outlined} onClick={handleClick}>
+  <Button
+    type={AppearanceStyleType.warning}
+    border={AppearanceBorderType.outlined}
+    onClick={handleClick}
+  >
     Outlined Warning Button
   </Button>
 )
