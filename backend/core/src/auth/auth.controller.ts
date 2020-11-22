@@ -1,30 +1,18 @@
-import {
-  Controller,
-  Request,
-  Post,
-  UseGuards,
-  Body,
-  HttpCode,
-  UseInterceptors,
-} from "@nestjs/common"
+import { Controller, Request, Post, UseGuards } from "@nestjs/common"
 import { LocalAuthGuard } from "./local-auth.guard"
 import { AuthService } from "./auth.service"
-import { UserService } from "../user/user.service"
-import { EmailService } from "../shared/email.service"
-import { CreateUserDto } from "../user/createUser.dto"
 import { DefaultAuthGuard } from "./default.guard"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { LoginDto, LoginResponseDto } from "./login.dto"
-import { TransformInterceptor } from "../interceptors/transform.interceptor"
-import { RegisterResponseDto } from "./user.dto"
+import { mapTo } from "../shared/mapTo"
+import { UserService } from "../user/user.service"
 
 @Controller("auth")
 @ApiTags("auth")
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    private emailService: EmailService
+    private readonly userService: UserService,
+    private readonly authService: AuthService
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -33,14 +21,14 @@ export class AuthController {
   @ApiOperation({ summary: "Login", operationId: "login" })
   login(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return { accessToken }
+    return mapTo(LoginResponseDto, { accessToken })
   }
 
   @UseGuards(DefaultAuthGuard)
   @Post("token")
   @ApiOperation({ summary: "Token", operationId: "token" })
-  token(@Request() req) {
+  token(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return { accessToken }
+    return mapTo(LoginResponseDto, { accessToken })
   }
 }

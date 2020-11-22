@@ -1,4 +1,3 @@
-import { ApplicationCreateDto } from "./../applications/application.create.dto"
 import { Injectable, Logger } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
@@ -8,12 +7,16 @@ import { User } from "../entity/user.entity"
 import { Listing } from "../entity/listing.entity"
 import Polyglot from "node-polyglot"
 import fs from "fs"
+import { ConfigService } from "@nestjs/config"
 
 @Injectable()
 export class EmailService {
   polyglot: Polyglot
 
-  constructor(private readonly sendGrid: SendGridService) {
+  constructor(
+    private readonly sendGrid: SendGridService,
+    private readonly configService: ConfigService
+  ) {
     const polyglot = new Polyglot({
       phrases: this.translations(),
     })
@@ -27,9 +30,11 @@ export class EmailService {
   }
 
   public async welcome(user: User) {
-    if (process.env.NODE_ENV == "production") {
+    if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
-        `Preparing to send a welcome email to ${user.email} from ${process.env.EMAIL_FROM_ADDRESS}...`
+        `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
+          "EMAIL_FROM_ADDRESS"
+        )}...`
       )
     }
     // TODO set locale for user
@@ -43,9 +48,11 @@ export class EmailService {
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
 
-    if (process.env.NODE_ENV == "production") {
+    if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a confirmation email to ${appData.applicant.emailAddress} from ${process.env.EMAIL_FROM_ADDRESS}...`
+        `Preparing to send a confirmation email to ${
+          appData.applicant.emailAddress
+        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
       )
     }
 
@@ -109,21 +116,21 @@ export class EmailService {
     await this.sendGrid.send(
       {
         to: to,
-        from: process.env.EMAIL_FROM_ADDRESS,
+        from: this.configService.get<string>("EMAIL_FROM_ADDRESS"),
         subject: subject,
         html: body,
       },
       false,
-      (error, info) => {
+      (error) => {
         if (error instanceof ResponseError) {
-          const { message, code, response } = error
-          const { headers, body } = response
+          const { response } = error
+          const { body } = response
           console.error(`Error sending email to: ${to}! Error body: ${body}`)
           if (!retry) {
             retry = 3
           }
           // Retries, if sending failed
-          this.send(to, subject, body, retry - 1)
+          void this.send(to, subject, body, retry - 1)
         }
       }
     )

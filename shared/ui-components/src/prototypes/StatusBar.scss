@@ -2,4 +2,17 @@
   @apply flex;
   @apply text-sm;
   @apply items-center;
+  @apply py-4;
+}
+
+.status-bar__status {
+  .tag {
+    @apply block;
+  }
+}
+
+.status-bar__action {
+  @apply ml-4;
+  @apply pl-4;
+  @apply border-l;
 }

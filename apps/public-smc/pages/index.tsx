@@ -3,7 +3,7 @@ import Head from "next/head"
 import Layout from "../layouts/application"
 import { Hero, MarkdownSection, MetaTags, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/homepage.mdx"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import axios from "axios"
 
 interface IndexProps {

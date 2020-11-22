@@ -1,17 +1,89 @@
 import React from "react"
 import ApplicationConductor from "./ApplicationConductor"
+import { ApplicationStatus, ApplicationSubmissionType, Language } from "@bloom-housing/core"
+
+export const retrieveApplicationConfig = () => {
+  // Note: this whole function will eventually be replaced with one that reads this from the backend.
+  return {
+    sections: ["You", "Household", "Income", "Preferences", "Review"],
+    languages: ["en", "zh"],
+    steps: [
+      {
+        name: "chooseLanguage",
+      },
+      {
+        name: "whatToExpect",
+      },
+      {
+        name: "primaryApplicantName",
+      },
+      {
+        name: "primaryApplicantAddress",
+      },
+      {
+        name: "alternateContactType",
+      },
+      {
+        name: "alternateContactName",
+      },
+      {
+        name: "alternateContactInfo",
+      },
+      {
+        name: "liveAlone",
+      },
+      {
+        name: "householdMemberInfo",
+      },
+      {
+        name: "addMembers",
+      },
+      {
+        name: "preferredUnitSize",
+      },
+      {
+        name: "adaHouseholdMembers",
+      },
+      {
+        name: "vouchersSubsidies",
+      },
+      {
+        name: "income",
+      },
+      {
+        name: "preferencesIntroduction",
+      },
+      {
+        name: "generalPool",
+      },
+      {
+        name: "demographics",
+      },
+      {
+        name: "summary",
+      },
+      {
+        name: "terms",
+      },
+    ],
+  }
+}
 
 export const blankApplication = () => {
   return {
     loaded: false,
-    completedStep: 0,
+    completedSections: 0,
+    submissionType: ApplicationSubmissionType.electronical,
+    language: Language.en,
+    acceptedTerms: false,
+    status: ApplicationStatus.submitted,
     applicant: {
       firstName: "",
       middleName: "",
       lastName: "",
-      birthMonth: 0,
-      birthDay: 0,
-      birthYear: 0,
+      birthMonth: "",
+      birthDay: "",
+      birthYear: "",
       emailAddress: "",
       noEmail: false,
       phoneNumber: "",
@@ -87,11 +159,16 @@ export const blankApplication = () => {
     preferredUnit: [],
     demographics: {
       ethnicity: "",
+      race: "",
       gender: "",
       sexualOrientation: "",
-      howDidYouHear: "",
+      howDidYouHear: [],
     },
-    preferences: {} as Record<string, any>,
+    preferences: {
+      liveIn: false,
+      none: false,
+      workIn: false,
+    },
     confirmationId: "",
   }
 }

@@ -1,9 +1,10 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
-import { Icon } from "../../../atoms/Icon"
+import { Icon } from "../../../icons/Icon"
 import { Address } from "@bloom-housing/core"
 import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 import { t } from "../../../helpers/translator"
+import Markdown from "markdown-to-jsx"
 
 export interface SidebarAddressProps {
   address: Address
@@ -28,7 +29,9 @@ const SidebarAddress = (props: SidebarAddressProps) => {
     hours = (
       <>
         <h3 className="text-caps-tiny ">{t("leasingAgent.officeHours")}</h3>
-        <p className="text-gray-800">{officeHours}</p>
+        <div className="text-gray-800 markdown">
+          <Markdown children={officeHours} options={{ disableParsingRawHTML: true }} />
+        </div>
       </>
     )
   }

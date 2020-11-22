@@ -1,0 +1,174 @@
+// Using due to errors from compass mixin
+@mixin custom-linear-gradient($top, $bottom) {
+  background: $top; /* Old browsers */
+  background: -moz-linear-gradient(top, $top 0%, $bottom 100%); /* FF3.6+ */
+  background: -webkit-linear-gradient(top, $top 0%, $bottom 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, $top 0%, $bottom 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, $top 0%, $bottom 100%); /* IE10+ */
+  background: linear-gradient(to bottom, $top 0%, $bottom 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+
+// Adds full screen image to pseudo element
+@mixin overlay-image() {
+  @apply block;
+  @apply absolute;
+  @apply inset-0;
+  content: "";
+  z-index: 2;
+}
+
+@mixin clearfix() {
+  &::after {
+    @apply table;
+    @apply clear-both;
+    content: "";
+  }
+}
+
+@mixin has-toggle() {
+  &:after {
+    @apply font-bold;
+    @apply inline-block;
+    @apply ml-2;
+    @apply mr-2;
+    @apply text-sm;
+    content: "⌃";
+    transform: rotate(180deg) translateY(2px);
+  }
+  &[aria-expanded="true"]:after {
+    @apply mr-5;
+    transform: rotate(0deg) translateY(2px);
+  }
+}
+
+@mixin has-image-skeleton() {
+  @apply bg-gray-400;
+
+  &::before {
+    @apply float-left;
+    content: "";
+    width: 1px;
+    margin-left: -1px;
+    height: 0;
+    padding-top: 591.44px / 1127.34px * 100%;
+  }
+
+  &::after {
+    /* to clear float */
+    @apply table;
+    @apply clear-both;
+    content: "";
+  }
+}
+
+@mixin filled-appearances() {
+  &.is-primary {
+    @apply bg-primary-dark;
+    @apply border-primary;
+    @apply text-white;
+
+    &:hover {
+      @apply bg-primary-darker;
+    }
+  }
+
+  &.is-success {
+    @apply bg-success;
+    @apply border-success;
+    @apply text-white;
+
+    &:hover {
+      @apply bg-success-dark;
+    }
+  }
+
+  &.is-alert {
+    @apply bg-alert;
+    @apply border-alert;
+    @apply text-white;
+
+    &:hover {
+      @apply bg-alert-dark;
+      @apply border-alert-dark;
+    }
+  }
+
+  &.is-warning {
+    @apply bg-warn;
+    @apply border-warn;
+    @apply text-gray-800;
+
+    &:hover {
+      @apply text-white;
+      @apply bg-warn-dark;
+      @apply border-warn-dark;
+    }
+  }
+
+  &.is-borderless {
+    @apply text-primary-darker;
+    border-color: transparent;
+    background: transparent;
+
+    &:hover {
+      background: transparent;
+      @apply text-primary-darker;
+    }
+  }
+}
+
+@mixin outlined-appearances() {
+  @apply bg-white;
+  @apply text-primary;
+  @apply border-2;
+  @apply border-primary;
+
+  &:hover {
+    @apply bg-primary-dark;
+    @apply text-white;
+  }
+
+  &.is-outlined {
+    background: transparent;
+
+    &.is-success {
+      @apply text-success;
+
+      &:hover {
+        @apply text-white;
+      }
+    }
+
+    &.is-alert {
+      @apply text-alert;
+
+      &:hover {
+        @apply text-white;
+      }
+    }
+
+    &.is-warning {
+      @apply text-gray-800;
+
+      &:hover {
+        @apply text-white;
+      }
+    }
+  }
+}
+
+@mixin transition-timing {
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.475, 0.335, 0.43, 0.94);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0s;
+  }
+}
+
+@mixin ellipsis() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

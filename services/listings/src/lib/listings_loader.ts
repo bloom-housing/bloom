@@ -14,7 +14,7 @@ export default (folderName: string) => {
 
     fs.readdir(directoryPath, (err, files) => {
       if (err) {
-        console.log("Unable to scan directory: " + err)
+        console.log("Unable to scan directory: " + err.message)
         reject()
       }
 

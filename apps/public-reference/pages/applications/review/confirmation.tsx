@@ -1,13 +1,19 @@
 /*
 5.4 Confirmation
-Application confirmation with lottery number (confirmation number) 
+Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { Button, FormCard, imageUrlFromListing, t } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  imageUrlFromListing,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext } from "react"
+import React, { useContext } from "react"
 
 export default () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -32,7 +38,9 @@ export default () => {
             {t("application.review.confirmation.lotteryNumber")}
           </h3>
 
-          <p className="font-serif text-3xl my-1">{application.confirmationId}</p>
+          <p id="confirmationId" className="font-serif text-3xl my-1">
+            {application.confirmationId}
+          </p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>
 
@@ -64,7 +72,7 @@ export default () => {
           )}
         </div>
 
-        {/* <div className="form-card__group">
+        <div className="form-card__group">
           <h3 className="form-card__paragraph-title">
             {t("application.review.confirmation.createAccountTitle")}
           </h3>
@@ -72,25 +80,25 @@ export default () => {
           <p className="field-note mt-1">
             {t("application.review.confirmation.createAccountParagraph")}
           </p>
-        </div> */}
+        </div>
 
         <div className="form-card__pager">
-          {/* <div className="form-card__pager-row primary">
+          <div className="form-card__pager-row primary">
             <Button
-              filled={true}
+              type={AppearanceStyleType.primary}
               onClick={() => {
-                router.push("/create-account").then(() => window.scrollTo(0, 0))
+                void router.push("/create-account").then(() => window.scrollTo(0, 0))
               }}
             >
               {t("application.form.general.createAccount")}
             </Button>
-          </div> */}
+          </div>
 
-          {/* <div className="form-card__pager-row py-6">
+          <div className="form-card__pager-row py-6">
             <a className="lined text-tiny" href="/">
               {t("application.review.confirmation.imdone")}
             </a>
-          </div> */}
+          </div>
 
           <div className="form-card__pager-row py-6">
             <Link href="/listings">

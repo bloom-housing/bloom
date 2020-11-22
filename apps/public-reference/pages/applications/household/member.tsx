@@ -2,13 +2,15 @@
 2.2 - Add Members
 Add household members
 */
-import Router, { useRouter } from "next/router"
+import { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
   ErrorMessage,
   Field,
+  FieldGroup,
   Form,
   FormCard,
   FormOptions,
@@ -20,8 +22,7 @@ import { HouseholdMember } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
@@ -64,16 +65,16 @@ class Member implements HouseholdMember {
     latitude: null,
     longitude: null,
   }
-  sameAddress?: boolean
+  sameAddress?: string
   relationship?: string
-  workInRegion?: boolean
+  workInRegion?: string
 }
 
 export default () => {
   let memberId, member, saveText, cancelText
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
-  const currentPageStep = 2
+  const currentPageSection = 2
 
   if (router.query.memberId) {
     memberId = parseInt(router.query.memberId.toString())
@@ -88,13 +89,14 @@ export default () => {
   }
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
-    Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -104,19 +106,49 @@ export default () => {
       application.householdMembers.splice(member.id, 1)
       conductor.sync()
     }
-    Router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
   }
 
   const sameAddress = watch("sameAddress")
   const workInRegion = watch("workInRegion")
 
+  const sameAddressOptions = [
+    {
+      id: "sameAddressYes",
+      label: t("t.yes"),
+      value: "yes",
+      defaultChecked: member.sameAddress === "yes",
+    },
+    {
+      id: "sameAddressNo",
+      label: t("t.no"),
+      value: "no",
+      defaultChecked: member.sameAddress === "no",
+    },
+  ]
+
+  const workInRegionOptions = [
+    {
+      id: "workInRegionYes",
+      label: t("t.yes"),
+      value: "yes",
+      defaultChecked: member.workInRegion === "yes",
+    },
+    {
+      id: "workInRegionNo",
+      label: t("t.no"),
+      value: "no",
+      defaultChecked: member.workInRegion === "no",
+    },
+  ]
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
@@ -138,41 +170,52 @@ export default () => {
 
             <Form onSubmit={handleSubmit(onSubmit, onError)}>
               <div className="form-card__group border-b">
-                <label className="field-label--caps" htmlFor="firstName">
-                  {t("application.household.member.name")}
-                </label>
+                <fieldset>
+                  <legend className="field-label--caps">
+                    {t("application.household.member.name")}
+                  </legend>
 
-                <Field
-                  name="firstName"
-                  placeholder={t("application.name.firstName")}
-                  controlClassName="mt-2"
-                  defaultValue={member.firstName}
-                  validation={{ required: true }}
-                  error={errors.firstName}
-                  errorMessage={t("application.name.firstNameError")}
-                  register={register}
-                />
+                  <Field
+                    id="firstName"
+                    name="firstName"
+                    label={t("application.name.firstName")}
+                    placeholder={t("application.name.firstName")}
+                    readerOnly={true}
+                    defaultValue={member.firstName}
+                    validation={{ required: true }}
+                    error={errors.firstName}
+                    errorMessage={t("application.name.firstNameError")}
+                    register={register}
+                  />
 
-                <Field
-                  name="middleName"
-                  placeholder={t("application.name.middleName")}
-                  defaultValue={member.middleName}
-                  register={register}
-                />
+                  <Field
+                    id="middleName"
+                    name="middleName"
+                    label={t("application.name.middleNameOptional")}
+                    readerOnly={true}
+                    placeholder={t("application.name.middleNameOptional")}
+                    defaultValue={member.middleName}
+                    register={register}
+                  />
 
-                <Field
-                  name="lastName"
-                  placeholder={t("application.name.lastName")}
-                  defaultValue={member.lastName}
-                  validation={{ required: true }}
-                  error={errors.lastName}
-                  errorMessage={t("application.name.lastNameError")}
-                  register={register}
-                />
+                  <Field
+                    id="lastName"
+                    name="lastName"
+                    placeholder={t("application.name.lastName")}
+                    label={t("application.name.lastName")}
+                    readerOnly={true}
+                    defaultValue={member.lastName}
+                    validation={{ required: true }}
+                    error={errors.lastName}
+                    errorMessage={t("application.name.lastNameError")}
+                    register={register}
+                  />
+                </fieldset>
               </div>
 
               <div className="form-card__group border-b">
                 <DOBField
+                  id="applicant.member.dateOfBirth"
                   applicant={member}
                   register={register}
                   error={errors}
@@ -182,44 +225,26 @@ export default () => {
               </div>
 
               <div className="form-card__group border-b">
-                <label className="field-label--caps" htmlFor="sameAddress">
-                  {t("application.household.member.haveSameAddress")}
-                </label>
+                <fieldset>
+                  <legend className="field-label--caps">
+                    {t("application.household.member.haveSameAddress")}
+                  </legend>
+                  <FieldGroup
+                    name="sameAddress"
+                    type="radio"
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.sameAddress}
+                    errorMessage={t("application.form.errors.selectOption")}
+                    fields={sameAddressOptions}
+                  />
+                </fieldset>
 
-                <div className={"field mt-4 " + (errors.sameAddress ? "error" : "")}>
-                  <input
-                    type="radio"
-                    id="sameAddressYes"
-                    name="sameAddress"
-                    value="yes"
-                    defaultChecked={member.sameAddress == "yes"}
-                    ref={register({ required: true })}
-                  />
-                  <label className="font-semibold" htmlFor="sameAddressYes">
-                    {t("t.yes")}
-                  </label>
-                </div>
-                <div className={"field " + (errors.sameAddress ? "error" : "")}>
-                  <input
-                    type="radio"
-                    id="sameAddressNo"
-                    name="sameAddress"
-                    value="no"
-                    defaultChecked={member.sameAddress == "no"}
-                    ref={register({ required: true })}
-                  />
-                  <label className="font-semibold" htmlFor="sameAddressNo">
-                    {t("t.no")}
-                  </label>
-                  <ErrorMessage error={errors.sameAddress}>
-                    {t("application.form.errors.selectOption")}
-                  </ErrorMessage>
-                </div>
                 {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
-                  <>
-                    <label className="field-label--caps" htmlFor="street">
+                  <fieldset>
+                    <legend className="field-label--caps">
                       {t("application.contact.address")}
-                    </label>
+                    </legend>
 
                     <Field
                       id="addressStreet"
@@ -257,7 +282,7 @@ export default () => {
                       <Select
                         id="addressState"
                         name="address.state"
-                        label="State"
+                        label={t("application.contact.state")}
                         defaultValue={member.address.state}
                         validation={{ required: true }}
                         error={errors.address?.state}
@@ -272,64 +297,43 @@ export default () => {
                     <Field
                       id="addressZipCode"
                       name="address.zipCode"
-                      label="Zip"
-                      placeholder="Zipcode"
+                      label={t("application.contact.zip")}
+                      placeholder={t("application.contact.zipCode")}
                       defaultValue={member.address.zipCode}
                       validation={{ required: true }}
                       error={errors.address?.zipCode}
                       errorMessage={t("application.contact.zipCodeError")}
                       register={register}
                     />
-                  </>
+                  </fieldset>
                 )}
               </div>
 
               <div className="form-card__group border-b">
-                <label className="field-label--caps" htmlFor="firstName">
-                  {t("application.household.member.workInRegion")}
-                </label>
-                <p className="field-note my-2">
-                  {t("application.household.member.workInRegionNote")}
-                </p>
-
-                <div className={"field mt-4 " + (errors.workInRegion ? "error" : "")}>
-                  <input
-                    type="radio"
-                    id="workInRegionYes"
+                <fieldset>
+                  <legend className="field-label--caps">
+                    {t("application.household.member.workInRegion")}
+                  </legend>
+                  <FieldGroup
                     name="workInRegion"
-                    value="yes"
-                    defaultChecked={member.workInRegion == "yes"}
-                    ref={register({ required: true })}
-                  />
-                  <label className="font-semibold" htmlFor="workInRegionYes">
-                    {t("t.yes")}
-                  </label>
-                </div>
-                <div className={"field " + (errors.workInRegion ? "error" : "")}>
-                  <input
+                    groupNote={t("application.household.member.workInRegionNote")}
                     type="radio"
-                    id="workInRegionNo"
-                    name="workInRegion"
-                    value="no"
-                    defaultChecked={member.workInRegion == "no"}
-                    ref={register({ required: true })}
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.workInRegion}
+                    errorMessage={t("application.form.errors.selectOption")}
+                    fields={workInRegionOptions}
                   />
-                  <label className="font-semibold" htmlFor="workInRegionNo">
-                    {t("t.no")}
-                  </label>
+                </fieldset>
 
-                  <ErrorMessage error={errors.workInRegion}>
-                    {t("application.form.errors.selectOption")}
-                  </ErrorMessage>
-                </div>
                 {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
-                  <>
-                    <label className="field-label--caps" htmlFor="street">
+                  <fieldset>
+                    <legend className="field-label--caps">
                       {t("application.contact.address")}
-                    </label>
+                    </legend>
 
                     <Field
-                      id="addressStreet"
+                      id="workAddress.street"
                       name="workAddress.street"
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.workAddress.street}
@@ -340,7 +344,7 @@ export default () => {
                     />
 
                     <Field
-                      id="addressStreet2"
+                      id="workAddress.street2"
                       name="workAddress.street2"
                       label={t("application.contact.apt")}
                       placeholder={t("application.contact.apt")}
@@ -350,7 +354,7 @@ export default () => {
 
                     <div className="flex max-w-2xl">
                       <Field
-                        id="addressCity"
+                        id="workAddress.city"
                         name="workAddress.city"
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
@@ -362,9 +366,9 @@ export default () => {
                       />
 
                       <Select
-                        id="addressState"
+                        id="workAddress.state"
                         name="workAddress.state"
-                        label="State"
+                        label={t("application.contact.state")}
                         defaultValue={member.workAddress.state}
                         validation={{ required: true }}
                         error={errors.workAddress?.state}
@@ -377,17 +381,17 @@ export default () => {
                     </div>
 
                     <Field
-                      id="addressZipCode"
+                      id="workAddress.zipCode"
                       name="workAddress.zipCode"
-                      label="Zip"
-                      placeholder="Zipcode"
+                      label={t("application.contact.zip")}
+                      placeholder={t("application.contact.zipCode")}
                       defaultValue={member.workAddress.zipCode}
                       validation={{ required: true }}
                       error={errors.workAddress?.zipCode}
                       errorMessage={t("application.contact.zipCodeError")}
                       register={register}
                     />
-                  </>
+                  </fieldset>
                 )}
               </div>
 
@@ -410,7 +414,7 @@ export default () => {
                       />
                     </select>
                   </div>
-                  <ErrorMessage error={errors.relationship}>
+                  <ErrorMessage id="relationship-error" error={errors.relationship}>
                     {t("application.form.errors.selectOption")}
                   </ErrorMessage>
                 </div>
@@ -419,8 +423,8 @@ export default () => {
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
                   <Button
-                    filled={true}
-                    className=""
+                    id="save-member"
+                    type={AppearanceStyleType.primary}
                     onClick={() => {
                       //
                     }}
@@ -429,7 +433,7 @@ export default () => {
                   </Button>
                 </div>
                 <div className="form-card__pager-row py-8">
-                  <a href="#" className="lined text-tiny" onClick={deleteMember}>
+                  <a id="cancel-add" href="#" className="lined text-tiny" onClick={deleteMember}>
                     {cancelText}
                   </a>
                 </div>

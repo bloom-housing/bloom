@@ -1,5 +1,5 @@
 import React from "react"
-import { ErrorMessage } from "./ErrorMessage"
+import { ErrorMessage } from "../notifications/ErrorMessage"
 import { PhoneMask } from "./PhoneMask"
 import { Controller } from "react-hook-form"
 
@@ -7,18 +7,27 @@ export const PhoneField = (props: {
   error?: boolean
   errorMessage?: string
   controlClassName?: string
+  id?: string
   name: string
   label?: string
+  caps?: boolean
+  readerOnly?: boolean
   placeholder?: string
   defaultValue?: string
   control: any
   disabled?: boolean
 }) => {
+  const labelClasses = ["label"]
+  if (props.caps) labelClasses.push("field-label--caps")
+  if (props.readerOnly) labelClasses.push("sr-only")
+
   return (
     <div className={"field " + (props.error ? "error" : "")}>
+      {props.label && <label className={labelClasses.join(" ")}>{props.label}</label>}
       <div className={props.controlClassName}>
         <Controller
           className="input"
+          id={props.id}
           name={props.name}
           placeholder={props.placeholder}
           defaultValue={props.defaultValue}
@@ -37,7 +46,9 @@ export const PhoneField = (props: {
             },
           }}
         />
-        <ErrorMessage error={props.error}>{props.errorMessage}</ErrorMessage>
+        <ErrorMessage id={`${props.id}-error`} error={props.error}>
+          {props.errorMessage}
+        </ErrorMessage>
       </div>
     </div>
   )

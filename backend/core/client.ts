@@ -3,8 +3,6 @@
 /* eslint-disable */
 import axiosStatic, { AxiosInstance } from 'axios';
 
-const basePath = '';
-
 export interface IRequestOptions {
   headers?: any;
   baseURL?: string;
@@ -44,7 +42,6 @@ export function axios(configs: IRequestConfig, resolve: (p: any) => void, reject
 }
 
 export function getConfigs(method: string, contentType: string, url: string, options: any): IRequestConfig {
-  url = basePath + url;
   const configs: IRequestConfig = { ...options, method, url };
   configs.headers = {
     ...options.headers,
@@ -52,6 +49,8 @@ export function getConfigs(method: string, contentType: string, url: string, opt
   };
   return configs;
 }
+
+const basePath = '';
 
 export interface IList<T> extends Array<T> {}
 export interface List<T> extends Array<T> {}
@@ -64,16 +63,18 @@ export interface IListResult<T> {
   items?: T[];
 }
 
-export class ListResultDto<T> implements IListResult<T> {
+export class ListResult<T> implements IListResult<T> {
   items?: T[];
 }
 
 export interface IPagedResult<T> extends IListResult<T> {
-  totalCount: number;
+  totalCount?: number;
+  items?: T[];
 }
 
-export class PagedResultDto<T> implements IPagedResult<T> {
-  totalCount!: number;
+export class PagedResult<T> implements IPagedResult<T> {
+  totalCount?: number;
+  items?: T[];
 }
 
 // customer definition
@@ -86,33 +87,12 @@ export class AuthService {
   login(
     params: {
       /** requestBody */
-      body?: LoginDto;
+      body?: Login;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<LoginResponseDto> {
+  ): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
-      let url = '/auth/login';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Register
-   */
-  register(
-    params: {
-      /** requestBody */
-      body?: CreateUserDto;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = '/auth/register';
+      let url = basePath + '/auth/login';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -125,9 +105,9 @@ export class AuthService {
   /**
    * Token
    */
-  token(options: IRequestOptions = {}): Promise<any> {
+  token(options: IRequestOptions = {}): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
-      let url = '/auth/token';
+      let url = basePath + '/auth/token';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -146,12 +126,12 @@ export class ListingsService {
   list(
     params: {
       /**  */
-      jsonpath: string;
+      jsonpath?: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ListingExtendedDto> {
+  ): Promise<ListingExtended> {
     return new Promise((resolve, reject) => {
-      let url = '/listings';
+      let url = basePath + '/listings';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { jsonpath: params['jsonpath'] };
@@ -167,12 +147,12 @@ export class ListingsService {
   create(
     params: {
       /** requestBody */
-      body?: ListingCreateDto;
+      body?: ListingCreate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = '/listings';
+      let url = basePath + '/listings';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -193,7 +173,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = '/listings/{listingId}';
+      let url = basePath + '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -212,12 +192,12 @@ export class ListingsService {
       /**  */
       listingId: string;
       /** requestBody */
-      body?: ListingUpdateDto;
+      body?: ListingUpdate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = '/listings/{listingId}';
+      let url = basePath + '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
@@ -239,7 +219,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/listings/{listingId}';
+      let url = basePath + '/listings/{listingId}';
       url = url.replace('{listingId}', params['listingId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -259,15 +239,26 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      listingId: string;
+      page?: number;
+      /**  */
+      limit?: number;
+      /**  */
+      listingId?: string;
+      /**  */
+      search?: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationDto[]> {
+  ): Promise<PaginatedApplication> {
     return new Promise((resolve, reject) => {
-      let url = '/applications';
+      let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { listingId: params['listingId'] };
+      configs.params = {
+        page: params['page'],
+        limit: params['limit'],
+        listingId: params['listingId'],
+        search: params['search']
+      };
       let data = null;
 
       configs.data = data;
@@ -280,12 +271,12 @@ export class ApplicationsService {
   create(
     params: {
       /** requestBody */
-      body?: ApplicationCreateDto;
+      body?: ApplicationCreate;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationDto> {
+  ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = '/applications';
+      let url = basePath + '/applications';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -301,14 +292,14 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId: string;
+      listingId?: string;
       /**  */
-      includeHeaders: boolean;
+      includeHeaders?: boolean;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/csv';
+      let url = basePath + '/applications/csv';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { listingId: params['listingId'], includeHeaders: params['includeHeaders'] };
@@ -327,9 +318,9 @@ export class ApplicationsService {
       applicationId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationDto> {
+  ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/{applicationId}';
+      let url = basePath + '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -348,12 +339,12 @@ export class ApplicationsService {
       /**  */
       applicationId: string;
       /** requestBody */
-      body?: ApplicationUpdateDto;
+      body?: ApplicationUpdate;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationDto> {
+  ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/{applicationId}';
+      let url = basePath + '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
@@ -375,7 +366,7 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/applications/{applicationId}';
+      let url = basePath + '/applications/{applicationId}';
       url = url.replace('{applicationId}', params['applicationId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -394,7 +385,7 @@ export class AssetsService {
    */
   list(options: IRequestOptions = {}): Promise<Asset[]> {
     return new Promise((resolve, reject) => {
-      let url = '/assets';
+      let url = basePath + '/assets';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -410,12 +401,12 @@ export class AssetsService {
   create(
     params: {
       /** requestBody */
-      body?: AssetCreateDto;
+      body?: AssetCreate;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<AssetDto> {
+  ): Promise<Asset> {
     return new Promise((resolve, reject) => {
-      let url = '/assets';
+      let url = basePath + '/assets';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -431,12 +422,12 @@ export class AssetsService {
   update(
     params: {
       /** requestBody */
-      body?: AssetUpdateDto;
+      body?: AssetUpdate;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<AssetDto> {
+  ): Promise<Asset> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
+      let url = basePath + '/assets/{assetId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -455,9 +446,9 @@ export class AssetsService {
       assetId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<AssetDto> {
+  ): Promise<Asset> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
+      let url = basePath + '/assets/{assetId}';
       url = url.replace('{assetId}', params['assetId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -479,7 +470,7 @@ export class AssetsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/assets/{assetId}';
+      let url = basePath + '/assets/{assetId}';
       url = url.replace('{assetId}', params['assetId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -498,7 +489,7 @@ export class PreferencesService {
    */
   list(options: IRequestOptions = {}): Promise<Preference[]> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences';
+      let url = basePath + '/preferences';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -514,12 +505,12 @@ export class PreferencesService {
   create(
     params: {
       /** requestBody */
-      body?: PreferenceCreateDto;
+      body?: PreferenceCreate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Preference> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences';
+      let url = basePath + '/preferences';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -535,12 +526,12 @@ export class PreferencesService {
   update(
     params: {
       /** requestBody */
-      body?: PreferenceUpdateDto;
+      body?: PreferenceUpdate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Preference> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
+      let url = basePath + '/preferences/{preferenceId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -561,7 +552,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<Preference> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
+      let url = basePath + '/preferences/{preferenceId}';
       url = url.replace('{preferenceId}', params['preferenceId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -583,7 +574,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/preferences/{preferenceId}';
+      let url = basePath + '/preferences/{preferenceId}';
       url = url.replace('{preferenceId}', params['preferenceId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -602,7 +593,7 @@ export class ApplicationMethodsService {
    */
   list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods';
+      let url = basePath + '/applicationMethods';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -618,12 +609,12 @@ export class ApplicationMethodsService {
   create(
     params: {
       /** requestBody */
-      body?: ApplicationMethodCreateDto;
+      body?: ApplicationMethodCreate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationMethod> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods';
+      let url = basePath + '/applicationMethods';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -639,12 +630,12 @@ export class ApplicationMethodsService {
   update(
     params: {
       /** requestBody */
-      body?: ApplicationMethodUpdateDto;
+      body?: ApplicationMethodUpdate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationMethod> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -665,7 +656,7 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationMethod> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
       url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -687,7 +678,7 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/applicationMethods/{applicationMethodId}';
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
       url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -706,7 +697,7 @@ export class UnitsService {
    */
   list(options: IRequestOptions = {}): Promise<Unit[]> {
     return new Promise((resolve, reject) => {
-      let url = '/units';
+      let url = basePath + '/units';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -722,12 +713,12 @@ export class UnitsService {
   create(
     params: {
       /** requestBody */
-      body?: UnitCreateDto;
+      body?: UnitCreate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Unit> {
     return new Promise((resolve, reject) => {
-      let url = '/units';
+      let url = basePath + '/units';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -743,12 +734,12 @@ export class UnitsService {
   update(
     params: {
       /** requestBody */
-      body?: UnitUpdateDto;
+      body?: UnitUpdate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Unit> {
     return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
+      let url = basePath + '/units/{unitId}';
 
       const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
@@ -769,7 +760,7 @@ export class UnitsService {
     options: IRequestOptions = {}
   ): Promise<Unit> {
     return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
+      let url = basePath + '/units/{unitId}';
       url = url.replace('{unitId}', params['unitId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -791,7 +782,7 @@ export class UnitsService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = '/units/{unitId}';
+      let url = basePath + '/units/{unitId}';
       url = url.replace('{unitId}', params['unitId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
@@ -804,20 +795,114 @@ export class UnitsService {
   }
 }
 
-export interface LoginDto {
-  /**  */
-  email: string;
+export class ListingEventsService {
+  /**
+   * List listingEvents
+   */
+  list(options: IRequestOptions = {}): Promise<ListingEvent[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/listingEvents';
 
-  /**  */
-  password: string;
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create listingEvent
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ListingEventCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingEvent> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/listingEvents';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update listingEvent
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ListingEventUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingEvent> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/listingEvents/{listingEventId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get listingEvent by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      listingEventId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingEvent> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/listingEvents/{listingEventId}';
+      url = url.replace('{listingEventId}', params['listingEventId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete listingEvent by id
+   */
+  delete(
+    params: {
+      /**  */
+      listingEventId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/listingEvents/{listingEventId}';
+      url = url.replace('{listingEventId}', params['listingEventId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
-export interface LoginResponseDto {
+export interface User {
   /**  */
-  accessToken: string;
-}
+  id: string;
 
-export interface CreateUserDto {
   /**  */
   email: string;
 
@@ -825,7 +910,7 @@ export interface CreateUserDto {
   firstName: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
   lastName: string;
@@ -834,21 +919,207 @@ export interface CreateUserDto {
   dob: Date;
 
   /**  */
-  password: string;
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 }
 
-export interface ApplicationMethodDto {
+export interface UserCreate {
+  /**  */
+  password: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+}
+
+export interface UserWithAccessToken {
   /**  */
   id: string;
 
   /**  */
-  createdAt: string;
+  email: string;
 
   /**  */
-  updatedAt: string;
+  firstName: string;
 
   /**  */
-  type: EnumApplicationMethodDtoType;
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  accessToken: string;
+}
+
+export interface UserUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
+export interface Login {
+  /**  */
+  email: string;
+
+  /**  */
+  password: string;
+}
+
+export interface LoginResponse {
+  /**  */
+  accessToken: string;
+}
+
+export interface MinMaxCurrency {
+  /**  */
+  min: string;
+
+  /**  */
+  max: string;
+}
+
+export interface MinMax {
+  /**  */
+  min: number;
+
+  /**  */
+  max: number;
+}
+
+export interface UnitSummary {
+  /**  */
+  unitType: string;
+
+  /**  */
+  minIncomeRange: MinMaxCurrency;
+
+  /**  */
+  occupancyRange: MinMax;
+
+  /**  */
+  rentAsPercentIncomeRange: MinMax;
+
+  /**  */
+  rentRange: MinMaxCurrency;
+
+  /**  */
+  totalAvailable: number;
+
+  /**  */
+  areaRange: MinMax;
+
+  /**  */
+  floorRange?: MinMax;
+}
+
+export interface UnitSummaryByReservedType {
+  /**  */
+  reservedType: string;
+
+  /**  */
+  byUnitType: UnitSummary[];
+}
+
+export interface UnitSummaryByAMI {
+  /**  */
+  percent: string;
+
+  /**  */
+  byNonReservedUnitType: UnitSummary[];
+
+  /**  */
+  byReservedType: UnitSummaryByReservedType[];
+}
+
+export interface HMI {
+  /**  */
+  columns: object;
+
+  /**  */
+  rows: object[];
+}
+
+export interface UnitsSummarized {
+  /**  */
+  unitTypes: string[];
+
+  /**  */
+  reservedTypes: string[];
+
+  /**  */
+  priorityTypes: string[];
+
+  /**  */
+  amiPercentages: string[];
+
+  /**  */
+  byUnitType: UnitSummary[];
+
+  /**  */
+  byNonReservedUnitType: UnitSummary[];
+
+  /**  */
+  byReservedType: UnitSummaryByReservedType[];
+
+  /**  */
+  byAMI: UnitSummaryByAMI[];
+
+  /**  */
+  hmi: HMI;
+}
+
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 
   /**  */
   label: string;
@@ -860,15 +1131,15 @@ export interface ApplicationMethodDto {
   acceptsPostmarkedApplications: boolean;
 }
 
-export interface AssetDto {
+export interface Asset {
   /**  */
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   label: string;
@@ -885,144 +1156,15 @@ export interface PreferenceLink {
   url: string;
 }
 
-export interface PreferenceDto {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: string;
-
-  /**  */
-  updatedAt: string;
-
-  /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  links: PreferenceLink[];
-}
-
-export interface UnitDto {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  amiPercentage: string;
-
-  /**  */
-  annualIncomeMin: string;
-
-  /**  */
-  monthlyIncomeMin: string;
-
-  /**  */
-  floor: number;
-
-  /**  */
-  annualIncomeMax: string;
-
-  /**  */
-  maxOccupancy: number;
-
-  /**  */
-  minOccupancy: number;
-
-  /**  */
-  monthlyRent: string;
-
-  /**  */
-  numBathrooms: number;
-
-  /**  */
-  numBedrooms: number;
-
-  /**  */
-  number: string;
-
-  /**  */
-  priorityType: string;
-
-  /**  */
-  reservedType: string;
-
-  /**  */
-  sqFeet: number;
-
-  /**  */
-  status: string;
-
-  /**  */
-  unitType: string;
-
-  /**  */
-  amiChartId: number;
-
-  /**  */
-  monthlyRentAsPercentOfIncome: number;
-
-  /**  */
-  bmrProgramChart: boolean;
-}
-
-export interface User {
-  /**  */
-  id: string;
-
-  /**  */
-  passwordHash: string;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  applications: Application[];
-
-  /**  */
-  isAdmin: boolean;
-}
-
 export interface Preference {
   /**  */
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   ordinal: number;
@@ -1038,9 +1180,6 @@ export interface Preference {
 
   /**  */
   links: PreferenceLink[];
-
-  /**  */
-  listing: Listing;
 }
 
 export interface Unit {
@@ -1093,7 +1232,7 @@ export interface Unit {
   reservedType: string;
 
   /**  */
-  sqFeet: number;
+  sqFeet: string;
 
   /**  */
   status: string;
@@ -1105,70 +1244,47 @@ export interface Unit {
   amiChartId: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: number;
+  monthlyRentAsPercentOfIncome: string;
 
   /**  */
-  listing: Listing;
-
-  /**  */
-  bmrProgramChart: boolean;
+  bmrProgramChart?: boolean;
 }
 
-export interface ApplicationMethod {
+export interface ListingEvent {
+  /**  */
+  type: ListingEventType;
+
   /**  */
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
-  type: EnumApplicationMethodType;
+  startTime: Date;
 
   /**  */
-  label: string;
+  endTime: Date;
 
   /**  */
-  externalReference: string;
+  url?: string;
 
   /**  */
-  acceptsPostmarkedApplications: boolean;
-
-  /**  */
-  listing: Listing;
-}
-
-export interface Asset {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: string;
-
-  /**  */
-  updatedAt: string;
-
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-
-  /**  */
-  listing: CombinedListingTypes;
+  note?: string;
 }
 
 export interface Address {
   /**  */
-  placeName: string;
+  placeName?: string;
 
   /**  */
   city: string;
 
   /**  */
-  county: string;
+  county?: string;
 
   /**  */
   state: string;
@@ -1177,16 +1293,16 @@ export interface Address {
   street: string;
 
   /**  */
-  street2: string;
+  street2?: string;
 
   /**  */
   zipCode: string;
 
   /**  */
-  latitude: number;
+  latitude?: number;
 
   /**  */
-  longitude: number;
+  longitude?: number;
 }
 
 export interface WhatToExpect {
@@ -1202,19 +1318,13 @@ export interface WhatToExpect {
 
 export interface Listing {
   /**  */
-  id: string;
+  status: ListingStatus;
 
   /**  */
-  createdAt: string;
+  unitsSummarized: UnitsSummarized;
 
   /**  */
-  updatedAt: string;
-
-  /**  */
-  preferences: Preference[];
-
-  /**  */
-  units: Unit[];
+  urlSlug: string;
 
   /**  */
   applicationMethods: ApplicationMethod[];
@@ -1223,7 +1333,22 @@ export interface Listing {
   assets: Asset[];
 
   /**  */
-  applications: Application[];
+  preferences: Preference[];
+
+  /**  */
+  units: Unit[];
+
+  /**  */
+  events: ListingEvent[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 
   /**  */
   accessibility: string;
@@ -1352,230 +1477,49 @@ export interface Listing {
   yearBuilt: number;
 
   /**  */
-  status: EnumListingStatus;
-
-  /**  */
-  unitsSummarized: object;
-
-  /**  */
-  urlSlug: string;
+  applicationConfig?: object;
 }
 
-export interface Application {
+export interface ListingExtended {
   /**  */
-  id: string;
+  status: ListingsResponseStatus;
 
   /**  */
-  createdAt: string;
-
-  /**  */
-  updatedAt: string;
-
-  /**  */
-  appUrl: string;
-
-  /**  */
-  user: CombinedUserTypes;
-
-  /**  */
-  listing: Listing;
-
-  /**  */
-  application: object;
-}
-
-export interface ListingDto {
-  /**  */
-  applicationMethods: ApplicationMethodDto[];
-
-  /**  */
-  assets: AssetDto[];
-
-  /**  */
-  preferences: PreferenceDto[];
-
-  /**  */
-  units: UnitDto[];
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: string;
-
-  /**  */
-  updatedAt: string;
-
-  /**  */
-  applications: Application[];
-
-  /**  */
-  accessibility: string;
-
-  /**  */
-  amenities: string;
-
-  /**  */
-  applicationDueDate: string;
-
-  /**  */
-  applicationOpenDate: string;
-
-  /**  */
-  applicationFee: string;
-
-  /**  */
-  applicationOrganization: string;
-
-  /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  blankPaperApplicationCanBePickedUp: boolean;
-
-  /**  */
-  buildingAddress: CombinedBuildingAddressTypes;
-
-  /**  */
-  buildingTotalUnits: number;
-
-  /**  */
-  buildingSelectionCriteria: string;
-
-  /**  */
-  costsNotIncluded: string;
-
-  /**  */
-  creditHistory: string;
-
-  /**  */
-  criminalBackground: string;
-
-  /**  */
-  depositMin: string;
-
-  /**  */
-  depositMax: string;
-
-  /**  */
-  developer: string;
-
-  /**  */
-  disableUnitsAccordion: boolean;
-
-  /**  */
-  householdSizeMax: number;
-
-  /**  */
-  householdSizeMin: number;
-
-  /**  */
-  imageUrl: string;
-
-  /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
-
-  /**  */
-  leasingAgentEmail: string;
-
-  /**  */
-  leasingAgentName: string;
-
-  /**  */
-  leasingAgentOfficeHours: string;
-
-  /**  */
-  leasingAgentPhone: string;
-
-  /**  */
-  leasingAgentTitle: string;
-
-  /**  */
-  name: string;
-
-  /**  */
-  neighborhood: string;
-
-  /**  */
-  petPolicy: string;
-
-  /**  */
-  postmarkedApplicationsReceivedByDate: string;
-
-  /**  */
-  programRules: string;
-
-  /**  */
-  rentalAssistance: string;
-
-  /**  */
-  rentalHistory: string;
-
-  /**  */
-  requiredDocuments: string;
-
-  /**  */
-  smokingPolicy: string;
-
-  /**  */
-  unitsAvailable: number;
-
-  /**  */
-  unitAmenities: string;
-
-  /**  */
-  waitlistCurrentSize: number;
-
-  /**  */
-  waitlistMaxSize: number;
-
-  /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
-
-  /**  */
-  yearBuilt: number;
-
-  /**  */
-  status: EnumListingDtoStatus;
-
-  /**  */
-  unitsSummarized: object;
-
-  /**  */
-  urlSlug: string;
-}
-
-export interface ListingExtendedDto {
-  /**  */
-  status: EnumListingExtendedDtoStatus;
-
-  /**  */
-  listings: ListingDto[];
+  listings: Listing[];
 
   /**  */
   amiCharts: object;
 }
 
-export interface IdDto {
+export interface Id {
   /**  */
   id: string;
 }
 
-export interface ListingCreateDto {
+export interface ListingCreate {
   /**  */
-  applicationMethods: IdDto[];
+  status: ListingStatus;
 
   /**  */
-  assets: IdDto[];
+  unitsSummarized: UnitsSummarized;
 
   /**  */
-  preferences: IdDto[];
+  urlSlug: string;
 
   /**  */
-  units: IdDto[];
+  applicationMethods: Id[];
 
   /**  */
-  applications: Application[];
+  assets: Id[];
+
+  /**  */
+  preferences: Id[];
+
+  /**  */
+  units: Id[];
+
+  /**  */
+  events: Id[];
 
   /**  */
   accessibility: string;
@@ -1704,30 +1648,33 @@ export interface ListingCreateDto {
   yearBuilt: number;
 
   /**  */
-  status: EnumListingCreateDtoStatus;
+  applicationConfig?: object;
+}
+
+export interface ListingUpdate {
+  /**  */
+  status: ListingStatus;
 
   /**  */
-  unitsSummarized: object;
+  unitsSummarized: UnitsSummarized;
 
   /**  */
   urlSlug: string;
-}
-
-export interface ListingUpdateDto {
-  /**  */
-  applicationMethods: IdDto[];
 
   /**  */
-  assets: IdDto[];
+  applicationMethods: Id[];
 
   /**  */
-  preferences: IdDto[];
+  assets: Id[];
 
   /**  */
-  units: IdDto[];
+  preferences: Id[];
 
   /**  */
-  applications: Application[];
+  units: Id[];
+
+  /**  */
+  events: Id[];
 
   /**  */
   accessibility: string;
@@ -1856,64 +1803,305 @@ export interface ListingUpdateDto {
   yearBuilt: number;
 
   /**  */
-  status: EnumListingUpdateDtoStatus;
-
-  /**  */
-  unitsSummarized: object;
-
-  /**  */
-  urlSlug: string;
+  applicationConfig?: object;
 
   /**  */
   id: string;
 }
 
-export interface ApplicationDto {
+export interface Applicant {
   /**  */
-  listing: IdDto;
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  birthMonth: number;
+
+  /**  */
+  birthDay: number;
+
+  /**  */
+  birthYear: number;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  noEmail: boolean;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  phoneNumberType: string;
+
+  /**  */
+  noPhone: boolean;
+
+  /**  */
+  workInRegion: string;
+
+  /**  */
+  workAddress: Address;
+
+  /**  */
+  address: Address;
+}
+
+export interface AlternateContact {
+  /**  */
+  type: string;
+
+  /**  */
+  otherType: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  agency: string;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  mailingAddress: Address;
+}
+
+export interface Accessibility {
+  /**  */
+  mobility: boolean;
+
+  /**  */
+  vision: boolean;
+
+  /**  */
+  hearing: boolean;
+}
+
+export interface Demographics {
+  /**  */
+  ethnicity: string;
+
+  /**  */
+  gender: string;
+
+  /**  */
+  sexualOrientation: string;
+
+  /**  */
+  howDidYouHear: string[];
+
+  /**  */
+  race: string;
+}
+
+export interface HouseholdMember {
+  /**  */
+  id?: number;
+
+  /**  */
+  address: Address;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  birthMonth: number;
+
+  /**  */
+  birthDay: number;
+
+  /**  */
+  birthYear: number;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  noEmail: boolean;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  phoneNumberType: string;
+
+  /**  */
+  noPhone: boolean;
+
+  /**  */
+  sameAddress?: string;
+
+  /**  */
+  relationship?: string;
+
+  /**  */
+  workInRegion?: string;
+
+  /**  */
+  workAddress?: CombinedWorkAddressTypes;
+}
+
+export interface ApplicationData {
+  /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
+  /**  */
+  applicant: Applicant;
+
+  /**  */
+  additionalPhone: boolean;
+
+  /**  */
+  additionalPhoneNumber: string;
+
+  /**  */
+  additionalPhoneNumberType: string;
+
+  /**  */
+  contactPreferences: string[];
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  housingStatus: string;
+
+  /**  */
+  sendMailToMailingAddress: boolean;
+
+  /**  */
+  mailingAddress: Address;
+
+  /**  */
+  alternateAddress: Address;
+
+  /**  */
+  alternateContact: AlternateContact;
+
+  /**  */
+  accessibility: Accessibility;
+
+  /**  */
+  demographics: Demographics;
+
+  /**  */
+  incomeVouchers: boolean;
+
+  /**  */
+  income: string;
+
+  /**  */
+  incomePeriod: string;
+
+  /**  */
+  householdMembers: HouseholdMember[];
+
+  /**  */
+  preferredUnit: string[];
+
+  /**  */
+  preferences: object;
+
+  /**  */
+  acceptedTerms: boolean;
+}
+
+export interface Application {
+  /**  */
+  listing: Listing;
 
   /**  */
   id: string;
 
   /**  */
-  createdAt: string;
+  createdAt: Date;
 
   /**  */
-  updatedAt: string;
+  updatedAt: Date;
 
   /**  */
   appUrl: string;
 
   /**  */
-  application: object;
+  application: ApplicationData;
 }
 
-export interface ApplicationCreateDto {
+export interface PaginationMeta {
   /**  */
-  appUrl: string;
+  currentPage: number;
 
   /**  */
-  application: object;
+  itemCount: number;
 
   /**  */
-  listing: IdDto;
+  itemsPerPage: number;
+
+  /**  */
+  totalItems: number;
+
+  /**  */
+  totalPages: number;
 }
 
-export interface ApplicationUpdateDto {
+export interface PaginatedApplication {
+  /**  */
+  items: Application[];
+
+  /**  */
+  meta: PaginationMeta;
+}
+
+export interface ApplicationCreate {
+  /**  */
+  listing: Id;
+
   /**  */
   appUrl: string;
 
   /**  */
-  application: object;
+  application: ApplicationData;
+}
+
+export interface ApplicationUpdate {
+  /**  */
+  listing: Id;
 
   /**  */
-  listing: IdDto;
+  appUrl: string;
+
+  /**  */
+  application: ApplicationData;
 
   /**  */
   id: string;
 }
 
-export interface AssetCreateDto {
+export interface AssetCreate {
   /**  */
   label: string;
 
@@ -1921,7 +2109,7 @@ export interface AssetCreateDto {
   fileId: string;
 }
 
-export interface AssetUpdateDto {
+export interface AssetUpdate {
   /**  */
   label: string;
 
@@ -1932,7 +2120,7 @@ export interface AssetUpdateDto {
   id: string;
 }
 
-export interface PreferenceCreateDto {
+export interface PreferenceCreate {
   /**  */
   ordinal: number;
 
@@ -1949,7 +2137,7 @@ export interface PreferenceCreateDto {
   links: PreferenceLink[];
 }
 
-export interface PreferenceUpdateDto {
+export interface PreferenceUpdate {
   /**  */
   ordinal: number;
 
@@ -1969,9 +2157,9 @@ export interface PreferenceUpdateDto {
   id: string;
 }
 
-export interface ApplicationMethodCreateDto {
+export interface ApplicationMethodCreate {
   /**  */
-  type: EnumApplicationMethodCreateDtoType;
+  type: ApplicationMethodType;
 
   /**  */
   label: string;
@@ -1983,9 +2171,9 @@ export interface ApplicationMethodCreateDto {
   acceptsPostmarkedApplications: boolean;
 }
 
-export interface ApplicationMethodUpdateDto {
+export interface ApplicationMethodUpdate {
   /**  */
-  type: EnumApplicationMethodUpdateDtoType;
+  type: ApplicationMethodType;
 
   /**  */
   label: string;
@@ -2000,7 +2188,7 @@ export interface ApplicationMethodUpdateDto {
   id: string;
 }
 
-export interface UnitCreateDto {
+export interface UnitCreate {
   /**  */
   amiPercentage: string;
 
@@ -2041,7 +2229,7 @@ export interface UnitCreateDto {
   reservedType: string;
 
   /**  */
-  sqFeet: number;
+  sqFeet: string;
 
   /**  */
   status: string;
@@ -2053,13 +2241,13 @@ export interface UnitCreateDto {
   amiChartId: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: number;
+  monthlyRentAsPercentOfIncome: string;
 
   /**  */
-  bmrProgramChart: boolean;
+  bmrProgramChart?: boolean;
 }
 
-export interface UnitUpdateDto {
+export interface UnitUpdate {
   /**  */
   amiPercentage: string;
 
@@ -2100,7 +2288,7 @@ export interface UnitUpdateDto {
   reservedType: string;
 
   /**  */
-  sqFeet: number;
+  sqFeet: string;
 
   /**  */
   status: string;
@@ -2112,15 +2300,62 @@ export interface UnitUpdateDto {
   amiChartId: number;
 
   /**  */
-  monthlyRentAsPercentOfIncome: number;
+  monthlyRentAsPercentOfIncome: string;
 
   /**  */
-  bmrProgramChart: boolean;
+  bmrProgramChart?: boolean;
 
   /**  */
   id: string;
 }
-export enum EnumApplicationMethodDtoType {
+
+export interface ListingEventCreate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+}
+
+export interface ListingEventUpdate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  id: string;
+}
+
+export enum ListingsResponseStatus {
+  'ok' = 'ok'
+}
+
+export enum ListingStatus {
+  'active' = 'active',
+  'pending' = 'pending'
+}
+
+export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
@@ -2128,52 +2363,28 @@ export enum EnumApplicationMethodDtoType {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
 }
-export enum EnumApplicationMethodType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
+
+export enum ListingEventType {
+  'openHouse' = 'openHouse',
+  'publicLottery' = 'publicLottery'
 }
-export type CombinedListingTypes = (Listing & any) | null;
 export type CombinedApplicationAddressTypes = (Address & any) | null;
 export type CombinedBuildingAddressTypes = (Address & any) | null;
 export type CombinedLeasingAgentAddressTypes = (Address & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
-export enum EnumListingStatus {
-  'active' = 'active',
-  'pending' = 'pending'
+export enum ApplicationStatus {
+  'draft' = 'draft',
+  'submitted' = 'submitted',
+  'removed' = 'removed'
 }
-export type CombinedUserTypes = (User & any) | null;
-export enum EnumListingDtoStatus {
-  'active' = 'active',
-  'pending' = 'pending'
+
+export enum Language {
+  'en' = 'en',
+  'es' = 'es'
 }
-export enum EnumListingExtendedDtoStatus {
-  'ok' = 'ok'
+
+export enum ApplicationSubmissionType {
+  'paper' = 'paper',
+  'electronical' = 'electronical'
 }
-export enum EnumListingCreateDtoStatus {
-  'active' = 'active',
-  'pending' = 'pending'
-}
-export enum EnumListingUpdateDtoStatus {
-  'active' = 'active',
-  'pending' = 'pending'
-}
-export enum EnumApplicationMethodCreateDtoType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
-}
-export enum EnumApplicationMethodUpdateDtoType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
-}
+export type CombinedWorkAddressTypes = (Address & any) | null;

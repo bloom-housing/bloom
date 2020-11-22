@@ -45,7 +45,7 @@ describe("AuthService", () => {
 
     it("should assign the userId to the token sub", () => {
       const jwt = service.generateAccessToken(user)
-      const { sub } = jwtService.decode(jwt)
+      const { sub } = jwtService.decode(jwt) as { sub?: string }
       expect(sub).toBe(user.id)
     })
   })

@@ -1,0 +1,2436 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Overlays/Drawer Drawer Field Test 1`] = `
+<div>
+  <Drawer
+    ariaDescription="My Drawer"
+    open={true}
+    title="Drawer Title"
+  >
+    <Component
+      ariaDescription="My Drawer"
+      ariaLabel="Drawer Title"
+      className="has-drawer"
+      open={true}
+    >
+      <Portal
+        containerInfo={
+          <div>
+            <div
+              aria-describedby="My Drawer"
+              aria-labelledby="Drawer Title"
+              class="fixed-overlay is-backdrop has-drawer"
+              role="dialog"
+            >
+              <div
+                class="fixed-overlay__inner"
+              >
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="1"
+                />
+                <div
+                  data-focus-lock-disabled="false"
+                >
+                  <div
+                    class="drawer"
+                  >
+                    <header
+                      class="drawer__header"
+                    >
+                      <h1
+                        class="drawer__title"
+                      >
+                        Drawer Title
+                      </h1>
+                      <button
+                        aria-label="Close"
+                        class="drawer__close"
+                        tabindex="0"
+                      >
+                        <span
+                          class="ui-icon ui-medium"
+                        >
+                          <svg>
+                            <use
+                              xlink:href="#i-close"
+                            />
+                          </svg>
+                        </span>
+                      </button>
+                    </header>
+                    <div
+                      class="drawer__body"
+                    >
+                      <div
+                        class="drawer__content"
+                      >
+                        <section
+                          class="border p-8 bg-white mb-8"
+                        >
+                          <section
+                            class="grid-section"
+                          >
+                            <header
+                              class="grid-section__header"
+                            >
+                              <h2
+                                class="grid-section__title"
+                              >
+                                Section Title
+                              </h2>
+                            </header>
+                            <div
+                              class="grid-section__inner md:grid md:grid-cols-4 md:gap-8"
+                            >
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label1"
+                                >
+                                  Alpha
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label1-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label1"
+                                    name="label1"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label2"
+                                >
+                                  Beta
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label2-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label2"
+                                    name="label2"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label3"
+                                >
+                                  Gamma
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label3-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label3"
+                                    name="label3"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label4"
+                                >
+                                  Delta
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label4-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label4"
+                                    name="label4"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label5"
+                                >
+                                  Epsilon
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label5-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label5"
+                                    name="label5"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label6"
+                                >
+                                  Zeta
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label6-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label6"
+                                    name="label6"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label7"
+                                >
+                                  Eta
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label7-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label7"
+                                    name="label7"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                class="field"
+                              >
+                                <label
+                                  class="label"
+                                  for="label8"
+                                >
+                                  Theta
+                                </label>
+                                <div
+                                  class="control"
+                                >
+                                  <input
+                                    aria-describedby="label8-error"
+                                    aria-invalid="false"
+                                    class="input"
+                                    id="label8"
+                                    name="label8"
+                                    placeholder="Enter text"
+                                    type="text"
+                                    value=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <CSSTransition
+          classNames="overlay-effect"
+          in={true}
+          mountOnEnter={true}
+          timeout={250}
+          unmountOnExit={true}
+        >
+          <Transition
+            appear={false}
+            enter={true}
+            exit={true}
+            in={true}
+            mountOnEnter={true}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={250}
+            unmountOnExit={true}
+          >
+            <OverlayInner
+              ariaDescription="My Drawer"
+              ariaLabel="Drawer Title"
+              className="has-drawer"
+              open={true}
+            >
+              <div
+                aria-describedby="My Drawer"
+                aria-labelledby="Drawer Title"
+                className="fixed-overlay is-backdrop has-drawer"
+                role="dialog"
+              >
+                <div
+                  className="fixed-overlay__inner"
+                >
+                  <ForwardRef>
+                    <ForwardRef
+                      as="div"
+                      autoFocus={true}
+                      crossFrame={true}
+                      disabled={false}
+                      lockProps={Object {}}
+                      noFocusGuards={false}
+                      persistentFocus={false}
+                      returnFocus={false}
+                      sideCar={[Function]}
+                    >
+                      <div
+                        data-focus-guard={true}
+                        key="guard-first"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                      <div
+                        data-focus-guard={true}
+                        key="guard-nearest"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={1}
+                      />
+                      <SideEffect(FocusWatcher)
+                        autoFocus={true}
+                        crossFrame={true}
+                        disabled={false}
+                        id={Object {}}
+                        observed={
+                          <div
+                            data-focus-lock-disabled="false"
+                          >
+                            <div
+                              class="drawer"
+                            >
+                              <header
+                                class="drawer__header"
+                              >
+                                <h1
+                                  class="drawer__title"
+                                >
+                                  Drawer Title
+                                </h1>
+                                <button
+                                  aria-label="Close"
+                                  class="drawer__close"
+                                  tabindex="0"
+                                >
+                                  <span
+                                    class="ui-icon ui-medium"
+                                  >
+                                    <svg>
+                                      <use
+                                        xlink:href="#i-close"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </header>
+                              <div
+                                class="drawer__body"
+                              >
+                                <div
+                                  class="drawer__content"
+                                >
+                                  <section
+                                    class="border p-8 bg-white mb-8"
+                                  >
+                                    <section
+                                      class="grid-section"
+                                    >
+                                      <header
+                                        class="grid-section__header"
+                                      >
+                                        <h2
+                                          class="grid-section__title"
+                                        >
+                                          Section Title
+                                        </h2>
+                                      </header>
+                                      <div
+                                        class="grid-section__inner md:grid md:grid-cols-4 md:gap-8"
+                                      >
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label1"
+                                          >
+                                            Alpha
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label1-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label1"
+                                              name="label1"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label2"
+                                          >
+                                            Beta
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label2-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label2"
+                                              name="label2"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label3"
+                                          >
+                                            Gamma
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label3-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label3"
+                                              name="label3"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label4"
+                                          >
+                                            Delta
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label4-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label4"
+                                              name="label4"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label5"
+                                          >
+                                            Epsilon
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label5-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label5"
+                                              name="label5"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label6"
+                                          >
+                                            Zeta
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label6-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label6"
+                                              name="label6"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label7"
+                                          >
+                                            Eta
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label7-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label7"
+                                              name="label7"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="field"
+                                        >
+                                          <label
+                                            class="label"
+                                            for="label8"
+                                          >
+                                            Theta
+                                          </label>
+                                          <div
+                                            class="control"
+                                          >
+                                            <input
+                                              aria-describedby="label8-error"
+                                              aria-invalid="false"
+                                              class="input"
+                                              id="label8"
+                                              name="label8"
+                                              placeholder="Enter text"
+                                              type="text"
+                                              value=""
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </section>
+                                  </section>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                        onActivation={[Function]}
+                        onDeactivation={[Function]}
+                        persistentFocus={false}
+                        returnFocus={[Function]}
+                        shards={Array []}
+                        sideCar={
+                          Object {
+                            "assignMedium": [Function],
+                            "assignSyncMedium": [Function],
+                            "options": Object {
+                              "async": true,
+                              "ssr": false,
+                            },
+                            "read": [Function],
+                            "useMedium": [Function],
+                          }
+                        }
+                      >
+                        <FocusWatcher
+                          autoFocus={true}
+                          crossFrame={true}
+                          disabled={false}
+                          id={Object {}}
+                          observed={
+                            <div
+                              data-focus-lock-disabled="false"
+                            >
+                              <div
+                                class="drawer"
+                              >
+                                <header
+                                  class="drawer__header"
+                                >
+                                  <h1
+                                    class="drawer__title"
+                                  >
+                                    Drawer Title
+                                  </h1>
+                                  <button
+                                    aria-label="Close"
+                                    class="drawer__close"
+                                    tabindex="0"
+                                  >
+                                    <span
+                                      class="ui-icon ui-medium"
+                                    >
+                                      <svg>
+                                        <use
+                                          xlink:href="#i-close"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </header>
+                                <div
+                                  class="drawer__body"
+                                >
+                                  <div
+                                    class="drawer__content"
+                                  >
+                                    <section
+                                      class="border p-8 bg-white mb-8"
+                                    >
+                                      <section
+                                        class="grid-section"
+                                      >
+                                        <header
+                                          class="grid-section__header"
+                                        >
+                                          <h2
+                                            class="grid-section__title"
+                                          >
+                                            Section Title
+                                          </h2>
+                                        </header>
+                                        <div
+                                          class="grid-section__inner md:grid md:grid-cols-4 md:gap-8"
+                                        >
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label1"
+                                            >
+                                              Alpha
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label1-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label1"
+                                                name="label1"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label2"
+                                            >
+                                              Beta
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label2-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label2"
+                                                name="label2"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label3"
+                                            >
+                                              Gamma
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label3-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label3"
+                                                name="label3"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label4"
+                                            >
+                                              Delta
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label4-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label4"
+                                                name="label4"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label5"
+                                            >
+                                              Epsilon
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label5-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label5"
+                                                name="label5"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label6"
+                                            >
+                                              Zeta
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label6-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label6"
+                                                name="label6"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label7"
+                                            >
+                                              Eta
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label7-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label7"
+                                                name="label7"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div
+                                            class="field"
+                                          >
+                                            <label
+                                              class="label"
+                                              for="label8"
+                                            >
+                                              Theta
+                                            </label>
+                                            <div
+                                              class="control"
+                                            >
+                                              <input
+                                                aria-describedby="label8-error"
+                                                aria-invalid="false"
+                                                class="input"
+                                                id="label8"
+                                                name="label8"
+                                                placeholder="Enter text"
+                                                type="text"
+                                                value=""
+                                              />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </section>
+                                    </section>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          }
+                          onActivation={[Function]}
+                          onDeactivation={[Function]}
+                          persistentFocus={false}
+                          returnFocus={[Function]}
+                          shards={Array []}
+                          sideCar={
+                            Object {
+                              "assignMedium": [Function],
+                              "assignSyncMedium": [Function],
+                              "options": Object {
+                                "async": true,
+                                "ssr": false,
+                              },
+                              "read": [Function],
+                              "useMedium": [Function],
+                            }
+                          }
+                        />
+                      </SideEffect(FocusWatcher)>
+                      <div
+                        data-focus-lock-disabled={false}
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                      >
+                        <div
+                          className="drawer"
+                        >
+                          <header
+                            className="drawer__header"
+                          >
+                            <h1
+                              className="drawer__title"
+                            >
+                              Drawer Title
+                            </h1>
+                            <button
+                              aria-label="Close"
+                              className="drawer__close"
+                              tabIndex={0}
+                            >
+                              <Icon
+                                size="medium"
+                                symbol="close"
+                              >
+                                <span
+                                  className="ui-icon ui-medium"
+                                >
+                                  <svg>
+                                    <use
+                                      xlinkHref="#i-close"
+                                    />
+                                  </svg>
+                                </span>
+                              </Icon>
+                            </button>
+                          </header>
+                          <div
+                            className="drawer__body"
+                          >
+                            <div
+                              className="drawer__content"
+                            >
+                              <section
+                                className="border p-8 bg-white mb-8"
+                              >
+                                <GridSection
+                                  columns={4}
+                                  title="Section Title"
+                                >
+                                  <section
+                                    className="grid-section"
+                                  >
+                                    <header
+                                      className="grid-section__header"
+                                    >
+                                      <h2
+                                        className="grid-section__title"
+                                      >
+                                        Section Title
+                                      </h2>
+                                    </header>
+                                    <div
+                                      className="grid-section__inner md:grid md:grid-cols-4 md:gap-8"
+                                    >
+                                      <Field
+                                        label="Alpha"
+                                        name="label1"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label1"
+                                          >
+                                            Alpha
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label1-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label1"
+                                              name="label1"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                      <Field
+                                        label="Beta"
+                                        name="label2"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label2"
+                                          >
+                                            Beta
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label2-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label2"
+                                              name="label2"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                      <Field
+                                        label="Gamma"
+                                        name="label3"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label3"
+                                          >
+                                            Gamma
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label3-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label3"
+                                              name="label3"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                      <Field
+                                        label="Delta"
+                                        name="label4"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label4"
+                                          >
+                                            Delta
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label4-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label4"
+                                              name="label4"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                      <Field
+                                        label="Epsilon"
+                                        name="label5"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label5"
+                                          >
+                                            Epsilon
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label5-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label5"
+                                              name="label5"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                      <Field
+                                        label="Zeta"
+                                        name="label6"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label6"
+                                          >
+                                            Zeta
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label6-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label6"
+                                              name="label6"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                      <Field
+                                        label="Eta"
+                                        name="label7"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label7"
+                                          >
+                                            Eta
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label7-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label7"
+                                              name="label7"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                      <Field
+                                        label="Theta"
+                                        name="label8"
+                                        placeholder="Enter text"
+                                        register={[Function]}
+                                      >
+                                        <div
+                                          className="field"
+                                        >
+                                          <label
+                                            className="label"
+                                            htmlFor="label8"
+                                          >
+                                            Theta
+                                          </label>
+                                          <div
+                                            className="control"
+                                          >
+                                            <input
+                                              aria-describedby="label8-error"
+                                              aria-invalid={false}
+                                              className="input"
+                                              id="label8"
+                                              name="label8"
+                                              placeholder="Enter text"
+                                              type="text"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Field>
+                                    </div>
+                                  </section>
+                                </GridSection>
+                              </section>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        data-focus-guard={true}
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                    </ForwardRef>
+                  </ForwardRef>
+                </div>
+              </div>
+            </OverlayInner>
+          </Transition>
+        </CSSTransition>
+      </Portal>
+    </Component>
+  </Drawer>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Overlays/Drawer Drawer View Test 1`] = `
+<div>
+  <Drawer
+    ariaDescription="My Drawer"
+    open={true}
+    title="Drawer Title"
+  >
+    <Component
+      ariaDescription="My Drawer"
+      ariaLabel="Drawer Title"
+      className="has-drawer"
+      open={true}
+    >
+      <Portal
+        containerInfo={
+          <div>
+            <div
+              aria-describedby="My Drawer"
+              aria-labelledby="Drawer Title"
+              class="fixed-overlay is-backdrop has-drawer"
+              role="dialog"
+            >
+              <div
+                class="fixed-overlay__inner"
+              >
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="1"
+                />
+                <div
+                  data-focus-lock-disabled="false"
+                >
+                  <div
+                    class="drawer"
+                  >
+                    <header
+                      class="drawer__header"
+                    >
+                      <h1
+                        class="drawer__title"
+                      >
+                        Drawer Title
+                      </h1>
+                      <button
+                        aria-label="Close"
+                        class="drawer__close"
+                        tabindex="0"
+                      >
+                        <span
+                          class="ui-icon ui-medium"
+                        >
+                          <svg>
+                            <use
+                              xlink:href="#i-close"
+                            />
+                          </svg>
+                        </span>
+                      </button>
+                    </header>
+                    <div
+                      class="drawer__body"
+                    >
+                      <div
+                        class="drawer__content"
+                      >
+                        <section
+                          class="border rounded-md p-8 bg-white mb-8"
+                        >
+                          <section
+                            class="grid-section"
+                          >
+                            <header
+                              class="grid-section__header"
+                            >
+                              <h2
+                                class="grid-section__title"
+                              >
+                                Section Title
+                              </h2>
+                            </header>
+                            <div
+                              class="grid-section__inner is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
+                            >
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  First Name
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  Lisa
+                                </span>
+                              </p>
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  Middle Name
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  S
+                                </span>
+                              </p>
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  Last Name
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  Jones
+                                </span>
+                              </p>
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  Date of Birth
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  01/01/1985
+                                </span>
+                              </p>
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  Email
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  lisa@gmail.com
+                                </span>
+                              </p>
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  Phone
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  111-222-3333
+                                </span>
+                                <span
+                                  class="view-item__helper"
+                                >
+                                  Cell
+                                </span>
+                              </p>
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  Second Phone
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  111-222-3333
+                                </span>
+                                <span
+                                  class="view-item__helper"
+                                >
+                                  Work
+                                </span>
+                              </p>
+                              <p
+                                class="view-item"
+                              >
+                                <span
+                                  class="view-item__label"
+                                >
+                                  Perferred Contact
+                                </span>
+                                <span
+                                  class="view-item__value"
+                                >
+                                  Phone
+                                </span>
+                              </p>
+                            </div>
+                          </section>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-focus-guard="true"
+                  style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+                  tabindex="0"
+                />
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <CSSTransition
+          classNames="overlay-effect"
+          in={true}
+          mountOnEnter={true}
+          timeout={250}
+          unmountOnExit={true}
+        >
+          <Transition
+            appear={false}
+            enter={true}
+            exit={true}
+            in={true}
+            mountOnEnter={true}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={250}
+            unmountOnExit={true}
+          >
+            <OverlayInner
+              ariaDescription="My Drawer"
+              ariaLabel="Drawer Title"
+              className="has-drawer"
+              open={true}
+            >
+              <div
+                aria-describedby="My Drawer"
+                aria-labelledby="Drawer Title"
+                className="fixed-overlay is-backdrop has-drawer"
+                role="dialog"
+              >
+                <div
+                  className="fixed-overlay__inner"
+                >
+                  <ForwardRef>
+                    <ForwardRef
+                      as="div"
+                      autoFocus={true}
+                      crossFrame={true}
+                      disabled={false}
+                      lockProps={Object {}}
+                      noFocusGuards={false}
+                      persistentFocus={false}
+                      returnFocus={false}
+                      sideCar={[Function]}
+                    >
+                      <div
+                        data-focus-guard={true}
+                        key="guard-first"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                      <div
+                        data-focus-guard={true}
+                        key="guard-nearest"
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={1}
+                      />
+                      <SideEffect(FocusWatcher)
+                        autoFocus={true}
+                        crossFrame={true}
+                        disabled={false}
+                        id={Object {}}
+                        observed={
+                          <div
+                            data-focus-lock-disabled="false"
+                          >
+                            <div
+                              class="drawer"
+                            >
+                              <header
+                                class="drawer__header"
+                              >
+                                <h1
+                                  class="drawer__title"
+                                >
+                                  Drawer Title
+                                </h1>
+                                <button
+                                  aria-label="Close"
+                                  class="drawer__close"
+                                  tabindex="0"
+                                >
+                                  <span
+                                    class="ui-icon ui-medium"
+                                  >
+                                    <svg>
+                                      <use
+                                        xlink:href="#i-close"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </header>
+                              <div
+                                class="drawer__body"
+                              >
+                                <div
+                                  class="drawer__content"
+                                >
+                                  <section
+                                    class="border rounded-md p-8 bg-white mb-8"
+                                  >
+                                    <section
+                                      class="grid-section"
+                                    >
+                                      <header
+                                        class="grid-section__header"
+                                      >
+                                        <h2
+                                          class="grid-section__title"
+                                        >
+                                          Section Title
+                                        </h2>
+                                      </header>
+                                      <div
+                                        class="grid-section__inner is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
+                                      >
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            First Name
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            Lisa
+                                          </span>
+                                        </p>
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            Middle Name
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            S
+                                          </span>
+                                        </p>
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            Last Name
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            Jones
+                                          </span>
+                                        </p>
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            Date of Birth
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            01/01/1985
+                                          </span>
+                                        </p>
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            Email
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            lisa@gmail.com
+                                          </span>
+                                        </p>
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            Phone
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            111-222-3333
+                                          </span>
+                                          <span
+                                            class="view-item__helper"
+                                          >
+                                            Cell
+                                          </span>
+                                        </p>
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            Second Phone
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            111-222-3333
+                                          </span>
+                                          <span
+                                            class="view-item__helper"
+                                          >
+                                            Work
+                                          </span>
+                                        </p>
+                                        <p
+                                          class="view-item"
+                                        >
+                                          <span
+                                            class="view-item__label"
+                                          >
+                                            Perferred Contact
+                                          </span>
+                                          <span
+                                            class="view-item__value"
+                                          >
+                                            Phone
+                                          </span>
+                                        </p>
+                                      </div>
+                                    </section>
+                                  </section>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                        onActivation={[Function]}
+                        onDeactivation={[Function]}
+                        persistentFocus={false}
+                        returnFocus={[Function]}
+                        shards={Array []}
+                        sideCar={
+                          Object {
+                            "assignMedium": [Function],
+                            "assignSyncMedium": [Function],
+                            "options": Object {
+                              "async": true,
+                              "ssr": false,
+                            },
+                            "read": [Function],
+                            "useMedium": [Function],
+                          }
+                        }
+                      >
+                        <FocusWatcher
+                          autoFocus={true}
+                          crossFrame={true}
+                          disabled={false}
+                          id={Object {}}
+                          observed={
+                            <div
+                              data-focus-lock-disabled="false"
+                            >
+                              <div
+                                class="drawer"
+                              >
+                                <header
+                                  class="drawer__header"
+                                >
+                                  <h1
+                                    class="drawer__title"
+                                  >
+                                    Drawer Title
+                                  </h1>
+                                  <button
+                                    aria-label="Close"
+                                    class="drawer__close"
+                                    tabindex="0"
+                                  >
+                                    <span
+                                      class="ui-icon ui-medium"
+                                    >
+                                      <svg>
+                                        <use
+                                          xlink:href="#i-close"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </header>
+                                <div
+                                  class="drawer__body"
+                                >
+                                  <div
+                                    class="drawer__content"
+                                  >
+                                    <section
+                                      class="border rounded-md p-8 bg-white mb-8"
+                                    >
+                                      <section
+                                        class="grid-section"
+                                      >
+                                        <header
+                                          class="grid-section__header"
+                                        >
+                                          <h2
+                                            class="grid-section__title"
+                                          >
+                                            Section Title
+                                          </h2>
+                                        </header>
+                                        <div
+                                          class="grid-section__inner is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
+                                        >
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              First Name
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              Lisa
+                                            </span>
+                                          </p>
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              Middle Name
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              S
+                                            </span>
+                                          </p>
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              Last Name
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              Jones
+                                            </span>
+                                          </p>
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              Date of Birth
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              01/01/1985
+                                            </span>
+                                          </p>
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              Email
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              lisa@gmail.com
+                                            </span>
+                                          </p>
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              Phone
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              111-222-3333
+                                            </span>
+                                            <span
+                                              class="view-item__helper"
+                                            >
+                                              Cell
+                                            </span>
+                                          </p>
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              Second Phone
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              111-222-3333
+                                            </span>
+                                            <span
+                                              class="view-item__helper"
+                                            >
+                                              Work
+                                            </span>
+                                          </p>
+                                          <p
+                                            class="view-item"
+                                          >
+                                            <span
+                                              class="view-item__label"
+                                            >
+                                              Perferred Contact
+                                            </span>
+                                            <span
+                                              class="view-item__value"
+                                            >
+                                              Phone
+                                            </span>
+                                          </p>
+                                        </div>
+                                      </section>
+                                    </section>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          }
+                          onActivation={[Function]}
+                          onDeactivation={[Function]}
+                          persistentFocus={false}
+                          returnFocus={[Function]}
+                          shards={Array []}
+                          sideCar={
+                            Object {
+                              "assignMedium": [Function],
+                              "assignSyncMedium": [Function],
+                              "options": Object {
+                                "async": true,
+                                "ssr": false,
+                              },
+                              "read": [Function],
+                              "useMedium": [Function],
+                            }
+                          }
+                        />
+                      </SideEffect(FocusWatcher)>
+                      <div
+                        data-focus-lock-disabled={false}
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                      >
+                        <div
+                          className="drawer"
+                        >
+                          <header
+                            className="drawer__header"
+                          >
+                            <h1
+                              className="drawer__title"
+                            >
+                              Drawer Title
+                            </h1>
+                            <button
+                              aria-label="Close"
+                              className="drawer__close"
+                              tabIndex={0}
+                            >
+                              <Icon
+                                size="medium"
+                                symbol="close"
+                              >
+                                <span
+                                  className="ui-icon ui-medium"
+                                >
+                                  <svg>
+                                    <use
+                                      xlinkHref="#i-close"
+                                    />
+                                  </svg>
+                                </span>
+                              </Icon>
+                            </button>
+                          </header>
+                          <div
+                            className="drawer__body"
+                          >
+                            <div
+                              className="drawer__content"
+                            >
+                              <section
+                                className="border rounded-md p-8 bg-white mb-8"
+                              >
+                                <GridSection
+                                  columns={4}
+                                  inset={true}
+                                  tinted={true}
+                                  title="Section Title"
+                                >
+                                  <section
+                                    className="grid-section"
+                                  >
+                                    <header
+                                      className="grid-section__header"
+                                    >
+                                      <h2
+                                        className="grid-section__title"
+                                      >
+                                        Section Title
+                                      </h2>
+                                    </header>
+                                    <div
+                                      className="grid-section__inner is-tinted is-inset md:grid md:grid-cols-4 md:gap-8"
+                                    >
+                                      <ViewItem
+                                        label="First Name"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            First Name
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            Lisa
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                      <ViewItem
+                                        label="Middle Name"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            Middle Name
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            S
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                      <ViewItem
+                                        label="Last Name"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            Last Name
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            Jones
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                      <ViewItem
+                                        label="Date of Birth"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            Date of Birth
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            01/01/1985
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                      <ViewItem
+                                        label="Email"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            Email
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            lisa@gmail.com
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                      <ViewItem
+                                        helper="Cell"
+                                        label="Phone"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            Phone
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            111-222-3333
+                                          </span>
+                                          <span
+                                            className="view-item__helper"
+                                          >
+                                            Cell
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                      <ViewItem
+                                        helper="Work"
+                                        label="Second Phone"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            Second Phone
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            111-222-3333
+                                          </span>
+                                          <span
+                                            className="view-item__helper"
+                                          >
+                                            Work
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                      <ViewItem
+                                        label="Perferred Contact"
+                                      >
+                                        <p
+                                          className="view-item"
+                                        >
+                                          <span
+                                            className="view-item__label"
+                                          >
+                                            Perferred Contact
+                                          </span>
+                                          <span
+                                            className="view-item__value"
+                                          >
+                                            Phone
+                                          </span>
+                                        </p>
+                                      </ViewItem>
+                                    </div>
+                                  </section>
+                                </GridSection>
+                              </section>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        data-focus-guard={true}
+                        style={
+                          Object {
+                            "height": "0px",
+                            "left": "1px",
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "position": "fixed",
+                            "top": "1px",
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex={0}
+                      />
+                    </ForwardRef>
+                  </ForwardRef>
+                </div>
+              </div>
+            </OverlayInner>
+          </Transition>
+        </CSSTransition>
+      </Portal>
+    </Component>
+  </Drawer>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Overlays/Drawer Standard 1`] = `
+<div>
+  <Drawer
+    actions={
+      Array [
+        <Button
+          onClick={[Function]}
+          type="is-primary"
+        >
+          Submit
+        </Button>,
+        <Button
+          border="is-borderless"
+          onClick={[Function]}
+          type="is-secondary"
+        >
+          Cancel
+        </Button>,
+      ]
+    }
+    ariaDescription="My Drawer"
+    onClose={[Function]}
+    open={false}
+    title="Drawer Title"
+  >
+    <Component
+      ariaDescription="My Drawer"
+      ariaLabel="Drawer Title"
+      className="has-drawer"
+      onClose={[Function]}
+      open={false}
+    >
+      <Portal
+        containerInfo={<div />}
+      >
+        <CSSTransition
+          classNames="overlay-effect"
+          in={false}
+          mountOnEnter={true}
+          timeout={250}
+          unmountOnExit={true}
+        >
+          <Transition
+            appear={false}
+            enter={true}
+            exit={true}
+            in={false}
+            mountOnEnter={true}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={250}
+            unmountOnExit={true}
+          />
+        </CSSTransition>
+      </Portal>
+    </Component>
+  </Drawer>
+  <Button
+    onClick={[Function]}
+  >
+    <button
+      className="button"
+      onClick={[Function]}
+    >
+      Open Drawer
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Overlays/Drawer Standard On Left 1`] = `
+<div>
+  <Drawer
+    actions={
+      Array [
+        <Button
+          onClick={[Function]}
+          type="is-primary"
+        >
+          Submit
+        </Button>,
+        <Button
+          border="is-borderless"
+          onClick={[Function]}
+          type="is-secondary"
+        >
+          Cancel
+        </Button>,
+      ]
+    }
+    ariaDescription="My Drawer"
+    direction="left"
+    onClose={[Function]}
+    open={false}
+    title="Drawer Title"
+  >
+    <Component
+      ariaDescription="My Drawer"
+      ariaLabel="Drawer Title"
+      className="has-drawer is-direction-left"
+      onClose={[Function]}
+      open={false}
+    >
+      <Portal
+        containerInfo={<div />}
+      >
+        <CSSTransition
+          classNames="overlay-effect"
+          in={false}
+          mountOnEnter={true}
+          timeout={250}
+          unmountOnExit={true}
+        >
+          <Transition
+            appear={false}
+            enter={true}
+            exit={true}
+            in={false}
+            mountOnEnter={true}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={250}
+            unmountOnExit={true}
+          />
+        </CSSTransition>
+      </Portal>
+    </Component>
+  </Drawer>
+  <div
+    className="text-right"
+  >
+    <Button
+      onClick={[Function]}
+    >
+      <button
+        className="button"
+        onClick={[Function]}
+      >
+        Open Drawer
+      </button>
+    </Button>
+  </div>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;

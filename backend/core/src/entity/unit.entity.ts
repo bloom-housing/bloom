@@ -1,23 +1,184 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
   BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import {
   IsBoolean,
-  IsDateString,
+  IsDate,
+  IsDefined,
   IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
   IsUUID,
+  ValidateNested,
 } from "class-validator"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
+import { AnyDict } from "../lib/unit_transformations"
+
+export class MinMax {
+  @Expose()
+  @IsDefined()
+  @IsNumber()
+  min: number
+
+  @Expose()
+  @IsDefined()
+  @IsNumber()
+  max: number
+}
+
+export class MinMaxCurrency {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  min: string
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  max: string
+}
+
+export class UnitSummary {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  unitType: string
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MinMaxCurrency)
+  minIncomeRange: MinMaxCurrency
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MinMax)
+  occupancyRange: MinMax
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MinMax)
+  rentAsPercentIncomeRange: MinMax
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MinMaxCurrency)
+  rentRange: MinMaxCurrency
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  totalAvailable: number
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MinMax)
+  areaRange: MinMax
+
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => MinMax)
+  floorRange?: MinMax
+}
+
+export class UnitSummaryByReservedType {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  reservedType: string
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byUnitType: UnitSummary[]
+}
+
+export class UnitSummaryByAMI {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  percent: string
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byNonReservedUnitType: UnitSummary[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummaryByReservedType)
+  byReservedType: UnitSummaryByReservedType[]
+}
+
+export class HMI {
+  columns: AnyDict
+  rows: AnyDict[]
+}
+
+export class UnitsSummarized {
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  unitTypes: string[]
+
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  reservedTypes: string[]
+
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  priorityTypes: string[]
+
+  @Expose()
+  @IsDefined()
+  @IsString({ each: true })
+  amiPercentages: string[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byUnitType: UnitSummary[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummary)
+  byNonReservedUnitType: UnitSummary[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummaryByReservedType)
+  byReservedType: UnitSummaryByReservedType[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitSummaryByAMI)
+  byAMI: UnitSummaryByAMI[]
+
+  @Expose()
+  hmi: HMI
+}
 
 @Entity({ name: "units" })
 class Unit extends BaseEntity {
@@ -29,12 +190,12 @@ class Unit extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  @IsDateString()
+  @IsDate()
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
+  @IsDate()
   updatedAt: Date
 
   @Column({ nullable: true, type: "text" })
@@ -55,7 +216,7 @@ class Unit extends BaseEntity {
   @IsNumberString()
   monthlyIncomeMin: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -67,13 +228,13 @@ class Unit extends BaseEntity {
   @IsString()
   annualIncomeMax: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
   maxOccupancy: number | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -85,13 +246,13 @@ class Unit extends BaseEntity {
   @IsNumberString()
   monthlyRent: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
   numBathrooms: number | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -118,8 +279,8 @@ class Unit extends BaseEntity {
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  sqFeet: number | null
+  @IsString()
+  sqFeet: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
@@ -133,7 +294,7 @@ class Unit extends BaseEntity {
   @IsString()
   unitType: string | null
 
-  @Column({ nullable: true, type: "numeric" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -142,10 +303,10 @@ class Unit extends BaseEntity {
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
-  @IsNumber()
-  monthlyRentAsPercentOfIncome: number | null
+  @IsString()
+  monthlyRentAsPercentOfIncome: string | null
 
-  @ManyToOne((type) => Listing, (listing) => listing.units, {
+  @ManyToOne(() => Listing, (listing) => listing.units, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

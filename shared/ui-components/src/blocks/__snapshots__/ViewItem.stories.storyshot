@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Blocks/View Item Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <ViewItem
+    helper="Helper"
+    label="Label"
+  >
+    <p
+      className="view-item"
+    >
+      <span
+        className="view-item__label"
+      >
+        Label
+      </span>
+      <span
+        className="view-item__value"
+      >
+        Value
+      </span>
+      <span
+        className="view-item__helper"
+      >
+        Helper
+      </span>
+    </p>
+  </ViewItem>
+</div>
+`;
+
+exports[`Storyshots Blocks/View Item Flagged 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <ViewItem
+    flagged={true}
+    label="Address"
+  >
+    <p
+      className="view-item is-flagged"
+    >
+      <span
+        className="view-item__label"
+      >
+        Address
+      </span>
+      <span
+        className="view-item__value"
+      >
+        1112 Springfield St.
+      </span>
+    </p>
+  </ViewItem>
+</div>
+`;
+
+exports[`Storyshots Blocks/View Item No Helper 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <ViewItem
+    label="Address"
+  >
+    <p
+      className="view-item"
+    >
+      <span
+        className="view-item__label"
+      >
+        Address
+      </span>
+      <span
+        className="view-item__value"
+      >
+        1112 Springfield St.
+      </span>
+    </p>
+  </ViewItem>
+</div>
+`;

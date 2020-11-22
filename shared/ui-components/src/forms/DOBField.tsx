@@ -1,7 +1,6 @@
 import React from "react"
-import { ErrorMessage } from "./ErrorMessage"
-import t from "../helpers/translator"
-import Field from "./Field"
+import { t } from "../helpers/translator"
+import { Field } from "./Field"
 import { HouseholdMember } from "@bloom-housing/core"
 import moment from "moment"
 
@@ -13,10 +12,11 @@ export interface DOBFieldProps {
   applicant: HouseholdMember
   atAge?: boolean
   name?: string
+  id?: string
 }
 
 const DOBField = (props: DOBFieldProps) => {
-  const { applicant, error, register, watch, atAge, name } = props
+  const { applicant, error, register, watch, atAge, name, id } = props
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
   }
@@ -31,17 +31,16 @@ const DOBField = (props: DOBFieldProps) => {
   }
 
   return (
-    <fieldset>
+    <fieldset id={id}>
       <legend className="field-label--caps">{props.label}</legend>
 
       <div className="field-group--dob">
-        <label htmlFor={fieldName("birthMonth")} className="sr-only">
-          {t("t.month")}
-        </label>
         <Field
           name={fieldName("birthMonth")}
+          label={t("t.month")}
+          readerOnly={true}
           placeholder="MM"
-          defaultValue={"" + (applicant.birthMonth > 0 ? applicant.birthMonth : "")}
+          defaultValue={applicant.birthMonth ? applicant.birthMonth : ""}
           error={error?.birthMonth}
           validation={{
             required: true,
@@ -52,13 +51,12 @@ const DOBField = (props: DOBFieldProps) => {
           inputProps={{ maxLength: 2 }}
           register={register}
         />
-        <label htmlFor={fieldName("birthDay")} className="sr-only">
-          {t("t.day")}
-        </label>
         <Field
           name={fieldName("birthDay")}
+          label={t("t.day")}
+          readerOnly={true}
           placeholder="DD"
-          defaultValue={"" + (applicant.birthDay > 0 ? applicant.birthDay : "")}
+          defaultValue={applicant.birthDay ? applicant.birthDay : ""}
           error={error?.birthDay}
           validation={{
             required: true,
@@ -69,13 +67,12 @@ const DOBField = (props: DOBFieldProps) => {
           inputProps={{ maxLength: 2 }}
           register={register}
         />
-        <label htmlFor={fieldName("birthYear")} className="sr-only">
-          {t("t.year")}
-        </label>
         <Field
           name={fieldName("birthYear")}
+          label={t("t.year")}
+          readerOnly={true}
           placeholder="YYYY"
-          defaultValue={"" + (applicant.birthYear > 0 ? applicant.birthYear : "")}
+          defaultValue={applicant.birthYear ? applicant.birthYear : ""}
           error={error?.birthYear}
           validation={{
             required: true,
@@ -90,7 +87,9 @@ const DOBField = (props: DOBFieldProps) => {
 
       {(error?.birthMonth || error?.birthDay || error?.birthYear) && (
         <div className="field error">
-          <span className="error-message">{t("application.name.dateOfBirthError")}</span>
+          <span id={`${id}-error`} className="error-message">
+            {t("application.name.dateOfBirthError")}
+          </span>
         </div>
       )}
     </fieldset>

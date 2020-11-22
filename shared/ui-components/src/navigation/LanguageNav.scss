@@ -1,0 +1,26 @@
+.language-bar {
+  @apply bg-gray-800;
+}
+
+.language-bar__inner {
+  @apply max-w-5xl;
+  @apply m-auto;
+  @apply flex;
+  @apply justify-end;
+}
+
+.language-nav__list {
+  @apply flex;
+
+  li {
+    @apply py-2;
+    @apply px-2;
+    @apply text-gray-500;
+    @apply font-semibold;
+    @apply cursor-pointer;
+
+    &.is-active {
+      @apply text-white;
+    }
+  }
+}

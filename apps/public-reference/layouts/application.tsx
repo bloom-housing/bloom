@@ -1,4 +1,5 @@
-import * as React from "react"
+import React, { useContext } from "react"
+import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   LocalizedLink,
@@ -10,12 +11,20 @@ import {
   UserNav,
   t,
   UserContext,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
-import { useContext } from "react"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
+  const router = useRouter()
+
+  const LANGUAGES =
+    process.env.languages?.split(",")?.map((item) => ({
+      prefix: item === "en" ? "" : item,
+      label: t(`languages.${item}`),
+    })) || []
+
   return (
     <div className="site-wrapper">
       <div className="site-content">
@@ -27,6 +36,7 @@ const Layout = (props) => {
           logoSrc="/images/logo_glyph.svg"
           notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
           title={t("nav.siteTitle")}
+          languages={LANGUAGES}
         >
           <LocalizedLink href="/listings" className="navbar-item">
             {t("nav.listings")}
@@ -37,7 +47,15 @@ const Layout = (props) => {
               {t("nav.getAssistance")}
             </LocalizedLink>
           )}
-          {/* <UserNav signedIn={!!profile} signOut={signOut}>
+          <UserNav
+            signedIn={!!profile}
+            signOut={async () => {
+              setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+              await router.push("/sign-in")
+              signOut()
+              window.scrollTo(0, 0)
+            }}
+          >
             <LocalizedLink href="/account/dashboard" className="navbar-item">
               {t("nav.myDashboard")}
             </LocalizedLink>
@@ -47,7 +65,7 @@ const Layout = (props) => {
             <LocalizedLink href="/account/settings" className="navbar-item">
               {t("nav.accountSettings")}
             </LocalizedLink>
-          </UserNav> */}
+          </UserNav>
         </SiteHeader>
         <main id="main-content">{props.children}</main>
       </div>

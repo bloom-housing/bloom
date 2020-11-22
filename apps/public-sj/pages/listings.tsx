@@ -3,7 +3,7 @@ import Head from "next/head"
 import Layout from "../layouts/application"
 import axios from "axios"
 import moment from "moment"
-import { Listing } from "@bloom-housing/core/src/listings"
+import { Listing } from "@bloom-housing/core"
 import {
   ListingsGroup,
   ListingsList,

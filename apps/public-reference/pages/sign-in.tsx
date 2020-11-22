@@ -1,6 +1,8 @@
-import { useState, useContext } from "react"
+import React, { useState, useContext } from "react"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
+  AppearanceStyleType,
   Button,
   Field,
   Form,
@@ -14,13 +16,15 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { useRedirectToPrevPage } from "../lib/hooks"
 
 const SignIn = () => {
   const { login } = useContext(UserContext)
-  const redirectToPrev = useRedirectToPrevPage()
   /* Form Handler */
+  // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
+  // https://github.com/react-hook-form/react-hook-form/issues/2887
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
+  const router = useRouter()
   const [requestError, setRequestError] = useState<string>()
 
   const onSubmit = async (data: { email: string; password: string }) => {
@@ -29,7 +33,8 @@ const SignIn = () => {
     try {
       const user = await login(email, password)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
-      redirectToPrev()
+      await router.push("/account/dashboard")
+      window.scrollTo(0, 0)
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {
@@ -81,7 +86,7 @@ const SignIn = () => {
 
             <div className="text-center mt-6">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

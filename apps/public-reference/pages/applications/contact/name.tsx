@@ -3,7 +3,9 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
+import React from "react"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
@@ -16,20 +18,16 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
-import { useContext } from "react"
 import { emailRegex } from "../../../lib/helpers"
-import { useEffect } from "react"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 1
+  const { conductor, application, listing } = useFormConductor("primaryApplicantName")
+  const currentPageSection = 1
 
   /* Form Handler */
-  const { register, handleSubmit, setValue, watch, errors, clearErrors } = useForm<
-    Record<string, any>
-  >({
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit, watch, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
@@ -37,8 +35,8 @@ export default () => {
     },
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save({ applicant: { ...application.applicant, ...data.applicant } })
-    conductor.routeToNextOrReturnUrl("/applications/contact/address")
+    conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
+    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -56,9 +54,9 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
@@ -75,36 +73,42 @@ export default () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
-            <label className="field-label--caps" htmlFor="firstName">
-              {t("application.name.yourName")}
-            </label>
+            <fieldset>
+              <legend className="field-label--caps">{t("application.name.yourName")}</legend>
 
-            <Field
-              name="applicant.firstName"
-              placeholder={t("application.name.firstName")}
-              defaultValue={application.applicant.firstName}
-              validation={{ required: true }}
-              error={errors.applicant?.firstName}
-              errorMessage={t("application.name.firstNameError")}
-              register={register}
-            />
+              <Field
+                name="applicant.firstName"
+                label={t("application.name.firstName")}
+                placeholder={t("application.name.firstName")}
+                readerOnly={true}
+                defaultValue={application.applicant.firstName}
+                validation={{ required: true }}
+                error={errors.applicant?.firstName}
+                errorMessage={t("application.name.firstNameError")}
+                register={register}
+              />
 
-            <Field
-              name="applicant.middleName"
-              placeholder={t("application.name.middleName")}
-              defaultValue={application.applicant.middleName}
-              register={register}
-            />
+              <Field
+                name="applicant.middleName"
+                label={t("application.name.middleNameOptional")}
+                placeholder={t("application.name.middleNameOptional")}
+                readerOnly={true}
+                defaultValue={application.applicant.middleName}
+                register={register}
+              />
 
-            <Field
-              name="applicant.lastName"
-              placeholder={t("application.name.lastName")}
-              defaultValue={application.applicant.lastName}
-              validation={{ required: true }}
-              error={errors.applicant?.lastName}
-              errorMessage={t("application.name.lastNameError")}
-              register={register}
-            />
+              <Field
+                name="applicant.lastName"
+                label={t("application.name.lastName")}
+                placeholder={t("application.name.lastName")}
+                readerOnly={true}
+                defaultValue={application.applicant.lastName}
+                validation={{ required: true }}
+                error={errors.applicant?.lastName}
+                errorMessage={t("application.name.lastNameError")}
+                register={register}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__group border-b">
@@ -113,6 +117,7 @@ export default () => {
               register={register}
               error={errors.applicant}
               name="applicant"
+              id="applicant.dateOfBirth"
               watch={watch}
               atAge={true}
               label={t("application.name.yourDateOfBirth")}
@@ -120,9 +125,7 @@ export default () => {
           </div>
 
           <div className="form-card__group">
-            <label className="field-label--caps" htmlFor="emailAddress">
-              {t("application.name.yourEmailAddress")}
-            </label>
+            <h3 className="field-label--caps">{t("application.name.yourEmailAddress")}</h3>
 
             <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 
@@ -130,6 +133,8 @@ export default () => {
               type="email"
               name="applicant.emailAddress"
               placeholder={clientLoaded && noEmail ? t("t.none") : "example@web.com"}
+              label={t("application.name.yourEmailAddress")}
+              readerOnly={true}
               defaultValue={application.applicant.emailAddress}
               validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
               error={errors.applicant?.emailAddress}
@@ -138,25 +143,24 @@ export default () => {
               disabled={clientLoaded && noEmail}
             />
 
-            <div className="field">
-              <input
-                type="checkbox"
-                id="noEmail"
-                name="applicant.noEmail"
-                defaultChecked={clientLoaded && noEmail}
-                disabled={clientLoaded && emailPresent?.length > 0}
-                ref={register}
-              />
-              <label htmlFor="noEmail" className="text-primary font-semibold">
-                {t("application.name.noEmailAddress")}
-              </label>
-            </div>
+            <Field
+              type="checkbox"
+              id="noEmail"
+              name="applicant.noEmail"
+              label={t("application.name.noEmailAddress")}
+              primary={true}
+              register={register}
+              disabled={clientLoaded && emailPresent?.length > 0}
+              inputProps={{
+                defaultChecked: clientLoaded && noEmail,
+              }}
+            />
           </div>
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -168,7 +172,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}
