@@ -4888,10 +4888,10 @@ adjust-sourcemap-loader@2.0.0:
     object-path "0.11.4"
     regex-parser "2.2.10"
 
-ag-grid-community@^23.2.1:
-  version "23.2.1"
-  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-23.2.1.tgz#0cf2beb7ba2fcf66a4865e45faabdbea173d59b6"
-  integrity sha512-WHfDV7mFsd6eQJ5yOu26nnpnW7Gd02zcp9LHHfKQky8lfgTEo382qcja7MibHzB2f5vOCBdQnOPsWrbBNKRzhQ==
+ag-grid-community@^24.1.0:
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-24.1.0.tgz#1e3cab51211822e08d56f03a491b7c0deaa398e6"
+  integrity sha512-pWnWphuDcejZ8ahf6C734EpCx3XQ6dHEZWMWTlCdHNT0mZBLJ4YKCGACX+ttAEtSX2MGM3G13JncvuratUlYag==
 
 ag-grid-react@^24.1.0:
   version "24.1.0"
