@@ -19,12 +19,14 @@ const handleClick = (e: React.MouseEvent) => {
 }
 
 const StyleTypeStory = { ...AppearanceStyleType, default: undefined }
+const BorderTypeStory = { ...AppearanceBorderType, default: undefined }
 
 export const standard = () => {
   const styleSelect = select("Appearance Style", StyleTypeStory, undefined)
+  const borderSelect = select("Appearance Border", BorderTypeStory, undefined)
 
   return (
-    <Button type={styleSelect} onClick={handleClick}>
+    <Button type={styleSelect} border={borderSelect} onClick={handleClick}>
       {text("Label", "Hello Storybook")}
     </Button>
   )
@@ -39,36 +41,6 @@ export const small = () => (
 export const big = () => (
   <Button size={AppearanceSizeType.big} onClick={handleClick}>
     Big Button
-  </Button>
-)
-
-export const primary = () => (
-  <Button type={AppearanceStyleType.primary} onClick={handleClick}>
-    Primary Button
-  </Button>
-)
-
-export const secondary = () => (
-  <Button type={AppearanceStyleType.secondary} onClick={handleClick}>
-    Secondary Button
-  </Button>
-)
-
-export const success = () => (
-  <Button type={AppearanceStyleType.success} onClick={handleClick}>
-    Success Button
-  </Button>
-)
-
-export const alert = () => (
-  <Button type={AppearanceStyleType.alert} onClick={handleClick}>
-    Alert Button
-  </Button>
-)
-
-export const warning = () => (
-  <Button type={AppearanceStyleType.warning} onClick={handleClick}>
-    Warning Button
   </Button>
 )
 
@@ -93,36 +65,6 @@ export const NormalCaseAndSuccess = () => (
 export const borderless = () => (
   <Button border={AppearanceBorderType.borderless} onClick={handleClick}>
     Borderless Button
-  </Button>
-)
-
-export const successOutline = () => (
-  <Button
-    type={AppearanceStyleType.success}
-    border={AppearanceBorderType.outlined}
-    onClick={handleClick}
-  >
-    Outlined Success Button
-  </Button>
-)
-
-export const alertOutlined = () => (
-  <Button
-    type={AppearanceStyleType.alert}
-    border={AppearanceBorderType.outlined}
-    onClick={handleClick}
-  >
-    Outlined Alert Button
-  </Button>
-)
-
-export const warningOutline = () => (
-  <Button
-    type={AppearanceStyleType.warning}
-    border={AppearanceBorderType.outlined}
-    onClick={handleClick}
-  >
-    Outlined Warning Button
   </Button>
 )
 

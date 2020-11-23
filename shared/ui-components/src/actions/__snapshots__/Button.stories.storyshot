@@ -2,8 +2,8 @@
 
 exports[`Storyshots Actions/Button Big 1`] = `
 <Button
-  big={true}
   onClick={[Function]}
+  size="is-big"
 >
   <button
     className="button is-big"
@@ -14,16 +14,16 @@ exports[`Storyshots Actions/Button Big 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Actions/Button Filled 1`] = `
+exports[`Storyshots Actions/Button Borderless 1`] = `
 <Button
-  type={AppearanceStyleType.primary}
+  border="is-borderless"
   onClick={[Function]}
 >
   <button
-    className="button is-primary"
+    className="button is-borderless"
     onClick={[Function]}
   >
-    Filled Button
+    Borderless Button
   </button>
 </Button>
 `;
@@ -41,7 +41,7 @@ exports[`Storyshots Actions/Button Inaccessible 1`] = `
 </button>
 `;
 
-exports[`Storyshots Actions/Button Regular Case 1`] = `
+exports[`Storyshots Actions/Button Normal Case 1`] = `
 <Button
   normalCase={true}
   onClick={[Function]}
@@ -55,10 +55,25 @@ exports[`Storyshots Actions/Button Regular Case 1`] = `
 </Button>
 `;
 
+exports[`Storyshots Actions/Button Normal Case And Success 1`] = `
+<Button
+  normalCase={true}
+  onClick={[Function]}
+  type="is-success"
+>
+  <button
+    className="button is-success is-normal-case"
+    onClick={[Function]}
+  >
+    Button (Normal Case)
+  </button>
+</Button>
+`;
+
 exports[`Storyshots Actions/Button Small 1`] = `
 <Button
   onClick={[Function]}
-  small={true}
+  size="is-small"
 >
   <button
     className="button is-small"
@@ -69,17 +84,17 @@ exports[`Storyshots Actions/Button Small 1`] = `
 </Button>
 `;
 
-exports[`Storyshots Actions/Button Small And Filled 1`] = `
+exports[`Storyshots Actions/Button Small And Primary 1`] = `
 <Button
-  type={AppearanceStyleType.primary}
   onClick={[Function]}
-  small={true}
+  size="is-small"
+  type="is-primary"
 >
   <button
     className="button is-primary is-small"
     onClick={[Function]}
   >
-    Small and Filled Button
+    Small and Primary Button
   </button>
 </Button>
 `;
@@ -92,7 +107,21 @@ exports[`Storyshots Actions/Button Standard 1`] = `
     className="button"
     onClick={[Function]}
   >
-    Button Component
+    Hello Storybook
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Unstyled 1`] = `
+<Button
+  onClick={[Function]}
+  unstyled={true}
+>
+  <button
+    className="button is-unstyled"
+    onClick={[Function]}
+  >
+    Unstyled Button
   </button>
 </Button>
 `;
