@@ -17,7 +17,6 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDate,
-  IsDateString,
   IsDefined,
   IsEmail,
   IsEnum,
@@ -66,10 +65,13 @@ class Listing extends BaseEntity {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
+  @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @OneToMany(() => Preference, (preference) => preference.listing)
@@ -90,19 +92,17 @@ class Listing extends BaseEntity {
   @ManyToOne(() => Property, (property) => property.listings, { nullable: false })
   property: Property
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "timestamptz", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  // TODO Change to date
-  applicationDueDate: string | null
+  @IsDate()
+  applicationDueDate: Date | null
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "timestamptz", nullable: true })
   @Expose()
   @IsOptional()
-  @IsString()
-  // TODO Change to date
-  applicationOpenDate: string | null
+  @IsDate()
+  applicationOpenDate: Date | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -221,11 +221,12 @@ class Listing extends BaseEntity {
   @IsString()
   name: string | null
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "timestamptz", nullable: true })
   @Expose()
   @IsOptional()
-  @IsDateString()
-  postmarkedApplicationsReceivedByDate: string | null
+  @IsDate()
+  @Type(() => Date)
+  postmarkedApplicationsReceivedByDate: Date | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

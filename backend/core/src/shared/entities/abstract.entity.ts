@@ -1,5 +1,5 @@
 import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsString, IsUUID } from "class-validator"
 
 export class AbstractEntity {
@@ -12,10 +12,12 @@ export class AbstractEntity {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 }

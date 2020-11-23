@@ -21,7 +21,6 @@ import {
 import { Expose, Type } from "class-transformer"
 import { AnyDict } from "../lib/unit_transformations"
 import { Property } from "./property.entity"
-import { ApiProperty } from "@nestjs/swagger"
 
 export class MinMax {
   @Expose()
@@ -192,11 +191,13 @@ class Unit extends BaseEntity {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @Column({ nullable: true, type: "text" })

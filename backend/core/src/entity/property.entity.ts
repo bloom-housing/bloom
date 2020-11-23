@@ -29,11 +29,13 @@ export class Property {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @OneToMany(() => Unit, (unit) => unit.property, { eager: true })

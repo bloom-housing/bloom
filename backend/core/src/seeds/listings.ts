@@ -261,7 +261,7 @@ export const listingSeed1: ListingSeed = {
     },
   ],
   listing: {
-    applicationOpenDate: "2020-12-12T20:00:00.000Z",
+    applicationOpenDate: new Date("2020-12-12T20:00:00.000Z"),
     applicationPickUpAddress: {
       city: "San Jose",
       street: "98 Archer Street",
@@ -271,7 +271,7 @@ export const listingSeed1: ListingSeed = {
       longitude: -121.91071,
     },
     applicationPickUpAddressOfficeHours: "10AM to 12AM",
-    postmarkedApplicationsReceivedByDate: "2020-12-10T20:00:00.000Z",
+    postmarkedApplicationsReceivedByDate: new Date("2020-12-10T20:00:00.000Z"),
     disableUnitsAccordion: false,
     rentalAssistance: "",
 
@@ -288,7 +288,7 @@ export const listingSeed1: ListingSeed = {
       latitude: 37.55695,
       longitude: -122.27521,
     },
-    applicationDueDate: "2037-12-19T17:00:00.000-07:00",
+    applicationDueDate: new Date("2037-12-19T17:00:00.000-07:00"),
     applicationOrganization: "Triton",
     // TODO confirm not used anywhere
     // applicationPhone: "(650) 437-2039",

@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsString, IsUUID } from "class-validator"
 import { Property } from "./property.entity"
 
@@ -22,11 +22,13 @@ export class PropertyGroup {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @Column()

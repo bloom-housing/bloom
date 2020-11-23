@@ -14,6 +14,8 @@ export class ListingsService {
   public async list(jsonpath?: string): Promise<Listing[]> {
     let listings = await Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.property", "property")
+      .leftJoinAndSelect("property.amiChart", "amiChart")
+      .leftJoinAndSelect("amiChart.items", "amiChartItems")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
@@ -59,6 +61,8 @@ export class ListingsService {
     return await Listing.createQueryBuilder("listings")
       .where("listings.id = :id", { id: listingId })
       .leftJoinAndSelect("listings.property", "property")
+      .leftJoinAndSelect("property.amiChart", "amiChart")
+      .leftJoinAndSelect("amiChart.items", "amiChartItems")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")

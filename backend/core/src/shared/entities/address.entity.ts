@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
 
 @Entity()
@@ -13,11 +13,13 @@ export class Address {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @Column({ type: "text", nullable: true })

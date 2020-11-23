@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { Expose } from "class-transformer"
-import { IsDate, IsDateString, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
 
 @Entity({ name: "user_accounts" })
 @Index("user_accounts_email_unique_idx", { synchronize: false })
@@ -55,7 +55,7 @@ export class User {
 
   @UpdateDateColumn()
   @Expose()
-  @IsDateString()
+  @IsDate()
   updatedAt: Date
 
   @OneToMany(() => Application, (application) => application.user)

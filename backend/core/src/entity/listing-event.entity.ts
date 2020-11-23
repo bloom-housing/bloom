@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
 import { Listing } from "./listing.entity"
 import { ApiProperty } from "@nestjs/swagger"
@@ -28,11 +28,13 @@ export class ListingEvent extends BaseEntity {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @Column({
@@ -48,11 +50,13 @@ export class ListingEvent extends BaseEntity {
   @Column()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   startTime: Date
 
   @Column()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   endTime: Date
 
   @Column({ type: "text", nullable: true })

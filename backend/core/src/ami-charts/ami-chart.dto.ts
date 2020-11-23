@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { IsDateString, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { OmitType } from "@nestjs/swagger"
 import { AmiChart } from "../entity/ami-chart.entity"
 import { AmiChartItem } from "../entity/ami-chart-item.entity"
@@ -24,12 +24,14 @@ export class AmiChartItemUpdateDto extends OmitType(AmiChartItemDto, [
 
   @Expose()
   @IsOptional()
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date)
   createdAt?: Date
 
   @Expose()
   @IsOptional()
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date)
   updatedAt?: Date
 }
 
@@ -67,12 +69,14 @@ export class AmiChartUpdateDto extends OmitType(AmiChartDto, [
 
   @Expose()
   @IsOptional()
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date)
   createdAt?: Date
 
   @Expose()
   @IsOptional()
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date)
   updatedAt?: Date
 
   @Expose()

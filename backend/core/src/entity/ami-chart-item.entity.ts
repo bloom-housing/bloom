@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsString, IsUUID } from "class-validator"
 import { AmiChart } from "./ami-chart.entity"
 
@@ -21,11 +21,13 @@ export class AmiChartItem {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @ManyToOne(() => AmiChart, (amiChart) => amiChart.items)
