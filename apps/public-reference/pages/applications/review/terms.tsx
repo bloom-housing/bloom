@@ -40,7 +40,7 @@ export default () => {
     applicationsService
       .create({
         body: {
-          application,
+          ...application,
           listing: {
             id: listing.id,
           },

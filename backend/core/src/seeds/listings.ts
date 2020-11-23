@@ -6,7 +6,7 @@ import { ApplicationMethod, ApplicationMethodType } from "../entity/application-
 import { PropertyCreateDto } from "../property/property.dto"
 import { AssetCreateDto } from "../assets/asset.dto"
 import { PreferenceCreateDto } from "../preferences/preference.dto"
-import { BaseEntity, Column, Repository } from "typeorm"
+import { BaseEntity, Repository } from "typeorm"
 import { ListingEventCreateDto } from "../listing-events/listing-events.dto"
 import { ListingEvent, ListingEventType } from "../entity/listing-event.entity"
 import { Property } from "../entity/property.entity"
@@ -169,6 +169,7 @@ export const listingSeed1: ListingSeed = {
       number: "448",
       priorityType: null,
       reservedType: null,
+
       sqFeet: "1304",
       status: "available",
       unitType: "threeBdrm",

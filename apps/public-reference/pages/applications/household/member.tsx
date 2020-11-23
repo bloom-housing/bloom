@@ -18,7 +18,7 @@ import {
   relationshipKeys,
   t,
 } from "@bloom-housing/ui-components"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember, HouseholdMemberUpdate } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -26,8 +26,9 @@ import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
-class Member implements HouseholdMember {
-  id: number
+class Member implements HouseholdMemberUpdate {
+  id: string
+  orderId = 0
   firstName = ""
   middleName = ""
   lastName = ""
@@ -40,8 +41,8 @@ class Member implements HouseholdMember {
   phoneNumberType = ""
   noPhone = null
 
-  constructor(id) {
-    this.id = id
+  constructor(orderId) {
+    this.orderId = orderId
   }
   address = {
     placeName: null,

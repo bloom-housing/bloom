@@ -14,9 +14,7 @@ user.email = "test@xample.com"
 const listing = Object.assign({}, ArcherListing)
 
 const application = {
-  application: {
-    applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
-  },
+  applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
   id: "abcdefg",
 }
 let sendMock
