@@ -1,14 +1,17 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IsDefined, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsDefined, IsOptional, ValidateNested } from "class-validator"
 import { Property } from "../entity/property.entity"
 import { UnitDto } from "../units/unit.dto"
+import { AmiChartDto } from "../ami-charts/ami-chart.dto"
+import { AmiChart } from "../entity/ami-chart.entity"
 import { AddressDto, AddressUpdateDto } from "../shared/dto/address.dto"
 
 export class PropertyDto extends OmitType(Property, [
   "listings",
   "units",
   "propertyGroups",
+  "amiChart",
   "buildingAddress",
 ] as const) {
   @Exclude()
@@ -26,6 +29,11 @@ export class PropertyDto extends OmitType(Property, [
   units: UnitDto[]
 
   @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AmiChart)
+  amiChart: AmiChartDto | null
+
   @IsDefined()
   @ValidateNested()
   buildingAddress: AddressDto
@@ -48,9 +56,8 @@ export class PropertyCreateDto extends OmitType(PropertyDto, [
   buildingAddress: AddressUpdateDto
 }
 
-export class PropertyUpdateDto extends PropertyCreateDto {
-  @Expose()
-  @IsString()
-  @IsUUID()
-  id: string
+export class PropertyUpdateDto extends OmitType(PropertyDto, ["unitsSummarized"]) {
+  @Exclude()
+  @ApiHideProperty()
+  unitsSummarized
 }

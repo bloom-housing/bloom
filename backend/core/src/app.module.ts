@@ -25,6 +25,7 @@ import Joi from "joi"
 import { Reflector } from "@nestjs/core"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
+import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -75,6 +76,7 @@ export class AppModule {
         ListingEventsModule,
         PropertiesModule,
         PropertyGroupsModule,
+        AmiChartsModule,
       ],
     }
   }

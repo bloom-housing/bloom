@@ -34,12 +34,10 @@ const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
 const hmiData = (
   units: Units,
   byUnitType: UnitSummary[],
-  amiCharts: any,
+  amiChartItems: AmiChartItem[],
   amiPercentages: string[]
 ) => {
-  const amiChartId = units[0].amiChartId
   const bmrProgramChart = units[0].bmrProgramChart
-  const amiChart = amiCharts[amiChartId] as AmiChartItem[]
   const hmiHeaders = {
     householdSize: bmrProgramChart ? "Unit Type" : "Household Size",
   } as AnyDict
@@ -72,7 +70,7 @@ const hmiData = (
 
       let pushRow = false // row is valid if at least one column is filled
       amiValues.forEach((percent) => {
-        const amiInfo = amiChart.find((item) => {
+        const amiInfo = amiChartItems.find((item) => {
           return item.householdSize == columns.householdSize && item.percentOfAmi == percent
         })
         if (amiInfo) {
@@ -98,7 +96,7 @@ const hmiData = (
       const columns = { householdSize: null }
       columns["householdSize"] = i + 1
 
-      const amiInfo = amiChart.find((item) => {
+      const amiInfo = amiChartItems.find((item) => {
         return item.householdSize == columns.householdSize && item.percentOfAmi == amiValues[0]
       })
 
@@ -221,7 +219,7 @@ const summarizeByAmi = (
   })
 }
 
-export const transformUnits = (units: Unit[], amiCharts: any): UnitsSummarized => {
+export const transformUnits = (units: Unit[], amiCharts: AmiChartItem[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
   data.unitTypes = Array.from(
     new Set(units.map((unit) => unit.unitType).filter((item) => item != null))

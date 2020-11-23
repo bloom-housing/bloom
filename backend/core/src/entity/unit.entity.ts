@@ -295,12 +295,6 @@ class Unit extends BaseEntity {
   @IsString()
   unitType?: string | null
 
-  @Column({ nullable: true, type: "integer" })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  amiChartId?: number | null
-
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()

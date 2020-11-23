@@ -1,12 +1,11 @@
 import { Listing } from "../entity/listing.entity"
-import { ListingsResponseStatus } from "./listings.service"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IsDefined, IsEnum, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 
 import { PreferenceDto } from "../preferences/preference.dto"
 import { AssetDto } from "../assets/asset.dto"
 import { ApplicationMethodDto } from "../application-methods/application-method.dto"
-import { ApiHideProperty, ApiProperty, OmitType } from "@nestjs/swagger"
+import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { ListingEventDto } from "../listing-events/listing-events.dto"
 import { IdDto } from "../lib/id.dto"
 import { PropertyDto } from "../property/property.dto"
@@ -53,19 +52,6 @@ export class ListingDto extends OmitType(Listing, [
   @Exclude()
   @ApiHideProperty()
   applications
-}
-
-export class ListingExtendedDto {
-  @Expose()
-  @IsEnum(ListingsResponseStatus)
-  @ApiProperty({ enum: ListingsResponseStatus, enumName: "ListingsResponseStatus" })
-  status: ListingsResponseStatus
-  @Expose()
-  @ValidateNested({ each: true })
-  @Type(() => ListingDto)
-  listings: ListingDto[]
-  @Expose()
-  amiCharts: any
 }
 
 export class ListingCreateDto extends OmitType(ListingDto, [

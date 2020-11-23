@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,8 +14,8 @@ import { Listing } from "./listing.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { Unit, UnitsSummarized } from "./unit.entity"
 import { transformUnits } from "../lib/unit_transformations"
-import { amiCharts } from "../lib/ami_charts"
 import { PropertyGroup } from "./property-group.entity"
+import { AmiChart } from "./ami-chart.entity"
 import { Address } from "../shared/entities/address.entity"
 
 @Entity()
@@ -43,6 +44,9 @@ export class Property {
 
   @ManyToMany(() => PropertyGroup)
   propertyGroups: PropertyGroup[]
+
+  @ManyToOne(() => AmiChart, (amiChart) => amiChart.properties, { eager: true, nullable: true })
+  amiChart: AmiChart | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -126,8 +130,8 @@ export class Property {
   @Expose()
   @ApiProperty()
   get unitsSummarized(): UnitsSummarized | undefined {
-    if (Array.isArray(this.units) && this.units.length > 0) {
-      return transformUnits(this.units, amiCharts)
+    if (this.amiChart && Array.isArray(this.units) && this.units.length > 0) {
+      return transformUnits(this.units, this.amiChart.items)
     }
   }
 }

@@ -11,7 +11,6 @@ export class addApplicationData1605691160237 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "application_preferences" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "live_in" boolean NOT NULL, "none" boolean NOT NULL, "work_in" boolean NOT NULL, CONSTRAINT "PK_97729a397c6bff3aaa3bde8be94" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "demographics" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "ethnicity" character varying NOT NULL, "gender" character varying NOT NULL, "sexual_orientation" character varying NOT NULL, "how_did_you_hear" text array NOT NULL, "race" character varying NOT NULL, CONSTRAINT "PK_17bf4db5727bd0ad0462c67eda9" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "household_member" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "order_id" integer NOT NULL, "first_name" character varying NOT NULL, "middle_name" character varying NOT NULL, "last_name" character varying NOT NULL, "birth_month" character varying NOT NULL, "birth_day" character varying NOT NULL, "birth_year" character varying NOT NULL, "email_address" character varying NOT NULL, "no_email" boolean, "phone_number" character varying NOT NULL, "phone_number_type" character varying NOT NULL, "no_phone" boolean, "same_address" boolean, "relationship" text, "work_in_region" boolean, "address_id" uuid, "work_address_id" uuid, "application_id" uuid, CONSTRAINT "REL_7b61da64f1b7a6bbb48eb5bbb4" UNIQUE ("address_id"), CONSTRAINT "REL_f390552cbb929761927c70b7a0" UNIQUE ("work_address_id"), CONSTRAINT "PK_84e1d1f2553646d38e7c8b72a10" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`ALTER TABLE "listings" DROP COLUMN "blank_paper_application_can_be_picked_up"`);
         await queryRunner.query(`ALTER TABLE "applications" DROP COLUMN "application"`);
         await queryRunner.query(`ALTER TABLE "applications" ADD "additional_phone" boolean NOT NULL`);
         await queryRunner.query(`ALTER TABLE "applications" ADD "additional_phone_number" character varying NOT NULL`);
@@ -91,7 +90,6 @@ export class addApplicationData1605691160237 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "applications" DROP COLUMN "additional_phone_number"`);
         await queryRunner.query(`ALTER TABLE "applications" DROP COLUMN "additional_phone"`);
         await queryRunner.query(`ALTER TABLE "applications" ADD "application" jsonb`);
-        await queryRunner.query(`ALTER TABLE "listings" ADD "blank_paper_application_can_be_picked_up" boolean`);
         await queryRunner.query(`DROP TABLE "household_member"`);
         await queryRunner.query(`DROP TABLE "demographics"`);
         await queryRunner.query(`DROP TABLE "application_preferences"`);
