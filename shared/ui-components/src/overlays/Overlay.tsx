@@ -73,14 +73,10 @@ export const Overlay = (props: OverlayProps) => {
   useEffect(() => {
     if (!(overlayRoot && elForPortal)) return
 
-    if (props.open) {
-      disableBodyScroll(elForPortal)
-    }
+    props.open ? disableBodyScroll(elForPortal) : enableBodyScroll(elForPortal)
 
     return () => {
-      if (!props.open) {
-        enableBodyScroll(elForPortal)
-      }
+      if (!props.open) enableBodyScroll(elForPortal)
     }
   }, [elForPortal, overlayRoot, props.open])
 
