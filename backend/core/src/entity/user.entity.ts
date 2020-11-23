@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Application } from "../entity/application.entity"
+import { Application } from "../applications/entities/application.entity"
 import { Expose } from "class-transformer"
 import { IsDate, IsDateString, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
 

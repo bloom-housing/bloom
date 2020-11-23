@@ -159,6 +159,7 @@ export const listingSeed1: ListingSeed = {
       number: "448",
       priorityType: null,
       reservedType: null,
+
       sqFeet: "1304",
       status: "available",
       unitType: "threeBdrm",

@@ -2,7 +2,7 @@ import { DynamicModule, Module } from "@nestjs/common"
 import { UserModule } from "../user/user.module"
 import { Listing } from "../entity/listing.entity"
 import { Unit } from "../entity/unit.entity"
-import { Application } from "../entity/application.entity"
+import { Application } from "../applications/entities/application.entity"
 
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserService } from "../user/user.service"

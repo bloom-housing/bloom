@@ -8,8 +8,6 @@ import { UserCreateDto } from "./user/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./entity/user.entity"
-import { Application } from "./entity/application.entity"
-import { ListingsService } from "./listings/listings.service"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -19,10 +17,9 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
   await seedListing(app, listingSeed1)
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
-  const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
 
   const userService = app.get<UserService>(UserService)
-  const user = await userService.createUser(
+  await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
       firstName: "First",
@@ -33,7 +30,7 @@ async function bootstrap() {
     })
   )
 
-  const user2 = await userService.createUser(
+  await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test2@example.com",
       firstName: "Second",
@@ -56,25 +53,6 @@ async function bootstrap() {
   )
   admin.isAdmin = true
   await userRepo.save(admin)
-
-  const listingsService = app.get<ListingsService>(ListingsService)
-  const listing = (await listingsService.list()).listings[0]
-
-  let application = plainToClass(Application, {
-    user: { id: user.id },
-    listing: { id: listing.id },
-    application: { foo: "bar" },
-    appUrl: "aaaa",
-  })
-  await applicationRepo.save(application)
-
-  application = plainToClass(Application, {
-    user: { id: user2.id },
-    listing: { id: listing.id },
-    application: { foo: "bar2" },
-    appUrl: "bbbb",
-  })
-  await applicationRepo.save(application)
 
   await app.close()
 }
