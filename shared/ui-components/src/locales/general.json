@@ -8,7 +8,48 @@
   "applications": {
     "totalApplications": "Total Applications",
     "addApplication": "Add Application",
-    "applicationsReceived": "Applications Received"
+    "applicationsReceived": "Applications Received",
+    "table": {
+      "applicationSubmissionDate": "Application Submission Date",
+      "declaredAnnualIncome": "Declared Annual Income",
+      "declaredMonthlyIncome": "Declared Monthly Income",
+      "subsidyOrVoucher": "Subsidy or Voucher",
+      "requestAda": "Request ADA",
+      "preferenceClaimed": "Preference Claimed",
+      "primaryDob": "Primary DOB",
+      "phoneType": "Phone Type",
+      "additionalPhoneType": "Additional Phone Type",
+      "residenceStreet": "Residence Street Address",
+      "residenceCity": "Residence City",
+      "residenceState": "Residence State",
+      "residenceZip": "Residence Zip",
+      "mailingStreet": "Mailing Street Address",
+      "mailingCity": "Mailing City",
+      "mailingState": "Mailing State",
+      "mailingZip": "Mailing Zip",
+      "workStreet": "Work Street Address",
+      "workCity": "Work City",
+      "workState": "Work State",
+      "workZip": "Work Zip",
+      "altContactFirstName": "Alt Contact First Name",
+      "altContactLastName": "Alt Contact Last Name",
+      "altContactRelationship": "Alt Contact Relationship",
+      "altContactAgency": "Alt Contact Agency",
+      "altContactEmail": "Alt Contact Email",
+      "altContactPhone": "Alt Contact Phone",
+      "altContactStreetAddress": "Alt Contact Street Address",
+      "altContactCity": "Alt Contact City",
+      "altContactState": "Alt Contact State",
+      "altContactZip": "Alt Contact Zip",
+      "householdFirstName": "Household First Name",
+      "householdLastName": "Household Last Name",
+      "householdRelationship": "Household Relationship",
+      "householdDob": "Household DOB",
+      "householdStreetAddress": "Household Street Address",
+      "householdCity": "Household City",
+      "householdState": "Household State",
+      "householdZip": "Household Zip"
+    }
   },
   "application": {
     "details": {
@@ -18,6 +59,7 @@
       "submittedDate": "Application Submitted Date",
       "timeDate": "Application Submitted Time",
       "language": "Application Language",
+      "householdSize": "Household Size",
       "totalSize": "Total Household Size",
       "submittedBy": "Submitted By",
       "agency": "Agency if Applicable",
@@ -317,6 +359,10 @@
       "general": {
         "title": "Based on the information you have entered, your household has not claimed any housing preferences.",
         "preamble": "You will be in the general pool of applicants."
+      },
+      "options": {
+        "liveIn": "Live",
+        "workIn": "Work"
       }
     },
     "review": {
@@ -755,6 +801,7 @@
     "deposit": "Deposit",
     "errorsToResolve": "There are errors you'll need to resolve before moving on.",
     "export": "Export",
+    "filter": "Filter",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
