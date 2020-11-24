@@ -57,6 +57,7 @@ export * from "./src/helpers/tableSummaries"
 export * from "./src/helpers/translator"
 export * from "./src/helpers/useLanguageChange"
 export * from "./src/helpers/debounce"
+export * from "./src/helpers/formatIncome"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
