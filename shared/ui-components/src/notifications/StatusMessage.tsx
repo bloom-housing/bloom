@@ -4,7 +4,7 @@ import { Tag } from "../text/Tag"
 
 export interface StatusMessagesProps {
   lastTimestamp?: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const StatusMessages = (props: StatusMessagesProps) => {

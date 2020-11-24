@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Notifications/Status Messages No Messages 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component
+    lastTimestamp="August 25, 2021"
+  >
+    <ul
+      className="status-messages"
+    >
+      <li
+        className="status-message"
+      >
+        <div
+          className="status-message__note text-center"
+        >
+          Last Updated: 
+          August 25, 2021
+        </div>
+      </li>
+    </ul>
+  </Component>
+</div>
+`;
+
+exports[`Storyshots Notifications/Status Messages Several Messages 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component>
+    <ul
+      className="status-messages"
+    >
+      <StatusMessage
+        body="Additional details here."
+        status="Submitted"
+        style="is-success"
+        timestamp="3/2/21"
+      >
+        <li
+          className="status-message"
+        >
+          <div
+            className="status-message__status"
+          >
+            <Tag
+              pillStyle={true}
+              size="is-small"
+              type="is-success"
+            >
+              <span
+                className="tag is-success is-small is-pill"
+              >
+                Submitted
+              </span>
+            </Tag>
+            <span
+              className="status-message__time"
+            >
+              3/2/21
+            </span>
+          </div>
+          <div
+            className="status-message__note"
+          >
+            Additional details here.
+          </div>
+        </li>
+      </StatusMessage>
+      <StatusMessage
+        status="Draft"
+        timestamp="2/1/21"
+      >
+        <li
+          className="status-message"
+        >
+          <div
+            className="status-message__status"
+          >
+            <Tag
+              pillStyle={true}
+              size="is-small"
+            >
+              <span
+                className="tag is-small is-pill"
+              >
+                Draft
+              </span>
+            </Tag>
+            <span
+              className="status-message__time"
+            >
+              2/1/21
+            </span>
+          </div>
+        </li>
+      </StatusMessage>
+    </ul>
+  </Component>
+</div>
+`;

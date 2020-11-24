@@ -13,8 +13,10 @@ export const SeveralMessages = () => (
       status="Submitted"
       style={AppearanceStyleType.success}
       timestamp="3/2/21"
-      body="Totally Rad"
+      body="Additional details here."
     />
     <StatusMessage status="Draft" timestamp="2/1/21" />
   </StatusMessages>
 )
+
+export const NoMessages = () => <StatusMessages lastTimestamp="August 25, 2021"></StatusMessages>
