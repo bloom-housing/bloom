@@ -15,6 +15,12 @@ executors:
   cypress-node:
     docker:
       - image: "cypress/base:12.18.2"
+      - image: "circleci/postgres:12.3-postgis"
+        environment:
+          POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom
 
 jobs:
   setup:
