@@ -13,6 +13,7 @@ export interface DOBFieldProps {
   atAge?: boolean
   name?: string
   id?: string
+  readerOnly?: boolean
 }
 
 const DOBField = (props: DOBFieldProps) => {
@@ -30,9 +31,12 @@ const DOBField = (props: DOBFieldProps) => {
     )
   }
 
+  const labelClasses = ["field-label--caps"]
+  if (props.readerOnly) labelClasses.push("sr-only")
+
   return (
     <fieldset id={id}>
-      <legend className="field-label--caps">{props.label}</legend>
+      <legend className={labelClasses.join(" ")}>{props.label}</legend>
 
       <div className="field-group--dob">
         <Field
