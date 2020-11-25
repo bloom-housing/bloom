@@ -9,7 +9,7 @@ export interface DOBFieldProps {
   label: string
   register: any // comes from React Hook Form
   watch: any // comes from React Hook Form
-  applicant: HouseholdMember
+  applicant?: HouseholdMember
   atAge?: boolean
   name?: string
   id?: string
@@ -40,7 +40,7 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.month")}
           readerOnly={true}
           placeholder="MM"
-          defaultValue={applicant.birthMonth ? applicant.birthMonth : ""}
+          defaultValue={applicant?.birthMonth ? applicant.birthMonth : ""}
           error={error?.birthMonth}
           validation={{
             required: true,
@@ -56,7 +56,7 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.day")}
           readerOnly={true}
           placeholder="DD"
-          defaultValue={applicant.birthDay ? applicant.birthDay : ""}
+          defaultValue={applicant?.birthDay ? applicant.birthDay : ""}
           error={error?.birthDay}
           validation={{
             required: true,
@@ -72,7 +72,7 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.year")}
           readerOnly={true}
           placeholder="YYYY"
-          defaultValue={applicant.birthYear ? applicant.birthYear : ""}
+          defaultValue={applicant?.birthYear ? applicant.birthYear : ""}
           error={error?.birthYear}
           validation={{
             required: true,
