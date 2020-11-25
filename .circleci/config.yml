@@ -35,12 +35,8 @@ jobs:
   setup-with-db:
     executor: standard-node
     steps:
-      - checkout
-      - run: yarn install
-      - save_cache:
+      - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/
       - run: yarn test:backend:core:dbsetup
   lint:
     executor: standard-node
@@ -89,6 +85,9 @@ workflows:
   build:
     jobs:
       - setup
+      - setup-with-db:
+          requires:
+            - setup
       - lint:
           requires:
             - setup
