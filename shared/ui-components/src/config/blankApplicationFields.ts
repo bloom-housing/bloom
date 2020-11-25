@@ -1,6 +1,6 @@
 import { ApplicationStatus, ApplicationSubmissionType, Language } from "@bloom-housing/core"
 
-export const blankApplicationFields = {
+export const BlankApplicationFields = {
   submissionType: ApplicationSubmissionType.electronical,
   language: Language.en,
   acceptedTerms: false,
