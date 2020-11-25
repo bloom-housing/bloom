@@ -32,6 +32,16 @@ jobs:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
+  setup-with-db:
+    executor: standard-node
+    steps:
+      - checkout
+      - run: yarn install
+      - save_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
+      - run: yarn test:backend:core:dbsetup
   lint:
     executor: standard-node
     steps:
@@ -53,7 +63,6 @@ jobs:
       - run:
           name: DB Setup + Backend Core Tests
           command: |
-            yarn test:backend:core:dbsetup
             yarn test:backend:core
             yarn test:e2e:backend:core
           environment:
@@ -88,7 +97,7 @@ workflows:
             - setup
       - jest-backend:
           requires:
-            - setup
+            - setup-with-db
       - build-public:
           requires:
             - setup
@@ -97,7 +106,7 @@ workflows:
             - setup
       - cypress/run:
           requires:
-            - setup
+            - setup-with-db
           executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
