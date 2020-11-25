@@ -71,6 +71,6 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --max-warnings 1000"
+    "*.{js,ts,tsx}": "eslint --max-warnings 0"
   }
 }
