@@ -29,6 +29,7 @@ export * from "./src/footers/SiteFooter"
 /* Forms */
 export * from "./src/forms/DOBField"
 export * from "./src/forms/Field"
+export * from "./src/forms/PhoneField"
 export * from "./src/forms/HouseholdMemberForm"
 export * from "./src/forms/HouseholdSizeField"
 export * from "./src/forms/FieldGroup"
