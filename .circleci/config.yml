@@ -59,6 +59,7 @@ jobs:
       - run:
           name: DB Setup + Backend Core Tests
           command: |
+            yarn test:backend:core:dbsetup
             yarn test:backend:core
             yarn test:e2e:backend:core
           environment:
@@ -85,9 +86,6 @@ workflows:
   build:
     jobs:
       - setup
-      - setup-with-db:
-          requires:
-            - setup
       - lint:
           requires:
             - setup
@@ -96,7 +94,7 @@ workflows:
             - setup
       - jest-backend:
           requires:
-            - setup-with-db
+            - setup
       - build-public:
           requires:
             - setup
@@ -105,9 +103,10 @@ workflows:
             - setup
       - cypress/run:
           requires:
-            - setup-with-db
+            - setup
           executor: cypress-node
           working_directory: apps/public-reference
           yarn: true
+          build: yarn test:backend:core:dbsetup
           start: yarn dev:all
           wait-on: "http://localhost:3000"
