@@ -12,54 +12,172 @@ import {
   MinimalTable,
   InlineButton,
   DOBField,
+  Field,
   BlankApplicationFields,
+  emailRegex,
+  PhoneField,
+  Select,
+  contactPreferencesKeys,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
 import { useForm } from "react-hook-form"
+import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 type Props = {
   isEditable?: boolean
 }
 
+const contactPreferencesOptions = contactPreferencesKeys?.map((item) => item.id)
+
 const EditApplication = ({ isEditable }: Props) => {
   const router = useRouter()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm({ defaultValues: BlankApplicationFields })
+  const { register, watch, control, handleSubmit, errors } = useForm()
 
   return (
     <>
-      <section className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-        {!!isEditable && (
-          <InlineButton arrow onClick={() => router.back()}>
-            {t("t.back")}
-          </InlineButton>
-        )}
-        {/* TODO:hardcoded until we get information from the backend */}
-        <div className="status-bar__status md:pl-4 md:w-3/12">
-          <Tag success pillStyle>
-            Submitted
-          </Tag>
-        </div>
-      </section>
-
       <section className="bg-primary-lighter">
         <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">
           <div className="info-card md:w-9/12">
-            <GridSection
-              className="bg-primary-lighter"
-              title={t("application.details.applicationData")}
-              inset
-            >
+            <GridSection title={t("application.household.primaryApplicant")}>
               <GridCell>
-                <ViewItem label={t("application.new.dateSubmitted")}>.</ViewItem>
+                <ViewItem label={t("application.name.firstName")}>
+                  <Field
+                    name="applicant.firstName"
+                    label={t("application.name.firstName")}
+                    placeholder={t("application.name.firstName")}
+                    validation={{ required: true }}
+                    error={errors.applicant?.firstName}
+                    errorMessage={t("application.name.firstNameError")}
+                    register={register}
+                    readerOnly
+                  />
+                </ViewItem>
               </GridCell>
               <GridCell>
-                <ViewItem label={t("application.new.timeSubmitted")}>.</ViewItem>
+                <ViewItem label={t("application.name.middleName")}>
+                  <Field
+                    name="applicant.middleName"
+                    label={t("application.name.middleNameOptional")}
+                    placeholder={t("application.name.middleNameOptional")}
+                    register={register}
+                    readerOnly
+                  />
+                </ViewItem>
               </GridCell>
               <GridCell>
-                <ViewItem label={t("application.new.languageSubmittedIn")}>.</ViewItem>
+                <ViewItem label={t("application.name.lastName")}>
+                  <Field
+                    name="applicant.lastName"
+                    label={t("application.name.lastName")}
+                    placeholder={t("application.name.lastName")}
+                    validation={{ required: true }}
+                    error={errors.applicant?.lastName}
+                    errorMessage={t("application.name.lastNameError")}
+                    register={register}
+                    readerOnly
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell>
+                <ViewItem label={t("application.household.member.dateOfBirth")}>
+                  <DOBField
+                    register={register}
+                    error={errors.applicant}
+                    name="applicant"
+                    id="applicant.dateOfBirth"
+                    watch={watch}
+                    atAge={true}
+                    label={t("application.name.yourDateOfBirth")}
+                    readerOnly
+                  />
+                </ViewItem>
+              </GridCell>
+              {/* set noEmail to true after send - if value is empty */}
+              <GridCell>
+                <ViewItem label={t("t.email")}>
+                  <Field
+                    type="email"
+                    name="applicant.emailAddress"
+                    placeholder="example@web.com"
+                    label={t("application.name.yourEmailAddress")}
+                    readerOnly={true}
+                    validation={{ pattern: emailRegex }}
+                    error={errors.applicant?.emailAddress}
+                    errorMessage={t("application.name.emailAddressError")}
+                    register={register}
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell>
+                <ViewItem label={t("t.phone")}>
+                  <PhoneField
+                    label={t("application.contact.yourPhoneNumber")}
+                    caps={true}
+                    id="applicant.phoneNumber"
+                    name="applicant.phoneNumber"
+                    error={errors.applicant?.phoneNumber}
+                    errorMessage={t("application.contact.phoneNumberError")}
+                    controlClassName="control"
+                    control={control}
+                    readerOnly
+                  />
+                </ViewItem>
+              </GridCell>
+              {/* Does an admin should ability to set value to 'none' */}
+              <GridCell>
+                <ViewItem label={t("applications.table.phoneType")}>
+                  <Select
+                    id="applicant.phoneNumberType"
+                    name="applicant.phoneNumberType"
+                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                    label={t("application.contact.phoneNumberTypes.prompt")}
+                    labelClassName="sr-only"
+                    error={errors.applicant?.phoneNumberType}
+                    errorMessage={t("application.contact.phoneNumberTypeError")}
+                    register={register}
+                    controlClassName="control"
+                    options={phoneNumberKeys}
+                    keyPrefix="application.contact.phoneNumberTypes"
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell>
+                <ViewItem label={t("t.additionalPhone")}>
+                  <PhoneField
+                    id="additionalPhoneNumber"
+                    name="additionalPhoneNumber"
+                    label={t("application.contact.yourAdditionalPhoneNumber")}
+                    error={errors.additionalPhoneNumber}
+                    errorMessage={t("application.contact.phoneNumberError")}
+                    control={control}
+                    controlClassName="control"
+                    readerOnly
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell>
+                <ViewItem label={t("applications.table.additionalPhoneType")}>
+                  <Select
+                    id="additionalPhoneNumberType"
+                    name="additionalPhoneNumberType"
+                    error={errors?.additionalPhoneNumberType}
+                    errorMessage={t("application.contact.phoneNumberTypeError")}
+                    register={register}
+                    controlClassName="control"
+                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                    label={t("application.contact.phoneNumberTypes.prompt")}
+                    labelClassName={"sr-only"}
+                    options={phoneNumberKeys}
+                    keyPrefix="application.contact.phoneNumberTypes"
+                  />
+                </ViewItem>
+              </GridCell>
+              {/* it should be checkbox group */}
+              <GridCell>
+                <ViewItem label={t("application.contact.preferredContactType")}>.</ViewItem>
               </GridCell>
             </GridSection>
           </div>

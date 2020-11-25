@@ -25,7 +25,7 @@ const NewApplication = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
-      <PageHeader>Applications Received</PageHeader>
+      <PageHeader>{t("applications.newApplication")}</PageHeader>
 
       <EditApplication isEditable={false} />
     </Layout>
