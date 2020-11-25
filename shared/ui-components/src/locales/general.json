@@ -8,6 +8,7 @@
   "applications": {
     "totalApplications": "Total Applications",
     "addApplication": "Add Application",
+    "newApplication": "New Application",
     "applicationsReceived": "Applications Received",
     "table": {
       "applicationSubmissionDate": "Application Submission Date",
