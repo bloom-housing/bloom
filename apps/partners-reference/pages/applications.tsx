@@ -10,20 +10,25 @@ import {
   Button,
   ApiClientContext,
   debounce,
+  lRoute,
 } from "@bloom-housing/ui-components"
 import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../src/applications/applicationsColDefs"
+import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
+  const COLUMN_STATE_KEY = "column-state"
 
   const router = useRouter()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
+
+  const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
 
   const filterField = watch("filter-input", "")
   const [delayedFilterValue, setDelayedFilterValue] = useState(filterField)
@@ -37,6 +42,32 @@ const ApplicationsList = () => {
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
+  }
+
+  // load table state on initial render & pagination change (because the new data comes from API)
+  useEffect(() => {
+    const savedColumnState = sessionStorage.getItem(COLUMN_STATE_KEY)
+
+    if (gridColumnApi && savedColumnState) {
+      console.log("Applied columns state")
+      const parsedState: ColumnState[] = JSON.parse(savedColumnState)
+
+      gridColumnApi.applyColumnState({
+        state: parsedState,
+        applyOrder: true,
+      })
+    }
+  }, [gridColumnApi, pageIndex])
+
+  function saveColumnState(api: ColumnApi) {
+    console.log("saving table state...")
+    const columnState = api.getColumnState()
+    const columnStateJSON = JSON.stringify(columnState)
+    sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
+  }
+
+  function onGridReady(params) {
+    setGridColumnApi(params.columnApi)
   }
 
   const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
@@ -82,12 +113,18 @@ const ApplicationsList = () => {
 
   // ag grid settings
   class formatLinkCell {
-    linkWithId: HTMLAnchorElement
+    linkWithId: HTMLSpanElement
 
     init(params) {
-      this.linkWithId = document.createElement("a")
-      this.linkWithId.setAttribute("href", `/applications/${params.value}`)
+      this.linkWithId = document.createElement("button")
+      this.linkWithId.classList.add("text-blue-700")
+
       this.linkWithId.innerText = params.value
+
+      this.linkWithId.addEventListener("click", function () {
+        void saveColumnState(params.columnApi)
+        void router.push(lRoute(`/applications/${params.value}`))
+      })
     }
 
     getGui() {
@@ -95,7 +132,9 @@ const ApplicationsList = () => {
     }
   }
 
-  const gridOptions = {
+  const gridOptions: GridOptions = {
+    onSortChanged: (params) => saveColumnState(params.columnApi),
+    onColumnMoved: (params) => saveColumnState(params.columnApi),
     components: {
       formatLinkCell: formatLinkCell,
     },
@@ -152,6 +191,7 @@ const ApplicationsList = () => {
 
             <div className="applications-table mt-5">
               <AgGridReact
+                onGridReady={onGridReady}
                 gridOptions={gridOptions}
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
