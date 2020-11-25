@@ -1,3 +1,5 @@
+@import "../global/mixins.scss";
+
 .view-item {
   @apply relative;
   @apply text-base;
@@ -36,6 +38,10 @@
   @apply font-semibold;
   @apply block;
   @apply pt-2;
+
+  &.is-truncated {
+    @include ellipsis;
+  }
 }
 
 .view-item__helper {

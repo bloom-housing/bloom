@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef, useMemo, useCallback } from "react"
+import React, { useState, useEffect, useContext, useRef, useMemo } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
@@ -16,8 +16,8 @@ import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 import { getColDefs } from "../src/applications/applicationsColDefs"
+import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })

@@ -8,6 +8,7 @@ export interface ViewItemProps {
   helper?: string
   flagged?: boolean
   className?: string
+  truncated?: boolean
 }
 
 const ViewItem = (props: ViewItemProps) => {
@@ -17,6 +18,7 @@ const ViewItem = (props: ViewItemProps) => {
 
   let valueClassName = "view-item__value"
   if (!props.label) valueClassName += " pt-0"
+  if (props.truncated) valueClassName += " is-truncated"
 
   return (
     <p id={props.id} className={viewItemClasses.join(" ")}>

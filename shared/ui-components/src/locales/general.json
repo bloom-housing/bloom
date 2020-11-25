@@ -57,7 +57,7 @@
       "number": "Application Number",
       "type": "Application Submission Type",
       "submittedDate": "Application Submitted Date",
-      "timeDate": "Application Time Date",
+      "timeDate": "Application Submitted Time",
       "language": "Application Language",
       "householdSize": "Household Size",
       "totalSize": "Total Household Size",
@@ -68,9 +68,12 @@
       "liveOrWorkIn": "Live or Work in",
       "householdIncome": "Declared Household Income",
       "annualIncome": "Annual Income",
+      "monthlyIncome": "Monthly Income",
       "vouchers": "Housing Voucher or Subsidy",
       "preferredContact": "Preferred Contact",
       "residenceAddress": "Residence Address",
+      "workInRegion": "Work in Region",
+      "signatureOnTerms": "Signature on Terms of Agreement",
       "submissionType": {
         "electronical": "Electronical",
         "paper": "Paper"
