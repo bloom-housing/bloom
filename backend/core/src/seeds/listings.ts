@@ -56,7 +56,6 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
 
   const property = await propertyRepo.save({
     ...seed.property,
-    amiChart,
   })
 
   const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = seed.units.map((unit) => {
@@ -65,6 +64,7 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
       property: {
         id: property.id,
       },
+      amiChart,
     }
   })
   await unitsRepo.save(unitsToBeCreated)
@@ -154,6 +154,7 @@ export const listingSeed1: ListingSeed = {
       status: "available",
       unitType: "oneBdrm",
       monthlyRentAsPercentOfIncome: null,
+      amiChart: null,
     },
     {
       amiPercentage: "80.0",
@@ -174,6 +175,7 @@ export const listingSeed1: ListingSeed = {
       status: "available",
       unitType: "threeBdrm",
       monthlyRentAsPercentOfIncome: null,
+      amiChart: null,
     },
   ],
   applicationMethods: [
@@ -197,7 +199,6 @@ export const listingSeed1: ListingSeed = {
     },
   ],
   property: {
-    amiChart: null,
     amenities: "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
     accessibility:
       "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",

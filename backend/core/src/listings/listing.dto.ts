@@ -67,6 +67,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "applicationAddress",
   "applicationPickUpAddress",
   "leasingAgentAddress",
+  "urlSlug",
 ] as const) {
   @Expose()
   @IsDefined()

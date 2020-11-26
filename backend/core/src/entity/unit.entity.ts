@@ -21,6 +21,7 @@ import {
 import { Expose, Type } from "class-transformer"
 import { AnyDict } from "../lib/unit_transformations"
 import { Property } from "./property.entity"
+import { AmiChart } from "./ami-chart.entity"
 
 export class MinMax {
   @Expose()
@@ -199,6 +200,9 @@ class Unit extends BaseEntity {
   @IsDate()
   @Type(() => Date)
   updatedAt: Date
+
+  @ManyToOne(() => AmiChart, (amiChart) => amiChart.units, { eager: true, nullable: true })
+  amiChart: AmiChart | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()

@@ -35,7 +35,7 @@ export class AmiChartItemUpdateDto extends OmitType(AmiChartItemDto, [
   updatedAt?: Date
 }
 
-export class AmiChartDto extends OmitType(AmiChart, ["properties", "items"] as const) {
+export class AmiChartDto extends OmitType(AmiChart, ["units", "items"] as const) {
   @Expose()
   @IsDefined()
   @Type(() => AmiChartItemDto)

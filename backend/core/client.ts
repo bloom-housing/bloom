@@ -271,7 +271,7 @@ export class ApplicationsService {
   create(
     params: {
       /** requestBody */
-      body?: ApplicationCreate;
+      body?: ApplicationUpdate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
@@ -1107,6 +1107,110 @@ export class PropertyGroupsService {
   }
 }
 
+export class AmiChartsService {
+  /**
+   * List amiCharts
+   */
+  list(options: IRequestOptions = {}): Promise<AmiChart[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create amiChart
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AmiChartCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update amiChart
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AmiChartUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts/{amiChartId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get amiChart by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      amiChartId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts/{amiChartId}';
+      url = url.replace('{amiChartId}', params['amiChartId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete amiChart by id
+   */
+  delete(
+    params: {
+      /**  */
+      amiChartId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts/{amiChartId}';
+      url = url.replace('{amiChartId}', params['amiChartId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface User {
   /**  */
   id: string;
@@ -1390,7 +1494,47 @@ export interface UnitsSummarized {
   hmi: HMI;
 }
 
+export interface AmiChartItem {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  percentOfAmi: number;
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  income: number;
+}
+
+export interface AmiChart {
+  /**  */
+  items: AmiChartItem[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+}
+
 export interface Unit {
+  /**  */
+  amiChart: CombinedAmiChartTypes;
+
   /**  */
   id: string;
 
@@ -1449,24 +1593,21 @@ export interface Unit {
   unitType?: string;
 
   /**  */
-  amiChartId?: number;
-
-  /**  */
   monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean;
 }
 
-export interface AddressUpdate {
+export interface Address {
   /**  */
-  id?: string;
+  id: string;
 
   /**  */
-  createdAt?: Date;
+  createdAt: Date;
 
   /**  */
-  updatedAt?: Date;
+  updatedAt: Date;
 
   /**  */
   placeName?: string;
@@ -1504,7 +1645,7 @@ export interface Property {
   units: Unit[];
 
   /**  */
-  buildingAddress: AddressUpdate;
+  buildingAddress: Address;
 
   /**  */
   id: string;
@@ -1659,10 +1800,10 @@ export interface Listing {
   updatedAt: Date;
 
   /**  */
-  applicationDueDate: string;
+  applicationDueDate: Date;
 
   /**  */
-  applicationOpenDate: string;
+  applicationOpenDate: Date;
 
   /**  */
   applicationFee: string;
@@ -1722,7 +1863,7 @@ export interface Listing {
   name: string;
 
   /**  */
-  postmarkedApplicationsReceivedByDate: string;
+  postmarkedApplicationsReceivedByDate: Date;
 
   /**  */
   programRules: string;
@@ -1754,12 +1895,47 @@ export interface Id {
   id: string;
 }
 
+export interface AddressUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state: string;
+
+  /**  */
+  street: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface ListingCreate {
   /**  */
   status: ListingStatus;
-
-  /**  */
-  urlSlug: string;
 
   /**  */
   applicationMethods: Id[];
@@ -1786,10 +1962,10 @@ export interface ListingCreate {
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
-  applicationDueDate: string;
+  applicationDueDate: Date;
 
   /**  */
-  applicationOpenDate: string;
+  applicationOpenDate: Date;
 
   /**  */
   applicationFee: string;
@@ -1840,7 +2016,7 @@ export interface ListingCreate {
   name: string;
 
   /**  */
-  postmarkedApplicationsReceivedByDate: string;
+  postmarkedApplicationsReceivedByDate: Date;
 
   /**  */
   programRules: string;
@@ -1872,9 +2048,6 @@ export interface ListingUpdate {
   status: ListingStatus;
 
   /**  */
-  urlSlug: string;
-
-  /**  */
   applicationMethods: Id[];
 
   /**  */
@@ -1899,10 +2072,10 @@ export interface ListingUpdate {
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
-  applicationDueDate: string;
+  applicationDueDate: Date;
 
   /**  */
-  applicationOpenDate: string;
+  applicationOpenDate: Date;
 
   /**  */
   applicationFee: string;
@@ -1953,7 +2126,7 @@ export interface ListingUpdate {
   name: string;
 
   /**  */
-  postmarkedApplicationsReceivedByDate: string;
+  postmarkedApplicationsReceivedByDate: Date;
 
   /**  */
   programRules: string;
@@ -1984,6 +2157,21 @@ export interface ListingUpdate {
 }
 
 export interface Applicant {
+  /**  */
+  address: Address;
+
+  /**  */
+  workAddress: Address;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
   /**  */
   firstName: string;
 
@@ -2019,12 +2207,11 @@ export interface Applicant {
 
   /**  */
   workInRegion: string;
+}
 
+export interface AlternateContact {
   /**  */
-  workAddress: Address;
-
-  /**  */
-  address: Address;
+  mailingAddress: Address;
 
   /**  */
   id: string;
@@ -2034,9 +2221,7 @@ export interface Applicant {
 
   /**  */
   updatedAt: Date;
-}
 
-export interface AlternateContact {
   /**  */
   type: string;
 
@@ -2057,10 +2242,9 @@ export interface AlternateContact {
 
   /**  */
   emailAddress: string;
+}
 
-  /**  */
-  mailingAddress: Address;
-
+export interface Accessbility {
   /**  */
   id: string;
 
@@ -2069,9 +2253,7 @@ export interface AlternateContact {
 
   /**  */
   updatedAt: Date;
-}
 
-export interface Accessibility {
   /**  */
   mobility: boolean;
 
@@ -2080,7 +2262,9 @@ export interface Accessibility {
 
   /**  */
   hearing: boolean;
+}
 
+export interface Demographics {
   /**  */
   id: string;
 
@@ -2089,9 +2273,7 @@ export interface Accessibility {
 
   /**  */
   updatedAt: Date;
-}
 
-export interface Demographics {
   /**  */
   ethnicity: string;
 
@@ -2106,6 +2288,14 @@ export interface Demographics {
 
   /**  */
   race: string;
+}
+
+export interface HouseholdMember {
+  /**  */
+  address: Address;
+
+  /**  */
+  workAddress: Address;
 
   /**  */
   id: string;
@@ -2115,14 +2305,9 @@ export interface Demographics {
 
   /**  */
   updatedAt: Date;
-}
 
-export interface HouseholdMember {
   /**  */
   orderId: number;
-
-  /**  */
-  address: Address;
 
   /**  */
   firstName: string;
@@ -2165,13 +2350,9 @@ export interface HouseholdMember {
 
   /**  */
   workInRegion?: string;
+}
 
-  /**  */
-  workAddress?: CombinedWorkAddressTypes;
-
-  /**  */
-  applicationData: ApplicationData;
-
+export interface ApplicationPreferences {
   /**  */
   id: string;
 
@@ -2180,9 +2361,18 @@ export interface HouseholdMember {
 
   /**  */
   updatedAt: Date;
+
+  /**  */
+  liveIn: boolean;
+
+  /**  */
+  none: boolean;
+
+  /**  */
+  workIn: boolean;
 }
 
-export interface ApplicationData {
+export interface Application {
   /**  */
   status: ApplicationStatus;
 
@@ -2193,7 +2383,43 @@ export interface ApplicationData {
   submissionType: ApplicationSubmissionType;
 
   /**  */
+  listing: Listing;
+
+  /**  */
   applicant: Applicant;
+
+  /**  */
+  mailingAddress: Address;
+
+  /**  */
+  alternateAddress: Address;
+
+  /**  */
+  alternateContact: AlternateContact;
+
+  /**  */
+  accessibility: Accessbility;
+
+  /**  */
+  demographics: Demographics;
+
+  /**  */
+  householdMembers: HouseholdMember[];
+
+  /**  */
+  preferences: ApplicationPreferences;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  appUrl: string;
 
   /**  */
   additionalPhone: boolean;
@@ -2217,21 +2443,6 @@ export interface ApplicationData {
   sendMailToMailingAddress: boolean;
 
   /**  */
-  mailingAddress: Address;
-
-  /**  */
-  alternateAddress: Address;
-
-  /**  */
-  alternateContact: AlternateContact;
-
-  /**  */
-  accessibility: Accessibility;
-
-  /**  */
-  demographics: Demographics;
-
-  /**  */
   incomeVouchers: boolean;
 
   /**  */
@@ -2241,45 +2452,10 @@ export interface ApplicationData {
   incomePeriod: string;
 
   /**  */
-  householdMembers: HouseholdMember[];
-
-  /**  */
   preferredUnit: string[];
 
   /**  */
-  preferences: object;
-
-  /**  */
   acceptedTerms: boolean;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
-export interface Application {
-  /**  */
-  listing: Listing;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  appUrl: string;
-
-  /**  */
-  application: ApplicationData;
 }
 
 export interface PaginationMeta {
@@ -2503,7 +2679,27 @@ export interface HouseholdMemberUpdate {
   workInRegion?: string;
 }
 
-export interface ApplicationDataCreate {
+export interface ApplicationPreferencesUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  liveIn: boolean;
+
+  /**  */
+  none: boolean;
+
+  /**  */
+  workIn: boolean;
+}
+
+export interface ApplicationUpdate {
   /**  */
   status: ApplicationStatus;
 
@@ -2512,6 +2708,18 @@ export interface ApplicationDataCreate {
 
   /**  */
   submissionType: ApplicationSubmissionType;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  listing: Id;
 
   /**  */
   applicant: ApplicantUpdate;
@@ -2533,6 +2741,12 @@ export interface ApplicationDataCreate {
 
   /**  */
   householdMembers: HouseholdMemberUpdate[];
+
+  /**  */
+  preferences: ApplicationPreferencesUpdate;
+
+  /**  */
+  appUrl: string;
 
   /**  */
   additionalPhone: boolean;
@@ -2568,35 +2782,7 @@ export interface ApplicationDataCreate {
   preferredUnit: string[];
 
   /**  */
-  preferences: object;
-
-  /**  */
   acceptedTerms: boolean;
-}
-
-export interface ApplicationCreate {
-  /**  */
-  listing: Id;
-
-  /**  */
-  application: ApplicationDataCreate;
-
-  /**  */
-  appUrl: string;
-}
-
-export interface ApplicationUpdate {
-  /**  */
-  listing: Id;
-
-  /**  */
-  application: ApplicationDataCreate;
-
-  /**  */
-  appUrl: string;
-
-  /**  */
-  id: string;
 }
 
 export interface AssetCreate {
@@ -2688,6 +2874,9 @@ export interface ApplicationMethodUpdate {
 
 export interface UnitCreate {
   /**  */
+  amiChart: CombinedAmiChartTypes;
+
+  /**  */
   amiPercentage?: string;
 
   /**  */
@@ -2734,9 +2923,6 @@ export interface UnitCreate {
 
   /**  */
   unitType?: string;
-
-  /**  */
-  amiChartId?: number;
 
   /**  */
   monthlyRentAsPercentOfIncome?: string;
@@ -2747,6 +2933,9 @@ export interface UnitCreate {
 
 export interface UnitUpdate {
   /**  */
+  amiChart: CombinedAmiChartTypes;
+
+  /**  */
   amiPercentage?: string;
 
   /**  */
@@ -2793,9 +2982,6 @@ export interface UnitUpdate {
 
   /**  */
   unitType?: string;
-
-  /**  */
-  amiChartId?: number;
 
   /**  */
   monthlyRentAsPercentOfIncome?: string;
@@ -2846,6 +3032,12 @@ export interface ListingEventUpdate {
 
 export interface PropertyCreate {
   /**  */
+  buildingAddress: AddressUpdate;
+
+  /**  */
+  units: UnitUpdate[];
+
+  /**  */
   accessibility: string;
 
   /**  */
@@ -2880,16 +3072,19 @@ export interface PropertyCreate {
 
   /**  */
   yearBuilt: number;
-
-  /**  */
-  units: Unit[];
-
-  /**  */
-  buildingAddress: AddressUpdate;
 }
 
 export interface PropertyUpdate {
   /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
   accessibility: string;
 
   /**  */
@@ -2929,10 +3124,7 @@ export interface PropertyUpdate {
   units: Unit[];
 
   /**  */
-  buildingAddress: AddressUpdate;
-
-  /**  */
-  id: string;
+  buildingAddress: Address;
 }
 
 export interface PropertyGroup {
@@ -2971,6 +3163,62 @@ export interface PropertyGroupUpdate {
   id: string;
 }
 
+export interface AmiChartItemCreate {
+  /**  */
+  percentOfAmi: number;
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  income: number;
+}
+
+export interface AmiChartCreate {
+  /**  */
+  items: AmiChartItemCreate[];
+
+  /**  */
+  name: string;
+}
+
+export interface AmiChartItemUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  percentOfAmi: number;
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  income: number;
+}
+
+export interface AmiChartUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  items: AmiChartItemUpdate[];
+
+  /**  */
+  name: string;
+}
+
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending'
@@ -2984,7 +3232,7 @@ export enum ApplicationMethodType {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
 }
-
+export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
@@ -3008,4 +3256,3 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
-export type CombinedWorkAddressTypes = (Address & any) | null;

@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import jp from "jsonpath"
 
-import { plainToClass } from "class-transformer"
 import { Listing } from "../entity/listing.entity"
 import { ListingCreateDto, ListingUpdateDto } from "./listing.dto"
 
@@ -14,9 +13,10 @@ export class ListingsService {
   public async list(jsonpath?: string): Promise<Listing[]> {
     let listings = await Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.property", "property")
-      .leftJoinAndSelect("property.amiChart", "amiChart")
-      .leftJoinAndSelect("amiChart.items", "amiChartItems")
+      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
+      .leftJoinAndSelect("units.amiChart", "amiChart")
+      .leftJoinAndSelect("amiChart.items", "amiChartItems")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
@@ -36,9 +36,7 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
-    const listing = plainToClass(Listing, listingDto)
-    await listing.save()
-    return listing
+    return Listing.save(listingDto)
   }
 
   async update(listingDto: ListingUpdateDto) {
@@ -61,9 +59,10 @@ export class ListingsService {
     return await Listing.createQueryBuilder("listings")
       .where("listings.id = :id", { id: listingId })
       .leftJoinAndSelect("listings.property", "property")
-      .leftJoinAndSelect("property.amiChart", "amiChart")
-      .leftJoinAndSelect("amiChart.items", "amiChartItems")
+      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
+      .leftJoinAndSelect("units.amiChart", "amiChart")
+      .leftJoinAndSelect("amiChart.items", "amiChartItems")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")

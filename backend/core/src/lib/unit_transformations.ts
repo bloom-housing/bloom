@@ -1,5 +1,4 @@
 import { MinMax, MinMaxCurrency, Unit, UnitsSummarized, UnitSummary } from "../entity/unit.entity"
-import { AmiChartItem } from "../.."
 
 export type AnyDict = { [key: string]: any }
 type Units = Unit[]
@@ -31,13 +30,10 @@ const minMaxInCurrency = (minMax: MinMaxCurrency): MinMaxCurrency => {
 
 const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
 
-const hmiData = (
-  units: Units,
-  byUnitType: UnitSummary[],
-  amiChartItems: AmiChartItem[],
-  amiPercentages: string[]
-) => {
+const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string[]) => {
   const bmrProgramChart = units[0].bmrProgramChart
+  // TODO https://github.com/bloom-housing/bloom/issues/872
+  const amiChartItems = units[0].amiChart.items
   const hmiHeaders = {
     householdSize: bmrProgramChart ? "Unit Type" : "Household Size",
   } as AnyDict
@@ -219,7 +215,7 @@ const summarizeByAmi = (
   })
 }
 
-export const transformUnits = (units: Unit[], amiCharts: AmiChartItem[]): UnitsSummarized => {
+export const transformUnits = (units: Unit[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
   data.unitTypes = Array.from(
     new Set(units.map((unit) => unit.unitType).filter((item) => item != null))
@@ -238,6 +234,6 @@ export const transformUnits = (units: Unit[], amiCharts: AmiChartItem[]): UnitsS
   data.byNonReservedUnitType = summarizeUnits(nonReservedUnits, data.unitTypes)
   data.byReservedType = summarizeReservedTypes(units, data.reservedTypes, data.unitTypes)
   data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes, data.unitTypes)
-  data.hmi = hmiData(units, data.byUnitType, amiCharts, data.amiPercentages)
+  data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
   return data
 }

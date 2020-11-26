@@ -10,7 +10,7 @@ import {
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChartItem } from "./ami-chart-item.entity"
-import { Property } from "./property.entity"
+import { Unit } from "./unit.entity"
 
 @Entity()
 export class AmiChart extends BaseEntity {
@@ -42,8 +42,8 @@ export class AmiChart extends BaseEntity {
   @Type(() => AmiChartItem)
   items: AmiChartItem[]
 
-  @OneToMany(() => Property, (property) => property.amiChart)
-  properties: Property[]
+  @OneToMany(() => Unit, (unit) => unit.amiChart)
+  units: Unit[]
 
   @Column()
   @Expose()

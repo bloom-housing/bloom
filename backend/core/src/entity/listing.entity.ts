@@ -96,12 +96,14 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional()
   @IsDate()
+  @Type(() => Date)
   applicationDueDate: Date | null
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()
   @IsOptional()
   @IsDate()
+  @Type(() => Date)
   applicationOpenDate: Date | null
 
   @Column({ type: "text", nullable: true })

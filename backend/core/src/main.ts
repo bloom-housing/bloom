@@ -7,6 +7,7 @@ import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-except
 import { getConnection } from "typeorm"
 import { ConfigService } from "@nestjs/config"
 import dbOptions = require("../ormconfig")
+import * as bodyParser from "body-parser"
 
 let app
 async function bootstrap() {
@@ -25,6 +26,8 @@ async function bootstrap() {
       },
     })
   )
+  app.use(bodyParser.json({ limit: "50mb" }))
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))
 
   const conn = getConnection()
   // showMigrations returns true if there are pending migrations
