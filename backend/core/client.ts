@@ -3327,7 +3327,7 @@ export interface PropertyCreate {
   buildingAddress: AddressUpdate;
 
   /**  */
-  units: UnitUpdate[];
+  units: UnitCreate[];
 
   /**  */
   accessibility: string;
@@ -3368,13 +3368,19 @@ export interface PropertyCreate {
 
 export interface PropertyUpdate {
   /**  */
-  id: string;
+  id?: string;
 
   /**  */
-  createdAt: Date;
+  createdAt?: Date;
 
   /**  */
-  updatedAt: Date;
+  updatedAt?: Date;
+
+  /**  */
+  buildingAddress: AddressUpdate;
+
+  /**  */
+  units: UnitUpdate[];
 
   /**  */
   accessibility: string;
@@ -3411,12 +3417,6 @@ export interface PropertyUpdate {
 
   /**  */
   yearBuilt: number;
-
-  /**  */
-  units: Unit[];
-
-  /**  */
-  buildingAddress: Address;
 }
 
 export interface PropertyGroup {

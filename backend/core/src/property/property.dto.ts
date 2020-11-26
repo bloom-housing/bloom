@@ -1,9 +1,9 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IsDefined, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { Property } from "../entity/property.entity"
 import { AddressDto, AddressUpdateDto } from "../shared/dto/address.dto"
-import { UnitDto, UnitUpdateDto } from "../units/unit.dto"
+import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../units/unit.dto"
 
 export class PropertyDto extends OmitType(Property, [
   "listings",
@@ -41,9 +41,43 @@ export class PropertyCreateDto extends OmitType(PropertyDto, [
   "buildingAddress",
   "units",
 ] as const) {
-  @Exclude()
-  @ApiHideProperty()
-  unitsSummarized
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AddressUpdateDto)
+  buildingAddress: AddressUpdateDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => UnitCreateDto)
+  units: UnitCreateDto[]
+}
+
+export class PropertyUpdateDto extends OmitType(PropertyDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+  "unitsSummarized",
+  "buildingAddress",
+  "units",
+] as const) {
+  @Expose()
+  @IsOptional()
+  @IsUUID()
+  id?: string
+
+  @Expose()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  createdAt?: Date
+
+  @Expose()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  updatedAt?: Date
 
   @Expose()
   @IsDefined()
@@ -56,10 +90,4 @@ export class PropertyCreateDto extends OmitType(PropertyDto, [
   @ValidateNested({ each: true })
   @Type(() => UnitUpdateDto)
   units: UnitUpdateDto[]
-}
-
-export class PropertyUpdateDto extends OmitType(PropertyDto, ["unitsSummarized"]) {
-  @Exclude()
-  @ApiHideProperty()
-  unitsSummarized
 }
