@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -12,7 +11,7 @@ import { IsDate, IsString, IsUUID } from "class-validator"
 import { Expose, Type } from "class-transformer"
 
 @Entity({ name: "assets" })
-export class Asset extends BaseEntity {
+export class Asset {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString()

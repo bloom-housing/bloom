@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -22,7 +21,7 @@ export enum ApplicationMethodType {
 }
 
 @Entity({ name: "application_methods" })
-export class ApplicationMethod extends BaseEntity {
+export class ApplicationMethod {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString()

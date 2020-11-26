@@ -1890,9 +1890,65 @@ export interface Listing {
   applicationConfig?: object;
 }
 
+export interface ApplicationMethodCreate {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  label: string;
+
+  /**  */
+  externalReference: string;
+
+  /**  */
+  acceptsPostmarkedApplications: boolean;
+}
+
+export interface AssetCreate {
+  /**  */
+  label: string;
+
+  /**  */
+  fileId: string;
+}
+
+export interface PreferenceCreate {
+  /**  */
+  ordinal: number;
+
+  /**  */
+  title: string;
+
+  /**  */
+  subtitle: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  links: PreferenceLink[];
+}
+
 export interface Id {
   /**  */
   id: string;
+}
+
+export interface ListingEventCreate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
 }
 
 export interface AddressCreate {
@@ -1929,19 +1985,19 @@ export interface ListingCreate {
   status: ListingStatus;
 
   /**  */
-  applicationMethods: Id[];
+  applicationMethods: ApplicationMethodCreate[];
 
   /**  */
-  assets: Id[];
+  assets: AssetCreate[];
 
   /**  */
-  preferences: Id[];
+  preferences: PreferenceCreate[];
 
   /**  */
   property: Id;
 
   /**  */
-  events: Id[];
+  events: ListingEventCreate[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -2034,24 +2090,157 @@ export interface ListingCreate {
   applicationConfig?: object;
 }
 
+export interface ApplicationMethodUpdate {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  label: string;
+
+  /**  */
+  externalReference: string;
+
+  /**  */
+  acceptsPostmarkedApplications: boolean;
+}
+
+export interface AssetUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  label: string;
+
+  /**  */
+  fileId: string;
+}
+
+export interface PreferenceUpdate {
+  /**  */
+  ordinal: number;
+
+  /**  */
+  title: string;
+
+  /**  */
+  subtitle: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  links: PreferenceLink[];
+
+  /**  */
+  id: string;
+}
+
+export interface ListingEventUpdate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+}
+
+export interface AddressUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state: string;
+
+  /**  */
+  street: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface ListingUpdate {
   /**  */
   status: ListingStatus;
 
   /**  */
-  applicationMethods: Id[];
+  id?: string;
 
   /**  */
-  assets: Id[];
+  createdAt?: Date;
 
   /**  */
-  preferences: Id[];
+  updatedAt?: Date;
+
+  /**  */
+  applicationMethods: ApplicationMethodUpdate[];
+
+  /**  */
+  assets: AssetUpdate[];
+
+  /**  */
+  preferences: PreferenceUpdate[];
 
   /**  */
   property: Id;
 
   /**  */
-  events: Id[];
+  events: ListingEventUpdate[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -2142,9 +2331,6 @@ export interface ListingUpdate {
 
   /**  */
   applicationConfig?: object;
-
-  /**  */
-  id: string;
 }
 
 export interface Applicant {
@@ -2713,44 +2899,6 @@ export interface ApplicationCreate {
   acceptedTerms: boolean;
 }
 
-export interface AddressUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state: string;
-
-  /**  */
-  street: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface ApplicantUpdate {
   /**  */
   id?: string;
@@ -3053,105 +3201,6 @@ export interface ApplicationUpdate {
   acceptedTerms: boolean;
 }
 
-export interface AssetCreate {
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
-export interface AssetUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
-export interface PreferenceCreate {
-  /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  links: PreferenceLink[];
-}
-
-export interface PreferenceUpdate {
-  /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  links: PreferenceLink[];
-
-  /**  */
-  id: string;
-}
-
-export interface ApplicationMethodCreate {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface ApplicationMethodUpdate {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
 export interface UnitCreate {
   /**  */
   amiChart: CombinedAmiChartTypes;
@@ -3271,49 +3320,6 @@ export interface UnitUpdate {
 
   /**  */
   id: string;
-}
-
-export interface ListingEventCreate {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
-}
-
-export interface ListingEventUpdate {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
 }
 
 export interface PropertyCreate {
@@ -3523,9 +3529,9 @@ export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
 }
-export type CombinedApplicationAddressTypes = (AddressCreate & any) | null;
-export type CombinedApplicationPickUpAddressTypes = (AddressCreate & any) | null;
-export type CombinedLeasingAgentAddressTypes = (AddressCreate & any) | null;
+export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
+export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum ApplicationStatus {
   'draft' = 'draft',

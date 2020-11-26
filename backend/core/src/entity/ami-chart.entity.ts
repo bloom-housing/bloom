@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -13,7 +12,7 @@ import { AmiChartItem } from "./ami-chart-item.entity"
 import { Unit } from "./unit.entity"
 
 @Entity()
-export class AmiChart extends BaseEntity {
+export class AmiChart {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString()

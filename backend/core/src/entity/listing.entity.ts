@@ -74,22 +74,42 @@ class Listing extends BaseEntity {
   @Type(() => Date)
   updatedAt: Date
 
-  @OneToMany(() => Preference, (preference) => preference.listing)
+  @OneToMany(() => Preference, (preference) => preference.listing, { cascade: true })
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => Preference)
   preferences: Preference[]
 
-  @OneToMany(() => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
+  @OneToMany(() => ApplicationMethod, (applicationMethod) => applicationMethod.listing, {
+    cascade: true,
+  })
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => ApplicationMethod)
   applicationMethods: ApplicationMethod[]
 
-  @OneToMany(() => Asset, (asset) => asset.listing)
+  @OneToMany(() => Asset, (asset) => asset.listing, { cascade: true })
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => Asset)
   assets: Asset[]
 
-  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing)
+  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing, { cascade: true })
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => ListingEvent)
   events: ListingEvent[]
 
   @OneToMany(() => Application, (application) => application.listing)
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => Application)
   applications: Application[]
 
   @ManyToOne(() => Property, (property) => property.listings, { nullable: false })
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => Property)
   property: Property
 
   @Column({ type: "timestamptz", nullable: true })

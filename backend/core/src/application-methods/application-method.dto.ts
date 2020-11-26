@@ -1,13 +1,9 @@
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
+import { OmitType } from "@nestjs/swagger"
 import { ApplicationMethod } from "../entity/application-method.entity"
-import { Exclude, Expose, Type } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsOptional, IsUUID } from "class-validator"
 
-export class ApplicationMethodDto extends OmitType(ApplicationMethod, ["listing"] as const) {
-  @Exclude()
-  @ApiHideProperty()
-  listing
-}
+export class ApplicationMethodDto extends OmitType(ApplicationMethod, ["listing"] as const) {}
 
 export class ApplicationMethodCreateDto extends OmitType(ApplicationMethodDto, [
   "id",

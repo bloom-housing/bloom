@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -182,7 +181,7 @@ export class UnitsSummarized {
 }
 
 @Entity({ name: "units" })
-class Unit extends BaseEntity {
+class Unit {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsUUID()

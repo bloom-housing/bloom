@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -18,7 +17,7 @@ export enum ListingEventType {
 }
 
 @Entity({ name: "listing_events" })
-export class ListingEvent extends BaseEntity {
+export class ListingEvent {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString()

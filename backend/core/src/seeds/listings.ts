@@ -2,18 +2,16 @@ import { Listing, ListingStatus } from "../entity/listing.entity"
 import { ListingCreateDto } from "../listings/listing.dto"
 import { UnitCreateDto } from "../units/unit.dto"
 import { ApplicationMethodCreateDto } from "../application-methods/application-method.dto"
-import { ApplicationMethod, ApplicationMethodType } from "../entity/application-method.entity"
+import { ApplicationMethodType } from "../entity/application-method.entity"
 import { PropertyCreateDto } from "../property/property.dto"
 import { AssetCreateDto } from "../assets/asset.dto"
 import { PreferenceCreateDto } from "../preferences/preference.dto"
 import { BaseEntity, Repository } from "typeorm"
 import { ListingEventCreateDto } from "../listing-events/listing-events.dto"
-import { ListingEvent, ListingEventType } from "../entity/listing-event.entity"
+import { ListingEventType } from "../entity/listing-event.entity"
 import { Property } from "../entity/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { Unit } from "../.."
-import { Preference } from "../entity/preference.entity"
-import { Asset } from "../entity/asset.entity"
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/ami-chart.dto"
 import { AmiChart } from "../entity/ami-chart.entity"
@@ -21,13 +19,13 @@ import { SanMateoHUD2019 } from "./ami-charts"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
-  amiChart: Omit<AmiChartCreateDto, keyof BaseEntity>
-  units: Array<Omit<UnitCreateDto, keyof BaseEntity | "property">>
-  applicationMethods: Array<Omit<ApplicationMethodCreateDto, keyof BaseEntity | "listing">>
+  amiChart: AmiChartCreateDto
+  units: Array<Omit<UnitCreateDto, "property">>
+  applicationMethods: Array<Omit<ApplicationMethodCreateDto, "listing">>
   property: Omit<PropertyCreateDto, "propertyGroups" | "listings" | "units" | "unitsSummarized">
-  preferences: Array<Omit<PreferenceCreateDto, keyof BaseEntity | "listing">>
-  listingEvents: Array<Omit<ListingEventCreateDto, keyof BaseEntity | "listing">>
-  assets: Array<Omit<AssetCreateDto, keyof BaseEntity | "listing">>
+  preferences: Array<Omit<PreferenceCreateDto, "listing">>
+  listingEvents: Array<Omit<ListingEventCreateDto, "listing">>
+  assets: Array<Omit<AssetCreateDto, "listing">>
   listing: Omit<
     ListingCreateDto,
     | keyof BaseEntity
@@ -45,12 +43,6 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
   const propertyRepo = app.get<Repository<Property>>(getRepositoryToken(Property))
   const unitsRepo = app.get<Repository<Unit>>(getRepositoryToken(Unit))
   const listingsRepo = app.get<Repository<Unit>>(getRepositoryToken(Listing))
-  const preferencesRepo = app.get<Repository<Preference>>(getRepositoryToken(Preference))
-  const assetsRepo = app.get<Repository<Asset>>(getRepositoryToken(Asset))
-  const listingEventsRepo = app.get<Repository<ListingEvent>>(getRepositoryToken(ListingEvent))
-  const applicationMethodsRepo = app.get<Repository<ApplicationMethod>>(
-    getRepositoryToken(ApplicationMethod)
-  )
 
   const amiChart = await amiChartRepo.save(seed.amiChart)
 
@@ -74,64 +66,12 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
     property: {
       id: property.id,
     },
-    assets: [],
-    preferences: [],
-    applicationMethods: [],
-    events: [],
+    assets: seed.assets,
+    preferences: seed.preferences,
+    applicationMethods: seed.applicationMethods,
+    events: seed.listingEvents,
   }
-
-  const listing = await listingsRepo.save(listingCreateDto)
-
-  const preferencesToBeCreated: Array<Omit<
-    PreferenceCreateDto,
-    keyof BaseEntity
-  >> = seed.preferences.map((preference) => {
-    return {
-      ...preference,
-      listing: {
-        id: listing.id,
-      },
-    }
-  })
-  await preferencesRepo.save(preferencesToBeCreated)
-
-  const assetsToBeCreated: Array<Omit<AssetCreateDto, keyof BaseEntity>> = seed.assets.map(
-    (asset) => {
-      return {
-        ...asset,
-        listing: {
-          id: listing.id,
-        },
-      }
-    }
-  )
-  await assetsRepo.save(assetsToBeCreated)
-
-  const listingEventsToBeCreated: Array<Omit<
-    ListingEventCreateDto,
-    keyof BaseEntity
-  >> = seed.listingEvents.map((event) => {
-    return {
-      ...event,
-      listing: {
-        id: listing.id,
-      },
-    }
-  })
-  await listingEventsRepo.save(listingEventsToBeCreated)
-
-  const applicationMethodsToBeCreated: Array<Omit<
-    ApplicationMethodCreateDto,
-    keyof BaseEntity
-  >> = seed.applicationMethods.map((applicationMethod) => {
-    return {
-      ...applicationMethod,
-      listing: {
-        id: listing.id,
-      },
-    }
-  })
-  await applicationMethodsRepo.save(applicationMethodsToBeCreated)
+  await listingsRepo.save(listingCreateDto)
 }
 
 export const listingSeed1: ListingSeed = {

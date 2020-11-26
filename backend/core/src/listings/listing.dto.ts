@@ -1,15 +1,27 @@
 import { Listing } from "../entity/listing.entity"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 
-import { PreferenceDto } from "../preferences/preference.dto"
-import { AssetDto } from "../assets/asset.dto"
-import { ApplicationMethodDto } from "../application-methods/application-method.dto"
+import {
+  PreferenceCreateDto,
+  PreferenceDto,
+  PreferenceUpdateDto,
+} from "../preferences/preference.dto"
+import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../assets/asset.dto"
+import {
+  ApplicationMethodCreateDto,
+  ApplicationMethodDto,
+  ApplicationMethodUpdateDto,
+} from "../application-methods/application-method.dto"
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
-import { ListingEventDto } from "../listing-events/listing-events.dto"
+import {
+  ListingEventCreateDto,
+  ListingEventDto,
+  ListingEventUpdateDto,
+} from "../listing-events/listing-events.dto"
 import { IdDto } from "../lib/id.dto"
 import { PropertyDto } from "../property/property.dto"
-import { AddressCreateDto } from "../shared/dto/address.dto"
+import { AddressCreateDto, AddressUpdateDto } from "../shared/dto/address.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationMethods",
@@ -72,20 +84,20 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type(() => IdDto)
-  applicationMethods: IdDto[]
+  @Type(() => ApplicationMethodCreateDto)
+  applicationMethods: ApplicationMethodCreateDto[]
 
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type(() => IdDto)
-  assets: IdDto[]
+  @Type(() => AssetCreateDto)
+  assets: AssetCreateDto[]
 
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type(() => IdDto)
-  preferences: IdDto[]
+  @Type(() => PreferenceCreateDto)
+  preferences: PreferenceCreateDto[]
 
   @Expose()
   @IsDefined()
@@ -96,8 +108,8 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined()
   @ValidateNested({ each: true })
-  @Type(() => IdDto)
-  events: IdDto[]
+  @Type(() => ListingEventCreateDto)
+  events: ListingEventCreateDto[]
 
   @Expose()
   @IsOptional()
@@ -118,8 +130,83 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   leasingAgentAddress: AddressCreateDto | null
 }
 
-export class ListingUpdateDto extends ListingCreateDto {
+export class ListingUpdateDto extends OmitType(ListingDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+  "applicationMethods",
+  "assets",
+  "preferences",
+  "property",
+  "events",
+  "applications",
+  "applicationAddress",
+  "applicationPickUpAddress",
+  "leasingAgentAddress",
+  "urlSlug",
+] as const) {
   @Expose()
+  @IsOptional()
   @IsUUID()
-  id: string
+  id?: string
+
+  @Expose()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  createdAt?: Date
+
+  @Expose()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  updatedAt?: Date
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => ApplicationMethodUpdateDto)
+  applicationMethods: ApplicationMethodUpdateDto[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => AssetUpdateDto)
+  assets: AssetUpdateDto[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => PreferenceUpdateDto)
+  preferences: PreferenceUpdateDto[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => IdDto)
+  property: IdDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => ListingEventUpdateDto)
+  events: ListingEventUpdateDto[]
+
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AddressUpdateDto)
+  applicationAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AddressUpdateDto)
+  applicationPickUpAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AddressUpdateDto)
+  leasingAgentAddress: AddressUpdateDto | null
 }

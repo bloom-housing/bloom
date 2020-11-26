@@ -1,13 +1,9 @@
 import { Asset } from "../entity/asset.entity"
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
-import { Exclude, Expose, Type } from "class-transformer"
+import { OmitType } from "@nestjs/swagger"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsOptional, IsUUID } from "class-validator"
 
-export class AssetDto extends OmitType(Asset, ["listing"] as const) {
-  @Exclude()
-  @ApiHideProperty()
-  listing
-}
+export class AssetDto extends OmitType(Asset, ["listing"] as const) {}
 
 export class AssetCreateDto extends OmitType(AssetDto, ["id", "createdAt", "updatedAt"]) {}
 
