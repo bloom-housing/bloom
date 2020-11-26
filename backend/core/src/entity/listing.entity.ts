@@ -100,17 +100,17 @@ class Listing extends BaseEntity {
   @Type(() => ListingEvent)
   events: ListingEvent[]
 
-  @OneToMany(() => Application, (application) => application.listing)
-  @Expose()
-  @ValidateNested({ each: true })
-  @Type(() => Application)
-  applications: Application[]
-
   @ManyToOne(() => Property, (property) => property.listings, { nullable: false })
   @Expose()
   @ValidateNested({ each: true })
   @Type(() => Property)
   property: Property
+
+  @OneToMany(() => Application, (application) => application.listing)
+  @Expose()
+  @ValidateNested({ each: true })
+  @Type(() => Application)
+  applications: Application[]
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()

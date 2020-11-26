@@ -68,11 +68,13 @@ export class Address {
   @Expose()
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   latitude?: number
 
   @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   longitude?: number
 }

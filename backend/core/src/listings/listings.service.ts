@@ -12,15 +12,15 @@ export enum ListingsResponseStatus {
 export class ListingsService {
   public async list(jsonpath?: string): Promise<Listing[]> {
     let listings = await Listing.createQueryBuilder("listings")
+      .leftJoinAndSelect("listings.preferences", "preferences")
+      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect("listings.assets", "assets")
+      .leftJoinAndSelect("listings.events", "events")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("amiChart.items", "amiChartItems")
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.assets", "assets")
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
-      .leftJoinAndSelect("listings.events", "events")
       .orderBy({
         "listings.id": "DESC",
         "units.max_occupancy": "ASC",
@@ -31,7 +31,6 @@ export class ListingsService {
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)
     }
-
     return listings
   }
 
@@ -58,15 +57,15 @@ export class ListingsService {
   async findOne(listingId: string) {
     return await Listing.createQueryBuilder("listings")
       .where("listings.id = :id", { id: listingId })
+      .leftJoinAndSelect("listings.preferences", "preferences")
+      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect("listings.assets", "assets")
+      .leftJoinAndSelect("listings.events", "events")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("amiChart.items", "amiChartItems")
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.assets", "assets")
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
-      .leftJoinAndSelect("listings.events", "events")
       .orderBy({
         "preferences.ordinal": "ASC",
       })
