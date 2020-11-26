@@ -5,6 +5,12 @@ import { IsOptional, IsUUID } from "class-validator"
 
 export class AccessbilityDto extends OmitType(Accessibility, []) {}
 
+export class AccessbilityCreateDto extends OmitType(Accessibility, [
+  "id",
+  "createdAt",
+  "updatedAt",
+]) {}
+
 export class AccessbilityUpdateDto extends OmitType(Accessibility, [
   "id",
   "createdAt",

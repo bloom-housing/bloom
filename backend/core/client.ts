@@ -271,7 +271,7 @@ export class ApplicationsService {
   create(
     params: {
       /** requestBody */
-      body?: ApplicationUpdate;
+      body?: ApplicationCreate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
@@ -2481,6 +2481,274 @@ export interface PaginatedApplication {
 
   /**  */
   meta: PaginationMeta;
+}
+
+export interface AddressCreate {
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state: string;
+
+  /**  */
+  street: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
+export interface ApplicantCreate {
+  /**  */
+  address: AddressCreate;
+
+  /**  */
+  workAddress: AddressCreate;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  birthMonth: string;
+
+  /**  */
+  birthDay: string;
+
+  /**  */
+  birthYear: string;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  noEmail: boolean;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  phoneNumberType: string;
+
+  /**  */
+  noPhone: boolean;
+
+  /**  */
+  workInRegion: string;
+}
+
+export interface AlternateContactCreate {
+  /**  */
+  mailingAddress: AddressCreate;
+
+  /**  */
+  type: string;
+
+  /**  */
+  otherType: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  agency: string;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  emailAddress: string;
+}
+
+export interface AccessbilityCreate {
+  /**  */
+  mobility: boolean;
+
+  /**  */
+  vision: boolean;
+
+  /**  */
+  hearing: boolean;
+}
+
+export interface DemographicsCreate {
+  /**  */
+  ethnicity: string;
+
+  /**  */
+  gender: string;
+
+  /**  */
+  sexualOrientation: string;
+
+  /**  */
+  howDidYouHear: string[];
+
+  /**  */
+  race: string;
+}
+
+export interface HouseholdMemberCreate {
+  /**  */
+  address: AddressCreate;
+
+  /**  */
+  workAddress: AddressCreate;
+
+  /**  */
+  orderId: number;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  birthMonth: string;
+
+  /**  */
+  birthDay: string;
+
+  /**  */
+  birthYear: string;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  noEmail: boolean;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  phoneNumberType: string;
+
+  /**  */
+  noPhone: boolean;
+
+  /**  */
+  sameAddress?: string;
+
+  /**  */
+  relationship?: string;
+
+  /**  */
+  workInRegion?: string;
+}
+
+export interface ApplicationPreferencesCreate {
+  /**  */
+  liveIn: boolean;
+
+  /**  */
+  none: boolean;
+
+  /**  */
+  workIn: boolean;
+}
+
+export interface ApplicationCreate {
+  /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
+  /**  */
+  listing: Id;
+
+  /**  */
+  applicant: ApplicantCreate;
+
+  /**  */
+  mailingAddress: AddressCreate;
+
+  /**  */
+  alternateAddress: AddressCreate;
+
+  /**  */
+  alternateContact: AlternateContactCreate;
+
+  /**  */
+  accessibility: AccessbilityCreate;
+
+  /**  */
+  demographics: DemographicsCreate;
+
+  /**  */
+  householdMembers: HouseholdMemberCreate[];
+
+  /**  */
+  preferences: ApplicationPreferencesCreate;
+
+  /**  */
+  appUrl: string;
+
+  /**  */
+  additionalPhone: boolean;
+
+  /**  */
+  additionalPhoneNumber: string;
+
+  /**  */
+  additionalPhoneNumberType: string;
+
+  /**  */
+  contactPreferences: string[];
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  housingStatus: string;
+
+  /**  */
+  sendMailToMailingAddress: boolean;
+
+  /**  */
+  incomeVouchers: boolean;
+
+  /**  */
+  income: string;
+
+  /**  */
+  incomePeriod: string;
+
+  /**  */
+  preferredUnit: string[];
+
+  /**  */
+  acceptedTerms: boolean;
 }
 
 export interface ApplicantUpdate {

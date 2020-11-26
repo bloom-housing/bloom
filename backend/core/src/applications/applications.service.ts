@@ -68,8 +68,7 @@ export class ApplicationsService {
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
     const application = plainToClass(Application, applicationCreateDto)
     application.user = user
-    await this.repository.save(application)
-    return application
+    return await this.repository.save(application)
   }
 
   async findOne(applicationId: string) {

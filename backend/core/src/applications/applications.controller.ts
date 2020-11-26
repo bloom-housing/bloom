@@ -22,6 +22,7 @@ import { EmailService } from "../shared/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { mapTo } from "../shared/mapTo"
 import {
+  ApplicationCreateDto,
   ApplicationDto,
   ApplicationUpdateDto,
   PaginatedApplicationDto,
@@ -119,7 +120,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "Create application", operationId: "create" })
   async create(
     @Request() req: ExpressRequest,
-    @Body() applicationCreateDto: ApplicationUpdateDto
+    @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<ApplicationDto> {
     const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)

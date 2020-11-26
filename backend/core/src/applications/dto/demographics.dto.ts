@@ -5,6 +5,12 @@ import { IsOptional, IsUUID } from "class-validator"
 
 export class DemographicsDto extends OmitType(Demographics, []) {}
 
+export class DemographicsCreateDto extends OmitType(Demographics, [
+  "id",
+  "createdAt",
+  "updatedAt",
+]) {}
+
 export class DemographicsUpdateDto extends OmitType(Demographics, [
   "id",
   "createdAt",

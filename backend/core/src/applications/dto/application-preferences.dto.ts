@@ -5,6 +5,12 @@ import { ApplicationPreferences } from "../entities/application-preferences.enti
 
 export class ApplicationPreferencesDto extends OmitType(ApplicationPreferences, [] as const) {}
 
+export class ApplicationPreferencesCreateDto extends OmitType(ApplicationPreferences, [
+  "id",
+  "createdAt",
+  "updatedAt",
+] as const) {}
+
 export class ApplicationPreferencesUpdateDto extends OmitType(ApplicationPreferences, [
   "id",
   "createdAt",

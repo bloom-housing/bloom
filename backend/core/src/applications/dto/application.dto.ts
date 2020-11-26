@@ -5,13 +5,22 @@ import { Exclude, Expose, Type } from "class-transformer"
 import { IdDto } from "../../lib/id.dto"
 import { PaginationFactory } from "../../utils/pagination.dto"
 import { ListingDto } from "../../listings/listing.dto"
-import { ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
-import { AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
-import { AlternateContactDto, AlternateContactUpdateDto } from "./alternate-contact.dto"
-import { AccessbilityDto, AccessbilityUpdateDto } from "./accessibility.dto"
-import { DemographicsDto, DemographicsUpdateDto } from "./demographics.dto"
-import { HouseholdMemberDto, HouseholdMemberUpdateDto } from "./household-member.dto"
+import { ApplicantCreateDto, ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
+import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import {
+  AlternateContactCreateDto,
+  AlternateContactDto,
+  AlternateContactUpdateDto,
+} from "./alternate-contact.dto"
+import { AccessbilityCreateDto, AccessbilityDto, AccessbilityUpdateDto } from "./accessibility.dto"
+import { DemographicsCreateDto, DemographicsDto, DemographicsUpdateDto } from "./demographics.dto"
+import {
+  HouseholdMemberCreateDto,
+  HouseholdMemberDto,
+  HouseholdMemberUpdateDto,
+} from "./household-member.dto"
+import {
+  ApplicationPreferencesCreateDto,
   ApplicationPreferencesDto,
   ApplicationPreferencesUpdateDto,
 } from "./application-preferences.dto"
@@ -87,6 +96,74 @@ export class ApplicationDto extends OmitType(Application, [
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
+
+export class ApplicationCreateDto extends OmitType(ApplicationDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+  "listing",
+  "applicant",
+  "mailingAddress",
+  "alternateAddress",
+  "alternateContact",
+  "accessibility",
+  "demographics",
+  "householdMembers",
+  "preferences",
+] as const) {
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => IdDto)
+  listing: IdDto
+
+  @Expose()
+  @ValidateNested()
+  @Type(() => ApplicantCreateDto)
+  applicant: ApplicantCreateDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AddressCreateDto)
+  mailingAddress: AddressCreateDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AddressCreateDto)
+  alternateAddress: AddressCreateDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AlternateContactCreateDto)
+  alternateContact: AlternateContactCreateDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AccessbilityCreateDto)
+  accessibility: AccessbilityCreateDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DemographicsCreateDto)
+  demographics: DemographicsCreateDto
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => HouseholdMemberCreateDto)
+  householdMembers: HouseholdMemberCreateDto[]
+
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => ApplicationPreferencesCreateDto)
+  preferences: ApplicationPreferencesCreateDto
+}
 
 export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "id",

@@ -2,7 +2,7 @@ import { OmitType } from "@nestjs/swagger"
 import { AlternateContact } from "../entities/alternate-contact.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
-import { AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
+import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 
 export class AlternateContactDto extends OmitType(AlternateContact, ["mailingAddress"]) {
   @Expose()
@@ -10,6 +10,19 @@ export class AlternateContactDto extends OmitType(AlternateContact, ["mailingAdd
   @ValidateNested()
   @Type(() => AddressDto)
   mailingAddress: AddressDto
+}
+
+export class AlternateContactCreateDto extends OmitType(AlternateContact, [
+  "id",
+  "createdAt",
+  "updatedAt",
+  "mailingAddress",
+]) {
+  @Expose()
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => AddressCreateDto)
+  mailingAddress: AddressCreateDto
 }
 
 export class AlternateContactUpdateDto extends OmitType(AlternateContact, [
