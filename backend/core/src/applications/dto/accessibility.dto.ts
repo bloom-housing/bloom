@@ -3,15 +3,15 @@ import { Accessibility } from "../entities/accessibility.entity"
 import { Expose } from "class-transformer"
 import { IsOptional, IsUUID } from "class-validator"
 
-export class AccessbilityDto extends OmitType(Accessibility, []) {}
+export class AccessibilityDto extends Accessibility {}
 
-export class AccessbilityCreateDto extends OmitType(Accessibility, [
+export class AccessibilityCreateDto extends OmitType(AccessibilityDto, [
   "id",
   "createdAt",
   "updatedAt",
-]) {}
+] as const) {}
 
-export class AccessbilityUpdateDto extends OmitType(Accessibility, [
+export class AccessibilityUpdateDto extends OmitType(AccessibilityDto, [
   "id",
   "createdAt",
   "updatedAt",

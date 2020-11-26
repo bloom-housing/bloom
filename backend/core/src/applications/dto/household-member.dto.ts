@@ -26,7 +26,7 @@ export class HouseholdMemberDto extends OmitType(HouseholdMember, [
   application
 }
 
-export class HouseholdMemberCreateDto extends OmitType(HouseholdMember, [
+export class HouseholdMemberCreateDto extends OmitType(HouseholdMemberDto, [
   "id",
   "createdAt",
   "updatedAt",
@@ -51,7 +51,7 @@ export class HouseholdMemberCreateDto extends OmitType(HouseholdMember, [
   application
 }
 
-export class HouseholdMemberUpdateDto extends OmitType(HouseholdMember, [
+export class HouseholdMemberUpdateDto extends OmitType(HouseholdMemberDto, [
   "id",
   "createdAt",
   "updatedAt",

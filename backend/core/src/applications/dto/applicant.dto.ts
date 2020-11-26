@@ -18,7 +18,7 @@ export class ApplicantDto extends OmitType(Applicant, ["address", "workAddress"]
   workAddress: AddressDto
 }
 
-export class ApplicantCreateDto extends OmitType(Applicant, [
+export class ApplicantCreateDto extends OmitType(ApplicantDto, [
   "id",
   "createdAt",
   "updatedAt",
@@ -38,7 +38,7 @@ export class ApplicantCreateDto extends OmitType(Applicant, [
   workAddress: AddressCreateDto
 }
 
-export class ApplicantUpdateDto extends OmitType(Applicant, [
+export class ApplicantUpdateDto extends OmitType(ApplicantDto, [
   "id",
   "createdAt",
   "updatedAt",

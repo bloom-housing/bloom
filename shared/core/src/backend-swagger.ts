@@ -271,7 +271,7 @@ export class ApplicationsService {
   create(
     params: {
       /** requestBody */
-      body?: ApplicationUpdate;
+      body?: ApplicationCreate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
@@ -1895,16 +1895,7 @@ export interface Id {
   id: string;
 }
 
-export interface AddressUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
+export interface AddressCreate {
   /**  */
   placeName?: string;
 
@@ -2244,16 +2235,7 @@ export interface AlternateContact {
   emailAddress: string;
 }
 
-export interface Accessbility {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
+export interface Accessibility {
   /**  */
   mobility: boolean;
 
@@ -2262,6 +2244,15 @@ export interface Accessbility {
 
   /**  */
   hearing: boolean;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 }
 
 export interface Demographics {
@@ -2398,7 +2389,7 @@ export interface Application {
   alternateContact: AlternateContact;
 
   /**  */
-  accessibility: Accessbility;
+  accessibility: Accessibility;
 
   /**  */
   demographics: Demographics;
@@ -2481,6 +2472,283 @@ export interface PaginatedApplication {
 
   /**  */
   meta: PaginationMeta;
+}
+
+export interface ApplicantCreate {
+  /**  */
+  address: AddressCreate;
+
+  /**  */
+  workAddress: AddressCreate;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  birthMonth: string;
+
+  /**  */
+  birthDay: string;
+
+  /**  */
+  birthYear: string;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  noEmail: boolean;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  phoneNumberType: string;
+
+  /**  */
+  noPhone: boolean;
+
+  /**  */
+  workInRegion: string;
+}
+
+export interface AlternateContactCreate {
+  /**  */
+  mailingAddress: AddressCreate;
+
+  /**  */
+  type: string;
+
+  /**  */
+  otherType: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  agency: string;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  emailAddress: string;
+}
+
+export interface AccessibilityCreate {
+  /**  */
+  mobility: boolean;
+
+  /**  */
+  vision: boolean;
+
+  /**  */
+  hearing: boolean;
+}
+
+export interface DemographicsCreate {
+  /**  */
+  ethnicity: string;
+
+  /**  */
+  gender: string;
+
+  /**  */
+  sexualOrientation: string;
+
+  /**  */
+  howDidYouHear: string[];
+
+  /**  */
+  race: string;
+}
+
+export interface HouseholdMemberCreate {
+  /**  */
+  address: AddressCreate;
+
+  /**  */
+  workAddress: AddressCreate;
+
+  /**  */
+  orderId: number;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  birthMonth: string;
+
+  /**  */
+  birthDay: string;
+
+  /**  */
+  birthYear: string;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  noEmail: boolean;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  phoneNumberType: string;
+
+  /**  */
+  noPhone: boolean;
+
+  /**  */
+  sameAddress?: string;
+
+  /**  */
+  relationship?: string;
+
+  /**  */
+  workInRegion?: string;
+}
+
+export interface ApplicationPreferencesCreate {
+  /**  */
+  liveIn: boolean;
+
+  /**  */
+  none: boolean;
+
+  /**  */
+  workIn: boolean;
+}
+
+export interface ApplicationCreate {
+  /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
+  /**  */
+  listing: Id;
+
+  /**  */
+  applicant: ApplicantCreate;
+
+  /**  */
+  mailingAddress: AddressCreate;
+
+  /**  */
+  alternateAddress: AddressCreate;
+
+  /**  */
+  alternateContact: AlternateContactCreate;
+
+  /**  */
+  accessibility: AccessibilityCreate;
+
+  /**  */
+  demographics: DemographicsCreate;
+
+  /**  */
+  householdMembers: HouseholdMemberCreate[];
+
+  /**  */
+  preferences: ApplicationPreferencesCreate;
+
+  /**  */
+  appUrl: string;
+
+  /**  */
+  additionalPhone: boolean;
+
+  /**  */
+  additionalPhoneNumber: string;
+
+  /**  */
+  additionalPhoneNumberType: string;
+
+  /**  */
+  contactPreferences: string[];
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  housingStatus: string;
+
+  /**  */
+  sendMailToMailingAddress: boolean;
+
+  /**  */
+  incomeVouchers: boolean;
+
+  /**  */
+  income: string;
+
+  /**  */
+  incomePeriod: string;
+
+  /**  */
+  preferredUnit: string[];
+
+  /**  */
+  acceptedTerms: boolean;
+}
+
+export interface AddressUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state: string;
+
+  /**  */
+  street: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
 }
 
 export interface ApplicantUpdate {
@@ -2571,7 +2839,7 @@ export interface AlternateContactUpdate {
   emailAddress: string;
 }
 
-export interface AccessbilityUpdate {
+export interface AccessibilityUpdate {
   /**  */
   id?: string;
 
@@ -2734,7 +3002,7 @@ export interface ApplicationUpdate {
   alternateContact: AlternateContactUpdate;
 
   /**  */
-  accessibility: AccessbilityUpdate;
+  accessibility: AccessibilityUpdate;
 
   /**  */
   demographics: DemographicsUpdate;
@@ -2795,13 +3063,19 @@ export interface AssetCreate {
 
 export interface AssetUpdate {
   /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
   label: string;
 
   /**  */
   fileId: string;
-
-  /**  */
-  id: string;
 }
 
 export interface PreferenceCreate {
@@ -2860,6 +3134,15 @@ export interface ApplicationMethodUpdate {
   type: ApplicationMethodType;
 
   /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
   label: string;
 
   /**  */
@@ -2867,9 +3150,6 @@ export interface ApplicationMethodUpdate {
 
   /**  */
   acceptsPostmarkedApplications: boolean;
-
-  /**  */
-  id: string;
 }
 
 export interface UnitCreate {
@@ -3015,6 +3295,15 @@ export interface ListingEventUpdate {
   type: ListingEventType;
 
   /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
   startTime: Date;
 
   /**  */
@@ -3025,9 +3314,6 @@ export interface ListingEventUpdate {
 
   /**  */
   note?: string;
-
-  /**  */
-  id: string;
 }
 
 export interface PropertyCreate {
@@ -3237,9 +3523,9 @@ export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
 }
-export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
-export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
-export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedApplicationAddressTypes = (AddressCreate & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (AddressCreate & any) | null;
+export type CombinedLeasingAgentAddressTypes = (AddressCreate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum ApplicationStatus {
   'draft' = 'draft',

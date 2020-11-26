@@ -1,7 +1,7 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { ListingEvent } from "../entity/listing-event.entity"
 import { Exclude, Expose } from "class-transformer"
-import { IsString, IsUUID } from "class-validator"
+import { IsOptional, IsUUID } from "class-validator"
 
 export class ListingEventDto extends OmitType(ListingEvent, ["listing"] as const) {
   @Exclude()
@@ -15,9 +15,23 @@ export class ListingEventCreateDto extends OmitType(ListingEventDto, [
   "updatedAt",
 ] as const) {}
 
-export class ListingEventUpdateDto extends ListingEventCreateDto {
+export class ListingEventUpdateDto extends OmitType(ListingEventDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+] as const) {
   @Expose()
-  @IsString()
+  @IsOptional()
   @IsUUID()
-  id: string
+  id?: string
+
+  @Expose()
+  @IsOptional()
+  @IsUUID()
+  createdAt?: Date
+
+  @Expose()
+  @IsOptional()
+  @IsUUID()
+  updatedAt?: Date
 }

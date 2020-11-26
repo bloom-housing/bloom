@@ -3,15 +3,15 @@ import { Demographics } from "../entities/demographics.entity"
 import { Expose } from "class-transformer"
 import { IsOptional, IsUUID } from "class-validator"
 
-export class DemographicsDto extends OmitType(Demographics, []) {}
+export class DemographicsDto extends OmitType(Demographics, [] as const) {}
 
-export class DemographicsCreateDto extends OmitType(Demographics, [
+export class DemographicsCreateDto extends OmitType(DemographicsDto, [
   "id",
   "createdAt",
   "updatedAt",
-]) {}
+] as const) {}
 
-export class DemographicsUpdateDto extends OmitType(Demographics, [
+export class DemographicsUpdateDto extends OmitType(DemographicsDto, [
   "id",
   "createdAt",
   "updatedAt",

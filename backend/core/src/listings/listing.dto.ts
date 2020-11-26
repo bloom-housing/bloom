@@ -9,7 +9,7 @@ import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { ListingEventDto } from "../listing-events/listing-events.dto"
 import { IdDto } from "../lib/id.dto"
 import { PropertyDto } from "../property/property.dto"
-import { AddressUpdateDto } from "../shared/dto/address.dto"
+import { AddressCreateDto } from "../shared/dto/address.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationMethods",
@@ -102,20 +102,20 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional()
   @ValidateNested()
-  @Type(() => AddressUpdateDto)
-  applicationAddress: AddressUpdateDto | null
+  @Type(() => AddressCreateDto)
+  applicationAddress: AddressCreateDto | null
 
   @Expose()
   @IsOptional()
   @ValidateNested()
-  @Type(() => AddressUpdateDto)
-  applicationPickUpAddress: AddressUpdateDto | null
+  @Type(() => AddressCreateDto)
+  applicationPickUpAddress: AddressCreateDto | null
 
   @Expose()
   @IsOptional()
   @ValidateNested()
-  @Type(() => AddressUpdateDto)
-  leasingAgentAddress: AddressUpdateDto | null
+  @Type(() => AddressCreateDto)
+  leasingAgentAddress: AddressCreateDto | null
 }
 
 export class ListingUpdateDto extends ListingCreateDto {

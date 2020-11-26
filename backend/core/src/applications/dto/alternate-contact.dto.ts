@@ -12,7 +12,7 @@ export class AlternateContactDto extends OmitType(AlternateContact, ["mailingAdd
   mailingAddress: AddressDto
 }
 
-export class AlternateContactCreateDto extends OmitType(AlternateContact, [
+export class AlternateContactCreateDto extends OmitType(AlternateContactDto, [
   "id",
   "createdAt",
   "updatedAt",
@@ -25,7 +25,7 @@ export class AlternateContactCreateDto extends OmitType(AlternateContact, [
   mailingAddress: AddressCreateDto
 }
 
-export class AlternateContactUpdateDto extends OmitType(AlternateContact, [
+export class AlternateContactUpdateDto extends OmitType(AlternateContactDto, [
   "id",
   "createdAt",
   "updatedAt",

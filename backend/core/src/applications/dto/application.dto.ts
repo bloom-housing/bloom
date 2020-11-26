@@ -12,7 +12,6 @@ import {
   AlternateContactDto,
   AlternateContactUpdateDto,
 } from "./alternate-contact.dto"
-import { AccessbilityCreateDto, AccessbilityDto, AccessbilityUpdateDto } from "./accessibility.dto"
 import { DemographicsCreateDto, DemographicsDto, DemographicsUpdateDto } from "./demographics.dto"
 import {
   HouseholdMemberCreateDto,
@@ -24,6 +23,11 @@ import {
   ApplicationPreferencesDto,
   ApplicationPreferencesUpdateDto,
 } from "./application-preferences.dto"
+import {
+  AccessibilityCreateDto,
+  AccessibilityDto,
+  AccessibilityUpdateDto,
+} from "./accessibility.dto"
 
 export class ApplicationDto extends OmitType(Application, [
   "listing",
@@ -73,8 +77,8 @@ export class ApplicationDto extends OmitType(Application, [
   @Expose()
   @IsDefined()
   @ValidateNested()
-  @Type(() => AccessbilityDto)
-  accessibility: AccessbilityDto
+  @Type(() => AccessibilityDto)
+  accessibility: AccessibilityDto
 
   @Expose()
   @IsDefined()
@@ -143,8 +147,8 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   @Expose()
   @IsDefined()
   @ValidateNested()
-  @Type(() => AccessbilityCreateDto)
-  accessibility: AccessbilityCreateDto
+  @Type(() => AccessibilityCreateDto)
+  accessibility: AccessibilityCreateDto
 
   @Expose()
   @IsDefined()
@@ -226,8 +230,8 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   @Expose()
   @IsDefined()
   @ValidateNested()
-  @Type(() => AccessbilityUpdateDto)
-  accessibility: AccessbilityUpdateDto
+  @Type(() => AccessibilityUpdateDto)
+  accessibility: AccessibilityUpdateDto
 
   @Expose()
   @IsDefined()

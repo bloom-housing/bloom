@@ -1895,16 +1895,7 @@ export interface Id {
   id: string;
 }
 
-export interface AddressUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
+export interface AddressCreate {
   /**  */
   placeName?: string;
 
@@ -2244,16 +2235,7 @@ export interface AlternateContact {
   emailAddress: string;
 }
 
-export interface Accessbility {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
+export interface Accessibility {
   /**  */
   mobility: boolean;
 
@@ -2262,6 +2244,15 @@ export interface Accessbility {
 
   /**  */
   hearing: boolean;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 }
 
 export interface Demographics {
@@ -2398,7 +2389,7 @@ export interface Application {
   alternateContact: AlternateContact;
 
   /**  */
-  accessibility: Accessbility;
+  accessibility: Accessibility;
 
   /**  */
   demographics: Demographics;
@@ -2483,35 +2474,6 @@ export interface PaginatedApplication {
   meta: PaginationMeta;
 }
 
-export interface AddressCreate {
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state: string;
-
-  /**  */
-  street: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface ApplicantCreate {
   /**  */
   address: AddressCreate;
@@ -2582,7 +2544,7 @@ export interface AlternateContactCreate {
   emailAddress: string;
 }
 
-export interface AccessbilityCreate {
+export interface AccessibilityCreate {
   /**  */
   mobility: boolean;
 
@@ -2700,7 +2662,7 @@ export interface ApplicationCreate {
   alternateContact: AlternateContactCreate;
 
   /**  */
-  accessibility: AccessbilityCreate;
+  accessibility: AccessibilityCreate;
 
   /**  */
   demographics: DemographicsCreate;
@@ -2749,6 +2711,44 @@ export interface ApplicationCreate {
 
   /**  */
   acceptedTerms: boolean;
+}
+
+export interface AddressUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state: string;
+
+  /**  */
+  street: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
 }
 
 export interface ApplicantUpdate {
@@ -2839,7 +2839,7 @@ export interface AlternateContactUpdate {
   emailAddress: string;
 }
 
-export interface AccessbilityUpdate {
+export interface AccessibilityUpdate {
   /**  */
   id?: string;
 
@@ -3002,7 +3002,7 @@ export interface ApplicationUpdate {
   alternateContact: AlternateContactUpdate;
 
   /**  */
-  accessibility: AccessbilityUpdate;
+  accessibility: AccessibilityUpdate;
 
   /**  */
   demographics: DemographicsUpdate;
@@ -3063,13 +3063,19 @@ export interface AssetCreate {
 
 export interface AssetUpdate {
   /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
   label: string;
 
   /**  */
   fileId: string;
-
-  /**  */
-  id: string;
 }
 
 export interface PreferenceCreate {
@@ -3128,6 +3134,15 @@ export interface ApplicationMethodUpdate {
   type: ApplicationMethodType;
 
   /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
   label: string;
 
   /**  */
@@ -3135,9 +3150,6 @@ export interface ApplicationMethodUpdate {
 
   /**  */
   acceptsPostmarkedApplications: boolean;
-
-  /**  */
-  id: string;
 }
 
 export interface UnitCreate {
@@ -3283,6 +3295,15 @@ export interface ListingEventUpdate {
   type: ListingEventType;
 
   /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
   startTime: Date;
 
   /**  */
@@ -3293,9 +3314,6 @@ export interface ListingEventUpdate {
 
   /**  */
   note?: string;
-
-  /**  */
-  id: string;
 }
 
 export interface PropertyCreate {
@@ -3505,9 +3523,9 @@ export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
 }
-export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
-export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
-export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedApplicationAddressTypes = (AddressCreate & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (AddressCreate & any) | null;
+export type CombinedLeasingAgentAddressTypes = (AddressCreate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum ApplicationStatus {
   'draft' = 'draft',
