@@ -14,7 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import EditApplication from "../../src/applications/editApplication"
+import ApplicationForm from "../../src/applications/ApplicationForm"
 
 const NewApplication = () => {
   const router = useRouter()
@@ -27,7 +27,7 @@ const NewApplication = () => {
       {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
       <PageHeader>{t("applications.newApplication")}</PageHeader>
 
-      <EditApplication isEditable={false} />
+      <ApplicationForm isEditable={false} />
     </Layout>
   )
 }
