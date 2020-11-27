@@ -18,6 +18,7 @@ import {
   PhoneField,
   Select,
   contactPreferencesKeys,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
@@ -28,13 +29,19 @@ type Props = {
   isEditable?: boolean
 }
 
-const contactPreferencesOptions = contactPreferencesKeys?.map((item) => item.id)
-
 const EditApplication = ({ isEditable }: Props) => {
   const router = useRouter()
 
+  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
+    id: item.id,
+    label: t(`application.form.options.contact.${item.id}`),
+  }))
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors } = useForm()
+
+  const mailingAddressValue = watch("sendMailToMailingAddress")
+  const workInRegionValue = watch("applicant.workInRegion")
 
   // TODO: update dataKey inside fields
   const ApplicationAddress = useCallback((subtitle: string, dataKey: string) => {
@@ -84,7 +91,7 @@ const EditApplication = ({ isEditable }: Props) => {
           </ViewItem>
         </GridCell>
 
-        <GridCell className="md:grid md:grid-cols-2 md:gap-8">
+        <GridCell className="md:grid md:grid-cols-2 md:gap-8" span={2}>
           <ViewItem label={t("application.contact.state")} className="mb-0">
             <Select
               id="addressState"
@@ -115,9 +122,6 @@ const EditApplication = ({ isEditable }: Props) => {
             />
           </ViewItem>
         </GridCell>
-        {/* <GridCell>
-
-        </GridCell> */}
       </GridSection>
     )
   }, [])
@@ -264,7 +268,35 @@ const EditApplication = ({ isEditable }: Props) => {
                 </GridCell>
                 {/* it should be checkbox group */}
                 <GridCell>
-                  <ViewItem label={t("application.contact.preferredContactType")}>.</ViewItem>
+                  <ViewItem label={t("application.contact.preferredContactType")}>
+                    <FieldGroup
+                      name="contactPreferences"
+                      fields={contactPreferencesOptions}
+                      type="checkbox"
+                      register={register}
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                {/* TODO: to confirm */}
+                <GridCell>
+                  <ViewItem>
+                    <Field
+                      type="checkbox"
+                      id="sendMailToMailingAddress"
+                      name="sendMailToMailingAddress"
+                      label="I have mailing address"
+                      register={register}
+                    />
+
+                    <Field
+                      type="checkbox"
+                      id="applicant.workInRegion"
+                      name="applicant.workInRegion"
+                      label="I work in region"
+                      register={register}
+                    />
+                  </ViewItem>
                 </GridCell>
               </GridSection>
 
@@ -273,15 +305,17 @@ const EditApplication = ({ isEditable }: Props) => {
                 "application.applicant.address"
               )}
 
-              {ApplicationAddress(
-                t("application.contact.mailingAddress"),
-                "application.applicant.address"
-              )}
+              {mailingAddressValue &&
+                ApplicationAddress(
+                  t("application.contact.mailingAddress"),
+                  "application.applicant.address"
+                )}
 
-              {ApplicationAddress(
-                t("application.contact.workAddress"),
-                "application.applicant.address"
-              )}
+              {workInRegionValue &&
+                ApplicationAddress(
+                  t("application.contact.workAddress"),
+                  "application.applicant.address"
+                )}
             </GridSection>
           </div>
 
