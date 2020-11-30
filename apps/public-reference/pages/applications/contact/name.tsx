@@ -115,6 +115,7 @@ export default () => {
             <DOBField
               applicant={application.applicant}
               register={register}
+              required={true}
               error={errors.applicant}
               name="applicant"
               id="applicant.dateOfBirth"
