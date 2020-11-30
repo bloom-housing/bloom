@@ -5,7 +5,12 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 
 module.exports = {
   stories: ["../src/**/*.stories.@(tsx|mdx)"],
-  addons: ["@storybook/addon-docs", "@storybook/addon-a11y", "@storybook/addon-viewport"],
+  addons: [
+    "@storybook/addon-docs",
+    "@storybook/addon-a11y",
+    "@storybook/addon-viewport",
+    "@storybook/addon-knobs",
+  ],
   typescript: {
     reactDocgen: "react-docgen",
   },
