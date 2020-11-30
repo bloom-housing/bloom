@@ -17,6 +17,7 @@ const member = ({
 export const Default = () => (
   <DOBField
     applicant={member}
+    required={true}
     register={() => {
       //
     }}
