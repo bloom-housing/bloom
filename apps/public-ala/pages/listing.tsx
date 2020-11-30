@@ -3,39 +3,85 @@ import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
 import Markdown from "markdown-to-jsx"
-import { Listing } from "@bloom-housing/core"
+import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/core"
 import {
   AdditionalFees,
   ApplicationSection,
   ApplicationStatus,
-  BasicTable,
+  StandardTable,
   Description,
   ExpandableText,
+  getOccupancyDescription,
   GroupedTable,
   GroupedTableGroup,
-  Headers,
-  InfoCard,
+  groupNonReservedAndReservedSummaries,
   ImageCard,
+  imageUrlFromListing,
+  InfoCard,
   LeasingAgent,
-  ListingDetails,
   ListingDetailItem,
+  ListingDetails,
   ListingMap,
   ListSection,
   MetaTags,
+  occupancyTable,
   OneLineAddress,
   PreferencesList,
+  TableHeaders,
+  t,
   UnitTables,
   WhatToExpect,
-  imageUrlFromListing,
-  getOccupancyDescription,
-  groupNonReservedAndReservedSummaries,
-  occupancyTable,
-  t,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
+import moment from "moment"
 
 interface ListingProps {
   listing: Listing
+}
+
+const EventDateSection = (props: { event: ListingEvent }) => {
+  return (
+    <p className="text text-gray-800 pb-3 flex justify-between items-center">
+      <span className="inline-block">{moment(props.event.startTime).format("MMMM d, YYYY")}</span>
+      <span className="inline-block text-xs font-bold">
+        {moment(props.event.startTime).format("hh:mma") +
+          "-" +
+          moment(props.event.endTime).format("hh:mma")}
+      </span>
+    </p>
+  )
+}
+
+const OpenHouseEventSection = (props: { openHouseEvent: ListingEvent }) => {
+  return (
+    <section className="aside-block bg-primary-lighter border-t">
+      <h4 className="text-caps-tiny">{t("listings.openHouseEvent.header")}</h4>
+      <EventDateSection event={props.openHouseEvent} />
+      {props.openHouseEvent.url && (
+        <p className="text text-gray-800 pb-3">
+          <a href={props.openHouseEvent.url}>{t("listings.openHouseEvent.seeVideo")}</a>
+        </p>
+      )}
+      {props.openHouseEvent.note && (
+        <p className="text text-gray-600">{props.openHouseEvent.note}</p>
+      )}
+    </section>
+  )
+}
+
+const PublicLotteryEvent = (props: { publicLottery: ListingEvent }) => {
+  return (
+    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
+      <h4 className="text-caps-underline">{t("listings.publicLottery.header")}</h4>
+      <EventDateSection event={props.publicLottery} />
+      {props.publicLottery.url && (
+        <p className="text text-gray-800 pb-3">
+          <a href={props.publicLottery.url}>{t("listings.publicLottery.seeVideo")}</a>
+        </p>
+      )}
+      {props.publicLottery.note && <p className="text text-gray-600">{props.publicLottery.note}</p>}
+    </section>
+  )
 }
 
 export default class extends Component<ListingProps> {
@@ -75,7 +121,7 @@ export default class extends Component<ListingProps> {
         return percentInt
       })
       .sort()
-    const hmiHeaders = listing.unitsSummarized.hmi.columns as Headers
+    const hmiHeaders = listing.unitsSummarized.hmi.columns as TableHeaders
     const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
       return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
     })
@@ -116,7 +162,7 @@ export default class extends Component<ListingProps> {
       )
     }
 
-    if (listing.preferences) {
+    if (listing.preferences && listing.preferences.length > 0) {
       preferencesSection = (
         <ListSection
           title={t("listings.sections.housingPreferencesTitle")}
@@ -130,6 +176,16 @@ export default class extends Component<ListingProps> {
           </>
         </ListSection>
       )
+    }
+
+    let openHouseEvent: ListingEvent | null = null
+    if (Array.isArray(listing.events)) {
+      openHouseEvent = listing.events.find((event) => event.type === ListingEventType.openHouse)
+    }
+
+    let publicLottery: ListingEvent | null = null
+    if (Array.isArray(listing.events)) {
+      publicLottery = listing.events.find((event) => event.type === ListingEventType.publicLottery)
     }
 
     return (
@@ -211,11 +267,11 @@ export default class extends Component<ListingProps> {
                   title={t("listings.householdMaximumIncome")}
                   subtitle={householdMaximumIncomeSubheader}
                 >
-                  <BasicTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
+                  <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
                 </ListSection>
 
                 <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
-                  <BasicTable
+                  <StandardTable
                     headers={occupancyHeaders}
                     data={occupancyData}
                     responsiveCollapse={false}
@@ -268,11 +324,13 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
+                  {openHouseEvent && <OpenHouseEventSection openHouseEvent={openHouseEvent} />}
                   <ApplicationSection
                     listing={listing}
                     internalFormRoute="applications/start/choose-language"
                   />
                 </div>
+                {publicLottery && <PublicLotteryEvent publicLottery={publicLottery} />}
                 <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
               </aside>

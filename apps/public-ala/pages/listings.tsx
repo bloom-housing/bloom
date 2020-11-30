@@ -77,8 +77,10 @@ export default class extends Component<ListingsProps> {
         </Head>
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <PageHeader>{t("pageTitle.rent")}</PageHeader>
-        {this.renderOpenListings()}
-        {this.renderClosedListings()}
+        <div>
+          {this.renderOpenListings()}
+          {this.renderClosedListings()}
+        </div>
       </Layout>
     )
   }

@@ -2,15 +2,19 @@
 5.1 Demographics
 Optional demographic questions
 */
-import Link from "next/link"
-import Router from "next/router"
-import { Button, FormCard, ProgressNav, t, Form } from "@bloom-housing/ui-components"
+import React, { useMemo } from "react"
+import {
+  AppearanceStyleType,
+  Button,
+  FieldGroup,
+  Form,
+  FormCard,
+  ProgressNav,
+  Select,
+  t,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import { useContext, useMemo } from "react"
-import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { CheckboxGroup } from "@bloom-housing/ui-components/src/forms/CheckboxGroup"
 import {
   ethnicityKeys,
   raceKeys,
@@ -18,63 +22,61 @@ import {
   sexualOrientation,
   howDidYouHear,
 } from "@bloom-housing/ui-components/src/helpers/formOptions"
-import FormStep from "../../../src/forms/applications/FormStep"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 const Demographics = () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 4
+  const { conductor, application, listing } = useFormConductor("demographics")
+  const currentPageSection = 5
 
   /* Form Handler */
-  const { register, handleSubmit } = useForm()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      ethnicity: application.demographics.ethnicity,
+      race: application.demographics.race,
+      gender: application.demographics.gender,
+      sexualOrientation: application.demographics.sexualOrientation,
+    },
+  })
 
   const onSubmit = (data) => {
-    const { ethnicity, gender, sexualOrientation, howDidYouHear } = data
+    const { ethnicity, race, gender, sexualOrientation, howDidYouHear } = data
 
-    new FormStep(conductor).save({
+    conductor.currentStep.save({
       demographics: {
         ethnicity,
+        race,
         gender,
         sexualOrientation,
         howDidYouHear,
       },
     })
-
-    Router.push("/applications/review/summary").then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
 
   const howDidYouHearOptions = useMemo(() => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
-      defaultChecked: item.checked,
+      defaultChecked: item.checked || application.demographics.howDidYouHear.includes(item.id),
       register,
     }))
-  }, [register])
-
-  const backPath = "/applications/financial/income"
-  /* const backPath = application.preferences.none
-    ? "/applications/preferences/general"
-    : "/applications/preferences/select"
-  */
+  }, [register, application])
 
   return (
     <FormsLayout>
+      {console.log(application)}
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href={backPath}>
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
@@ -91,7 +93,7 @@ const Demographics = () => {
               label={t("application.review.demographics.ethnicityLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={ethnicityKeys}
               keyPrefix="application.review.demographics.ethnicityOptions"
@@ -103,7 +105,7 @@ const Demographics = () => {
               label={t("application.review.demographics.raceLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={raceKeys}
               keyPrefix="application.review.demographics.raceOptions"
@@ -117,7 +119,7 @@ const Demographics = () => {
               label={t("application.review.demographics.genderLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={genderKeys}
               keyPrefix="application.review.demographics.genderOptions"
@@ -131,7 +133,7 @@ const Demographics = () => {
               label={t("application.review.demographics.sexualOrientationLabel")}
               placeholder={t("application.form.general.defaultSelectPlaceholder")}
               register={register}
-              labelClassName="field-label--caps"
+              labelClassName="field-label--caps mb-3"
               controlClassName="control"
               options={sexualOrientation}
               keyPrefix="application.review.demographics.sexualOrientationOptions"
@@ -139,17 +141,23 @@ const Demographics = () => {
           </div>
 
           <div className="form-card__group is-borderless">
-            <CheckboxGroup
-              name="howDidYouHear"
-              groupLabel={t("application.review.demographics.howDidYouHearLabel")}
-              fields={howDidYouHearOptions}
-            />
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.review.demographics.howDidYouHearLabel")}
+              </legend>
+              <FieldGroup
+                type="checkbox"
+                name="howDidYouHear"
+                fields={howDidYouHearOptions}
+                register={register}
+              />
+            </fieldset>
           </div>
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

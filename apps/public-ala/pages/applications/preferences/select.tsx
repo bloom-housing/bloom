@@ -2,10 +2,10 @@
 4.1 Preferences Introduction
 Instructions on how preferences work and their value
 */
-import { useContext, useState } from "react"
+import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import Link from "next/link"
 import {
+  AppearanceStyleType,
   AlertBox,
   Button,
   ErrorMessage,
@@ -15,13 +15,13 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import FormStep from "../../../src/forms/applications/FormStep"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
+  const { conductor, application, listing } = useFormConductor("preferencesIntroduction")
   const [showMore, setShowMore] = useState({})
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 4
+  const currentPageSection = 4
 
   const preferenceOptions = ["liveIn", "workIn"]
 
@@ -29,41 +29,31 @@ export default () => {
     setShowMore({ ...showMore, [option]: !showMore[option] })
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm({
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    new FormStep(conductor).save({ preferences: data })
-    if (data.none) {
-      conductor.routeToNextOrReturnUrl("/applications/preferences/general")
-    } else {
-      conductor.completeStep(4)
-      conductor.sync()
-      conductor.routeToNextOrReturnUrl("/applications/review/demographics")
+    if (!data.none) {
+      conductor.completeSection(4)
     }
-  }
-  const onError = () => {
-    window.scrollTo(0, 0)
+
+    conductor.currentStep.save({ preferences: data })
+    conductor.routeToNextOrReturnUrl()
   }
 
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/financial/income">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.preferences.title")}</h2>
@@ -94,7 +84,7 @@ export default () => {
                   onChange={() => {
                     setTimeout(() => {
                       setValue("none", false)
-                      trigger("none")
+                      void trigger("none")
                     }, 1)
                   }}
                 />
@@ -152,7 +142,7 @@ export default () => {
                     preferenceOptions.forEach((option) => {
                       setValue(option, false)
                     })
-                    trigger("none")
+                    void trigger("none")
                   }
                 }}
               />
@@ -164,7 +154,7 @@ export default () => {
                 {t("application.preferences.stillHaveOpportunity")}
               </p>
 
-              <ErrorMessage error={errors.none}>
+              <ErrorMessage id="preferences-error" error={errors.none}>
                 {t("application.form.errors.selectOption")}
               </ErrorMessage>
             </div>
@@ -173,7 +163,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                filled={true}
+                type={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
                 }}
@@ -185,7 +175,8 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  className="button is-unstyled mb-4"
+                  unstyled={true}
+                  className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
                   }}

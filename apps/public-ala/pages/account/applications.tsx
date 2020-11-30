@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState, Fragment } from "react"
+import React, { useEffect, useState, Fragment } from "react"
 import Head from "next/head"
 import {
-  ApiClientContext,
+  AppearanceBorderType,
+  AppearanceStyleType,
   AppStatusItem,
+  Button,
   DashBlock,
   DashBlocks,
   HeaderBadge,
@@ -15,10 +17,9 @@ import {
 import Layout from "../../layouts/application"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import moment from "moment"
-import { Application } from "@bloom-housing/backend-core/client"
+import { Application } from "@bloom-housing/core"
 
 export default () => {
-  const { applicationsService } = useContext(ApiClientContext)
   const [applications, setApplications] = useState([])
   const [deletingApplication, setDeletingApplication] = useState(null)
 
@@ -42,17 +43,9 @@ export default () => {
     </div>
   )
   const modalActions = [
-    {
-      label: t("t.cancel"),
-      type: "cancel" as const,
-      onClick: () => {
-        setDeletingApplication(null)
-      },
-    },
-    {
-      label: t("t.delete"),
-      type: "primary" as const,
-      onClick: () => {
+    <Button
+      type={AppearanceStyleType.primary}
+      onClick={() => {
         // applicationsService.delete(deletingApplication.id).then(() => {
         const newApplications = [...applications]
         const deletedAppIndex = applications.indexOf(deletingApplication, 0)
@@ -60,8 +53,19 @@ export default () => {
         setDeletingApplication(null)
         setApplications(newApplications)
         // })
-      },
-    },
+      }}
+    >
+      {t("t.delete")}
+    </Button>,
+    <Button
+      type={AppearanceStyleType.secondary}
+      border={AppearanceBorderType.borderless}
+      onClick={() => {
+        setDeletingApplication(null)
+      }}
+    >
+      {t("t.cancel")}
+    </Button>,
   ]
   return (
     <>
@@ -71,8 +75,8 @@ export default () => {
           title={t("application.deleteThisApplication")}
           ariaDescription={t("application.deleteThisApplication")}
           actions={modalActions}
-          fullScreen
-        ></Modal>
+          hideCloseIcon
+        />
         <Layout>
           <Head>
             <title>{t("nav.myApplications")}</title>
@@ -83,13 +87,13 @@ export default () => {
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
                   <Fragment>
-                    {applications.map((application, i) => (
+                    {applications.map((application) => (
                       <AppStatusItem
                         key={application.id}
                         status="inProgress"
                         application={application}
                         setDeletingApplication={setDeletingApplication}
-                      ></AppStatusItem>
+                      />
                     ))}
                     {applications.length == 0 && noApplicationsSection}
                   </Fragment>
