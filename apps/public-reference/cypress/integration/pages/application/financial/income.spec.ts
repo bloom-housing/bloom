@@ -116,7 +116,10 @@ describe("applications/financial/income", function () {
     cy.loadConfig()
     cy.visit(route)
 
-    cy.getByID("income").type(this.data["income"])
+    const income = getListingIncome()
+    const incomeMonthlyAllowed = income?.monthlyMax ? income?.monthlyMax - 10 : null
+
+    cy.getByID("income").type(`${incomeMonthlyAllowed}`)
     cy.getByID("incomePeriodMonthly").check()
 
     cy.goNext()
@@ -127,7 +130,7 @@ describe("applications/financial/income", function () {
     cy.isNextRouteValid("income")
 
     cy.getSubmissionContext().should("include", {
-      income: this.data["income"],
+      income: `${incomeMonthlyAllowed}`,
       incomePeriod: this.data["incomePeriod"],
     })
   })
