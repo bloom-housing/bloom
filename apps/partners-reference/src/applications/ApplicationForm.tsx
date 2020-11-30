@@ -32,13 +32,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
   }))
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm<
-    Record<string, any>
-  >()
+  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: boolean = watch("application.applicant.workInRegion")
-  const phoneValue: string = watch("application.applicant.phoneNumber")
+  const phoneValue: string = watch("application.phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
 
   // reset phone type field when phone is empty
@@ -62,8 +60,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const onSubmit = (data) => {
     setErrorAlert(false)
 
-    const noPhone = data?.applicant?.phoneNumber?.length ? false : true
-    const noEmail = data?.applicant?.emailAddress?.length ? false : true
+    const noPhone = data?.application?.phoneNumber?.length ? false : true
+    const noEmail = data?.application?.applicant?.emailAddress?.length ? false : true
 
     const response = {
       ...BlankApplicationFields,
@@ -234,15 +232,14 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("t.phone")}>
                       <PhoneField
-                        id="application.applicant.phoneNumber"
-                        name="application.applicant.phoneNumber"
+                        id="application.phoneNumber"
+                        name="application.phoneNumber"
                         label={t("application.contact.yourPhoneNumber")}
-                        caps={true}
                         required={false}
-                        error={errors.application?.applicant?.phoneNumber}
+                        error={errors.application?.phoneNumber}
                         errorMessage={t("application.contact.phoneNumberError")}
-                        controlClassName="control"
                         control={control}
+                        controlClassName="control"
                         readerOnly
                       />
                     </ViewItem>
