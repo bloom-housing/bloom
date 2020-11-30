@@ -53,6 +53,9 @@
     }
   },
   "application": {
+    "add": {
+      "applicationAddError": "You’ll need to resolve any errors before moving on."
+    },
     "details": {
       "applicationData": "Application Data",
       "number": "Application Number",
