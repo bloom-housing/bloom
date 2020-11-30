@@ -156,7 +156,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
   return (
     <>
       <section className="bg-primary-lighter">
-        {errorAlert && <AlertBox closeable>{t("application.add.applicationAddError")}</AlertBox>}
+        {errorAlert && (
+          <AlertBox onClose={() => setErrorAlert(false)} closeable>
+            {t("application.add.applicationAddError")}
+          </AlertBox>
+        )}
         <Form id="application-form" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">
             <div className="info-card md:w-9/12">
@@ -204,7 +208,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         id="application.applicant.dateOfBirth"
                         name="application.applicant.dateOfBirth"
                         register={register}
-                        error={errors.applicant}
+                        error={errors.application?.applicant?.dateOfBirth}
                         watch={watch}
                         atAge={true}
                         label={t("application.name.yourDateOfBirth")}
@@ -222,7 +226,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         label={t("application.name.yourEmailAddress")}
                         readerOnly={true}
                         validation={{ pattern: emailRegex }}
-                        error={errors.applicant?.emailAddress}
+                        error={errors.application?.applicant?.emailAddress}
                         errorMessage={t("application.name.emailAddressError")}
                         register={register}
                       />
@@ -236,7 +240,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         label={t("application.contact.yourPhoneNumber")}
                         caps={true}
                         required={false}
-                        error={errors.applicant?.phoneNumber}
+                        error={errors.application?.applicant?.phoneNumber}
                         errorMessage={t("application.contact.phoneNumberError")}
                         controlClassName="control"
                         control={control}
@@ -252,7 +256,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         placeholder={t("application.contact.phoneNumberTypes.prompt")}
                         label={t("application.contact.phoneNumberTypes.prompt")}
                         labelClassName="sr-only"
-                        error={errors.applicant?.phoneNumberType}
+                        error={errors.application?.applicant?.phoneNumberType}
                         errorMessage={t("application.contact.phoneNumberTypeError")}
                         register={register}
                         controlClassName="control"
@@ -270,7 +274,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         name="application.additionalPhoneNumber"
                         label={t("application.contact.yourAdditionalPhoneNumber")}
                         required={false}
-                        error={errors.additionalPhoneNumber}
+                        error={errors.application?.additionalPhoneNumber}
                         errorMessage={t("application.contact.phoneNumberError")}
                         control={control}
                         controlClassName="control"
@@ -283,7 +287,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       <Select
                         id="application.additionalPhoneNumberType"
                         name="application.additionalPhoneNumberType"
-                        error={errors?.additionalPhoneNumberType}
+                        error={errors.application?.additionalPhoneNumberType}
                         errorMessage={t("application.contact.phoneNumberTypeError")}
                         register={register}
                         controlClassName="control"
