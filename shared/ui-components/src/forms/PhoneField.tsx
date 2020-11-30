@@ -16,6 +16,7 @@ export const PhoneField = (props: {
   defaultValue?: string
   control: any
   disabled?: boolean
+  required?: boolean
 }) => {
   const labelClasses = ["label"]
   if (props.caps) labelClasses.push("field-label--caps")
@@ -35,15 +36,17 @@ export const PhoneField = (props: {
           as={PhoneMask}
           control={props.control}
           rules={{
-            validate: {
-              inputTel: (v) => {
-                const dropdown = document.querySelector<HTMLInputElement>(
-                  "#" + props.name.replace(".", "\\.")
-                )
-                if (!dropdown || dropdown.disabled) return true
-                return v?.match(/\d/g)?.length == 10 ? true : false
-              },
-            },
+            validate: props.required
+              ? {
+                  inputTel: (v) => {
+                    const dropdown = document.querySelector<HTMLInputElement>(
+                      "#" + props.name.replace(".", "\\.")
+                    )
+                    if (!dropdown || dropdown.disabled) return true
+                    return v?.match(/\d/g)?.length == 10 ? true : false
+                  },
+                }
+              : {},
           }}
         />
         <ErrorMessage id={`${props.id}-error`} error={props.error}>

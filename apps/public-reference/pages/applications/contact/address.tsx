@@ -118,6 +118,7 @@ export default () => {
             <PhoneField
               label={t("application.contact.yourPhoneNumber")}
               caps={true}
+              required={true}
               id="applicant.phoneNumber"
               name="applicant.phoneNumber"
               placeholder={clientLoaded && noPhone ? t("t.none") : null}
@@ -192,6 +193,7 @@ export default () => {
                   id="additionalPhoneNumber"
                   name="additionalPhoneNumber"
                   label={t("application.contact.yourAdditionalPhoneNumber")}
+                  required={true}
                   caps={true}
                   error={errors.additionalPhoneNumber}
                   errorMessage={t("application.contact.phoneNumberError")}
