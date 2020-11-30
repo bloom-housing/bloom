@@ -36,17 +36,17 @@ export const PhoneField = (props: {
           as={PhoneMask}
           control={props.control}
           rules={{
-            validate: props.required
-              ? {
-                  inputTel: (v) => {
-                    const dropdown = document.querySelector<HTMLInputElement>(
-                      "#" + props.name.replace(".", "\\.")
-                    )
-                    if (!dropdown || dropdown.disabled) return true
-                    return v?.match(/\d/g)?.length == 10 ? true : false
-                  },
-                }
-              : {},
+            validate: {
+              inputTel: (v) => {
+                if (!props.required && v.length === 0) return true
+
+                const dropdown = document.querySelector<HTMLInputElement>(
+                  "#" + props.name.replace(".", "\\.")
+                )
+                if (!dropdown || dropdown.disabled) return true
+                return v?.match(/\d/g)?.length == 10 ? true : false
+              },
+            },
           }}
         />
         <ErrorMessage id={`${props.id}-error`} error={props.error}>
