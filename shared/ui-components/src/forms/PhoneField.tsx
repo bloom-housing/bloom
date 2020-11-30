@@ -31,14 +31,14 @@ export const PhoneField = (props: {
           id={props.id}
           name={props.name}
           placeholder={props.placeholder}
-          defaultValue={props.defaultValue}
+          defaultValue={props.defaultValue || ""}
           disabled={props.disabled}
           as={PhoneMask}
           control={props.control}
           rules={{
             validate: {
               inputTel: (v) => {
-                if (!props.required && v.length === 0) return true
+                if (!props.required && !v?.length) return true
 
                 const dropdown = document.querySelector<HTMLInputElement>(
                   "#" + props.name.replace(".", "\\.")
