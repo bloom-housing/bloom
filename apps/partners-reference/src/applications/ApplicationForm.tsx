@@ -1,5 +1,5 @@
-import React, { useCallback } from "react"
-import { useRouter } from "next/router"
+import React, { useState, useCallback, useEffect } from "react"
+// import { useRouter } from "next/router"
 import {
   t,
   GridSection,
@@ -7,7 +7,6 @@ import {
   GridCell,
   DOBField,
   Field,
-  BlankApplicationFields,
   emailRegex,
   PhoneField,
   Select,
@@ -15,6 +14,8 @@ import {
   FieldGroup,
   Button,
   Form,
+  AlertBox,
+  BlankApplicationFields,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -24,101 +25,138 @@ type Props = {
 }
 
 const ApplicationForm = ({ isEditable }: Props) => {
-  const router = useRouter()
-
+  const [errorAlert, setErrorAlert] = useState(false)
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
     label: t(`application.form.options.contact.${item.id}`),
   }))
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors } = useForm()
+  const { register, watch, control, handleSubmit, errors, setValue } = useForm<Record<string, any>>(
+    {
+      defaultValues: {
+        "application.applicant.phoneNumberType": "",
+        "application.additionalPhoneNumberType": "",
+      },
+    }
+  )
 
-  const mailingAddressValue = watch("sendMailToMailingAddress")
-  const workInRegionValue = watch("applicant.workInRegion")
+  const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
+  const workInRegionValue: boolean = watch("application.applicant.workInRegion")
+  const phoneValue: string = watch("application.applicant.phoneNumber")
+  const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
+
+  // reset phone type field when phone is empty
+  useEffect(() => {
+    if (!phoneValue?.length) {
+      setValue("application.applicant.phoneNumberType", "")
+    }
+  }, [setValue, phoneValue])
+
+  // reset additional phone type field when additional phone is empty
+  useEffect(() => {
+    if (!additionalPhoneValue?.length) {
+      setValue("application.additionalPhoneNumberType", "")
+    }
+  }, [setValue, additionalPhoneValue])
 
   const onSubmit = (data) => {
-    console.log("Submit SUCCESS", data)
+    setErrorAlert(false)
+
+    const noPhone = data?.applicant?.phoneNumber?.length ? false : true
+    const noEmail = data?.applicant?.emailAddress?.length ? false : true
+
+    const response = {
+      ...BlankApplicationFields,
+      noPhone,
+      noEmail,
+    }
+
+    console.log("Submit SUCCESS", response)
   }
 
   const onError = (error) => {
+    setErrorAlert(true)
     console.log("Submit ERROR", error)
   }
 
-  // TODO: update dataKey inside fields
-  const ApplicationAddress = useCallback((subtitle: string, dataKey: string) => {
-    return (
-      <GridSection subtitle={subtitle}>
-        <GridCell span={2}>
-          <ViewItem label={t("application.contact.streetAddress")}>
-            <Field
-              id="addressStreet"
-              name="applicant.address.street"
-              label={t("application.contact.streetAddress")}
-              placeholder={t("application.contact.streetAddress")}
-              register={register}
-              readerOnly
-            />
-          </ViewItem>
-        </GridCell>
-        <GridCell>
-          <ViewItem label={t("application.contact.apt")}>
-            <Field
-              id="addressStreet2"
-              name="applicant.address.street2"
-              label={t("application.contact.apt")}
-              placeholder={t("application.contact.apt")}
-              register={register}
-              readerOnly
-            />
-          </ViewItem>
-        </GridCell>
+  const ApplicationAddress = useCallback(
+    (subtitle: string, dataKey: string) => {
+      return (
+        <GridSection subtitle={subtitle}>
+          <GridCell span={2}>
+            <ViewItem label={t("application.contact.streetAddress")}>
+              <Field
+                id={`${dataKey}.street`}
+                name={`${dataKey}.street`}
+                label={t("application.contact.streetAddress")}
+                placeholder={t("application.contact.streetAddress")}
+                register={register}
+                readerOnly
+              />
+            </ViewItem>
+          </GridCell>
+          <GridCell>
+            <ViewItem label={t("application.contact.apt")}>
+              <Field
+                id={`${dataKey}.street2`}
+                name={`${dataKey}.street2`}
+                label={t("application.contact.apt")}
+                placeholder={t("application.contact.apt")}
+                register={register}
+                readerOnly
+              />
+            </ViewItem>
+          </GridCell>
 
-        <GridCell>
-          <ViewItem label={t("application.contact.city")}>
-            <Field
-              id="addressCity"
-              name="applicant.address.city"
-              label={t("application.contact.cityName")}
-              placeholder={t("application.contact.cityName")}
-              register={register}
-              readerOnly
-            />
-          </ViewItem>
-        </GridCell>
+          <GridCell>
+            <ViewItem label={t("application.contact.city")}>
+              <Field
+                id={`${dataKey}.city`}
+                name={`${dataKey}.city`}
+                label={t("application.contact.cityName")}
+                placeholder={t("application.contact.cityName")}
+                register={register}
+                readerOnly
+              />
+            </ViewItem>
+          </GridCell>
 
-        <GridCell className="md:grid md:grid-cols-2 md:gap-8" span={2}>
-          <ViewItem label={t("application.contact.state")} className="mb-0">
-            <Select
-              id="addressState"
-              name="applicant.address.state"
-              label={t("application.contact.state")}
-              labelClassName="sr-only"
-              register={register}
-              controlClassName="control"
-              options={stateKeys}
-              keyPrefix="application.form.options.states"
-            />
-          </ViewItem>
+          <GridCell className="md:grid md:grid-cols-2 md:gap-8" span={2}>
+            <ViewItem label={t("application.contact.state")} className="mb-0">
+              <Select
+                id={`${dataKey}.state`}
+                name={`${dataKey}.state`}
+                label={t("application.contact.state")}
+                labelClassName="sr-only"
+                register={register}
+                controlClassName="control"
+                options={stateKeys}
+                keyPrefix="application.form.options.states"
+              />
+            </ViewItem>
 
-          <ViewItem label={t("application.contact.zip")}>
-            <Field
-              id="addressZipCode"
-              name="applicant.address.zipCode"
-              label={t("application.contact.zip")}
-              placeholder={t("application.contact.zipCode")}
-              register={register}
-              readerOnly
-            />
-          </ViewItem>
-        </GridCell>
-      </GridSection>
-    )
-  }, [])
+            <ViewItem label={t("application.contact.zip")}>
+              <Field
+                id={`${dataKey}.zipCode`}
+                name={`${dataKey}.zipCode`}
+                label={t("application.contact.zip")}
+                placeholder={t("application.contact.zipCode")}
+                register={register}
+                readerOnly
+              />
+            </ViewItem>
+          </GridCell>
+        </GridSection>
+      )
+    },
+    [register]
+  )
 
   return (
     <>
       <section className="bg-primary-lighter">
+        {errorAlert && <AlertBox closeable>{t("application.add.applicationAddError")}</AlertBox>}
         <Form id="application-form" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">
             <div className="info-card md:w-9/12">
@@ -127,7 +165,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.name.firstName")}>
                       <Field
-                        name="applicant.firstName"
+                        id="application.applicant.firstName"
+                        name="application.applicant.firstName"
                         label={t("application.name.firstName")}
                         placeholder={t("application.name.firstName")}
                         register={register}
@@ -138,7 +177,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.name.middleName")}>
                       <Field
-                        name="applicant.middleName"
+                        id="application.applicant.middleName"
+                        name="application.applicant.middleName"
                         label={t("application.name.middleNameOptional")}
                         placeholder={t("application.name.middleNameOptional")}
                         register={register}
@@ -149,7 +189,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.name.lastName")}>
                       <Field
-                        name="applicant.lastName"
+                        id="application.applicant.lastName"
+                        name="application.applicant.lastName"
                         label={t("application.name.lastName")}
                         placeholder={t("application.name.lastName")}
                         register={register}
@@ -160,10 +201,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.household.member.dateOfBirth")}>
                       <DOBField
+                        id="application.applicant.dateOfBirth"
+                        name="application.applicant.dateOfBirth"
                         register={register}
                         error={errors.applicant}
-                        name="applicant"
-                        id="applicant.dateOfBirth"
                         watch={watch}
                         atAge={true}
                         label={t("application.name.yourDateOfBirth")}
@@ -171,12 +212,12 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       />
                     </ViewItem>
                   </GridCell>
-                  {/* TODO: set noEmail to true after send - if value is empty */}
                   <GridCell>
                     <ViewItem label={t("t.email")}>
                       <Field
+                        id="application.applicant.emailAddress"
+                        name="application.applicant.emailAddress"
                         type="email"
-                        name="applicant.emailAddress"
                         placeholder="example@web.com"
                         label={t("application.name.yourEmailAddress")}
                         readerOnly={true}
@@ -190,11 +231,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("t.phone")}>
                       <PhoneField
+                        id="application.applicant.phoneNumber"
+                        name="application.applicant.phoneNumber"
                         label={t("application.contact.yourPhoneNumber")}
                         caps={true}
                         required={false}
-                        id="applicant.phoneNumber"
-                        name="applicant.phoneNumber"
                         error={errors.applicant?.phoneNumber}
                         errorMessage={t("application.contact.phoneNumberError")}
                         controlClassName="control"
@@ -203,12 +244,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       />
                     </ViewItem>
                   </GridCell>
-                  {/* Does an admin should ability to set value to 'none' */}
                   <GridCell>
                     <ViewItem label={t("applications.table.phoneType")}>
                       <Select
-                        id="applicant.phoneNumberType"
-                        name="applicant.phoneNumberType"
+                        id="application.applicant.phoneNumberType"
+                        name="application.applicant.phoneNumberType"
                         placeholder={t("application.contact.phoneNumberTypes.prompt")}
                         label={t("application.contact.phoneNumberTypes.prompt")}
                         labelClassName="sr-only"
@@ -218,14 +258,16 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         controlClassName="control"
                         options={phoneNumberKeys}
                         keyPrefix="application.contact.phoneNumberTypes"
+                        disabled={!phoneValue?.length}
+                        defaultValue=""
                       />
                     </ViewItem>
                   </GridCell>
                   <GridCell>
                     <ViewItem label={t("t.additionalPhone")}>
                       <PhoneField
-                        id="additionalPhoneNumber"
-                        name="additionalPhoneNumber"
+                        id="application.additionalPhoneNumber"
+                        name="application.additionalPhoneNumber"
                         label={t("application.contact.yourAdditionalPhoneNumber")}
                         required={false}
                         error={errors.additionalPhoneNumber}
@@ -239,8 +281,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("applications.table.additionalPhoneType")}>
                       <Select
-                        id="additionalPhoneNumberType"
-                        name="additionalPhoneNumberType"
+                        id="application.additionalPhoneNumberType"
+                        name="application.additionalPhoneNumberType"
                         error={errors?.additionalPhoneNumberType}
                         errorMessage={t("application.contact.phoneNumberTypeError")}
                         register={register}
@@ -250,14 +292,16 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         labelClassName={"sr-only"}
                         options={phoneNumberKeys}
                         keyPrefix="application.contact.phoneNumberTypes"
+                        disabled={!additionalPhoneValue?.length}
+                        defaultValue=""
                       />
                     </ViewItem>
                   </GridCell>
-                  {/* it should be checkbox group */}
+
                   <GridCell>
                     <ViewItem label={t("application.contact.preferredContactType")}>
                       <FieldGroup
-                        name="contactPreferences"
+                        name="application.contactPreferences"
                         fields={contactPreferencesOptions}
                         type="checkbox"
                         register={register}
@@ -265,21 +309,20 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     </ViewItem>
                   </GridCell>
 
-                  {/* TODO: to confirm */}
                   <GridCell>
                     <ViewItem>
                       <Field
+                        id="application.sendMailToMailingAddress"
+                        name="application.sendMailToMailingAddress"
                         type="checkbox"
-                        id="sendMailToMailingAddress"
-                        name="sendMailToMailingAddress"
                         label="I have mailing address"
                         register={register}
                       />
 
                       <Field
+                        id="application.applicant.workInRegion"
+                        name="application.applicant.workInRegion"
                         type="checkbox"
-                        id="applicant.workInRegion"
-                        name="applicant.workInRegion"
                         label="I work in region"
                         register={register}
                       />
@@ -295,13 +338,13 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 {mailingAddressValue &&
                   ApplicationAddress(
                     t("application.contact.mailingAddress"),
-                    "application.applicant.address"
+                    "application.mailingAddress"
                   )}
 
                 {workInRegionValue &&
                   ApplicationAddress(
                     t("application.contact.workAddress"),
-                    "application.applicant.address"
+                    "application.applicant.workAddress"
                   )}
               </GridSection>
             </div>
