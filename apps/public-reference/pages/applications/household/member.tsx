@@ -216,6 +216,7 @@ export default () => {
               <div className="form-card__group border-b">
                 <DOBField
                   id="applicant.member.dateOfBirth"
+                  required={true}
                   applicant={member}
                   register={register}
                   error={errors}

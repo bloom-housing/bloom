@@ -13,6 +13,7 @@ export interface DOBFieldProps {
   atAge?: boolean
   name?: string
   id?: string
+  required?: boolean
 }
 
 const DOBField = (props: DOBFieldProps) => {
@@ -43,9 +44,13 @@ const DOBField = (props: DOBFieldProps) => {
           defaultValue={applicant.birthMonth ? applicant.birthMonth : ""}
           error={error?.birthMonth}
           validation={{
-            required: true,
+            required: props.required,
             validate: {
-              monthRange: (value: string) => parseInt(value) > 0 && parseInt(value) <= 12,
+              monthRange: (value: string) => {
+                if (!props.required && !value?.length) return true
+
+                return parseInt(value) > 0 && parseInt(value) <= 12
+              },
             },
           }}
           inputProps={{ maxLength: 2 }}
@@ -59,9 +64,13 @@ const DOBField = (props: DOBFieldProps) => {
           defaultValue={applicant.birthDay ? applicant.birthDay : ""}
           error={error?.birthDay}
           validation={{
-            required: true,
+            required: props.required,
             validate: {
-              dayRange: (value: string) => parseInt(value) > 0 && parseInt(value) <= 31,
+              dayRange: (value: string) => {
+                if (!props.required && !value?.length) return true
+
+                return parseInt(value) > 0 && parseInt(value) <= 31
+              },
             },
           }}
           inputProps={{ maxLength: 2 }}
@@ -75,9 +84,13 @@ const DOBField = (props: DOBFieldProps) => {
           defaultValue={applicant.birthYear ? applicant.birthYear : ""}
           error={error?.birthYear}
           validation={{
-            required: true,
+            required: props.required,
             validate: {
-              yearRange: (value: string) => validateAge(value),
+              yearRange: (value: string) => {
+                if (!props.required && !value?.length) return true
+
+                return validateAge(value)
+              },
             },
           }}
           inputProps={{ maxLength: 4 }}
