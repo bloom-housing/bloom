@@ -16,6 +16,7 @@ export const PhoneField = (props: {
   defaultValue?: string
   control: any
   disabled?: boolean
+  required?: boolean
 }) => {
   const labelClasses = ["label"]
   if (props.caps) labelClasses.push("field-label--caps")
@@ -37,6 +38,8 @@ export const PhoneField = (props: {
           rules={{
             validate: {
               inputTel: (v) => {
+                if (!props.required && v.length === 0) return true
+
                 const dropdown = document.querySelector<HTMLInputElement>(
                   "#" + props.name.replace(".", "\\.")
                 )
