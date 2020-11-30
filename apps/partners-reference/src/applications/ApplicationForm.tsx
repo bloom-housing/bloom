@@ -32,7 +32,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   }))
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors, setValue, clearErrors, reset } = useForm<
+  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm<
     Record<string, any>
   >()
 
