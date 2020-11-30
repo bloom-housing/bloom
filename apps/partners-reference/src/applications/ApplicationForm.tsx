@@ -32,14 +32,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
   }))
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors, setValue } = useForm<Record<string, any>>(
-    {
-      defaultValues: {
-        "application.applicant.phoneNumberType": "",
-        "application.additionalPhoneNumberType": "",
-      },
-    }
-  )
+  const { register, watch, control, handleSubmit, errors, setValue, clearErrors, reset } = useForm<
+    Record<string, any>
+  >()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: boolean = watch("application.applicant.workInRegion")
@@ -48,17 +43,21 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
   // reset phone type field when phone is empty
   useEffect(() => {
+    const fieldKey = "application.applicant.phoneNumberType"
     if (!phoneValue?.length) {
-      setValue("application.applicant.phoneNumberType", "")
+      setValue(fieldKey, "")
+      clearErrors(fieldKey)
     }
-  }, [setValue, phoneValue])
+  }, [setValue, clearErrors, phoneValue])
 
   // reset additional phone type field when additional phone is empty
   useEffect(() => {
+    const fieldKey = "application.additionalPhoneNumberType"
     if (!additionalPhoneValue?.length) {
-      setValue("application.additionalPhoneNumberType", "")
+      setValue(fieldKey, "")
+      clearErrors(fieldKey)
     }
-  }, [setValue, additionalPhoneValue])
+  }, [setValue, clearErrors, additionalPhoneValue])
 
   const onSubmit = (data) => {
     setErrorAlert(false)
@@ -262,8 +261,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         controlClassName="control"
                         options={phoneNumberKeys}
                         keyPrefix="application.contact.phoneNumberTypes"
+                        validation={{ required: phoneValue?.length > 0 }}
                         disabled={!phoneValue?.length}
-                        defaultValue=""
                       />
                     </ViewItem>
                   </GridCell>
@@ -296,8 +295,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         labelClassName={"sr-only"}
                         options={phoneNumberKeys}
                         keyPrefix="application.contact.phoneNumberTypes"
+                        validation={{ required: additionalPhoneValue?.length > 0 }}
                         disabled={!additionalPhoneValue?.length}
-                        defaultValue=""
                       />
                     </ViewItem>
                   </GridCell>
