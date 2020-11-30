@@ -192,6 +192,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       <PhoneField
                         label={t("application.contact.yourPhoneNumber")}
                         caps={true}
+                        required={false}
                         id="applicant.phoneNumber"
                         name="applicant.phoneNumber"
                         error={errors.applicant?.phoneNumber}
@@ -226,6 +227,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         id="additionalPhoneNumber"
                         name="additionalPhoneNumber"
                         label={t("application.contact.yourAdditionalPhoneNumber")}
+                        required={false}
                         error={errors.additionalPhoneNumber}
                         errorMessage={t("application.contact.phoneNumberError")}
                         control={control}
