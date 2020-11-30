@@ -66,7 +66,7 @@ const ListingsList = (props: ListingsProps) => {
             href={`listing/id=${listing.id}`}
             as={`/listing/${listing.id}/${listing.urlSlug}`}
           >
-            {t("label.seeDetails")}
+            {t("t.seeDetails")}
           </LinkButton>
         </div>
       </article>

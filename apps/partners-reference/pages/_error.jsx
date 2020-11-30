@@ -3,7 +3,7 @@ import Head from "next/head"
 import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
 
 export default () => {
-  const pageTitle = t("error.notFound.title")
+  const pageTitle = t("errors.notFound.title")
 
   return (
     <Layout>
@@ -11,7 +11,7 @@ export default () => {
         <title>{pageTitle}</title>
       </Head>
       <Hero title={pageTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings">
-        {t("error.notFound.message")}
+        {t("errors.notFound.message")}
       </Hero>
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>An error has occurred.</MarkdownSection>

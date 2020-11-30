@@ -307,7 +307,7 @@ export default function ApplicationsList() {
                   <ViewItem label={t("application.details.preferredContact")}>
                     {application.contactPreferences.map((item) => (
                       <span key={item}>
-                        {t(`application.form.options.contact.${item}`)}
+                        {t(`t.${item}`)}
                         <br />
                       </span>
                     ))}

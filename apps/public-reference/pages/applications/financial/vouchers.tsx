@@ -89,7 +89,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -97,7 +97,7 @@ export default () => {
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
-              <p className="field-note mb-4">{t("application.financial.vouchers.prompt")}</p>
+              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
               <FieldGroup
                 type="radio"
                 name="incomeVouchers"

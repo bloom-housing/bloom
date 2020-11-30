@@ -116,7 +116,7 @@ export const LoggedInUserIdleTimeout = ({ onTimeout }: { onTimeout?: () => unkno
   // Only render the IdleTimeout component if the user is logged in
   return profile && signOut
     ? createElement(IdleTimeout, {
-        promptTitle: t("authentication.timeout.title"),
+        promptTitle: t("t.areYouStillWorking"),
         promptText: t("authentication.timeout.text"),
         promptAction: t("authentication.timeout.action"),
         redirectPath: `/sign-in`,

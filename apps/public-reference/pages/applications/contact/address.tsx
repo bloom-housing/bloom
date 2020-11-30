@@ -84,7 +84,7 @@ export default () => {
 
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
-    label: t(`application.form.options.contact.${item.id}`),
+    label: t(`t.${item.id}`),
     defaultChecked: application?.contactPreferences?.includes(item.id) || false,
   }))
 
@@ -109,7 +109,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -122,7 +122,7 @@ export default () => {
               name="applicant.phoneNumber"
               placeholder={clientLoaded && noPhone ? t("t.none") : null}
               error={!noPhone ? errors.applicant?.phoneNumber : false}
-              errorMessage={t("application.contact.phoneNumberError")}
+              errorMessage={t("errors.phoneNumberError")}
               controlClassName="control"
               control={control}
               defaultValue={application.applicant.phoneNumber}
@@ -139,7 +139,7 @@ export default () => {
               validation={{ required: !noPhone }}
               defaultValue={application.applicant.phoneNumberType}
               error={!noPhone && errors.applicant?.phoneNumberType}
-              errorMessage={t("application.contact.phoneNumberTypeError")}
+              errorMessage={t("errors.phoneNumberTypeError")}
               register={register}
               controlClassName="control"
               options={phoneNumberKeys}
@@ -194,7 +194,7 @@ export default () => {
                   label={t("application.contact.yourAdditionalPhoneNumber")}
                   caps={true}
                   error={errors.additionalPhoneNumber}
-                  errorMessage={t("application.contact.phoneNumberError")}
+                  errorMessage={t("errors.phoneNumberError")}
                   control={control}
                   defaultValue={application.additionalPhoneNumber}
                   controlClassName="control"
@@ -206,7 +206,7 @@ export default () => {
                   defaultValue={application.additionalPhoneNumberType}
                   validation={{ required: true }}
                   error={errors?.additionalPhoneNumberType}
-                  errorMessage={t("application.contact.phoneNumberTypeError")}
+                  errorMessage={t("errors.phoneNumberTypeError")}
                   register={register}
                   controlClassName="control"
                   placeholder={t("application.contact.phoneNumberTypes.prompt")}
@@ -235,7 +235,7 @@ export default () => {
                 defaultValue={application.applicant.address.street}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.street}
-                errorMessage={t("application.contact.streetError")}
+                errorMessage={t("errors.streetError")}
                 register={register}
               />
 
@@ -257,7 +257,7 @@ export default () => {
                   defaultValue={application.applicant.address.city}
                   validation={{ required: true }}
                   error={errors.applicant?.address?.city}
-                  errorMessage={t("application.contact.cityError")}
+                  errorMessage={t("errors.cityError")}
                   register={register}
                 />
 
@@ -267,11 +267,11 @@ export default () => {
                   label={t("application.contact.state")}
                   validation={{ required: true }}
                   error={errors.applicant?.address?.state}
-                  errorMessage={t("application.contact.stateError")}
+                  errorMessage={t("errors.stateError")}
                   register={register}
                   controlClassName="control"
                   options={stateKeys}
-                  keyPrefix="application.form.options.states"
+                  keyPrefix="states"
                 />
               </div>
               <Field
@@ -282,7 +282,7 @@ export default () => {
                 defaultValue={application.applicant.address.zipCode}
                 validation={{ required: true }}
                 error={errors.applicant?.address?.zipCode}
-                errorMessage={t("application.contact.zipCodeError")}
+                errorMessage={t("errors.zipCodeError")}
                 register={register}
               />
 
@@ -316,7 +316,7 @@ export default () => {
                   defaultValue={application.mailingAddress.street}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.street}
-                  errorMessage={t("application.contact.streetError")}
+                  errorMessage={t("errors.streetError")}
                   register={register}
                 />
 
@@ -338,7 +338,7 @@ export default () => {
                     defaultValue={application.mailingAddress.city}
                     validation={{ required: true }}
                     error={errors.mailingAddress?.city}
-                    errorMessage={t("application.contact.cityError")}
+                    errorMessage={t("errors.cityError")}
                     register={register}
                   />
 
@@ -349,11 +349,11 @@ export default () => {
                     defaultValue={application.mailingAddress.state}
                     validation={{ required: true }}
                     error={errors.mailingAddress?.state}
-                    errorMessage={t("application.contact.stateError")}
+                    errorMessage={t("errors.stateError")}
                     register={register}
                     controlClassName="control"
                     options={stateKeys}
-                    keyPrefix="application.form.options.states"
+                    keyPrefix="states"
                   />
                 </div>
 
@@ -365,7 +365,7 @@ export default () => {
                   defaultValue={application.mailingAddress.zipCode}
                   validation={{ required: true }}
                   error={errors.mailingAddress?.zipCode}
-                  errorMessage={t("application.contact.zipCodeError")}
+                  errorMessage={t("errors.zipCodeError")}
                   register={register}
                 />
               </fieldset>
@@ -382,7 +382,7 @@ export default () => {
                 type="checkbox"
                 validation={{ required: true }}
                 error={errors?.contactPreferences}
-                errorMessage={t("application.form.errors.selectAtLeastOne")}
+                errorMessage={t("errors.selectAtLeastOne")}
                 register={register}
               />
             </fieldset>
@@ -426,7 +426,7 @@ export default () => {
                 id="applicant.workInRegion-error"
                 error={errors.applicant?.workInRegion}
               >
-                {t("application.form.errors.selectOption")}
+                {t("errors.selectOption")}
               </ErrorMessage>
             </fieldset>
 
@@ -445,7 +445,7 @@ export default () => {
                     defaultValue={application.applicant.workAddress.street}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.street}
-                    errorMessage={t("application.contact.streetError")}
+                    errorMessage={t("errors.streetError")}
                     register={register}
                   />
 
@@ -467,7 +467,7 @@ export default () => {
                       defaultValue={application.applicant.workAddress.city}
                       validation={{ required: true }}
                       error={errors.applicant?.workAddress?.city}
-                      errorMessage={t("application.contact.cityError")}
+                      errorMessage={t("errors.cityError")}
                       register={register}
                     />
 
@@ -478,11 +478,11 @@ export default () => {
                       defaultValue={application.applicant.workAddress.state}
                       validation={{ required: true }}
                       error={errors.applicant?.workAddress?.state}
-                      errorMessage={t("application.contact.stateError")}
+                      errorMessage={t("errors.stateError")}
                       register={register}
                       controlClassName="control"
                       options={stateKeys}
-                      keyPrefix="application.form.options.states"
+                      keyPrefix="states"
                     />
                   </div>
 
@@ -494,7 +494,7 @@ export default () => {
                     defaultValue={application.applicant.workAddress.zipCode}
                     validation={{ required: true }}
                     error={errors.applicant?.workAddress?.zipCode}
-                    errorMessage={t("application.contact.zipCodeError")}
+                    errorMessage={t("errors.zipCodeError")}
                     register={register}
                   />
                 </fieldset>

@@ -67,7 +67,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -84,7 +84,7 @@ export default () => {
                 defaultValue={application.applicant.firstName}
                 validation={{ required: true }}
                 error={errors.applicant?.firstName}
-                errorMessage={t("application.name.firstNameError")}
+                errorMessage={t("errors.firstNameError")}
                 register={register}
               />
 
@@ -105,7 +105,7 @@ export default () => {
                 defaultValue={application.applicant.lastName}
                 validation={{ required: true }}
                 error={errors.applicant?.lastName}
-                errorMessage={t("application.name.lastNameError")}
+                errorMessage={t("errors.lastNameError")}
                 register={register}
               />
             </fieldset>

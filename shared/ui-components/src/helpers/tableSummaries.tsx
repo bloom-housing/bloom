@@ -5,8 +5,7 @@ import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
   const unitSummaries = summaries.map((unitSummary) => {
-    const unitPluralization =
-      unitSummary.totalAvailable == 1 ? t("listings.unit") : t("listings.units")
+    const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
         <strong>{unitSummary.minIncomeRange.min}</strong>

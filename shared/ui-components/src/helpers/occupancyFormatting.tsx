@@ -11,14 +11,14 @@ export const occupancyTable = (listing: Listing) => {
 
       if (unitSummary.occupancyRange.max == null) {
         occupancy = `at least ${unitSummary.occupancyRange.min} ${
-          unitSummary.occupancyRange.min == 1 ? t("listings.person") : t("listings.people")
+          unitSummary.occupancyRange.min == 1 ? t("t.person") : t("t.people")
         }`
       } else if (unitSummary.occupancyRange.max > 1) {
         occupancy = `${unitSummary.occupancyRange.min}-${unitSummary.occupancyRange.max} ${
-          unitSummary.occupancyRange.max == 1 ? t("listings.person") : t("listings.people")
+          unitSummary.occupancyRange.max == 1 ? t("t.person") : t("t.people")
         }`
       } else {
-        occupancy = `1 ${t("listings.person")}`
+        occupancy = `1 ${t("t.person")}`
       }
 
       return {

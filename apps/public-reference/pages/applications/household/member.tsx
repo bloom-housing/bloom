@@ -164,7 +164,7 @@ export default () => {
           <>
             {Object.entries(errors).length > 0 && (
               <AlertBox type="alert" inverted>
-                {t("t.errorsToResolve")}
+                {t("errors.errorsToResolve")}
               </AlertBox>
             )}
 
@@ -184,7 +184,7 @@ export default () => {
                     defaultValue={member.firstName}
                     validation={{ required: true }}
                     error={errors.firstName}
-                    errorMessage={t("application.name.firstNameError")}
+                    errorMessage={t("errors.firstNameError")}
                     register={register}
                   />
 
@@ -207,7 +207,7 @@ export default () => {
                     defaultValue={member.lastName}
                     validation={{ required: true }}
                     error={errors.lastName}
-                    errorMessage={t("application.name.lastNameError")}
+                    errorMessage={t("errors.lastNameError")}
                     register={register}
                   />
                 </fieldset>
@@ -235,7 +235,7 @@ export default () => {
                     register={register}
                     validation={{ required: true }}
                     error={errors.sameAddress}
-                    errorMessage={t("application.form.errors.selectOption")}
+                    errorMessage={t("errors.selectOption")}
                     fields={sameAddressOptions}
                   />
                 </fieldset>
@@ -253,7 +253,7 @@ export default () => {
                       defaultValue={member.address.street}
                       validation={{ required: true }}
                       error={errors.address?.street}
-                      errorMessage={t("application.contact.streetError")}
+                      errorMessage={t("errors.streetError")}
                       register={register}
                     />
 
@@ -275,7 +275,7 @@ export default () => {
                         defaultValue={member.address.city}
                         validation={{ required: true }}
                         error={errors.address?.city}
-                        errorMessage={t("application.contact.cityError")}
+                        errorMessage={t("errors.cityError")}
                         register={register}
                       />
 
@@ -286,11 +286,11 @@ export default () => {
                         defaultValue={member.address.state}
                         validation={{ required: true }}
                         error={errors.address?.state}
-                        errorMessage={t("application.contact.stateError")}
+                        errorMessage={t("errors.stateError")}
                         register={register}
                         controlClassName="control"
                         options={stateKeys}
-                        keyPrefix="application.form.options.states"
+                        keyPrefix="states"
                       />
                     </div>
 
@@ -302,7 +302,7 @@ export default () => {
                       defaultValue={member.address.zipCode}
                       validation={{ required: true }}
                       error={errors.address?.zipCode}
-                      errorMessage={t("application.contact.zipCodeError")}
+                      errorMessage={t("errors.zipCodeError")}
                       register={register}
                     />
                   </fieldset>
@@ -321,7 +321,7 @@ export default () => {
                     register={register}
                     validation={{ required: true }}
                     error={errors.workInRegion}
-                    errorMessage={t("application.form.errors.selectOption")}
+                    errorMessage={t("errors.selectOption")}
                     fields={workInRegionOptions}
                   />
                 </fieldset>
@@ -339,7 +339,7 @@ export default () => {
                       defaultValue={member.workAddress.street}
                       validation={{ required: true }}
                       error={errors.workAddress?.street}
-                      errorMessage={t("application.contact.streetError")}
+                      errorMessage={t("errors.streetError")}
                       register={register}
                     />
 
@@ -361,7 +361,7 @@ export default () => {
                         defaultValue={member.workAddress.city}
                         validation={{ required: true }}
                         error={errors.workAddress?.city}
-                        errorMessage={t("application.contact.cityError")}
+                        errorMessage={t("errors.cityError")}
                         register={register}
                       />
 
@@ -372,11 +372,11 @@ export default () => {
                         defaultValue={member.workAddress.state}
                         validation={{ required: true }}
                         error={errors.workAddress?.state}
-                        errorMessage={t("application.contact.stateError")}
+                        errorMessage={t("errors.stateError")}
                         register={register}
                         controlClassName="control"
                         options={stateKeys}
-                        keyPrefix="application.form.options.states"
+                        keyPrefix="states"
                       />
                     </div>
 
@@ -388,7 +388,7 @@ export default () => {
                       defaultValue={member.workAddress.zipCode}
                       validation={{ required: true }}
                       error={errors.workAddress?.zipCode}
-                      errorMessage={t("application.contact.zipCodeError")}
+                      errorMessage={t("errors.zipCodeError")}
                       register={register}
                     />
                   </fieldset>
@@ -415,7 +415,7 @@ export default () => {
                     </select>
                   </div>
                   <ErrorMessage id="relationship-error" error={errors.relationship}>
-                    {t("application.form.errors.selectOption")}
+                    {t("errors.selectOption")}
                   </ErrorMessage>
                 </div>
               </div>

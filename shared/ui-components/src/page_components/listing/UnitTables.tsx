@@ -28,7 +28,7 @@ const formatRange = (range: MinMax, ordinalize?: boolean) => {
 }
 
 const unitsLabel = (units: Unit[]): string => {
-  const label = units.length > 1 ? t("listings.units") : t("listings.unit")
+  const label = units.length > 1 ? t("t.units") : t("t.unit")
   return `${units.length} ${label}`
 }
 
@@ -42,7 +42,7 @@ const UnitTables = (props: UnitTablesProps) => {
   const unitSummaries = props.unitSummaries
 
   const unitsHeaders = {
-    number: capitalize(t("listings.unit") + " #"),
+    number: capitalize(t("t.unit") + " #"),
     sqFeet: capitalize(t("t.area")),
     numBathrooms: capitalize(t("listings.bath") + "s"),
     floor: capitalize(t("t.floor")),
@@ -94,7 +94,7 @@ const UnitTables = (props: UnitTablesProps) => {
               <h3 className="toggle-header">
                 <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>:&nbsp;
                 {unitsLabel(units)},&nbsp;
-                {formatRange(unitSummary.areaRange)} {t("listings.squareFeet")}
+                {formatRange(unitSummary.areaRange)} {t("t.squareFeet")}
                 {floorSection}
               </h3>
             </button>
