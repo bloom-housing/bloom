@@ -38,15 +38,15 @@ export const getListingIncome = (): getIncomeReturn => {
 
   const listingObj: Listing = JSON.parse(listing)
 
-  const { units } = listingObj
+  const { units } = listingObj.property
 
   const [annualMin, annualMax, monthlyMin] =
     units &&
     units.reduce(
       ([aMin, aMax, mMin], unit) => [
-        Math.min(aMin, parseFloat(unit.annualIncomeMin)),
-        Math.max(aMax, parseFloat(unit.annualIncomeMax)),
-        Math.min(mMin, parseFloat(unit.monthlyIncomeMin)),
+        Math.min(aMin, parseFloat(unit.annualIncomeMin || "0.0")),
+        Math.max(aMax, parseFloat(unit.annualIncomeMax || "0.0")),
+        Math.min(mMin, parseFloat(unit.monthlyIncomeMin || "0.0")),
       ],
       [Infinity, 0, Infinity]
     )
