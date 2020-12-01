@@ -4,7 +4,11 @@ This is the repository for the Bloom affordable housing system.
 
 ## System Overview
 
-An overview of the system will go here.
+Bloom consists of a client/server architecture using [Next.js](https://nextjs.org) (a React-based site framework) for the frontend applications and [NestJS](https://nestjs.com) for the backend API.
+
+The frontend apps can easily be deployed to any Jamstack-friendly web host such as Netlify or Vercel. The frontend build process performs a static rendering of as much of the React page component trees as possible based on API data available at the time of the build. Additional real-time interactivity is made possible by React components at run-time.
+
+The backend can be simultaenously deployed to PaaS-style hosts such as Heroku. Its primary architectural dependency is a PostgreSQL database.
 
 ### Applications
 
@@ -18,9 +22,9 @@ Each application is designed to run entirely in the browser, and to only serve a
 
 ### Services
 
-- `/backend/core` will be the container for the key backend services (e.g. listings, applications, users) going forward. Information is stored in a postgres database, and served over HTTPS to the front-end (either at build time for things that can be server-. rendered, or at run time).
+- `/backend/core` will be the container for the key backend services (e.g. listings, applications, users) going forward. Information is stored in a postgres database, and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time).
 
-- `services/listings` was the initial backend service for listing information, serving from json files with some minimal transformation.
+- `services/listings` was the initial backend service for listing information, serving from json files with some minimal transformation. It will soon be retired.
 
 ### Shared Libraries
 

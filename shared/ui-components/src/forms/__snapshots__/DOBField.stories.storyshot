@@ -19,6 +19,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
     error={Object {}}
     label="Date of Birth"
     register={[Function]}
+    required={true}
     watch={[Function]}
   >
     <fieldset>

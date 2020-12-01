@@ -3117,6 +3117,9 @@ export interface ApplicationPreferencesUpdate {
 
 export interface ApplicationUpdate {
   /**  */
+  incomePeriod: IncomePeriod;
+
+  /**  */
   status: ApplicationStatus;
 
   /**  */
@@ -3533,6 +3536,11 @@ export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export enum IncomePeriod {
+  'perMonth' = 'perMonth',
+  'perYear' = 'perYear'
+}
+
 export enum ApplicationStatus {
   'draft' = 'draft',
   'submitted' = 'submitted',

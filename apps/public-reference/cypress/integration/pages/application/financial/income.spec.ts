@@ -1,3 +1,5 @@
+import { getListingIncome } from "../../../../support/helpers"
+
 describe("applications/financial/income", function () {
   const route = "applications/financial/income"
 
@@ -25,30 +27,6 @@ describe("applications/financial/income", function () {
     cy.getByID("incomePeriod-error").should("be.visible").and("not.to.be.empty")
   })
 
-  it("should display error when income is lower than allowed", function () {
-    cy.loadConfig()
-    cy.visit(route)
-
-    cy.getByID("income").type(this.data["incomeLower"])
-    cy.getByID("incomePeriodMonthly").check()
-
-    cy.goNext()
-
-    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooLowErrorText"])
-  })
-
-  it("should display error when income is higher than allowed", function () {
-    cy.loadConfig()
-    cy.visit(route)
-
-    cy.getByID("income").type(this.data["incomeHigher"])
-    cy.getByID("incomePeriodMonthly").check()
-
-    cy.goNext()
-
-    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
-  })
-
   it("Should do not check income when user selected voucher in the previous step", function () {
     cy.loadConfig({
       incomeVouchers: true,
@@ -66,11 +44,82 @@ describe("applications/financial/income", function () {
     cy.isNextRouteValid("income")
   })
 
+  it("Should show error when annual income is lower than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
+    const income = getListingIncome()
+
+    const annualMin = income?.annualMax ? income?.annualMin - 10 : null
+
+    cy.getByID("income").type(`${annualMin}`)
+    cy.getByID("incomePeriodYearly").check()
+
+    cy.goNext()
+
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooLowErrorText"])
+  })
+
+  it("Should show error when annual income is more than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
+    const income = getListingIncome()
+
+    const annualMax = income?.annualMax ? income?.annualMax + 10 : null
+
+    cy.getByID("income").type(`${annualMax}`)
+    cy.getByID("incomePeriodYearly").check()
+
+    cy.goNext()
+
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
+  })
+
+  it("Should show error when monthly income is less than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
+    const income = getListingIncome()
+
+    const monthlyMin = income?.monthlyMin ? income?.monthlyMin - 10 : null
+
+    cy.getByID("income").type(`${monthlyMin}`)
+    cy.getByID("incomePeriodMonthly").check()
+
+    cy.goNext()
+
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooLowErrorText"])
+  })
+
+  it("Should show error when monthly income is more than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
+
+    const income = getListingIncome()
+
+    const monthlyMax = income?.monthlyMax ? income?.monthlyMax + 10 : null
+
+    cy.getByID("income").type(`${monthlyMax}`)
+    cy.getByID("incomePeriodMonthly").check()
+
+    cy.goNext()
+
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
+  })
+
   it("Should save form values and redirect to the next step", function () {
     cy.loadConfig()
     cy.visit(route)
 
-    cy.getByID("income").type(this.data["income"])
+    const income = getListingIncome()
+    const incomeMonthlyAllowed = income?.monthlyMax ? income?.monthlyMax - 10 : null
+
+    cy.getByID("income").type(`${incomeMonthlyAllowed}`)
     cy.getByID("incomePeriodMonthly").check()
 
     cy.goNext()
@@ -81,7 +130,7 @@ describe("applications/financial/income", function () {
     cy.isNextRouteValid("income")
 
     cy.getSubmissionContext().should("include", {
-      income: this.data["income"],
+      income: `${incomeMonthlyAllowed}`,
       incomePeriod: this.data["incomePeriod"],
     })
   })

@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
 import {
+  AppearanceStyleType,
   PageHeader,
   t,
   Tag,
@@ -11,21 +12,30 @@ import {
   GridCell,
   MinimalTable,
   InlineButton,
+  formatIncome,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
+import { IncomePeriod } from "@bloom-housing/core"
+
+enum AddressColsType {
+  "residence" = "residence",
+  "mailing" = "mailing",
+  "work" = "work",
+  "alternateAddress" = "alternateAddress",
+}
 
 export default function ApplicationsList() {
   const router = useRouter()
 
   const applicationId = router.query.applicationId as string
 
-  const { applicationDto } = useSingleApplicationData(applicationId)
+  const { application } = useSingleApplicationData(applicationId)
 
   const applicationDate = useMemo(() => {
-    if (!applicationDto) return null
+    if (!application) return null
 
-    const momentDate = moment(applicationDto.createdAt)
+    const momentDate = moment(application.createdAt)
     const date = momentDate.format("MM/DD/YYYY")
     const time = momentDate.format("HH:mm:ss A")
 
@@ -33,25 +43,25 @@ export default function ApplicationsList() {
       date,
       time,
     }
-  }, [applicationDto])
+  }, [application])
 
   const applicationUpdated = useMemo(() => {
-    if (!applicationDto) return null
+    if (!application) return null
 
-    const momentDate = moment(applicationDto.updatedAt)
+    const momentDate = moment(application.updatedAt)
 
     return momentDate.format("MMMM DD, YYYY")
-  }, [applicationDto])
+  }, [application])
 
   const annualIncome = useMemo(() => {
-    if (!applicationDto) return null
+    if (!application) return null
 
-    const { income, incomePeriod } = applicationDto
+    const { income, incomePeriod } = application
     const numericIncome = parseFloat(income)
 
     const annual = incomePeriod === "perMonth" ? numericIncome * 12 : numericIncome
     return `${annual.toFixed(2)}`
-  }, [applicationDto])
+  }, [application])
 
   const householdMembersHeaders = {
     name: t("t.name"),
@@ -63,7 +73,7 @@ export default function ApplicationsList() {
   }
 
   const householdMembersData = useMemo(() => {
-    return applicationDto?.householdMembers?.map((item) => ({
+    return application?.householdMembers?.map((item) => ({
       name: `${item.firstName} ${item.middleName} ${item.lastName}`,
       relationship: t(`application.form.options.relationship.${item.relationship}`),
       birth: `${item.birthMonth}/${item.birthDay}/${item.birthYear}`,
@@ -71,7 +81,7 @@ export default function ApplicationsList() {
       city: item.address.city,
       state: item.address.state,
     }))
-  }, [applicationDto])
+  }, [application])
 
   const accessibilityLabels = (accessibility) => {
     const labels = []
@@ -84,53 +94,71 @@ export default function ApplicationsList() {
   }
 
   const addressCols = useCallback(
-    (isMailingAddress) => (
-      <>
-        <GridCell>
-          <ViewItem label={t("application.contact.streetAddress")}>
-            {isMailingAddress
-              ? applicationDto.mailingAddress.street
-              : applicationDto.applicant.address.street}
-          </ViewItem>
-        </GridCell>
+    (type: AddressColsType) => {
+      const address = {
+        city: "",
+        state: "",
+        street: "",
+        street2: "",
+        zipCode: "",
+      }
 
-        <GridCell span={3}>
-          <ViewItem label={t("application.contact.apt")}>
-            {isMailingAddress
-              ? applicationDto.mailingAddress.street2
-              : applicationDto.applicant.address.street2}
-          </ViewItem>
-        </GridCell>
+      Object.keys(address).forEach((item) => {
+        if (type === AddressColsType.residence) {
+          address[item] = application.applicant.address[item]
+        }
 
-        <GridCell>
-          <ViewItem label={t("application.contact.city")}>
-            {isMailingAddress
-              ? applicationDto.mailingAddress.city
-              : applicationDto.applicant.address.city}
-          </ViewItem>
-        </GridCell>
+        if (type === AddressColsType.mailing) {
+          if (application.sendMailToMailingAddress) {
+            address[item] = application.mailingAddress[item]
+          } else {
+            address[item] = application.applicant.address[item]
+          }
+        }
 
-        <GridCell>
-          <ViewItem label={t("application.contact.state")}>
-            {isMailingAddress
-              ? applicationDto.mailingAddress.state
-              : applicationDto.applicant.address.state}
-          </ViewItem>
-        </GridCell>
+        if (type === AddressColsType.work) {
+          if (application.applicant.workInRegion === "yes") {
+            address[item] = application.applicant.workAddress[item]
+          } else {
+            address[item] = t("t.n/a")
+          }
+        }
 
-        <GridCell>
-          <ViewItem label={t("application.contact.zip")}>
-            {isMailingAddress
-              ? applicationDto.mailingAddress.zipCode
-              : applicationDto.applicant.address.zipCode}
-          </ViewItem>
-        </GridCell>
-      </>
-    ),
-    [applicationDto]
+        if (type === AddressColsType.alternateAddress) {
+          address[item] = application.alternateContact.mailingAddress[item]
+            ? application.alternateContact.mailingAddress[item]
+            : t("t.n/a")
+        }
+      })
+
+      return (
+        <>
+          <GridCell>
+            <ViewItem label={t("application.contact.streetAddress")}>{address.street}</ViewItem>
+          </GridCell>
+
+          <GridCell span={2}>
+            <ViewItem label={t("application.contact.apt")}>{address.street2}</ViewItem>
+          </GridCell>
+
+          <GridCell>
+            <ViewItem label={t("application.contact.city")}>{address.city}</ViewItem>
+          </GridCell>
+
+          <GridCell>
+            <ViewItem label={t("application.contact.state")}>{address.state}</ViewItem>
+          </GridCell>
+
+          <GridCell>
+            <ViewItem label={t("application.contact.zip")}>{address.zipCode}</ViewItem>
+          </GridCell>
+        </>
+      )
+    },
+    [application]
   )
 
-  if (!applicationDto) return null
+  if (!application) return null
 
   return (
     <Layout>
@@ -140,10 +168,10 @@ export default function ApplicationsList() {
       {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
       <PageHeader>
         <p className="font-sans font-semibold uppercase text-3xl">
-          {applicationDto.applicant.firstName} {applicationDto.applicant.lastName}
+          {application.applicant.firstName} {application.applicant.lastName}
         </p>
 
-        <p className="font-sans text-base mt-1">{applicationDto.id}</p>
+        <p className="font-sans text-base mt-1">{application.id}</p>
       </PageHeader>
 
       <section className="border-t bg-white">
@@ -153,9 +181,9 @@ export default function ApplicationsList() {
           </InlineButton>
 
           <div className="status-bar__status md:pl-4 md:w-3/12">
-            <Tag success pillStyle>
-              {applicationDto.status
-                ? t(`application.details.applicationStatus.${applicationDto.status}`)
+            <Tag type={AppearanceStyleType.success} pillStyle>
+              {application.status
+                ? t(`application.details.applicationStatus.${application.status}`)
                 : t(`application.details.applicationStatus.submitted`)}
             </Tag>
           </div>
@@ -171,13 +199,13 @@ export default function ApplicationsList() {
               inset
             >
               <GridCell>
-                <ViewItem label={t("application.details.number")}>{applicationDto.id}</ViewItem>
+                <ViewItem label={t("application.details.number")}>{application.id}</ViewItem>
               </GridCell>
 
-              {applicationDto.submissionType && (
+              {application.submissionType && (
                 <GridCell>
                   <ViewItem label={t("application.details.type")}>
-                    {t(`application.details.submissionType.${applicationDto.submissionType}`)}
+                    {t(`application.details.submissionType.${application.submissionType}`)}
                   </ViewItem>
                 </GridCell>
               )}
@@ -196,22 +224,22 @@ export default function ApplicationsList() {
 
               <GridCell>
                 <ViewItem label={t("application.details.language")}>
-                  {applicationDto.language
-                    ? t(`languages.${applicationDto.language}`)
+                  {application.language
+                    ? t(`languages.${application.language}`)
                     : t("languages.en")}
                 </ViewItem>
               </GridCell>
 
               <GridCell>
                 <ViewItem label={t("application.details.totalSize")}>
-                  {applicationDto.householdSize}
+                  {application.householdSize}
                 </ViewItem>
               </GridCell>
 
               <GridCell>
                 <ViewItem label={t("application.details.submittedBy")}>
-                  {applicationDto.applicant.firstName} {applicationDto.applicant.middleName}{" "}
-                  {applicationDto.applicant.lastName}
+                  {application.applicant.firstName} {application.applicant.middleName}{" "}
+                  {application.applicant.lastName}
                 </ViewItem>
               </GridCell>
             </GridSection>
@@ -222,51 +250,70 @@ export default function ApplicationsList() {
               inset
               grid={false}
             >
-              <GridSection columns={4}>
+              <GridSection columns={3}>
                 <GridCell>
                   <ViewItem label={t("application.name.firstName")}>
-                    {applicationDto.applicant.firstName}
+                    {application.applicant.firstName}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.name.middleName")}>
-                    {applicationDto.applicant.middleName}
+                    {application.applicant.middleName
+                      ? application.applicant.middleName
+                      : t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.name.lastName")}>
-                    {applicationDto.applicant.lastName}
+                    {application.applicant.lastName}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.household.member.dateOfBirth")}>
-                    {applicationDto.applicant.birthMonth}/{applicationDto.applicant.birthDay}/
-                    {applicationDto.applicant.birthYear}
+                    {application.applicant.birthMonth}/{application.applicant.birthDay}/
+                    {application.applicant.birthYear}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label={t("t.email")}>{applicationDto.applicant.emailAddress}</ViewItem>
+                  <ViewItem label={t("t.email")} truncated>
+                    {application.applicant.emailAddress}
+                  </ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label={t("t.phone")}>{applicationDto.applicant.phoneNumber}</ViewItem>
+                  <ViewItem
+                    label={t("t.phone")}
+                    helper={t(
+                      `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
+                    )}
+                  >
+                    {application.applicant.phoneNumber}
+                  </ViewItem>
                 </GridCell>
 
                 <GridCell>
-                  <ViewItem label={t("t.secondPhone")}>
-                    {applicationDto.additionalPhoneNumber
-                      ? applicationDto.additionalPhoneNumber
+                  <ViewItem
+                    label={t("t.secondPhone")}
+                    helper={
+                      application.additionalPhoneNumber &&
+                      t(
+                        `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
+                      )
+                    }
+                  >
+                    {application.additionalPhoneNumber
+                      ? application.additionalPhoneNumber
                       : t("t.none")}
                   </ViewItem>
                 </GridCell>
 
-                <GridCell span={2}>
+                <GridCell>
                   <ViewItem label={t("application.details.preferredContact")}>
-                    {applicationDto.contactPreferences.map((item) => (
+                    {application.contactPreferences.map((item) => (
                       <span key={item}>
                         {t(`application.form.options.contact.${item}`)}
                         <br />
@@ -274,71 +321,90 @@ export default function ApplicationsList() {
                     ))}
                   </ViewItem>
                 </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.details.workInRegion")}>
+                    {application.applicant.workInRegion === "yes" ? t("t.yes") : t("t.no")}
+                  </ViewItem>
+                </GridCell>
               </GridSection>
 
-              <GridSection subtitle={t("application.details.residenceAddress")} columns={4}>
-                {addressCols(false)}
+              <GridSection subtitle={t("application.details.residenceAddress")} columns={3}>
+                {addressCols(AddressColsType.residence)}
               </GridSection>
 
-              <GridSection subtitle={t("application.contact.mailingAddress")} columns={4}>
-                {addressCols(applicationDto.sendMailToMailingAddress)}
+              <GridSection subtitle={t("application.contact.mailingAddress")} columns={3}>
+                {addressCols(AddressColsType.mailing)}
+              </GridSection>
+
+              <GridSection subtitle={t("application.contact.workAddress")} columns={3}>
+                {addressCols(AddressColsType.work)}
               </GridSection>
             </GridSection>
 
             {/* alternate contact */}
-            {applicationDto.alternateContact.type !== "" &&
-              applicationDto.alternateContact.type !== "noContact" && (
+            {application.alternateContact.type !== "" &&
+              application.alternateContact.type !== "noContact" && (
                 <GridSection
                   className="bg-primary-lighter"
                   title={t("application.alternateContact.type.label")}
                   inset
+                  grid={false}
                 >
-                  <GridCell>
-                    <ViewItem label={t("application.name.firstName")}>
-                      {applicationDto.alternateContact.firstName}
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("application.name.lastName")}>
-                      {applicationDto.alternateContact.lastName}
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("t.relationship")}>
-                      {t(
-                        `application.alternateContact.type.options.${applicationDto.alternateContact.type}`
-                      )}
-                    </ViewItem>
-                  </GridCell>
-
-                  {
+                  <GridSection columns={3}>
                     <GridCell>
-                      <ViewItem label={t("application.details.agency")}>
-                        {applicationDto.alternateContact.agency?.length
-                          ? applicationDto.alternateContact.agency
-                          : t("t.none")}
+                      <ViewItem label={t("application.name.firstName")}>
+                        {application.alternateContact.firstName}
                       </ViewItem>
                     </GridCell>
-                  }
 
-                  <GridCell>
-                    <ViewItem label={t("t.email")}>
-                      {applicationDto.alternateContact.emailAddress}
-                    </ViewItem>
-                  </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("application.name.lastName")}>
+                        {application.alternateContact.lastName}
+                      </ViewItem>
+                    </GridCell>
 
-                  <GridCell>
-                    <ViewItem label={t("t.phone")}>
-                      {applicationDto.alternateContact.phoneNumber}
-                    </ViewItem>
-                  </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("t.relationship")}>
+                        {t(
+                          `application.alternateContact.type.options.${application.alternateContact.type}`
+                        )}
+                      </ViewItem>
+                    </GridCell>
+
+                    {
+                      <GridCell>
+                        <ViewItem label={t("application.details.agency")}>
+                          {application.alternateContact.agency?.length
+                            ? application.alternateContact.agency
+                            : t("t.none")}
+                        </ViewItem>
+                      </GridCell>
+                    }
+
+                    <GridCell>
+                      <ViewItem label={t("t.email")}>
+                        {application.alternateContact.emailAddress
+                          ? application.alternateContact.emailAddress
+                          : t("t.n/a")}
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.phone")}>
+                        {application.alternateContact.phoneNumber}
+                      </ViewItem>
+                    </GridCell>
+                  </GridSection>
+
+                  <GridSection subtitle={t("application.contact.address")} columns={3}>
+                    {addressCols(AddressColsType.alternateAddress)}
+                  </GridSection>
                 </GridSection>
               )}
 
             {/* household members */}
-            {applicationDto.householdSize > 1 && (
+            {application.householdSize > 1 && (
               <GridSection
                 className="bg-primary-lighter"
                 title={t("application.household.householdMembers")}
@@ -355,10 +421,11 @@ export default function ApplicationsList() {
               className="bg-primary-lighter"
               title={t("application.review.householdDetails")}
               inset
+              columns={3}
             >
               <GridCell>
                 <ViewItem label={t("application.details.adaPriorities")}>
-                  {accessibilityLabels(applicationDto.accessibility).map((item) => (
+                  {accessibilityLabels(application.accessibility).map((item) => (
                     <Fragment key={item}>
                       {item}
                       <br />
@@ -379,7 +446,7 @@ export default function ApplicationsList() {
                     "application.details.countyName"
                   )}`}
                 >
-                  {applicationDto.preferences.liveIn || applicationDto.preferences.workIn
+                  {application.preferences.liveIn || application.preferences.workIn
                     ? t("t.yes")
                     : t("t.no")}
                 </ViewItem>
@@ -392,11 +459,53 @@ export default function ApplicationsList() {
               inset
             >
               <GridCell>
-                <ViewItem label={t("application.details.annualIncome")}>{annualIncome}</ViewItem>
+                <ViewItem label={t("application.details.annualIncome")}>
+                  {application.incomePeriod === IncomePeriod.perYear
+                    ? formatIncome(
+                        parseFloat(application.income),
+                        application.incomePeriod,
+                        IncomePeriod.perYear
+                      )
+                    : t("t.n/a")}
+                </ViewItem>
               </GridCell>
+
+              <GridCell>
+                <ViewItem label={t("application.details.monthlyIncome")}>
+                  {application.incomePeriod === IncomePeriod.perMonth
+                    ? formatIncome(
+                        parseFloat(application.income),
+                        application.incomePeriod,
+                        IncomePeriod.perMonth
+                      )
+                    : t("t.n/a")}
+                </ViewItem>
+              </GridCell>
+
               <GridCell>
                 <ViewItem label={t("application.details.vouchers")}>
-                  {applicationDto.incomeVouchers ? t("t.yes") : t("t.no")}
+                  {application.incomeVouchers ? t("t.yes") : t("t.no")}
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+
+            <GridSection
+              className="bg-primary-lighter"
+              title={t("application.review.terms.title")}
+              inset
+              grid={false}
+            >
+              <GridCell>
+                <ViewItem label={t("application.details.signatureOnTerms")}>
+                  {(() => {
+                    if (typeof application.acceptedTerms == "undefined") {
+                      return t("t.n/a")
+                    } else if (application.acceptedTerms) {
+                      return t("t.yes")
+                    } else {
+                      return t("t.no")
+                    }
+                  })()}
                 </ViewItem>
               </GridCell>
             </GridSection>

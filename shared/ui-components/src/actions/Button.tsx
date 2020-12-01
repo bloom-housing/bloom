@@ -1,19 +1,11 @@
 import * as React from "react"
 import "./Button.scss"
-import {
-  AppearanceStyleType,
-  AppearanceSizeType,
-  AppearanceBorderType,
-} from "../global/AppearanceTypes"
+import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
 
-export interface ButtonProps {
+export interface ButtonProps extends AppearanceProps {
   id?: string
   children: React.ReactNode
   onClick: (e: React.MouseEvent) => void
-  type?: AppearanceStyleType
-  border?: AppearanceBorderType
-  size?: AppearanceSizeType
-  normalCase?: boolean
   unstyled?: boolean
   fullWidth?: boolean
   className?: string
@@ -21,11 +13,7 @@ export interface ButtonProps {
 }
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
-  const classNames = ["button"]
-  if (props.type) classNames.push(props.type)
-  if (props.border) classNames.push(props.border)
-  if (props.size) classNames.push(props.size)
-  if (props.normalCase) classNames.push("is-normal-case")
+  const classNames = ["button"].concat(classNamesForAppearanceTypes(props))
   if (props.unstyled) classNames.push("is-unstyled")
   if (props.fullWidth) classNames.push("is-fullwidth")
   if (props.className) classNames.push(props.className)

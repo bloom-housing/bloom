@@ -21,7 +21,6 @@ export * from "./src/config"
 
 /* Elements */
 export * from "./src/elements/MetaTags"
-export * from "./src/elements/Tag"
 
 /* Footers */
 export * from "./src/footers/ExygyFooter"
@@ -58,6 +57,7 @@ export * from "./src/helpers/tableSummaries"
 export * from "./src/helpers/translator"
 export * from "./src/helpers/useLanguageChange"
 export * from "./src/helpers/debounce"
+export * from "./src/helpers/formatIncome"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
@@ -116,6 +116,7 @@ export * from "./src/tables/MinimalTable"
 
 /* Text */
 export * from "./src/text/Description"
+export * from "./src/text/Tag"
 
 /* Archer listing */
 export * from "@bloom-housing/core/src/archer-listing"

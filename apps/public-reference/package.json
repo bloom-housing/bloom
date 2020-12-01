@@ -12,7 +12,7 @@
     "export": "next export",
     "start": "next start",
     "dev:listings": "cd ../../backend/core && yarn dev",
-    "dev:server-wait": "wait-on \"http://localhost:${PORT:-3100}/\" && yarn dev",
+    "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {

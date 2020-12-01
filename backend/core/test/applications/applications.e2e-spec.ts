@@ -14,6 +14,7 @@ import {
   ApplicationStatus,
   ApplicationSubmissionType,
   ApplicationUpdate,
+  IncomePeriod,
   Language,
 } from "@bloom-housing/core"
 // Use require because of the CommonJS/AMD style export.
@@ -126,7 +127,7 @@ describe("Applications", () => {
       },
       incomeVouchers: true,
       income: "100.00",
-      incomePeriod: "",
+      incomePeriod: IncomePeriod.perMonth,
       householdMembers: [],
       preferredUnit: ["a", "b"],
       preferences: {
