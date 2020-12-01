@@ -161,12 +161,15 @@ export class Application extends AbstractEntity {
   @IsString({ each: true })
   preferredUnit: string[]
 
+  @OneToOne(() => ApplicationPreferences, { eager: true, cascade: true })
+  @JoinColumn()
   @Expose()
   @IsDefined()
   @ValidateNested()
   @Type(() => ApplicationPreferences)
   preferences: ApplicationPreferences
 
+  @Column({ enum: ApplicationStatus })
   @Expose()
   @IsEnum(ApplicationStatus)
   @ApiProperty({ enum: ApplicationStatus, enumName: "ApplicationStatus" })

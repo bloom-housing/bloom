@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
-import { Expose } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
 
 @Entity({ name: "user_accounts" })
@@ -46,16 +46,19 @@ export class User {
   @Column("timestamp without time zone")
   @Expose()
   @IsDate()
+  @Type(() => Date)
   dob: Date
 
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @OneToMany(() => Application, (application) => application.user)

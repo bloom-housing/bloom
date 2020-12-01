@@ -1,7 +1,7 @@
 import { Column, Entity } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose } from "class-transformer"
-import { IsString } from "class-validator"
+import { IsOptional, IsString } from "class-validator"
 
 @Entity()
 export class Demographics extends AbstractEntity {
@@ -25,8 +25,9 @@ export class Demographics extends AbstractEntity {
   @IsString({ each: true })
   howDidYouHear: string[]
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional()
   @IsString()
-  race: string
+  race?: string | null
 }
