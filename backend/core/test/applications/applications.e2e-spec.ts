@@ -50,7 +50,7 @@ describe("Applications", () => {
         birthMonth: "",
         birthDay: "",
         birthYear: "",
-        emailAddress: "",
+        emailAddress: null,
         noEmail: false,
         phoneNumber: "",
         phoneNumberType: "",

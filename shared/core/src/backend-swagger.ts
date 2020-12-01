@@ -3195,9 +3195,6 @@ export interface ApplicationUpdate {
   income: string;
 
   /**  */
-  incomePeriod: string;
-
-  /**  */
   preferredUnit: string[];
 
   /**  */
