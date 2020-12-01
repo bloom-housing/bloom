@@ -60,7 +60,7 @@ Cypress.Commands.add("loadConfig", (initialValues, configFile = "applicationConf
 
   // it loads the first listing from the backend and merge with sample configuration
   cy.request("GET", listingsUrl).then((res) => {
-    const listing = res.body.listings[0]
+    const listing = res.body && res.body[0]
 
     const completeListingData = { ...listing, ...listingConfig }
     sessionStorage.setItem("bloom-app-listing", JSON.stringify(completeListingData))
