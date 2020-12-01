@@ -1,12 +1,42 @@
 import React from "react"
 import App from "next/app"
-import Router from "next/router"
-import "@bloom-housing/ui-components/styles/index.scss"
-import "../styles/overrides.scss"
-import { addTranslation } from "@bloom-housing/ui-components"
+import "@bloom-housing/ui-components/src/global/index.scss"
+import {
+  addTranslation,
+  UserProvider,
+  ConfigProvider,
+  ApiClientProvider,
+  LoggedInUserIdleTimeout,
+} from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
+import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
+import ApplicationConductor, {
+  loadApplicationFromAutosave,
+  loadSavedListing,
+} from "../lib/ApplicationConductor"
 
 class MyApp extends App {
+  constructor(props) {
+    super(props)
+
+    // Load autosaved listing application, if any
+    const application = loadApplicationFromAutosave() || blankApplication()
+    const savedListing = loadSavedListing()
+    this.state = {
+      conductor: new ApplicationConductor(application, savedListing),
+      application: application,
+      listing: savedListing,
+    }
+  }
+
+  // This gets passed along through the context
+  syncApplication = (data) => {
+    this.setState({ application: data })
+  }
+  syncListing = (data) => {
+    this.setState({ listing: data })
+  }
+
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {} // you can add custom props that pass down to all pages here
 
@@ -36,17 +66,17 @@ class MyApp extends App {
     // NOTE: this may get called without a full page reload,
     // so we need to enforce idempotency
     if (!document.body.customScriptsLoaded) {
-      Router.events.on("routeChangeComplete", pageChangeHandler)
+      this.props.router.events.on("routeChangeComplete", pageChangeHandler)
 
       const headScriptTag = document.createElement("script")
       headScriptTag.textContent = headScript()
-      if (headScriptTag.textContent != "") {
+      if (headScriptTag.textContent !== "") {
         document.head.append(headScriptTag)
       }
 
       const bodyTopTagTmpl = document.createElement("template")
       bodyTopTagTmpl.innerHTML = bodyTopTag()
-      if (bodyTopTagTmpl.innerHTML != "") {
+      if (bodyTopTagTmpl.innerHTML !== "") {
         document.body.prepend(bodyTopTagTmpl.content.cloneNode(true))
       }
 
@@ -73,7 +103,26 @@ class MyApp extends App {
       }
     }
 
-    return <Component {...pageProps} />
+    return (
+      <AppSubmissionContext.Provider
+        value={{
+          conductor: this.state.conductor,
+          application: this.state.application,
+          listing: this.state.listing,
+          syncApplication: this.syncApplication,
+          syncListing: this.syncListing,
+        }}
+      >
+        <ConfigProvider apiUrl={process.env.backendApiBase}>
+          <UserProvider>
+            <ApiClientProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => this.state.conductor.reset()} />
+              <Component {...pageProps} />
+            </ApiClientProvider>
+          </UserProvider>
+        </ConfigProvider>
+      </AppSubmissionContext.Provider>
+    )
   }
 }
 

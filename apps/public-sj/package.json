@@ -1,5 +1,5 @@
 {
-  "name": "@bloom-housing/public-sj",
+  "name": "@housingbayarea/public-sj",
   "version": "0.2.16",
   "description": "Public web app for the City of San Jose using the Bloom affordable housing system",
   "main": "index.js",
