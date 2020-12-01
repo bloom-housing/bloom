@@ -2551,6 +2551,9 @@ export interface ApplicationPreferences {
 
 export interface Application {
   /**  */
+  incomePeriod: IncomePeriod;
+
+  /**  */
   status: ApplicationStatus;
 
   /**  */
@@ -2624,9 +2627,6 @@ export interface Application {
 
   /**  */
   income: string;
-
-  /**  */
-  incomePeriod: string;
 
   /**  */
   preferredUnit: string[];
@@ -2824,6 +2824,9 @@ export interface ApplicationPreferencesCreate {
 
 export interface ApplicationCreate {
   /**  */
+  incomePeriod: IncomePeriod;
+
+  /**  */
   status: ApplicationStatus;
 
   /**  */
@@ -2888,9 +2891,6 @@ export interface ApplicationCreate {
 
   /**  */
   income: string;
-
-  /**  */
-  incomePeriod: string;
 
   /**  */
   preferredUnit: string[];
@@ -3117,6 +3117,9 @@ export interface ApplicationPreferencesUpdate {
 
 export interface ApplicationUpdate {
   /**  */
+  incomePeriod: IncomePeriod;
+
+  /**  */
   status: ApplicationStatus;
 
   /**  */
@@ -3190,9 +3193,6 @@ export interface ApplicationUpdate {
 
   /**  */
   income: string;
-
-  /**  */
-  incomePeriod: string;
 
   /**  */
   preferredUnit: string[];
@@ -3533,6 +3533,11 @@ export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export enum IncomePeriod {
+  'perMonth' = 'perMonth',
+  'perYear' = 'perYear'
+}
+
 export enum ApplicationStatus {
   'draft' = 'draft',
   'submitted' = 'submitted',

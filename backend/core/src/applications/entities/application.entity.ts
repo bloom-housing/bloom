@@ -37,6 +37,11 @@ export enum Language {
   es = "es",
 }
 
+export enum IncomePeriod {
+  perMonth = "perMonth",
+  perYear = "perYear",
+}
+
 @Entity({ name: "applications" })
 export class Application extends AbstractEntity {
   @Column({ type: "text" })
@@ -142,10 +147,11 @@ export class Application extends AbstractEntity {
   @IsString()
   income: string
 
-  @Column()
+  @Column({ enum: IncomePeriod })
   @Expose()
-  @IsString()
-  incomePeriod: string
+  @IsEnum(IncomePeriod)
+  @ApiProperty({ enum: IncomePeriod, enumName: "IncomePeriod" })
+  incomePeriod: IncomePeriod
 
   @OneToMany(() => HouseholdMember, (householdMember) => householdMember.application, {
     eager: true,
