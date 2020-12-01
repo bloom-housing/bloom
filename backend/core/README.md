@@ -57,7 +57,7 @@ yarn db:migration:run
 End-to-end tests:
 
 ```shell script
-yarn test:e2e
+yarn test:e2e:local
 ```
 
 Unit tests:

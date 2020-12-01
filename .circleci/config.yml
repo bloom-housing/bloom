@@ -59,7 +59,6 @@ jobs:
       - run:
           name: DB Setup + Backend Core Tests
           command: |
-            apt install postgresql-client
             yarn test:backend:core:dbsetup
             yarn test:backend:core
             yarn test:e2e:backend:core
