@@ -2368,7 +2368,7 @@ export interface Applicant {
   birthYear: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
   noEmail: boolean;
@@ -2686,7 +2686,7 @@ export interface ApplicantCreate {
   birthYear: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
   noEmail: boolean;
@@ -2934,7 +2934,7 @@ export interface ApplicantUpdate {
   birthYear: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
   noEmail: boolean;

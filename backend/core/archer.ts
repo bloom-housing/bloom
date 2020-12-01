@@ -1,9 +1,240 @@
-import { ApplicationMethodType, Listing, ListingStatus } from "@bloom-housing/core"
+import { AmiChartCreate, ApplicationMethodType, Listing, ListingStatus } from "@bloom-housing/core"
+
+export const SanMateoHUD2019: AmiChartCreate = {
+  name: "SanMateoHUD2019",
+  items: [
+    {
+      percentOfAmi: 120,
+      householdSize: 1,
+      income: 114900,
+    },
+    {
+      percentOfAmi: 120,
+      householdSize: 2,
+      income: 131300,
+    },
+    {
+      percentOfAmi: 120,
+      householdSize: 3,
+      income: 147750,
+    },
+    {
+      percentOfAmi: 120,
+      householdSize: 4,
+      income: 164150,
+    },
+    {
+      percentOfAmi: 120,
+      householdSize: 5,
+      income: 177300,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 1,
+      income: 95750,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 2,
+      income: 109450,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 3,
+      income: 123100,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 4,
+      income: 136800,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 5,
+      income: 147750,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 6,
+      income: 158700,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 7,
+      income: 169650,
+    },
+    {
+      percentOfAmi: 100,
+      householdSize: 8,
+      income: 180600,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 1,
+      income: 90450,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 2,
+      income: 103350,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 3,
+      income: 116250,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 4,
+      income: 129150,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 5,
+      income: 139500,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 6,
+      income: 149850,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 7,
+      income: 160150,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 8,
+      income: 170500,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 1,
+      income: 71170,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 2,
+      income: 81340,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 3,
+      income: 91502,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 4,
+      income: 101629,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 5,
+      income: 109833,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 6,
+      income: 117924,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 7,
+      income: 126059,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 8,
+      income: 134219,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 1,
+      income: 56450,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 2,
+      income: 64500,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 3,
+      income: 72550,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 4,
+      income: 80600,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 5,
+      income: 87050,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 6,
+      income: 93500,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 7,
+      income: 99950,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 8,
+      income: 106400,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 1,
+      income: 33850,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 2,
+      income: 38700,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 3,
+      income: 43550,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 4,
+      income: 48350,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 5,
+      income: 52250,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 6,
+      income: 56100,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 7,
+      income: 60000,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 8,
+      income: 63850,
+    },
+  ],
+}
 
 export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
   applicationConfig: undefined,
-  applicationOpenDate: "2019-12-31T15:22:57.000-07:00",
+  applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
   depositMax: "",
@@ -16,7 +247,7 @@ export const ArcherListing: Listing = {
     bePreparedIfChosen: "Be prepared if chosen.",
   },
   status: ListingStatus.active,
-  postmarkedApplicationsReceivedByDate: "2019-12-05",
+  postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationAddress: {
     city: "San Jose",
     street: "98 Archer Street",
@@ -25,7 +256,7 @@ export const ArcherListing: Listing = {
     latitude: 37.36537,
     longitude: -121.91071,
   },
-  applicationDueDate: "2019-12-31T15:22:57.000-07:00",
+  applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationMethods: [
     {
       id: "1",
@@ -173,7 +404,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-07-09T21:20:05.783Z"),
         updatedAt: new Date("2019-08-14T23:05:43.913Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -196,7 +427,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.982Z"),
         updatedAt: new Date("2019-08-14T23:06:59.015Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -219,7 +450,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.758Z"),
         updatedAt: new Date("2019-08-14T23:06:59.023Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -242,7 +473,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.766Z"),
         updatedAt: new Date("2019-08-14T23:06:59.031Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -265,7 +496,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.771Z"),
         updatedAt: new Date("2019-08-14T23:06:59.039Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -288,7 +519,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.777Z"),
         updatedAt: new Date("2019-08-14T23:06:59.046Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -311,7 +542,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.783Z"),
         updatedAt: new Date("2019-08-14T23:06:59.053Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -334,7 +565,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.976Z"),
         updatedAt: new Date("2019-08-14T23:06:59.161Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -357,7 +588,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.976Z"),
         updatedAt: new Date("2019-08-14T23:06:59.167Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -380,7 +611,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-07-09T21:24:14.122Z"),
         updatedAt: new Date("2019-08-14T23:06:59.173Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -403,7 +634,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:55:22.950Z"),
         updatedAt: new Date("2019-08-14T23:06:59.179Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -426,7 +657,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:55:22.956Z"),
         updatedAt: new Date("2019-08-14T23:06:59.186Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -449,7 +680,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:55:22.961Z"),
         updatedAt: new Date("2019-08-14T23:06:59.192Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -472,7 +703,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:55:22.967Z"),
         updatedAt: new Date("2019-08-14T23:06:59.198Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -495,7 +726,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:55:22.972Z"),
         updatedAt: new Date("2019-08-14T23:06:59.204Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -518,7 +749,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:55:22.978Z"),
         updatedAt: new Date("2019-08-14T23:06:59.210Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -541,7 +772,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:55:22.984Z"),
         updatedAt: new Date("2019-08-14T23:06:59.216Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -564,7 +795,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.563Z"),
         updatedAt: new Date("2019-08-14T23:06:59.222Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -587,7 +818,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.570Z"),
         updatedAt: new Date("2019-08-14T23:06:59.229Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -610,7 +841,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.575Z"),
         updatedAt: new Date("2019-08-14T23:06:59.235Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -633,7 +864,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.580Z"),
         updatedAt: new Date("2019-08-14T23:06:59.241Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -656,7 +887,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.587Z"),
         updatedAt: new Date("2019-08-14T23:06:59.247Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -679,7 +910,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.593Z"),
         updatedAt: new Date("2019-08-14T23:06:59.254Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -702,7 +933,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.606Z"),
         updatedAt: new Date("2019-08-14T23:06:59.260Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -725,7 +956,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:56:06.612Z"),
         updatedAt: new Date("2019-08-14T23:06:59.267Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -748,7 +979,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.790Z"),
         updatedAt: new Date("2019-08-14T23:06:59.060Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -771,7 +1002,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.796Z"),
         updatedAt: new Date("2019-08-14T23:06:59.067Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -794,7 +1025,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.802Z"),
         updatedAt: new Date("2019-08-14T23:06:59.074Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -817,7 +1048,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.807Z"),
         updatedAt: new Date("2019-08-14T23:06:59.080Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -840,7 +1071,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.813Z"),
         updatedAt: new Date("2019-08-14T23:06:59.086Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -863,7 +1094,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:52:08.819Z"),
         updatedAt: new Date("2019-08-14T23:06:59.093Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -886,7 +1117,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.921Z"),
         updatedAt: new Date("2019-08-14T23:06:59.099Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -909,7 +1140,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.927Z"),
         updatedAt: new Date("2019-08-14T23:06:59.105Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -932,7 +1163,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.933Z"),
         updatedAt: new Date("2019-08-14T23:06:59.111Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -955,7 +1186,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.938Z"),
         updatedAt: new Date("2019-08-14T23:06:59.118Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -978,7 +1209,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.944Z"),
         updatedAt: new Date("2019-08-14T23:06:59.124Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -1001,7 +1232,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.950Z"),
         updatedAt: new Date("2019-08-14T23:06:59.130Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -1024,7 +1255,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.955Z"),
         updatedAt: new Date("2019-08-14T23:06:59.136Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -1047,7 +1278,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.960Z"),
         updatedAt: new Date("2019-08-14T23:06:59.142Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -1070,7 +1301,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.965Z"),
         updatedAt: new Date("2019-08-14T23:06:59.148Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
       {
@@ -1093,7 +1324,7 @@ export const ArcherListing: Listing = {
         unitType: "studio",
         createdAt: new Date("2019-08-14T22:53:09.970Z"),
         updatedAt: new Date("2019-08-14T23:06:59.155Z"),
-        amiChartId: 4,
+        amiChart: SanMateoHUD2019,
         monthlyRentAsPercentOfIncome: null,
       },
     ],

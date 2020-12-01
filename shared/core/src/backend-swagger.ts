@@ -2368,7 +2368,7 @@ export interface Applicant {
   birthYear: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
   noEmail: boolean;
@@ -2686,7 +2686,7 @@ export interface ApplicantCreate {
   birthYear: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
   noEmail: boolean;
@@ -2934,7 +2934,7 @@ export interface ApplicantUpdate {
   birthYear: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
   noEmail: boolean;
@@ -3117,9 +3117,6 @@ export interface ApplicationPreferencesUpdate {
 
 export interface ApplicationUpdate {
   /**  */
-  incomePeriod: IncomePeriod;
-
-  /**  */
   status: ApplicationStatus;
 
   /**  */
@@ -3193,6 +3190,9 @@ export interface ApplicationUpdate {
 
   /**  */
   income: string;
+
+  /**  */
+  incomePeriod: string;
 
   /**  */
   preferredUnit: string[];
@@ -3533,11 +3533,6 @@ export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
-export enum IncomePeriod {
-  'perMonth' = 'perMonth',
-  'perYear' = 'perYear'
-}
-
 export enum ApplicationStatus {
   'draft' = 'draft',
   'submitted' = 'submitted',
