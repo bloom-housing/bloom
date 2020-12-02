@@ -54,7 +54,8 @@
   },
   "application": {
     "add": {
-      "applicationAddError": "You’ll need to resolve any errors before moving on."
+      "applicationAddError": "You’ll need to resolve any errors before moving on.",
+      "workInRegion": "Work in the region?"
     },
     "details": {
       "applicationData": "Application Data",

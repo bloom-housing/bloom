@@ -24,18 +24,16 @@ type Props = {
   isEditable?: boolean
 }
 
+type AddressType = "residence" | "work" | "mailing"
+
 const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
-  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
-    id: item.id,
-    label: t(`application.form.options.contact.${item.id}`),
-  }))
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
-  const workInRegionValue: boolean = watch("application.applicant.workInRegion")
+  const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
   const phoneValue: string = watch("application.phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
 
@@ -77,8 +75,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
     console.log("Submit ERROR", error)
   }
 
+  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => item.id)
+
   const ApplicationAddress = useCallback(
-    (subtitle: string, dataKey: string) => {
+    (subtitle: string, dataKey: string, type: AddressType) => {
       return (
         <GridSection subtitle={subtitle}>
           <GridCell span={2}>
@@ -144,6 +144,18 @@ const ApplicationForm = ({ isEditable }: Props) => {
               />
             </ViewItem>
           </GridCell>
+
+          {type === "residence" && (
+            <GridCell span={2}>
+              <Field
+                id="application.sendMailToMailingAddress"
+                name="application.sendMailToMailingAddress"
+                type="checkbox"
+                label={t("application.contact.sendMailToMailingAddress")}
+                register={register}
+              />
+            </GridCell>
+          )}
         </GridSection>
       )
     },
@@ -300,51 +312,67 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
                   <GridCell>
                     <ViewItem label={t("application.contact.preferredContactType")}>
-                      <FieldGroup
-                        name="application.contactPreferences"
-                        fields={contactPreferencesOptions}
-                        type="checkbox"
+                      <Select
+                        id="contactPreferences"
+                        name="contactPreferences"
+                        labelClassName="sr-only"
                         register={register}
+                        controlClassName="control"
+                        options={contactPreferencesOptions}
+                        keyPrefix="application.form.options.contact"
                       />
                     </ViewItem>
                   </GridCell>
 
                   <GridCell>
-                    <ViewItem>
-                      <Field
-                        id="application.sendMailToMailingAddress"
-                        name="application.sendMailToMailingAddress"
-                        type="checkbox"
-                        label="I have mailing address"
-                        register={register}
-                      />
+                    <ViewItem label={t("application.add.workInRegion")}>
+                      <div className="flex h-12 items-center">
+                        <Field
+                          id="application.applicant.workInRegionYes"
+                          name="application.applicant.workInRegion"
+                          className="m-0"
+                          type="radio"
+                          label={t("t.yes")}
+                          register={register}
+                          inputProps={{
+                            value: "yes",
+                          }}
+                        />
 
-                      <Field
-                        id="application.applicant.workInRegion"
-                        name="application.applicant.workInRegion"
-                        type="checkbox"
-                        label="I work in region"
-                        register={register}
-                      />
+                        <Field
+                          id="application.applicant.workInRegionNo"
+                          name="application.applicant.workInRegion"
+                          className="m-0"
+                          type="radio"
+                          label={t("t.no")}
+                          register={register}
+                          inputProps={{
+                            value: "no",
+                          }}
+                        />
+                      </div>
                     </ViewItem>
                   </GridCell>
                 </GridSection>
 
                 {ApplicationAddress(
                   t("application.details.residenceAddress"),
-                  "application.applicant.address"
+                  "application.applicant.address",
+                  "residence"
                 )}
 
                 {mailingAddressValue &&
                   ApplicationAddress(
                     t("application.contact.mailingAddress"),
-                    "application.mailingAddress"
+                    "application.mailingAddress",
+                    "mailing"
                   )}
 
-                {workInRegionValue &&
+                {workInRegionValue === "yes" &&
                   ApplicationAddress(
                     t("application.contact.workAddress"),
-                    "application.applicant.workAddress"
+                    "application.applicant.workAddress",
+                    "work"
                   )}
               </GridSection>
             </div>
