@@ -50,7 +50,7 @@ describe("applications/financial/income", function () {
 
     const income = getListingIncome()
 
-    const annualMin = income?.annualMax ? income?.annualMin - 10 : null
+    const annualMin = income?.annualMax ? income?.annualMin - 1 : null
 
     cy.getByID("income").type(`${annualMin}`)
     cy.getByID("incomePeriodYearly").check()
@@ -67,7 +67,7 @@ describe("applications/financial/income", function () {
 
     const income = getListingIncome()
 
-    const annualMax = income?.annualMax ? income?.annualMax + 10 : null
+    const annualMax = income?.annualMax ? income?.annualMax + 1 : null
 
     cy.getByID("income").type(`${annualMax}`)
     cy.getByID("incomePeriodYearly").check()
@@ -84,7 +84,7 @@ describe("applications/financial/income", function () {
 
     const income = getListingIncome()
 
-    const monthlyMin = income?.monthlyMin ? income?.monthlyMin - 10 : null
+    const monthlyMin = income?.monthlyMin ? income?.monthlyMin - 1 : null
 
     cy.getByID("income").type(`${monthlyMin}`)
     cy.getByID("incomePeriodMonthly").check()
@@ -101,7 +101,7 @@ describe("applications/financial/income", function () {
 
     const income = getListingIncome()
 
-    const monthlyMax = income?.monthlyMax ? income?.monthlyMax + 10 : null
+    const monthlyMax = income?.monthlyMax ? income?.monthlyMax + 1 : null
 
     cy.getByID("income").type(`${monthlyMax}`)
     cy.getByID("incomePeriodMonthly").check()
@@ -117,7 +117,7 @@ describe("applications/financial/income", function () {
     cy.visit(route)
 
     const income = getListingIncome()
-    const incomeMonthlyAllowed = income?.monthlyMax ? income?.monthlyMax - 10 : null
+    const incomeMonthlyAllowed = income?.monthlyMax ? income?.monthlyMax - 1 : null
 
     cy.getByID("income").type(`${incomeMonthlyAllowed}`)
     cy.getByID("incomePeriodMonthly").check()

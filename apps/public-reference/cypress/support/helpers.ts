@@ -53,9 +53,9 @@ export const getListingIncome = (): getIncomeReturn => {
   const monthlyMax = annualMax / 12.0
 
   return {
-    monthlyMin,
-    monthlyMax,
-    annualMin,
-    annualMax,
+    monthlyMin: parseFloat(monthlyMin.toFixed(2)),
+    monthlyMax: parseFloat(monthlyMax.toFixed(2)),
+    annualMin: parseFloat(annualMin.toFixed(2)),
+    annualMax: parseFloat(annualMax.toFixed(2)),
   }
 }
