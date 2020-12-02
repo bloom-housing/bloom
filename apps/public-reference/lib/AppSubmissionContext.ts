@@ -78,7 +78,7 @@ export const blankApplication = () => {
     acceptedTerms: false,
     status: ApplicationStatus.submitted,
     applicant: {
-      orderId: 0,
+      orderId: undefined,
       firstName: "",
       middleName: "",
       lastName: "",
