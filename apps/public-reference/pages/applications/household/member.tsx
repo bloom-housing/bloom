@@ -28,7 +28,7 @@ import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
 class Member implements HouseholdMemberUpdate {
   id: string
-  orderId = 0
+  orderId = undefined
   firstName = ""
   middleName = ""
   lastName = ""
@@ -103,8 +103,8 @@ export default () => {
     window.scrollTo(0, 0)
   }
   const deleteMember = () => {
-    if (member.id != undefined) {
-      application.householdMembers.splice(member.id, 1)
+    if (member.orderId != undefined) {
+      application.householdMembers.splice(member.orderId, 1)
       conductor.sync()
     }
     void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
