@@ -15,10 +15,11 @@ import { Application } from "./application.entity"
 
 @Entity()
 export class HouseholdMember extends AbstractEntity {
-  @Column()
+  @Column({ nullable: true })
   @Expose()
+  @IsOptional()
   @IsNumber()
-  orderId: number
+  orderId?: number
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()

@@ -62,7 +62,14 @@ Cypress.Commands.add("loadConfig", (initialValues, configFile = "applicationConf
   cy.request("GET", listingsUrl).then((res) => {
     const listing = res.body && res.body[0]
 
+    if (initialValues && listing) {
+      Object.keys(initialValues).forEach((item) => {
+        setProperty(listing, item, initialValues[item])
+      })
+    }
+
     const completeListingData = { ...listing, ...listingConfig }
+    console.log(completeListingData)
     sessionStorage.setItem("bloom-app-listing", JSON.stringify(completeListingData))
   })
 })

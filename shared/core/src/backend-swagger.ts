@@ -2484,7 +2484,7 @@ export interface HouseholdMember {
   updatedAt: Date;
 
   /**  */
-  orderId: number;
+  orderId?: number;
 
   /**  */
   firstName: string;
@@ -2766,7 +2766,7 @@ export interface HouseholdMemberCreate {
   workAddress: AddressCreate;
 
   /**  */
-  orderId: number;
+  orderId?: number;
 
   /**  */
   firstName: string;
@@ -3050,7 +3050,7 @@ export interface HouseholdMemberUpdate {
   workAddress: AddressUpdate;
 
   /**  */
-  orderId: number;
+  orderId?: number;
 
   /**  */
   firstName: string;
