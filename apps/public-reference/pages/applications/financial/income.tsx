@@ -170,7 +170,7 @@ export default () => {
               error={errors.income}
               register={register}
               prepend="$"
-              errorMessage={t("t.numberError")}
+              errorMessage={t("errors.numberError")}
               inputProps={{ step: 0.01, onBlur: formatValue }}
             />
 

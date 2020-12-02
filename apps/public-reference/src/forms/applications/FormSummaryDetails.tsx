@@ -246,7 +246,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
           {application.incomePeriod && (
             <ViewItem id="incomeValue" label={t("t.income")}>
-              ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+              ${application.income} {t(`t.${application.incomePeriod}`)}
             </ViewItem>
           )}
         </div>

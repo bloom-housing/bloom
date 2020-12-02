@@ -138,7 +138,7 @@ export default () => {
               defaultValue={application.applicant.emailAddress}
               validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
               error={errors.applicant?.emailAddress}
-              errorMessage={t("application.name.emailAddressError")}
+              errorMessage={t("errors.emailAddressError")}
               register={register}
               disabled={clientLoaded && noEmail}
             />

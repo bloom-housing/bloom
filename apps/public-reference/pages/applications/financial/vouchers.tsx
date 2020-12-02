@@ -44,12 +44,12 @@ export default () => {
     {
       id: "incomeVouchersYes",
       value: "true",
-      label: t("application.financial.vouchers.yes"),
+      label: t("t.yes"),
     },
     {
       id: "incomeVouchersNo",
       value: "false",
-      label: t("application.financial.vouchers.no"),
+      label: t("t.no"),
     },
   ]
 
@@ -102,7 +102,7 @@ export default () => {
                 type="radio"
                 name="incomeVouchers"
                 error={errors.incomeVouchers}
-                errorMessage={t("application.financial.vouchers.error")}
+                errorMessage={t("errors.selectAnOption")}
                 register={register}
                 validation={{ required: true }}
                 fields={incomeVouchersValues}
