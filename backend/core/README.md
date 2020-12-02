@@ -16,22 +16,40 @@ Operational configuration the service is read from environment variables. Copy `
 
 ### Setting up a Database
 
-Dev DB reseed:
+There are two databases used in this project: `bloom` and `bloom_test`. First is used every time  you are starting a project with `yarn dev` and second one is only used in end-to-end tests. Corresponding TypeORM configs are defined in `ormconfig.ts` and `ormconfig.test.ts`.
+If you are just starting to work with the projects it's best to simply run:
 
 ```shell script
-psql -c 'DROP DATABASE bloom;' && psql -c 'CREATE DATABASE bloom;' && yarn migrate && yarn seed
+yarn && yarn reseed:db
 ```
 
-Test DB reseed:
+that will create `bloom` DB for you, migrate it to the latest schema and seed with appropriate dev data.
+
+Dropping the DB:
 
 ```shell script
-psql -c 'DROP DATABASE bloom_test;' && psql -c 'CREATE DATABASE bloom_test;' && yarn typeorm-test migration:run && yarn test:seed
+yarn db:drop
 ```
 
-Importing a listing (make sure you're in the backend/core directory):
+Creating the DB:
 
 ```shell script
-yarn ts-node listings-importer.ts http://localhost:3100/ [USERNAME]:[PASSWORD] listing_data/skylyne.json
+yarn db:create
+```
+
+Seeding the DB:
+```shell script
+yarn db:seed
+```
+
+Generating a new migration:
+```shell script
+yarn db:migration:generate
+```
+
+Applying migrations:
+```shell script
+yarn db:migration:run
 ```
 
 ### Running Tests
@@ -39,11 +57,14 @@ yarn ts-node listings-importer.ts http://localhost:3100/ [USERNAME]:[PASSWORD] l
 End-to-end tests:
 
 ```shell script
-yarn test:e2e
+yarn test:e2e:local
 ```
 
-or a single module:
+Unit tests:
 
 ```shell script
-yarn test:e2e test/user-applications
+yarn test
 ```
+
+
+

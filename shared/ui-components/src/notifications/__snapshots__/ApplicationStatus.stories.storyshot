@@ -5563,8 +5563,7 @@ exports[`Storyshots Notifications/Application Status Opened With No Due 1`] = `
         </span>
       </Icon>
         
-      Applications Open
-      : March 17, 2030
+      First Come First Serve
     </div>
   </ApplicationStatus>
   <InlineSVG

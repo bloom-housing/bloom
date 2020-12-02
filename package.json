@@ -31,7 +31,7 @@
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "test:shared:ui": "cd shared/ui-components && yarn test",
     "test:services:listings": "cd services/listings && yarn test",
-    "test:backend:core:dbsetup": "cd backend/core && yarn migrate && yarn seed",
+    "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e",
     "test:apps": "concurrently \"yarn dev:listings\" \"yarn test:app:public\"",

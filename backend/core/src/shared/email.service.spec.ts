@@ -2,8 +2,8 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { SendGridService, SendGridModule } from "@anchan828/nest-sendgrid"
 import { User } from "../entity/user.entity"
 import { EmailService } from "./email.service"
-import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import { ConfigModule } from "@nestjs/config"
+import { ArcherListing } from "@bloom-housing/core"
 
 declare const expect: jest.Expect
 const user = new User()
@@ -11,12 +11,10 @@ user.firstName = "Test"
 user.lastName = "User"
 user.email = "test@xample.com"
 
-const listing = Object.assign({}, Archer) as any
+const listing = Object.assign({}, ArcherListing)
 
 const application = {
-  application: {
-    applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
-  },
+  applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
   id: "abcdefg",
 }
 let sendMock
@@ -61,6 +59,9 @@ describe("EmailService", () => {
 
   describe("confirmation", () => {
     it("should generate html body", async () => {
+      // TODO Remove BaseEntity from inheritance from all entities
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       await service.confirmation(listing, application, "http://localhost:3000")
       expect(sendMock).toHaveBeenCalled()
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)

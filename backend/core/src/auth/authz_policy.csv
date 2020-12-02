@@ -10,6 +10,9 @@ p, admin, preference, true, .*
 p, admin, applicationMethod, true, .*
 p, admin, unit, true, .*
 p, admin, listingEvent, true, .*
+p, admin, property, true, .*
+p, admin, propertyGroup, true, .*
+p, admin, amiChart, true, .*
 
 p, admin, listing, true, .*
 p, anonymous, listing, true, read

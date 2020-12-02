@@ -106,7 +106,7 @@ describe("applications/household/member", function () {
         birthYear: this.data["birthYear"],
         emailAddress: "",
         firstName: this.data["firstName"],
-        id: 0,
+        orderId: 0,
         lastName: this.data["lastName"],
         middleName: this.data["middleName"],
         noEmail: null,

@@ -5,8 +5,8 @@ import { Listing } from "@bloom-housing/core"
 export const occupancyTable = (listing: Listing) => {
   let occupancyData = [] as any
 
-  if (listing.unitsSummarized) {
-    occupancyData = listing.unitsSummarized.byUnitType.map((unitSummary) => {
+  if (listing.property.unitsSummarized) {
+    occupancyData = listing.property.unitsSummarized.byUnitType.map((unitSummary) => {
       let occupancy = ""
 
       if (unitSummary.occupancyRange.max == null) {
@@ -32,7 +32,7 @@ export const occupancyTable = (listing: Listing) => {
 }
 
 export const getOccupancyDescription = (listing: Listing) => {
-  const unitsSummarized = listing.unitsSummarized
+  const unitsSummarized = listing.property.unitsSummarized
   if (unitsSummarized && unitsSummarized.unitTypes.includes("SRO")) {
     return unitsSummarized.unitTypes.length == 1
       ? t("listings.occupancyDescriptionAllSro")

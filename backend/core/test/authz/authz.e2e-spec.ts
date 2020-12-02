@@ -9,14 +9,8 @@ import { applicationSetup, AppModule } from "../../src/app.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 
-// Cypress brings in Chai types for the global expect, but we want to use jest
-// expect here so we need to re-declare it.
-// see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
-declare const expect: jest.Expect
-
 describe("Authz", () => {
   let app: INestApplication
-  let adminAccessToken: string
   let userAccessToken: string
   const adminOnlyEndpoints = [
     "/applicationMethods",
@@ -38,7 +32,6 @@ describe("Authz", () => {
     app = applicationSetup(app)
     await app.init()
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
-    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
 
   describe("admin endpoints", () => {
@@ -169,9 +162,7 @@ describe("Authz", () => {
     })
     it("should allow anonymous user to GET listings by ID", async () => {
       const res = await supertest(app.getHttpServer()).get(listingsEndpoint).expect(200)
-      await supertest(app.getHttpServer())
-        .get(`${listingsEndpoint}/${res.body.listings[0].id}`)
-        .expect(200)
+      await supertest(app.getHttpServer()).get(`${listingsEndpoint}/${res.body[0].id}`).expect(200)
     })
     it(`should not allow normal/anonymous user to DELETE listings`, async () => {
       // anonymous

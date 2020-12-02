@@ -30,14 +30,12 @@ export default function ApplicationsList() {
 
   const applicationId = router.query.applicationId as string
 
-  const { applicationDto } = useSingleApplicationData(applicationId)
-
-  const application = applicationDto?.application
+  const { application } = useSingleApplicationData(applicationId)
 
   const applicationDate = useMemo(() => {
-    if (!applicationDto) return null
+    if (!application) return null
 
-    const momentDate = moment(applicationDto.createdAt)
+    const momentDate = moment(application.createdAt)
     const date = momentDate.format("MM/DD/YYYY")
     const time = momentDate.format("HH:mm:ss A")
 
@@ -45,15 +43,25 @@ export default function ApplicationsList() {
       date,
       time,
     }
-  }, [applicationDto])
+  }, [application])
 
   const applicationUpdated = useMemo(() => {
-    if (!applicationDto) return null
+    if (!application) return null
 
-    const momentDate = moment(applicationDto.updatedAt)
+    const momentDate = moment(application.updatedAt)
 
     return momentDate.format("MMMM DD, YYYY")
-  }, [applicationDto])
+  }, [application])
+
+  const annualIncome = useMemo(() => {
+    if (!application) return null
+
+    const { income, incomePeriod } = application
+    const numericIncome = parseFloat(income)
+
+    const annual = incomePeriod === "perMonth" ? numericIncome * 12 : numericIncome
+    return `${annual.toFixed(2)}`
+  }, [application])
 
   const householdMembersHeaders = {
     name: t("t.name"),
@@ -150,7 +158,7 @@ export default function ApplicationsList() {
     [application]
   )
 
-  if (!applicationDto) return null
+  if (!application) return null
 
   return (
     <Layout>
@@ -163,7 +171,7 @@ export default function ApplicationsList() {
           {application.applicant.firstName} {application.applicant.lastName}
         </p>
 
-        <p className="font-sans text-base mt-1">{applicationDto.id}</p>
+        <p className="font-sans text-base mt-1">{application.id}</p>
       </PageHeader>
 
       <section className="border-t bg-white">
@@ -191,7 +199,7 @@ export default function ApplicationsList() {
               inset
             >
               <GridCell>
-                <ViewItem label={t("application.details.number")}>{applicationDto.id}</ViewItem>
+                <ViewItem label={t("application.details.number")}>{application.id}</ViewItem>
               </GridCell>
 
               {application.submissionType && (
@@ -452,7 +460,7 @@ export default function ApplicationsList() {
             >
               <GridCell>
                 <ViewItem label={t("application.details.annualIncome")}>
-                  {application.incomePeriod === "perYear"
+                  {application.incomePeriod === IncomePeriod.perYear
                     ? formatIncome(
                         parseFloat(application.income),
                         application.incomePeriod,
@@ -464,7 +472,7 @@ export default function ApplicationsList() {
 
               <GridCell>
                 <ViewItem label={t("application.details.monthlyIncome")}>
-                  {application.incomePeriod === "perMonth"
+                  {application.incomePeriod === IncomePeriod.perMonth
                     ? formatIncome(
                         parseFloat(application.income),
                         application.incomePeriod,

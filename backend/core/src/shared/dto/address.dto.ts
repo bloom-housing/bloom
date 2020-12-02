@@ -1,49 +1,24 @@
 import { Expose } from "class-transformer"
-import { IsDefined, IsNumber, IsOptional, IsString } from "class-validator"
+import { IsOptional, IsUUID } from "class-validator"
+import { OmitType } from "@nestjs/swagger"
+import { Address } from "../entities/address.entity"
 
-export class Address {
+export class AddressDto extends OmitType(Address, []) {}
+export class AddressCreateDto extends OmitType(Address, ["id", "createdAt", "updatedAt"]) {}
+
+export class AddressUpdateDto extends OmitType(Address, ["id", "createdAt", "updatedAt"]) {
   @Expose()
   @IsOptional()
-  @IsString()
-  placeName?: string
-
-  @Expose()
-  @IsDefined()
-  @IsString()
-  city: string
-
-  @Expose()
-  @IsOptional()
-  @IsString()
-  county?: string
-
-  @Expose()
-  @IsDefined()
-  @IsString()
-  state: string
-
-  @Expose()
-  @IsDefined()
-  @IsString()
-  street: string
+  @IsUUID()
+  id?: string
 
   @Expose()
   @IsOptional()
-  @IsString()
-  street2?: string
-
-  @Expose()
-  @IsDefined()
-  @IsString()
-  zipCode: string
+  @IsUUID()
+  createdAt?: Date
 
   @Expose()
   @IsOptional()
-  @IsNumber()
-  latitude?: number
-
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  longitude?: number
+  @IsUUID()
+  updatedAt?: Date
 }

@@ -1,16 +1,13 @@
 import { Repository } from "typeorm"
 import { ClassType } from "class-transformer/ClassTransformer"
-import { plainToClass } from "class-transformer"
 import { Inject, NotFoundException } from "@nestjs/common"
 import { FindConditions } from "typeorm/find-options/FindConditions"
 import { ObjectLiteral } from "typeorm/common/ObjectLiteral"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type"
-import { IPaginationOptions, paginate, Pagination } from "nestjs-typeorm-paginate"
-import { IsDefined, IsNumber, Max, Min } from "class-validator"
 
 export interface GenericUpdateDto {
-  id: string
+  id?: string
 }
 
 export interface QueryOneOptions<T> {
@@ -41,8 +38,7 @@ export function AbstractServiceFactory<T, TCreateDto, TUpdateDto extends Generic
     }
 
     async create(dto: TCreateDto): Promise<T> {
-      const obj = plainToClass(entity, dto)
-      return await this.repository.save(obj)
+      return await this.repository.save(dto)
     }
 
     async findOne(queryOneOptions: QueryOneOptions<T>): Promise<T> {

@@ -18,7 +18,7 @@ import {
   relationshipKeys,
   t,
 } from "@bloom-housing/ui-components"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember, HouseholdMemberUpdate } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -26,8 +26,9 @@ import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
-class Member implements HouseholdMember {
-  id: number
+class Member implements HouseholdMemberUpdate {
+  id: string
+  orderId = undefined
   firstName = ""
   middleName = ""
   lastName = ""
@@ -40,8 +41,8 @@ class Member implements HouseholdMember {
   phoneNumberType = ""
   noPhone = null
 
-  constructor(id) {
-    this.id = id
+  constructor(orderId) {
+    this.orderId = orderId
   }
   address = {
     placeName: null,
@@ -102,8 +103,8 @@ export default () => {
     window.scrollTo(0, 0)
   }
   const deleteMember = () => {
-    if (member.id != undefined) {
-      application.householdMembers.splice(member.id, 1)
+    if (member.orderId != undefined) {
+      application.householdMembers.splice(member.orderId, 1)
       conductor.sync()
     }
     void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
@@ -117,13 +118,13 @@ export default () => {
       id: "sameAddressYes",
       label: t("t.yes"),
       value: "yes",
-      defaultChecked: member.sameAddress === "yes",
+      defaultChecked: member?.sameAddress === "yes",
     },
     {
       id: "sameAddressNo",
       label: t("t.no"),
       value: "no",
-      defaultChecked: member.sameAddress === "no",
+      defaultChecked: member?.sameAddress === "no",
     },
   ]
 
@@ -132,13 +133,13 @@ export default () => {
       id: "workInRegionYes",
       label: t("t.yes"),
       value: "yes",
-      defaultChecked: member.workInRegion === "yes",
+      defaultChecked: member?.workInRegion === "yes",
     },
     {
       id: "workInRegionNo",
       label: t("t.no"),
       value: "no",
-      defaultChecked: member.workInRegion === "no",
+      defaultChecked: member?.workInRegion === "no",
     },
   ]
 

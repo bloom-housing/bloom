@@ -150,8 +150,8 @@ const ApplicationsList = () => {
     let max = 1
 
     appsData?.items.forEach((item) => {
-      if (item.application.householdSize > max) {
-        max = item.application.householdSize
+      if (item.householdSize > max) {
+        max = item.householdSize
       }
     })
 
