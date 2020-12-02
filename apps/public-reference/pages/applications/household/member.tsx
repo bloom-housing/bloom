@@ -118,13 +118,13 @@ export default () => {
       id: "sameAddressYes",
       label: t("t.yes"),
       value: "yes",
-      defaultChecked: member.sameAddress === "yes",
+      defaultChecked: member?.sameAddress === "yes",
     },
     {
       id: "sameAddressNo",
       label: t("t.no"),
       value: "no",
-      defaultChecked: member.sameAddress === "no",
+      defaultChecked: member?.sameAddress === "no",
     },
   ]
 
@@ -133,13 +133,13 @@ export default () => {
       id: "workInRegionYes",
       label: t("t.yes"),
       value: "yes",
-      defaultChecked: member.workInRegion === "yes",
+      defaultChecked: member?.workInRegion === "yes",
     },
     {
       id: "workInRegionNo",
       label: t("t.no"),
       value: "no",
-      defaultChecked: member.workInRegion === "no",
+      defaultChecked: member?.workInRegion === "no",
     },
   ]
 
