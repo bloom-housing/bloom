@@ -2,7 +2,6 @@
   "loaded":false,
   "completedSections":4,
   "applicant":{
-     "orderId": 0,
      "phoneNumber":"(444) 444-4444",
      "noPhone":false,
      "phoneNumberType":"work",
