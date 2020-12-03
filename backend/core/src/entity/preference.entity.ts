@@ -5,7 +5,6 @@ import {
   ManyToOne,
   UpdateDateColumn,
   CreateDateColumn,
-  BaseEntity,
 } from "typeorm"
 import { Listing } from "./listing.entity"
 import { Expose, Type } from "class-transformer"
@@ -21,7 +20,7 @@ export class PreferenceLink {
 }
 
 @Entity({ name: "preferences" })
-class Preference extends BaseEntity {
+class Preference {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString()
@@ -31,11 +30,13 @@ class Preference extends BaseEntity {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @Column({ type: "integer", nullable: true })

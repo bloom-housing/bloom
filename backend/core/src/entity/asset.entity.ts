@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -8,11 +7,11 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "./listing.entity"
-import { IsDate, IsDateString, IsObject, IsString, IsUUID } from "class-validator"
-import { Expose } from "class-transformer"
+import { IsDate, IsString, IsUUID } from "class-validator"
+import { Expose, Type } from "class-transformer"
 
 @Entity({ name: "assets" })
-export class Asset extends BaseEntity {
+export class Asset {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString()
@@ -22,11 +21,13 @@ export class Asset extends BaseEntity {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
   @Column({ type: "text" })

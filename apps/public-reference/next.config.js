@@ -57,7 +57,7 @@ module.exports = withCSS(
             let listings = []
             try {
               const response = await axios.get(BACKEND_API_BASE + LISTINGS_QUERY)
-              listings = response.data.listings
+              listings = response.data
             } catch (error) {
               console.log(error)
             }

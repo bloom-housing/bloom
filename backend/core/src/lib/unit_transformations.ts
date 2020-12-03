@@ -1,5 +1,4 @@
 import { MinMax, MinMaxCurrency, Unit, UnitsSummarized, UnitSummary } from "../entity/unit.entity"
-import { AmiChartItem } from "../.."
 
 export type AnyDict = { [key: string]: any }
 type Units = Unit[]
@@ -31,15 +30,10 @@ const minMaxInCurrency = (minMax: MinMaxCurrency): MinMaxCurrency => {
 
 const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
 
-const hmiData = (
-  units: Units,
-  byUnitType: UnitSummary[],
-  amiCharts: any,
-  amiPercentages: string[]
-) => {
-  const amiChartId = units[0].amiChartId
+const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string[]) => {
   const bmrProgramChart = units[0].bmrProgramChart
-  const amiChart = amiCharts[amiChartId] as AmiChartItem[]
+  // TODO https://github.com/bloom-housing/bloom/issues/872
+  const amiChartItems = units[0].amiChart.items
   const hmiHeaders = {
     householdSize: bmrProgramChart ? "Unit Type" : "Household Size",
   } as AnyDict
@@ -72,7 +66,7 @@ const hmiData = (
 
       let pushRow = false // row is valid if at least one column is filled
       amiValues.forEach((percent) => {
-        const amiInfo = amiChart.find((item) => {
+        const amiInfo = amiChartItems.find((item) => {
           return item.householdSize == columns.householdSize && item.percentOfAmi == percent
         })
         if (amiInfo) {
@@ -98,7 +92,7 @@ const hmiData = (
       const columns = { householdSize: null }
       columns["householdSize"] = i + 1
 
-      const amiInfo = amiChart.find((item) => {
+      const amiInfo = amiChartItems.find((item) => {
         return item.householdSize == columns.householdSize && item.percentOfAmi == amiValues[0]
       })
 
@@ -221,7 +215,7 @@ const summarizeByAmi = (
   })
 }
 
-export const transformUnits = (units: Unit[], amiCharts: any): UnitsSummarized => {
+export const transformUnits = (units: Unit[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
   data.unitTypes = Array.from(
     new Set(units.map((unit) => unit.unitType).filter((item) => item != null))
@@ -240,6 +234,6 @@ export const transformUnits = (units: Unit[], amiCharts: any): UnitsSummarized =
   data.byNonReservedUnitType = summarizeUnits(nonReservedUnits, data.unitTypes)
   data.byReservedType = summarizeReservedTypes(units, data.reservedTypes, data.unitTypes)
   data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes, data.unitTypes)
-  data.hmi = hmiData(units, data.byUnitType, amiCharts, data.amiPercentages)
+  data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
   return data
 }

@@ -91,7 +91,7 @@ export default class extends Component<ListingProps> {
 
     try {
       const response = await axios.get(process.env.listingServiceUrl)
-      listing = response.data.listings.find((l) => l.id == listingId)
+      listing = response.data.find((l) => l.id == listingId)
     } catch (error) {
       console.log(error)
     }
@@ -103,7 +103,7 @@ export default class extends Component<ListingProps> {
     let buildingSelectionCriteria, preferencesSection
     const listing = this.props.listing
 
-    const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
+    const oneLineAddress = <OneLineAddress address={listing.property.buildingAddress} />
 
     const googleMapsHref =
       "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
@@ -115,22 +115,22 @@ export default class extends Component<ListingProps> {
       availability: t("t.availability"),
     }
 
-    const amiValues = listing.unitsSummarized.amiPercentages
+    const amiValues = listing.property.unitsSummarized.amiPercentages
       .map((percent) => {
         const percentInt = parseInt(percent, 10)
         return percentInt
       })
       .sort()
-    const hmiHeaders = listing.unitsSummarized.hmi.columns as TableHeaders
-    const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
+    const hmiHeaders = listing.property.unitsSummarized.hmi.columns as TableHeaders
+    const hmiData = listing.property.unitsSummarized.hmi.rows.map((row) => {
       return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
     })
     let groupedUnits: GroupedTableGroup[] = null
 
     if (amiValues.length == 1) {
       groupedUnits = groupNonReservedAndReservedSummaries(
-        listing.unitsSummarized.byNonReservedUnitType,
-        listing.unitsSummarized.byReservedType
+        listing.property.unitsSummarized.byNonReservedUnitType,
+        listing.property.unitsSummarized.byReservedType
       )
     } // else condition is handled inline below
 
@@ -148,7 +148,7 @@ export default class extends Component<ListingProps> {
     })
     const metaImage = imageUrlFromListing(listing)
 
-    const householdMaximumIncomeSubheader = listing.units[0].bmrProgramChart
+    const householdMaximumIncomeSubheader = listing.property.units[0].bmrProgramChart
       ? t("listings.forIncomeCalculationsBMR")
       : t("listings.forIncomeCalculations")
 
@@ -202,7 +202,7 @@ export default class extends Component<ListingProps> {
               <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
                 {oneLineAddress}
               </p>
-              <p className="text-gray-700 text-base">{listing.developer}</p>
+              <p className="text-gray-700 text-base">{listing.property.developer}</p>
               <p className="text-xs">
                 <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
                   {t("t.viewOnMap")}
@@ -218,7 +218,7 @@ export default class extends Component<ListingProps> {
           <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
             {amiValues.length > 1 &&
               amiValues.map((percent) => {
-                const byAMI = listing.unitsSummarized.byAMI.find((item) => {
+                const byAMI = listing.property.unitsSummarized.byAMI.find((item) => {
                   return parseInt(item.percent, 10) == percent
                 })
 
@@ -342,19 +342,34 @@ export default class extends Component<ListingProps> {
             >
               <div className="listing-detail-panel">
                 <dl className="column-definition-list">
-                  <Description term={t("t.neighborhood")} description={listing.neighborhood} />
-                  <Description term={t("t.built")} description={listing.yearBuilt} />
-                  <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
-                  <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
-                  <Description term={t("t.propertyAmenities")} description={listing.amenities} />
-                  <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
-                  <Description term={t("t.accessibility")} description={listing.accessibility} />
+                  <Description
+                    term={t("t.neighborhood")}
+                    description={listing.property.neighborhood}
+                  />
+                  <Description term={t("t.built")} description={listing.property.yearBuilt} />
+                  <Description
+                    term={t("t.smokingPolicy")}
+                    description={listing.property.smokingPolicy}
+                  />
+                  <Description term={t("t.petsPolicy")} description={listing.property.petPolicy} />
+                  <Description
+                    term={t("t.propertyAmenities")}
+                    description={listing.property.amenities}
+                  />
+                  <Description
+                    term={t("t.unitAmenities")}
+                    description={listing.property.unitAmenities}
+                  />
+                  <Description
+                    term={t("t.accessibility")}
+                    description={listing.property.accessibility}
+                  />
                   <Description
                     term={t("t.unitFeatures")}
                     description={
                       <UnitTables
-                        units={listing.units}
-                        unitSummaries={listing.unitsSummarized.byUnitType}
+                        units={listing.property.units}
+                        unitSummaries={listing.property.unitsSummarized.byUnitType}
                         disableAccordion={listing.disableUnitsAccordion}
                       />
                     }
@@ -364,19 +379,20 @@ export default class extends Component<ListingProps> {
               </div>
             </ListingDetailItem>
 
-            {listing?.buildingAddress.latitude && listing?.buildingAddress.longitude && (
-              <ListingDetailItem
-                imageAlt={t("listings.neighborhoodBuildings")}
-                imageSrc="/images/listing-neighborhood.svg"
-                title={t("listings.sections.neighborhoodTitle")}
-                subtitle={t("listings.sections.neighborhoodSubtitle")}
-                desktopClass="bg-primary-lighter"
-              >
-                <div className="listing-detail-panel">
-                  <ListingMap address={listing.buildingAddress} listing={listing} />
-                </div>
-              </ListingDetailItem>
-            )}
+            {listing.property?.buildingAddress.latitude &&
+              listing.property?.buildingAddress.longitude && (
+                <ListingDetailItem
+                  imageAlt={t("listings.neighborhoodBuildings")}
+                  imageSrc="/images/listing-neighborhood.svg"
+                  title={t("listings.sections.neighborhoodTitle")}
+                  subtitle={t("listings.sections.neighborhoodSubtitle")}
+                  desktopClass="bg-primary-lighter"
+                >
+                  <div className="listing-detail-panel">
+                    <ListingMap address={listing.property.buildingAddress} listing={listing} />
+                  </div>
+                </ListingDetailItem>
+              )}
 
             {(listing.requiredDocuments || listing.programRules) && (
               <ListingDetailItem

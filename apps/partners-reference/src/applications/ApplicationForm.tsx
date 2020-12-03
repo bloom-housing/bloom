@@ -15,7 +15,6 @@ import {
   Button,
   Form,
   AlertBox,
-  BlankApplicationFields,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -62,12 +61,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
     const noEmail = data?.application?.applicant?.emailAddress?.length ? false : true
 
     const response = {
-      ...BlankApplicationFields,
       noPhone,
       noEmail,
     }
 
-    console.log("Submit SUCCESS", response)
+    console.log("Submit SUCCESS", response, data)
   }
 
   const onError = (error) => {

@@ -19,10 +19,9 @@ interface IndexProps {
 export default class extends Component<IndexProps> {
   public static async getInitialProps() {
     let listings = []
-
     try {
       const response = await axios.get(process.env.listingServiceUrl)
-      listings = response.data.listings
+      listings = response.data
     } catch (error) {
       console.log(error)
     }
@@ -40,7 +39,6 @@ export default class extends Component<IndexProps> {
     //    const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
     const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
     const metaImage = "" // TODO: replace with hero image
-
     const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
     return (
       <Layout>

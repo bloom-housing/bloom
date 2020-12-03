@@ -15,16 +15,13 @@ export const formatUrlSlug = (input: string): string => {
         // Divide into words based on upper case letters followed by lower case letters
         .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]+|[0-9]+/g) || []
     )
-
       .join("_")
       .toLowerCase()
   )
 }
 
 export const listingUrlSlug = (listing: Listing): string => {
-  const {
-    name,
-    buildingAddress: { city, street, state },
-  } = listing
+  const { name } = listing
+  const { city, street, state } = listing.property.buildingAddress
   return formatUrlSlug([name, street, city, state].join(" "))
 }

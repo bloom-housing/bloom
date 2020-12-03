@@ -3,7 +3,7 @@ import "./AppStatusItem.scss"
 import moment from "moment"
 import { MultiLineAddress } from "../helpers/address"
 import { t } from "../helpers/translator"
-import { Application, Address } from "@bloom-housing/core"
+import { Application } from "@bloom-housing/core"
 import { LocalizedLink } from "../actions/LocalizedLink"
 
 // TODO status and lotteryNumber should be loaded from Application
@@ -43,7 +43,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
         <section className="status-item__content">
           <div className="status-item__details">
             <p className="status-item__address">
-              <MultiLineAddress address={listing.buildingAddress as Address} />
+              <MultiLineAddress address={listing.property.buildingAddress} />
             </p>
             {lotteryNumber && (
               <p className="status-item__number">

@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -7,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Listing } from "./listing.entity"
 import {
   IsBoolean,
   IsDate,
@@ -21,6 +19,8 @@ import {
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { AnyDict } from "../lib/unit_transformations"
+import { Property } from "./property.entity"
+import { AmiChart } from "./ami-chart.entity"
 
 export class MinMax {
   @Expose()
@@ -181,7 +181,7 @@ export class UnitsSummarized {
 }
 
 @Entity({ name: "units" })
-class Unit extends BaseEntity {
+class Unit {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsUUID()
@@ -191,126 +191,125 @@ class Unit extends BaseEntity {
   @CreateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
   @IsDate()
+  @Type(() => Date)
   updatedAt: Date
 
+  @ManyToOne(() => AmiChart, (amiChart) => amiChart.units, { eager: true, nullable: true })
+  amiChart: AmiChart | null
+
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  amiPercentage: string | null
+  amiPercentage?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsNumberString()
-  annualIncomeMin: string | null
+  annualIncomeMin?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsNumberString()
-  monthlyIncomeMin: string | null
+  monthlyIncomeMin?: string | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  floor: number | null
+  floor?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  annualIncomeMax: string | null
+  annualIncomeMax?: string | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  maxOccupancy: number | null
+  maxOccupancy?: number | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  minOccupancy: number | null
+  minOccupancy?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsNumberString()
-  monthlyRent: string | null
+  monthlyRent?: string | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  numBathrooms: number | null
+  numBathrooms?: number | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional()
   @IsNumber()
-  numBedrooms: number | null
+  numBedrooms?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  number: string | null
+  number?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  priorityType: string | null
+  priorityType?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  reservedType: string | null
+  reservedType?: string | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
   @IsString()
-  sqFeet: string | null
+  sqFeet?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  status: string | null
+  status?: string | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()
   @IsOptional()
   @IsString()
-  unitType: string | null
-
-  @Column({ nullable: true, type: "integer" })
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  amiChartId: number | null
+  unitType?: string | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional()
   @IsString()
-  monthlyRentAsPercentOfIncome: string | null
+  monthlyRentAsPercentOfIncome?: string | null
 
-  @ManyToOne(() => Listing, (listing) => listing.units, {
+  @ManyToOne(() => Property, (property) => property.units, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  listing: Listing
+  property: Property
 
   @Column({ type: "boolean", nullable: true })
   @Expose()

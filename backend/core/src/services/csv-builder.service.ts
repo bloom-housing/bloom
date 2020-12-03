@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common"
 export type FormattingMetadata = {
   label: string
   discriminator: string
-  formatter: (obj: any) => string
+  formatter: (obj) => string
   type?: "array" | "object"
 }
 
@@ -20,7 +20,7 @@ export type FormattingMetadataAggregateFactory = () => FormattingMetadataAggrega
 
 export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
 export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
-export const streetFormatter = (obj?: { street: string; street2: string }) => {
+export const streetFormatter = (obj?: { street: string; street2?: string }) => {
   if (!obj) {
     return defaultFormatter(obj)
   }
@@ -35,7 +35,8 @@ export const streetFormatter = (obj?: { street: string; street2: string }) => {
   }
   return `${obj.street}, ${obj.street2}`
 }
-export const dobFormatter = (obj?: { birthMonth: number; birthDay: number; birthYear: number }) => {
+export const dobFormatter = (obj?: { birthMonth: string; birthDay: string; birthYear: string }) => {
+  // TODO Use locale variable Date string
   return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : defaultFormatter(obj)
 }
 export const joinArrayFormatter = (obj?: string[]) => (obj ? obj.join(",") : "")
@@ -93,7 +94,11 @@ export class CsvBuilder {
         }
       } else {
         const metadata: FormattingMetadata = metadataObj as FormattingMetadata
-        outputRows.push(metadata.formatter(value))
+        try {
+          outputRows.push(metadata.formatter(value))
+        } catch (e) {
+          outputRows.push("")
+        }
       }
     }
     return outputRows

@@ -15,6 +15,12 @@ executors:
   cypress-node:
     docker:
       - image: "cypress/base:12.18.2"
+      - image: "circleci/postgres:12.3-postgis"
+        environment:
+          POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom
 
 jobs:
   setup:
@@ -26,6 +32,12 @@ jobs:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
+  setup-with-db:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:backend:core:dbsetup
   lint:
     executor: standard-node
     steps:
@@ -89,11 +101,12 @@ workflows:
       - build-partners:
           requires:
             - setup
-    #  - cypress/run:
-    #      requires:
-    #        - setup
-    #      executor: cypress-node
-    #      working_directory: apps/public-reference
-    #      yarn: true
-    #      start: yarn dev:all
-    #      wait-on: "http://localhost:3000"
+      - cypress/run:
+          requires:
+            - setup
+          executor: cypress-node
+          working_directory: apps/public-reference
+          yarn: true
+          build: yarn test:backend:core:dbsetup
+          start: yarn dev:all
+          wait-on: "http://localhost:3000"

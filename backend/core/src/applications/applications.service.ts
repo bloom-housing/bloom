@@ -1,11 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common"
-import { Application, ApplicationStatus } from "../entity/application.entity"
+import { Application } from "./entities/application.entity"
 import { plainToClass } from "class-transformer"
-import {
-  ApplicationCreateDto,
-  ApplicationsListQueryParams,
-  ApplicationUpdateDto,
-} from "./application.dto"
+import { ApplicationUpdateDto } from "./dto/application.dto"
 import { User } from "../entity/user.entity"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -13,11 +9,13 @@ import { Repository } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 import { CsvBuilder } from "../services/csv-builder.service"
+import { ApplicationsListQueryParams } from "./applications.controller"
+import { Request } from "express"
 
 @Injectable()
 export class ApplicationsService {
   constructor(
-    @Inject(REQUEST) private readonly request: any,
+    @Inject(REQUEST) private readonly request: Request,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
     private readonly csvBuilder: CsvBuilder
   ) {}
@@ -31,7 +29,7 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["listing", "user"],
+      relations: ["listing", "user", "listing.property"],
     })
   }
 
@@ -48,6 +46,7 @@ export class ApplicationsService {
     const qb = this.repository.createQueryBuilder("application")
     qb.leftJoinAndSelect("application.user", "user")
     qb.leftJoinAndSelect("application.listing", "listing")
+    qb.leftJoinAndSelect("listing.property", "property")
 
     if (user) {
       qb.andWhere("user.id = :userId", { userId: user.id })
@@ -66,11 +65,10 @@ export class ApplicationsService {
     return paginate(qb, { limit: params.limit, page: params.page })
   }
 
-  async create(applicationCreateDto: ApplicationCreateDto, user?: User) {
+  async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
     const application = plainToClass(Application, applicationCreateDto)
     application.user = user
-    await this.repository.save(application)
-    return application
+    return await this.repository.save(application)
   }
 
   async findOne(applicationId: string) {
@@ -78,7 +76,7 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
-      relations: ["listing", "user"],
+      relations: ["listing", "user", "listing.property"],
     })
   }
 
@@ -87,7 +85,7 @@ export class ApplicationsService {
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
-        relations: ["listing", "user"],
+        relations: ["listing", "user", "listing.property"],
       }))
     Object.assign(application, applicationUpdateDto)
     await this.repository.save(application)
