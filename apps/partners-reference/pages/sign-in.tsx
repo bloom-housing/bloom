@@ -1,24 +1,27 @@
-import React, { useState, useContext } from "react"
+import React, { useContext } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
+import Link from "next/link"
 import {
+  AlertBox,
   AppearanceStyleType,
   Button,
   Field,
+  Form,
   FormCard,
   Icon,
-  ErrorMessage,
   UserContext,
+  t,
 } from "@bloom-housing/ui-components"
+import { emailRegex } from "../lib/helpers"
 import FormsLayout from "../layouts/forms"
 
 export default () => {
   const { login } = useContext(UserContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, setError, clearErrors } = useForm()
   const router = useRouter()
-  const [requestError, setRequestError] = useState<string>()
 
   const onSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data
@@ -29,14 +32,25 @@ export default () => {
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {
-        setRequestError(`Error signing you in: ${err.message}`)
+        console.warn(err.message)
+        setError("authentication", {
+          type: "manual",
+          message: t("authentication.signIn.cantFindAccount"),
+        })
       } else {
         console.error(err)
-        setRequestError(
-          "There was an error signing you in. Please try again, or contact support for help."
-        )
+        setError("authentication", {
+          type: "manual",
+          message: `${t("authentication.signIn.error")} ${t(
+            "authentication.signIn.errorGenericMessage"
+          )}`,
+        })
       }
     }
+  }
+
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   return (
@@ -46,42 +60,59 @@ export default () => {
           <Icon size="2xl" symbol="profile" />
           <h2 className="form-card__title">Partners Sign In</h2>
         </div>
-        <div className="form-card__group pt-0 border-b">
-          <ErrorMessage error={Boolean(requestError)}>{requestError}</ErrorMessage>
+        {Object.entries(errors).length > 0 && (
+          <AlertBox type="alert" inverted closeable>
+            {errors.authentication ? errors.authentication.message : t("t.errorsToResolve")}
+          </AlertBox>
+        )}
 
-          <form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+        <div className="form-card__group pt-8 border-b">
+          <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
             <Field
               caps={true}
+              type="email"
               name="email"
               label="Email"
-              validation={{ required: true }}
-              error={errors.email}
-              errorMessage="Please enter your login email"
+              validation={{ required: true, pattern: emailRegex }}
+              error={errors.email || errors.authentication}
+              errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
               register={register}
+              inputProps={{
+                onChange: () => clearErrors("authentication"),
+              }}
             />
+
+            <aside className="float-right font-bold">
+              <Link href="/forgot-password">
+                <a>{t("authentication.signIn.forgotPassword")}</a>
+              </Link>
+            </aside>
 
             <Field
               caps={true}
+              type="password"
               name="password"
               label="Password"
               validation={{ required: true }}
-              error={errors.password}
-              errorMessage="Please enter your login password"
+              error={errors.password || errors.authentication}
+              errorMessage={errors.password ? t("authentication.signIn.passwordError") : undefined}
               register={register}
-              type="password"
+              inputProps={{
+                onChange: () => clearErrors("authentication"),
+              }}
             />
 
             <div className="text-center mt-6">
               <Button
                 type={AppearanceStyleType.primary}
                 onClick={() => {
-                  //
+                  clearErrors("authentication")
                 }}
               >
                 Sign In
               </Button>
             </div>
-          </form>
+          </Form>
         </div>
       </FormCard>
     </FormsLayout>

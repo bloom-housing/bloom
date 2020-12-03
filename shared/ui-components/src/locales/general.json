@@ -541,8 +541,12 @@
       "signOutMessage": "We care about your security. We logged you out due to inactivity. Please sign in to continue."
     },
     "signIn": {
+      "loginError": "Please enter a valid email address",
+      "passwordError": "Please enter a valid password",
+      "cantFindAccount": "We couldn't find an account with that email address/password.",
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
+      "forgotPassword": "Forgot password?",
       "success": "Welcome back, %{name}!"
     },
     "signOut": {
