@@ -12,7 +12,7 @@ export interface DOBFieldProps {
   register: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   watch: any // comes from React Hook Form
-  applicant: HouseholdMemberUpdate
+  applicant?: HouseholdMemberUpdate
   atAge?: boolean
   name?: string
   id?: string
