@@ -12,7 +12,7 @@ exports[`Storyshots Blocks/View Item Default 1`] = `
     helper="Helper"
     label="Label"
   >
-    <p
+    <div
       className="view-item"
     >
       <span
@@ -30,7 +30,7 @@ exports[`Storyshots Blocks/View Item Default 1`] = `
       >
         Helper
       </span>
-    </p>
+    </div>
   </ViewItem>
 </div>
 `;
@@ -47,7 +47,7 @@ exports[`Storyshots Blocks/View Item Flagged 1`] = `
     flagged={true}
     label="Address"
   >
-    <p
+    <div
       className="view-item is-flagged"
     >
       <span
@@ -60,7 +60,7 @@ exports[`Storyshots Blocks/View Item Flagged 1`] = `
       >
         1112 Springfield St.
       </span>
-    </p>
+    </div>
   </ViewItem>
 </div>
 `;
@@ -76,7 +76,7 @@ exports[`Storyshots Blocks/View Item No Helper 1`] = `
   <ViewItem
     label="Address"
   >
-    <p
+    <div
       className="view-item"
     >
       <span
@@ -89,7 +89,7 @@ exports[`Storyshots Blocks/View Item No Helper 1`] = `
       >
         1112 Springfield St.
       </span>
-    </p>
+    </div>
   </ViewItem>
 </div>
 `;

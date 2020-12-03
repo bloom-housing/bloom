@@ -4,6 +4,7 @@ import { ErrorMessage } from "../notifications/ErrorMessage"
 export interface FieldProps {
   error?: boolean
   errorMessage?: string
+  className?: string
   controlClassName?: string
   caps?: boolean
   primary?: boolean
@@ -25,6 +26,10 @@ const Field = (props: FieldProps) => {
   const classes = ["field"]
   if (props.error) {
     classes.push("error")
+  }
+
+  if (props.className) {
+    classes.push(props.className)
   }
 
   const controlClasses = ["control"]

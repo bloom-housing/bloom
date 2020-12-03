@@ -8,6 +8,7 @@
   "applications": {
     "totalApplications": "Total Applications",
     "addApplication": "Add Application",
+    "newApplication": "New Application",
     "applicationsReceived": "Applications Received",
     "table": {
       "applicationSubmissionDate": "Application Submission Date",
@@ -52,6 +53,10 @@
     }
   },
   "application": {
+    "add": {
+      "applicationAddError": "You’ll need to resolve any errors before moving on.",
+      "workInRegion": "Work in the region?"
+    },
     "details": {
       "applicationData": "Application Data",
       "number": "Application Number",

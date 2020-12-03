@@ -58,7 +58,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="Street Address"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -71,7 +71,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         112 Springfield St.
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -82,7 +82,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="Apt Unit #"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -95,7 +95,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         1
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -108,7 +108,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="City"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -121,7 +121,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         Oakland
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -132,7 +132,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="State"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -145,7 +145,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         CA
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -156,7 +156,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="Zip"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -169,7 +169,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         94577
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -204,7 +204,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="Street Address"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -217,7 +217,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         112 Springfield St.
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -228,7 +228,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="Apt Unit #"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -241,7 +241,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         1
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -254,7 +254,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="City"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -267,7 +267,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         Oakland
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -278,7 +278,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="State"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -291,7 +291,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         CA
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -302,7 +302,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                   <ViewItem
                     label="Zip"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -315,7 +315,7 @@ exports[`Storyshots Sections/Grid Section Address 1`] = `
                       >
                         94577
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -675,7 +675,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
             <ViewItem
               label="First Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -688,7 +688,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   Lisa
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -699,7 +699,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
             <ViewItem
               label="Middle Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -712,7 +712,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   S
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -723,7 +723,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
             <ViewItem
               label="Last Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -736,7 +736,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   Jones
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -747,7 +747,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
             <ViewItem
               label="Date of Birth"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -760,7 +760,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   01/01/1985
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -771,7 +771,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
             <ViewItem
               label="Email"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -784,7 +784,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   lisa@gmail.com
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -796,7 +796,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
               helper="Cell"
               label="Phone"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -814,7 +814,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   Cell
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -826,7 +826,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
               helper="Work"
               label="Second Phone"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -844,7 +844,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   Work
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -855,7 +855,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
             <ViewItem
               label="Perferred Contact"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -868,7 +868,7 @@ exports[`Storyshots Sections/Grid Section Default Three Columns 1`] = `
                 >
                   Phone
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -930,7 +930,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
             <ViewItem
               label="First Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -943,7 +943,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   Lisa
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -954,7 +954,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
             <ViewItem
               label="Middle Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -967,7 +967,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   S
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -978,7 +978,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
             <ViewItem
               label="Last Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -991,7 +991,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   Jones
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -1002,7 +1002,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
             <ViewItem
               label="Date of Birth"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -1015,7 +1015,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   01/01/1985
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -1026,7 +1026,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
             <ViewItem
               label="Email"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -1039,7 +1039,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   lisa@gmail.com
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -1051,7 +1051,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
               helper="Cell"
               label="Phone"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -1069,7 +1069,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   Cell
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -1081,7 +1081,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
               helper="Work"
               label="Second Phone"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -1099,7 +1099,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   Work
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -1110,7 +1110,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
             <ViewItem
               label="Perferred Contact"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -1123,7 +1123,7 @@ exports[`Storyshots Sections/Grid Section Four Columns Edit 1`] = `
                 >
                   Phone
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -1452,7 +1452,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                   <ViewItem
                     label="First Name"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1465,7 +1465,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         Lisa
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1476,7 +1476,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                   <ViewItem
                     label="Middle Name"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1489,7 +1489,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         S
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1500,7 +1500,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                   <ViewItem
                     label="Last Name"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1513,7 +1513,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         Jones
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1524,7 +1524,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                   <ViewItem
                     label="Date of Birth"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1537,7 +1537,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         01/01/1985
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1548,7 +1548,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                   <ViewItem
                     label="Email"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1561,7 +1561,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         lisa@gmail.com
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1573,7 +1573,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                     helper="Cell"
                     label="Phone"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1591,7 +1591,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         Cell
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1603,7 +1603,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                     helper="Work"
                     label="Second Phone"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1621,7 +1621,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         Work
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1632,7 +1632,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                   <ViewItem
                     label="Preferred Contact"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1645,7 +1645,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column 1`] = `
                       >
                         Phone
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1678,7 +1678,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
         <ViewItem
           label="Application Number"
         >
-          <p
+          <div
             className="view-item"
           >
             <span
@@ -1691,7 +1691,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
             >
               APP-0001002002
             </span>
-          </p>
+          </div>
         </ViewItem>
         <GridSection
           grid={false}
@@ -1783,7 +1783,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                     flagged={true}
                     label="First Name"
                   >
-                    <p
+                    <div
                       className="view-item is-flagged"
                     >
                       <span
@@ -1796,7 +1796,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                       >
                         Lisa
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1808,7 +1808,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                     flagged={true}
                     label="Middle Name"
                   >
-                    <p
+                    <div
                       className="view-item is-flagged"
                     >
                       <span
@@ -1821,7 +1821,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                       >
                         S
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1833,7 +1833,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                     flagged={true}
                     label="Last Name"
                   >
-                    <p
+                    <div
                       className="view-item is-flagged"
                     >
                       <span
@@ -1846,7 +1846,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                       >
                         Jones
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1858,7 +1858,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                     flagged={true}
                     label="Date of Birth"
                   >
-                    <p
+                    <div
                       className="view-item is-flagged"
                     >
                       <span
@@ -1871,7 +1871,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                       >
                         01/01/1985
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1882,7 +1882,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                   <ViewItem
                     label="Email"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1895,7 +1895,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                       >
                         lisa@gmail.com
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1907,7 +1907,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                     helper="Cell"
                     label="Phone"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1925,7 +1925,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                       >
                         Cell
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
@@ -1937,7 +1937,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                     helper="Work"
                     label="Second Phone"
                   >
-                    <p
+                    <div
                       className="view-item"
                     >
                       <span
@@ -1955,14 +1955,14 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                       >
                         Work
                       </span>
-                    </p>
+                    </div>
                   </ViewItem>
                 </article>
               </GridCell>
               <ViewItem
                 label="Preferred Contact"
               >
-                <p
+                <div
                   className="view-item"
                 >
                   <span
@@ -1975,7 +1975,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Single Column Warn 1`] = 
                   >
                     Phone
                   </span>
-                </p>
+                </div>
               </ViewItem>
             </div>
           </section>
@@ -2291,7 +2291,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
             <ViewItem
               label="First Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -2304,7 +2304,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
                 >
                   Lisa
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -2315,7 +2315,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
             <ViewItem
               label="Middle Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -2328,7 +2328,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
                 >
                   S
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -2339,7 +2339,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
             <ViewItem
               label="Last Name"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -2352,7 +2352,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
                 >
                   Jones
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>
@@ -2363,7 +2363,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
             <ViewItem
               label="Date of Birth"
             >
-              <p
+              <div
                 className="view-item"
               >
                 <span
@@ -2376,7 +2376,7 @@ exports[`Storyshots Sections/Grid Section Two Columns 1`] = `
                 >
                   01/01/1985
                 </span>
-              </p>
+              </div>
             </ViewItem>
           </article>
         </GridCell>

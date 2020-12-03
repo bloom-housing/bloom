@@ -29,6 +29,7 @@ export * from "./src/footers/SiteFooter"
 /* Forms */
 export * from "./src/forms/DOBField"
 export * from "./src/forms/Field"
+export * from "./src/forms/PhoneField"
 export * from "./src/forms/HouseholdMemberForm"
 export * from "./src/forms/HouseholdSizeField"
 export * from "./src/forms/FieldGroup"
@@ -58,7 +59,7 @@ export * from "./src/helpers/translator"
 export * from "./src/helpers/useLanguageChange"
 export * from "./src/helpers/debounce"
 export * from "./src/helpers/formatIncome"
-
+export * from "./src/helpers/validators"
 /* Icons */
 export * from "./src/icons/HeaderBadge"
 export * from "./src/icons/Icon"
