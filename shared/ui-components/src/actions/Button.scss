@@ -51,7 +51,8 @@
     @apply normal-case;
   }
 
-  &.is-unstyled {
+  &.is-unstyled,
+  &.is-inline {
     @apply normal-case;
     @apply border-0;
     @apply p-0;
@@ -66,6 +67,14 @@
       @apply text-primary;
       background: transparent;
     }
+  }
+
+  &.is-inline {
+    @apply text-primary;
+    @apply font-semibold;
+    @apply text-tiny;
+    @apply m-0;
+    @apply no-underline;
   }
 
   &.is-text-caps {
@@ -94,6 +103,10 @@
 
   @include filled-appearances;
   @include outlined-appearances;
+}
+
+.button__icon {
+  @apply mr-1;
 }
 
 button {

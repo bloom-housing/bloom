@@ -1,11 +1,14 @@
 import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
+import { Icon } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
   children: React.ReactNode
   onClick: (e: React.MouseEvent) => void
+  icon?: string
+  inline?: boolean
   unstyled?: boolean
   fullWidth?: boolean
   className?: string
@@ -14,6 +17,7 @@ export interface ButtonProps extends AppearanceProps {
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
   const classNames = ["button"].concat(classNamesForAppearanceTypes(props))
+  if (props.inline) classNames.push("is-inline")
   if (props.unstyled) classNames.push("is-unstyled")
   if (props.fullWidth) classNames.push("is-fullwidth")
   if (props.className) classNames.push(props.className)
@@ -23,6 +27,18 @@ export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
 const Button = (props: ButtonProps) => {
   const buttonClasses = buttonClassesForProps(props)
 
+  let buttonInner = <></>
+  if (props.icon) {
+    buttonInner = (
+      <>
+        <Icon className="button__icon" size="tiny" symbol={props.icon} />
+        <span className="button__content">{props.children}</span>
+      </>
+    )
+  } else {
+    buttonInner = <>{props.children}</>
+  }
+
   return (
     <button
       id={props.id}
@@ -30,7 +46,7 @@ const Button = (props: ButtonProps) => {
       onClick={props.onClick}
       disabled={props.disabled}
     >
-      {props.children}
+      {buttonInner}
     </button>
   )
 }

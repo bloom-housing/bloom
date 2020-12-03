@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { withKnobs, text, select } from "@storybook/addon-knobs"
-
+import SVG from "react-inlinesvg"
 import { Button } from "../actions/Button"
 import {
   AppearanceBorderType,
@@ -11,7 +11,15 @@ import {
 
 export default {
   title: "Actions/Button",
-  decorators: [withKnobs],
+  decorators: [
+    (storyFn: any) => (
+      <div>
+        {storyFn()}
+        <SVG src="/images/icons.svg" />
+      </div>
+    ),
+    withKnobs,
+  ],
 }
 
 const handleClick = (e: React.MouseEvent) => {
@@ -71,6 +79,12 @@ export const borderless = () => (
 export const unstyled = () => (
   <Button unstyled={true} onClick={handleClick}>
     Unstyled Button
+  </Button>
+)
+
+export const inline = () => (
+  <Button inline={true} icon="arrow-back" onClick={() => alert("Click!")}>
+    Go Back
   </Button>
 )
 
