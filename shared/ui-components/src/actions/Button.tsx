@@ -24,20 +24,21 @@ export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
   return classNames
 }
 
-const Button = (props: ButtonProps) => {
-  const buttonClasses = buttonClassesForProps(props)
-
-  let buttonInner = <></>
+export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
   if (props.icon) {
-    buttonInner = (
+    return (
       <>
         <Icon className="button__icon" size="tiny" symbol={props.icon} />
         <span className="button__content">{props.children}</span>
       </>
     )
   } else {
-    buttonInner = <>{props.children}</>
+    return <>{props.children}</>
   }
+}
+
+const Button = (props: ButtonProps) => {
+  const buttonClasses = buttonClassesForProps(props)
 
   return (
     <button
@@ -46,7 +47,7 @@ const Button = (props: ButtonProps) => {
       onClick={props.onClick}
       disabled={props.disabled}
     >
-      {buttonInner}
+      {buttonInner(props)}
     </button>
   )
 }
