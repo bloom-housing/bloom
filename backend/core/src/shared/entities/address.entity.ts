@@ -8,7 +8,7 @@ export class Address {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
@@ -31,7 +31,6 @@ export class Address {
 
   @Column()
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   city: string
 
@@ -75,7 +74,7 @@ export class Address {
   @Column({ type: "numeric", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => Number)
   longitude?: number
 }

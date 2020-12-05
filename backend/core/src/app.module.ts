@@ -1,4 +1,4 @@
-import { DynamicModule, INestApplication, Module, ValidationPipe } from "@nestjs/common"
+import { DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
@@ -20,13 +20,11 @@ import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import * as bodyParser from "body-parser"
-import { defaultValidationPipeOptions } from "./shared/default-validation-pipe-options"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
   app.use(logger)
   app.useGlobalFilters(new EntityNotFoundExceptionFilter())
-  app.useGlobalPipes(new ValidationPipe(defaultValidationPipeOptions))
   app.use(bodyParser.json({ limit: "50mb" }))
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))
   return app

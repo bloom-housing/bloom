@@ -28,5 +28,3 @@ export class AuthzGuard implements CanActivate {
     return this.authzService.can(authUser, type, action)
   }
 }
-
-export default AuthzGuard

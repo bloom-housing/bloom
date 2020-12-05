@@ -9,6 +9,7 @@ export enum authzActions {
   update = "update",
   delete = "delete",
   listAll = "list_all",
+  submit = "submit",
 }
 
 @Injectable()

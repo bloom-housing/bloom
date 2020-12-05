@@ -377,6 +377,27 @@ export class ApplicationsService {
       axios(configs, resolve, reject);
     });
   }
+  /**
+   * Submit application
+   */
+  submit(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications/submit';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class AssetsService {

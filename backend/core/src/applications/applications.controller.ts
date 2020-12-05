@@ -10,6 +10,8 @@ import {
   Query,
   Request,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from "@nestjs/common"
 import { Request as ExpressRequest } from "express"
 import { ApplicationsService } from "./applications.service"
@@ -32,6 +34,7 @@ import { IsBoolean, IsOptional, IsString } from "class-validator"
 import { Pagination, PaginationQueryParams } from "../utils/pagination.dto"
 import { Application } from "./entities/application.entity"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -83,6 +86,9 @@ export class ApplicationsCsvListQueryParams {
 @ApiBearerAuth()
 @ResourceType("application")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UsePipes(
+  new ValidationPipe({ ...defaultValidationPipeOptions, groups: [ValidationsGroupsEnum.partners] })
+)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
