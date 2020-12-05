@@ -3,6 +3,7 @@ import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-val
 import { OmitType } from "@nestjs/swagger"
 import { AmiChart } from "../entity/ami-chart.entity"
 import { AmiChartItem } from "../entity/ami-chart-item.entity"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export class AmiChartItemDto extends OmitType(AmiChartItem, ["amiChart"]) {}
 
@@ -18,28 +19,28 @@ export class AmiChartItemUpdateDto extends OmitType(AmiChartItemDto, [
   "updatedAt",
 ]) {
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt?: Date
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
 }
 
 export class AmiChartDto extends OmitType(AmiChart, ["units", "items"] as const) {
   @Expose()
-  @IsDefined()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AmiChartItemDto)
-  @ValidateNested({ each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   items: AmiChartItemDto[]
 }
 
@@ -50,9 +51,9 @@ export class AmiChartCreateDto extends OmitType(AmiChartDto, [
   "items",
 ] as const) {
   @Expose()
-  @IsDefined()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AmiChartItemCreateDto)
-  @ValidateNested({ each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   items: AmiChartItemCreateDto[]
 }
 
@@ -63,25 +64,25 @@ export class AmiChartUpdateDto extends OmitType(AmiChartDto, [
   "items",
 ]) {
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt?: Date
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
 
   @Expose()
-  @IsDefined()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AmiChartItemUpdateDto)
-  @ValidateNested({ each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   items: AmiChartItemUpdateDto[]
 }

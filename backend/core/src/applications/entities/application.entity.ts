@@ -20,6 +20,7 @@ import { Demographics } from "./demographics.entity"
 import { HouseholdMember } from "./household-member.entity"
 import { ApplicationPreferences } from "./application-preferences.entity"
 import { ApiProperty } from "@nestjs/swagger"
+import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 export enum ApplicationStatus {
   draft = "draft",
@@ -46,7 +47,7 @@ export enum IncomePeriod {
 export class Application extends AbstractEntity {
   @Column({ type: "text" })
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   appUrl: string
 
   @ManyToOne(() => User, (user) => user.applications, { nullable: true })
@@ -58,98 +59,98 @@ export class Application extends AbstractEntity {
   @OneToOne(() => Applicant, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @ValidateNested()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Applicant)
   applicant: Applicant
 
   @Column()
   @Expose()
-  @IsBoolean()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   additionalPhone: boolean
 
   @Column()
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   additionalPhoneNumber: string
 
   @Column()
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   additionalPhoneNumberType: string
 
   @Column("text", { array: true })
   @Expose()
-  @IsString({ each: true })
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   contactPreferences: string[]
 
   @Column()
   @Expose()
-  @IsNumber()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   householdSize: number
 
   @Column()
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   housingStatus: string
 
   @Column()
   @Expose()
-  @IsBoolean()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   sendMailToMailingAddress: boolean
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   mailingAddress: Address
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   alternateAddress: Address
 
   @OneToOne(() => AlternateContact, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AlternateContact)
   alternateContact: AlternateContact
 
   @OneToOne(() => Accessibility, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Accessibility)
   accessibility: Accessibility
 
   @OneToOne(() => Demographics, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Demographics)
   demographics: Demographics
 
   @Column()
   @Expose()
-  @IsBoolean()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   incomeVouchers: boolean
 
   @Column()
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   income: string
 
   @Column({ enum: IncomePeriod })
   @Expose()
-  @IsEnum(IncomePeriod)
+  @IsEnum(IncomePeriod, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: IncomePeriod, enumName: "IncomePeriod" })
   incomePeriod: IncomePeriod
 
@@ -158,44 +159,44 @@ export class Application extends AbstractEntity {
     cascade: true,
   })
   @Expose()
-  @ValidateNested({ each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => HouseholdMember)
   householdMembers: HouseholdMember[]
 
   @Column({ type: "text", array: true })
   @Expose()
-  @IsString({ each: true })
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   preferredUnit: string[]
 
   @OneToOne(() => ApplicationPreferences, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationPreferences)
   preferences: ApplicationPreferences
 
   @Column({ enum: ApplicationStatus })
   @Expose()
-  @IsEnum(ApplicationStatus)
+  @IsEnum(ApplicationStatus, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: ApplicationStatus, enumName: "ApplicationStatus" })
   status: ApplicationStatus
 
   @Column({ enum: Language })
   @Expose()
-  @IsEnum(Language)
+  @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: Language, enumName: "Language" })
   language: Language
 
   @Column({ enum: ApplicationSubmissionType })
   @Expose()
-  @IsEnum(ApplicationSubmissionType)
+  @IsEnum(ApplicationSubmissionType, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: ApplicationSubmissionType, enumName: "ApplicationSubmissionType" })
   submissionType: ApplicationSubmissionType
 
   @Column({ enum: ApplicationSubmissionType })
   @Expose()
-  @IsOptional()
-  @IsBoolean()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   acceptedTerms: boolean | null
 }

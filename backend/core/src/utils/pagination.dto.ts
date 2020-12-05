@@ -1,8 +1,9 @@
 import { ClassType } from "class-transformer/ClassTransformer"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
-import { Exclude, Expose, Transform, Type } from "class-transformer"
+import { Expose, Transform, Type } from "class-transformer"
 import { IsNumber, IsOptional } from "class-validator"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export class PaginationMeta implements IPaginationMeta {
   @Expose()
@@ -42,8 +43,8 @@ export class PaginationQueryParams {
     required: false,
     default: 1,
   })
-  @IsOptional()
-  @IsNumber()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
     toClassOnly: true,
   })
@@ -56,8 +57,8 @@ export class PaginationQueryParams {
     required: false,
     default: 10,
   })
-  @IsOptional()
-  @IsNumber()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? parseInt(value) : 10), {
     toClassOnly: true,
   })

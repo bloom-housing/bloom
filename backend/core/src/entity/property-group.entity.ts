@@ -10,30 +10,31 @@ import {
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsString, IsUUID } from "class-validator"
 import { Property } from "./property.entity"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 @Entity()
 export class PropertyGroup {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
-  @IsString()
-  @IsUUID()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
 
   @Column()
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   name: string
 
   @ManyToMany(() => Property)

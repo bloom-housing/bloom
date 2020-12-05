@@ -1,8 +1,9 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { HouseholdMember } from "../entities/household-member.entity"
+import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 export class HouseholdMemberDto extends OmitType(HouseholdMember, [
   "address",
@@ -10,14 +11,14 @@ export class HouseholdMemberDto extends OmitType(HouseholdMember, [
   "application",
 ] as const) {
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   address: AddressDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   workAddress: AddressDto
 
@@ -35,14 +36,14 @@ export class HouseholdMemberCreateDto extends OmitType(HouseholdMemberDto, [
   "application",
 ] as const) {
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   address: AddressCreateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   workAddress: AddressCreateDto
 
@@ -60,29 +61,31 @@ export class HouseholdMemberUpdateDto extends OmitType(HouseholdMemberDto, [
   "application",
 ] as const) {
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
 
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
   createdAt?: Date
 
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
   updatedAt?: Date
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   address: AddressUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   workAddress: AddressUpdateDto
 
