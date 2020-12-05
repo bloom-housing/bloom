@@ -123,6 +123,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   listing: IdDto
 
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicantCreateDto)
   applicant: ApplicantCreateDto
