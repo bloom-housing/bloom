@@ -20,7 +20,7 @@ export type FormattingMetadataAggregateFactory = () => FormattingMetadataAggrega
 
 export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
 export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
-export const streetFormatter = (obj?: { street: string; street2?: string }) => {
+export const streetFormatter = (obj?: { street?: string; street2?: string }) => {
   if (!obj) {
     return defaultFormatter(obj)
   }

@@ -10,17 +10,17 @@ export class Accessibility extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  mobility: boolean | null
+  mobility?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  vision: boolean | null
+  vision?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  hearing: boolean | null
+  hearing?: boolean | null
 }

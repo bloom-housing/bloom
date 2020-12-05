@@ -7,42 +7,47 @@ import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 @Entity()
 export class AlternateContact extends AbstractEntity {
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  type: string
+  type?: string | null
 
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  otherType: string | null
+  otherType?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  firstName: string
+  firstName?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  lastName: string
+  lastName?: string | null
 
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  agency: string | null
+  agency?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  phoneNumber: string
+  phoneNumber?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  emailAddress: string
+  emailAddress?: string | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()

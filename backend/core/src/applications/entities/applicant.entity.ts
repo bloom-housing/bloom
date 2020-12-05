@@ -45,42 +45,47 @@ export class Applicant extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   birthDay?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  birthYear: string
+  birthYear?: string | null
 
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
-  emailAddress?: string
+  emailAddress?: string | null
 
-  @Column()
+  @Column({ type: "bool", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  noEmail: boolean
+  noEmail?: boolean | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  phoneNumber: string
+  phoneNumber?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  phoneNumberType: string
+  phoneNumberType?: string | null
 
-  @Column()
+  @Column({ type: "bool", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  noPhone: boolean
+  noPhone?: boolean | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsIn(["yes", "no"], { groups: [ValidationsGroupsEnum.default] })
-  workInRegion: string | null
+  workInRegion?: string | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()

@@ -20,7 +20,7 @@ export class HouseholdMember extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  orderId?: number
+  orderId?: number | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
@@ -30,62 +30,71 @@ export class HouseholdMember extends AbstractEntity {
   @Type(() => Address)
   address: Address
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  firstName: string
+  firstName?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  middleName: string
+  middleName?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  lastName: string
+  lastName?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  birthMonth: string
+  birthMonth?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  birthDay: string
+  birthDay?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  birthYear: string
+  birthYear?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  emailAddress: string
+  emailAddress?: string | null
 
   @Column({ nullable: true, type: "boolean" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  noEmail: boolean | null
+  noEmail?: boolean | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  phoneNumber: string
+  phoneNumber?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  phoneNumberType: string
+  phoneNumberType?: string | null
 
-  @Column({ nullable: true, type: "boolean" })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  noPhone: boolean | null
+  noPhone?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()

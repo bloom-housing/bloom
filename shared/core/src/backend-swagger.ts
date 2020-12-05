@@ -1640,16 +1640,16 @@ export interface Address {
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -1760,16 +1760,16 @@ export interface Address {
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -1983,16 +1983,16 @@ export interface AddressCreate {
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -2217,16 +2217,16 @@ export interface AddressUpdate {
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -2386,25 +2386,25 @@ export interface Applicant {
   birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
   emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
-  workInRegion: string;
+  workInRegion?: string;
 }
 
 export interface AlternateContact {
@@ -2421,36 +2421,36 @@ export interface AlternateContact {
   updatedAt: Date;
 
   /**  */
-  type: string;
+  type?: string;
 
   /**  */
-  otherType: string;
+  otherType?: string;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  agency: string;
+  agency?: string;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 }
 
 export interface Accessibility {
   /**  */
-  mobility: boolean;
+  mobility?: boolean;
 
   /**  */
-  vision: boolean;
+  vision?: boolean;
 
   /**  */
-  hearing: boolean;
+  hearing?: boolean;
 
   /**  */
   id: string;
@@ -2473,13 +2473,13 @@ export interface Demographics {
   updatedAt: Date;
 
   /**  */
-  ethnicity: string;
+  ethnicity?: string;
 
   /**  */
-  gender: string;
+  gender?: string;
 
   /**  */
-  sexualOrientation: string;
+  sexualOrientation?: string;
 
   /**  */
   howDidYouHear: string[];
@@ -2508,37 +2508,37 @@ export interface HouseholdMember {
   orderId?: number;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
   sameAddress?: string;
@@ -2704,25 +2704,25 @@ export interface ApplicantCreate {
   birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
   emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
-  workInRegion: string;
+  workInRegion?: string;
 }
 
 export interface AlternateContactCreate {
@@ -2730,47 +2730,47 @@ export interface AlternateContactCreate {
   mailingAddress: AddressCreate;
 
   /**  */
-  type: string;
+  type?: string;
 
   /**  */
-  otherType: string;
+  otherType?: string;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  agency: string;
+  agency?: string;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 }
 
 export interface AccessibilityCreate {
   /**  */
-  mobility: boolean;
+  mobility?: boolean;
 
   /**  */
-  vision: boolean;
+  vision?: boolean;
 
   /**  */
-  hearing: boolean;
+  hearing?: boolean;
 }
 
 export interface DemographicsCreate {
   /**  */
-  ethnicity: string;
+  ethnicity?: string;
 
   /**  */
-  gender: string;
+  gender?: string;
 
   /**  */
-  sexualOrientation: string;
+  sexualOrientation?: string;
 
   /**  */
   howDidYouHear: string[];
@@ -2790,37 +2790,37 @@ export interface HouseholdMemberCreate {
   orderId?: number;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
   sameAddress?: string;
@@ -2952,25 +2952,25 @@ export interface ApplicantUpdate {
   birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
   emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
-  workInRegion: string;
+  workInRegion?: string;
 }
 
 export interface AlternateContactUpdate {
@@ -2987,25 +2987,25 @@ export interface AlternateContactUpdate {
   mailingAddress: AddressUpdate;
 
   /**  */
-  type: string;
+  type?: string;
 
   /**  */
-  otherType: string;
+  otherType?: string;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  agency: string;
+  agency?: string;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 }
 
 export interface AccessibilityUpdate {
@@ -3019,13 +3019,13 @@ export interface AccessibilityUpdate {
   updatedAt?: Date;
 
   /**  */
-  mobility: boolean;
+  mobility?: boolean;
 
   /**  */
-  vision: boolean;
+  vision?: boolean;
 
   /**  */
-  hearing: boolean;
+  hearing?: boolean;
 }
 
 export interface DemographicsUpdate {
@@ -3039,13 +3039,13 @@ export interface DemographicsUpdate {
   updatedAt?: Date;
 
   /**  */
-  ethnicity: string;
+  ethnicity?: string;
 
   /**  */
-  gender: string;
+  gender?: string;
 
   /**  */
-  sexualOrientation: string;
+  sexualOrientation?: string;
 
   /**  */
   howDidYouHear: string[];
@@ -3074,37 +3074,37 @@ export interface HouseholdMemberUpdate {
   orderId?: number;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
   sameAddress?: string;
