@@ -87,7 +87,10 @@ export class ApplicationsCsvListQueryParams {
 @ResourceType("application")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(
-  new ValidationPipe({ ...defaultValidationPipeOptions, groups: [ValidationsGroupsEnum.partners] })
+  new ValidationPipe({
+    ...defaultValidationPipeOptions,
+    groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
+  })
 )
 export class ApplicationsController {
   constructor(

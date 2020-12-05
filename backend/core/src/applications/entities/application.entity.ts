@@ -45,10 +45,11 @@ export enum IncomePeriod {
 
 @Entity({ name: "applications" })
 export class Application extends AbstractEntity {
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  appUrl: string
+  appUrl?: string | null
 
   @ManyToOne(() => User, (user) => user.applications, { nullable: true })
   user: User | null
@@ -63,40 +64,46 @@ export class Application extends AbstractEntity {
   @Type(() => Applicant)
   applicant: Applicant
 
-  @Column()
+  @Column({ type: "bool", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  additionalPhone: boolean
+  additionalPhone?: boolean | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  additionalPhoneNumber: string
+  additionalPhoneNumber?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  additionalPhoneNumberType: string
+  additionalPhoneNumberType?: string | null
 
   @Column("text", { array: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   contactPreferences: string[]
 
-  @Column()
+  @Column({ type: "integer", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSize: number
+  householdSize?: number | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  housingStatus: string
+  housingStatus?: string | null
 
-  @Column()
+  @Column({ type: "bool", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  sendMailToMailingAddress: boolean
+  sendMailToMailingAddress?: boolean | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
@@ -138,21 +145,24 @@ export class Application extends AbstractEntity {
   @Type(() => Demographics)
   demographics: Demographics
 
-  @Column()
+  @Column({ type: "bool", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  incomeVouchers: boolean
+  incomeVouchers?: boolean | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  income: string
+  income?: string | null
 
-  @Column({ enum: IncomePeriod })
+  @Column({ enum: IncomePeriod, nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsEnum(IncomePeriod, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: IncomePeriod, enumName: "IncomePeriod" })
-  incomePeriod: IncomePeriod
+  incomePeriod?: IncomePeriod | null
 
   @OneToMany(() => HouseholdMember, (householdMember) => householdMember.application, {
     eager: true,
@@ -194,9 +204,9 @@ export class Application extends AbstractEntity {
   @ApiProperty({ enum: ApplicationSubmissionType, enumName: "ApplicationSubmissionType" })
   submissionType: ApplicationSubmissionType
 
-  @Column({ enum: ApplicationSubmissionType })
+  @Column({ type: "bool", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  acceptedTerms: boolean | null
+  acceptedTerms?: boolean | null
 }

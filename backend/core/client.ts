@@ -1634,7 +1634,7 @@ export interface Address {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
@@ -1754,7 +1754,7 @@ export interface Address {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
@@ -1977,7 +1977,7 @@ export interface AddressCreate {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
@@ -2211,7 +2211,7 @@ export interface AddressUpdate {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
@@ -2371,19 +2371,19 @@ export interface Applicant {
   updatedAt: Date;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
   birthYear: string;
@@ -2572,7 +2572,7 @@ export interface ApplicationPreferences {
 
 export interface Application {
   /**  */
-  incomePeriod: IncomePeriod;
+  incomePeriod?: IncomePeriod;
 
   /**  */
   status: ApplicationStatus;
@@ -2620,40 +2620,40 @@ export interface Application {
   updatedAt: Date;
 
   /**  */
-  appUrl: string;
+  appUrl?: string;
 
   /**  */
-  additionalPhone: boolean;
+  additionalPhone?: boolean;
 
   /**  */
-  additionalPhoneNumber: string;
+  additionalPhoneNumber?: string;
 
   /**  */
-  additionalPhoneNumberType: string;
+  additionalPhoneNumberType?: string;
 
   /**  */
   contactPreferences: string[];
 
   /**  */
-  householdSize: number;
+  householdSize?: number;
 
   /**  */
-  housingStatus: string;
+  housingStatus?: string;
 
   /**  */
-  sendMailToMailingAddress: boolean;
+  sendMailToMailingAddress?: boolean;
 
   /**  */
-  incomeVouchers: boolean;
+  incomeVouchers?: boolean;
 
   /**  */
-  income: string;
+  income?: string;
 
   /**  */
   preferredUnit: string[];
 
   /**  */
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
 }
 
 export interface PaginationMeta {
@@ -2689,19 +2689,19 @@ export interface ApplicantCreate {
   workAddress: AddressCreate;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
   birthYear: string;
@@ -2845,7 +2845,7 @@ export interface ApplicationPreferencesCreate {
 
 export interface ApplicationCreate {
   /**  */
-  incomePeriod: IncomePeriod;
+  incomePeriod?: IncomePeriod;
 
   /**  */
   status: ApplicationStatus;
@@ -2884,40 +2884,40 @@ export interface ApplicationCreate {
   preferences: ApplicationPreferencesCreate;
 
   /**  */
-  appUrl: string;
+  appUrl?: string;
 
   /**  */
-  additionalPhone: boolean;
+  additionalPhone?: boolean;
 
   /**  */
-  additionalPhoneNumber: string;
+  additionalPhoneNumber?: string;
 
   /**  */
-  additionalPhoneNumberType: string;
+  additionalPhoneNumberType?: string;
 
   /**  */
   contactPreferences: string[];
 
   /**  */
-  householdSize: number;
+  householdSize?: number;
 
   /**  */
-  housingStatus: string;
+  housingStatus?: string;
 
   /**  */
-  sendMailToMailingAddress: boolean;
+  sendMailToMailingAddress?: boolean;
 
   /**  */
-  incomeVouchers: boolean;
+  incomeVouchers?: boolean;
 
   /**  */
-  income: string;
+  income?: string;
 
   /**  */
   preferredUnit: string[];
 
   /**  */
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
 }
 
 export interface ApplicantUpdate {
@@ -2937,19 +2937,19 @@ export interface ApplicantUpdate {
   workAddress: AddressUpdate;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
   birthYear: string;
@@ -3138,7 +3138,7 @@ export interface ApplicationPreferencesUpdate {
 
 export interface ApplicationUpdate {
   /**  */
-  incomePeriod: IncomePeriod;
+  incomePeriod?: IncomePeriod;
 
   /**  */
   status: ApplicationStatus;
@@ -3186,40 +3186,40 @@ export interface ApplicationUpdate {
   preferences: ApplicationPreferencesUpdate;
 
   /**  */
-  appUrl: string;
+  appUrl?: string;
 
   /**  */
-  additionalPhone: boolean;
+  additionalPhone?: boolean;
 
   /**  */
-  additionalPhoneNumber: string;
+  additionalPhoneNumber?: string;
 
   /**  */
-  additionalPhoneNumberType: string;
+  additionalPhoneNumberType?: string;
 
   /**  */
   contactPreferences: string[];
 
   /**  */
-  householdSize: number;
+  householdSize?: number;
 
   /**  */
-  housingStatus: string;
+  housingStatus?: string;
 
   /**  */
-  sendMailToMailingAddress: boolean;
+  sendMailToMailingAddress?: boolean;
 
   /**  */
-  incomeVouchers: boolean;
+  incomeVouchers?: boolean;
 
   /**  */
-  income: string;
+  income?: string;
 
   /**  */
   preferredUnit: string[];
 
   /**  */
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
 }
 
 export interface UnitCreate {
