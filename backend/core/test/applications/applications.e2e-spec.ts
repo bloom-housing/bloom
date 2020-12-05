@@ -174,7 +174,7 @@ describe("Applications", () => {
   it(`/POST `, async () => {
     const body = getTestAppBody()
     const res = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
     expect(res.body).toMatchObject(body)
@@ -186,7 +186,7 @@ describe("Applications", () => {
   it(`/GET by id`, async () => {
     const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
@@ -203,7 +203,10 @@ describe("Applications", () => {
 
   it(`/POST unauthenticated`, async () => {
     const body = getTestAppBody()
-    const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(201)
+    const res = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
     expect(res.body).toMatchObject(body)
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
@@ -213,7 +216,7 @@ describe("Applications", () => {
   it(`/DELETE `, async () => {
     const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
@@ -230,7 +233,7 @@ describe("Applications", () => {
   it(`/DELETE user 2 unauthorized to delete user 1 application`, async () => {
     const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
@@ -243,7 +246,7 @@ describe("Applications", () => {
   it(`/PUT `, async () => {
     const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
@@ -261,7 +264,7 @@ describe("Applications", () => {
   it(`/PUT user 2 unauthorized to edit user 1 application`, async () => {
     const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
