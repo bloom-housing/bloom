@@ -29,7 +29,15 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["listing", "user", "listing.property"],
+      relations: [
+        "listing",
+        "user",
+        "listing.property",
+        "listing.property.buildingAddress",
+        "listing.property.units",
+        "listing.property.units.amiChart",
+        "listing.property.units.amiChart.items",
+      ],
     })
   }
 
@@ -47,6 +55,10 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("application.user", "user")
     qb.leftJoinAndSelect("application.listing", "listing")
     qb.leftJoinAndSelect("listing.property", "property")
+    qb.leftJoinAndSelect("property.buildingAddress", "buildingAddress")
+    qb.leftJoinAndSelect("property.units", "units")
+    qb.leftJoinAndSelect("units.amiChart", "amiChart")
+    qb.leftJoinAndSelect("amiChart.items", "amiChartItems")
 
     if (user) {
       qb.andWhere("user.id = :userId", { userId: user.id })
