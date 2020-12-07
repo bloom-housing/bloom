@@ -763,7 +763,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 </GridCell>
 
                 <GridCell span={2}>
-                  <ViewItem label={t("application.add.sexualOrientation")}>
+                  <ViewItem label={t("application.add.howDidYouHearAboutUs")}>
                     <FieldGroup
                       type="checkbox"
                       name="application.demographics.howDidYouHear"
