@@ -30,13 +30,23 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
+  const {
+    register,
+    watch,
+    control,
+    handleSubmit,
+    errors,
+    setValue,
+    clearErrors,
+    trigger,
+  } = useForm()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
   const phoneValue: string = watch("application.phoneNumber")
   const alternatePhoneValue: string = watch("application.alternateContactPhone")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
+  const incomePeriodValue: string = watch("application.incomePeriod")
 
   // reset phone type field when phone is empty
   useEffect(() => {
@@ -528,6 +538,152 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     </fieldset>
                   </ViewItem>
                 </GridCell>
+              </GridSection>
+
+              <GridSection title={t("application.details.preferences")} columns={1}>
+                <GridCell>
+                  <ViewItem
+                    label={`${t("application.details.liveOrWorkIn")} ${t(
+                      "application.details.countyName"
+                    )}`}
+                  >
+                    <fieldset className="mt-4">
+                      <Field
+                        id="application.preferences.liveIn"
+                        name="application.preferences.liveIn"
+                        type="checkbox"
+                        label={`${t("application.add.preferences.liveIn")} ${t(
+                          "application.details.countyName"
+                        )}`}
+                        register={register}
+                        inputProps={{
+                          onChange: () => {
+                            setValue("application.preferences.none", false)
+                          },
+                        }}
+                      />
+
+                      <Field
+                        id="application.preferences.workIn"
+                        name="application.preferences.workIn"
+                        type="checkbox"
+                        label={`${t("application.add.preferences.workIn")} ${t(
+                          "application.details.countyName"
+                        )}`}
+                        register={register}
+                        inputProps={{
+                          onChange: () => {
+                            setValue("application.preferences.none", false)
+                          },
+                        }}
+                      />
+
+                      <Field
+                        id="application.preferences.none"
+                        name="application.preferences.none"
+                        type="checkbox"
+                        label={t("application.add.preferences.optedOut")}
+                        register={register}
+                        inputProps={{
+                          onChange: () => {
+                            setValue("application.preferences.liveIn", false)
+                            setValue("application.preferences.workIn", false)
+                          },
+                        }}
+                      />
+                    </fieldset>
+                  </ViewItem>
+                </GridCell>
+              </GridSection>
+
+              <GridSection title={t("application.details.householdIncome")} grid={false}>
+                <GridSection columns={3}>
+                  <GridCell>
+                    <ViewItem label={t("application.add.incomePeriod")}>
+                      <div className="flex h-12 items-center">
+                        <Field
+                          id="application.incomePeriodYear"
+                          name="application.incomePeriod"
+                          className="m-0"
+                          type="radio"
+                          label={t("application.financial.income.perYear")}
+                          register={register}
+                          inputProps={{
+                            value: "perYear",
+                            onChange: () => {
+                              setValue("application.incomeMonth", "")
+                              setValue("application.incomeYear", "")
+                            },
+                          }}
+                        />
+
+                        <Field
+                          id="application.incomePeriodMonth"
+                          name="application.incomePeriod"
+                          className="m-0"
+                          type="radio"
+                          label={t("application.financial.income.perMonth")}
+                          register={register}
+                          inputProps={{
+                            value: "perMonth",
+                            onChange: () => {
+                              setValue("application.incomeMonth", "")
+                              setValue("application.incomeYear", "")
+                            },
+                          }}
+                        />
+                      </div>
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
+
+                <GridSection columns={3}>
+                  <GridCell>
+                    <ViewItem label={t("application.details.annualIncome")}>
+                      <Field
+                        id="application.incomeMonth"
+                        type="number"
+                        name="application.incomeMonth"
+                        label={t("application.details.annualIncome")}
+                        placeholder={t("t.enterAmount")}
+                        register={register}
+                        disabled={incomePeriodValue !== "perYear"}
+                        readerOnly
+                      />
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.details.monthlyIncome")}>
+                      <Field
+                        id="application.incomeYear"
+                        type="number"
+                        name="application.incomeYear"
+                        label={t("application.details.annualIncome")}
+                        placeholder={t("t.enterAmount")}
+                        register={register}
+                        disabled={incomePeriodValue !== "perMonth"}
+                        readerOnly
+                      />
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.details.vouchers")}>
+                      <Select
+                        id="application.incomeVouchers"
+                        name="application.incomeVouchers"
+                        placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                        label={t("application.details.vouchers")}
+                        labelClassName="sr-only"
+                        register={register}
+                        controlClassName="control"
+                        options={["yes", "no"]}
+                        keyPrefix="t"
+                      />
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
               </GridSection>
             </div>
 

@@ -58,7 +58,13 @@
       "workInRegion": "Work in the region?",
       "mobility": "Mobility Impairments",
       "vision": "Vision Impairments",
-      "hearing": "Hearing Impairments"
+      "hearing": "Hearing Impairments",
+      "preferences": {
+        "liveIn": "Live in",
+        "workIn": "Work in",
+        "optedOut": "Opted out of preference"
+      },
+      "incomePeriod": "Income Period"
     },
     "details": {
       "applicationData": "Application Data",
@@ -813,6 +819,7 @@
     "deposit": "Deposit",
     "errorsToResolve": "There are errors you'll need to resolve before moving on.",
     "export": "Export",
+    "enterAmount": "Enter amount",
     "filter": "Filter",
     "floor": "floor",
     "floors": "floors",
