@@ -173,7 +173,7 @@ describe("Applications", () => {
 
   it(`/POST `, async () => {
     const body = getTestAppBody()
-    const res = await supertest(app.getHttpServer())
+    let res = await supertest(app.getHttpServer())
       .post(`/applications`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
@@ -181,6 +181,13 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+    res = await supertest(app.getHttpServer())
+      .get(`/applications`)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0]).toMatchObject(body)
   })
 
   it(`/GET by id`, async () => {
