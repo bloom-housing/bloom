@@ -187,6 +187,7 @@ describe("Applications", () => {
       .expect(200)
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0]).toMatchObject(body)
   })
 
   it(`/GET by id`, async () => {
