@@ -102,7 +102,7 @@ export default function ListingsList() {
           <div className="ag-theme-alpine ag-theme-bloom">
             <AgGridReact
               columnDefs={columnDefs}
-              rowData={listingDtos.listings}
+              rowData={listingDtos}
               domLayout={"autoHeight"}
               headerHeight={83}
               rowHeight={58}
