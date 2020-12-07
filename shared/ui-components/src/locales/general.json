@@ -64,7 +64,13 @@
         "workIn": "Work in",
         "optedOut": "Opted out of preference"
       },
-      "incomePeriod": "Income Period"
+      "incomePeriod": "Income Period",
+      "demographicsInformation": "Demographic Information",
+      "ethnicity": "Ethnicity",
+      "race": "Race",
+      "gender": "Gender",
+      "howDidYouHearAboutUs": "How did you hear about us?",
+      "sexualOrientation": "Sexual Orientation"
     },
     "details": {
       "applicationData": "Application Data",

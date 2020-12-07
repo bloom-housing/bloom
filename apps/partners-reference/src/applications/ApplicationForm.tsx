@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, useMemo } from "react"
 // import { useRouter } from "next/router"
 import {
   t,
@@ -12,6 +12,11 @@ import {
   Select,
   contactPreferencesKeys,
   relationshipKeys,
+  ethnicityKeys,
+  raceKeys,
+  genderKeys,
+  sexualOrientation,
+  howDidYouHear,
   FieldGroup,
   Button,
   Form,
@@ -30,16 +35,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const {
-    register,
-    watch,
-    control,
-    handleSubmit,
-    errors,
-    setValue,
-    clearErrors,
-    trigger,
-  } = useForm()
+  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
@@ -95,6 +91,13 @@ const ApplicationForm = ({ isEditable }: Props) => {
   }
 
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => item.id)
+  const howDidYouHearOptions = useMemo(() => {
+    return howDidYouHear?.map((item) => ({
+      id: item.id,
+      label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
+      register,
+    }))
+  }, [register])
 
   const ApplicationAddress = useCallback(
     (subtitle: string, dataKey: string, type: AddressType) => {
@@ -684,6 +687,116 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     </ViewItem>
                   </GridCell>
                 </GridSection>
+              </GridSection>
+
+              <GridSection title={t("application.add.demographicsInformation")} columns={3}>
+                <GridCell>
+                  <ViewItem label={t("application.add.ethnicity")}>
+                    <Select
+                      id="application.demographics.ethnicity"
+                      name="application.demographics.ethnicity"
+                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      label={t("application.add.ethnicity")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={ethnicityKeys}
+                      keyPrefix="application.review.demographics.ethnicityOptions"
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.add.race")}>
+                    <Select
+                      id="application.demographics.race"
+                      name="application.demographics.race"
+                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      label={t("application.add.race")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={raceKeys}
+                      keyPrefix="application.review.demographics.raceOptions"
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.add.gender")}>
+                    <Select
+                      id="application.demographics.gender"
+                      name="application.demographics.gender"
+                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      label={t("application.add.gender")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={genderKeys}
+                      keyPrefix="application.review.demographics.genderOptions"
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.add.sexualOrientation")}>
+                    <Select
+                      id="application.demographics.sexualOrientation"
+                      name="application.demographics.sexualOrientation"
+                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      label={t("application.add.sexualOrientation")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={sexualOrientation}
+                      keyPrefix="application.review.demographics.sexualOrientationOptions"
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell span={2}>
+                  <ViewItem label={t("application.add.sexualOrientation")}>
+                    <FieldGroup
+                      type="checkbox"
+                      name="application.demographics.howDidYouHear"
+                      fields={howDidYouHearOptions}
+                      register={register}
+                      fieldGroupClassName="grid grid-cols-2"
+                    />
+                  </ViewItem>
+                </GridCell>
+              </GridSection>
+
+              <GridSection title={t("application.review.terms.title")}>
+                <GridCell>
+                  <ViewItem label={t("application.details.signatureOnTerms")}>
+                    <div className="flex h-12 items-center">
+                      <Field
+                        id="application.acceptedTermsYes"
+                        name="application.acceptedTerms"
+                        className="m-0"
+                        type="radio"
+                        label={t("t.yes")}
+                        register={register}
+                        inputProps={{
+                          value: "yes",
+                        }}
+                      />
+
+                      <Field
+                        id="application.acceptedTermsNo"
+                        name="application.acceptedTerms"
+                        className="m-0"
+                        type="radio"
+                        label={t("t.no")}
+                        register={register}
+                        inputProps={{
+                          value: "no",
+                        }}
+                      />
+                    </div>
+                  </ViewItem>
+                </GridCell>
               </GridSection>
             </div>
 
