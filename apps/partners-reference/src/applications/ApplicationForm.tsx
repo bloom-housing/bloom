@@ -399,7 +399,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   )}
               </GridSection>
 
-              <GridSection title={t("application.alternateContact.type.label")} columns={3}>
+              <GridSection
+                title={t("application.alternateContact.type.label")}
+                columns={3}
+                separator
+              >
                 <GridCell>
                   <ViewItem label={t("application.name.firstName")}>
                     <Field
@@ -511,7 +515,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 </GridCell>
               </GridSection>
 
-              <GridSection title={t("application.review.householdDetails")} columns={1}>
+              <GridSection title={t("application.review.householdDetails")} columns={1} separator>
                 <GridCell>
                   <ViewItem label={t("application.details.adaPriorities")}>
                     <fieldset className="mt-4">
@@ -543,7 +547,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 </GridCell>
               </GridSection>
 
-              <GridSection title={t("application.details.preferences")} columns={1}>
+              <GridSection title={t("application.details.preferences")} columns={1} separator>
                 <GridCell>
                   <ViewItem
                     label={`${t("application.details.liveOrWorkIn")} ${t(
@@ -599,7 +603,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 </GridCell>
               </GridSection>
 
-              <GridSection title={t("application.details.householdIncome")} grid={false}>
+              <GridSection title={t("application.details.householdIncome")} grid={false} separator>
                 <GridSection columns={3}>
                   <GridCell>
                     <ViewItem label={t("application.add.incomePeriod")}>
@@ -689,7 +693,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 </GridSection>
               </GridSection>
 
-              <GridSection title={t("application.add.demographicsInformation")} columns={3}>
+              <GridSection
+                title={t("application.add.demographicsInformation")}
+                columns={3}
+                separator
+              >
                 <GridCell>
                   <ViewItem label={t("application.add.ethnicity")}>
                     <Select
@@ -767,7 +775,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 </GridCell>
               </GridSection>
 
-              <GridSection title={t("application.review.terms.title")}>
+              <GridSection title={t("application.review.terms.title")} separator>
                 <GridCell>
                   <ViewItem label={t("application.details.signatureOnTerms")}>
                     <div className="flex h-12 items-center">
