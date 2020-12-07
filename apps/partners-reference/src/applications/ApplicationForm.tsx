@@ -11,6 +11,7 @@ import {
   PhoneField,
   Select,
   contactPreferencesKeys,
+  relationshipKeys,
   FieldGroup,
   Button,
   Form,
@@ -34,6 +35,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
   const phoneValue: string = watch("application.phoneNumber")
+  const alternatePhoneValue: string = watch("application.alternateContactPhone")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
 
   // reset phone type field when phone is empty
@@ -53,6 +55,15 @@ const ApplicationForm = ({ isEditable }: Props) => {
       clearErrors(fieldKey)
     }
   }, [setValue, clearErrors, additionalPhoneValue])
+
+  // reset alternate phone type field when phone is empty
+  useEffect(() => {
+    const fieldKey = "application.alternateContact.phoneNumberType"
+    if (!alternatePhoneValue?.length) {
+      setValue(fieldKey, "")
+      clearErrors(fieldKey)
+    }
+  }, [setValue, clearErrors, alternatePhoneValue])
 
   const onSubmit = (data) => {
     setErrorAlert(false)
@@ -313,6 +324,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       <Select
                         id="contactPreferences"
                         name="contactPreferences"
+                        label={t("application.contact.preferredContactType")}
                         labelClassName="sr-only"
                         register={register}
                         controlClassName="control"
@@ -372,6 +384,118 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     "application.applicant.workAddress",
                     "work"
                   )}
+              </GridSection>
+
+              <GridSection title={t("application.alternateContact.type.label")} columns={3}>
+                <GridCell>
+                  <ViewItem label={t("application.name.firstName")}>
+                    <Field
+                      id="application.alternateContact.firstName"
+                      name="application.alternateContact.firstName"
+                      label={t("application.name.firstName")}
+                      placeholder={t("application.name.firstName")}
+                      register={register}
+                      readerOnly
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.name.lastName")}>
+                    <Field
+                      id="application.alternateContact.lastName"
+                      name="application.alternateContact.lastName"
+                      placeholder={t("application.name.lastName")}
+                      register={register}
+                      label={t("application.name.lastName")}
+                      readerOnly
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("t.relationship")}>
+                    <Select
+                      id="application.alternateContact.relationship"
+                      name="application.alternateContact.relationship"
+                      label={t("t.relationship")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={relationshipKeys}
+                      keyPrefix="application.form.options.relationship"
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.details.agency")}>
+                    <Field
+                      id="application.alternateContact.agency"
+                      name="application.alternateContact.agency"
+                      label={t("application.details.agency")}
+                      placeholder={t(
+                        "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
+                      )}
+                      register={register}
+                      readerOnly
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("t.email")}>
+                    <Field
+                      id="application.alternateContact.emailAddress"
+                      name="application.alternateContact.emailAddress"
+                      type="email"
+                      placeholder="example@web.com"
+                      label={t("t.email")}
+                      validation={{ pattern: emailRegex }}
+                      error={errors.application?.alternateContact?.emailAddress}
+                      errorMessage={t("application.name.emailAddressError")}
+                      register={register}
+                      readerOnly
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("t.phone")}>
+                    <PhoneField
+                      id="application.alternateContactPhone"
+                      name="application.alternateContactPhone"
+                      required={false}
+                      error={errors.application?.alternateContactPhone}
+                      errorMessage={t("application.contact.phoneNumberError")}
+                      control={control}
+                      controlClassName="control"
+                      label={t("t.phone")}
+                      readerOnly
+                    />
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  {/* TODO: add this field to the BE and public reference */}
+                  <ViewItem label={t("applications.table.phoneType")}>
+                    <Select
+                      id="application.alternateContact.phoneNumberType"
+                      name="application.alternateContact.phoneNumberType"
+                      placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                      label={t("applications.table.phoneType")}
+                      labelClassName="sr-only"
+                      error={errors.application?.alternateContact?.phoneNumberType}
+                      errorMessage={t("application.contact.phoneNumberTypeError")}
+                      register={register}
+                      controlClassName="control"
+                      options={phoneNumberKeys}
+                      keyPrefix="application.contact.phoneNumberTypes"
+                      validation={{ required: alternatePhoneValue?.length > 0 }}
+                      disabled={!alternatePhoneValue?.length}
+                    />
+                  </ViewItem>
+                </GridCell>
               </GridSection>
             </div>
 
