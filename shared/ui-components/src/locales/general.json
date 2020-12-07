@@ -55,7 +55,10 @@
   "application": {
     "add": {
       "applicationAddError": "You’ll need to resolve any errors before moving on.",
-      "workInRegion": "Work in the region?"
+      "workInRegion": "Work in the region?",
+      "mobility": "Mobility Impairments",
+      "vision": "Vision Impairments",
+      "hearing": "Hearing Impairments"
     },
     "details": {
       "applicationData": "Application Data",

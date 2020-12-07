@@ -497,6 +497,38 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   </ViewItem>
                 </GridCell>
               </GridSection>
+
+              <GridSection title={t("application.review.householdDetails")} columns={1}>
+                <GridCell>
+                  <ViewItem label={t("application.details.adaPriorities")}>
+                    <fieldset className="mt-4">
+                      <Field
+                        id="application.accessibility.mobility"
+                        name="application.accessibility.mobility"
+                        type="checkbox"
+                        label={t("application.add.mobility")}
+                        register={register}
+                      />
+
+                      <Field
+                        id="application.accessibility.vision"
+                        name="application.accessibility.vision"
+                        type="checkbox"
+                        label={t("application.add.vision")}
+                        register={register}
+                      />
+
+                      <Field
+                        id="application.accessibility.hearing"
+                        name="application.accessibility.hearing"
+                        type="checkbox"
+                        label={t("application.add.hearing")}
+                        register={register}
+                      />
+                    </fieldset>
+                  </ViewItem>
+                </GridCell>
+              </GridSection>
             </div>
 
             <div className="md:w-3/12">
