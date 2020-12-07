@@ -769,7 +769,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       name="application.demographics.howDidYouHear"
                       fields={howDidYouHearOptions}
                       register={register}
-                      fieldGroupClassName="grid grid-cols-2"
+                      fieldGroupClassName="grid grid-cols-2 mt-4"
                     />
                   </ViewItem>
                 </GridCell>
