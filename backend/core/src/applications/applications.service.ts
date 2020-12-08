@@ -29,7 +29,16 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["listing", "user", "listing.property"],
+      relations: [
+        "listing",
+        "user",
+        "listing.property",
+        "listing.property.buildingAddress",
+        "listing.property.units",
+        "listing.property.units.amiChart",
+        "listing.property.units.amiChart.items",
+      ],
+      loadEagerRelations: true,
     })
   }
 
@@ -44,9 +53,31 @@ export class ApplicationsService {
 
   async listPaginated(params: ApplicationsListQueryParams, user?: User) {
     const qb = this.repository.createQueryBuilder("application")
+    // FIXME This is a temporary fix before switching to using a repository with
+    //  to_tsvector. Previously it didn't work because of bugs in TypeORM related to jsonb columns
+    // When using querybuild we actually need to specify all the relation that
+    // are normally registeredas eager with repository methods.
+    qb.leftJoinAndSelect("application.accessibility", "accessibility")
+    qb.leftJoinAndSelect("application.alternateAddress", "alternateAddress")
+    qb.leftJoinAndSelect("application.alternateContact", "alternateContact")
+    qb.leftJoinAndSelect("alternateContact.mailingAddress", "alternateMailingAddress")
+    qb.leftJoinAndSelect("application.applicant", "applicant")
+    qb.leftJoinAndSelect("applicant.address", "applicantAddress")
+    qb.leftJoinAndSelect("applicant.workAddress", "applicantWorkAddress")
+    qb.leftJoinAndSelect("application.demographics", "demographics")
+    qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
+    qb.leftJoinAndSelect("householdMembers.address", "householdMembersAddress")
+    qb.leftJoinAndSelect("householdMembers.workAddress", "householdMembersWorkAddress")
+    qb.leftJoinAndSelect("application.mailingAddress", "applicationMailingAddress")
+    qb.leftJoinAndSelect("application.preferences", "preferences")
+    // Not eager relations
     qb.leftJoinAndSelect("application.user", "user")
     qb.leftJoinAndSelect("application.listing", "listing")
     qb.leftJoinAndSelect("listing.property", "property")
+    qb.leftJoinAndSelect("property.buildingAddress", "buildingAddress")
+    qb.leftJoinAndSelect("property.units", "units")
+    qb.leftJoinAndSelect("units.amiChart", "amiChart")
+    qb.leftJoinAndSelect("amiChart.items", "amiChartItems")
 
     if (user) {
       qb.andWhere("user.id = :userId", { userId: user.id })
