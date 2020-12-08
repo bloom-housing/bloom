@@ -22,7 +22,7 @@ Each application is designed to run entirely in the browser, and to only serve a
 
 ### Services
 
-- `/backend/core` will be the container for the key backend services (e.g. listings, applications, users) going forward. Information is stored in a postgres database, and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time).
+- `backend/core` will be the container for the key backend services (e.g. listings, applications, users) going forward. Information is stored in a postgres database, and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time).
 
 - `services/listings` was the initial backend service for listing information, serving from json files with some minimal transformation. It will soon be retired.
 
