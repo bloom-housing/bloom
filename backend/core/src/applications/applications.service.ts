@@ -88,7 +88,7 @@ export class ApplicationsService {
     }
 
     if (params.search) {
-      qb.andWhere("to_tsvector('english', application) @@ plainto_tsquery(:search)", {
+      qb.andWhere("to_tsvector('english', concat_ws(' ', applicant)) @@ plainto_tsquery(:search)", {
         search: params.search,
       })
     }
