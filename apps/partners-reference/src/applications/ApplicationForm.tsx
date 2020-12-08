@@ -11,7 +11,7 @@ import {
   PhoneField,
   Select,
   contactPreferencesKeys,
-  relationshipKeys,
+  altContactRelationshipKeys,
   ethnicityKeys,
   raceKeys,
   genderKeys,
@@ -91,6 +91,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   }
 
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => item.id)
+  const altContactRelationshipOptions = ["", ...altContactRelationshipKeys]
   const howDidYouHearOptions = useMemo(() => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
@@ -439,8 +440,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
-                      options={relationshipKeys}
-                      keyPrefix="application.form.options.relationship"
+                      options={altContactRelationshipOptions}
+                      keyPrefix="application.alternateContact.type.options"
                     />
                   </ViewItem>
                 </GridCell>
@@ -489,27 +490,6 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       controlClassName="control"
                       label={t("t.phone")}
                       readerOnly
-                    />
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  {/* TODO: add this field to the BE and public reference */}
-                  <ViewItem label={t("applications.table.phoneType")}>
-                    <Select
-                      id="application.alternateContact.phoneNumberType"
-                      name="application.alternateContact.phoneNumberType"
-                      placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                      label={t("applications.table.phoneType")}
-                      labelClassName="sr-only"
-                      error={errors.application?.alternateContact?.phoneNumberType}
-                      errorMessage={t("application.contact.phoneNumberTypeError")}
-                      register={register}
-                      controlClassName="control"
-                      options={phoneNumberKeys}
-                      keyPrefix="application.contact.phoneNumberTypes"
-                      validation={{ required: alternatePhoneValue?.length > 0 }}
-                      disabled={!alternatePhoneValue?.length}
                     />
                   </ViewItem>
                 </GridCell>
