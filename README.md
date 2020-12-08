@@ -22,7 +22,7 @@ Each application is designed to run entirely in the browser, and to only serve a
 
 ### Services
 
-- `/backend/core` will be the container for the key backend services (e.g. listings, applications, users) going forward. Information is stored in a postgres database, and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time).
+- `backend/core` will be the container for the key backend services (e.g. listings, applications, users) going forward. Information is stored in a postgres database, and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time).
 
 - `services/listings` was the initial backend service for listing information, serving from json files with some minimal transformation. It will soon be retired.
 
@@ -50,7 +50,7 @@ Operational configuration of each app and service is read from environment varia
 
 ### Setting up a test Database
 
-The new `backend/core` uses a postgres database, which is accessed via TypeORM. Once postgres is sety up and a blank database is initialized, yarn scripts are available within that package to create/migrate the schema, and to seed the database for development and testing. See backend/core/README.md for more details.
+The new `backend/core` uses a postgres database, which is accessed via TypeORM. Once postgres is set up and a blank database is initialized, yarn scripts are available within that package to create/migrate the schema, and to seed the database for development and testing. See [backend/core/README.md](https://github.com/bloom-housing/bloom/blob/master/backend/core/README.md) for more details.
 
 ### Running a Local Test Server
 
@@ -67,7 +67,7 @@ This runs 4 processes for each of the two apps and two services on 4 different p
 
 ### Storybook Component Library
 
-The `ui-components` package includes [Storybook](https://storybook.js.org/), an environment for easily browing the UI components independent of their implementation. Storybook can be run locally with `yarn start` from within the `shared/ui-components` directory. Contributions to component stories are highly encouraged, and will also benefit testing coverage via Storyshots.
+The `ui-components` package includes [Storybook](https://storybook.js.org/), an environment for easily browing the UI components independent of their implementation. Storybook can be run locally with `yarn start` from within the `shared/ui-components` directory. Contributions to component stories are highly encouraged, and will also benefit testing coverage via Storyshots. See [backend/core/README.md](https://github.com/bloom-housing/bloom/blob/master/shared/ui-components/README.md) for more details.
 
 ### Running Tests
 
