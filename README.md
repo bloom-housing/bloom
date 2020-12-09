@@ -88,7 +88,7 @@ yarn test:all
 
 ### Versioning
 
-We are using [lerna](https://lerna.js.org/) as a package versioning tool. It helps with keeping multiple package versions in sync.
+We are using [lerna](https://lerna.js.org/) as a package versioning tool. It helps with keeping multiple package versions in sync for the entire monorepo.
 
 ## Contributing
 
