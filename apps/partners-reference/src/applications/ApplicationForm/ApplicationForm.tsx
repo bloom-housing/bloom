@@ -27,15 +27,14 @@ import {
   AlertBox,
   Drawer,
 } from "@bloom-housing/ui-components"
-import { useForm } from "react-hook-form"
+import { useForm, UseFormMethods } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import ApplicationFormMember from "./ApplicationFormMember"
+import { ApplicationFormAddress } from "./ApplicationFormAddress"
 
 type Props = {
   isEditable?: boolean
 }
-
-type AddressType = "residence" | "work" | "mailing"
 
 const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
@@ -106,91 +105,6 @@ const ApplicationForm = ({ isEditable }: Props) => {
       register,
     }))
   }, [register])
-
-  const ApplicationAddress = useCallback(
-    (subtitle: string, dataKey: string, type: AddressType) => {
-      return (
-        <GridSection subtitle={subtitle}>
-          <GridCell span={2}>
-            <ViewItem label={t("application.contact.streetAddress")}>
-              <Field
-                id={`${dataKey}.street`}
-                name={`${dataKey}.street`}
-                label={t("application.contact.streetAddress")}
-                placeholder={t("application.contact.streetAddress")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-          <GridCell>
-            <ViewItem label={t("application.contact.apt")}>
-              <Field
-                id={`${dataKey}.street2`}
-                name={`${dataKey}.street2`}
-                label={t("application.contact.apt")}
-                placeholder={t("application.contact.apt")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-
-          <GridCell>
-            <ViewItem label={t("application.contact.city")}>
-              <Field
-                id={`${dataKey}.city`}
-                name={`${dataKey}.city`}
-                label={t("application.contact.cityName")}
-                placeholder={t("application.contact.cityName")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-
-          <GridCell className="md:grid md:grid-cols-2 md:gap-8" span={2}>
-            <ViewItem label={t("application.contact.state")} className="mb-0">
-              <Select
-                id={`${dataKey}.state`}
-                name={`${dataKey}.state`}
-                label={t("application.contact.state")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={stateKeys}
-                keyPrefix="application.form.options.states"
-              />
-            </ViewItem>
-
-            <ViewItem label={t("application.contact.zip")}>
-              <Field
-                id={`${dataKey}.zipCode`}
-                name={`${dataKey}.zipCode`}
-                label={t("application.contact.zip")}
-                placeholder={t("application.contact.zipCode")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-
-          {type === "residence" && (
-            <GridCell span={2}>
-              <Field
-                id="application.sendMailToMailingAddress"
-                name="application.sendMailToMailingAddress"
-                type="checkbox"
-                label={t("application.contact.sendMailToMailingAddress")}
-                register={register}
-              />
-            </GridCell>
-          )}
-        </GridSection>
-      )
-    },
-    [register]
-  )
 
   return (
     <>
@@ -386,24 +300,27 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   </GridCell>
                 </GridSection>
 
-                {ApplicationAddress(
+                {ApplicationFormAddress(
                   t("application.details.residenceAddress"),
                   "application.applicant.address",
-                  "residence"
+                  "residence",
+                  register
                 )}
 
                 {mailingAddressValue &&
-                  ApplicationAddress(
+                  ApplicationFormAddress(
                     t("application.contact.mailingAddress"),
                     "application.mailingAddress",
-                    "mailing"
+                    "mailing",
+                    register
                   )}
 
                 {workInRegionValue === "yes" &&
-                  ApplicationAddress(
+                  ApplicationFormAddress(
                     t("application.contact.workAddress"),
                     "application.applicant.workAddress",
-                    "work"
+                    "work",
+                    register
                   )}
               </GridSection>
 
