@@ -54,7 +54,7 @@ exports[`Storyshots Prototypes/StatusAside Status Aside 1`] = `
           <Button
             onClick={[Function]}
             size="is-small"
-            type="is-primary"
+            styleType="is-primary"
           >
             <button
               className="button is-primary is-small"

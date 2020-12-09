@@ -33,14 +33,14 @@ exports[`Storyshots Overlays/Modal Basic Modal 1`] = `
       Array [
         <Button
           onClick={[Function]}
-          type="is-primary"
+          styleType="is-primary"
         >
           Submit
         </Button>,
         <Button
           border="is-borderless"
           onClick={[Function]}
-          type="is-secondary"
+          styleType="is-secondary"
         >
           Cancel
         </Button>,
@@ -107,13 +107,13 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
       Array [
         <Button
           onClick={[Function]}
-          type="is-success"
+          styleType="is-success"
         >
           Submit
         </Button>,
         <Button
           onClick={[Function]}
-          type="is-alert"
+          styleType="is-alert"
         >
           Cancel
         </Button>,
@@ -542,13 +542,13 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                               Array [
                                 <Button
                                   onClick={[Function]}
-                                  type="is-success"
+                                  styleType="is-success"
                                 >
                                   Submit
                                 </Button>,
                                 <Button
                                   onClick={[Function]}
-                                  type="is-alert"
+                                  styleType="is-alert"
                                 >
                                   Cancel
                                 </Button>,
@@ -577,7 +577,7 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                                       >
                                         <Button
                                           onClick={[Function]}
-                                          type="is-success"
+                                          styleType="is-success"
                                         >
                                           <button
                                             className="button is-success"
@@ -596,7 +596,7 @@ exports[`Storyshots Overlays/Modal Success Failure Modal 1`] = `
                                       >
                                         <Button
                                           onClick={[Function]}
-                                          type="is-alert"
+                                          styleType="is-alert"
                                         >
                                           <button
                                             className="button is-alert"
@@ -681,14 +681,14 @@ exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
       Array [
         <Button
           onClick={[Function]}
-          type="is-primary"
+          styleType="is-primary"
         >
           Submit
         </Button>,
         <Button
           border="is-borderless"
           onClick={[Function]}
-          type="is-secondary"
+          styleType="is-secondary"
         >
           Cancel
         </Button>,
@@ -1073,14 +1073,14 @@ exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
                               Array [
                                 <Button
                                   onClick={[Function]}
-                                  type="is-primary"
+                                  styleType="is-primary"
                                 >
                                   Submit
                                 </Button>,
                                 <Button
                                   border="is-borderless"
                                   onClick={[Function]}
-                                  type="is-secondary"
+                                  styleType="is-secondary"
                                 >
                                   Cancel
                                 </Button>,
@@ -1109,7 +1109,7 @@ exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
                                       >
                                         <Button
                                           onClick={[Function]}
-                                          type="is-primary"
+                                          styleType="is-primary"
                                         >
                                           <button
                                             className="button is-primary"
@@ -1129,7 +1129,7 @@ exports[`Storyshots Overlays/Modal Transparent Overlay Modal 1`] = `
                                         <Button
                                           border="is-borderless"
                                           onClick={[Function]}
-                                          type="is-secondary"
+                                          styleType="is-secondary"
                                         >
                                           <button
                                             className="button is-secondary is-borderless"

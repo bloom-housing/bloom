@@ -56,7 +56,7 @@ exports[`Storyshots Notifications/Status Messages Several Messages 1`] = `
             <Tag
               pillStyle={true}
               size="is-small"
-              type="is-success"
+              styleType="is-success"
             >
               <span
                 className="tag is-success is-small is-pill"
