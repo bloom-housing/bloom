@@ -94,6 +94,32 @@ const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps
     console.log("on error")
   }
 
+  const sameAddressOptions = [
+    {
+      id: "sameAddressYes",
+      label: t("t.yes"),
+      value: "yes",
+    },
+    {
+      id: "sameAddressNo",
+      label: t("t.no"),
+      value: "no",
+    },
+  ]
+
+  const workInRegionOptions = [
+    {
+      id: "workInRegionYes",
+      label: t("t.yes"),
+      value: "yes",
+    },
+    {
+      id: "workInRegionNo",
+      label: t("t.no"),
+      value: "no",
+    },
+  ]
+
   return (
     <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
       <div className="border rounded-md p-8 bg-white">
@@ -163,76 +189,43 @@ const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps
               />
             </ViewItem>
           </GridCell>
-          {/* <GridCell>
+
+          <GridCell>
             <ViewItem label={t("application.add.sameAddressAsPrimary")}>
-              <div className="flex h-12 items-center">
-                <Field
-                  id="application.acceptedTermsYes"
-                  name="application.acceptedTerms"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.yes")}
-                  register={register}
-                  inputProps={{
-                    value: "yes",
-                  }}
-                />
-
-                <Field
-                  id="application.acceptedTermsNo"
-                  name="application.acceptedTerms"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.no")}
-                  register={register}
-                  inputProps={{
-                    value: "no",
-                  }}
-                />
-              </div>
+              <FieldGroup
+                name="sameAddress"
+                type="radio"
+                register={register}
+                fields={sameAddressOptions}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+              />
             </ViewItem>
-          </GridCell> */}
+          </GridCell>
 
-          {/* <GridCell>
+          <GridCell>
             <ViewItem label={t("application.details.workInRegion")}>
-              <div className="flex h-12 items-center">
-                <Field
-                  id="application.acceptedTermsYes"
-                  name="application.acceptedTerms"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.yes")}
-                  register={register}
-                  inputProps={{
-                    value: "yes",
-                  }}
-                />
-
-                <Field
-                  id="application.acceptedTermsNo"
-                  name="application.acceptedTerms"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.no")}
-                  register={register}
-                  inputProps={{
-                    value: "no",
-                  }}
-                />
-              </div>
+              <FieldGroup
+                name="workInRegion"
+                type="radio"
+                register={register}
+                fields={workInRegionOptions}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+              />
             </ViewItem>
-          </GridCell> */}
+          </GridCell>
         </GridSection>
       </div>
 
       <div className="mt-6">
-        <Button onClick={() => console.log("submit")} type={AppearanceStyleType.primary}>
+        <Button onClick={() => console.log("submit")} styleType={AppearanceStyleType.primary}>
           {t("application.review.terms.submit")}
         </Button>
 
         <Button
           onClick={onClose}
-          type={AppearanceStyleType.secondary}
+          styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
         >
           {t("t.cancel")}
