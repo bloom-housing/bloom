@@ -14,7 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import ApplicationForm from "../../src/applications/ApplicationForm"
+import ApplicationForm from "../../src/applications/ApplicationForm/ApplicationForm"
 
 const NewApplication = () => {
   const router = useRouter()

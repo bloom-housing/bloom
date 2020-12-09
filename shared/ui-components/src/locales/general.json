@@ -70,7 +70,9 @@
       "race": "Race",
       "gender": "Gender",
       "howDidYouHearAboutUs": "How did you hear about us?",
-      "sexualOrientation": "Sexual Orientation"
+      "sexualOrientation": "Sexual Orientation",
+      "addHouseholdMember": "Add Household Member",
+      "sameAddressAsPrimary": "Same Address as Primary"
     },
     "details": {
       "applicationData": "Application Data",

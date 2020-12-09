@@ -11,7 +11,11 @@ import {
   PhoneField,
   Select,
   contactPreferencesKeys,
+  relationshipKeys,
   altContactRelationshipKeys,
+  AppearanceSizeType,
+  AppearanceStyleType,
+  AppearanceBorderType,
   ethnicityKeys,
   raceKeys,
   genderKeys,
@@ -21,9 +25,11 @@ import {
   Button,
   Form,
   AlertBox,
+  Drawer,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import ApplicationFormMember from "./ApplicationFormMember"
 
 type Props = {
   isEditable?: boolean
@@ -33,6 +39,7 @@ type AddressType = "residence" | "work" | "mailing"
 
 const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
+  const [membersDrawer, setMembersDrawer] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
@@ -493,6 +500,30 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     />
                   </ViewItem>
                 </GridCell>
+              </GridSection>
+
+              <GridSection
+                title={t("application.household.householdMembers")}
+                grid={false}
+                separator
+              >
+                <div className="bg-gray-300 px-4 py-5">
+                  <Button size={AppearanceSizeType.normal} onClick={() => setMembersDrawer(true)}>
+                    {t("application.add.addHouseholdMember")}
+                  </Button>
+                </div>
+
+                <Drawer
+                  open={membersDrawer}
+                  title={t("application.household.householdMember")}
+                  onClose={() => setMembersDrawer(!membersDrawer)}
+                  ariaDescription="My Drawer"
+                >
+                  <ApplicationFormMember
+                    onSubmit={() => console.log("submit")}
+                    onClose={() => setMembersDrawer(false)}
+                  />
+                </Drawer>
               </GridSection>
 
               <GridSection title={t("application.review.householdDetails")} columns={1} separator>
