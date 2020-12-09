@@ -26,7 +26,7 @@ export enum AppearanceShadeType {
 }
 
 export interface AppearanceProps {
-  type?: AppearanceStyleType
+  styleType?: AppearanceStyleType
   border?: AppearanceBorderType
   size?: AppearanceSizeType
   shade?: AppearanceShadeType
@@ -35,7 +35,7 @@ export interface AppearanceProps {
 
 export const classNamesForAppearanceTypes = (props: AppearanceProps) => {
   const classNames = []
-  if (props.type) classNames.push(props.type)
+  if (props.styleType) classNames.push(props.styleType)
   if (props.border) classNames.push(props.border)
   if (props.size) classNames.push(props.size)
   if (props.shade) classNames.push(props.shade)

@@ -31,12 +31,12 @@ export const Standard = () => {
         onClose={() => setDrawerState(!drawerState)}
         ariaDescription="My Drawer"
         actions={[
-          <Button onClick={() => setDrawerState(!drawerState)} type={AppearanceStyleType.primary}>
+          <Button onClick={() => setDrawerState(!drawerState)} styleType={AppearanceStyleType.primary}>
             Submit
           </Button>,
           <Button
             onClick={() => setDrawerState(!drawerState)}
-            type={AppearanceStyleType.secondary}
+            styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
           >
             Cancel
@@ -71,12 +71,12 @@ export const StandardOnLeft = () => {
         ariaDescription="My Drawer"
         direction={DrawerSide.left}
         actions={[
-          <Button onClick={() => setDrawerState(!drawerState)} type={AppearanceStyleType.primary}>
+          <Button onClick={() => setDrawerState(!drawerState)} styleType={AppearanceStyleType.primary}>
             Submit
           </Button>,
           <Button
             onClick={() => setDrawerState(!drawerState)}
-            type={AppearanceStyleType.secondary}
+            styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
           >
             Cancel
@@ -87,7 +87,7 @@ export const StandardOnLeft = () => {
           <p>Test</p>
         </section>
       </Drawer>
-      <div class="text-right">
+      <div className="text-right">
         <Button
           onClick={() => {
             setDrawerState(true)

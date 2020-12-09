@@ -23,7 +23,7 @@ export const StatusBar = () => (
     </div>
     <Button
       size={AppearanceSizeType.small}
-      type={AppearanceStyleType.primary}
+      styleType={AppearanceStyleType.primary}
       onClick={handleClick}
     >
       Save

@@ -53,7 +53,7 @@ export default () => {
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Button
-                type={AppearanceStyleType.primary}
+                styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

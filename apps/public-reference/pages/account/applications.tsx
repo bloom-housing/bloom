@@ -44,7 +44,7 @@ export default () => {
   )
   const modalActions = [
     <Button
-      type={AppearanceStyleType.primary}
+      styleType={AppearanceStyleType.primary}
       onClick={() => {
         // applicationsService.delete(deletingApplication.id).then(() => {
         const newApplications = [...applications]
@@ -58,7 +58,7 @@ export default () => {
       {t("t.delete")}
     </Button>,
     <Button
-      type={AppearanceStyleType.secondary}
+      styleType={AppearanceStyleType.secondary}
       border={AppearanceBorderType.borderless}
       onClick={() => {
         setDeletingApplication(null)

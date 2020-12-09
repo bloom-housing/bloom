@@ -82,7 +82,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
 
   const modalActions = [
     <Button
-      type={AppearanceStyleType.primary}
+      styleType={AppearanceStyleType.primary}
       onClick={() => {
         clearTimeout(promptTimeout)
         setPromptTimeout(undefined)

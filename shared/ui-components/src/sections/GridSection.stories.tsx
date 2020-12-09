@@ -344,7 +344,7 @@ export const ButtonGrid = () => (
       </Button>
     </GridCell>
     <GridCell span={2}>
-      <Button type={AppearanceStyleType.primary} fullWidth={true} onClick={() => {}}>
+      <Button styleType={AppearanceStyleType.primary} fullWidth={true} onClick={() => {}}>
         I'm a Button!
       </Button>
     </GridCell>

@@ -26,7 +26,7 @@ export const standard = () => {
   const borderSelect = select("Appearance Border", BorderTypeStory, undefined)
 
   return (
-    <Button type={styleSelect} border={borderSelect} onClick={handleClick}>
+    <Button styleType={styleSelect} border={borderSelect} onClick={handleClick}>
       {text("Label", "Hello Storybook")}
     </Button>
   )
@@ -45,7 +45,7 @@ export const big = () => (
 )
 
 export const SmallAndPrimary = () => (
-  <Button size={AppearanceSizeType.small} type={AppearanceStyleType.primary} onClick={handleClick}>
+  <Button size={AppearanceSizeType.small} styleType={AppearanceStyleType.primary} onClick={handleClick}>
     Small and Primary Button
   </Button>
 )
@@ -57,7 +57,7 @@ export const NormalCase = () => (
 )
 
 export const NormalCaseAndSuccess = () => (
-  <Button normalCase={true} type={AppearanceStyleType.success} onClick={handleClick}>
+  <Button normalCase={true} styleType={AppearanceStyleType.success} onClick={handleClick}>
     Button (Normal Case)
   </Button>
 )

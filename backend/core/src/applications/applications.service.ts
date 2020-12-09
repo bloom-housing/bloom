@@ -29,15 +29,7 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: [
-        "listing",
-        "user",
-        "listing.property",
-        "listing.property.buildingAddress",
-        "listing.property.units",
-        "listing.property.units.amiChart",
-        "listing.property.units.amiChart.items",
-      ],
+      relations: ["listing", "user", "listing.property"],
       loadEagerRelations: true,
     })
   }
@@ -88,7 +80,7 @@ export class ApplicationsService {
     }
 
     if (params.search) {
-      qb.andWhere("to_tsvector('english', application) @@ plainto_tsquery(:search)", {
+      qb.andWhere("to_tsvector('english', concat_ws(' ', applicant)) @@ plainto_tsquery(:search)", {
         search: params.search,
       })
     }
