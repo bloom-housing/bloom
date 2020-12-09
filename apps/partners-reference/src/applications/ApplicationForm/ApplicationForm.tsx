@@ -508,7 +508,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 separator
               >
                 <div className="bg-gray-300 px-4 py-5">
-                  <Button size={AppearanceSizeType.normal} onClick={() => setMembersDrawer(true)}>
+                  <Button
+                    type="button"
+                    size={AppearanceSizeType.normal}
+                    onClick={() => setMembersDrawer(true)}
+                  >
                     {t("application.add.addHouseholdMember")}
                   </Button>
                 </div>
