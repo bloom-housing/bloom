@@ -512,18 +512,6 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     {t("application.add.addHouseholdMember")}
                   </Button>
                 </div>
-
-                <Drawer
-                  open={membersDrawer}
-                  title={t("application.household.householdMember")}
-                  onClose={() => setMembersDrawer(!membersDrawer)}
-                  ariaDescription="My Drawer"
-                >
-                  <ApplicationFormMember
-                    onSubmit={() => console.log("submit")}
-                    onClose={() => setMembersDrawer(false)}
-                  />
-                </Drawer>
               </GridSection>
 
               <GridSection title={t("application.review.householdDetails")} columns={1} separator>
@@ -836,6 +824,18 @@ const ApplicationForm = ({ isEditable }: Props) => {
             </div>
           </div>
         </Form>
+
+        <Drawer
+          open={membersDrawer}
+          title={t("application.household.householdMember")}
+          onClose={() => setMembersDrawer(!membersDrawer)}
+          ariaDescription="My Drawer"
+        >
+          <ApplicationFormMember
+            onSubmit={() => console.log("submit")}
+            onClose={() => setMembersDrawer(false)}
+          />
+        </Drawer>
       </section>
     </>
   )
