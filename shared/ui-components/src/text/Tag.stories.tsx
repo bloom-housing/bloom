@@ -9,9 +9,9 @@ export default {
 
 export const standard = () => <Tag>Tag</Tag>
 
-export const success = () => <Tag type={AppearanceStyleType.success}>Success</Tag>
+export const success = () => <Tag styleType={AppearanceStyleType.success}>Success</Tag>
 
-export const warning = () => <Tag type={AppearanceStyleType.warning}>Warning</Tag>
+export const warning = () => <Tag styleType={AppearanceStyleType.warning}>Warning</Tag>
 
 export const small = () => <Tag size={AppearanceSizeType.small}>Warning</Tag>
 
@@ -26,7 +26,7 @@ export const pillSmall = () => (
 )
 
 export const PillAndSuccess = () => (
-  <Tag pillStyle={true} type={AppearanceStyleType.success}>
+  <Tag pillStyle={true} styleType={AppearanceStyleType.success}>
     Pill Success
   </Tag>
 )

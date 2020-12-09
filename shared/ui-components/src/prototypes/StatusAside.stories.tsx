@@ -31,7 +31,7 @@ export const StatusAside = () => (
         <div className="button-group__item col-span-2">
           <Button
             size={AppearanceSizeType.small}
-            type={AppearanceStyleType.primary}
+            styleType={AppearanceStyleType.primary}
             onClick={handleClick}
           >
             Submit

@@ -426,7 +426,7 @@ export default () => {
                 <div className="form-card__pager-row primary">
                   <Button
                     id="save-member"
-                    type={AppearanceStyleType.primary}
+                    styleType={AppearanceStyleType.primary}
                     onClick={() => {
                       //
                     }}

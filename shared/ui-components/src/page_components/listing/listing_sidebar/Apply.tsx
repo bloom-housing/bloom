@@ -76,7 +76,7 @@ const Apply = (props: ApplyProps) => {
         {!openDateState(listing) && onlineApplicationUrl !== "" && (
           <>
             <LinkButton
-              type={AppearanceStyleType.primary}
+              styleType={AppearanceStyleType.primary}
               className="w-full mb-2"
               href={onlineApplicationUrl}
             >
@@ -89,7 +89,7 @@ const Apply = (props: ApplyProps) => {
             {onlineApplicationUrl !== "" && <OrDivider bgColor="white" />}
             <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
             <Button
-              type={onlineApplicationUrl === "" ? AppearanceStyleType.primary : undefined}
+              styleType={onlineApplicationUrl === "" ? AppearanceStyleType.primary : undefined}
               className="w-full mb-2"
               onClick={toggleDownload}
             >
