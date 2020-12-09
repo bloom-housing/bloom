@@ -30,6 +30,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { ApplicationFormAddress } from "./ApplicationFormAddress"
 
 // TODO: fix obSubmit type
 type ApplicationFormMemberProps = {
@@ -85,6 +86,9 @@ class Member implements HouseholdMemberUpdate {
 const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
+
+  const sameAddressField = watch("sameAddress")
+  const workInRegionField = watch("workInRegion")
 
   function onFormSubmit(data) {
     console.log("on submit", data)
@@ -216,6 +220,22 @@ const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps
             </ViewItem>
           </GridCell>
         </GridSection>
+
+        {sameAddressField !== "yes" &&
+          ApplicationFormAddress(
+            t("application.details.residenceAddress"),
+            "address",
+            "residence-member",
+            register
+          )}
+
+        {workInRegionField === "yes" &&
+          ApplicationFormAddress(
+            t("application.contact.workAddress"),
+            "application.applicant.workAddress",
+            "work",
+            register
+          )}
       </div>
 
       <div className="mt-6">
