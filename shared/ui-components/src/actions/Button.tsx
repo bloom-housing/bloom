@@ -4,6 +4,7 @@ import { AppearanceProps, classNamesForAppearanceTypes } from "../global/Appeara
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
+  type?: "button" | "submit" | "reset"
   children: React.ReactNode
   onClick: (e: React.MouseEvent) => void
   unstyled?: boolean
@@ -26,6 +27,7 @@ const Button = (props: ButtonProps) => {
   return (
     <button
       id={props.id}
+      type={props.type}
       className={buttonClasses.join(" ")}
       onClick={props.onClick}
       disabled={props.disabled}
