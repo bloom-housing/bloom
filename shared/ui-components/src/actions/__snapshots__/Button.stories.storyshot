@@ -62,15 +62,15 @@ exports[`Storyshots Actions/Button Inaccessible 1`] = `
 </div>
 `;
 
-exports[`Storyshots Actions/Button Inline 1`] = `
+exports[`Storyshots Actions/Button Inline Icon 1`] = `
 <div>
   <Button
     icon="arrow-back"
-    inline={true}
+    inlineIcon="left"
     onClick={[Function]}
   >
     <button
-      className="button is-inline"
+      className="button is-inline inline-icon--left"
       onClick={[Function]}
     >
       <Icon
@@ -93,6 +93,39 @@ exports[`Storyshots Actions/Button Inline 1`] = `
       >
         Go Back
       </span>
+    </button>
+  </Button>
+  <br />
+  <br />
+  <Button
+    icon="right"
+    inlineIcon="right"
+    onClick={[Function]}
+  >
+    <button
+      className="button is-inline inline-icon--right"
+      onClick={[Function]}
+    >
+      <span
+        className="button__content"
+      >
+        Go Forward
+      </span>
+      <Icon
+        className="button__icon"
+        size="tiny"
+        symbol="right"
+      >
+        <span
+          className="ui-icon ui-tiny button__icon"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-right"
+            />
+          </svg>
+        </span>
+      </Icon>
     </button>
   </Button>
   <InlineSVG
