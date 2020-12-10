@@ -3,8 +3,6 @@ import moment from "moment"
 import { ApplicationSection } from "./ApplicationSection"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-// @ts-ignore
 export default {
   component: ApplicationSection,
   title: "Listing Sidebar/Application Section",
@@ -12,11 +10,10 @@ export default {
 
 export const dueSoon = () => {
   const listing = Object.assign({}, Archer) as any
+  const days = 10
   listing.applicationOpenDate = ""
   listing.waitlistCurrentSize = 0
-  listing.applicationDueDate = moment().add(10, "days").format()
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
+  listing.applicationDueDate = moment().add(days, "days").format()
   return <ApplicationSection listing={listing} internalFormRoute="/forms" />
 }
 

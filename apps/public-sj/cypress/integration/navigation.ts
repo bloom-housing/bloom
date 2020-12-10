@@ -1,34 +1,49 @@
-describe("Navigating around the site", function () {
-  it("Loads the homepage directly", function () {
-    cy.visit("http://localhost:3000")
+describe("Navigating around the site", () => {
+  it("Loads the homepage directly", () => {
+    cy.visit("/")
 
     // Check that the homepage banner text is present on the page
     cy.contains("Apply for affordable housing")
   })
 
-  it("Loads the listings page directly", function () {
-    cy.visit("http://localhost:3000/listings")
+  it("Loads the listings page directly", () => {
+    cy.visit("/listings")
 
     // Check that the listings page banner text is present on the page
     cy.contains("Rent affordable housing")
   })
 
-  it("Loads a listing page directly", function () {
-    cy.visit("http://localhost:3000/listing/vWgL5K1EUG8q0SX-Dv5BA")
+  it("Loads a listing page directly by id", () => {
+    cy.visit("/listing/a41641e6-2772-4e18-af8c-b16c1973e976")
 
     // Check that the listing page sidebar apply section text is present on the page
-    cy.contains("Get a Paper Application")
+    cy.contains("Apply Online")
+
+    // Check that the URL got re-written with a URL slug
+    cy.location("pathname").should(
+      "eq",
+      "/listing/a41641e6-2772-4e18-af8c-b16c1973e976/the_triton_55_triton_park_lane_foster_city_ca"
+    )
   })
 
-  it("Loads a non-listing-related page directly", function () {
-    cy.visit("http://localhost:3000/disclaimer")
+  it("Loads a listing page directly with a full url", () => {
+    cy.visit(
+      "/listing/a41641e6-2772-4e18-af8c-b16c1973e976/the_triton_55_triton_park_lane_foster_city_ca"
+    )
+
+    // Check that the listing page sidebar apply section text is present on the page
+    cy.contains("Apply Online")
+  })
+
+  it("Loads a non-listing-related page directly", () => {
+    cy.visit("/disclaimer")
 
     // Check that the Disclaimer page banner text is present on the page
     cy.contains("Endorsement Disclaimers")
   })
 
-  it("Can navigate to all page types after initial site load", function () {
-    cy.visit("http://localhost:3000")
+  it("Can navigate to all page types after initial site load", () => {
+    cy.visit("/")
 
     // Click on the Disclaimer page link in the footer
     cy.get("footer a").contains("Disclaimer").click()
@@ -63,7 +78,7 @@ describe("Navigating around the site", function () {
       })
 
     // Check that the homepage banner text is present on the page
-    cy.url().should("eq", "http://localhost:3000/")
+    cy.url().should("eq", `${Cypress.config("baseUrl")}/`)
     cy.contains("Apply for affordable housing")
   })
 })

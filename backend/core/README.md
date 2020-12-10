@@ -28,6 +28,12 @@ Test DB reseed:
 psql -c 'DROP DATABASE bloom_test;' && psql -c 'CREATE DATABASE bloom_test;' && yarn typeorm-test migration:run && yarn test:seed
 ```
 
+Importing a listing (make sure you're in the backend/core directory):
+
+```shell script
+yarn ts-node listings-importer.ts http://localhost:3100/ [USERNAME]:[PASSWORD] listing_data/skylyne.json
+```
+
 ### Running Tests
 
 End-to-end tests:

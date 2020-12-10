@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios"
-import { CreateUserDto, User } from "@bloom-housing/backend-core/"
 import { getTokenTtl } from "./token"
+import { UserCreate, User } from "@bloom-housing/core"
 
 export const renewToken = async (client: AxiosInstance) => {
   const res = await client.post<{ accessToken: string }>("auth/token")
@@ -17,7 +17,7 @@ export const login = async (apiBase: string, email: string, password: string) =>
   return accessToken
 }
 
-export const register = async (apiBase: string, data: CreateUserDto) => {
+export const register = async (apiBase: string, data: UserCreate) => {
   const res = await axios.post<{ accessToken: string } & User>(`${apiBase}/auth/register`, data)
   const { accessToken, ...rest } = res.data
   const user = rest as User
@@ -25,7 +25,7 @@ export const register = async (apiBase: string, data: CreateUserDto) => {
 }
 
 export const getProfile = async (client: AxiosInstance) => {
-  const res = await client.get<User>("/user/profile")
+  const res = await client.get<User>("/user")
   return res.data
 }
 
@@ -58,7 +58,7 @@ export const scheduleTokenRefresh = (
           onRefresh(newToken)
         }
       }
-      run()
+      void run()
     }, Math.max(ttl - 60000, 0)) as unknown) as number
   }
 }

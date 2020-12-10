@@ -1,5 +1,5 @@
+import { MarkdownSection, PageHeader, t } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
-import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/privacy_policy.mdx"
 
 export default () => {

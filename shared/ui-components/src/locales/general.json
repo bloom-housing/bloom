@@ -5,7 +5,40 @@
     "myApplications": "My Applications",
     "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
   },
+  "applications": {
+    "totalApplications": "Total Applications",
+    "addApplication": "Add Application",
+    "applicationsReceived": "Applications Received"
+  },
   "application": {
+    "details": {
+      "applicationData": "Application Data",
+      "number": "Application Number",
+      "type": "Application Submission Type",
+      "submittedDate": "Application Submitted Date",
+      "timeDate": "Application Time Date",
+      "language": "Application Language",
+      "totalSize": "Total Household Size",
+      "submittedBy": "Submitted By",
+      "agency": "Agency if Applicable",
+      "adaPriorities": "ADA Priorities Selected",
+      "preferences": "Application Preferences",
+      "liveOrWorkIn": "Live or Work in",
+      "householdIncome": "Declared Household Income",
+      "annualIncome": "Annual Income",
+      "vouchers": "Housing Voucher or Subsidy",
+      "preferredContact": "Preferred Contact",
+      "residenceAddress": "Residence Address",
+      "submissionType": {
+        "electronical": "Electronical",
+        "paper": "Paper"
+      },
+      "applicationStatus": {
+        "draft": "Draft",
+        "submitted": "Submitted",
+        "removed": "Removed"
+      }
+    },
     "form": {
       "errors": {
         "selectOption": "Please select one of the options above.",
@@ -109,7 +142,8 @@
       "yourName": "Your Name",
       "firstName": "First Name",
       "firstNameError": "Please enter a First Name",
-      "middleName": "Middle Name (optional)",
+      "middleNameOptional": "Middle Name (optional)",
+      "middleName": "Middle Name",
       "lastName": "Last Name",
       "lastNameError": "Please enter a Last Name",
       "yourDateOfBirth": "Your Date of Birth",
@@ -131,12 +165,14 @@
       "phoneNumberError": "Please enter a phone number",
       "noPhoneNumber": "I don't have a telephone number",
       "phoneNumberTypeError": "Please enter a phone number type",
+      "yourAdditionalPhoneNumber": "Your Second Phone Number",
       "additionalPhoneNumber": "I have an additional phone number",
       "address": "Address",
       "addressWhereYouCurrentlyLive": "We need the address where you currently live. If you are homeless, enter either the shelter address or an address close to where you stay.",
       "streetAddress": "Street Address",
       "streetError": "Please enter an address",
       "apt": "Apt or Unit #",
+      "city": "City",
       "cityName": "City Name",
       "cityError": "Please enter a city",
       "contactPreference": "How do you prefer to be contacted?",
@@ -219,6 +255,7 @@
         "preferredUnitType": "Preferred Unit Type",
         "title": "What unit sizes are you interested in?",
         "subTitle": "Your selected unit type will be subject to availability.",
+        "legend": "Preferred unit type",
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
@@ -241,7 +278,7 @@
         "updateHouseholdMember": "Update Household Member",
         "whatReletionship": "What is their relationship to you",
         "workInRegion": "Do they work in <REGION>?",
-        "workInRegionNote": "This means they currently work in <REGION> at least 75% of theirs work hours."
+        "workInRegionNote": "TBD"
       },
       "membersInfo": {
         "title": "Before adding other people, make sure that they aren't named on any other application for this listing."
@@ -252,6 +289,7 @@
       "label": "ADA Accessible Units",
       "title": "Do you or anyone in your household need any of the following ADA accessibility features?",
       "subTitle": "If you are selected for a unit, the property will work to accommodate your need to the best of their ability. Should your application be chosen, be prepared to provide supporting documentation from your physician.",
+      "legend": "ADA Features",
       "mobility": "For Mobility Impairments",
       "vision": "For Vision Impairments",
       "hearing": "For Hearing Impairments"
@@ -382,6 +420,7 @@
         "prompt": "What is your household total pre-tax income?",
         "placeholder": "Total all of your income sources",
         "incomeError": "Please enter a valid number greater than 0.",
+        "legend": "Income frequency",
         "perMonth": "per month",
         "perYear": "per year",
         "periodError": "Please select one of the options above.",
@@ -410,6 +449,7 @@
           "strong": "Rental subsidies",
           "text": "like VASH, HSA, HOPWA, Catholic Charities, AIDS Foundation, etc."
         },
+        "legend": "Housing vouchers, nontaxable income or rental subsidies",
         "prompt": "Please select one.",
         "yes": "Yes",
         "no": "No",
@@ -455,6 +495,9 @@
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "success": "Welcome back, %{name}!"
+    },
+    "signOut": {
+      "success": "You have successfully logged out of your account."
     }
   },
   "config": {
@@ -510,6 +553,14 @@
     }
   },
   "listings": {
+    "openHouseEvent": {
+      "header": "Open Houses",
+      "seeVideo": "See Video"
+    },
+    "publicLottery": {
+      "header": "Public Lottery",
+      "seeVideo": "See Video"
+    },
     "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
@@ -687,6 +738,7 @@
     "name": "Local Region"
   },
   "t": {
+    "at": "at",
     "additionalPhone": "Additional Phone",
     "area": "area",
     "accessibility": "Accessibility",
@@ -699,10 +751,13 @@
     "delete": "Delete",
     "deposit": "Deposit",
     "errorsToResolve": "There are errors you'll need to resolve before moving on.",
+    "export": "Export",
     "floor": "floor",
     "floors": "floors",
     "income": "Income",
+    "jumpTo": "Jump to",
     "loginIsRequired": "Login is required to view this page.",
+    "lastUpdated": "Last updated",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
     "month": "Month",
@@ -717,17 +772,22 @@
     "petsPolicy": "Pets Policy",
     "phone": "Phone",
     "email": "Email",
+    "previous": "Previous",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "preferences": "Preferences",
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
     "rent": "Rent",
+    "secondPhone": "Second Phone",
     "seeListing": "See Listing",
     "selectAllThatApply": "Please select all that apply.",
     "selectOne": "Select One",
+    "show": "Show",
     "skipToMainContent": "Skip to main content",
     "smokingPolicy": "Smoking Policy",
+    "street": "Street",
     "sqFeet": "sqft",
+    "relationship": "Relationship",
     "unitAmenities": "Unit Amenities",
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
@@ -748,5 +808,9 @@
     "applicantsWillBeContacted": "Applicants will be contacted by the property agent in rank order until vacancies are filled.",
     "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
     "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
+  },
+  "languages": {
+    "en": "English",
+    "es": "Spanish"
   }
 }

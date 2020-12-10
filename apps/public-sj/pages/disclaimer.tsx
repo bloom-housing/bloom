@@ -3,7 +3,7 @@ import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
 import PageContent from "../page_content/disclaimer.mdx"
 
 export default () => {
-  const pageTitle = <>{t("nav.disclaimer")}</>
+  const pageTitle = <>{t("pageTitle.disclaimer")}</>
 
   return (
     <Layout>

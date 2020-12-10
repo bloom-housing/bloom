@@ -2,59 +2,47 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
-import Link from "next/link"
-import Router from "next/router"
+import React, { useState } from "react"
 import {
+  AppearanceSizeType,
   Button,
+  Form,
   FormCard,
+  HouseholdSizeField,
   ProgressNav,
   t,
-  HouseholdSizeField,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo, useState } from "react"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
-let nextPageUrl
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
+  const { conductor, application, listing } = useFormConductor("liveAlone")
   const [validateHousehold, setValidateHousehold] = useState(true)
-  const currentPageStep = 2
+  const currentPageSection = 2
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, clearErrors } = useForm()
   const onSubmit = () => {
     conductor.sync()
-
-    Router.push(nextPageUrl).then(() => window.scrollTo(0, 0))
+    conductor.routeToNextOrReturnUrl()
   }
-
-  const backUrl =
-    application.alternateContact.type == "noContact"
-      ? "/applications/contact/alternate-contact-type"
-      : "/applications/contact/alternate-contact-contact"
 
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href={backUrl}>
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
+
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {t("application.household.liveAlone.title")}
@@ -77,10 +65,10 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row">
               <Button
-                big={true}
+                id="btn-live-alone"
+                size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  nextPageUrl = "/applications/household/preferred-units"
                   application.householdSize = 1
                   application.householdMembers = []
                   setValidateHousehold(true)
@@ -91,10 +79,11 @@ export default () => {
             </div>
             <div className="form-card__pager-row">
               <Button
-                big={true}
+                id="btn-with-people"
+                size={AppearanceSizeType.big}
                 className="w-full md:w-3/4"
                 onClick={() => {
-                  nextPageUrl = "/applications/household/members-info"
+                  if (application.householdSize === 1) application.householdSize = 0
                   setValidateHousehold(false)
                 }}
               >

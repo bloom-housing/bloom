@@ -1,9 +1,7 @@
 import { Component } from "react"
 import Head from "next/head"
-import Layout from "../layouts/application"
 import axios from "axios"
 import moment from "moment"
-import { Listing } from "@bloom-housing/core/src/listings"
 import {
   ListingsGroup,
   ListingsList,
@@ -12,6 +10,8 @@ import {
   openDateState,
   t,
 } from "@bloom-housing/ui-components"
+import { Listing } from "@bloom-housing/core"
+import Layout from "../layouts/application"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -46,7 +46,7 @@ export default class extends Component<ListingsProps> {
     return this.props.openListings.length > 0 ? (
       <ListingsList listings={this.props.openListings} />
     ) : (
-      <div className="flex flex-row flex-wrap max-w-5xl m-auto mt-5 mb-12 text-center p-4 bg-primary-lighter">
+      <div className="notice-block">
         <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
       </div>
     )
@@ -77,8 +77,10 @@ export default class extends Component<ListingsProps> {
         </Head>
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
         <PageHeader>{t("pageTitle.rent")}</PageHeader>
-        {this.renderOpenListings()}
-        {this.renderClosedListings()}
+        <div>
+          {this.renderOpenListings()}
+          {this.renderClosedListings()}
+        </div>
       </Layout>
     )
   }

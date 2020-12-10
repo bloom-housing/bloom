@@ -4,6 +4,7 @@ import { ConnectionOptions } from "typeorm"
 
 // dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
 try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   require("dotenv").config()
 } catch {
   // Pass

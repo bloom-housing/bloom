@@ -1,24 +1,25 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
   BaseEntity,
+  Column,
   CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Unit } from "./unit.entity"
+import { Unit, UnitsSummarized } from "./unit.entity"
 import { Application } from "./application.entity"
 import { Asset } from "./asset.entity"
 import { ApplicationMethod } from "./application-method.entity"
 import { Address } from "../shared/dto/address.dto"
 import { WhatToExpect } from "../shared/dto/whatToExpect.dto"
 import { Preference } from "./preference.entity"
-import { UnitsSummarized } from "@bloom-housing/core"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
+  IsDate,
   IsDateString,
+  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -27,10 +28,32 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
+import { ListingEvent } from "./listing-event.entity"
+import { transformUnits } from "../lib/unit_transformations"
+import { amiCharts } from "../lib/ami_charts"
+import { listingUrlSlug } from "../lib/url_helper"
+import { ApiProperty } from "@nestjs/swagger"
 
 export enum ListingStatus {
   active = "active",
   pending = "pending",
+}
+
+export class AmiChartItem {
+  @Expose()
+  @IsDefined()
+  @IsString()
+  percentOfAmi: number
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  householdSize: number
+
+  @Expose()
+  @IsDefined()
+  @IsString()
+  income: number
 }
 
 @Entity({ name: "listings" })
@@ -43,25 +66,29 @@ class Listing extends BaseEntity {
 
   @CreateDateColumn()
   @Expose()
-  createdAt: string
+  @IsDate()
+  createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  updatedAt: string
+  updatedAt: Date
 
-  @OneToMany((type) => Preference, (preference) => preference.listing)
+  @OneToMany(() => Preference, (preference) => preference.listing)
   preferences: Preference[]
 
-  @OneToMany((type) => Unit, (unit) => unit.listing)
+  @OneToMany(() => Unit, (unit) => unit.listing, { eager: true })
   units: Unit[]
 
-  @OneToMany((type) => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
+  @OneToMany(() => ApplicationMethod, (applicationMethod) => applicationMethod.listing)
   applicationMethods: ApplicationMethod[]
 
-  @OneToMany((type) => Asset, (asset) => asset.listing)
+  @OneToMany(() => Asset, (asset) => asset.listing)
   assets: Asset[]
 
-  @OneToMany((type) => Application, (application) => application.listing)
+  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing)
+  events: ListingEvent[]
+
+  @OneToMany(() => Application, (application) => application.listing)
   applications: Application[]
 
   @Column({ type: "text", nullable: true })
@@ -118,9 +145,22 @@ class Listing extends BaseEntity {
   @IsOptional()
   @ValidateNested()
   @Type(() => Address)
+  applicationPickUpAddress: Address | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional()
+  @IsString()
+  applicationPickUpAddressOfficeHours: string | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Address)
   buildingAddress: Address | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -174,13 +214,13 @@ class Listing extends BaseEntity {
   @IsBoolean()
   disableUnitsAccordion: boolean | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
   householdSizeMax: number | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -283,7 +323,7 @@ class Listing extends BaseEntity {
   @IsString()
   smokingPolicy: string | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -295,13 +335,13 @@ class Listing extends BaseEntity {
   @IsString()
   unitAmenities: string | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
   waitlistCurrentSize: number | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -314,7 +354,7 @@ class Listing extends BaseEntity {
   @Type(() => WhatToExpect)
   whatToExpect: WhatToExpect | null
 
-  @Column({ type: "numeric", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional()
   @IsNumber()
@@ -327,14 +367,25 @@ class Listing extends BaseEntity {
   })
   @Expose()
   @IsEnum(ListingStatus)
+  @ApiProperty({ enum: ListingStatus, enumName: "ListingStatus" })
   status: ListingStatus
 
-  // # TODO
   @Expose()
-  unitsSummarized?: UnitsSummarized
+  @ApiProperty()
+  get unitsSummarized(): UnitsSummarized | undefined {
+    if (Array.isArray(this.units) && this.units.length > 0) {
+      return transformUnits(this.units, amiCharts)
+    }
+  }
 
   @Expose()
-  urlSlug?: string
+  @ApiProperty()
+  get urlSlug(): string | undefined {
+    return listingUrlSlug(this)
+  }
+
+  @Expose()
+  applicationConfig?: Record<string, unknown>
 }
 
 export { Listing as default, Listing }

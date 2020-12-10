@@ -5,10 +5,12 @@ import { Logger, ValidationPipe } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { getConnection } from "typeorm"
+import { ConfigService } from "@nestjs/config"
+import dbOptions = require("../ormconfig")
 
 let app
 async function bootstrap() {
-  app = await NestFactory.create(AppModule)
+  app = await NestFactory.create(AppModule.register(dbOptions))
   app.enableCors()
   app.use(logger)
   app.useGlobalFilters(new EntityNotFoundExceptionFilter())
@@ -18,6 +20,9 @@ async function bootstrap() {
       whitelist: true,
       // Automatically transform validated prop values into their specified types
       transform: true,
+      transformOptions: {
+        excludeExtraneousValues: true,
+      },
     })
   )
 
@@ -35,8 +40,9 @@ async function bootstrap() {
     .build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup("docs", app, document)
-  await app.listen(process.env.PORT || 3001)
+  const configService: ConfigService = app.get(ConfigService)
+  await app.listen(configService.get<number>("PORT"))
 }
-bootstrap()
+void bootstrap()
 
 export default app

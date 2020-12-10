@@ -2,9 +2,10 @@
 2.2 - Add Members
 Add household members
 */
-import Link from "next/link"
-import Router from "next/router"
+import React from "react"
+import { useRouter } from "next/router"
 import {
+  AppearanceStyleType,
   Button,
   FormCard,
   HouseholdMemberForm,
@@ -15,33 +16,36 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import ApplicationConductor from "../../../lib/ApplicationConductor"
-import { useContext, useMemo } from "react"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useContext(AppSubmissionContext)
-  const currentPageStep = 2
-  application.householdSize = application.householdMembers.length + 1
+  const { conductor, application, listing } = useFormConductor("addMembers")
+  const router = useRouter()
+  const currentPageSection = 2
+  const householdSize = application.householdMembers.length + 1
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register, clearErrors } = useForm()
-  const onSubmit = (data) => {
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl("/applications/household/preferred-units")
+  const onSubmit = () => {
+    conductor.currentStep.save({
+      householdSize: application.householdMembers.length + 1,
+    })
+    conductor.routeToNextOrReturnUrl()
   }
 
   const onAddMember = () => {
-    Router.push("/applications/household/member").then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/member").then(() => window.scrollTo(0, 0))
   }
 
   const applicant = application.applicant
 
-  const membersSection = application.householdMembers.map((member, key) => {
+  const membersSection = application.householdMembers.map((member) => {
     return (
       <HouseholdMemberForm
         member={member}
-        key={"member" + key}
+        key={member}
         type={t("application.household.householdMember")}
       />
     )
@@ -51,20 +55,15 @@ export default () => {
     <FormsLayout>
       <FormCard header={listing?.name}>
         <ProgressNav
-          currentPageStep={currentPageStep}
-          completedSteps={application.completedStep}
-          labels={["You", "Household", "Income", "Preferences", "Review"]}
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections}
         />
       </FormCard>
 
       <FormCard>
-        <p className="form-card__back">
-          <strong>
-            <Link href="/applications/household/members-info">
-              <a>{t("t.back")}</a>
-            </Link>
-          </strong>
-        </p>
+        <FormBackLink url={conductor.determinePreviousUrl()} />
+
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">
             {t("application.household.addMembers.title")}
@@ -75,7 +74,7 @@ export default () => {
           <div>
             <HouseholdSizeField
               listing={listing}
-              householdSize={application.householdSize}
+              householdSize={householdSize}
               validate={true}
               register={register}
               error={errors.householdSize}
@@ -93,7 +92,7 @@ export default () => {
         </Form>
         <div className="form-card__group pt-0 mt-0">
           <div className="text-center">
-            <Button onClick={onAddMember}>
+            <Button id="btn-add-member" onClick={onAddMember}>
               {t("application.household.addMembers.addHouseholdMember")}
             </Button>
           </div>
@@ -101,11 +100,12 @@ export default () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Button
-              filled={true}
+              id="btn-add-done"
+              type={AppearanceStyleType.primary}
               className=""
               onClick={() => {
                 conductor.returnToReview = false
-                handleSubmit(onSubmit)()
+                void handleSubmit(onSubmit)()
               }}
             >
               {t("application.household.addMembers.done")}
@@ -115,10 +115,11 @@ export default () => {
           {conductor.canJumpForwardToReview() && (
             <div className="form-card__pager-row">
               <Button
-                className="button is-unstyled mb-4"
+                unstyled={true}
+                className="mb-4"
                 onClick={() => {
                   conductor.returnToReview = true
-                  handleSubmit(onSubmit)()
+                  void handleSubmit(onSubmit)()
                 }}
               >
                 {t("application.form.general.saveAndReturn")}

@@ -10,8 +10,5 @@ export default {
 const listing = Object.assign({}, Archer) as any
 
 export const showsApplicationFeeAndDeposit = () => {
-  /* eslint-disable @typescript-eslint/ban-ts-ignore */
-  // @ts-ignore
   return <AdditionalFees listing={listing} />
-  /* eslint-enable @typescript-eslint/ban-ts-ignore */
 }

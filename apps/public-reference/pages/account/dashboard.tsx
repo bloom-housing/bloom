@@ -8,6 +8,7 @@ import {
   MetaTags,
   RequireLogin,
   t,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 
@@ -26,21 +27,25 @@ export default class extends Component {
           </Head>
           <MetaTags title={t("nav.myDashboard")} description="" />
           <section className="bg-gray-300">
-            <div className="flex flex-wrap relative max-w-5xl mx-auto md:py-8">
-              <DashBlocks>
-                <DashBlock
-                  href="/account/applications"
-                  title={t("account.myApplications")}
-                  subtitle={t("account.myApplicationsSubtitle")}
-                  icon={<HeaderBadge />}
-                ></DashBlock>
-                <DashBlock
-                  href="/account/settings"
-                  title={t("account.accountSettings")}
-                  subtitle={t("account.accountSettingsSubtitle")}
-                  icon={settingsIcon}
-                ></DashBlock>
-              </DashBlocks>
+            <div className="max-w-5xl mx-auto md:py-8">
+              <SiteAlert type="success" className="md:mb-8" timeout={30000} />
+
+              <div className="flex flex-wrap relative">
+                <DashBlocks>
+                  <DashBlock
+                    href="/account/applications"
+                    title={t("account.myApplications")}
+                    subtitle={t("account.myApplicationsSubtitle")}
+                    icon={<HeaderBadge />}
+                  ></DashBlock>
+                  <DashBlock
+                    href="/account/settings"
+                    title={t("account.accountSettings")}
+                    subtitle={t("account.accountSettingsSubtitle")}
+                    icon={settingsIcon}
+                  ></DashBlock>
+                </DashBlocks>
+              </div>
             </div>
           </section>
         </Layout>

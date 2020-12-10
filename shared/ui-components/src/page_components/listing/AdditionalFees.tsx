@@ -20,10 +20,10 @@ const AdditionalFees = (props: AdditionalFeesProps) => (
         <div className="text-base">{t("t.deposit")}</div>
         <div className="text-xl font-bold">
           {props.listing.depositMax && props.listing.depositMin != props.listing.depositMax
-            ? `$${props.listing.depositMin}–$${props.listing.depositMax}`
+            ? `$${props.listing.depositMin} – $${props.listing.depositMax}`
             : `$${props.listing.depositMin}`}
         </div>
-        <div>{props.listing.depositMaxExtraText || t("listings.depositOrMonthsRent")}</div>
+        <div>{t("listings.depositOrMonthsRent")}</div>
       </div>
     </div>
 

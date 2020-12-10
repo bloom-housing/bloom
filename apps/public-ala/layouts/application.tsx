@@ -51,7 +51,15 @@ const Layout = (props) => {
               {t("nav.getAssistance")}
             </LocalizedLink>
           )}
-          {/* <UserNav signedIn={!!profile} signOut={signOut}>
+          {/* <UserNav
+            signedIn={!!profile}
+            signOut={async () => {
+              setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+              await router.push("/sign-in")
+              signOut()
+              window.scrollTo(0, 0)
+            }}
+          >
             <LocalizedLink href="/account/dashboard" className="navbar-item">
               {t("nav.myDashboard")}
             </LocalizedLink>

@@ -5,9 +5,8 @@ import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
 
 import { plainToClass } from "class-transformer"
-import { ListingCreateDto } from "./listing.create.dto"
 import { Listing } from "../entity/listing.entity"
-import { ListingUpdateDto } from "./listings.update.dto"
+import { ListingCreateDto, ListingExtendedDto, ListingUpdateDto } from "./listing.dto"
 
 export enum ListingsResponseStatus {
   ok = "ok",
@@ -15,12 +14,13 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<any> {
+  public async list(jsonpath?: string): Promise<ListingExtendedDto> {
     let listings = await Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.units", "units")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect("listings.events", "events")
       .orderBy({
         "listings.id": "DESC",
         "units.max_occupancy": "ASC",
@@ -31,13 +31,6 @@ export class ListingsService {
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)
     }
-
-    listings.forEach((listing) => {
-      if (listing.units.length) {
-        listing.unitsSummarized = transformUnits(listing.units, amiCharts)
-      }
-      listing.urlSlug = listingUrlSlug(listing)
-    })
 
     const data = {
       status: ListingsResponseStatus.ok,
@@ -77,6 +70,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect("listings.events", "events")
       .orderBy({
         "preferences.ordinal": "ASC",
       })

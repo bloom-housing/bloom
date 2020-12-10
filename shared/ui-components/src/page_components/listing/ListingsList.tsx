@@ -1,7 +1,7 @@
 import * as React from "react"
-import { ImageCard } from "../../cards/ImageCard"
-import { Listing } from "@bloom-housing/core"
-import { LinkButton } from "../../atoms/LinkButton"
+import { ImageCard } from "../../blocks/ImageCard"
+import { Asset, Listing } from "@bloom-housing/core"
+import { LinkButton } from "../../actions/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
 import { t } from "../../helpers/translator"
@@ -12,7 +12,7 @@ export interface ListingsProps {
 }
 
 const imageUrlFromListing = (listing: Listing) => {
-  return listing?.assets?.find((asset) => asset.label == "building")?.fileId
+  return listing?.assets?.find((asset: Asset) => asset.label == "building")?.fileId
 }
 
 const ListingsList = (props: ListingsProps) => {
