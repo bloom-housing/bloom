@@ -82,10 +82,17 @@ export const unstyled = () => (
   </Button>
 )
 
-export const inline = () => (
-  <Button inline={true} icon="arrow-back" onClick={() => alert("Click!")}>
-    Go Back
-  </Button>
+export const inlineIcon = () => (
+  <>
+    <Button inlineIcon="left" icon="arrow-back" onClick={() => alert("Click!")}>
+      Go Back
+    </Button>
+    <br />
+    <br />
+    <Button inlineIcon="right" icon="right" onClick={() => alert("Click!")}>
+      Go Forward
+    </Button>
+  </>
 )
 
 // TODO: replace with tailwind markup, if it matters

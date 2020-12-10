@@ -176,7 +176,7 @@ export default function ApplicationsList() {
 
       <section className="border-t bg-white">
         <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-          <Button inline={true} icon="arrow-back" onClick={() => router.back()}>
+          <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
             {t("t.back")}
           </Button>
 

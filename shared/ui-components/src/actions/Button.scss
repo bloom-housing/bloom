@@ -75,6 +75,17 @@
     @apply text-tiny;
     @apply m-0;
     @apply no-underline;
+
+    &.inline-icon--left {
+      .button__icon {
+        @apply mr-1;
+      }
+    }
+    &.inline-icon--right {
+      .button__icon {
+        @apply ml-1;
+      }
+    }
   }
 
   &.is-text-caps {
@@ -103,10 +114,6 @@
 
   @include filled-appearances;
   @include outlined-appearances;
-}
-
-.button__icon {
-  @apply mr-1;
 }
 
 button {

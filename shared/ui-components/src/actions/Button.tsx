@@ -8,7 +8,7 @@ export interface ButtonProps extends AppearanceProps {
   children: React.ReactNode
   onClick: (e: React.MouseEvent) => void
   icon?: string
-  inline?: boolean
+  inlineIcon?: "left" | "right"
   unstyled?: boolean
   fullWidth?: boolean
   className?: string
@@ -17,7 +17,10 @@ export interface ButtonProps extends AppearanceProps {
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
   const classNames = ["button"].concat(classNamesForAppearanceTypes(props))
-  if (props.inline) classNames.push("is-inline")
+  if (props.inlineIcon) {
+    classNames.push("is-inline")
+    classNames.push(`inline-icon--${props.inlineIcon}`)
+  }
   if (props.unstyled) classNames.push("is-unstyled")
   if (props.fullWidth) classNames.push("is-fullwidth")
   if (props.className) classNames.push(props.className)
@@ -26,10 +29,15 @@ export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
 
 export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
   if (props.icon) {
-    return (
+    return props.inlineIcon == "left" ? (
       <>
         <Icon className="button__icon" size="tiny" symbol={props.icon} />
         <span className="button__content">{props.children}</span>
+      </>
+    ) : (
+      <>
+        <span className="button__content">{props.children}</span>
+        <Icon className="button__icon" size="tiny" symbol={props.icon} />
       </>
     )
   } else {
