@@ -25,9 +25,13 @@ import {
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
+type Props = {
+  isEditable?: boolean
+}
+
 type AddressType = "residence" | "work" | "mailing"
 
-const ApplicationForm = () => {
+const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
