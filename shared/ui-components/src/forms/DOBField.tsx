@@ -1,18 +1,23 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMemberUpdate } from "@bloom-housing/core"
 import moment from "moment"
 
 export interface DOBFieldProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   label: string
-  register: any // comes from React Hook Form
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  register: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   watch: any // comes from React Hook Form
-  applicant: HouseholdMember
+  applicant?: HouseholdMemberUpdate
   atAge?: boolean
   name?: string
   id?: string
+  required?: boolean
+  readerOnly?: boolean
 }
 
 const DOBField = (props: DOBFieldProps) => {
@@ -30,9 +35,12 @@ const DOBField = (props: DOBFieldProps) => {
     )
   }
 
+  const labelClasses = ["field-label--caps"]
+  if (props.readerOnly) labelClasses.push("sr-only")
+
   return (
     <fieldset id={id}>
-      <legend className="field-label--caps">{props.label}</legend>
+      <legend className={labelClasses.join(" ")}>{props.label}</legend>
 
       <div className="field-group--dob">
         <Field
@@ -40,12 +48,16 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.month")}
           readerOnly={true}
           placeholder="MM"
-          defaultValue={applicant.birthMonth ? applicant.birthMonth : ""}
+          defaultValue={applicant?.birthMonth ? applicant.birthMonth : ""}
           error={error?.birthMonth}
           validation={{
-            required: true,
+            required: props.required,
             validate: {
-              monthRange: (value: string) => parseInt(value) > 0 && parseInt(value) <= 12,
+              monthRange: (value: string) => {
+                if (!props.required && !value?.length) return true
+
+                return parseInt(value) > 0 && parseInt(value) <= 12
+              },
             },
           }}
           inputProps={{ maxLength: 2 }}
@@ -56,12 +68,16 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.day")}
           readerOnly={true}
           placeholder="DD"
-          defaultValue={applicant.birthDay ? applicant.birthDay : ""}
+          defaultValue={applicant?.birthDay ? applicant.birthDay : ""}
           error={error?.birthDay}
           validation={{
-            required: true,
+            required: props.required,
             validate: {
-              dayRange: (value: string) => parseInt(value) > 0 && parseInt(value) <= 31,
+              dayRange: (value: string) => {
+                if (!props.required && !value?.length) return true
+
+                return parseInt(value) > 0 && parseInt(value) <= 31
+              },
             },
           }}
           inputProps={{ maxLength: 2 }}
@@ -72,12 +88,16 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.year")}
           readerOnly={true}
           placeholder="YYYY"
-          defaultValue={applicant.birthYear ? applicant.birthYear : ""}
+          defaultValue={applicant?.birthYear ? applicant.birthYear : ""}
           error={error?.birthYear}
           validation={{
-            required: true,
+            required: props.required,
             validate: {
-              yearRange: (value: string) => validateAge(value),
+              yearRange: (value: string) => {
+                if (!props.required && !value?.length) return true
+
+                return validateAge(value)
+              },
             },
           }}
           inputProps={{ maxLength: 4 }}

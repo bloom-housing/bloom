@@ -7,9 +7,16 @@
       @apply mb-0;
     }
   }
+
+  &.has-separator {
+    @apply border-t;
+    @apply border-gray-500;
+    @apply pt-8;
+    @apply mt-8;
+  }
 }
 
-.grid-section + .grid-section {
+.grid-section:not(.has-separator) + .grid-section {
   @apply mt-6;
 }
 

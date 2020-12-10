@@ -15,10 +15,10 @@ import {
   OnClientSide,
   ProgressNav,
   t,
+  emailRegex,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { emailRegex } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
@@ -115,6 +115,7 @@ export default () => {
             <DOBField
               applicant={application.applicant}
               register={register}
+              required={true}
               error={errors.applicant}
               name="applicant"
               id="applicant.dateOfBirth"

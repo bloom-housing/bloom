@@ -1,7 +1,6 @@
 import { formatUrlSlug, listingUrlSlug } from "../../src/lib/url_helper"
 
-import triton from "../../../../services/listings/listings/triton-test.json"
-import { Listing } from "../../src/entity/listing.entity"
+import { ArcherListing } from "@bloom-housing/core"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -25,10 +24,13 @@ describe("formatUrlSlug", () => {
 
 describe("listingUrlSlug", () => {
   // Force cast to listing - should we add a dependency to `listingsLoader` instead?
-  const listing = (triton as unknown) as Listing
+  const listing = ArcherListing
 
   test("Generates a URL slug for a Listing", () => {
+    // TODO Remove BaseEntity from inheritance from all entities
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const slug = listingUrlSlug(listing)
-    expect(slug).toEqual("test_triton_55_triton_park_lane_foster_city_ca")
+    expect(slug).toEqual("archer_studios_98_archer_street_san_jose_ca")
   })
 })

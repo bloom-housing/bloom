@@ -1,9 +1,9 @@
 import React from "react"
 import { AppStatusItem } from "./AppStatusItem"
-import Archer from "@bloom-housing/listings-service/listings/archer.json"
+import { ArcherListing } from "@bloom-housing/core/src/archer-listing"
 import moment from "moment"
-import { Application } from "@bloom-housing/core"
-const listing = Object.assign({}, Archer) as any
+import { Application, Listing } from "@bloom-housing/core"
+const listing = Object.assign({}, ArcherListing) as Listing
 
 export default {
   title: "Blocks/Application Status Item",

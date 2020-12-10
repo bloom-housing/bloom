@@ -44,7 +44,7 @@ export function useSingleApplicationData(applicationId: string) {
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
 
   return {
-    applicationDto: data,
+    application: data,
     applicationLoading: !error && !data,
     applicationError: error,
   }

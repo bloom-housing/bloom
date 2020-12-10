@@ -1,7 +1,8 @@
 import * as React from "react"
 import moment from "moment"
 import { ApplicationSection } from "./ApplicationSection"
-import Archer from "@bloom-housing/listings-service/listings/archer.json"
+import {ArcherListing} from "@bloom-housing/core/src/archer-listing"
+import { Listing } from "@bloom-housing/core"
 
 export default {
   component: ApplicationSection,
@@ -9,7 +10,7 @@ export default {
 }
 
 export const dueSoon = () => {
-  const listing = Object.assign({}, Archer) as any
+  const listing = Object.assign({}, ArcherListing) as Listing
   const days = 10
   listing.applicationOpenDate = ""
   listing.waitlistCurrentSize = 0

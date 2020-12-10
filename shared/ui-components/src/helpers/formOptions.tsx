@@ -45,6 +45,14 @@ export const relationshipKeys = [
   "other",
 ]
 
+export const altContactRelationshipKeys = [
+  "familyMember",
+  "friend",
+  "caseManager",
+  "other",
+  "noContact",
+]
+
 export const stateKeys = [
   "",
   "AL",

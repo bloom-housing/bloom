@@ -26,7 +26,7 @@ type IncomePeriod = "perMonth" | "perYear"
 
 function verifyIncome(listing: Listing, income: number, period: IncomePeriod): IncomeError {
   // Look through all the units on this listing to see what the absolute max/min income requirements are.
-  const [annualMin, annualMax, monthlyMin] = listing.units.reduce(
+  const [annualMin, annualMax, monthlyMin] = listing.property.units.reduce(
     ([aMin, aMax, mMin], unit) => [
       Math.min(aMin, parseFloat(unit.annualIncomeMin)),
       Math.max(aMax, parseFloat(unit.annualIncomeMax)),

@@ -27,9 +27,13 @@ export interface GridSectionProps {
   tightSpacing?: boolean
   reverse?: boolean
   children: React.ReactNode
+  separator?: boolean
 }
 
 const GridSection = (props: GridSectionProps) => {
+  const sectionClasses = ["grid-section"]
+  if (props.separator) sectionClasses.push("has-separator")
+
   const gridClasses = ["grid-section__inner"]
   const grid = typeof props.grid != "undefined" ? props.grid : true
   if (props.tinted) gridClasses.push("is-tinted")
@@ -53,7 +57,7 @@ const GridSection = (props: GridSectionProps) => {
   if (props.title) subtitleClasses.push("mt-4")
 
   return (
-    <section className="grid-section">
+    <section className={sectionClasses.join(" ")}>
       {(props.title || props.subtitle) && (
         <header className={headerClasses.join(" ")}>
           {props.title && <h2 className="grid-section__title">{props.title}</h2>}

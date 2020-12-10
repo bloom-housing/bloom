@@ -7,185 +7,259 @@ import {
   keysToJoinedStringFormatter,
   streetFormatter,
 } from "./csv-builder.service"
+import { Application } from "../applications/entities/application.entity"
+import { HouseholdMember } from "../applications/entities/household-member.entity"
 
 export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAggregateFactory = () => {
   return [
-    { label: "Application Number", discriminator: "id", formatter: defaultFormatter },
+    {
+      label: "Application Number",
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.id)
+      },
+    },
     {
       label: "Application Submission Date",
-      discriminator: "createdAt",
-      formatter: (createdAt: string) =>
-        new Date(createdAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
+      discriminator: "",
+      formatter: (application: Application) =>
+        new Date(application.createdAt).toLocaleString("en-US", {
+          timeZone: "America/Los_Angeles",
+        }),
     },
     {
       label: "Primary Applicant First Name",
-      discriminator: "application.applicant.firstName",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.firstName)
+      },
     },
     {
       label: "Primary Applicant Middle Name",
-      discriminator: "application.applicant.middleName",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.middleName)
+      },
     },
     {
       label: "Primary Applicant Last Name",
-      discriminator: "application.applicant.lastName",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.lastName)
+      },
     },
     {
       label: "Primary Applicant Date of Birth",
-      discriminator: "application.applicant",
-      formatter: dobFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return dobFormatter(application.applicant)
+      },
     },
     {
       label: "Primary Applicant Email",
-      discriminator: "application.applicant.emailAddress",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.emailAddress)
+      },
     },
     {
       label: "Primary Applicant Phone",
-      discriminator: "application.applicant.phoneNumber",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.phoneNumber)
+      },
     },
     {
       label: "Primary Applicant Phone Type",
-      discriminator: "application.applicant.phoneNumberType",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.phoneNumberType)
+      },
     },
     {
       label: "Primary Applicant Additional Phone",
-      discriminator: "application.additionalPhoneNumber",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.additionalPhone)
+      },
     },
     {
       label: "Primary Applicant Additional Phone Type",
-      discriminator: "application.additionalPhoneNumberType",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.additionalPhoneNumberType)
+      },
     },
     {
       label: "Primary Applicant Preferred Contact Type",
-      discriminator: "application.contactPreferences",
-      formatter: joinArrayFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return joinArrayFormatter(application.contactPreferences)
+      },
     },
     {
       label: "Primary Applicant Residence Street Address",
-      discriminator: "application.applicant.address",
-      formatter: streetFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return streetFormatter(application.applicant.address)
+      },
     },
     {
       label: "Primary Applicant Residence City",
-      discriminator: "application.applicant.address.city",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.address.city)
+      },
     },
     {
       label: "Primary Applicant Residence State",
-      discriminator: "application.applicant.address.state",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.address.state)
+      },
     },
     {
       label: "Primary Applicant Residence Zip",
-      discriminator: "application.applicant.address.zipCode",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => application.applicant.address.zipCode,
     },
     {
       label: "Primary Applicant Mailing Street Address",
-      discriminator: "application.mailingAddress",
-      formatter: streetFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return streetFormatter(application.mailingAddress)
+      },
     },
     {
       label: "Primary Applicant Mailing City",
-      discriminator: "application.mailingAddress.city",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.mailingAddress.city)
+      },
     },
     {
       label: "Primary Applicant Mailing State",
-      discriminator: "application.mailingAddress.state",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.mailingAddress.state)
+      },
     },
     {
       label: "Primary Applicant Mailing Zip",
-      discriminator: "application.mailingAddress.zipCode",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.mailingAddress.zipCode)
+      },
     },
     {
       label: "Primary Applicant Work Street Address",
-      discriminator: "application.applicant.workAddress.street",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return streetFormatter(application.applicant.workAddress)
+      },
     },
     {
       label: "Primary Applicant Work City",
-      discriminator: "application.applicant.workAddress.city",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.workAddress.city)
+      },
     },
     {
       label: "Primary Applicant Work State",
-      discriminator: "application.applicant.workAddress.state",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.workAddress.state)
+      },
     },
     {
       label: "Primary Applicant Work Zip",
-      discriminator: "application.applicant.workAddress.zipCode",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.applicant.workAddress.zipCode)
+      },
     },
     {
       label: "Alternate Contact First Name",
-      discriminator: "application.alternateContact.firstName",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.firstName)
+      },
     },
     {
       label: "Alternate Contact Last Name",
-      discriminator: "application.alternateContact.lastName",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.lastName)
+      },
     },
     {
       label: "Alternate Contact Type",
-      discriminator: "application.alternateContact.type",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.type)
+      },
     },
     {
       label: "Alternate Contact Agency",
-      discriminator: "application.alternateContact.agency",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.agency)
+      },
     },
     {
       label: "Alternate Contact Other",
-      discriminator: "application.alternateContact.otherType",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.otherType)
+      },
     },
     {
       label: "Alternate Contact Email",
-      discriminator: "application.alternateContact.emailAddress",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.emailAddress)
+      },
     },
     {
       label: "Alternate Contact Phone",
-      discriminator: "application.alternateContact.phoneNumber",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.phoneNumber)
+      },
     },
     {
       label: "Alternate Contact Street Address",
-      discriminator: "application.alternateContact.mailingAddress.street",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return streetFormatter(application.alternateContact.mailingAddress)
+      },
     },
     {
       label: "Alternate Contact City",
-      discriminator: "application.alternateContact.mailingAddress.city",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.mailingAddress.city)
+      },
     },
     {
       label: "Alternate Contact State",
-      discriminator: "application.alternateContact.mailingAddress.state",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.mailingAddress.state)
+      },
     },
     {
       label: "Alternate Contact Zip",
-      discriminator: "application.alternateContact.mailingAddress.zipCode",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.alternateContact.mailingAddress.zipCode)
+      },
     },
     {
       label: "Monthly Income",
-      discriminator: "application",
-      formatter: (application) => {
+      discriminator: "",
+      formatter: (application: Application) => {
         switch (application.incomePeriod) {
           case "perYear":
             return ""
@@ -198,8 +272,8 @@ export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAg
     },
     {
       label: "Annual Income",
-      discriminator: "application",
-      formatter: (application) => {
+      discriminator: "",
+      formatter: (application: Application) => {
         switch (application.incomePeriod) {
           case "perYear":
             return application.income
@@ -212,81 +286,131 @@ export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAg
     },
     {
       label: "Requested accessibility",
-      discriminator: "application.accessibility",
-      formatter: keysToJoinedStringFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return keysToJoinedStringFormatter({
+          hearing: application.accessibility.hearing,
+          mobility: application.accessibility.mobility,
+          vision: application.accessibility.vision,
+        })
+      },
     },
     {
       label: "Receives Vouchers or Subsidies",
-      discriminator: "application.incomeVouchers",
-      formatter: booleanFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return booleanFormatter(application.incomeVouchers)
+      },
     },
     {
       label: "Requested unit type",
-      discriminator: "application.preferredUnit",
-      formatter: joinArrayFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return joinArrayFormatter(application.preferredUnit)
+      },
     },
     {
       label: "Household Size",
-      discriminator: "application.householdSize",
-      formatter: defaultFormatter,
+      discriminator: "",
+      formatter: (application: Application) => {
+        return defaultFormatter(application.householdSize)
+      },
     },
     {
       type: "array",
       size: null,
-      discriminator: "application.householdMembers",
+      discriminator: "householdMembers",
       items: [
-        { label: "Household First Name", discriminator: "firstName", formatter: defaultFormatter },
+        {
+          label: "Household First Name",
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.firstName)
+          },
+        },
         {
           label: "Household Middle Name",
-          discriminator: "middleName",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.middleName)
+          },
         },
-        { label: "Household Last Name", discriminator: "lastName", formatter: defaultFormatter },
+        {
+          label: "Household Last Name",
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.lastName)
+          },
+        },
         {
           label: "Household Relationship",
-          discriminator: "relationship",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.relationship)
+          },
         },
-        { label: "Household Date of Birth", discriminator: ".", formatter: dobFormatter },
+        {
+          label: "Household Date of Birth",
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return dobFormatter(householdMember)
+          },
+        },
         {
           label: "Household Residence Street Address",
-          discriminator: "address",
-          formatter: streetFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return streetFormatter(householdMember.address)
+          },
         },
         {
           label: "Household Residence City",
-          discriminator: "address.city",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.address.city)
+          },
         },
         {
           label: "Household Residence State",
-          discriminator: "address.state",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.address.state)
+          },
         },
         {
           label: "Household Residence Zip",
-          discriminator: "address.zipCode",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.address.zipCode)
+          },
         },
         {
           label: "Household Work Street Address",
-          discriminator: "workAddress.street",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return streetFormatter(householdMember.workAddress)
+          },
         },
         {
           label: "Household Work City",
-          discriminator: "workAddress.city",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.workAddress.city)
+          },
         },
         {
           label: "Household Work State",
-          discriminator: "workAddress.state",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.workAddress.state)
+          },
         },
         {
           label: "Household Work Zip",
-          discriminator: "workAddress.zipCode",
-          formatter: defaultFormatter,
+          discriminator: "",
+          formatter: (householdMember: HouseholdMember) => {
+            return defaultFormatter(householdMember.workAddress.zipCode)
+          },
         },
       ],
     },

@@ -18,6 +18,7 @@ interface FieldGroupProps {
   groupNote?: string
   register: any
   validation?: Record<string, any>
+  fieldGroupClassName?: string
 }
 
 const FieldGroup = ({
@@ -30,13 +31,14 @@ const FieldGroup = ({
   errorMessage,
   groupNote,
   register,
+  fieldGroupClassName,
 }: FieldGroupProps) => {
   return (
     <>
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
-      <div className={`field ${error && "error"}`}>
+      <div className={`field ${error && "error"} ${fieldGroupClassName || ""}`}>
         {fields?.map((item) => (
           <div className={`field`} key={item.id}>
             <input

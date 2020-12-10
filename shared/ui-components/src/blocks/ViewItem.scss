@@ -42,6 +42,11 @@
   &.is-truncated {
     @include ellipsis;
   }
+
+  // do not change font-family for inputs
+  .field .control .input {
+    @apply font-sans;
+  }
 }
 
 .view-item__helper {

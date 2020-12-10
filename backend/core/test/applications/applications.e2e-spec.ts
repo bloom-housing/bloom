@@ -11,9 +11,9 @@ import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import {
   Application,
-  ApplicationCreate,
   ApplicationStatus,
   ApplicationSubmissionType,
+  ApplicationUpdate,
   IncomePeriod,
   Language,
 } from "@bloom-housing/core"
@@ -33,109 +33,107 @@ describe("Applications", () => {
   let adminAccessToken: string
   let listingId: string
 
-  const getTestAppBody: () => ApplicationCreate = () => {
+  const getTestAppBody: () => ApplicationUpdate = () => {
     return {
       appUrl: "",
       listing: {
         id: listingId,
       },
-      application: {
-        language: Language.en,
-        status: ApplicationStatus.submitted,
-        submissionType: ApplicationSubmissionType.electronical,
-        acceptedTerms: false,
-        applicant: {
-          firstName: "",
-          middleName: "",
-          lastName: "",
-          birthMonth: "",
-          birthDay: "",
-          birthYear: "",
-          emailAddress: "",
-          noEmail: false,
-          phoneNumber: "",
-          phoneNumberType: "",
-          noPhone: false,
-          workInRegion: null,
-          address: {
-            street: "",
-            street2: "",
-            city: "",
-            state: "",
-            zipCode: "",
-            county: "",
-            latitude: null,
-            longitude: null,
-          },
-          workAddress: {
-            street: "",
-            street2: "",
-            city: "",
-            state: "",
-            zipCode: "",
-            county: "",
-            latitude: null,
-            longitude: null,
-          },
+      language: Language.en,
+      status: ApplicationStatus.submitted,
+      submissionType: ApplicationSubmissionType.electronical,
+      acceptedTerms: false,
+      applicant: {
+        firstName: "Applicant",
+        middleName: "Middlename",
+        lastName: "",
+        birthMonth: "",
+        birthDay: "",
+        birthYear: "",
+        emailAddress: null,
+        noEmail: false,
+        phoneNumber: "",
+        phoneNumberType: "",
+        noPhone: false,
+        workInRegion: null,
+        address: {
+          street: "",
+          street2: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          county: "",
+          latitude: null,
+          longitude: null,
         },
-        additionalPhone: true,
-        additionalPhoneNumber: "12345",
-        additionalPhoneNumberType: "cell",
-        contactPreferences: ["a", "b"],
-        householdSize: 1,
-        housingStatus: "status",
-        sendMailToMailingAddress: true,
+        workAddress: {
+          street: "",
+          street2: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          county: "",
+          latitude: null,
+          longitude: null,
+        },
+      },
+      additionalPhone: true,
+      additionalPhoneNumber: "12345",
+      additionalPhoneNumberType: "cell",
+      contactPreferences: ["a", "b"],
+      householdSize: 1,
+      housingStatus: "status",
+      sendMailToMailingAddress: true,
+      mailingAddress: {
+        street: "",
+        street2: "",
+        city: "",
+        state: "",
+        zipCode: "",
+      },
+      alternateAddress: {
+        street: "",
+        street2: "",
+        city: "",
+        state: "",
+        zipCode: "",
+      },
+      alternateContact: {
+        type: "",
+        otherType: "",
+        firstName: "",
+        lastName: "",
+        agency: "",
+        phoneNumber: "",
+        emailAddress: "",
         mailingAddress: {
           street: "",
-          street2: "",
           city: "",
           state: "",
           zipCode: "",
         },
-        alternateAddress: {
-          street: "",
-          street2: "",
-          city: "",
-          state: "",
-          zipCode: "",
-        },
-        alternateContact: {
-          type: "",
-          otherType: "",
-          firstName: "",
-          lastName: "",
-          agency: "",
-          phoneNumber: "",
-          emailAddress: "",
-          mailingAddress: {
-            street: "",
-            city: "",
-            state: "",
-            zipCode: "",
-          },
-        },
-        accessibility: {
-          mobility: null,
-          vision: null,
-          hearing: null,
-        },
-        demographics: {
-          ethnicity: "",
-          race: "",
-          gender: "",
-          sexualOrientation: "",
-          howDidYouHear: [],
-        },
-        incomeVouchers: true,
-        income: "100.00",
-        incomePeriod: IncomePeriod.perYear,
-        householdMembers: [],
-        preferredUnit: ["a", "b"],
-        preferences: {
-          liveIn: false,
-          none: false,
-          workIn: false,
-        },
+      },
+      accessibility: {
+        mobility: null,
+        vision: null,
+        hearing: null,
+      },
+      demographics: {
+        ethnicity: "",
+        race: "",
+        gender: "",
+        sexualOrientation: "",
+        howDidYouHear: [],
+      },
+      incomeVouchers: true,
+      income: "100.00",
+      incomePeriod: IncomePeriod.perMonth,
+      householdMembers: [],
+      preferredUnit: ["a", "b"],
+      preferences: {
+        liveIn: false,
+        none: false,
+        workIn: false,
       },
     }
   }
@@ -161,7 +159,7 @@ describe("Applications", () => {
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    listingId = res.body.listings[0].id
+    listingId = res.body[0].id
   })
 
   it(`/GET `, async () => {
@@ -170,19 +168,26 @@ describe("Applications", () => {
       .set(...setAuthorization(user1AccessToken))
       .expect(200)
     expect(Array.isArray(res.body.items)).toBe(true)
-    expect(res.body.items.length).toBe(1)
+    expect(res.body.items.length).toBe(0)
   })
 
   it(`/POST `, async () => {
     const body = getTestAppBody()
-    const res = await supertest(app.getHttpServer())
+    let res = await supertest(app.getHttpServer())
       .post(`/applications`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
-    expect(res.body).toEqual(expect.objectContaining(body))
+    expect(res.body).toMatchObject(body)
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+    res = await supertest(app.getHttpServer())
+      .get(`/applications`)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0]).toMatchObject(body)
   })
 
   it(`/GET by id`, async () => {
@@ -192,7 +197,7 @@ describe("Applications", () => {
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
-    expect(createRes.body).toEqual(expect.objectContaining(body))
+    expect(createRes.body).toMatchObject(body)
     expect(createRes.body).toHaveProperty("createdAt")
     expect(createRes.body).toHaveProperty("updatedAt")
     expect(createRes.body).toHaveProperty("id")
@@ -206,10 +211,48 @@ describe("Applications", () => {
   it(`/POST unauthenticated`, async () => {
     const body = getTestAppBody()
     const res = await supertest(app.getHttpServer()).post(`/applications`).send(body).expect(201)
-    expect(res.body).toEqual(expect.objectContaining(body))
+    expect(res.body).toMatchObject(body)
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+  })
+
+  it(`/POST and search`, async () => {
+    const body = getTestAppBody()
+    body.applicant.firstName = "MyName"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?search=MyName`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].id === createRes.body.id)
+    expect(res.body.items[0]).toMatchObject(createRes.body)
+  })
+
+  it(`/POST and CSV export`, async () => {
+    const body = getTestAppBody()
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/csv/?includeHeaders=true`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(typeof res.body === "string")
   })
 
   it(`/DELETE `, async () => {
@@ -249,7 +292,7 @@ describe("Applications", () => {
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
-    expect(createRes.body).toEqual(expect.objectContaining(body))
+    expect(createRes.body).toMatchObject(body)
     const newBody = getTestAppBody() as Application
     newBody.id = createRes.body.id
     const putRes = await supertest(app.getHttpServer())
@@ -257,7 +300,7 @@ describe("Applications", () => {
       .send(newBody)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
-    expect(putRes.body).toEqual(expect.objectContaining(newBody))
+    expect(putRes.body).toMatchObject(newBody)
   })
 
   it(`/PUT user 2 unauthorized to edit user 1 application`, async () => {
@@ -267,7 +310,7 @@ describe("Applications", () => {
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
-    expect(createRes.body).toEqual(expect.objectContaining(body))
+    expect(createRes.body).toMatchObject(body)
     const newBody = getTestAppBody() as Application
     newBody.id = createRes.body.id
     await supertest(app.getHttpServer())

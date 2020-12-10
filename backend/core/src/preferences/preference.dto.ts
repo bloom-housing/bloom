@@ -1,13 +1,9 @@
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
+import { OmitType } from "@nestjs/swagger"
 import { Preference } from "../entity/preference.entity"
-import { Exclude, Expose } from "class-transformer"
+import { Expose } from "class-transformer"
 import { IsString, IsUUID } from "class-validator"
 
-export class PreferenceDto extends OmitType(Preference, ["listing"] as const) {
-  @Exclude()
-  @ApiHideProperty()
-  listing
-}
+export class PreferenceDto extends OmitType(Preference, ["listing"] as const) {}
 
 export class PreferenceCreateDto extends OmitType(PreferenceDto, [
   "id",

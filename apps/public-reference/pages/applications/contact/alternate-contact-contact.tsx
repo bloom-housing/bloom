@@ -83,6 +83,7 @@ export default () => {
               name="phoneNumber"
               label={t("application.alternateContact.contact.phoneNumberFormLabel")}
               readerOnly={true}
+              required={true}
               error={errors.phoneNumber}
               errorMessage={t("errors.phoneNumberError")}
               controlClassName="control"

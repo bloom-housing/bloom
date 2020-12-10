@@ -11,6 +11,7 @@ import {
   ApiClientContext,
   debounce,
   lRoute,
+  LocalizedLink,
 } from "@bloom-housing/ui-components"
 import { useApplicationsData } from "../lib/hooks"
 import Layout from "../layouts/application"
@@ -150,8 +151,8 @@ const ApplicationsList = () => {
     let max = 1
 
     appsData?.items.forEach((item) => {
-      if (item.application.householdSize > max) {
-        max = item.application.householdSize
+      if (item.householdSize > max) {
+        max = item.householdSize
       }
     })
 
@@ -179,9 +180,11 @@ const ApplicationsList = () => {
               </div>
 
               <div className="flex-row">
-                <Button className="mx-1" onClick={() => false}>
-                  {t("applications.addApplication")}
-                </Button>
+                <LocalizedLink href="applications/add">
+                  <Button className="mx-1" onClick={() => false}>
+                    {t("applications.addApplication")}
+                  </Button>
+                </LocalizedLink>
 
                 <Button className="mx-1" onClick={() => onExport()}>
                   {t("t.export")}

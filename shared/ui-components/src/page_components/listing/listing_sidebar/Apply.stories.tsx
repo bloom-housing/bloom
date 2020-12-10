@@ -1,17 +1,17 @@
 import * as React from "react"
 
 import { Apply } from "./Apply"
-import Archer from "@bloom-housing/listings-service/listings/archer.json"
+import {ArcherListing} from "@bloom-housing/core/src/archer-listing"
 import {
   ApplicationMethod,
-  ApplicationMethodType,
+  ApplicationMethodType, Listing
 } from "@bloom-housing/core"
 
 export default {
   title: "Listing Sidebar/Apply",
 }
 
-const listing = Object.assign({}, Archer) as any
+const listing = Object.assign({}, ArcherListing) as Listing
 const internalFormRoute = "/applications/start/choose-language"
 
 export const hardApplicationDeadline = () => {
