@@ -94,14 +94,14 @@ export default () => {
                 register={register}
                 validation={{ required: true }}
                 error={errors.agree}
-                errorMessage={t("application.review.terms.agreeError")}
+                errorMessage={t("errors.agreeError")}
               />
             </div>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button type={AppearanceStyleType.primary} onClick={() => false}>
-                {t("application.review.terms.submit")}
+                {t("t.submit")}
               </Button>
             </div>
           </div>

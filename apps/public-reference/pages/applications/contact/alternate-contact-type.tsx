@@ -64,7 +64,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -74,7 +74,7 @@ export default () => {
               <legend className="field-label--caps">
                 {t("application.alternateContact.type.label")}
               </legend>
-              <p className="field-note mb-4">{t("application.alternateContact.type.helperText")}</p>
+              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
               {altContactRelationshipKeys.map((option, i) => {
                 return (
                   <Fragment key={option}>

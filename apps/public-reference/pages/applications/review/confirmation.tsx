@@ -90,7 +90,7 @@ export default () => {
                 void router.push("/create-account").then(() => window.scrollTo(0, 0))
               }}
             >
-              {t("application.form.general.createAccount")}
+              {t("account.createAccount")}
             </Button>
           </div>
 

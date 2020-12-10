@@ -24,7 +24,7 @@ const HouseholdMemberForm = (props: { member: HouseholdMemberUpdate; type: strin
     <ViewItem helper={type} className="pb-4 border-b text-left">
       {member.firstName} {member.lastName}
       <a id="edit-member" className="edit-link" href="#" onClick={editMember}>
-        {t("label.edit")}
+        {t("t.edit")}
       </a>
     </ViewItem>
   )
