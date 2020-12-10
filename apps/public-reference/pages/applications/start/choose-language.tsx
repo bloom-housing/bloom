@@ -40,6 +40,8 @@ export default () => {
   useEffect(() => {
     if (!context.listing) {
       void loadListing(listingId, setListing, conductor, context)
+    } else {
+      setListing(context.listing)
     }
   }, [conductor, context, listingId])
 

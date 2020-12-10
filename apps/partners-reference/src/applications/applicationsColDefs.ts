@@ -116,7 +116,7 @@ export function getColDefs(maxHouseholdSize: number) {
         if (!data.value) return ""
 
         const posiviveValues = Object.entries(data.value).reduce((acc, curr) => {
-          if (curr[1]) {
+          if (curr[1] && !["id", "createdAt", "updatedAt"].includes(curr[0])) {
             acc.push(t(`application.ada.${curr[0]}`))
           }
 
@@ -137,7 +137,11 @@ export function getColDefs(maxHouseholdSize: number) {
         if (!data.value) return ""
 
         const posiviveValues = Object.entries(data.value).reduce((acc, curr) => {
-          if (curr[0] !== "none" && curr[1]) {
+          if (
+            curr[0] !== "none" &&
+            !["id", "createdAt", "updatedAt"].includes(curr[0]) &&
+            curr[1]
+          ) {
             acc.push(t(`application.preferences.options.${curr[0]}`))
           }
 
