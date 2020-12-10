@@ -55,7 +55,22 @@
   "application": {
     "add": {
       "applicationAddError": "You’ll need to resolve any errors before moving on.",
-      "workInRegion": "Work in the region?"
+      "workInRegion": "Work in the region?",
+      "mobility": "Mobility Impairments",
+      "vision": "Vision Impairments",
+      "hearing": "Hearing Impairments",
+      "preferences": {
+        "liveIn": "Live in",
+        "workIn": "Work in",
+        "optedOut": "Opted out of preference"
+      },
+      "incomePeriod": "Income Period",
+      "demographicsInformation": "Demographic Information",
+      "ethnicity": "Ethnicity",
+      "race": "Race",
+      "gender": "Gender",
+      "howDidYouHearAboutUs": "How did you hear about us?",
+      "sexualOrientation": "Sexual Orientation"
     },
     "details": {
       "applicationData": "Application Data",
@@ -810,6 +825,7 @@
     "deposit": "Deposit",
     "errorsToResolve": "There are errors you'll need to resolve before moving on.",
     "export": "Export",
+    "enterAmount": "Enter amount",
     "filter": "Filter",
     "floor": "floor",
     "floors": "floors",
