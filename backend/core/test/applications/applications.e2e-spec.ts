@@ -224,7 +224,7 @@ describe("Applications", () => {
     const body = getTestAppBody()
     body.applicant.firstName = "MyName"
     const createRes = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .expect(201)
     expect(createRes.body).toMatchObject(body)
@@ -244,7 +244,7 @@ describe("Applications", () => {
   it(`/POST and CSV export`, async () => {
     const body = getTestAppBody()
     const createRes = await supertest(app.getHttpServer())
-      .post(`/applications`)
+      .post(`/applications/submit`)
       .send(body)
       .expect(201)
     expect(createRes.body).toMatchObject(body)
