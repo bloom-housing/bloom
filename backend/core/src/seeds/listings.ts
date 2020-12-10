@@ -132,10 +132,10 @@ export const listingSeed1: ListingSeed = {
       externalReference: "",
     },
     {
-      type: ApplicationMethodType.ExternalLink,
+      type: ApplicationMethodType.Internal,
       acceptsPostmarkedApplications: false,
       label: "Label",
-      externalReference: "/applications/start/choose-language?listingId=jsQvgvy6eJy56TNCFfQp8",
+      externalReference: "",
     },
   ],
   property: {
@@ -202,7 +202,7 @@ export const listingSeed1: ListingSeed = {
     },
   ],
   listing: {
-    applicationOpenDate: new Date("2020-12-12T20:00:00.000Z"),
+    applicationOpenDate: new Date("2020-10-12T20:00:00.000Z"),
     applicationPickUpAddress: {
       city: "San Jose",
       street: "98 Archer Street",
@@ -212,7 +212,7 @@ export const listingSeed1: ListingSeed = {
       longitude: -121.91071,
     },
     applicationPickUpAddressOfficeHours: "10AM to 12AM",
-    postmarkedApplicationsReceivedByDate: new Date("2020-12-10T20:00:00.000Z"),
+    postmarkedApplicationsReceivedByDate: new Date("2021-12-10T20:00:00.000Z"),
     disableUnitsAccordion: false,
     rentalAssistance: "",
 

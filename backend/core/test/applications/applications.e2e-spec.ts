@@ -44,8 +44,8 @@ describe("Applications", () => {
       submissionType: ApplicationSubmissionType.electronical,
       acceptedTerms: false,
       applicant: {
-        firstName: "",
-        middleName: "",
+        firstName: "Applicant",
+        middleName: "Middlename",
         lastName: "",
         birthMonth: "",
         birthDay: "",
@@ -173,7 +173,7 @@ describe("Applications", () => {
 
   it(`/POST `, async () => {
     const body = getTestAppBody()
-    const res = await supertest(app.getHttpServer())
+    let res = await supertest(app.getHttpServer())
       .post(`/applications/submit`)
       .send(body)
       .set(...setAuthorization(user1AccessToken))
@@ -181,6 +181,13 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+    res = await supertest(app.getHttpServer())
+      .get(`/applications`)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0]).toMatchObject(body)
   })
 
   it(`/GET by id`, async () => {
@@ -211,6 +218,44 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+  })
+
+  it(`/POST and search`, async () => {
+    const body = getTestAppBody()
+    body.applicant.firstName = "MyName"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?search=MyName`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].id === createRes.body.id)
+    expect(res.body.items[0]).toMatchObject(createRes.body)
+  })
+
+  it(`/POST and CSV export`, async () => {
+    const body = getTestAppBody()
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/csv/?includeHeaders=true`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(typeof res.body === "string")
   })
 
   it(`/DELETE `, async () => {
