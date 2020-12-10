@@ -8,6 +8,10 @@ Bloom components have been design with the principles of [Atomic Design](http://
 
 There are also Page Components as a distinct class, which represent larger combinations of components (atomic: organisms) that are meant to be directly imported into specific pages in the system (e.g. a home page).
 
+## Locales/Translations
+
+Look in `src/locales` for JSON files containing translated keys for UI elements and copy across all monorepo sites.
+
 ## Storybook
 
 The UI components package includes [Storybook](https://storybook.js.org/) for easy browsing of the component tree, and is the best way to get started understand what's available.
