@@ -9,13 +9,14 @@ import {
 import { Listing } from "./listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export class PreferenceLink {
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   title: string
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   url: string
 }
 
@@ -23,50 +24,50 @@ export class PreferenceLink {
 class Preference {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
-  @IsString()
-  @IsUUID()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
 
   @Column({ type: "integer", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsNumber()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   ordinal: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   title: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   subtitle: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   description: string | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
-  @IsOptional()
-  @ValidateNested({ each: true })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceLink)
   links: PreferenceLink[] | null
 

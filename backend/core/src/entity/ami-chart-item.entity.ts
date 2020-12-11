@@ -9,24 +9,25 @@ import {
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsString, IsUUID } from "class-validator"
 import { AmiChart } from "./ami-chart.entity"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 @Entity()
 export class AmiChartItem {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
-  @IsString()
-  @IsUUID()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
 
@@ -35,16 +36,16 @@ export class AmiChartItem {
 
   @Column()
   @Expose()
-  @IsNumber()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   percentOfAmi: number
 
   @Column()
   @Expose()
-  @IsNumber()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   householdSize: number
 
   @Column()
   @Expose()
-  @IsNumber()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   income: number
 }

@@ -1,5 +1,5 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
-import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { Application } from "../entities/application.entity"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IdDto } from "../../lib/id.dto"
@@ -28,6 +28,7 @@ import {
   AccessibilityDto,
   AccessibilityUpdateDto,
 } from "./accessibility.dto"
+import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 export class ApplicationDto extends OmitType(Application, [
   "listing",
@@ -42,8 +43,8 @@ export class ApplicationDto extends OmitType(Application, [
   "preferences",
 ] as const) {
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingDto)
   listing: ListingDto
 
@@ -52,49 +53,49 @@ export class ApplicationDto extends OmitType(Application, [
   user
 
   @Expose()
-  @ValidateNested()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicantDto)
   applicant: ApplicantDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   mailingAddress: AddressDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   alternateAddress: AddressDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AlternateContactDto)
   alternateContact: AlternateContactDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AccessibilityDto)
   accessibility: AccessibilityDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => DemographicsDto)
   demographics: DemographicsDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => HouseholdMemberDto)
   householdMembers: HouseholdMemberDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationPreferencesDto)
   preferences: ApplicationPreferencesDto
 }
@@ -116,55 +117,56 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "preferences",
 ] as const) {
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   listing: IdDto
 
   @Expose()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicantCreateDto)
   applicant: ApplicantCreateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   mailingAddress: AddressCreateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   alternateAddress: AddressCreateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AlternateContactCreateDto)
   alternateContact: AlternateContactCreateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AccessibilityCreateDto)
   accessibility: AccessibilityCreateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => DemographicsCreateDto)
   demographics: DemographicsCreateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => HouseholdMemberCreateDto)
   householdMembers: HouseholdMemberCreateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationPreferencesCreateDto)
   preferences: ApplicationPreferencesCreateDto
 }
@@ -184,70 +186,72 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "preferences",
 ] as const) {
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
 
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
   createdAt?: Date
 
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
   updatedAt?: Date
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   listing: IdDto
 
   @Expose()
-  @ValidateNested()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicantUpdateDto)
   applicant: ApplicantUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   mailingAddress: AddressUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   alternateAddress: AddressUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AlternateContactUpdateDto)
   alternateContact: AlternateContactUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AccessibilityUpdateDto)
   accessibility: AccessibilityUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => DemographicsUpdateDto)
   demographics: DemographicsUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => HouseholdMemberUpdateDto)
   householdMembers: HouseholdMemberUpdateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationPreferencesUpdateDto)
   preferences: ApplicationPreferencesUpdateDto
 }

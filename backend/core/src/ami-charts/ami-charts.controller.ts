@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
@@ -6,12 +17,14 @@ import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { AmiChartsService } from "./ami-charts.service"
 import { AmiChartCreateDto, AmiChartDto, AmiChartUpdateDto } from "./ami-chart.dto"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("/amiCharts")
 @ApiTags("amiCharts")
 @ApiBearerAuth()
 @ResourceType("amiChart")
 @UseGuards(DefaultAuthGuard, AuthzGuard)
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class AmiChartsController {
   constructor(private readonly amiChartsService: AmiChartsService) {}
 

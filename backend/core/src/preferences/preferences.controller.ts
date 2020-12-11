@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { PreferencesService } from "../preferences/preferences.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import {
@@ -10,12 +21,14 @@ import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("/preferences")
 @ApiTags("preferences")
 @ApiBearerAuth()
 @ResourceType("preference")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class PreferencesController {
   constructor(private readonly preferencesService: PreferencesService) {}
 

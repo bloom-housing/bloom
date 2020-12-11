@@ -1,7 +1,8 @@
 import { OmitType } from "@nestjs/swagger"
 import { Demographics } from "../entities/demographics.entity"
-import { Expose } from "class-transformer"
-import { IsOptional, IsUUID } from "class-validator"
+import { Expose, Type } from "class-transformer"
+import { IsDate, IsOptional, IsUUID } from "class-validator"
+import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 export class DemographicsDto extends OmitType(Demographics, [] as const) {}
 
@@ -17,17 +18,19 @@ export class DemographicsUpdateDto extends OmitType(DemographicsDto, [
   "updatedAt",
 ]) {
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
 
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
   createdAt?: Date
 
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
   updatedAt?: Date
 }

@@ -10,13 +10,14 @@ import {
 import { Application } from "../applications/entities/application.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 @Entity({ name: "user_accounts" })
 @Index("user_accounts_email_unique_idx", { synchronize: false })
 export class User {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
-  @IsUUID()
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @Column("varchar", { select: false })
@@ -24,45 +25,46 @@ export class User {
 
   @Column("varchar")
   @Expose()
-  @IsEmail()
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   email: string
 
   @Column("varchar")
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   firstName: string
 
   @Column("varchar", { nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   middleName?: string
 
   @Column("varchar")
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   lastName: string
 
   @Column("timestamp without time zone")
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   dob: Date
 
   @CreateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
 
   @OneToMany(() => Application, (application) => application.user)
   applications: Application[]
+
   @Column("boolean", { default: false })
   isAdmin: boolean
 

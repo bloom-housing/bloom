@@ -10,6 +10,8 @@ import {
   Query,
   Request,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from "@nestjs/common"
 import { Request as ExpressRequest } from "express"
 import { ApplicationsService } from "./applications.service"
@@ -31,6 +33,8 @@ import { Expose, Transform } from "class-transformer"
 import { IsBoolean, IsOptional, IsString } from "class-validator"
 import { Pagination, PaginationQueryParams } from "../utils/pagination.dto"
 import { Application } from "./entities/application.entity"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -39,8 +43,8 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
     example: "listingId",
     required: false,
   })
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   listingId?: string
 
   @Expose()
@@ -49,8 +53,8 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
     example: "search",
     required: false,
   })
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   search?: string
 }
 
@@ -61,8 +65,8 @@ export class ApplicationsCsvListQueryParams {
     example: "listingId",
     required: false,
   })
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   listingId?: string
 
   @Expose()
@@ -71,8 +75,8 @@ export class ApplicationsCsvListQueryParams {
     example: true,
     required: false,
   })
-  @IsOptional()
-  @IsBoolean()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
   includeHeaders?: boolean
 }
@@ -82,6 +86,12 @@ export class ApplicationsCsvListQueryParams {
 @ApiBearerAuth()
 @ResourceType("application")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UsePipes(
+  new ValidationPipe({
+    ...defaultValidationPipeOptions,
+    groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
+  })
+)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,

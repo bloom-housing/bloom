@@ -377,6 +377,27 @@ export class ApplicationsService {
       axios(configs, resolve, reject);
     });
   }
+  /**
+   * Submit application
+   */
+  submit(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications/submit';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class AssetsService {
@@ -1613,22 +1634,22 @@ export interface Address {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -1733,22 +1754,22 @@ export interface Address {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -1956,22 +1977,22 @@ export interface AddressCreate {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -2190,22 +2211,22 @@ export interface AddressUpdate {
   placeName?: string;
 
   /**  */
-  city: string;
+  city?: string;
 
   /**  */
   county?: string;
 
   /**  */
-  state: string;
+  state?: string;
 
   /**  */
-  street: string;
+  street?: string;
 
   /**  */
   street2?: string;
 
   /**  */
-  zipCode: string;
+  zipCode?: string;
 
   /**  */
   latitude?: number;
@@ -2350,40 +2371,40 @@ export interface Applicant {
   updatedAt: Date;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
   emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
-  workInRegion: string;
+  workInRegion?: string;
 }
 
 export interface AlternateContact {
@@ -2400,36 +2421,36 @@ export interface AlternateContact {
   updatedAt: Date;
 
   /**  */
-  type: string;
+  type?: string;
 
   /**  */
-  otherType: string;
+  otherType?: string;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  agency: string;
+  agency?: string;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 }
 
 export interface Accessibility {
   /**  */
-  mobility: boolean;
+  mobility?: boolean;
 
   /**  */
-  vision: boolean;
+  vision?: boolean;
 
   /**  */
-  hearing: boolean;
+  hearing?: boolean;
 
   /**  */
   id: string;
@@ -2452,13 +2473,13 @@ export interface Demographics {
   updatedAt: Date;
 
   /**  */
-  ethnicity: string;
+  ethnicity?: string;
 
   /**  */
-  gender: string;
+  gender?: string;
 
   /**  */
-  sexualOrientation: string;
+  sexualOrientation?: string;
 
   /**  */
   howDidYouHear: string[];
@@ -2487,37 +2508,37 @@ export interface HouseholdMember {
   orderId?: number;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
   sameAddress?: string;
@@ -2551,7 +2572,7 @@ export interface ApplicationPreferences {
 
 export interface Application {
   /**  */
-  incomePeriod: IncomePeriod;
+  incomePeriod?: IncomePeriod;
 
   /**  */
   status: ApplicationStatus;
@@ -2599,40 +2620,40 @@ export interface Application {
   updatedAt: Date;
 
   /**  */
-  appUrl: string;
+  appUrl?: string;
 
   /**  */
-  additionalPhone: boolean;
+  additionalPhone?: boolean;
 
   /**  */
-  additionalPhoneNumber: string;
+  additionalPhoneNumber?: string;
 
   /**  */
-  additionalPhoneNumberType: string;
+  additionalPhoneNumberType?: string;
 
   /**  */
   contactPreferences: string[];
 
   /**  */
-  householdSize: number;
+  householdSize?: number;
 
   /**  */
-  housingStatus: string;
+  housingStatus?: string;
 
   /**  */
-  sendMailToMailingAddress: boolean;
+  sendMailToMailingAddress?: boolean;
 
   /**  */
-  incomeVouchers: boolean;
+  incomeVouchers?: boolean;
 
   /**  */
-  income: string;
+  income?: string;
 
   /**  */
   preferredUnit: string[];
 
   /**  */
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
 }
 
 export interface PaginationMeta {
@@ -2668,40 +2689,40 @@ export interface ApplicantCreate {
   workAddress: AddressCreate;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
   emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
-  workInRegion: string;
+  workInRegion?: string;
 }
 
 export interface AlternateContactCreate {
@@ -2709,47 +2730,47 @@ export interface AlternateContactCreate {
   mailingAddress: AddressCreate;
 
   /**  */
-  type: string;
+  type?: string;
 
   /**  */
-  otherType: string;
+  otherType?: string;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  agency: string;
+  agency?: string;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 }
 
 export interface AccessibilityCreate {
   /**  */
-  mobility: boolean;
+  mobility?: boolean;
 
   /**  */
-  vision: boolean;
+  vision?: boolean;
 
   /**  */
-  hearing: boolean;
+  hearing?: boolean;
 }
 
 export interface DemographicsCreate {
   /**  */
-  ethnicity: string;
+  ethnicity?: string;
 
   /**  */
-  gender: string;
+  gender?: string;
 
   /**  */
-  sexualOrientation: string;
+  sexualOrientation?: string;
 
   /**  */
   howDidYouHear: string[];
@@ -2769,37 +2790,37 @@ export interface HouseholdMemberCreate {
   orderId?: number;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
   sameAddress?: string;
@@ -2824,7 +2845,7 @@ export interface ApplicationPreferencesCreate {
 
 export interface ApplicationCreate {
   /**  */
-  incomePeriod: IncomePeriod;
+  incomePeriod?: IncomePeriod;
 
   /**  */
   status: ApplicationStatus;
@@ -2863,40 +2884,40 @@ export interface ApplicationCreate {
   preferences: ApplicationPreferencesCreate;
 
   /**  */
-  appUrl: string;
+  appUrl?: string;
 
   /**  */
-  additionalPhone: boolean;
+  additionalPhone?: boolean;
 
   /**  */
-  additionalPhoneNumber: string;
+  additionalPhoneNumber?: string;
 
   /**  */
-  additionalPhoneNumberType: string;
+  additionalPhoneNumberType?: string;
 
   /**  */
   contactPreferences: string[];
 
   /**  */
-  householdSize: number;
+  householdSize?: number;
 
   /**  */
-  housingStatus: string;
+  housingStatus?: string;
 
   /**  */
-  sendMailToMailingAddress: boolean;
+  sendMailToMailingAddress?: boolean;
 
   /**  */
-  incomeVouchers: boolean;
+  incomeVouchers?: boolean;
 
   /**  */
-  income: string;
+  income?: string;
 
   /**  */
   preferredUnit: string[];
 
   /**  */
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
 }
 
 export interface ApplicantUpdate {
@@ -2916,40 +2937,40 @@ export interface ApplicantUpdate {
   workAddress: AddressUpdate;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
   emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
-  workInRegion: string;
+  workInRegion?: string;
 }
 
 export interface AlternateContactUpdate {
@@ -2966,25 +2987,25 @@ export interface AlternateContactUpdate {
   mailingAddress: AddressUpdate;
 
   /**  */
-  type: string;
+  type?: string;
 
   /**  */
-  otherType: string;
+  otherType?: string;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  agency: string;
+  agency?: string;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 }
 
 export interface AccessibilityUpdate {
@@ -2998,13 +3019,13 @@ export interface AccessibilityUpdate {
   updatedAt?: Date;
 
   /**  */
-  mobility: boolean;
+  mobility?: boolean;
 
   /**  */
-  vision: boolean;
+  vision?: boolean;
 
   /**  */
-  hearing: boolean;
+  hearing?: boolean;
 }
 
 export interface DemographicsUpdate {
@@ -3018,13 +3039,13 @@ export interface DemographicsUpdate {
   updatedAt?: Date;
 
   /**  */
-  ethnicity: string;
+  ethnicity?: string;
 
   /**  */
-  gender: string;
+  gender?: string;
 
   /**  */
-  sexualOrientation: string;
+  sexualOrientation?: string;
 
   /**  */
   howDidYouHear: string[];
@@ -3053,37 +3074,37 @@ export interface HouseholdMemberUpdate {
   orderId?: number;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
   sameAddress?: string;
@@ -3117,7 +3138,7 @@ export interface ApplicationPreferencesUpdate {
 
 export interface ApplicationUpdate {
   /**  */
-  incomePeriod: IncomePeriod;
+  incomePeriod?: IncomePeriod;
 
   /**  */
   status: ApplicationStatus;
@@ -3165,40 +3186,40 @@ export interface ApplicationUpdate {
   preferences: ApplicationPreferencesUpdate;
 
   /**  */
-  appUrl: string;
+  appUrl?: string;
 
   /**  */
-  additionalPhone: boolean;
+  additionalPhone?: boolean;
 
   /**  */
-  additionalPhoneNumber: string;
+  additionalPhoneNumber?: string;
 
   /**  */
-  additionalPhoneNumberType: string;
+  additionalPhoneNumberType?: string;
 
   /**  */
   contactPreferences: string[];
 
   /**  */
-  householdSize: number;
+  householdSize?: number;
 
   /**  */
-  housingStatus: string;
+  housingStatus?: string;
 
   /**  */
-  sendMailToMailingAddress: boolean;
+  sendMailToMailingAddress?: boolean;
 
   /**  */
-  incomeVouchers: boolean;
+  incomeVouchers?: boolean;
 
   /**  */
-  income: string;
+  income?: string;
 
   /**  */
   preferredUnit: string[];
 
   /**  */
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
 }
 
 export interface UnitCreate {

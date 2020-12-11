@@ -20,7 +20,7 @@ export type FormattingMetadataAggregateFactory = () => FormattingMetadataAggrega
 
 export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
 export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
-export const streetFormatter = (obj?: { street: string; street2?: string }) => {
+export const streetFormatter = (obj?: { street?: string; street2?: string }) => {
   if (!obj) {
     return defaultFormatter(obj)
   }
@@ -35,7 +35,11 @@ export const streetFormatter = (obj?: { street: string; street2?: string }) => {
   }
   return `${obj.street}, ${obj.street2}`
 }
-export const dobFormatter = (obj?: { birthMonth: string; birthDay: string; birthYear: string }) => {
+export const dobFormatter = (obj?: {
+  birthMonth?: string
+  birthDay?: string
+  birthYear?: string
+}) => {
   // TODO Use locale variable Date string
   return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : defaultFormatter(obj)
 }
