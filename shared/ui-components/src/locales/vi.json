@@ -356,7 +356,7 @@
     }
   },
   "config": {
-    "routePrefix": ""
+    "routePrefix": "vi"
   },
   "errors": {
     "alert": {
