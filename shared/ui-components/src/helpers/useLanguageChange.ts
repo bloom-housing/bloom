@@ -24,6 +24,8 @@ export function useLanguageChange(languages: LangItem[]) {
       )
     } else if (!pathIncludesLang.length && prefix !== "") {
       newPath = `/${prefix + pathname}`
+    } else if (pathIncludesLang.length) {
+      newPath = newPath.replace(/^\/.*?(\/|$)/, `/${prefix}$1`)
     }
 
     void router.replace({

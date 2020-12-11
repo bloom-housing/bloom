@@ -154,7 +154,7 @@ module.exports = withCSS(
                 page: "/applications/contact/name",
               },
             })
-            const languages = ["es"] // add new language codes here
+            const languages = ["es", "zh", "vi"] // add new language codes here
             const languagePaths = {}
             Object.entries(translatablePaths).forEach(([key, value]) => {
               languagePaths[key] = value

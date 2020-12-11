@@ -49,9 +49,13 @@ class MyApp extends App {
       "@bloom-housing/ui-components/src/locales/general.json"
     )
     const spanishTranslations = await import("@bloom-housing/ui-components/src/locales/es.json")
+    const chineseTranslations = await import("@bloom-housing/ui-components/src/locales/zh.json")
+    const vietnameseTranslations = await import("@bloom-housing/ui-components/src/locales/vi.json")
     const translations = {
       general: generalTranslations,
       es: spanishTranslations,
+      zh: chineseTranslations,
+      vi: vietnameseTranslations,
       custom: {
         general: await import("../page_content/locale_overrides/general.json"),
         // Uncomment to add additional language overrides

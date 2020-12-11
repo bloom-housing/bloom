@@ -518,7 +518,9 @@
   },
   "languages": {
     "en": "English",
-    "es": "Spanish"
+    "es": "Spanish",
+    "zh": "中文",
+    "vi": "Vietnamese"
   },
   "leasingAgent": {
     "contact": "Contact Leasing Agent",
