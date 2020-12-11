@@ -11,7 +11,7 @@ import {
   ViewItem,
   GridCell,
   MinimalTable,
-  InlineButton,
+  Button,
   formatIncome,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
@@ -176,9 +176,9 @@ export default function ApplicationsList() {
 
       <section className="border-t bg-white">
         <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-          <InlineButton arrow onClick={() => router.back()}>
+          <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
             {t("t.back")}
-          </InlineButton>
+          </Button>
 
           <div className="status-bar__status md:pl-4 md:w-3/12">
             <Tag type={AppearanceStyleType.success} pillStyle>

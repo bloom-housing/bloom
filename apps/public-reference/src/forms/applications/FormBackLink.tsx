@@ -1,14 +1,11 @@
-import Link from "next/link"
-import { OnClientSide, t } from "@bloom-housing/ui-components"
+import { LinkButton, OnClientSide, t } from "@bloom-housing/ui-components"
 
 const FormBackLink = (props: { url: string }) => (
   <p className="form-card__back">
     {OnClientSide() && props.url && (
-      <strong>
-        <Link href={props.url}>
-          <a>{t("t.back")}</a>
-        </Link>
-      </strong>
+      <LinkButton inlineIcon="left" icon="arrow-back" href={props.url}>
+        {t("t.back")}
+      </LinkButton>
     )}
   </p>
 )

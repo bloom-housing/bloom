@@ -3,7 +3,6 @@ export * from "./src/actions/Button"
 export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
-export * from "./src/actions/InlineButton"
 
 /* Blocks */
 export * from "./src/blocks/AppStatusItem"

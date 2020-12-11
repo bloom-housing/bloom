@@ -51,7 +51,8 @@
     @apply normal-case;
   }
 
-  &.is-unstyled {
+  &.is-unstyled,
+  &.is-inline {
     @apply normal-case;
     @apply border-0;
     @apply p-0;
@@ -65,6 +66,25 @@
     &:hover {
       @apply text-primary;
       background: transparent;
+    }
+  }
+
+  &.is-inline {
+    @apply text-primary;
+    @apply font-semibold;
+    @apply text-tiny;
+    @apply m-0;
+    @apply no-underline;
+
+    &.inline-icon--left {
+      .button__icon {
+        @apply mr-1;
+      }
+    }
+    &.inline-icon--right {
+      .button__icon {
+        @apply ml-1;
+      }
     }
   }
 
