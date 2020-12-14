@@ -27,6 +27,7 @@ import {
   AlertBox,
   Drawer,
   blankApplication,
+  MinimalTable,
 } from "@bloom-housing/ui-components"
 import { useForm, UseFormMethods } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -40,7 +41,7 @@ type Props = {
 
 const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
-  const [membersDrawer, setMembersDrawer] = useState(false)
+  const [membersDrawer, setMembersDrawer] = useState<number | boolean>(false)
 
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
@@ -150,6 +151,71 @@ const ApplicationForm = ({ isEditable }: Props) => {
       register,
     }))
   }, [register])
+
+  const editMember = useCallback(
+    (orderId: number) => {
+      setMembersDrawer(orderId)
+    },
+    [setMembersDrawer]
+  )
+
+  const deleteMember = useCallback(
+    (orderId: number) => {
+      const updatedMembers = householdMembers.filter((member) => member.orderId !== orderId)
+      setHouseholdMembers(updatedMembers)
+    },
+    [setHouseholdMembers, householdMembers]
+  )
+
+  const memberTableHeaders = {
+    name: t("t.name"),
+    relationship: t("t.relationship"),
+    dob: t("application.household.member.dateOfBirth"),
+    sameResidence: t("application.add.sameResidence"),
+    workInRegion: t("application.details.workInRegion"),
+    action: "",
+  }
+
+  const memberTableData = useMemo(
+    () =>
+      householdMembers.map((member) => {
+        const { birthMonth, birthDay, birthYear } = member
+
+        return {
+          name: `${member.firstName} ${member.lastName}`,
+          relationship: member.relationship
+            ? t(`application.form.options.relationship.${member.relationship}`)
+            : t("t.n/a"),
+          dob:
+            birthMonth && birthDay && birthYear
+              ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
+              : t("t.n/a"),
+          sameResidence:
+            member.sameAddress === "yes"
+              ? t("t.yes")
+              : member.sameAddress === "no"
+              ? t("t.no")
+              : t("t.n/a"),
+          workInRegion:
+            member.workInRegion === "yes"
+              ? t("t.yes")
+              : member.workInRegion === "no"
+              ? t("t.no")
+              : t("t.n/a"),
+          action: (
+            <div className="flex">
+              <Button type="button" onClick={() => editMember(member.orderId)} unstyled>
+                <strong className="uppercase">{t("t.edit")}</strong>
+              </Button>
+              <Button type="button" onClick={() => deleteMember(member.orderId)} unstyled>
+                <strong className="uppercase">{t("t.delete")}</strong>
+              </Button>
+            </div>
+          ),
+        }
+      }),
+    [deleteMember, editMember, householdMembers]
+  )
 
   return (
     <>
@@ -470,6 +536,12 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 separator
               >
                 <div className="bg-gray-300 px-4 py-5">
+                  {!!householdMembers.length && (
+                    <div className="mb-5">
+                      <MinimalTable headers={memberTableHeaders} data={memberTableData} />
+                    </div>
+                  )}
+
                   <Button
                     type="button"
                     size={AppearanceSizeType.normal}
@@ -791,10 +863,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
           </div>
         </Form>
 
-        {console.log("members: ", householdMembers)}
-
         <Drawer
-          open={membersDrawer}
+          open={!!membersDrawer}
           title={t("application.household.householdMember")}
           onClose={() => setMembersDrawer(!membersDrawer)}
           ariaDescription="My Drawer"
@@ -803,6 +873,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
             onSubmit={(member) => addMember(member)}
             onClose={() => setMembersDrawer(false)}
             members={householdMembers}
+            memberOrderId={membersDrawer}
           />
         </Drawer>
       </section>

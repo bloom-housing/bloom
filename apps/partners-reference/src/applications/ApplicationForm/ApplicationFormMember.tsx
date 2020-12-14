@@ -37,6 +37,7 @@ type ApplicationFormMemberProps = {
   onSubmit: (member: HouseholdMember) => void
   onClose: () => void
   members: HouseholdMember[]
+  memberOrderId: number | boolean
 }
 
 class Member implements HouseholdMember {
@@ -92,16 +93,46 @@ class Member implements HouseholdMember {
   workInRegion?: string
 }
 
-const ApplicationFormMember = ({ onSubmit, onClose, members }: ApplicationFormMemberProps) => {
+const ApplicationFormMember = ({
+  onSubmit,
+  onClose,
+  members,
+  memberOrderId,
+}: ApplicationFormMemberProps) => {
+  const currentlyEdited = useMemo(() => {
+    return members.filter((member) => member.orderId === memberOrderId)[0]
+  }, [members, memberOrderId])
+
+  // TODO: declare default value for DOB
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
+  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm({
+    defaultValues: {
+      firstName: currentlyEdited?.firstName,
+      middleName: currentlyEdited?.middleName,
+      lastName: currentlyEdited?.lastName,
+      relationship: currentlyEdited?.relationship,
+      sameAddress: currentlyEdited?.sameAddress,
+      workInRegion: currentlyEdited?.workInRegion,
+      dateOfBirth: {
+        birthMonth: currentlyEdited?.birthMonth,
+        birthDay: currentlyEdited?.birthDay,
+        birthYear: currentlyEdited?.birthYear,
+      },
+      address: currentlyEdited?.address,
+      workAddress: currentlyEdited?.workAddress,
+    },
+  })
 
   const sameAddressField = watch("sameAddress")
   const workInRegionField = watch("workInRegion")
 
   function onFormSubmit(data) {
+    const { birthMonth, birthDay, birthYear } = data.dateOfBirth
+
     const newMember = new Member(members.length + 1)
-    onSubmit({ ...newMember, ...data })
+    onSubmit({ ...newMember, ...data, birthMonth, birthDay, birthYear })
+    onClose()
   }
 
   function onFormError() {
@@ -136,6 +167,7 @@ const ApplicationFormMember = ({ onSubmit, onClose, members }: ApplicationFormMe
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
+      {console.log("currently edited member", currentlyEdited)}
       <div className="border rounded-md p-8 bg-white">
         <GridSection title={t("application.review.householdDetails")} columns={4}>
           <GridCell>
@@ -231,7 +263,7 @@ const ApplicationFormMember = ({ onSubmit, onClose, members }: ApplicationFormMe
           </GridCell>
         </GridSection>
 
-        {sameAddressField !== "yes" &&
+        {sameAddressField === "no" &&
           ApplicationFormAddress(
             t("application.details.residenceAddress"),
             "address",
@@ -249,11 +281,12 @@ const ApplicationFormMember = ({ onSubmit, onClose, members }: ApplicationFormMe
       </div>
 
       <div className="mt-6">
-        <Button onClick={() => console.log("submit")} styleType={AppearanceStyleType.primary}>
+        <Button onClick={() => false} styleType={AppearanceStyleType.primary}>
           {t("t.submit")}
         </Button>
 
         <Button
+          type="button"
           onClick={onClose}
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
