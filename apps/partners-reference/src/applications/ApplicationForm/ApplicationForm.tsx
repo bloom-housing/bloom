@@ -180,7 +180,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         readerOnly={true}
                         validation={{ pattern: emailRegex }}
                         error={errors.application?.applicant?.emailAddress}
-                        errorMessage={t("application.name.emailAddressError")}
+                        errorMessage={t("errors.emailAddressError")}
                         register={register}
                       />
                     </ViewItem>
@@ -193,7 +193,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         label={t("application.contact.yourPhoneNumber")}
                         required={false}
                         error={errors.application?.phoneNumber}
-                        errorMessage={t("application.contact.phoneNumberError")}
+                        errorMessage={t("errors.phoneNumberError")}
                         control={control}
                         controlClassName="control"
                         readerOnly
@@ -209,7 +209,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         label={t("application.contact.phoneNumberTypes.prompt")}
                         labelClassName="sr-only"
                         error={errors.application?.applicant?.phoneNumberType}
-                        errorMessage={t("application.contact.phoneNumberTypeError")}
+                        errorMessage={t("errors.phoneNumberTypeError")}
                         register={register}
                         controlClassName="control"
                         options={phoneNumberKeys}
@@ -227,7 +227,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         label={t("application.contact.yourAdditionalPhoneNumber")}
                         required={false}
                         error={errors.application?.additionalPhoneNumber}
-                        errorMessage={t("application.contact.phoneNumberError")}
+                        errorMessage={t("errors.phoneNumberError")}
                         control={control}
                         controlClassName="control"
                         readerOnly
@@ -240,7 +240,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         id="application.additionalPhoneNumberType"
                         name="application.additionalPhoneNumberType"
                         error={errors.application?.additionalPhoneNumberType}
-                        errorMessage={t("application.contact.phoneNumberTypeError")}
+                        errorMessage={t("errors.phoneNumberTypeError")}
                         register={register}
                         controlClassName="control"
                         placeholder={t("application.contact.phoneNumberTypes.prompt")}
@@ -264,7 +264,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         register={register}
                         controlClassName="control"
                         options={contactPreferencesOptions}
-                        keyPrefix="application.form.options.contact"
+                        keyPrefix="t"
                       />
                     </ViewItem>
                   </GridCell>
@@ -395,7 +395,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       label={t("t.email")}
                       validation={{ pattern: emailRegex }}
                       error={errors.application?.alternateContact?.emailAddress}
-                      errorMessage={t("application.name.emailAddressError")}
+                      errorMessage={t("errors.emailAddressError")}
                       register={register}
                       readerOnly
                     />
@@ -409,7 +409,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       name="application.alternateContactPhone"
                       required={false}
                       error={errors.application?.alternateContactPhone}
-                      errorMessage={t("application.contact.phoneNumberError")}
+                      errorMessage={t("errors.phoneNumberError")}
                       control={control}
                       controlClassName="control"
                       label={t("t.phone")}
@@ -533,7 +533,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                           name="application.incomePeriod"
                           className="m-0"
                           type="radio"
-                          label={t("application.financial.income.perYear")}
+                          label={t("t.perYear")}
                           register={register}
                           inputProps={{
                             value: "perYear",
@@ -549,7 +549,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                           name="application.incomePeriod"
                           className="m-0"
                           type="radio"
-                          label={t("application.financial.income.perMonth")}
+                          label={t("t.perMonth")}
                           register={register}
                           inputProps={{
                             value: "perMonth",
@@ -600,7 +600,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       <Select
                         id="application.incomeVouchers"
                         name="application.incomeVouchers"
-                        placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                        placeholder={t("t.selectOne")}
                         label={t("application.details.vouchers")}
                         labelClassName="sr-only"
                         register={register}
@@ -623,7 +623,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.ethnicity"
                       name="application.demographics.ethnicity"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.ethnicity")}
                       labelClassName="sr-only"
                       register={register}
@@ -639,7 +639,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.race"
                       name="application.demographics.race"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.race")}
                       labelClassName="sr-only"
                       register={register}
@@ -655,7 +655,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.gender"
                       name="application.demographics.gender"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.gender")}
                       labelClassName="sr-only"
                       register={register}
@@ -671,7 +671,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.sexualOrientation"
                       name="application.demographics.sexualOrientation"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.sexualOrientation")}
                       labelClassName="sr-only"
                       register={register}

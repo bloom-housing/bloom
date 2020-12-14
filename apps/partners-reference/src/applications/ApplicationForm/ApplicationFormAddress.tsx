@@ -60,7 +60,7 @@ export const ApplicationFormAddress = (
             register={register}
             controlClassName="control"
             options={stateKeys}
-            keyPrefix="application.form.options.states"
+            keyPrefix="states"
           />
         </ViewItem>
 

@@ -240,7 +240,7 @@ const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps
 
       <div className="mt-6">
         <Button onClick={() => console.log("submit")} styleType={AppearanceStyleType.primary}>
-          {t("application.review.terms.submit")}
+          {t("t.submit")}
         </Button>
 
         <Button
