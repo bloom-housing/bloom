@@ -18,10 +18,10 @@ import {
   ProgressNav,
   FieldGroup,
   t,
+  blankApplication,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { blankApplication } from "../../../lib/AppSubmissionContext"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
