@@ -74,7 +74,8 @@
       "howDidYouHearAboutUs": "How did you hear about us?",
       "sexualOrientation": "Sexual Orientation",
       "addHouseholdMember": "Add Household Member",
-      "sameAddressAsPrimary": "Same Address as Primary"
+      "sameAddressAsPrimary": "Same Address as Primary",
+      "sameResidence": "Same Residence"
     },
     "details": {
       "applicationData": "Application Data",
