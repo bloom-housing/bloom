@@ -34,13 +34,16 @@ import { ApplicationFormAddress } from "./ApplicationFormAddress"
 
 // TODO: fix obSubmit type
 type ApplicationFormMemberProps = {
-  onSubmit: () => unknown
+  onSubmit: (member: HouseholdMember) => void
   onClose: () => void
+  members: HouseholdMember[]
 }
 
-class Member implements HouseholdMemberUpdate {
+class Member implements HouseholdMember {
   id: string
   orderId = undefined
+  createdAt: undefined
+  updatedAt: undefined
   firstName = ""
   middleName = ""
   lastName = ""
@@ -57,6 +60,9 @@ class Member implements HouseholdMemberUpdate {
     this.orderId = orderId
   }
   address = {
+    id: undefined,
+    createdAt: undefined,
+    updatedAt: undefined,
     placeName: null,
     city: "",
     county: "",
@@ -68,6 +74,9 @@ class Member implements HouseholdMemberUpdate {
     longitude: null,
   }
   workAddress = {
+    id: undefined,
+    createdAt: undefined,
+    updatedAt: undefined,
     placeName: null,
     city: "",
     county: "",
@@ -83,7 +92,7 @@ class Member implements HouseholdMemberUpdate {
   workInRegion?: string
 }
 
-const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps) => {
+const ApplicationFormMember = ({ onSubmit, onClose, members }: ApplicationFormMemberProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
 
@@ -91,7 +100,8 @@ const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps
   const workInRegionField = watch("workInRegion")
 
   function onFormSubmit(data) {
-    console.log("on submit", data)
+    const newMember = new Member(members.length + 1)
+    onSubmit({ ...newMember, ...data })
   }
 
   function onFormError() {
@@ -232,7 +242,7 @@ const ApplicationFormMember = ({ onSubmit, onClose }: ApplicationFormMemberProps
         {workInRegionField === "yes" &&
           ApplicationFormAddress(
             t("application.contact.workAddress"),
-            "application.applicant.workAddress",
+            "workAddress",
             "work",
             register
           )}

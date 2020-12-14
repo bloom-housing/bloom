@@ -26,11 +26,13 @@ import {
   Form,
   AlertBox,
   Drawer,
+  blankApplication,
 } from "@bloom-housing/ui-components"
 import { useForm, UseFormMethods } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import ApplicationFormMember from "./ApplicationFormMember"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
+import { ApplicationCreate, HouseholdMember, HouseholdMemberUpdate } from "@bloom-housing/core"
 
 type Props = {
   isEditable?: boolean
@@ -40,13 +42,15 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
   const [membersDrawer, setMembersDrawer] = useState(false)
 
+  const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
-  const phoneValue: string = watch("application.phoneNumber")
-  const alternatePhoneValue: string = watch("application.alternateContactPhone")
+  const phoneValue: string = watch("application.applicant.phoneNumber")
+  const alternatePhoneValue: string = watch("application.alternateContact.phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
   const incomePeriodValue: string = watch("application.incomePeriod")
 
@@ -77,18 +81,59 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }, [setValue, clearErrors, alternatePhoneValue])
 
+  function addMember(member: HouseholdMember) {
+    setHouseholdMembers([...householdMembers, member])
+  }
+
   const onSubmit = (data) => {
     setErrorAlert(false)
 
-    const noPhone = data?.application?.phoneNumber?.length ? false : true
-    const noEmail = data?.application?.applicant?.emailAddress?.length ? false : true
+    const blankFields = blankApplication()
 
-    const response = {
-      noPhone,
-      noEmail,
+    const { birthMonth, birthDay, birthYear } = data?.dateOfBirth || {}
+    const { phoneNumber, emailAddress } = data?.application?.applicant || {}
+    const { incomeMonth, incomeYear } = data
+
+    const noPhone = !(phoneNumber?.length > 0)
+    const noEmail = !(emailAddress?.length > 0)
+
+    const incomeRaw = incomeMonth ? incomeMonth : incomeYear || null
+    const income = incomeRaw ? parseFloat(incomeRaw.toFixed(2)) : ""
+
+    // map household members to fill address if is the same as applicant
+    const members = householdMembers?.map((member) => {
+      if (member.sameAddress) {
+        return {
+          ...member,
+          address: {
+            ...blankFields.applicant.address,
+            ...data.application.applicant.address,
+          },
+        }
+      }
+
+      return member
+    })
+
+    const response: ApplicationCreate = {
+      ...blankFields,
+      birthMonth,
+      birthDay,
+      birthYear,
+      ...{
+        ...blankFields.applicant,
+        noEmail,
+        noPhone,
+      },
+      income,
+      householdMembers: members,
+      householdSize: members.length,
+      ...data.application,
+      incomeVouchers: data.application?.incomeVouchers === "yes",
+      acceptedTerms: data.application?.acceptedTerms === "yes",
     }
 
-    console.log("Submit SUCCESS", response, data)
+    console.log("Submit SUCCESS", response)
   }
 
   const onError = (error) => {
@@ -158,10 +203,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.household.member.dateOfBirth")}>
                       <DOBField
-                        id="application.applicant.dateOfBirth"
-                        name="application.applicant.dateOfBirth"
+                        id="dateOfBirth"
+                        name="dateOfBirth"
                         register={register}
-                        error={errors.application?.applicant?.dateOfBirth}
+                        error={errors?.dateOfBirth}
                         watch={watch}
                         atAge={true}
                         label={t("application.name.yourDateOfBirth")}
@@ -188,11 +233,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("t.phone")}>
                       <PhoneField
-                        id="application.phoneNumber"
-                        name="application.phoneNumber"
+                        id="application.applicant.phoneNumber"
+                        name="application.applicant.phoneNumber"
                         label={t("application.contact.yourPhoneNumber")}
                         required={false}
-                        error={errors.application?.phoneNumber}
+                        error={errors.application?.applicant?.phoneNumber}
                         errorMessage={t("errors.phoneNumberError")}
                         control={control}
                         controlClassName="control"
@@ -405,10 +450,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 <GridCell>
                   <ViewItem label={t("t.phone")}>
                     <PhoneField
-                      id="application.alternateContactPhone"
-                      name="application.alternateContactPhone"
+                      id="application.alternateContact.phoneNumber"
+                      name="application.alternateContact.phoneNumber"
                       required={false}
-                      error={errors.application?.alternateContactPhone}
+                      error={errors.application?.alternateContact?.phoneNumber}
                       errorMessage={t("errors.phoneNumberError")}
                       control={control}
                       controlClassName="control"
@@ -538,8 +583,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                           inputProps={{
                             value: "perYear",
                             onChange: () => {
-                              setValue("application.incomeMonth", "")
-                              setValue("application.incomeYear", "")
+                              setValue("incomeMonth", "")
+                              setValue("incomeYear", "")
                             },
                           }}
                         />
@@ -554,8 +599,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                           inputProps={{
                             value: "perMonth",
                             onChange: () => {
-                              setValue("application.incomeMonth", "")
-                              setValue("application.incomeYear", "")
+                              setValue("incomeMonth", "")
+                              setValue("incomeYear", "")
                             },
                           }}
                         />
@@ -568,9 +613,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.details.annualIncome")}>
                       <Field
-                        id="application.incomeMonth"
+                        id="incomeMonth"
                         type="number"
-                        name="application.incomeMonth"
+                        name="incomeMonth"
                         label={t("application.details.annualIncome")}
                         placeholder={t("t.enterAmount")}
                         register={register}
@@ -583,9 +628,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.details.monthlyIncome")}>
                       <Field
-                        id="application.incomeYear"
+                        id="incomeYear"
                         type="number"
-                        name="application.incomeYear"
+                        name="incomeYear"
                         label={t("application.details.annualIncome")}
                         placeholder={t("t.enterAmount")}
                         register={register}
@@ -746,6 +791,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
           </div>
         </Form>
 
+        {console.log("members: ", householdMembers)}
+
         <Drawer
           open={membersDrawer}
           title={t("application.household.householdMember")}
@@ -753,8 +800,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
           ariaDescription="My Drawer"
         >
           <ApplicationFormMember
-            onSubmit={() => console.log("submit")}
+            onSubmit={(member) => addMember(member)}
             onClose={() => setMembersDrawer(false)}
+            members={householdMembers}
           />
         </Drawer>
       </section>
