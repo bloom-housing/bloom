@@ -108,7 +108,7 @@ const DOBField = (props: DOBFieldProps) => {
       {(error?.birthMonth || error?.birthDay || error?.birthYear) && (
         <div className="field error">
           <span id={`${id}-error`} className="error-message">
-            {t("application.name.dateOfBirthError")}
+            {t("errors.dateOfBirthError")}
           </span>
         </div>
       )}

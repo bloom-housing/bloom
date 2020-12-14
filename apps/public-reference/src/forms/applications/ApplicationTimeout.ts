@@ -15,7 +15,7 @@ const ApplicationTimeout = () => {
   return profile
     ? null
     : createElement(IdleTimeout, {
-        promptTitle: t("application.timeout.title"),
+        promptTitle: t("t.areYouStillWorking"),
         promptText: t("application.timeout.text"),
         promptAction: t("application.timeout.action"),
         redirectPath: "/",

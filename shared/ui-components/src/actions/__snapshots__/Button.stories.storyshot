@@ -1,127 +1,264 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Actions/Button Big 1`] = `
-<Button
-  onClick={[Function]}
-  size="is-big"
->
-  <button
-    className="button is-big"
+<div>
+  <Button
     onClick={[Function]}
+    size="is-big"
   >
-    Big Button
-  </button>
-</Button>
+    <button
+      className="button is-big"
+      onClick={[Function]}
+    >
+      Big Button
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Borderless 1`] = `
-<Button
-  border="is-borderless"
-  onClick={[Function]}
->
-  <button
-    className="button is-borderless"
+<div>
+  <Button
+    border="is-borderless"
     onClick={[Function]}
   >
-    Borderless Button
-  </button>
-</Button>
+    <button
+      className="button is-borderless"
+      onClick={[Function]}
+    >
+      Borderless Button
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Inaccessible 1`] = `
-<button
-  style={
-    Object {
-      "backgroundColor": "red",
-      "color": "darkRed",
+<div>
+  <button
+    style={
+      Object {
+        "backgroundColor": "red",
+        "color": "darkRed",
+      }
     }
-  }
->
-  Inaccessible button
-</button>
+  >
+    Inaccessible button
+  </button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Actions/Button Inline Icon 1`] = `
+<div>
+  <Button
+    icon="arrow-back"
+    inlineIcon="left"
+    onClick={[Function]}
+  >
+    <button
+      className="button is-inline inline-icon--left"
+      onClick={[Function]}
+    >
+      <Icon
+        className="button__icon"
+        size="tiny"
+        symbol="arrow-back"
+      >
+        <span
+          className="ui-icon ui-tiny button__icon"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-arrow-back"
+            />
+          </svg>
+        </span>
+      </Icon>
+      <span
+        className="button__content"
+      >
+        Go Back
+      </span>
+    </button>
+  </Button>
+  <br />
+  <br />
+  <Button
+    icon="right"
+    inlineIcon="right"
+    onClick={[Function]}
+  >
+    <button
+      className="button is-inline inline-icon--right"
+      onClick={[Function]}
+    >
+      <span
+        className="button__content"
+      >
+        Go Forward
+      </span>
+      <Icon
+        className="button__icon"
+        size="tiny"
+        symbol="right"
+      >
+        <span
+          className="ui-icon ui-tiny button__icon"
+        >
+          <svg>
+            <use
+              xlinkHref="#i-right"
+            />
+          </svg>
+        </span>
+      </Icon>
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Normal Case 1`] = `
-<Button
-  normalCase={true}
-  onClick={[Function]}
->
-  <button
-    className="button is-normal-case"
+<div>
+  <Button
+    normalCase={true}
     onClick={[Function]}
   >
-    Button (Normal Case)
-  </button>
-</Button>
+    <button
+      className="button is-normal-case"
+      onClick={[Function]}
+    >
+      Button (Normal Case)
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Normal Case And Success 1`] = `
-<Button
-  normalCase={true}
-  onClick={[Function]}
-  type="is-success"
->
-  <button
-    className="button is-success is-normal-case"
+<div>
+  <Button
+    normalCase={true}
     onClick={[Function]}
+    type="is-success"
   >
-    Button (Normal Case)
-  </button>
-</Button>
+    <button
+      className="button is-success is-normal-case"
+      onClick={[Function]}
+    >
+      Button (Normal Case)
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Small 1`] = `
-<Button
-  onClick={[Function]}
-  size="is-small"
->
-  <button
-    className="button is-small"
+<div>
+  <Button
     onClick={[Function]}
+    size="is-small"
   >
-    Small Button
-  </button>
-</Button>
+    <button
+      className="button is-small"
+      onClick={[Function]}
+    >
+      Small Button
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Small And Primary 1`] = `
-<Button
-  onClick={[Function]}
-  size="is-small"
-  type="is-primary"
->
-  <button
-    className="button is-primary is-small"
+<div>
+  <Button
     onClick={[Function]}
+    size="is-small"
+    type="is-primary"
   >
-    Small and Primary Button
-  </button>
-</Button>
+    <button
+      className="button is-primary is-small"
+      onClick={[Function]}
+    >
+      Small and Primary Button
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Standard 1`] = `
-<Button
-  onClick={[Function]}
->
-  <button
-    className="button"
+<div>
+  <Button
     onClick={[Function]}
   >
-    Hello Storybook
-  </button>
-</Button>
+    <button
+      className="button"
+      onClick={[Function]}
+    >
+      Hello Storybook
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;
 
 exports[`Storyshots Actions/Button Unstyled 1`] = `
-<Button
-  onClick={[Function]}
-  unstyled={true}
->
-  <button
-    className="button is-unstyled"
+<div>
+  <Button
     onClick={[Function]}
+    unstyled={true}
   >
-    Unstyled Button
-  </button>
-</Button>
+    <button
+      className="button is-unstyled"
+      onClick={[Function]}
+    >
+      Unstyled Button
+    </button>
+  </Button>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
 `;

@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ListingCreateDto, ListingDto, ListingUpdateDto } from "./listing.dto"
@@ -7,12 +19,14 @@ import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator"
 import { mapTo } from "../shared/mapTo"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("listings")
 @ApiTags("listings")
 @ApiBearerAuth()
 @ResourceType("listing")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class ListingsController {
   constructor(private readonly listingsService: ListingsService) {}
 

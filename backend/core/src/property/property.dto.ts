@@ -4,6 +4,7 @@ import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-val
 import { Property } from "../entity/property.entity"
 import { AddressDto, AddressUpdateDto } from "../shared/dto/address.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../units/unit.dto"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export class PropertyDto extends OmitType(Property, [
   "listings",
@@ -20,15 +21,15 @@ export class PropertyDto extends OmitType(Property, [
   propertyGroups
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitDto)
   units: UnitDto[]
 
-  @ValidateNested()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   buildingAddress: AddressDto
 }
@@ -42,14 +43,14 @@ export class PropertyCreateDto extends OmitType(PropertyDto, [
   "units",
 ] as const) {
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   buildingAddress: AddressUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitCreateDto)
   units: UnitCreateDto[]
 }
@@ -63,31 +64,31 @@ export class PropertyUpdateDto extends OmitType(PropertyDto, [
   "units",
 ] as const) {
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt?: Date
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   buildingAddress: AddressUpdateDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitUpdateDto)
   units: UnitUpdateDto[]
 }

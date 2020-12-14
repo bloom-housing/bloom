@@ -9,13 +9,26 @@ import {
   PropertyGroupDto,
   PropertyGroupUpdateDto,
 } from "./property-group.dto"
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("propertyGroups")
 @ApiTags("propertyGroups")
 @ApiBearerAuth()
 @ResourceType("propertyGroup")
 @UseGuards(DefaultAuthGuard, AuthzGuard)
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class PropertyGroupsController {
   constructor(private readonly propertyGroupsService: PropertyGroupsService) {}
 

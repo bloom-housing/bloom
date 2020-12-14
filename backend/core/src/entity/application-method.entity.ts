@@ -10,6 +10,7 @@ import { Listing } from "./listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsBoolean, IsDate, IsEnum, IsOptional, IsString, IsUUID } from "class-validator"
 import { ApiProperty } from "@nestjs/swagger"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export enum ApplicationMethodType {
   Internal = "Internal",
@@ -24,19 +25,19 @@ export enum ApplicationMethodType {
 export class ApplicationMethod {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
-  @IsString()
-  @IsUUID()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
 
@@ -45,27 +46,27 @@ export class ApplicationMethod {
     enum: ApplicationMethodType,
   })
   @Expose()
-  @IsString()
-  @IsEnum(ApplicationMethodType)
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ApplicationMethodType, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: ApplicationMethodType, enumName: "ApplicationMethodType" })
   type: ApplicationMethodType
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   label: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   externalReference: string | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsBoolean()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   acceptsPostmarkedApplications: boolean | null
   @ManyToOne(() => Listing, (listing) => listing.applicationMethods)
   listing: Listing

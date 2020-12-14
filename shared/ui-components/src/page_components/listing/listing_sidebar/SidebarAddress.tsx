@@ -43,7 +43,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
           {mainAddress}
           <br />
           <a href={googleMapsHref} target="_blank">
-            <Icon symbol="map" size="medium" /> {t("label.getDirections")}
+            <Icon symbol="map" size="medium" /> {t("t.getDirections")}
           </a>
         </p>
       )}

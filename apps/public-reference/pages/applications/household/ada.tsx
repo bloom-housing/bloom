@@ -72,14 +72,14 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
         <div className="form-card__group">
           <fieldset>
             <legend className="sr-only">{t("application.ada.legend")}</legend>
-            <p className="field-note mb-4">{t("t.selectAllThatApply")}</p>
+            <p className="field-note mb-4">{t("errors.selectAllThatApply")}</p>
 
             <div className="field">
               <input
@@ -166,7 +166,7 @@ export default () => {
               </label>
 
               <ErrorMessage id="accessibilityCheckboxGroupError" error={errors.none}>
-                {t("application.form.errors.selectOption")}
+                {t("errors.selectOption")}
               </ErrorMessage>
             </div>
           </fieldset>

@@ -96,12 +96,12 @@ export default () => {
     {
       id: "incomePeriodMonthly",
       value: "perMonth",
-      label: t("application.financial.income.perMonth"),
+      label: t("t.perMonth"),
     },
     {
       id: "incomePeriodYearly",
       value: "perYear",
-      label: t("application.financial.income.perYear"),
+      label: t("t.perYear"),
     },
   ]
 
@@ -130,7 +130,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -151,7 +151,7 @@ export default () => {
                 {t(`application.financial.income.validationError.instruction2`)}
               </p>
               <p>
-                <a href="#">{t("application.financial.income.validationError.assistance")}</a>
+                <a href="#">{t("nav.getAssistance")}</a>
               </p>
             </AlertNotice>
           </>
@@ -170,7 +170,7 @@ export default () => {
               error={errors.income}
               register={register}
               prepend="$"
-              errorMessage={t("application.financial.income.incomeError")}
+              errorMessage={t("errors.numberError")}
               inputProps={{ step: 0.01, onBlur: formatValue }}
             />
 
@@ -180,7 +180,7 @@ export default () => {
                 type="radio"
                 name="incomePeriod"
                 error={errors.incomePeriod}
-                errorMessage={t("application.financial.income.periodError")}
+                errorMessage={t("errors.selectOption")}
                 register={register}
                 validation={{ required: true }}
                 fields={incomePeriodValues}

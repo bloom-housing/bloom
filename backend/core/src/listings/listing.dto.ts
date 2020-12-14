@@ -22,6 +22,7 @@ import {
 import { IdDto } from "../lib/id.dto"
 import { PropertyDto } from "../property/property.dto"
 import { AddressCreateDto, AddressUpdateDto } from "../shared/dto/address.dto"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationMethods",
@@ -32,32 +33,32 @@ export class ListingDto extends OmitType(Listing, [
   "applications",
 ] as const) {
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodDto)
   applicationMethods: ApplicationMethodDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetDto)
   assets: AssetDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceDto)
   preferences: PreferenceDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => PropertyDto)
   property: PropertyDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
 
@@ -82,50 +83,50 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "urlSlug",
 ] as const) {
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodCreateDto)
   applicationMethods: ApplicationMethodCreateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetCreateDto)
   assets: AssetCreateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceCreateDto)
   preferences: PreferenceCreateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   property: IdDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEventCreateDto)
   events: ListingEventCreateDto[]
 
   @Expose()
-  @IsOptional()
-  @ValidateNested()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationAddress: AddressCreateDto | null
 
   @Expose()
-  @IsOptional()
-  @ValidateNested()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationPickUpAddress: AddressCreateDto | null
 
   @Expose()
-  @IsOptional()
-  @ValidateNested()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   leasingAgentAddress: AddressCreateDto | null
 }
@@ -146,67 +147,67 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "urlSlug",
 ] as const) {
   @Expose()
-  @IsOptional()
-  @IsUUID()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt?: Date
 
   @Expose()
-  @IsOptional()
-  @IsDate()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodUpdateDto)
   applicationMethods: ApplicationMethodUpdateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetUpdateDto)
   assets: AssetUpdateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceUpdateDto)
   preferences: PreferenceUpdateDto[]
 
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   property: IdDto
 
   @Expose()
-  @IsDefined()
-  @ValidateNested({ each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEventUpdateDto)
   events: ListingEventUpdateDto[]
 
   @Expose()
-  @IsOptional()
-  @ValidateNested()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   applicationAddress: AddressUpdateDto | null
 
   @Expose()
-  @IsOptional()
-  @ValidateNested()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   applicationPickUpAddress: AddressUpdateDto | null
 
   @Expose()
-  @IsOptional()
-  @ValidateNested()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   leasingAgentAddress: AddressUpdateDto | null
 }

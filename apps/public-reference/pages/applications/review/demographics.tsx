@@ -91,7 +91,7 @@ const Demographics = () => {
               id="ethnicity"
               name="ethnicity"
               label={t("application.review.demographics.ethnicityLabel")}
-              placeholder={t("application.form.general.defaultSelectPlaceholder")}
+              placeholder={t("t.selectOne")}
               register={register}
               labelClassName="field-label--caps mb-3"
               controlClassName="control"
@@ -103,7 +103,7 @@ const Demographics = () => {
               id="race"
               name="race"
               label={t("application.review.demographics.raceLabel")}
-              placeholder={t("application.form.general.defaultSelectPlaceholder")}
+              placeholder={t("t.selectOne")}
               register={register}
               labelClassName="field-label--caps mb-3"
               controlClassName="control"
@@ -117,7 +117,7 @@ const Demographics = () => {
               id="gender"
               name="gender"
               label={t("application.review.demographics.genderLabel")}
-              placeholder={t("application.form.general.defaultSelectPlaceholder")}
+              placeholder={t("t.selectOne")}
               register={register}
               labelClassName="field-label--caps mb-3"
               controlClassName="control"
@@ -131,7 +131,7 @@ const Demographics = () => {
               id="sexualOrientation"
               name="sexualOrientation"
               label={t("application.review.demographics.sexualOrientationLabel")}
-              placeholder={t("application.form.general.defaultSelectPlaceholder")}
+              placeholder={t("t.selectOne")}
               register={register}
               labelClassName="field-label--caps mb-3"
               controlClassName="control"

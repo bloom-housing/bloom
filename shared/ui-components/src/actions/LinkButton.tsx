@@ -1,7 +1,7 @@
 import * as React from "react"
 import { LocalizedLink } from "./LocalizedLink"
 import "./Button.scss"
-import { buttonClassesForProps, ButtonProps } from "./Button"
+import { buttonClassesForProps, buttonInner, ButtonProps } from "./Button"
 
 export interface LinkButtonProps extends Omit<ButtonProps, "onClick"> {
   href: string
@@ -27,11 +27,11 @@ const LinkButton = (props: LinkButtonProps) => {
   } as LinkProps
 
   if (isExternalLink(props.href)) {
-    return <a {...linkProps}>{props.children}</a>
+    return <a {...linkProps}>{buttonInner(props)}</a>
   } else {
     if (props.as) linkProps.as = props.as
 
-    return <LocalizedLink {...linkProps}>{props.children}</LocalizedLink>
+    return <LocalizedLink {...linkProps}>{buttonInner(props)}</LocalizedLink>
   }
 }
 

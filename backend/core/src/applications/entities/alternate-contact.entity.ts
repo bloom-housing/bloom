@@ -3,51 +3,57 @@ import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDefined, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
+import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 @Entity()
 export class AlternateContact extends AbstractEntity {
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  type: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  type?: string | null
 
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
-  otherType: string | null
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  otherType?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  firstName: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  firstName?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  lastName: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  lastName?: string | null
 
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
-  agency: string | null
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  agency?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  phoneNumber: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  phoneNumber?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  emailAddress: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  emailAddress?: string | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
-  @IsDefined()
-  @ValidateNested()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   mailingAddress: Address
 }

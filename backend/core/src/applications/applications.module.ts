@@ -10,6 +10,7 @@ import { SharedModule } from "../shared/shared.module"
 import { ListingsModule } from "../listings/listings.module"
 import { Address } from "../shared/entities/address.entity"
 import { Applicant } from "./entities/applicant.entity"
+import { ApplicationsSubmissionController } from "./applications-submission.controller"
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { Applicant } from "./entities/applicant.entity"
   ],
   providers: [ApplicationsService, CsvEncoder, CsvBuilder],
   exports: [ApplicationsService],
-  controllers: [ApplicationsController],
+  controllers: [ApplicationsController, ApplicationsSubmissionController],
 })
 export class ApplicationsModule {}

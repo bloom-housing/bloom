@@ -2,6 +2,7 @@ import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { User } from "../entity/user.entity"
 import { Exclude, Expose } from "class-transformer"
 import { IsString } from "class-validator"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export class UserDto extends OmitType(User, ["passwordHash", "applications", "isAdmin"] as const) {
   @Exclude()
@@ -32,7 +33,7 @@ export class UserCreateDto extends OmitType(UserDto, ["id", "createdAt", "update
   updatedAt
 
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   password: string
 }
 

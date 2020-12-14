@@ -1,10 +1,4 @@
-import {
-  ClassSerializerInterceptor,
-  DynamicModule,
-  INestApplication,
-  Module,
-  ValidationPipe,
-} from "@nestjs/common"
+import { DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
@@ -22,27 +16,17 @@ import { UnitsModule } from "./units/units.module"
 import { ListingEventsModule } from "./listing-events/listing-events.module"
 import { ConfigModule } from "@nestjs/config"
 import Joi from "joi"
-import { Reflector } from "@nestjs/core"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
+import * as bodyParser from "body-parser"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
   app.use(logger)
   app.useGlobalFilters(new EntityNotFoundExceptionFilter())
-  app.useGlobalInterceptors(
-    new ClassSerializerInterceptor(app.get(Reflector), { excludeExtraneousValues: true })
-  )
-  app.useGlobalPipes(
-    new ValidationPipe({
-      // Only allow props through that have been specified in the appropriate DTO
-      whitelist: true,
-      // Automatically transform validated prop values into their specified types
-      transform: true,
-      forbidNonWhitelisted: true,
-    })
-  )
+  app.use(bodyParser.json({ limit: "50mb" }))
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))
   return app
 }
 
