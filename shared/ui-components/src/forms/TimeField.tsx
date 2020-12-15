@@ -1,5 +1,8 @@
 import React from "react"
-import { ErrorMessage, Field, Select, t } from "@bloom-housing/ui-components"
+import { t } from "../helpers/translator"
+import { ErrorMessage } from "../notifications/ErrorMessage"
+import { Field } from "./Field"
+import { Select } from "../forms/Select"
 import { UseFormMethods } from "react-hook-form"
 
 type TimeFieldDefaultValues = {

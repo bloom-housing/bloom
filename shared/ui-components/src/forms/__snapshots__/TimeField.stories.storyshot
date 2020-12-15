@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Forms/Time Field Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <TimeField
+    error={false}
+    id="time"
+    label="Time"
+    name="time"
+    register={[Function]}
+    required={true}
+  >
+    <fieldset
+      id="time"
+    >
+      <legend
+        className="field-label--caps"
+      >
+        Time
+      </legend>
+      <div
+        className="field-group--date"
+      >
+        <Field
+          defaultValue=""
+          describedBy="time-error"
+          error={false}
+          inputProps={
+            Object {
+              "maxLength": 2,
+            }
+          }
+          label="Hour"
+          name="time.hours"
+          placeholder="HH"
+          readerOnly={true}
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "hourRange": [Function],
+              },
+            }
+          }
+        >
+          <div
+            className="field"
+          >
+            <label
+              className="label sr-only"
+              htmlFor="time.hours"
+            >
+              Hour
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="time-error"
+                aria-invalid={false}
+                className="input"
+                defaultValue=""
+                id="time.hours"
+                maxLength={2}
+                name="time.hours"
+                placeholder="HH"
+                type="text"
+              />
+            </div>
+          </div>
+        </Field>
+        <Field
+          defaultValue=""
+          describedBy="time-error"
+          error={false}
+          inputProps={
+            Object {
+              "maxLength": 2,
+            }
+          }
+          label="minutes"
+          name="time.minutes"
+          placeholder="MM"
+          readerOnly={true}
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "minutesRange": [Function],
+              },
+            }
+          }
+        >
+          <div
+            className="field"
+          >
+            <label
+              className="label sr-only"
+              htmlFor="time.minutes"
+            >
+              minutes
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="time-error"
+                aria-invalid={false}
+                className="input"
+                defaultValue=""
+                id="time.minutes"
+                maxLength={2}
+                name="time.minutes"
+                placeholder="MM"
+                type="text"
+              />
+            </div>
+          </div>
+        </Field>
+        <Field
+          defaultValue=""
+          describedBy="time-error"
+          error={false}
+          inputProps={
+            Object {
+              "maxLength": 2,
+            }
+          }
+          label="seconds"
+          name="time.seconds"
+          placeholder="SS"
+          readerOnly={true}
+          register={[Function]}
+          validation={
+            Object {
+              "required": true,
+              "validate": Object {
+                "secondsRange": [Function],
+              },
+            }
+          }
+        >
+          <div
+            className="field"
+          >
+            <label
+              className="label sr-only"
+              htmlFor="time.seconds"
+            >
+              seconds
+            </label>
+            <div
+              className="control"
+            >
+              <input
+                aria-describedby="time-error"
+                aria-invalid={false}
+                className="input"
+                defaultValue=""
+                id="time.seconds"
+                maxLength={2}
+                name="time.seconds"
+                placeholder="SS"
+                type="text"
+              />
+            </div>
+          </div>
+        </Field>
+        <Component
+          defaultValue=""
+          describedBy="time-error"
+          error={false}
+          id="time.time"
+          keyPrefix="t"
+          label="time"
+          labelClassName="sr-only"
+          name="time.time"
+          options={
+            Array [
+              "am",
+              "pm",
+            ]
+          }
+          register={[Function]}
+        >
+          <div
+            className="field "
+          >
+            <label
+              className="sr-only"
+              htmlFor="time.time"
+            >
+              time
+            </label>
+            <div>
+              <select
+                aria-describedby="time-error"
+                aria-invalid={false}
+                className="input"
+                defaultValue=""
+                id="time.time"
+                name="time.time"
+              >
+                <Component
+                  keyPrefix="t"
+                  options={
+                    Array [
+                      "am",
+                      "pm",
+                    ]
+                  }
+                >
+                  <option
+                    key="am"
+                    value="am"
+                  >
+                    AM
+                  </option>
+                  <option
+                    key="pm"
+                    value="pm"
+                  >
+                    PM
+                  </option>
+                </Component>
+              </select>
+            </div>
+          </div>
+        </Component>
+      </div>
+      <div
+        className="field error"
+        id="time-error"
+      >
+        <ErrorMessage
+          error={false}
+        />
+      </div>
+    </fieldset>
+  </TimeField>
+</div>
+`;
