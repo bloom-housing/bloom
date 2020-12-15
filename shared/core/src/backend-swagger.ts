@@ -2654,6 +2654,9 @@ export interface Application {
 
   /**  */
   acceptedTerms?: boolean;
+
+  /**  */
+  submissionDate?: Date;
 }
 
 export interface PaginationMeta {
@@ -2918,6 +2921,9 @@ export interface ApplicationCreate {
 
   /**  */
   acceptedTerms?: boolean;
+
+  /**  */
+  submissionDate?: Date;
 }
 
 export interface ApplicantUpdate {
@@ -3220,6 +3226,9 @@ export interface ApplicationUpdate {
 
   /**  */
   acceptedTerms?: boolean;
+
+  /**  */
+  submissionDate?: Date;
 }
 
 export interface UnitCreate {

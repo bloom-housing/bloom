@@ -20,13 +20,19 @@ import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-
 import { ResourceAction } from "../auth/resource_action.decorator"
 import { authzActions } from "../auth/authz.service"
 import { AuthzGuard } from "../auth/authz.guard"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
 @ResourceType("application")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
-@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+@UsePipes(
+  new ValidationPipe({
+    ...defaultValidationPipeOptions,
+    groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
+  })
+)
 export class ApplicationsSubmissionController {
   constructor(
     private readonly applicationsService: ApplicationsService,
@@ -41,6 +47,8 @@ export class ApplicationsSubmissionController {
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<ApplicationDto> {
+    // Applicants should not be able to control submissionDate
+    applicationCreateDto.submissionDate = new Date()
     const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {
