@@ -31,7 +31,7 @@ export class ApplicationsSubmissionController {
   constructor(
     private readonly applicationsService: ApplicationsService,
     private readonly emailService: EmailService,
-    private readonly listingsService: ListingsService
+    private readonly listingsService: ListingsService,
   ) {}
 
   @Post(`submit`)

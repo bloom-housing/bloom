@@ -35,6 +35,8 @@ import { Pagination, PaginationQueryParams } from "../utils/pagination.dto"
 import { Application } from "./entities/application.entity"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { Action, CaslAbilityFactory } from "../auth/casl"
+import { AbstractEntity } from "../shared/entities/abstract.entity"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -97,8 +99,9 @@ export class ApplicationsController {
     private readonly applicationsService: ApplicationsService,
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
-    private readonly authzService: AuthzService
-  ) {}
+    private readonly authzService: AuthzService,
+    private readonly caslAbilityFactory: CaslAbilityFactory,
+) {}
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
@@ -132,6 +135,7 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<ApplicationDto> {
+    const ability = this.caslAbilityFactory.createForUser(req.user)
     const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {

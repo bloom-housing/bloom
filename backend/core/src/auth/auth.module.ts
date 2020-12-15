@@ -12,6 +12,7 @@ import { AuthzService } from "./authz.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { UserModule } from "../user/user.module"
 import Joi from "joi"
+import { CaslAbilityFactory } from "./casl"
 
 @Module({
   imports: [
@@ -35,8 +36,8 @@ import Joi from "joi"
       }),
     }),
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService],
-  exports: [AuthzService, AuthService],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, CaslAbilityFactory],
+  exports: [AuthzService, AuthService, CaslAbilityFactory],
   controllers: [AuthController],
 })
 export class AuthModule {}
