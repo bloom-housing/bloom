@@ -29,7 +29,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
         Date of Birth
       </legend>
       <div
-        className="field-group--dob"
+        className="field-group--date"
       >
         <Field
           defaultValue=""
