@@ -21,10 +21,6 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 } else if (process.env.BACKEND_API_BASE) {
   BACKEND_API_BASE = process.env.BACKEND_API_BASE
 }
-
-// The base URL for the front end, which gets submitted with the application for email links
-const SITE_BASE_URL = process.env.SITE_BASE_URL
-
 const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
@@ -47,10 +43,10 @@ module.exports = withCSS(
           env: {
             backendApiBase: BACKEND_API_BASE,
             listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
-            siteBaseUrl: SITE_BASE_URL,
             mapBoxToken: MAPBOX_TOKEN,
             housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
             gtmKey: process.env.GTM_KEY || null,
+            languages: process.env.LANGUAGES || "en",
           },
           sassLoaderOptions: {
             additionalData: tailwindVars,
@@ -89,6 +85,75 @@ module.exports = withCSS(
               "/listings": { page: "/listings" },
               "/housing-counselors": { page: "/HousingCounselors" },
               "/additional-resources": { page: "/AdditionalResources" },
+              "/applications/start/choose-language": {
+                page: "/applications/start/choose-language",
+              },
+              "/applications/start/what-to-expect": {
+                page: "/applications/start/what-to-expect",
+              },
+              "/applications/review/confirmation": {
+                page: "/applications/review/confirmation",
+              },
+              "/applications/review/demographics": {
+                page: "/applications/review/demographics",
+              },
+              "/applications/review/summary": {
+                page: "/applications/review/summary",
+              },
+              "/applications/review/terms": {
+                page: "/applications/review/terms",
+              },
+              "/applications/reserved/units": {
+                page: "/applications/reserved/units",
+              },
+              "/applications/preferences/general": {
+                page: "/applications/preferences/general",
+              },
+              "/applications/preferences/select": {
+                page: "/applications/preferences/select",
+              },
+              "/applications/household/ada": {
+                page: "/applications/household/ada",
+              },
+              "/applications/household/add-members": {
+                page: "/applications/household/add-members",
+              },
+              "/applications/household/current": {
+                page: "/applications/household/current",
+              },
+              "/applications/household/live-alone": {
+                page: "/applications/household/live-alone",
+              },
+              "/applications/household/member": {
+                page: "/applications/household/member",
+              },
+              "/applications/household/members-info": {
+                page: "/applications/household/members-info",
+              },
+              "/applications/household/preferred-units": {
+                page: "/applications/household/preferred-units",
+              },
+              "/applications/financial/income": {
+                page: "/applications/financial/income",
+              },
+              "/applications/financial/vouchers": {
+                page: "/applications/financial/vouchers",
+              },
+              "/applications/contact/address": {
+                page: "/applications/contact/address",
+              },
+              "/applications/contact/alternate-contact-contact": {
+                page: "/applications/contact/alternate-contact-contact",
+              },
+              "/applications/contact/alternate-contact-name": {
+                page: "/applications/contact/alternate-contact-name",
+              },
+              "/applications/contact/alternate-contact-type": {
+                page: "/applications/contact/alternate-contact-type",
+              },
+              "/applications/contact/name": {
+                page: "/applications/contact/name",
+              },
             })
             const languages = ["es"] // add new language codes here
             const languagePaths = {}
@@ -108,9 +173,6 @@ module.exports = withCSS(
             return Object.assign({}, languagePaths, {
               "/disclaimer": { page: "/disclaimer" },
               "/privacy": { page: "/privacy" },
-              "/applications/start/choose-language": {
-                page: "/applications/start/choose-language",
-              },
               "/sign-in": { page: "/sign-in" },
               "/create-account": { page: "/create-account" },
               "/account/applications": { page: "/account/applications" },
