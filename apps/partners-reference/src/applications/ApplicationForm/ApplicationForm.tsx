@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react"
-// import { useRouter } from "next/router"
 import {
   t,
   GridSection,
@@ -11,11 +10,8 @@ import {
   PhoneField,
   Select,
   contactPreferencesKeys,
-  relationshipKeys,
   altContactRelationshipKeys,
   AppearanceSizeType,
-  AppearanceStyleType,
-  AppearanceBorderType,
   ethnicityKeys,
   raceKeys,
   genderKeys,
@@ -29,11 +25,11 @@ import {
   blankApplication,
   MinimalTable,
 } from "@bloom-housing/ui-components"
-import { useForm, UseFormMethods } from "react-hook-form"
-import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
-import ApplicationFormMember from "./ApplicationFormMember"
+import { useForm } from "react-hook-form"
+import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { ApplicationFormMember } from "./ApplicationFormMember"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
-import { ApplicationCreate, HouseholdMember, HouseholdMemberUpdate } from "@bloom-housing/core"
+import { ApplicationCreate, HouseholdMember } from "@bloom-housing/core"
 
 type Props = {
   isEditable?: boolean

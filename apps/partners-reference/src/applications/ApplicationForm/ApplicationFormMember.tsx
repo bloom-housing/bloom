@@ -1,6 +1,5 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react"
-// import { useRouter } from "next/router"
-import { HouseholdMember, HouseholdMemberUpdate } from "@bloom-housing/core"
+import React, { useMemo } from "react"
+import { HouseholdMember } from "@bloom-housing/core"
 import {
   t,
   GridSection,
@@ -8,38 +7,23 @@ import {
   GridCell,
   DOBField,
   Field,
-  emailRegex,
-  PhoneField,
   Select,
-  contactPreferencesKeys,
   relationshipKeys,
-  altContactRelationshipKeys,
-  AppearanceSizeType,
   AppearanceStyleType,
   AppearanceBorderType,
-  ethnicityKeys,
-  raceKeys,
-  genderKeys,
-  sexualOrientation,
-  howDidYouHear,
   FieldGroup,
   Button,
   Form,
-  AlertBox,
-  Drawer,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
 
-// TODO: fix obSubmit type
 type ApplicationFormMemberProps = {
   onSubmit: (member: HouseholdMember) => void
   onClose: () => void
   members: HouseholdMember[]
   memberOrderId: number | boolean
 }
-
 class Member implements HouseholdMember {
   id: string
   orderId = undefined
@@ -103,10 +87,8 @@ const ApplicationFormMember = ({
     return members.filter((member) => member.orderId === memberOrderId)[0]
   }, [members, memberOrderId])
 
-  // TODO: declare default value for DOB
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm({
+  const { register, watch, handleSubmit, errors } = useForm({
     defaultValues: {
       firstName: currentlyEdited?.firstName,
       middleName: currentlyEdited?.middleName,
@@ -167,7 +149,6 @@ const ApplicationFormMember = ({
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
-      {console.log("currently edited member", currentlyEdited)}
       <div className="border rounded-md p-8 bg-white">
         <GridSection title={t("application.review.householdDetails")} columns={4}>
           <GridCell>
