@@ -508,7 +508,7 @@
     {
       "title": "Live or Work Preference",
       "subtitle": "As required by the City of San Mateo, Montara offers a preference for households with at least one member who currently lives and/or works within the City of San Mateo for the affordable non-subsidized units. A San Mateo worker includes persons who are employed or notified that they are hired to work in the City of San Mateo for at least 20 hours per week (or \u201chalf-time\u201d).  At initial lease-up, if an applicant has been furloughed or laid off as a result of a response to COVID-19, the applicant may still be able to qualify for preference if they can provide proof that they were  employed in the City of San Mateo in March 2020.  ",
-      "ordinal": "1st"
+      "ordinal": 1
     }
   ],
   "createdAt": "2020-06-18T12:47:26.824522",

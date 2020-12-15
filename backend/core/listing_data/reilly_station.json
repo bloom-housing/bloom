@@ -1,5 +1,6 @@
 {
   "name": "Reilly Station",
+  "events":[],
   "acceptingApplicationsByPostmark": false,
   "applicationDueDate": "2020-08-21T16:00:00.000-0700",
   "applicationPostmarkDueDate": false,
@@ -81,8 +82,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -104,8 +104,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -127,8 +126,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -150,8 +148,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -173,8 +170,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -196,8 +192,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -219,8 +214,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -242,8 +236,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -265,8 +258,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -288,8 +280,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -311,8 +302,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -334,8 +324,7 @@
       "maxOccupancy": 3,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 608,
-
+      "sqFeet": "608",
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
       "createdAt": "2020-07-27T12:10:08.582579",
@@ -357,8 +346,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -381,8 +369,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -405,8 +392,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -429,8 +415,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -453,8 +438,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -477,8 +461,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -501,8 +484,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -525,8 +507,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -549,8 +530,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -573,8 +553,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -597,8 +576,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -621,8 +599,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -645,8 +622,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -669,8 +645,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -693,8 +668,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -717,8 +691,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -741,8 +714,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -765,8 +737,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -789,8 +760,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -813,8 +783,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -837,8 +806,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -861,8 +829,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -885,8 +852,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -909,8 +875,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -933,8 +898,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -957,8 +921,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -981,8 +944,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1005,8 +967,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1029,8 +990,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1053,8 +1013,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1077,8 +1036,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1101,8 +1059,7 @@
       "maxOccupancy": 5,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 845,
-
+      "sqFeet": "845",
       "numBathrooms": 1,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1125,8 +1082,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1149,8 +1105,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1173,8 +1128,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1197,8 +1151,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1221,8 +1174,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1245,8 +1197,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1269,8 +1220,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1293,8 +1243,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1317,8 +1266,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1341,8 +1289,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1365,8 +1312,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1389,8 +1335,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1413,8 +1358,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1437,8 +1381,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1461,8 +1404,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1485,8 +1427,7 @@
       "minOccupancy": 7,
       "reservedType": null,
       "priorityType": "",
-      "sqFeet": 1103,
-
+      "sqFeet": "1103",
       "numBathrooms": 2,
       "rentAsPercentageOfIncome": false,
       "showSummaryOfUnitTypeOnly": true,
@@ -1503,7 +1444,7 @@
     {
       "title": "Live/work in the City of Fremont",
       "subtitle": "Households that currently live or work in the City of Fremont are given priority.",
-      "ordinal": "1st"
+      "ordinal": 1
     }
   ],
   "id": "WdFQ0GNo9T-ND1dOCaLyT",

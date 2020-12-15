@@ -1,5 +1,6 @@
 {
   "id": "6b157e60-0cf8-0139-7cff-2683e7458fb7",
+  "events":[],
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spafitness center, clubhouse, business center, heated pool & spa, outdoor BBQ’s, courtyard w/ fireplace",
   "applicationDueDate": "2020-08-10T17:00:00.000-07:00",
@@ -85,7 +86,7 @@
       "number": "308",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 1138,
+      "sqFeet": "1138",
       "status": "available",
       "unitType": "twoBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -97,7 +98,7 @@
   ],
   "preferences": [
     {
-      "ordinal": "1",
+      "ordinal": 1,
       "title": "Preference 1a",
       "subtitle": null,
       "description": "Persons who are living in a Below Market Rate deed restricted unit in Foster City for a minimum of twelve (12) months that is subject to termination of affordability restrictions within three (3) years.",
@@ -106,7 +107,7 @@
       ]
     },
     {
-      "ordinal": "2",
+      "ordinal": 2,
       "title": "Preference 1b",
       "subtitle": null,
       "description": "Persons who live and work in Foster City.",
@@ -115,7 +116,7 @@
       ]
     },
     {
-      "ordinal": "3",
+      "ordinal": 3,
       "title": "Preference 2",
       "subtitle": null,
       "description": "Persons who live in Foster City.",
@@ -124,7 +125,7 @@
       ]
     },
     {
-      "ordinal": "4",
+      "ordinal": 4,
       "title": "Preference 3",
       "subtitle": null,
       "description": "Employees of the City of Foster City.",
@@ -133,7 +134,7 @@
       ]
     },
     {
-      "ordinal": "5",
+      "ordinal": 5,
       "title": "Preference 4",
       "subtitle": null,
       "description": "Classroom teachers who are employees of the San Mateo-Foster City School District, the San Mateo Union High School District and the San Mateo County Community College District.",
@@ -142,7 +143,7 @@
       ]
     },
     {
-      "ordinal": "6",
+      "ordinal": 6,
       "title": "Preference 5",
       "subtitle": null,
       "description": "Persons who work in Foster City.",
@@ -151,7 +152,7 @@
       ]
     },
     {
-      "ordinal": "7",
+      "ordinal": 7,
       "title": "Preference 6",
       "subtitle": null,
       "description": "All others who are income qualified.",

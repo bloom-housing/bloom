@@ -157,14 +157,14 @@
   ],
   "preferences": [
     {
-      "ordinal": "1st",
+      "ordinal": 1,
       "title": "Live or Work in San Mateo",
       "subtitle": null,
       "description": "Applicants who currently live or work in San Mateo.",
       "links": null
     },
     {
-      "ordinal": "2nd",
+      "ordinal": 2,
       "title": "General Pool",
       "subtitle": null,
       "description": "All other applicants.",

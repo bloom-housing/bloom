@@ -1,5 +1,6 @@
 {
   "id": "6b169720-0cf8-0139-7cff-2683e7458fb7",
+  "events":[],
   "accessibility": "Accessiblity features in common areas like lobby, wheelchair ramps, accessible bathrooms and elevators.",
   "amenities": "Gym, theater room, clubhouse, pool, playground, business center, spa",
   "applicationDueDate": null,
@@ -84,7 +85,7 @@
       "number": "L-119",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 690,
+      "sqFeet": "690",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -108,7 +109,7 @@
       "number": "N-201",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 848,
+      "sqFeet": "848",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -132,7 +133,7 @@
       "number": "I-235",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 750,
+      "sqFeet": "750",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -144,14 +145,14 @@
   ],
   "preferences": [
     {
-      "ordinal": "1",
+      "ordinal": 1,
       "title": "Live or Work in San Mateo",
       "subtitle": null,
       "description": "Applicants who currently live or work in San Mateo.",
       "links": null
     },
     {
-      "ordinal": "2",
+      "ordinal": 2,
       "title": "General Pool",
       "subtitle": null,
       "description": "All other applicants.",

@@ -104,7 +104,7 @@
       "updatedAt": "2019-10-28T17:00:00.000Z",
       "listingId": 7,
       "amiChartId": 1,
-      "monthlyRentAsPercentOfIncome": 30
+      "monthlyRentAsPercentOfIncome": "30"
     },
     {
       "id": 143,
@@ -128,7 +128,7 @@
       "updatedAt": "2019-10-28T17:00:00.000Z",
       "listingId": 7,
       "amiChartId": 1,
-      "monthlyRentAsPercentOfIncome": 30
+      "monthlyRentAsPercentOfIncome": "30"
     },
     {
       "id": 142,
@@ -152,7 +152,7 @@
       "updatedAt": "2019-10-28T17:00:00.000Z",
       "listingId": 7,
       "amiChartId": 1,
-      "monthlyRentAsPercentOfIncome": 30
+      "monthlyRentAsPercentOfIncome": "30"
     },
     {
       "id": 141,
@@ -176,7 +176,7 @@
       "updatedAt": "2019-10-28T17:00:00.000Z",
       "listingId": 7,
       "amiChartId": 1,
-      "monthlyRentAsPercentOfIncome": 30
+      "monthlyRentAsPercentOfIncome": "30"
     },
     {
       "id": 140,
@@ -200,7 +200,7 @@
       "updatedAt": "2019-10-28T17:00:00.000Z",
       "listingId": 7,
       "amiChartId": 1,
-      "monthlyRentAsPercentOfIncome": 30
+      "monthlyRentAsPercentOfIncome": "30"
     },
     {
       "id": 139,
@@ -224,7 +224,7 @@
       "updatedAt": "2019-10-28T17:00:00.000Z",
       "listingId": 7,
       "amiChartId": 1,
-      "monthlyRentAsPercentOfIncome": 30
+      "monthlyRentAsPercentOfIncome": "30"
     }
   ],
   "preferences": []

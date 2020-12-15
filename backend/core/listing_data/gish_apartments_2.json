@@ -1,5 +1,6 @@
 {
   "id": "6b172ba0-0cf8-0139-7cff-2683e7458fb7",
+  "events":[],
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, Laundry",
   "applicationAddress": {
@@ -65,7 +66,7 @@
   "rentalHistory": "The applicants’ landlord references must verify a history of responsible occupancy, behavior, and conduct.  Current landlord references will be requested along with a third party unlawful detainer search.  All previous landlords during the past three years will also be contacted.  Landlord references will help to determine whether or not the applicant has a good rent paying history, whether or not there have been any disturbing behavior patterns including repeated lease violations, destruction of property, etc.  Any documented behavior which would constitute a material violation of the standard lease to be used at this location may be considered grounds for ineligibility.",
   "preferences": [
     {
-      "ordinal": "1",
+      "ordinal": 1,
       "title": "Certificate of Preference (COP)",
       "subtitle": "Up to 56 units available",
       "description": "For households in which at least one member holds a Certificate of Preference from the former San Francisco Redevelopment Agency. COP holders were displaced by Agency action generally during the 1960s and 1970s.",
@@ -77,7 +78,7 @@
       ]
     },
     {
-      "ordinal": "2",
+      "ordinal": 2,
       "title": "Displaced Tenant Housing Preference (DTHP)",
       "subtitle": "Up to 3 units available",
       "description": "For households in which at least one member holds a Displaced Tenant Housing Preference Certificate. DTHP Certificate holders are tenants who were evicted through either an Ellis Act Eviction or an Owner Move In Eviction, or have been displaced by a fire. Once all units reserved for this preference are filled, remaining DTHP holders will receive Live/Work preference, regardless of their current residence or work location.",
@@ -93,7 +94,7 @@
       ]
     },
     {
-      "ordinal": "3",
+      "ordinal": 3,
       "title": "Classroom teachers who are employees of the San Mateo Foster City School District and San Mateo County Community College District"
     }
   ],
@@ -115,7 +116,7 @@
       "number": "205",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 355,
+      "sqFeet": "355",
       "status": "occupied",
       "unitType": "studio",
       "createdAt": "2019-06-20T21:20:34.291Z",
@@ -139,7 +140,7 @@
       "number": "206",
       "priorityType": null,
       "reservedType": "senior",
-      "sqFeet": 355,
+      "sqFeet": "355",
       "status": "occupied",
       "unitType": "studio",
       "createdAt": "2019-06-25T17:26:59.698Z",
@@ -163,7 +164,7 @@
       "number": "303",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 355,
+      "sqFeet": "355",
       "status": "occupied",
       "unitType": "studio",
       "createdAt": "2019-06-25T17:27:12.228Z",
@@ -187,7 +188,7 @@
       "number": "403",
       "priorityType": null,
       "reservedType": "veteran",
-      "sqFeet": 355,
+      "sqFeet": "355",
       "status": "occupied",
       "unitType": "studio",
       "createdAt": "2019-06-25T17:27:23.985Z",
@@ -211,7 +212,7 @@
       "number": "406",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 355,
+      "sqFeet": "355",
       "status": "occupied",
       "unitType": "studio",
       "createdAt": "2019-06-25T17:27:38.397Z",
