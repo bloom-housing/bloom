@@ -4,7 +4,7 @@ import { UnitsService } from "./units.service"
 import { UnitsController } from "./units.controller"
 import { AuthzService } from "../auth/authz.service"
 import { AuthModule } from "../auth/auth.module"
-import { Unit } from "../entity/unit.entity"
+import { Unit } from "./entities/unit.entity"
 
 @Module({
   imports: [TypeOrmModule.forFeature([Unit]), AuthModule],

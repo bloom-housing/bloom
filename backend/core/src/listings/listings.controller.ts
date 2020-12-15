@@ -13,7 +13,7 @@ import {
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { ListingCreateDto, ListingDto, ListingUpdateDto } from "./listing.dto"
+import { ListingCreateDto, ListingDto, ListingUpdateDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"

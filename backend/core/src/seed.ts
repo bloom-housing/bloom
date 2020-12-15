@@ -4,10 +4,10 @@ import yargs from "yargs"
 import { listingSeed1, seedListing } from "./seeds/listings"
 import { UserService } from "./user/user.service"
 import { plainToClass } from "class-transformer"
-import { UserCreateDto } from "./user/user.dto"
+import { UserCreateDto } from "./user/dto/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { User } from "./entity/user.entity"
+import { User } from "./user/entities/user.entity"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },

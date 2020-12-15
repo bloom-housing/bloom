@@ -1,6 +1,6 @@
 import { Factory } from "fishery"
 import { nanoid } from "nanoid"
-import { Listing } from "../../src/entity/listing.entity"
+import { Listing } from "../../src/listings/entities/listing.entity"
 
 export default Factory.define<Listing>(({ sequence, factories }) => ({
   id: nanoid(),

@@ -1,4 +1,10 @@
-import { MinMax, MinMaxCurrency, Unit, UnitsSummarized, UnitSummary } from "../entity/unit.entity"
+import {
+  MinMax,
+  MinMaxCurrency,
+  Unit,
+  UnitsSummarized,
+  UnitSummary,
+} from "../units/entities/unit.entity"
 
 export type AnyDict = { [key: string]: any }
 type Units = Unit[]

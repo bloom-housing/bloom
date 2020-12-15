@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { SendGridService, SendGridModule } from "@anchan828/nest-sendgrid"
-import { User } from "../entity/user.entity"
+import { User } from "../user/entities/user.entity"
 import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
 import { ArcherListing } from "@bloom-housing/core"

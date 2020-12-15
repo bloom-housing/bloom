@@ -16,7 +16,7 @@ import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { AmiChartsService } from "./ami-charts.service"
-import { AmiChartCreateDto, AmiChartDto, AmiChartUpdateDto } from "./ami-chart.dto"
+import { AmiChartCreateDto, AmiChartDto, AmiChartUpdateDto } from "./dto/ami-chart.dto"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("/amiCharts")
