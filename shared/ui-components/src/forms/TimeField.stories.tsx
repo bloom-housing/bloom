@@ -8,22 +8,16 @@ export default {
 }
 
 export const Default = () => {
-  const { register, watch, handleSubmit, errors} = useForm({ mode: "onChange" })
-
-  const field = watch("time")
+  const { register, errors } = useForm({ mode: "onChange" })
 
   return (
-    <>
-      <TimeField
-        id="time"
-        name="time"
-        required={true}
-        register={register}
-        error={!!errors?.time}
-        watch={watch}
-      />
-
-      {console.log(field)}
-    </>
+    <TimeField
+      id="time"
+      label="Time"
+      name="time"
+      required={true}
+      register={register}
+      error={!!errors?.time}
+    />
   )
 }

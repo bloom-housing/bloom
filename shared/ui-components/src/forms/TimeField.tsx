@@ -2,30 +2,50 @@ import React from "react"
 import { ErrorMessage, Field, Select, t } from "@bloom-housing/ui-components"
 import { UseFormMethods } from "react-hook-form"
 
-export interface TimeFieldProps {
-  error?: boolean
-  register: UseFormMethods["register"]
-  watch: UseFormMethods["watch"]
-  name?: string
-  id?: string
-  required?: boolean
-  readerOnly?: boolean
+type TimeFieldDefaultValues = {
+  hours?: number
+  minutes?: number
+  seconds?: number
+  time?: "am" | "pm"
 }
 
-const TimeField = ({ required = false, error, register, watch, name, id }: TimeFieldProps) => {
+export type TimeFieldProps = {
+  error?: boolean
+  register: UseFormMethods["register"]
+  name?: string
+  id?: string
+  label: string
+  required?: boolean
+  readerOnly?: boolean
+  defaultValues?: TimeFieldDefaultValues
+}
+
+const TimeField = ({
+  required = false,
+  error,
+  register,
+  name,
+  id,
+  label,
+  readerOnly,
+  defaultValues,
+}: TimeFieldProps) => {
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
   }
 
+  const labelClasses = ["field-label--caps"]
+  if (readerOnly) labelClasses.push("sr-only")
+
   return (
-    <fieldset>
-      <legend></legend>
+    <fieldset id={id}>
+      <legend className={labelClasses.join(" ")}>{label}</legend>
 
       <div className="field-group--date">
         <Field
           name={fieldName("hours")}
-          // label={t("t.month")}
-          // defaultValue={}
+          label={t("t.hour")}
+          defaultValue={defaultValues?.hours || ""}
           readerOnly={true}
           placeholder="HH"
           error={error}
@@ -41,12 +61,13 @@ const TimeField = ({ required = false, error, register, watch, name, id }: TimeF
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          describedBy={`${id}-error`}
         />
 
         <Field
           name={fieldName("minutes")}
-          // label={t("t.month")}
-          // defaultValue={}
+          label={t("t.minutes")}
+          defaultValue={defaultValues?.minutes || ""}
           readerOnly={true}
           placeholder="MM"
           error={error}
@@ -62,11 +83,12 @@ const TimeField = ({ required = false, error, register, watch, name, id }: TimeF
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          describedBy={`${id}-error`}
         />
 
         <Field
-          // label={t("t.month")}
-          // defaultValue={}
+          label={t("t.seconds")}
+          defaultValue={defaultValues?.seconds || ""}
           name={fieldName("seconds")}
           readerOnly={true}
           placeholder="SS"
@@ -83,12 +105,26 @@ const TimeField = ({ required = false, error, register, watch, name, id }: TimeF
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          describedBy={`${id}-error`}
         />
 
-        <Select name={fieldName("time")} register={register} options={["am", "pm"]} keyPrefix="t" />
+        <Select
+          name={fieldName("time")}
+          id={fieldName("time")}
+          labelClassName="sr-only"
+          label={t("t.time")}
+          register={register}
+          options={["am", "pm"]}
+          keyPrefix="t"
+          defaultValue={defaultValues?.time || ""}
+          error={error}
+          describedBy={`${id}-error`}
+        />
       </div>
 
-      <ErrorMessage error={error}>{t("errors.timeError")}</ErrorMessage>
+      <div id={`${id}-error`} className="field error">
+        <ErrorMessage error={error}>{t("errors.timeError")}</ErrorMessage>
+      </div>
     </fieldset>
   )
 }
