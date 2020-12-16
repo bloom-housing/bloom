@@ -200,11 +200,21 @@ const ApplicationForm = ({ isEditable }: Props) => {
               : t("t.n/a"),
           action: (
             <div className="flex">
-              <Button type="button" onClick={() => editMember(member.orderId)} unstyled>
-                <strong className="uppercase">{t("t.edit")}</strong>
+              <Button
+                type="button"
+                className="font-semibold uppercase"
+                onClick={() => editMember(member.orderId)}
+                unstyled
+              >
+                {t("t.edit")}
               </Button>
-              <Button type="button" onClick={() => deleteMember(member.orderId)} unstyled>
-                <strong className="uppercase">{t("t.delete")}</strong>
+              <Button
+                type="button"
+                className="font-semibold uppercase text-red-700"
+                onClick={() => deleteMember(member.orderId)}
+                unstyled
+              >
+                {t("t.delete")}
               </Button>
             </div>
           ),
