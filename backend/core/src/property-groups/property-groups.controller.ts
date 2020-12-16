@@ -8,7 +8,7 @@ import {
   PropertyGroupCreateDto,
   PropertyGroupDto,
   PropertyGroupUpdateDto,
-} from "./property-group.dto"
+} from "./dto/property-group.dto"
 import {
   Body,
   Controller,

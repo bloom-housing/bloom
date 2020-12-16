@@ -4,7 +4,7 @@ import { Application } from "../entities/application.entity"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IdDto } from "../../lib/id.dto"
 import { PaginationFactory } from "../../utils/pagination.dto"
-import { ListingDto } from "../../listings/listing.dto"
+import { ListingDto } from "../../listings/dto/listing.dto"
 import { ApplicantCreateDto, ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import {
