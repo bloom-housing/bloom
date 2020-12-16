@@ -24,6 +24,9 @@ import {
   Drawer,
   blankApplication,
   MinimalTable,
+  Modal,
+  AppearanceStyleType,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -38,6 +41,7 @@ type Props = {
 const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
   const [membersDrawer, setMembersDrawer] = useState<number | boolean>(false)
+  const [membersDeleteModal, setMembersDeleteModal] = useState<number | boolean>(false)
 
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
@@ -159,8 +163,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
     (orderId: number) => {
       const updatedMembers = householdMembers.filter((member) => member.orderId !== orderId)
       setHouseholdMembers(updatedMembers)
+      setMembersDeleteModal(false)
     },
-    [setHouseholdMembers, householdMembers]
+    [setMembersDeleteModal, setHouseholdMembers, householdMembers]
   )
 
   const memberTableHeaders = {
@@ -211,7 +216,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
               <Button
                 type="button"
                 className="font-semibold uppercase text-red-700"
-                onClick={() => deleteMember(member.orderId)}
+                onClick={() => setMembersDeleteModal(member.orderId)}
                 unstyled
               >
                 {t("t.delete")}
@@ -872,8 +877,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
         <Drawer
           open={!!membersDrawer}
           title={t("application.household.householdMember")}
+          ariaDescription={t("application.household.householdMember")}
           onClose={() => setMembersDrawer(!membersDrawer)}
-          ariaDescription="My Drawer"
         >
           <ApplicationFormMember
             onSubmit={(member) => addMember(member)}
@@ -882,6 +887,36 @@ const ApplicationForm = ({ isEditable }: Props) => {
             memberOrderId={membersDrawer}
           />
         </Drawer>
+
+        <Modal
+          open={!!membersDeleteModal}
+          title={t("application.deleteThisMember")}
+          ariaDescription={t("application.deleteMemberDescription")}
+          onClose={() => setMembersDeleteModal(false)}
+          actions={[
+            <Button
+              styleType={AppearanceStyleType.alert}
+              onClick={() => {
+                if (typeof membersDeleteModal === "number") {
+                  deleteMember(membersDeleteModal)
+                }
+              }}
+            >
+              {t("t.delete")}
+            </Button>,
+            <Button
+              styleType={AppearanceStyleType.primary}
+              border={AppearanceBorderType.borderless}
+              onClick={() => {
+                setMembersDeleteModal(false)
+              }}
+            >
+              {t("t.cancel")}
+            </Button>,
+          ]}
+        >
+          {t("application.deleteMemberDescription")}
+        </Modal>
       </section>
     </>
   )
