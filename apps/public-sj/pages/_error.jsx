@@ -17,9 +17,6 @@ const ErrorPage = () => {
         <MarkdownSection fullwidth={true}>
           <>
             <p>{t("welcome.seeMoreOpportunities")}</p>
-            <LinkButton href="/additional-resources">
-              {t("welcome.viewAdditionalHousing")}
-            </LinkButton>
           </>
         </MarkdownSection>
       </div>
