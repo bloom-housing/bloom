@@ -1,14 +1,15 @@
 import { Expose } from "class-transformer"
 import { IsString } from "class-validator"
+import { ValidationsGroupsEnum } from "../validations-groups.enum"
 
 export class WhatToExpect {
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicantsWillBeContacted: string
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   allInfoWillBeVerified: string
   @Expose()
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   bePreparedIfChosen: string
 }

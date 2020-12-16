@@ -6,7 +6,7 @@ import { Address } from "@bloom-housing/core"
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">
     <Link href={props.href}>
-      <a className="edit-link">{t("label.edit")}</a>
+      <a className="edit-link">{t("t.edit")}</a>
     </Link>
   </div>
 )
@@ -105,7 +105,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
         )}
 
         {application.applicant.emailAddress && (
-          <ViewItem id="applicantEmail" label={t("label.email")}>
+          <ViewItem id="applicantEmail" label={t("t.email")}>
             {application.applicant.emailAddress}
           </ViewItem>
         )}
@@ -131,9 +131,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
             id="applicantPreferredContactType"
             label={t("application.contact.preferredContactType")}
           >
-            {application.contactPreferences
-              ?.map((item) => t(`application.form.options.contact.${item}`))
-              .join(", ")}
+            {application.contactPreferences?.map((item) => t(`t.${item}`)).join(", ")}
           </ViewItem>
         )}
       </div>
@@ -248,7 +246,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
           {application.incomePeriod && (
             <ViewItem id="incomeValue" label={t("t.income")}>
-              ${application.income} {t(`application.financial.income.${application.incomePeriod}`)}
+              ${application.income} {t(`t.${application.incomePeriod}`)}
             </ViewItem>
           )}
         </div>

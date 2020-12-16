@@ -66,7 +66,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -80,7 +80,7 @@ export default () => {
                 groupNote={t("application.household.preferredUnit.optionsLabel")}
                 fields={preferredUnitOptions}
                 error={errors.preferredUnit}
-                errorMessage={t("application.form.errors.selectAtLeastOne")}
+                errorMessage={t("errors.selectAtLeastOne")}
                 validation={{ required: true }}
                 register={register}
               />

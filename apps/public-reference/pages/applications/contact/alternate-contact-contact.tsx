@@ -66,7 +66,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -85,7 +85,7 @@ export default () => {
               readerOnly={true}
               required={true}
               error={errors.phoneNumber}
-              errorMessage={t("application.contact.phoneNumberError")}
+              errorMessage={t("errors.phoneNumberError")}
               controlClassName="control"
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
@@ -116,8 +116,8 @@ export default () => {
               <Field
                 id="mailingAddress.street"
                 name="mailingAddress.street"
-                label={t("application.alternateContact.contact.streetFormPlaceholder")}
-                placeholder={t("application.alternateContact.contact.streetFormPlaceholder")}
+                label={t("application.contact.streetAddress")}
+                placeholder={t("application.contact.streetAddress")}
                 defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}
               />
@@ -126,8 +126,8 @@ export default () => {
                 <Field
                   id="mailingAddress.city"
                   name="mailingAddress.city"
-                  label={t("application.alternateContact.contact.cityFormLabel")}
-                  placeholder={t("application.alternateContact.contact.cityFormPlaceholder")}
+                  label={t("application.contact.cityName")}
+                  placeholder={t("application.contact.cityName")}
                   defaultValue={application.alternateContact.mailingAddress.city}
                   register={register}
                 />
@@ -135,19 +135,19 @@ export default () => {
                 <Select
                   id="mailingAddress.state"
                   name="mailingAddress.state"
-                  label={t("application.alternateContact.contact.stateFormLabel")}
+                  label={t("application.contact.state")}
                   defaultValue={application.alternateContact.mailingAddress.state}
                   register={register}
                   controlClassName="control"
                   options={stateKeys}
-                  keyPrefix="application.form.options.states"
+                  keyPrefix="states"
                 />
               </div>
               <Field
                 id="mailingAddress.zipCode"
                 name="mailingAddress.zipCode"
-                label={t("application.alternateContact.contact.zipcodeFormLabel")}
-                placeholder={t("application.alternateContact.contact.zipcodeFormPlaceholder")}
+                label={t("application.contact.zip")}
+                placeholder={t("application.contact.zipCode")}
                 defaultValue={application.alternateContact.mailingAddress.zipCode}
                 register={register}
               />

@@ -1,80 +1,81 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsDefined, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
+import { ValidationsGroupsEnum } from "../validations-groups.enum"
 
 @Entity()
 export class Address {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
-  @IsString()
-  @IsUUID()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
   @Expose()
-  @IsDate()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   placeName?: string
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsDefined()
-  @IsString()
-  city: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  city?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
-  county?: string
-
-  @Column()
-  @Expose()
-  @IsDefined()
-  @IsString()
-  state: string
-
-  @Column()
-  @Expose()
-  @IsDefined()
-  @IsString()
-  street: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  county?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
-  street2?: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  state?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsDefined()
-  @IsString()
-  zipCode: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  street?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  street2?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  zipCode?: string | null
 
   @Column({ type: "numeric", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsNumber()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => Number)
-  latitude?: number
+  latitude?: number | null
 
   @Column({ type: "numeric", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsNumber()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => Number)
-  longitude?: number
+  longitude?: number | null
 }

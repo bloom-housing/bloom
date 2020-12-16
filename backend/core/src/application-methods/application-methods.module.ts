@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ApplicationMethodsService } from "./application-method.service"
 import { ApplicationMethodsController } from "./application-methods.controller"
-import { ApplicationMethod } from "../entity/application-method.entity"
+import { ApplicationMethod } from "./entities/application-method.entity"
 import { AuthModule } from "../auth/auth.module"
 
 @Module({

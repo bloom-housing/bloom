@@ -12,6 +12,7 @@ import {
   Form,
   FormCard,
   ProgressNav,
+  altContactRelationshipKeys,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -40,7 +41,6 @@ export default () => {
   const onError = () => {
     window.scrollTo(0, 0)
   }
-  const options = ["familyMember", "friend", "caseManager", "other", "noContact"]
   const type = watch("type", application.alternateContact.type)
 
   return (
@@ -64,7 +64,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -74,8 +74,8 @@ export default () => {
               <legend className="field-label--caps">
                 {t("application.alternateContact.type.label")}
               </legend>
-              <p className="field-note mb-4">{t("application.alternateContact.type.helperText")}</p>
-              {options.map((option, i) => {
+              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+              {altContactRelationshipKeys.map((option, i) => {
                 return (
                   <Fragment key={option}>
                     <Field
@@ -112,7 +112,7 @@ export default () => {
                         register={register}
                       />
                     )}
-                    {i === options.length - 1 && (
+                    {i === altContactRelationshipKeys.length - 1 && (
                       <ErrorMessage id="type-error" error={errors.type}>
                         {t("application.alternateContact.type.validationErrorMessage")}
                       </ErrorMessage>

@@ -2,32 +2,36 @@ import { Column, Entity } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose } from "class-transformer"
 import { IsOptional, IsString } from "class-validator"
+import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 @Entity()
 export class Demographics extends AbstractEntity {
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  ethnicity: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  ethnicity?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  gender: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  gender?: string | null
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @IsString()
-  sexualOrientation: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  sexualOrientation?: string | null
 
   @Column({ array: true, type: "text" })
   @Expose()
-  @IsString({ each: true })
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   howDidYouHear: string[]
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional()
-  @IsString()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   race?: string | null
 }

@@ -7,22 +7,26 @@ import {
   Body,
   Put,
   NotFoundException,
+  UsePipes,
+  ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger"
-import { UserCreateDto, UserDto, UserDtoWithAccessToken, UserUpdateDto } from "./user.dto"
+import { UserCreateDto, UserDto, UserDtoWithAccessToken, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email.service"
 import { ResourceType } from "../auth/resource_type.decorator"
-import AuthzGuard from "../auth/authz.guard"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { mapTo } from "../shared/mapTo"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { AuthzGuard } from "../auth/authz.guard"
 
 @Controller("user")
 @ApiBearerAuth()
 @ResourceType("user")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class UserController {
   constructor(
     private readonly userService: UserService,

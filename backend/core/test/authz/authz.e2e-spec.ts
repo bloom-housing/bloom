@@ -148,10 +148,12 @@ describe("Authz", () => {
     })
     it(`should allow normal/anonymous user to POST applications`, async () => {
       // anonymous
-      await supertest(app.getHttpServer()).post(applicationsEndpoint).expect(400)
+      await supertest(app.getHttpServer())
+        .post(applicationsEndpoint + "/submit")
+        .expect(400)
       // logged in normal user
       await supertest(app.getHttpServer())
-        .post(applicationsEndpoint)
+        .post(applicationsEndpoint + "/submit")
         .set(...setAuthorization(userAccessToken))
         .expect(400)
     })

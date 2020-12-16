@@ -31,11 +31,11 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               ref={register({
                 min: {
                   value: listing.property.householdSizeMin,
-                  message: t("application.form.errors.householdTooSmall"),
+                  message: t("errors.householdTooSmall"),
                 },
                 max: {
                   value: listing.property.householdSizeMax,
-                  message: t("application.form.errors.householdTooBig"),
+                  message: t("errors.householdTooBig"),
                 },
               })}
             />
@@ -47,9 +47,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
             <AlertNotice title={error?.message} type="alert" inverted>
               <p className="mb-2">{t("application.household.dontQualifyInfo")}</p>
               <p>
-                <a href={assistanceUrl}>
-                  {t("application.financial.income.validationError.assistance")}
-                </a>
+                <a href={assistanceUrl}>{t("nav.getAssistance")}</a>
               </p>
             </AlertNotice>
           </ErrorMessage>

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common"
 import jp from "jsonpath"
 
-import { Listing } from "../entity/listing.entity"
-import { ListingCreateDto, ListingUpdateDto } from "./listing.dto"
+import { Listing } from "./entities/listing.entity"
+import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
 
 export enum ListingsResponseStatus {
   ok = "ok",

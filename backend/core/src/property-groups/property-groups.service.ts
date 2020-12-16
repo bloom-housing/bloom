@@ -1,5 +1,5 @@
-import { PropertyGroupCreateDto, PropertyGroupUpdateDto } from "./property-group.dto"
-import { PropertyGroup } from "../entity/property-group.entity"
+import { PropertyGroupCreateDto, PropertyGroupUpdateDto } from "./dto/property-group.dto"
+import { PropertyGroup } from "./entities/property-group.entity"
 import { AbstractServiceFactory } from "../shared/abstract-service"
 import { Injectable } from "@nestjs/common"
 

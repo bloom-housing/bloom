@@ -6,7 +6,7 @@
  * - snake_case
  * @param input
  */
-import { Listing } from "../entity/listing.entity"
+import { Listing } from "../listings/entities/listing.entity"
 
 export const formatUrlSlug = (input: string): string => {
   return (

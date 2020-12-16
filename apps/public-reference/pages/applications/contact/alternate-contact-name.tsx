@@ -58,7 +58,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -71,27 +71,25 @@ export default () => {
               <Field
                 id="firstName"
                 name="firstName"
-                label={t("application.alternateContact.name.firstNameFormPlaceholder")}
+                label={t("application.name.firstName")}
                 readerOnly={true}
-                placeholder={t("application.alternateContact.name.firstNameFormPlaceholder")}
+                placeholder={t("application.name.firstName")}
                 defaultValue={application.alternateContact.firstName}
                 validation={{ required: true }}
                 error={errors.firstName}
-                errorMessage={t(
-                  "application.alternateContact.name.firstNameValidationErrorMessage"
-                )}
+                errorMessage={t("errors.firstNameError")}
                 register={register}
               />
               <Field
                 id="lastName"
                 name="lastName"
-                label={t("application.alternateContact.name.lastNameFormPlaceholder")}
+                label={t("application.name.lastName")}
                 readerOnly={true}
-                placeholder={t("application.alternateContact.name.lastNameFormPlaceholder")}
+                placeholder={t("application.name.lastName")}
                 defaultValue={application.alternateContact.lastName}
                 validation={{ required: true }}
                 error={errors.lastName}
-                errorMessage={t("application.alternateContact.name.lastNameValidationErrorMessage")}
+                errorMessage={t("errors.lastNameError")}
                 register={register}
               />
               {application.alternateContact.type === "caseManager" && (

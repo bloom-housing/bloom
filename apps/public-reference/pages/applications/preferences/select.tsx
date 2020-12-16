@@ -63,7 +63,7 @@ export default () => {
 
         {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
-            {t("t.errorsToResolve")}
+            {t("errors.errorsToResolve")}
           </AlertBox>
         )}
 
@@ -102,7 +102,7 @@ export default () => {
                     toggleShowMoreForOption(option)
                   }}
                 >
-                  {t(showMore[option] ? "label.readLess" : "label.readMore")}
+                  {t(showMore[option] ? "t.readLess" : "t.readMore")}
                 </button>
               </p>
 
@@ -155,7 +155,7 @@ export default () => {
               </p>
 
               <ErrorMessage id="preferences-error" error={errors.none}>
-                {t("application.form.errors.selectOption")}
+                {t("errors.selectOption")}
               </ErrorMessage>
             </div>
           </div>
