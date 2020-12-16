@@ -225,7 +225,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
           ),
         }
       }),
-    [deleteMember, editMember, householdMembers]
+    [editMember, householdMembers]
   )
 
   return (
