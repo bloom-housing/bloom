@@ -16,7 +16,7 @@ import {
   ApplicationMethodCreateDto,
   ApplicationMethodDto,
   ApplicationMethodUpdateDto,
-} from "./application-method.dto"
+} from "./dto/application-method.dto"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"

@@ -1,6 +1,6 @@
 import { Factory } from "fishery"
 import { nanoid } from "nanoid"
-import { Unit } from "../../src/entity/unit.entity"
+import { Unit } from "../../src/units/entities/unit.entity"
 import { BaseEntity } from "typeorm"
 
 type NonDbUnit = Omit<Unit, keyof BaseEntity>

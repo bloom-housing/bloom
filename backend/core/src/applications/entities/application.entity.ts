@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm"
-import { User } from "../../entity/user.entity"
-import { Listing } from "../../entity/listing.entity"
+import { User } from "../../user/entities/user.entity"
+import { Listing } from "../../listings/entities/listing.entity"
 import {
   IsBoolean,
   IsDefined,

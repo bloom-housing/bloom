@@ -20,6 +20,7 @@ export interface FieldProps {
   disabled?: boolean
   prepend?: string
   inputProps?: Record<string, unknown>
+  describedBy?: string
 }
 
 const Field = (props: FieldProps) => {
@@ -61,7 +62,7 @@ const Field = (props: FieldProps) => {
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
-          aria-describedby={`${idOrName}-error`}
+          aria-describedby={props.describedBy ? props.describedBy : `${idOrName}-error`}
           aria-invalid={!!props.error || false}
           className="input"
           type={type}

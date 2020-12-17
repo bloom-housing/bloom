@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { User } from "../entity/user.entity"
+import { User } from "./entities/user.entity"
 import { FindConditions, Repository } from "typeorm"
 import { scrypt, randomBytes } from "crypto"
-import { UserCreateDto, UserDto } from "./user.dto"
+import { UserCreateDto, UserDto } from "./dto/user.dto"
 
 // Length of hashed key, in bytes
 const SCRYPT_KEYLEN = 64

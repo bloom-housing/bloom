@@ -12,7 +12,7 @@ import {
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { AssetsService } from "./assets.service"
-import { AssetCreateDto, AssetDto, AssetUpdateDto } from "./asset.dto"
+import { AssetCreateDto, AssetDto, AssetUpdateDto } from "./dto/asset.dto"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"

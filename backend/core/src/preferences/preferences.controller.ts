@@ -12,11 +12,7 @@ import {
 } from "@nestjs/common"
 import { PreferencesService } from "../preferences/preferences.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import {
-  PreferenceCreateDto,
-  PreferenceDto,
-  PreferenceUpdateDto,
-} from "../preferences/preference.dto"
+import { PreferenceCreateDto, PreferenceDto, PreferenceUpdateDto } from "./dto/preference.dto"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
