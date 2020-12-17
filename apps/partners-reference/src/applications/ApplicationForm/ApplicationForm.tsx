@@ -177,56 +177,58 @@ const ApplicationForm = ({ isEditable }: Props) => {
     action: "",
   }
 
-  const memberTableData = useMemo(
-    () =>
-      householdMembers.map((member) => {
-        const { birthMonth, birthDay, birthYear } = member
+  const memberTableData = useMemo(() => {
+    const chooseAddressStatus = (value: string | null) => {
+      switch (value) {
+        case "yes":
+          return t("t.yes")
+        case "no":
+          return t("t.no")
+        default:
+          return t("t.n/a")
+      }
+    }
 
-        return {
-          name: `${member.firstName} ${member.lastName}`,
-          relationship: member.relationship
-            ? t(`application.form.options.relationship.${member.relationship}`)
+    return householdMembers.map((member) => {
+      const { birthMonth, birthDay, birthYear } = member
+
+      return {
+        name:
+          (member.firstName + member.lastName).length > 0
+            ? `${member.firstName} ${member.lastName}`
+            : t("n/a"),
+        relationship: member.relationship
+          ? t(`application.form.options.relationship.${member.relationship}`)
+          : t("t.n/a"),
+        dob:
+          birthMonth && birthDay && birthYear
+            ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
             : t("t.n/a"),
-          dob:
-            birthMonth && birthDay && birthYear
-              ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
-              : t("t.n/a"),
-          sameResidence:
-            member.sameAddress === "yes"
-              ? t("t.yes")
-              : member.sameAddress === "no"
-              ? t("t.no")
-              : t("t.n/a"),
-          workInRegion:
-            member.workInRegion === "yes"
-              ? t("t.yes")
-              : member.workInRegion === "no"
-              ? t("t.no")
-              : t("t.n/a"),
-          action: (
-            <div className="flex">
-              <Button
-                type="button"
-                className="font-semibold uppercase"
-                onClick={() => editMember(member.orderId)}
-                unstyled
-              >
-                {t("t.edit")}
-              </Button>
-              <Button
-                type="button"
-                className="font-semibold uppercase text-red-700"
-                onClick={() => setMembersDeleteModal(member.orderId)}
-                unstyled
-              >
-                {t("t.delete")}
-              </Button>
-            </div>
-          ),
-        }
-      }),
-    [editMember, householdMembers]
-  )
+        sameResidence: chooseAddressStatus(member.sameAddress),
+        workInRegion: chooseAddressStatus(member.workInRegion),
+        action: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="font-semibold uppercase"
+              onClick={() => editMember(member.orderId)}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="font-semibold uppercase text-red-700"
+              onClick={() => setMembersDeleteModal(member.orderId)}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      }
+    })
+  }, [editMember, householdMembers])
 
   return (
     <>
