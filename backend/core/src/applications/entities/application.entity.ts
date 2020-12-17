@@ -211,7 +211,7 @@ export class Application extends AbstractEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   acceptedTerms?: boolean | null
 
-  @Column({ type: "timestamptz", nullable: false })
+  @Column({ type: "timestamptz", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
