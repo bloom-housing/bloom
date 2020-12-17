@@ -42,7 +42,7 @@ const DOBField = (props: DOBFieldProps) => {
     <fieldset id={id}>
       <legend className={labelClasses.join(" ")}>{props.label}</legend>
 
-      <div className="field-group--dob">
+      <div className="field-group--date">
         <Field
           name={fieldName("birthMonth")}
           label={t("t.month")}
