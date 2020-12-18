@@ -18,6 +18,7 @@ interface SelectProps {
   disabled?: boolean
   options: string[]
   keyPrefix: string
+  describedBy?: string
 }
 
 export const Select = ({
@@ -35,6 +36,7 @@ export const Select = ({
   disabled,
   options,
   keyPrefix,
+  describedBy,
 }: SelectProps) => {
   return (
     <div className={"field " + (error ? "error" : "")}>
@@ -46,6 +48,8 @@ export const Select = ({
           className="input"
           id={id || name}
           name={name}
+          aria-describedby={describedBy ? describedBy : `${id}-error`}
+          aria-invalid={!!error || false}
           defaultValue={defaultValue}
           ref={register(validation)}
           disabled={disabled}

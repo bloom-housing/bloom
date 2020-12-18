@@ -265,14 +265,14 @@ input[type=number] {
 }
 
 .flex > .field,
-.field-group--dob .field {
+.field-group--date .field {
   @apply flex-auto;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
 }
 
 .flex > .field,
-.field-group--dob .field {
+.field-group--date .field {
   &:first-of-type {
     margin-left: 0;
   }
@@ -281,7 +281,7 @@ input[type=number] {
   }
 }
 
-.field-group--dob {
+.field-group--date {
   @apply flex;
 
   .field {
