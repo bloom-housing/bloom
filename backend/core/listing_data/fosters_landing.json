@@ -1,8 +1,6 @@
 {
-  "id": "9S_YS18IRr7fu9YAmT8Tk",
-  "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": false,
+  "id": "6b168bf0-0cf8-0139-7cff-2683e7458fb7",
+  "events":[],
   "accessibility": "",
   "amenities": "Fitness center, three pools and spas, basketball courts, tennis courts and playground",
   "applicationDueDate": "2019-12-31T17:00:00.000Z",
@@ -16,7 +14,6 @@
     "longitude": -122.26385910564855
   },
   "applicationPhone": "(650) 574-0630",
-  "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "Foster City",
     "county": "San Mateo",
@@ -26,14 +23,13 @@
     "latitude": 37.5559677,
     "longitude": -122.26385910564855
   },
-  "buildingName": "Foster's Landing",
   "buildingSelectionCriteria": "",
   "costsNotIncluded": "Residents are responsible for PGE, Water/Sewer/Trash. Residents are given an allowance to offset the Water/Sewer/Trash. Late Fee is $85 and NSF is $25. ",
   "creditHistory": "Background/Credit will be processed by a 3rd party",
   "depositMax": "800.0",
   "depositMin": "400.0",
   "developer": "Essex",
-  "imageUrl": "https://ssl.c.photoshelter.com/img-get2/I0000RQpv19RzjbQ/sec=wd0sd0oe0lwe0ms1000ed20191103ms6thyQ1TZB2ytA/fill=1020x683/PS-100-Fosters-Landing.jpg",
+  "imageUrl": "/images/fosters.jpg",
   "programRules": "The Below Market Rate (BMR) rent program will expire at the end of Dec 31, 2022. Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
   "externalId": null,
   "waitlistMaxSize": null,
@@ -53,13 +49,6 @@
   "groupId": 2,
   "hideUnitFeatures": false,
   "unitAmenities": "Washer/Dryer and dishwasher",
-  "attachments": [
-    {
-      "fileUrl": "http://bit.ly/2BPv52T",
-      "label": "English",
-      "type": 1
-    }
-  ],
   "applicationFee": "48.0",
   "criminalBackground": "Background/Credit will be processed by a 3rd party",
   "leasingAgentAddress": {
@@ -77,13 +66,12 @@
   "leasingAgentTitle": "Leasing Agent",
   "rentalHistory": "No eviction or landlord judgement.",
   "buildingTotalUnits": 6,
-  "acceptsPostmarkedApplications": false,
   "postmarkedApplicationsReceivedByDate": null,
   "totalUnits": 6,
   "unitsAvailable": 6,
   "units": [
     {
-      "id": 144,
+      "id": "6b168c60-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "86175.0",
       "monthlyIncomeMin": "7181.25",
@@ -97,7 +85,7 @@
       "number": "1106",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 725,
+      "sqFeet": "725",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-10-28T17:00:00.000Z",
@@ -107,7 +95,7 @@
       "monthlyRentAsPercentOfIncome": "30"
     },
     {
-      "id": 143,
+      "id": "6b168ca0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "86175.0",
       "monthlyIncomeMin": "7181.25",
@@ -121,7 +109,7 @@
       "number": "3006",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 725,
+      "sqFeet": "725",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-10-28T17:00:00.000Z",
@@ -131,7 +119,7 @@
       "monthlyRentAsPercentOfIncome": "30"
     },
     {
-      "id": 142,
+      "id": "6b168cc0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "86175.0",
       "monthlyIncomeMin": "7181.25",
@@ -145,7 +133,7 @@
       "number": "3610",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 725,
+      "sqFeet": "725",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-10-28T17:00:00.000Z",
@@ -155,7 +143,7 @@
       "monthlyRentAsPercentOfIncome": "30"
     },
     {
-      "id": 141,
+      "id": "6b168ce0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "86175.0",
       "monthlyIncomeMin": "7181.25",
@@ -169,7 +157,7 @@
       "number": "3007",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 635,
+      "sqFeet": "635",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-10-28T17:00:00.000Z",
@@ -179,7 +167,7 @@
       "monthlyRentAsPercentOfIncome": "30"
     },
     {
-      "id": 140,
+      "id": "6b168d00-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "86175.0",
       "monthlyIncomeMin": "7181.25",
@@ -193,7 +181,7 @@
       "number": "2609",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 635,
+      "sqFeet": "635",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-10-28T17:00:00.000Z",
@@ -203,7 +191,7 @@
       "monthlyRentAsPercentOfIncome": "30"
     },
     {
-      "id": 139,
+      "id": "6b168d20-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "86175.0",
       "monthlyIncomeMin": "7181.25",
@@ -217,7 +205,7 @@
       "number": "3215",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 635,
+      "sqFeet": "635",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-10-28T17:00:00.000Z",
@@ -227,5 +215,27 @@
       "monthlyRentAsPercentOfIncome": "30"
     }
   ],
-  "preferences": []
+  "preferences": [
+
+  ],
+  "applicationMethods": [
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "externalReference": "http://bit.ly/2BPv52T",
+      "label": "English"
+    },
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": false
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/fosters.jpg"
+    }
+  ]
 }

@@ -1,8 +1,6 @@
 {
-  "id": "JXOzy471GkeebcSLfPqV1",
-  "acceptingApplicationsAtLeasingAgent": true,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": false,
+  "id": "6b169720-0cf8-0139-7cff-2683e7458fb7",
+  "events":[],
   "accessibility": "Accessiblity features in common areas like lobby, wheelchair ramps, accessible bathrooms and elevators.",
   "amenities": "Gym, theater room, clubhouse, pool, playground, business center, spa",
   "applicationDueDate": null,
@@ -17,7 +15,6 @@
     "longitude": -122.284063
   },
   "applicationPhone": "650-358-8511",
-  "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "San Mateo",
     "county": "San Mateo",
@@ -27,7 +24,6 @@
     "latitude": 37.562992,
     "longitude": -122.284063
   },
-  "buildingName": "Bridgepointe Rental Condominiums",
   "buildingSelectionCriteria": null,
   "costsNotIncluded": "Residents are responsible for water, sewage, trash and PGE. Pet Deposit 500.00 and 60.00 pet rent. Rental insurance is required. Rent is due 1st and late as of 6th. Late fee is 75.00. Resident to pay $35.00 for rejected check or electronic payment.",
   "creditHistory": "No collections, no bankruptcy, income is 2.5 the monthly rent. A credit report will be completed on all applicants to verify credit ratings. Income plus verified credit history will be entered into a credit scoring model to determine rental eligibility and security deposit levels. All decisions for residency are based on a system which considers credit history, rent history, income qualifications, and employment history. An approved decision based on the system does not automatically constittute an approval of residency. Applicant(s) and occupant(s) aged 18 years or older MUST also pass the criminal background check based on the criteria contained herein to be approved for residency. Credit recommendations other than an accept decision, will require a rental verification. Applications for residency will automatically be denied for the following reasons: a. An outstanding debt to a previous landlord or an outstanding NSF check must be paid in full b. An unsatisfied breach of a prior lease or a prior eviction of any applicant or occupant c. More than four (4) late pays and two (2) NSF's in the last twenty-four (24) months",
@@ -53,13 +49,6 @@
   "updatedAt": "2020-05-12T22:15:15.443Z",
   "hideUnitFeatures": false,
   "unitAmenities": "Washer and dryer, heater,electric stoves",
-  "attachments": [
-    {
-      "fileUrl": "https://drive.google.com/file/d/1rw1MR6FOZKfHSFhGFy4TfiysWnIlF3OL/view?usp=sharing",
-      "label": "English",
-      "type": 1
-    }
-  ],
   "applicationFee": "0.0",
   "criminalBackground": "Qualified applicants with criminal history will be considered for housing in compliance with Article 49 of the San Francisco Police Code: Fair Chance Ordinance.",
   "leasingAgentAddress": {
@@ -77,17 +66,16 @@
   "leasingAgentTitle": "Assistant Business Manager",
   "rentalHistory": "Our credit reporting agency also reviews eviction and court databases to search for both eviction filings and judgements within the past 24 months. No Fault or Dismissed evictions will not be held against the household. If a household does not meet the rental or credit criteria, they will then have the option of either paying an additional deposit equal to 1 times the monthly rent, or providing a qualified guarantor. If the applicant does not provide either of these options, it could result in the denial of their application. Mitigating Circumstances will be considered on a case by case basis.",
   "buildingTotalUnits": 396,
-  "acceptsPostmarkedApplications": false,
   "postmarkedApplicationsReceivedByDate": null,
   "totalUnits": 3,
   "unitsAvailable": 3,
   "units": [
     {
-      "id": 434,
+      "id": "6b169760-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "85800.0",
       "monthlyIncomeMin": "7150.0",
-      "floor": "1",
+      "floor": 1,
       "annualIncomeMax": "114900-147750",
       "maxOccupancy": 3,
       "minOccupancy": 1,
@@ -97,7 +85,7 @@
       "number": "L-119",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 690,
+      "sqFeet": "690",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -107,11 +95,11 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": 435,
+      "id": "6b1697a0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "85800.0",
       "monthlyIncomeMin": "7150.0",
-      "floor": "2",
+      "floor": 2,
       "annualIncomeMax": "114,900-147,750",
       "maxOccupancy": 3,
       "minOccupancy": 1,
@@ -121,7 +109,7 @@
       "number": "N-201",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 848,
+      "sqFeet": "848",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -131,11 +119,11 @@
       "monthlyRentAsPercentOfIncome": null
     },
     {
-      "id": 436,
+      "id": "6b1697b0-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "120.0",
       "annualIncomeMin": "85800.0",
       "monthlyIncomeMin": "7150.0",
-      "floor": "2",
+      "floor": 2,
       "annualIncomeMax": "114,900-147,750",
       "maxOccupancy": 3,
       "minOccupancy": 1,
@@ -145,7 +133,7 @@
       "number": "I-235",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 750,
+      "sqFeet": "750",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -175,5 +163,25 @@
     "applicantsWillBeContacted": "Applicants will be contacted by the City of San Mateo on a first come first serve basis until vacancies are filled.",
     "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed if you have made any fraudulent statements, or if any household member appears on more than one application for this listing. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
     "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents within 5 business days of being contacted."
-  }
+  },
+  "applicationMethods": [
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "externalReference": "https://drive.google.com/file/d/1rw1MR6FOZKfHSFhGFy4TfiysWnIlF3OL/view?usp=sharing",
+      "label": "English"
+    },
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": false
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/bridgepointe.jpg"
+    }
+  ]
 }

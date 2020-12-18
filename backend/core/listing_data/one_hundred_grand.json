@@ -1,8 +1,6 @@
 {
-  "id": "V1StGXR8Z5jdHi6BmyT",
-  "acceptingApplicationsAtLeasingAgent": false,
-  "acceptingApplicationsByPoBox": false,
-  "acceptingOnlineApplications": false,
+  "id": "6b157e60-0cf8-0139-7cff-2683e7458fb7",
+  "events":[],
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spafitness center, clubhouse, business center, heated pool & spa, outdoor BBQ’s, courtyard w/ fireplace",
   "applicationDueDate": "2020-08-10T17:00:00.000-07:00",
@@ -17,7 +15,6 @@
     "longitude": -122.268743
   },
   "applicationPhone": "(650) 350-1099",
-  "blankPaperApplicationCanBePickedUp": false,
   "buildingAddress": {
     "city": "Foster City",
     "county": "San Mateo",
@@ -27,7 +24,6 @@
     "latitude": 37.562493,
     "longitude": -122.268743
   },
-  "buildingName": "One Hundred Grand",
   "buildingSelectionCriteria": null,
   "costsNotIncluded": "Residents responsible for utilities: electric, gas, cable/internet, water, sewer, trash, admin fee. Residents required to maintain a renter's insurance policy as outlined in the lease agreement. Rent is due by the 3rd of each month and rent is considered late on the 4th of each month. Late fee is $150.00. Resident to pay $35 for each returned check or rejected electronic payment. Pet Deposit is $500 per pet. $50 monthly pet rent per pet.",
   "creditHistory": "No collections, no bankruptcy, income is twice monthly rent. A credit report will be completed on all applicants to verify credit ratings. Income plus verified credit history will be entered into a credit scoring model to determine rental eligibility and security deposit levels. All decisions for residency are based on a system which considers credit history, rent history, income qualifications, and employment history. An approved decision based on the system does not automatically constittute an approval of residency. Applicant(s) and occupant(s) aged 18 years or older MUST also pass the criminal background check based on the criteria contained herein to be approved for residency.  Credit recommendations other than an accept decision, will require a rental verification. Applications for residency will automatically be denied for the following reasons: a. An outstanding debt to a previous landlord or an outstanding NSF check must be paid in full b. An unsatisfied breach of a prior lease or a prior eviction of any applicant or occupant c. More than four (4) late pays and two (2) NSF's in the last twenty-four (24) months",
@@ -53,13 +49,6 @@
   "updatedAt": "2020-06-9T22:15:15.443Z",
   "hideUnitFeatures": false,
   "unitAmenities": "Refrigerator, washer/dryer, gas stoves, microwave, dishwasher, central AC/Heat, quartz countertops, wood flooring, patio/balcony",
-  "attachments": [
-    {
-      "fileUrl": "https://100grandapts.com/bmr.php",
-      "label": "English",
-      "type": 1
-    }
-  ],
   "applicationFee": "50.94",
   "criminalBackground": "We obtain a criminal background check on each applicant who will reside in the apartment home. It is possible your application will be denied due to criminal convictions.",
   "leasingAgentAddress": {
@@ -78,17 +67,16 @@
   "leasingAgentTitle": "Assistant Community Manager",
   "rentalHistory": "Our credit reporting agency also reviews eviction and court databases to search for both eviction filings and judgements within the past 24 months and may include rent payment history as an indicator of future rent payment performance. Applicants are responsible for ensuring their rental history is accurate. No Fault or Dismissed evictions will not be held against the household. If a household does not meet the rental or credit criteria it could result in the denial of their application. Mitigating Circumstances will be considered on a case-by-case basis.",
   "buildingTotalUnits": 1,
-  "acceptsPostmarkedApplications": false,
   "postmarkedApplicationsReceivedByDate": null,
   "totalUnits": 166,
   "unitsAvailable": 1,
   "units": [
     {
-      "id": 437,
+      "id": "6b159210-0cf8-0139-7cff-2683e7458fb7",
       "amiPercentage": "80.0",
       "annualIncomeMin": "70704.0",
       "monthlyIncomeMin": "5892.0",
-      "floor": "3",
+      "floor": 3,
       "annualIncomeMax": "97,600-150,600",
       "maxOccupancy": 5,
       "minOccupancy": 2,
@@ -98,7 +86,7 @@
       "number": "308",
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 1138,
+      "sqFeet": "1138",
       "status": "available",
       "unitType": "twoBdrm",
       "createdAt": "2019-06-03T10:42:43.134Z",
@@ -114,49 +102,79 @@
       "title": "Preference 1a",
       "subtitle": null,
       "description": "Persons who are living in a Below Market Rate deed restricted unit in Foster City for a minimum of twelve (12) months that is subject to termination of affordability restrictions within three (3) years.",
-      "links": []
+      "links": [
+
+      ]
     },
     {
       "ordinal": 2,
       "title": "Preference 1b",
       "subtitle": null,
       "description": "Persons who live and work in Foster City.",
-      "links": []
+      "links": [
+
+      ]
     },
     {
       "ordinal": 3,
       "title": "Preference 2",
       "subtitle": null,
       "description": "Persons who live in Foster City.",
-      "links": []
+      "links": [
+
+      ]
     },
     {
       "ordinal": 4,
       "title": "Preference 3",
       "subtitle": null,
       "description": "Employees of the City of Foster City.",
-      "links": []
+      "links": [
+
+      ]
     },
     {
       "ordinal": 5,
       "title": "Preference 4",
       "subtitle": null,
       "description": "Classroom teachers who are employees of the San Mateo-Foster City School District, the San Mateo Union High School District and the San Mateo County Community College District.",
-      "links": []
+      "links": [
+
+      ]
     },
     {
       "ordinal": 6,
       "title": "Preference 5",
       "subtitle": null,
       "description": "Persons who work in Foster City.",
-      "links": []
+      "links": [
+
+      ]
     },
     {
       "ordinal": 7,
       "title": "Preference 6",
       "subtitle": null,
       "description": "All others who are income qualified.",
-      "links": []
+      "links": [
+
+      ]
+    }
+  ],
+  "applicationMethods": [
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "externalReference": "https://100grandapts.com/bmr.php",
+      "label": "English"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/100_grand.jpg"
     }
   ]
 }

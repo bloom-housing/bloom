@@ -1,5 +1,6 @@
 {
   "id": "sz0UrxnBaSdgeSdfgcgha8",
+  "events":[],
   "accessibility": "This site is not wheelchair accessible, however, all Reasonable Accommodations will be considered.",
   "amenities": "On-site laundry",
   "applicationAddress": {
@@ -83,7 +84,7 @@
       "number": null,
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 580,
+      "sqFeet": "580",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2020-02-18T21:20:34.291Z",
@@ -107,7 +108,7 @@
       "number": null,
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 580,
+      "sqFeet": "580",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2020-02-18T21:20:34.291Z",
@@ -131,7 +132,7 @@
       "number": null,
       "priorityType": null,
       "reservedType": null,
-      "sqFeet": 580,
+      "sqFeet": "580",
       "status": "available",
       "unitType": "oneBdrm",
       "createdAt": "2020-02-18T21:20:34.291Z",

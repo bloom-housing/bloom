@@ -103,6 +103,14 @@ module.exports = withCSS(
             return Object.assign({}, languagePaths, {
               "/disclaimer": { page: "/disclaimer" },
               "/privacy": { page: "/privacy" },
+              "/applications/start/choose-language": {
+                page: "/applications/start/choose-language",
+              },
+              "/sign-in": { page: "/sign-in" },
+              "/create-account": { page: "/create-account" },
+              "/account/applications": { page: "/account/applications" },
+              "/account/dashboard": { page: "/account/dashboard" },
+              "/account/settings": { page: "/account/settings" },
               "/welcome": { page: "/welcome" },
               "/welcome-es": { page: "/welcome-es" },
               "/welcome-vi": { page: "/welcome-vi" },
