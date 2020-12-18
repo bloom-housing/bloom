@@ -131,7 +131,7 @@ export default () => {
 
             <div className="text-center mt-10">
               <Button
-                type={AppearanceStyleType.primary}
+                styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   console.info("button has been clicked!")
                 }}

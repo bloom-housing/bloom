@@ -101,7 +101,7 @@ export default () => {
           <div className="form-card__pager-row primary">
             <Button
               id="btn-add-done"
-              type={AppearanceStyleType.primary}
+              styleType={AppearanceStyleType.primary}
               className=""
               onClick={() => {
                 conductor.returnToReview = false

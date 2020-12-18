@@ -90,7 +90,7 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                type={AppearanceStyleType.primary}
+                styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

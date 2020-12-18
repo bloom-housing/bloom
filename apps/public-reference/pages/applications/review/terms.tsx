@@ -100,7 +100,7 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button type={AppearanceStyleType.primary} onClick={() => false}>
+              <Button styleType={AppearanceStyleType.primary} onClick={() => false}>
                 {t("t.submit")}
               </Button>
             </div>

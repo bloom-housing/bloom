@@ -3,7 +3,7 @@
 exports[`Storyshots Actions/Link Button Filled 1`] = `
 <LinkButton
   href="#"
-  type="is-primary"
+  styleType="is-primary"
 >
   <LocalizedLink
     className="button is-primary"
@@ -79,7 +79,7 @@ exports[`Storyshots Actions/Link Button Small And Filled 1`] = `
 <LinkButton
   href="#"
   size="is-small"
-  type="is-primary"
+  styleType="is-primary"
 >
   <LocalizedLink
     className="button is-primary is-small"

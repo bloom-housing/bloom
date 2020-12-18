@@ -181,7 +181,7 @@ export default function ApplicationsList() {
           </Button>
 
           <div className="status-bar__status md:pl-4 md:w-3/12">
-            <Tag type={AppearanceStyleType.success} pillStyle>
+            <Tag styleType={AppearanceStyleType.success} pillStyle>
               {application.status
                 ? t(`application.details.applicationStatus.${application.status}`)
                 : t(`application.details.applicationStatus.submitted`)}

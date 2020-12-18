@@ -36,7 +36,7 @@ const StatusMessage = (props: StatusMessageProps) => {
   return (
     <li className="status-message">
       <div className="status-message__status">
-        <Tag pillStyle={true} type={props.style} size={AppearanceSizeType.small}>
+        <Tag pillStyle={true} styleType={props.style} size={AppearanceSizeType.small}>
           {props.status}
         </Tag>
 

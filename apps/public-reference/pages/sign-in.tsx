@@ -86,7 +86,7 @@ const SignIn = () => {
 
             <div className="text-center mt-6">
               <Button
-                type={AppearanceStyleType.primary}
+                styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   //
                 }}

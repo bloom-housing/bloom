@@ -41,12 +41,12 @@ export const BasicModal = () => {
         ariaDescription="Modal description"
         onClose={() => setOpenModal(!openModal)}
         actions={[
-          <Button onClick={() => setOpenModal(!openModal)} type={AppearanceStyleType.primary}>
+          <Button onClick={() => setOpenModal(!openModal)} styleType={AppearanceStyleType.primary}>
             Submit
           </Button>,
           <Button
             onClick={() => setOpenModal(!openModal)}
-            type={AppearanceStyleType.secondary}
+            styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
           >
             Cancel
@@ -66,12 +66,12 @@ export const TransparentOverlayModal = () => (
     ariaDescription="Modal description"
     hideCloseIcon
     actions={[
-      <Button onClick={noop} type={AppearanceStyleType.primary}>
+      <Button onClick={noop} styleType={AppearanceStyleType.primary}>
         Submit
       </Button>,
       <Button
         onClick={noop}
-        type={AppearanceStyleType.secondary}
+        styleType={AppearanceStyleType.secondary}
         border={AppearanceBorderType.borderless}
       >
         Cancel
@@ -90,10 +90,10 @@ export const SuccessFailureModal = () => (
     ariaDescription="Modal description"
     onClose={noop}
     actions={[
-      <Button onClick={noop} type={AppearanceStyleType.success}>
+      <Button onClick={noop} styleType={AppearanceStyleType.success}>
         Submit
       </Button>,
-      <Button onClick={noop} type={AppearanceStyleType.alert}>
+      <Button onClick={noop} styleType={AppearanceStyleType.alert}>
         Cancel
       </Button>,
     ]}

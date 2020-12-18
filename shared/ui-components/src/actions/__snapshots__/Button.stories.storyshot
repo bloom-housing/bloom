@@ -162,7 +162,7 @@ exports[`Storyshots Actions/Button Normal Case And Success 1`] = `
   <Button
     normalCase={true}
     onClick={[Function]}
-    type="is-success"
+    styleType="is-success"
   >
     <button
       className="button is-success is-normal-case"
@@ -205,7 +205,7 @@ exports[`Storyshots Actions/Button Small And Primary 1`] = `
   <Button
     onClick={[Function]}
     size="is-small"
-    type="is-primary"
+    styleType="is-primary"
   >
     <button
       className="button is-primary is-small"
