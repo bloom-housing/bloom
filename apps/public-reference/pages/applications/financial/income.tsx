@@ -3,7 +3,7 @@
 Total pre-tax household income from all sources
 */
 import React, { useState } from "react"
-import { Listing } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
   AlertBox,

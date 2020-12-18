@@ -17,7 +17,7 @@ import {
 import Layout from "../../layouts/application"
 import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import moment from "moment"
-import { Application } from "@bloom-housing/core"
+import { Application } from "@bloom-housing/backend-core/types"
 
 export default () => {
   const [applications, setApplications] = useState([])

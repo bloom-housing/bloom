@@ -1,7 +1,7 @@
 import React, { ReactNode, Fragment, useEffect, useState } from "react"
 import Link from "next/link"
 import { MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { Address } from "@bloom-housing/core"
+import { Address } from "@bloom-housing/backend-core/types"
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">

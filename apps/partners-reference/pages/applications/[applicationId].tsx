@@ -16,7 +16,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import { IncomePeriod } from "@bloom-housing/core"
+import { IncomePeriod } from "@bloom-housing/backend-core/types"
 
 enum AddressColsType {
   "residence" = "residence",

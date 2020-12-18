@@ -3,7 +3,7 @@ import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
 import Markdown from "markdown-to-jsx"
-import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/core"
+import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
   ApplicationSection,

@@ -3,7 +3,7 @@ import { SendGridService, SendGridModule } from "@anchan828/nest-sendgrid"
 import { User } from "../user/entities/user.entity"
 import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
-import { ArcherListing } from "@bloom-housing/core"
+import { ArcherListing } from "@bloom-housing/backend-core/types"
 
 declare const expect: jest.Expect
 const user = new User()

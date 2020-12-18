@@ -1,5 +1,5 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { Listing } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/backend-core/types"
 
 type getIncomeReturn = {
   monthlyMin: number

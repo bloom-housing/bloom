@@ -1,6 +1,6 @@
 import { Component } from "react"
 import Head from "next/head"
-import { Listing } from "@bloom-housing/core"
+import { Listing } from "@bloom-housing/backend-core/types"
 import {
   LinkButton,
   Hero,

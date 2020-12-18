@@ -1,6 +1,6 @@
 import moment from "moment"
 import { t, formatIncome } from "@bloom-housing/ui-components"
-import { IncomePeriod } from "@bloom-housing/core"
+import { IncomePeriod } from "@bloom-housing/backend-core/types"
 
 export function getColDefs(maxHouseholdSize: number) {
   const defs = [

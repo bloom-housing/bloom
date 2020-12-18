@@ -1,7 +1,7 @@
 import { Component } from "react"
 import axios from "axios"
 
-import { HousingCounselor as Counselor } from "@bloom-housing/core"
+import { HousingCounselor as Counselor } from "@bloom-housing/backend-core/types"
 import { HousingCounselor, PageHeader, t } from "@bloom-housing/ui-components"
 
 import Layout from "../layouts/application"

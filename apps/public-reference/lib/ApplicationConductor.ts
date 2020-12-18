@@ -3,8 +3,8 @@
 // get changed at some point.
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
-import { Listing } from "@bloom-housing/core"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { Listing } from "@bloom-housing/backend-core/types"
+import { blankApplication } from "@bloom-housing/backend-core/types"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
