@@ -30,7 +30,7 @@ exports[`Storyshots Text/Tag Pill And Success 1`] = `
 >
   <Tag
     pillStyle={true}
-    type="is-success"
+    styleType="is-success"
   >
     <span
       className="tag is-success is-pill"
@@ -109,7 +109,7 @@ exports[`Storyshots Text/Tag Success 1`] = `
   }
 >
   <Tag
-    type="is-success"
+    styleType="is-success"
   >
     <span
       className="tag is-success"
@@ -129,7 +129,7 @@ exports[`Storyshots Text/Tag Warning 1`] = `
   }
 >
   <Tag
-    type="is-warning"
+    styleType="is-warning"
   >
     <span
       className="tag is-warning"

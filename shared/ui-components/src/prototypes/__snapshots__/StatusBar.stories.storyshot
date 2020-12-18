@@ -30,7 +30,7 @@ exports[`Storyshots Prototypes/StatusBar Status Bar 1`] = `
     <Button
       onClick={[Function]}
       size="is-small"
-      type="is-primary"
+      styleType="is-primary"
     >
       <button
         className="button is-primary is-small"
