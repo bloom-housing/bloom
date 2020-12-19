@@ -1,6 +1,7 @@
 import React from "react"
 import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
 import { Tag } from "../text/Tag"
+import { t } from "../helpers/translator"
 
 export interface StatusMessagesProps {
   lastTimestamp?: string
@@ -21,7 +22,12 @@ export const StatusMessages = (props: StatusMessagesProps) => {
       </ul>
     )
   } else {
-    return <ul className="status-messages">{props.children}</ul>
+    return (
+      <>
+        <h3 className="status-messages__title">{t("t.statusHistory")}</h3>
+        <ul className="status-messages">{props.children}</ul>
+      </>
+    )
   }
 }
 

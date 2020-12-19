@@ -18,10 +18,7 @@ export const StatusAside = (props: StatusAsideProps) => (
     </div>
 
     {React.Children.count(props.children) > 0 && (
-      <div className="status-aside__messages">
-        <h3 className="status-aside__title">Status History</h3>
-        {props.children}
-      </div>
+      <div className="status-aside__messages">{props.children}</div>
     )}
   </div>
 )

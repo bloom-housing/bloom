@@ -51,3 +51,28 @@ export const WithButtonsAndMessages = () => (
     </StatusMessages>
   </StatusAside>
 )
+
+export const OnlyTimestamp = () => (
+  <StatusAside
+    columns={1}
+    actions={[
+      <GridCell>
+        <Button fullWidth={true} size={AppearanceSizeType.small} onClick={() => {}}>
+          Save
+        </Button>
+      </GridCell>,
+      <GridCell>
+        <Button
+          type={AppearanceStyleType.secondary}
+          fullWidth={true}
+          size={AppearanceSizeType.small}
+          onClick={() => {}}
+        >
+          Preview
+        </Button>
+      </GridCell>,
+    ]}
+  >
+    <StatusMessages lastTimestamp="February 3, 2021" />
+  </StatusAside>
+)

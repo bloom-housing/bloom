@@ -4,6 +4,7 @@ import {
   t,
   GridSection,
   StatusAside,
+  StatusMessages,
   ViewItem,
   GridCell,
   DOBField,
@@ -823,7 +824,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     </LinkButton>
                   </GridCell>,
                 ]}
-              ></StatusAside>
+              >
+                <StatusMessages lastTimestamp="Whatever" />
+              </StatusAside>
             </aside>
           </div>
         </Form>
