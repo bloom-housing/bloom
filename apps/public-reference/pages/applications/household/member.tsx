@@ -17,9 +17,8 @@ import {
   ProgressNav,
   relationshipKeys,
   t,
-  Member,
 } from "@bloom-housing/ui-components"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember, Member } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"

@@ -6,39 +6,39 @@ export class Member implements HouseholdMemberUpdate {
   firstName = ""
   middleName = ""
   lastName = ""
-  birthMonth = undefined
-  birthDay = undefined
-  birthYear = undefined
+  birthMonth = null
+  birthDay = null
+  birthYear = null
   emailAddress = ""
-  noEmail = undefined
+  noEmail = null
   phoneNumber = ""
   phoneNumberType = ""
-  noPhone = undefined
+  noPhone = null
 
   constructor(orderId: number) {
     this.orderId = orderId
   }
   address = {
-    placeName: undefined,
+    placeName: null,
     city: "",
     county: "",
     state: "",
     street: "",
     street2: "",
     zipCode: "",
-    latitude: undefined,
-    longitude: undefined,
+    latitude: null,
+    longitude: null,
   }
   workAddress = {
-    placeName: undefined,
+    placeName: null,
     city: "",
     county: "",
     state: "",
     street: "",
     street2: "",
     zipCode: "",
-    latitude: undefined,
-    longitude: undefined,
+    latitude: null,
+    longitude: null,
   }
   sameAddress?: string
   relationship?: string

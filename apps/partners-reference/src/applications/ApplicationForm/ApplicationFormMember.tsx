@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember, Member } from "@bloom-housing/core"
 import {
   t,
   GridSection,
@@ -13,8 +13,7 @@ import {
   AppearanceBorderType,
   FieldGroup,
   Button,
-  Form,
-  Member,
+  Form
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
