@@ -15,7 +15,7 @@ export const StatusMessages = (props: StatusMessagesProps) => {
         {props.lastTimestamp && (
           <li className="status-message">
             <div className="status-message__note text-center">
-              Last Updated: {props.lastTimestamp}
+              {t("t.lastUpdated")}: {props.lastTimestamp}
             </div>
           </li>
         )}
