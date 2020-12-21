@@ -14,78 +14,28 @@ import {
   FieldGroup,
   Button,
   Form,
+  Member,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
+import { nanoid } from "nanoid"
 
 type ApplicationFormMemberProps = {
   onSubmit: (member: HouseholdMember) => void
   onClose: () => void
   members: HouseholdMember[]
-  memberOrderId: number | boolean
-}
-class Member implements HouseholdMember {
-  id: string
-  orderId = undefined
-  createdAt: undefined
-  updatedAt: undefined
-  firstName = ""
-  middleName = ""
-  lastName = ""
-  birthMonth = null
-  birthDay = null
-  birthYear = null
-  emailAddress = ""
-  noEmail = null
-  phoneNumber = ""
-  phoneNumberType = ""
-  noPhone = null
-
-  constructor(orderId) {
-    this.orderId = orderId
-  }
-  address = {
-    id: undefined,
-    createdAt: undefined,
-    updatedAt: undefined,
-    placeName: null,
-    city: "",
-    county: "",
-    state: "",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: null,
-    longitude: null,
-  }
-  workAddress = {
-    id: undefined,
-    createdAt: undefined,
-    updatedAt: undefined,
-    placeName: null,
-    city: "",
-    county: "",
-    state: "",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: null,
-    longitude: null,
-  }
-  sameAddress?: string
-  relationship?: string
-  workInRegion?: string
+  editedMemberId: string | boolean
 }
 
 const ApplicationFormMember = ({
   onSubmit,
   onClose,
   members,
-  memberOrderId,
+  editedMemberId,
 }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
-    return members.filter((member) => member.orderId === memberOrderId)[0]
-  }, [members, memberOrderId])
+    return members.filter((member) => member.id === editedMemberId)[0]
+  }, [members, editedMemberId])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, handleSubmit, errors } = useForm({
@@ -111,9 +61,21 @@ const ApplicationFormMember = ({
 
   function onFormSubmit(data) {
     const { birthMonth, birthDay, birthYear } = data.dateOfBirth
+    const formData = {
+      ...data,
+      birthMonth,
+      birthDay,
+      birthYear,
+    }
 
-    const newMember = new Member(members.length + 1)
-    onSubmit({ ...newMember, ...data, birthMonth, birthDay, birthYear })
+    if (editedMemberId && typeof editedMemberId === "string") {
+      const editedMember = members.find((member) => member.id === editedMemberId)
+      onSubmit({ ...editedMember, ...formData })
+    } else {
+      const newMember = new Member(members.length + 1)
+      onSubmit({ ...newMember, id: nanoid(), ...formData })
+    }
+
     onClose()
   }
 

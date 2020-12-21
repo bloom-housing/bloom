@@ -60,6 +60,8 @@ export * from "./src/helpers/debounce"
 export * from "./src/helpers/formatIncome"
 export * from "./src/helpers/validators"
 export * from "./src/helpers/blankApplication"
+export * from "./src/helpers/Member"
+
 /* Icons */
 export * from "./src/icons/HeaderBadge"
 export * from "./src/icons/Icon"

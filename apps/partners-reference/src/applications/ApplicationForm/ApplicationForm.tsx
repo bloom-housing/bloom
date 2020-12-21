@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react"
-import { useRouter } from "next/router"
 import {
   t,
   GridSection,
@@ -32,7 +31,7 @@ import { useForm } from "react-hook-form"
 import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import { ApplicationFormMember } from "./ApplicationFormMember"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
-import { ApplicationCreate, HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember } from "@bloom-housing/core"
 
 type Props = {
   isEditable?: boolean
@@ -40,12 +39,10 @@ type Props = {
 
 const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
-  const [membersDrawer, setMembersDrawer] = useState<number | boolean>(false)
-  const [membersDeleteModal, setMembersDeleteModal] = useState<number | boolean>(false)
+  const [membersDrawer, setMembersDrawer] = useState<string | boolean>(false)
+  const [membersDeleteModal, setMembersDeleteModal] = useState<string | boolean>(false)
 
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
-
-  const router = useRouter()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
@@ -84,8 +81,15 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }, [setValue, clearErrors, alternatePhoneValue])
 
-  function addMember(member: HouseholdMember) {
-    setHouseholdMembers([...householdMembers, member])
+  function saveMember(newMember: HouseholdMember) {
+    const isExists = householdMembers.find((member) => member.id === newMember.id)
+
+    if (isExists) {
+      const withoutEdited = householdMembers.filter((member) => member.id !== newMember.id)
+      setHouseholdMembers([...withoutEdited, newMember])
+    } else {
+      setHouseholdMembers([...householdMembers, newMember])
+    }
   }
 
   const onSubmit = (data) => {
@@ -110,15 +114,15 @@ const ApplicationForm = ({ isEditable }: Props) => {
   }, [register])
 
   const editMember = useCallback(
-    (orderId: number) => {
-      setMembersDrawer(orderId)
+    (id: string) => {
+      setMembersDrawer(id)
     },
     [setMembersDrawer]
   )
 
   const deleteMember = useCallback(
-    (orderId: number) => {
-      const updatedMembers = householdMembers.filter((member) => member.orderId !== orderId)
+    (id: string) => {
+      const updatedMembers = householdMembers.filter((member) => member.id !== id)
       setHouseholdMembers(updatedMembers)
       setMembersDeleteModal(false)
     },
@@ -168,7 +172,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
             <Button
               type="button"
               className="font-semibold uppercase"
-              onClick={() => editMember(member.orderId)}
+              onClick={() => editMember(member.id)}
               unstyled
             >
               {t("t.edit")}
@@ -176,7 +180,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
             <Button
               type="button"
               className="font-semibold uppercase text-red-700"
-              onClick={() => setMembersDeleteModal(member.orderId)}
+              onClick={() => setMembersDeleteModal(member.id)}
               unstyled
             >
               {t("t.delete")}
@@ -840,10 +844,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
           onClose={() => setMembersDrawer(!membersDrawer)}
         >
           <ApplicationFormMember
-            onSubmit={(member) => addMember(member)}
+            onSubmit={(member) => saveMember(member)}
             onClose={() => setMembersDrawer(false)}
             members={householdMembers}
-            memberOrderId={membersDrawer}
+            editedMemberId={membersDrawer}
           />
         </Drawer>
 
@@ -856,7 +860,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
             <Button
               styleType={AppearanceStyleType.alert}
               onClick={() => {
-                if (typeof membersDeleteModal === "number") {
+                if (typeof membersDeleteModal === "string") {
                   deleteMember(membersDeleteModal)
                 }
               }}
