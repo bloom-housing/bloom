@@ -3,6 +3,8 @@ import React, { useState, useCallback, useEffect, useMemo } from "react"
 import {
   t,
   GridSection,
+  StatusAside,
+  StatusMessages,
   ViewItem,
   GridCell,
   DOBField,
@@ -19,8 +21,10 @@ import {
   howDidYouHear,
   FieldGroup,
   Button,
+  LinkButton,
   Form,
   AlertBox,
+  AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -788,21 +792,42 @@ const ApplicationForm = ({ isEditable }: Props) => {
               </GridSection>
             </div>
 
-            <div className="md:w-3/12">
-              <ul className="status-messages">
-                <li className="status-message">
-                  <div className="status-message__note text-center">
+            <aside className="md:w-3/12 md:pl-6">
+              <StatusAside
+                columns={1}
+                actions={[
+                  <GridCell>
                     <Button
+                      type={AppearanceStyleType.primary}
+                      fullWidth
                       onClick={() => {
                         //
                       }}
                     >
                       Submit
                     </Button>
-                  </div>
-                </li>
-              </ul>
-            </div>
+                  </GridCell>,
+                  <GridCell>
+                    <Button
+                      type={AppearanceStyleType.secondary}
+                      fullWidth
+                      onClick={() => {
+                        //
+                      }}
+                    >
+                      Submit &amp; New
+                    </Button>
+                  </GridCell>,
+                  <GridCell className="flex">
+                    <LinkButton unstyled fullWidth className="bg-opacity-0" href="/applications">
+                      Cancel
+                    </LinkButton>
+                  </GridCell>,
+                ]}
+              >
+                <StatusMessages lastTimestamp="Whatever" />
+              </StatusAside>
+            </aside>
           </div>
         </Form>
       </section>

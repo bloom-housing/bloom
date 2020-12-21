@@ -75,6 +75,8 @@ export * from "./src/navigation/UserNav"
 /* Notifications */
 export * from "./src/notifications/ApplicationStatus"
 export * from "./src/notifications/ErrorMessage"
+export * from "./src/notifications/StatusAside"
+export * from "./src/notifications/StatusMessage"
 export * from "./src/notifications"
 
 /* Overlays */
