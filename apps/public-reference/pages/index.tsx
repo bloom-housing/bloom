@@ -19,11 +19,14 @@ interface IndexProps {
 export default class extends Component<IndexProps> {
   public static async getInitialProps() {
     let listings = []
-    try {
-      const response = await axios.get(process.env.listingServiceUrl)
-      listings = response.data
-    } catch (error) {
-      console.log(error)
+
+    if (typeof window === "undefined") {
+      try {
+        const response = await axios.get(process.env.listingServiceUrl)
+        listings = response.data
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     return { listings }

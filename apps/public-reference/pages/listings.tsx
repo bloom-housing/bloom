@@ -22,21 +22,23 @@ export default class extends Component<ListingsProps> {
     let openListings = []
     let closedListings = []
 
-    try {
-      const response = await axios.get(process.env.listingServiceUrl)
-      const nowTime = moment()
-      openListings = response.data.filter((listing: Listing) => {
-        return (
-          openDateState(listing) ||
-          nowTime <= moment(listing.applicationDueDate) ||
-          listing.applicationDueDate == null
-        )
-      })
-      closedListings = response.data.filter((listing: Listing) => {
-        return nowTime > moment(listing.applicationDueDate)
-      })
-    } catch (error) {
-      console.log(error)
+    if (typeof window === "undefined") {
+      try {
+        const response = await axios.get(process.env.listingServiceUrl)
+        const nowTime = moment()
+        openListings = response.data.filter((listing: Listing) => {
+          return (
+            openDateState(listing) ||
+            nowTime <= moment(listing.applicationDueDate) ||
+            listing.applicationDueDate == null
+          )
+        })
+        closedListings = response.data.filter((listing: Listing) => {
+          return nowTime > moment(listing.applicationDueDate)
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     return { openListings, closedListings }

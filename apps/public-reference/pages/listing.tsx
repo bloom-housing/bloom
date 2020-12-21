@@ -89,11 +89,13 @@ export default class extends Component<ListingProps> {
     const listingId = query.id
     let listing = {}
 
-    try {
-      const response = await axios.get(process.env.listingServiceUrl)
-      listing = response.data.find((l) => l.id == listingId)
-    } catch (error) {
-      console.log(error)
+    if (typeof window === "undefined") {
+      try {
+        const response = await axios.get(process.env.listingServiceUrl)
+        listing = response.data.find((l) => l.id == listingId)
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     return { listing }

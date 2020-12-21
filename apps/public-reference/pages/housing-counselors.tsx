@@ -14,7 +14,7 @@ export default class extends Component<HousingCounselorsProps> {
   public static async getInitialProps() {
     let counselors: Counselor[] = []
 
-    if (process.env.housingCounselorServiceUrl) {
+    if (typeof window === "undefined" && process.env.housingCounselorServiceUrl) {
       try {
         const response = await axios.get(process.env.housingCounselorServiceUrl)
         counselors = response.data.locations
