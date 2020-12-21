@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react"
+import { useRouter } from "next/router"
 import {
   t,
   GridSection,
@@ -22,7 +23,6 @@ import {
   Form,
   AlertBox,
   Drawer,
-  blankApplication,
   MinimalTable,
   Modal,
   AppearanceStyleType,
@@ -44,6 +44,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const [membersDeleteModal, setMembersDeleteModal] = useState<number | boolean>(false)
 
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
+
+  const router = useRouter()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
@@ -89,52 +91,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const onSubmit = (data) => {
     setErrorAlert(false)
 
-    const blankFields = blankApplication()
-
-    const { birthMonth, birthDay, birthYear } = data?.dateOfBirth || {}
-    const { phoneNumber, emailAddress } = data?.application?.applicant || {}
-    const { incomeMonth, incomeYear } = data
-
-    const noPhone = !(phoneNumber?.length > 0)
-    const noEmail = !(emailAddress?.length > 0)
-
-    const incomeRaw = incomeMonth ? incomeMonth : incomeYear || null
-    const income = incomeRaw ? parseFloat(incomeRaw.toFixed(2)) : ""
-
-    // map household members to fill address if is the same as applicant
-    const members = householdMembers?.map((member) => {
-      if (member.sameAddress) {
-        return {
-          ...member,
-          address: {
-            ...blankFields.applicant.address,
-            ...data.application.applicant.address,
-          },
-        }
-      }
-
-      return member
-    })
-
-    const response: ApplicationCreate = {
-      ...blankFields,
-      birthMonth,
-      birthDay,
-      birthYear,
-      ...{
-        ...blankFields.applicant,
-        noEmail,
-        noPhone,
-      },
-      income,
-      householdMembers: members,
-      householdSize: members.length,
-      ...data.application,
-      incomeVouchers: data.application?.incomeVouchers === "yes",
-      acceptedTerms: data.application?.acceptedTerms === "yes",
-    }
-
-    console.log("Submit SUCCESS", response)
+    console.log(data)
   }
 
   const onError = (error) => {
