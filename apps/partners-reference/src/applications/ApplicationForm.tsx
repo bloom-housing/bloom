@@ -798,7 +798,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 actions={[
                   <GridCell>
                     <Button
-                      type={AppearanceStyleType.primary}
+                      styleType={AppearanceStyleType.primary}
                       fullWidth
                       onClick={() => {
                         //
@@ -809,7 +809,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   </GridCell>,
                   <GridCell>
                     <Button
-                      type={AppearanceStyleType.secondary}
+                      styleType={AppearanceStyleType.secondary}
                       fullWidth
                       onClick={() => {
                         //
