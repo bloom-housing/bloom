@@ -12,6 +12,7 @@ import {
   PhoneField,
   Select,
   contactPreferencesKeys,
+  applicationLanguageKeys,
   altContactRelationshipKeys,
   AppearanceSizeType,
   ethnicityKeys,
@@ -29,6 +30,7 @@ import {
   Modal,
   AppearanceStyleType,
   AppearanceBorderType,
+  TimeField,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -205,7 +207,50 @@ const ApplicationForm = ({ isEditable }: Props) => {
         <Form id="application-form" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">
             <div className="info-card md:w-9/12">
-              <GridSection title={t("application.household.primaryApplicant")} grid={false}>
+              <GridSection title={t("application.details.applicationData")} grid={false}>
+                <GridSection columns={3}>
+                  <ViewItem label={t("application.add.dateSubmitted")}>
+                    <DOBField
+                      id="dateSubmitted"
+                      name="dateSubmitted"
+                      register={register}
+                      error={errors?.dateSubmitted}
+                      watch={watch}
+                      label={t("application.add.dateSubmitted")}
+                      readerOnly
+                    />
+                  </ViewItem>
+
+                  <ViewItem label={t("application.add.timeSubmitted")}>
+                    <TimeField
+                      id="timeSubmitted"
+                      name="timeSubmitted"
+                      label={t("application.add.timeSubmitted")}
+                      register={register}
+                      error={!!errors?.timeSubmitted}
+                      readerOnly
+                    />
+                  </ViewItem>
+
+                  <ViewItem label={t("application.add.languageSubmittedIn")}>
+                    <Select
+                      id="language"
+                      name="language"
+                      label={t("application.add.languageSubmittedIn")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={applicationLanguageKeys}
+                      keyPrefix="languages"
+                    />
+                  </ViewItem>
+                </GridSection>
+              </GridSection>
+              <GridSection
+                title={t("application.household.primaryApplicant")}
+                grid={false}
+                separator
+              >
                 <GridSection columns={3}>
                   <GridCell>
                     <ViewItem label={t("application.name.firstName")}>

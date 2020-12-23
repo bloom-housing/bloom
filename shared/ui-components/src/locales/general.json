@@ -75,7 +75,10 @@
       "sexualOrientation": "Sexual Orientation",
       "addHouseholdMember": "Add Household Member",
       "sameAddressAsPrimary": "Same Address as Primary",
-      "sameResidence": "Same Residence"
+      "sameResidence": "Same Residence",
+      "languageSubmittedIn": "Language Submitted In",
+      "timeSubmitted": "Time Submitted",
+      "dateSubmitted": "Date Submitted"
     },
     "details": {
       "applicationData": "Application Data",

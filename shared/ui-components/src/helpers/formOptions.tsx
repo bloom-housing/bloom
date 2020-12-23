@@ -190,6 +190,8 @@ export const preferredUnit: FieldGroupItem[] = [
   },
 ]
 
+export const applicationLanguageKeys = ["en", "es"]
+
 export const FormOptions = (props: FormOptionsProps) => {
   const options = props.options.map((option) => {
     if (option == "") {
