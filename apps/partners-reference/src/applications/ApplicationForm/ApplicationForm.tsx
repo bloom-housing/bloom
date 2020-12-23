@@ -103,11 +103,6 @@ const ApplicationForm = ({ isEditable }: Props) => {
     setErrorAlert(false)
 
     const body = data
-    // const body: ApplicationCreate = {}
-
-    // householdMembers
-
-    console.log(body)
 
     try {
       const result = await applicationsService.create({ body })
