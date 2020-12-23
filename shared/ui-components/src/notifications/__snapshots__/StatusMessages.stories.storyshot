@@ -20,7 +20,8 @@ exports[`Storyshots Notifications/Status Messages No Messages 1`] = `
         <div
           className="status-message__note text-center"
         >
-          Last Updated: 
+          Last Updated
+          : 
           August 25, 2021
         </div>
       </li>
@@ -38,6 +39,11 @@ exports[`Storyshots Notifications/Status Messages Several Messages 1`] = `
   }
 >
   <Component>
+    <h3
+      className="status-messages__title"
+    >
+      Status History
+    </h3>
     <ul
       className="status-messages"
     >

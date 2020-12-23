@@ -1,0 +1,327 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Notifications/Status Aside Only Timestamp 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component
+    actions={
+      Array [
+        <GridCell>
+          <Button
+            fullWidth={true}
+            onClick={[Function]}
+            size="is-small"
+          >
+            Save
+          </Button>
+        </GridCell>,
+        <GridCell>
+          <Button
+            fullWidth={true}
+            onClick={[Function]}
+            size="is-small"
+            type="is-secondary"
+          >
+            Preview
+          </Button>
+        </GridCell>,
+      ]
+    }
+    columns={1}
+  >
+    <div
+      className="status-aside"
+    >
+      <div
+        className="status-aside__buttons"
+      >
+        <GridSection
+          columns={1}
+          tightSpacing={true}
+        >
+          <section
+            className="grid-section"
+          >
+            <div
+              className="grid-section__inner md:grid md:grid-cols-1 md:gap-2"
+            >
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <Button
+                    fullWidth={true}
+                    onClick={[Function]}
+                    size="is-small"
+                  >
+                    <button
+                      className="button is-small is-fullwidth"
+                      onClick={[Function]}
+                    >
+                      Save
+                    </button>
+                  </Button>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <Button
+                    fullWidth={true}
+                    onClick={[Function]}
+                    size="is-small"
+                    type="is-secondary"
+                  >
+                    <button
+                      className="button is-secondary is-small is-fullwidth"
+                      onClick={[Function]}
+                    >
+                      Preview
+                    </button>
+                  </Button>
+                </article>
+              </GridCell>
+            </div>
+          </section>
+        </GridSection>
+      </div>
+      <div
+        className="status-aside__messages"
+      >
+        <Component
+          lastTimestamp="February 3, 2021"
+        >
+          <ul
+            className="status-messages"
+          >
+            <li
+              className="status-message"
+            >
+              <div
+                className="status-message__note text-center"
+              >
+                Last Updated
+                : 
+                February 3, 2021
+              </div>
+            </li>
+          </ul>
+        </Component>
+      </div>
+    </div>
+  </Component>
+</div>
+`;
+
+exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Component
+    actions={
+      Array [
+        <GridCell>
+          <Button
+            fullWidth={true}
+            onClick={[Function]}
+            size="is-small"
+          >
+            Save
+          </Button>
+        </GridCell>,
+        <GridCell>
+          <Button
+            fullWidth={true}
+            onClick={[Function]}
+            size="is-small"
+            type="is-secondary"
+          >
+            Preview
+          </Button>
+        </GridCell>,
+        <GridCell
+          span={2}
+        >
+          <Button
+            fullWidth={true}
+            onClick={[Function]}
+            size="is-small"
+            type="is-primary"
+          >
+            Submit
+          </Button>
+        </GridCell>,
+      ]
+    }
+  >
+    <div
+      className="status-aside"
+    >
+      <div
+        className="status-aside__buttons"
+      >
+        <GridSection
+          columns={2}
+          tightSpacing={true}
+        >
+          <section
+            className="grid-section"
+          >
+            <div
+              className="grid-section__inner md:grid md:grid-cols-2 md:gap-2"
+            >
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <Button
+                    fullWidth={true}
+                    onClick={[Function]}
+                    size="is-small"
+                  >
+                    <button
+                      className="button is-small is-fullwidth"
+                      onClick={[Function]}
+                    >
+                      Save
+                    </button>
+                  </Button>
+                </article>
+              </GridCell>
+              <GridCell>
+                <article
+                  className="grid-item"
+                >
+                  <Button
+                    fullWidth={true}
+                    onClick={[Function]}
+                    size="is-small"
+                    type="is-secondary"
+                  >
+                    <button
+                      className="button is-secondary is-small is-fullwidth"
+                      onClick={[Function]}
+                    >
+                      Preview
+                    </button>
+                  </Button>
+                </article>
+              </GridCell>
+              <GridCell
+                span={2}
+              >
+                <article
+                  className="grid-item md:col-span-2"
+                >
+                  <Button
+                    fullWidth={true}
+                    onClick={[Function]}
+                    size="is-small"
+                    type="is-primary"
+                  >
+                    <button
+                      className="button is-primary is-small is-fullwidth"
+                      onClick={[Function]}
+                    >
+                      Submit
+                    </button>
+                  </Button>
+                </article>
+              </GridCell>
+            </div>
+          </section>
+        </GridSection>
+      </div>
+      <div
+        className="status-aside__messages"
+      >
+        <Component>
+          <h3
+            className="status-messages__title"
+          >
+            Status History
+          </h3>
+          <ul
+            className="status-messages"
+          >
+            <StatusMessage
+              body="Changed status of one application."
+              status="Submitted"
+              style="is-success"
+              timestamp="3/2/21"
+            >
+              <li
+                className="status-message"
+              >
+                <div
+                  className="status-message__status"
+                >
+                  <Tag
+                    pillStyle={true}
+                    size="is-small"
+                    type="is-success"
+                  >
+                    <span
+                      className="tag is-success is-small is-pill"
+                    >
+                      Submitted
+                    </span>
+                  </Tag>
+                  <span
+                    className="status-message__time"
+                  >
+                    3/2/21
+                  </span>
+                </div>
+                <div
+                  className="status-message__note"
+                >
+                  Changed status of one application.
+                </div>
+              </li>
+            </StatusMessage>
+            <StatusMessage
+              status="Draft"
+              timestamp="2/1/21"
+            >
+              <li
+                className="status-message"
+              >
+                <div
+                  className="status-message__status"
+                >
+                  <Tag
+                    pillStyle={true}
+                    size="is-small"
+                  >
+                    <span
+                      className="tag is-small is-pill"
+                    >
+                      Draft
+                    </span>
+                  </Tag>
+                  <span
+                    className="status-message__time"
+                  >
+                    2/1/21
+                  </span>
+                </div>
+              </li>
+            </StatusMessage>
+          </ul>
+        </Component>
+      </div>
+    </div>
+  </Component>
+</div>
+`;
