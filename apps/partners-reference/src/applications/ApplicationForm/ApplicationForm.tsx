@@ -38,6 +38,8 @@ import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOp
 import { ApplicationFormMember } from "./ApplicationFormMember"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
 import { HouseholdMember, ApplicationCreate } from "@bloom-housing/core"
+import { formatApplicationData } from "../../../lib/formatApplicationData"
+
 type Props = {
   isEditable?: boolean
 }
@@ -99,42 +101,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }
 
-  const formatFormData = (data) => {
-    const createdAt: Date | null = (() => {
-      const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
-        data.dateSubmitted || {}
-      const { hours, minutes = 0, seconds = 0, time } = data.timeSubmitted || {}
-
-      if (!submissionDay || !submissionMonth || !submissionYear) return null
-
-      const date = new Date()
-
-      date.setUTCDate(submissionDay)
-      date.setUTCMonth(submissionMonth)
-      date.setUTCFullYear(submissionYear)
-
-      if (hours && minutes && seconds && time) {
-        date.setUTCHours(hours)
-        date.setUTCMinutes(minutes)
-        date.setUTCSeconds(seconds)
-      } else {
-        date.setUTCHours(0)
-        date.setUTCMinutes(0)
-        date.setUTCSeconds(0)
-      }
-
-      return date
-    })()
-
-    return {
-      createdAt,
-    }
-  }
-
   const onSubmit = async (data) => {
     setErrorAlert(false)
 
-    const body = formatFormData(data)
+    const body = formatApplicationData(data)
     console.log(body)
 
     try {
@@ -279,8 +249,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
                   <ViewItem label={t("application.add.languageSubmittedIn")}>
                     <Select
-                      id="language"
-                      name="language"
+                      id="application.language"
+                      name="application.language"
                       label={t("application.add.languageSubmittedIn")}
                       labelClassName="sr-only"
                       register={register}
