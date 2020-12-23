@@ -99,10 +99,43 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }
 
+  const formatFormData = (data) => {
+    const createdAt: Date | null = (() => {
+      const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
+        data.dateSubmitted || {}
+      const { hours, minutes = 0, seconds = 0, time } = data.timeSubmitted || {}
+
+      if (!submissionDay || !submissionMonth || !submissionYear) return null
+
+      const date = new Date()
+
+      date.setUTCDate(submissionDay)
+      date.setUTCMonth(submissionMonth)
+      date.setUTCFullYear(submissionYear)
+
+      if (hours && minutes && seconds && time) {
+        date.setUTCHours(hours)
+        date.setUTCMinutes(minutes)
+        date.setUTCSeconds(seconds)
+      } else {
+        date.setUTCHours(0)
+        date.setUTCMinutes(0)
+        date.setUTCSeconds(0)
+      }
+
+      return date
+    })()
+
+    return {
+      createdAt,
+    }
+  }
+
   const onSubmit = async (data) => {
     setErrorAlert(false)
 
-    const body = data
+    const body = formatFormData(data)
+    console.log(body)
 
     try {
       const result = await applicationsService.create({ body })
