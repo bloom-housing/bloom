@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react"
-// import { useRouter } from "next/router"
 import {
   t,
   GridSection,
@@ -14,6 +13,7 @@ import {
   Select,
   contactPreferencesKeys,
   altContactRelationshipKeys,
+  AppearanceSizeType,
   ethnicityKeys,
   raceKeys,
   genderKeys,
@@ -24,27 +24,36 @@ import {
   LinkButton,
   Form,
   AlertBox,
+  Drawer,
+  MinimalTable,
+  Modal,
   AppearanceStyleType,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { ApplicationFormMember } from "./ApplicationFormMember"
+import { ApplicationFormAddress } from "./ApplicationFormAddress"
+import { HouseholdMember } from "@bloom-housing/core"
 
 type Props = {
   isEditable?: boolean
 }
 
-type AddressType = "residence" | "work" | "mailing"
-
 const ApplicationForm = ({ isEditable }: Props) => {
   const [errorAlert, setErrorAlert] = useState(false)
+  const [membersDrawer, setMembersDrawer] = useState<string | boolean>(false)
+  const [membersDeleteModal, setMembersDeleteModal] = useState<string | boolean>(false)
+
+  const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
-  const phoneValue: string = watch("application.phoneNumber")
-  const alternatePhoneValue: string = watch("application.alternateContactPhone")
+  const phoneValue: string = watch("application.applicant.phoneNumber")
+  const alternatePhoneValue: string = watch("application.alternateContact.phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
   const incomePeriodValue: string = watch("application.incomePeriod")
 
@@ -75,18 +84,21 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }, [setValue, clearErrors, alternatePhoneValue])
 
+  function saveMember(newMember: HouseholdMember) {
+    const isExists = householdMembers.find((member) => member.id === newMember.id)
+
+    if (isExists) {
+      const withoutEdited = householdMembers.filter((member) => member.id !== newMember.id)
+      setHouseholdMembers([...withoutEdited, newMember])
+    } else {
+      setHouseholdMembers([...householdMembers, newMember])
+    }
+  }
+
   const onSubmit = (data) => {
     setErrorAlert(false)
 
-    const noPhone = data?.application?.phoneNumber?.length ? false : true
-    const noEmail = data?.application?.applicant?.emailAddress?.length ? false : true
-
-    const response = {
-      noPhone,
-      noEmail,
-    }
-
-    console.log("Submit SUCCESS", response, data)
+    console.log(data)
   }
 
   const onError = (error) => {
@@ -104,90 +116,83 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }))
   }, [register])
 
-  const ApplicationAddress = useCallback(
-    (subtitle: string, dataKey: string, type: AddressType) => {
-      return (
-        <GridSection subtitle={subtitle}>
-          <GridCell span={2}>
-            <ViewItem label={t("application.contact.streetAddress")}>
-              <Field
-                id={`${dataKey}.street`}
-                name={`${dataKey}.street`}
-                label={t("application.contact.streetAddress")}
-                placeholder={t("application.contact.streetAddress")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-          <GridCell>
-            <ViewItem label={t("application.contact.apt")}>
-              <Field
-                id={`${dataKey}.street2`}
-                name={`${dataKey}.street2`}
-                label={t("application.contact.apt")}
-                placeholder={t("application.contact.apt")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-
-          <GridCell>
-            <ViewItem label={t("application.contact.city")}>
-              <Field
-                id={`${dataKey}.city`}
-                name={`${dataKey}.city`}
-                label={t("application.contact.cityName")}
-                placeholder={t("application.contact.cityName")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-
-          <GridCell className="md:grid md:grid-cols-2 md:gap-8" span={2}>
-            <ViewItem label={t("application.contact.state")} className="mb-0">
-              <Select
-                id={`${dataKey}.state`}
-                name={`${dataKey}.state`}
-                label={t("application.contact.state")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={stateKeys}
-                keyPrefix="application.form.options.states"
-              />
-            </ViewItem>
-
-            <ViewItem label={t("application.contact.zip")}>
-              <Field
-                id={`${dataKey}.zipCode`}
-                name={`${dataKey}.zipCode`}
-                label={t("application.contact.zip")}
-                placeholder={t("application.contact.zipCode")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
-          </GridCell>
-
-          {type === "residence" && (
-            <GridCell span={2}>
-              <Field
-                id="application.sendMailToMailingAddress"
-                name="application.sendMailToMailingAddress"
-                type="checkbox"
-                label={t("application.contact.sendMailToMailingAddress")}
-                register={register}
-              />
-            </GridCell>
-          )}
-        </GridSection>
-      )
+  const editMember = useCallback(
+    (id: string) => {
+      setMembersDrawer(id)
     },
-    [register]
+    [setMembersDrawer]
   )
+
+  const deleteMember = useCallback(
+    (id: string) => {
+      const updatedMembers = householdMembers.filter((member) => member.id !== id)
+      setHouseholdMembers(updatedMembers)
+      setMembersDeleteModal(false)
+    },
+    [setMembersDeleteModal, setHouseholdMembers, householdMembers]
+  )
+
+  const memberTableHeaders = {
+    name: t("t.name"),
+    relationship: t("t.relationship"),
+    dob: t("application.household.member.dateOfBirth"),
+    sameResidence: t("application.add.sameResidence"),
+    workInRegion: t("application.details.workInRegion"),
+    action: "",
+  }
+
+  const memberTableData = useMemo(() => {
+    const chooseAddressStatus = (value: string | null) => {
+      switch (value) {
+        case "yes":
+          return t("t.yes")
+        case "no":
+          return t("t.no")
+        default:
+          return t("t.n/a")
+      }
+    }
+
+    return householdMembers.map((member) => {
+      const { birthMonth, birthDay, birthYear } = member
+
+      return {
+        name:
+          (member.firstName + member.lastName).length > 0
+            ? `${member.firstName} ${member.lastName}`
+            : t("n/a"),
+        relationship: member.relationship
+          ? t(`application.form.options.relationship.${member.relationship}`)
+          : t("t.n/a"),
+        dob:
+          birthMonth && birthDay && birthYear
+            ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
+            : t("t.n/a"),
+        sameResidence: chooseAddressStatus(member.sameAddress),
+        workInRegion: chooseAddressStatus(member.workInRegion),
+        action: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="font-semibold uppercase"
+              onClick={() => editMember(member.id)}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="font-semibold uppercase text-red-700"
+              onClick={() => setMembersDeleteModal(member.id)}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      }
+    })
+  }, [editMember, householdMembers])
 
   return (
     <>
@@ -241,10 +246,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.household.member.dateOfBirth")}>
                       <DOBField
-                        id="application.applicant.dateOfBirth"
-                        name="application.applicant.dateOfBirth"
+                        id="dateOfBirth"
+                        name="dateOfBirth"
                         register={register}
-                        error={errors.application?.applicant?.dateOfBirth}
+                        error={errors?.dateOfBirth}
                         watch={watch}
                         atAge={true}
                         label={t("application.name.yourDateOfBirth")}
@@ -263,7 +268,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         readerOnly={true}
                         validation={{ pattern: emailRegex }}
                         error={errors.application?.applicant?.emailAddress}
-                        errorMessage={t("application.name.emailAddressError")}
+                        errorMessage={t("errors.emailAddressError")}
                         register={register}
                       />
                     </ViewItem>
@@ -271,12 +276,12 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("t.phone")}>
                       <PhoneField
-                        id="application.phoneNumber"
-                        name="application.phoneNumber"
+                        id="application.applicant.phoneNumber"
+                        name="application.applicant.phoneNumber"
                         label={t("application.contact.yourPhoneNumber")}
                         required={false}
-                        error={errors.application?.phoneNumber}
-                        errorMessage={t("application.contact.phoneNumberError")}
+                        error={errors.application?.applicant?.phoneNumber}
+                        errorMessage={t("errors.phoneNumberError")}
                         control={control}
                         controlClassName="control"
                         readerOnly
@@ -292,7 +297,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         label={t("application.contact.phoneNumberTypes.prompt")}
                         labelClassName="sr-only"
                         error={errors.application?.applicant?.phoneNumberType}
-                        errorMessage={t("application.contact.phoneNumberTypeError")}
+                        errorMessage={t("errors.phoneNumberTypeError")}
                         register={register}
                         controlClassName="control"
                         options={phoneNumberKeys}
@@ -310,7 +315,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         label={t("application.contact.yourAdditionalPhoneNumber")}
                         required={false}
                         error={errors.application?.additionalPhoneNumber}
-                        errorMessage={t("application.contact.phoneNumberError")}
+                        errorMessage={t("errors.phoneNumberError")}
                         control={control}
                         controlClassName="control"
                         readerOnly
@@ -323,7 +328,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         id="application.additionalPhoneNumberType"
                         name="application.additionalPhoneNumberType"
                         error={errors.application?.additionalPhoneNumberType}
-                        errorMessage={t("application.contact.phoneNumberTypeError")}
+                        errorMessage={t("errors.phoneNumberTypeError")}
                         register={register}
                         controlClassName="control"
                         placeholder={t("application.contact.phoneNumberTypes.prompt")}
@@ -347,7 +352,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         register={register}
                         controlClassName="control"
                         options={contactPreferencesOptions}
-                        keyPrefix="application.form.options.contact"
+                        keyPrefix="t"
                       />
                     </ViewItem>
                   </GridCell>
@@ -383,24 +388,27 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   </GridCell>
                 </GridSection>
 
-                {ApplicationAddress(
+                {ApplicationFormAddress(
                   t("application.details.residenceAddress"),
                   "application.applicant.address",
-                  "residence"
+                  "residence",
+                  register
                 )}
 
                 {mailingAddressValue &&
-                  ApplicationAddress(
+                  ApplicationFormAddress(
                     t("application.contact.mailingAddress"),
                     "application.mailingAddress",
-                    "mailing"
+                    "mailing",
+                    register
                   )}
 
                 {workInRegionValue === "yes" &&
-                  ApplicationAddress(
+                  ApplicationFormAddress(
                     t("application.contact.workAddress"),
                     "application.applicant.workAddress",
-                    "work"
+                    "work",
+                    register
                   )}
               </GridSection>
 
@@ -475,7 +483,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       label={t("t.email")}
                       validation={{ pattern: emailRegex }}
                       error={errors.application?.alternateContact?.emailAddress}
-                      errorMessage={t("application.name.emailAddressError")}
+                      errorMessage={t("errors.emailAddressError")}
                       register={register}
                       readerOnly
                     />
@@ -485,11 +493,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 <GridCell>
                   <ViewItem label={t("t.phone")}>
                     <PhoneField
-                      id="application.alternateContactPhone"
-                      name="application.alternateContactPhone"
+                      id="application.alternateContact.phoneNumber"
+                      name="application.alternateContact.phoneNumber"
                       required={false}
-                      error={errors.application?.alternateContactPhone}
-                      errorMessage={t("application.contact.phoneNumberError")}
+                      error={errors.application?.alternateContact?.phoneNumber}
+                      errorMessage={t("errors.phoneNumberError")}
                       control={control}
                       controlClassName="control"
                       label={t("t.phone")}
@@ -497,6 +505,28 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     />
                   </ViewItem>
                 </GridCell>
+              </GridSection>
+
+              <GridSection
+                title={t("application.household.householdMembers")}
+                grid={false}
+                separator
+              >
+                <div className="bg-gray-300 px-4 py-5">
+                  {!!householdMembers.length && (
+                    <div className="mb-5">
+                      <MinimalTable headers={memberTableHeaders} data={memberTableData} />
+                    </div>
+                  )}
+
+                  <Button
+                    type="button"
+                    size={AppearanceSizeType.normal}
+                    onClick={() => setMembersDrawer(true)}
+                  >
+                    {t("application.add.addHouseholdMember")}
+                  </Button>
+                </div>
               </GridSection>
 
               <GridSection title={t("application.review.householdDetails")} columns={1} separator>
@@ -597,13 +627,13 @@ const ApplicationForm = ({ isEditable }: Props) => {
                           name="application.incomePeriod"
                           className="m-0"
                           type="radio"
-                          label={t("application.financial.income.perYear")}
+                          label={t("t.perYear")}
                           register={register}
                           inputProps={{
                             value: "perYear",
                             onChange: () => {
-                              setValue("application.incomeMonth", "")
-                              setValue("application.incomeYear", "")
+                              setValue("incomeMonth", "")
+                              setValue("incomeYear", "")
                             },
                           }}
                         />
@@ -613,13 +643,13 @@ const ApplicationForm = ({ isEditable }: Props) => {
                           name="application.incomePeriod"
                           className="m-0"
                           type="radio"
-                          label={t("application.financial.income.perMonth")}
+                          label={t("t.perMonth")}
                           register={register}
                           inputProps={{
                             value: "perMonth",
                             onChange: () => {
-                              setValue("application.incomeMonth", "")
-                              setValue("application.incomeYear", "")
+                              setValue("incomeMonth", "")
+                              setValue("incomeYear", "")
                             },
                           }}
                         />
@@ -632,9 +662,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.details.annualIncome")}>
                       <Field
-                        id="application.incomeMonth"
+                        id="incomeMonth"
                         type="number"
-                        name="application.incomeMonth"
+                        name="incomeMonth"
                         label={t("application.details.annualIncome")}
                         placeholder={t("t.enterAmount")}
                         register={register}
@@ -647,9 +677,9 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridCell>
                     <ViewItem label={t("application.details.monthlyIncome")}>
                       <Field
-                        id="application.incomeYear"
+                        id="incomeYear"
                         type="number"
-                        name="application.incomeYear"
+                        name="incomeYear"
                         label={t("application.details.annualIncome")}
                         placeholder={t("t.enterAmount")}
                         register={register}
@@ -664,7 +694,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       <Select
                         id="application.incomeVouchers"
                         name="application.incomeVouchers"
-                        placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                        placeholder={t("t.selectOne")}
                         label={t("application.details.vouchers")}
                         labelClassName="sr-only"
                         register={register}
@@ -687,7 +717,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.ethnicity"
                       name="application.demographics.ethnicity"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.ethnicity")}
                       labelClassName="sr-only"
                       register={register}
@@ -703,7 +733,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.race"
                       name="application.demographics.race"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.race")}
                       labelClassName="sr-only"
                       register={register}
@@ -719,7 +749,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.gender"
                       name="application.demographics.gender"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.gender")}
                       labelClassName="sr-only"
                       register={register}
@@ -735,7 +765,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <Select
                       id="application.demographics.sexualOrientation"
                       name="application.demographics.sexualOrientation"
-                      placeholder={t("application.form.general.defaultSelectPlaceholder")}
+                      placeholder={t("t.selectOne")}
                       label={t("application.add.sexualOrientation")}
                       labelClassName="sr-only"
                       register={register}
@@ -830,6 +860,50 @@ const ApplicationForm = ({ isEditable }: Props) => {
             </aside>
           </div>
         </Form>
+
+        <Drawer
+          open={!!membersDrawer}
+          title={t("application.household.householdMember")}
+          ariaDescription={t("application.household.householdMember")}
+          onClose={() => setMembersDrawer(!membersDrawer)}
+        >
+          <ApplicationFormMember
+            onSubmit={(member) => saveMember(member)}
+            onClose={() => setMembersDrawer(false)}
+            members={householdMembers}
+            editedMemberId={membersDrawer}
+          />
+        </Drawer>
+
+        <Modal
+          open={!!membersDeleteModal}
+          title={t("application.deleteThisMember")}
+          ariaDescription={t("application.deleteMemberDescription")}
+          onClose={() => setMembersDeleteModal(false)}
+          actions={[
+            <Button
+              styleType={AppearanceStyleType.alert}
+              onClick={() => {
+                if (typeof membersDeleteModal === "string") {
+                  deleteMember(membersDeleteModal)
+                }
+              }}
+            >
+              {t("t.delete")}
+            </Button>,
+            <Button
+              styleType={AppearanceStyleType.primary}
+              border={AppearanceBorderType.borderless}
+              onClick={() => {
+                setMembersDeleteModal(false)
+              }}
+            >
+              {t("t.cancel")}
+            </Button>,
+          ]}
+        >
+          {t("application.deleteMemberDescription")}
+        </Modal>
       </section>
     </>
   )

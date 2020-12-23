@@ -7,9 +7,11 @@ import {
   ConfigProvider,
   ApiClientProvider,
   LoggedInUserIdleTimeout,
+  blankApplication,
 } from "@bloom-housing/ui-components"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
-import { AppSubmissionContext, blankApplication } from "../lib/AppSubmissionContext"
+import { AppSubmissionContext } from "../lib/AppSubmissionContext"
+
 import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,

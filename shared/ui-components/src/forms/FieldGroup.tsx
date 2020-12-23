@@ -19,6 +19,7 @@ interface FieldGroupProps {
   register: any
   validation?: Record<string, any>
   fieldGroupClassName?: string
+  fieldClassName?: string
 }
 
 const FieldGroup = ({
@@ -32,6 +33,7 @@ const FieldGroup = ({
   groupNote,
   register,
   fieldGroupClassName,
+  fieldClassName,
 }: FieldGroupProps) => {
   return (
     <>
@@ -40,7 +42,7 @@ const FieldGroup = ({
 
       <div className={`field ${error && "error"} ${fieldGroupClassName || ""}`}>
         {fields?.map((item) => (
-          <div className={`field`} key={item.id}>
+          <div className={`field ${fieldClassName || ""}`} key={item.id}>
             <input
               aria-describedby={`${name}-error`}
               aria-invalid={!!error || false}

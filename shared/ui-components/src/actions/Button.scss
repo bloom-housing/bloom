@@ -51,6 +51,10 @@
     @apply normal-case;
   }
 
+  &.is-unstyled {
+    background: transparent;
+  }
+
   &.is-unstyled,
   &.is-inline {
     @apply normal-case;

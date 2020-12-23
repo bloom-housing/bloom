@@ -18,58 +18,13 @@ import {
   relationshipKeys,
   t,
 } from "@bloom-housing/ui-components"
-import { HouseholdMember, HouseholdMemberUpdate } from "@bloom-housing/core"
+import { HouseholdMember, Member } from "@bloom-housing/core"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
-
-class Member implements HouseholdMemberUpdate {
-  id: string
-  orderId = undefined
-  firstName = ""
-  middleName = ""
-  lastName = ""
-  birthMonth = null
-  birthDay = null
-  birthYear = null
-  emailAddress = ""
-  noEmail = null
-  phoneNumber = ""
-  phoneNumberType = ""
-  noPhone = null
-
-  constructor(orderId) {
-    this.orderId = orderId
-  }
-  address = {
-    placeName: null,
-    city: "",
-    county: "",
-    state: "",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: null,
-    longitude: null,
-  }
-  workAddress = {
-    placeName: null,
-    city: "",
-    county: "",
-    state: "",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: null,
-    longitude: null,
-  }
-  sameAddress?: string
-  relationship?: string
-  workInRegion?: string
-}
 
 export default () => {
   let memberId, member, saveText, cancelText

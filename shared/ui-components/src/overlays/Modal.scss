@@ -23,6 +23,10 @@
   @apply pt-8;
 }
 
+.modal__title {
+  @apply text-xl;
+}
+
 .modal__inner {
   &:last-of-type {
     @apply rounded-b;

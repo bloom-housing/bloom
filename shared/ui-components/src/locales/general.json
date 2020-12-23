@@ -72,7 +72,10 @@
       "race": "Race",
       "gender": "Gender",
       "howDidYouHearAboutUs": "How did you hear about us?",
-      "sexualOrientation": "Sexual Orientation"
+      "sexualOrientation": "Sexual Orientation",
+      "addHouseholdMember": "Add Household Member",
+      "sameAddressAsPrimary": "Same Address as Primary",
+      "sameResidence": "Same Residence"
     },
     "details": {
       "applicationData": "Application Data",
@@ -440,6 +443,8 @@
     "continueApplication": "Continue Application",
     "applicationNeverSubmitted": "Your application was never submitted",
     "deleteThisApplication": "Delete this application?",
+    "deleteThisMember": "Delete this member?",
+    "deleteMemberDescription": "Do you really want to delete this member?",
     "deleteApplicationDescription": "Deleting this application means you will lose all the information you've entered.",
     "edited": "Edited",
     "status": "Status",
