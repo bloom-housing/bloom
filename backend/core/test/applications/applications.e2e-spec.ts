@@ -298,6 +298,8 @@ describe("Applications", () => {
     expect(createRes.body).toMatchObject(body)
     const newBody = getTestAppBody() as Application
     newBody.id = createRes.body.id
+    // Because submission date is applied server side
+    newBody.submissionDate = createRes.body.submissionDate
     const putRes = await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)
       .send(newBody)

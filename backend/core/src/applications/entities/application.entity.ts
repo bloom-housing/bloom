@@ -3,6 +3,7 @@ import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import {
   IsBoolean,
+  IsDate,
   IsDefined,
   IsEnum,
   IsNumber,
@@ -209,4 +210,11 @@ export class Application extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   acceptedTerms?: boolean | null
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  submissionDate?: Date | null
 }
