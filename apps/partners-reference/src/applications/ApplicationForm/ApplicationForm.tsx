@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react"
+import React, { useState, useCallback, useEffect, useMemo, useContext } from "react"
 import {
+  ApiClientContext,
   t,
   GridSection,
   StatusAside,
@@ -36,8 +37,7 @@ import { useForm } from "react-hook-form"
 import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import { ApplicationFormMember } from "./ApplicationFormMember"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
-import { HouseholdMember } from "@bloom-housing/core"
-
+import { HouseholdMember, ApplicationCreate } from "@bloom-housing/core"
 type Props = {
   isEditable?: boolean
 }
@@ -48,6 +48,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const [membersDeleteModal, setMembersDeleteModal] = useState<string | boolean>(false)
 
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
+
+  const { applicationsService } = useContext(ApiClientContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
@@ -97,10 +99,25 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setErrorAlert(false)
 
-    console.log(data)
+    const body = data
+    // const body: ApplicationCreate = {}
+
+    // householdMembers
+
+    console.log(body)
+
+    try {
+      const result = await applicationsService.create({ body })
+
+      if (result) {
+        console.log("submission success")
+      }
+    } catch (err) {
+      setErrorAlert(true)
+    }
   }
 
   const onError = (error) => {
@@ -240,7 +257,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
-                      options={applicationLanguageKeys}
+                      options={["", ...applicationLanguageKeys]}
                       keyPrefix="languages"
                     />
                   </ViewItem>
