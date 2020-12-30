@@ -1,12 +1,10 @@
 import {
-  ApplicationCreate,
   ApplicationUpdate,
   ApplicantUpdate,
   Language,
   IncomePeriod,
   ApplicationSubmissionType,
   ApplicationStatus,
-  HouseholdMember,
   Address,
 } from "@bloom-housing/core"
 
@@ -66,15 +64,22 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
   const {
     additionalPhoneNumber: additionalPhoneNumberData,
     additionalPhoneNumberType: additionalPhoneNumberTypeData,
+    mailingAddress: mailingAddressData,
     additionalPhoneNumber,
+    contactPreferences,
+    sendMailToMailingAddress,
+    alternateContact,
+    accessibility,
+    preferences,
+    incomePeriod,
+    demographics,
+    preferredUnit,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
   const additionalPhoneNumberType = additionalPhoneNumberTypeData
     ? additionalPhoneNumberTypeData
     : null
-
-  const { contactPreferences, sendMailToMailingAddress } = data.application
 
   const mailingAddress = (() => {
     const blankAddress: Address = {
@@ -87,23 +92,13 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
       state: "",
       zipCode: "",
     }
-    const { mailingAddress: mailingAddressData } = data.application
 
     return sendMailToMailingAddress ? mailingAddressData : blankAddress
   })()
 
-  const {
-    alternateContact,
-    accessibility,
-    preferences,
-    incomePeriod,
-    demographics,
-    preferredUnit,
-  } = data.application
-
   const alternateAddress: Address = data.application.alternateAddress
 
-  const { incomeMonth, incomeYear } = data
+  const { incomeMonth, incomeYear, householdMembers } = data
 
   const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
   const incomeVouchers =
@@ -126,9 +121,6 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
   const listing = {
     id: listingId,
   }
-
-  // Household Members
-  const householdMembers: HouseholdMember[] = []
 
   const result: ApplicationUpdate = {
     createdAt,

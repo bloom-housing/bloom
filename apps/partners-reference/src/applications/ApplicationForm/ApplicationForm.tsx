@@ -109,7 +109,12 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const onSubmit = async (data) => {
     setErrorAlert(false)
 
-    const body = formatApplicationData(data, listingId, false)
+    const formData = {
+      householdMembers,
+      ...data,
+    }
+
+    const body = formatApplicationData(formData, listingId, false)
     console.log(body)
 
     try {
