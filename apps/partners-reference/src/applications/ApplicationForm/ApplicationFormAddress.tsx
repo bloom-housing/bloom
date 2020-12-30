@@ -2,7 +2,7 @@ import { UseFormMethods } from "react-hook-form"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
 
-type AddressType = "residence" | "residence-member" | "work" | "mailing"
+type AddressType = "residence" | "residence-member" | "work" | "mailing" | "alternate"
 
 export const ApplicationFormAddress = (
   subtitle: string,
