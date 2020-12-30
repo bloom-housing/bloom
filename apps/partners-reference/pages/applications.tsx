@@ -180,7 +180,7 @@ const ApplicationsList = () => {
               </div>
 
               <div className="flex-row">
-                <LocalizedLink href="applications/add">
+                <LocalizedLink href={`/listings/${listingId}/add`}>
                   <Button className="mx-1" onClick={() => false}>
                     {t("applications.addApplication")}
                   </Button>
