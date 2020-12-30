@@ -1,4 +1,14 @@
-import { ApplicationUpdate, ApplicantUpdate, Language } from "@bloom-housing/core"
+import {
+  ApplicationCreate,
+  ApplicationUpdate,
+  ApplicantUpdate,
+  Language,
+  IncomePeriod,
+  ApplicationSubmissionType,
+  ApplicationStatus,
+  HouseholdMember,
+  Address,
+} from "@bloom-housing/core"
 
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
@@ -6,8 +16,7 @@ import { ApplicationUpdate, ApplicantUpdate, Language } from "@bloom-housing/cor
 */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const formatApplicationData = (data: any, editMode: boolean) => {
-  console.log(data)
+export const formatApplicationData = (data: any, listingId, editMode: boolean) => {
   const language: Language = data.application.language
 
   // create createdAt date
@@ -65,6 +74,62 @@ export const formatApplicationData = (data: any, editMode: boolean) => {
     ? additionalPhoneNumberTypeData
     : null
 
+  const { contactPreferences, sendMailToMailingAddress } = data.application
+
+  const mailingAddress = (() => {
+    const blankAddress: Address = {
+      id: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
+      street: "",
+      street2: "",
+      city: "",
+      state: "",
+      zipCode: "",
+    }
+    const { mailingAddress: mailingAddressData } = data.application
+
+    return sendMailToMailingAddress ? mailingAddressData : blankAddress
+  })()
+
+  const {
+    alternateContact,
+    accessibility,
+    preferences,
+    incomePeriod,
+    demographics,
+    preferredUnit,
+  } = data.application
+
+  const alternateAddress: Address = data.application.alternateAddress
+
+  const { incomeMonth, incomeYear } = data
+
+  const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
+  const incomeVouchers =
+    data.application.incomeVouchers === "yes"
+      ? true
+      : data.application.incomeVouchers === "no"
+      ? false
+      : null
+
+  const acceptedTerms =
+    data.application.acceptedTerms === "yes"
+      ? true
+      : data.application.acceptedTerms === "no"
+      ? false
+      : null
+
+  const submissionType = ApplicationSubmissionType.paper
+  const status = editMode ? ApplicationStatus.submitted : ApplicationStatus.draft
+
+  const listing = {
+    id: listingId,
+  }
+
+  // Household Members
+  const householdMembers: HouseholdMember[] = []
+
   const result: ApplicationUpdate = {
     createdAt,
     language,
@@ -72,6 +137,23 @@ export const formatApplicationData = (data: any, editMode: boolean) => {
     additionalPhone,
     additionalPhoneNumber,
     additionalPhoneNumberType,
+    contactPreferences,
+    sendMailToMailingAddress,
+    mailingAddress,
+    alternateContact,
+    accessibility,
+    preferences,
+    income,
+    incomePeriod,
+    incomeVouchers,
+    demographics,
+    acceptedTerms,
+    submissionType,
+    status,
+    listing,
+    preferredUnit,
+    alternateAddress,
+    householdMembers,
   }
 
   return result
