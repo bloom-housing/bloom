@@ -1,5 +1,5 @@
 {
-  "packages": ["apps/public-reference", "apps/partners-reference", "backend/core", "ui-components"],
+  "packages": ["apps/public", "apps/partners", "backend/core", "ui-components"],
   "version": "0.3.4",
   "npmClient": "yarn",
   "useWorkspaces": true

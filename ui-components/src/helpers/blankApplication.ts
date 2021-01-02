@@ -1,4 +1,8 @@
-import { ApplicationStatus, ApplicationSubmissionType, Language } from "@bloom-housing/core"
+import {
+  ApplicationStatus,
+  ApplicationSubmissionType,
+  Language,
+} from "@bloom-housing/backend-core/types"
 
 export const blankApplication = () => {
   return {

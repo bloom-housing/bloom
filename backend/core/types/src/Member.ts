@@ -1,4 +1,4 @@
-import { HouseholdMemberUpdate } from "@bloom-housing/core"
+import { HouseholdMemberUpdate } from "./backend-swagger"
 
 export class Member implements HouseholdMemberUpdate {
   id: string

@@ -4,8 +4,8 @@
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": {
     "packages": [
-      "apps/public-reference",
-      "apps/partners-reference",
+      "apps/public",
+      "apps/partners",
       "backend/core",
       "ui-components"
     ],
@@ -17,12 +17,12 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/public-reference && yarn dev",
-    "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/public-reference && yarn test",
-    "build:app:public": "cd apps/public-reference && yarn build",
-    "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/partners-reference && yarn dev",
-    "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/partners-reference && yarn test",
-    "build:app:partners": "cd apps/partners-reference && yarn build",
+    "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/public && yarn dev",
+    "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/public && yarn test",
+    "build:app:public": "cd apps/public && yarn build",
+    "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/partners && yarn dev",
+    "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd apps/partners && yarn test",
+    "build:app:partners": "cd apps/partners && yarn build",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" OLD_LISTINGS,BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:listings\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",

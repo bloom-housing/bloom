@@ -54,7 +54,6 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^0.3.4",
-    "@bloom-housing/core": "^0.3.4",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jwt-decode": "^2.2.1",
     "@types/markdown-to-jsx": "^6.11.2",
