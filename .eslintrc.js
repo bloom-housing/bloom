@@ -3,8 +3,8 @@ module.exports = {
   parserOptions: {
     project: [
       "./tsconfig.json",
-      "./apps/public/tsconfig.json",
-      "./apps/partners/tsconfig.json",
+      "./sites/public/tsconfig.json",
+      "./sites/partners/tsconfig.json",
       "./services/**/tsconfig.json",
     ],
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features

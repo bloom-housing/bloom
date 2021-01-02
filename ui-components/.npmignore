@@ -31,7 +31,7 @@ apps/**/cypress/screenshots
 # Complied Typescript
 dist
 services/listings/dist/**
-apps/public/.next
+sites/public/.next
 
 # Runtime data
 pids
@@ -62,7 +62,7 @@ build/Release
 
 # Dependency directories
 node_modules/**
-apps/public/node_modules/**
+sites/public/node_modules/**
 ui-components/node_modules/**
 jspm_packages/
 

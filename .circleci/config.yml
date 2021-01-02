@@ -105,7 +105,7 @@ workflows:
           requires:
             - setup
           executor: cypress-node
-          working_directory: apps/public
+          working_directory: sites/public
           yarn: true
           build: yarn test:backend:core:dbsetup
           start: yarn dev:all
