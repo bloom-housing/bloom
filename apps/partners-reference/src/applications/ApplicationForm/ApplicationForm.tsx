@@ -963,7 +963,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                       <LinkButton
                         unstyled
                         fullWidth
-                        className="bg-opacity-0 text-red-700"
+                        className="bg-opacity-0"
                         href={`/listings/${listingId}/applications`}
                       >
                         {t("t.cancel")}

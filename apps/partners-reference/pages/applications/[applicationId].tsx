@@ -38,9 +38,16 @@ export default function ApplicationsList() {
   const applicationDate = useMemo(() => {
     if (!application) return null
 
-    const momentDate = moment(application.createdAt)
+    const momentDate = moment(application.submissionDate)
     const date = momentDate.format("MM/DD/YYYY")
     const time = momentDate.format("HH:mm:ss A")
+
+    if (!momentDate.isValid()) {
+      return {
+        date: t("t.n/a"),
+        time: t("t.n/a"),
+      }
+    }
 
     return {
       date,
@@ -108,20 +115,20 @@ export default function ApplicationsList() {
 
       Object.keys(address).forEach((item) => {
         if (type === AddressColsType.residence) {
-          address[item] = application.applicant.address[item]
+          address[item] = application.applicant.address[item] || t("t.n/a")
         }
 
         if (type === AddressColsType.mailing) {
           if (application.sendMailToMailingAddress) {
             address[item] = application.mailingAddress[item]
           } else {
-            address[item] = application.applicant.address[item]
+            address[item] = application.applicant.address[item] || t("t.n/a")
           }
         }
 
         if (type === AddressColsType.work) {
           if (application.applicant.workInRegion === "yes") {
-            address[item] = application.applicant.workAddress[item]
+            address[item] = application.applicant.workAddress[item] || t("t.n/a")
           } else {
             address[item] = t("t.n/a")
           }
@@ -244,22 +251,21 @@ export default function ApplicationsList() {
 
               <GridCell>
                 <ViewItem label={t("application.details.language")}>
-                  {application.language
-                    ? t(`languages.${application.language}`)
-                    : t("languages.en")}
+                  {application.language ? t(`languages.${application.language}`) : t("n/a")}
                 </ViewItem>
               </GridCell>
 
               <GridCell>
                 <ViewItem label={t("application.details.totalSize")}>
-                  {application.householdSize}
+                  {application.householdSize || 1}
                 </ViewItem>
               </GridCell>
 
               <GridCell>
                 <ViewItem label={t("application.details.submittedBy")}>
-                  {application.applicant.firstName} {application.applicant.middleName}{" "}
-                  {application.applicant.lastName}
+                  {application.applicant.firstName && application.applicant.lastName
+                    ? `${application.applicant.firstName} ${application.applicant.lastName}`
+                    : t("n/a")}
                 </ViewItem>
               </GridCell>
             </GridSection>
@@ -273,45 +279,53 @@ export default function ApplicationsList() {
               <GridSection columns={3}>
                 <GridCell>
                   <ViewItem label={t("application.name.firstName")}>
-                    {application.applicant.firstName}
+                    {application.applicant.firstName || t("n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.name.middleName")}>
-                    {application.applicant.middleName
-                      ? application.applicant.middleName
-                      : t("t.n/a")}
+                    {application.applicant.middleName || t("n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.name.lastName")}>
-                    {application.applicant.lastName}
+                    {application.applicant.lastName || t("n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.household.member.dateOfBirth")}>
-                    {application.applicant.birthMonth}/{application.applicant.birthDay}/
-                    {application.applicant.birthYear}
+                    {(() => {
+                      const { birthMonth, birthDay, birthYear } = application?.applicant
+
+                      if (birthMonth && birthDay && birthYear) {
+                        return `${birthMonth}/${birthDay}/${birthYear}`
+                      }
+
+                      return t("n/a")
+                    })()}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("t.email")} truncated>
-                    {application.applicant.emailAddress}
+                    {application.applicant.emailAddress || t("n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem
                     label={t("t.phone")}
-                    helper={t(
-                      `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
-                    )}
+                    helper={
+                      application.applicant.phoneNumberType &&
+                      t(
+                        `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
+                      )
+                    }
                   >
-                    {application.applicant.phoneNumber}
+                    {application.applicant.phoneNumber || t("n/a")}
                   </ViewItem>
                 </GridCell>
 
@@ -325,26 +339,32 @@ export default function ApplicationsList() {
                       )
                     }
                   >
-                    {application.additionalPhoneNumber
-                      ? application.additionalPhoneNumber
-                      : t("t.none")}
+                    {application.additionalPhoneNumber || t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.details.preferredContact")}>
-                    {application.contactPreferences.map((item) => (
-                      <span key={item}>
-                        {t(`t.${item}`)}
-                        <br />
-                      </span>
-                    ))}
+                    {(() => {
+                      if (!application.contactPreferences.length) return t("n/a")
+
+                      return application.contactPreferences.map((item) => (
+                        <span key={item}>
+                          {t(`t.${item}`)}
+                          <br />
+                        </span>
+                      ))
+                    })()}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.details.workInRegion")}>
-                    {application.applicant.workInRegion === "yes" ? t("t.yes") : t("t.no")}
+                    {(() => {
+                      if (!application.applicant.workInRegion) return t("n/a")
+
+                      return application.applicant.workInRegion === "yes" ? t("t.yes") : t("t.no")
+                    })()}
                   </ViewItem>
                 </GridCell>
               </GridSection>
@@ -374,45 +394,45 @@ export default function ApplicationsList() {
                   <GridSection columns={3}>
                     <GridCell>
                       <ViewItem label={t("application.name.firstName")}>
-                        {application.alternateContact.firstName}
+                        {application.alternateContact.firstName || t("t.n/a")}
                       </ViewItem>
                     </GridCell>
 
                     <GridCell>
                       <ViewItem label={t("application.name.lastName")}>
-                        {application.alternateContact.lastName}
+                        {application.alternateContact.lastName || t("t.n/a")}
                       </ViewItem>
                     </GridCell>
 
                     <GridCell>
                       <ViewItem label={t("t.relationship")}>
-                        {t(
-                          `application.alternateContact.type.options.${application.alternateContact.type}`
-                        )}
+                        {(() => {
+                          if (!application.alternateContact.type) return t("t.n/a")
+
+                          return t(
+                            `application.alternateContact.type.options.${application.alternateContact.type}`
+                          )
+                        })()}
                       </ViewItem>
                     </GridCell>
 
                     {
                       <GridCell>
                         <ViewItem label={t("application.details.agency")}>
-                          {application.alternateContact.agency?.length
-                            ? application.alternateContact.agency
-                            : t("t.none")}
+                          {application.alternateContact.agency || t("t.n/a")}
                         </ViewItem>
                       </GridCell>
                     }
 
                     <GridCell>
                       <ViewItem label={t("t.email")}>
-                        {application.alternateContact.emailAddress
-                          ? application.alternateContact.emailAddress
-                          : t("t.n/a")}
+                        {application.alternateContact.emailAddress || t("t.n/a")}
                       </ViewItem>
                     </GridCell>
 
                     <GridCell>
                       <ViewItem label={t("t.phone")}>
-                        {application.alternateContact.phoneNumber}
+                        {application.alternateContact.phoneNumber || t("t.n/a")}
                       </ViewItem>
                     </GridCell>
                   </GridSection>
@@ -504,7 +524,15 @@ export default function ApplicationsList() {
 
               <GridCell>
                 <ViewItem label={t("application.details.vouchers")}>
-                  {application.incomeVouchers ? t("t.yes") : t("t.no")}
+                  {(() => {
+                    if (application.incomeVouchers === null) return t("t.n/a")
+
+                    if (application.incomeVouchers) {
+                      return t("t.yes")
+                    }
+
+                    return t("t.no")
+                  })()}
                 </ViewItem>
               </GridCell>
             </GridSection>
@@ -518,7 +546,7 @@ export default function ApplicationsList() {
               <GridCell>
                 <ViewItem label={t("application.details.signatureOnTerms")}>
                   {(() => {
-                    if (typeof application.acceptedTerms == "undefined") {
+                    if (application.acceptedTerms === null) {
                       return t("t.n/a")
                     } else if (application.acceptedTerms) {
                       return t("t.yes")

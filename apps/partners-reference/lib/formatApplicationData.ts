@@ -31,10 +31,10 @@ function getAddress(condition, addressData) {
 }
 
 export const formatApplicationData = (data: any, listingId, editMode: boolean) => {
-  const language: Language = data.application.language
+  const language: Language = data.application.language ? data.application.language : null
 
   // create createdAt date
-  const createdAt: Date | null = (() => {
+  const submissionDate: Date | null = (() => {
     const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
       data.dateSubmitted || {}
     const { hours, minutes = 0, seconds = 0, time } = data.timeSubmitted || {}
@@ -48,13 +48,9 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     date.setUTCFullYear(submissionYear)
 
     if (hours && minutes && seconds && time) {
-      date.setUTCHours(hours)
-      date.setUTCMinutes(minutes)
-      date.setUTCSeconds(seconds)
+      date.setUTCHours(hours, minutes, seconds)
     } else {
-      date.setUTCHours(0)
-      date.setUTCMinutes(0)
-      date.setUTCSeconds(0)
+      date.setUTCHours(0, 0, 0, 0)
     }
 
     return date
@@ -67,13 +63,19 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     const phoneNumberType = applicantData.phoneNumberType ? applicantData.phoneNumberType : null
     const noEmail = !applicantData.emailAddress
     const noPhone = !phoneNumber
-    const workInRegion = applicantData?.workInRegion === "yes"
+    const workInRegion = applicantData?.workInRegion ? applicantData?.workInRegion : null
+    const emailAddress = applicantData?.emailAddress ? applicantData?.emailAddress : null
 
-    const workAddress = getAddress(workInRegion, applicantData?.workAddress)
+    const workAddress = getAddress(
+      applicantData?.workInRegion === "yes",
+      applicantData?.workAddress
+    )
 
     return {
       ...applicantData,
       ...data.dateOfBirth,
+      emailAddress,
+      workInRegion,
       workAddress,
       phoneNumber,
       phoneNumberType,
@@ -93,7 +95,6 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     alternateContact,
     accessibility,
     preferences,
-    incomePeriod,
     demographics,
     preferredUnit,
   } = data.application
@@ -109,6 +110,8 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
   const alternateAddress = getAddress(false, null)
 
   const { incomeMonth, incomeYear, householdMembers } = data
+
+  const incomePeriod = data.application.incomePeriod ? data.application.incomePeriod : null
 
   const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
   const incomeVouchers =
@@ -132,8 +135,10 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     id: listingId,
   }
 
+  const householdSize = householdMembers.length || 1
+
   const result: ApplicationUpdate = {
-    createdAt,
+    submissionDate,
     language,
     applicant,
     additionalPhone,
@@ -156,6 +161,7 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     preferredUnit,
     alternateAddress,
     householdMembers,
+    householdSize,
   }
 
   return result
