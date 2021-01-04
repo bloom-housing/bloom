@@ -13,10 +13,13 @@ import {
   MinimalTable,
   Button,
   formatIncome,
+  StatusAside,
+  StatusMessages,
+  LinkButton,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import { IncomePeriod } from "@bloom-housing/core"
+import { IncomePeriod, ApplicationStatus } from "@bloom-housing/core"
 
 enum AddressColsType {
   "residence" = "residence",
@@ -158,6 +161,29 @@ export default function ApplicationsList() {
     [application]
   )
 
+  const applicationStatus = useMemo(() => {
+    switch (application?.status) {
+      case ApplicationStatus.submitted:
+        return (
+          <Tag styleType={AppearanceStyleType.success} pillStyle>
+            {t(`application.details.applicationStatus.submitted`)}
+          </Tag>
+        )
+      case ApplicationStatus.removed:
+        return (
+          <Tag styleType={AppearanceStyleType.warning} pillStyle>
+            {t(`application.details.applicationStatus.removed`)}
+          </Tag>
+        )
+      default:
+        return (
+          <Tag styleType={AppearanceStyleType.primary} pillStyle>
+            {t(`application.details.applicationStatus.draft`)}
+          </Tag>
+        )
+    }
+  }, [application])
+
   if (!application) return null
 
   return (
@@ -180,13 +206,7 @@ export default function ApplicationsList() {
             {t("t.back")}
           </Button>
 
-          <div className="status-bar__status md:pl-4 md:w-3/12">
-            <Tag styleType={AppearanceStyleType.success} pillStyle>
-              {application.status
-                ? t(`application.details.applicationStatus.${application.status}`)
-                : t(`application.details.applicationStatus.submitted`)}
-            </Tag>
-          </div>
+          <div className="status-bar__status md:pl-4 md:w-3/12">{applicationStatus}</div>
         </div>
       </section>
 
@@ -511,14 +531,35 @@ export default function ApplicationsList() {
             </GridSection>
           </div>
 
-          <div className="md:w-3/12">
-            <ul className="status-messages">
-              <li className="status-message">
-                <div className="status-message__note text-tiny text-center pt-2">
-                  {t("t.lastUpdated")} {applicationUpdated}
-                </div>
-              </li>
-            </ul>
+          <div className="md:w-3/12 pl-6">
+            <StatusAside
+              columns={1}
+              actions={[
+                <GridCell key="btn-submitNew">
+                  <Button
+                    styleType={AppearanceStyleType.secondary}
+                    fullWidth
+                    onClick={() => {
+                      //
+                    }}
+                  >
+                    {t("t.edit")}
+                  </Button>
+                </GridCell>,
+                <GridCell className="flex" key="btn-cancel">
+                  <LinkButton
+                    unstyled
+                    fullWidth
+                    className="bg-opacity-0 text-red-700"
+                    href={`/applications/${applicationId}/edit`}
+                  >
+                    {t("t.delete")}
+                  </LinkButton>
+                </GridCell>,
+              ]}
+            >
+              <StatusMessages lastTimestamp={applicationUpdated} />
+            </StatusAside>
           </div>
         </div>
       </section>
