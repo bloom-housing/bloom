@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import {
   ApiClientContext,
   t,
+  Tag,
   GridSection,
   StatusAside,
   StatusMessages,
@@ -227,216 +228,685 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
   return (
     <>
+      <div className="flex justify-end max-w-screen-xl px-5 mx-auto w-full">
+        <div className="md:w-3/12 py-3 md:pl-6">
+          <Tag className="block" pillStyle={true} size={AppearanceSizeType.big}>
+            {t("application.details.applicationStatus.draft")}
+          </Tag>
+        </div>
+      </div>
+
       <section className="bg-primary-lighter">
-        {errorAlert && (
-          <AlertBox onClose={() => setErrorAlert(false)} closeable>
-            {t("application.add.applicationAddError")}
-          </AlertBox>
-        )}
-        <Form id="application-form" onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">
-            <div className="info-card md:w-9/12">
-              <GridSection title={t("application.details.applicationData")} grid={false}>
-                <GridSection columns={3}>
-                  <ViewItem label={t("application.add.dateSubmitted")}>
-                    <DOBField
-                      id="dateSubmitted"
-                      name="dateSubmitted"
-                      register={register}
-                      error={errors?.dateSubmitted}
-                      watch={watch}
-                      label={t("application.add.dateSubmitted")}
-                      readerOnly
-                    />
-                  </ViewItem>
+        <div className="max-w-screen-xl px-5 mx-auto">
+          {errorAlert && (
+            <AlertBox onClose={() => setErrorAlert(false)} closeable>
+              {t("application.add.applicationAddError")}
+            </AlertBox>
+          )}
 
-                  <ViewItem label={t("application.add.timeSubmitted")}>
-                    <TimeField
-                      id="timeSubmitted"
-                      name="timeSubmitted"
-                      label={t("application.add.timeSubmitted")}
-                      register={register}
-                      error={!!errors?.timeSubmitted}
-                      readerOnly
-                    />
-                  </ViewItem>
-
-                  <ViewItem label={t("application.add.languageSubmittedIn")}>
-                    <Select
-                      id="application.language"
-                      name="application.language"
-                      label={t("application.add.languageSubmittedIn")}
-                      labelClassName="sr-only"
-                      register={register}
-                      controlClassName="control"
-                      options={["", ...applicationLanguageKeys]}
-                      keyPrefix="languages"
-                    />
-                  </ViewItem>
-                </GridSection>
-              </GridSection>
-              <GridSection
-                title={t("application.household.primaryApplicant")}
-                grid={false}
-                separator
-              >
-                <GridSection columns={3}>
-                  <GridCell>
-                    <ViewItem label={t("application.name.firstName")}>
-                      <Field
-                        id="application.applicant.firstName"
-                        name="application.applicant.firstName"
-                        label={t("application.name.firstName")}
-                        placeholder={t("application.name.firstName")}
-                        register={register}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-                  <GridCell>
-                    <ViewItem label={t("application.name.middleName")}>
-                      <Field
-                        id="application.applicant.middleName"
-                        name="application.applicant.middleName"
-                        label={t("application.name.middleNameOptional")}
-                        placeholder={t("application.name.middleNameOptional")}
-                        register={register}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-                  <GridCell>
-                    <ViewItem label={t("application.name.lastName")}>
-                      <Field
-                        id="application.applicant.lastName"
-                        name="application.applicant.lastName"
-                        label={t("application.name.lastName")}
-                        placeholder={t("application.name.lastName")}
-                        register={register}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-                  <GridCell>
-                    <ViewItem label={t("application.household.member.dateOfBirth")}>
+          <Form id="application-form" onSubmit={handleSubmit(onSubmit, onError)}>
+            <div className="flex flex-row flex-wrap mt-5">
+              <div className="info-card md:w-9/12">
+                <GridSection title={t("application.details.applicationData")} grid={false}>
+                  <GridSection columns={3}>
+                    <ViewItem label={t("application.add.dateSubmitted")}>
                       <DOBField
-                        id="dateOfBirth"
-                        name="dateOfBirth"
+                        id="dateSubmitted"
+                        name="dateSubmitted"
                         register={register}
-                        error={errors?.dateOfBirth}
+                        error={errors?.dateSubmitted}
                         watch={watch}
-                        atAge={true}
-                        label={t("application.name.yourDateOfBirth")}
+                        label={t("application.add.dateSubmitted")}
                         readerOnly
                       />
                     </ViewItem>
-                  </GridCell>
-                  <GridCell>
-                    <ViewItem label={t("t.email")}>
-                      <Field
-                        id="application.applicant.emailAddress"
-                        name="application.applicant.emailAddress"
-                        type="email"
-                        placeholder="example@web.com"
-                        label={t("application.name.yourEmailAddress")}
-                        readerOnly={true}
-                        validation={{ pattern: emailRegex }}
-                        error={errors.application?.applicant?.emailAddress}
-                        errorMessage={t("errors.emailAddressError")}
+
+                    <ViewItem label={t("application.add.timeSubmitted")}>
+                      <TimeField
+                        id="timeSubmitted"
+                        name="timeSubmitted"
+                        label={t("application.add.timeSubmitted")}
                         register={register}
-                      />
-                    </ViewItem>
-                  </GridCell>
-                  <GridCell>
-                    <ViewItem label={t("t.phone")}>
-                      <PhoneField
-                        id="application.applicant.phoneNumber"
-                        name="application.applicant.phoneNumber"
-                        label={t("application.contact.yourPhoneNumber")}
-                        required={false}
-                        error={errors.application?.applicant?.phoneNumber}
-                        errorMessage={t("errors.phoneNumberError")}
-                        control={control}
-                        controlClassName="control"
+                        error={!!errors?.timeSubmitted}
                         readerOnly
                       />
                     </ViewItem>
-                  </GridCell>
-                  <GridCell>
-                    <ViewItem label={t("applications.table.phoneType")}>
+
+                    <ViewItem label={t("application.add.languageSubmittedIn")}>
                       <Select
-                        id="application.applicant.phoneNumberType"
-                        name="application.applicant.phoneNumberType"
-                        placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                        label={t("application.contact.phoneNumberTypes.prompt")}
+                        id="application.language"
+                        name="application.language"
+                        label={t("application.add.languageSubmittedIn")}
                         labelClassName="sr-only"
-                        error={errors.application?.applicant?.phoneNumberType}
-                        errorMessage={t("errors.phoneNumberTypeError")}
                         register={register}
                         controlClassName="control"
-                        options={phoneNumberKeys}
-                        keyPrefix="application.contact.phoneNumberTypes"
-                        validation={{ required: phoneValue?.length > 0 }}
-                        disabled={!phoneValue?.length}
+                        options={["", ...applicationLanguageKeys]}
+                        keyPrefix="languages"
+                      />
+                    </ViewItem>
+                  </GridSection>
+                </GridSection>
+                <GridSection
+                  title={t("application.household.primaryApplicant")}
+                  grid={false}
+                  separator
+                >
+                  <GridSection columns={3}>
+                    <GridCell>
+                      <ViewItem label={t("application.name.firstName")}>
+                        <Field
+                          id="application.applicant.firstName"
+                          name="application.applicant.firstName"
+                          label={t("application.name.firstName")}
+                          placeholder={t("application.name.firstName")}
+                          register={register}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("application.name.middleName")}>
+                        <Field
+                          id="application.applicant.middleName"
+                          name="application.applicant.middleName"
+                          label={t("application.name.middleNameOptional")}
+                          placeholder={t("application.name.middleNameOptional")}
+                          register={register}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("application.name.lastName")}>
+                        <Field
+                          id="application.applicant.lastName"
+                          name="application.applicant.lastName"
+                          label={t("application.name.lastName")}
+                          placeholder={t("application.name.lastName")}
+                          register={register}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("application.household.member.dateOfBirth")}>
+                        <DOBField
+                          id="dateOfBirth"
+                          name="dateOfBirth"
+                          register={register}
+                          error={errors?.dateOfBirth}
+                          watch={watch}
+                          atAge={true}
+                          label={t("application.name.yourDateOfBirth")}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("t.email")}>
+                        <Field
+                          id="application.applicant.emailAddress"
+                          name="application.applicant.emailAddress"
+                          type="email"
+                          placeholder="example@web.com"
+                          label={t("application.name.yourEmailAddress")}
+                          readerOnly={true}
+                          validation={{ pattern: emailRegex }}
+                          error={errors.application?.applicant?.emailAddress}
+                          errorMessage={t("errors.emailAddressError")}
+                          register={register}
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("t.phone")}>
+                        <PhoneField
+                          id="application.applicant.phoneNumber"
+                          name="application.applicant.phoneNumber"
+                          label={t("application.contact.yourPhoneNumber")}
+                          required={false}
+                          error={errors.application?.applicant?.phoneNumber}
+                          errorMessage={t("errors.phoneNumberError")}
+                          control={control}
+                          controlClassName="control"
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("applications.table.phoneType")}>
+                        <Select
+                          id="application.applicant.phoneNumberType"
+                          name="application.applicant.phoneNumberType"
+                          placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                          label={t("application.contact.phoneNumberTypes.prompt")}
+                          labelClassName="sr-only"
+                          error={errors.application?.applicant?.phoneNumberType}
+                          errorMessage={t("errors.phoneNumberTypeError")}
+                          register={register}
+                          controlClassName="control"
+                          options={phoneNumberKeys}
+                          keyPrefix="application.contact.phoneNumberTypes"
+                          validation={{ required: phoneValue?.length > 0 }}
+                          disabled={!phoneValue?.length}
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("t.additionalPhone")}>
+                        <PhoneField
+                          id="application.additionalPhoneNumber"
+                          name="application.additionalPhoneNumber"
+                          label={t("application.contact.yourAdditionalPhoneNumber")}
+                          required={false}
+                          error={errors.application?.additionalPhoneNumber}
+                          errorMessage={t("errors.phoneNumberError")}
+                          control={control}
+                          controlClassName="control"
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+                    <GridCell>
+                      <ViewItem label={t("applications.table.additionalPhoneType")}>
+                        <Select
+                          id="application.additionalPhoneNumberType"
+                          name="application.additionalPhoneNumberType"
+                          error={errors.application?.additionalPhoneNumberType}
+                          errorMessage={t("errors.phoneNumberTypeError")}
+                          register={register}
+                          controlClassName="control"
+                          placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                          label={t("application.contact.phoneNumberTypes.prompt")}
+                          labelClassName={"sr-only"}
+                          options={phoneNumberKeys}
+                          keyPrefix="application.contact.phoneNumberTypes"
+                          validation={{ required: additionalPhoneValue?.length > 0 }}
+                          disabled={!additionalPhoneValue?.length}
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("application.contact.preferredContactType")}>
+                        <Select
+                          id="application.contactPreferences"
+                          name="application.contactPreferences"
+                          label={t("application.contact.preferredContactType")}
+                          labelClassName="sr-only"
+                          register={register}
+                          controlClassName="control"
+                          options={["", ...contactPreferencesOptions]}
+                          keyPrefix="t"
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("application.add.workInRegion")}>
+                        <div className="flex h-12 items-center">
+                          <Field
+                            id="application.applicant.workInRegionYes"
+                            name="application.applicant.workInRegion"
+                            className="m-0"
+                            type="radio"
+                            label={t("t.yes")}
+                            register={register}
+                            inputProps={{
+                              value: "yes",
+                            }}
+                          />
+
+                          <Field
+                            id="application.applicant.workInRegionNo"
+                            name="application.applicant.workInRegion"
+                            className="m-0"
+                            type="radio"
+                            label={t("t.no")}
+                            register={register}
+                            inputProps={{
+                              value: "no",
+                            }}
+                          />
+                        </div>
+                      </ViewItem>
+                    </GridCell>
+                  </GridSection>
+
+                  {ApplicationFormAddress(
+                    t("application.details.residenceAddress"),
+                    "application.applicant.address",
+                    "residence",
+                    register
+                  )}
+
+                  {mailingAddressValue &&
+                    ApplicationFormAddress(
+                      t("application.contact.mailingAddress"),
+                      "application.mailingAddress",
+                      "mailing",
+                      register
+                    )}
+
+                  {workInRegionValue === "yes" &&
+                    ApplicationFormAddress(
+                      t("application.contact.workAddress"),
+                      "application.applicant.workAddress",
+                      "work",
+                      register
+                    )}
+                </GridSection>
+
+                <GridSection
+                  title={t("application.alternateContact.type.label")}
+                  grid={false}
+                  separator
+                >
+                  <GridSection columns={3}>
+                    <GridCell>
+                      <ViewItem label={t("application.name.firstName")}>
+                        <Field
+                          id="application.alternateContact.firstName"
+                          name="application.alternateContact.firstName"
+                          label={t("application.name.firstName")}
+                          placeholder={t("application.name.firstName")}
+                          register={register}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("application.name.lastName")}>
+                        <Field
+                          id="application.alternateContact.lastName"
+                          name="application.alternateContact.lastName"
+                          placeholder={t("application.name.lastName")}
+                          register={register}
+                          label={t("application.name.lastName")}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.relationship")}>
+                        <Select
+                          id="application.alternateContact.relationship"
+                          name="application.alternateContact.relationship"
+                          label={t("t.relationship")}
+                          labelClassName="sr-only"
+                          register={register}
+                          controlClassName="control"
+                          options={altContactRelationshipOptions}
+                          keyPrefix="application.alternateContact.type.options"
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("application.details.agency")}>
+                        <Field
+                          id="application.alternateContact.agency"
+                          name="application.alternateContact.agency"
+                          label={t("application.details.agency")}
+                          placeholder={t(
+                            "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
+                          )}
+                          register={register}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.email")}>
+                        <Field
+                          id="application.alternateContact.emailAddress"
+                          name="application.alternateContact.emailAddress"
+                          type="email"
+                          placeholder="example@web.com"
+                          label={t("t.email")}
+                          validation={{ pattern: emailRegex }}
+                          error={errors.application?.alternateContact?.emailAddress}
+                          errorMessage={t("errors.emailAddressError")}
+                          register={register}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.phone")}>
+                        <PhoneField
+                          id="application.alternateContact.phoneNumber"
+                          name="application.alternateContact.phoneNumber"
+                          required={false}
+                          error={errors.application?.alternateContact?.phoneNumber}
+                          errorMessage={t("errors.phoneNumberError")}
+                          control={control}
+                          controlClassName="control"
+                          label={t("t.phone")}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+                  </GridSection>
+
+                  <GridSection grid={false}>
+                    {ApplicationFormAddress(
+                      t("application.contact.mailingAddress"),
+                      "application.alternateAddress",
+                      "alternate",
+                      register
+                    )}
+                  </GridSection>
+                </GridSection>
+
+                <GridSection
+                  title={t("application.household.householdMembers")}
+                  grid={false}
+                  separator
+                >
+                  <div className="bg-gray-300 px-4 py-5">
+                    {!!householdMembers.length && (
+                      <div className="mb-5">
+                        <MinimalTable headers={memberTableHeaders} data={memberTableData} />
+                      </div>
+                    )}
+
+                    <Button
+                      type="button"
+                      size={AppearanceSizeType.normal}
+                      onClick={() => setMembersDrawer(true)}
+                    >
+                      {t("application.add.addHouseholdMember")}
+                    </Button>
+                  </div>
+                </GridSection>
+
+                <GridSection title={t("application.review.householdDetails")} columns={1} separator>
+                  <GridCell>
+                    <ViewItem label={t("application.details.preferredUnitSizes")}>
+                      <FieldGroup
+                        type="checkbox"
+                        name="application.preferredUnit"
+                        fields={preferredUnitOptions}
+                        register={register}
+                        fieldGroupClassName="grid grid-cols-2 mt-4"
                       />
                     </ViewItem>
                   </GridCell>
                   <GridCell>
-                    <ViewItem label={t("t.additionalPhone")}>
-                      <PhoneField
-                        id="application.additionalPhoneNumber"
-                        name="application.additionalPhoneNumber"
-                        label={t("application.contact.yourAdditionalPhoneNumber")}
-                        required={false}
-                        error={errors.application?.additionalPhoneNumber}
-                        errorMessage={t("errors.phoneNumberError")}
-                        control={control}
-                        controlClassName="control"
-                        readerOnly
-                      />
+                    <ViewItem label={t("application.details.adaPriorities")}>
+                      <fieldset className="mt-4">
+                        <Field
+                          id="application.accessibility.mobility"
+                          name="application.accessibility.mobility"
+                          type="checkbox"
+                          label={t("application.add.mobility")}
+                          register={register}
+                        />
+
+                        <Field
+                          id="application.accessibility.vision"
+                          name="application.accessibility.vision"
+                          type="checkbox"
+                          label={t("application.add.vision")}
+                          register={register}
+                        />
+
+                        <Field
+                          id="application.accessibility.hearing"
+                          name="application.accessibility.hearing"
+                          type="checkbox"
+                          label={t("application.add.hearing")}
+                          register={register}
+                        />
+                      </fieldset>
                     </ViewItem>
                   </GridCell>
+                </GridSection>
+
+                <GridSection title={t("application.details.preferences")} columns={1} separator>
                   <GridCell>
-                    <ViewItem label={t("applications.table.additionalPhoneType")}>
+                    <ViewItem
+                      label={`${t("application.details.liveOrWorkIn")} ${t(
+                        "application.details.countyName"
+                      )}`}
+                    >
+                      <fieldset className="mt-4">
+                        <Field
+                          id="application.preferences.liveIn"
+                          name="application.preferences.liveIn"
+                          type="checkbox"
+                          label={`${t("application.add.preferences.liveIn")} ${t(
+                            "application.details.countyName"
+                          )}`}
+                          register={register}
+                          inputProps={{
+                            onChange: () => {
+                              setValue("application.preferences.none", false)
+                            },
+                          }}
+                        />
+
+                        <Field
+                          id="application.preferences.workIn"
+                          name="application.preferences.workIn"
+                          type="checkbox"
+                          label={`${t("application.add.preferences.workIn")} ${t(
+                            "application.details.countyName"
+                          )}`}
+                          register={register}
+                          inputProps={{
+                            onChange: () => {
+                              setValue("application.preferences.none", false)
+                            },
+                          }}
+                        />
+
+                        <Field
+                          id="application.preferences.none"
+                          name="application.preferences.none"
+                          type="checkbox"
+                          label={t("application.add.preferences.optedOut")}
+                          register={register}
+                          inputProps={{
+                            onChange: () => {
+                              setValue("application.preferences.liveIn", false)
+                              setValue("application.preferences.workIn", false)
+                            },
+                          }}
+                        />
+                      </fieldset>
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
+
+                <GridSection
+                  title={t("application.details.householdIncome")}
+                  grid={false}
+                  separator
+                >
+                  <GridSection columns={3}>
+                    <GridCell>
+                      <ViewItem label={t("application.add.incomePeriod")}>
+                        <div className="flex h-12 items-center">
+                          <Field
+                            id="application.incomePeriodYear"
+                            name="application.incomePeriod"
+                            className="m-0"
+                            type="radio"
+                            label={t("t.perYear")}
+                            register={register}
+                            inputProps={{
+                              value: "perYear",
+                              onChange: () => {
+                                setValue("incomeMonth", "")
+                                setValue("incomeYear", "")
+                              },
+                            }}
+                          />
+
+                          <Field
+                            id="application.incomePeriodMonth"
+                            name="application.incomePeriod"
+                            className="m-0"
+                            type="radio"
+                            label={t("t.perMonth")}
+                            register={register}
+                            inputProps={{
+                              value: "perMonth",
+                              onChange: () => {
+                                setValue("incomeMonth", "")
+                                setValue("incomeYear", "")
+                              },
+                            }}
+                          />
+                        </div>
+                      </ViewItem>
+                    </GridCell>
+                  </GridSection>
+
+                  <GridSection columns={3}>
+                    <GridCell>
+                      <ViewItem label={t("application.details.annualIncome")}>
+                        <Field
+                          id="incomeYear"
+                          type="number"
+                          name="incomeYear"
+                          label={t("application.details.annualIncome")}
+                          placeholder={t("t.enterAmount")}
+                          register={register}
+                          disabled={incomePeriodValue !== "perYear"}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("application.details.monthlyIncome")}>
+                        <Field
+                          id="incomeMonth"
+                          type="number"
+                          name="incomeMonth"
+                          label={t("application.details.monthlyIncome")}
+                          placeholder={t("t.enterAmount")}
+                          register={register}
+                          disabled={incomePeriodValue !== "perMonth"}
+                          readerOnly
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("application.details.vouchers")}>
+                        <Select
+                          id="application.incomeVouchers"
+                          name="application.incomeVouchers"
+                          placeholder={t("t.selectOne")}
+                          label={t("application.details.vouchers")}
+                          labelClassName="sr-only"
+                          register={register}
+                          controlClassName="control"
+                          options={["yes", "no"]}
+                          keyPrefix="t"
+                        />
+                      </ViewItem>
+                    </GridCell>
+                  </GridSection>
+                </GridSection>
+
+                <GridSection
+                  title={t("application.add.demographicsInformation")}
+                  columns={3}
+                  separator
+                >
+                  <GridCell>
+                    <ViewItem label={t("application.add.ethnicity")}>
                       <Select
-                        id="application.additionalPhoneNumberType"
-                        name="application.additionalPhoneNumberType"
-                        error={errors.application?.additionalPhoneNumberType}
-                        errorMessage={t("errors.phoneNumberTypeError")}
+                        id="application.demographics.ethnicity"
+                        name="application.demographics.ethnicity"
+                        placeholder={t("t.selectOne")}
+                        label={t("application.add.ethnicity")}
+                        labelClassName="sr-only"
                         register={register}
                         controlClassName="control"
-                        placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                        label={t("application.contact.phoneNumberTypes.prompt")}
-                        labelClassName={"sr-only"}
-                        options={phoneNumberKeys}
-                        keyPrefix="application.contact.phoneNumberTypes"
-                        validation={{ required: additionalPhoneValue?.length > 0 }}
-                        disabled={!additionalPhoneValue?.length}
+                        options={ethnicityKeys}
+                        keyPrefix="application.review.demographics.ethnicityOptions"
                       />
                     </ViewItem>
                   </GridCell>
 
                   <GridCell>
-                    <ViewItem label={t("application.contact.preferredContactType")}>
+                    <ViewItem label={t("application.add.race")}>
                       <Select
-                        id="application.contactPreferences"
-                        name="application.contactPreferences"
-                        label={t("application.contact.preferredContactType")}
+                        id="application.demographics.race"
+                        name="application.demographics.race"
+                        placeholder={t("t.selectOne")}
+                        label={t("application.add.race")}
                         labelClassName="sr-only"
                         register={register}
                         controlClassName="control"
-                        options={["", ...contactPreferencesOptions]}
-                        keyPrefix="t"
+                        options={raceKeys}
+                        keyPrefix="application.review.demographics.raceOptions"
                       />
                     </ViewItem>
                   </GridCell>
 
                   <GridCell>
-                    <ViewItem label={t("application.add.workInRegion")}>
+                    <ViewItem label={t("application.add.gender")}>
+                      <Select
+                        id="application.demographics.gender"
+                        name="application.demographics.gender"
+                        placeholder={t("t.selectOne")}
+                        label={t("application.add.gender")}
+                        labelClassName="sr-only"
+                        register={register}
+                        controlClassName="control"
+                        options={genderKeys}
+                        keyPrefix="application.review.demographics.genderOptions"
+                      />
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell>
+                    <ViewItem label={t("application.add.sexualOrientation")}>
+                      <Select
+                        id="application.demographics.sexualOrientation"
+                        name="application.demographics.sexualOrientation"
+                        placeholder={t("t.selectOne")}
+                        label={t("application.add.sexualOrientation")}
+                        labelClassName="sr-only"
+                        register={register}
+                        controlClassName="control"
+                        options={sexualOrientation}
+                        keyPrefix="application.review.demographics.sexualOrientationOptions"
+                      />
+                    </ViewItem>
+                  </GridCell>
+
+                  <GridCell span={2}>
+                    <ViewItem label={t("application.add.howDidYouHearAboutUs")}>
+                      <FieldGroup
+                        type="checkbox"
+                        name="application.demographics.howDidYouHear"
+                        fields={howDidYouHearOptions}
+                        register={register}
+                        fieldGroupClassName="grid grid-cols-2 mt-4"
+                      />
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
+
+                <GridSection title={t("application.review.terms.title")} separator>
+                  <GridCell>
+                    <ViewItem label={t("application.details.signatureOnTerms")}>
                       <div className="flex h-12 items-center">
                         <Field
-                          id="application.applicant.workInRegionYes"
-                          name="application.applicant.workInRegion"
+                          id="application.acceptedTermsYes"
+                          name="application.acceptedTerms"
                           className="m-0"
                           type="radio"
                           label={t("t.yes")}
@@ -447,8 +917,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         />
 
                         <Field
-                          id="application.applicant.workInRegionNo"
-                          name="application.applicant.workInRegion"
+                          id="application.acceptedTermsNo"
+                          name="application.acceptedTerms"
                           className="m-0"
                           type="radio"
                           label={t("t.no")}
@@ -461,501 +931,52 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     </ViewItem>
                   </GridCell>
                 </GridSection>
+              </div>
 
-                {ApplicationFormAddress(
-                  t("application.details.residenceAddress"),
-                  "application.applicant.address",
-                  "residence",
-                  register
-                )}
-
-                {mailingAddressValue &&
-                  ApplicationFormAddress(
-                    t("application.contact.mailingAddress"),
-                    "application.mailingAddress",
-                    "mailing",
-                    register
-                  )}
-
-                {workInRegionValue === "yes" &&
-                  ApplicationFormAddress(
-                    t("application.contact.workAddress"),
-                    "application.applicant.workAddress",
-                    "work",
-                    register
-                  )}
-              </GridSection>
-
-              <GridSection
-                title={t("application.alternateContact.type.label")}
-                grid={false}
-                separator
-              >
-                <GridSection columns={3}>
-                  <GridCell>
-                    <ViewItem label={t("application.name.firstName")}>
-                      <Field
-                        id="application.alternateContact.firstName"
-                        name="application.alternateContact.firstName"
-                        label={t("application.name.firstName")}
-                        placeholder={t("application.name.firstName")}
-                        register={register}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("application.name.lastName")}>
-                      <Field
-                        id="application.alternateContact.lastName"
-                        name="application.alternateContact.lastName"
-                        placeholder={t("application.name.lastName")}
-                        register={register}
-                        label={t("application.name.lastName")}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("t.relationship")}>
-                      <Select
-                        id="application.alternateContact.relationship"
-                        name="application.alternateContact.relationship"
-                        label={t("t.relationship")}
-                        labelClassName="sr-only"
-                        register={register}
-                        controlClassName="control"
-                        options={altContactRelationshipOptions}
-                        keyPrefix="application.alternateContact.type.options"
-                      />
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("application.details.agency")}>
-                      <Field
-                        id="application.alternateContact.agency"
-                        name="application.alternateContact.agency"
-                        label={t("application.details.agency")}
-                        placeholder={t(
-                          "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
-                        )}
-                        register={register}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("t.email")}>
-                      <Field
-                        id="application.alternateContact.emailAddress"
-                        name="application.alternateContact.emailAddress"
-                        type="email"
-                        placeholder="example@web.com"
-                        label={t("t.email")}
-                        validation={{ pattern: emailRegex }}
-                        error={errors.application?.alternateContact?.emailAddress}
-                        errorMessage={t("errors.emailAddressError")}
-                        register={register}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("t.phone")}>
-                      <PhoneField
-                        id="application.alternateContact.phoneNumber"
-                        name="application.alternateContact.phoneNumber"
-                        required={false}
-                        error={errors.application?.alternateContact?.phoneNumber}
-                        errorMessage={t("errors.phoneNumberError")}
-                        control={control}
-                        controlClassName="control"
-                        label={t("t.phone")}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-                </GridSection>
-
-                <GridSection grid={false}>
-                  {ApplicationFormAddress(
-                    t("application.contact.mailingAddress"),
-                    "application.alternateAddress",
-                    "alternate",
-                    register
-                  )}
-                </GridSection>
-              </GridSection>
-
-              <GridSection
-                title={t("application.household.householdMembers")}
-                grid={false}
-                separator
-              >
-                <div className="bg-gray-300 px-4 py-5">
-                  {!!householdMembers.length && (
-                    <div className="mb-5">
-                      <MinimalTable headers={memberTableHeaders} data={memberTableData} />
-                    </div>
-                  )}
-
-                  <Button
-                    type="button"
-                    size={AppearanceSizeType.normal}
-                    onClick={() => setMembersDrawer(true)}
-                  >
-                    {t("application.add.addHouseholdMember")}
-                  </Button>
-                </div>
-              </GridSection>
-
-              <GridSection title={t("application.review.householdDetails")} columns={1} separator>
-                <GridCell>
-                  <ViewItem label={t("application.details.preferredUnitSizes")}>
-                    <FieldGroup
-                      type="checkbox"
-                      name="application.preferredUnit"
-                      fields={preferredUnitOptions}
-                      register={register}
-                      fieldGroupClassName="grid grid-cols-2 mt-4"
-                    />
-                  </ViewItem>
-                </GridCell>
-                <GridCell>
-                  <ViewItem label={t("application.details.adaPriorities")}>
-                    <fieldset className="mt-4">
-                      <Field
-                        id="application.accessibility.mobility"
-                        name="application.accessibility.mobility"
-                        type="checkbox"
-                        label={t("application.add.mobility")}
-                        register={register}
-                      />
-
-                      <Field
-                        id="application.accessibility.vision"
-                        name="application.accessibility.vision"
-                        type="checkbox"
-                        label={t("application.add.vision")}
-                        register={register}
-                      />
-
-                      <Field
-                        id="application.accessibility.hearing"
-                        name="application.accessibility.hearing"
-                        type="checkbox"
-                        label={t("application.add.hearing")}
-                        register={register}
-                      />
-                    </fieldset>
-                  </ViewItem>
-                </GridCell>
-              </GridSection>
-
-              <GridSection title={t("application.details.preferences")} columns={1} separator>
-                <GridCell>
-                  <ViewItem
-                    label={`${t("application.details.liveOrWorkIn")} ${t(
-                      "application.details.countyName"
-                    )}`}
-                  >
-                    <fieldset className="mt-4">
-                      <Field
-                        id="application.preferences.liveIn"
-                        name="application.preferences.liveIn"
-                        type="checkbox"
-                        label={`${t("application.add.preferences.liveIn")} ${t(
-                          "application.details.countyName"
-                        )}`}
-                        register={register}
-                        inputProps={{
-                          onChange: () => {
-                            setValue("application.preferences.none", false)
-                          },
+              <aside className="md:w-3/12 md:pl-6">
+                <StatusAside
+                  columns={1}
+                  actions={[
+                    <GridCell>
+                      <Button
+                        styleType={AppearanceStyleType.primary}
+                        fullWidth
+                        onClick={() => {
+                          //
                         }}
-                      />
-
-                      <Field
-                        id="application.preferences.workIn"
-                        name="application.preferences.workIn"
-                        type="checkbox"
-                        label={`${t("application.add.preferences.workIn")} ${t(
-                          "application.details.countyName"
-                        )}`}
-                        register={register}
-                        inputProps={{
-                          onChange: () => {
-                            setValue("application.preferences.none", false)
-                          },
+                      >
+                        {t("t.submit")}
+                      </Button>
+                    </GridCell>,
+                    <GridCell>
+                      <Button
+                        styleType={AppearanceStyleType.secondary}
+                        fullWidth
+                        onClick={() => {
+                          //
                         }}
-                      />
-
-                      <Field
-                        id="application.preferences.none"
-                        name="application.preferences.none"
-                        type="checkbox"
-                        label={t("application.add.preferences.optedOut")}
-                        register={register}
-                        inputProps={{
-                          onChange: () => {
-                            setValue("application.preferences.liveIn", false)
-                            setValue("application.preferences.workIn", false)
-                          },
-                        }}
-                      />
-                    </fieldset>
-                  </ViewItem>
-                </GridCell>
-              </GridSection>
-
-              <GridSection title={t("application.details.householdIncome")} grid={false} separator>
-                <GridSection columns={3}>
-                  <GridCell>
-                    <ViewItem label={t("application.add.incomePeriod")}>
-                      <div className="flex h-12 items-center">
-                        <Field
-                          id="application.incomePeriodYear"
-                          name="application.incomePeriod"
-                          className="m-0"
-                          type="radio"
-                          label={t("t.perYear")}
-                          register={register}
-                          inputProps={{
-                            value: "perYear",
-                            onChange: () => {
-                              setValue("incomeMonth", "")
-                              setValue("incomeYear", "")
-                            },
-                          }}
-                        />
-
-                        <Field
-                          id="application.incomePeriodMonth"
-                          name="application.incomePeriod"
-                          className="m-0"
-                          type="radio"
-                          label={t("t.perMonth")}
-                          register={register}
-                          inputProps={{
-                            value: "perMonth",
-                            onChange: () => {
-                              setValue("incomeMonth", "")
-                              setValue("incomeYear", "")
-                            },
-                          }}
-                        />
-                      </div>
-                    </ViewItem>
-                  </GridCell>
-                </GridSection>
-
-                <GridSection columns={3}>
-                  <GridCell>
-                    <ViewItem label={t("application.details.annualIncome")}>
-                      <Field
-                        id="incomeYear"
-                        type="number"
-                        name="incomeYear"
-                        label={t("application.details.annualIncome")}
-                        placeholder={t("t.enterAmount")}
-                        register={register}
-                        disabled={incomePeriodValue !== "perYear"}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("application.details.monthlyIncome")}>
-                      <Field
-                        id="incomeMonth"
-                        type="number"
-                        name="incomeMonth"
-                        label={t("application.details.monthlyIncome")}
-                        placeholder={t("t.enterAmount")}
-                        register={register}
-                        disabled={incomePeriodValue !== "perMonth"}
-                        readerOnly
-                      />
-                    </ViewItem>
-                  </GridCell>
-
-                  <GridCell>
-                    <ViewItem label={t("application.details.vouchers")}>
-                      <Select
-                        id="application.incomeVouchers"
-                        name="application.incomeVouchers"
-                        placeholder={t("t.selectOne")}
-                        label={t("application.details.vouchers")}
-                        labelClassName="sr-only"
-                        register={register}
-                        controlClassName="control"
-                        options={["yes", "no"]}
-                        keyPrefix="t"
-                      />
-                    </ViewItem>
-                  </GridCell>
-                </GridSection>
-              </GridSection>
-
-              <GridSection
-                title={t("application.add.demographicsInformation")}
-                columns={3}
-                separator
-              >
-                <GridCell>
-                  <ViewItem label={t("application.add.ethnicity")}>
-                    <Select
-                      id="application.demographics.ethnicity"
-                      name="application.demographics.ethnicity"
-                      placeholder={t("t.selectOne")}
-                      label={t("application.add.ethnicity")}
-                      labelClassName="sr-only"
-                      register={register}
-                      controlClassName="control"
-                      options={ethnicityKeys}
-                      keyPrefix="application.review.demographics.ethnicityOptions"
-                    />
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.add.race")}>
-                    <Select
-                      id="application.demographics.race"
-                      name="application.demographics.race"
-                      placeholder={t("t.selectOne")}
-                      label={t("application.add.race")}
-                      labelClassName="sr-only"
-                      register={register}
-                      controlClassName="control"
-                      options={raceKeys}
-                      keyPrefix="application.review.demographics.raceOptions"
-                    />
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.add.gender")}>
-                    <Select
-                      id="application.demographics.gender"
-                      name="application.demographics.gender"
-                      placeholder={t("t.selectOne")}
-                      label={t("application.add.gender")}
-                      labelClassName="sr-only"
-                      register={register}
-                      controlClassName="control"
-                      options={genderKeys}
-                      keyPrefix="application.review.demographics.genderOptions"
-                    />
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell>
-                  <ViewItem label={t("application.add.sexualOrientation")}>
-                    <Select
-                      id="application.demographics.sexualOrientation"
-                      name="application.demographics.sexualOrientation"
-                      placeholder={t("t.selectOne")}
-                      label={t("application.add.sexualOrientation")}
-                      labelClassName="sr-only"
-                      register={register}
-                      controlClassName="control"
-                      options={sexualOrientation}
-                      keyPrefix="application.review.demographics.sexualOrientationOptions"
-                    />
-                  </ViewItem>
-                </GridCell>
-
-                <GridCell span={2}>
-                  <ViewItem label={t("application.add.howDidYouHearAboutUs")}>
-                    <FieldGroup
-                      type="checkbox"
-                      name="application.demographics.howDidYouHear"
-                      fields={howDidYouHearOptions}
-                      register={register}
-                      fieldGroupClassName="grid grid-cols-2 mt-4"
-                    />
-                  </ViewItem>
-                </GridCell>
-              </GridSection>
-
-              <GridSection title={t("application.review.terms.title")} separator>
-                <GridCell>
-                  <ViewItem label={t("application.details.signatureOnTerms")}>
-                    <div className="flex h-12 items-center">
-                      <Field
-                        id="application.acceptedTermsYes"
-                        name="application.acceptedTerms"
-                        className="m-0"
-                        type="radio"
-                        label={t("t.yes")}
-                        register={register}
-                        inputProps={{
-                          value: "yes",
-                        }}
-                      />
-
-                      <Field
-                        id="application.acceptedTermsNo"
-                        name="application.acceptedTerms"
-                        className="m-0"
-                        type="radio"
-                        label={t("t.no")}
-                        register={register}
-                        inputProps={{
-                          value: "no",
-                        }}
-                      />
-                    </div>
-                  </ViewItem>
-                </GridCell>
-              </GridSection>
+                      >
+                        {t("t.submitNew")}
+                      </Button>
+                    </GridCell>,
+                    <GridCell className="flex">
+                      <LinkButton
+                        unstyled
+                        fullWidth
+                        className="bg-opacity-0"
+                        href={`/listings/${listingId}/applications`}
+                      >
+                        {t("t.cancel")}
+                      </LinkButton>
+                    </GridCell>,
+                  ]}
+                >
+                  {isEditable && <StatusMessages lastTimestamp="Whatever" />}
+                </StatusAside>
+              </aside>
             </div>
-
-            <aside className="md:w-3/12 md:pl-6">
-              <StatusAside
-                columns={1}
-                actions={[
-                  <GridCell>
-                    <Button
-                      styleType={AppearanceStyleType.primary}
-                      fullWidth
-                      onClick={() => {
-                        //
-                      }}
-                    >
-                      Submit
-                    </Button>
-                  </GridCell>,
-                  <GridCell>
-                    <Button
-                      styleType={AppearanceStyleType.secondary}
-                      fullWidth
-                      onClick={() => {
-                        //
-                      }}
-                    >
-                      Submit &amp; New
-                    </Button>
-                  </GridCell>,
-                  <GridCell className="flex">
-                    <LinkButton unstyled fullWidth className="bg-opacity-0" href="/applications">
-                      Cancel
-                    </LinkButton>
-                  </GridCell>,
-                ]}
-              >
-                <StatusMessages lastTimestamp="Whatever" />
-              </StatusAside>
-            </aside>
-          </div>
-        </Form>
+          </Form>
+        </div>
 
         <Drawer
           open={!!membersDrawer}
