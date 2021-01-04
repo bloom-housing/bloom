@@ -195,6 +195,7 @@ export class Application extends AbstractEntity {
 
   @Column({ enum: Language })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: Language, enumName: "Language" })
   language: Language
