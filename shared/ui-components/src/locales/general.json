@@ -78,7 +78,8 @@
       "sameResidence": "Same Residence",
       "languageSubmittedIn": "Language Submitted In",
       "timeSubmitted": "Time Submitted",
-      "dateSubmitted": "Date Submitted"
+      "dateSubmitted": "Date Submitted",
+      "applicationSubmitted": "Application Submitted"
     },
     "details": {
       "applicationData": "Application Data",

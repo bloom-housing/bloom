@@ -35,6 +35,7 @@ import {
   AppearanceStyleType,
   AppearanceBorderType,
   TimeField,
+  AlertTypes,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
@@ -51,7 +52,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const router = useRouter()
   const listingId = router.query.id as string
 
-  const [errorAlert, setErrorAlert] = useState(false)
+  const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [membersDrawer, setMembersDrawer] = useState<string | boolean>(false)
   const [membersDeleteModal, setMembersDeleteModal] = useState<string | boolean>(false)
 
@@ -109,7 +110,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   }
 
   const onSubmit = async (data) => {
-    setErrorAlert(false)
+    setAlert(null)
 
     const formData = {
       householdMembers,
@@ -117,22 +118,20 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
 
     const body = formatApplicationData(formData, listingId, false)
-    console.log(body)
 
     try {
       const result = await applicationsService.create({ body })
 
       if (result) {
-        console.log("submission success")
+        setAlert("success")
       }
     } catch (err) {
-      setErrorAlert(true)
+      setAlert("alert")
     }
   }
 
-  const onError = (error) => {
-    setErrorAlert(true)
-    console.log("Submit ERROR", error)
+  const onError = () => {
+    setAlert("alert")
   }
 
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
@@ -243,9 +242,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
       <section className="bg-primary-lighter">
         <div className="max-w-screen-xl px-5 my-5 mx-auto">
-          {errorAlert && (
-            <AlertBox onClose={() => setErrorAlert(false)} closeable>
-              {t("application.add.applicationAddError")}
+          {alert && (
+            <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
+              {alert === "success"
+                ? t("application.add.applicationSubmitted")
+                : t("application.add.applicationAddError")}
             </AlertBox>
           )}
 
