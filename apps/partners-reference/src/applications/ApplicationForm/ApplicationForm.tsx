@@ -64,7 +64,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
-  const phoneValue: string = watch("application.applicant.phoneNumber")
+  const phoneValue: string = watch("phoneNumber")
   const alternatePhoneValue: string = watch("application.alternateContact.phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
   const incomePeriodValue: string = watch("application.incomePeriod")
@@ -237,7 +237,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
       </div>
 
       <section className="bg-primary-lighter">
-        <div className="max-w-screen-xl px-5 mx-auto">
+        <div className="max-w-screen-xl px-5 my-5 mx-auto">
           {errorAlert && (
             <AlertBox onClose={() => setErrorAlert(false)} closeable>
               {t("application.add.applicationAddError")}
@@ -361,11 +361,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     <GridCell>
                       <ViewItem label={t("t.phone")}>
                         <PhoneField
-                          id="application.applicant.phoneNumber"
-                          name="application.applicant.phoneNumber"
+                          id="phoneNumber"
+                          name="phoneNumber"
                           label={t("application.contact.yourPhoneNumber")}
                           required={false}
-                          error={errors.application?.applicant?.phoneNumber}
+                          error={errors?.phoneNumber}
                           errorMessage={t("errors.phoneNumberError")}
                           control={control}
                           controlClassName="control"
@@ -937,7 +937,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                 <StatusAside
                   columns={1}
                   actions={[
-                    <GridCell>
+                    <GridCell key="btn-submit">
                       <Button
                         styleType={AppearanceStyleType.primary}
                         fullWidth
@@ -948,7 +948,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         {t("t.submit")}
                       </Button>
                     </GridCell>,
-                    <GridCell>
+                    <GridCell key="btn-submitNew">
                       <Button
                         styleType={AppearanceStyleType.secondary}
                         fullWidth
@@ -959,7 +959,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         {t("t.submitNew")}
                       </Button>
                     </GridCell>,
-                    <GridCell className="flex">
+                    <GridCell className="flex" key="btn-cancel">
                       <LinkButton
                         unstyled
                         fullWidth

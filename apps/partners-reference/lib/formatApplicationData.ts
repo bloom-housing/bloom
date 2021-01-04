@@ -46,14 +46,16 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
 
   // create applicant
   const applicant = ((): ApplicantUpdate => {
+    const { phoneNumber } = data
     const { applicant: applicantData } = data.application
     const phoneNumberType = applicantData.phoneNumberType ? applicantData.phoneNumberType : null
     const noEmail = !applicantData.emailAddress
-    const noPhone = !applicantData.phoneNumber
+    const noPhone = !phoneNumber
 
     return {
       ...applicantData,
       ...data.dateOfBirth,
+      phoneNumber,
       phoneNumberType,
       noEmail,
       noPhone,
