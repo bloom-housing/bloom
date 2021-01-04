@@ -112,7 +112,8 @@
         "submitted": "Submitted",
         "removed": "Removed"
       },
-      "preferredUnitSizes": "Preferred Unit Sizes"
+      "preferredUnitSizes": "Preferred Unit Sizes",
+      "householdMemberDetails": "Household Member Details"
     },
     "form": {
       "general": {
@@ -787,6 +788,7 @@
     "day": "Day",
     "delete": "Delete",
     "deposit": "Deposit",
+    "done": "Done",
     "export": "Export",
     "enterAmount": "Enter amount",
     "filter": "Filter",

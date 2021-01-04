@@ -70,6 +70,8 @@ const ApplicationFormMember = ({
       workInRegion: workInRegion ? workInRegion : null,
     }
 
+    console.log("member: ", formData)
+
     if (editedMemberId && typeof editedMemberId === "string") {
       const editedMember = members.find((member) => member.id === editedMemberId)
       onSubmit({ ...editedMember, ...formData })
