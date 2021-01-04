@@ -126,6 +126,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
       if (result) {
         setAlert("success")
+
+        setTimeout(() => {
+          void router.push(`/applications/${result.id}`)
+        }, 2000)
       }
     } catch (err) {
       setAlert("alert")
