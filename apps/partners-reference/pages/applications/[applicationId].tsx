@@ -257,7 +257,7 @@ export default function ApplicationsList() {
 
               <GridCell>
                 <ViewItem label={t("application.details.totalSize")}>
-                  {application.householdSize || 1}
+                  {!application.householdSize ? 1 : application.householdSize + 1}
                 </ViewItem>
               </GridCell>
 
@@ -409,6 +409,9 @@ export default function ApplicationsList() {
                         {(() => {
                           if (!application.alternateContact.type) return t("t.n/a")
 
+                          if (application.alternateContact.otherType)
+                            return application.alternateContact.otherType
+
                           return t(
                             `application.alternateContact.type.options.${application.alternateContact.type}`
                           )
@@ -463,6 +466,21 @@ export default function ApplicationsList() {
               inset
               columns={3}
             >
+              <GridCell>
+                <ViewItem label={t("application.details.preferredUnitSizes")}>
+                  {(() => {
+                    if (!application?.preferredUnit?.length) return t("t.n/a")
+
+                    return application?.preferredUnit?.map((item) => (
+                      <Fragment key={item}>
+                        {t(`application.household.preferredUnit.options.${item}`)}
+                        <br />
+                      </Fragment>
+                    ))
+                  })()}
+                </ViewItem>
+              </GridCell>
+
               <GridCell>
                 <ViewItem label={t("application.details.adaPriorities")}>
                   {accessibilityLabels(application.accessibility).map((item) => (
@@ -535,6 +553,70 @@ export default function ApplicationsList() {
                   })()}
                 </ViewItem>
               </GridCell>
+            </GridSection>
+
+            <GridSection
+              className="bg-primary-lighter"
+              title={t("application.add.demographicsInformation")}
+              inset
+              grid={false}
+            >
+              <GridSection columns={3}>
+                <GridCell>
+                  <ViewItem label={t("application.add.ethnicity")}>
+                    {application?.demographics?.ethnicity
+                      ? t(
+                          `application.review.demographics.ethnicityOptions.${application?.demographics?.ethnicity}`
+                        )
+                      : t("t.n/a")}
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.add.race")}>
+                    {application?.demographics?.race
+                      ? t(
+                          `application.review.demographics.raceOptions.${application?.demographics?.race}`
+                        )
+                      : t("t.n/a")}
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.add.gender")}>
+                    {application?.demographics?.gender
+                      ? t(
+                          `application.review.demographics.genderOptions.${application?.demographics?.gender}`
+                        )
+                      : t("t.n/a")}
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.add.sexualOrientation")}>
+                    {application?.demographics?.sexualOrientation
+                      ? t(
+                          `application.review.demographics.sexualOrientationOptions.${application?.demographics?.sexualOrientation}`
+                        )
+                      : t("t.n/a")}
+                  </ViewItem>
+                </GridCell>
+
+                <GridCell>
+                  <ViewItem label={t("application.add.howDidYouHearAboutUs")}>
+                    {(() => {
+                      if (!application?.demographics?.howDidYouHear?.length) return t("t.n/a")
+
+                      return application.demographics?.howDidYouHear?.map((item) => (
+                        <Fragment key={item}>
+                          {t(`application.review.demographics.howDidYouHearOptions.${item}`)}
+                          <br />
+                        </Fragment>
+                      ))
+                    })()}
+                  </ViewItem>
+                </GridCell>
+              </GridSection>
             </GridSection>
 
             <GridSection

@@ -40,7 +40,7 @@ import { useForm } from "react-hook-form"
 import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import { ApplicationFormMember } from "./ApplicationFormMember"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
-import { HouseholdMember, ApplicationCreate } from "@bloom-housing/core"
+import { HouseholdMember } from "@bloom-housing/core"
 import { formatApplicationData } from "../../../lib/formatApplicationData"
 
 type Props = {
@@ -68,6 +68,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const alternatePhoneValue: string = watch("application.alternateContact.phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
   const incomePeriodValue: string = watch("application.incomePeriod")
+  const alternateContactType: string = watch("application.alternateContact.type")
 
   // reset phone type field when phone is empty
   useEffect(() => {
@@ -530,21 +531,6 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     </GridCell>
 
                     <GridCell>
-                      <ViewItem label={t("t.relationship")}>
-                        <Select
-                          id="application.alternateContact.relationship"
-                          name="application.alternateContact.relationship"
-                          label={t("t.relationship")}
-                          labelClassName="sr-only"
-                          register={register}
-                          controlClassName="control"
-                          options={altContactRelationshipOptions}
-                          keyPrefix="application.alternateContact.type.options"
-                        />
-                      </ViewItem>
-                    </GridCell>
-
-                    <GridCell>
                       <ViewItem label={t("application.details.agency")}>
                         <Field
                           id="application.alternateContact.agency"
@@ -591,6 +577,36 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         />
                       </ViewItem>
                     </GridCell>
+
+                    <GridCell>
+                      <ViewItem label={t("t.relationship")}>
+                        <Select
+                          id="application.alternateContact.type"
+                          name="application.alternateContact.type"
+                          label={t("t.relationship")}
+                          labelClassName="sr-only"
+                          register={register}
+                          controlClassName="control"
+                          options={altContactRelationshipOptions}
+                          keyPrefix="application.alternateContact.type.options"
+                        />
+                      </ViewItem>
+                    </GridCell>
+
+                    {alternateContactType === "other" && (
+                      <GridCell>
+                        <ViewItem label={t("t.otherRelationShip")}>
+                          <Field
+                            id="application.alternateContact.otherType"
+                            name="application.alternateContact.otherType"
+                            label={t("t.otherRelationShip")}
+                            placeholder={t("t.relationship")}
+                            register={register}
+                            readerOnly
+                          />
+                        </ViewItem>
+                      </GridCell>
+                    )}
                   </GridSection>
 
                   <GridSection grid={false}>
