@@ -14,6 +14,22 @@ import {
 */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+function getAddress(condition, addressData) {
+  const blankAddress: Address = {
+    id: undefined,
+    createdAt: undefined,
+    updatedAt: undefined,
+    street: "",
+    street2: "",
+    city: "",
+    state: "",
+    zipCode: "",
+  }
+
+  return condition ? addressData : blankAddress
+}
+
 export const formatApplicationData = (data: any, listingId, editMode: boolean) => {
   const language: Language = data.application.language
 
@@ -51,10 +67,14 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     const phoneNumberType = applicantData.phoneNumberType ? applicantData.phoneNumberType : null
     const noEmail = !applicantData.emailAddress
     const noPhone = !phoneNumber
+    const workInRegion = applicantData?.workInRegion === "yes"
+
+    const workAddress = getAddress(workInRegion, applicantData?.workAddress)
 
     return {
       ...applicantData,
       ...data.dateOfBirth,
+      workAddress,
       phoneNumber,
       phoneNumberType,
       noEmail,
@@ -83,22 +103,10 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     ? additionalPhoneNumberTypeData
     : null
 
-  const mailingAddress = (() => {
-    const blankAddress: Address = {
-      id: undefined,
-      createdAt: undefined,
-      updatedAt: undefined,
-      street: "",
-      street2: "",
-      city: "",
-      state: "",
-      zipCode: "",
-    }
+  const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 
-    return sendMailToMailingAddress ? mailingAddressData : blankAddress
-  })()
-
-  const alternateAddress: Address = data.application.alternateAddress
+  // pass blank address, not used for now everywhere
+  const alternateAddress = getAddress(false, null)
 
   const { incomeMonth, incomeYear, householdMembers } = data
 

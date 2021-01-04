@@ -134,7 +134,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
     console.log("Submit ERROR", error)
   }
 
-  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => item.id)
+  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
+    id: item.id,
+    label: t(`t.${item.id}`),
+  }))
+
   const altContactRelationshipOptions = ["", ...altContactRelationshipKeys]
   const howDidYouHearOptions = useMemo(() => {
     return howDidYouHear?.map((item) => ({
@@ -429,22 +433,18 @@ const ApplicationForm = ({ isEditable }: Props) => {
 
                     <GridCell>
                       <ViewItem label={t("application.contact.preferredContactType")}>
-                        <Select
-                          id="application.contactPreferences"
+                        <FieldGroup
                           name="application.contactPreferences"
-                          label={t("application.contact.preferredContactType")}
-                          labelClassName="sr-only"
+                          fields={contactPreferencesOptions}
+                          type="checkbox"
                           register={register}
-                          controlClassName="control"
-                          options={["", ...contactPreferencesOptions]}
-                          keyPrefix="t"
                         />
                       </ViewItem>
                     </GridCell>
 
                     <GridCell>
                       <ViewItem label={t("application.add.workInRegion")}>
-                        <div className="flex h-12 items-center">
+                        <div className="flex items-center">
                           <Field
                             id="application.applicant.workInRegionYes"
                             name="application.applicant.workInRegion"
@@ -596,7 +596,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   <GridSection grid={false}>
                     {ApplicationFormAddress(
                       t("application.contact.mailingAddress"),
-                      "application.alternateAddress",
+                      "application.alternateContact.mailingAddress",
                       "alternate",
                       register
                     )}
