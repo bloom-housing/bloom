@@ -59,12 +59,15 @@ const ApplicationFormMember = ({
   const workInRegionField = watch("workInRegion")
 
   function onFormSubmit(data) {
+    const { sameAddress, workInRegion } = data
     const { birthMonth, birthDay, birthYear } = data.dateOfBirth
     const formData = {
       ...data,
       birthMonth,
       birthDay,
       birthYear,
+      sameAddress: sameAddress ? sameAddress : null,
+      workInRegion: workInRegion ? workInRegion : null,
     }
 
     if (editedMemberId && typeof editedMemberId === "string") {

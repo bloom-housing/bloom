@@ -77,19 +77,42 @@ export default function ApplicationsList() {
     name: t("t.name"),
     relationship: t("t.relationship"),
     birth: t("application.household.member.dateOfBirth"),
-    street: t("t.street"),
-    city: t("application.contact.city"),
-    state: t("application.contact.state"),
+    sameResidence: t("application.add.sameResidence"),
+    workInRegion: t("application.details.workInRegion"),
+    action: "",
   }
 
   const householdMembersData = useMemo(() => {
+    const checkAvailablility = (property) => {
+      if (property === "yes") {
+        return t("t.yes")
+      } else if (property === "no") {
+        return t("t.no")
+      }
+
+      return t("t.n/a")
+    }
     return application?.householdMembers?.map((item) => ({
       name: `${item.firstName} ${item.middleName} ${item.lastName}`,
-      relationship: t(`application.form.options.relationship.${item.relationship}`),
-      birth: `${item.birthMonth}/${item.birthDay}/${item.birthYear}`,
-      street: item.address.street,
-      city: item.address.city,
-      state: item.address.state,
+      relationship: item.relationship
+        ? t(`application.form.options.relationship.${item.relationship}`)
+        : t("t.n/a"),
+      birth:
+        item.birthMonth && item.birthDay && item.birthYear
+          ? `${item.birthMonth}/${item.birthDay}/${item.birthYear}`
+          : t("t.n/a"),
+      sameResidence: checkAvailablility(item.sameAddress),
+      workInRegion: checkAvailablility(item.workInRegion),
+      action: (
+        <Button
+          type="button"
+          className="font-semibold uppercase"
+          onClick={() => console.log(item.id)}
+          unstyled
+        >
+          {t("t.view")}
+        </Button>
+      ),
     }))
   }, [application])
 
@@ -251,7 +274,7 @@ export default function ApplicationsList() {
 
               <GridCell>
                 <ViewItem label={t("application.details.language")}>
-                  {application.language ? t(`languages.${application.language}`) : t("n/a")}
+                  {application.language ? t(`languages.${application.language}`) : t("t.n/a")}
                 </ViewItem>
               </GridCell>
 
@@ -265,7 +288,7 @@ export default function ApplicationsList() {
                 <ViewItem label={t("application.details.submittedBy")}>
                   {application.applicant.firstName && application.applicant.lastName
                     ? `${application.applicant.firstName} ${application.applicant.lastName}`
-                    : t("n/a")}
+                    : t("t.n/a")}
                 </ViewItem>
               </GridCell>
             </GridSection>
@@ -279,19 +302,19 @@ export default function ApplicationsList() {
               <GridSection columns={3}>
                 <GridCell>
                   <ViewItem label={t("application.name.firstName")}>
-                    {application.applicant.firstName || t("n/a")}
+                    {application.applicant.firstName || t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.name.middleName")}>
-                    {application.applicant.middleName || t("n/a")}
+                    {application.applicant.middleName || t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("application.name.lastName")}>
-                    {application.applicant.lastName || t("n/a")}
+                    {application.applicant.lastName || t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
@@ -304,14 +327,14 @@ export default function ApplicationsList() {
                         return `${birthMonth}/${birthDay}/${birthYear}`
                       }
 
-                      return t("n/a")
+                      return t("t.n/a")
                     })()}
                   </ViewItem>
                 </GridCell>
 
                 <GridCell>
                   <ViewItem label={t("t.email")} truncated>
-                    {application.applicant.emailAddress || t("n/a")}
+                    {application.applicant.emailAddress || t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
@@ -325,7 +348,7 @@ export default function ApplicationsList() {
                       )
                     }
                   >
-                    {application.applicant.phoneNumber || t("n/a")}
+                    {application.applicant.phoneNumber || t("t.n/a")}
                   </ViewItem>
                 </GridCell>
 
@@ -346,7 +369,7 @@ export default function ApplicationsList() {
                 <GridCell>
                   <ViewItem label={t("application.details.preferredContact")}>
                     {(() => {
-                      if (!application.contactPreferences.length) return t("n/a")
+                      if (!application.contactPreferences.length) return t("t.n/a")
 
                       return application.contactPreferences.map((item) => (
                         <span key={item}>
@@ -361,7 +384,7 @@ export default function ApplicationsList() {
                 <GridCell>
                   <ViewItem label={t("application.details.workInRegion")}>
                     {(() => {
-                      if (!application.applicant.workInRegion) return t("n/a")
+                      if (!application.applicant.workInRegion) return t("t.n/a")
 
                       return application.applicant.workInRegion === "yes" ? t("t.yes") : t("t.no")
                     })()}
@@ -447,7 +470,7 @@ export default function ApplicationsList() {
               )}
 
             {/* household members */}
-            {application.householdSize > 1 && (
+            {application.householdSize >= 1 && (
               <GridSection
                 className="bg-primary-lighter"
                 title={t("application.household.householdMembers")}

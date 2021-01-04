@@ -112,6 +112,8 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const onSubmit = async (data) => {
     setAlert(null)
 
+    console.log(householdMembers)
+
     const formData = {
       householdMembers,
       ...data,
@@ -196,7 +198,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
         name:
           (member.firstName + member.lastName).length > 0
             ? `${member.firstName} ${member.lastName}`
-            : t("n/a"),
+            : t("t.n/a"),
         relationship: member.relationship
           ? t(`application.form.options.relationship.${member.relationship}`)
           : t("t.n/a"),
