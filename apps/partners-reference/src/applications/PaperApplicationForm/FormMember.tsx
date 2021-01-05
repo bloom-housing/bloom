@@ -32,7 +32,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
   }, [members, editedMemberId])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, handleSubmit, errors } = useForm({
+  const { register, watch, errors, trigger, getValues } = useForm({
     defaultValues: {
       firstName: currentlyEdited?.firstName,
       middleName: currentlyEdited?.middleName,
@@ -53,10 +53,18 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
   const sameAddressField = watch("sameAddress")
   const workInRegionField = watch("workInRegion")
 
-  function onFormSubmit(data) {
+  async function onFormSubmit() {
+    const validation = await trigger()
+
+    if (!validation) return
+
+    const data = getValues()
+
     const { sameAddress, workInRegion } = data
     const { birthMonth, birthDay, birthYear } = data.dateOfBirth
     const formData = {
+      createdAt: undefined,
+      updatedAt: undefined,
       ...data,
       birthMonth,
       birthDay,
@@ -74,10 +82,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     }
 
     onClose()
-  }
-
-  function onFormError() {
-    console.log("on error")
   }
 
   const sameAddressOptions = [
@@ -107,7 +111,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
   ]
 
   return (
-    <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
+    <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
         <GridSection title={t("application.review.householdDetails")} columns={4}>
           <GridCell>
@@ -216,7 +220,11 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       </div>
 
       <div className="mt-6">
-        <Button onClick={() => false} styleType={AppearanceStyleType.primary}>
+        <Button
+          type="button"
+          onClick={() => onFormSubmit()}
+          styleType={AppearanceStyleType.primary}
+        >
           {t("t.submit")}
         </Button>
 

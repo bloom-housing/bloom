@@ -7,6 +7,7 @@ import {
   ApplicationStatus,
   Address,
 } from "@bloom-housing/core"
+import moment from "moment"
 
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
@@ -33,8 +34,8 @@ function getAddress(condition, addressData) {
 export const formatApplicationData = (data: any, listingId, editMode: boolean) => {
   const language: Language = data.application.language ? data.application.language : null
 
-  // create createdAt date
   const submissionDate: Date | null = (() => {
+    // rename default (wrong property names)
     const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
       data.dateSubmitted || {}
     const { hours, minutes = 0, seconds = 0, time } = data.timeSubmitted || {}
@@ -44,11 +45,13 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     const date = new Date()
 
     date.setUTCDate(submissionDay)
-    date.setUTCMonth(submissionMonth)
+    date.setUTCMonth(submissionMonth - 1)
     date.setUTCFullYear(submissionYear)
 
     if (hours && minutes && seconds && time) {
-      date.setUTCHours(hours, minutes, seconds)
+      const hourNumber = parseInt(hours, 10)
+      const hour24Clock = time === "am" ? hourNumber : hourNumber + 12
+      date.setUTCHours(hour24Clock, minutes, seconds)
     } else {
       date.setUTCHours(0, 0, 0, 0)
     }
@@ -163,6 +166,8 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     householdMembers,
     householdSize,
   }
+
+  console.log(result)
 
   return result
 }

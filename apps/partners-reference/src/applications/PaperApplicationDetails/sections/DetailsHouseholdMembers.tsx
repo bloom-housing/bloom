@@ -21,13 +21,13 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   const householdMembersData = useMemo(() => {
     const checkAvailablility = (property) => {
-      if (property === "yes") {
+      if (property === null) {
+        return t("t.n/a")
+      } else if (property) {
         return t("t.yes")
-      } else if (property === "no") {
-        return t("t.no")
       }
 
-      return t("t.n/a")
+      return t("t.no")
     }
     return application?.householdMembers?.map((item) => ({
       name: `${item.firstName} ${item.middleName} ${item.lastName}`,
@@ -61,10 +61,10 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
       tinted
       inset
     >
-      {application.householdSize > 1 ? (
+      {application.householdSize >= 1 ? (
         <MinimalTable headers={householdMembersHeaders} data={householdMembersData} />
       ) : (
-        <span className="text-base font-semibold	">{t("t.none")}</span>
+        <span className="text-base font-semibold">{t("t.none")}</span>
       )}
     </GridSection>
   )

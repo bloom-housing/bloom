@@ -10,8 +10,9 @@ const DetailsApplicationData = () => {
     if (!application) return null
 
     const momentDate = moment(application.submissionDate)
-    const date = momentDate.format("MM/DD/YYYY")
-    const time = momentDate.format("HH:mm:ss A")
+
+    const date = momentDate.utc().format("MM/DD/YYYY")
+    const time = momentDate.utc().format("hh:mm:ss A")
 
     if (!momentDate.isValid()) {
       return {

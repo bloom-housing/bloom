@@ -27,6 +27,8 @@ const FormApplicationData = () => {
             watch={watch}
             label={t("application.add.dateSubmitted")}
             readerOnly
+            atAge={false}
+            errorMessage={t("errors.dateError")}
           />
         </ViewItem>
 
