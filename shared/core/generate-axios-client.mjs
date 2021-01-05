@@ -1,18 +1,18 @@
-import { codegen } from "swagger-axios-codegen"
+import codegen from "swagger-axios-codegen"
 import * as fs from "fs"
 
 async function codeGen() {
-  await codegen({
+  await codegen.codegen({
     methodNameMode: "operationId",
     remoteUrl: "http://localhost:3100/docs-json",
-    outputDir: ".",
+    outputDir: "src",
     useStaticMethod: false,
-    fileName: "client.ts",
+    fileName: "backend-swagger.ts",
     useHeaderParameters: false,
     strictNullChecks: true,
   })
-  let content = fs.readFileSync("./client.ts", "utf-8")
+  let content = fs.readFileSync("./src/backend-swagger.ts", "utf-8")
   content = content.replace(/(\w+)Dto/g, "$1")
-  fs.writeFileSync("./client.ts", content)
+  fs.writeFileSync("./src/backend-swagger.ts", content)
 }
 void codeGen()
