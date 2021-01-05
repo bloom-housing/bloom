@@ -512,7 +512,8 @@
     "selectAnOption": "Please select an option.",
     "selectOption": "Please select one of the options above.",
     "householdTooBig": "Your household size is too big.",
-    "householdTooSmall": "Your household size is too small."
+    "householdTooSmall": "Your household size is too small.",
+    "dateError": "Please enter a valid date"
   },
   "footer": {
     "contact": "Contact",
