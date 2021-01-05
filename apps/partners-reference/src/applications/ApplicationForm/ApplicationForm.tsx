@@ -61,7 +61,17 @@ const ApplicationForm = ({ isEditable }: Props) => {
   const { applicationsService } = useContext(ApiClientContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, handleSubmit, errors, setValue, clearErrors } = useForm()
+  const {
+    register,
+    watch,
+    control,
+    handleSubmit,
+    errors,
+    setValue,
+    clearErrors,
+    getValues,
+    trigger,
+  } = useForm()
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
@@ -109,10 +119,21 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }
 
-  const onSubmit = async (data) => {
-    setAlert(null)
+  const triggerSubmit = async (data: any) => onSubmit(data, "details")
 
-    console.log(householdMembers)
+  const triggerSubmitAndRedirect = async () => {
+    const validation = await trigger()
+
+    if (validation) {
+      const data = getValues()
+      void onSubmit(data, "new")
+    } else {
+      onError()
+    }
+  }
+
+  const onSubmit = async (data: any, redirect: "details" | "new") => {
+    setAlert(null)
 
     const formData = {
       householdMembers,
@@ -128,7 +149,11 @@ const ApplicationForm = ({ isEditable }: Props) => {
         setAlert("success")
 
         setTimeout(() => {
-          void router.push(`/applications/${result.id}`)
+          if (redirect === "details") {
+            void router.push(`/applications/${result.id}`)
+          } else {
+            void router.push(`/listings/${listingId}/add`)
+          }
         }, 2000)
       }
     } catch (err) {
@@ -256,7 +281,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
             </AlertBox>
           )}
 
-          <Form id="application-form" onSubmit={handleSubmit(onSubmit, onError)}>
+          <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
             <div className="flex flex-row flex-wrap mt-5">
               <div className="info-card md:w-9/12">
                 <GridSection title={t("application.details.applicationData")} grid={false}>
@@ -973,11 +998,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
                     </GridCell>,
                     <GridCell key="btn-submitNew">
                       <Button
+                        type="button"
                         styleType={AppearanceStyleType.secondary}
                         fullWidth
-                        onClick={() => {
-                          //
-                        }}
+                        onClick={() => triggerSubmitAndRedirect()}
                       >
                         {t("t.submitNew")}
                       </Button>
