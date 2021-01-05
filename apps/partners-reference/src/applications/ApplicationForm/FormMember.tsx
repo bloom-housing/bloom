@@ -16,7 +16,7 @@ import {
   Form,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { ApplicationFormAddress } from "./ApplicationFormAddress"
+import { FormAddress } from "./FormAddress"
 import { nanoid } from "nanoid"
 
 type ApplicationFormMemberProps = {
@@ -26,12 +26,7 @@ type ApplicationFormMemberProps = {
   editedMemberId: string | boolean
 }
 
-const ApplicationFormMember = ({
-  onSubmit,
-  onClose,
-  members,
-  editedMemberId,
-}: ApplicationFormMemberProps) => {
+const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.id === editedMemberId)[0]
   }, [members, editedMemberId])
@@ -69,8 +64,6 @@ const ApplicationFormMember = ({
       sameAddress: sameAddress ? sameAddress : null,
       workInRegion: workInRegion ? workInRegion : null,
     }
-
-    console.log("member: ", formData)
 
     if (editedMemberId && typeof editedMemberId === "string") {
       const editedMember = members.find((member) => member.id === editedMemberId)
@@ -211,7 +204,7 @@ const ApplicationFormMember = ({
         </GridSection>
 
         {sameAddressField === "no" &&
-          ApplicationFormAddress(
+          FormAddress(
             t("application.details.residenceAddress"),
             "address",
             "residence-member",
@@ -219,12 +212,7 @@ const ApplicationFormMember = ({
           )}
 
         {workInRegionField === "yes" &&
-          ApplicationFormAddress(
-            t("application.contact.workAddress"),
-            "workAddress",
-            "work",
-            register
-          )}
+          FormAddress(t("application.contact.workAddress"), "workAddress", "work", register)}
       </div>
 
       <div className="mt-6">
@@ -245,4 +233,4 @@ const ApplicationFormMember = ({
   )
 }
 
-export { ApplicationFormMember as default, ApplicationFormMember }
+export { FormMember as default, FormMember }

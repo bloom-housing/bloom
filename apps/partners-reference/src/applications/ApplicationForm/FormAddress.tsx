@@ -4,7 +4,7 @@ import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housin
 
 type AddressType = "residence" | "residence-member" | "work" | "mailing" | "alternate"
 
-export const ApplicationFormAddress = (
+export const FormAddress = (
   subtitle: string,
   dataKey: string,
   type: AddressType,
