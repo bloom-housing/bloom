@@ -648,7 +648,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                   </div>
                 </GridSection>
 
-                <GridSection title={t("application.review.householdDetails")} columns={1} separator>
+                <GridSection title={t("application.review.householdDetails")} columns={2} separator>
                   <GridCell>
                     <ViewItem label={t("application.details.preferredUnitSizes")}>
                       <FieldGroup
@@ -656,7 +656,7 @@ const ApplicationForm = ({ isEditable }: Props) => {
                         name="application.preferredUnit"
                         fields={preferredUnitOptions}
                         register={register}
-                        fieldGroupClassName="grid grid-cols-2 mt-4"
+                        fieldGroupClassName="grid grid-cols-1 mt-4"
                       />
                     </ViewItem>
                   </GridCell>
