@@ -129,7 +129,7 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
       : null
 
   const submissionType = ApplicationSubmissionType.paper
-  const status = editMode ? ApplicationStatus.submitted : ApplicationStatus.draft
+  const status = ApplicationStatus.submitted
 
   const listing = {
     id: listingId,
