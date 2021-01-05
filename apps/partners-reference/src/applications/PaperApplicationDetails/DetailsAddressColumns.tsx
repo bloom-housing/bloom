@@ -4,7 +4,7 @@ import { Application, HouseholdMemberUpdate } from "@bloom-housing/core"
 type DetailsAddressColumnsProps = {
   type: AddressColsType
   application: Application
-  householdMember: HouseholdMemberUpdate
+  householdMember?: HouseholdMemberUpdate
 }
 
 export enum AddressColsType {
