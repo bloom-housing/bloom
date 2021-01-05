@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useCallback, useState } from "react"
+import React, { Fragment, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
@@ -16,20 +16,18 @@ import {
   StatusAside,
   StatusMessages,
   LinkButton,
-  Drawer,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import { IncomePeriod, ApplicationStatus, HouseholdMemberUpdate } from "@bloom-housing/core"
-
-enum AddressColsType {
-  "residence" = "residence",
-  "mailing" = "mailing",
-  "work" = "work",
-  "alternateAddress" = "alternateAddress",
-  "memberResidence" = "memberResidence",
-  "memberWork" = "memberWork",
-}
+import { IncomePeriod, ApplicationStatus } from "@bloom-housing/core"
+import {
+  AddressColsType,
+  DetailsAddressColumns,
+} from "../../src/applications/PaperApplicationDetails/DetailsAddressColumns"
+import {
+  DetailsMemberDrawer,
+  MembersDrawer,
+} from "../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -66,7 +64,7 @@ export default function ApplicationsList() {
     return momentDate.format("MMMM DD, YYYY")
   }, [application])
 
-  const [membersDrawer, setMembersDrawer] = useState<HouseholdMemberUpdate | null>(null)
+  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
 
   const householdMembersHeaders = {
     name: t("t.name"),
@@ -120,87 +118,6 @@ export default function ApplicationsList() {
 
     return labels
   }
-
-  const addressCols = useCallback(
-    (type: AddressColsType) => {
-      const address = {
-        city: "",
-        state: "",
-        street: "",
-        street2: "",
-        zipCode: "",
-      }
-
-      Object.keys(address).forEach((item) => {
-        if (type === AddressColsType.residence) {
-          address[item] = application.applicant.address[item] || t("t.n/a")
-        }
-
-        if (type === AddressColsType.mailing) {
-          if (application.sendMailToMailingAddress) {
-            address[item] = application.mailingAddress[item]
-          } else {
-            address[item] = application.applicant.address[item] || t("t.n/a")
-          }
-        }
-
-        if (type === AddressColsType.work) {
-          if (application.applicant.workInRegion === "yes") {
-            address[item] = application.applicant.workAddress[item] || t("t.n/a")
-          } else {
-            address[item] = t("t.n/a")
-          }
-        }
-
-        if (type === AddressColsType.alternateAddress) {
-          address[item] = application.alternateContact.mailingAddress[item]
-            ? application.alternateContact.mailingAddress[item]
-            : t("t.n/a")
-        }
-
-        if (type === AddressColsType.memberWork) {
-          address[item] = membersDrawer?.workAddress[item]
-            ? membersDrawer?.workAddress[item]
-            : t("t.n/a")
-        }
-
-        if (type === AddressColsType.memberResidence) {
-          if (membersDrawer?.sameAddress) {
-            address[item] = application.applicant.address[item]
-              ? application.applicant.address[item]
-              : t("t.n/a")
-          } else {
-            address[item] = membersDrawer?.address[item] ? membersDrawer?.address[item] : t("t.n/a")
-          }
-        }
-      })
-
-      return (
-        <>
-          <GridCell>
-            <ViewItem label={t("application.contact.streetAddress")}>{address.street}</ViewItem>
-          </GridCell>
-
-          <GridCell span={2}>
-            <ViewItem label={t("application.contact.apt")}>{address.street2}</ViewItem>
-          </GridCell>
-
-          <GridCell>
-            <ViewItem label={t("application.contact.city")}>{address.city}</ViewItem>
-          </GridCell>
-
-          <GridCell>
-            <ViewItem label={t("application.contact.state")}>{address.state}</ViewItem>
-          </GridCell>
-
-          <GridCell>
-            <ViewItem label={t("application.contact.zip")}>{address.zipCode}</ViewItem>
-          </GridCell>
-        </>
-      )
-    },
-    [application, membersDrawer]
-  )
 
   const applicationStatus = useMemo(() => {
     switch (application?.status) {
@@ -405,19 +322,29 @@ export default function ApplicationsList() {
                 </GridSection>
 
                 <GridSection subtitle={t("application.details.residenceAddress")} columns={3}>
-                  {addressCols(AddressColsType.residence)}
+                  <DetailsAddressColumns
+                    type={AddressColsType.residence}
+                    application={application}
+                    householdMember={membersDrawer}
+                  />
                 </GridSection>
 
                 <GridSection subtitle={t("application.contact.mailingAddress")} columns={3}>
-                  {addressCols(AddressColsType.mailing)}
+                  <DetailsAddressColumns
+                    type={AddressColsType.mailing}
+                    application={application}
+                    householdMember={membersDrawer}
+                  />
                 </GridSection>
 
                 <GridSection subtitle={t("application.contact.workAddress")} columns={3}>
-                  {addressCols(AddressColsType.work)}
+                  <DetailsAddressColumns
+                    type={AddressColsType.work}
+                    application={application}
+                    householdMember={membersDrawer}
+                  />
                 </GridSection>
               </GridSection>
-
-              {/* alternate contact */}
 
               <GridSection
                 className="bg-primary-lighter"
@@ -475,11 +402,14 @@ export default function ApplicationsList() {
                 </GridSection>
 
                 <GridSection subtitle={t("application.contact.address")} columns={3}>
-                  {addressCols(AddressColsType.alternateAddress)}
+                  <DetailsAddressColumns
+                    type={AddressColsType.alternateAddress}
+                    application={application}
+                    householdMember={membersDrawer}
+                  />
                 </GridSection>
               </GridSection>
 
-              {/* household members */}
               {application.householdSize >= 1 && (
                 <GridSection
                   className="bg-primary-lighter"
@@ -492,7 +422,6 @@ export default function ApplicationsList() {
                 </GridSection>
               )}
 
-              {/* household details */}
               <GridSection
                 className="bg-primary-lighter"
                 title={t("application.review.householdDetails")}
@@ -644,94 +573,11 @@ export default function ApplicationsList() {
         </section>
       </Layout>
 
-      <Drawer
-        open={!!membersDrawer}
-        title={t("application.household.householdMember")}
-        ariaDescription={t("application.household.householdMember")}
-        onClose={() => setMembersDrawer(null)}
-      >
-        <section className="border rounded-md p-8 bg-white mb-8">
-          <GridSection
-            title={t("application.details.householdMemberDetails")}
-            tinted={true}
-            inset={true}
-            grid={false}
-          >
-            <GridSection grid columns={4}>
-              <ViewItem
-                label={t("application.name.firstName")}
-                children={membersDrawer?.firstName || t("t.n/a")}
-              />
-
-              <ViewItem
-                label={t("application.name.middleName")}
-                children={membersDrawer?.middleName || t("t.n/a")}
-              />
-
-              <ViewItem
-                label={t("application.name.lastName")}
-                children={membersDrawer?.lastName || t("t.n/a")}
-              />
-
-              <ViewItem
-                label={t("application.household.member.dateOfBirth")}
-                children={
-                  membersDrawer?.birthMonth && membersDrawer?.birthDay && membersDrawer?.birthYear
-                    ? `${membersDrawer?.birthMonth}/${membersDrawer?.birthDay}/${membersDrawer?.birthYear}`
-                    : t("t.n/a")
-                }
-              />
-
-              <ViewItem
-                label={t("application.add.sameAddressAsPrimary")}
-                children={
-                  membersDrawer?.sameAddress === null
-                    ? t("t.n/a")
-                    : membersDrawer?.sameAddress
-                    ? t("t.yes")
-                    : t("t.no")
-                }
-              />
-
-              <ViewItem
-                label={t("application.add.workInRegion")}
-                children={
-                  membersDrawer?.workInRegion === null
-                    ? t("t.n/a")
-                    : membersDrawer?.workInRegion
-                    ? t("t.yes")
-                    : t("t.no")
-                }
-              />
-
-              <ViewItem
-                label={t("t.relationship")}
-                children={
-                  membersDrawer?.relationship
-                    ? t(`application.form.options.relationship.${membersDrawer?.relationship}`)
-                    : t("t.n/a")
-                }
-              />
-            </GridSection>
-
-            <GridSection grid={false} columns={2}>
-              <GridSection subtitle={t("application.details.residenceAddress")} columns={3}>
-                {addressCols(AddressColsType.memberResidence)}
-              </GridSection>
-
-              {membersDrawer?.workInRegion && (
-                <GridSection subtitle={t("application.contact.workAddress")} columns={3}>
-                  {addressCols(AddressColsType.memberWork)}
-                </GridSection>
-              )}
-            </GridSection>
-          </GridSection>
-        </section>
-
-        <Button styleType={AppearanceStyleType.primary} onClick={() => setMembersDrawer(null)}>
-          {t("t.done")}
-        </Button>
-      </Drawer>
+      <DetailsMemberDrawer
+        application={application}
+        membersDrawer={membersDrawer}
+        setMembersDrawer={setMembersDrawer}
+      />
     </>
   )
 }
