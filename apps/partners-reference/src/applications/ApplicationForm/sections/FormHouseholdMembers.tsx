@@ -12,10 +12,9 @@ import {
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/core"
 
-import { FormMethods } from "./types"
 import { FormMember } from "../FormMember"
 
-interface FormHouseholdMembersProps extends FormMethods {
+type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]
   setHouseholdMembers: (members: HouseholdMember[]) => void
 }

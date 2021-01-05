@@ -1,4 +1,5 @@
 import React, { useEffect } from "react"
+import { useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
@@ -13,19 +14,14 @@ import {
   contactPreferencesKeys,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import { FormMethods } from "./types"
 import { FormAddress } from "../FormAddress"
 
-type FormPrimaryApplicantProps = FormMethods
+const FormPrimaryApplicant = () => {
+  const formMethods = useFormContext()
 
-const FormPrimaryApplicant = ({
-  register,
-  watch,
-  errors,
-  control,
-  setValue,
-  clearErrors,
-}: FormPrimaryApplicantProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch, errors, control, setValue, clearErrors } = formMethods
+
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
     label: t(`t.${item.id}`),

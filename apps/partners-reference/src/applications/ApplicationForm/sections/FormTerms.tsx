@@ -1,10 +1,12 @@
 import React from "react"
+import { useFormContext } from "react-hook-form"
 import { t, GridSection, ViewItem, GridCell, Field } from "@bloom-housing/ui-components"
-import { FormMethods } from "./types"
 
-type FormTermsProps = FormMethods
+const FormTerms = () => {
+  const formMethods = useFormContext()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register } = formMethods
 
-const FormTerms = ({ register }: FormTermsProps) => {
   return (
     <GridSection title={t("application.review.terms.title")} separator>
       <GridCell>

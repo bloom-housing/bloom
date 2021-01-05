@@ -1,10 +1,13 @@
 import React from "react"
 import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
-import { FormMethods } from "./types"
+import { useFormContext } from "react-hook-form"
 
-type FormHouseholdIncomeProps = FormMethods
+const FormHouseholdIncome = () => {
+  const formMethods = useFormContext()
 
-const FormHouseholdIncome = ({ register, setValue, watch }: FormHouseholdIncomeProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, setValue, watch } = formMethods
+
   const incomePeriodValue: string = watch("application.incomePeriod")
 
   return (

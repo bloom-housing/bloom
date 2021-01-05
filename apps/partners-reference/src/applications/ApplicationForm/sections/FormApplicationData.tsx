@@ -7,12 +7,14 @@ import {
   applicationLanguageKeys,
   TimeField,
 } from "@bloom-housing/ui-components"
+import { useFormContext } from "react-hook-form"
 
-import { FormMethods } from "./types"
+const FormApplicationData = () => {
+  const formMethods = useFormContext()
 
-type FormApplicationDataProps = FormMethods
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch, errors } = formMethods
 
-const FormApplicationData = ({ register, watch, errors }: FormApplicationDataProps) => {
   return (
     <GridSection title={t("application.details.applicationData")} grid={false}>
       <GridSection columns={3}>

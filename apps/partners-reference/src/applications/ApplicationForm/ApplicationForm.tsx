@@ -4,18 +4,12 @@ import {
   ApiClientContext,
   t,
   Tag,
-  StatusAside,
-  StatusMessages,
-  GridCell,
   AppearanceSizeType,
-  Button,
-  LinkButton,
   Form,
   AlertBox,
-  AppearanceStyleType,
   AlertTypes,
 } from "@bloom-housing/ui-components"
-import { useForm, FormProvider, useFormContext } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 import { HouseholdMember } from "@bloom-housing/core"
 import { formatApplicationData } from "../../../lib/formatApplicationData"
 
@@ -29,11 +23,9 @@ import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
 
-type Props = {
-  isEditable?: boolean
-}
+import { FormAside } from "./FormAside"
 
-const ApplicationForm = ({ isEditable }: Props) => {
+const ApplicationForm = () => {
   const router = useRouter()
   const listingId = router.query.id as string
   const { applicationsService } = useContext(ApiClientContext)
@@ -60,6 +52,10 @@ const ApplicationForm = ({ isEditable }: Props) => {
     }
   }
 
+  /*
+    @data: form data comes from the react-hook-form
+    @redirect: open application details or blank application form
+  */
   const onSubmit = async (data: any, redirect: "details" | "new") => {
     setAlert(null)
 
@@ -116,60 +112,34 @@ const ApplicationForm = ({ isEditable }: Props) => {
           <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
             <div className="flex flex-row flex-wrap mt-5">
               <div className="info-card md:w-9/12">
-                <FormApplicationData {...formMethods} />
-                <FormPrimaryApplicant {...formMethods} />
-                <FormAlternateContact {...formMethods} />
+                <FormApplicationData />
+
+                <FormPrimaryApplicant />
+
+                <FormAlternateContact />
+
                 <FormHouseholdMembers
                   householdMembers={householdMembers}
                   setHouseholdMembers={setHouseholdMembers}
-                  {...formMethods}
                 />
-                <FormHouseholdDetails {...formMethods} />
-                <FormPreferences {...formMethods} />
-                <FormHouseholdIncome {...formMethods} />
 
-                <FormDemographics {...formMethods} />
+                <FormHouseholdDetails />
 
-                <FormTerms {...formMethods} />
+                <FormPreferences />
+
+                <FormHouseholdIncome />
+
+                <FormDemographics />
+
+                <FormTerms />
               </div>
 
               <aside className="md:w-3/12 md:pl-6">
-                <StatusAside
-                  columns={1}
-                  actions={[
-                    <GridCell key="btn-submit">
-                      <Button
-                        styleType={AppearanceStyleType.primary}
-                        fullWidth
-                        onClick={() => false}
-                      >
-                        {t("t.submit")}
-                      </Button>
-                    </GridCell>,
-                    <GridCell key="btn-submitNew">
-                      <Button
-                        type="button"
-                        styleType={AppearanceStyleType.secondary}
-                        fullWidth
-                        onClick={() => triggerSubmitAndRedirect()}
-                      >
-                        {t("t.submitNew")}
-                      </Button>
-                    </GridCell>,
-                    <GridCell className="flex" key="btn-cancel">
-                      <LinkButton
-                        unstyled
-                        fullWidth
-                        className="bg-opacity-0"
-                        href={`/listings/${listingId}/applications`}
-                      >
-                        {t("t.cancel")}
-                      </LinkButton>
-                    </GridCell>,
-                  ]}
-                >
-                  {isEditable && <StatusMessages lastTimestamp="" />}
-                </StatusAside>
+                <FormAside
+                  isEdit={false}
+                  triggerSubmitAndRedirect={triggerSubmitAndRedirect}
+                  listingId={listingId}
+                />
               </aside>
             </div>
           </Form>

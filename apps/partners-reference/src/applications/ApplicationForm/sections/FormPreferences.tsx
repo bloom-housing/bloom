@@ -1,10 +1,13 @@
 import React from "react"
 import { t, GridSection, ViewItem, GridCell, Field } from "@bloom-housing/ui-components"
-import { FormMethods } from "./types"
+import { useFormContext } from "react-hook-form"
 
-type FormPreferencesProps = FormMethods
+const FormPreferences = () => {
+  const formMethods = useFormContext()
 
-const FormPreferences = ({ register, setValue }: FormPreferencesProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, setValue } = formMethods
+
   return (
     <GridSection title={t("application.details.preferences")} columns={1} separator>
       <GridCell>

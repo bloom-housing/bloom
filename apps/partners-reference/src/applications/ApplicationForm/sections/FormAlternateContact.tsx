@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-// import { useFormContext } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
@@ -11,19 +11,13 @@ import {
   PhoneField,
   altContactRelationshipKeys,
 } from "@bloom-housing/ui-components"
-import { FormMethods } from "./types"
 import { FormAddress } from "../FormAddress"
 
-type FormAlternateContactProps = FormMethods
+const FormAlternateContact = () => {
+  const formMethods = useFormContext()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { watch, setValue, clearErrors, register, errors, control } = formMethods
 
-const FormAlternateContact = ({
-  register,
-  watch,
-  errors,
-  control,
-  setValue,
-  clearErrors,
-}: FormAlternateContactProps) => {
   const altContactRelationshipOptions = ["", ...altContactRelationshipKeys]
   const alternateContactType: string = watch("application.alternateContact.type")
   const alternatePhoneValue: string = watch("application.alternateContact.phoneNumber")

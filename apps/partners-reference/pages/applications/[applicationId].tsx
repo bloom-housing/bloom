@@ -418,68 +418,66 @@ export default function ApplicationsList() {
               </GridSection>
 
               {/* alternate contact */}
-              {application.alternateContact.type !== "" &&
-                application.alternateContact.type !== "noContact" && (
-                  <GridSection
-                    className="bg-primary-lighter"
-                    title={t("application.alternateContact.type.label")}
-                    inset
-                    grid={false}
-                  >
-                    <GridSection columns={3}>
-                      <GridCell>
-                        <ViewItem label={t("application.name.firstName")}>
-                          {application.alternateContact.firstName || t("t.n/a")}
-                        </ViewItem>
-                      </GridCell>
 
-                      <GridCell>
-                        <ViewItem label={t("application.name.lastName")}>
-                          {application.alternateContact.lastName || t("t.n/a")}
-                        </ViewItem>
-                      </GridCell>
+              <GridSection
+                className="bg-primary-lighter"
+                title={t("application.alternateContact.type.label")}
+                inset
+                grid={false}
+              >
+                <GridSection columns={3}>
+                  <GridCell>
+                    <ViewItem label={t("application.name.firstName")}>
+                      {application.alternateContact.firstName || t("t.n/a")}
+                    </ViewItem>
+                  </GridCell>
 
-                      <GridCell>
-                        <ViewItem label={t("t.relationship")}>
-                          {(() => {
-                            if (!application.alternateContact.type) return t("t.n/a")
+                  <GridCell>
+                    <ViewItem label={t("application.name.lastName")}>
+                      {application.alternateContact.lastName || t("t.n/a")}
+                    </ViewItem>
+                  </GridCell>
 
-                            if (application.alternateContact.otherType)
-                              return application.alternateContact.otherType
+                  <GridCell>
+                    <ViewItem label={t("t.relationship")}>
+                      {(() => {
+                        if (!application.alternateContact.type) return t("t.n/a")
 
-                            return t(
-                              `application.alternateContact.type.options.${application.alternateContact.type}`
-                            )
-                          })()}
-                        </ViewItem>
-                      </GridCell>
+                        if (application.alternateContact.otherType)
+                          return application.alternateContact.otherType
 
-                      {
-                        <GridCell>
-                          <ViewItem label={t("application.details.agency")}>
-                            {application.alternateContact.agency || t("t.n/a")}
-                          </ViewItem>
-                        </GridCell>
-                      }
+                        return t(
+                          `application.alternateContact.type.options.${application.alternateContact.type}`
+                        )
+                      })()}
+                    </ViewItem>
+                  </GridCell>
 
-                      <GridCell>
-                        <ViewItem label={t("t.email")}>
-                          {application.alternateContact.emailAddress || t("t.n/a")}
-                        </ViewItem>
-                      </GridCell>
+                  {
+                    <GridCell>
+                      <ViewItem label={t("application.details.agency")}>
+                        {application.alternateContact.agency || t("t.n/a")}
+                      </ViewItem>
+                    </GridCell>
+                  }
 
-                      <GridCell>
-                        <ViewItem label={t("t.phone")}>
-                          {application.alternateContact.phoneNumber || t("t.n/a")}
-                        </ViewItem>
-                      </GridCell>
-                    </GridSection>
+                  <GridCell>
+                    <ViewItem label={t("t.email")}>
+                      {application.alternateContact.emailAddress || t("t.n/a")}
+                    </ViewItem>
+                  </GridCell>
 
-                    <GridSection subtitle={t("application.contact.address")} columns={3}>
-                      {addressCols(AddressColsType.alternateAddress)}
-                    </GridSection>
-                  </GridSection>
-                )}
+                  <GridCell>
+                    <ViewItem label={t("t.phone")}>
+                      {application.alternateContact.phoneNumber || t("t.n/a")}
+                    </ViewItem>
+                  </GridCell>
+                </GridSection>
+
+                <GridSection subtitle={t("application.contact.address")} columns={3}>
+                  {addressCols(AddressColsType.alternateAddress)}
+                </GridSection>
+              </GridSection>
 
               {/* household members */}
               {application.householdSize >= 1 && (

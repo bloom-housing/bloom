@@ -1,4 +1,5 @@
 import React from "react"
+import { useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
@@ -8,11 +9,13 @@ import {
   FieldGroup,
   preferredUnit,
 } from "@bloom-housing/ui-components"
-import { FormMethods } from "./types"
 
-type FormHouseholdDetailsProps = FormMethods
+const FormHouseholdDetails = () => {
+  const formMethods = useFormContext()
 
-const FormHouseholdDetails = ({ register }: FormHouseholdDetailsProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register } = formMethods
+
   const preferredUnitOptions = preferredUnit?.map((item) => ({
     id: item.id,
     label: t(`application.household.preferredUnit.options.${item.id}`),

@@ -1,4 +1,5 @@
 import React, { useMemo } from "react"
+import { useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
@@ -12,11 +13,13 @@ import {
   sexualOrientation,
   howDidYouHear,
 } from "@bloom-housing/ui-components"
-import { FormMethods } from "./types"
 
-type FormDemographicsProps = FormMethods
+const FormDemographics = () => {
+  const formMethods = useFormContext()
 
-const FormDemographics = ({ register }: FormDemographicsProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register } = formMethods
+
   const howDidYouHearOptions = useMemo(() => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
