@@ -22,7 +22,7 @@ const FormHouseholdDetails = () => {
   }))
 
   return (
-    <GridSection title={t("application.review.householdDetails")} columns={2} separator>
+    <GridSection title={t("application.review.householdDetails")} columns={3} separator>
       <GridCell>
         <ViewItem label={t("application.details.preferredUnitSizes")}>
           <FieldGroup
