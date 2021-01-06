@@ -27,7 +27,7 @@ export const StatusBarSuccessAndBackButton = () => (
         Back
       </Button>
     }
-    tagLabel="Success"
+    tagLabel="Submitted"
     tagStyle={AppearanceStyleType.success}
   />
 )
