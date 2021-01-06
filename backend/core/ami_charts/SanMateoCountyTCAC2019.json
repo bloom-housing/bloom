@@ -2,7 +2,12 @@
   {
     "percentOfAmi": 60,
     "householdSize": 1,
-    "income": 71170
+    "income": 73080
+  },
+  {
+    "percentOfAmi": 60,
+    "householdSize": 2,
+    "income": 83520
   },
   {
     "percentOfAmi": 50,
