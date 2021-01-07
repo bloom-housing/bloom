@@ -312,6 +312,11 @@ class Listing extends BaseEntity {
 
   @Expose()
   applicationConfig?: Record<string, unknown>
+
+  @Column({ type: "bool", default: false })
+  @Expose()
+  @ApiProperty({ type: Boolean, default: false })
+  displayWaitlistSize: boolean
 }
 
 export { Listing as default, Listing }

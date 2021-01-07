@@ -22,20 +22,24 @@ const Waitlist = (props: WaitlistProps) => {
   if (listing.property.unitsAvailable > 0 && waitlistOpen) {
     header = t("listings.waitlist.unitsAndWaitlist")
     subheader = t("listings.waitlist.submitAnApplication")
-    waitlistItems = (
-      <>
-        <WaitlistItem
-          value={listing.property.unitsAvailable}
-          text={t("listings.availableUnits")}
-          className={"font-semibold"}
-        />
-        <WaitlistItem
-          value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
-          text={t("listings.waitlist.openSlots")}
-          className={"font-semibold"}
-        />
-      </>
-    )
+    if (listing.displayWaitlistSize) {
+      waitlistItems = (
+        <>
+          <WaitlistItem
+            value={listing.property.unitsAvailable}
+            text={t("listings.availableUnits")}
+            className={"font-semibold"}
+          />
+          {listing.displayWaitlistSize && (
+            <WaitlistItem
+              value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+              text={t("listings.waitlist.openSlots")}
+              className={"font-semibold"}
+            />
+          )}
+        </>
+      )
+    }
   } else {
     if (waitlistOpen) {
       header = t("listings.waitlist.isOpen")
