@@ -22,6 +22,7 @@ import { Application } from "@bloom-housing/core"
 export default () => {
   const [applications, setApplications] = useState([])
   const [deletingApplication, setDeletingApplication] = useState(null)
+  const listing = Object.assign({}, Archer) as any
 
   useEffect(() => {
     // applicationsService.list().then((apps) => {
@@ -91,6 +92,7 @@ export default () => {
                       <AppStatusItem
                         key={application.id}
                         status="inProgress"
+                        listing={listing}
                         application={application}
                         setDeletingApplication={setDeletingApplication}
                       />

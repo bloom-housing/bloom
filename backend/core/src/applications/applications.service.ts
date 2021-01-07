@@ -29,7 +29,7 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["listing", "user", "listing.property"],
+      relations: ["user"],
       loadEagerRelations: true,
     })
   }
@@ -64,12 +64,6 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("application.preferences", "preferences")
     // Not eager relations
     qb.leftJoinAndSelect("application.user", "user")
-    qb.leftJoinAndSelect("application.listing", "listing")
-    qb.leftJoinAndSelect("listing.property", "property")
-    qb.leftJoinAndSelect("property.buildingAddress", "buildingAddress")
-    qb.leftJoinAndSelect("property.units", "units")
-    qb.leftJoinAndSelect("units.amiChart", "amiChart")
-    qb.leftJoinAndSelect("amiChart.items", "amiChartItems")
 
     if (user) {
       qb.andWhere("user.id = :userId", { userId: user.id })
@@ -99,7 +93,7 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
-      relations: ["listing", "user", "listing.property"],
+      relations: ["user"],
     })
   }
 
@@ -108,7 +102,7 @@ export class ApplicationsService {
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
-        relations: ["listing", "user", "listing.property"],
+        relations: ["user"],
       }))
     Object.assign(application, applicationUpdateDto)
     await this.repository.save(application)

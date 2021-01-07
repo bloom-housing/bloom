@@ -4,7 +4,6 @@ import { Application } from "../entities/application.entity"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IdDto } from "../../lib/id.dto"
 import { PaginationFactory } from "../../utils/pagination.dto"
-import { ListingDto } from "../../listings/dto/listing.dto"
 import { ApplicantCreateDto, ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import {
@@ -45,8 +44,8 @@ export class ApplicationDto extends OmitType(Application, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ListingDto)
-  listing: ListingDto
+  @Type(() => IdDto)
+  listing: IdDto
 
   @Exclude()
   @ApiHideProperty()
