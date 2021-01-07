@@ -7,7 +7,6 @@ import {
   ApplicationStatus,
   Address,
 } from "@bloom-housing/core"
-import moment from "moment"
 
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
@@ -16,7 +15,7 @@ import moment from "moment"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-function getAddress(condition, addressData) {
+function getAddress(condition: boolean, addressData?: Address): Address {
   const blankAddress: Address = {
     id: undefined,
     createdAt: undefined,
@@ -32,13 +31,13 @@ function getAddress(condition, addressData) {
 }
 
 export const formatApplicationData = (data: any, listingId, editMode: boolean) => {
-  const language: Language = data.application.language ? data.application.language : null
+  const language: Language | null = data.application.language ? data.application.language : null
 
   const submissionDate: Date | null = (() => {
     // rename default (wrong property names)
     const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
       data.dateSubmitted || {}
-    const { hours, minutes = 0, seconds = 0, time } = data.timeSubmitted || {}
+    const { hours, minutes = 0, seconds = 0, period } = data.timeSubmitted || {}
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
 
@@ -48,9 +47,9 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     date.setUTCMonth(submissionMonth - 1)
     date.setUTCFullYear(submissionYear)
 
-    if (hours && minutes && seconds && time) {
+    if (hours && minutes && seconds && period) {
       const hourNumber = parseInt(hours, 10)
-      const hour24Clock = time === "am" ? hourNumber : hourNumber + 12
+      const hour24Clock = period === "am" ? hourNumber : hourNumber + 12
       date.setUTCHours(hour24Clock, minutes, seconds)
     } else {
       date.setUTCHours(0, 0, 0, 0)
@@ -61,13 +60,13 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
 
   // create applicant
   const applicant = ((): ApplicantUpdate => {
-    const { phoneNumber } = data
+    const phoneNumber: string | null = data?.phoneNumber || null
     const { applicant: applicantData } = data.application
-    const phoneNumberType = applicantData.phoneNumberType ? applicantData.phoneNumberType : null
+    const phoneNumberType: string | null = applicantData.phoneNumberType || null
     const noEmail = !applicantData.emailAddress
     const noPhone = !phoneNumber
-    const workInRegion = applicantData?.workInRegion ? applicantData?.workInRegion : null
-    const emailAddress = applicantData?.emailAddress ? applicantData?.emailAddress : null
+    const workInRegion: string | null = applicantData?.workInRegion || null
+    const emailAddress: string | null = applicantData?.emailAddress || null
 
     const workAddress = getAddress(
       applicantData?.workInRegion === "yes",
@@ -114,7 +113,7 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
 
   const { incomeMonth, incomeYear, householdMembers } = data
 
-  const incomePeriod = data.application.incomePeriod ? data.application.incomePeriod : null
+  const incomePeriod: IncomePeriod | null = data.application?.incomePeriod || null
 
   const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
   const incomeVouchers =
@@ -166,8 +165,6 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
     householdMembers,
     householdSize,
   }
-
-  console.log(result)
 
   return result
 }
