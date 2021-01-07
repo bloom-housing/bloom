@@ -5,11 +5,13 @@ import { Field } from "./Field"
 import { Select } from "../forms/Select"
 import { UseFormMethods } from "react-hook-form"
 
-type TimeFieldDefaultValues = {
+type TimeFieldPeriod = "am" | "pm"
+
+export type TimeFieldValues = {
   hours?: number
   minutes?: number
   seconds?: number
-  time?: "am" | "pm"
+  period?: TimeFieldPeriod
 }
 
 export type TimeFieldProps = {
@@ -20,7 +22,7 @@ export type TimeFieldProps = {
   label: string
   required?: boolean
   readerOnly?: boolean
-  defaultValues?: TimeFieldDefaultValues
+  defaultValues?: TimeFieldValues
 }
 
 const TimeField = ({
@@ -112,14 +114,14 @@ const TimeField = ({
         />
 
         <Select
-          name={fieldName("time")}
-          id={fieldName("time")}
+          name={fieldName("period")}
+          id={fieldName("period")}
           labelClassName="sr-only"
           label={t("t.time")}
           register={register}
           options={["am", "pm"]}
           keyPrefix="t"
-          defaultValue={defaultValues?.time || ""}
+          defaultValue={defaultValues?.period || ""}
           error={error}
           describedBy={`${id}-error`}
         />
