@@ -1,28 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { Column, Entity } from "typeorm"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsNumber, IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../validations-groups.enum"
+import { AbstractEntity } from "./abstract.entity"
 
 @Entity()
-export class Address {
-  @PrimaryGeneratedColumn("uuid")
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  id: string
-
-  @CreateDateColumn()
-  @Expose()
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt: Date
-
-  @UpdateDateColumn()
-  @Expose()
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt: Date
-
+export class Address extends AbstractEntity {
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

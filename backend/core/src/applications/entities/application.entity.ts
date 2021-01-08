@@ -58,7 +58,7 @@ export class Application extends AbstractEntity {
   @ManyToOne(() => Listing, (listing) => listing.applications)
   listing: Listing
 
-  @OneToOne(() => Applicant, { eager: true, cascade: true })
+  @OneToOne(() => Applicant, { eager: true })
   @JoinColumn()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

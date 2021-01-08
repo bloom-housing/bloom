@@ -1,6 +1,11 @@
-import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import {
+  CreateDateColumn,
+  DeleteDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsString, IsUUID } from "class-validator"
+import { IsDate, IsString, IsUUID, IsOptional } from "class-validator"
 import { ValidationsGroupsEnum } from "../validations-groups.enum"
 
 export class AbstractEntity {
@@ -21,4 +26,11 @@ export class AbstractEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
+
+  @DeleteDateColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  deletedAt?: Date
 }
