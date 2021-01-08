@@ -1,12 +1,7 @@
 module.exports = {
   parser: "@typescript-eslint/parser", // Specifies the ESLint parser
   parserOptions: {
-    project: [
-      "./tsconfig.json",
-      "./sites/public/tsconfig.json",
-      "./sites/partners/tsconfig.json",
-      "./services/**/tsconfig.json",
-    ],
+    project: ["./tsconfig.json", "./sites/public/tsconfig.json", "./sites/partners/tsconfig.json"],
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: "module", // Allows for the use of imports
     tsconfigRootDir: ".",

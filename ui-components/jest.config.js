@@ -11,13 +11,13 @@ module.exports = {
     },
   },
   rootDir: "../..",
-  roots: ["<rootDir>/shared/ui-components"],
+  roots: ["<rootDir>/ui-components"],
   transform: {
     "^.+\\.stories\\.[t|j]sx$": "@storybook/addon-storyshots/injectFileName",
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
   setupFiles: ["dotenv/config"],
-  setupFilesAfterEnv: ["<rootDir>/shared/ui-components/.jest/setup-tests.js"],
+  setupFilesAfterEnv: ["<rootDir>/ui-components/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
   },

@@ -30,7 +30,6 @@ apps/**/cypress/screenshots
 
 # Complied Typescript
 dist
-services/listings/dist/**
 sites/public/.next
 
 # Runtime data
