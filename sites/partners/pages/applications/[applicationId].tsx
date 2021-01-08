@@ -6,17 +6,17 @@ import {
   AppearanceStyleType,
   PageHeader,
   t,
-  Tag,
   GridSection,
   ViewItem,
   GridCell,
   MinimalTable,
   Button,
+  StatusBar,
   formatIncome,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-import { IncomePeriod } from "@bloom-housing/backend-core/types"
+import { ApplicationStatus, IncomePeriod } from "@bloom-housing/backend-core/types"
 
 enum AddressColsType {
   "residence" = "residence",
@@ -174,21 +174,23 @@ export default function ApplicationsList() {
         <p className="font-sans text-base mt-1">{application.id}</p>
       </PageHeader>
 
-      <section className="border-t bg-white">
-        <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
+      <StatusBar
+        backButton={
           <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
             {t("t.back")}
           </Button>
-
-          <div className="status-bar__status md:pl-4 md:w-3/12">
-            <Tag styleType={AppearanceStyleType.success} pillStyle>
-              {application.status
-                ? t(`application.details.applicationStatus.${application.status}`)
-                : t(`application.details.applicationStatus.submitted`)}
-            </Tag>
-          </div>
-        </div>
-      </section>
+        }
+        tagStyle={
+          application?.status == ApplicationStatus.submitted
+            ? AppearanceStyleType.success
+            : AppearanceStyleType.primary
+        }
+        tagLabel={
+          application?.status
+            ? t(`application.details.applicationStatus.${application.status}`)
+            : t(`application.details.applicationStatus.submitted`)
+        }
+      />
 
       <section className="bg-primary-lighter">
         <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">

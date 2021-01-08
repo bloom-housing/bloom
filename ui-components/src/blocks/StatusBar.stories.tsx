@@ -33,5 +33,5 @@ export const StatusBarSuccessAndBackButton = () => (
 )
 
 export const StatusBarDraft = () => (
-  <StatusBar tagLabel="Draft" tagStyle={AppearanceStyleType.secondary} />
+  <StatusBar tagLabel="Draft" tagStyle={AppearanceStyleType.primary} />
 )
