@@ -10,7 +10,7 @@ module.exports = {
       tsConfig: "tsconfig.json",
     },
   },
-  rootDir: "../..",
+  rootDir: "..",
   roots: ["<rootDir>/ui-components"],
   transform: {
     "^.+\\.stories\\.[t|j]sx$": "@storybook/addon-storyshots/injectFileName",

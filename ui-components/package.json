@@ -9,7 +9,7 @@
   "scripts": {
     "build-storybook": "build-storybook -c .storybook",
     "start": "start-storybook -s ./public",
-    "test": "jest shared/ui-components"
+    "test": "jest ui-components"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
