@@ -34,7 +34,7 @@ import { useForm } from "react-hook-form"
 import { phoneNumberKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 import { ApplicationFormMember } from "./ApplicationFormMember"
 import { ApplicationFormAddress } from "./ApplicationFormAddress"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember } from "@bloom-housing/backend-core/types"
 
 type Props = {
   isEditable?: boolean

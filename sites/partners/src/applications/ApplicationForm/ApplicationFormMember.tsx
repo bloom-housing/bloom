@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { HouseholdMember, Member } from "@bloom-housing/core"
+import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import {
   t,
   GridSection,
