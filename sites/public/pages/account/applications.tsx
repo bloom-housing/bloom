@@ -15,7 +15,6 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
-import Archer from "@bloom-housing/listings-service/listings/archer.json"
 import moment from "moment"
 import { Application } from "@bloom-housing/backend-core/types"
 
@@ -27,7 +26,7 @@ export default () => {
     // applicationsService.list().then((apps) => {
     //   setApplications(apps)
     // })
-    const listing = Object.assign({}, Archer) as any
+    const listing = {} as any
     const application = {} as Application
     listing.applicationDueDate = moment().add(10, "days").format()
     application.listing = listing
