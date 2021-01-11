@@ -4,6 +4,11 @@ import { Field } from "./Field"
 import { HouseholdMemberUpdate } from "@bloom-housing/core"
 import moment from "moment"
 
+export type DOBFieldValues = {
+  birthDay: string
+  birthMonth: string
+  birthYear: string
+}
 export interface DOBFieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any

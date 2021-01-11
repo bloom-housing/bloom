@@ -1,6 +1,15 @@
 import React from "react"
 import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
+import {
+  ApplicationUpdate,
+  ApplicantUpdate,
+  Language,
+  IncomePeriod,
+  ApplicationSubmissionType,
+  ApplicationStatus,
+  Address,
+} from "@bloom-housing/core"
 
 const FormHouseholdIncome = () => {
   const formMethods = useFormContext()
@@ -24,7 +33,7 @@ const FormHouseholdIncome = () => {
                 label={t("t.perYear")}
                 register={register}
                 inputProps={{
-                  value: "perYear",
+                  value: IncomePeriod.perYear,
                   onChange: () => {
                     setValue("incomeMonth", "")
                     setValue("incomeYear", "")
@@ -40,7 +49,7 @@ const FormHouseholdIncome = () => {
                 label={t("t.perMonth")}
                 register={register}
                 inputProps={{
-                  value: "perMonth",
+                  value: IncomePeriod.perMonth,
                   onChange: () => {
                     setValue("incomeMonth", "")
                     setValue("incomeYear", "")
@@ -62,7 +71,7 @@ const FormHouseholdIncome = () => {
               label={t("application.details.annualIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
-              disabled={incomePeriodValue !== "perYear"}
+              disabled={incomePeriodValue !== IncomePeriod.perYear}
               readerOnly
             />
           </ViewItem>
@@ -77,7 +86,7 @@ const FormHouseholdIncome = () => {
               label={t("application.details.monthlyIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
-              disabled={incomePeriodValue !== "perMonth"}
+              disabled={incomePeriodValue !== IncomePeriod.perMonth}
               readerOnly
             />
           </ViewItem>

@@ -8,9 +8,11 @@ import {
   Form,
   AlertBox,
   AlertTypes,
+  DOBFieldValues,
+  TimeFieldValues,
 } from "@bloom-housing/ui-components"
-import { useForm, FormProvider } from "react-hook-form"
-import { HouseholdMember } from "@bloom-housing/core"
+import { useForm, FormProvider, NestedValue } from "react-hook-form"
+import { HouseholdMember, Language, IncomePeriod } from "@bloom-housing/core"
 import { formatApplicationData } from "../../../lib/formatApplicationData"
 
 import { FormApplicationData } from "./sections/FormApplicationData"
@@ -24,6 +26,7 @@ import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
 
 import { FormAside } from "./FormAside"
+import { FormTypes } from "./FormTypes"
 
 const ApplicationForm = () => {
   const router = useRouter()
@@ -33,7 +36,7 @@ const ApplicationForm = () => {
   const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
-  const formMethods = useForm()
+  const formMethods = useForm<FormTypes>()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues, trigger } = formMethods
@@ -56,7 +59,7 @@ const ApplicationForm = () => {
     @data: form data comes from the react-hook-form
     @redirect: open application details or blank application form
   */
-  const onSubmit = async (data: any, redirect: "details" | "new") => {
+  const onSubmit = async (data: FormTypes, redirect: "details" | "new") => {
     setAlert(null)
 
     const formData = {

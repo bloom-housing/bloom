@@ -6,20 +6,19 @@ import {
   ApplicationSubmissionType,
   ApplicationStatus,
   Address,
+  HouseholdMember,
 } from "@bloom-housing/core"
+import { FormTypes } from "../src/applications/PaperApplicationForm/FormTypes"
 
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
 */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type GetAddressType = Omit<Address, "id" | "createdAt" | "updatedAt">
 
-function getAddress(condition: boolean, addressData?: Address): Address {
-  const blankAddress: Address = {
-    id: undefined,
-    createdAt: undefined,
-    updatedAt: undefined,
+function getAddress(condition: boolean, addressData?: GetAddressType): GetAddressType {
+  const blankAddress: GetAddressType = {
     street: "",
     street2: "",
     city: "",
@@ -30,7 +29,12 @@ function getAddress(condition: boolean, addressData?: Address): Address {
   return condition ? addressData : blankAddress
 }
 
-export const formatApplicationData = (data: any, listingId, editMode: boolean) => {
+interface FormData extends FormTypes {
+  householdMembers: HouseholdMember[]
+}
+
+export const formatApplicationData = (data: FormData, listingId, editMode: boolean) => {
+  console.log(data)
   const language: Language | null = data.application.language ? data.application.language : null
 
   const submissionDate: Date | null = (() => {
@@ -43,14 +47,14 @@ export const formatApplicationData = (data: any, listingId, editMode: boolean) =
 
     const date = new Date()
 
-    date.setUTCDate(submissionDay)
-    date.setUTCMonth(submissionMonth - 1)
-    date.setUTCFullYear(submissionYear)
+    date.setUTCDate(parseInt(submissionDay))
+    date.setUTCMonth(parseInt(submissionMonth) - 1)
+    date.setUTCFullYear(parseInt(submissionYear))
 
     if (hours && minutes && seconds && period) {
       const hourNumber = parseInt(hours, 10)
       const hour24Clock = period === "am" ? hourNumber : hourNumber + 12
-      date.setUTCHours(hour24Clock, minutes, seconds)
+      date.setUTCHours(hour24Clock, parseInt(minutes), parseInt(seconds))
     } else {
       date.setUTCHours(0, 0, 0, 0)
     }

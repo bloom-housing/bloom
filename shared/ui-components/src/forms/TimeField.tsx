@@ -8,9 +8,9 @@ import { UseFormMethods } from "react-hook-form"
 type TimeFieldPeriod = "am" | "pm"
 
 export type TimeFieldValues = {
-  hours?: number
-  minutes?: number
-  seconds?: number
+  hours?: string
+  minutes?: string
+  seconds?: string
   period?: TimeFieldPeriod
 }
 

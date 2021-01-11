@@ -1,6 +1,6 @@
 import * as React from "react"
 import { t } from "./translator"
-
+import { Language } from "@bloom-housing/core"
 interface FormOptionsProps {
   options: string[]
   keyPrefix: string
@@ -190,7 +190,7 @@ export const preferredUnit: FieldGroupItem[] = [
   },
 ]
 
-export const applicationLanguageKeys = ["en", "es"]
+export const applicationLanguageKeys = [Language.en, Language.es]
 
 export const FormOptions = (props: FormOptionsProps) => {
   const options = props.options.map((option) => {
