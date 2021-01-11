@@ -26,6 +26,28 @@ type ApplicationFormMemberProps = {
   editedMemberId: string | boolean
 }
 
+export enum FormMemberFields {
+  FirstName = "firstName",
+  MiddleName = "middleName",
+  LastName = "lastName",
+  DateOfBirth = "dateOfBirth",
+  Relationship = "relationship",
+  SameAddress = "sameAddress",
+  WorkInRegion = "workInRegion",
+  Address = "address",
+  AddressStreet = "address.street",
+  AddressStreet2 = "address.street2",
+  AddressCity = "address.city",
+  AddressState = "address.state",
+  AddressZip = "address.zip",
+  WorkAddress = "workAddress",
+  WorkAddressStreet = "workAddress.street",
+  WorkAddressStreet2 = "workAddress.street2",
+  WorkAddressCity = "workAddress.city",
+  WorkAddressState = "workAddress.state",
+  WorkAddressZip = "workAddress.zip",
+}
+
 const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.id === editedMemberId)[0]
@@ -34,24 +56,24 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, trigger, getValues } = useForm({
     defaultValues: {
-      firstName: currentlyEdited?.firstName,
-      middleName: currentlyEdited?.middleName,
-      lastName: currentlyEdited?.lastName,
-      relationship: currentlyEdited?.relationship,
-      sameAddress: currentlyEdited?.sameAddress,
-      workInRegion: currentlyEdited?.workInRegion,
-      dateOfBirth: {
+      [FormMemberFields.FirstName]: currentlyEdited?.firstName,
+      [FormMemberFields.MiddleName]: currentlyEdited?.middleName,
+      [FormMemberFields.LastName]: currentlyEdited?.lastName,
+      [FormMemberFields.Relationship]: currentlyEdited?.relationship,
+      [FormMemberFields.SameAddress]: currentlyEdited?.sameAddress,
+      [FormMemberFields.WorkInRegion]: currentlyEdited?.workInRegion,
+      [FormMemberFields.DateOfBirth]: {
         birthMonth: currentlyEdited?.birthMonth,
         birthDay: currentlyEdited?.birthDay,
         birthYear: currentlyEdited?.birthYear,
       },
-      address: currentlyEdited?.address,
-      workAddress: currentlyEdited?.workAddress,
+      [FormMemberFields.Address]: currentlyEdited?.address,
+      [FormMemberFields.WorkAddress]: currentlyEdited?.workAddress,
     },
   })
 
-  const sameAddressField = watch("sameAddress")
-  const workInRegionField = watch("workInRegion")
+  const sameAddressField = watch(FormMemberFields.SameAddress)
+  const workInRegionField = watch(FormMemberFields.WorkInRegion)
 
   async function onFormSubmit() {
     const validation = await trigger()
@@ -117,8 +139,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <GridCell>
             <ViewItem label={t("application.name.firstName")}>
               <Field
-                id="firstName"
-                name="firstName"
+                id={FormMemberFields.FirstName}
+                name={FormMemberFields.FirstName}
                 label={t("application.name.firstName")}
                 placeholder={t("application.name.firstName")}
                 register={register}
@@ -129,8 +151,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <GridCell>
             <ViewItem label={t("application.name.middleName")}>
               <Field
-                id="middleName"
-                name="middleName"
+                id={FormMemberFields.MiddleName}
+                name={FormMemberFields.MiddleName}
                 label={t("application.name.middleNameOptional")}
                 placeholder={t("application.name.middleNameOptional")}
                 register={register}
@@ -141,8 +163,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <GridCell>
             <ViewItem label={t("application.name.lastName")}>
               <Field
-                id="lastName"
-                name="lastName"
+                id={FormMemberFields.LastName}
+                name={FormMemberFields.LastName}
                 label={t("application.name.lastName")}
                 placeholder={t("application.name.lastName")}
                 register={register}
@@ -153,8 +175,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <GridCell>
             <ViewItem label={t("application.household.member.dateOfBirth")}>
               <DOBField
-                id="dateOfBirth"
-                name="dateOfBirth"
+                id={FormMemberFields.DateOfBirth}
+                name={FormMemberFields.DateOfBirth}
                 register={register}
                 error={errors?.dateOfBirth}
                 watch={watch}
@@ -168,8 +190,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <GridCell>
             <ViewItem label={t("t.relationship")}>
               <Select
-                id="relationship"
-                name="relationship"
+                id={FormMemberFields.Relationship}
+                name={FormMemberFields.Relationship}
                 label={t("t.relationship")}
                 labelClassName="sr-only"
                 register={register}
@@ -183,7 +205,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <GridCell>
             <ViewItem label={t("application.add.sameAddressAsPrimary")}>
               <FieldGroup
-                name="sameAddress"
+                name={FormMemberFields.SameAddress}
                 type="radio"
                 register={register}
                 fields={sameAddressOptions}
@@ -196,7 +218,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <GridCell>
             <ViewItem label={t("application.details.workInRegion")}>
               <FieldGroup
-                name="workInRegion"
+                name={FormMemberFields.WorkInRegion}
                 type="radio"
                 register={register}
                 fields={workInRegionOptions}
@@ -210,13 +232,18 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
         {sameAddressField === "no" &&
           FormAddress(
             t("application.details.residenceAddress"),
-            "address",
+            FormMemberFields.Address,
             "residence-member",
             register
           )}
 
         {workInRegionField === "yes" &&
-          FormAddress(t("application.contact.workAddress"), "workAddress", "work", register)}
+          FormAddress(
+            t("application.contact.workAddress"),
+            FormMemberFields.WorkAddress,
+            "work",
+            register
+          )}
       </div>
 
       <div className="mt-6">

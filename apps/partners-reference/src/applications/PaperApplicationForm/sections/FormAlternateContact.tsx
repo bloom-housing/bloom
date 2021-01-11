@@ -13,6 +13,22 @@ import {
 } from "@bloom-housing/ui-components"
 import { FormAddress } from "../FormAddress"
 
+export enum AlternateContactFields {
+  FirstName = "application.alternateContact.firstName",
+  LastName = "application.alternateContact.lastName",
+  Agency = "application.alternateContact.agency",
+  EmailAddress = "application.alternateContact.emailAddress",
+  PhoneNumber = "application.alternateContact.phoneNumber",
+  Type = "application.alternateContact.type",
+  OtherType = "application.alternateContact.otherType",
+  MailingAddress = "application.alternateContact.mailingAddress",
+  MailingAddressStreet = "application.alternateContact.mailingAddress.street",
+  MailingAddressStreet2 = "application.alternateContact.mailingAddress.street2",
+  MailingAddressCity = "application.alternateContact.mailingAddress.city",
+  MailingAddressState = "application.alternateContact.mailingAddress.state",
+  MailingAddressZipCode = "application.alternateContact.mailingAddress.zipCode",
+}
+
 const FormAlternateContact = () => {
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -37,8 +53,8 @@ const FormAlternateContact = () => {
         <GridCell>
           <ViewItem label={t("application.name.firstName")}>
             <Field
-              id="application.alternateContact.firstName"
-              name="application.alternateContact.firstName"
+              id={AlternateContactFields.FirstName}
+              name={AlternateContactFields.FirstName}
               label={t("application.name.firstName")}
               placeholder={t("application.name.firstName")}
               register={register}
@@ -50,8 +66,8 @@ const FormAlternateContact = () => {
         <GridCell>
           <ViewItem label={t("application.name.lastName")}>
             <Field
-              id="application.alternateContact.lastName"
-              name="application.alternateContact.lastName"
+              id={AlternateContactFields.LastName}
+              name={AlternateContactFields.LastName}
               placeholder={t("application.name.lastName")}
               register={register}
               label={t("application.name.lastName")}
@@ -63,8 +79,8 @@ const FormAlternateContact = () => {
         <GridCell>
           <ViewItem label={t("application.details.agency")}>
             <Field
-              id="application.alternateContact.agency"
-              name="application.alternateContact.agency"
+              id={AlternateContactFields.Agency}
+              name={AlternateContactFields.Agency}
               label={t("application.details.agency")}
               placeholder={t("application.alternateContact.name.caseManagerAgencyFormPlaceHolder")}
               register={register}
@@ -76,8 +92,8 @@ const FormAlternateContact = () => {
         <GridCell>
           <ViewItem label={t("t.email")}>
             <Field
-              id="application.alternateContact.emailAddress"
-              name="application.alternateContact.emailAddress"
+              id={AlternateContactFields.EmailAddress}
+              name={AlternateContactFields.EmailAddress}
               type="email"
               placeholder="example@web.com"
               label={t("t.email")}
@@ -93,8 +109,8 @@ const FormAlternateContact = () => {
         <GridCell>
           <ViewItem label={t("t.phone")}>
             <PhoneField
-              id="application.alternateContact.phoneNumber"
-              name="application.alternateContact.phoneNumber"
+              id={AlternateContactFields.PhoneNumber}
+              name={AlternateContactFields.PhoneNumber}
               required={false}
               error={errors.application?.alternateContact?.phoneNumber}
               errorMessage={t("errors.phoneNumberError")}
@@ -109,8 +125,8 @@ const FormAlternateContact = () => {
         <GridCell>
           <ViewItem label={t("t.relationship")}>
             <Select
-              id="application.alternateContact.type"
-              name="application.alternateContact.type"
+              id={AlternateContactFields.Type}
+              name={AlternateContactFields.Type}
               label={t("t.relationship")}
               labelClassName="sr-only"
               register={register}
@@ -125,8 +141,8 @@ const FormAlternateContact = () => {
           <GridCell>
             <ViewItem label={t("t.otherRelationShip")}>
               <Field
-                id="application.alternateContact.otherType"
-                name="application.alternateContact.otherType"
+                id={AlternateContactFields.OtherType}
+                name={AlternateContactFields.OtherType}
                 label={t("t.otherRelationShip")}
                 placeholder={t("t.relationship")}
                 register={register}
@@ -140,7 +156,7 @@ const FormAlternateContact = () => {
       <GridSection grid={false}>
         {FormAddress(
           t("application.contact.mailingAddress"),
-          "application.alternateContact.mailingAddress",
+          AlternateContactFields.OtherType,
           "alternate",
           register
         )}

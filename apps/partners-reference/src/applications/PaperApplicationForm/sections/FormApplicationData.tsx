@@ -9,6 +9,12 @@ import {
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 
+export enum FormApplicationDataFields {
+  DateSubmitted = "dateSubmitted",
+  TimeSubmitted = "timeSubmitted",
+  Language = "application.language",
+}
+
 const FormApplicationData = () => {
   const formMethods = useFormContext()
 
@@ -20,8 +26,8 @@ const FormApplicationData = () => {
       <GridSection columns={3}>
         <ViewItem label={t("application.add.dateSubmitted")}>
           <DOBField
-            id="dateSubmitted"
-            name="dateSubmitted"
+            id={FormApplicationDataFields.DateSubmitted}
+            name={FormApplicationDataFields.DateSubmitted}
             register={register}
             error={errors?.dateSubmitted}
             watch={watch}
@@ -34,8 +40,8 @@ const FormApplicationData = () => {
 
         <ViewItem label={t("application.add.timeSubmitted")}>
           <TimeField
-            id="timeSubmitted"
-            name="timeSubmitted"
+            id={FormApplicationDataFields.TimeSubmitted}
+            name={FormApplicationDataFields.TimeSubmitted}
             label={t("application.add.timeSubmitted")}
             register={register}
             error={!!errors?.timeSubmitted}
@@ -45,8 +51,8 @@ const FormApplicationData = () => {
 
         <ViewItem label={t("application.add.languageSubmittedIn")}>
           <Select
-            id="application.language"
-            name="application.language"
+            id={FormApplicationDataFields.Language}
+            name={FormApplicationDataFields.Language}
             label={t("application.add.languageSubmittedIn")}
             labelClassName="sr-only"
             register={register}

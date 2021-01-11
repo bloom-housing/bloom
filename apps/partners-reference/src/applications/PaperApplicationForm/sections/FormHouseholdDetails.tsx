@@ -10,6 +10,13 @@ import {
   preferredUnit,
 } from "@bloom-housing/ui-components"
 
+export enum FormHouseholdDetailsFields {
+  PreferredUnit = "application.preferredUnit",
+  Mobility = "application.accessibility.mobility",
+  Vision = "application.accessibility.vision",
+  Hearing = "application.accessibility.hearing",
+}
+
 const FormHouseholdDetails = () => {
   const formMethods = useFormContext()
 
@@ -27,7 +34,7 @@ const FormHouseholdDetails = () => {
         <ViewItem label={t("application.details.preferredUnitSizes")}>
           <FieldGroup
             type="checkbox"
-            name="application.preferredUnit"
+            name={FormHouseholdDetailsFields.PreferredUnit}
             fields={preferredUnitOptions}
             register={register}
             fieldGroupClassName="grid grid-cols-1 mt-4"
@@ -38,24 +45,24 @@ const FormHouseholdDetails = () => {
         <ViewItem label={t("application.details.adaPriorities")}>
           <fieldset className="mt-4">
             <Field
-              id="application.accessibility.mobility"
-              name="application.accessibility.mobility"
+              id={FormHouseholdDetailsFields.Mobility}
+              name={FormHouseholdDetailsFields.Mobility}
               type="checkbox"
               label={t("application.add.mobility")}
               register={register}
             />
 
             <Field
-              id="application.accessibility.vision"
-              name="application.accessibility.vision"
+              id={FormHouseholdDetailsFields.Vision}
+              name={FormHouseholdDetailsFields.Vision}
               type="checkbox"
               label={t("application.add.vision")}
               register={register}
             />
 
             <Field
-              id="application.accessibility.hearing"
-              name="application.accessibility.hearing"
+              id={FormHouseholdDetailsFields.Hearing}
+              name={FormHouseholdDetailsFields.Hearing}
               type="checkbox"
               label={t("application.add.hearing")}
               register={register}

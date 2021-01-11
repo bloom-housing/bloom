@@ -24,6 +24,7 @@ import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
 
 import { FormAside } from "./FormAside"
+import { FormValues } from "./FormTypes"
 
 const ApplicationForm = () => {
   const router = useRouter()
@@ -33,13 +34,12 @@ const ApplicationForm = () => {
   const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
-  const formMethods = useForm()
+  const formMethods = useForm<FormValues>()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues, trigger } = formMethods
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const triggerSubmit = async (data: any) => onSubmit(data, "details")
+  const triggerSubmit = async (data: FormValues) => onSubmit(data, "details")
 
   const triggerSubmitAndRedirect = async () => {
     const validation = await trigger()
@@ -56,7 +56,8 @@ const ApplicationForm = () => {
     @data: form data comes from the react-hook-form
     @redirect: open application details or blank application form
   */
-  const onSubmit = async (data: any, redirect: "details" | "new") => {
+  const onSubmit = async (data: FormValues, redirect: "details" | "new") => {
+    console.log(data)
     setAlert(null)
 
     const formData = {

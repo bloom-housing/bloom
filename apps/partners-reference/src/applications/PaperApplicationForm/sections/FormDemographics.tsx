@@ -14,6 +14,14 @@ import {
   howDidYouHear,
 } from "@bloom-housing/ui-components"
 
+export enum FormDemographicsFields {
+  Ethnicity = "application.demographics.ethnicity",
+  Race = "application.demographics.race",
+  Gender = "application.demographics.gender",
+  SexualOrientation = "application.demographics.sexualOrientation",
+  HowDidYouHearAboutUs = "application.demographics.howDidYouHear",
+}
+
 const FormDemographics = () => {
   const formMethods = useFormContext()
 
@@ -33,8 +41,8 @@ const FormDemographics = () => {
       <GridCell>
         <ViewItem label={t("application.add.ethnicity")}>
           <Select
-            id="application.demographics.ethnicity"
-            name="application.demographics.ethnicity"
+            id={FormDemographicsFields.Ethnicity}
+            name={FormDemographicsFields.Ethnicity}
             placeholder={t("t.selectOne")}
             label={t("application.add.ethnicity")}
             labelClassName="sr-only"
@@ -49,8 +57,8 @@ const FormDemographics = () => {
       <GridCell>
         <ViewItem label={t("application.add.race")}>
           <Select
-            id="application.demographics.race"
-            name="application.demographics.race"
+            id={FormDemographicsFields.Race}
+            name={FormDemographicsFields.Race}
             placeholder={t("t.selectOne")}
             label={t("application.add.race")}
             labelClassName="sr-only"
@@ -65,8 +73,8 @@ const FormDemographics = () => {
       <GridCell>
         <ViewItem label={t("application.add.gender")}>
           <Select
-            id="application.demographics.gender"
-            name="application.demographics.gender"
+            id={FormDemographicsFields.Gender}
+            name={FormDemographicsFields.Gender}
             placeholder={t("t.selectOne")}
             label={t("application.add.gender")}
             labelClassName="sr-only"
@@ -81,8 +89,8 @@ const FormDemographics = () => {
       <GridCell>
         <ViewItem label={t("application.add.sexualOrientation")}>
           <Select
-            id="application.demographics.sexualOrientation"
-            name="application.demographics.sexualOrientation"
+            id={FormDemographicsFields.SexualOrientation}
+            name={FormDemographicsFields.SexualOrientation}
             placeholder={t("t.selectOne")}
             label={t("application.add.sexualOrientation")}
             labelClassName="sr-only"
@@ -98,7 +106,7 @@ const FormDemographics = () => {
         <ViewItem label={t("application.add.howDidYouHearAboutUs")}>
           <FieldGroup
             type="checkbox"
-            name="application.demographics.howDidYouHear"
+            name={FormDemographicsFields.HowDidYouHearAboutUs}
             fields={howDidYouHearOptions}
             register={register}
             fieldGroupClassName="grid grid-cols-2 mt-4"

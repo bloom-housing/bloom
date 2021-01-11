@@ -2,6 +2,12 @@ import React from "react"
 import { t, GridSection, ViewItem, GridCell, Field } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 
+export enum FormPreferencesFields {
+  LiveIn = "application.preferences.liveIn",
+  WorkIn = "application.preferences.workIn",
+  None = "application.preferences.none",
+}
+
 const FormPreferences = () => {
   const formMethods = useFormContext()
 
@@ -16,8 +22,8 @@ const FormPreferences = () => {
         >
           <fieldset className="mt-4">
             <Field
-              id="application.preferences.liveIn"
-              name="application.preferences.liveIn"
+              id={FormPreferencesFields.LiveIn}
+              name={FormPreferencesFields.LiveIn}
               type="checkbox"
               label={`${t("application.add.preferences.liveIn")} ${t(
                 "application.details.countyName"
@@ -25,14 +31,14 @@ const FormPreferences = () => {
               register={register}
               inputProps={{
                 onChange: () => {
-                  setValue("application.preferences.none", false)
+                  setValue(FormPreferencesFields.None, false)
                 },
               }}
             />
 
             <Field
-              id="application.preferences.workIn"
-              name="application.preferences.workIn"
+              id={FormPreferencesFields.WorkIn}
+              name={FormPreferencesFields.WorkIn}
               type="checkbox"
               label={`${t("application.add.preferences.workIn")} ${t(
                 "application.details.countyName"
@@ -40,21 +46,21 @@ const FormPreferences = () => {
               register={register}
               inputProps={{
                 onChange: () => {
-                  setValue("application.preferences.none", false)
+                  setValue(FormPreferencesFields.None, false)
                 },
               }}
             />
 
             <Field
-              id="application.preferences.none"
-              name="application.preferences.none"
+              id={FormPreferencesFields.None}
+              name={FormPreferencesFields.None}
               type="checkbox"
               label={t("application.add.preferences.optedOut")}
               register={register}
               inputProps={{
                 onChange: () => {
-                  setValue("application.preferences.liveIn", false)
-                  setValue("application.preferences.workIn", false)
+                  setValue(FormPreferencesFields.LiveIn, false)
+                  setValue(FormPreferencesFields.WorkIn, false)
                 },
               }}
             />

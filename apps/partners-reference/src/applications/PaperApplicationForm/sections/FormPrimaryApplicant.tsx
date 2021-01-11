@@ -16,6 +16,44 @@ import {
 } from "@bloom-housing/ui-components"
 import { FormAddress } from "../FormAddress"
 
+export enum FormPrimaryApplicantFields {
+  FirstName = "application.applicant.firstName",
+  MiddleName = "application.applicant.middleName",
+  LastName = "application.applicant.lastName",
+  DateOfBirth = "dateOfBirth",
+  EmailAddress = "application.applicant.emailAddress",
+  PhoneNumber = "phoneNumber",
+  PhoneNumberType = "application.applicant.phoneNumberType",
+  AdditionalPhoneNumber = "application.additionalPhoneNumber",
+  AdditionalPhoneNumberType = "application.additionalPhoneNumberType",
+  ContactPreferences = "application.contactPreferences",
+  WorkInRegion = "application.applicant.workInRegion",
+  Address = "application.applicant.address",
+  AddressStreet = "application.applicant.address.street",
+  AddressStreet2 = "application.applicant.address.street2",
+  AddressCity = "application.applicant.address.city",
+  AddressState = "application.applicant.address.state",
+  AddressZip = "application.applicant.address.zip",
+  MailToMailingAddress = "application.sendMailToMailingAddress",
+  MailingAddress = "application.mailingAddress",
+  MailingAddressStreet = "application.mailingAddress.street",
+  MailingAddressStreet2 = "application.mailingAddress.street2",
+  MailingAddressCity = "application.mailingAddress.city",
+  MailingAddressState = "application.mailingAddress.state",
+  MailingAddressZip = "application.mailingAddress.zip",
+  WorkAddress = "application.applicant.workAddress",
+  WorkAddressStreet = "application.applicant.workAddress.street",
+  WorkAddressStreet2 = "application.applicant.workAddress.street2",
+  WorkAddressCity = "application.applicant.workAddress.city",
+  WorkAddressState = "application.applicant.workAddress.state",
+  WorkAddressZip = "application.applicant.workAddress.zip",
+}
+
+export enum FormPrimaryApplicantWorkValues {
+  Yes = "yes",
+  No = "no",
+}
+
 const FormPrimaryApplicant = () => {
   const formMethods = useFormContext()
 
@@ -34,7 +72,7 @@ const FormPrimaryApplicant = () => {
 
   // reset phone type field when phone is empty
   useEffect(() => {
-    const fieldKey = "application.applicant.phoneNumberType"
+    const fieldKey = FormPrimaryApplicantFields.PhoneNumberType
     if (!phoneValue?.length) {
       setValue(fieldKey, "")
       clearErrors(fieldKey)
@@ -43,7 +81,7 @@ const FormPrimaryApplicant = () => {
 
   // reset additional phone type field when additional phone is empty
   useEffect(() => {
-    const fieldKey = "application.additionalPhoneNumberType"
+    const fieldKey = FormPrimaryApplicantFields.AdditionalPhoneNumberType
     if (!additionalPhoneValue?.length) {
       setValue(fieldKey, "")
       clearErrors(fieldKey)
@@ -56,8 +94,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("application.name.firstName")}>
             <Field
-              id="application.applicant.firstName"
-              name="application.applicant.firstName"
+              id={FormPrimaryApplicantFields.FirstName}
+              name={FormPrimaryApplicantFields.FirstName}
               label={t("application.name.firstName")}
               placeholder={t("application.name.firstName")}
               register={register}
@@ -68,8 +106,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("application.name.middleName")}>
             <Field
-              id="application.applicant.middleName"
-              name="application.applicant.middleName"
+              id={FormPrimaryApplicantFields.MiddleName}
+              name={FormPrimaryApplicantFields.MiddleName}
               label={t("application.name.middleNameOptional")}
               placeholder={t("application.name.middleNameOptional")}
               register={register}
@@ -80,8 +118,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("application.name.lastName")}>
             <Field
-              id="application.applicant.lastName"
-              name="application.applicant.lastName"
+              id={FormPrimaryApplicantFields.LastName}
+              name={FormPrimaryApplicantFields.LastName}
               label={t("application.name.lastName")}
               placeholder={t("application.name.lastName")}
               register={register}
@@ -92,8 +130,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("application.household.member.dateOfBirth")}>
             <DOBField
-              id="dateOfBirth"
-              name="dateOfBirth"
+              id={FormPrimaryApplicantFields.DateOfBirth}
+              name={FormPrimaryApplicantFields.DateOfBirth}
               register={register}
               error={errors?.dateOfBirth}
               watch={watch}
@@ -106,8 +144,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("t.email")}>
             <Field
-              id="application.applicant.emailAddress"
-              name="application.applicant.emailAddress"
+              id={FormPrimaryApplicantFields.EmailAddress}
+              name={FormPrimaryApplicantFields.EmailAddress}
               type="email"
               placeholder="example@web.com"
               label={t("application.name.yourEmailAddress")}
@@ -122,8 +160,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("t.phone")}>
             <PhoneField
-              id="phoneNumber"
-              name="phoneNumber"
+              id={FormPrimaryApplicantFields.PhoneNumber}
+              name={FormPrimaryApplicantFields.PhoneNumber}
               label={t("application.contact.yourPhoneNumber")}
               required={false}
               error={errors?.phoneNumber}
@@ -137,8 +175,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("applications.table.phoneType")}>
             <Select
-              id="application.applicant.phoneNumberType"
-              name="application.applicant.phoneNumberType"
+              id={FormPrimaryApplicantFields.PhoneNumberType}
+              name={FormPrimaryApplicantFields.PhoneNumberType}
               placeholder={t("application.contact.phoneNumberTypes.prompt")}
               label={t("application.contact.phoneNumberTypes.prompt")}
               labelClassName="sr-only"
@@ -156,8 +194,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("t.additionalPhone")}>
             <PhoneField
-              id="application.additionalPhoneNumber"
-              name="application.additionalPhoneNumber"
+              id={FormPrimaryApplicantFields.AdditionalPhoneNumber}
+              name={FormPrimaryApplicantFields.AdditionalPhoneNumber}
               label={t("application.contact.yourAdditionalPhoneNumber")}
               required={false}
               error={errors.application?.additionalPhoneNumber}
@@ -171,8 +209,8 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("applications.table.additionalPhoneType")}>
             <Select
-              id="application.additionalPhoneNumberType"
-              name="application.additionalPhoneNumberType"
+              id={FormPrimaryApplicantFields.AdditionalPhoneNumberType}
+              name={FormPrimaryApplicantFields.AdditionalPhoneNumberType}
               error={errors.application?.additionalPhoneNumberType}
               errorMessage={t("errors.phoneNumberTypeError")}
               register={register}
@@ -191,7 +229,7 @@ const FormPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("application.contact.preferredContactType")}>
             <FieldGroup
-              name="application.contactPreferences"
+              name={FormPrimaryApplicantFields.ContactPreferences}
               fields={contactPreferencesOptions}
               type="checkbox"
               register={register}
@@ -203,26 +241,26 @@ const FormPrimaryApplicant = () => {
           <ViewItem label={t("application.add.workInRegion")}>
             <div className="flex items-center">
               <Field
-                id="application.applicant.workInRegionYes"
-                name="application.applicant.workInRegion"
+                id={`${FormPrimaryApplicantFields.WorkInRegion}Yes`}
+                name={FormPrimaryApplicantFields.WorkInRegion}
                 className="m-0"
                 type="radio"
                 label={t("t.yes")}
                 register={register}
                 inputProps={{
-                  value: "yes",
+                  value: FormPrimaryApplicantWorkValues.Yes,
                 }}
               />
 
               <Field
-                id="application.applicant.workInRegionNo"
-                name="application.applicant.workInRegion"
+                id={`${FormPrimaryApplicantFields.WorkInRegion}No`}
+                name={FormPrimaryApplicantFields.WorkInRegion}
                 className="m-0"
                 type="radio"
                 label={t("t.no")}
                 register={register}
                 inputProps={{
-                  value: "no",
+                  value: FormPrimaryApplicantWorkValues.No,
                 }}
               />
             </div>
@@ -232,7 +270,7 @@ const FormPrimaryApplicant = () => {
 
       {FormAddress(
         t("application.details.residenceAddress"),
-        "application.applicant.address",
+        FormPrimaryApplicantFields.Address,
         "residence",
         register
       )}
@@ -240,15 +278,15 @@ const FormPrimaryApplicant = () => {
       {mailingAddressValue &&
         FormAddress(
           t("application.contact.mailingAddress"),
-          "application.mailingAddress",
+          FormPrimaryApplicantFields.MailingAddress,
           "mailing",
           register
         )}
 
-      {workInRegionValue === "yes" &&
+      {workInRegionValue === FormPrimaryApplicantWorkValues.Yes &&
         FormAddress(
           t("application.contact.workAddress"),
-          "application.applicant.workAddress",
+          FormPrimaryApplicantFields.WorkAddress,
           "work",
           register
         )}
