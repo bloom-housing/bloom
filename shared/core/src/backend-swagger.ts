@@ -2620,6 +2620,9 @@ export interface Application {
   updatedAt: Date;
 
   /**  */
+  deletedAt?: Date;
+
+  /**  */
   appUrl?: string;
 
   /**  */
@@ -3163,6 +3166,9 @@ export interface ApplicationUpdate {
 
   /**  */
   updatedAt?: Date;
+
+  /**  */
+  deletedAt?: Date;
 
   /**  */
   listing: Id;
