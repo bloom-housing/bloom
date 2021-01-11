@@ -24,13 +24,9 @@ Each application is designed to run entirely in the browser, and to only serve a
 
 - `backend/core` will be the container for the key backend services (e.g. listings, applications, users) going forward. Information is stored in a postgres database, and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time).
 
-- `services/listings` was the initial backend service for listing information, serving from json files with some minimal transformation. It will soon be retired.
-
 ### Shared Libraries
 
-- `shared/ui-components` Contains shared UI components that are shared between applications and meant to be easily imported to implementation-specific sites without customization. Pull Requests to improve UI components in a generalized way are welcomed.
-
-- `shared/core` Contains core typescript interfaces that are meant to serve as a bridge to support object commonality between front-end and back-end. Likely to be deprecated in the near future as objects are defined by the backend core and exported via swagger for the front-end to consume.
+- `ui-components` Contains shared UI components that are shared between applications and meant to be easily imported to implementation-specific sites without customization. Pull Requests to improve UI components in a generalized way are welcomed.
 
 ## Getting Started for Developers
 
@@ -63,11 +59,10 @@ This runs 4 processes for each of the two apps and two services on 4 different p
 - 3000 for the Public app
 - 3001 for the Partners app
 - 3100 for the new backend/core
-- 3101 for the legacy listings service
 
 ### Storybook Component Library
 
-The `ui-components` package includes [Storybook](https://storybook.js.org/), an environment for easily browing the UI components independent of their implementation. Storybook can be run locally with `yarn start` from within the `shared/ui-components` directory. Contributions to component stories are highly encouraged, and will also benefit testing coverage via Storyshots. See [backend/core/README.md](https://github.com/bloom-housing/bloom/blob/master/shared/ui-components/README.md) for more details.
+The `ui-components` package includes [Storybook](https://storybook.js.org/), an environment for easily browing the UI components independent of their implementation. Storybook can be run locally with `yarn start` from within the `ui-components` directory. Contributions to component stories are highly encouraged, and will also benefit testing coverage via Storyshots. See [backend/core/README.md](https://github.com/bloom-housing/bloom/blob/master/ui-components/README.md) for more details.
 
 ### Running Tests
 
