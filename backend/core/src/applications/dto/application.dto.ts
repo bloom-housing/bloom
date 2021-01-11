@@ -106,6 +106,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",
   "createdAt",
   "updatedAt",
+  "deletedAt",
   "listing",
   "applicant",
   "mailingAddress",
@@ -175,6 +176,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "id",
   "createdAt",
   "updatedAt",
+  "deletedAt",
   "listing",
   "applicant",
   "mailingAddress",
@@ -201,6 +203,12 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  deletedAt?: Date
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
