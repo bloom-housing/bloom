@@ -1,6 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
-import { plainToClass } from "class-transformer"
 import { ApplicationUpdateDto } from "./dto/application.dto"
 import { User } from "../user/entities/user.entity"
 import { REQUEST } from "@nestjs/core"
@@ -29,8 +28,7 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["listing", "user", "listing.property"],
-      loadEagerRelations: true,
+      relations: ["user"],
     })
   }
 
@@ -61,15 +59,16 @@ export class ApplicationsService {
             ),
           }),
         },
-        relations: ["listing", "user", "listing.property"],
+        relations: ["user"],
       }
     )
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
-    const application = plainToClass(Application, applicationCreateDto)
-    application.user = user
-    return await this.repository.save(application)
+    return await this.repository.save({
+      ...applicationCreateDto,
+      user,
+    })
   }
 
   async findOne(applicationId: string) {
@@ -77,7 +76,7 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
-      relations: ["listing", "user", "listing.property"],
+      relations: ["user"],
     })
   }
 
@@ -86,7 +85,7 @@ export class ApplicationsService {
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
-        relations: ["listing", "user", "listing.property"],
+        relations: ["user"],
       }))
     Object.assign(application, applicationUpdateDto)
     await this.repository.save(application)
