@@ -16,7 +16,7 @@ import {
   ApplicationUpdate,
   IncomePeriod,
   Language,
-} from "@bloom-housing/core"
+} from "@bloom-housing/backend-core/types"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")

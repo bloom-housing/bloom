@@ -14,9 +14,9 @@ The backend can be simultaenously deployed to PaaS-style hosts such as Heroku. I
 
 This repository contains refence implementations for each of the two main user-facing applications in the system:
 
-- `apps/public-reference` is the applicant-facing site available to the general public. It provides the ability to browse available listings, and to apply for listings either using the Common Application or an external link to an online or PDF application.
+- `sites/public` is the applicant-facing site available to the general public. It provides the ability to browse available listings, and to apply for listings either using the Common Application or an external link to an online or PDF application.
 
-- `apps/partners-reference` is the site designed for housing developers, property managers, and city/county (jurisdiction) employees. It will offer the ability to view and edit listings, view applications, and other administrative activities. A login is required to use the Partners Portal.
+- `sites/partners` is the site designed for housing developers, property managers, and city/county (jurisdiction) employees. It will offer the ability to view and edit listings, view applications, and other administrative activities. A login is required to use the Partners Portal.
 
 Each application is designed to run entirely in the browser, and to only serve as a baseline for the customized site specific to each jurisdiction. See the [housingbayarea Bloom fork](https://github.com/housingbayarea/bloom) for an example with customized sites.
 
@@ -77,13 +77,13 @@ yarn test:all
 
 ### Adding a new app
 
-1. Duplicate the [public-reference](apps/public-reference) directory to `apps/<your-app-name>`
-1. Change all usages of `public-reference` in `apps/<your-app-name>/package.json` to `<your-app-name>`
+1. Duplicate the [public](sites/public) directory to `sites/<your-app-name>`
+1. Change all usages of `public` in `sites/<your-app-name>/package.json` to `<your-app-name>`
 1. Update root-level [package.json](package.json)
    - Add `<your-app-name>` to the `workspaces.packages` list
    - Add yarn scripts for your new app
-     - ex build script: `"dev:app:<myapp>": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/<your-app-name> && yarn dev"`
-     - ex test script: `"test:app:<myapp>": "wait-on \"http://localhost:${PORT:-3001}/\" && cd apps/<your-app-name> && yarn test"`
+     - ex build script: `"dev:app:<myapp>": "wait-on \"http://localhost:${PORT:-3001}/\" && cd sites/<your-app-name> && yarn dev"`
+     - ex test script: `"test:app:<myapp>": "wait-on \"http://localhost:${PORT:-3001}/\" && cd sites/<your-app-name> && yarn test"`
 1. Run `yarn install` and now you should be able to build your app with `yarn dev:app:<myapp>`
 
 ### Versioning
