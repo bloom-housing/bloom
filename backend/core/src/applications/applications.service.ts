@@ -116,6 +116,6 @@ export class ApplicationsService {
   }
 
   async delete(applicationId: string) {
-    return await this.repository.delete({ id: applicationId })
+    return await this.repository.softRemove({ id: applicationId })
   }
 }
