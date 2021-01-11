@@ -61,7 +61,7 @@ const DetailsApplicationData = () => {
 
       <GridCell>
         <ViewItem label={t("application.details.totalSize")}>
-          {!application.householdSize ? 1 : application.householdSize + 1}
+          {!application.householdSize ? 1 : application.householdSize}
         </ViewItem>
       </GridCell>
 
