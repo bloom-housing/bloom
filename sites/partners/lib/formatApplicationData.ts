@@ -33,8 +33,8 @@ interface FormData extends FormTypes {
   householdMembers: HouseholdMember[]
 }
 
-export const formatApplicationData = (data: FormData, listingId) => {
-  console.log(data)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const formatApplicationData = (data: FormData, listingId: string, editMode: boolean) => {
   const language: Language | null = data.application.language ? data.application.language : null
 
   const submissionDate: Date | null = (() => {

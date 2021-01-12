@@ -10,6 +10,8 @@ type Address = {
   zipCode: string
 }
 
+type YesNoAnswer = "yes" | "no"
+
 export type FormTypes = {
   dateOfBirth: DOBFieldValues
   timeSubmitted: TimeFieldValues
@@ -24,9 +26,9 @@ export type FormTypes = {
     additionalPhoneNumber: string
     additionalPhoneNumberType: string
     contactPreferences: string[]
-    acceptedTerms: "yes" | "no"
+    acceptedTerms: YesNoAnswer
     incomePeriod: IncomePeriod
-    incomeVouchers: "yes" | "no"
+    incomeVouchers: YesNoAnswer
     preferredUnit: string[]
     accessibility: NestedValue<{
       mobility: boolean
@@ -56,7 +58,7 @@ export type FormTypes = {
       middleName: string
       lastName: string
       emailAddress: string
-      workInRegion: "yes" | "no"
+      workInRegion: YesNoAnswer
       address: NestedValue<Address>
       workAddress: NestedValue<Address>
       phoneNumberType?: string
