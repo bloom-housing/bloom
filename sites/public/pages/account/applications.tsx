@@ -21,7 +21,7 @@ import { Application } from "@bloom-housing/backend-core/types"
 export default () => {
   const [applications, setApplications] = useState([])
   const [deletingApplication, setDeletingApplication] = useState(null)
-  const listing = Object.assign({}, Archer) as any
+  const listing = Object.assign({}, Archer)
 
   useEffect(() => {
     // applicationsService.list().then((apps) => {
