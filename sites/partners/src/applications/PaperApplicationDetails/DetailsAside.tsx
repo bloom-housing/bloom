@@ -6,8 +6,8 @@ import {
   Button,
   GridCell,
   AppearanceStyleType,
-  LinkButton,
   StatusMessages,
+  LocalizedLink,
 } from "@bloom-housing/ui-components"
 import { DetailsApplicationContext } from "./DetailsApplicationContext"
 
@@ -31,25 +31,21 @@ const DetailsAside = ({ applicationId }: DetailsAsideProps) => {
       columns={1}
       actions={[
         <GridCell key="btn-submitNew">
-          <Button
-            styleType={AppearanceStyleType.secondary}
-            fullWidth
-            onClick={() => {
-              //
-            }}
-          >
-            {t("t.edit")}
-          </Button>
+          <LocalizedLink href={`/applications/${applicationId}/edit`}>
+            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+              {t("t.edit")}
+            </Button>
+          </LocalizedLink>
         </GridCell>,
         <GridCell className="flex" key="btn-cancel">
-          <LinkButton
+          <Button
             unstyled
             fullWidth
             className="bg-opacity-0 text-red-700"
-            href={`/applications/${applicationId}/edit`}
+            onClick={() => console.log("delete")}
           >
             {t("t.delete")}
-          </LinkButton>
+          </Button>
         </GridCell>,
       ]}
     >

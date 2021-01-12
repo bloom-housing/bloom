@@ -26,7 +26,11 @@ import { FormTerms } from "./sections/FormTerms"
 import { FormAside } from "./FormAside"
 import { FormTypes } from "./FormTypes"
 
-const ApplicationForm = () => {
+type ApplicationFormProps = {
+  editMode?: boolean
+}
+
+const ApplicationForm = ({ editMode }: ApplicationFormProps) => {
   const router = useRouter()
   const listingId = router.query.id as string
   const { applicationsService } = useContext(ApiClientContext)
@@ -92,6 +96,7 @@ const ApplicationForm = () => {
 
   return (
     <FormProvider {...formMethods}>
+      {console.log(editMode)}
       <div className="flex justify-end max-w-screen-xl px-5 mx-auto w-full">
         <div className="md:w-3/12 py-3 md:pl-6">
           <Tag className="block" pillStyle={true} size={AppearanceSizeType.big}>
