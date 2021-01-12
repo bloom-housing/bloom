@@ -41,10 +41,19 @@ export class ListingsService {
   async update(listingDto: ListingUpdateDto) {
     const listing = await Listing.findOneOrFail({
       where: { id: listingDto.id },
+      relations: ["property"],
     })
-    Object.assign(listing, listingDto)
-    await listing.save()
-    return listing
+    /*
+      NOTE: Object.assign would replace listing.property of type Property with object of type IdDto
+       coming from ListingUpdateDto, which is causing a problem for dynamically computed
+       listingUrlSlug property (it requires property.buildingAddress.city to exist). The solution is
+       to assign this separately so that other properties (outside of IdDto type) of
+       listing.property are retained.
+    */
+    const { property, ...dto } = listingDto
+    Object.assign(listing, dto)
+    Object.assign(listing.property, property)
+    return await listing.save()
   }
 
   async delete(listingId: string) {
