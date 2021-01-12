@@ -8,7 +8,7 @@ import {
   Drawer,
 } from "@bloom-housing/ui-components"
 import { AddressColsType, DetailsAddressColumns } from "./DetailsAddressColumns"
-import { Application, HouseholdMemberUpdate } from "@bloom-housing/core"
+import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 
 export type MembersDrawer = HouseholdMemberUpdate | null
 

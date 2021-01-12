@@ -7,7 +7,7 @@ import {
   ApplicationStatus,
   Address,
   HouseholdMember,
-} from "@bloom-housing/core"
+} from "@bloom-housing/backend-core/types"
 import { FormTypes } from "../src/applications/PaperApplicationForm/FormTypes"
 
 /*
@@ -33,7 +33,7 @@ interface FormData extends FormTypes {
   householdMembers: HouseholdMember[]
 }
 
-export const formatApplicationData = (data: FormData, listingId, editMode: boolean) => {
+export const formatApplicationData = (data: FormData, listingId) => {
   console.log(data)
   const language: Language | null = data.application.language ? data.application.language : null
 

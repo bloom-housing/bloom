@@ -1,6 +1,6 @@
 import { DOBFieldValues, TimeFieldValues } from "@bloom-housing/ui-components"
 import { NestedValue } from "react-hook-form"
-import { Language, IncomePeriod } from "@bloom-housing/core"
+import { Language, IncomePeriod } from "@bloom-housing/backend-core/types"
 
 type Address = {
   street: string

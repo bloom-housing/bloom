@@ -4,8 +4,7 @@ import Head from "next/head"
 import { AppearanceStyleType, PageHeader, t, Tag, Button } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
-<<<<<<< HEAD:apps/partners-reference/pages/applications/[applicationId].tsx
-import { ApplicationStatus } from "@bloom-housing/core"
+import { ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,
   MembersDrawer,
@@ -21,16 +20,6 @@ import { DetailsPreferences } from "../../src/applications/PaperApplicationDetai
 import { DetailsHouseholdIncome } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { DetailsAside } from "../../src/applications/PaperApplicationDetails/DetailsAside"
-=======
-import { IncomePeriod } from "@bloom-housing/backend-core/types"
-
-enum AddressColsType {
-  "residence" = "residence",
-  "mailing" = "mailing",
-  "work" = "work",
-  "alternateAddress" = "alternateAddress",
-}
->>>>>>> master:sites/partners/pages/applications/[applicationId].tsx
 
 export default function ApplicationsList() {
   const router = useRouter()

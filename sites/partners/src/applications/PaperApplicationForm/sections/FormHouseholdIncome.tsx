@@ -1,15 +1,7 @@
 import React from "react"
 import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import {
-  ApplicationUpdate,
-  ApplicantUpdate,
-  Language,
-  IncomePeriod,
-  ApplicationSubmissionType,
-  ApplicationStatus,
-  Address,
-} from "@bloom-housing/core"
+import { IncomePeriod } from "@bloom-housing/backend-core/types"
 
 const FormHouseholdIncome = () => {
   const formMethods = useFormContext()

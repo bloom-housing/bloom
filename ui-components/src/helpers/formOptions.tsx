@@ -1,6 +1,6 @@
 import * as React from "react"
 import { t } from "./translator"
-import { Language } from "@bloom-housing/core"
+import { Language } from "@bloom-housing/backend-core/types"
 interface FormOptionsProps {
   options: string[]
   keyPrefix: string

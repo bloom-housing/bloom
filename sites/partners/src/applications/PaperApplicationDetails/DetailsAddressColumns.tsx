@@ -1,5 +1,5 @@
 import { t, GridCell, ViewItem } from "@bloom-housing/ui-components"
-import { Application, HouseholdMemberUpdate } from "@bloom-housing/core"
+import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 
 type DetailsAddressColumnsProps = {
   type: AddressColsType

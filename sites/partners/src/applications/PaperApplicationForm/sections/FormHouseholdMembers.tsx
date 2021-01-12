@@ -10,7 +10,7 @@ import {
   AppearanceStyleType,
   AppearanceBorderType,
 } from "@bloom-housing/ui-components"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember } from "@bloom-housing/backend-core/types"
 
 import { FormMember } from "../FormMember"
 

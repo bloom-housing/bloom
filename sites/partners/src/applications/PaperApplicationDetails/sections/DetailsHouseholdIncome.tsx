@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell, formatIncome } from "@bloom-housing/ui-components"
 import { DetailsApplicationContext } from "../DetailsApplicationContext"
-import { IncomePeriod } from "@bloom-housing/core"
+import { IncomePeriod } from "@bloom-housing/backend-core/types"
 
 const DetailsHouseholdIncome = () => {
   const application = useContext(DetailsApplicationContext)

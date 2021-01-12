@@ -10,7 +10,7 @@ import {
   AlertTypes,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
-import { HouseholdMember } from "@bloom-housing/core"
+import { HouseholdMember } from "@bloom-housing/backend-core/types"
 import { formatApplicationData } from "../../../lib/formatApplicationData"
 
 import { FormApplicationData } from "./sections/FormApplicationData"
