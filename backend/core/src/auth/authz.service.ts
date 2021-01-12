@@ -8,7 +8,6 @@ export enum authzActions {
   read = "read",
   update = "update",
   delete = "delete",
-  listAll = "list_all",
   submit = "submit",
 }
 

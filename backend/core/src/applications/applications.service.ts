@@ -7,8 +7,6 @@ import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
-import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
-import { CsvBuilder } from "../services/csv-builder.service"
 import { ApplicationsListQueryParams } from "./applications.controller"
 import { Request } from "express"
 
@@ -17,10 +15,9 @@ export class ApplicationsService {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
-    private readonly csvBuilder: CsvBuilder
   ) {}
 
-  private async list(listingId: string | null, user?: User) {
+  public async list(listingId: string | null, user?: User) {
     return this.repository.find({
       where: {
         ...(user && { user: { id: user.id } }),
@@ -34,16 +31,7 @@ export class ApplicationsService {
     })
   }
 
-  async listAsCsv(listingId: string | null, includeHeaders: boolean, user?: User) {
-    const applications = await this.list(listingId, user)
-    return this.csvBuilder.build(
-      applications,
-      applicationFormattingMetadataAggregateFactory,
-      includeHeaders
-    )
-  }
-
-  async listPaginated(params: ApplicationsListQueryParams, user?: User) {
+  async listPaginated(params: ApplicationsListQueryParams) {
     const qb = this.repository.createQueryBuilder("application")
     // FIXME This is a temporary fix before switching to using a repository with
     //  to_tsvector. Previously it didn't work because of bugs in TypeORM related to jsonb columns
@@ -71,8 +59,8 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("units.amiChart", "amiChart")
     qb.leftJoinAndSelect("amiChart.items", "amiChartItems")
 
-    if (user) {
-      qb.andWhere("user.id = :userId", { userId: user.id })
+    if (params.userId) {
+      qb.andWhere("user.id = :userId", { userId: params.userId })
     }
 
     if (params.listingId) {

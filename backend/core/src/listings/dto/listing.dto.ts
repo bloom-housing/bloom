@@ -23,6 +23,7 @@ import { IdDto } from "../../lib/id.dto"
 import { PropertyDto } from "../../property/dto/property.dto"
 import { AddressCreateDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { UserDto } from "../../user/dto/user.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationMethods",
@@ -31,6 +32,7 @@ export class ListingDto extends OmitType(Listing, [
   "property",
   "events",
   "applications",
+  "leasingAgent",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -62,6 +64,12 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
 
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UserDto)
+  leasingAgent: UserDto
+
   @Exclude()
   @ApiHideProperty()
   applications
@@ -80,6 +88,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "applicationAddress",
   "applicationPickUpAddress",
   "leasingAgentAddress",
+  "leasingAgent",
   "urlSlug",
 ] as const) {
   @Expose()
@@ -129,6 +138,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   leasingAgentAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  leasingAgent: IdDto
 }
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
@@ -145,6 +160,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "applicationPickUpAddress",
   "leasingAgentAddress",
   "urlSlug",
+  "leasingAgent",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -210,4 +226,10 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   leasingAgentAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  leasingAgent: IdDto
 }

@@ -8,9 +8,11 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
+import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsDate, IsEmail, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { Address } from "../../shared/entities/address.entity"
 
 @Entity({ name: "user_accounts" })
 @Index("user_accounts_email_unique_idx", { synchronize: false })
@@ -65,9 +67,14 @@ export class User {
   @OneToMany(() => Application, (application) => application.user)
   applications: Application[]
 
+  @OneToMany(() => Listing, (listing) => listing.leasingAgent)
+  listings: Listing[]
+
   @Column("boolean", { default: false })
   isAdmin: boolean
 
+  @Column("boolean", { default: false })
+  isLeasingAgent: boolean
   /**
    * Array of roles this user can become. Logic is simple right now, but in theory this will expand to take into
    * account membership in a domain (company-level or admin area level for example).
@@ -77,6 +84,17 @@ export class User {
    * work properly.
    */
   get roles(): string[] {
-    return ["user", ...(this.isAdmin ? ["admin"] : [])]
+    return [
+      "user",
+      ...(this.isAdmin ? ["admin"] : []),
+      ...(this.isLeasingAgent ? ["leasingAgent"] : []),
+    ]
   }
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Address)
+  address?: Address | null
 }
