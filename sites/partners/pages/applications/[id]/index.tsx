@@ -1,7 +1,15 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AppearanceStyleType, PageHeader, t, Tag, Button } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  PageHeader,
+  t,
+  Tag,
+  Button,
+  ApiClientContext,
+  AlertBox,
+} from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
@@ -23,13 +31,21 @@ import { DetailsAside } from "../../../src/applications/PaperApplicationDetails/
 
 export default function ApplicationsList() {
   const router = useRouter()
-  const applicationId = router.query.applicationId as string
+  const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
+  const { applicationsService } = useContext(ApiClientContext)
+
+  const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
 
-  function deleteApplication() {
-    console.log("deleting...")
+  async function deleteApplication() {
+    try {
+      await applicationsService.delete({ applicationId })
+      void router.push(`/listings/${application?.listing?.id}/applications`)
+    } catch (err) {
+      setErrorAlert(true)
+    }
   }
 
   const applicationStatus = useMemo(() => {
@@ -83,27 +99,40 @@ export default function ApplicationsList() {
         </section>
 
         <section className="bg-primary-lighter">
-          <div className="flex flex-row flex-wrap mx-auto px-5 mt-5 max-w-screen-xl">
-            <div className="info-card md:w-9/12">
-              <DetailsApplicationData />
+          <div className="mx-auto px-5 mt-5 max-w-screen-xl">
+            {errorAlert && (
+              <AlertBox
+                className="mb-5"
+                onClose={() => setErrorAlert(false)}
+                closeable
+                type="alert"
+              >
+                {t("authentication.signIn.errorGenericMessage")}
+              </AlertBox>
+            )}
 
-              <DetailsPrimaryApplicant />
+            <div className="flex flex-row flex-wrap ">
+              <div className="info-card md:w-9/12">
+                <DetailsApplicationData />
 
-              <DetailsAlternateContact />
+                <DetailsPrimaryApplicant />
 
-              <DetailsHouseholdMembers setMembersDrawer={setMembersDrawer} />
+                <DetailsAlternateContact />
 
-              <DetailsHouseholdDetails />
+                <DetailsHouseholdMembers setMembersDrawer={setMembersDrawer} />
 
-              <DetailsPreferences />
+                <DetailsHouseholdDetails />
 
-              <DetailsHouseholdIncome />
+                <DetailsPreferences />
 
-              <DetailsTerms />
-            </div>
+                <DetailsHouseholdIncome />
 
-            <div className="md:w-3/12 pl-6">
-              <DetailsAside applicationId={applicationId} onDelete={deleteApplication} />
+                <DetailsTerms />
+              </div>
+
+              <div className="md:w-3/12 pl-6">
+                <DetailsAside applicationId={applicationId} onDelete={deleteApplication} />
+              </div>
             </div>
           </div>
         </section>

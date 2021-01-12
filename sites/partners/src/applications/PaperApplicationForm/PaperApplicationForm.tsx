@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react"
-import { useRouter } from "next/router"
 import {
   ApiClientContext,
   t,
@@ -9,6 +8,7 @@ import {
   AlertBox,
   AlertTypes,
 } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
 import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
 import { HouseholdMember } from "@bloom-housing/backend-core/types"
 import { formatApplicationData } from "../../../lib/formatApplicationData"
@@ -27,12 +27,14 @@ import { FormAside } from "./FormAside"
 import { FormTypes } from "./FormTypes"
 
 type ApplicationFormProps = {
+  listingId: string
   editMode?: boolean
 }
 
-const ApplicationForm = ({ editMode }: ApplicationFormProps) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
   const router = useRouter()
-  const listingId = router.query.id as string
+
   const { applicationsService } = useContext(ApiClientContext)
 
   const [alert, setAlert] = useState<AlertTypes | null>(null)
@@ -96,7 +98,6 @@ const ApplicationForm = ({ editMode }: ApplicationFormProps) => {
 
   return (
     <FormProvider {...formMethods}>
-      {console.log(editMode)}
       <div className="flex justify-end max-w-screen-xl px-5 mx-auto w-full">
         <div className="md:w-3/12 py-3 md:pl-6">
           <Tag className="block" pillStyle={true} size={AppearanceSizeType.big}>
