@@ -18,8 +18,8 @@
     "state": "CA",
     "street": "4619 Brunswick St",
     "zipCode": "94014",
-    "latitude": 37.7054062,
-    "longitude": -122.4581286
+    "latitude": 37.704575, 
+    "longitude": -122.461062
   },
   "buildingSelectionCriteria": "",
   "costsNotIncluded": "No Rent Due Until March 2021 if you sign by Jan 30th.",
@@ -56,13 +56,13 @@
   "leasingAgentAddress": {
     "city": "Daly City",
     "state": "CA",
-    "street": "6674 Mission Street",
-    "zipCode": "94914"
+    "street": "4619 Brunswick St",
+    "zipCode": "94014"
   },
   "leasingAgentEmail": "brunswickasstmgr@apertopm.com",
   "leasingAgentName": "Tina Taylor",
   "leasingAgentOfficeHours": null,
-  "leasingAgentPhone": "(650) 731-5724",
+  "leasingAgentPhone": "(650) 731-4139",
   "leasingAgentTitle": "Leasing Agent",
   "rentalHistory": "",
   "buildingTotalUnits": 204,

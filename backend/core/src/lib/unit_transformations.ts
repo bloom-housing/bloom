@@ -141,8 +141,8 @@ const summarizeUnits = (
           parseFloat(unit.monthlyIncomeMin)
         )
         summary.minIncomeRange = {
-          min: minIncomeRange.min.toPrecision(2),
-          max: minIncomeRange.max.toPrecision(2),
+          min: minIncomeRange.min.toFixed(2),
+          max: minIncomeRange.max.toFixed(2),
         }
 
         summary.occupancyRange = minMaxValue(
@@ -162,8 +162,8 @@ const summarizeUnits = (
           Number.parseFloat(unit.monthlyRent)
         )
         summary.rentRange = {
-          min: rentRange.min.toPrecision(2),
-          max: rentRange.max.toPrecision(2),
+          min: rentRange.min.toFixed(2),
+          max: rentRange.max.toFixed(2),
         }
         if (unit.floor) {
           summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
