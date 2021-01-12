@@ -28,7 +28,7 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["user"],
+      relations: ["listing", "user"],
     })
   }
 
@@ -59,7 +59,7 @@ export class ApplicationsService {
             ),
           }),
         },
-        relations: ["user"],
+        relations: ["listing", "user"],
       }
     )
   }
@@ -76,7 +76,7 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
-      relations: ["user"],
+      relations: ["listing", "user"],
     })
   }
 
@@ -85,7 +85,7 @@ export class ApplicationsService {
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
-        relations: ["user"],
+        relations: ["listing", "user"],
       }))
     Object.assign(application, applicationUpdateDto)
     await this.repository.save(application)
