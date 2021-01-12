@@ -1,4 +1,9 @@
-import { AmiChartCreate, ApplicationMethodType, Listing, ListingStatus } from "@bloom-housing/core"
+import {
+  AmiChartCreate,
+  ApplicationMethodType,
+  Listing,
+  ListingStatus,
+} from "@bloom-housing/backend-core/types"
 
 export const SanMateoHUD2019: AmiChartCreate = {
   name: "SanMateoHUD2019",

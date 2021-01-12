@@ -2620,6 +2620,9 @@ export interface Application {
   updatedAt: Date;
 
   /**  */
+  deletedAt?: Date;
+
+  /**  */
   appUrl?: string;
 
   /**  */
@@ -2654,6 +2657,9 @@ export interface Application {
 
   /**  */
   acceptedTerms?: boolean;
+
+  /**  */
+  submissionDate?: Date;
 }
 
 export interface PaginationMeta {
@@ -2918,6 +2924,9 @@ export interface ApplicationCreate {
 
   /**  */
   acceptedTerms?: boolean;
+
+  /**  */
+  submissionDate?: Date;
 }
 
 export interface ApplicantUpdate {
@@ -3159,6 +3168,9 @@ export interface ApplicationUpdate {
   updatedAt?: Date;
 
   /**  */
+  deletedAt?: Date;
+
+  /**  */
   listing: Id;
 
   /**  */
@@ -3220,6 +3232,9 @@ export interface ApplicationUpdate {
 
   /**  */
   acceptedTerms?: boolean;
+
+  /**  */
+  submissionDate?: Date;
 }
 
 export interface UnitCreate {

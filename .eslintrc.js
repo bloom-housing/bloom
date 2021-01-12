@@ -1,12 +1,7 @@
 module.exports = {
   parser: "@typescript-eslint/parser", // Specifies the ESLint parser
   parserOptions: {
-    project: [
-      "./tsconfig.json",
-      "./apps/public-reference/tsconfig.json",
-      "./apps/partners-reference/tsconfig.json",
-      "./services/**/tsconfig.json",
-    ],
+    project: ["./tsconfig.json", "./sites/public/tsconfig.json", "./sites/partners/tsconfig.json"],
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: "module", // Allows for the use of imports
     tsconfigRootDir: ".",
@@ -32,9 +27,13 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": "warn",
     "react/jsx-uses-vars": "warn",
     "react/jsx-uses-react": "warn",
-    "@typescript-eslint/restrict-template-expressions": ["error", {
-      allowNumber: true, allowAny: true
-    }],
+    "@typescript-eslint/restrict-template-expressions": [
+      "error",
+      {
+        allowNumber: true,
+        allowAny: true,
+      },
+    ],
     // These rules catches various usecases of variables typed as "any", since they won't be flagged by the TS
     // compiler and thus are potential sources of issues. The current codebase has too many uses of `any` to make
     // these effective rules though, so disabling them for now.
@@ -50,6 +49,6 @@ module.exports = {
     "dist",
     "migration/",
     "**/*.stories.tsx",
-    "**/.eslintrc.js"
+    "**/.eslintrc.js",
   ],
 }

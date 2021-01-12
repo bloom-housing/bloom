@@ -1,4 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm"
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from "typeorm"
 import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import {
@@ -46,6 +54,13 @@ export enum IncomePeriod {
 
 @Entity({ name: "applications" })
 export class Application extends AbstractEntity {
+  @DeleteDateColumn()
+  @Expose()
+  @IsOptional()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  deletedAt?: Date | null
+
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
