@@ -16,12 +16,12 @@ import {
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import moment from "moment"
-import { Application } from "@bloom-housing/backend-core/types"
+import { Application, ArcherListing } from "@bloom-housing/backend-core/types"
 
 export default () => {
   const [applications, setApplications] = useState([])
   const [deletingApplication, setDeletingApplication] = useState(null)
-  const listing = Object.assign({}, Archer)
+  const listing = Object.assign({}, ArcherListing)
 
   useEffect(() => {
     // applicationsService.list().then((apps) => {
