@@ -28,6 +28,10 @@ export default function ApplicationsList() {
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
 
+  function deleteApplication() {
+    console.log("deleting...")
+  }
+
   const applicationStatus = useMemo(() => {
     switch (application?.status) {
       case ApplicationStatus.submitted:
@@ -99,7 +103,7 @@ export default function ApplicationsList() {
             </div>
 
             <div className="md:w-3/12 pl-6">
-              <DetailsAside applicationId={applicationId} />
+              <DetailsAside applicationId={applicationId} onDelete={deleteApplication} />
             </div>
           </div>
         </section>

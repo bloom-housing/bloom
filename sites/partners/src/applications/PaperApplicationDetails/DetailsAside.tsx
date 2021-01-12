@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import moment from "moment"
 import {
   t,
@@ -8,15 +8,20 @@ import {
   AppearanceStyleType,
   StatusMessages,
   LocalizedLink,
+  Modal,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { DetailsApplicationContext } from "./DetailsApplicationContext"
 
 type DetailsAsideProps = {
   applicationId: string
+  onDelete: () => void
 }
 
-const DetailsAside = ({ applicationId }: DetailsAsideProps) => {
+const DetailsAside = ({ applicationId, onDelete }: DetailsAsideProps) => {
   const application = useContext(DetailsApplicationContext)
+
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const applicationUpdated = useMemo(() => {
     if (!application) return null
@@ -27,30 +32,61 @@ const DetailsAside = ({ applicationId }: DetailsAsideProps) => {
   }, [application])
 
   return (
-    <StatusAside
-      columns={1}
-      actions={[
-        <GridCell key="btn-submitNew">
-          <LocalizedLink href={`/applications/${applicationId}/edit`}>
-            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
-              {t("t.edit")}
+    <>
+      <StatusAside
+        columns={1}
+        actions={[
+          <GridCell key="btn-submitNew">
+            <LocalizedLink href={`/applications/${applicationId}/edit`}>
+              <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+                {t("t.edit")}
+              </Button>
+            </LocalizedLink>
+          </GridCell>,
+          <GridCell className="flex" key="btn-cancel">
+            <Button
+              unstyled
+              fullWidth
+              className="bg-opacity-0 text-red-700"
+              onClick={() => setDeleteModal(true)}
+            >
+              {t("t.delete")}
             </Button>
-          </LocalizedLink>
-        </GridCell>,
-        <GridCell className="flex" key="btn-cancel">
+          </GridCell>,
+        ]}
+      >
+        <StatusMessages lastTimestamp={applicationUpdated} />
+      </StatusAside>
+
+      <Modal
+        open={!!deleteModal}
+        title={t("application.deleteThisApplication")}
+        ariaDescription={t("application.deleteApplicationDescription")}
+        onClose={() => setDeleteModal(false)}
+        actions={[
           <Button
-            unstyled
-            fullWidth
-            className="bg-opacity-0 text-red-700"
-            onClick={() => console.log("delete")}
+            styleType={AppearanceStyleType.alert}
+            onClick={() => {
+              onDelete()
+              setDeleteModal(false)
+            }}
           >
             {t("t.delete")}
-          </Button>
-        </GridCell>,
-      ]}
-    >
-      <StatusMessages lastTimestamp={applicationUpdated} />
-    </StatusAside>
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setDeleteModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("application.deleteApplicationDescription")}
+      </Modal>
+    </>
   )
 }
 
