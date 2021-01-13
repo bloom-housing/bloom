@@ -5,7 +5,7 @@ import { blankApplication } from "@bloom-housing/ui-components"
 export const retrieveApplicationConfig = () => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   return {
-    sections: ["You", "Household", "Income", "Preferences", "Review"],
+    sections: ["you", "household", "income", "preferences", "review"],
     languages: ["en", "zh"],
     steps: [
       {
