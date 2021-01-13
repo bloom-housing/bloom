@@ -102,6 +102,7 @@ const DOBField = (props: DOBFieldProps) => {
             required: props.required,
             validate: {
               yearRange: (value: string) => {
+                if (props.required && value && parseInt(value) < 1900) return false
                 if (!props.required && !value?.length) return true
 
                 return validateAge(value)
