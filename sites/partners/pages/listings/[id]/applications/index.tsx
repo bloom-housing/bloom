@@ -50,7 +50,6 @@ const ApplicationsList = () => {
     const savedColumnState = sessionStorage.getItem(COLUMN_STATE_KEY)
 
     if (gridColumnApi && savedColumnState) {
-      console.log("Applied columns state")
       const parsedState: ColumnState[] = JSON.parse(savedColumnState)
 
       gridColumnApi.applyColumnState({
@@ -61,7 +60,6 @@ const ApplicationsList = () => {
   }, [gridColumnApi, pageIndex])
 
   function saveColumnState(api: ColumnApi) {
-    console.log("saving table state...")
     const columnState = api.getColumnState()
     const columnStateJSON = JSON.stringify(columnState)
     sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
@@ -124,7 +122,6 @@ const ApplicationsList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        console.log(params.value)
         void router.push(lRoute(`/applications/${params.value}`))
       })
     }
