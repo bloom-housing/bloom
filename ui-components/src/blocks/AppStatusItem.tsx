@@ -3,20 +3,20 @@ import "./AppStatusItem.scss"
 import moment from "moment"
 import { MultiLineAddress } from "../helpers/address"
 import { t } from "../helpers/translator"
-import { Application } from "@bloom-housing/backend-core/types"
+import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { LocalizedLink } from "../actions/LocalizedLink"
 
 // TODO status and lotteryNumber should be loaded from Application
 interface AppStatusItemProps {
   application: Application
+  listing: Listing
   status: string
   setDeletingApplication: (application: Application) => void
   lotteryNumber?: string
 }
 
 const AppStatusItem = (props: AppStatusItemProps) => {
-  const { application, status, lotteryNumber, setDeletingApplication } = props
-  const listing = application.listing
+  const { application, listing, status, lotteryNumber, setDeletingApplication } = props
   const applicationDueDate = moment(listing.applicationDueDate)
   const editDate = moment(application.updatedAt)
   let statusText = t("application.statuses." + status)

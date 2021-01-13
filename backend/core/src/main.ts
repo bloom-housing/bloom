@@ -13,8 +13,18 @@ async function bootstrap() {
   const conn = getConnection()
   // showMigrations returns true if there are pending migrations
   if (await conn.showMigrations()) {
-    Logger.error("Detected pending migrations. Please run them before starting the app.")
-    process.exit(1)
+    if (process.env.NODE_ENV === "development") {
+      Logger.warn(
+        "Detected pending migrations. Please run 'yarn db:migration:run' or remove /dist directory " +
+          "(compiled files are retained and you could e.g. have migration .js files from other" +
+          "branches that TypeORM is incorrectly trying to find in migrations table in the DB)."
+      )
+    } else {
+      Logger.error(
+        "Detected pending migrations. Please run 'yarn db:migration:run' before starting the app."
+      )
+      process.exit(1)
+    }
   }
   const options = new DocumentBuilder()
     .setTitle("Bloom API")
