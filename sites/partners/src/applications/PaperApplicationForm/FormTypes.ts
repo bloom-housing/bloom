@@ -10,7 +10,7 @@ type Address = {
   zipCode: string
 }
 
-type YesNoAnswer = "yes" | "no"
+export type YesNoAnswer = "yes" | "no"
 
 export type FormTypes = {
   dateOfBirth: DOBFieldValues
