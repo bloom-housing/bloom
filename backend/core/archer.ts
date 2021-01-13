@@ -322,6 +322,8 @@ export const ArcherListing: Listing = {
   waitlistMaxSize: 300,
   name: "Archer Studios",
   waitlistCurrentSize: 300,
+  // Addng displayWaitListSize for #707
+  displayWaitlistSize: false,
   // TODO confirm not used anywhere
   // prioritiesDescriptor: null,
   requiredDocuments: "Completed application and government issued IDs",
