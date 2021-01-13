@@ -80,6 +80,66 @@ export class PagedResult<T> implements IPagedResult<T> {
 // customer definition
 // empty
 
+export class UserService {
+  /**
+   *
+   */
+  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create user
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UserCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserWithAccessToken> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/{id}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class AuthService {
   /**
    * Login
@@ -246,6 +306,8 @@ export class ApplicationsService {
       listingId?: string;
       /**  */
       search?: string;
+      /**  */
+      userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -257,7 +319,8 @@ export class ApplicationsService {
         page: params['page'],
         limit: params['limit'],
         listingId: params['listingId'],
-        search: params['search']
+        search: params['search'],
+        userId: params['userId']
       };
       let data = null;
 
@@ -295,6 +358,8 @@ export class ApplicationsService {
       listingId?: string;
       /**  */
       includeHeaders?: boolean;
+      /**  */
+      userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -302,7 +367,11 @@ export class ApplicationsService {
       let url = basePath + '/applications/csv';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { listingId: params['listingId'], includeHeaders: params['includeHeaders'] };
+      configs.params = {
+        listingId: params['listingId'],
+        includeHeaders: params['includeHeaders'],
+        userId: params['userId']
+      };
       let data = null;
 
       configs.data = data;
@@ -1232,7 +1301,48 @@ export class AmiChartsService {
   }
 }
 
+export interface Address {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city?: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode?: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface User {
+  /**  */
+  address?: CombinedAddressTypes;
+
   /**  */
   id: string;
 
@@ -1258,9 +1368,41 @@ export interface User {
   updatedAt: Date;
 }
 
+export interface AddressCreate {
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city?: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode?: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface UserCreate {
   /**  */
   password: string;
+
+  /**  */
+  address?: CombinedAddressTypes;
 
   /**  */
   email: string;
@@ -1279,6 +1421,9 @@ export interface UserCreate {
 }
 
 export interface UserWithAccessToken {
+  /**  */
+  address?: CombinedAddressTypes;
+
   /**  */
   id: string;
 
@@ -1307,9 +1452,56 @@ export interface UserWithAccessToken {
   accessToken: string;
 }
 
+export interface AddressUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city?: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode?: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface UserUpdate {
   /**  */
-  id: string;
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  address?: CombinedAddressTypes;
 
   /**  */
   firstName: string;
@@ -1322,12 +1514,6 @@ export interface UserUpdate {
 
   /**  */
   dob: Date;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
 }
 
 export interface Login {
@@ -1620,44 +1806,6 @@ export interface Unit {
   bmrProgramChart?: boolean;
 }
 
-export interface Address {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface Property {
   /**  */
   unitsSummarized: UnitsSummarized;
@@ -1740,44 +1888,6 @@ export interface ListingEvent {
   note?: string;
 }
 
-export interface Address {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface WhatToExpect {
   /**  */
   applicantsWillBeContacted: string;
@@ -1812,6 +1922,18 @@ export interface Listing {
   events: ListingEvent[];
 
   /**  */
+  applicationAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgent?: CombinedLeasingAgentTypes;
+
+  /**  */
   id: string;
 
   /**  */
@@ -1831,12 +1953,6 @@ export interface Listing {
 
   /**  */
   applicationOrganization: string;
-
-  /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
@@ -1861,9 +1977,6 @@ export interface Listing {
 
   /**  */
   disableUnitsAccordion: boolean;
-
-  /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
   leasingAgentEmail: string;
@@ -1972,35 +2085,6 @@ export interface ListingEventCreate {
   note?: string;
 }
 
-export interface AddressCreate {
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface ListingCreate {
   /**  */
   status: ListingStatus;
@@ -2028,6 +2112,9 @@ export interface ListingCreate {
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgent?: CombinedLeasingAgentTypes;
 
   /**  */
   applicationDueDate: Date;
@@ -2197,44 +2284,6 @@ export interface ListingEventUpdate {
   note?: string;
 }
 
-export interface AddressUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface ListingUpdate {
   /**  */
   status: ListingStatus;
@@ -2271,6 +2320,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgent?: CombinedLeasingAgentTypes;
 
   /**  */
   applicationDueDate: Date;
@@ -2584,7 +2636,7 @@ export interface Application {
   submissionType: ApplicationSubmissionType;
 
   /**  */
-  listing: Listing;
+  listing: Id;
 
   /**  */
   applicant: Applicant;
@@ -3546,7 +3598,7 @@ export interface AmiChartUpdate {
   /**  */
   name: string;
 }
-
+export type CombinedAddressTypes = (AddressUpdate & any) | null;
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending'
@@ -3568,6 +3620,7 @@ export enum ListingEventType {
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedLeasingAgentTypes = (Id & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum IncomePeriod {
   'perMonth' = 'perMonth',

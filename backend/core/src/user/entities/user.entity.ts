@@ -3,7 +3,9 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
@@ -91,7 +93,8 @@ export class User {
     ]
   }
 
-  @Column({ type: "jsonb", nullable: true })
+  @OneToOne(() => Address, { nullable: true, eager: true, cascade: true })
+  @JoinColumn()
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

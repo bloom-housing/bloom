@@ -32,7 +32,7 @@ export class ListingsService {
     let listings = await this.getQueryBuilder()
       .orderBy({
         "listings.id": "DESC",
-        "property.units.max_occupancy": "ASC",
+        "units.max_occupancy": "ASC",
         "preferences.ordinal": "ASC",
       })
       .getMany()

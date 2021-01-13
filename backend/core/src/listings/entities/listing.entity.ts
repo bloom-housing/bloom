@@ -221,11 +221,12 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   leasingAgentName: string | null
 
-  @ManyToOne(() => User, (leasingAgent) => leasingAgent.listings, { eager: true })
+  @ManyToOne(() => User, (leasingAgent) => leasingAgent.listings, { eager: true, nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => User)
-  leasingAgent: User
+  leasingAgent?: User | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

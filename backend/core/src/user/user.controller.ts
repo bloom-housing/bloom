@@ -10,7 +10,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { UserCreateDto, UserDto, UserDtoWithAccessToken, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
@@ -25,6 +25,7 @@ import { Request as ExpressRequest } from "express"
 
 @Controller("user")
 @ApiBearerAuth()
+@ApiTags("user")
 @ResourceType("user")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))

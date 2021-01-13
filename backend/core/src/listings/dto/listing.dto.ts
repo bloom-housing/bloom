@@ -1,5 +1,5 @@
 import { Listing } from "../entities/listing.entity"
-import { Exclude, Expose, Type } from "class-transformer"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 
 import {
@@ -13,7 +13,7 @@ import {
   ApplicationMethodDto,
   ApplicationMethodUpdateDto,
 } from "../../application-methods/dto/application-method.dto"
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
+import { OmitType } from "@nestjs/swagger"
 import {
   ListingEventCreateDto,
   ListingEventDto,
@@ -21,7 +21,7 @@ import {
 } from "../../listing-events/dto/listing-events.dto"
 import { IdDto } from "../../lib/id.dto"
 import { PropertyDto } from "../../property/dto/property.dto"
-import { AddressCreateDto, AddressUpdateDto } from "../../shared/dto/address.dto"
+import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { UserDto } from "../../user/dto/user.dto"
 
@@ -31,8 +31,11 @@ export class ListingDto extends OmitType(Listing, [
   "preferences",
   "property",
   "events",
-  "applications",
+  "applicationAddress",
+  "applicationPickUpAddress",
+  "leasingAgentAddress",
   "leasingAgent",
+  "applications",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -65,14 +68,29 @@ export class ListingDto extends OmitType(Listing, [
   events: ListingEventDto[]
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressDto)
+  applicationAddress: AddressDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressCreateDto)
+  applicationPickUpAddress: AddressDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressDto)
+  leasingAgentAddress: AddressDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UserDto)
-  leasingAgent: UserDto
-
-  @Exclude()
-  @ApiHideProperty()
-  applications
+  leasingAgent?: UserDto | null
 }
 
 export class ListingCreateDto extends OmitType(ListingDto, [
@@ -84,7 +102,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "preferences",
   "property",
   "events",
-  "applications",
   "applicationAddress",
   "applicationPickUpAddress",
   "leasingAgentAddress",
@@ -140,10 +157,11 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   leasingAgentAddress: AddressCreateDto | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  leasingAgent: IdDto
+  leasingAgent?: IdDto | null
 }
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
@@ -155,7 +173,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "preferences",
   "property",
   "events",
-  "applications",
   "applicationAddress",
   "applicationPickUpAddress",
   "leasingAgentAddress",
@@ -228,8 +245,9 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   leasingAgentAddress: AddressUpdateDto | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  leasingAgent: IdDto
+  leasingAgent?: IdDto | null
 }
