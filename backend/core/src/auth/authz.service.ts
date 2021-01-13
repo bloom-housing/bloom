@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import { newEnforcer } from "casbin"
 import path from "path"
-import { User } from "../.."
+import { User } from "../user/entities/user.entity"
 
 export enum authzActions {
   create = "create",

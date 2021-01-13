@@ -36,7 +36,6 @@ import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 import { CsvBuilder } from "../services/csv-builder.service"
-import { Application } from "./entities/application.entity"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -203,7 +202,7 @@ export class ApplicationsController {
     await this.applicationsService.delete(applicationId)
   }
 
-  private authorizeUserAction(user, app: Application, action: authzActions) {
+  private authorizeUserAction(user, app, action) {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
       user_id: app.user?.id,

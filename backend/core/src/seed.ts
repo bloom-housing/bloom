@@ -1,7 +1,7 @@
 import { SeederModule } from "./seeder/seeder.module"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
-import { listingSeed1, seedListing } from "./seeds/listings"
+import { ListingSeed, listingSeed1, seedListing } from "./seeds/listings"
 import { UserService } from "./user/user.service"
 import { plainToClass } from "class-transformer"
 import { UserCreateDto } from "./user/dto/user.dto"
@@ -13,9 +13,21 @@ const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
+const newSeed = (): ListingSeed => {
+  return JSON.parse(JSON.stringify(listingSeed1)) as ListingSeed
+}
+
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
-  await seedListing(app, listingSeed1)
+  await seedListing(app, newSeed())
+  const listingSeed = newSeed()
+  await seedListing(app, {
+    ...listingSeed,
+    leasingAgent: {
+      ...listingSeed.leasingAgent,
+      email: "leasing-agent-2@example.com",
+    },
+  })
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
 
   const userService = app.get<UserService>(UserService)

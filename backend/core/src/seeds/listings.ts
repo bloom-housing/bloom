@@ -299,7 +299,7 @@ export const listingSeed1: ListingSeed = {
     firstName: "First",
     lastName: "Last",
     middleName: "Middle",
-    email: "leasing-agent@example.com",
+    email: "leasing-agent-1@example.com",
     password: "abcdef",
     dob: new Date(),
   },
