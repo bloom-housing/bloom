@@ -128,6 +128,17 @@ export default () => {
                   開始
                 </Button>
               )}
+
+              {listing?.applicationConfig.languages.some((lang) => lang == "zh") && (
+                <Button
+                  className="language-select mx-1"
+                  onClick={() => {
+                    //
+                  }}
+                >
+                  Bắt đầu
+                </Button>
+              )}
             </div>
           </Form>
 

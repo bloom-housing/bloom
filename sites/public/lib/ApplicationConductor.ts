@@ -4,7 +4,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { blankApplication, lRoute } from "@bloom-housing/ui-components"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
@@ -197,8 +197,10 @@ export default class ApplicationConductor {
   }
 
   routeToNextOrReturnUrl(url?: string) {
-    this.returnToReview = false
-    void Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
+    void Router.push(lRoute(this.nextOrReturnUrl(url))).then(() => {
+      this.returnToReview = false
+      window.scrollTo(0, 0)
+    })
   }
 
   nextOrReturnUrl(url?: string) {

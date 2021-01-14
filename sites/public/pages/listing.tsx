@@ -251,7 +251,7 @@ export default class extends Component<ListingProps> {
           <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
             <ApplicationSection
               listing={listing}
-              internalFormRoute="applications/start/choose-language"
+              internalFormRoute="/applications/start/choose-language"
             />
           </div>
           <ListingDetails>
@@ -327,7 +327,7 @@ export default class extends Component<ListingProps> {
                   {openHouseEvent && <OpenHouseEventSection openHouseEvent={openHouseEvent} />}
                   <ApplicationSection
                     listing={listing}
-                    internalFormRoute="applications/start/choose-language"
+                    internalFormRoute="/applications/start/choose-language"
                   />
                 </div>
                 {publicLottery && <PublicLotteryEvent publicLottery={publicLottery} />}
