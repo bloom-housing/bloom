@@ -1,7 +1,7 @@
 {
   "id": "HOLNx_F7fUCeax5GCoIr9g",
   "events":[],
-  "postmarkedApplicationsReceivedByDate": "2020-12-31T17:00:00.000-07:00",
+  "postmarkedApplicationsReceivedByDate": "2021-02-22T17:00:00.000-07:00",
   "accessibility": "All common areas ADA accessible and homes ADA adaptable.",
   "amenities": "Onsite parking, a co-working lounge, package locker, and a bike storage.",
   "applicationAddress": {
@@ -12,7 +12,7 @@
     "latitude": null,
     "longitude": null
   },
-  "applicationDueDate": "2020-12-31T17:00:00.000-07:00",
+  "applicationDueDate": "2021-02-22T17:00:00.000-07:00",
   "applicationOrganization": "Greystar",
   "applicationPhone": null,
   "buildingAddress": {
@@ -53,7 +53,7 @@
   "applicationFee": "52.46",
   "criminalBackground": "We obtain a criminal background check on each applicant who will reside in the apartment home. It is possible your application will be denied due to criminal convictions.",
   "leasingAgentEmail": "SoHayBMR@Greystar.com",
-  "leasingAgentName": "",
+  "leasingAgentName": "Carl David ",
   "leasingAgentAddress": {
     "city": "Hayward",
     "street": "29362 Mission Blvd",
@@ -63,10 +63,36 @@
     "longitude": -122.049316
   },
   "leasingAgentOfficeHours": "Due to COVID-19, our offices are closed. Please call or email or leasing agent for any questions during Mon-Fri 9AM-5PM",
-  "leasingAgentPhone": "415-793-9976",
+  "leasingAgentPhone": "510-314-9033",
   "leasingAgentTitle": "Management Coordinator",
   "rentalHistory": "Applicant must be able to provide sufficient residential information for at least the past two years to enable the Property Manager to adequately evaluate rental history and/or place of residence. If two years of prior residential information proves insufficient for obtaining adequate references, additional residential history may be requested. Negative rental history will be grounds for denial, including: Any evictions with an outstanding judgement, 4 or more evictions filings, 4 or more late payments being reported on the rental history report",
-  "preferences": [],
+  "preferences": [
+    {
+      "ordinal": 1,
+      "title": "Live or Work in Hayward",
+      "subtitle": "",
+      "description": "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
+      "links": []
+    },
+    {
+      "ordinal": 2,
+      "title": "Displaced Tenant Housing Preference",
+      "subtitle": "",
+      "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+      "links": []
+    },
+    {
+      "ordinal": 3,
+      "title": "Mission Boulevard Corridor (SR 238) Displaced Tenant Housing Preference",
+      "subtitle": "",
+      "description": "At least one member of my household is an SR 238 Program Participant as required under the terms of the SR 238 Settlement Implementation Project. Program Participants are tenants of previously sold Caltrans properties along the SR 238 Mission Boulevard Corridor and are given occupancy preference when new below-market housing is constructed in the Corridor.",
+      "links": [
+        {
+          "title": "Read More",
+          "url": "https://www.hayward-ca.gov/238/background"
+        }]
+    }
+  ],
   "buildingTotalUnits": 72,
   "units": [
     {
@@ -90,7 +116,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -115,7 +141,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -140,7 +166,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -165,7 +191,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -190,7 +216,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -215,7 +241,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -240,7 +266,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -265,7 +291,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -290,7 +316,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -315,7 +341,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -340,7 +366,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -365,7 +391,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     }
@@ -393,7 +419,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -418,7 +444,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -443,7 +469,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -468,7 +494,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -493,7 +519,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -518,7 +544,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -543,7 +569,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     },
@@ -568,7 +594,7 @@
       "createdAt": "2020-02-18T21:20:34.291Z",
       "updatedAt": "2020-02-18T21:20:34.291Z",
       "listingId": "HOLNx_F7fUCeax5GCoIr5g",
-      "amiChartId": 10,
+      "amiChartId": 12,
       "bmrProgramChart": true,
       "monthlyRentAsPercentOfIncome": null
     }
