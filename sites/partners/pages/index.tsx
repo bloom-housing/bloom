@@ -1,117 +1,117 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import Head from "next/head"
-import { PageHeader, MetaTags, t } from "@bloom-housing/ui-components"
+import { PageHeader, MetaTags, t, lRoute } from "@bloom-housing/ui-components"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts/application"
-import { useRouter } from "next/router"
 
 import { AgGridReact } from "ag-grid-react"
-import { GridApi } from "ag-grid-community"
+import { GridOptions, GridApi } from "ag-grid-community"
 
 export default function ListingsList() {
-  const router = useRouter()
+  // const router = useRouter()
   const [gridApi, setGridApi] = useState<GridApi>(null)
+
+  console.log(gridApi)
 
   const onGridReady = (params) => {
     setGridApi(params.api)
   }
+  class formatLinkCell {
+    link: HTMLAnchorElement
 
-  const onSelectionChanged = () => {
-    const row = gridApi.getSelectedRows()
-    const rowId = row[0].id
+    init(params) {
+      this.link = document.createElement("a")
+      this.link.classList.add("text-blue-700")
+      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+      this.link.innerText = params.value
+    }
 
-    void router.push(`/listings/${rowId}/applications`)
+    getGui() {
+      return this.link
+    }
+  }
+
+  const gridOptions: GridOptions = {
+    components: {
+      formatLinkCell: formatLinkCell,
+    },
   }
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
-  const columnDefs = [
-    {
-      headerName: "Name",
-      field: "name",
-      sortable: true,
-      filter: true,
-    },
-    {
-      headerName: "Status",
-      field: "status",
-      sortable: true,
-      filter: true,
-    },
-    {
-      headerName: "Id",
-      field: "id",
-      sortable: true,
-      filter: true,
-    },
-    {
-      headerName: "Created",
-      field: "createdAt",
-      sortable: true,
-      filter: true,
-    },
-  ]
+  const columnDefs = useMemo(
+    () => [
+      {
+        headerName: t("listings.listingName"),
+        field: "name",
+        sortable: false,
+        filter: false,
+        cellRenderer: "formatLinkCell",
+      },
+      {
+        headerName: t("listings.applicationDeadline"),
+        field: "applicationDueDate",
+        sortable: false,
+        filter: false,
+        valueFormatter: ({ value }) => {
+          console.log(value)
+
+          return value
+        },
+      },
+      {
+        headerName: t("listings.applicationsSubmitted"),
+        field: "isSubmitted",
+        sortable: false,
+        filter: false,
+      },
+      {
+        headerName: t("listings.availableUnits"),
+        field: "property.unitsAvailable",
+        sortable: false,
+        filter: false,
+      },
+      {
+        headerName: t("listings.waitlist.open"),
+        field: "waitlistCurrentSize",
+        sortable: false,
+        filter: false,
+      },
+      {
+        headerName: t("listings.listingStatus"),
+        field: "status",
+        sortable: false,
+        filter: false,
+      },
+    ],
+    []
+  )
 
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
   if (listingsError) return "An error has occurred."
   if (listingsLoading) return "Loading..."
 
-  // DEMO custom pagination
-  // const onGridReady = params => {
-  //   this.gridApi = params.api;
-  //   this.gridColumnApi = params.columnApi;
-  // };
-
-  // const onPaginationChanged = () => {
-  //   console.log('onPaginationPageLoaded');
-  //   if (this.gridApi) {
-  //     setText('#lbLastPageFound', this.gridApi.paginationIsLastPageFound());
-  //     setText('#lbPageSize', this.gridApi.paginationGetPageSize());
-  //     setText('#lbCurrentPage', this.gridApi.paginationGetCurrentPage() + 1);
-  //     setText('#lbTotalPages', this.gridApi.paginationGetTotalPages());
-  //     setLastButtonDisabled(!this.gridApi.paginationIsLastPageFound());
-  //   }
-  // };
-
-  // const onBtNext = () => {
-  //   this.gridApi.paginationGoToNextPage()
-  // }
-
-  // const onBtPrevious = () => {
-  //   this.gridApi.paginationGoToPreviousPage()
-  // }
-
-  // const onBtPageFive = () => {
-  //   this.gridApi.paginationGoToPage(4);
-  // };
-
-  // const onBtPageFifty = () => {
-  //   this.gridApi.paginationGoToPage(49);
-  // };
-
   return (
     <Layout>
+      {console.log(listingDtos)}
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>All Listings</PageHeader>
+      <PageHeader>{t("nav.listings")}</PageHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <AgGridReact
+              onGridReady={onGridReady}
+              gridOptions={gridOptions}
               columnDefs={columnDefs}
               rowData={listingDtos}
               domLayout={"autoHeight"}
               headerHeight={83}
               rowHeight={58}
-              suppressPaginationPanel={true}
-              paginationPageSize={8}
               suppressScrollOnNewData={true}
-              rowSelection={"single"}
-              onGridReady={onGridReady}
-              onSelectionChanged={onSelectionChanged}
             ></AgGridReact>
           </div>
         </article>

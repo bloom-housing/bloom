@@ -678,7 +678,10 @@
     "processInfo": "Process Info",
     "featuresCards": "Features Cards",
     "neighborhoodBuildings": "Neighborhood Buildings",
-    "additionalInformationEnvelope": "Additional Information Envelope"
+    "additionalInformationEnvelope": "Additional Information Envelope",
+    "listingName": "Listing Name",
+    "applicationsSubmitted": "Applications Submitted",
+    "listingStatus": "Listing Status"
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",
