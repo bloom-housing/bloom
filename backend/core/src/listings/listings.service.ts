@@ -20,7 +20,6 @@ export class ListingsService {
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.events", "events")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
-      .leftJoinAndSelect("leasingAgents.address", "leasingAgentsAddress")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")

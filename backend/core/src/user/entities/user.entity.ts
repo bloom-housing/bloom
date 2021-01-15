@@ -3,19 +3,16 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  JoinColumn,
   ManyToMany,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsEmail, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { Address } from "../../shared/entities/address.entity"
 
 @Entity({ name: "user_accounts" })
 @Index("user_accounts_email_unique_idx", { synchronize: false })
@@ -87,12 +84,4 @@ export class User {
   get roles(): string[] {
     return ["user", ...(this.isAdmin ? ["admin"] : [])]
   }
-
-  @OneToOne(() => Address, { nullable: true, eager: true, cascade: true })
-  @JoinColumn()
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  address?: Address | null
 }
