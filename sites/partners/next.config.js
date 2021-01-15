@@ -7,7 +7,7 @@ const withCSS = require("@zeit/next-css")
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
-const axios = require("axios")
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
@@ -41,40 +41,12 @@ module.exports = withCSS(
           additionalData: tailwindVars,
         },
         // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
-        async exportPathMap() {
-          // we fetch our list of listings, this allow us to dynamically generate the exported pages
-          let listings = []
-          try {
-            const response = await axios.get(BACKEND_API_BASE + LISTINGS_QUERY)
-            listings = response.data
-          } catch (error) {
-            console.log(error)
-          }
-
-          // tranform the list of posts into a map of pages with the pathname `/post/:id`
-          const listingPaths =
-            (listings &&
-              listings.reduce(
-                (listingPaths, listing) =>
-                  Object.assign({}, listingPaths, {
-                    [`/listings/${listing.id}/applications`]: {
-                      page: "/applications",
-                      query: { id: listing.id },
-                    },
-                    [`/listings/${listing.id}/add`]: {
-                      page: "/add",
-                      query: { id: listing.id },
-                    },
-                  }),
-                {}
-              )) ||
-            {}
-
+        exportPathMap() {
           // define page paths for various available languages
-          const translatablePaths = Object.assign({}, listingPaths, {
+          const translatablePaths = {
             "/": { page: "/" },
             "/listings": { page: "/listings" },
-          })
+          }
           const languages = ["es"] // add new language codes here
           const languagePaths = {}
           Object.entries(translatablePaths).forEach(([key, value]) => {

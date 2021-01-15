@@ -13,11 +13,11 @@ import {
   lRoute,
   LocalizedLink,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../lib/hooks"
-import Layout from "../layouts/application"
+import { useApplicationsData } from "../../../../lib/hooks"
+import Layout from "../../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { getColDefs } from "../src/applications/applicationsColDefs"
+import { getColDefs } from "../../../../src/applications/applicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {
@@ -50,7 +50,6 @@ const ApplicationsList = () => {
     const savedColumnState = sessionStorage.getItem(COLUMN_STATE_KEY)
 
     if (gridColumnApi && savedColumnState) {
-      console.log("Applied columns state")
       const parsedState: ColumnState[] = JSON.parse(savedColumnState)
 
       gridColumnApi.applyColumnState({
@@ -61,7 +60,6 @@ const ApplicationsList = () => {
   }, [gridColumnApi, pageIndex])
 
   function saveColumnState(api: ColumnApi) {
-    console.log("saving table state...")
     const columnState = api.getColumnState()
     const columnStateJSON = JSON.stringify(columnState)
     sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
@@ -180,7 +178,7 @@ const ApplicationsList = () => {
               </div>
 
               <div className="flex-row">
-                <LocalizedLink href={`/listings/${listingId}/add`}>
+                <LocalizedLink href={`/listings/${listingId}/applications/add`}>
                   <Button className="mx-1" onClick={() => false}>
                     {t("applications.addApplication")}
                   </Button>

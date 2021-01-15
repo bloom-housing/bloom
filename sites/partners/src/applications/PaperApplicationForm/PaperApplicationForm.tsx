@@ -26,9 +26,15 @@ import { FormTerms } from "./sections/FormTerms"
 import { FormAside } from "./FormAside"
 import { FormTypes } from "./FormTypes"
 
-const ApplicationForm = () => {
+type ApplicationFormProps = {
+  listingId: string
+  editMode?: boolean
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
   const router = useRouter()
-  const listingId = router.query.id as string
+
   const { applicationsService } = useContext(ApiClientContext)
 
   const [alert, setAlert] = useState<AlertTypes | null>(null)
