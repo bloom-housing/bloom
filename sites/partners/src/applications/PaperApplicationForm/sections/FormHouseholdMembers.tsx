@@ -77,6 +77,8 @@ const FormHouseholdMembers = ({
 
     return householdMembers.map((member) => {
       const { birthMonth, birthDay, birthYear } = member
+      const sameResidence = member.sameAddress as YesNoAnswer
+      const workInRegion = member.workInRegion as YesNoAnswer
 
       return {
         name: (member.firstName + member.lastName).length
@@ -89,8 +91,8 @@ const FormHouseholdMembers = ({
           birthMonth && birthDay && birthYear
             ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
             : t("t.n/a"),
-        sameResidence: chooseAddressStatus(member.sameAddress),
-        workInRegion: chooseAddressStatus(member.workInRegion),
+        sameResidence: chooseAddressStatus(sameResidence),
+        workInRegion: chooseAddressStatus(workInRegion),
         action: (
           <div className="flex">
             <Button
