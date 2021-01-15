@@ -1301,47 +1301,14 @@ export class AmiChartsService {
   }
 }
 
-export interface Address {
+export interface Id {
   /**  */
   id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
 }
 
 export interface User {
   /**  */
-  address?: CombinedAddressTypes;
+  leasingAgentInListings?: Id[];
 
   /**  */
   id: string;
@@ -1399,6 +1366,9 @@ export interface AddressCreate {
 
 export interface UserCreate {
   /**  */
+  dob: Date;
+
+  /**  */
   password: string;
 
   /**  */
@@ -1415,14 +1385,11 @@ export interface UserCreate {
 
   /**  */
   lastName: string;
-
-  /**  */
-  dob: Date;
 }
 
 export interface UserWithAccessToken {
   /**  */
-  address?: CombinedAddressTypes;
+  leasingAgentInListings?: Id[];
 
   /**  */
   id: string;
@@ -1501,6 +1468,9 @@ export interface UserUpdate {
   updatedAt?: Date;
 
   /**  */
+  dob: Date;
+
+  /**  */
   address?: CombinedAddressTypes;
 
   /**  */
@@ -1511,9 +1481,6 @@ export interface UserUpdate {
 
   /**  */
   lastName: string;
-
-  /**  */
-  dob: Date;
 }
 
 export interface Login {
@@ -1806,6 +1773,44 @@ export interface Unit {
   bmrProgramChart?: boolean;
 }
 
+export interface Address {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city?: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode?: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface Property {
   /**  */
   unitsSummarized: UnitsSummarized;
@@ -1888,6 +1893,29 @@ export interface ListingEvent {
   note?: string;
 }
 
+export interface UserBasic {
+  /**  */
+  id: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
 export interface WhatToExpect {
   /**  */
   applicantsWillBeContacted: string;
@@ -1931,7 +1959,7 @@ export interface Listing {
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
-  leasingAgent?: CombinedLeasingAgentTypes;
+  leasingAgents?: UserBasic[];
 
   /**  */
   id: string;
@@ -2063,11 +2091,6 @@ export interface PreferenceCreate {
   links: PreferenceLink[];
 }
 
-export interface Id {
-  /**  */
-  id: string;
-}
-
 export interface ListingEventCreate {
   /**  */
   type: ListingEventType;
@@ -2114,7 +2137,7 @@ export interface ListingCreate {
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
-  leasingAgent?: CombinedLeasingAgentTypes;
+  leasingAgents?: Id[];
 
   /**  */
   applicationDueDate: Date;
@@ -2322,7 +2345,7 @@ export interface ListingUpdate {
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
-  leasingAgent?: CombinedLeasingAgentTypes;
+  leasingAgents?: Id[];
 
   /**  */
   applicationDueDate: Date;
@@ -3620,7 +3643,6 @@ export enum ListingEventType {
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
-export type CombinedLeasingAgentTypes = (Id & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
