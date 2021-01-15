@@ -41,7 +41,7 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
     // rename default (wrong property names)
     const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
       data.dateSubmitted || {}
-    const { hours, minutes = 0, seconds = 0, period } = data.timeSubmitted || {}
+    const { hours, minutes = 0, seconds = 0, period } = data?.timeSubmitted || {}
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
 
