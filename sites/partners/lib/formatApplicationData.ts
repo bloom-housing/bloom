@@ -35,7 +35,7 @@ interface FormData extends FormTypes {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const formatApplicationData = (data: FormData, listingId: string, editMode: boolean) => {
-  const language: Language | null = data.application.language ? data.application.language : null
+  const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
     // rename default (wrong property names)
