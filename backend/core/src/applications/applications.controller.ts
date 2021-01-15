@@ -206,7 +206,7 @@ export class ApplicationsController {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
       user_id: app.user?.id,
-      listing_leasing_agent_id: app.listing.leasingAgent.id,
+      listing_id: app.listing?.id,
     })
   }
 }

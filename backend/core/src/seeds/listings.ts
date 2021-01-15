@@ -38,9 +38,9 @@ export interface ListingSeed {
     | "events"
     | "assets"
     | "preferences"
-    | "leasingAgent"
+    | "leasingAgents"
   >
-  leasingAgent: UserCreateDto
+  leasingAgents: UserCreateDto[]
 }
 
 export async function seedListing(app: INestApplicationContext, seed: ListingSeed) {
@@ -50,10 +50,10 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
   const listingsRepo = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
   const usersService = app.get<UserService>(UserService)
-  const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
-  const leasingAgent = await usersService.createUser(seed.leasingAgent)
-  leasingAgent.isLeasingAgent = true
-  await userRepo.save(leasingAgent)
+  app.get<Repository<User>>(getRepositoryToken(User))
+  const leasingAgents = await Promise.all(
+    seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+  )
 
   const amiChart = await amiChartRepo.save(seed.amiChart)
 
@@ -75,7 +75,7 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
   const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug"> = {
     ...seed.listing,
     property,
-    leasingAgent,
+    leasingAgents: leasingAgents,
     assets: seed.assets,
     preferences: seed.preferences,
     applicationMethods: seed.applicationMethods,
@@ -295,12 +295,14 @@ export const listingSeed1: ListingSeed = {
   amiChart: SanMateoHUD2019,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  leasingAgent: {
-    firstName: "First",
-    lastName: "Last",
-    middleName: "Middle",
-    email: "leasing-agent-1@example.com",
-    password: "abcdef",
-    dob: new Date(),
-  },
+  leasingAgents: [
+    {
+      firstName: "First",
+      lastName: "Last",
+      middleName: "Middle",
+      email: "leasing-agent-1@example.com",
+      password: "abcdef",
+      dob: new Date(),
+    },
+  ],
 }

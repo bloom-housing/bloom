@@ -3,6 +3,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -221,12 +223,15 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   leasingAgentName: string | null
 
-  @ManyToOne(() => User, (leasingAgent) => leasingAgent.listings, { eager: true, nullable: true })
+  @ManyToMany(() => User, (leasingAgent) => leasingAgent.leasingAgentInListings, {
+    nullable: true,
+  })
+  @JoinTable()
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => User)
-  leasingAgent?: User | null
+  leasingAgents?: User[] | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

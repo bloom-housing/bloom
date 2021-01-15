@@ -4,6 +4,7 @@ import {
   Entity,
   Index,
   JoinColumn,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -69,14 +70,12 @@ export class User {
   @OneToMany(() => Application, (application) => application.user)
   applications: Application[]
 
-  @OneToMany(() => Listing, (listing) => listing.leasingAgent)
-  listings: Listing[]
+  @ManyToMany(() => Listing, (listing) => listing.leasingAgents, { nullable: true, eager: true })
+  leasingAgentInListings?: Listing[] | null
 
   @Column("boolean", { default: false })
   isAdmin: boolean
 
-  @Column("boolean", { default: false })
-  isLeasingAgent: boolean
   /**
    * Array of roles this user can become. Logic is simple right now, but in theory this will expand to take into
    * account membership in a domain (company-level or admin area level for example).
@@ -86,11 +85,7 @@ export class User {
    * work properly.
    */
   get roles(): string[] {
-    return [
-      "user",
-      ...(this.isAdmin ? ["admin"] : []),
-      ...(this.isLeasingAgent ? ["leasingAgent"] : []),
-    ]
+    return ["user", ...(this.isAdmin ? ["admin"] : [])]
   }
 
   @OneToOne(() => Address, { nullable: true, eager: true, cascade: true })

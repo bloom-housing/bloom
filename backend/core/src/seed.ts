@@ -23,10 +23,12 @@ async function bootstrap() {
   const listingSeed = newSeed()
   await seedListing(app, {
     ...listingSeed,
-    leasingAgent: {
-      ...listingSeed.leasingAgent,
-      email: "leasing-agent-2@example.com",
-    },
+    leasingAgents: [
+      {
+        ...listingSeed.leasingAgents[0],
+        email: "leasing-agent-2@example.com",
+      },
+    ],
   })
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
 

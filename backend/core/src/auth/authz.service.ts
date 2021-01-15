@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import { newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../user/entities/user.entity"
+import { Listing } from "../listings/entities/listing.entity"
 
 export enum authzActions {
   create = "create",
@@ -39,6 +40,20 @@ export class AuthzService {
     if (user) {
       await Promise.all(user.roles.map((r) => e.addRoleForUser(user.id, r)))
     }
+
+    if (user) {
+      await Promise.all(
+        user?.leasingAgentInListings.map((listing: Listing) =>
+          e.addPermissionForUser(
+            user.id,
+            "application",
+            `!r.obj || r.obj.listing_id == '${listing.id}'`,
+            "read"
+          )
+        )
+      )
+    }
+
     return e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 

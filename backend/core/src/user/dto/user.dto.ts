@@ -4,14 +4,39 @@ import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
+import { IdDto } from "../../lib/id.dto"
 
 export class UserDto extends OmitType(User, [
-  "passwordHash",
+  "address",
   "applications",
   "isAdmin",
-  "isLeasingAgent",
-  "listings",
+  "leasingAgentInListings",
+  "passwordHash",
+  "roles",
+] as const) {
+  @Expose()
+  @IsOptional()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressDto)
+  address?: AddressDto | null
+
+  @Expose()
+  @IsOptional()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  leasingAgentInListings?: IdDto[] | null
+}
+
+export class UserBasicDto extends OmitType(User, [
   "address",
+  "applications",
+  "dob",
+  "isAdmin",
+  "leasingAgentInListings",
+  "passwordHash",
+  "roles",
 ] as const) {
   @Expose()
   @IsOptional()
@@ -31,7 +56,13 @@ export class UserCreateDto extends OmitType(UserDto, [
   "createdAt",
   "updatedAt",
   "address",
+  "leasingAgentInListings",
 ] as const) {
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  dob: Date
+
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   password: string
@@ -48,8 +79,9 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "email",
   "address",
+  "email",
+  "leasingAgentInListings",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -67,6 +99,11 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  dob: Date
 
   @Expose()
   @IsOptional()

@@ -202,12 +202,14 @@ describe("Applications", () => {
 
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     // Finding listings corresponding to leasing agents (permission wise)
-    listing1Id = res.body.filter(
-      (listing: ListingDto) => listing.leasingAgent.id === leasingAgent1Profile.id
-    )[0].id
-    listing2Id = res.body.filter(
-      (listing: ListingDto) => listing.leasingAgent.id === leasingAgent2Profile.id
-    )[0].id
+    listing1Id = res.body.filter((listing: ListingDto) => {
+      const leasingAgentsIds = listing.leasingAgents.map((agent) => agent.id)
+      return leasingAgentsIds.indexOf(leasingAgent1Profile.id) !== -1
+    })[0].id
+    listing2Id = res.body.filter((listing: ListingDto) => {
+      const leasingAgentsIds = listing.leasingAgents.map((agent) => agent.id)
+      return leasingAgentsIds.indexOf(leasingAgent2Profile.id) !== -1
+    })[0].id
   })
 
   beforeEach(async () => {
