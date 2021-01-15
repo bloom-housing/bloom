@@ -35,13 +35,13 @@ interface FormData extends FormTypes {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const formatApplicationData = (data: FormData, listingId: string, editMode: boolean) => {
-  const language: Language | null = data.application.language ? data.application.language : null
+  const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
     // rename default (wrong property names)
     const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
       data.dateSubmitted || {}
-    const { hours, minutes = 0, seconds = 0, period } = data.timeSubmitted || {}
+    const { hours, minutes = 0, seconds = 0, period } = data?.timeSubmitted || {}
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
 

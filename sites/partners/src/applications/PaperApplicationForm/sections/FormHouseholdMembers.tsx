@@ -11,6 +11,7 @@ import {
   AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/backend-core/types"
+import type { YesNoAnswer } from "../FormTypes"
 
 import { FormMember } from "../FormMember"
 
@@ -63,7 +64,7 @@ const FormHouseholdMembers = ({
   }
 
   const memberTableData = useMemo(() => {
-    const chooseAddressStatus = (value: string | null) => {
+    const chooseAddressStatus = (value: YesNoAnswer | null) => {
       switch (value) {
         case "yes":
           return t("t.yes")
@@ -76,6 +77,8 @@ const FormHouseholdMembers = ({
 
     return householdMembers.map((member) => {
       const { birthMonth, birthDay, birthYear } = member
+      const sameResidence = member.sameAddress as YesNoAnswer
+      const workInRegion = member.workInRegion as YesNoAnswer
 
       return {
         name: (member.firstName + member.lastName).length
@@ -88,8 +91,8 @@ const FormHouseholdMembers = ({
           birthMonth && birthDay && birthYear
             ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
             : t("t.n/a"),
-        sameResidence: chooseAddressStatus(member.sameAddress),
-        workInRegion: chooseAddressStatus(member.workInRegion),
+        sameResidence: chooseAddressStatus(sameResidence),
+        workInRegion: chooseAddressStatus(workInRegion),
         action: (
           <div className="flex">
             <Button

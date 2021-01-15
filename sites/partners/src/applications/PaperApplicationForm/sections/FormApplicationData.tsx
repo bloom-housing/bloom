@@ -1,8 +1,10 @@
+import React, { useEffect } from "react"
 import {
   t,
   GridSection,
   ViewItem,
   DOBField,
+  DOBFieldValues,
   Select,
   applicationLanguageKeys,
   TimeField,
@@ -13,7 +15,23 @@ const FormApplicationData = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors } = formMethods
+  const { register, watch, errors, setValue } = formMethods
+
+  const dateSubmittedValue: DOBFieldValues = watch("dateSubmitted")
+  const dateSubmittedError = !!errors?.dateSubmitted
+  const isDateFilled =
+    dateSubmittedValue?.birthDay && dateSubmittedValue?.birthMonth && dateSubmittedValue?.birthYear
+
+  const isDateRequired =
+    dateSubmittedValue?.birthDay || dateSubmittedValue?.birthMonth || dateSubmittedValue?.birthYear
+
+  useEffect(() => {
+    if (dateSubmittedError || !isDateRequired) {
+      setValue("timeSubmitted.hours", null)
+      setValue("timeSubmitted.minutes", null)
+      setValue("timeSubmitted.seconds", null)
+    }
+  }, [dateSubmittedError, isDateRequired, setValue])
 
   return (
     <GridSection title={t("application.details.applicationData")} grid={false}>
@@ -29,6 +47,7 @@ const FormApplicationData = () => {
             readerOnly
             atAge={false}
             errorMessage={t("errors.dateError")}
+            required={!!isDateRequired}
           />
         </ViewItem>
 
@@ -38,8 +57,11 @@ const FormApplicationData = () => {
             name="timeSubmitted"
             label={t("application.add.timeSubmitted")}
             register={register}
+            watch={watch}
             error={!!errors?.timeSubmitted}
             readerOnly
+            disabled={!isDateFilled}
+            required={!!isDateFilled}
           />
         </ViewItem>
 

@@ -2584,7 +2584,7 @@ export interface Application {
   submissionType: ApplicationSubmissionType;
 
   /**  */
-  listing: Listing;
+  listing: Id;
 
   /**  */
   applicant: Applicant;
