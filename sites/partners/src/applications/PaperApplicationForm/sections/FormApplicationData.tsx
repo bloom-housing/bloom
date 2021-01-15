@@ -26,12 +26,12 @@ const FormApplicationData = () => {
     dateSubmittedValue?.birthDay || dateSubmittedValue?.birthMonth || dateSubmittedValue?.birthYear
 
   useEffect(() => {
-    if (dateSubmittedError) {
+    if (dateSubmittedError || !isDateRequired) {
       setValue("timeSubmitted.hours", null)
       setValue("timeSubmitted.minutes", null)
       setValue("timeSubmitted.seconds", null)
     }
-  }, [dateSubmittedError, setValue])
+  }, [dateSubmittedError, isDateRequired, setValue])
 
   return (
     <GridSection title={t("application.details.applicationData")} grid={false}>
@@ -61,6 +61,7 @@ const FormApplicationData = () => {
             error={!!errors?.timeSubmitted}
             readerOnly
             disabled={!isDateFilled}
+            required={!!isDateFilled}
           />
         </ViewItem>
 
