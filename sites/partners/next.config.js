@@ -61,6 +61,10 @@ module.exports = withCSS(
                       page: "/applications",
                       query: { id: listing.id },
                     },
+                    [`/listings/${listing.id}/add`]: {
+                      page: "/add",
+                      query: { id: listing.id },
+                    },
                   }),
                 {}
               )) ||

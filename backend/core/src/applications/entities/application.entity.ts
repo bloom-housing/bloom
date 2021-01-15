@@ -208,11 +208,12 @@ export class Application extends AbstractEntity {
   @ApiProperty({ enum: ApplicationStatus, enumName: "ApplicationStatus" })
   status: ApplicationStatus
 
-  @Column({ enum: Language })
+  @Column({ enum: Language, nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: Language, enumName: "Language" })
-  language: Language
+  language?: Language | null
 
   @Column({ enum: ApplicationSubmissionType })
   @Expose()

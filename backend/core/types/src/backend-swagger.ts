@@ -2578,7 +2578,7 @@ export interface Application {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
@@ -2857,7 +2857,7 @@ export interface ApplicationCreate {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
@@ -3153,7 +3153,7 @@ export interface ApplicationUpdate {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
