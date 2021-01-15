@@ -11,7 +11,6 @@ export class UserDto extends OmitType(User, [
   "isAdmin",
   "leasingAgentInListings",
   "passwordHash",
-  "roles",
 ] as const) {
   @Expose()
   @IsOptional()
@@ -40,6 +39,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
+  "roles",
 ] as const) {
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
@@ -64,6 +64,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "updatedAt",
   "email",
   "leasingAgentInListings",
+  "roles",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

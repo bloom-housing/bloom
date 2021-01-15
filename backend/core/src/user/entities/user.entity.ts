@@ -13,6 +13,12 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ApiProperty } from "@nestjs/swagger"
+
+export enum UserRole {
+  user = "user",
+  admin = "admin",
+}
 
 @Entity({ name: "user_accounts" })
 @Index("user_accounts_email_unique_idx", { synchronize: false })
@@ -81,7 +87,9 @@ export class User {
    * group membership, for example), and these relations will need to be loaded in order for the list of roles to
    * work properly.
    */
-  get roles(): string[] {
-    return ["user", ...(this.isAdmin ? ["admin"] : [])]
+  @Expose()
+  @ApiProperty({ enum: UserRole, enumName: "UserRole" })
+  get roles(): UserRole[] {
+    return [UserRole.user, ...(this.isAdmin ? [UserRole.admin] : [])]
   }
 }

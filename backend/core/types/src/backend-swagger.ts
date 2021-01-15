@@ -1308,6 +1308,9 @@ export interface Id {
 
 export interface User {
   /**  */
+  roles: UserRole;
+
+  /**  */
   leasingAgentInListings?: Id[];
 
   /**  */
@@ -1388,6 +1391,9 @@ export interface UserCreate {
 }
 
 export interface UserWithAccessToken {
+  /**  */
+  roles: UserRole;
+
   /**  */
   leasingAgentInListings?: Id[];
 
@@ -3620,6 +3626,11 @@ export interface AmiChartUpdate {
 
   /**  */
   name: string;
+}
+
+export enum UserRole {
+  'user' = 'user',
+  'admin' = 'admin'
 }
 export type CombinedAddressTypes = (AddressUpdate & any) | null;
 export enum ListingStatus {
