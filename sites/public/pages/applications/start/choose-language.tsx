@@ -32,6 +32,7 @@ const loadListing = async (listingId, stateFunction, conductor, context) => {
 export default () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
+  const [newLocale, setNewLocale] = useState("")
   const context = useContext(AppSubmissionContext)
   const { conductor, application } = context
 
@@ -53,7 +54,9 @@ export default () => {
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+    void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
+      window.scrollTo(0, 0)
+    })
   }
 
   return (
@@ -100,7 +103,7 @@ export default () => {
                 <Button
                   className="language-select mx-1"
                   onClick={() => {
-                    // Set the language in the context here...
+                    setNewLocale("")
                   }}
                 >
                   Begin
@@ -111,7 +114,7 @@ export default () => {
                 <Button
                   className="language-select mx-1"
                   onClick={() => {
-                    //
+                    setNewLocale("/es")
                   }}
                 >
                   Empezar
@@ -122,7 +125,7 @@ export default () => {
                 <Button
                   className="language-select mx-1"
                   onClick={() => {
-                    //
+                    setNewLocale("/zh")
                   }}
                 >
                   開始
@@ -133,7 +136,7 @@ export default () => {
                 <Button
                   className="language-select mx-1"
                   onClick={() => {
-                    //
+                    setNewLocale("/vi")
                   }}
                 >
                   Bắt đầu
