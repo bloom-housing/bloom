@@ -1,21 +1,14 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import Head from "next/head"
 import { PageHeader, MetaTags, t, lRoute } from "@bloom-housing/ui-components"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts/application"
+import moment from "moment"
 
 import { AgGridReact } from "ag-grid-react"
-import { GridOptions, GridApi } from "ag-grid-community"
+import { GridOptions } from "ag-grid-community"
 
 export default function ListingsList() {
-  // const router = useRouter()
-  const [gridApi, setGridApi] = useState<GridApi>(null)
-
-  console.log(gridApi)
-
-  const onGridReady = (params) => {
-    setGridApi(params.api)
-  }
   class formatLinkCell {
     link: HTMLAnchorElement
 
@@ -31,9 +24,25 @@ export default function ListingsList() {
     }
   }
 
+  class formatWaitlistStatus {
+    text: HTMLSpanElement
+
+    init({ data }) {
+      const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
+
+      this.text = document.createElement("span")
+      this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
+    }
+
+    getGui() {
+      return this.text
+    }
+  }
+
   const gridOptions: GridOptions = {
     components: {
       formatLinkCell: formatLinkCell,
+      formatWaitlistStatus: formatWaitlistStatus,
     },
   }
 
@@ -47,6 +56,7 @@ export default function ListingsList() {
         field: "name",
         sortable: false,
         filter: false,
+        resizable: true,
         cellRenderer: "formatLinkCell",
       },
       {
@@ -54,35 +64,32 @@ export default function ListingsList() {
         field: "applicationDueDate",
         sortable: false,
         filter: false,
-        valueFormatter: ({ value }) => {
-          console.log(value)
-
-          return value
-        },
-      },
-      {
-        headerName: t("listings.applicationsSubmitted"),
-        field: "isSubmitted",
-        sortable: false,
-        filter: false,
+        resizable: true,
+        valueFormatter: ({ value }) => moment(value).format("MM/DD/YYYY"),
       },
       {
         headerName: t("listings.availableUnits"),
         field: "property.unitsAvailable",
         sortable: false,
         filter: false,
+        resizable: true,
       },
       {
         headerName: t("listings.waitlist.open"),
         field: "waitlistCurrentSize",
         sortable: false,
         filter: false,
+        resizable: true,
+        cellRenderer: "formatWaitlistStatus",
       },
       {
         headerName: t("listings.listingStatus"),
         field: "status",
         sortable: false,
         filter: false,
+        resizable: true,
+        flex: 1,
+        valueFormatter: ({ value }) => t(`listings.${value}`),
       },
     ],
     []
@@ -94,7 +101,6 @@ export default function ListingsList() {
 
   return (
     <Layout>
-      {console.log(listingDtos)}
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
@@ -104,7 +110,6 @@ export default function ListingsList() {
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <AgGridReact
-              onGridReady={onGridReady}
               gridOptions={gridOptions}
               columnDefs={columnDefs}
               rowData={listingDtos}
@@ -113,6 +118,17 @@ export default function ListingsList() {
               rowHeight={58}
               suppressScrollOnNewData={true}
             ></AgGridReact>
+
+            <div className="data-pager">
+              <div className="data-pager__control-group">
+                <span className="data-pager__control">
+                  <span className="field-label" id="lbTotalPages">
+                    {listingDtos?.length}
+                  </span>
+                  <span className="field-label">{t("listings.totalListings")}</span>
+                </span>
+              </div>
+            </div>
           </div>
         </article>
       </section>
