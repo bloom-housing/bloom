@@ -4,7 +4,7 @@ import "./ListSection.scss"
 export interface ListSectionProps {
   title: string
   subtitle: string
-  children?: JSX.Element
+  children?: React.ReactNode
 }
 
 const ListSection = (props: ListSectionProps) => (
