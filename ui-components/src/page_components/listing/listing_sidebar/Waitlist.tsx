@@ -29,11 +29,13 @@ const Waitlist = (props: WaitlistProps) => {
           text={t("listings.availableUnits")}
           className={"font-semibold"}
         />
-        <WaitlistItem
-          value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
-          text={t("listings.waitlist.openSlots")}
-          className={"font-semibold"}
-        />
+        {listing.displayWaitlistSize && (
+          <WaitlistItem
+            value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+            text={t("listings.waitlist.openSlots")}
+            className={"font-semibold"}
+          />
+        )}
       </>
     )
   } else {
@@ -50,11 +52,13 @@ const Waitlist = (props: WaitlistProps) => {
           value={listing.waitlistCurrentSize}
           text={t("listings.waitlist.currentSize")}
         />
-        <WaitlistItem
-          value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
-          text={t("listings.waitlist.openSlots")}
-          className={"font-semibold"}
-        />
+        {listing.displayWaitlistSize && (
+          <WaitlistItem
+            value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+            text={t("listings.waitlist.openSlots")}
+            className={"font-semibold"}
+          />
+        )}
         <WaitlistItem value={listing.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
       </>
     )
