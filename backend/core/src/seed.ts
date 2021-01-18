@@ -15,7 +15,7 @@ const argv = yargs.scriptName("seed").options({
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
-  await seedListing(app, listingSeed1)
+  // await seedListing(app, listingSeed1)
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
 
   const userService = app.get<UserService>(UserService)
