@@ -42,6 +42,10 @@ export class AuthzService {
     }
 
     if (user) {
+      // NOTE This normally should be in authz_policy.csv, but casbin does not support expressions on arrays.
+      //  Permissions for a leasing agent on applications are there defined here programatically.
+      //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.
+      //  User side this is expressed by 'leasingAgentInListings' property.
       await Promise.all(
         user?.leasingAgentInListings.map((listing: Listing) =>
           e.addPermissionForUser(
