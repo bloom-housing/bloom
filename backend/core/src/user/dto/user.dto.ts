@@ -3,7 +3,6 @@ import { User } from "../entities/user.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { AddressCreateDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { IdDto } from "../../lib/id.dto"
 
 export class UserDto extends OmitType(User, [
@@ -42,20 +41,8 @@ export class UserCreateDto extends OmitType(UserDto, [
   "roles",
 ] as const) {
   @Expose()
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  dob: Date
-
-  @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   password: string
-
-  @Expose()
-  @IsOptional()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  address?: AddressCreateDto | null
 }
 
 export class UserUpdateDto extends OmitType(UserDto, [
@@ -87,11 +74,4 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   dob: Date
-
-  @Expose()
-  @IsOptional()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressUpdateDto)
-  address?: AddressUpdateDto | null
 }

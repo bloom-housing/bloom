@@ -48,7 +48,7 @@ export class AuthzService {
             user.id,
             "application",
             `!r.obj || r.obj.listing_id == '${listing.id}'`,
-            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete}`
+            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
           )
         )
       )

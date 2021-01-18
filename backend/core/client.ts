@@ -1338,44 +1338,12 @@ export interface User {
   updatedAt: Date;
 }
 
-export interface AddressCreate {
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface UserCreate {
   /**  */
   dob: Date;
 
   /**  */
   password: string;
-
-  /**  */
-  address?: CombinedAddressTypes;
 
   /**  */
   email: string;
@@ -1425,44 +1393,6 @@ export interface UserWithAccessToken {
   accessToken: string;
 }
 
-export interface AddressUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
 export interface UserUpdate {
   /**  */
   id?: string;
@@ -1475,9 +1405,6 @@ export interface UserUpdate {
 
   /**  */
   dob: Date;
-
-  /**  */
-  address?: CombinedAddressTypes;
 
   /**  */
   firstName: string;
@@ -2114,6 +2041,35 @@ export interface ListingEventCreate {
   note?: string;
 }
 
+export interface AddressCreate {
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city?: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode?: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface ListingCreate {
   /**  */
   status: ListingStatus;
@@ -2311,6 +2267,44 @@ export interface ListingEventUpdate {
 
   /**  */
   note?: string;
+}
+
+export interface AddressUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city?: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode?: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
 }
 
 export interface ListingUpdate {
@@ -3632,7 +3626,7 @@ export enum UserRole {
   'user' = 'user',
   'admin' = 'admin'
 }
-export type CombinedAddressTypes = (AddressUpdate & any) | null;
+
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending'
