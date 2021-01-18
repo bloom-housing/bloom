@@ -88,7 +88,7 @@ export class User {
    * work properly.
    */
   @Expose()
-  @ApiProperty({ enum: UserRole, enumName: "UserRole" })
+  @ApiProperty({ enum: UserRole, enumName: "UserRole", isArray: true })
   get roles(): UserRole[] {
     return [UserRole.user, ...(this.isAdmin ? [UserRole.admin] : [])]
   }

@@ -1308,7 +1308,7 @@ export interface Id {
 
 export interface User {
   /**  */
-  roles: UserRole;
+  roles: UserRole[];
 
   /**  */
   leasingAgentInListings?: Id[];
@@ -1340,9 +1340,6 @@ export interface User {
 
 export interface UserCreate {
   /**  */
-  dob: Date;
-
-  /**  */
   password: string;
 
   /**  */
@@ -1356,11 +1353,14 @@ export interface UserCreate {
 
   /**  */
   lastName: string;
+
+  /**  */
+  dob: Date;
 }
 
 export interface UserWithAccessToken {
   /**  */
-  roles: UserRole;
+  roles: UserRole[];
 
   /**  */
   leasingAgentInListings?: Id[];
