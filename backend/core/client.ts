@@ -1797,6 +1797,9 @@ export interface Listing {
   urlSlug: string;
 
   /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
@@ -2004,6 +2007,9 @@ export interface AddressCreate {
 export interface ListingCreate {
   /**  */
   status: ListingStatus;
+
+  /**  */
+  displayWaitlistSize: boolean;
 
   /**  */
   applicationMethods: ApplicationMethodCreate[];
@@ -2238,6 +2244,9 @@ export interface AddressUpdate {
 export interface ListingUpdate {
   /**  */
   status: ListingStatus;
+
+  /**  */
+  displayWaitlistSize: boolean;
 
   /**  */
   id?: string;

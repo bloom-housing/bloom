@@ -109,6 +109,7 @@ export class HouseholdMember extends AbstractEntity {
   relationship?: string | null
 
   @Column({ type: "boolean", nullable: true })
+  @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsIn(["yes", "no"], { groups: [ValidationsGroupsEnum.default] })
   workInRegion?: string | null

@@ -4,9 +4,15 @@ import { Field } from "./Field"
 import { HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 
+export type DOBFieldValues = {
+  birthDay: string
+  birthMonth: string
+  birthYear: string
+}
 export interface DOBFieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
+  errorMessage?: string
   label: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: any
@@ -21,13 +27,15 @@ export interface DOBFieldProps {
 }
 
 const DOBField = (props: DOBFieldProps) => {
-  const { applicant, error, register, watch, atAge, name, id } = props
+  const { applicant, error, register, watch, atAge, name, id, errorMessage } = props
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
   }
   const birthDay = watch(fieldName("birthDay"))
   const birthMonth = watch(fieldName("birthMonth"))
   const validateAge = (value: string) => {
+    if (!atAge) return true
+
     return (
       parseInt(value) > 1900 &&
       moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") <
@@ -94,6 +102,7 @@ const DOBField = (props: DOBFieldProps) => {
             required: props.required,
             validate: {
               yearRange: (value: string) => {
+                if (props.required && value && parseInt(value) < 1900) return false
                 if (!props.required && !value?.length) return true
 
                 return validateAge(value)
@@ -108,7 +117,7 @@ const DOBField = (props: DOBFieldProps) => {
       {(error?.birthMonth || error?.birthDay || error?.birthYear) && (
         <div className="field error">
           <span id={`${id}-error`} className="error-message">
-            {t("errors.dateOfBirthError")}
+            {errorMessage ? errorMessage : t("errors.dateOfBirthError")}
           </span>
         </div>
       )}

@@ -16,16 +16,18 @@ import {
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import moment from "moment"
-import { Application } from "@bloom-housing/backend-core/types"
+import { Application, ArcherListing } from "@bloom-housing/backend-core/types"
 
 export default () => {
   const [applications, setApplications] = useState([])
   const [deletingApplication, setDeletingApplication] = useState(null)
+  const listing = Object.assign({}, ArcherListing)
 
   useEffect(() => {
     // applicationsService.list().then((apps) => {
     //   setApplications(apps)
     // })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const listing = {} as any
     const application = {} as Application
     listing.applicationDueDate = moment().add(10, "days").format()
@@ -90,6 +92,7 @@ export default () => {
                       <AppStatusItem
                         key={application.id}
                         status="inProgress"
+                        listing={listing}
                         application={application}
                         setDeletingApplication={setDeletingApplication}
                       />

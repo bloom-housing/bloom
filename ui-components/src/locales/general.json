@@ -75,7 +75,11 @@
       "sexualOrientation": "Sexual Orientation",
       "addHouseholdMember": "Add Household Member",
       "sameAddressAsPrimary": "Same Address as Primary",
-      "sameResidence": "Same Residence"
+      "sameResidence": "Same Residence",
+      "languageSubmittedIn": "Language Submitted In",
+      "timeSubmitted": "Time Submitted",
+      "dateSubmitted": "Date Submitted",
+      "applicationSubmitted": "Application Submitted"
     },
     "details": {
       "applicationData": "Application Data",
@@ -107,7 +111,9 @@
         "draft": "Draft",
         "submitted": "Submitted",
         "removed": "Removed"
-      }
+      },
+      "preferredUnitSizes": "Preferred Unit Sizes",
+      "householdMemberDetails": "Household Member Details"
     },
     "form": {
       "general": {
@@ -506,7 +512,8 @@
     "selectAnOption": "Please select an option.",
     "selectOption": "Please select one of the options above.",
     "householdTooBig": "Your household size is too big.",
-    "householdTooSmall": "Your household size is too small."
+    "householdTooSmall": "Your household size is too small.",
+    "dateError": "Please enter a valid date"
   },
   "footer": {
     "contact": "Contact",
@@ -782,6 +789,7 @@
     "day": "Day",
     "delete": "Delete",
     "deposit": "Deposit",
+    "done": "Done",
     "export": "Export",
     "enterAmount": "Enter amount",
     "filter": "Filter",
@@ -827,6 +835,7 @@
     "readLess": "read less",
     "readMore": "read more",
     "relationship": "Relationship",
+    "otherRelationShip": "Other Relationship",
     "rent": "Rent",
     "secondPhone": "Second Phone",
     "seconds": "seconds",
@@ -843,6 +852,7 @@
     "statusHistory": "Status History",
     "street": "Street",
     "submit": "Submit",
+    "submitNew": "Submit & New",
     "time": "time",
     "text": "Text",
     "unit": "unit",
@@ -850,6 +860,7 @@
     "unitAmenities": "Unit Amenities",
     "unitFeatures": "Unit Features",
     "unitType": "Unit Type",
+    "view": "View",
     "viewMap": "View Map",
     "viewOnMap": "View on Map",
     "year": "Year",

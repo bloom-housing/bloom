@@ -1,11 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
-import { plainToClass } from "class-transformer"
 import { ApplicationUpdateDto } from "./dto/application.dto"
 import { User } from "../user/entities/user.entity"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { Raw, Repository } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
 import { CsvBuilder } from "../services/csv-builder.service"
@@ -29,8 +28,7 @@ export class ApplicationsService {
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
       },
-      relations: ["listing", "user", "listing.property"],
-      loadEagerRelations: true,
+      relations: ["listing", "user"],
     })
   }
 
@@ -44,54 +42,33 @@ export class ApplicationsService {
   }
 
   async listPaginated(params: ApplicationsListQueryParams, user?: User) {
-    const qb = this.repository.createQueryBuilder("application")
-    // FIXME This is a temporary fix before switching to using a repository with
-    //  to_tsvector. Previously it didn't work because of bugs in TypeORM related to jsonb columns
-    // When using querybuild we actually need to specify all the relation that
-    // are normally registeredas eager with repository methods.
-    qb.leftJoinAndSelect("application.accessibility", "accessibility")
-    qb.leftJoinAndSelect("application.alternateAddress", "alternateAddress")
-    qb.leftJoinAndSelect("application.alternateContact", "alternateContact")
-    qb.leftJoinAndSelect("alternateContact.mailingAddress", "alternateMailingAddress")
-    qb.leftJoinAndSelect("application.applicant", "applicant")
-    qb.leftJoinAndSelect("applicant.address", "applicantAddress")
-    qb.leftJoinAndSelect("applicant.workAddress", "applicantWorkAddress")
-    qb.leftJoinAndSelect("application.demographics", "demographics")
-    qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
-    qb.leftJoinAndSelect("householdMembers.address", "householdMembersAddress")
-    qb.leftJoinAndSelect("householdMembers.workAddress", "householdMembersWorkAddress")
-    qb.leftJoinAndSelect("application.mailingAddress", "applicationMailingAddress")
-    qb.leftJoinAndSelect("application.preferences", "preferences")
-    // Not eager relations
-    qb.leftJoinAndSelect("application.user", "user")
-    qb.leftJoinAndSelect("application.listing", "listing")
-    qb.leftJoinAndSelect("listing.property", "property")
-    qb.leftJoinAndSelect("property.buildingAddress", "buildingAddress")
-    qb.leftJoinAndSelect("property.units", "units")
-    qb.leftJoinAndSelect("units.amiChart", "amiChart")
-    qb.leftJoinAndSelect("amiChart.items", "amiChartItems")
-
-    if (user) {
-      qb.andWhere("user.id = :userId", { userId: user.id })
-    }
-
-    if (params.listingId) {
-      qb.andWhere("listing.id = :listingId", { listingId: params.listingId })
-    }
-
-    if (params.search) {
-      qb.andWhere("to_tsvector('english', concat_ws(' ', applicant)) @@ plainto_tsquery(:search)", {
-        search: params.search,
-      })
-    }
-
-    return paginate(qb, { limit: params.limit, page: params.page })
+    return paginate(
+      this.repository,
+      { limit: params.limit, page: params.page },
+      {
+        where: {
+          ...(user && { user: { id: user.id } }),
+          ...(params.listingId && { listing: { id: params.listingId } }),
+          ...(params.search && {
+            applicant: Raw(
+              () =>
+                `to_tsvector('english', concat_ws(' ', "Application__applicant")) @@ plainto_tsquery(:search)`,
+              {
+                search: params.search,
+              }
+            ),
+          }),
+        },
+        relations: ["listing", "user"],
+      }
+    )
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
-    const application = plainToClass(Application, applicationCreateDto)
-    application.user = user
-    return await this.repository.save(application)
+    return await this.repository.save({
+      ...applicationCreateDto,
+      user,
+    })
   }
 
   async findOne(applicationId: string) {
@@ -99,7 +76,7 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
-      relations: ["listing", "user", "listing.property"],
+      relations: ["listing", "user"],
     })
   }
 
@@ -108,7 +85,7 @@ export class ApplicationsService {
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
-        relations: ["listing", "user", "listing.property"],
+        relations: ["listing", "user"],
       }))
     Object.assign(application, applicationUpdateDto)
     await this.repository.save(application)
