@@ -11,6 +11,7 @@
     "totalApplications": "Total Applications",
     "addApplication": "Add Application",
     "newApplication": "New Application",
+    "editApplication": "Edit Application",
     "applicationsReceived": "Applications Received",
     "table": {
       "applicationSubmissionDate": "Application Submission Date",

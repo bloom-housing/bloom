@@ -10,8 +10,8 @@ import {
   AlertTypes,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
-import { formatApplicationData } from "../../../lib/formatApplicationData"
+import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
+import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
 
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
@@ -28,19 +28,26 @@ import { FormTypes } from "./FormTypes"
 
 type ApplicationFormProps = {
   listingId: string
+  application?: Application
   editMode?: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
+const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
+  const defaultValues = editMode ? parseApplicationData(application) : {}
+
+  console.log(defaultValues)
+
+  const formMethods = useForm<UseFormMethods<FormTypes>>({
+    defaultValues,
+  })
+
   const router = useRouter()
 
   const { applicationsService } = useContext(ApiClientContext)
 
   const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
-
-  const formMethods = useForm<UseFormMethods<FormTypes>>()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues, trigger } = formMethods

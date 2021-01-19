@@ -8,6 +8,7 @@ import {
   Address,
   HouseholdMember,
 } from "@bloom-housing/backend-core/types"
+import { TimeFieldPeriod } from "@bloom-housing/ui-components"
 import { FormTypes } from "../src/applications/PaperApplicationForm/FormTypes"
 
 /*
@@ -171,4 +172,123 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
   }
 
   return result
+}
+
+export const parseApplicationData = (applicationData: ApplicationUpdate) => {
+  const submissionDate = applicationData.submissionDate
+    ? new Date(applicationData.submissionDate)
+    : null
+
+  const dateOfBirth = (() => {
+    const { birthDay, birthMonth, birthYear } = applicationData.applicant
+
+    return {
+      birthDay,
+      birthMonth,
+      birthYear,
+    }
+  })()
+
+  const incomePeriod = applicationData.incomePeriod
+  const incomeMonth = incomePeriod === "perMonth" ? applicationData.income : null
+  const incomeYear = incomePeriod === "perYear" ? applicationData.income : null
+
+  const timeSubmitted = (() => {
+    const hoursNumber = submissionDate?.getUTCHours()
+
+    const hours = hoursNumber.toString()
+    const minutes = submissionDate?.getUTCMinutes().toString()
+    const seconds = submissionDate?.getUTCSeconds().toString()
+    const period: TimeFieldPeriod = hoursNumber > 12 ? "pm" : "am"
+
+    return {
+      hours,
+      minutes,
+      seconds,
+      period,
+    }
+  })()
+
+  const dateSubmitted = (() => {
+    const birthMonth = (submissionDate?.getUTCMonth() + 1).toString()
+    const birthDay = submissionDate?.getUTCDate().toString()
+    const birthYear = submissionDate?.getUTCFullYear().toString()
+
+    return {
+      birthMonth,
+      birthDay,
+      birthYear,
+    }
+  })()
+
+  const phoneNumber = applicationData.applicant.phoneNumber
+
+  const application = (() => {
+    const language = applicationData.language
+    const preferences = applicationData.preferences
+    const contactPreferences = applicationData.contactPreferences
+    const sendMailToMailingAddress = applicationData.sendMailToMailingAddress
+    const mailingAddress = applicationData.mailingAddress
+    const preferredUnit = applicationData.preferredUnit
+    const accessibility = applicationData.accessibility
+    const incomePeriod = applicationData.incomePeriod
+    const incomeVouchers = applicationData.incomeVouchers ? "yes" : "no"
+    const demographics = applicationData.demographics
+    const acceptedTerms = applicationData.acceptedTerms ? "yes" : "no"
+
+    const { additionalPhoneNumber, additionalPhoneNumberType } = applicationData
+
+    const {
+      firstName,
+      middleName,
+      lastName,
+      emailAddress,
+      workInRegion,
+      address,
+      workAddress,
+      phoneNumberType,
+    } = applicationData.applicant
+
+    const applicant = {
+      firstName,
+      middleName,
+      lastName,
+      emailAddress,
+      workInRegion,
+      address,
+      workAddress,
+      phoneNumberType,
+    }
+
+    // TODO: move phone number to a proper structure
+    return {
+      applicant,
+      language,
+      phoneNumber,
+      additionalPhoneNumber,
+      additionalPhoneNumberType,
+      preferences,
+      contactPreferences,
+      sendMailToMailingAddress,
+      mailingAddress,
+      preferredUnit,
+      accessibility,
+      incomePeriod,
+      incomeVouchers,
+      demographics,
+      acceptedTerms,
+    }
+  })()
+
+  const values: FormTypes = {
+    dateOfBirth,
+    dateSubmitted,
+    timeSubmitted,
+    phoneNumber,
+    application,
+    incomeMonth,
+    incomeYear,
+  }
+
+  return values
 }

@@ -5,7 +5,7 @@ import { Field } from "./Field"
 import { Select } from "../forms/Select"
 import { UseFormMethods } from "react-hook-form"
 
-type TimeFieldPeriod = "am" | "pm"
+export type TimeFieldPeriod = "am" | "pm"
 
 export type TimeFieldValues = {
   hours?: string

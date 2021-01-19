@@ -23,9 +23,11 @@ const NewApplication = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>{t("applications.newApplication")}</PageHeader>
+      <PageHeader>
+        {t("applications.editApplication")} <p className="text-base">{application.id}</p>
+      </PageHeader>
 
-      <PaperApplicationForm listingId={application.listing.id} />
+      <PaperApplicationForm listingId={application.listing.id} application={application} editMode />
     </Layout>
   )
 }
