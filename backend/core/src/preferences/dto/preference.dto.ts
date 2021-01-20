@@ -4,7 +4,10 @@ import { Expose } from "class-transformer"
 import { IsString, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
-export class PreferenceDto extends OmitType(Preference, ["listing"] as const) {}
+export class PreferenceDto extends OmitType(Preference, [
+  "listing",
+  "applicationPreferences",
+] as const) {}
 
 export class PreferenceCreateDto extends OmitType(PreferenceDto, [
   "id",

@@ -94,9 +94,9 @@ export class ApplicationDto extends OmitType(Application, [
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationPreferencesDto)
-  preferences: ApplicationPreferencesDto
+  preferences: ApplicationPreferencesDto[]
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
@@ -166,9 +166,9 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationPreferencesCreateDto)
-  preferences: ApplicationPreferencesCreateDto
+  preferences: ApplicationPreferencesCreateDto[]
 }
 
 export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
@@ -258,7 +258,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationPreferencesUpdateDto)
-  preferences: ApplicationPreferencesUpdateDto
+  preferences: ApplicationPreferencesUpdateDto[]
 }

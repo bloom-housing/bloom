@@ -2363,6 +2363,19 @@ export interface ListingUpdate {
   applicationConfig?: object;
 }
 
+export interface BasePreference {
+  /**  */
+  type: PreferenceType;
+}
+
+export interface NotePreference {
+  /**  */
+  type: PreferenceType;
+
+  /**  */
+  note: string;
+}
+
 export interface Applicant {
   /**  */
   address: Address;
@@ -2561,6 +2574,12 @@ export interface HouseholdMember {
 
 export interface ApplicationPreferences {
   /**  */
+  data?: AllDataTypes;
+
+  /**  */
+  preference: Id;
+
+  /**  */
   id: string;
 
   /**  */
@@ -2568,15 +2587,6 @@ export interface ApplicationPreferences {
 
   /**  */
   updatedAt: Date;
-
-  /**  */
-  liveIn: boolean;
-
-  /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
 }
 
 export interface Application {
@@ -2587,13 +2597,13 @@ export interface Application {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
 
   /**  */
-  listing: Listing;
+  listing: Id;
 
   /**  */
   applicant: Applicant;
@@ -2617,7 +2627,7 @@ export interface Application {
   householdMembers: HouseholdMember[];
 
   /**  */
-  preferences: ApplicationPreferences;
+  preferences: ApplicationPreferences[];
 
   /**  */
   id: string;
@@ -2849,13 +2859,10 @@ export interface HouseholdMemberCreate {
 
 export interface ApplicationPreferencesCreate {
   /**  */
-  liveIn: boolean;
+  data?: AllDataTypes;
 
   /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
+  preference: Id;
 }
 
 export interface ApplicationCreate {
@@ -2866,7 +2873,7 @@ export interface ApplicationCreate {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
@@ -2896,7 +2903,7 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[];
 
   /**  */
-  preferences: ApplicationPreferencesCreate;
+  preferences: ApplicationPreferencesCreate[];
 
   /**  */
   appUrl?: string;
@@ -3136,6 +3143,9 @@ export interface HouseholdMemberUpdate {
 
 export interface ApplicationPreferencesUpdate {
   /**  */
+  data?: AllDataTypes;
+
+  /**  */
   id?: string;
 
   /**  */
@@ -3145,13 +3155,7 @@ export interface ApplicationPreferencesUpdate {
   updatedAt?: Date;
 
   /**  */
-  liveIn: boolean;
-
-  /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
+  preference: Id;
 }
 
 export interface ApplicationUpdate {
@@ -3162,7 +3166,7 @@ export interface ApplicationUpdate {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
@@ -3204,7 +3208,7 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[];
 
   /**  */
-  preferences: ApplicationPreferencesUpdate;
+  preferences: ApplicationPreferencesUpdate[];
 
   /**  */
   appUrl?: string;
@@ -3578,6 +3582,11 @@ export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export enum PreferenceType {
+  'base' = 'base',
+  'note' = 'note'
+}
+
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'
@@ -3598,3 +3607,4 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
+export type AllDataTypes = BasePreference | NotePreference;

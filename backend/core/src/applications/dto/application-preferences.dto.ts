@@ -1,10 +1,20 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsUUID } from "class-validator"
-import { ApplicationPreferences } from "../entities/application-preferences.entity"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ApplicationPreference } from "../entities/application-preferences.entity"
+import { IdDto } from "../../lib/id.dto"
 
-export class ApplicationPreferencesDto extends OmitType(ApplicationPreferences, [] as const) {}
+export class ApplicationPreferencesDto extends OmitType(ApplicationPreference, [
+  "application",
+  "preference",
+] as const) {
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  preference: IdDto
+}
 
 export class ApplicationPreferencesCreateDto extends OmitType(ApplicationPreferencesDto, [
   "id",

@@ -27,7 +27,7 @@ import { AlternateContact } from "./alternate-contact.entity"
 import { Accessibility } from "./accessibility.entity"
 import { Demographics } from "./demographics.entity"
 import { HouseholdMember } from "./household-member.entity"
-import { ApplicationPreferences } from "./application-preferences.entity"
+import { ApplicationPreference } from "./application-preferences.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
@@ -194,13 +194,16 @@ export class Application extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   preferredUnit: string[]
 
-  @OneToOne(() => ApplicationPreferences, { eager: true, cascade: true })
-  @JoinColumn()
+  @OneToMany(
+    () => ApplicationPreference,
+    (applicationPreference) => applicationPreference.application,
+    { eager: true, cascade: true }
+  )
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferences)
-  preferences: ApplicationPreferences
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationPreference)
+  preferences: ApplicationPreference[]
 
   @Column({ enum: ApplicationStatus })
   @Expose()
