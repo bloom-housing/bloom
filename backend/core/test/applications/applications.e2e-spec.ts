@@ -23,6 +23,7 @@ import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
+import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -39,6 +40,7 @@ describe("Applications", () => {
   let leasingAgent2AccessToken: string
   let leasingAgent2Profile: UserDto
   let applicationsRepository: Repository<Application>
+  let householdMembersRepository: Repository<HouseholdMember>
   let listing1Id: string
   let listing2Id: string
 
@@ -157,7 +159,7 @@ describe("Applications", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([Application]),
+        TypeOrmModule.forFeature([Application, HouseholdMember]),
       ],
     })
       .overrideProvider(EmailService)
@@ -167,6 +169,9 @@ describe("Applications", () => {
     app = applicationSetup(app)
     await app.init()
     applicationsRepository = app.get<Repository<Application>>(getRepositoryToken(Application))
+    householdMembersRepository = app.get<Repository<HouseholdMember>>(
+      getRepositoryToken(HouseholdMember)
+    )
 
     user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
 
@@ -213,6 +218,7 @@ describe("Applications", () => {
   })
 
   beforeEach(async () => {
+    await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()
   })
 
