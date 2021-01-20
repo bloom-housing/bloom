@@ -10,8 +10,8 @@ export default {
 export const Default = () => {
   return (
     <TabNav>
-      <Tab href="/?path=/story/navigation-tab-nav--other">Other</Tab>
-      <Tab href="/?path=/story/navigation-tab-nav--default" current>
+      <Tab href="javascript:alert('Other Tab')">Other</Tab>
+      <Tab href="javascript:alert('Default Tab')" current>
         Default
       </Tab>
     </TabNav>
@@ -21,10 +21,10 @@ export const Default = () => {
 export const Other = () => {
   return (
     <TabNav>
-      <Tab href="/?path=/story/navigation-tab-nav--other" current>
+      <Tab href="javascript:alert('Other Tab')" current>
         Other
       </Tab>
-      <Tab href="/?path=/story/navigation-tab-nav--default">Default</Tab>
+      <Tab href="javascript:alert('Default Tab')">Default</Tab>
     </TabNav>
   )
 }
