@@ -27,15 +27,10 @@ const Layout = (props) => {
           notice=""
           title={t("nav.siteTitle")}
         >
-          <LocalizedLink href="/properties" className="navbar-item">
-            {t("nav.properties")}
-          </LocalizedLink>
-          <LocalizedLink href="/listings" className="navbar-item">
+          <LocalizedLink href="/" className="navbar-item">
             {t("nav.listings")}
           </LocalizedLink>
-          <LocalizedLink href="/applications" className="navbar-item">
-            {t("nav.applications")}
-          </LocalizedLink>
+
           {!!profile && (
             <a href="#" className="navbar-item" onClick={signOut}>
               {t("nav.signOut")}
