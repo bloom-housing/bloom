@@ -81,7 +81,7 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
     applicationMethods: seed.applicationMethods,
     events: seed.listingEvents,
   }
-  await listingsRepo.save(listingCreateDto)
+  return await listingsRepo.save(listingCreateDto)
 }
 
 export const listingSeed1: ListingSeed = {

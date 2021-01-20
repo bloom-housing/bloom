@@ -8,6 +8,7 @@ import { UserCreateDto } from "./user/dto/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./user/entities/user.entity"
+import { makeNewApplication } from "./seeds/applications"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -19,9 +20,9 @@ const newSeed = (): ListingSeed => {
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
-  await seedListing(app, newSeed())
+  const listing1 = await seedListing(app, newSeed())
   const listingSeed = newSeed()
-  await seedListing(app, {
+  const listing2 = await seedListing(app, {
     ...listingSeed,
     leasingAgents: [
       {
@@ -30,10 +31,11 @@ async function bootstrap() {
       },
     ],
   })
+
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
 
   const userService = app.get<UserService>(UserService)
-  await userService.createUser(
+  const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
       firstName: "First",
@@ -44,7 +46,7 @@ async function bootstrap() {
     })
   )
 
-  await userService.createUser(
+  const user2 = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test2@example.com",
       firstName: "Second",
@@ -65,6 +67,14 @@ async function bootstrap() {
       password: "abcdef",
     })
   )
+
+  for (let i = 0; i < 200; i++) {
+    await makeNewApplication(app, listing1, user1)
+    await makeNewApplication(app, listing1, user2)
+    await makeNewApplication(app, listing2, user1)
+    await makeNewApplication(app, listing2, user2)
+  }
+
   admin.isAdmin = true
   await userRepo.save(admin)
 

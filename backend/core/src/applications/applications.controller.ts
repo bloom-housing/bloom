@@ -163,6 +163,7 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<ApplicationDto> {
+    await this.authorizeUserAction(req.user, applicationCreateDto, authzActions.create)
     const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {
