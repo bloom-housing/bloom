@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   ApiClientContext,
@@ -36,8 +36,6 @@ type ApplicationFormProps = {
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const defaultValues = editMode ? parseApplicationData(application) : {}
 
-  console.log(defaultValues)
-
   const formMethods = useForm<UseFormMethods<FormTypes>>({
     defaultValues,
   })
@@ -48,6 +46,12 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
+
+  useEffect(() => {
+    if (application.householdMembers) {
+      setHouseholdMembers(application.householdMembers)
+    }
+  }, [application, setHouseholdMembers])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues, trigger } = formMethods
@@ -81,7 +85,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     const body = formatApplicationData(formData, listingId, false)
 
     try {
-      const result = await applicationsService.create({ body })
+      const result = editMode
+        ? await applicationsService.update({ applicationId: application.id, body })
+        : await applicationsService.create({ body })
 
       if (result) {
         setAlert("success")

@@ -236,7 +236,7 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
     const demographics = applicationData.demographics
     const acceptedTerms = applicationData.acceptedTerms ? "yes" : "no"
 
-    const { additionalPhoneNumber, additionalPhoneNumberType } = applicationData
+    const { additionalPhoneNumber, additionalPhoneNumberType, alternateContact } = applicationData
 
     const {
       firstName,
@@ -277,6 +277,7 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
       incomeVouchers,
       demographics,
       acceptedTerms,
+      alternateContact,
     }
   })()
 
