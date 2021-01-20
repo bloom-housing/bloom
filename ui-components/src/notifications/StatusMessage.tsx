@@ -3,7 +3,7 @@ import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTyp
 import { Tag } from "../text/Tag"
 import { t } from "../helpers/translator"
 
-import "./StatusMessages.scss"
+import "./StatusMessage.scss"
 
 export interface StatusMessagesProps {
   lastTimestamp?: string
