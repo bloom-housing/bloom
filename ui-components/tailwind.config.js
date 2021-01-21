@@ -113,6 +113,7 @@ module.exports = {
       wide: ".025em",
       wider: ".05em",
       widest: ".12em",
+      ultrawide: ".25em",
     },
     extend: {
       borderColor: (theme) => ({
