@@ -10,6 +10,7 @@ import {
 import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import {
+  ArrayMaxSize,
   IsBoolean,
   IsDate,
   IsDefined,
@@ -105,6 +106,7 @@ export class Application extends AbstractEntity {
   @Column("text", { array: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   contactPreferences: string[]
 
@@ -193,12 +195,14 @@ export class Application extends AbstractEntity {
   })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMember)
   householdMembers: HouseholdMember[]
 
   @Column({ type: "text", array: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   preferredUnit: string[]
 

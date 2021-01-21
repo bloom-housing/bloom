@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer"
-import { IsOptional, IsString, MaxLength } from "class-validator"
+import { ArrayMaxSize, IsOptional, IsString, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 export class HousingCounselor {
@@ -11,6 +11,7 @@ export class HousingCounselor {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
   languages: string[]
 
   @Expose()
