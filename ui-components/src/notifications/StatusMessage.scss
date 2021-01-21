@@ -19,3 +19,7 @@
 .status-message__status + .status-message__note {
   @apply mt-3;
 }
+
+.status-message__note {
+  @apply text-sm;
+}

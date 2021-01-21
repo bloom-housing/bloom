@@ -65,11 +65,11 @@ exports[`Storyshots Prototypes/TabNav Tab Nav Count 1`] = `
             <Tag
               pillStyle={true}
             >
-              <div
+              <span
                 className="tag is-pill"
               >
                 22
-              </div>
+              </span>
             </Tag>
           </a>
         </li>
