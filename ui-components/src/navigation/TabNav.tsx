@@ -43,8 +43,10 @@ const Tab = (props: TabProps) => {
 
 const TabNav = (props: { children: React.ReactNode }) => {
   return (
-    <nav className="tab-nav" role="tablist" aria-label="Secondary navigation">
-      <ul>{props.children}</ul>
+    <nav className="tab-nav">
+      <ul role="tablist" aria-label="Secondary navigation">
+        {props.children}
+      </ul>
     </nav>
   )
 }
