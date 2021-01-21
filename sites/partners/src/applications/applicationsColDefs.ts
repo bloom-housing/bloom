@@ -1,5 +1,5 @@
 import moment from "moment"
-import { t, formatIncome } from "@bloom-housing/ui-components"
+import { t, formatIncome, formatYesNoLabel } from "@bloom-housing/ui-components"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
 
 export function getColDefs(maxHouseholdSize: number) {
@@ -160,7 +160,10 @@ export function getColDefs(maxHouseholdSize: number) {
       minWidth: 100,
       valueFormatter: ({ value }) => {
         if (!value) return ""
-        return `${value.birthMonth}/${value.birthDay}/${value.birthYear}`
+
+        const isValidDOB = !!value?.birthMonth && !!value?.birthDay && value?.birthYear
+
+        return isValidDOB ? `${value.birthMonth}/${value.birthDay}/${value.birthYear}` : ""
       },
     },
     {
@@ -425,113 +428,91 @@ export function getColDefs(maxHouseholdSize: number) {
   ]
 
   const householdCols = []
-  // householdSize property includes primary applicant, so we have to exclude it
-  for (let i = 0; i < maxHouseholdSize - 1; i++) {
+
+  for (let i = 0; i < maxHouseholdSize; i++) {
     const householdIndex = i + 1
 
     householdCols.push(
       {
-        headerName: `${t("applications.table.householdFirstName")} ${householdIndex}`,
+        headerName: `${t("application.name.firstName")} HH:${householdIndex}`,
         field: "householdMembers",
         sortable: false,
         filter: false,
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
+          if (!value) return t("n/a")
 
-          return value[i] ? value[i].firstName : ""
+          return value[i]?.firstName ? value[i].firstName : t("t.n/a")
         },
       },
       {
-        headerName: `${t("applications.table.householdLastName")} ${householdIndex}`,
+        headerName: `${t("application.name.lastName")} HH:${householdIndex}`,
         field: "householdMembers",
         sortable: false,
         filter: false,
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
+          if (!value) return t("t.n/a")
 
-          return value[i] ? value[i].lastName : ""
+          return value[i]?.lastName ? value[i].lastName : t("t.n/a")
         },
       },
       {
-        headerName: `${t("applications.table.householdRelationship")} ${householdIndex}`,
+        headerName: `${t("applications.table.householdDob")} HH:${householdIndex}`,
         field: "householdMembers",
         sortable: false,
         filter: false,
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
+          if (!value) return t("t.n/a")
 
-          return value[i] ? t(`application.form.options.relationship.${value[i].relationship}`) : ""
+          const isValidDOB = !!value[i]?.birthMonth && !!value[i]?.birthDay && value[i]?.birthYear
+
+          return isValidDOB
+            ? `${value[i].birthMonth}/${value[i].birthDay}/${value[i].birthYear}`
+            : t("t.n/a")
         },
       },
       {
-        headerName: `${t("applications.table.householdDob")} ${householdIndex}`,
+        headerName: `${t("t.relationship")} HH:${householdIndex}`,
         field: "householdMembers",
         sortable: false,
         filter: false,
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
+          if (!value) return t("t.n/a")
 
-          return value[i] ? `${value[i].birthMonth}/${value[i].birthDay}/${value[i].birthYear}` : ""
+          return value[i]?.relationship
+            ? t(`application.form.options.relationship.${value[i].relationship}`)
+            : t("t.n/a")
         },
       },
       {
-        headerName: `${t("applications.table.householdStreetAddress")} ${householdIndex}`,
+        headerName: `${t("application.add.sameAddressAsPrimary")} HH:${householdIndex}`,
         field: "householdMembers",
         sortable: false,
         filter: false,
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
-
-          return value[i] ? value[i].address.street : ""
+          if (!value) return t("t.n/a")
+          return formatYesNoLabel(value[i]?.sameAddress)
         },
       },
       {
-        headerName: `${t("applications.table.householdCity")} ${householdIndex}`,
+        headerName: `${t("application.details.workInRegion")} HH:${householdIndex}`,
         field: "householdMembers",
         sortable: false,
         filter: false,
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
-
-          return value[i] ? value[i].address.city : ""
-        },
-      },
-      {
-        headerName: `${t("applications.table.householdState")} ${householdIndex}`,
-        field: "householdMembers",
-        sortable: false,
-        filter: false,
-        width: 125,
-        minWidth: 100,
-        valueFormatter: ({ value }) => {
-          if (!value) return ""
-
-          return value[i] ? value[i].address.state : ""
-        },
-      },
-      {
-        headerName: `${t("applications.table.householdZip")} ${householdIndex}`,
-        field: "householdMembers",
-        sortable: false,
-        filter: false,
-        width: 125,
-        minWidth: 100,
-        valueFormatter: ({ value }) => {
-          if (!value) return ""
-
-          return value[i] ? value[i].address.zipCode : ""
+          if (!value) return t("t.n/a")
+          return formatYesNoLabel(value[i]?.workInRegion)
         },
       }
     )

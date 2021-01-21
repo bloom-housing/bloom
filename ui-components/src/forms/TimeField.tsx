@@ -1,41 +1,59 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { Field } from "./Field"
 import { Select } from "../forms/Select"
 import { UseFormMethods } from "react-hook-form"
 
-type TimeFieldDefaultValues = {
-  hours?: number
-  minutes?: number
-  seconds?: number
-  time?: "am" | "pm"
+type TimeFieldPeriod = "am" | "pm"
+
+export type TimeFieldValues = {
+  hours?: string
+  minutes?: string
+  seconds?: string
+  period?: TimeFieldPeriod
 }
 
 export type TimeFieldProps = {
   error?: boolean
   register: UseFormMethods["register"]
+  watch: UseFormMethods["watch"]
   name?: string
   id?: string
   label: string
   required?: boolean
   readerOnly?: boolean
-  defaultValues?: TimeFieldDefaultValues
+  defaultValues?: TimeFieldValues
+  disabled?: boolean
 }
 
 const TimeField = ({
   required = false,
   error,
   register,
+  watch,
   name,
   id,
   label,
   readerOnly,
   defaultValues,
+  disabled,
 }: TimeFieldProps) => {
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
   }
+
+  // it prevents partial fill, all fields should be filled or nothing
+  const [innerRequiredRule, setInnerRequiredRule] = useState(false)
+
+  const hoursField = watch(fieldName("hours"))
+  const minutesField = watch(fieldName("minutes"))
+  const secondsField = watch(fieldName("seconds"))
+
+  useEffect(() => {
+    const someFieldsFilled = hoursField || minutesField || secondsField
+    setInnerRequiredRule(someFieldsFilled)
+  }, [hoursField, minutesField, secondsField])
 
   const labelClasses = ["field-label--caps"]
   if (readerOnly) labelClasses.push("sr-only")
@@ -43,7 +61,6 @@ const TimeField = ({
   return (
     <fieldset id={id}>
       <legend className={labelClasses.join(" ")}>{label}</legend>
-
       <div className="field-group--date">
         <Field
           name={fieldName("hours")}
@@ -53,7 +70,7 @@ const TimeField = ({
           placeholder="HH"
           error={error}
           validation={{
-            required: required,
+            required: required || innerRequiredRule,
             validate: {
               hourRange: (value: string) => {
                 if (!required && !value?.length) return true
@@ -65,6 +82,7 @@ const TimeField = ({
           inputProps={{ maxLength: 2 }}
           register={register}
           describedBy={`${id}-error`}
+          disabled={disabled}
         />
 
         <Field
@@ -75,7 +93,7 @@ const TimeField = ({
           placeholder="MM"
           error={error}
           validation={{
-            required: required,
+            required: required || innerRequiredRule,
             validate: {
               minutesRange: (value: string) => {
                 if (!required && !value?.length) return true
@@ -87,6 +105,7 @@ const TimeField = ({
           inputProps={{ maxLength: 2 }}
           register={register}
           describedBy={`${id}-error`}
+          disabled={disabled}
         />
 
         <Field
@@ -97,7 +116,7 @@ const TimeField = ({
           placeholder="SS"
           error={error}
           validation={{
-            required: required,
+            required: required || innerRequiredRule,
             validate: {
               secondsRange: (value: string) => {
                 if (!required && !value?.length) return true
@@ -109,19 +128,21 @@ const TimeField = ({
           inputProps={{ maxLength: 2 }}
           register={register}
           describedBy={`${id}-error`}
+          disabled={disabled}
         />
 
         <Select
-          name={fieldName("time")}
-          id={fieldName("time")}
+          name={fieldName("period")}
+          id={fieldName("period")}
           labelClassName="sr-only"
           label={t("t.time")}
           register={register}
           options={["am", "pm"]}
           keyPrefix="t"
-          defaultValue={defaultValues?.time || ""}
+          defaultValue={defaultValues?.period || ""}
           error={error}
           describedBy={`${id}-error`}
+          disabled={disabled}
         />
       </div>
 

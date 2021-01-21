@@ -1868,6 +1868,9 @@ export interface Listing {
   urlSlug: string;
 
   /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
@@ -2073,6 +2076,9 @@ export interface AddressCreate {
 export interface ListingCreate {
   /**  */
   status: ListingStatus;
+
+  /**  */
+  displayWaitlistSize: boolean;
 
   /**  */
   applicationMethods: ApplicationMethodCreate[];
@@ -2310,6 +2316,9 @@ export interface AddressUpdate {
 export interface ListingUpdate {
   /**  */
   status: ListingStatus;
+
+  /**  */
+  displayWaitlistSize: boolean;
 
   /**  */
   id?: string;
@@ -2653,7 +2662,7 @@ export interface Application {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
@@ -2932,7 +2941,7 @@ export interface ApplicationCreate {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;
@@ -3228,7 +3237,7 @@ export interface ApplicationUpdate {
   status: ApplicationStatus;
 
   /**  */
-  language: Language;
+  language?: Language;
 
   /**  */
   submissionType: ApplicationSubmissionType;

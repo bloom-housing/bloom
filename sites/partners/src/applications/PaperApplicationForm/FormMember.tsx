@@ -16,7 +16,7 @@ import {
   Form,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { ApplicationFormAddress } from "./ApplicationFormAddress"
+import { FormAddress } from "./FormAddress"
 import { nanoid } from "nanoid"
 
 type ApplicationFormMemberProps = {
@@ -26,18 +26,13 @@ type ApplicationFormMemberProps = {
   editedMemberId: string | boolean
 }
 
-const ApplicationFormMember = ({
-  onSubmit,
-  onClose,
-  members,
-  editedMemberId,
-}: ApplicationFormMemberProps) => {
+const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.id === editedMemberId)[0]
   }, [members, editedMemberId])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, handleSubmit, errors } = useForm({
+  const { register, watch, errors, trigger, getValues } = useForm({
     defaultValues: {
       firstName: currentlyEdited?.firstName,
       middleName: currentlyEdited?.middleName,
@@ -58,13 +53,24 @@ const ApplicationFormMember = ({
   const sameAddressField = watch("sameAddress")
   const workInRegionField = watch("workInRegion")
 
-  function onFormSubmit(data) {
+  async function onFormSubmit() {
+    const validation = await trigger()
+
+    if (!validation) return
+
+    const data = getValues()
+
+    const { sameAddress, workInRegion } = data
     const { birthMonth, birthDay, birthYear } = data.dateOfBirth
     const formData = {
+      createdAt: undefined,
+      updatedAt: undefined,
       ...data,
       birthMonth,
       birthDay,
       birthYear,
+      sameAddress: sameAddress ? sameAddress : null,
+      workInRegion: workInRegion ? workInRegion : null,
     }
 
     if (editedMemberId && typeof editedMemberId === "string") {
@@ -76,10 +82,6 @@ const ApplicationFormMember = ({
     }
 
     onClose()
-  }
-
-  function onFormError() {
-    console.log("on error")
   }
 
   const sameAddressOptions = [
@@ -109,7 +111,7 @@ const ApplicationFormMember = ({
   ]
 
   return (
-    <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
+    <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
         <GridSection title={t("application.review.householdDetails")} columns={4}>
           <GridCell>
@@ -206,7 +208,7 @@ const ApplicationFormMember = ({
         </GridSection>
 
         {sameAddressField === "no" &&
-          ApplicationFormAddress(
+          FormAddress(
             t("application.details.residenceAddress"),
             "address",
             "residence-member",
@@ -214,16 +216,15 @@ const ApplicationFormMember = ({
           )}
 
         {workInRegionField === "yes" &&
-          ApplicationFormAddress(
-            t("application.contact.workAddress"),
-            "workAddress",
-            "work",
-            register
-          )}
+          FormAddress(t("application.contact.workAddress"), "workAddress", "work", register)}
       </div>
 
       <div className="mt-6">
-        <Button onClick={() => false} styleType={AppearanceStyleType.primary}>
+        <Button
+          type="button"
+          onClick={() => onFormSubmit()}
+          styleType={AppearanceStyleType.primary}
+        >
           {t("t.submit")}
         </Button>
 
@@ -240,4 +241,4 @@ const ApplicationFormMember = ({
   )
 }
 
-export { ApplicationFormMember as default, ApplicationFormMember }
+export { FormMember as default, FormMember }

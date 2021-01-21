@@ -291,6 +291,7 @@ export const listingSeed1: ListingSeed = {
     // TODO confirm not used anywhere
     // totalUnits: 2,
     status: ListingStatus.active,
+    displayWaitlistSize: false,
   },
   amiChart: SanMateoHUD2019,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

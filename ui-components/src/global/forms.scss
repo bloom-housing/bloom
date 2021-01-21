@@ -267,8 +267,8 @@ input[type=number] {
 .flex > .field,
 .field-group--date .field {
   @apply flex-auto;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  margin-left: 0.325rem;
+  margin-right: 0.325rem;
 }
 
 .flex > .field,
@@ -287,6 +287,11 @@ input[type=number] {
   .field {
     max-width: 3.5rem;
     margin-bottom: 0;
+
+    select {
+      padding-right: 1.75rem;
+      background-position: right 0.625rem center;
+    }
 
     &:last-child {
       max-width: 4.5rem;

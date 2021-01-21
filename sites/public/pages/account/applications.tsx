@@ -27,6 +27,7 @@ export default () => {
     // applicationsService.list().then((apps) => {
     //   setApplications(apps)
     // })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const listing = {} as any
     const application = {} as Application
     listing.applicationDueDate = moment().add(10, "days").format()
