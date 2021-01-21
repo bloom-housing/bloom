@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsDate, IsEmail, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 @Entity({ name: "user_accounts" })
@@ -31,17 +31,20 @@ export class User {
   @Column("varchar")
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   firstName: string
 
   @Column("varchar", { nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   middleName?: string
 
   @Column("varchar")
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   lastName: string
 
   @Column("timestamp without time zone")

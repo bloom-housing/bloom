@@ -105,7 +105,7 @@ describe("Applications", () => {
         lastName: "",
         agency: "",
         phoneNumber: "",
-        emailAddress: "",
+        emailAddress: "alternate@contact.com",
         mailingAddress: {
           street: "",
           city: "",
