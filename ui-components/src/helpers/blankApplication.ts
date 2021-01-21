@@ -2,6 +2,7 @@ import {
   ApplicationStatus,
   ApplicationSubmissionType,
   Language,
+  PreferenceType,
 } from "@bloom-housing/backend-core/types"
 
 export const blankApplication = () => {
@@ -100,11 +101,18 @@ export const blankApplication = () => {
       sexualOrientation: "",
       howDidYouHear: [],
     },
-    preferences: {
-      liveIn: false,
-      none: false,
-      workIn: false,
-    },
+    preferences: [
+      {
+        data: {
+          type: PreferenceType.liveOrWork,
+          liveIn: null,
+          workIn: null,
+        },
+        preference: {
+          id: null,
+        },
+      },
+    ],
     confirmationId: "",
   }
 }

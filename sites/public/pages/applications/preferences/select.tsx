@@ -17,6 +17,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
+import { PreferenceType } from "@bloom-housing/backend-core/types"
 
 export default () => {
   const { conductor, application, listing } = useFormConductor("preferencesIntroduction")
@@ -38,7 +39,21 @@ export default () => {
       conductor.completeSection(4)
     }
 
-    conductor.currentStep.save({ preferences: data })
+    conductor.currentStep.save({
+      preferences: [
+        {
+          preference: {
+            // TODO it should not be a fixed 0 index preference
+            id: listing.preference[0].id,
+          },
+          data: {
+            type: PreferenceType.liveOrWork,
+            liveIn: data.liveIn,
+            workIn: data.workIn,
+          },
+        },
+      ],
+    })
     conductor.routeToNextOrReturnUrl()
   }
 

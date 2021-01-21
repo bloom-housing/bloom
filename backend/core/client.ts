@@ -2597,7 +2597,7 @@ export interface HouseholdMember {
 
 export interface ApplicationPreferences {
   /**  */
-  data?: AllDataTypes;
+  data: AllDataTypes;
 
   /**  */
   preference: Id;
@@ -2882,7 +2882,7 @@ export interface HouseholdMemberCreate {
 
 export interface ApplicationPreferencesCreate {
   /**  */
-  data?: AllDataTypes;
+  data: AllDataTypes;
 
   /**  */
   preference: Id;
@@ -3166,7 +3166,7 @@ export interface HouseholdMemberUpdate {
 
 export interface ApplicationPreferencesUpdate {
   /**  */
-  data?: AllDataTypes;
+  data: AllDataTypes;
 
   /**  */
   id?: string;
@@ -3598,7 +3598,6 @@ export enum ApplicationMethodType {
 }
 
 export enum PreferenceType {
-  'base' = 'base',
   'liveOrWork' = 'liveOrWork',
   'displaced' = 'displaced'
 }
@@ -3631,4 +3630,4 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
-export type AllDataTypes = BasePreference | LiveOrWorkPreference | DisplacedPreference;
+export type AllDataTypes = LiveOrWorkPreference | DisplacedPreference;
