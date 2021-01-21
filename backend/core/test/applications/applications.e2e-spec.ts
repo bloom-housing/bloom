@@ -130,11 +130,7 @@ describe("Applications", () => {
       incomePeriod: IncomePeriod.perMonth,
       householdMembers: [],
       preferredUnit: ["a", "b"],
-      preferences: {
-        liveIn: false,
-        none: false,
-        workIn: false,
-      },
+      preferences: [],
     }
   }
 
