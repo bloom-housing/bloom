@@ -21,7 +21,11 @@ import { ResourceAction } from "../auth/resource_action.decorator"
 import { authzActions } from "../auth/authz.service"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
-import { BasePreference, NotePreference } from "./entities/application-preferences.entity"
+import {
+  BasePreference,
+  DisplacedPreference,
+  LiveOrWorkPreference,
+} from "./entities/application-preferences.entity"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -34,7 +38,7 @@ import { BasePreference, NotePreference } from "./entities/application-preferenc
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
   })
 )
-@ApiExtraModels(BasePreference, NotePreference)
+@ApiExtraModels(BasePreference, LiveOrWorkPreference, DisplacedPreference)
 export class ApplicationsSubmissionController {
   constructor(
     private readonly applicationsService: ApplicationsService,

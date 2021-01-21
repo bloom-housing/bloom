@@ -1393,6 +1393,9 @@ export interface PreferenceLink {
 
 export interface Preference {
   /**  */
+  type: PreferenceType;
+
+  /**  */
   id: string;
 
   /**  */
@@ -1938,6 +1941,9 @@ export interface AssetCreate {
 
 export interface PreferenceCreate {
   /**  */
+  type: PreferenceType;
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -2159,6 +2165,9 @@ export interface AssetUpdate {
 
 export interface PreferenceUpdate {
   /**  */
+  type: PreferenceType;
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -2368,12 +2377,26 @@ export interface BasePreference {
   type: PreferenceType;
 }
 
-export interface NotePreference {
+export interface LiveOrWorkPreference {
   /**  */
   type: PreferenceType;
 
   /**  */
-  note: string;
+  liveIn: boolean;
+
+  /**  */
+  workIn: boolean;
+}
+
+export interface DisplacedPreference {
+  /**  */
+  type: PreferenceType;
+
+  /**  */
+  name: string;
+
+  /**  */
+  address: AddressCreate;
 }
 
 export interface Applicant {
@@ -3573,6 +3596,12 @@ export enum ApplicationMethodType {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
 }
+
+export enum PreferenceType {
+  'base' = 'base',
+  'liveOrWork' = 'liveOrWork',
+  'displaced' = 'displaced'
+}
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ListingEventType {
   'openHouse' = 'openHouse',
@@ -3582,11 +3611,6 @@ export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
-export enum PreferenceType {
-  'base' = 'base',
-  'note' = 'note'
-}
-
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'
@@ -3607,4 +3631,4 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
-export type AllDataTypes = BasePreference | NotePreference;
+export type AllDataTypes = BasePreference | LiveOrWorkPreference | DisplacedPreference;

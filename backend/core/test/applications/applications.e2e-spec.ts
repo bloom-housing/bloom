@@ -16,7 +16,9 @@ import {
   ApplicationUpdate,
   IncomePeriod,
   Language,
+  PreferenceType,
 } from "@bloom-housing/backend-core/types"
+import { ListingDto } from "../../src/listings/dto/listing.dto"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
@@ -32,6 +34,7 @@ describe("Applications", () => {
   let user2AccessToken: string
   let adminAccessToken: string
   let listingId: string
+  let listing: ListingDto
 
   const getTestAppBody: () => ApplicationUpdate = () => {
     return {
@@ -155,6 +158,7 @@ describe("Applications", () => {
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    listing = res.body
     listingId = res.body[0].id
   })
 
@@ -169,6 +173,18 @@ describe("Applications", () => {
 
   it(`/POST `, async () => {
     const body = getTestAppBody()
+    body.preferences = [
+      {
+        data: {
+          type: PreferenceType.liveOrWork,
+          liveIn: true,
+          workIn: true,
+        },
+        preference: {
+          id: listing[0].preferences[0].id,
+        },
+      },
+    ]
     let res = await supertest(app.getHttpServer())
       .post(`/applications/submit`)
       .send(body)

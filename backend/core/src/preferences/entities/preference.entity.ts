@@ -9,9 +9,19 @@ import {
 } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import {
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApplicationPreference } from "../../applications/entities/application-preferences.entity"
+import { ApiProperty } from "@nestjs/swagger"
+import { PreferenceType } from "../../shared/preference-type"
 
 export class PreferenceLink {
   @Expose()
@@ -84,6 +94,12 @@ class Preference {
     (applicationPreference) => applicationPreference.preference
   )
   applicationPreferences: ApplicationPreference
+
+  @Column({ type: "enum", enum: PreferenceType })
+  @Expose()
+  @IsEnum(PreferenceType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: PreferenceType, enumName: "PreferenceType" })
+  type: PreferenceType
 }
 
 export { Preference as default, Preference }

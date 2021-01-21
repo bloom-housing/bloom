@@ -16,6 +16,7 @@ import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { SanMateoHUD2019 } from "./ami-charts"
+import { PreferenceType } from "../shared/preference-type"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
@@ -175,6 +176,7 @@ export const listingSeed1: ListingSeed = {
       ordinal: 1,
       subtitle: "Subtitle",
       title: "Title",
+      type: PreferenceType.liveOrWork,
     },
   ],
   listingEvents: [
