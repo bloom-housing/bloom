@@ -10,24 +10,21 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
 >
   <TabNav>
     <nav
-      aria-label="Secondary navigation"
       className="tab-nav"
-      role="tablist"
     >
-      <ul>
+      <ul
+        aria-label="Secondary navigation"
+        role="tablist"
+      >
         <Tab
           href="javascript:alert('Other Tab')"
         >
           <li
             className="tab-nav__tab"
             onKeyUp={[Function]}
+            role="tab"
           >
             <LocalizedLink
-              aria={
-                Object {
-                  "role": "tab",
-                }
-              }
               href="javascript:alert('Other Tab')"
               tabIndex={-1}
             >
@@ -38,7 +35,6 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
                   href="javascript:alert('Other Tab')"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
-                  role="tab"
                   tabIndex={-1}
                 >
                   Other
@@ -52,15 +48,15 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
           href="javascript:alert('Default Tab')"
         >
           <li
+            aria-selected="true"
             className="tab-nav__tab"
             onKeyUp={[Function]}
+            role="tab"
           >
             <LocalizedLink
               aria={
                 Object {
                   "aria-current": "page",
-                  "aria-selected": "true",
-                  "role": "tab",
                 }
               }
               className="is-active"
@@ -72,12 +68,10 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
               >
                 <a
                   aria-current="page"
-                  aria-selected="true"
                   className="is-active"
                   href="javascript:alert('Default Tab')"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
-                  role="tab"
                   tabIndex={0}
                 >
                   Default
@@ -102,25 +96,26 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
 >
   <TabNav>
     <nav
-      aria-label="Secondary navigation"
       className="tab-nav"
-      role="tablist"
     >
-      <ul>
+      <ul
+        aria-label="Secondary navigation"
+        role="tablist"
+      >
         <Tab
           current={true}
           href="javascript:alert('Other Tab')"
         >
           <li
+            aria-selected="true"
             className="tab-nav__tab"
             onKeyUp={[Function]}
+            role="tab"
           >
             <LocalizedLink
               aria={
                 Object {
                   "aria-current": "page",
-                  "aria-selected": "true",
-                  "role": "tab",
                 }
               }
               className="is-active"
@@ -132,12 +127,10 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
               >
                 <a
                   aria-current="page"
-                  aria-selected="true"
                   className="is-active"
                   href="javascript:alert('Other Tab')"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
-                  role="tab"
                   tabIndex={0}
                 >
                   Other
@@ -152,13 +145,9 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
           <li
             className="tab-nav__tab"
             onKeyUp={[Function]}
+            role="tab"
           >
             <LocalizedLink
-              aria={
-                Object {
-                  "role": "tab",
-                }
-              }
               href="javascript:alert('Default Tab')"
               tabIndex={-1}
             >
@@ -169,7 +158,6 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
                   href="javascript:alert('Default Tab')"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
-                  role="tab"
                   tabIndex={-1}
                 >
                   Default

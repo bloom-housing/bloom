@@ -21,17 +21,17 @@ const Tab = (props: TabProps) => {
     }
   }
 
-  const aria = {
-    role: "tab",
-  }
-  if (props.current) aria["aria-current"] = "page"
-  if (props.current) aria["aria-selected"] = "true"
-
   return (
-    <li ref={tabRef} onKeyUp={handleKeyboard} className="tab-nav__tab">
+    <li
+      role="tab"
+      aria-selected={props.current ? "true" : undefined}
+      ref={tabRef}
+      onKeyUp={handleKeyboard}
+      className="tab-nav__tab"
+    >
       <LocalizedLink
         className={props.current ? "is-active" : undefined}
-        aria={aria}
+        aria={props.current ? { "aria-current": "page" } : undefined}
         href={props.href}
         tabIndex={props.current ? 0 : -1}
       >
