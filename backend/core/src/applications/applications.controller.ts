@@ -35,11 +35,7 @@ import { Pagination, PaginationQueryParams } from "../utils/pagination.dto"
 import { Application } from "./entities/application.entity"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import {
-  BasePreference,
-  DisplacedPreference,
-  LiveOrWorkPreference,
-} from "./entities/application-preferences.entity"
+import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -97,7 +93,7 @@ export class ApplicationsCsvListQueryParams {
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(BasePreference, LiveOrWorkPreference, DisplacedPreference)
+@ApiExtraModels(...applicationPreferenceExtraModels)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,

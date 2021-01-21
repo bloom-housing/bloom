@@ -16,12 +16,12 @@ import {
   ApplicationUpdate,
   IncomePeriod,
   Language,
-  PreferenceType,
 } from "@bloom-housing/backend-core/types"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
+import { InputType } from "../../src/shared/input-type"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -175,16 +175,53 @@ describe("Applications", () => {
     const body = getTestAppBody()
     body.preferences = [
       {
-        data: {
-          type: PreferenceType.liveOrWork,
-          liveIn: true,
-          workIn: true,
-        },
+        data: [
+          {
+            type: InputType.boolean,
+            key: "liveIn",
+            value: true,
+          },
+          {
+            type: InputType.text,
+            key: "note1",
+            value: "some text",
+          },
+          {
+            type: InputType.address,
+            key: "displaceeAddress",
+            value: {
+              street: "",
+              street2: "",
+              city: "",
+              state: "",
+              zipCode: "",
+            },
+          },
+        ],
         preference: {
           id: listing[0].preferences[0].id,
         },
       },
     ]
+
+    // formMetadata: [
+    //   {
+    //     type: InputType.boolean,
+    //     label: "Live In",
+    //     key: "liveIn",
+    //   },
+    //   {
+    //     type: InputType.text,
+    //     label: "Some note input",
+    //     key: "note1",
+    //   },
+    //   {
+    //     type: InputType.address,
+    //     label: "Address",
+    //     key: "displaceeAddress",
+    //   },
+    // ],
+
     let res = await supertest(app.getHttpServer())
       .post(`/applications/submit`)
       .send(body)

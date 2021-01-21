@@ -1391,10 +1391,18 @@ export interface PreferenceLink {
   url: string;
 }
 
-export interface Preference {
+export interface BaseInputMetadata {
   /**  */
-  type: PreferenceType;
+  type: InputType;
 
+  /**  */
+  label: string;
+
+  /**  */
+  key: string;
+}
+
+export interface Preference {
   /**  */
   id: string;
 
@@ -1418,6 +1426,9 @@ export interface Preference {
 
   /**  */
   links: PreferenceLink[];
+
+  /**  */
+  formMetadata?: BaseInputMetadata[];
 }
 
 export interface MinMaxCurrency {
@@ -1941,9 +1952,6 @@ export interface AssetCreate {
 
 export interface PreferenceCreate {
   /**  */
-  type: PreferenceType;
-
-  /**  */
   ordinal: number;
 
   /**  */
@@ -1957,6 +1965,9 @@ export interface PreferenceCreate {
 
   /**  */
   links: PreferenceLink[];
+
+  /**  */
+  formMetadata?: BaseInputMetadata[];
 }
 
 export interface Id {
@@ -2165,9 +2176,6 @@ export interface AssetUpdate {
 
 export interface PreferenceUpdate {
   /**  */
-  type: PreferenceType;
-
-  /**  */
   ordinal: number;
 
   /**  */
@@ -2181,6 +2189,9 @@ export interface PreferenceUpdate {
 
   /**  */
   links: PreferenceLink[];
+
+  /**  */
+  formMetadata?: BaseInputMetadata[];
 
   /**  */
   id: string;
@@ -2372,31 +2383,37 @@ export interface ListingUpdate {
   applicationConfig?: object;
 }
 
-export interface BasePreference {
+export interface BooleanInput {
   /**  */
-  type: PreferenceType;
+  type: InputType;
+
+  /**  */
+  value: boolean;
+
+  /**  */
+  key: string;
 }
 
-export interface LiveOrWorkPreference {
+export interface TextInput {
   /**  */
-  type: PreferenceType;
+  type: InputType;
 
   /**  */
-  liveIn: boolean;
+  value: string;
 
   /**  */
-  workIn: boolean;
+  key: string;
 }
 
-export interface DisplacedPreference {
+export interface AddressInput {
   /**  */
-  type: PreferenceType;
+  type: InputType;
 
   /**  */
-  name: string;
+  value: AddressCreate;
 
   /**  */
-  address: AddressCreate;
+  key: string;
 }
 
 export interface Applicant {
@@ -2597,7 +2614,7 @@ export interface HouseholdMember {
 
 export interface ApplicationPreferences {
   /**  */
-  data: AllDataTypes;
+  data: AllDataTypes[];
 
   /**  */
   preference: Id;
@@ -2882,7 +2899,7 @@ export interface HouseholdMemberCreate {
 
 export interface ApplicationPreferencesCreate {
   /**  */
-  data: AllDataTypes;
+  data: AllDataTypes[];
 
   /**  */
   preference: Id;
@@ -3166,7 +3183,7 @@ export interface HouseholdMemberUpdate {
 
 export interface ApplicationPreferencesUpdate {
   /**  */
-  data: AllDataTypes;
+  data: AllDataTypes[];
 
   /**  */
   id?: string;
@@ -3597,9 +3614,10 @@ export enum ApplicationMethodType {
   'LeasingAgent' = 'LeasingAgent'
 }
 
-export enum PreferenceType {
-  'liveOrWork' = 'liveOrWork',
-  'displaced' = 'displaced'
+export enum InputType {
+  'boolean' = 'boolean',
+  'text' = 'text',
+  'address' = 'address'
 }
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ListingEventType {
@@ -3630,4 +3648,4 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
-export type AllDataTypes = LiveOrWorkPreference | DisplacedPreference;
+export type AllDataTypes = BooleanInput | TextInput | AddressInput;

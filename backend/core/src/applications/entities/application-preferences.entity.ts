@@ -1,42 +1,61 @@
 import { Expose, Type } from "class-transformer"
-import { IsBoolean, IsDefined, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
+import {
+  ArrayMaxSize,
+  IsBoolean,
+  IsDefined,
+  IsEnum,
+  IsString,
+  MaxLength,
+  ValidateNested,
+} from "class-validator"
 import { Column, Entity, ManyToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApiProperty, getSchemaPath } from "@nestjs/swagger"
 import { Application } from "./application.entity"
 import { Preference } from "../../preferences/entities/preference.entity"
+import { InputType } from "../../shared/input-type"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
-import { PreferenceType } from "../../shared/preference-type"
 
-export class BasePreference {
+export class BaseInput {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(PreferenceType, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: PreferenceType, enumName: "PreferenceType" })
-  type: PreferenceType
-}
+  @IsEnum(InputType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: InputType, enumName: "InputType" })
+  type: InputType
 
-export class LiveOrWorkPreference extends BasePreference {
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  liveIn: boolean
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  workIn: boolean
-}
-
-export class DisplacedPreference extends BasePreference {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  name: string
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  key: string
+}
 
+export class BaseInputMetadata extends BaseInput {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  label: string
+}
+
+export class BooleanInput extends BaseInput {
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  value: boolean
+}
+
+export class TextInput extends BaseInput {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  value: string
+}
+
+export class AddressInput extends BaseInput {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  address: AddressCreateDto
+  value: AddressCreateDto
 }
 
 @Entity()
@@ -50,21 +69,29 @@ export class ApplicationPreference extends AbstractEntity {
   @Column("jsonb", { nullable: false })
   @Expose()
   @ApiProperty({
-    oneOf: [
-      { $ref: getSchemaPath(LiveOrWorkPreference) },
-      { $ref: getSchemaPath(DisplacedPreference) },
-    ],
+    type: "array",
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(BooleanInput) },
+        { $ref: getSchemaPath(TextInput) },
+        { $ref: getSchemaPath(AddressInput) },
+      ],
+    },
   })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default]})
-  @Type(() => BasePreference, {
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => BaseInput, {
     keepDiscriminatorProperty: true,
     discriminator: {
       property: "type",
       subTypes: [
-        { value: LiveOrWorkPreference, name: PreferenceType.liveOrWork },
-        { value: DisplacedPreference, name: PreferenceType.displaced },
+        { value: BooleanInput, name: InputType.boolean },
+        { value: TextInput, name: InputType.text },
+        { value: AddressInput, name: InputType.address },
       ],
     },
   })
-  data: LiveOrWorkPreference | DisplacedPreference | null
+  data: Array<BooleanInput | TextInput | AddressInput>
 }
+
+export const applicationPreferenceExtraModels = [BooleanInput, TextInput, AddressInput]
