@@ -30,6 +30,7 @@ import { HouseholdMember } from "./household-member.entity"
 import { ApplicationPreferences } from "./application-preferences.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
 
 export enum ApplicationStatus {
   draft = "draft",
@@ -233,4 +234,8 @@ export class Application extends AbstractEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   submissionDate?: Date | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  applicationFlaggedSet: ApplicationFlaggedSet[]
 }

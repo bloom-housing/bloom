@@ -20,6 +20,7 @@ import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import * as bodyParser from "body-parser"
+import { ApplicationFlaggedSetModule } from "./application-flagged-sets/application-flagged-set.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -61,6 +62,7 @@ export class AppModule {
         PropertiesModule,
         PropertyGroupsModule,
         AmiChartsModule,
+        ApplicationFlaggedSetModule,
       ],
     }
   }
