@@ -82,6 +82,9 @@ export class User {
   @Column("boolean", { default: false })
   isAdmin: boolean
 
+  @Column("varchar", { select: false, nullable: true })
+  resetToken: string
+
   /**
    * Array of roles this user can become. Logic is simple right now, but in theory this will expand to take into
    * account membership in a domain (company-level or admin area level for example).

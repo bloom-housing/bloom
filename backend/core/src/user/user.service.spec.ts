@@ -1,5 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing"
-import { UserService } from "./user.service"
+import { HttpException } from "@nestjs/common"
+import { UserService, USER_ERRORS } from "./user.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
 
@@ -8,7 +9,7 @@ import { User } from "./entities/user.entity"
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
 declare const expect: jest.Expect
 
-const mockUserRepo = {}
+const mockUserRepo = { findOne: jest.fn() }
 
 describe("UserService", () => {
   let service: UserService
@@ -29,5 +30,15 @@ describe("UserService", () => {
 
   it("should be defined", () => {
     expect(service).toBeDefined()
+  })
+
+  describe("forgotPassword", () => {
+    it("should return 400 if email is not found", () => {
+      void service.forgotPassword("abc@xyz.com").then((data) => {
+        expect(data).toThrow(
+          new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+        )
+      })
+    })
   })
 })

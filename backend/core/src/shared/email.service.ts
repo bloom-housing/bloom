@@ -90,6 +90,29 @@ export class EmailService {
     )
   }
 
+  public async forgotPassword(user: User, appUrl: string) {
+    const compiledTemplate = this.template("forgot-password")
+    const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
+
+    if (this.configService.get<string>("NODE_ENV") == "production") {
+      Logger.log(
+        `Preparing to send a forget password email to ${user.email} from ${this.configService.get<
+          string
+        >("EMAIL_FROM_ADDRESS")}...`
+      )
+    }
+
+    await this.send(
+      user.email,
+      this.polyglot.t("forgotPassword.subject"),
+      compiledTemplate({
+        resetUrl: resetUrl,
+        resetOptions: { appUrl: appUrl },
+        user: user,
+      })
+    )
+  }
+
   private template(view: string) {
     return Handlebars.compile(
       fs.readFileSync(path.join(path.resolve(__dirname, "..", "views"), `/${view}.hbs`), "utf8")

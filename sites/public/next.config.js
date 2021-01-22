@@ -177,6 +177,8 @@ module.exports = withCSS(
               "/disclaimer": { page: "/disclaimer" },
               "/privacy": { page: "/privacy" },
               "/sign-in": { page: "/sign-in" },
+              "/forgot-password": { page: "/forgot-password" },
+              "/reset-password": { page: "/reset-password" },
               "/create-account": { page: "/create-account" },
               "/account/applications": { page: "/account/applications" },
               "/account/dashboard": { page: "/account/dashboard" },

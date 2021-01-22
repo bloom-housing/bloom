@@ -18,6 +18,14 @@
     "footer": "Alameda County - Housing and Community Development (HCD) Department",
     "thankYou": "Thank you"
   },
+  "forgotPassword": {
+    "callToAction": "If you did make this request, please click on the link below to reset your password:",
+    "changePassword": "Change my password",
+    "ignoreRequest": "If you didn't request this, please ignore this email.",
+    "passwordInfo": "Your password won't change until you access the link above and create a new one.",
+    "resetRequest": "A request to reset your Bloom Housing Portal website password for %{appUrl} has recently been made.",
+    "subject": "Forgot your password?"
+  },
   "leasingAgent": {
     "contactAgentToUpdateInfo": "If you need to update information on your application, do not apply again. Contact the agent. See below for contact information for the Agent for this listing.",
     "officeHours": "Office Hours:"
