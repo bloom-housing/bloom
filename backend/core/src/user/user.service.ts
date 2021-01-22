@@ -116,7 +116,7 @@ export class UserService {
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
-    const payload = decode(dto.token, process.env.SECRET)
+    const payload = decode(user.resetToken, process.env.SECRET)
     if (moment(payload.expiresAt) < moment()) {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
