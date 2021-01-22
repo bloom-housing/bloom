@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Navigation/Tab Nav Default 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <TabNav>
+    <nav
+      className="tab-nav"
+    >
+      <ul
+        aria-label="Secondary navigation"
+        role="tablist"
+      >
+        <Tab
+          href="javascript:alert('Other Tab')"
+        >
+          <li
+            className="tab-nav__tab"
+            onKeyUp={[Function]}
+            role="tab"
+          >
+            <LocalizedLink
+              href="javascript:alert('Other Tab')"
+              tabIndex={-1}
+            >
+              <Link
+                href="javascript:alert('Other Tab')"
+              >
+                <a
+                  href="javascript:alert('Other Tab')"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  tabIndex={-1}
+                >
+                  Other
+                </a>
+              </Link>
+            </LocalizedLink>
+          </li>
+        </Tab>
+        <Tab
+          current={true}
+          href="javascript:alert('Default Tab')"
+          tagContent="15"
+        >
+          <li
+            aria-selected="true"
+            className="tab-nav__tab"
+            onKeyUp={[Function]}
+            role="tab"
+          >
+            <LocalizedLink
+              aria={
+                Object {
+                  "aria-current": "page",
+                }
+              }
+              className="is-active"
+              href="javascript:alert('Default Tab')"
+              tabIndex={0}
+            >
+              <Link
+                href="javascript:alert('Default Tab')"
+              >
+                <a
+                  aria-current="page"
+                  className="is-active"
+                  href="javascript:alert('Default Tab')"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  tabIndex={0}
+                >
+                  Default
+                  <Tag
+                    pillStyle={true}
+                  >
+                    <span
+                      className="tag is-pill"
+                    >
+                      15
+                    </span>
+                  </Tag>
+                </a>
+              </Link>
+            </LocalizedLink>
+          </li>
+        </Tab>
+      </ul>
+    </nav>
+  </TabNav>
+</div>
+`;
+
+exports[`Storyshots Navigation/Tab Nav Other 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <TabNav>
+    <nav
+      className="tab-nav"
+    >
+      <ul
+        aria-label="Secondary navigation"
+        role="tablist"
+      >
+        <Tab
+          current={true}
+          href="javascript:alert('Other Tab')"
+        >
+          <li
+            aria-selected="true"
+            className="tab-nav__tab"
+            onKeyUp={[Function]}
+            role="tab"
+          >
+            <LocalizedLink
+              aria={
+                Object {
+                  "aria-current": "page",
+                }
+              }
+              className="is-active"
+              href="javascript:alert('Other Tab')"
+              tabIndex={0}
+            >
+              <Link
+                href="javascript:alert('Other Tab')"
+              >
+                <a
+                  aria-current="page"
+                  className="is-active"
+                  href="javascript:alert('Other Tab')"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  tabIndex={0}
+                >
+                  Other
+                </a>
+              </Link>
+            </LocalizedLink>
+          </li>
+        </Tab>
+        <Tab
+          href="javascript:alert('Default Tab')"
+          tagContent="15"
+        >
+          <li
+            className="tab-nav__tab"
+            onKeyUp={[Function]}
+            role="tab"
+          >
+            <LocalizedLink
+              href="javascript:alert('Default Tab')"
+              tabIndex={-1}
+            >
+              <Link
+                href="javascript:alert('Default Tab')"
+              >
+                <a
+                  href="javascript:alert('Default Tab')"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  tabIndex={-1}
+                >
+                  Default
+                  <Tag
+                    pillStyle={true}
+                  >
+                    <span
+                      className="tag is-pill"
+                    >
+                      15
+                    </span>
+                  </Tag>
+                </a>
+              </Link>
+            </LocalizedLink>
+          </li>
+        </Tab>
+      </ul>
+    </nav>
+  </TabNav>
+</div>
+`;
