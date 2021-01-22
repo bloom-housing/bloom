@@ -7,12 +7,12 @@ import { openDateState } from "../helpers/state"
 import "./Hero.scss"
 
 export interface HeroProps {
-  title: JSX.Element
+  title: React.ReactNode
   backgroundImage?: string
   buttonTitle: string
   buttonLink: string
   listings?: Listing[]
-  children?: JSX.Element
+  children?: React.ReactNode
 }
 
 const listingOpen = (listing: Listing) => {

@@ -6,7 +6,7 @@ export interface InfoCardProps {
   title: string
   externalHref?: string
   className?: string
-  children: JSX.Element | string
+  children: React.ReactNode
 }
 
 const InfoCard = (props: InfoCardProps) => {
