@@ -11,7 +11,7 @@ export const Default = () => {
   return (
     <TabNav>
       <Tab href="javascript:alert('Other Tab')">Other</Tab>
-      <Tab href="javascript:alert('Default Tab')" current>
+      <Tab href="javascript:alert('Default Tab')" current tagContent="15">
         Default
       </Tab>
     </TabNav>
@@ -24,7 +24,9 @@ export const Other = () => {
       <Tab href="javascript:alert('Other Tab')" current>
         Other
       </Tab>
-      <Tab href="javascript:alert('Default Tab')">Default</Tab>
+      <Tab href="javascript:alert('Default Tab')" tagContent="15">
+        Default
+      </Tab>
     </TabNav>
   )
 }

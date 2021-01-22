@@ -46,6 +46,7 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
         <Tab
           current={true}
           href="javascript:alert('Default Tab')"
+          tagContent="15"
         >
           <li
             aria-selected="true"
@@ -75,6 +76,15 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
                   tabIndex={0}
                 >
                   Default
+                  <Tag
+                    pillStyle={true}
+                  >
+                    <span
+                      className="tag is-pill"
+                    >
+                      15
+                    </span>
+                  </Tag>
                 </a>
               </Link>
             </LocalizedLink>
@@ -141,6 +151,7 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
         </Tab>
         <Tab
           href="javascript:alert('Default Tab')"
+          tagContent="15"
         >
           <li
             className="tab-nav__tab"
@@ -161,6 +172,15 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
                   tabIndex={-1}
                 >
                   Default
+                  <Tag
+                    pillStyle={true}
+                  >
+                    <span
+                      className="tag is-pill"
+                    >
+                      15
+                    </span>
+                  </Tag>
                 </a>
               </Link>
             </LocalizedLink>

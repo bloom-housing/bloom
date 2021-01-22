@@ -1,10 +1,12 @@
 import React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
+import { Tag } from "../text/Tag"
 import "./TabNav.scss"
 
 export interface TabProps {
   href: string
   current?: boolean
+  tagContent?: React.ReactNode
   children: React.ReactNode
 }
 
@@ -36,6 +38,7 @@ const Tab = (props: TabProps) => {
         tabIndex={props.current ? 0 : -1}
       >
         {props.children}
+        {props.tagContent && <Tag pillStyle={true}>{props.tagContent}</Tag>}
       </LocalizedLink>
     </li>
   )
