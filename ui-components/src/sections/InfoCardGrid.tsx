@@ -4,7 +4,7 @@ import "./InfoCardGrid.scss"
 export interface InfoCardGridProps {
   title: string
   subtitle?: string
-  children: JSX.Element | JSX.Element[]
+  children: React.ReactNode
 }
 
 const InfoCardGrid = (props: InfoCardGridProps) => (
