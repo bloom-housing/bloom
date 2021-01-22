@@ -13,3 +13,8 @@ GTM_KEY = "GTM-TBD"
 
 [context.branch-deploy.environment]
 GTM_KEY = "GTM-TBD"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
