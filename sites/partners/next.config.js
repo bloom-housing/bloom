@@ -64,6 +64,14 @@ module.exports = withCSS(
 
           return languagePaths
         },
+        rewrites() {
+          return [
+            {
+              source: "/:path*",
+              destination: "/",
+            },
+          ]
+        },
       })
     )
   )
