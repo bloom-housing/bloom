@@ -5,7 +5,7 @@ export interface ContentSectionProps {
   title?: string
   subtitle?: string
   icon?: string
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 const ContentSection = (props: ContentSectionProps) => (

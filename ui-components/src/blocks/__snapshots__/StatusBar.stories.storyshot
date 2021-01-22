@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Blocks/Status Bar Status Bar Draft 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <StatusBar
+    tagLabel="Draft"
+    tagStyle="is-primary"
+  >
+    <section
+      className="status-bar"
+    >
+      <div
+        className="status-bar__row tag-only"
+      >
+        <div
+          className="status-bar__tag"
+        >
+          <Tag
+            pillStyle={true}
+            styleType="is-primary"
+          >
+            <span
+              className="tag is-primary is-pill"
+            >
+              Draft
+            </span>
+          </Tag>
+        </div>
+      </div>
+    </section>
+  </StatusBar>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;
+
+exports[`Storyshots Blocks/Status Bar Status Bar Success And Back Button 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <StatusBar
+    backButton={
+      <Button
+        icon="arrow-back"
+        inlineIcon="left"
+        onClick={[Function]}
+      >
+        Back
+      </Button>
+    }
+    tagLabel="Submitted"
+    tagStyle="is-success"
+  >
+    <section
+      className="status-bar"
+    >
+      <div
+        className="status-bar__row"
+      >
+        <Button
+          icon="arrow-back"
+          inlineIcon="left"
+          onClick={[Function]}
+        >
+          <button
+            className="button is-inline inline-icon--left"
+            onClick={[Function]}
+          >
+            <Icon
+              className="button__icon"
+              size="tiny"
+              symbol="arrow-back"
+            >
+              <span
+                className="ui-icon ui-tiny button__icon"
+              >
+                <svg>
+                  <use
+                    xlinkHref="#i-arrow-back"
+                  />
+                </svg>
+              </span>
+            </Icon>
+            <span
+              className="button__content"
+            >
+              Back
+            </span>
+          </button>
+        </Button>
+        <div
+          className="status-bar__tag"
+        >
+          <Tag
+            pillStyle={true}
+            styleType="is-success"
+          >
+            <span
+              className="tag is-success is-pill"
+            >
+              Submitted
+            </span>
+          </Tag>
+        </div>
+      </div>
+    </section>
+  </StatusBar>
+  <InlineSVG
+    cacheRequests={true}
+    src="/images/icons.svg"
+    uniquifyIDs={false}
+  />
+</div>
+`;

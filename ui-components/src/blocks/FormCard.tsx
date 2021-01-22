@@ -3,7 +3,7 @@ import "./FormCard.scss"
 
 export interface FormCardProps {
   header?: string
-  children: JSX.Element | JSX.Element[]
+  children: React.ReactNode
   className?: string
 }
 
