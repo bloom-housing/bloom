@@ -541,6 +541,8 @@
     "officeHours": "Office Hours"
   },
   "listings": {
+    "active": "Accepting Applications",
+    "pending": "Coming Soon",
     "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
@@ -643,6 +645,7 @@
     "showClosedListings": "Show Closed Listings",
     "singleRoomOccupancy": "Single Room Occupancy",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
+    "totalListings": "Total Listings",
     "unitTypes": {
       "oneBdrm": "1 BR",
       "twoBdrm": "2 BR",
@@ -678,7 +681,10 @@
     "processInfo": "Process Info",
     "featuresCards": "Features Cards",
     "neighborhoodBuildings": "Neighborhood Buildings",
-    "additionalInformationEnvelope": "Additional Information Envelope"
+    "additionalInformationEnvelope": "Additional Information Envelope",
+    "listingName": "Listing Name",
+    "applicationsSubmitted": "Applications Submitted",
+    "listingStatus": "Listing Status"
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",
