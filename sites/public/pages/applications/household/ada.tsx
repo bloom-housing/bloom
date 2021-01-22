@@ -57,7 +57,7 @@ export default () => {
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
-          labels={conductor.config.sections}
+          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
         />
       </FormCard>
 
@@ -96,7 +96,7 @@ export default () => {
                 }}
               />
               <label htmlFor="mobility" className="font-semibold">
-                For Mobility Impairments
+                {t("application.ada.mobility")}
               </label>
             </div>
 
@@ -115,7 +115,7 @@ export default () => {
                 }}
               />
               <label htmlFor="vision" className="font-semibold">
-                For Vision Impairments
+                {t("application.ada.vision")}
               </label>
             </div>
 
@@ -134,7 +134,7 @@ export default () => {
                 }}
               />
               <label htmlFor="hearing" className="font-semibold">
-                For Hearing Impairments
+                {t("application.ada.hearing")}
               </label>
             </div>
 

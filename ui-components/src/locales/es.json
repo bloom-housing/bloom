@@ -53,7 +53,7 @@
       "title": "¿Cuál es su nombre?",
       "yourName": "Su nombre",
       "firstName": "Nombre",
-      "middleName": "Inicial media (opcional)",
+      "middleNameOptional": "Inicial media (opcional)",
       "lastName": "Apellido",
       "yourDateOfBirth": "Su fecha de nacimiento",
       "yourEmailAddress": "Su dirección de email",
