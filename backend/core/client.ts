@@ -80,6 +80,66 @@ export class PagedResult<T> implements IPagedResult<T> {
 // customer definition
 // empty
 
+export class UserService {
+  /**
+   *
+   */
+  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create user
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UserCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserWithAccessToken> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/{id}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class AuthService {
   /**
    * Login
@@ -246,6 +306,8 @@ export class ApplicationsService {
       listingId?: string;
       /**  */
       search?: string;
+      /**  */
+      userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -257,7 +319,8 @@ export class ApplicationsService {
         page: params['page'],
         limit: params['limit'],
         listingId: params['listingId'],
-        search: params['search']
+        search: params['search'],
+        userId: params['userId']
       };
       let data = null;
 
@@ -295,6 +358,8 @@ export class ApplicationsService {
       listingId?: string;
       /**  */
       includeHeaders?: boolean;
+      /**  */
+      userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -302,7 +367,11 @@ export class ApplicationsService {
       let url = basePath + '/applications/csv';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { listingId: params['listingId'], includeHeaders: params['includeHeaders'] };
+      configs.params = {
+        listingId: params['listingId'],
+        includeHeaders: params['includeHeaders'],
+        userId: params['userId']
+      };
       let data = null;
 
       configs.data = data;
@@ -1232,7 +1301,18 @@ export class AmiChartsService {
   }
 }
 
+export interface Id {
+  /**  */
+  id: string;
+}
+
 export interface User {
+  /**  */
+  roles: UserRole[];
+
+  /**  */
+  leasingAgentInListings?: Id[];
+
   /**  */
   id: string;
 
@@ -1280,6 +1360,12 @@ export interface UserCreate {
 
 export interface UserWithAccessToken {
   /**  */
+  roles: UserRole[];
+
+  /**  */
+  leasingAgentInListings?: Id[];
+
+  /**  */
   id: string;
 
   /**  */
@@ -1309,7 +1395,16 @@ export interface UserWithAccessToken {
 
 export interface UserUpdate {
   /**  */
-  id: string;
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  dob: Date;
 
   /**  */
   firstName: string;
@@ -1319,15 +1414,6 @@ export interface UserUpdate {
 
   /**  */
   lastName: string;
-
-  /**  */
-  dob: Date;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
 }
 
 export interface Login {
@@ -1740,42 +1826,27 @@ export interface ListingEvent {
   note?: string;
 }
 
-export interface Address {
+export interface UserBasic {
   /**  */
   id: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
 
   /**  */
   createdAt: Date;
 
   /**  */
   updatedAt: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
 }
 
 export interface WhatToExpect {
@@ -1815,6 +1886,18 @@ export interface Listing {
   events: ListingEvent[];
 
   /**  */
+  applicationAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgents?: UserBasic[];
+
+  /**  */
   id: string;
 
   /**  */
@@ -1834,12 +1917,6 @@ export interface Listing {
 
   /**  */
   applicationOrganization: string;
-
-  /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
@@ -1864,9 +1941,6 @@ export interface Listing {
 
   /**  */
   disableUnitsAccordion: boolean;
-
-  /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
   leasingAgentEmail: string;
@@ -1953,11 +2027,6 @@ export interface PreferenceCreate {
   links: PreferenceLink[];
 }
 
-export interface Id {
-  /**  */
-  id: string;
-}
-
 export interface ListingEventCreate {
   /**  */
   type: ListingEventType;
@@ -2034,6 +2103,9 @@ export interface ListingCreate {
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgents?: Id[];
 
   /**  */
   applicationDueDate: Date;
@@ -2280,6 +2352,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgents?: Id[];
 
   /**  */
   applicationDueDate: Date;
@@ -2593,7 +2668,7 @@ export interface Application {
   submissionType: ApplicationSubmissionType;
 
   /**  */
-  listing: Listing;
+  listing: Id;
 
   /**  */
   applicant: Applicant;
@@ -3554,6 +3629,11 @@ export interface AmiChartUpdate {
 
   /**  */
   name: string;
+}
+
+export enum UserRole {
+  'user' = 'user',
+  'admin' = 'admin'
 }
 
 export enum ListingStatus {

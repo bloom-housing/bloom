@@ -51,7 +51,7 @@ export default () => {
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
-          labels={conductor.config.sections}
+          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
         />
       </FormCard>
       <FormCard>

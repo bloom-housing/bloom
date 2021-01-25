@@ -105,7 +105,7 @@ export class HouseholdMember extends AbstractEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   noPhone?: boolean | null
 
-  @Column({ type: "boolean", nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsIn(["yes", "no"], { groups: [ValidationsGroupsEnum.default] })
@@ -118,7 +118,7 @@ export class HouseholdMember extends AbstractEntity {
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   relationship?: string | null
 
-  @Column({ type: "boolean", nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsIn(["yes", "no"], { groups: [ValidationsGroupsEnum.default] })

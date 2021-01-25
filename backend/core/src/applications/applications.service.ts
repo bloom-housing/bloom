@@ -1,25 +1,19 @@
-import { Inject, Injectable } from "@nestjs/common"
+import { Injectable } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
 import { ApplicationUpdateDto } from "./dto/application.dto"
 import { User } from "../user/entities/user.entity"
-import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Raw, Repository } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
-import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
-import { CsvBuilder } from "../services/csv-builder.service"
 import { ApplicationsListQueryParams } from "./applications.controller"
-import { Request } from "express"
 
 @Injectable()
 export class ApplicationsService {
   constructor(
-    @Inject(REQUEST) private readonly request: Request,
-    @InjectRepository(Application) private readonly repository: Repository<Application>,
-    private readonly csvBuilder: CsvBuilder
+    @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
-  private async list(listingId: string | null, user?: User) {
+  public async list(listingId: string | null, user?: User) {
     return this.repository.find({
       where: {
         ...(user && { user: { id: user.id } }),
@@ -32,22 +26,13 @@ export class ApplicationsService {
     })
   }
 
-  async listAsCsv(listingId: string | null, includeHeaders: boolean, user?: User) {
-    const applications = await this.list(listingId, user)
-    return this.csvBuilder.build(
-      applications,
-      applicationFormattingMetadataAggregateFactory,
-      includeHeaders
-    )
-  }
-
-  async listPaginated(params: ApplicationsListQueryParams, user?: User) {
+  async listPaginated(params: ApplicationsListQueryParams) {
     return paginate(
       this.repository,
       { limit: params.limit, page: params.page },
       {
         where: {
-          ...(user && { user: { id: user.id } }),
+          ...(params.userId && { user: { id: params.userId } }),
           ...(params.listingId && { listing: { id: params.listingId } }),
           ...(params.search && {
             applicant: Raw(
