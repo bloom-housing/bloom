@@ -80,7 +80,8 @@
       "languageSubmittedIn": "Language Submitted In",
       "timeSubmitted": "Time Submitted",
       "dateSubmitted": "Date Submitted",
-      "applicationSubmitted": "Application Submitted"
+      "applicationSubmitted": "Application Submitted",
+      "applicationUpdated": "Application Updated"
     },
     "details": {
       "applicationData": "Application Data",

@@ -107,9 +107,15 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         <div className="max-w-screen-xl px-5 my-5 mx-auto">
           {alert && (
             <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
-              {alert === "success"
-                ? t("application.add.applicationSubmitted")
-                : t("application.add.applicationAddError")}
+              {(() => {
+                if (alert === "success") {
+                  return editMode
+                    ? t("application.add.applicationUpdated")
+                    : t("application.add.applicationSubmitted")
+                }
+
+                return t("application.add.applicationAddError")
+              })()}
             </AlertBox>
           )}
 
