@@ -1,7 +1,7 @@
 import { OmitType } from "@nestjs/swagger"
 import { AlternateContact } from "../entities/alternate-contact.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
@@ -39,13 +39,13 @@ export class AlternateContactUpdateDto extends OmitType(AlternateContactDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
 

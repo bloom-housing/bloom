@@ -36,7 +36,7 @@ export class UserService {
     return this.repo.findOne(options)
   }
 
-  async update(dto: UserDto) {
+  async update(dto: Partial<UserDto>) {
     const obj = await this.repo.findOne({
       where: {
         id: dto.id,
@@ -46,8 +46,7 @@ export class UserService {
       throw new NotFoundException()
     }
     Object.assign(obj, dto)
-    await this.repo.save(obj)
-    return obj
+    return await this.repo.save(obj)
   }
 
   // passwordHash is a hidden field - we need to build a query to get it directly
