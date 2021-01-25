@@ -5,9 +5,9 @@ API Operations:
 Side effects:
   - creation logic will start in ApplicationFlaggedSetService (on `afterInsert` and `afterUpdate` events of Application entity)
   - duplicate application removal will happen in `resolve` API operation
-        - [NB] when to update the application's status and what?
-        - [NB] I am assuming ApplicationFlaggedSet status will be updated in `resolve`
-        - [NB] no soft delete happens on resolved applications, instead introduce the new status for application (resolved/dupliacte)
+    - [NB] when to update the application's status and what?
+    - [NB] I am assuming ApplicationFlaggedSet status will be updated in `resolve`
+    - [NB] no soft delete happens on resolved applications, instead introduce the new status for application (resolved/dupliacte)
 Some additional requirements:
   - permissions: only an admin or a leasingAgent can access resources in this endpoint
       
