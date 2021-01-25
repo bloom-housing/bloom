@@ -24,6 +24,7 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { makeNewApplication } from "../../src/seeds/applications"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -33,7 +34,9 @@ declare const expect: jest.Expect
 describe("Applications", () => {
   let app: INestApplication
   let user1AccessToken: string
+  let user1Profile: UserDto
   let user2AccessToken: string
+  let user2Profile: UserDto
   let adminAccessToken: string
   let leasingAgent1AccessToken: string
   let leasingAgent1Profile: UserDto
@@ -202,6 +205,20 @@ describe("Applications", () => {
       await supertest(app.getHttpServer())
         .get(`/user`)
         .set(...setAuthorization(leasingAgent2AccessToken))
+        .expect(200)
+    ).body
+
+    user1Profile = (
+      await supertest(app.getHttpServer())
+        .get(`/user`)
+        .set(...setAuthorization(user1AccessToken))
+        .expect(200)
+    ).body
+
+    user2Profile = (
+      await supertest(app.getHttpServer())
+        .get(`/user`)
+        .set(...setAuthorization(user2AccessToken))
         .expect(200)
     ).body
 
@@ -502,6 +519,25 @@ describe("Applications", () => {
       .send(newBody)
       .set(...setAuthorization(user2AccessToken))
       .expect(403)
+  })
+
+  it(`export created applications as CSV`, async () => {
+    await makeNewApplication(app, { id: listing1Id }, { id: user1Profile.id })
+    await makeNewApplication(app, { id: listing2Id }, { id: user2Profile.id })
+
+    await supertest(app.getHttpServer())
+      .get(`/applications/csv`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    await supertest(app.getHttpServer())
+      .get(`/applications/csv`)
+      .set(...setAuthorization(leasingAgent1AccessToken))
+      .expect(403)
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/csv/?listingId=${listing1Id}`)
+      .set(...setAuthorization(leasingAgent1AccessToken))
+      .expect(200)
+    expect(typeof res.body).toBe("string")
   })
 
   afterEach(() => {

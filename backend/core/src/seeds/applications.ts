@@ -1,5 +1,4 @@
 import { INestApplicationContext } from "@nestjs/common"
-import { Listing, User } from "../.."
 import { ApplicationCreateDto } from "../applications/dto/application.dto"
 import { Repository } from "typeorm"
 import {
@@ -10,6 +9,7 @@ import {
   Language,
 } from "../applications/entities/application.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
+import { IdDto } from "../lib/id.dto"
 
 const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing"> = {
   acceptedTerms: true,
@@ -169,8 +169,8 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
 
 export const makeNewApplication = async (
   app: INestApplicationContext,
-  listing: Listing,
-  user?: User
+  listing: IdDto,
+  user?: IdDto
 ) => {
   const dto: ApplicationCreateDto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
   dto.user = user
