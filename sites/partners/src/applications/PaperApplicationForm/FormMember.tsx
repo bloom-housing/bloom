@@ -17,18 +17,17 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { FormAddress } from "./FormAddress"
-import { nanoid } from "nanoid"
 
 type ApplicationFormMemberProps = {
   onSubmit: (member: HouseholdMember) => void
   onClose: () => void
   members: HouseholdMember[]
-  editedMemberId: string | boolean
+  editedMemberId?: number
 }
 
 const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
-    return members.filter((member) => member.id === editedMemberId)[0]
+    return members.filter((member) => member.orderId === editedMemberId)[0]
   }, [members, editedMemberId])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -73,12 +72,13 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       workInRegion: workInRegion ? workInRegion : null,
     }
 
-    if (editedMemberId && typeof editedMemberId === "string") {
-      const editedMember = members.find((member) => member.id === editedMemberId)
+    const editedMember = members.find((member) => member.orderId === editedMemberId)
+
+    if (editedMember) {
       onSubmit({ ...editedMember, ...formData })
     } else {
       const newMember = new Member(members.length + 1)
-      onSubmit({ ...newMember, id: nanoid(), ...formData })
+      onSubmit({ ...newMember, ...formData })
     }
 
     onClose()

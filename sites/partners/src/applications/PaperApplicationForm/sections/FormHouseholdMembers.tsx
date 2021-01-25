@@ -24,8 +24,8 @@ const FormHouseholdMembers = ({
   householdMembers,
   setHouseholdMembers,
 }: FormHouseholdMembersProps) => {
-  const [membersDrawer, setMembersDrawer] = useState<string | boolean>(false)
-  const [membersDeleteModal, setMembersDeleteModal] = useState<string | boolean>(false)
+  const [membersDrawer, setMembersDrawer] = useState<number | null>(null)
+  const [membersDeleteModal, setMembersDeleteModal] = useState<number | null>(null)
 
   const memberTableHeaders = {
     name: t("t.name"),
@@ -37,26 +37,35 @@ const FormHouseholdMembers = ({
   }
 
   const editMember = useCallback(
-    (id: string) => {
-      setMembersDrawer(id)
+    (orderId: number) => {
+      setMembersDrawer(orderId)
     },
     [setMembersDrawer]
   )
 
+  // remove member from array and define new order numbers
   const deleteMember = useCallback(
-    (id: string) => {
-      const updatedMembers = householdMembers.filter((member) => member.id !== id)
+    (orderId: number) => {
+      const updatedMembers = householdMembers
+        .filter((member) => member.orderId !== orderId)
+        .map((updatedMember, index) => ({
+          ...updatedMember,
+          orderId: index + 1,
+        }))
+
       setHouseholdMembers(updatedMembers)
-      setMembersDeleteModal(false)
+      setMembersDeleteModal(null)
     },
     [setMembersDeleteModal, setHouseholdMembers, householdMembers]
   )
 
   function saveMember(newMember: HouseholdMember) {
-    const isExists = householdMembers.find((member) => member.id === newMember.id)
+    const isExists = householdMembers.find((member) => member.orderId === newMember.orderId)
 
     if (isExists) {
-      const withoutEdited = householdMembers.filter((member) => member.id !== newMember.id)
+      const withoutEdited = householdMembers.filter(
+        (member) => member.orderId !== newMember.orderId
+      )
       setHouseholdMembers([...withoutEdited, newMember])
     } else {
       setHouseholdMembers([...householdMembers, newMember])
@@ -98,7 +107,7 @@ const FormHouseholdMembers = ({
             <Button
               type="button"
               className="font-semibold uppercase"
-              onClick={() => editMember(member.id)}
+              onClick={() => editMember(member.orderId)}
               unstyled
             >
               {t("t.edit")}
@@ -106,7 +115,7 @@ const FormHouseholdMembers = ({
             <Button
               type="button"
               className="font-semibold uppercase text-red-700"
-              onClick={() => setMembersDeleteModal(member.id)}
+              onClick={() => setMembersDeleteModal(member.orderId)}
               unstyled
             >
               {t("t.delete")}
@@ -130,7 +139,7 @@ const FormHouseholdMembers = ({
           <Button
             type="button"
             size={AppearanceSizeType.normal}
-            onClick={() => setMembersDrawer(true)}
+            onClick={() => setMembersDrawer(householdMembers.length + 1)}
           >
             {t("application.add.addHouseholdMember")}
           </Button>
@@ -141,11 +150,11 @@ const FormHouseholdMembers = ({
         open={!!membersDrawer}
         title={t("application.household.householdMember")}
         ariaDescription={t("application.household.householdMember")}
-        onClose={() => setMembersDrawer(!membersDrawer)}
+        onClose={() => setMembersDrawer(null)}
       >
         <FormMember
           onSubmit={(member) => saveMember(member)}
-          onClose={() => setMembersDrawer(false)}
+          onClose={() => setMembersDrawer(null)}
           members={householdMembers}
           editedMemberId={membersDrawer}
         />
@@ -155,15 +164,11 @@ const FormHouseholdMembers = ({
         open={!!membersDeleteModal}
         title={t("application.deleteThisMember")}
         ariaDescription={t("application.deleteMemberDescription")}
-        onClose={() => setMembersDeleteModal(false)}
+        onClose={() => setMembersDeleteModal(null)}
         actions={[
           <Button
             styleType={AppearanceStyleType.alert}
-            onClick={() => {
-              if (typeof membersDeleteModal === "string") {
-                deleteMember(membersDeleteModal)
-              }
-            }}
+            onClick={() => deleteMember(membersDeleteModal)}
           >
             {t("t.delete")}
           </Button>,
@@ -171,7 +176,7 @@ const FormHouseholdMembers = ({
             styleType={AppearanceStyleType.primary}
             border={AppearanceBorderType.borderless}
             onClick={() => {
-              setMembersDeleteModal(false)
+              setMembersDeleteModal(null)
             }}
           >
             {t("t.cancel")}
