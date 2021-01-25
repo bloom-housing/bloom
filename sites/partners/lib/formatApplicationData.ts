@@ -196,9 +196,9 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
   const timeSubmitted = (() => {
     const hoursNumber = submissionDate?.getUTCHours()
 
-    const hours = hoursNumber.toString()
-    const minutes = submissionDate?.getUTCMinutes().toString()
-    const seconds = submissionDate?.getUTCSeconds().toString()
+    const hours = hoursNumber?.toString()
+    const minutes = submissionDate?.getUTCMinutes()?.toString()
+    const seconds = submissionDate?.getUTCSeconds()?.toString()
     const period: TimeFieldPeriod = hoursNumber > 12 ? "pm" : "am"
 
     return {
@@ -213,6 +213,8 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
     const birthMonth = (submissionDate?.getUTCMonth() + 1).toString()
     const birthDay = submissionDate?.getUTCDate().toString()
     const birthYear = submissionDate?.getUTCFullYear().toString()
+
+    if (!submissionDate) return null
 
     return {
       birthMonth,

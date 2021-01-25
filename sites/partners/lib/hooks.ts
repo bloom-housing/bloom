@@ -6,10 +6,7 @@ import { ApiClientContext } from "@bloom-housing/ui-components"
 export function useListingsData() {
   const fetcher = (url) => fetch(url).then((r) => r.json())
   const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
-  if (data && data.status == "ok") {
-    console.log(data)
-    console.log(`Listings Data Received: ${data.listings}`)
-  }
+
   return {
     listingDtos: data,
     listingsLoading: !error && !data,

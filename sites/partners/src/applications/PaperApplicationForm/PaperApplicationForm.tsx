@@ -40,7 +40,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
   useEffect(() => {
-    if (application.householdMembers) {
+    if (application?.householdMembers) {
       setHouseholdMembers(application.householdMembers)
     }
   }, [application, setHouseholdMembers])

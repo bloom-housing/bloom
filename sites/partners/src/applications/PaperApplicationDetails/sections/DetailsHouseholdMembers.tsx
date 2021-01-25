@@ -21,13 +21,13 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   const householdMembersData = useMemo(() => {
     const checkAvailablility = (property) => {
-      if (property === null) {
-        return t("t.n/a")
-      } else if (property) {
+      if (property === "yes") {
         return t("t.yes")
+      } else if (property === "no") {
+        return t("t.no")
       }
 
-      return t("t.no")
+      return t("t.n/a")
     }
     return application?.householdMembers?.map((item) => ({
       name: `${item.firstName} ${item.middleName} ${item.lastName}`,

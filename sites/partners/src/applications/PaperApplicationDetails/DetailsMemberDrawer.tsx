@@ -65,22 +65,22 @@ const DetailsMemberDrawer = ({
             <ViewItem
               label={t("application.add.sameAddressAsPrimary")}
               children={
-                membersDrawer?.sameAddress === null
-                  ? t("t.n/a")
-                  : membersDrawer?.sameAddress
+                membersDrawer?.sameAddress === "yes"
                   ? t("t.yes")
-                  : t("t.no")
+                  : membersDrawer?.sameAddress === "no"
+                  ? t("t.no")
+                  : t("t.n/a")
               }
             />
 
             <ViewItem
               label={t("application.add.workInRegion")}
               children={
-                membersDrawer?.workInRegion === null
-                  ? t("t.n/a")
-                  : membersDrawer?.workInRegion
+                membersDrawer?.workInRegion === "yes"
                   ? t("t.yes")
-                  : t("t.no")
+                  : membersDrawer?.workInRegion === "no"
+                  ? t("t.no")
+                  : t("t.n/a")
               }
             />
 

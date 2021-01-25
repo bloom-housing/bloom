@@ -11,9 +11,19 @@ const DetailsPreferences = () => {
         <ViewItem
           label={`${t("application.details.liveOrWorkIn")} ${t("application.details.countyName")}`}
         >
-          {application.preferences.liveIn || application.preferences.workIn
-            ? t("t.yes")
-            : t("t.no")}
+          {(() => {
+            if (
+              !application.preferences.liveIn &&
+              !application.preferences.workIn &&
+              !application.preferences.none
+            ) {
+              return t("t.n/a")
+            }
+
+            return application.preferences.liveIn || application.preferences.workIn
+              ? t("t.yes")
+              : t("t.no")
+          })()}
         </ViewItem>
       </GridCell>
     </GridSection>
