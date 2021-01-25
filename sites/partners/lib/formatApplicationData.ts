@@ -199,7 +199,7 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
   const timeSubmitted = (() => {
     const hoursNumber = submissionDate?.getUTCHours()
 
-    const hours = hoursNumber ? hoursNumber % 12 || 12 : ""
+    const hours = (hoursNumber ? hoursNumber % 12 || 12 : "").toString()
     const minutes = submissionDate?.getUTCMinutes()?.toString()
     const seconds = submissionDate?.getUTCSeconds()?.toString()
     const period: TimeFieldPeriod = hoursNumber > 12 ? "pm" : "am"
