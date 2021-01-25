@@ -9,8 +9,11 @@ import {
   HouseholdMember,
 } from "@bloom-housing/backend-core/types"
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
-import { FormTypes } from "../src/applications/PaperApplicationForm/FormTypes"
-
+import {
+  FormTypes,
+  YesNoAnswer,
+  ApplicationTypes,
+} from "../src/applications/PaperApplicationForm/FormTypes"
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -225,45 +228,35 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
-  const application = (() => {
-    const language = applicationData.language
-    const preferences = applicationData.preferences
-    const contactPreferences = applicationData.contactPreferences
-    const sendMailToMailingAddress = applicationData.sendMailToMailingAddress
-    const mailingAddress = applicationData.mailingAddress
-    const preferredUnit = applicationData.preferredUnit
-    const accessibility = applicationData.accessibility
-    const incomePeriod = applicationData.incomePeriod
-    const incomeVouchers = applicationData.incomeVouchers ? "yes" : "no"
-    const demographics = applicationData.demographics
-    const acceptedTerms = applicationData.acceptedTerms ? "yes" : "no"
-
-    const { additionalPhoneNumber, additionalPhoneNumberType, alternateContact } = applicationData
-
+  const application: ApplicationTypes = (() => {
     const {
-      firstName,
-      middleName,
-      lastName,
-      emailAddress,
-      workInRegion,
-      address,
-      workAddress,
-      phoneNumberType,
-    } = applicationData.applicant
+      language,
+      preferences,
+      contactPreferences,
+      sendMailToMailingAddress,
+      mailingAddress,
+      preferredUnit,
+      accessibility,
+      incomePeriod,
+      demographics,
+      additionalPhoneNumber,
+      additionalPhoneNumberType,
+      alternateContact,
+    } = applicationData
+
+    const incomeVouchers: YesNoAnswer =
+      applicationData.incomeVouchers === null ? null : applicationData.incomeVouchers ? "yes" : "no"
+
+    const acceptedTerms: YesNoAnswer =
+      applicationData.acceptedTerms === null ? null : applicationData.acceptedTerms ? "yes" : "no"
+    const workInRegion = applicationData.applicant.workInRegion as YesNoAnswer
 
     const applicant = {
-      firstName,
-      middleName,
-      lastName,
-      emailAddress,
+      ...applicationData.applicant,
       workInRegion,
-      address,
-      workAddress,
-      phoneNumberType,
     }
 
-    // TODO: move phone number to a proper structure
-    return {
+    const result = {
       applicant,
       language,
       phoneNumber,
@@ -281,6 +274,8 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
       acceptedTerms,
       alternateContact,
     }
+
+    return result
   })()
 
   const values: FormTypes = {
@@ -288,9 +283,9 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
     dateSubmitted,
     timeSubmitted,
     phoneNumber,
-    application,
     incomeMonth,
     incomeYear,
+    application,
   }
 
   return values
