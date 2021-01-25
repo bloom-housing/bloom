@@ -31,10 +31,11 @@ import {
 } from "./dto/application.dto"
 import { Expose, Transform } from "class-transformer"
 import { IsBoolean, IsOptional, IsString } from "class-validator"
-import { Pagination, PaginationQueryParams } from "../utils/pagination.dto"
-import { Application } from "./entities/application.entity"
+import { PaginationQueryParams } from "../utils/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
+import { CsvBuilder } from "../services/csv-builder.service"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -56,6 +57,16 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   search?: string
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "userId",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  userId?: string
 }
 
 export class ApplicationsCsvListQueryParams {
@@ -79,6 +90,16 @@ export class ApplicationsCsvListQueryParams {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
   includeHeaders?: boolean
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "userId",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  userId?: string
 }
 
 @Controller("applications")
@@ -97,7 +118,8 @@ export class ApplicationsController {
     private readonly applicationsService: ApplicationsService,
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
-    private readonly authzService: AuthzService
+    private readonly authzService: AuthzService,
+    private readonly csvBuilder: CsvBuilder
   ) {}
 
   @Get()
@@ -106,23 +128,32 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Query() queryParams: ApplicationsListQueryParams
   ): Promise<PaginatedApplicationDto> {
-    let response: Pagination<Application>
-    if (await this.authzService.can(req.user, "application", authzActions.listAll)) {
-      response = await this.applicationsService.listPaginated(queryParams)
-    } else {
-      response = await this.applicationsService.listPaginated(queryParams, req.user)
-    }
+    const response = await this.applicationsService.listPaginated(queryParams)
+    await Promise.all(
+      response.items.map(async (application) => {
+        await this.authorizeUserAction(req.user, application, authzActions.read)
+      })
+    )
     return mapTo(PaginatedApplicationDto, response)
   }
 
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
-  async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
-    return await this.applicationsService.listAsCsv(
-      queryParams.listingId,
-      queryParams.includeHeaders,
-      null
+  async listAsCsv(
+    @Request() req: ExpressRequest,
+    @Query() queryParams: ApplicationsCsvListQueryParams
+  ): Promise<string> {
+    const applications = await this.applicationsService.list(queryParams.listingId, null)
+    await Promise.all(
+      applications.map(async (application) => {
+        await this.authorizeUserAction(req.user, application, authzActions.read)
+      })
+    )
+    return this.csvBuilder.build(
+      applications,
+      applicationFormattingMetadataAggregateFactory,
+      queryParams.includeHeaders
     )
   }
 
@@ -132,6 +163,7 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Body() applicationCreateDto: ApplicationCreateDto
   ): Promise<ApplicationDto> {
+    await this.authorizeUserAction(req.user, applicationCreateDto, authzActions.create)
     const application = await this.applicationsService.create(applicationCreateDto, req.user)
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {
@@ -175,6 +207,7 @@ export class ApplicationsController {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
       user_id: app.user?.id,
+      listing_id: app.listing?.id,
     })
   }
 }

@@ -50,7 +50,7 @@
       "title": "您叫什麼名字？",
       "yourName": "您的姓名",
       "firstName": "名字",
-      "middleName": "中間名（選填）",
+      "middleNameOptional": "中間名（選填）",
       "lastName": "姓氏",
       "yourDateOfBirth": "您的出生日期",
       "yourEmailAddress": "電郵地址",

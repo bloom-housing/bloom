@@ -11,7 +11,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
         <strong>{unitSummary.minIncomeRange.min}</strong>
       ) : (
         <>
-          <strong>{unitSummary.minIncomeRange.min}</strong> to{" "}
+          <strong>{unitSummary.minIncomeRange.min}</strong> {t("t.to")}{" "}
           <strong>{unitSummary.minIncomeRange.max}</strong>
         </>
       )
@@ -20,14 +20,22 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
         <strong>{unitSummary.rentRange.min}</strong>
       ) : (
         <>
-          <strong>{unitSummary.rentRange.min}</strong> to{" "}
+          <strong>{unitSummary.rentRange.min}</strong> {t("t.to")}{" "}
           <strong>{unitSummary.rentRange.max}</strong>
         </>
       )
     return {
       unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
-      minimumIncome: <>{minIncome} per month</>,
-      rent: <>{rent} per month</>,
+      minimumIncome: (
+        <>
+          {minIncome} {t("t.perMonth")}
+        </>
+      ),
+      rent: (
+        <>
+          {rent} {t("t.perMonth")}
+        </>
+      ),
       availability: (
         <>
           {unitSummary.totalAvailable > 0 ? (

@@ -104,7 +104,7 @@ export default () => {
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
-          labels={conductor.config.sections}
+          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
         />
       </FormCard>
 
@@ -198,7 +198,7 @@ export default () => {
                 </fieldset>
 
                 {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
-                  <fieldset>
+                  <fieldset className="mt-8">
                     <legend className="field-label--caps">
                       {t("application.contact.address")}
                     </legend>
@@ -284,7 +284,7 @@ export default () => {
                 </fieldset>
 
                 {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
-                  <fieldset>
+                  <fieldset className="mt-8">
                     <legend className="field-label--caps">
                       {t("application.contact.address")}
                     </legend>

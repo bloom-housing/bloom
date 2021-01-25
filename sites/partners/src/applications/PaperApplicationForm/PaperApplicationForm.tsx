@@ -1,14 +1,6 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import {
-  ApiClientContext,
-  t,
-  Tag,
-  AppearanceSizeType,
-  Form,
-  AlertBox,
-  AlertTypes,
-} from "@bloom-housing/ui-components"
+import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
 import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
 import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
 import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
@@ -111,14 +103,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   return (
     <FormProvider {...formMethods}>
-      <div className="flex justify-end max-w-screen-xl px-5 mx-auto w-full">
-        <div className="md:w-3/12 py-3 md:pl-6">
-          <Tag className="block" pillStyle={true} size={AppearanceSizeType.big}>
-            {t("application.details.applicationStatus.draft")}
-          </Tag>
-        </div>
-      </div>
-
       <section className="bg-primary-lighter">
         <div className="max-w-screen-xl px-5 my-5 mx-auto">
           {alert && (

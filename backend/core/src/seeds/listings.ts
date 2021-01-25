@@ -15,7 +15,10 @@ import { Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { User } from "../user/entities/user.entity"
+import { UserService } from "../user/user.service"
 import { SanMateoHUD2019 } from "./ami-charts"
+import { UserCreateDto } from "../user/dto/user.dto"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
@@ -35,14 +38,22 @@ export interface ListingSeed {
     | "events"
     | "assets"
     | "preferences"
+    | "leasingAgents"
   >
+  leasingAgents: UserCreateDto[]
 }
 
 export async function seedListing(app: INestApplicationContext, seed: ListingSeed) {
   const amiChartRepo = app.get<Repository<AmiChart>>(getRepositoryToken(AmiChart))
   const propertyRepo = app.get<Repository<Property>>(getRepositoryToken(Property))
   const unitsRepo = app.get<Repository<Unit>>(getRepositoryToken(Unit))
-  const listingsRepo = app.get<Repository<Unit>>(getRepositoryToken(Listing))
+  const listingsRepo = app.get<Repository<Listing>>(getRepositoryToken(Listing))
+
+  const usersService = app.get<UserService>(UserService)
+  app.get<Repository<User>>(getRepositoryToken(User))
+  const leasingAgents = await Promise.all(
+    seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+  )
 
   const amiChart = await amiChartRepo.save(seed.amiChart)
 
@@ -63,15 +74,14 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
 
   const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug"> = {
     ...seed.listing,
-    property: {
-      id: property.id,
-    },
+    property,
+    leasingAgents: leasingAgents,
     assets: seed.assets,
     preferences: seed.preferences,
     applicationMethods: seed.applicationMethods,
     events: seed.listingEvents,
   }
-  await listingsRepo.save(listingCreateDto)
+  return await listingsRepo.save(listingCreateDto)
 }
 
 export const listingSeed1: ListingSeed = {
@@ -284,4 +294,16 @@ export const listingSeed1: ListingSeed = {
     displayWaitlistSize: false,
   },
   amiChart: SanMateoHUD2019,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  leasingAgents: [
+    {
+      firstName: "First",
+      lastName: "Last",
+      middleName: "Middle",
+      email: "leasing-agent-1@example.com",
+      password: "abcdef",
+      dob: new Date(),
+    },
+  ],
 }

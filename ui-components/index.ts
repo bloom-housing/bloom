@@ -12,6 +12,7 @@ export * from "./src/blocks/FormCard"
 export * from "./src/blocks/HousingCounselor"
 export * from "./src/blocks/ImageCard"
 export * from "./src/blocks/InfoCard"
+export * from "./src/blocks/StatusBar"
 export * from "./src/blocks/ViewItem"
 
 /* Contexts */
@@ -60,6 +61,7 @@ export * from "./src/helpers/debounce"
 export * from "./src/helpers/formatIncome"
 export * from "./src/helpers/validators"
 export * from "./src/helpers/blankApplication"
+export * from "./src/helpers/formatYesNoLabel"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"

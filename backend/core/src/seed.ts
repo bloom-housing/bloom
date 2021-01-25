@@ -1,25 +1,41 @@
 import { SeederModule } from "./seeder/seeder.module"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
-import { listingSeed1, seedListing } from "./seeds/listings"
+import { ListingSeed, listingSeed1, seedListing } from "./seeds/listings"
 import { UserService } from "./user/user.service"
 import { plainToClass } from "class-transformer"
 import { UserCreateDto } from "./user/dto/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./user/entities/user.entity"
+import { makeNewApplication } from "./seeds/applications"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
+const newSeed = (): ListingSeed => {
+  return JSON.parse(JSON.stringify(listingSeed1)) as ListingSeed
+}
+
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
-  await seedListing(app, listingSeed1)
+  const listing1 = await seedListing(app, newSeed())
+  const listingSeed = newSeed()
+  const listing2 = await seedListing(app, {
+    ...listingSeed,
+    leasingAgents: [
+      {
+        ...listingSeed.leasingAgents[0],
+        email: "leasing-agent-2@example.com",
+      },
+    ],
+  })
+
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
 
   const userService = app.get<UserService>(UserService)
-  await userService.createUser(
+  const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
       firstName: "First",
@@ -30,7 +46,7 @@ async function bootstrap() {
     })
   )
 
-  await userService.createUser(
+  const user2 = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test2@example.com",
       firstName: "Second",
@@ -51,6 +67,14 @@ async function bootstrap() {
       password: "abcdef",
     })
   )
+
+  for (let i = 0; i < 200; i++) {
+    await makeNewApplication(app, listing1, user1)
+    await makeNewApplication(app, listing1, user2)
+    await makeNewApplication(app, listing2, user1)
+    await makeNewApplication(app, listing2, user2)
+  }
+
   admin.isAdmin = true
   await userRepo.save(admin)
 
