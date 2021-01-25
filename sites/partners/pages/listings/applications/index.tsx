@@ -122,7 +122,7 @@ const ApplicationsList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        void router.push(lRoute(`/applications/${params.value}`))
+        void router.push(lRoute(`/application?id=${params.value}`))
       })
     }
 
