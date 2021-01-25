@@ -15,7 +15,7 @@ export default function ListingsList() {
     init(params) {
       this.link = document.createElement("a")
       this.link.classList.add("text-blue-700")
-      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+      this.link.setAttribute("href", lRoute(`/listings/applications?listing=${params.data.id}`))
       this.link.innerText = params.value
     }
 
