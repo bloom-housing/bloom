@@ -1,5 +1,6 @@
 import { t, GridCell, ViewItem } from "@bloom-housing/ui-components"
 import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
+import { YesNoAnswer } from "../PaperApplicationForm/FormTypes"
 
 type DetailsAddressColumnsProps = {
   type: AddressColsType
@@ -43,7 +44,7 @@ const DetailsAddressColumns = ({
     }
 
     if (type === AddressColsType.work) {
-      if (application.applicant.workInRegion === "yes") {
+      if (application.applicant.workInRegion === YesNoAnswer.Yes) {
         address[item] = application.applicant.workAddress[item] || t("t.n/a")
       } else {
         address[item] = t("t.n/a")

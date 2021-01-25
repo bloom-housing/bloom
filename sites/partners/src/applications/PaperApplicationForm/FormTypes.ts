@@ -9,7 +9,10 @@ type Address = {
   zipCode?: string
 }
 
-export type YesNoAnswer = "yes" | "no" | null
+export enum YesNoAnswer {
+  "Yes" = "yes",
+  "No" = "no",
+}
 
 export type ApplicationTypes = {
   mailingAddress: Address

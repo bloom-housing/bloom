@@ -11,8 +11,7 @@ import {
   AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/backend-core/types"
-import type { YesNoAnswer } from "../FormTypes"
-
+import { YesNoAnswer } from "../FormTypes"
 import { FormMember } from "../FormMember"
 
 type FormHouseholdMembersProps = {
@@ -75,9 +74,9 @@ const FormHouseholdMembers = ({
   const memberTableData = useMemo(() => {
     const chooseAddressStatus = (value: YesNoAnswer | null) => {
       switch (value) {
-        case "yes":
+        case YesNoAnswer.Yes:
           return t("t.yes")
-        case "no":
+        case YesNoAnswer.No:
           return t("t.no")
         default:
           return t("t.n/a")

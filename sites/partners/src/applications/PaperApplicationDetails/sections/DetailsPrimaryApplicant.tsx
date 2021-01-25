@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { DetailsApplicationContext } from "../DetailsApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
+import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 const DetailsPrimaryApplicant = () => {
   const application = useContext(DetailsApplicationContext)
@@ -96,7 +97,7 @@ const DetailsPrimaryApplicant = () => {
             {(() => {
               if (!application.applicant.workInRegion) return t("t.n/a")
 
-              return application.applicant.workInRegion === "yes" ? t("t.yes") : t("t.no")
+              return application.applicant.workInRegion === YesNoAnswer.Yes ? t("t.yes") : t("t.no")
             })()}
           </ViewItem>
         </GridCell>

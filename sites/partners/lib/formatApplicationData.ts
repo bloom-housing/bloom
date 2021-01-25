@@ -77,7 +77,7 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
     const emailAddress: string | null = applicantData?.emailAddress || null
 
     const workAddress = getAddress(
-      applicantData?.workInRegion === "yes",
+      applicantData?.workInRegion === YesNoAnswer.Yes,
       applicantData?.workAddress
     )
 
@@ -125,16 +125,16 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
 
   const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
   const incomeVouchers =
-    data.application.incomeVouchers === "yes"
+    data.application.incomeVouchers === YesNoAnswer.Yes
       ? true
-      : data.application.incomeVouchers === "no"
+      : data.application.incomeVouchers === YesNoAnswer.No
       ? false
       : null
 
   const acceptedTerms =
-    data.application.acceptedTerms === "yes"
+    data.application.acceptedTerms === YesNoAnswer.Yes
       ? true
-      : data.application.acceptedTerms === "no"
+      : data.application.acceptedTerms === YesNoAnswer.No
       ? false
       : null
 
@@ -245,10 +245,18 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
     } = applicationData
 
     const incomeVouchers: YesNoAnswer =
-      applicationData.incomeVouchers === null ? null : applicationData.incomeVouchers ? "yes" : "no"
+      applicationData.incomeVouchers === null
+        ? null
+        : applicationData.incomeVouchers
+        ? YesNoAnswer.Yes
+        : YesNoAnswer.No
 
     const acceptedTerms: YesNoAnswer =
-      applicationData.acceptedTerms === null ? null : applicationData.acceptedTerms ? "yes" : "no"
+      applicationData.acceptedTerms === null
+        ? null
+        : applicationData.acceptedTerms
+        ? YesNoAnswer.Yes
+        : YesNoAnswer.No
     const workInRegion = applicationData.applicant.workInRegion as YesNoAnswer
 
     const applicant = {

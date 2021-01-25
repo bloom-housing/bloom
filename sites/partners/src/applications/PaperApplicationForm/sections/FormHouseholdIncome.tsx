@@ -2,6 +2,7 @@ import React from "react"
 import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
+import { YesNoAnswer } from "../FormTypes"
 
 const FormHouseholdIncome = () => {
   const formMethods = useFormContext()
@@ -94,7 +95,7 @@ const FormHouseholdIncome = () => {
               labelClassName="sr-only"
               register={register}
               controlClassName="control"
-              options={["yes", "no"]}
+              options={[YesNoAnswer.Yes, YesNoAnswer.No]}
               keyPrefix="t"
             />
           </ViewItem>

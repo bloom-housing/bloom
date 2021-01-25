@@ -17,6 +17,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { FormAddress } from "./FormAddress"
+import { YesNoAnswer } from "./FormTypes"
 
 type ApplicationFormMemberProps = {
   onSubmit: (member: HouseholdMember) => void
@@ -88,12 +89,12 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     {
       id: "sameAddressYes",
       label: t("t.yes"),
-      value: "yes",
+      value: YesNoAnswer.Yes,
     },
     {
       id: "sameAddressNo",
       label: t("t.no"),
-      value: "no",
+      value: YesNoAnswer.No,
     },
   ]
 
@@ -101,12 +102,12 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     {
       id: "workInRegionYes",
       label: t("t.yes"),
-      value: "yes",
+      value: YesNoAnswer.Yes,
     },
     {
       id: "workInRegionNo",
       label: t("t.no"),
-      value: "no",
+      value: YesNoAnswer.No,
     },
   ]
 
@@ -207,7 +208,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           </GridCell>
         </GridSection>
 
-        {sameAddressField === "no" &&
+        {sameAddressField === YesNoAnswer.No &&
           FormAddress(
             t("application.details.residenceAddress"),
             "address",
@@ -215,7 +216,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
             register
           )}
 
-        {workInRegionField === "yes" &&
+        {workInRegionField === YesNoAnswer.Yes &&
           FormAddress(t("application.contact.workAddress"), "workAddress", "work", register)}
       </div>
 

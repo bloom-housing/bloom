@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from "react"
 import { t, GridSection, MinimalTable, Button } from "@bloom-housing/ui-components"
 import { DetailsApplicationContext } from "../DetailsApplicationContext"
 import { MembersDrawer } from "../DetailsMemberDrawer"
+import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 type DetailsHouseholdMembersProps = {
   setMembersDrawer: (member: MembersDrawer) => void
@@ -21,7 +22,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   const householdMembersData = useMemo(() => {
     const checkAvailablility = (property) => {
-      if (property === "yes") {
+      if (property === YesNoAnswer.Yes) {
         return t("t.yes")
       } else if (property === "no") {
         return t("t.no")
