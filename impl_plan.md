@@ -7,6 +7,7 @@ Side effects:
   - duplicate application removal will happen in `resolve` API operation
         - [NB] when to update the application's status and what?
         - [NB] I am assuming ApplicationFlaggedSet status will be updated in `resolve`
+        - [NB] no soft delete happens on resolved applications, instead introduce the new status for application (resolved/dupliacte)
 Some additional requirements:
   - permissions: only an admin or a leasingAgent can access resources in this endpoint
       
@@ -37,9 +38,10 @@ Questions:
       - resolvedTime: Date (nullable = true)
       - resolvingUserId: User (nullable = true, eager = true)
       - resolved application: Application (nullable = true)
+      - status: string (default = flagged, values: resolved)
       - applications: Application[]
       
-      - [NB] Do we need listingID prop as well?
+      - [NB] Do we need listingID prop as well? - No required
     - define owning relation to be AFS with @JoinTable() decorator
     - generate a migration
 
@@ -77,6 +79,7 @@ Questions:
     - implement afterInsert -> simply create a new  mock AFS instance with no applications associated with it and save it using the AFS repository, but set e.g. a name (for test purposes now)
         - [NB] Did not quote understand what `afterInsert` and `afterUpdate` do
         - [NB] to create a mock AFS we should first write the logic to pull the duplicate applications from application entity is it? Should we use aggregator to pull the duplicate entries and group them and then feed that to AFS entity?
+        - [NB] business logic to be written in the AFS controller using afterInsert hook
     - check if `GET /application-flagged-sets` returns a non empty array after an application has been submitted
   
     To summarize we should now have a new AFS Controller which only allows an admin to list dummy application flagged sets
