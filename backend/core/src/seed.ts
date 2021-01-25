@@ -68,11 +68,13 @@ async function bootstrap() {
     })
   )
 
-  for (let i = 0; i < 200; i++) {
-    await makeNewApplication(app, listing1, user1)
-    await makeNewApplication(app, listing1, user2)
-    await makeNewApplication(app, listing2, user1)
-    await makeNewApplication(app, listing2, user2)
+  for (let i = 0; i < 10; i++) {
+    await Promise.all([
+      await makeNewApplication(app, listing1, user1),
+      await makeNewApplication(app, listing1, user2),
+      await makeNewApplication(app, listing2, user1),
+      await makeNewApplication(app, listing2, user2),
+    ])
   }
 
   admin.isAdmin = true
