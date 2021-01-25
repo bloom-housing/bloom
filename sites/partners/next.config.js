@@ -46,6 +46,10 @@ module.exports = withCSS(
           const translatablePaths = {
             "/": { page: "/" },
             "/sign-in": { page: "/sign-in" },
+            "/listings/applications": { page: "/listings/applications" },
+            "/listings/applications/add": { page: "/listings/applications/add" },
+            "/application": { page: "/application" },
+            "/application/edit": { page: "/application/edit" },
           }
 
           const languages = ["es", "zh", "vi"] // add new language codes here
