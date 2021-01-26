@@ -32,7 +32,8 @@ const NewApplication = () => {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>
-        {t("applications.editApplication")} <p className="text-base">{application.id}</p>
+        {t("applications.editApplication")}{" "}
+        <p className="text-base">{`${application.applicant?.firstName} ${application.applicant?.middleName} ${application.applicant?.lastName}`}</p>
       </PageHeader>
 
       <StatusBar
