@@ -163,14 +163,14 @@ export default class ApplicationConductor {
   }
 
   sync() {
-    setTimeout(() => {
-      if (typeof window != "undefined") {
-        window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
-        if (this.listing) {
-          window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
-        }
+    // NOTE: had to remove timeout because of Next doing full-page reloads in
+    // some cases. Need to revisit after upgrading to v10
+    if (typeof window != "undefined") {
+      window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
+      if (this.listing) {
+        window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
       }
-    }, 800)
+    }
   }
 
   reset() {

@@ -132,7 +132,7 @@ export default () => {
                 </Button>
               )}
 
-              {listing?.applicationConfig.languages.some((lang) => lang == "zh") && (
+              {listing?.applicationConfig.languages.some((lang) => lang == "vi") && (
                 <Button
                   className="language-select mx-1"
                   onClick={() => {
