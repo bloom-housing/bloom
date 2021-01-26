@@ -1,5 +1,6 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect, useMemo } from "react"
 import { useRouter } from "next/router"
+import moment from "moment"
 import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
 import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
 import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
@@ -38,6 +39,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
+
+  const lastUpdatedDate = useMemo(() => moment(application?.updatedAt).format("MMMM DD, YYYY"), [
+    application,
+  ])
 
   useEffect(() => {
     if (application?.householdMembers) {
@@ -146,9 +151,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
               <aside className="md:w-3/12 md:pl-6">
                 <FormAside
-                  isEdit={false}
+                  isEdit={editMode}
                   triggerSubmitAndRedirect={triggerSubmitAndRedirect}
                   listingId={listingId}
+                  lastUpdated={lastUpdatedDate}
                 />
               </aside>
             </div>

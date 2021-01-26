@@ -81,7 +81,8 @@
       "timeSubmitted": "Time Submitted",
       "dateSubmitted": "Date Submitted",
       "applicationSubmitted": "Application Submitted",
-      "applicationUpdated": "Application Updated"
+      "applicationUpdated": "Application Updated",
+      "saveAndExit": "Save & exit"
     },
     "details": {
       "applicationData": "Application Data",
