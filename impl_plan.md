@@ -32,13 +32,15 @@ Questions:
 1. Let's start with DB models. Define an AFS entity:
     - props:
       - id, createdAt, updatedAt
-      - name: string
+      - name: string.   
+            ```What value does the name holds??```
       - rule: Enum
       - resolved: boolean (default = false)
       - resolvedTime: Date (nullable = true)
       - resolvingUserId: User (nullable = true, eager = true)
-      - resolved application: Application (nullable = true)
-      - status: string (default = flagged, values: resolved)
+      - resolved application: Application (nullable = true)  
+        ```Is it the list of application ids that are resolved?```
+      - status: Enum (Values: flagged, resolved)
       - applications: Application[]
       
       - [NB] Do we need listingID prop as well? - No required
