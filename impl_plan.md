@@ -99,3 +99,88 @@ Questions:
 ### TODO: 
     - Extend AFS Controller.list to accept listingId as a query param
     - Add object level permissions and allow a leasing agent to access AFS (now the permissions only allow admins to act on AFS) - see ApplicationsController.authorizeUserAction method and how it's implemented along with AuthzService implementation, basically we can only tell whether a leasingAgent is allowed to do something after we retrieve the object from the database and check if this is an AFS for a listing that this leasingAgent is assigned to. 
+
+## Revision [MP]:
+### Duplicate adding logic:
+
+1. Application inserted (either caputed by afterInsert or directly in ApplicationsService)
+2. Make 3 queries::
+	a. find all existing applications that match rule 1 name + dob for given new application
+	b. find all existing applications that match rule 2 residence address for given new application
+	c. find all existing applications that match rule 3 email for given new application
+3. For each of the 3 groups of ex_applications (existing applications):
+
+```python
+new_application = {}
+query_results = {
+  "name_dob": [],
+  "residence": []
+  "email": [] 
+}
+for group_rule, group in query_results.items():
+	for ex_application in a group:
+		for afses in ex_application.application_flagged_sets:
+			if any([afs.rule == group_rule for afs in afses):
+				if new_application in afs.applications:
+          continue
+        else:
+          afs.add(new_application)
+          afs.save()
+			else:
+				create a new AFS and connect e_application with new_application
+        afs.save()
+```
+
+### Resolving logic:
+
+By resolving I mean marking as duplicate:
+
+1. Input is:
+  - AFS id
+  - applications ids array to be resolved
+
+2. Since we need to mark multiple applications here I think we need another M:N relation with applications something like resolved applications. Assuming that AFS now has a new property resolvedApplications (array of resolved applications):
+  - add applications ids to this AFS.resolvedApplications array
+  - mark AFS.resolved to true (action has been taken)
+  - set resolvingUserId
+  - set resolve time
+
+3. Now we need to remove the resolved applications from other AFSes. Fetch applications given in input applications ids array and:
+```python
+input_afs_id = ''
+applications_with_afs_joined = []
+for application in applications_with_afs_joined:
+  afs_array_without_resolved_one = filter(lambda afs: afs.id != input_afs_id, application.afs)
+  for afs in afs_array_without_resolved_one:
+    afs.remove(application.id)
+```
+
+### Querying applications:
+
+Logic of querying applications should be modified to accomodate: 
+
+> And the application will then be removed from the main applications table
+
+So if we added the application to AFS.resolvedApplications we need to somehow filter out applications that are in AFS.resolvedApplications because this is indicator that application is a duplicate.
+
+```python
+all_applications = []
+map_to_id_array = lambda arr: map(lambda item: item.id, arr)
+filter(lambda app: not any([app.id in map_to_id_array(afs.resolved_applications)] for afs in app.application_flagged_sets), all_applications)
+# In other words allow only that do not appear in any resolved_applications array for any afs their are assigned to
+```
+
+NOTE: I think application should have a separate property 'duplicate' which is not in the DB but dynamically computed from AFS table like this:
+
+```typescript
+  class Application {
+    ...
+    @Expose()
+    @ApiProperty()
+    get isDuplicate(): boolean {
+      return this.applicationFlaggedSets.some(afs => this.id in afs.resolvedApplications)
+    }
+    ...
+  }
+```
+
