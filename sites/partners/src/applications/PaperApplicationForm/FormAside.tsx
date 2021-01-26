@@ -48,7 +48,7 @@ const FormAside = ({
       )
     }
 
-    elements.push(
+    const cancel = (
       <GridCell className="flex" key="btn-cancel">
         <LinkButton
           unstyled
@@ -60,6 +60,27 @@ const FormAside = ({
         </LinkButton>
       </GridCell>
     )
+
+    if (isEdit) {
+      elements.push(
+        <div className="flex justify-center">
+          {cancel}
+          <GridCell className="flex" key="btn-delete">
+            <Button
+              type="button"
+              unstyled
+              fullWidth
+              className="bg-opacity-0 text-red-700"
+              onClick={() => console.log("delete")}
+            >
+              {t("t.delete")}
+            </Button>
+          </GridCell>
+        </div>
+      )
+    } else {
+      elements.push(cancel)
+    }
 
     return elements
   }, [isEdit, listingId, triggerSubmitAndRedirect])
