@@ -11,6 +11,7 @@ import { ListingsModule } from "../listings/listings.module"
 import { Address } from "../shared/entities/address.entity"
 import { Applicant } from "./entities/applicant.entity"
 import { ApplicationsSubmissionController } from "./applications-submission.controller"
+import { ApplicationFlaggedSetModule } from "../application-flagged-sets/application-flagged-set.module"
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ApplicationsSubmissionController } from "./applications-submission.cont
     AuthModule,
     SharedModule,
     ListingsModule,
+    ApplicationFlaggedSetModule,
   ],
   providers: [ApplicationsService, CsvEncoder, CsvBuilder],
   exports: [ApplicationsService],

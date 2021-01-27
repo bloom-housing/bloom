@@ -3,6 +3,7 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -235,7 +236,9 @@ export class Application extends AbstractEntity {
   @Type(() => Date)
   submissionDate?: Date | null
 
+  @ManyToMany(() => ApplicationFlaggedSet, (afs) => afs.applications)
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  applicationFlaggedSet: ApplicationFlaggedSet[]
+  @Type(() => ApplicationFlaggedSet)
+  applicationFlaggedSets: ApplicationFlaggedSet[]
 }

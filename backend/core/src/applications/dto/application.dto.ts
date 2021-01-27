@@ -40,6 +40,7 @@ export class ApplicationDto extends OmitType(Application, [
   "demographics",
   "householdMembers",
   "preferences",
+  "applicationFlaggedSets",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -97,6 +98,12 @@ export class ApplicationDto extends OmitType(Application, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationPreferencesDto)
   preferences: ApplicationPreferencesDto
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  applicationFlaggedSets: IdDto[]
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
@@ -115,6 +122,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "preferences",
+  "applicationFlaggedSets",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -185,6 +193,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "preferences",
+  "applicationFlaggedSets",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

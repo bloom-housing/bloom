@@ -10,12 +10,14 @@ import { applicationFormattingMetadataAggregateFactory } from "../services/appli
 import { CsvBuilder } from "../services/csv-builder.service"
 import { ApplicationsListQueryParams } from "./applications.controller"
 import { Request } from "express"
+import { ApplicationFlaggedSetService } from "../application-flagged-sets/application-flagged-set.service"
 
 @Injectable()
 export class ApplicationsService {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
+    private readonly applicationFlaggedSetService: ApplicationFlaggedSetService,
     private readonly csvBuilder: CsvBuilder
   ) {}
 
@@ -65,10 +67,12 @@ export class ApplicationsService {
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
-    return await this.repository.save({
+    const application = await this.repository.save({
       ...applicationCreateDto,
       user,
     })
+    await this.applicationFlaggedSetService.handleInsert(application)
+    return application
   }
 
   async findOne(applicationId: string) {

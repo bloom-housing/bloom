@@ -6,6 +6,7 @@ import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { UserDto } from "../../user/dto/user.dto"
 import { ApplicantDto } from "../../applications/dto/applicant.dto"
 import { ApplicationDto } from "../../applications/dto/application.dto"
+import { PaginationFactory } from "../../utils/pagination.dto"
 
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   "resolvingUserId",
@@ -25,8 +26,12 @@ export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationDto)
-  applications: ApplicationDto
+  applications: ApplicationDto[]
 }
+
+export class PaginatedApplicationFlaggedSetDto extends PaginationFactory<ApplicationFlaggedSetDto>(
+  ApplicationFlaggedSetDto
+) {}
 
 export class ApplicationFlaggedSetCreateDto extends OmitType(ApplicationFlaggedSet, [
   "id",
@@ -90,5 +95,5 @@ export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedS
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationDto)
-  applications: ApplicationDto
+  applications: ApplicationDto[]
 }

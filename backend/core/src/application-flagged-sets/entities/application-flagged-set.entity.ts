@@ -22,6 +22,7 @@ import { Application } from "../../applications/entities/application.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { User } from "../../user/entities/user.entity"
 import { Applicant } from "../../applications/entities/applicant.entity"
+import { Expose, Type } from "class-transformer"
 
 export enum Rule {
   nameAndDOB = "Name and DOB",
@@ -34,44 +35,46 @@ export enum FlaggedSetStatus {
   resolved = "resolved",
 }
 
-@Entity({ name: "application-flagged-set" })
+@Entity({ name: "application_flagged_sets" })
 export class ApplicationFlaggedSet {
   @PrimaryGeneratedColumn("uuid")
+  @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
+  @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
+  @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
 
-  // Not sure what does the name holds? primary applicant name?
-  // @Column({ type: "text", nullable: false })
-  // @IsString({ groups: [ValidationsGroupsEnum.default] })
-  // name: string
-
   @ManyToOne(() => Applicant, { eager: true, nullable: true, cascade: true })
   @JoinColumn()
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Applicant)
   primaryApplicant: Applicant
 
   @Column({ enum: Rule, nullable: false })
+  @Expose()
   @IsEnum(Rule, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   rule: string
 
   @Column({ type: "bool", nullable: false })
+  @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   resolved: boolean
 
   @Column({ type: "timestamptz", nullable: true })
+  @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
@@ -79,19 +82,19 @@ export class ApplicationFlaggedSet {
 
   @ManyToOne(() => User, { eager: true, nullable: true, cascade: true })
   @JoinColumn()
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => User)
   resolvingUserId: User
 
-  // resolved applications
-  // did not really understand what to do here
-
-  @Column({ enum: FlaggedSetStatus, nullable: false })
+  @Column({ enum: FlaggedSetStatus, nullable: false, default: FlaggedSetStatus.flagged })
+  @Expose()
   @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
   status: FlaggedSetStatus
 
-  @ManyToMany(() => Application)
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ManyToMany(() => Application, (application) => application.applicationFlaggedSets)
   @JoinTable()
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   applications: Application[]
 }
