@@ -10,18 +10,24 @@ import {
   LocalizedLink,
   Modal,
   AppearanceBorderType,
+  LinkButton,
 } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "./ApplicationContext"
 
-type DetailsAsideProps = {
-  applicationId: string
+type AsideProps = {
+  type: AsideType
+  listingId: string
   onDelete: () => void
+  triggerSubmitAndRedirect?: () => void
 }
 
-const DetailsAside = ({ applicationId, onDelete }: DetailsAsideProps) => {
-  const application = useContext(ApplicationContext)
+type AsideType = "add" | "edit" | "details"
 
+const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsideProps) => {
+  const application = useContext(ApplicationContext)
   const [deleteModal, setDeleteModal] = useState(false)
+
+  const applicationId = application?.id
 
   const applicationUpdated = useMemo(() => {
     if (!application) return null
@@ -31,31 +37,96 @@ const DetailsAside = ({ applicationId, onDelete }: DetailsAsideProps) => {
     return momentDate.format("MMMM DD, YYYY")
   }, [application])
 
-  return (
-    <>
-      <StatusAside
-        columns={1}
-        actions={[
+  const actions = useMemo(() => {
+    const elements = []
+
+    const cancel = (
+      <GridCell className="flex" key="btn-cancel">
+        <LinkButton
+          unstyled
+          fullWidth
+          className="bg-opacity-0"
+          href={`/listings/applications?listing=${listingId}`}
+        >
+          {t("t.cancel")}
+        </LinkButton>
+      </GridCell>
+    )
+
+    if (type === "details") {
+      elements.push(
+        <GridCell key="btn-submitNew">
+          <LocalizedLink href={`/application/edit?id=${applicationId}`}>
+            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+              {t("t.edit")}
+            </Button>
+          </LocalizedLink>
+        </GridCell>,
+        <GridCell className="flex" key="btn-cancel">
+          <Button
+            unstyled
+            fullWidth
+            className="bg-opacity-0 text-red-700"
+            onClick={() => setDeleteModal(true)}
+          >
+            {t("t.delete")}
+          </Button>
+        </GridCell>
+      )
+    }
+
+    if (type === "add" || type === "edit") {
+      elements.push(
+        <GridCell key="btn-submit">
+          <Button styleType={AppearanceStyleType.primary} fullWidth onClick={() => false}>
+            {type === "edit" ? t("application.add.saveAndExit") : t("t.submit")}
+          </Button>
+        </GridCell>
+      )
+
+      if (type === "add") {
+        elements.push(
           <GridCell key="btn-submitNew">
-            <LocalizedLink href={`/application/edit?id=${applicationId}`}>
-              <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
-                {t("t.edit")}
-              </Button>
-            </LocalizedLink>
-          </GridCell>,
-          <GridCell className="flex" key="btn-cancel">
             <Button
-              unstyled
+              type="button"
+              styleType={AppearanceStyleType.secondary}
               fullWidth
-              className="bg-opacity-0 text-red-700"
-              onClick={() => setDeleteModal(true)}
+              onClick={() => triggerSubmitAndRedirect()}
             >
-              {t("t.delete")}
+              {t("t.submitNew")}
             </Button>
           </GridCell>,
-        ]}
-      >
-        <StatusMessages lastTimestamp={applicationUpdated} />
+          cancel
+        )
+      }
+
+      if (type === "edit") {
+        elements.push(
+          <div className="flex justify-center">
+            {cancel}
+            <GridCell className="flex" key="btn-delete">
+              <Button
+                type="button"
+                unstyled
+                fullWidth
+                className="bg-opacity-0 text-red-700"
+                onClick={() => console.log("delete")}
+              >
+                {t("t.delete")}
+              </Button>
+            </GridCell>
+          </div>
+        )
+      }
+    }
+
+    return elements
+  }, [applicationId, listingId, triggerSubmitAndRedirect, type])
+
+  return (
+    <>
+      <StatusAside columns={1} actions={actions}>
+        {type === "edit" && <StatusMessages lastTimestamp={applicationUpdated} />}
       </StatusAside>
 
       <Modal
@@ -90,4 +161,4 @@ const DetailsAside = ({ applicationId, onDelete }: DetailsAsideProps) => {
   )
 }
 
-export { DetailsAside as default, DetailsAside }
+export { Aside as default, Aside }

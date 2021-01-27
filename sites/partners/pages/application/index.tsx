@@ -27,7 +27,7 @@ import { DetailsHouseholdDetails } from "../../src/applications/PaperApplication
 import { DetailsPreferences } from "../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
 import { DetailsHouseholdIncome } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
-import { DetailsAside } from "../../src/applications/Aside"
+import { Aside } from "../../src/applications/Aside"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -131,7 +131,11 @@ export default function ApplicationsList() {
               </div>
 
               <div className="md:w-3/12 pl-6">
-                <DetailsAside applicationId={applicationId} onDelete={deleteApplication} />
+                <Aside
+                  type="details"
+                  listingId={application?.listing?.id}
+                  onDelete={deleteApplication}
+                />
               </div>
             </div>
           </div>

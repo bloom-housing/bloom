@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect, useMemo } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import moment from "moment"
 import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
-import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
 import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
 
@@ -16,7 +15,7 @@ import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
 
-import { FormAside } from "./FormAside"
+import { Aside } from "../Aside"
 import { FormTypes } from "./FormTypes"
 
 type ApplicationFormProps = {
@@ -29,7 +28,7 @@ type ApplicationFormProps = {
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const defaultValues = editMode ? parseApplicationData(application) : {}
 
-  const formMethods = useForm<UseFormMethods<FormTypes>>({
+  const formMethods = useForm<FormTypes>({
     defaultValues,
   })
 
@@ -40,10 +39,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
-  const lastUpdatedDate = useMemo(() => moment(application?.updatedAt).format("MMMM DD, YYYY"), [
-    application,
-  ])
-
   useEffect(() => {
     if (application?.householdMembers) {
       setHouseholdMembers(application.householdMembers)
@@ -51,7 +46,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   }, [application, setHouseholdMembers])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, getValues, trigger } = formMethods
+  const { handleSubmit, trigger, clearErrors, reset } = formMethods
 
   const triggerSubmit = async (data: FormTypes) => onSubmit(data, "details")
 
@@ -59,9 +54,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     const validation = await trigger()
 
     if (validation) {
-      const data: FormTypes = void getValues()
+      const data = formMethods.getValues()
 
-      void onSubmit(data, "new")
+      if (data) {
+        void onSubmit(data, "new")
+      }
     } else {
       onError()
     }
@@ -69,7 +66,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   /*
     @data: form data comes from the react-hook-form
-    @redirect: open application details or blank application form
+    @redirect: open application details or reset form
   */
   const onSubmit = async (data: FormTypes, redirect: "details" | "new") => {
     setAlert(null)
@@ -93,7 +90,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           if (redirect === "details") {
             void router.push(`/application?id=${result.id}`)
           } else {
-            void router.push(`/listings/applications/add?listing=${listingId}`)
+            reset()
+            clearErrors()
+            setAlert(null)
           }
         }, 2000)
       }
@@ -150,11 +149,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
               </div>
 
               <aside className="md:w-3/12 md:pl-6">
-                <FormAside
-                  isEdit={editMode}
-                  triggerSubmitAndRedirect={triggerSubmitAndRedirect}
+                <Aside
+                  type={editMode ? "edit" : "add"}
                   listingId={listingId}
-                  lastUpdated={lastUpdatedDate}
+                  onDelete={() => console.log("delete application")}
+                  triggerSubmitAndRedirect={triggerSubmitAndRedirect}
                 />
               </aside>
             </div>
