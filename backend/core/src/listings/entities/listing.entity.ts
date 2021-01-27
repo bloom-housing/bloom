@@ -3,12 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
+import { User } from "../../user/entities/user.entity"
 import { Asset } from "../../assets/entities/asset.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { WhatToExpect } from "../../shared/dto/whatToExpect.dto"
@@ -103,7 +106,7 @@ class Listing extends BaseEntity {
 
   @ManyToOne(() => Property, (property) => property.listings, { nullable: false })
   @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Property)
   property: Property
 
@@ -219,6 +222,16 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   leasingAgentName: string | null
+
+  @ManyToMany(() => User, (leasingAgent) => leasingAgent.leasingAgentInListings, {
+    nullable: true,
+  })
+  @JoinTable()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => User)
+  leasingAgents?: User[] | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

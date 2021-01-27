@@ -50,7 +50,7 @@
       "title": "Tên của quý vị là gì?",
       "yourName": "Tên Quý vị",
       "firstName": "Tên",
-      "middleName": "Tên Đệm (không bắt buộc)",
+      "middleNameOptional": "Tên Đệm (không bắt buộc)",
       "lastName": "Họ",
       "yourDateOfBirth": "Ngày sinh của Quý vị",
       "yourEmailAddress": "Địa chỉ Email của Quý vị",

@@ -1,21 +1,23 @@
 import React from "react"
 import Head from "next/head"
-import { useRouter } from "next/router"
-import { PageHeader, t, MetaTags } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  MetaTags,
+  PageHeader,
+  StatusBar,
+  t,
+} from "@bloom-housing/ui-components"
 import Layout from "../../../layouts/application"
 import PaperApplicationForm from "../../../src/applications/PaperApplicationForm/PaperApplicationForm"
-import { useSingleApplicationData } from "../../../lib/hooks"
+import { useRouter } from "next/router"
 
 const NewApplication = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
 
   const router = useRouter()
-  const applicationId = router.query.id as string
-
-  const { application } = useSingleApplicationData(applicationId)
-
-  if (!application) return false
+  const listingId = router.query.listing as string
 
   return (
     <Layout>
@@ -25,7 +27,17 @@ const NewApplication = () => {
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader>{t("applications.newApplication")}</PageHeader>
 
-      <PaperApplicationForm listingId={application.listing.id} />
+      <StatusBar
+        backButton={
+          <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
+            {t("t.back")}
+          </Button>
+        }
+        tagStyle={AppearanceStyleType.primary}
+        tagLabel={t(`application.details.applicationStatus.draft`)}
+      />
+
+      <PaperApplicationForm listingId={listingId} />
     </Layout>
   )
 }

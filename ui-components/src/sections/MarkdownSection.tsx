@@ -3,7 +3,7 @@ import "./MarkdownSection.scss"
 
 export interface MarkdownSectionProps {
   fullwidth?: boolean
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 export const MarkdownSection = (props: MarkdownSectionProps) => {

@@ -22,6 +22,7 @@ const mockUser: User = {
   dob: new Date("2020-01-01"),
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2020-01-01"),
+  roles: [],
 }
 
 let initialStateLoaded = false

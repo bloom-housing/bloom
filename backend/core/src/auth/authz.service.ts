@@ -1,14 +1,14 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import { newEnforcer } from "casbin"
 import path from "path"
-import { User } from "../.."
+import { User } from "../user/entities/user.entity"
+import { Listing } from "../listings/entities/listing.entity"
 
 export enum authzActions {
   create = "create",
   read = "read",
   update = "update",
   delete = "delete",
-  listAll = "list_all",
   submit = "submit",
 }
 
@@ -40,6 +40,24 @@ export class AuthzService {
     if (user) {
       await Promise.all(user.roles.map((r) => e.addRoleForUser(user.id, r)))
     }
+
+    if (user) {
+      // NOTE This normally should be in authz_policy.csv, but casbin does not support expressions on arrays.
+      //  Permissions for a leasing agent on applications are there defined here programatically.
+      //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.
+      //  User side this is expressed by 'leasingAgentInListings' property.
+      await Promise.all(
+        user?.leasingAgentInListings.map((listing: Listing) =>
+          e.addPermissionForUser(
+            user.id,
+            "application",
+            `!r.obj || r.obj.listing_id == '${listing.id}'`,
+            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
+          )
+        )
+      )
+    }
+
     return e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 

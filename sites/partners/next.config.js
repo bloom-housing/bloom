@@ -45,9 +45,14 @@ module.exports = withCSS(
           // define page paths for various available languages
           const translatablePaths = {
             "/": { page: "/" },
-            "/listings": { page: "/listings" },
+            "/sign-in": { page: "/sign-in" },
+            "/listings/applications": { page: "/listings/applications" },
+            "/listings/applications/add": { page: "/listings/applications/add" },
+            "/application": { page: "/application" },
+            "/application/edit": { page: "/application/edit" },
           }
-          const languages = ["es"] // add new language codes here
+
+          const languages = ["es", "zh", "vi"] // add new language codes here
           const languagePaths = {}
           Object.entries(translatablePaths).forEach(([key, value]) => {
             languagePaths[key] = value
@@ -61,10 +66,7 @@ module.exports = withCSS(
             })
           })
 
-          // combine the map of all various types of page paths
-          return Object.assign({}, languagePaths, {
-            "/sign-in": { page: "/sign-in" },
-          })
+          return languagePaths
         },
       })
     )

@@ -1,5 +1,5 @@
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
-import { Exclude, Expose, Type } from "class-transformer"
+import { OmitType } from "@nestjs/swagger"
+import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { HouseholdMember } from "../entities/household-member.entity"
@@ -21,10 +21,6 @@ export class HouseholdMemberDto extends OmitType(HouseholdMember, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   workAddress: AddressDto
-
-  @Exclude()
-  @ApiHideProperty()
-  application
 }
 
 export class HouseholdMemberCreateDto extends OmitType(HouseholdMemberDto, [
@@ -33,7 +29,6 @@ export class HouseholdMemberCreateDto extends OmitType(HouseholdMemberDto, [
   "updatedAt",
   "address",
   "workAddress",
-  "application",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -46,10 +41,6 @@ export class HouseholdMemberCreateDto extends OmitType(HouseholdMemberDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   workAddress: AddressCreateDto
-
-  @Exclude()
-  @ApiHideProperty()
-  application
 }
 
 export class HouseholdMemberUpdateDto extends OmitType(HouseholdMemberDto, [
@@ -58,7 +49,6 @@ export class HouseholdMemberUpdateDto extends OmitType(HouseholdMemberDto, [
   "updatedAt",
   "address",
   "workAddress",
-  "application",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -88,8 +78,4 @@ export class HouseholdMemberUpdateDto extends OmitType(HouseholdMemberDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   workAddress: AddressUpdateDto
-
-  @Exclude()
-  @ApiHideProperty()
-  application
 }

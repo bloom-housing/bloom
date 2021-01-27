@@ -37,7 +37,7 @@ const DetailsAside = ({ applicationId, onDelete }: DetailsAsideProps) => {
         columns={1}
         actions={[
           <GridCell key="btn-submitNew">
-            <LocalizedLink href={`/applications/${applicationId}/edit`}>
+            <LocalizedLink href={`/application/edit?id=${applicationId}`}>
               <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
                 {t("t.edit")}
               </Button>

@@ -1,20 +1,15 @@
-.tab-nav {
-  ul {
-    @apply flex;
-    @apply items-center;
-    @apply font-alt-sans;
-    @apply uppercase;
-    @apply text-sm;
-    @apply font-semibold;
-    @apply tracking-wider;
-  }
+.tab-nav ul {
+  @apply flex;
+  @apply items-center;
+  @apply font-alt-sans;
+  @apply uppercase;
+  @apply text-sm;
+  @apply font-semibold;
+  @apply tracking-wider;
+}
 
-  li {
-    @apply flex;
-  }
-
+.tab-nav__tab {
   a {
-    @apply flex;
     @apply block;
     @apply px-6;
     @apply py-3;
@@ -25,13 +20,11 @@
     line-height: 1.5rem;
 
     &:hover {
-      @apply border-b-2;
       @apply text-gray-900;
       @apply border-gray-450;
     }
 
-    &.is-current {
-      @apply border-b-2;
+    &.is-active {
       @apply border-primary;
       @apply text-gray-900;
     }

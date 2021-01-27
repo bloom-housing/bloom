@@ -8,6 +8,7 @@ export interface LocalizedLinkProps {
   className?: string
   children?: any
   aria?: Record<string, string>
+  tabIndex?: number
 }
 
 const LocalizedLink = (props: LocalizedLinkProps) => {
@@ -22,7 +23,7 @@ const LocalizedLink = (props: LocalizedLinkProps) => {
 
   return (
     <Link {...localizedProps}>
-      <a className={props.className} {...ariaAttributes}>
+      <a className={props.className} tabIndex={props.tabIndex} {...ariaAttributes}>
         {props.children}
       </a>
     </Link>

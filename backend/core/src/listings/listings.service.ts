@@ -3,6 +3,8 @@ import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
 import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Repository } from "typeorm"
 
 export enum ListingsResponseStatus {
   ok = "ok",
@@ -10,17 +12,24 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<Listing[]> {
-    let listings = await Listing.createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.preferences", "preferences")
+  constructor(@InjectRepository(Listing) private readonly repository: Repository<Listing>) {}
+
+  private getQueryBuilder() {
+    return Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
       .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.events", "events")
+      .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
+      .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("amiChart.items", "amiChartItems")
+  }
+
+  public async list(jsonpath?: string): Promise<Listing[]> {
+    let listings = await this.getQueryBuilder()
       .orderBy({
         "listings.id": "DESC",
         "units.max_occupancy": "ASC",
@@ -64,17 +73,8 @@ export class ListingsService {
   }
 
   async findOne(listingId: string) {
-    return await Listing.createQueryBuilder("listings")
+    return await this.getQueryBuilder()
       .where("listings.id = :id", { id: listingId })
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
-      .leftJoinAndSelect("listings.assets", "assets")
-      .leftJoinAndSelect("listings.events", "events")
-      .leftJoinAndSelect("listings.property", "property")
-      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
-      .leftJoinAndSelect("property.units", "units")
-      .leftJoinAndSelect("units.amiChart", "amiChart")
-      .leftJoinAndSelect("amiChart.items", "amiChartItems")
       .orderBy({
         "preferences.ordinal": "ASC",
       })
