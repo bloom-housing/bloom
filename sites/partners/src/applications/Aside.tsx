@@ -102,7 +102,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
 
       if (type === "edit") {
         elements.push(
-          <div className="flex justify-center">
+          <div className="flex justify-center" key="btn-group">
             {cancel}
             <GridCell className="flex" key="btn-delete">
               <Button
@@ -110,7 +110,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
                 unstyled
                 fullWidth
                 className="bg-opacity-0 text-red-700"
-                onClick={() => console.log("delete")}
+                onClick={() => setDeleteModal(true)}
               >
                 {t("t.delete")}
               </Button>

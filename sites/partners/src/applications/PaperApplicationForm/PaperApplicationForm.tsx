@@ -105,6 +105,15 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     setAlert("alert")
   }
 
+  async function deleteApplication() {
+    try {
+      await applicationsService.delete({ applicationId: application?.id })
+      void router.push(`/listings/applications?listing=${listingId}`)
+    } catch (err) {
+      setAlert("alert")
+    }
+  }
+
   return (
     <FormProvider {...formMethods}>
       <section className="bg-primary-lighter">
@@ -152,7 +161,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                 <Aside
                   type={editMode ? "edit" : "add"}
                   listingId={listingId}
-                  onDelete={() => console.log("delete application")}
+                  onDelete={() => deleteApplication()}
                   triggerSubmitAndRedirect={triggerSubmitAndRedirect}
                 />
               </aside>
