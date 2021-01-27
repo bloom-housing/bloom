@@ -13,11 +13,11 @@ import {
   lRoute,
   LocalizedLink,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../../../../lib/hooks"
-import Layout from "../../../../layouts/application"
+import { useApplicationsData } from "../../../lib/hooks"
+import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { getColDefs } from "../../../../src/applications/applicationsColDefs"
+import { getColDefs } from "../../../src/applications/applicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {
@@ -37,7 +37,7 @@ const ApplicationsList = () => {
   const pageSize = watch("page-size", 8)
   const [pageIndex, setPageIndex] = useState(1)
 
-  const listingId = router.query.id as string
+  const listingId = router.query.listing as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
   const { applicationsService } = useContext(ApiClientContext)
 
@@ -122,7 +122,7 @@ const ApplicationsList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        void router.push(lRoute(`/applications/${params.value}`))
+        void router.push(lRoute(`/application?id=${params.value}`))
       })
     }
 
@@ -178,7 +178,7 @@ const ApplicationsList = () => {
               </div>
 
               <div className="flex-row">
-                <LocalizedLink href={`/listings/${listingId}/applications/add`}>
+                <LocalizedLink href={`/listings/applications/add?listing=${listingId}`}>
                   <Button className="mx-1" onClick={() => false}>
                     {t("applications.addApplication")}
                   </Button>
