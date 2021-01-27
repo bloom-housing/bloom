@@ -103,7 +103,7 @@ export class UserService {
     }
 
     // Token expires in 24 hours
-    const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
+    const payload = { id: user.id, expiresAt: moment().add(1, "hour") }
     const token = encode(payload, process.env.SECRET)
     user.resetToken = token
     await this.repo.save(user)

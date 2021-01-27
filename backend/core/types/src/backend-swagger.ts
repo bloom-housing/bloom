@@ -118,6 +118,48 @@ export class UserService {
     });
   }
   /**
+   * Forgot Password
+   */
+  forgotPassword(
+    params: {
+      /** requestBody */
+      body?: ForgotPassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ForgotPasswordResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/forgot-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update Password
+   */
+  updatePassword(
+    params: {
+      /** requestBody */
+      body?: UpdatePassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/update-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Update user
    */
   update(
@@ -1081,6 +1123,35 @@ export interface UserWithAccessToken {
   accessToken: string;
 }
 
+export interface ForgotPassword {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface ForgotPasswordResponse {
+  /**  */
+  message: string;
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  token: string;
+}
+
+export interface LoginResponse {
+  /**  */
+  accessToken: string;
+}
+
 export interface UserUpdate {
   /**  */
   id?: string;
@@ -1110,11 +1181,6 @@ export interface Login {
 
   /**  */
   password: string;
-}
-
-export interface LoginResponse {
-  /**  */
-  accessToken: string;
 }
 
 export interface PreferenceLink {
@@ -1469,6 +1535,9 @@ export interface Property {
 export interface UserBasic {
   /**  */
   id: string;
+
+  /**  */
+  resetToken: string;
 
   /**  */
   email: string;

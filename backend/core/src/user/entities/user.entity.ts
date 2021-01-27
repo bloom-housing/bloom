@@ -31,6 +31,9 @@ export class User {
   @Column("varchar", { select: false })
   passwordHash: string
 
+  @Column("varchar", { select: false, nullable: true })
+  resetToken: string
+
   @Column("varchar")
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
@@ -81,9 +84,6 @@ export class User {
 
   @Column("boolean", { default: false })
   isAdmin: boolean
-
-  @Column("varchar", { select: false, nullable: true })
-  resetToken: string
 
   /**
    * Array of roles this user can become. Logic is simple right now, but in theory this will expand to take into
