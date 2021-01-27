@@ -11,7 +11,7 @@ import {
   Modal,
   AppearanceBorderType,
 } from "@bloom-housing/ui-components"
-import { DetailsApplicationContext } from "../ApplicationContext"
+import { ApplicationContext } from "./ApplicationContext"
 
 type DetailsAsideProps = {
   applicationId: string
@@ -19,7 +19,7 @@ type DetailsAsideProps = {
 }
 
 const DetailsAside = ({ applicationId, onDelete }: DetailsAsideProps) => {
-  const application = useContext(DetailsApplicationContext)
+  const application = useContext(ApplicationContext)
 
   const [deleteModal, setDeleteModal] = useState(false)
 

@@ -18,7 +18,7 @@ import {
   MembersDrawer,
 } from "../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
 
-import { DetailsApplicationContext } from "../../src/applications/ApplicationContext"
+import { ApplicationContext } from "../../src/applications/ApplicationContext"
 import { DetailsApplicationData } from "../../src/applications/PaperApplicationDetails/sections/DetailsApplicationData"
 import { DetailsPrimaryApplicant } from "../../src/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
 import { DetailsAlternateContact } from "../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
@@ -27,7 +27,7 @@ import { DetailsHouseholdDetails } from "../../src/applications/PaperApplication
 import { DetailsPreferences } from "../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
 import { DetailsHouseholdIncome } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
-import { DetailsAside } from "../../src/applications/PaperApplicationDetails/DetailsAside"
+import { DetailsAside } from "../../src/applications/Aside"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -74,7 +74,7 @@ export default function ApplicationsList() {
   if (!application) return null
 
   return (
-    <DetailsApplicationContext.Provider value={application}>
+    <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
           <title>{t("nav.siteTitle")}</title>
@@ -143,6 +143,6 @@ export default function ApplicationsList() {
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
       />
-    </DetailsApplicationContext.Provider>
+    </ApplicationContext.Provider>
   )
 }
