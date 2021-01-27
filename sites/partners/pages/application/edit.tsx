@@ -10,9 +10,9 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
-import Layout from "../../../layouts/application"
-import PaperApplicationForm from "../../../src/applications/PaperApplicationForm/PaperApplicationForm"
-import { useSingleApplicationData } from "../../../lib/hooks"
+import Layout from "../../layouts/application"
+import PaperApplicationForm from "../../src/applications/PaperApplicationForm/PaperApplicationForm"
+import { useSingleApplicationData } from "../../lib/hooks"
 
 const NewApplication = () => {
   const metaDescription = ""

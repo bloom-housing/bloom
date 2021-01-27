@@ -91,9 +91,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
         setTimeout(() => {
           if (redirect === "details") {
-            void router.push(`/applications/${result.id}`)
+            void router.push(`/application?id=${result.id}`)
           } else {
-            void router.push(`/listings/${listingId}/add`)
+            void router.push(`/listings/applications/add?listing=${listingId}`)
           }
         }, 2000)
       }

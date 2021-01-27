@@ -8,8 +8,8 @@ import {
   StatusBar,
   t,
 } from "@bloom-housing/ui-components"
-import Layout from "../../../../layouts/application"
-import PaperApplicationForm from "../../../../src/applications/PaperApplicationForm/PaperApplicationForm"
+import Layout from "../../../layouts/application"
+import PaperApplicationForm from "../../../src/applications/PaperApplicationForm/PaperApplicationForm"
 import { useRouter } from "next/router"
 
 const NewApplication = () => {
@@ -17,7 +17,7 @@ const NewApplication = () => {
   const metaImage = "" // TODO: replace with hero image
 
   const router = useRouter()
-  const listingId = router.query.id as string
+  const listingId = router.query.listing as string
 
   return (
     <Layout>
