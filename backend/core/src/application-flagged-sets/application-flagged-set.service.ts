@@ -13,7 +13,9 @@ export class ApplicationFlaggedSetService {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     @InjectRepository(ApplicationFlaggedSet)
-    private readonly repository: Repository<ApplicationFlaggedSet>
+    private readonly repository: Repository<ApplicationFlaggedSet>,
+    @InjectRepository(Application)
+    private readonly applicationsRepository: Repository<Application>
   ) {}
   async list(params: ApplicationsListQueryParams) {
     return paginate(
