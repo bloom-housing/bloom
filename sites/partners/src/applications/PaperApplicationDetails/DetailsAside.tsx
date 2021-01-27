@@ -11,7 +11,7 @@ import {
   Modal,
   AppearanceBorderType,
 } from "@bloom-housing/ui-components"
-import { DetailsApplicationContext } from "./DetailsApplicationContext"
+import { DetailsApplicationContext } from "../ApplicationContext"
 
 type DetailsAsideProps = {
   applicationId: string

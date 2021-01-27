@@ -18,7 +18,7 @@ import {
   MembersDrawer,
 } from "../../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
 
-import { DetailsApplicationContext } from "../../../src/applications/PaperApplicationDetails/DetailsApplicationContext"
+import { DetailsApplicationContext } from "../../../src/applications/ApplicationContext"
 import { DetailsApplicationData } from "../../../src/applications/PaperApplicationDetails/sections/DetailsApplicationData"
 import { DetailsPrimaryApplicant } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
 import { DetailsAlternateContact } from "../../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
