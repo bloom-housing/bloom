@@ -28,6 +28,25 @@ export class ApplicationFlaggedSetService {
   }
 
   async handleInsert(application: Application) {
+    const nameDobRule = await this.repository.find({
+      where: {
+        firstName: application.applicant.firstName,
+        lastName: application.applicant.lastName,
+        dob: application.applicant.birthDay,
+      },
+      relations: ["applications"],
+    })
+
+    const emailRule = await this.repository.find({
+      where: {
+        emailAddress: application.applicant.emailAddress,
+      },
+      relations: ["applications"],
+    })
+
+    console.log("Name and DOB Rule ", nameDobRule)
+    console.log("Email Rule ", emailRule)
+
     return this.repository.save({
       primaryApplicant: null,
       rule: Rule.email,

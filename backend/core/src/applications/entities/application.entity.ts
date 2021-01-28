@@ -56,6 +56,9 @@ export enum IncomePeriod {
 
 @Entity({ name: "applications" })
 export class Application extends AbstractEntity {
+  static createQueryBuilder(arg0: string) {
+    throw new Error("Method not implemented.")
+  }
   @DeleteDateColumn()
   @Expose()
   @IsOptional()
