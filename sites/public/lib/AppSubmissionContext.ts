@@ -6,7 +6,7 @@ export const retrieveApplicationConfig = () => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   return {
     sections: ["you", "household", "income", "preferences", "review"],
-    languages: ["en", "zh"],
+    languages: ["en", "es", "zh", "vi"],
     steps: [
       {
         name: "chooseLanguage",

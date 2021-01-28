@@ -8,6 +8,12 @@
     "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
   },
   "applications": {
+    "begin": {
+      "en": "Begin",
+      "es": "Empezar",
+      "zh": "開始",
+      "vi": "Bắt đầu"
+    },
     "totalApplications": "Total Applications",
     "addApplication": "Add Application",
     "newApplication": "New Application",
