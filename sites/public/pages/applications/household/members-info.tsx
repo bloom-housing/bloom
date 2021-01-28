@@ -11,6 +11,7 @@ import {
   Form,
   FormCard,
   ProgressNav,
+  lRoute,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -28,7 +29,9 @@ export default () => {
     shouldFocusError: false,
   })
   const onSubmit = () => {
-    void router.push("/applications/household/add-members").then(() => window.scrollTo(0, 0))
+    void router
+      .push(lRoute("/applications/household/add-members"))
+      .then(() => window.scrollTo(0, 0))
   }
   const onError = () => {
     window.scrollTo(0, 0)

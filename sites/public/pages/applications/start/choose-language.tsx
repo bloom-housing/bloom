@@ -32,6 +32,7 @@ const loadListing = async (listingId, stateFunction, conductor, context) => {
 export default () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
+  const [newLocale, setNewLocale] = useState("")
   const context = useContext(AppSubmissionContext)
   const { conductor, application } = context
 
@@ -53,7 +54,9 @@ export default () => {
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+    void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
+      window.scrollTo(0, 0)
+    })
   }
 
   return (
@@ -91,42 +94,22 @@ export default () => {
           <Form className="" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__pager-row primary px-4">
               {listing?.applicationConfig.languages.length > 1 && (
-                <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
-                  {t("application.chooseLanguage.chooseYourLanguage")}
-                </h3>
-              )}
+                <>
+                  <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
+                    {t("application.chooseLanguage.chooseYourLanguage")}
+                  </h3>
 
-              {listing?.applicationConfig.languages.some((lang) => lang == "en") && (
-                <Button
-                  className="language-select mx-1"
-                  onClick={() => {
-                    // Set the language in the context here...
-                  }}
-                >
-                  Begin
-                </Button>
-              )}
-
-              {listing?.applicationConfig.languages.some((lang) => lang == "es") && (
-                <Button
-                  className="language-select mx-1"
-                  onClick={() => {
-                    //
-                  }}
-                >
-                  Empezar
-                </Button>
-              )}
-
-              {listing?.applicationConfig.languages.some((lang) => lang == "zh") && (
-                <Button
-                  className="language-select mx-1"
-                  onClick={() => {
-                    //
-                  }}
-                >
-                  開始
-                </Button>
+                  {listing.applicationConfig.languages.map((lang) => (
+                    <Button
+                      className="language-select mx-1"
+                      onClick={() => {
+                        setNewLocale(lang == "en" ? "" : `/${lang}`)
+                      }}
+                    >
+                      {t(`applications.begin.${lang}`)}
+                    </Button>
+                  ))}
+                </>
               )}
             </div>
           </Form>
