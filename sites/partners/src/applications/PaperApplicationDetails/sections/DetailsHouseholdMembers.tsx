@@ -1,14 +1,15 @@
 import React, { useContext, useMemo } from "react"
 import { t, GridSection, MinimalTable, Button } from "@bloom-housing/ui-components"
-import { DetailsApplicationContext } from "../DetailsApplicationContext"
+import { ApplicationContext } from "../../ApplicationContext"
 import { MembersDrawer } from "../DetailsMemberDrawer"
+import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 type DetailsHouseholdMembersProps = {
   setMembersDrawer: (member: MembersDrawer) => void
 }
 
 const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersProps) => {
-  const application = useContext(DetailsApplicationContext)
+  const application = useContext(ApplicationContext)
 
   const householdMembersHeaders = {
     name: t("t.name"),
@@ -21,13 +22,13 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   const householdMembersData = useMemo(() => {
     const checkAvailablility = (property) => {
-      if (property === null) {
-        return t("t.n/a")
-      } else if (property) {
+      if (property === YesNoAnswer.Yes) {
         return t("t.yes")
+      } else if (property === "no") {
+        return t("t.no")
       }
 
-      return t("t.no")
+      return t("t.n/a")
     }
     return application?.householdMembers?.map((item) => ({
       name: `${item.firstName} ${item.middleName} ${item.lastName}`,

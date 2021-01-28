@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
-import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
-import { formatApplicationData } from "../../../lib/formatApplicationData"
+import { useForm, FormProvider } from "react-hook-form"
+import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
+import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
 
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
@@ -15,16 +15,23 @@ import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
 
-import { FormAside } from "./FormAside"
+import { Aside } from "../Aside"
 import { FormTypes } from "./FormTypes"
 
 type ApplicationFormProps = {
   listingId: string
+  application?: Application
   editMode?: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
+const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
+  const defaultValues = editMode ? parseApplicationData(application) : {}
+
+  const formMethods = useForm<FormTypes>({
+    defaultValues,
+  })
+
   const router = useRouter()
 
   const { applicationsService } = useContext(ApiClientContext)
@@ -32,10 +39,14 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
   const [alert, setAlert] = useState<AlertTypes | null>(null)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
-  const formMethods = useForm<UseFormMethods<FormTypes>>()
+  useEffect(() => {
+    if (application?.householdMembers) {
+      setHouseholdMembers(application.householdMembers)
+    }
+  }, [application, setHouseholdMembers])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, getValues, trigger } = formMethods
+  const { handleSubmit, trigger, clearErrors, reset } = formMethods
 
   const triggerSubmit = async (data: FormTypes) => onSubmit(data, "details")
 
@@ -43,9 +54,11 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
     const validation = await trigger()
 
     if (validation) {
-      const data: FormTypes = void getValues()
+      const data = formMethods.getValues()
 
-      void onSubmit(data, "new")
+      if (data) {
+        void onSubmit(data, "new")
+      }
     } else {
       onError()
     }
@@ -53,7 +66,7 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
 
   /*
     @data: form data comes from the react-hook-form
-    @redirect: open application details or blank application form
+    @redirect: open application details or reset form
   */
   const onSubmit = async (data: FormTypes, redirect: "details" | "new") => {
     setAlert(null)
@@ -66,7 +79,9 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
     const body = formatApplicationData(formData, listingId, false)
 
     try {
-      const result = await applicationsService.create({ body })
+      const result = editMode
+        ? await applicationsService.update({ applicationId: application.id, body })
+        : await applicationsService.create({ body })
 
       if (result) {
         setAlert("success")
@@ -75,7 +90,9 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
           if (redirect === "details") {
             void router.push(`/application?id=${result.id}`)
           } else {
-            void router.push(`/listings/applications/add?listing=${listingId}`)
+            reset()
+            clearErrors()
+            setAlert(null)
           }
         }, 2000)
       }
@@ -88,15 +105,30 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
     setAlert("alert")
   }
 
+  async function deleteApplication() {
+    try {
+      await applicationsService.delete({ applicationId: application?.id })
+      void router.push(`/listings/applications?listing=${listingId}`)
+    } catch (err) {
+      setAlert("alert")
+    }
+  }
+
   return (
     <FormProvider {...formMethods}>
       <section className="bg-primary-lighter">
         <div className="max-w-screen-xl px-5 my-5 mx-auto">
           {alert && (
             <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
-              {alert === "success"
-                ? t("application.add.applicationSubmitted")
-                : t("application.add.applicationAddError")}
+              {(() => {
+                if (alert === "success") {
+                  return editMode
+                    ? t("application.add.applicationUpdated")
+                    : t("application.add.applicationSubmitted")
+                }
+
+                return t("application.add.applicationAddError")
+              })()}
             </AlertBox>
           )}
 
@@ -126,10 +158,11 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
               </div>
 
               <aside className="md:w-3/12 md:pl-6">
-                <FormAside
-                  isEdit={false}
-                  triggerSubmitAndRedirect={triggerSubmitAndRedirect}
+                <Aside
+                  type={editMode ? "edit" : "add"}
                   listingId={listingId}
+                  onDelete={() => deleteApplication()}
+                  triggerSubmitAndRedirect={triggerSubmitAndRedirect}
                 />
               </aside>
             </div>

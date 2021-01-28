@@ -17,6 +17,7 @@
     "totalApplications": "Total Applications",
     "addApplication": "Add Application",
     "newApplication": "New Application",
+    "editApplication": "Edit Application",
     "applicationsReceived": "Applications Received",
     "table": {
       "applicationSubmissionDate": "Application Submission Date",
@@ -85,7 +86,9 @@
       "languageSubmittedIn": "Language Submitted In",
       "timeSubmitted": "Time Submitted",
       "dateSubmitted": "Date Submitted",
-      "applicationSubmitted": "Application Submitted"
+      "applicationSubmitted": "Application Submitted",
+      "applicationUpdated": "Application Updated",
+      "saveAndExit": "Save & exit"
     },
     "details": {
       "applicationData": "Application Data",
