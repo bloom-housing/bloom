@@ -32,10 +32,15 @@ const NewApplication = () => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
+
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+
         <PageHeader>
-          {t("applications.editApplication")}{" "}
-          <p className="text-base">{`${application.applicant?.firstName} ${application.applicant?.middleName} ${application.applicant?.lastName}`}</p>
+          <p className="font-sans font-semibold uppercase text-3xl">
+            {t("t.edit")}: {application.applicant.firstName} {application.applicant.lastName}
+          </p>
+
+          <p className="font-sans text-base mt-1">{application.id}</p>
         </PageHeader>
 
         <StatusBar
