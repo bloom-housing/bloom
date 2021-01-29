@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { Repository, SelectQueryBuilder } from "typeorm"
 import { Request } from "express"
-import { ApplicationFlaggedSet, Rule } from "./entities/application-flagged-set.entity"
+import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { paginate } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "../applications/applications.controller"
 import { Application } from "../applications/entities/application.entity"
@@ -36,34 +36,57 @@ export class ApplicationFlaggedSetService {
 
   async handleInsert(application: Application) {
     console.log("Whats in Application ??", application)
+    const nameDobRule = await this.applicationsRepository.find({
+      where: (qb: SelectQueryBuilder<Application>) => {
+        qb.where("Application__applicant.firstName = :firstName", {
+          firstName: application.applicant.firstName,
+        })
+        qb.andWhere("Application__applicant.lastName = :lastName", {
+          lastName: application.applicant.lastName,
+        })
+        qb.andWhere("Application__applicant.birthMonth = :birthMonth", {
+          birthMonth: application.applicant.birthMonth,
+        })
+        qb.andWhere("Application__applicant.birthDay = :birthDay", {
+          birthDay: application.applicant.birthDay,
+        })
+        qb.andWhere("Application__applicant.birthYear = :birthYear", {
+          birthYear: application.applicant.birthYear,
+        })
+        qb.andWhere("Application.status = :status", { status: "submitted" })
+      },
+    })
+    nameDobRule["rule"] = "Name and DOB"
 
-    // Pulls all the duplicate applications with same Name and DOB
-    // I will optimize the query to get the FirstName + LastName and DOB as mm/dd/yyyy in one where clause
-    const nameDobRule = await this.applicationsRepository
-      .createQueryBuilder("applications")
-      .leftJoinAndSelect("applications.applicant", "applicant")
-      .where("applicant.firstName = :firstName", { firstName: application.applicant.firstName })
-      .andWhere("applicant.lastName = :lastName", { lastName: application.applicant.lastName })
-      .andWhere("applicant.birthMonth = :birthMonth", { birthMonth: application.applicant.birthMonth })
-      .andWhere("applicant.birthDay = :birthDay", { birthDay: application.applicant.birthDay })
-      .andWhere("applicant.birthYear = :birthYear", { birthYear: application.applicant.birthYear })
-      .getMany()
+    const emailRule = await this.applicationsRepository.find({
+      where: (qb: SelectQueryBuilder<Application>) => {
+        qb.where("Application__applicant.emailAddress = :emailAddress", {
+          emailAddress: application.applicant.emailAddress,
+        })
+        qb.andWhere("Application.status = :status", { status: "submitted" })
+      },
+    })
+    emailRule["rule"] = "Email"
 
-    // Pulls all the duplicate applications with Email Address
-    const emailRule = await this.applicationsRepository
-      .createQueryBuilder("applications")
-      .leftJoinAndSelect("applications.applicant", "applicant")
-      .where("applicant.emailAddress = :emailAddress", { emailAddress: application.applicant.emailAddress })
-      .getMany()
+    // console.log("Name and DOB Rule Data", nameDobRule)
+    // console.log("Email Rule Data", emailRule)
 
-    console.log("Name and DOB Rule Data", nameDobRule)
-    console.log("Email Rule Data", emailRule)
+    // testing purpose only
+    let primaryApplicant = null
+    let rule = null
+    const duplicateApplications = []
+    for (const apps of nameDobRule) {
+      primaryApplicant = apps.applicant.id
+      rule = nameDobRule["rule"]
+      duplicateApplications.push(apps.id)
+      console.log("APPLICATIONSSSS ", duplicateApplications)
+    }
 
     return this.repository.save({
-      primaryApplicant: null,
-      rule: Rule.email,
+      primaryApplicant: primaryApplicant,
+      rule: rule,
       resolved: false,
-      applications: [{ id: application.id }],
+      applications: duplicateApplications,
     })
   }
 }
