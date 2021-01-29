@@ -4,7 +4,6 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDefined,
-  IsEmail,
   IsIn,
   IsOptional,
   IsString,
@@ -61,7 +60,7 @@ export class Applicant extends AbstractEntity {
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  // @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   emailAddress?: string | null
 
   @Column({ type: "bool", nullable: true })
