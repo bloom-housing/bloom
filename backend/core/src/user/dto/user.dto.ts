@@ -1,7 +1,15 @@
 import { OmitType } from "@nestjs/swagger"
 import { User } from "../entities/user.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import {
+  IsDate,
+  IsDefined,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  ValidateNested,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { IdDto } from "../../lib/id.dto"
 
@@ -42,6 +50,7 @@ export class UserCreateDto extends OmitType(UserDto, [
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   password: string
 }
 

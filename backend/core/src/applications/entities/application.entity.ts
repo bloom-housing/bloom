@@ -10,6 +10,7 @@ import {
 import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import {
+  ArrayMaxSize,
   IsBoolean,
   IsDate,
   IsDefined,
@@ -17,6 +18,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
   ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
@@ -65,6 +67,7 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
 
   @ManyToOne(() => User, (user) => user.applications, { nullable: true })
@@ -90,17 +93,21 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   additionalPhoneNumber?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   additionalPhoneNumberType?: string | null
 
   @Column("text", { array: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   contactPreferences: string[]
 
   @Column({ type: "integer", nullable: true })
@@ -113,6 +120,7 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   housingStatus?: string | null
 
   @Column({ type: "bool", nullable: true })
@@ -171,6 +179,7 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   income?: string | null
 
   @Column({ enum: IncomePeriod, nullable: true })
@@ -186,12 +195,15 @@ export class Application extends AbstractEntity {
   })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMember)
   householdMembers: HouseholdMember[]
 
   @Column({ type: "text", array: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   preferredUnit: string[]
 
   @OneToOne(() => ApplicationPreferences, { eager: true, cascade: true })
