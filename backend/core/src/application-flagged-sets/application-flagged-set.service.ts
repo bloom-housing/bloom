@@ -17,6 +17,13 @@ export class ApplicationFlaggedSetService {
     @InjectRepository(Application)
     private readonly applicationsRepository: Repository<Application>
   ) {}
+
+  private getQueryBuilder() {
+    return this.applicationsRepository
+      .createQueryBuilder("application")
+      .leftJoinAndSelect("application.applicant", "applicant")
+  }
+
   async list(params: ApplicationsListQueryParams) {
     return paginate(
       this.repository,
@@ -28,24 +35,29 @@ export class ApplicationFlaggedSetService {
   }
 
   async handleInsert(application: Application) {
-    const nameDobRule = await this.repository.find({
-      where: {
-        firstName: application.applicant.firstName,
-        lastName: application.applicant.lastName,
-        dob: application.applicant.birthDay,
-      },
-      relations: ["applications"],
-    })
+    console.log("Whats in Application ??", application)
 
-    const emailRule = await this.repository.find({
-      where: {
-        emailAddress: application.applicant.emailAddress,
-      },
-      relations: ["applications"],
-    })
+    // Pulls all the duplicate applications with same Name and DOB
+    // I will optimize the query to get the FirstName + LastName and DOB as mm/dd/yyyy in one where clause
+    const nameDobRule = await this.applicationsRepository
+      .createQueryBuilder("applications")
+      .leftJoinAndSelect("applications.applicant", "applicant")
+      .where("applicant.firstName = :firstName", { firstName: application.applicant.firstName })
+      .andWhere("applicant.lastName = :lastName", { lastName: application.applicant.lastName })
+      .andWhere("applicant.birthMonth = :birthMonth", { birthMonth: application.applicant.birthMonth })
+      .andWhere("applicant.birthDay = :birthDay", { birthDay: application.applicant.birthDay })
+      .andWhere("applicant.birthYear = :birthYear", { birthYear: application.applicant.birthYear })
+      .getMany()
 
-    console.log("Name and DOB Rule ", nameDobRule)
-    console.log("Email Rule ", emailRule)
+    // Pulls all the duplicate applications with Email Address
+    const emailRule = await this.applicationsRepository
+      .createQueryBuilder("applications")
+      .leftJoinAndSelect("applications.applicant", "applicant")
+      .where("applicant.emailAddress = :emailAddress", { emailAddress: application.applicant.emailAddress })
+      .getMany()
+
+    console.log("Name and DOB Rule Data", nameDobRule)
+    console.log("Email Rule Data", emailRule)
 
     return this.repository.save({
       primaryApplicant: null,
