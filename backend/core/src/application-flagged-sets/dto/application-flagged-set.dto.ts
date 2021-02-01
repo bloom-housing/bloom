@@ -10,7 +10,6 @@ import { PaginationFactory } from "../../utils/pagination.dto"
 
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   "resolvingUserId",
-  "primaryApplicant",
   "applications",
 ] as const) {
   @Expose()
@@ -38,7 +37,6 @@ export class ApplicationFlaggedSetCreateDto extends OmitType(ApplicationFlaggedS
   "createdAt",
   "updatedAt",
   "resolvingUserId",
-  "primaryApplicant",
   "applications",
 ] as const) {
   @Expose()
@@ -62,7 +60,6 @@ export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedS
   "createdAt",
   "updatedAt",
   "resolvingUserId",
-  "primaryApplicant",
   "applications",
 ] as const) {
   @Expose()

@@ -21,7 +21,6 @@ import {
 import { Application } from "../../applications/entities/application.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { User } from "../../user/entities/user.entity"
-import { Applicant } from "../../applications/entities/applicant.entity"
 import { Expose, Type } from "class-transformer"
 
 export enum Rule {
@@ -54,13 +53,6 @@ export class ApplicationFlaggedSet {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
-
-  @ManyToOne(() => Applicant, { eager: true, nullable: true, cascade: true })
-  @JoinColumn()
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Applicant)
-  primaryApplicant: Applicant
 
   @Column({ enum: Rule, nullable: false })
   @Expose()

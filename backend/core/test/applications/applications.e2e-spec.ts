@@ -24,6 +24,7 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { ApplicationFlaggedSet } from "../../src/application-flagged-sets/entities/application-flagged-set.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -41,6 +42,7 @@ describe("Applications", () => {
   let leasingAgent2Profile: UserDto
   let applicationsRepository: Repository<Application>
   let householdMembersRepository: Repository<HouseholdMember>
+  let afsRepository: Repository<ApplicationFlaggedSet>
   let listing1Id: string
   let listing2Id: string
 
@@ -58,9 +60,9 @@ describe("Applications", () => {
         firstName: "Applicant",
         middleName: "Middlename",
         lastName: "",
-        birthMonth: "",
-        birthDay: "",
-        birthYear: "",
+        birthMonth: "01",
+        birthDay: "02",
+        birthYear: "1990",
         emailAddress: null,
         noEmail: false,
         phoneNumber: "",
@@ -172,6 +174,9 @@ describe("Applications", () => {
     householdMembersRepository = app.get<Repository<HouseholdMember>>(
       getRepositoryToken(HouseholdMember)
     )
+    afsRepository = app.get<Repository<ApplicationFlaggedSet>>(
+      getRepositoryToken(ApplicationFlaggedSet)
+    )
 
     user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
 
@@ -220,6 +225,7 @@ describe("Applications", () => {
   beforeEach(async () => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()
+    await afsRepository.createQueryBuilder().delete().execute()
   })
 
   it(`should allow a user to create and read his own application `, async () => {
@@ -502,6 +508,70 @@ describe("Applications", () => {
       .send(newBody)
       .set(...setAuthorization(user2AccessToken))
       .expect(403)
+  })
+
+  it(`should create a single application flagged set for two and three duplicate applications`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.emailAddress = "one@email.com"
+    body.applicant.firstName = "One"
+    const appRes1 = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(201)
+    const appRes2 = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(201)
+    let afsRes = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets/`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(afsRes.body.items.length).toBe(1)
+    expect(afsRes.body.items[0].applications.length).toBe(2)
+    let appsInAfs = afsRes.body.items[0].applications.map((a) => a.id)
+    expect(appsInAfs).toContain(appRes1.body.id)
+    expect(appsInAfs).toContain(appRes2.body.id)
+
+    const appRes3 = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(201)
+
+    afsRes = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets/`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    expect(afsRes.body.items.length).toBe(1)
+    expect(afsRes.body.items[0].applications.length).toBe(3)
+    appsInAfs = afsRes.body.items[0].applications.map((a) => a.id)
+    expect(appsInAfs).toContain(appRes1.body.id)
+    expect(appsInAfs).toContain(appRes2.body.id)
+    expect(appsInAfs).toContain(appRes3.body.id)
+  })
+
+  it(`should not create an application flagged set two applications that are different`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.firstName = "One"
+    await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(201)
+    body.applicant.firstName = "Two"
+    await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(201)
+    const afsRes = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets/`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(afsRes.body.items.length).toBe(0)
   })
 
   afterEach(() => {

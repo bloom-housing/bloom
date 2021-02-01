@@ -21,6 +21,8 @@ import { Property } from "../property/entities/property.entity"
 import { Asset } from "../assets/entities/asset.entity"
 import { ListingEvent } from "../listing-events/entities/listing-event.entity"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/application-flagged-set.entity"
+import { ApplicationFlaggedSetService } from "../application-flagged-sets/application-flagged-set.service"
 
 @Module({})
 export class SeederModule {
@@ -46,9 +48,17 @@ export class SeederModule {
           ApplicationMethod,
           ListingEvent,
           AmiChart,
+          ApplicationFlaggedSet,
         ]),
       ],
-      providers: [UserService, ListingsService, ApplicationsService, CsvBuilder, CsvEncoder],
+      providers: [
+        UserService,
+        ListingsService,
+        ApplicationsService,
+        CsvBuilder,
+        CsvEncoder,
+        ApplicationFlaggedSetService,
+      ],
     }
   }
 }
