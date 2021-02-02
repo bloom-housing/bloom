@@ -86,12 +86,12 @@ const PublicLotteryEvent = (props: { publicLottery: ListingEvent }) => {
 
 export default class extends Component<ListingProps> {
   public static async getInitialProps({ query }) {
-    const listingId = query.id
+    const listingId = query.id as string
     let listing = {}
 
     try {
-      const response = await axios.get(process.env.listingServiceUrl)
-      listing = response.data.find((l) => l.id == listingId)
+      const response = await axios.get(process.env.backendApiBase + "/listings/" + listingId)
+      listing = response.data
     } catch (error) {
       console.log(error)
     }
