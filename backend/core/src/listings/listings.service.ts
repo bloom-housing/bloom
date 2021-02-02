@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common"
-import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
 import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
@@ -28,18 +27,16 @@ export class ListingsService {
       .leftJoinAndSelect("amiChart.items", "amiChartItems")
   }
 
-  public async list(jsonpath?: string): Promise<Listing[]> {
-    let listings = await this.getQueryBuilder()
+  public async list(county: string): Promise<Listing[]> {
+    const listings = await this.getQueryBuilder()
       .orderBy({
         "listings.id": "DESC",
         "units.max_occupancy": "ASC",
         "preferences.ordinal": "ASC",
       })
+      .andWhere("buildingAddress.county = :county", { county })
       .getMany()
 
-    if (jsonpath) {
-      listings = jp.query(listings, jsonpath)
-    }
     return listings
   }
 

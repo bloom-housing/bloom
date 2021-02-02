@@ -33,12 +33,12 @@ export class ListingsController {
   @Get()
   @ApiOperation({ summary: "List listings", operationId: "list" })
   @ApiImplicitQuery({
-    name: "jsonpath",
-    required: false,
+    name: "county",
+    required: true,
     type: String,
   })
-  public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingDto[]> {
-    return mapTo(ListingDto, await this.listingsService.list(jsonpath))
+  public async getAll(@Query("county") county?: string): Promise<ListingDto[]> {
+    return mapTo(ListingDto, await this.listingsService.list(county))
   }
 
   @Post()
