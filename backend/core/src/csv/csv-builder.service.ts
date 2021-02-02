@@ -1,5 +1,6 @@
 import { CsvEncoder } from "./csv-encoder.service"
 import { Injectable } from "@nestjs/common"
+import { CSVFormattingType } from "./formatting/application-formatting-metadata-factory"
 
 export type FormattingMetadata = {
   label: string
@@ -16,7 +17,9 @@ export type FormattingMetadataArray = {
 }
 
 export type FormattingMetadataAggregate = Array<FormattingMetadata | FormattingMetadataArray>
-export type FormattingMetadataAggregateFactory = () => FormattingMetadataAggregate
+export type FormattingMetadataAggregateFactory = (
+  type: CSVFormattingType
+) => FormattingMetadataAggregate
 
 export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
 export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
@@ -152,9 +155,10 @@ export class CsvBuilder {
   public build(
     arr: any[],
     formattingMetadataAggregateFactory: FormattingMetadataAggregateFactory,
+    csvFormattingType: CSVFormattingType,
     includeHeaders?: boolean
   ): string {
-    const formattingMetadataAggregate = formattingMetadataAggregateFactory()
+    const formattingMetadataAggregate = formattingMetadataAggregateFactory(csvFormattingType)
     if (!formattingMetadataAggregate) {
       return ""
     }
