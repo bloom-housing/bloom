@@ -51,6 +51,7 @@ export default class extends Component<IndexProps> {
           <SiteAlert type="success" className={alertClasses} timeout={30000} />
         </div>
         <Hero
+          backgroundImage="/images/hero-background.jpg"
           title={heroTitle}
           buttonTitle={t("welcome.seeRentalListings")}
           buttonLink="/listings"

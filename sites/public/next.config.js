@@ -84,6 +84,7 @@ module.exports = withCSS(
               "/": { page: "/" },
               "/listings": { page: "/listings" },
               "/housing-counselors": { page: "/housing-counselors" },
+              "/additional-resources": { page: "/additional-resources" },
               "/applications/start/choose-language": {
                 page: "/applications/start/choose-language",
               },
@@ -154,7 +155,7 @@ module.exports = withCSS(
                 page: "/applications/contact/name",
               },
             })
-            const languages = ["es", "zh", "vi"] // add new language codes here
+            const languages = ["es"] // add new language codes here
             const languagePaths = {}
             Object.entries(translatablePaths).forEach(([key, value]) => {
               languagePaths[key] = value

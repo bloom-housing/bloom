@@ -1,9 +1,0 @@
-{
-  "phoneNumber": "4444555544",
-  "phoneNumberFormatted": "(444) 455-5544",
-  "emailAddress": "test@bloom.com",
-  "mailingAddress.street": "Street 1",
-  "mailingAddress.city": "Los Angeles",
-  "mailingAddress.state": "CA",
-  "mailingAddress.zipCode": "90003"
-}
