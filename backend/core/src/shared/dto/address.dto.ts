@@ -1,49 +1,27 @@
-import { Expose } from "class-transformer"
-import { IsDefined, IsNumber, IsOptional, IsString } from "class-validator"
+import { Expose, Type } from "class-transformer"
+import { IsDate, IsOptional, IsUUID } from "class-validator"
+import { OmitType } from "@nestjs/swagger"
+import { Address } from "../entities/address.entity"
+import { ValidationsGroupsEnum } from "../validations-groups.enum"
 
-export class Address {
-  @Expose()
-  @IsOptional()
-  @IsString()
-  placeName?: string
+export class AddressDto extends OmitType(Address, []) {}
+export class AddressCreateDto extends OmitType(Address, ["id", "createdAt", "updatedAt"]) {}
 
+export class AddressUpdateDto extends OmitType(Address, ["id", "createdAt", "updatedAt"]) {
   @Expose()
-  @IsDefined()
-  @IsString()
-  city: string
-
-  @Expose()
-  @IsOptional()
-  @IsString()
-  county?: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  id?: string
 
   @Expose()
-  @IsDefined()
-  @IsString()
-  state: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  createdAt?: Date
 
   @Expose()
-  @IsDefined()
-  @IsString()
-  street: string
-
-  @Expose()
-  @IsOptional()
-  @IsString()
-  street2?: string
-
-  @Expose()
-  @IsDefined()
-  @IsString()
-  zipCode: string
-
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  latitude?: number
-
-  @Expose()
-  @IsOptional()
-  @IsNumber()
-  longitude?: number
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  updatedAt?: Date
 }

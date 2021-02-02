@@ -9,6 +9,7 @@ async function codeGen() {
     useStaticMethod: false,
     fileName: "client.ts",
     useHeaderParameters: false,
+    strictNullChecks: true,
   })
   let content = fs.readFileSync("./client.ts", "utf-8")
   content = content.replace(/(\w+)Dto/g, "$1")

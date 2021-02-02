@@ -1,17 +1,30 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { UnitsService } from "./units.service"
-import { UnitCreateDto, UnitDto, UnitUpdateDto } from "./unit.dto"
+import { UnitCreateDto, UnitDto, UnitUpdateDto } from "./dto/unit.dto"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("/units")
 @ApiTags("units")
 @ApiBearerAuth()
 @ResourceType("unit")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class UnitsController {
   constructor(private readonly unitsService: UnitsService) {}
 

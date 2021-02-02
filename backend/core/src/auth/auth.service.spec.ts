@@ -1,9 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { AuthService } from "./auth.service"
-import { User } from "../entity/user.entity"
+import { User } from "../user/entities/user.entity"
 import { JwtModule, JwtService } from "@nestjs/jwt"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { RevokedToken } from "../entity/revokedToken.entity"
+import { RevokedToken } from "./entities/revokedToken.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

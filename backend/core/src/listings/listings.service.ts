@@ -1,12 +1,10 @@
 import { Injectable } from "@nestjs/common"
-import { amiCharts } from "../lib/ami_charts"
-import { transformUnits } from "../lib/unit_transformations"
-import { listingUrlSlug } from "../lib/url_helper"
 import jp from "jsonpath"
 
-import { plainToClass } from "class-transformer"
-import { Listing } from "../entity/listing.entity"
-import { ListingCreateDto, ListingExtendedDto, ListingUpdateDto } from "./listing.dto"
+import { Listing } from "./entities/listing.entity"
+import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Repository } from "typeorm"
 
 export enum ListingsResponseStatus {
   ok = "ok",
@@ -14,13 +12,24 @@ export enum ListingsResponseStatus {
 
 @Injectable()
 export class ListingsService {
-  public async list(jsonpath?: string): Promise<ListingExtendedDto> {
-    let listings = await Listing.createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.units", "units")
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.assets", "assets")
+  constructor(@InjectRepository(Listing) private readonly repository: Repository<Listing>) {}
+
+  private getQueryBuilder() {
+    return Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect("listings.assets", "assets")
       .leftJoinAndSelect("listings.events", "events")
+      .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
+      .leftJoinAndSelect("listings.preferences", "preferences")
+      .leftJoinAndSelect("listings.property", "property")
+      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
+      .leftJoinAndSelect("property.units", "units")
+      .leftJoinAndSelect("units.amiChart", "amiChart")
+      .leftJoinAndSelect("amiChart.items", "amiChartItems")
+  }
+
+  public async list(jsonpath?: string): Promise<Listing[]> {
+    let listings = await this.getQueryBuilder()
       .orderBy({
         "listings.id": "DESC",
         "units.max_occupancy": "ASC",
@@ -31,29 +40,29 @@ export class ListingsService {
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)
     }
-
-    const data = {
-      status: ListingsResponseStatus.ok,
-      listings: listings,
-      amiCharts: amiCharts,
-    }
-
-    return data
+    return listings
   }
 
   async create(listingDto: ListingCreateDto) {
-    const listing = plainToClass(Listing, listingDto)
-    await listing.save()
-    return listing
+    return Listing.save(listingDto)
   }
 
   async update(listingDto: ListingUpdateDto) {
     const listing = await Listing.findOneOrFail({
       where: { id: listingDto.id },
+      relations: ["property"],
     })
-    Object.assign(listing, listingDto)
-    await listing.save()
-    return listing
+    /*
+      NOTE: Object.assign would replace listing.property of type Property with object of type IdDto
+       coming from ListingUpdateDto, which is causing a problem for dynamically computed
+       listingUrlSlug property (it requires property.buildingAddress.city to exist). The solution is
+       to assign this separately so that other properties (outside of IdDto type) of
+       listing.property are retained.
+    */
+    const { property, ...dto } = listingDto
+    Object.assign(listing, dto)
+    Object.assign(listing.property, property)
+    return await listing.save()
   }
 
   async delete(listingId: string) {
@@ -64,13 +73,8 @@ export class ListingsService {
   }
 
   async findOne(listingId: string) {
-    return await Listing.createQueryBuilder("listings")
+    return await this.getQueryBuilder()
       .where("listings.id = :id", { id: listingId })
-      .leftJoinAndSelect("listings.units", "units")
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.assets", "assets")
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
-      .leftJoinAndSelect("listings.events", "events")
       .orderBy({
         "preferences.ordinal": "ASC",
       })

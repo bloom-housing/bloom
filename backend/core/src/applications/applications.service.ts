@@ -1,28 +1,19 @@
-import { Inject, Injectable } from "@nestjs/common"
-import { Application, ApplicationStatus } from "../entity/application.entity"
-import { plainToClass } from "class-transformer"
-import {
-  ApplicationCreateDto,
-  ApplicationsListQueryParams,
-  ApplicationUpdateDto,
-} from "./application.dto"
-import { User } from "../entity/user.entity"
-import { REQUEST } from "@nestjs/core"
+import { Injectable } from "@nestjs/common"
+import { Application } from "./entities/application.entity"
+import { ApplicationUpdateDto } from "./dto/application.dto"
+import { User } from "../user/entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { Raw, Repository } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
-import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
-import { CsvBuilder } from "../services/csv-builder.service"
+import { ApplicationsListQueryParams } from "./applications.controller"
 
 @Injectable()
 export class ApplicationsService {
   constructor(
-    @Inject(REQUEST) private readonly request: any,
-    @InjectRepository(Application) private readonly repository: Repository<Application>,
-    private readonly csvBuilder: CsvBuilder
+    @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
-  private async list(listingId: string | null, user?: User) {
+  public async list(listingId: string | null, user?: User) {
     return this.repository.find({
       where: {
         ...(user && { user: { id: user.id } }),
@@ -35,42 +26,34 @@ export class ApplicationsService {
     })
   }
 
-  async listAsCsv(listingId: string | null, includeHeaders: boolean, user?: User) {
-    const applications = await this.list(listingId, user)
-    return this.csvBuilder.build(
-      applications,
-      applicationFormattingMetadataAggregateFactory,
-      includeHeaders
+  async listPaginated(params: ApplicationsListQueryParams) {
+    return paginate(
+      this.repository,
+      { limit: params.limit, page: params.page },
+      {
+        where: {
+          ...(params.userId && { user: { id: params.userId } }),
+          ...(params.listingId && { listing: { id: params.listingId } }),
+          ...(params.search && {
+            applicant: Raw(
+              () =>
+                `to_tsvector('english', concat_ws(' ', "Application__applicant")) @@ plainto_tsquery(:search)`,
+              {
+                search: params.search,
+              }
+            ),
+          }),
+        },
+        relations: ["listing", "user"],
+      }
     )
   }
 
-  async listPaginated(params: ApplicationsListQueryParams, user?: User) {
-    const qb = this.repository.createQueryBuilder("application")
-    qb.leftJoinAndSelect("application.user", "user")
-    qb.leftJoinAndSelect("application.listing", "listing")
-
-    if (user) {
-      qb.andWhere("user.id = :userId", { userId: user.id })
-    }
-
-    if (params.listingId) {
-      qb.andWhere("listing.id = :listingId", { listingId: params.listingId })
-    }
-
-    if (params.search) {
-      qb.andWhere("to_tsvector('english', application) @@ plainto_tsquery(:search)", {
-        search: params.search,
-      })
-    }
-
-    return paginate(qb, { limit: params.limit, page: params.page })
-  }
-
-  async create(applicationCreateDto: ApplicationCreateDto, user?: User) {
-    const application = plainToClass(Application, applicationCreateDto)
-    application.user = user
-    await this.repository.save(application)
-    return application
+  async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
+    return await this.repository.save({
+      ...applicationCreateDto,
+      user,
+    })
   }
 
   async findOne(applicationId: string) {
@@ -89,12 +72,16 @@ export class ApplicationsService {
         where: { id: applicationUpdateDto.id },
         relations: ["listing", "user"],
       }))
-    Object.assign(application, applicationUpdateDto)
+    Object.assign(application, {
+      ...applicationUpdateDto,
+      id: application.id,
+    })
+
     await this.repository.save(application)
     return application
   }
 
   async delete(applicationId: string) {
-    return await this.repository.delete({ id: applicationId })
+    return await this.repository.softRemove({ id: applicationId })
   }
 }

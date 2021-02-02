@@ -1,0 +1,127 @@
+@import "../global/mixins.scss";
+
+.button {
+  @apply rounded;
+  @apply px-6;
+  @apply py-4;
+  @apply text-lg;
+  @apply text-center;
+  @apply uppercase;
+  @apply font-alt-sans;
+  @apply inline-block;
+  @apply tracking-widest;
+  @apply text-sm;
+  @apply font-bold;
+  @apply leading-snug;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-accent-cool;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    @apply bg-white;
+    @apply border-gray-450;
+    @apply text-gray-450;
+  }
+
+  &.is-secondary {
+    @apply border-gray-700;
+    @apply text-gray-700;
+
+    &:hover {
+      @apply bg-gray-700;
+      @apply text-white;
+    }
+  }
+
+  &.is-small {
+    @apply text-xs;
+    @apply px-6;
+    @apply py-3;
+  }
+
+  &.is-big {
+    @apply px-6;
+    @apply py-6;
+  }
+
+  &.is-normal-case {
+    @apply normal-case;
+  }
+
+  &.is-unstyled {
+    background: transparent;
+  }
+
+  &.is-unstyled,
+  &.is-inline {
+    @apply normal-case;
+    @apply border-0;
+    @apply p-0;
+    @apply font-sans;
+    @apply tracking-normal;
+    @apply font-normal;
+    @apply underline;
+    @apply m-4;
+    @apply text-tiny;
+
+    &:hover {
+      @apply text-primary;
+      background: transparent;
+    }
+  }
+
+  &.is-inline {
+    @apply text-primary;
+    @apply font-semibold;
+    @apply text-tiny;
+    @apply m-0;
+    @apply no-underline;
+
+    &.inline-icon--left {
+      .button__icon {
+        @apply mr-1;
+      }
+    }
+    &.inline-icon--right {
+      .button__icon {
+        @apply ml-1;
+      }
+    }
+  }
+
+  &.is-text-caps {
+    @apply text-primary-dark;
+    @apply normal-case;
+    @apply border-0;
+    @apply p-0;
+    @apply font-sans;
+    @apply tracking-normal;
+    @apply font-normal;
+    @apply underline;
+    @apply m-4;
+    @apply uppercase;
+    @apply text-tiny;
+    @apply block;
+
+    &:hover {
+      @apply text-primary-dark;
+      background: transparent;
+    }
+  }
+
+  &.is-fullwidth {
+    @apply w-full;
+  }
+
+  @include filled-appearances;
+  @include outlined-appearances;
+}
+
+button {
+  &.has-toggle {
+    @include has-toggle;
+  }
+}

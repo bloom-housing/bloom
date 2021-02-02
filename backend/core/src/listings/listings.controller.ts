@@ -1,19 +1,32 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { ListingCreateDto, ListingDto, ListingExtendedDto, ListingUpdateDto } from "./listing.dto"
-import { DefaultAuthGuard } from "../auth/default.guard"
+import { ListingCreateDto, ListingDto, ListingUpdateDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator"
 import { mapTo } from "../shared/mapTo"
+import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("listings")
 @ApiTags("listings")
 @ApiBearerAuth()
 @ResourceType("listing")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class ListingsController {
   constructor(private readonly listingsService: ListingsService) {}
 
@@ -24,8 +37,8 @@ export class ListingsController {
     required: false,
     type: String,
   })
-  public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingExtendedDto> {
-    return mapTo(ListingExtendedDto, await this.listingsService.list(jsonpath))
+  public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingDto[]> {
+    return mapTo(ListingDto, await this.listingsService.list(jsonpath))
   }
 
   @Post()

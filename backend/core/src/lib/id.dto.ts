@@ -1,9 +1,10 @@
 import { IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
+import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 
 export class IdDto {
   @Expose()
-  @IsString()
-  @IsUUID()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 }

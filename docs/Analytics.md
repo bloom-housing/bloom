@@ -23,7 +23,7 @@ A basic setup can be accomplished by:
 
 Once all of the GTM and GA provisioning and configuration has been completed, the code-side changes should be as simple as setting the GTM_KEY environment variable to the key from the container created above. This should be set in .env for a local dev environment (see `.env.template`), or in netlify.toml for those apps being deployed via Netlify.
 
-See `apps/public-reference/src/customScripts.ts` for use of the GTM_KEY, noting that translation to gtmKey in process.env is automatic.
+See `sites/public/src/customScripts.ts` for use of the GTM_KEY, noting that translation to gtmKey in process.env is automatic.
 
 ## Netlify Analytics
 

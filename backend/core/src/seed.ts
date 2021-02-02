@@ -1,29 +1,41 @@
 import { SeederModule } from "./seeder/seeder.module"
-import { ListingsSeederService } from "./seeder/listings-seeder/listings-seeder.service"
-import { UserService } from "./user/user.service"
-import { plainToClass } from "class-transformer"
-import { Application } from "./entity/application.entity"
-import { ListingsService } from "./listings/listings.service"
-import { User } from "./entity/user.entity"
-import { Repository } from "typeorm"
-import { getRepositoryToken } from "@nestjs/typeorm"
-import { UserCreateDto } from "./user/user.dto"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
+import { ListingSeed, listingSeed1, seedListing } from "./seeds/listings"
+import { UserService } from "./user/user.service"
+import { plainToClass } from "class-transformer"
+import { UserCreateDto } from "./user/dto/user.dto"
+import { Repository } from "typeorm"
+import { getRepositoryToken } from "@nestjs/typeorm"
+import { User } from "./user/entities/user.entity"
+import { makeNewApplication } from "./seeds/applications"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
+const newSeed = (): ListingSeed => {
+  return JSON.parse(JSON.stringify(listingSeed1)) as ListingSeed
+}
+
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
+  const listing1 = await seedListing(app, newSeed())
+  const listingSeed = newSeed()
+  const listing2 = await seedListing(app, {
+    ...listingSeed,
+    leasingAgents: [
+      {
+        ...listingSeed.leasingAgents[0],
+        email: "leasing-agent-2@example.com",
+      },
+    ],
+  })
+
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
-  const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
-  const listingsSeederService = app.get<ListingsSeederService>(ListingsSeederService)
-  await listingsSeederService.seed()
 
   const userService = app.get<UserService>(UserService)
-  const user = await userService.createUser(
+  const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
       firstName: "First",
@@ -55,27 +67,18 @@ async function bootstrap() {
       password: "abcdef",
     })
   )
+
+  for (let i = 0; i < 10; i++) {
+    await Promise.all([
+      await makeNewApplication(app, listing1, user1),
+      await makeNewApplication(app, listing1, user2),
+      await makeNewApplication(app, listing2, user1),
+      await makeNewApplication(app, listing2, user2),
+    ])
+  }
+
   admin.isAdmin = true
   await userRepo.save(admin)
-
-  const listingsService = app.get<ListingsService>(ListingsService)
-  const listing = (await listingsService.list()).listings[0]
-
-  let application = plainToClass(Application, {
-    user: { id: user.id },
-    listing: { id: listing.id },
-    application: { foo: "bar" },
-    appUrl: "aaaa",
-  })
-  await applicationRepo.save(application)
-
-  application = plainToClass(Application, {
-    user: { id: user2.id },
-    listing: { id: listing.id },
-    application: { foo: "bar2" },
-    appUrl: "bbbb",
-  })
-  await applicationRepo.save(application)
 
   await app.close()
 }

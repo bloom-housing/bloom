@@ -1,12 +1,11 @@
 {
   "packages": [
-    "apps/public-reference",
-    "apps/partners-reference",
+    "sites/public",
+    "sites/partners",
     "backend/core",
-    "services/listings",
-    "shared/*"
+    "ui-components"
   ],
-  "version": "0.2.16",
+  "version": "0.3.5",
   "npmClient": "yarn",
   "useWorkspaces": true
 }

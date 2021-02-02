@@ -1,13 +1,12 @@
 import { DynamicModule, Module } from "@nestjs/common"
-import { ListingsSeederService } from "./listings-seeder/listings-seeder.service"
 import { UserModule } from "../user/user.module"
-import { Listing } from "../entity/listing.entity"
-import { Unit } from "../entity/unit.entity"
-import { Application } from "../entity/application.entity"
+import { Listing } from "../listings/entities/listing.entity"
+import { Unit } from "../units/entities/unit.entity"
+import { Application } from "../applications/entities/application.entity"
 
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserService } from "../user/user.service"
-import { User } from "../entity/user.entity"
+import { User } from "../user/entities/user.entity"
 import { ListingsService } from "../listings/listings.service"
 import { ApplicationsService } from "../applications/applications.service"
 import dbOptions = require("../../ormconfig")
@@ -15,6 +14,13 @@ import testDbOptions = require("../../ormconfig.test")
 import { ConfigModule } from "@nestjs/config"
 import { CsvBuilder } from "../services/csv-builder.service"
 import { CsvEncoder } from "../services/csv-encoder.service"
+import { PropertyGroup } from "../property-groups/entities/property-group.entity"
+import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
+import { Preference } from "../preferences/entities/preference.entity"
+import { Property } from "../property/entities/property.entity"
+import { Asset } from "../assets/entities/asset.entity"
+import { ListingEvent } from "../listing-events/entities/listing-event.entity"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 
 @Module({})
 export class SeederModule {
@@ -28,16 +34,21 @@ export class SeederModule {
         TypeOrmModule.forRoot({
           ...dbConfig,
         }),
-        TypeOrmModule.forFeature([Listing, Unit, Application, User]),
+        TypeOrmModule.forFeature([
+          Asset,
+          Listing,
+          Unit,
+          Application,
+          User,
+          Property,
+          PropertyGroup,
+          Preference,
+          ApplicationMethod,
+          ListingEvent,
+          AmiChart,
+        ]),
       ],
-      providers: [
-        ListingsSeederService,
-        UserService,
-        ListingsService,
-        ApplicationsService,
-        CsvBuilder,
-        CsvEncoder,
-      ],
+      providers: [UserService, ListingsService, ApplicationsService, CsvBuilder, CsvEncoder],
     }
   }
 }
