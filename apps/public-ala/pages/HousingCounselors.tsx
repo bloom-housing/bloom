@@ -32,7 +32,7 @@ export default class extends Component<HousingCounselorsProps> {
         <PageHeader inverse={true} subtitle={t("housingCounselors.subtitle")}>
           {t("pageTitle.housingCounselors")}
         </PageHeader>
-        {this.props.counselors.map((c) => {
+        {this.props.counselors?.map((c) => {
           return (
             <article key={c.name} className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
               <HousingCounselor counselor={c} />
