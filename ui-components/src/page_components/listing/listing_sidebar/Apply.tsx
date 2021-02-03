@@ -31,7 +31,7 @@ const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMet
 
 const OrDivider = (props: { bgColor: string }) => (
   <div className="aside-block__divider">
-    <span className={`bg-${props.bgColor} aside-block__conjunction`}>or</span>
+    <span className={`bg-${props.bgColor} aside-block__conjunction`}>{t("t.or")}</span>
   </div>
 )
 
