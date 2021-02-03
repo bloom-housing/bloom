@@ -31,7 +31,7 @@ export class User {
   @Column("varchar", { select: false })
   passwordHash: string
 
-  @Column("varchar", { select: false, nullable: true })
+  @Column("varchar", { nullable: true })
   resetToken: string
 
   @Column("varchar")
