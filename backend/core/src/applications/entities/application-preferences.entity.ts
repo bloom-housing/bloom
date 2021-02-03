@@ -17,7 +17,7 @@ import { Preference } from "../../preferences/entities/preference.entity"
 import { InputType } from "../../shared/input-type"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 
-export class BaseInput {
+export class FormMetadataExtraData {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(InputType, { groups: [ValidationsGroupsEnum.default] })
@@ -30,27 +30,20 @@ export class BaseInput {
   key: string
 }
 
-export class BaseInputMetadata extends BaseInput {
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
-  label: string
-}
-
-export class BooleanInput extends BaseInput {
+export class BooleanInput extends FormMetadataExtraData {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   value: boolean
 }
 
-export class TextInput extends BaseInput {
+export class TextInput extends FormMetadataExtraData {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   value: string
 }
 
-export class AddressInput extends BaseInput {
+export class AddressInput extends FormMetadataExtraData {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -58,40 +51,64 @@ export class AddressInput extends BaseInput {
   value: AddressCreateDto
 }
 
-@Entity()
-export class ApplicationPreference extends AbstractEntity {
-  @ManyToOne(() => Application, (application) => application.householdMembers)
-  application: Application
-
-  @ManyToOne(() => Preference, (preference) => preference.applicationPreferences, { eager: true })
-  preference: Preference
-
-  @Column("jsonb", { nullable: false })
+export class FormMetadataOptions {
   @Expose()
-  @ApiProperty({
-    type: "array",
-    items: {
-      oneOf: [
-        { $ref: getSchemaPath(BooleanInput) },
-        { $ref: getSchemaPath(TextInput) },
-        { $ref: getSchemaPath(AddressInput) },
-      ],
-    },
-  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  key: string
+
+  @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => BaseInput, {
-    keepDiscriminatorProperty: true,
-    discriminator: {
-      property: "type",
-      subTypes: [
-        { value: BooleanInput, name: InputType.boolean },
-        { value: TextInput, name: InputType.text },
-        { value: AddressInput, name: InputType.address },
-      ],
-    },
-  })
-  data: Array<BooleanInput | TextInput | AddressInput>
+  extraData: FormMetadataExtraData[]
 }
+
+export class FormMetadata {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  key: string
+
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  options: FormMetadataOptions[]
+}
+
+// TODO
+// @Entity()
+// export class ApplicationPreference extends AbstractEntity {
+//   @ManyToOne(() => Application, (application) => application.householdMembers)
+//   application: Application
+//
+//   @ManyToOne(() => Preference, (preference) => preference.applicationPreferences, { eager: true })
+//   preference: Preference
+//
+//   @Column("jsonb", { nullable: false })
+//   @Expose()
+//   @ApiProperty({
+//     type: "array",
+//     items: {
+//       oneOf: [
+//         { $ref: getSchemaPath(BooleanInput) },
+//         { $ref: getSchemaPath(TextInput) },
+//         { $ref: getSchemaPath(AddressInput) },
+//       ],
+//     },
+//   })
+//   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+//   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+//   @Type(() => FormMetadataExtraData, {
+//     keepDiscriminatorProperty: true,
+//     discriminator: {
+//       property: "type",
+//       subTypes: [
+//         { value: BooleanInput, name: InputType.boolean },
+//         { value: TextInput, name: InputType.text },
+//         { value: AddressInput, name: InputType.address },
+//       ],
+//     },
+//   })
+//   data: Array<BooleanInput | TextInput | AddressInput>
+// }
 
 export const applicationPreferenceExtraModels = [BooleanInput, TextInput, AddressInput]

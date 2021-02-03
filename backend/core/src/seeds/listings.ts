@@ -166,33 +166,55 @@ export const listingSeed1: ListingSeed = {
   },
   preferences: [
     {
-      description: "Description",
-      links: [
-        {
-          title: "Link title",
-          url: "",
-        },
-      ],
       ordinal: 1,
-      subtitle: "Subtitle",
-      title: "Title",
-      formMetadata: [
-        {
-          type: InputType.boolean,
-          label: "Live In",
-          key: "liveIn",
-        },
-        {
-          type: InputType.text,
-          label: "Some note input",
-          key: "note1",
-        },
-        {
-          type: InputType.address,
-          label: "Address",
-          key: "displaceeAddress",
-        },
-      ],
+      title: "Live or Work in Hayward",
+      subtitle: "",
+      description:
+        "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
+      links: [],
+      formMetadata: {
+        key: "liveWork",
+        options: [
+          {
+            key: "live",
+            extraData: [],
+          },
+          {
+            key: "work",
+            extraData: [],
+          },
+        ],
+      },
+    },
+    {
+      ordinal: 2,
+      title: "Displaced Tenant Housing Preference",
+      subtitle: "",
+      description:
+        "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+      links: [],
+      formMetadata: {
+        key: "displacedTenant",
+        options: [
+          {
+            key: "general",
+            extraData: [
+              {
+                key: "name",
+                type: InputType.text,
+              },
+              {
+                key: "name",
+                type: InputType.address,
+              },
+            ],
+          },
+          {
+            key: "missionCorridor",
+            extraData: [],
+          },
+        ],
+      },
     },
   ],
   listingEvents: [

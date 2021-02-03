@@ -27,7 +27,8 @@ import { AlternateContact } from "./alternate-contact.entity"
 import { Accessibility } from "./accessibility.entity"
 import { Demographics } from "./demographics.entity"
 import { HouseholdMember } from "./household-member.entity"
-import { ApplicationPreference } from "./application-preferences.entity"
+// TODO
+// import { ApplicationPreference } from "./application-preferences.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
@@ -194,16 +195,19 @@ export class Application extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   preferredUnit: string[]
 
-  @OneToMany(
-    () => ApplicationPreference,
-    (applicationPreference) => applicationPreference.application,
-    { eager: true, cascade: true }
-  )
+  // TODO
+  // @OneToMany(
+  //   () => ApplicationPreference,
+  //   (applicationPreference) => applicationPreference.application,
+  //   { eager: true, cascade: true }
+  // )
+  @Column({ type: "jsonb" })
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationPreference)
-  preferences: ApplicationPreference[]
+  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  // @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  preferences: any
 
   @Column({ enum: ApplicationStatus })
   @Expose()

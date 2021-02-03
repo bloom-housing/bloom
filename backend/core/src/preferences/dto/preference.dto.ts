@@ -6,7 +6,8 @@ import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
 export class PreferenceDto extends OmitType(Preference, [
   "listing",
-  "applicationPreferences",
+  // TODO
+  // "applicationPreferences",
 ] as const) {}
 
 export class PreferenceCreateDto extends OmitType(PreferenceDto, [

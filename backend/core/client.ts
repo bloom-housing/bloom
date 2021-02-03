@@ -1391,15 +1391,28 @@ export interface PreferenceLink {
   url: string;
 }
 
-export interface BaseInputMetadata {
+export interface FormMetadataExtraData {
   /**  */
   type: InputType;
 
   /**  */
-  label: string;
+  key: string;
+}
 
+export interface FormMetadataOptions {
   /**  */
   key: string;
+
+  /**  */
+  extraData: FormMetadataExtraData[];
+}
+
+export interface FormMetadata {
+  /**  */
+  key: string;
+
+  /**  */
+  options: FormMetadataOptions[];
 }
 
 export interface Preference {
@@ -1428,7 +1441,7 @@ export interface Preference {
   links: PreferenceLink[];
 
   /**  */
-  formMetadata?: BaseInputMetadata[];
+  formMetadata?: FormMetadata;
 }
 
 export interface MinMaxCurrency {
@@ -1967,7 +1980,7 @@ export interface PreferenceCreate {
   links: PreferenceLink[];
 
   /**  */
-  formMetadata?: BaseInputMetadata[];
+  formMetadata?: FormMetadata;
 }
 
 export interface Id {
@@ -2191,7 +2204,7 @@ export interface PreferenceUpdate {
   links: PreferenceLink[];
 
   /**  */
-  formMetadata?: BaseInputMetadata[];
+  formMetadata?: FormMetadata;
 
   /**  */
   id: string;
@@ -2388,10 +2401,10 @@ export interface BooleanInput {
   type: InputType;
 
   /**  */
-  value: boolean;
+  key: string;
 
   /**  */
-  key: string;
+  value: boolean;
 }
 
 export interface TextInput {
@@ -2399,10 +2412,10 @@ export interface TextInput {
   type: InputType;
 
   /**  */
-  value: string;
+  key: string;
 
   /**  */
-  key: string;
+  value: string;
 }
 
 export interface AddressInput {
@@ -2410,10 +2423,10 @@ export interface AddressInput {
   type: InputType;
 
   /**  */
-  value: AddressCreate;
+  key: string;
 
   /**  */
-  key: string;
+  value: AddressCreate;
 }
 
 export interface Applicant {
@@ -2612,23 +2625,6 @@ export interface HouseholdMember {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferences {
-  /**  */
-  data: AllDataTypes[];
-
-  /**  */
-  preference: Id;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
 export interface Application {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -2665,9 +2661,6 @@ export interface Application {
 
   /**  */
   householdMembers: HouseholdMember[];
-
-  /**  */
-  preferences: ApplicationPreferences[];
 
   /**  */
   id: string;
@@ -2713,6 +2706,9 @@ export interface Application {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: object;
 
   /**  */
   acceptedTerms?: boolean;
@@ -2897,14 +2893,6 @@ export interface HouseholdMemberCreate {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferencesCreate {
-  /**  */
-  data: AllDataTypes[];
-
-  /**  */
-  preference: Id;
-}
-
 export interface ApplicationCreate {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -2943,9 +2931,6 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[];
 
   /**  */
-  preferences: ApplicationPreferencesCreate[];
-
-  /**  */
   appUrl?: string;
 
   /**  */
@@ -2977,6 +2962,9 @@ export interface ApplicationCreate {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: object;
 
   /**  */
   acceptedTerms?: boolean;
@@ -3181,23 +3169,6 @@ export interface HouseholdMemberUpdate {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferencesUpdate {
-  /**  */
-  data: AllDataTypes[];
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  preference: Id;
-}
-
 export interface ApplicationUpdate {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -3248,9 +3219,6 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[];
 
   /**  */
-  preferences: ApplicationPreferencesUpdate[];
-
-  /**  */
   appUrl?: string;
 
   /**  */
@@ -3282,6 +3250,9 @@ export interface ApplicationUpdate {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: object;
 
   /**  */
   acceptedTerms?: boolean;
@@ -3648,4 +3619,3 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
-export type AllDataTypes = BooleanInput | TextInput | AddressInput;

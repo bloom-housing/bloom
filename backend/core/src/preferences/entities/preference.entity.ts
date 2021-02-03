@@ -12,8 +12,9 @@ import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import {
-  ApplicationPreference,
-  BaseInputMetadata,
+  // ApplicationPreference,
+  FormMetadataExtraData,
+  FormMetadata,
 } from "../../applications/entities/application-preferences.entity"
 
 export class PreferenceLink {
@@ -82,17 +83,18 @@ class Preference {
   })
   listing: Listing
 
-  @ManyToMany(
-    () => ApplicationPreference,
-    (applicationPreference) => applicationPreference.preference
-  )
-  applicationPreferences: ApplicationPreference
+  // TODO
+  // @ManyToMany(
+  //   () => ApplicationPreference,
+  //   (applicationPreference) => applicationPreference.preference
+  // )
+  // applicationPreferences: ApplicationPreference
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  formMetadata?: BaseInputMetadata[]
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  formMetadata?: FormMetadata
 }
 
 export { Preference as default, Preference }
