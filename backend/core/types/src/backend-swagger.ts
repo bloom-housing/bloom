@@ -3649,6 +3649,12 @@ export enum ApplicationMethodType {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
 }
+
+export enum InputType {
+  'boolean' = 'boolean',
+  'text' = 'text',
+  'address' = 'address'
+}
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ListingEventType {
   'openHouse' = 'openHouse',

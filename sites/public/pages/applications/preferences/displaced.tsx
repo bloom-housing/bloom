@@ -9,9 +9,12 @@ import {
   AlertBox,
   Button,
   ErrorMessage,
+  Field,
   Form,
   FormCard,
   ProgressNav,
+  Select,
+  stateKeys,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -19,18 +22,35 @@ import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useFormConductor("preferencesIntroduction")
+  const { conductor, application, listing } = useFormConductor("preferencesDisplaced")
   const [showMore, setShowMore] = useState({})
   const currentPageSection = 4
 
-  const preferenceOptions = ["liveIn", "workIn"]
+  const preferenceOptions = ["general", "missionCorridor"]
+  const pluckPreference = (key: string) =>
+    application.preferences.find((metadata) => metadata.key == key)
+  const displacedPreference = pluckPreference("displacedTenant")
 
   const toggleShowMoreForOption = (option) =>
     setShowMore({ ...showMore, [option]: !showMore[option] })
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm({
+  const { getValues, register, handleSubmit, errors, setValue, trigger, watch } = useForm<
+    Record<string, any>
+  >({
+    defaultValues: {
+      general:
+        displacedPreference?.options?.find((options) => options.key == "general").checked === true,
+      missionCorridor:
+        displacedPreference?.options?.find((options) => options.key == "missionCorridor")
+          .checked === true,
+      none: displacedPreference?.claimed === false,
+      displaceeName: displacedPreference?.options?.find((options) => options.key == "general")
+        ?.extraData[0]?.value,
+      displaceeAddress: displacedPreference?.options?.find((options) => options.key == "general")
+        ?.extraData[1]?.value,
+    },
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
@@ -38,9 +58,11 @@ export default () => {
       conductor.completeSection(4)
     }
 
-    conductor.currentStep.save({ preferences: data })
+    conductor.currentStep.save({ ...data })
     conductor.routeToNextOrReturnUrl()
   }
+
+  const generalOptionSelected = watch("general")
 
   return (
     <FormsLayout>
@@ -59,6 +81,8 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.preferences.title")}</h2>
 
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
+
+          <p className="field-note mt-5 text-center">Page 2 of 2</p>
         </div>
 
         {Object.entries(errors).length > 0 && (
@@ -79,7 +103,6 @@ export default () => {
                   type="checkbox"
                   id={option}
                   name={option}
-                  defaultChecked={application.preferences[option]}
                   ref={register}
                   onChange={() => {
                     setTimeout(() => {
@@ -89,7 +112,7 @@ export default () => {
                   }}
                 />
                 <label htmlFor={option} className="font-semibold uppercase tracking-wider">
-                  {t(`application.preferences.${option}.label`)}
+                  {t(`application.preferences.displacedTenant.${option}.label`)}
                 </label>
               </div>
 
@@ -108,16 +131,103 @@ export default () => {
 
               {showMore[option] && (
                 <p className="field-note mt-6 ml-8">
-                  {t(`application.preferences.${option}.description`)}
-                  <br />
-                  <a
-                    className="block pt-2"
-                    href={t(`application.preferences.${option}.link`)}
-                    target="_blank"
-                  >
-                    Link
-                  </a>
+                  {t(`application.preferences.displacedTenant.${option}.description`)}
+                  {!t(`application.preferences.displacedTenant.${option}.link`).includes(
+                    "application.preferences"
+                  ) && (
+                    <>
+                      <br />
+                      <a
+                        className="block pt-2"
+                        href={t(`application.preferences.displacedTenant.${option}.link`)}
+                        target="_blank"
+                      >
+                        {t(`application.preferences.displacedTenant.${option}.link`).replace(
+                          /https?:\/\//,
+                          ""
+                        )}
+                      </a>
+                    </>
+                  )}
                 </p>
+              )}
+
+              {option == "general" && generalOptionSelected && (
+                <div className="mt-6 ml-8">
+                  <fieldset>
+                    <legend className="field-label--caps">
+                      {t("application.preferences.displacedTenant.whichHouseholdMember")}
+                    </legend>
+
+                    <div className="field">
+                      <div className="control">
+                        <select
+                          className="input"
+                          id="displaceeName"
+                          name="displaceeName"
+                          ref={register()}
+                        >
+                          <option value="">{t("t.selectOne")}</option>
+                          <option>
+                            {application.applicant.firstName} {application.applicant.lastName}
+                          </option>
+                          {application.householdMembers.map((member) => (
+                            <option>
+                              {member.firstName} {member.lastName}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </fieldset>
+                  <fieldset className="mt-5">
+                    <legend className="field-label--caps">
+                      {t("application.preferences.displacedTenant.whatAddress")}
+                    </legend>
+                    <Field
+                      id="displaceeAddress.street"
+                      name="displaceeAddress.street"
+                      label={t("application.contact.streetAddress")}
+                      placeholder={t("application.contact.streetAddress")}
+                      register={register}
+                    />
+
+                    <Field
+                      id="displaceeAddress.street2"
+                      name="displaceeAddress.street2"
+                      label={t("application.contact.apt")}
+                      placeholder={t("application.contact.apt")}
+                      register={register}
+                    />
+
+                    <div className="flex max-w-2xl">
+                      <Field
+                        id="displaceeAddress.city"
+                        name="displaceeAddress.city"
+                        label={t("application.contact.cityName")}
+                        placeholder={t("application.contact.cityName")}
+                        register={register}
+                      />
+
+                      <Select
+                        id="displaceeAddress.state"
+                        name="displaceeAddress.state"
+                        label={t("application.contact.state")}
+                        register={register}
+                        controlClassName="control"
+                        options={stateKeys}
+                        keyPrefix="states"
+                      />
+                    </div>
+                    <Field
+                      id="displaceeAddress.zipCode"
+                      name="displaceeAddress.zipCode"
+                      label={t("application.contact.zip")}
+                      placeholder={t("application.contact.zipCode")}
+                      register={register}
+                    />
+                  </fieldset>
+                </div>
               )}
             </div>
           ))}
@@ -128,7 +238,6 @@ export default () => {
                 type="checkbox"
                 id="none"
                 name="none"
-                defaultChecked={application.preferences.none}
                 ref={register({
                   validate: {
                     somethingIsChecked: (value) => {

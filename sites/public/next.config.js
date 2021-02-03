@@ -108,8 +108,11 @@ module.exports = withCSS(
               "/applications/preferences/general": {
                 page: "/applications/preferences/general",
               },
-              "/applications/preferences/select": {
-                page: "/applications/preferences/select",
+              "/applications/preferences/live-work": {
+                page: "/applications/preferences/live-work",
+              },
+              "/applications/preferences/displaced": {
+                page: "/applications/preferences/displaced",
               },
               "/applications/household/ada": {
                 page: "/applications/household/ada",

@@ -100,11 +100,7 @@ export const blankApplication = () => {
       sexualOrientation: "",
       howDidYouHear: [],
     },
-    preferences: {
-      liveIn: false,
-      none: false,
-      workIn: false,
-    },
+    preferences: [],
     confirmationId: "",
   }
 }
