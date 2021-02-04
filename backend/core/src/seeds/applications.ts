@@ -10,6 +10,7 @@ import {
   Language,
 } from "../applications/entities/application.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
+import { InputType } from "../shared/input-type"
 
 const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing"> = {
   acceptedTerms: true,
@@ -155,11 +156,48 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
     street2: "street2",
     zipCode: "zip code",
   },
-  preferences: {
-    liveIn: false,
-    none: false,
-    workIn: false,
-  },
+  preferences: [
+    {
+      key: "liveWork",
+      claimed: true,
+      options: [
+        {
+          key: "live",
+          checked: true,
+        },
+        {
+          key: "work",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "displacedTenant",
+      claimed: true,
+      options: [
+        {
+          key: "general",
+          checked: true,
+          extraData: [
+            {
+              key: "name",
+              type: InputType.text,
+              value: "Roger Thornhill",
+            },
+            {
+              key: "name",
+              type: InputType.address,
+              value: {},
+            },
+          ],
+        },
+        {
+          key: "missionCorridor",
+          checked: false,
+        },
+      ],
+    },
+  ],
   preferredUnit: ["preferred unit"],
   sendMailToMailingAddress: true,
   status: ApplicationStatus.submitted,
