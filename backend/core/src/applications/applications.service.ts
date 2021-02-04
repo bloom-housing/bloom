@@ -72,7 +72,10 @@ export class ApplicationsService {
         where: { id: applicationUpdateDto.id },
         relations: ["listing", "user"],
       }))
-    Object.assign(application, applicationUpdateDto)
+    Object.assign(application, {
+      ...applicationUpdateDto,
+      id: application.id,
+    })
 
     await this.repository.save(application)
     return application
