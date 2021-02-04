@@ -64,10 +64,26 @@ export class ApplicationFlaggedSetService {
       },
     })
 
+    const emailRuleSet = await this.applicationsRepository.find({
+      where: (qb: SelectQueryBuilder<Application>) => {
+        qb.where("Application.id != :id", {
+          id: newApplication.id,
+        }).andWhere("Application__applicant.emailAddress = :emailAddress", {
+          emailAddress: newApplication.applicant.emailAddress,
+        })
+      },
+      join: {
+        alias: "Application",
+        leftJoinAndSelect: {
+          afs: "Application.applicationFlaggedSets",
+          afsApplications: "afs.applications",
+        },
+      },
+    })
+
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
-      [Rule.email]: [],
-      [Rule.address]: [],
+      [Rule.email]: emailRuleSet,
     }
 
     for (const [queryRule, exApplications] of Object.entries(queries)) {
@@ -78,7 +94,7 @@ export class ApplicationFlaggedSetService {
         )
         if (afsesMatchingRule.length === 0) {
           const newAfs: DeepPartial<ApplicationFlaggedSet> = {
-            rule: Rule.nameAndDOB,
+            rule: queryRule,
             resolved: false,
             resolvedTime: null,
             resolvingUserId: null,
@@ -88,9 +104,9 @@ export class ApplicationFlaggedSetService {
           await this.afsRepository.save(newAfs)
         } else {
           for (const afs of afsesMatchingRule) {
-            if (visitedAfses.includes(afs.id)) {
-              return
-            }
+            // if (visitedAfses.includes(afs.id)) {
+            //   return
+            // }
             visitedAfses.push(afs.id)
             afs.applications.push(newApplication)
             await this.afsRepository.save(afs)

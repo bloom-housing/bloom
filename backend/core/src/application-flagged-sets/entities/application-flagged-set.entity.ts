@@ -26,7 +26,6 @@ import { Expose, Type } from "class-transformer"
 export enum Rule {
   nameAndDOB = "Name and DOB",
   email = "Email",
-  address = "Resident Address",
 }
 
 export enum FlaggedSetStatus {
