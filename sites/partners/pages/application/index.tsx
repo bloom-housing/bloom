@@ -10,24 +10,24 @@ import {
   ApiClientContext,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { useSingleApplicationData } from "../../../lib/hooks"
-import Layout from "../../../layouts/application"
+import { useSingleApplicationData } from "../../lib/hooks"
+import Layout from "../../layouts/application"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,
   MembersDrawer,
-} from "../../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
+} from "../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
 
-import { DetailsApplicationContext } from "../../../src/applications/PaperApplicationDetails/DetailsApplicationContext"
-import { DetailsApplicationData } from "../../../src/applications/PaperApplicationDetails/sections/DetailsApplicationData"
-import { DetailsPrimaryApplicant } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
-import { DetailsAlternateContact } from "../../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
-import { DetailsHouseholdMembers } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
-import { DetailsHouseholdDetails } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
-import { DetailsPreferences } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
-import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
-import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
-import { DetailsAside } from "../../../src/applications/PaperApplicationDetails/DetailsAside"
+import { ApplicationContext } from "../../src/applications/ApplicationContext"
+import { DetailsApplicationData } from "../../src/applications/PaperApplicationDetails/sections/DetailsApplicationData"
+import { DetailsPrimaryApplicant } from "../../src/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
+import { DetailsAlternateContact } from "../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
+import { DetailsHouseholdMembers } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
+import { DetailsHouseholdDetails } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
+import { DetailsPreferences } from "../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
+import { DetailsHouseholdIncome } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
+import { DetailsTerms } from "../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
+import { Aside } from "../../src/applications/Aside"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -42,7 +42,7 @@ export default function ApplicationsList() {
   async function deleteApplication() {
     try {
       await applicationsService.delete({ applicationId })
-      void router.push(`/listings/${application?.listing?.id}/applications`)
+      void router.push(`/listings/applications?listing=${application?.listing?.id}`)
     } catch (err) {
       setErrorAlert(true)
     }
@@ -74,7 +74,7 @@ export default function ApplicationsList() {
   if (!application) return null
 
   return (
-    <DetailsApplicationContext.Provider value={application}>
+    <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
           <title>{t("nav.siteTitle")}</title>
@@ -131,7 +131,11 @@ export default function ApplicationsList() {
               </div>
 
               <div className="md:w-3/12 pl-6">
-                <DetailsAside applicationId={applicationId} onDelete={deleteApplication} />
+                <Aside
+                  type="details"
+                  listingId={application?.listing?.id}
+                  onDelete={deleteApplication}
+                />
               </div>
             </div>
           </div>
@@ -143,6 +147,6 @@ export default function ApplicationsList() {
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
       />
-    </DetailsApplicationContext.Provider>
+    </ApplicationContext.Provider>
   )
 }

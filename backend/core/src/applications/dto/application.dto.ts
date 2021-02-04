@@ -1,5 +1,12 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
-import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import {
+  ArrayMaxSize,
+  IsDate,
+  IsDefined,
+  IsOptional,
+  IsUUID,
+  ValidateNested,
+} from "class-validator"
 import { Application } from "../entities/application.entity"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IdDto } from "../../lib/id.dto"
@@ -90,6 +97,7 @@ export class ApplicationDto extends OmitType(Application, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberDto)
   householdMembers: HouseholdMemberDto[]
 
@@ -164,6 +172,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberCreateDto)
   householdMembers: HouseholdMemberCreateDto[]
 
@@ -258,6 +267,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberUpdateDto)
   householdMembers: HouseholdMemberUpdateDto[]
 

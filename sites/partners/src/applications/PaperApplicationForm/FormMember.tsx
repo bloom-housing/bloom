@@ -17,18 +17,18 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { FormAddress } from "./FormAddress"
-import { nanoid } from "nanoid"
+import { YesNoAnswer } from "./FormTypes"
 
 type ApplicationFormMemberProps = {
   onSubmit: (member: HouseholdMember) => void
   onClose: () => void
   members: HouseholdMember[]
-  editedMemberId: string | boolean
+  editedMemberId?: number
 }
 
 const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
-    return members.filter((member) => member.id === editedMemberId)[0]
+    return members.filter((member) => member.orderId === editedMemberId)[0]
   }, [members, editedMemberId])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -73,12 +73,13 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       workInRegion: workInRegion ? workInRegion : null,
     }
 
-    if (editedMemberId && typeof editedMemberId === "string") {
-      const editedMember = members.find((member) => member.id === editedMemberId)
+    const editedMember = members.find((member) => member.orderId === editedMemberId)
+
+    if (editedMember) {
       onSubmit({ ...editedMember, ...formData })
     } else {
       const newMember = new Member(members.length + 1)
-      onSubmit({ ...newMember, id: nanoid(), ...formData })
+      onSubmit({ ...newMember, ...formData })
     }
 
     onClose()
@@ -88,12 +89,12 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     {
       id: "sameAddressYes",
       label: t("t.yes"),
-      value: "yes",
+      value: YesNoAnswer.Yes,
     },
     {
       id: "sameAddressNo",
       label: t("t.no"),
-      value: "no",
+      value: YesNoAnswer.No,
     },
   ]
 
@@ -101,12 +102,12 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     {
       id: "workInRegionYes",
       label: t("t.yes"),
-      value: "yes",
+      value: YesNoAnswer.Yes,
     },
     {
       id: "workInRegionNo",
       label: t("t.no"),
-      value: "no",
+      value: YesNoAnswer.No,
     },
   ]
 
@@ -207,7 +208,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           </GridCell>
         </GridSection>
 
-        {sameAddressField === "no" &&
+        {sameAddressField === YesNoAnswer.No &&
           FormAddress(
             t("application.details.residenceAddress"),
             "address",
@@ -215,7 +216,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
             register
           )}
 
-        {workInRegionField === "yes" &&
+        {workInRegionField === YesNoAnswer.Yes &&
           FormAddress(t("application.contact.workAddress"), "workAddress", "work", register)}
       </div>
 

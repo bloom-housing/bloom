@@ -9,6 +9,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { AddressColsType, DetailsAddressColumns } from "./DetailsAddressColumns"
 import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
+import { YesNoAnswer } from "../PaperApplicationForm/FormTypes"
 
 export type MembersDrawer = HouseholdMemberUpdate | null
 
@@ -65,22 +66,22 @@ const DetailsMemberDrawer = ({
             <ViewItem
               label={t("application.add.sameAddressAsPrimary")}
               children={
-                membersDrawer?.sameAddress === null
-                  ? t("t.n/a")
-                  : membersDrawer?.sameAddress
+                membersDrawer?.sameAddress === YesNoAnswer.Yes
                   ? t("t.yes")
-                  : t("t.no")
+                  : membersDrawer?.sameAddress === YesNoAnswer.No
+                  ? t("t.no")
+                  : t("t.n/a")
               }
             />
 
             <ViewItem
               label={t("application.add.workInRegion")}
               children={
-                membersDrawer?.workInRegion === null
-                  ? t("t.n/a")
-                  : membersDrawer?.workInRegion
+                membersDrawer?.workInRegion === YesNoAnswer.Yes
                   ? t("t.yes")
-                  : t("t.no")
+                  : membersDrawer?.workInRegion === YesNoAnswer.No
+                  ? t("t.no")
+                  : t("t.n/a")
               }
             />
 

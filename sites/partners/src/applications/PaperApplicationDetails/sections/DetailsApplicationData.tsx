@@ -1,10 +1,10 @@
 import React, { useContext, useMemo } from "react"
 import moment from "moment"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
-import { DetailsApplicationContext } from "../DetailsApplicationContext"
+import { ApplicationContext } from "../../ApplicationContext"
 
 const DetailsApplicationData = () => {
-  const application = useContext(DetailsApplicationContext)
+  const application = useContext(ApplicationContext)
 
   const applicationDate = useMemo(() => {
     if (!application) return null

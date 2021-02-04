@@ -70,7 +70,10 @@ class MyApp extends App {
         <UserProvider>
           <RequireLogin signInPath="/sign-in" signInMessage={signInMessage}>
             <ApiClientProvider>
-              <Component {...pageProps} />
+              {/* <Component {...pageProps} /> */}
+              <div suppressHydrationWarning>
+                {typeof window === "undefined" ? null : <Component {...pageProps} />}
+              </div>
             </ApiClientProvider>
           </RequireLogin>
         </UserProvider>

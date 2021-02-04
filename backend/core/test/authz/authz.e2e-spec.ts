@@ -119,6 +119,11 @@ describe("Authz", () => {
     it("should not allow anonymous user to GET applications", async () => {
       await supertest(app.getHttpServer()).get(applicationsEndpoint).expect(403)
     })
+    it("should not allow anonymous user to GET CSV applications", async () => {
+      await supertest(app.getHttpServer())
+        .get(applicationsEndpoint + "/csv")
+        .expect(403)
+    })
     it("should not allow anonymous user to GET applications by ID", async () => {
       await supertest(app.getHttpServer())
         .get(applicationsEndpoint + "/fake_id")

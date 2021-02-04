@@ -1,6 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, ViewItem, GridCell, Field } from "@bloom-housing/ui-components"
+import { YesNoAnswer } from "../FormTypes"
 
 const FormTerms = () => {
   const formMethods = useFormContext()
@@ -20,7 +21,7 @@ const FormTerms = () => {
               label={t("t.yes")}
               register={register}
               inputProps={{
-                value: "yes",
+                value: YesNoAnswer.Yes,
               }}
             />
 
@@ -32,7 +33,7 @@ const FormTerms = () => {
               label={t("t.no")}
               register={register}
               inputProps={{
-                value: "no",
+                value: YesNoAnswer.No,
               }}
             />
           </div>

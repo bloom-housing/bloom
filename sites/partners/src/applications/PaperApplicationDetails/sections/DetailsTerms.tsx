@@ -1,9 +1,9 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
-import { DetailsApplicationContext } from "../DetailsApplicationContext"
+import { ApplicationContext } from "../../ApplicationContext"
 
 const DetailsTerms = () => {
-  const application = useContext(DetailsApplicationContext)
+  const application = useContext(ApplicationContext)
 
   return (
     <GridSection
