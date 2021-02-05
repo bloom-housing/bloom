@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { CacheModule, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
@@ -12,6 +12,10 @@ import { User } from "../user/entities/user.entity"
 
 @Module({
   imports: [
+    CacheModule.register({
+      ttl: 24 * 60 * 60,
+      max: 10,
+    }),
     TypeOrmModule.forFeature([Listing, Preference, Unit, Asset, ApplicationMethod, User]),
     AuthModule,
   ],
