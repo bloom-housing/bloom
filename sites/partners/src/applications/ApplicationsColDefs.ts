@@ -36,7 +36,7 @@ export function getColDefs(maxHouseholdSize: number) {
     {
       headerName: t("applications.table.applicationType"),
       field: "submissionType",
-      sortable: false,
+      sortable: true,
       filter: false,
       width: 150,
       minWidth: 120,
