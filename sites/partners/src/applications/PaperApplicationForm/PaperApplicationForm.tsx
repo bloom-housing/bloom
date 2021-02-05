@@ -1,6 +1,13 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
+import {
+  ApiClientContext,
+  t,
+  Form,
+  AlertBox,
+  AlertTypes,
+  setSiteAlertMessage,
+} from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
 import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
@@ -84,17 +91,20 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         : await applicationsService.create({ body })
 
       if (result) {
-        setAlert("success")
+        setSiteAlertMessage(
+          editMode
+            ? t("application.add.applicationUpdated")
+            : t("application.add.applicationSubmitted"),
+          "success"
+        )
 
-        setTimeout(() => {
-          if (redirect === "details") {
-            void router.push(`/application?id=${result.id}`)
-          } else {
-            reset()
-            clearErrors()
-            setAlert(null)
-          }
-        }, 2000)
+        if (redirect === "details") {
+          void router.push(`/application?id=${result.id}`)
+        } else {
+          reset()
+          clearErrors()
+          setAlert(null)
+        }
       }
     } catch (err) {
       setAlert("alert")
@@ -120,15 +130,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         <div className="max-w-screen-xl px-5 my-5 mx-auto">
           {alert && (
             <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
-              {(() => {
-                if (alert === "success") {
-                  return editMode
-                    ? t("application.add.applicationUpdated")
-                    : t("application.add.applicationSubmitted")
-                }
-
-                return t("application.add.applicationAddError")
-              })()}
+              {t("application.add.applicationAddError")}
             </AlertBox>
           )}
 

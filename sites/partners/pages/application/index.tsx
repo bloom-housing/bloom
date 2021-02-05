@@ -9,6 +9,7 @@ import {
   Button,
   ApiClientContext,
   AlertBox,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
 import Layout from "../../layouts/application"
@@ -80,17 +81,32 @@ export default function ApplicationsList() {
           <title>{t("nav.siteTitle")}</title>
         </Head>
         {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
-        <PageHeader>
-          <p className="font-sans font-semibold uppercase text-3xl">
-            {application.applicant.firstName} {application.applicant.lastName}
-          </p>
 
-          <p className="font-sans text-base mt-1">{application.id}</p>
+        <PageHeader
+          className="relative"
+          title={
+            <>
+              <p className="font-sans font-semibold uppercase text-3xl">
+                {application.applicant.firstName} {application.applicant.lastName}
+              </p>
+
+              <p className="font-sans text-base mt-1">{application.id}</p>
+            </>
+          }
+        >
+          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
+            <SiteAlert type="success" timeout={5000} dismissable />
+          </div>
         </PageHeader>
-
         <section className="border-t bg-white">
           <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-            <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
+            <Button
+              inlineIcon="left"
+              icon="arrow-back"
+              onClick={() =>
+                router.push(`/listings/applications?listing=${application.listing.id}`)
+              }
+            >
               {t("t.back")}
             </Button>
 

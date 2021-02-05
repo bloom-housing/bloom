@@ -35,17 +35,25 @@ const NewApplication = () => {
 
         <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
 
-        <PageHeader>
-          <p className="font-sans font-semibold uppercase text-3xl">
-            {t("t.edit")}: {application.applicant.firstName} {application.applicant.lastName}
-          </p>
+        <PageHeader
+          title={
+            <>
+              <p className="font-sans font-semibold uppercase text-3xl">
+                {t("t.edit")}: {application.applicant.firstName} {application.applicant.lastName}
+              </p>
 
-          <p className="font-sans text-base mt-1">{application.id}</p>
-        </PageHeader>
+              <p className="font-sans text-base mt-1">{application.id}</p>
+            </>
+          }
+        />
 
         <StatusBar
           backButton={
-            <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
+            <Button
+              inlineIcon="left"
+              icon="arrow-back"
+              onClick={() => router.push(`/application?id=${application.id}`)}
+            >
               {t("t.back")}
             </Button>
           }

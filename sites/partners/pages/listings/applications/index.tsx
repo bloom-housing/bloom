@@ -167,7 +167,7 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>{t("applications.applicationsReceived")}</PageHeader>
+      <PageHeader title={t("applications.applicationsReceived")} />
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">

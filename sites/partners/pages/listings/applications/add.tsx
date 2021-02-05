@@ -25,7 +25,7 @@ const NewApplication = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>{t("applications.newApplication")}</PageHeader>
+      <PageHeader title={t("applications.newApplication")} />
 
       <StatusBar
         backButton={
