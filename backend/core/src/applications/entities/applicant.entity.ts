@@ -9,6 +9,7 @@ import {
   IsString,
   MaxLength,
   ValidateNested,
+  IsEmail,
 } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
@@ -60,7 +61,7 @@ export class Applicant extends AbstractEntity {
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  // @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   emailAddress?: string | null
 
   @Column({ type: "bool", nullable: true })
