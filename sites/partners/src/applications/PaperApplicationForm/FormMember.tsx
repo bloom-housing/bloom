@@ -159,7 +159,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 register={register}
                 error={errors?.dateOfBirth}
                 watch={watch}
-                atAge={true}
+                atAge={false}
                 label={t("application.name.yourDateOfBirth")}
                 readerOnly
               />
