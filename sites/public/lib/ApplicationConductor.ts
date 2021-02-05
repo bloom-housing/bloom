@@ -157,8 +157,12 @@ export default class ApplicationConductor {
     return this.steps[this.currentStepIndex]
   }
 
-  totalNumberOfSections() {
+  get totalNumberOfSections() {
     return this.config.sections.length
+  }
+
+  get preferenceStepsTotal() {
+    return this.config.steps.filter((step) => step.name.includes("preference")).length
   }
 
   completeSection(section) {
@@ -166,7 +170,7 @@ export default class ApplicationConductor {
   }
 
   canJumpForwardToReview() {
-    return this.application.completedSections === this.totalNumberOfSections() - 1
+    return this.application.completedSections === this.totalNumberOfSections - 1
   }
 
   sync() {

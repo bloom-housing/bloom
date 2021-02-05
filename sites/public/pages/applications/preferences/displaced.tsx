@@ -82,7 +82,9 @@ export default () => {
 
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
 
-          <p className="field-note mt-5 text-center">Page 2 of 2</p>
+          <p className="field-note mt-5 text-center">
+            {t("t.pageXofY", { num: 2, total: conductor.preferenceStepsTotal })}
+          </p>
         </div>
 
         {Object.entries(errors).length > 0 && (

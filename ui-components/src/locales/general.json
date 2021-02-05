@@ -326,7 +326,7 @@
       "title": "Your household may qualify for the following housing preferences.",
       "preamble": "If you qualify for this preference, you'll get a higher ranking.",
       "selectBelow": "If you have one of these housing preferences, select it below:",
-      "dontWant": "I don't want this preference",
+      "dontWant": "I don't want these preferences",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
       "liveWork": {
@@ -345,8 +345,8 @@
         "whichHouseholdMember": "Which household member is claiming this preference?",
         "whatAddress": "What address was the household member displaced from?",
         "general": {
-          "label": "Displacee Tenant Housing Preference",
-          "description": "Displacee Tenant copy goes here…",
+          "label": "Displaced Tenant Housing Preference",
+          "description": "Displaced Tenant copy goes here…",
           "link": "http://domain.com"
         }
       },
@@ -846,6 +846,7 @@
     "noneFound": "None found.",
     "occupancy": "Occupancy",
     "or": "or",
+    "pageXofY": "Page %{num} of %{total}",
     "people": "people",
     "person": "person",
     "perMonth": "per month",
