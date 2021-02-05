@@ -23,12 +23,12 @@ export default class DisplacedPreferenceStep extends StepDefinition {
         {
           key: "name",
           type: InputType.text,
-          value: formData.displaceeName,
+          value: formData.displacedName,
         },
         {
           key: "address",
           type: InputType.address,
-          value: formData.displaceeAddress,
+          value: formData.displacedAddress,
         }
       )
     }

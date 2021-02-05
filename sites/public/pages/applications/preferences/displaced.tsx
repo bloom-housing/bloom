@@ -46,9 +46,9 @@ export default () => {
         displacedPreference?.options?.find((options) => options.key == "missionCorridor")
           .checked === true,
       none: displacedPreference?.claimed === false,
-      displaceeName: displacedPreference?.options?.find((options) => options.key == "general")
+      displacedName: displacedPreference?.options?.find((options) => options.key == "general")
         ?.extraData[0]?.value,
-      displaceeAddress: displacedPreference?.options?.find((options) => options.key == "general")
+      displacedAddress: displacedPreference?.options?.find((options) => options.key == "general")
         ?.extraData[1]?.value,
     },
     shouldFocusError: false,
@@ -162,11 +162,14 @@ export default () => {
                     </legend>
 
                     <div className="field">
+                      <label className="sr-only" htmlFor="displacedName">
+                        {t("t.name")}
+                      </label>
                       <div className="control">
                         <select
                           className="input"
-                          id="displaceeName"
-                          name="displaceeName"
+                          id="displacedName"
+                          name="displacedName"
                           ref={register()}
                         >
                           <option value="">{t("t.selectOne")}</option>
@@ -187,16 +190,16 @@ export default () => {
                       {t("application.preferences.displacedTenant.whatAddress")}
                     </legend>
                     <Field
-                      id="displaceeAddress.street"
-                      name="displaceeAddress.street"
+                      id="displacedAddress.street"
+                      name="displacedAddress.street"
                       label={t("application.contact.streetAddress")}
                       placeholder={t("application.contact.streetAddress")}
                       register={register}
                     />
 
                     <Field
-                      id="displaceeAddress.street2"
-                      name="displaceeAddress.street2"
+                      id="displacedAddress.street2"
+                      name="displacedAddress.street2"
                       label={t("application.contact.apt")}
                       placeholder={t("application.contact.apt")}
                       register={register}
@@ -204,16 +207,16 @@ export default () => {
 
                     <div className="flex max-w-2xl">
                       <Field
-                        id="displaceeAddress.city"
-                        name="displaceeAddress.city"
+                        id="displacedAddress.city"
+                        name="displacedAddress.city"
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
                         register={register}
                       />
 
                       <Select
-                        id="displaceeAddress.state"
-                        name="displaceeAddress.state"
+                        id="displacedAddress.state"
+                        name="displacedAddress.state"
                         label={t("application.contact.state")}
                         register={register}
                         controlClassName="control"
@@ -222,8 +225,8 @@ export default () => {
                       />
                     </div>
                     <Field
-                      id="displaceeAddress.zipCode"
-                      name="displaceeAddress.zipCode"
+                      id="displacedAddress.zipCode"
+                      name="displacedAddress.zipCode"
                       label={t("application.contact.zip")}
                       placeholder={t("application.contact.zipCode")}
                       register={register}
