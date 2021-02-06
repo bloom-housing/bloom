@@ -46,10 +46,15 @@ export default () => {
         displacedPreference?.options?.find((options) => options.key == "missionCorridor")
           .checked === true,
       none: displacedPreference?.claimed === false,
-      displacedName: displacedPreference?.options?.find((options) => options.key == "general")
+      generalName: displacedPreference?.options?.find((options) => options.key == "general")
         ?.extraData[0]?.value,
-      displacedAddress: displacedPreference?.options?.find((options) => options.key == "general")
+      generalAddress: displacedPreference?.options?.find((options) => options.key == "general")
         ?.extraData[1]?.value,
+      missionName: displacedPreference?.options?.find((options) => options.key == "missionCorridor")
+        ?.extraData[0]?.value,
+      missionAddress: displacedPreference?.options?.find(
+        (options) => options.key == "missionCorridor"
+      )?.extraData[1]?.value,
     },
     shouldFocusError: false,
   })
@@ -63,6 +68,7 @@ export default () => {
   }
 
   const generalOptionSelected = watch("general")
+  const missionOptionSelected = watch("missionCorridor")
 
   return (
     <FormsLayout>
@@ -154,52 +160,50 @@ export default () => {
                 </p>
               )}
 
-              {option == "general" && generalOptionSelected && (
+              {((option == "general" && generalOptionSelected) ||
+                (option == "missionCorridor" && missionOptionSelected)) && (
                 <div className="mt-6 ml-8">
                   <fieldset>
                     <legend className="field-label--caps">
                       {t("application.preferences.displacedTenant.whichHouseholdMember")}
                     </legend>
 
-                    <div className="field">
-                      <label className="sr-only" htmlFor="displacedName">
-                        {t("t.name")}
-                      </label>
-                      <div className="control">
-                        <select
-                          className="input"
-                          id="displacedName"
-                          name="displacedName"
-                          ref={register()}
-                        >
-                          <option value="">{t("t.selectOne")}</option>
-                          <option>
-                            {application.applicant.firstName} {application.applicant.lastName}
-                          </option>
-                          {application.householdMembers.map((member) => (
-                            <option>
-                              {member.firstName} {member.lastName}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
+                    <Select
+                      name={`${option}Name`}
+                      label={t("t.name")}
+                      labelClassName="sr-only"
+                      controlClassName="control"
+                      placeholder={t("t.selectOne")}
+                      validation={{ required: true }}
+                      error={errors[`${option}Name`]}
+                      errorMessage={t("errors.selectOption")}
+                      options={application.householdMembers.map((member) => {
+                        return {
+                          label: `${member.firstName} ${member.lastName}`,
+                          value: `${member.firstName} ${member.lastName}`,
+                        }
+                      })}
+                      register={register}
+                    />
                   </fieldset>
                   <fieldset className="mt-5">
                     <legend className="field-label--caps">
                       {t("application.preferences.displacedTenant.whatAddress")}
                     </legend>
                     <Field
-                      id="displacedAddress.street"
-                      name="displacedAddress.street"
+                      id={`${option}Address.street`}
+                      name={`${option}Address.street`}
                       label={t("application.contact.streetAddress")}
                       placeholder={t("application.contact.streetAddress")}
+                      validation={{ required: true }}
+                      error={errors[`${option}Address`]?.street}
+                      errorMessage={t("errors.streetError")}
                       register={register}
                     />
 
                     <Field
-                      id="displacedAddress.street2"
-                      name="displacedAddress.street2"
+                      id={`${option}Address.street2`}
+                      name={`${option}Address.street2`}
                       label={t("application.contact.apt")}
                       placeholder={t("application.contact.apt")}
                       register={register}
@@ -207,17 +211,23 @@ export default () => {
 
                     <div className="flex max-w-2xl">
                       <Field
-                        id="displacedAddress.city"
-                        name="displacedAddress.city"
+                        id={`${option}Address.city`}
+                        name={`${option}Address.city`}
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
+                        validation={{ required: true }}
+                        error={errors[`${option}Address`]?.city}
+                        errorMessage={t("errors.cityError")}
                         register={register}
                       />
 
                       <Select
-                        id="displacedAddress.state"
-                        name="displacedAddress.state"
+                        id={`${option}Address.state`}
+                        name={`${option}Address.state`}
                         label={t("application.contact.state")}
+                        validation={{ required: true }}
+                        error={errors[`${option}Address`]?.state}
+                        errorMessage={t("errors.stateError")}
                         register={register}
                         controlClassName="control"
                         options={stateKeys}
@@ -225,10 +235,13 @@ export default () => {
                       />
                     </div>
                     <Field
-                      id="displacedAddress.zipCode"
-                      name="displacedAddress.zipCode"
+                      id={`${option}Address.zipCode`}
+                      name={`${option}Address.zipCode`}
                       label={t("application.contact.zip")}
                       placeholder={t("application.contact.zipCode")}
+                      validation={{ required: true }}
+                      error={errors[`${option}Address`]?.zipCode}
+                      errorMessage={t("errors.zipCodeError")}
                       register={register}
                     />
                   </fieldset>

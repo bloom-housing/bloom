@@ -15,6 +15,7 @@ export default class DisplacedPreferenceStep extends StepDefinition {
         {
           key: "missionCorridor",
           checked: formData.missionCorridor,
+          extraData: [],
         },
       ],
     }
@@ -23,17 +24,30 @@ export default class DisplacedPreferenceStep extends StepDefinition {
         {
           key: "name",
           type: InputType.text,
-          value: formData.displacedName,
+          value: formData.generalName,
         },
         {
           key: "address",
           type: InputType.address,
-          value: formData.displacedAddress,
+          value: formData.generalAddress,
+        }
+      )
+    }
+    if (formData.missionCorridor) {
+      preferenceData.options[1].extraData.push(
+        {
+          key: "name",
+          type: InputType.text,
+          value: formData.missionName,
+        },
+        {
+          key: "address",
+          type: InputType.address,
+          value: formData.missionAddress,
         }
       )
     }
     this.application.preferences[1] = preferenceData
-    console.log(this.application.preferences)
     this.conductor.sync()
   }
 }
