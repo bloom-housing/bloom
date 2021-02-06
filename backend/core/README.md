@@ -14,16 +14,20 @@ The following steps should provide a working local environement for development 
 
 Operational configuration the service is read from environment variables. Copy `.env.template` to `.env` and edit the settings specific to your development environment. Make sure the Database URL matches your Postgres configuration.
 
+### Installing Postgres
+
+You can install Postgres using Homebrew with the following command: `brew install postgresql`.
+
 ### Setting up a Database
 
 There are two databases used in this project: `bloom` and `bloom_test`. First is used every time  you are starting a project with `yarn dev` and second one is only used in end-to-end tests. Corresponding TypeORM configs are defined in `ormconfig.ts` and `ormconfig.test.ts`.
 If you are just starting to work with the projects it's best to simply run:
 
 ```shell script
-yarn && yarn reseed:db
+yarn && yarn db:reseed
 ```
 
-that will create `bloom` DB for you, migrate it to the latest schema and seed with appropriate dev data.
+that will create `bloom` DB for you, migrate it to the latest schema and seed with appropriate dev data. If running the reseed command requires that you input a password for Postgres, set the following environment variables: `PGUSER` to postgres and `PGPASSWORD` to the default password you inputted for the postgres user during Postgres installation.
 
 Dropping the DB:
 
