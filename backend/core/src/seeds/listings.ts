@@ -215,7 +215,7 @@ export const listingSeed1: ListingSeed = {
                 type: InputType.text,
               },
               {
-                key: "name",
+                key: "address",
                 type: InputType.address,
               },
             ],
