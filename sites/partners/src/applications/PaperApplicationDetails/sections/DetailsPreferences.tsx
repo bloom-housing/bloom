@@ -39,18 +39,22 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                 return options.map((option) => {
                   const extra = option.extraData?.map((extra) => {
                     if (extra.type === InputType.text)
-                      return <ViewItem label={extra.key}>{extra.value}</ViewItem>
+                      return (
+                        <ViewItem label={t(`application.preferences.options.${extra.key}`)}>
+                          {extra.value}
+                        </ViewItem>
+                      )
 
                     if (extra.type === InputType.boolean)
                       return (
-                        <ViewItem label={extra.key}>
+                        <ViewItem label={t(`application.preferences.options.${extra.key}`)}>
                           {extra.value ? t("t.yes") : t("t.no")}
                         </ViewItem>
                       )
 
                     if (extra.type === InputType.address)
                       return (
-                        <GridSection subtitle={extra.key} columns={3}>
+                        <GridSection subtitle={t(`application.contact.address`)} columns={3}>
                           <DetailsAddressColumns
                             type={AddressColsType.preferences}
                             addressObject={extra.value}
@@ -60,8 +64,8 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                   })
 
                   return (
-                    <div>
-                      <p>{option.key}</p>
+                    <div key={option.key}>
+                      <p>{t(`application.preferences.options.${option.key}`)}</p>
                       <div className="my-5">{extra}</div>
                     </div>
                   )

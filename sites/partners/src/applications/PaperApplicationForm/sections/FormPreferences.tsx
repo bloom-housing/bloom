@@ -51,7 +51,7 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
                   id={FIELD_NAME}
                   name={FIELD_NAME}
                   type="text"
-                  label={extraKey}
+                  label={t(`application.preferences.options.${extraKey}`)}
                   register={register}
                 />
               )
@@ -86,7 +86,7 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
                         id={buildOptionName(preference.formMetadata.key, option.key)}
                         name={buildOptionName(preference.formMetadata.key, option.key)}
                         type="checkbox"
-                        label={option.key}
+                        label={t(`application.preferences.options.${option.key}`)}
                         register={register}
                         inputProps={{
                           onChange: () => {
