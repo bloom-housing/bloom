@@ -288,10 +288,42 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
+  const preferences = (() => {
+    const formObj = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const preferencesData = applicationData.preferences as Record<string, any>
+
+    preferencesData.forEach((item) => {
+      const options = item.options.reduce((acc, curr) => {
+        const extraData =
+          curr?.extraData?.reduce((extraAcc, extraCurr) => {
+            Object.assign(extraAcc, {
+              [extraCurr.key]: extraCurr.value,
+            })
+
+            return extraAcc
+          }, {}) || {}
+
+        Object.assign(acc, {
+          [curr.key]: {
+            claimed: curr.checked,
+            ...extraData,
+          },
+        })
+        return acc
+      }, {})
+
+      Object.assign(formObj, {
+        [item.key]: options,
+      })
+    })
+
+    return formObj
+  })()
+
   const application: ApplicationTypes = (() => {
     const {
       language,
-      preferences,
       contactPreferences,
       sendMailToMailingAddress,
       mailingAddress,
