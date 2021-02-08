@@ -1,6 +1,7 @@
 {
   "baseUrl": "http://localhost:3000",
   "defaultCommandTimeout": 10000,
-  "projectId": "bloom-public-reference"
+  "projectId": "bloom-public-reference",
+  "pageLoadTimeout": 100000
 }
 

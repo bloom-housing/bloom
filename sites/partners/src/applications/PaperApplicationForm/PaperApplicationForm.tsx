@@ -80,7 +80,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
     try {
       const result = editMode
-        ? await applicationsService.update({ applicationId: application.id, body })
+        ? await applicationsService.update({
+            applicationId: application.id,
+            body: { id: application.id, ...body },
+          })
         : await applicationsService.create({ body })
 
       if (result) {

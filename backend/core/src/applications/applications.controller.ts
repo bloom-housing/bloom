@@ -34,8 +34,11 @@ import { IsBoolean, IsOptional, IsString } from "class-validator"
 import { PaginationQueryParams } from "../utils/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { applicationFormattingMetadataAggregateFactory } from "../services/application-formatting-metadata"
-import { CsvBuilder } from "../services/csv-builder.service"
+import {
+  applicationFormattingMetadataAggregateFactory,
+  CSVFormattingType,
+} from "../csv/formatting/application-formatting-metadata-factory"
+import { CsvBuilder } from "../csv/csv-builder.service"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -153,6 +156,8 @@ export class ApplicationsController {
     return this.csvBuilder.build(
       applications,
       applicationFormattingMetadataAggregateFactory,
+      // Every application points to the same listing
+      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
       queryParams.includeHeaders
     )
   }
