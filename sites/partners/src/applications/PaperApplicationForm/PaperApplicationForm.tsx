@@ -4,6 +4,7 @@ import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/
 import { useForm, FormProvider } from "react-hook-form"
 import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
 import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
+import { useSingleListingData } from "../../../lib/hooks"
 
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
@@ -26,6 +27,10 @@ type ApplicationFormProps = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
+  const { listingDto } = useSingleListingData(listingId)
+
+  const preferences = listingDto?.preferences
+
   const defaultValues = editMode ? parseApplicationData(application) : {}
 
   const formMethods = useForm<FormTypes>({
@@ -151,7 +156,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                 <FormHouseholdDetails />
 
-                <FormPreferences />
+                <FormPreferences preferences={preferences} />
 
                 <FormHouseholdIncome />
 
