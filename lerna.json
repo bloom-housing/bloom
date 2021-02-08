@@ -5,7 +5,7 @@
     "backend/core",
     "ui-components"
   ],
-  "version": "0.3.6",
+  "version": "0.3.7",
   "npmClient": "yarn",
   "useWorkspaces": true
 }
