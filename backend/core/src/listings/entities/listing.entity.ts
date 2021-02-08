@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Application, IncomePeriod } from "../../applications/entities/application.entity"
+import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../user/entities/user.entity"
 import { WhatToExpect } from "../../shared/dto/whatToExpect.dto"
 import { Preference } from "../../preferences/entities/preference.entity"
@@ -392,7 +392,7 @@ class Listing extends BaseEntity {
 
   @Column({ enum: CSVFormattingType, default: CSVFormattingType.basic })
   @Expose()
-  @IsEnum(IncomePeriod, { groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(CSVFormattingType, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: CSVFormattingType, enumName: "CSVFormattingType" })
   CSVFormattingType: CSVFormattingType
 }
