@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import "./LoadingOverlay.scss"
 
 type LoadingOverlayProps = {
@@ -7,9 +7,23 @@ type LoadingOverlayProps = {
 }
 
 const LoadingOverlay = ({ isLoading, children }: LoadingOverlayProps) => {
-  if (!isLoading) return <>{children}</>
+  const content = useMemo(() => {
+    if (!isLoading) return children
 
-  return <div className="loading-overlay">{children}</div>
+    return (
+      <div className="loading-overlay">
+        <span className="spinner"></span>
+
+        {children}
+      </div>
+    )
+  }, [isLoading, children])
+
+  return (
+    <div role="alert" aria-live="assertive">
+      {content}
+    </div>
+  )
 }
 
 export { LoadingOverlay as default, LoadingOverlay }

@@ -1,13 +1,6 @@
 import React from "react"
 import Head from "next/head"
-import {
-  AppearanceStyleType,
-  Button,
-  MetaTags,
-  PageHeader,
-  StatusBar,
-  t,
-} from "@bloom-housing/ui-components"
+import { MetaTags, PageHeader, t } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts/application"
 import PaperApplicationForm from "../../../src/applications/PaperApplicationForm/PaperApplicationForm"
 import { useRouter } from "next/router"
@@ -26,16 +19,6 @@ const NewApplication = () => {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("applications.newApplication")} />
-
-      <StatusBar
-        backButton={
-          <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
-            {t("t.back")}
-          </Button>
-        }
-        tagStyle={AppearanceStyleType.primary}
-        tagLabel={t(`application.details.applicationStatus.draft`)}
-      />
 
       <PaperApplicationForm listingId={listingId} />
     </Layout>

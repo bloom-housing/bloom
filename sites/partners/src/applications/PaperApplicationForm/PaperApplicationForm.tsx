@@ -8,11 +8,13 @@ import {
   AlertTypes,
   setSiteAlertMessage,
   LoadingOverlay,
+  StatusBar,
+  AppearanceStyleType,
+  Button,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
-import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
+import { HouseholdMember, Application, ApplicationStatus } from "@bloom-housing/backend-core/types"
 import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
-
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
@@ -131,55 +133,81 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   }
 
   return (
-    <FormProvider {...formMethods}>
-      <section className="bg-primary-lighter">
-        <div className="max-w-screen-xl px-5 my-5 mx-auto">
-          {alert && (
-            <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
-              {t("application.add.applicationAddError")}
-            </AlertBox>
-          )}
+    <LoadingOverlay isLoading={loading}>
+      <>
+        <StatusBar
+          backButton={
+            <Button
+              inlineIcon="left"
+              icon="arrow-back"
+              onClick={() =>
+                editMode ? router.push(`/application?id=${application.id}`) : router.back()
+              }
+            >
+              {t("t.back")}
+            </Button>
+          }
+          tagStyle={
+            application?.status == ApplicationStatus.submitted
+              ? AppearanceStyleType.success
+              : AppearanceStyleType.primary
+          }
+          tagLabel={
+            application?.status
+              ? t(`application.details.applicationStatus.${application.status}`)
+              : t(`application.details.applicationStatus.submitted`)
+          }
+        />
 
-          <LoadingOverlay isLoading={loading}>
-            <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
-              <div className="flex flex-row flex-wrap mt-5">
-                <div className="info-card md:w-9/12">
-                  <FormApplicationData />
+        <FormProvider {...formMethods}>
+          <section className="bg-primary-lighter py-5">
+            <div className="max-w-screen-xl px-5 mx-auto">
+              {alert && (
+                <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
+                  {t("application.add.applicationAddError")}
+                </AlertBox>
+              )}
 
-                  <FormPrimaryApplicant />
+              <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                <div className="flex flex-row flex-wrap mt-5">
+                  <div className="info-card md:w-9/12">
+                    <FormApplicationData />
 
-                  <FormAlternateContact />
+                    <FormPrimaryApplicant />
 
-                  <FormHouseholdMembers
-                    householdMembers={householdMembers}
-                    setHouseholdMembers={setHouseholdMembers}
-                  />
+                    <FormAlternateContact />
 
-                  <FormHouseholdDetails />
+                    <FormHouseholdMembers
+                      householdMembers={householdMembers}
+                      setHouseholdMembers={setHouseholdMembers}
+                    />
 
-                  <FormPreferences />
+                    <FormHouseholdDetails />
 
-                  <FormHouseholdIncome />
+                    <FormPreferences />
 
-                  <FormDemographics />
+                    <FormHouseholdIncome />
 
-                  <FormTerms />
+                    <FormDemographics />
+
+                    <FormTerms />
+                  </div>
+
+                  <aside className="md:w-3/12 md:pl-6">
+                    <Aside
+                      type={editMode ? "edit" : "add"}
+                      listingId={listingId}
+                      onDelete={() => deleteApplication()}
+                      triggerSubmitAndRedirect={triggerSubmitAndRedirect}
+                    />
+                  </aside>
                 </div>
-
-                <aside className="md:w-3/12 md:pl-6">
-                  <Aside
-                    type={editMode ? "edit" : "add"}
-                    listingId={listingId}
-                    onDelete={() => deleteApplication()}
-                    triggerSubmitAndRedirect={triggerSubmitAndRedirect}
-                  />
-                </aside>
-              </div>
-            </Form>
-          </LoadingOverlay>
-        </div>
-      </section>
-    </FormProvider>
+              </Form>
+            </div>
+          </section>
+        </FormProvider>
+      </>
+    </LoadingOverlay>
   )
 }
 
