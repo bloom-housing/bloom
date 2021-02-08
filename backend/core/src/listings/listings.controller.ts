@@ -1,5 +1,6 @@
 import {
   Body,
+  CacheInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,6 +9,7 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
@@ -37,6 +39,7 @@ export class ListingsController {
     required: false,
     type: String,
   })
+  @UseInterceptors(CacheInterceptor)
   public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingDto[]> {
     return mapTo(ListingDto, await this.listingsService.list(jsonpath))
   }
@@ -49,6 +52,7 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
+  @UseInterceptors(CacheInterceptor)
   async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
     return mapTo(ListingDto, await this.listingsService.findOne(listingId))
   }

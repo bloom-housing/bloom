@@ -1,9 +1,10 @@
 import {
   AmiChartCreate,
   ApplicationMethodType,
+  CSVFormattingType,
   Listing,
   ListingStatus,
-} from "@bloom-housing/backend-core/types"
+} from "./types"
 
 export const SanMateoHUD2019: AmiChartCreate = {
   name: "SanMateoHUD2019",
@@ -264,27 +265,18 @@ export const ArcherListing: Listing = {
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationMethods: [
     {
-      id: "1",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       type: ApplicationMethodType.POBox,
       acceptsPostmarkedApplications: true,
       label: "",
       externalReference: "",
     },
     {
-      id: "2",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       type: ApplicationMethodType.LeasingAgent,
       acceptsPostmarkedApplications: true,
       label: "",
       externalReference: "",
     },
     {
-      id: "3",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       type: ApplicationMethodType.PaperPickup,
       acceptsPostmarkedApplications: true,
       label: "",
@@ -300,9 +292,6 @@ export const ArcherListing: Listing = {
       // referenceType: "Listing",
       // TODO confirm not used anywhere
       // referenceId: "Uvbk5qurpB2WI9V6WnNdH",
-      id: "1",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       label: "building",
       fileId:
         "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
@@ -342,6 +331,7 @@ export const ArcherListing: Listing = {
   applicationFee: "30.0",
   criminalBackground:
     "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
+  CSVFormattingType: CSVFormattingType.basic,
   leasingAgentAddress: {
     city: "San Jose",
     street: "98 Archer Street",

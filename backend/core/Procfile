@@ -1,2 +1,2 @@
 release: yarn herokusetup
-web: yarn start
+web: yarn db:migration:run && yarn start

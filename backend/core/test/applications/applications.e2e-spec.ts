@@ -15,7 +15,7 @@ import {
   ApplicationUpdate,
   IncomePeriod,
   Language,
-} from "@bloom-housing/backend-core/types"
+} from "../../types"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
@@ -29,6 +29,7 @@ import { HouseholdMember } from "../../src/applications/entities/household-membe
 // expect here so we need to re-declare it.
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
 declare const expect: jest.Expect
+jest.setTimeout(30000)
 
 describe("Applications", () => {
   let app: INestApplication

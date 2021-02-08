@@ -1,14 +1,17 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useContext } from "react"
 import Head from "next/head"
-import { PageHeader, MetaTags, t, lRoute } from "@bloom-housing/ui-components"
+import { PageHeader, MetaTags, t, lRoute, UserContext } from "@bloom-housing/ui-components"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts/application"
 import moment from "moment"
+import { UserRole, Listing } from "@bloom-housing/backend-core/types"
 
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
 
 export default function ListingsList() {
+  const { profile } = useContext(UserContext)
+  const leasingAgentInListings = profile.leasingAgentInListings?.map((item) => item.id)
   class formatLinkCell {
     link: HTMLAnchorElement
 
@@ -96,6 +99,20 @@ export default function ListingsList() {
   )
 
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
+
+  // filter listings to show items depends on user role
+  const filteredListings = useMemo(() => {
+    if (profile.roles.includes(UserRole.admin)) return listingDtos
+
+    return listingDtos?.reduce((acc, curr) => {
+      if (leasingAgentInListings.includes(curr.id)) {
+        acc.push(curr)
+      }
+
+      return acc
+    }, []) as Listing[]
+  }, [leasingAgentInListings, listingDtos, profile.roles])
+
   if (listingsError) return "An error has occurred."
   if (listingsLoading) return "Loading..."
 
@@ -112,7 +129,7 @@ export default function ListingsList() {
             <AgGridReact
               gridOptions={gridOptions}
               columnDefs={columnDefs}
-              rowData={listingDtos}
+              rowData={filteredListings}
               domLayout={"autoHeight"}
               headerHeight={83}
               rowHeight={58}
@@ -123,7 +140,7 @@ export default function ListingsList() {
               <div className="data-pager__control-group">
                 <span className="data-pager__control">
                   <span className="field-label" id="lbTotalPages">
-                    {listingDtos?.length}
+                    {filteredListings?.length}
                   </span>
                   <span className="field-label">{t("listings.totalListings")}</span>
                 </span>
