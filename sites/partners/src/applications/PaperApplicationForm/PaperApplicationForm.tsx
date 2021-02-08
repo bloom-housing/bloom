@@ -83,6 +83,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
     const body = formatApplicationData(formData, listingId, false)
 
+    console.log(data)
+
+    return null
+
     try {
       const result = editMode
         ? await applicationsService.update({

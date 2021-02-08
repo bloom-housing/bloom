@@ -16,16 +16,18 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = formMethods
 
+  const buildOptionName = useCallback((option: string) => {
+    return `${PREFERENCES_FORM_PATH}.${option}.claimed`
+  }, [])
+
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     preferences?.forEach((preference) =>
-      preference?.formMetadata.options.forEach((option) =>
-        keys.push(`${PREFERENCES_FORM_PATH}.${option.key}`)
-      )
+      preference?.formMetadata.options.forEach((option) => keys.push(buildOptionName(option.key)))
     )
 
     return keys
-  }, [preferences])
+  }, [preferences, buildOptionName])
 
   const watchPreferences = watch(allOptionFieldNames)
 
@@ -36,17 +38,17 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
 
   const createExtraDataFields = useCallback(
     (optionKey, metaKey: string, type: InputType) => {
-      console.log("create")
-      if (!watchPreferences[`${PREFERENCES_FORM_PATH}.${optionKey}`]) return
+      if (!watchPreferences[buildOptionName(optionKey)]) return
 
       return (
         <div className="my-4">
+          {console.log(`${PREFERENCES_FORM_PATH}.${optionKey}.${metaKey}`)}
           {(() => {
             if (type === InputType.text) {
               return (
                 <Field
-                  id={metaKey}
-                  name={metaKey}
+                  id={`${PREFERENCES_FORM_PATH}.${optionKey}.${metaKey}`}
+                  name={`${PREFERENCES_FORM_PATH}.${optionKey}.${metaKey}`}
                   type="text"
                   label={metaKey}
                   register={register}
@@ -55,13 +57,18 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
             }
 
             if (type === InputType.address) {
-              return FormAddress(t("application.contact.address"), metaKey, "preference", register)
+              return FormAddress(
+                t("application.contact.address"),
+                `${PREFERENCES_FORM_PATH}.${optionKey}.${metaKey}`,
+                "preference",
+                register
+              )
             }
           })()}
         </div>
       )
     },
-    [register, watchPreferences]
+    [register, watchPreferences, buildOptionName]
   )
 
   return (
@@ -75,8 +82,8 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
                   return (
                     <React.Fragment key={option.key}>
                       <Field
-                        id={option.key}
-                        name={`${PREFERENCES_FORM_PATH}.${option.key}`}
+                        id={buildOptionName(option.key)}
+                        name={buildOptionName(option.key)}
                         type="checkbox"
                         label={option.key}
                         register={register}
@@ -86,7 +93,8 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
                           },
                         }}
                       />
-                      {watchPreferences[`${PREFERENCES_FORM_PATH}.${option.key}`] &&
+                      {console.log("extra", option.extraData)}
+                      {watchPreferences[buildOptionName(option.key)] &&
                         option.extraData?.map((extra) =>
                           createExtraDataFields(option.key, extra.key, extra.type)
                         )}
