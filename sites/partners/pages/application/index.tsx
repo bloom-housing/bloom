@@ -11,6 +11,7 @@ import {
   AlertBox,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
+
 import Layout from "../../layouts/application"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
@@ -33,8 +34,8 @@ export default function ApplicationsList() {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
-  const { applicationsService } = useContext(ApiClientContext)
 
+  const { applicationsService } = useContext(ApiClientContext)
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -123,7 +124,7 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdDetails />
 
-                <DetailsPreferences />
+                <DetailsPreferences listingId={application?.listing?.id} />
 
                 <DetailsHouseholdIncome />
 
