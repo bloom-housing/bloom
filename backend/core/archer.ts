@@ -4,7 +4,7 @@ import {
   CSVFormattingType,
   Listing,
   ListingStatus,
-} from "@bloom-housing/backend-core/types"
+} from "./types"
 
 export const SanMateoHUD2019: AmiChartCreate = {
   name: "SanMateoHUD2019",
