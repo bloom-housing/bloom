@@ -32,10 +32,7 @@ export class AmiChart {
   @Type(() => Date)
   updatedAt: Date
 
-  @OneToMany(() => AmiChartItem, (amiChartItem) => amiChartItem.amiChart, {
-    eager: true,
-    cascade: true,
-  })
+  @Column("jsonb")
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

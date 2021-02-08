@@ -1,14 +1,17 @@
-import { Listing, ListingStatus } from "../listings/entities/listing.entity"
+import {
+  ApplicationMethod,
+  ApplicationMethodType,
+  Asset,
+  Listing,
+  ListingEvent,
+  ListingEventType,
+  ListingStatus,
+} from "../listings/entities/listing.entity"
 import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
-import { ApplicationMethodCreateDto } from "../application-methods/dto/application-method.dto"
-import { ApplicationMethodType } from "../application-methods/entities/application-method.entity"
 import { PropertyCreateDto } from "../property/dto/property.dto"
-import { AssetCreateDto } from "../assets/dto/asset.dto"
 import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
 import { BaseEntity, Repository } from "typeorm"
-import { ListingEventCreateDto } from "../listing-events/dto/listing-events.dto"
-import { ListingEventType } from "../listing-events/entities/listing-event.entity"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { Unit } from "../.."
@@ -25,11 +28,11 @@ import { CSVFormattingType } from "../csv/formatting/application-formatting-meta
 export interface ListingSeed {
   amiChart: AmiChartCreateDto
   units: Array<Omit<UnitCreateDto, "property">>
-  applicationMethods: Array<Omit<ApplicationMethodCreateDto, "listing">>
+  applicationMethods: Array<Omit<ApplicationMethod, "listing">>
   property: Omit<PropertyCreateDto, "propertyGroups" | "listings" | "units" | "unitsSummarized">
   preferences: Array<Omit<PreferenceCreateDto, "listing">>
-  listingEvents: Array<Omit<ListingEventCreateDto, "listing">>
-  assets: Array<Omit<AssetCreateDto, "listing">>
+  listingEvents: Array<Omit<ListingEvent, "listing">>
+  assets: Array<Omit<Asset, "listing">>
   listing: Omit<
     ListingCreateDto,
     | keyof BaseEntity
