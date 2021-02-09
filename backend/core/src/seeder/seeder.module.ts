@@ -12,8 +12,8 @@ import { ApplicationsService } from "../applications/applications.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
 import { ConfigModule } from "@nestjs/config"
-import { CsvBuilder } from "../services/csv-builder.service"
-import { CsvEncoder } from "../services/csv-encoder.service"
+import { CsvBuilder } from "../csv/csv-builder.service"
+import { CsvEncoder } from "../csv/csv-encoder.service"
 import { PropertyGroup } from "../property-groups/entities/property-group.entity"
 import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
 import { Preference } from "../preferences/entities/preference.entity"

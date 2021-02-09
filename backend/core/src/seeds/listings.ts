@@ -20,6 +20,7 @@ import { UserService } from "../user/user.service"
 import { SanMateoHUD2019 } from "./ami-charts"
 import { InputType } from "../shared/input-type"
 import { UserCreateDto } from "../user/dto/user.dto"
+import { CSVFormattingType } from "../csv/formatting/application-formatting-metadata-factory"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
@@ -214,7 +215,7 @@ export const listingSeed1: ListingSeed = {
                 type: InputType.text,
               },
               {
-                key: "name",
+                key: "address",
                 type: InputType.address,
               },
             ],
@@ -332,6 +333,7 @@ export const listingSeed1: ListingSeed = {
     // totalUnits: 2,
     status: ListingStatus.active,
     displayWaitlistSize: false,
+    CSVFormattingType: CSVFormattingType.basic,
   },
   amiChart: SanMateoHUD2019,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

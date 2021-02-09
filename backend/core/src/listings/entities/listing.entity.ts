@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Application } from "../../applications/entities/application.entity"
+import { Application, IncomePeriod } from "../../applications/entities/application.entity"
 import { User } from "../../user/entities/user.entity"
 import { Asset } from "../../assets/entities/asset.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
@@ -35,6 +35,7 @@ import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { CSVFormattingType } from "../../csv/formatting/application-formatting-metadata-factory"
 
 export enum ListingStatus {
   active = "active",
@@ -335,6 +336,12 @@ class Listing extends BaseEntity {
   @ApiProperty({ type: Boolean, default: false })
   @IsBoolean()
   displayWaitlistSize: boolean
+
+  @Column({ enum: CSVFormattingType, default: CSVFormattingType.basic })
+  @Expose()
+  @IsEnum(IncomePeriod, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: CSVFormattingType, enumName: "CSVFormattingType" })
+  CSVFormattingType: CSVFormattingType
 }
 
 export { Listing as default, Listing }
