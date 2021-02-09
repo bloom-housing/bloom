@@ -61,6 +61,17 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
     }
   }
 
+  const preferenceNameAddress = (option) => {
+    return `
+      ${option.extraData[0].value},
+      ${option.extraData[1].value.street},
+      ${option.extraData[1].value.street2 ? `${option.extraData[1].value.street2},` : ""}
+      ${option.extraData[1].value.city},
+      ${option.extraData[1].value.state}
+      ${option.extraData[1].value.zipCode}
+    `
+  }
+
   return (
     <>
       <h3 className="form--card__sub-header">
@@ -269,7 +280,14 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
                   preference.options
                     .filter((item) => item.checked === true)
                     .map((option) => (
-                      <ViewItem label={t("application.preferences.youHaveClaimed")}>
+                      <ViewItem
+                        label={t("application.preferences.youHaveClaimed")}
+                        helper={
+                          preference.key == "displacedTenant" &&
+                          ["general", "missionCorridor"].includes(option.key) &&
+                          preferenceNameAddress(option)
+                        }
+                      >
                         {t(`application.preferences.${preference.key}.${option.key}.label`)}
                       </ViewItem>
                     ))

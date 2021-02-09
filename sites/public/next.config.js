@@ -47,6 +47,7 @@ module.exports = withCSS(
             housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
             gtmKey: process.env.GTM_KEY || null,
             languages: process.env.LANGUAGES || "en",
+            idleTimeout: process.env.IDLE_TIMEOUT,
           },
           sassLoaderOptions: {
             additionalData: tailwindVars,

@@ -50,9 +50,10 @@ export default () => {
         ?.extraData[0]?.value,
       generalAddress: displacedPreference?.options?.find((options) => options.key == "general")
         ?.extraData[1]?.value,
-      missionName: displacedPreference?.options?.find((options) => options.key == "missionCorridor")
-        ?.extraData[0]?.value,
-      missionAddress: displacedPreference?.options?.find(
+      missionCorridorName: displacedPreference?.options?.find(
+        (options) => options.key == "missionCorridor"
+      )?.extraData[0]?.value,
+      missionCorridorAddress: displacedPreference?.options?.find(
         (options) => options.key == "missionCorridor"
       )?.extraData[1]?.value,
     },
@@ -69,6 +70,20 @@ export default () => {
 
   const generalOptionSelected = watch("general")
   const missionOptionSelected = watch("missionCorridor")
+
+  const householdMemberOptions = [
+    {
+      label: `${application.applicant.firstName} ${application.applicant.lastName}`,
+      value: `${application.applicant.firstName} ${application.applicant.lastName}`,
+    },
+  ].concat(
+    application.householdMembers.map((member) => {
+      return {
+        label: `${member.firstName} ${member.lastName}`,
+        value: `${member.firstName} ${member.lastName}`,
+      }
+    })
+  )
 
   return (
     <FormsLayout>
@@ -177,12 +192,7 @@ export default () => {
                       validation={{ required: true }}
                       error={errors[`${option}Name`]}
                       errorMessage={t("errors.selectOption")}
-                      options={application.householdMembers.map((member) => {
-                        return {
-                          label: `${member.firstName} ${member.lastName}`,
-                          value: `${member.firstName} ${member.lastName}`,
-                        }
-                      })}
+                      options={householdMemberOptions}
                       register={register}
                     />
                   </fieldset>
