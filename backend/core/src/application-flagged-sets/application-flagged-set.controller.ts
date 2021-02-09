@@ -4,12 +4,21 @@ import { IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { PaginationQueryParams } from "../utils/pagination.dto"
 import { ApplicationFlaggedSetService } from "./application-flagged-set.service"
-import { Controller, Get, Query, Request, UsePipes, ValidationPipe } from "@nestjs/common"
+import {
+  Controller,
+  Get,
+  Query,
+  Request,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Request as ExpressRequest } from "express"
 import { mapTo } from "../shared/mapTo"
 import { PaginatedApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
+import { AuthzGuard } from "../auth/authz.guard"
 
 export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -27,7 +36,7 @@ export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams 
 @ApiTags("applicationFlaggedSets")
 @ApiBearerAuth()
 @ResourceType("applicationFlaggedSet")
-// @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(AuthzGuard)
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,

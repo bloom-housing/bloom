@@ -38,6 +38,9 @@ export class ApplicationFlaggedSetService {
         qb.where("Application.id != :id", {
           id: newApplication.id,
         })
+          .andWhere("Application.listing.id = :listingId", {
+            listingId: newApplication.listing.id,
+          })
           .andWhere("Application__applicant.firstName = :firstName", {
             firstName: newApplication.applicant.firstName,
           })
@@ -68,9 +71,13 @@ export class ApplicationFlaggedSetService {
       where: (qb: SelectQueryBuilder<Application>) => {
         qb.where("Application.id != :id", {
           id: newApplication.id,
-        }).andWhere("Application__applicant.emailAddress = :emailAddress", {
-          emailAddress: newApplication.applicant.emailAddress,
         })
+          .andWhere("Application.listing.id = :listingId", {
+            listingId: newApplication.listing.id,
+          })
+          .andWhere("Application__applicant.emailAddress = :emailAddress", {
+            emailAddress: newApplication.applicant.emailAddress,
+          })
       },
       join: {
         alias: "Application",
@@ -104,9 +111,9 @@ export class ApplicationFlaggedSetService {
           await this.afsRepository.save(newAfs)
         } else {
           for (const afs of afsesMatchingRule) {
-            // if (visitedAfses.includes(afs.id)) {
-            //   return
-            // }
+            if (visitedAfses.includes(afs.id)) {
+              return
+            }
             visitedAfses.push(afs.id)
             afs.applications.push(newApplication)
             await this.afsRepository.save(afs)

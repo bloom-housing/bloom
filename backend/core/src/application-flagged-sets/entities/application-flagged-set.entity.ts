@@ -88,4 +88,13 @@ export class ApplicationFlaggedSet {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   applications: Application[]
+
+  @ManyToMany(
+    () => Application,
+    (resolvedApplication) => resolvedApplication.applicationFlaggedSets
+  )
+  @JoinTable()
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  resolvedApplication: Application[]
 }
