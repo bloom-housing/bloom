@@ -125,7 +125,6 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
           </GridCell>
         ))}
       </GridSection>
-      {/* {console.log(preferences)} */}
     </GridSection>
   )
 }
