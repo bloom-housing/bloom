@@ -185,7 +185,7 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
               value: "Roger Thornhill",
             },
             {
-              key: "name",
+              key: "address",
               type: InputType.address,
               value: {},
             },
