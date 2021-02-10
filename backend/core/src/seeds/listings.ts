@@ -225,7 +225,16 @@ export const listingSeed1: ListingSeed = {
           },
           {
             key: "missionCorridor",
-            extraData: [],
+            extraData: [
+              {
+                key: "name",
+                type: InputType.text,
+              },
+              {
+                key: "address",
+                type: InputType.address,
+              },
+            ],
           },
         ],
       },
