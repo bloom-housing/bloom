@@ -1,9 +1,6 @@
-import {
-  AmiChart,
-  ApplicationMethodType,
-  Listing,
-  ListingStatus,
-} from "@bloom-housing/backend-core/types"
+
+import { ListingStatus, AmiChart,ApplicationMethodType, Listing } from "./backend-swagger"
+
 
 const amiChart: AmiChart = {
   id: "somerandomid",
