@@ -75,6 +75,14 @@ nav.navbar {
     margin-top: 0;
   }
 
+  &.slim {
+    @apply w-40;
+  }
+
+  &.normal {
+    @apply w-64;
+  }
+
   &.navbar-item,
   &.navbar-item:hover,
   &.navbar-item:focus {
