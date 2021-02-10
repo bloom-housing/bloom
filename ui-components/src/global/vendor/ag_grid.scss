@@ -32,6 +32,10 @@
     box-shadow: inset 0px -3px 0px 0px $tailwind-primary;
   }
 
+  .ag-header-icon .ag-icon.ag-icon-none {
+    @apply text-gray-600;
+  }
+
   .ag-header-cell-text {
     @apply whitespace-normal;
     text-overflow: unset;

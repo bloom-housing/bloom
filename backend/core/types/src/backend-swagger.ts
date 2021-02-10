@@ -469,110 +469,6 @@ export class ApplicationsService {
   }
 }
 
-export class AssetsService {
-  /**
-   * List assets
-   */
-  list(options: IRequestOptions = {}): Promise<Asset[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create asset
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: AssetCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update asset
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: AssetUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets/{assetId}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get asset by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      assetId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets/{assetId}';
-      url = url.replace('{assetId}', params['assetId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete asset by id
-   */
-  delete(
-    params: {
-      /**  */
-      assetId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets/{assetId}';
-      url = url.replace('{assetId}', params['assetId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class PreferencesService {
   /**
    * List preferences
@@ -677,110 +573,6 @@ export class PreferencesService {
   }
 }
 
-export class ApplicationMethodsService {
-  /**
-   * List applicationMethods
-   */
-  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create applicationMethod
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ApplicationMethodCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update applicationMethod
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ApplicationMethodUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods/{applicationMethodId}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get applicationMethod by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      applicationMethodId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods/{applicationMethodId}';
-      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete applicationMethod by id
-   */
-  delete(
-    params: {
-      /**  */
-      applicationMethodId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods/{applicationMethodId}';
-      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class UnitsService {
   /**
    * List units
@@ -874,110 +666,6 @@ export class UnitsService {
     return new Promise((resolve, reject) => {
       let url = basePath + '/units/{unitId}';
       url = url.replace('{unitId}', params['unitId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
-export class ListingEventsService {
-  /**
-   * List listingEvents
-   */
-  list(options: IRequestOptions = {}): Promise<ListingEvent[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create listingEvent
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ListingEventCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ListingEvent> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update listingEvent
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ListingEventUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ListingEvent> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents/{listingEventId}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get listingEvent by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      listingEventId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ListingEvent> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents/{listingEventId}';
-      url = url.replace('{listingEventId}', params['listingEventId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete listingEvent by id
-   */
-  delete(
-    params: {
-      /**  */
-      listingEventId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents/{listingEventId}';
-      url = url.replace('{listingEventId}', params['listingEventId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
@@ -1429,46 +1117,6 @@ export interface LoginResponse {
   accessToken: string;
 }
 
-export interface ApplicationMethod {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface Asset {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
 export interface PreferenceLink {
   /**  */
   title: string;
@@ -1629,15 +1277,6 @@ export interface UnitsSummarized {
 }
 
 export interface AmiChartItem {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
   /**  */
   percentOfAmi: number;
 
@@ -1827,32 +1466,6 @@ export interface Property {
   yearBuilt: number;
 }
 
-export interface ListingEvent {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
-}
-
 export interface UserBasic {
   /**  */
   id: string;
@@ -1874,6 +1487,45 @@ export interface UserBasic {
 
   /**  */
   updatedAt: Date;
+}
+
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  label: string;
+
+  /**  */
+  externalReference: string;
+
+  /**  */
+  acceptsPostmarkedApplications: boolean;
+}
+
+export interface Asset {
+  /**  */
+  label: string;
+
+  /**  */
+  fileId: string;
+}
+
+export interface ListingEvent {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
 }
 
 export interface WhatToExpect {
@@ -1898,19 +1550,13 @@ export interface Listing {
   displayWaitlistSize: boolean;
 
   /**  */
-  applicationMethods: ApplicationMethod[];
-
-  /**  */
-  assets: Asset[];
+  CSVFormattingType: CSVFormattingType;
 
   /**  */
   preferences: Preference[];
 
   /**  */
   property: Property;
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -1932,6 +1578,15 @@ export interface Listing {
 
   /**  */
   updatedAt: Date;
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: Asset[];
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   applicationDueDate: Date;
@@ -2015,28 +1670,6 @@ export interface Listing {
   applicationConfig?: object;
 }
 
-export interface ApplicationMethodCreate {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface AssetCreate {
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
 export interface PreferenceCreate {
   /**  */
   ordinal: number;
@@ -2055,23 +1688,6 @@ export interface PreferenceCreate {
 
   /**  */
   formMetadata?: FormMetadata;
-}
-
-export interface ListingEventCreate {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
 }
 
 export interface AddressCreate {
@@ -2111,19 +1727,13 @@ export interface ListingCreate {
   displayWaitlistSize: boolean;
 
   /**  */
-  applicationMethods: ApplicationMethodCreate[];
-
-  /**  */
-  assets: AssetCreate[];
+  CSVFormattingType: CSVFormattingType;
 
   /**  */
   preferences: PreferenceCreate[];
 
   /**  */
   property: Id;
-
-  /**  */
-  events: ListingEventCreate[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -2136,6 +1746,15 @@ export interface ListingCreate {
 
   /**  */
   leasingAgents?: Id[];
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: Asset[];
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   applicationDueDate: Date;
@@ -2219,46 +1838,6 @@ export interface ListingCreate {
   applicationConfig?: object;
 }
 
-export interface ApplicationMethodUpdate {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface AssetUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
 export interface PreferenceUpdate {
   /**  */
   ordinal: number;
@@ -2280,32 +1859,6 @@ export interface PreferenceUpdate {
 
   /**  */
   id: string;
-}
-
-export interface ListingEventUpdate {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
 }
 
 export interface AddressUpdate {
@@ -2354,6 +1907,9 @@ export interface ListingUpdate {
   displayWaitlistSize: boolean;
 
   /**  */
+  CSVFormattingType: CSVFormattingType;
+
+  /**  */
   id?: string;
 
   /**  */
@@ -2363,19 +1919,10 @@ export interface ListingUpdate {
   updatedAt?: Date;
 
   /**  */
-  applicationMethods: ApplicationMethodUpdate[];
-
-  /**  */
-  assets: AssetUpdate[];
-
-  /**  */
   preferences: PreferenceUpdate[];
 
   /**  */
   property: Id;
-
-  /**  */
-  events: ListingEventUpdate[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -2388,6 +1935,15 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgents?: Id[];
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: Asset[];
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   applicationDueDate: Date;
@@ -3590,43 +3146,12 @@ export interface PropertyGroupUpdate {
   id: string;
 }
 
-export interface AmiChartItemCreate {
-  /**  */
-  percentOfAmi: number;
-
-  /**  */
-  householdSize: number;
-
-  /**  */
-  income: number;
-}
-
 export interface AmiChartCreate {
   /**  */
-  items: AmiChartItemCreate[];
+  items: AmiChartItem[];
 
   /**  */
   name: string;
-}
-
-export interface AmiChartItemUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  percentOfAmi: number;
-
-  /**  */
-  householdSize: number;
-
-  /**  */
-  income: number;
 }
 
 export interface AmiChartUpdate {
@@ -3640,7 +3165,7 @@ export interface AmiChartUpdate {
   updatedAt?: Date;
 
   /**  */
-  items: AmiChartItemUpdate[];
+  items: AmiChartItem[];
 
   /**  */
   name: string;
@@ -3656,6 +3181,11 @@ export enum ListingStatus {
   'pending' = 'pending'
 }
 
+export enum CSVFormattingType {
+  'basic' = 'basic',
+  'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
+}
+export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -3670,7 +3200,6 @@ export enum InputType {
   'text' = 'text',
   'address' = 'address'
 }
-export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
