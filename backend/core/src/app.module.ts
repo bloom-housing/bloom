@@ -9,11 +9,8 @@ import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
 import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { logger } from "./middleware/logger.middleware"
-import { AssetsModule } from "./assets/assets.module"
 import { PreferencesModule } from "./preferences/preferences.module"
-import { ApplicationMethodsModule } from "./application-methods/application-methods.module"
 import { UnitsModule } from "./units/units.module"
-import { ListingEventsModule } from "./listing-events/listing-events.module"
 import { ConfigModule } from "@nestjs/config"
 import Joi from "joi"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
@@ -53,11 +50,8 @@ export class AppModule {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        AssetsModule,
         PreferencesModule,
-        ApplicationMethodsModule,
         UnitsModule,
-        ListingEventsModule,
         PropertiesModule,
         PropertyGroupsModule,
         AmiChartsModule,

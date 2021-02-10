@@ -16,16 +16,12 @@ export class ListingsService {
 
   private getQueryBuilder() {
     return Listing.createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
-      .leftJoinAndSelect("listings.assets", "assets")
-      .leftJoinAndSelect("listings.events", "events")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("units.amiChart", "amiChart")
-      .leftJoinAndSelect("amiChart.items", "amiChartItems")
   }
 
   public async list(jsonpath?: string): Promise<Listing[]> {
