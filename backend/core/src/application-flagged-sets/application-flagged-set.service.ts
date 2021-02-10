@@ -11,6 +11,7 @@ import {
 import { paginate } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "../applications/applications.controller"
 import { Application } from "../applications/entities/application.entity"
+import { ApplicationFlaggedSetUpdateDto } from "./dto/application-flagged-set.dto"
 
 @Injectable()
 export class ApplicationFlaggedSetService {
