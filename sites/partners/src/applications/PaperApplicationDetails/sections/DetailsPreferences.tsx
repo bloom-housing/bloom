@@ -29,7 +29,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
         const optionDetails = preferences.find((item) => item.key === optionKey)
 
         return (
-          <GridCell>
+          <GridCell key={listingPreference.id}>
             <ViewItem label={listingPreference.title}>
               {(() => {
                 if (!optionDetails.claimed) return t("t.none")
@@ -40,21 +40,31 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                   const extra = option.extraData?.map((extra) => {
                     if (extra.type === InputType.text)
                       return (
-                        <ViewItem label={t(`application.preferences.options.${extra.key}`)}>
+                        <ViewItem
+                          key={extra.key}
+                          label={t(`application.preferences.options.${extra.key}`)}
+                        >
                           {extra.value}
                         </ViewItem>
                       )
 
                     if (extra.type === InputType.boolean)
                       return (
-                        <ViewItem label={t(`application.preferences.options.${extra.key}`)}>
+                        <ViewItem
+                          key={extra.key}
+                          label={t(`application.preferences.options.${extra.key}`)}
+                        >
                           {extra.value ? t("t.yes") : t("t.no")}
                         </ViewItem>
                       )
 
                     if (extra.type === InputType.address)
                       return (
-                        <GridSection subtitle={t(`application.contact.address`)} columns={3}>
+                        <GridSection
+                          key={extra.key}
+                          subtitle={t(`application.contact.address`)}
+                          columns={3}
+                        >
                           <DetailsAddressColumns
                             type={AddressColsType.preferences}
                             addressObject={extra.value}
