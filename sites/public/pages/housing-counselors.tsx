@@ -29,9 +29,11 @@ export default class extends Component<HousingCounselorsProps> {
   public render() {
     return (
       <Layout>
-        <PageHeader inverse={true} subtitle={t("housingCounselors.subtitle")}>
-          {t("pageTitle.housingCounselors")}
-        </PageHeader>
+        <PageHeader
+          inverse={true}
+          title={t("pageTitle.housingCounselors")}
+          subtitle={t("housingCounselors.subtitle")}
+        />
         <section>
           {this.props.counselors.map((c) => {
             return (

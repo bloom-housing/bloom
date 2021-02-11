@@ -20,6 +20,7 @@ export interface DOBFieldProps {
   watch: any // comes from React Hook Form
   applicant?: HouseholdMemberUpdate
   atAge?: boolean
+  validateHhAge?: boolean
   name?: string
   id?: string
   required?: boolean
@@ -27,7 +28,7 @@ export interface DOBFieldProps {
 }
 
 const DOBField = (props: DOBFieldProps) => {
-  const { applicant, error, register, watch, atAge, name, id, errorMessage } = props
+  const { applicant, error, register, watch, atAge, validateHhAge, name, id, errorMessage } = props
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
   }
@@ -41,6 +42,13 @@ const DOBField = (props: DOBFieldProps) => {
       moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") <
         moment().subtract(atAge ? 18 : 0, "years")
     )
+  }
+
+  const validateHouseholdMemberAge = (value: string) => {
+    const nextYearData = moment().add(1, "year")
+    const inputDate = moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY")
+
+    return parseInt(value) > 1900 && inputDate <= nextYearData
   }
 
   const labelClasses = ["field-label--caps"]
@@ -104,6 +112,8 @@ const DOBField = (props: DOBFieldProps) => {
               yearRange: (value: string) => {
                 if (props.required && value && parseInt(value) < 1900) return false
                 if (!props.required && !value?.length) return true
+
+                if (value?.length && validateHhAge) return validateHouseholdMemberAge(value)
 
                 return validateAge(value)
               },

@@ -30,6 +30,7 @@ export const SiteAlert = ({
     const storedMessage = sessionStorage.getItem(`alert_message_${type}`)
 
     if (storedMessage) {
+      console.log("alert")
       setMessage(storedMessage)
       setOpen(true)
       sessionStorage.removeItem(`alert_message_${type}`)
