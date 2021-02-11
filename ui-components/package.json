@@ -16,6 +16,7 @@
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "@storybook/addon-a11y": "^6.0.26",
+    "@storybook/addon-actions": "^6.1.17",
     "@storybook/addon-docs": "^6.0.26",
     "@storybook/addon-knobs": "^6.1.1",
     "@storybook/addon-storyshots": "^6.0.26",

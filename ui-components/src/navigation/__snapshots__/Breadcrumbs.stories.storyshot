@@ -15,17 +15,17 @@ exports[`Storyshots Navigation/Breadcrumbs Default 1`] = `
     >
       <ol>
         <BreadcrumbLink
-          href="#"
+          href="/One"
         >
           <li>
             <LocalizedLink
-              href="#"
+              href="/One"
             >
               <Link
-                href="#"
+                href="/One"
               >
                 <a
-                  href="/#"
+                  href="/One"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >
@@ -36,17 +36,17 @@ exports[`Storyshots Navigation/Breadcrumbs Default 1`] = `
           </li>
         </BreadcrumbLink>
         <BreadcrumbLink
-          href="#"
+          href="/Two"
         >
           <li>
             <LocalizedLink
-              href="#"
+              href="/Two"
             >
               <Link
-                href="#"
+                href="/Two"
               >
                 <a
-                  href="/#"
+                  href="/Two"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >
@@ -58,7 +58,7 @@ exports[`Storyshots Navigation/Breadcrumbs Default 1`] = `
         </BreadcrumbLink>
         <BreadcrumbLink
           current={true}
-          href="#"
+          href="/Three"
         >
           <li>
             <LocalizedLink
@@ -68,15 +68,15 @@ exports[`Storyshots Navigation/Breadcrumbs Default 1`] = `
                 }
               }
               className="is-active"
-              href="#"
+              href="/Three"
             >
               <Link
-                href="#"
+                href="/Three"
               >
                 <a
                   aria-current="page"
                   className="is-active"
-                  href="/#"
+                  href="/Three"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >
