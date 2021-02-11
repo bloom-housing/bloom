@@ -177,8 +177,8 @@ module.exports = withCSS(
             return Object.assign({}, languagePaths, {
               "/disclaimer": { page: "/disclaimer" },
               "/privacy": { page: "/privacy" },
-              "/sign-in": { page: "/sign-in" },
-              "/create-account": { page: "/create-account" },
+              // "/sign-in": { page: "/sign-in" },
+              // "/create-account": { page: "/create-account" },
               "/account/applications": { page: "/account/applications" },
               "/account/dashboard": { page: "/account/dashboard" },
               "/account/settings": { page: "/account/settings" },
