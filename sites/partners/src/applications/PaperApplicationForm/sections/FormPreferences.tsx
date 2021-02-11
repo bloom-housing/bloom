@@ -1,14 +1,57 @@
 import React, { useMemo, useCallback } from "react"
 import { t, GridSection, ViewItem, GridCell, Field } from "@bloom-housing/ui-components"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, UseFormMethods } from "react-hook-form"
 import { Preference, FormMetadataOptions, InputType } from "@bloom-housing/backend-core/types"
 import { FormAddress } from "../FormAddress"
+
+const PREFERENCES_FORM_PATH = "application.preferences"
 
 type FormPreferencesProps = {
   preferences: Preference[]
 }
 
-const PREFERENCES_FORM_PATH = "application.preferences"
+type ExtraFieldProps = {
+  metaKey: string
+  optionKey: string
+  extraKey: string
+  type: InputType
+  register: UseFormMethods["register"]
+}
+
+const ExtraField = ({ metaKey, optionKey, extraKey, type, register }: ExtraFieldProps) => {
+  const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
+
+  return (
+    <div className="my-4" key={FIELD_NAME}>
+      {(() => {
+        if (type === InputType.text) {
+          return (
+            <Field
+              id={FIELD_NAME}
+              name={FIELD_NAME}
+              type="text"
+              label={t(`application.preferences.options.${extraKey}`)}
+              register={register}
+            />
+          )
+        }
+
+        if (type === InputType.address) {
+          return (
+            <div className="pb-4">
+              {FormAddress(
+                t("application.preferences.options.address"),
+                FIELD_NAME,
+                "preference",
+                register
+              )}
+            </div>
+          )
+        }
+      })()}
+    </div>
+  )
+}
 
 const FormPreferences = ({ preferences }: FormPreferencesProps) => {
   const formMethods = useFormContext()
@@ -38,44 +81,6 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
     preferenceKeys.forEach((k) => setValue(buildOptionName(metaKey, k), false))
   }
 
-  const createExtraDataFields = useCallback(
-    (metaKey: string, optionKey: string, extraKey: string, type: InputType) => {
-      const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
-
-      return (
-        <div className="my-4" key={FIELD_NAME}>
-          {(() => {
-            if (type === InputType.text) {
-              return (
-                <Field
-                  id={FIELD_NAME}
-                  name={FIELD_NAME}
-                  type="text"
-                  label={t(`application.preferences.options.${extraKey}`)}
-                  register={register}
-                />
-              )
-            }
-
-            if (type === InputType.address) {
-              return (
-                <div className="pb-4">
-                  {FormAddress(
-                    t("application.preferences.options.address"),
-                    FIELD_NAME,
-                    "preference",
-                    register
-                  )}
-                </div>
-              )
-            }
-          })()}
-        </div>
-      )
-    },
-    [register]
-  )
-
   return (
     <GridSection title={t("application.details.preferences")} separator grid={false}>
       <GridSection columns={2}>
@@ -99,14 +104,15 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
                         }}
                       />
                       {watchPreferences[buildOptionName(preference.formMetadata.key, option.key)] &&
-                        option.extraData?.map((extra) =>
-                          createExtraDataFields(
-                            preference.formMetadata.key,
-                            option.key,
-                            extra.key,
-                            extra.type
-                          )
-                        )}
+                        option.extraData?.map((extra) => (
+                          <ExtraField
+                            metaKey={preference.formMetadata.key}
+                            optionKey={option.key}
+                            extraKey={extra.key}
+                            type={extra.type}
+                            register={register}
+                          />
+                        ))}
                     </React.Fragment>
                   )
                 })}

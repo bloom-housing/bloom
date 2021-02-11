@@ -62,7 +62,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                       return (
                         <GridSection
                           key={extra.key}
-                          subtitle={t(`application.contact.address`)}
+                          subtitle={t(`application.preferences.options.address`)}
                           columns={3}
                         >
                           <DetailsAddressColumns
