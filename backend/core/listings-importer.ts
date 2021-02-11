@@ -30,8 +30,6 @@ const instance = axios.create({
 
 serviceOptions.axios = instance
 
-const assetsService = new client.AssetsService()
-const applicatonMethodsService = new client.ApplicationMethodsService()
 const unitsService = new client.UnitsService()
 const preferencesService = new client.PreferencesService()
 const listingsService = new client.ListingsService()
@@ -119,11 +117,9 @@ async function main() {
   })
 
   let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
-  const relationsKeys = ["assets", "units", "applicationMethods", "preferences"]
+  const relationsKeys = ["units", "preferences"]
   listing = reformatListing(listing, relationsKeys)
-  listing = await uploadEntity("assets", assetsService, listing)
   listing = await uploadEntity("units", unitsService, listing)
-  listing = await uploadEntity("applicationMethods", applicatonMethodsService, listing)
   listing = await uploadEntity("preferences", preferencesService, listing)
   const newListing = await uploadListing(listing)
   console.log(newListing)

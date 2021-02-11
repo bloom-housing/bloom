@@ -102,7 +102,6 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
     additionalPhoneNumber,
     contactPreferences,
     sendMailToMailingAddress,
-    alternateContact,
     accessibility,
     preferences,
     demographics,
@@ -115,6 +114,11 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
     : null
 
   const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
+
+  const alternateContact = data.application.alternateContact
+
+  // send null instead of empty string
+  alternateContact.emailAddress = alternateContact.emailAddress || null
 
   // pass blank address, not used for now everywhere
   const alternateAddress = getAddress(false, null)
