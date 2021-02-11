@@ -1,7 +1,24 @@
 {
   "id": "HOLNx_F7fUCeax5GCoIr9g",
-  "events":[],
-  "postmarkedApplicationsReceivedByDate": "2021-03-03T17:00:00.000-07:00",
+  "events":[
+    {
+      "type": "openHouse",
+      "startTime": "2021-03-03T14:00:00.000-08:00",
+      "endTime": "2021-03-03T15:00:00.000-08:00",
+      "url": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_M2E0MThlMTgtNGUwMi00ODk3LWFkYTQtMmM4YzYzNTIwMTUz%40thread.v2/0?context=%7b%22Tid%22%3a%2215cb6c53-0a50-4876-a66c-9a753d760a7d%22%2c%22Oid%22%3a%2267252afa-99d8-45f9-93b0-91c740661a60%22%7d"
+    },    {
+      "type": "openHouse",
+      "startTime": "2021-03-09T11:00:00.000-08:00",
+      "endTime": "2021-03-09T12:00:00.000-08:00",
+      "url": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MGI2OWUyNTMtMzIyNy00YWQ1LTllOTEtNzc4NmNjODJiNmJm%40thread.v2/0?context=%7b%22Tid%22%3a%2215cb6c53-0a50-4876-a66c-9a753d760a7d%22%2c%22Oid%22%3a%2267252afa-99d8-45f9-93b0-91c740661a60%22%7d"
+    },
+    {
+      "type": "publicLottery",
+      "startTime": "2021-03-29T14:00:00.000-08:00",
+      "endTime": "2021-03-29T15:00:00.000-08:00"
+    }
+  ],
+  "postmarkedApplicationsReceivedByDate": "2021-03-03T17:00:00.000-08:00",
   "applicationAddress": {
     "city": "San Francisco",
     "street": "P.O. Box 14217",
@@ -10,7 +27,7 @@
     "latitude": null,
     "longitude": null
   },
-  "applicationDueDate": "2021-03-03T18:00:00.000-07:00",
+  "applicationDueDate": "2021-03-15T17:00:00.000-08:00",
   "applicationOrganization": "The Mix at SoHay BMR",
   "applicationPhone": null,
   "buildingSelectionCriteria": null,
@@ -30,8 +47,8 @@
   "reservedCommunityMinimumAge": null,
   "reservedDescriptor": "Senior",
   "status": "active",
-  "createdAt": "2020-11-06T15:11:26.446-07:00",
-  "updatedAt": "2020-11-06T11:47:47.150-07:00",
+  "createdAt": "2020-11-06T15:11:26.446-08:00",
+  "updatedAt": "2020-11-06T11:47:47.150-08:00",
   "groupId": 1,
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
@@ -68,8 +85,8 @@
     }
   ],
   "property": {
-    "createdAt": "2021-02-02T17:00:00.000-07:00",
-    "updatedAt": "2021-02-02T17:00:00.000-07:00",
+    "createdAt": "2021-02-02T17:00:00.000-08:00",
+    "updatedAt": "2021-02-02T17:00:00.000-08:00",
     "householdSizeMin": 1,
     "householdSizeMax": 5,
     "smokingPolicy": "Non-Smoking Building",

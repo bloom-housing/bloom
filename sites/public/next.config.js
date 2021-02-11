@@ -85,7 +85,7 @@ module.exports = withCSS(
               "/": { page: "/" },
               "/listings": { page: "/listings" },
               "/additional-resources": { page: "/additional-resources" },
-              "/housing-counselors": { page: "/housing-counselors" },
+              // "/housing-counselors": { page: "/housing-counselors" },
               "/applications/start/choose-language": {
                 page: "/applications/start/choose-language",
               },
