@@ -10,8 +10,8 @@ export default {
 export const Default = () => {
   return (
     <TabNav>
-      <Tab href="javascript:alert('Other Tab')">Other</Tab>
-      <Tab href="javascript:alert('Default Tab')" current tagContent="15">
+      <Tab href={"#"}>Other</Tab>
+      <Tab href={"#"} current tagContent="15">
         Default
       </Tab>
     </TabNav>
@@ -21,10 +21,10 @@ export const Default = () => {
 export const Other = () => {
   return (
     <TabNav>
-      <Tab href="javascript:alert('Other Tab')" current>
+      <Tab href={"#"} current>
         Other
       </Tab>
-      <Tab href="javascript:alert('Default Tab')" tagContent="15">
+      <Tab href={"#"} tagContent="15">
         Default
       </Tab>
     </TabNav>

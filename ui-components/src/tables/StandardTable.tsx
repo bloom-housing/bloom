@@ -35,15 +35,19 @@ export interface StandardTableProps {
 export const StandardTable = (props: StandardTableProps) => {
   const { headers, data, cellClassName } = props
 
-  const headerLabels = Object.values(headers).map((col) => {
-    const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
+  const headerLabels = Object.values(headers).map((col, index) => {
+    const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
-  const body = data.map((row: Record<string, React.ReactNode>) => {
-    const rowKey = (row["id"] as string) || (process.env.NODE_ENV === "test" ? "" : nanoid())
-    const cols = Object.keys(headers).map((colKey) => {
-      const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
+  const body = data.map((row: Record<string, React.ReactNode>, dataIndex) => {
+    const rowKey = row["id"]
+      ? `row-${row["id"] as string}`
+      : process.env.NODE_ENV === "test"
+      ? `standardrow-${dataIndex}`
+      : nanoid()
+    const cols = Object.keys(headers).map((colKey, colIndex) => {
+      const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const header = headers[colKey]
       const cell = row[colKey]
       return (
@@ -53,7 +57,7 @@ export const StandardTable = (props: StandardTableProps) => {
       )
     })
     return (
-      <Row id={"row-" + rowKey} key={rowKey}>
+      <Row id={rowKey} key={rowKey}>
         {cols}
       </Row>
     )

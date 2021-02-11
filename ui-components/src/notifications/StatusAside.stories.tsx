@@ -13,14 +13,14 @@ export default {
 export const WithButtonsAndMessages = () => (
   <StatusAside
     actions={[
-      <GridCell>
+      <GridCell key={0}>
         <Button fullWidth={true} size={AppearanceSizeType.small} onClick={() => {}}>
           Save
         </Button>
       </GridCell>,
-      <GridCell>
+      <GridCell key={1}>
         <Button
-          type={AppearanceStyleType.secondary}
+          styleType={AppearanceStyleType.secondary}
           fullWidth={true}
           size={AppearanceSizeType.small}
           onClick={() => {}}
@@ -28,9 +28,9 @@ export const WithButtonsAndMessages = () => (
           Preview
         </Button>
       </GridCell>,
-      <GridCell span={2}>
+      <GridCell span={2} key={2}>
         <Button
-          type={AppearanceStyleType.primary}
+          styleType={AppearanceStyleType.primary}
           fullWidth={true}
           size={AppearanceSizeType.small}
           onClick={() => {}}
@@ -56,14 +56,14 @@ export const OnlyTimestamp = () => (
   <StatusAside
     columns={1}
     actions={[
-      <GridCell>
+      <GridCell key={0}>
         <Button fullWidth={true} size={AppearanceSizeType.small} onClick={() => {}}>
           Save
         </Button>
       </GridCell>,
-      <GridCell>
+      <GridCell key={1}>
         <Button
-          type={AppearanceStyleType.secondary}
+          styleType={AppearanceStyleType.secondary}
           fullWidth={true}
           size={AppearanceSizeType.small}
           onClick={() => {}}
