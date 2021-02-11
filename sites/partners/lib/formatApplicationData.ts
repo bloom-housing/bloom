@@ -37,13 +37,14 @@ function getAddress(condition: boolean, addressData?: GetAddressType): GetAddres
 
 interface FormData extends FormTypes {
   householdMembers: HouseholdMember[]
+  submissionType: ApplicationSubmissionType
 }
 
 /*
   Format data which comes from react-hook-form into correct API format.
 */
 
-export const mapFormToApi = (data: FormData, listingId: string) => {
+export const mapFormToApi = (data: FormData, listingId: string, editMode: boolean) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -201,7 +202,7 @@ export const mapFormToApi = (data: FormData, listingId: string) => {
       ? false
       : null
 
-  const submissionType = ApplicationSubmissionType.paper
+  const submissionType = editMode ? data.submissionType : ApplicationSubmissionType.paper
   const status = ApplicationStatus.submitted
 
   const listing = {

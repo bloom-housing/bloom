@@ -90,10 +90,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
     const formData = {
       householdMembers,
+      submissionType: application?.submissionType,
       ...data,
     }
 
-    const body = mapFormToApi(formData, listingId)
+    const body = mapFormToApi(formData, listingId, editMode)
 
     try {
       const result = editMode
