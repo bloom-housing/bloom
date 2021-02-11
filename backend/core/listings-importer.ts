@@ -43,7 +43,7 @@ async function uploadEntity(entityKey, entityService, listing) {
         const res = await entityService.create({
           body: obj,
         })
-        return { id: res.id }
+        return res
       } catch (e) {
         console.log(obj)
         console.log(e.response.data.message)
