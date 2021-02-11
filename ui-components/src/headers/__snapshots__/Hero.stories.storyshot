@@ -13,7 +13,7 @@ exports[`Storyshots Headers/Hero With Background 1`] = `
   }
 >
   <div
-    className="hero"
+    className="hero "
     style={
       Object {
         "backgroundImage": "url(/images/banner.png)",
@@ -1295,7 +1295,7 @@ Credit recommendations other than an accept decision, will require a rental veri
   }
 >
   <div
-    className="hero"
+    className="hero "
   >
     <h1
       className="hero__title"
@@ -1339,7 +1339,7 @@ exports[`Storyshots Headers/Hero With No Listings 1`] = `
   }
 >
   <div
-    className="hero"
+    className="hero "
   >
     <h1
       className="hero__title"
