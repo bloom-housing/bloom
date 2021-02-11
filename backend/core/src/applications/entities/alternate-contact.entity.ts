@@ -58,7 +58,7 @@ export class AlternateContact extends AbstractEntity {
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   emailAddress?: string | null
