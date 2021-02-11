@@ -12,13 +12,7 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 describe("Authz", () => {
   let app: INestApplication
   let userAccessToken: string
-  const adminOnlyEndpoints = [
-    "/applicationMethods",
-    "/assets",
-    "/listingEvents",
-    "/preferences",
-    "/units",
-  ]
+  const adminOnlyEndpoints = ["/preferences", "/units"]
   const applicationsEndpoint = "/applications"
   const listingsEndpoint = "/listings"
   const userEndpoint = "/user"

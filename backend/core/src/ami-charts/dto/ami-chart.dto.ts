@@ -5,43 +5,12 @@ import { AmiChart } from "../entities/ami-chart.entity"
 import { AmiChartItem } from "../entities/ami-chart-item.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
-export class AmiChartItemDto extends OmitType(AmiChartItem, ["amiChart"]) {}
-
-export class AmiChartItemCreateDto extends OmitType(AmiChartItemDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-]) {}
-
-export class AmiChartItemUpdateDto extends OmitType(AmiChartItemDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-]) {
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  id?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
-}
-
 export class AmiChartDto extends OmitType(AmiChart, ["units", "items"] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AmiChartItemDto)
+  @Type(() => AmiChartItem)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  items: AmiChartItemDto[]
+  items: AmiChartItem[]
 }
 
 export class AmiChartCreateDto extends OmitType(AmiChartDto, [
@@ -52,9 +21,9 @@ export class AmiChartCreateDto extends OmitType(AmiChartDto, [
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AmiChartItemCreateDto)
+  @Type(() => AmiChartItem)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  items: AmiChartItemCreateDto[]
+  items: AmiChartItem[]
 }
 
 export class AmiChartUpdateDto extends OmitType(AmiChartDto, [
@@ -82,7 +51,7 @@ export class AmiChartUpdateDto extends OmitType(AmiChartDto, [
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AmiChartItemUpdateDto)
+  @Type(() => AmiChartItem)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  items: AmiChartItemUpdateDto[]
+  items: AmiChartItem[]
 }
