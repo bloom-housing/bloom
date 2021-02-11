@@ -20,7 +20,7 @@ export const blankApplication = () => {
       birthMonth: "",
       birthDay: "",
       birthYear: "",
-      emailAddress: "",
+      emailAddress: null,
       noEmail: false,
       phoneNumber: "",
       phoneNumberType: "",
@@ -75,7 +75,7 @@ export const blankApplication = () => {
       lastName: "",
       agency: "",
       phoneNumber: "",
-      emailAddress: "",
+      emailAddress: null,
       mailingAddress: {
         street: "",
         city: "",
