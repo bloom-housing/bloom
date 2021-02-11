@@ -129,4 +129,26 @@ export class ApplicationFlaggedSetService {
       }
     }
   }
+
+  // Add resolved logic here
+  // Not able to image how data is coming in and in what form?
+  // I have no idea what have I written here
+  async update(afsUpdateDto: ApplicationFlaggedSetUpdateDto) {
+    const resolvedafs = await this.afsRepository.findOneOrFail({
+      where: { id: afsUpdateDto.id },
+      relations: ["applications"],
+    })
+    resolvedafs.resolved = true
+    resolvedafs.resolvedTime = new Date()
+    const applicatonsInAFS = []
+    for (const application of applicatonsInAFS) {
+      const nonResolvedAfses = application.applicationFlaggedSets.filter(
+        (afs) => afs.id != afsUpdateDto.id
+      )
+      for (const afs of nonResolvedAfses) {
+        afs.remove(application.id)
+      }
+    }
+    await this.afsRepository.save(resolvedafs)
+  }
 }

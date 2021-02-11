@@ -4615,4 +4615,3 @@ export enum EnumApplicationFlaggedSetStatus {
   'resolved' = 'resolved'
 }
 export type CombinedUserTypes = (User & any) | null;
-

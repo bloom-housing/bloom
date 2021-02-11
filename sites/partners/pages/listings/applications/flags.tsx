@@ -16,24 +16,47 @@ const ApplicationFlaggedSetList = () => {
 
   const listingId = router.query.listing as string
   const { appsData } = useApplicationFlaggedSetData(pageIndex, pageSize, listingId)
-  console.log("NETRA appsData", appsData)
+  const afs = appsData?.items || []
+
+  const pendingReviews = useMemo(() => {
+    let count = 0
+    appsData?.items.forEach((item) => {
+      count = item.applications.length
+    })
+    return count
+  }, [appsData])
+
+  const primaryApplicant = useMemo(() => {
+    let fullName
+    appsData?.items.forEach((item) => {
+      item.applications.forEach((app) => {
+        fullName = app.applicant.firstName + " " + app.applicant.lastName
+      })
+    })
+    return fullName
+  }, [appsData])
+
+  const defaultColDef = {
+    resizable: true,
+    maxWidth: 300,
+  }
 
   const columnDefs = useMemo(
     () => [
       {
         headerName: t("flaggedSet.flaggedSet"),
-        field: "flaggedSet",
+        field: "rule",
         sortable: false,
         filter: false,
         resizable: true,
-        cellRenderer: "formatLinkCell",
       },
       {
         headerName: t("application.household.primaryApplicant"),
-        field: "primaryApplicant",
+        field: `${primaryApplicant}`,
         sortable: false,
         filter: false,
         resizable: true,
+        valueFormatter: `${primaryApplicant}`,
       },
       {
         headerName: t("flaggedSet.ruleName"),
@@ -44,11 +67,11 @@ const ApplicationFlaggedSetList = () => {
       },
       {
         headerName: t("flaggedSet.pendingReview"),
-        field: "pendingReview",
+        field: `${pendingReviews}`,
         sortable: false,
         filter: false,
         resizable: true,
-        cellRenderer: "formatWaitlistStatus",
+        valueFormatter: `${pendingReviews}`,
       },
       {
         headerName: t("application.status"),
@@ -57,22 +80,16 @@ const ApplicationFlaggedSetList = () => {
         filter: false,
         resizable: true,
         flex: 1,
-        valueFormatter: ({ value }) => t(`listings.${value}`),
+        valueFormatter: ({ value }) => t(`flaggedSet.${value}`),
       },
     ],
     []
   )
 
-  const defaultColDef = {
-    resizable: true,
-    maxWidth: 300,
-  }
   // reset page to 1 when user change limit
   useEffect(() => {
     setPageIndex(1)
   }, [pageSize])
-  
-  const applications = appsData?.items || []
 
   return (
     <Layout>
@@ -83,7 +100,7 @@ const ApplicationFlaggedSetList = () => {
               <AgGridReact
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
-                rowData={applications}
+                rowData={afs}
                 domLayout={"autoHeight"}
                 headerHeight={83}
                 rowHeight={58}

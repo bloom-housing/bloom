@@ -35,8 +35,6 @@ export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams 
 @Controller("applicationFlaggedSets")
 @ApiTags("applicationFlaggedSets")
 @ApiBearerAuth()
-@ResourceType("applicationFlaggedSet")
-@UseGuards(AuthzGuard)
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,

@@ -49,3 +49,21 @@ export function useSingleApplicationData(applicationId: string) {
     applicationError: error,
   }
 }
+
+export function useApplicationFlaggedSetData(pageIndex: number, limit = 10, listingId: string) {
+  const { applicationFlaggedSetService } = useContext(ApiClientContext)
+  const endpointUrl = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}`
+  const fetcher = () =>
+    applicationFlaggedSetService.list({
+      listingId,
+      page: pageIndex,
+      limit,
+    })
+  const { data, error } = useSWR(endpointUrl, fetcher)
+
+  return {
+    appsData: data,
+    appsLoading: !error && !data,
+    appsError: error,
+  }
+}
