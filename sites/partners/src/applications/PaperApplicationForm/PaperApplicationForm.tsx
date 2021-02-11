@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
-import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
+import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
 import { useSingleListingData } from "../../../lib/hooks"
 
 import { FormApplicationData } from "./sections/FormApplicationData"
@@ -31,7 +31,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const preferences = listingDto?.preferences
 
-  const defaultValues = editMode ? parseApplicationData(application) : {}
+  const defaultValues = editMode ? mapApiToForm(application) : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -81,7 +81,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       ...data,
     }
 
-    const body = formatApplicationData(formData, listingId, false)
+    const body = mapFormToApi(formData, listingId)
 
     try {
       const result = editMode

@@ -39,8 +39,11 @@ interface FormData extends FormTypes {
   householdMembers: HouseholdMember[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const formatApplicationData = (data: FormData, listingId: string, editMode: boolean) => {
+/*
+  Format data which comes from react-hook-form into correct API format.
+*/
+
+export const mapFormToApi = (data: FormData, listingId: string) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -237,7 +240,11 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
   return result
 }
 
-export const parseApplicationData = (applicationData: ApplicationUpdate) => {
+/*
+  Format data which comes from the API into correct react-hook-form format.
+*/
+
+export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const submissionDate = applicationData.submissionDate
     ? new Date(applicationData.submissionDate)
     : null
@@ -289,36 +296,43 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
   const phoneNumber = applicationData.applicant.phoneNumber
 
   const preferences = (() => {
-    const formObj = {}
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const preferencesData = applicationData.preferences as Record<string, any>
+    const preferencesFormData = {}
 
-    preferencesData.forEach((item) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const preferencesApiData = applicationData.preferences as Record<string, any>
+
+    preferencesApiData.forEach((item) => {
       const options = item.options.reduce((acc, curr) => {
+        // extraData which comes from the API is an array, in the form we expect an object
         const extraData =
           curr?.extraData?.reduce((extraAcc, extraCurr) => {
+            // value - it can be string or nested address object
+            const value = extraCurr.value
             Object.assign(extraAcc, {
-              [extraCurr.key]: extraCurr.value,
+              [extraCurr.key]: value,
             })
 
             return extraAcc
           }, {}) || {}
 
+        // each form option has "claimed" property - it's "checked" property in the API
+        const claimed = curr.checked
+
         Object.assign(acc, {
           [curr.key]: {
-            claimed: curr.checked,
+            claimed,
             ...extraData,
           },
         })
         return acc
       }, {})
 
-      Object.assign(formObj, {
+      Object.assign(preferencesFormData, {
         [item.key]: options,
       })
     })
 
-    return formObj
+    return preferencesFormData
   })()
 
   const application: ApplicationTypes = (() => {
