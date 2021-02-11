@@ -89,7 +89,9 @@
       "dateSubmitted": "Date Submitted",
       "applicationSubmitted": "Application Submitted",
       "applicationUpdated": "Application Updated",
-      "saveAndExit": "Save & exit"
+      "saveAndExit": "Save & exit",
+      "claimant": "Claimant",
+      "displacedAddress": "Displaced Address"
     },
     "details": {
       "applicationData": "Application Data",
@@ -360,7 +362,8 @@
         "work": "Work",
         "general": "General",
         "missionCorridor": "Mission Corridor",
-        "name": "Name"
+        "name": "Claimant",
+        "address": "Displaced Address"
       }
     },
     "review": {
