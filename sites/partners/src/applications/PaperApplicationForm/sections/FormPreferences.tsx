@@ -58,11 +58,15 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
             }
 
             if (type === InputType.address) {
-              return FormAddress(
-                t("application.contact.address"),
-                FIELD_NAME,
-                "preference",
-                register
+              return (
+                <div className="pb-4">
+                  {FormAddress(
+                    t("application.preferences.options.address"),
+                    FIELD_NAME,
+                    "preference",
+                    register
+                  )}
+                </div>
               )
             }
           })()}
