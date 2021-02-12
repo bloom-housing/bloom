@@ -2,14 +2,14 @@ import { t, GridCell, ViewItem } from "@bloom-housing/ui-components"
 import {
   Application,
   HouseholdMemberUpdate,
-  AddressUpdate,
+  AddressCreate,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../PaperApplicationForm/FormTypes"
 
 type DetailsAddressColumnsProps = {
   type: AddressColsType
   application?: Application
-  addressObject?: AddressUpdate
+  addressObject?: AddressCreate
   householdMember?: HouseholdMemberUpdate
 }
 

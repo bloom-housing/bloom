@@ -299,8 +299,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const preferences = (() => {
     const preferencesFormData = {}
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const preferencesApiData = applicationData.preferences as Record<string, any>
+    const preferencesApiData = applicationData.preferences
 
     preferencesApiData.forEach((item) => {
       const options = item.options.reduce((acc, curr) => {
