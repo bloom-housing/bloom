@@ -198,7 +198,7 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
       ],
     },
   ],
-  preferredUnit: ["preferred unit"],
+  preferredUnit: ["studio"],
   sendMailToMailingAddress: true,
   status: ApplicationStatus.submitted,
   submissionDate: new Date(),
