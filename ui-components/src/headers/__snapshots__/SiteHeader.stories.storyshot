@@ -34,14 +34,14 @@ exports[`Storyshots Headers/Site Header Standard 1`] = `
         className="navbar-brand"
       >
         <LocalizedLink
-          className="navbar-item logo"
+          className="navbar-item logo "
           href="/"
         >
           <Link
             href="/"
           >
             <a
-              className="navbar-item logo"
+              className="navbar-item logo "
               href="/"
               onClick={[Function]}
               onMouseEnter={[Function]}
@@ -136,14 +136,14 @@ exports[`Storyshots Headers/Site Header With Dropdown And Button 1`] = `
         className="navbar-brand"
       >
         <LocalizedLink
-          className="navbar-item logo"
+          className="navbar-item logo "
           href="/"
         >
           <Link
             href="/"
           >
             <a
-              className="navbar-item logo"
+              className="navbar-item logo "
               href="/"
               onClick={[Function]}
               onMouseEnter={[Function]}
@@ -350,14 +350,14 @@ exports[`Storyshots Headers/Site Header With Language Navigation 1`] = `
         className="navbar-brand"
       >
         <LocalizedLink
-          className="navbar-item logo"
+          className="navbar-item logo "
           href="/"
         >
           <Link
             href="/"
           >
             <a
-              className="navbar-item logo"
+              className="navbar-item logo "
               href="/"
               onClick={[Function]}
               onMouseEnter={[Function]}
