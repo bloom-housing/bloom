@@ -75,7 +75,7 @@ const TimeField = ({
               hourRange: (value: string) => {
                 if (!required && !value?.length) return true
 
-                return parseInt(value) > 0 && parseInt(value) <= 11
+                return parseInt(value) > 0 && parseInt(value) <= 12
               },
             },
           }}

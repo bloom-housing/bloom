@@ -96,6 +96,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
     const body = mapFormToApi(formData, listingId, editMode)
 
+    console.log(body)
+
     try {
       const result = editMode
         ? await applicationsService.update({
