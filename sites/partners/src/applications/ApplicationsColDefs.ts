@@ -154,22 +154,22 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 150,
       minWidth: 100,
-      valueFormatter: (data) => {
-        if (!data.value) return ""
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
 
-        const posiviveValues = Object.entries(data.value).reduce((acc, curr) => {
-          if (
-            curr[0] !== "none" &&
-            !["id", "createdAt", "updatedAt"].includes(curr[0]) &&
-            curr[1]
-          ) {
-            acc.push(t(`application.preferences.options.${curr[0]}`))
+        const claimed = value?.reduce((acc, curr) => {
+          const options = curr.options
+            .filter((option) => option?.checked)
+            ?.map((item) => t(`application.preferences.options.${item.key}`))
+
+          if (curr?.claimed) {
+            acc.push(options.join(", "))
           }
 
           return acc
         }, [])
 
-        return posiviveValues.length ? posiviveValues.join(", ") : t("t.none")
+        return claimed?.length ? claimed.join(", ") : t("t.none")
       },
     },
     {
