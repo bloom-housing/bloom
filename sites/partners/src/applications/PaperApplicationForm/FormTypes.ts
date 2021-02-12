@@ -58,11 +58,8 @@ export type ApplicationTypes = {
     workAddress: Address
     phoneNumberType?: string
   }
-  preferences: {
-    liveIn: boolean
-    workIn: boolean
-    none: boolean
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  preferences: Record<string, any>
 }
 
 export type FormTypes = {

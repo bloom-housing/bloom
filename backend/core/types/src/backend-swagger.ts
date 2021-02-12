@@ -3185,6 +3185,12 @@ export enum CSVFormattingType {
   'basic' = 'basic',
   'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
 }
+
+export enum InputType {
+  'boolean' = 'boolean',
+  'text' = 'text',
+  'address' = 'address'
+}
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
@@ -3195,11 +3201,6 @@ export enum ApplicationMethodType {
   'LeasingAgent' = 'LeasingAgent'
 }
 
-export enum InputType {
-  'boolean' = 'boolean',
-  'text' = 'text',
-  'address' = 'address'
-}
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'

@@ -119,6 +119,9 @@ module.exports = {
       borderColor: (theme) => ({
         default: theme("colors.gray.450", "currentColor"),
       }),
+      inset: {
+        4: "1rem",
+      },
     },
   },
 }

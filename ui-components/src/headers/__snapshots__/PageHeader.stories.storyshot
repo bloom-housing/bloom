@@ -3,6 +3,7 @@
 exports[`Storyshots Headers/Page Header With Subtitle 1`] = `
 <PageHeader
   subtitle="Here is a subtitle"
+  title="Hello World"
 >
   <header
     className="page-header bg-primary-lighter"
@@ -27,7 +28,9 @@ exports[`Storyshots Headers/Page Header With Subtitle 1`] = `
 `;
 
 exports[`Storyshots Headers/Page Header With Text Content 1`] = `
-<PageHeader>
+<PageHeader
+  title="Hello World"
+>
   <header
     className="page-header bg-primary-lighter"
   >

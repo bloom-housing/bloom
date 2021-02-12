@@ -23,6 +23,9 @@ export class ApplicationsService {
         ...(listingId && { listing: { id: listingId } }),
       },
       relations: ["listing", "user"],
+      order: {
+        createdAt: "DESC",
+      },
     })
   }
 
@@ -45,6 +48,9 @@ export class ApplicationsService {
           }),
         },
         relations: ["listing", "user"],
+        order: {
+          createdAt: "DESC",
+        },
       }
     )
   }

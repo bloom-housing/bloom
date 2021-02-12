@@ -32,7 +32,7 @@ export default () => {
   })
   const onSubmit = (data) => {
     application.alternateContact.phoneNumber = data.phoneNumber
-    application.alternateContact.emailAddress = data.emailAddress
+    application.alternateContact.emailAddress = data.emailAddress || null
     application.alternateContact.mailingAddress.street = data.mailingAddress.street
     application.alternateContact.mailingAddress.state = data.mailingAddress.state
     application.alternateContact.mailingAddress.zipCode = data.mailingAddress.zipCode
@@ -101,7 +101,7 @@ export default () => {
               label={t("application.alternateContact.contact.emailAddressFormLabel")}
               readerOnly={true}
               placeholder={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
-              defaultValue={application.alternateContact.emailAddress}
+              defaultValue={application.alternateContact.emailAddress || null}
               register={register}
             />
           </div>

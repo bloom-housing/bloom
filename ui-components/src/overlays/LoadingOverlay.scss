@@ -1,0 +1,51 @@
+@keyframes spinner {
+  0% {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) rotate(360deg);
+  }
+}
+
+.loading-overlay {
+  @apply relative;
+  @apply pointer-events-none;
+
+  &:before {
+    content: "";
+    @apply absolute;
+    @apply top-0;
+    @apply left-0;
+    @apply w-full;
+    @apply h-full;
+    @apply z-10;
+    background-color: rgba(255,255,255, 0.5);
+  }
+}
+
+.spinner {
+  @apply block;
+  @apply w-full;
+  @apply absolute;
+  @apply mx-auto;
+  @apply z-10;
+  @apply inset-x-auto;
+  top: 330px;
+
+  &::before {
+    @apply absolute;
+    @apply border-4;
+    @apply border-gray-400;
+    @apply rounded-full;
+    @apply origin-center;
+    content: "";
+    width: 70px;
+    height: 70px;
+    animation: 2s linear infinite spinner;
+    border-bottom-color: #999999;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    will-change: transform;
+  }
+}

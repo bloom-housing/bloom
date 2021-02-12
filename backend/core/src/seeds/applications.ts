@@ -50,8 +50,8 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
       zipCode: "zip code",
     },
     otherType: "other",
-    phoneNumber: "1234566",
-    type: "type",
+    phoneNumber: "(123) 123-1231",
+    type: "cell",
   },
   appUrl: "",
   applicant: {
@@ -75,8 +75,8 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
     middleName: "Middle",
     noEmail: false,
     noPhone: false,
-    phoneNumber: "12345",
-    phoneNumberType: "mobile",
+    phoneNumber: "(123) 123-1231",
+    phoneNumberType: "cell",
     workAddress: {
       city: "city",
       county: "county",
@@ -121,8 +121,8 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
       noEmail: false,
       noPhone: false,
       orderId: 1,
-      phoneNumber: "12345",
-      phoneNumberType: "mobile",
+      phoneNumber: "(123) 123-1231",
+      phoneNumberType: "cell",
       relationship: "parent",
       sameAddress: "no",
       workAddress: {
