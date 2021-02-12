@@ -51,7 +51,7 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
     },
     otherType: "other",
     phoneNumber: "(123) 123-1231",
-    type: "cell",
+    type: "friend",
   },
   appUrl: "",
   applicant: {
@@ -198,7 +198,7 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
       ],
     },
   ],
-  preferredUnit: ["preferred unit"],
+  preferredUnit: ["studio"],
   sendMailToMailingAddress: true,
   status: ApplicationStatus.submitted,
   submissionDate: new Date(),

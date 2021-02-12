@@ -120,6 +120,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           reset()
           clearErrors()
           setAlert(null)
+          router.reload()
         }
       }
     } catch (err) {
@@ -164,7 +165,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           tagLabel={
             application?.status
               ? t(`application.details.applicationStatus.${application.status}`)
-              : t(`application.details.applicationStatus.submitted`)
+              : t(`application.details.applicationStatus.draft`)
           }
         />
 
@@ -172,7 +173,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           <section className="bg-primary-lighter py-5">
             <div className="max-w-screen-xl px-5 mx-auto">
               {alert && (
-                <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
+                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type={alert}>
                   {t("application.add.applicationAddError")}
                 </AlertBox>
               )}
