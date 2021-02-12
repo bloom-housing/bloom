@@ -4,7 +4,6 @@
 process.env.TZ = "UTC"
 
 module.exports = {
-  collectCoverage: true,
   testRegex: "/*.test.tsx$",
   collectCoverageFrom: ["**/*.tsx", "!**/*.stories.tsx"],
   coverageReporters: ["lcov", "text"],
