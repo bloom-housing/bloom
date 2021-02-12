@@ -5,7 +5,6 @@ import {
   t,
   Form,
   AlertBox,
-  AlertTypes,
   setSiteAlertMessage,
   LoadingOverlay,
   StatusBar,
@@ -35,6 +34,8 @@ type ApplicationFormProps = {
   editMode?: boolean
 }
 
+type AlertErrorType = "api" | "form"
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
@@ -51,7 +52,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const { applicationsService } = useContext(ApiClientContext)
 
-  const [alert, setAlert] = useState<AlertTypes | null>(null)
+  const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
@@ -96,8 +97,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
     const body = mapFormToApi(formData, listingId, editMode)
 
-    console.log(body)
-
     try {
       const result = editMode
         ? await applicationsService.update({
@@ -126,13 +125,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         }
       }
     } catch (err) {
-      setAlert("alert")
       setLoading(false)
+      setAlert("api")
     }
   }
 
   const onError = () => {
-    setAlert("alert")
+    setAlert("form")
   }
 
   async function deleteApplication() {
@@ -140,7 +139,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       await applicationsService.delete({ applicationId: application?.id })
       void router.push(`/listings/applications?listing=${listingId}`)
     } catch (err) {
-      setAlert("alert")
+      setAlert("api")
     }
   }
 
@@ -175,8 +174,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           <section className="bg-primary-lighter py-5">
             <div className="max-w-screen-xl px-5 mx-auto">
               {alert && (
-                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type={alert}>
-                  {t("application.add.applicationAddError")}
+                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
+                  {alert === "form"
+                    ? t("application.add.applicationAddError")
+                    : t("errors.alert.badRequest")}
                 </AlertBox>
               )}
 

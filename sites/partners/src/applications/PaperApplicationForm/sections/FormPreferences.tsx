@@ -106,6 +106,7 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
                       {watchPreferences[buildOptionName(preference.formMetadata.key, option.key)] &&
                         option.extraData?.map((extra) => (
                           <ExtraField
+                            key={extra.key}
                             metaKey={preference.formMetadata.key}
                             optionKey={option.key}
                             extraKey={extra.key}
