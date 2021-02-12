@@ -14,7 +14,8 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import { HouseholdMember, Application, ApplicationStatus } from "@bloom-housing/backend-core/types"
-import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
+import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
+import { useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
@@ -36,7 +37,11 @@ type ApplicationFormProps = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
-  const defaultValues = editMode ? parseApplicationData(application) : {}
+  const { listingDto } = useSingleListingData(listingId)
+
+  const preferences = listingDto?.preferences
+
+  const defaultValues = editMode ? mapApiToForm(application) : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -85,10 +90,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
     const formData = {
       householdMembers,
+      submissionType: application?.submissionType,
       ...data,
     }
 
-    const body = formatApplicationData(formData, listingId, false)
+    const body = mapFormToApi(formData, listingId, editMode)
 
     try {
       const result = editMode
@@ -187,7 +193,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormHouseholdDetails />
 
-                    <FormPreferences />
+                    <FormPreferences preferences={preferences} />
 
                     <FormHouseholdIncome />
 

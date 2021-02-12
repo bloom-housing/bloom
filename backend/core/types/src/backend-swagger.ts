@@ -1125,6 +1125,30 @@ export interface PreferenceLink {
   url: string;
 }
 
+export interface FormMetadataExtraData {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+}
+
+export interface FormMetadataOptions {
+  /**  */
+  key: string;
+
+  /**  */
+  extraData: FormMetadataExtraData[];
+}
+
+export interface FormMetadata {
+  /**  */
+  key: string;
+
+  /**  */
+  options: FormMetadataOptions[];
+}
+
 export interface Preference {
   /**  */
   id: string;
@@ -1149,6 +1173,9 @@ export interface Preference {
 
   /**  */
   links: PreferenceLink[];
+
+  /**  */
+  formMetadata?: FormMetadata;
 }
 
 export interface MinMaxCurrency {
@@ -1658,6 +1685,9 @@ export interface PreferenceCreate {
 
   /**  */
   links: PreferenceLink[];
+
+  /**  */
+  formMetadata?: FormMetadata;
 }
 
 export interface AddressCreate {
@@ -1823,6 +1853,9 @@ export interface PreferenceUpdate {
 
   /**  */
   links: PreferenceLink[];
+
+  /**  */
+  formMetadata?: FormMetadata;
 
   /**  */
   id: string;
@@ -1992,6 +2025,39 @@ export interface ListingUpdate {
 
   /**  */
   applicationConfig?: object;
+}
+
+export interface BooleanInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: boolean;
+}
+
+export interface TextInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: string;
+}
+
+export interface AddressInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: AddressCreate;
 }
 
 export interface Applicant {
@@ -2190,26 +2256,6 @@ export interface HouseholdMember {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferences {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  liveIn: boolean;
-
-  /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
-}
-
 export interface Application {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -2246,9 +2292,6 @@ export interface Application {
 
   /**  */
   householdMembers: HouseholdMember[];
-
-  /**  */
-  preferences: ApplicationPreferences;
 
   /**  */
   id: string;
@@ -2294,6 +2337,9 @@ export interface Application {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: object;
 
   /**  */
   acceptedTerms?: boolean;
@@ -2478,17 +2524,6 @@ export interface HouseholdMemberCreate {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferencesCreate {
-  /**  */
-  liveIn: boolean;
-
-  /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
-}
-
 export interface ApplicationCreate {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -2527,9 +2562,6 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[];
 
   /**  */
-  preferences: ApplicationPreferencesCreate;
-
-  /**  */
   appUrl?: string;
 
   /**  */
@@ -2561,6 +2593,9 @@ export interface ApplicationCreate {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: object;
 
   /**  */
   acceptedTerms?: boolean;
@@ -2765,26 +2800,6 @@ export interface HouseholdMemberUpdate {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferencesUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  liveIn: boolean;
-
-  /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
-}
-
 export interface ApplicationUpdate {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -2835,9 +2850,6 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[];
 
   /**  */
-  preferences: ApplicationPreferencesUpdate;
-
-  /**  */
   appUrl?: string;
 
   /**  */
@@ -2869,6 +2881,9 @@ export interface ApplicationUpdate {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: object;
 
   /**  */
   acceptedTerms?: boolean;
@@ -3169,6 +3184,12 @@ export enum ListingStatus {
 export enum CSVFormattingType {
   'basic' = 'basic',
   'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
+}
+
+export enum InputType {
+  'boolean' = 'boolean',
+  'text' = 'text',
+  'address' = 'address'
 }
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {

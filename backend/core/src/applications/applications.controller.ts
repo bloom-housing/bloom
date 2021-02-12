@@ -15,7 +15,7 @@ import {
 } from "@nestjs/common"
 import { Request as ExpressRequest } from "express"
 import { ApplicationsService } from "./applications.service"
-import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
@@ -39,6 +39,7 @@ import {
   CSVFormattingType,
 } from "../csv/formatting/application-formatting-metadata-factory"
 import { CsvBuilder } from "../csv/csv-builder.service"
+import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -116,6 +117,7 @@ export class ApplicationsCsvListQueryParams {
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
+@ApiExtraModels(...applicationPreferenceExtraModels)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,

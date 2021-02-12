@@ -21,6 +21,7 @@ import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { User } from "../user/entities/user.entity"
 import { UserService } from "../user/user.service"
 import { SanMateoHUD2019 } from "./ami-charts"
+import { InputType } from "../shared/input-type"
 import { UserCreateDto } from "../user/dto/user.dto"
 import { CSVFormattingType } from "../csv/formatting/application-formatting-metadata-factory"
 
@@ -179,16 +180,64 @@ export const listingSeed1: ListingSeed = {
   },
   preferences: [
     {
-      description: "Description",
-      links: [
-        {
-          title: "Link title",
-          url: "",
-        },
-      ],
       ordinal: 1,
-      subtitle: "Subtitle",
-      title: "Title",
+      title: "Live or Work in Hayward",
+      subtitle: "",
+      description:
+        "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
+      links: [],
+      formMetadata: {
+        key: "liveWork",
+        options: [
+          {
+            key: "live",
+            extraData: [],
+          },
+          {
+            key: "work",
+            extraData: [],
+          },
+        ],
+      },
+    },
+    {
+      ordinal: 2,
+      title: "Displaced Tenant Housing Preference",
+      subtitle: "",
+      description:
+        "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+      links: [],
+      formMetadata: {
+        key: "displacedTenant",
+        options: [
+          {
+            key: "general",
+            extraData: [
+              {
+                key: "name",
+                type: InputType.text,
+              },
+              {
+                key: "address",
+                type: InputType.address,
+              },
+            ],
+          },
+          {
+            key: "missionCorridor",
+            extraData: [
+              {
+                key: "name",
+                type: InputType.text,
+              },
+              {
+                key: "address",
+                type: InputType.address,
+              },
+            ],
+          },
+        ],
+      },
     },
   ],
   listingEvents: [

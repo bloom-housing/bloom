@@ -89,7 +89,9 @@
       "dateSubmitted": "Date Submitted",
       "applicationSubmitted": "Application Submitted",
       "applicationUpdated": "Application Updated",
-      "saveAndExit": "Save & exit"
+      "saveAndExit": "Save & exit",
+      "claimant": "Claimant",
+      "displacedAddress": "Displaced Address"
     },
     "details": {
       "applicationData": "Application Data",
@@ -327,26 +329,41 @@
       "title": "Your household may qualify for the following housing preferences.",
       "preamble": "If you qualify for this preference, you'll get a higher ranking.",
       "selectBelow": "If you have one of these housing preferences, select it below:",
-      "dontWant": "I don't want this preference",
+      "dontWant": "I don't want these preferences",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
-      "liveIn": {
-        "label": "Live in <REGION> Preference",
-        "description": "Live in <REGION> copy goes here…",
-        "link": "http://domain.com"
+      "liveWork": {
+        "live": {
+          "label": "Live in <REGION> Preference",
+          "description": "Live in <REGION> copy goes here…",
+          "link": "http://domain.com"
+        },
+        "work": {
+          "label": "Work in <REGION> Preference",
+          "description": "Work in <REGION> copy goes here…",
+          "link": "http://domain.com"
+        }
       },
-      "workIn": {
-        "label": "Work in <REGION> Preference",
-        "description": "Work in <REGION> copy goes here…",
-        "link": "http://domain.com"
+      "displacedTenant": {
+        "whichHouseholdMember": "Which household member is claiming this preference?",
+        "whatAddress": "What address was the household member displaced from?",
+        "general": {
+          "label": "Displaced Tenant Housing Preference",
+          "description": "Displaced Tenant copy goes here…",
+          "link": "http://domain.com"
+        }
       },
       "general": {
         "title": "Based on the information you have entered, your household has not claimed any housing preferences.",
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "liveIn": "Live",
-        "workIn": "Work"
+        "live": "Live",
+        "work": "Work",
+        "general": "General",
+        "missionCorridor": "Mission Corridor",
+        "name": "Claimant",
+        "address": "Displaced Address"
       }
     },
     "review": {
@@ -836,6 +853,7 @@
     "noneFound": "None found.",
     "occupancy": "Occupancy",
     "or": "or",
+    "pageXofY": "Page %{num} of %{total}",
     "people": "people",
     "person": "person",
     "perMonth": "per month",

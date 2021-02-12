@@ -24,11 +24,11 @@ import {
   HouseholdMemberDto,
   HouseholdMemberUpdateDto,
 } from "./household-member.dto"
-import {
-  ApplicationPreferencesCreateDto,
-  ApplicationPreferencesDto,
-  ApplicationPreferencesUpdateDto,
-} from "./application-preferences.dto"
+// import {
+//   ApplicationPreferencesCreateDto,
+//   ApplicationPreferencesDto,
+//   ApplicationPreferencesUpdateDto,
+// } from "./application-preferences.dto"
 import {
   AccessibilityCreateDto,
   AccessibilityDto,
@@ -46,7 +46,8 @@ export class ApplicationDto extends OmitType(Application, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "preferences",
+  // TODO
+  // "preferences",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -100,11 +101,12 @@ export class ApplicationDto extends OmitType(Application, [
   @Type(() => HouseholdMemberDto)
   householdMembers: HouseholdMemberDto[]
 
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferencesDto)
-  preferences: ApplicationPreferencesDto
+  // TODO
+  // @Expose()
+  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  // @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  // @Type(() => ApplicationPreferencesDto)
+  // preferences: ApplicationPreferencesDto[]
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
@@ -122,7 +124,8 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "preferences",
+  // TODO
+  // "preferences",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -173,11 +176,12 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   @Type(() => HouseholdMemberCreateDto)
   householdMembers: HouseholdMemberCreateDto[]
 
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferencesCreateDto)
-  preferences: ApplicationPreferencesCreateDto
+  // TODO
+  // @Expose()
+  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  // @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  // @Type(() => ApplicationPreferencesCreateDto)
+  // preferences: ApplicationPreferencesCreateDto[]
 }
 
 export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
@@ -193,7 +197,8 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "preferences",
+  // TODO
+  // "preferences",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -266,9 +271,10 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   @Type(() => HouseholdMemberUpdateDto)
   householdMembers: HouseholdMemberUpdateDto[]
 
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferencesUpdateDto)
-  preferences: ApplicationPreferencesUpdateDto
+  // TODO
+  // @Expose()
+  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  // @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  // @Type(() => ApplicationPreferencesUpdateDto)
+  // preferences: ApplicationPreferencesUpdateDto[]
 }

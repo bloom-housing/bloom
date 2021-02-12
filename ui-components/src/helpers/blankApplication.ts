@@ -101,9 +101,9 @@ export const blankApplication = () => {
       howDidYouHear: [],
     },
     preferences: {
-      liveIn: false,
+      live: false,
+      work: false,
       none: false,
-      workIn: false,
     },
     confirmationId: "",
   }

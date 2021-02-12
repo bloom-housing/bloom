@@ -19,6 +19,7 @@ import {
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
+import { InputType } from "../../src/shared/input-type"
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
@@ -36,6 +37,8 @@ describe("Applications", () => {
   let user1AccessToken: string
   let user2AccessToken: string
   let adminAccessToken: string
+  let listingId: string
+  let listing: ListingDto
   let leasingAgent1AccessToken: string
   let leasingAgent1Profile: UserDto
   let leasingAgent2AccessToken: string
@@ -142,11 +145,7 @@ describe("Applications", () => {
       incomePeriod: IncomePeriod.perMonth,
       householdMembers: [],
       preferredUnit: ["a", "b"],
-      preferences: {
-        liveIn: false,
-        none: false,
-        workIn: false,
-      },
+      preferences: [],
     }
   }
 
@@ -207,6 +206,8 @@ describe("Applications", () => {
     ).body
 
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    listing = res.body
+    listingId = res.body[0].id
     // Finding listings corresponding to leasing agents (permission wise)
     listing1Id = res.body.filter((listing: ListingDto) => {
       const leasingAgentsIds = listing.leasingAgents.map((agent) => agent.id)
@@ -225,6 +226,49 @@ describe("Applications", () => {
 
   it(`should allow a user to create and read his own application `, async () => {
     const body = getTestAppBody(listing1Id)
+    body.preferences = [
+      {
+        key: "liveWork",
+        claimed: true,
+        options: [
+          {
+            key: "live",
+            checked: true,
+          },
+          {
+            key: "work",
+            checked: false,
+          },
+        ],
+      },
+      {
+        key: "displacedTenant",
+        claimed: true,
+        options: [
+          {
+            key: "general",
+            checked: true,
+            extraData: [
+              {
+                key: "name",
+                type: InputType.text,
+                value: "Roger Thornhill",
+              },
+              {
+                key: "address",
+                type: InputType.address,
+                value: {},
+              },
+            ],
+          },
+          {
+            key: "missionCorridor",
+            checked: false,
+          },
+        ],
+      },
+    ]
+
     let res = await supertest(app.getHttpServer())
       .post(`/applications/submit`)
       .send(body)
