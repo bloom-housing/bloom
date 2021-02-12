@@ -4,7 +4,7 @@ export class makeListingApplicationMethodsAJsonbColumn1612778951266 implements M
     name = 'makeListingApplicationMethodsAJsonbColumn1612778951266'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "listings" ADD "application_methods" jsonb NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "listings" ADD "application_methods" jsonb NOT NULL default '[]'::jsonb`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
