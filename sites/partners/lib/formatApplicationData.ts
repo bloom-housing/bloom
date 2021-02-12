@@ -278,11 +278,11 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   })()
 
   const dateSubmitted = (() => {
+    if (!submissionDate) return null
+
     const birthMonth = submissionDate.format("MM")
     const birthDay = submissionDate.format("DD")
     const birthYear = submissionDate.format("YYYY")
-
-    if (!submissionDate) return null
 
     return {
       birthMonth,
