@@ -63,7 +63,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
       "MM/DD/YYYY hh:mm:ss A"
     ).format(TIME_24H_FORMAT)
 
-    const formattedDate = moment(dateString, TIME_24H_FORMAT).utc().toDate()
+    const formattedDate = moment(dateString, TIME_24H_FORMAT).utc(true).toDate()
 
     return formattedDate
   })()
