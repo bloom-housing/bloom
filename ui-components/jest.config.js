@@ -4,6 +4,19 @@
 process.env.TZ = "UTC"
 
 module.exports = {
+  collectCoverage: true,
+  testRegex: "/*.test.tsx$",
+  collectCoverageFrom: ["**/*.tsx", "!**/*.stories.tsx"],
+  coverageReporters: ["lcov", "text"],
+  coverageDirectory: "test-coverage",
+  coverageThreshold: {
+    global: {
+      branches: 0,
+      functions: 0,
+      lines: 0,
+      statements: 0,
+    },
+  },
   preset: "ts-jest",
   globals: {
     "ts-jest": {
