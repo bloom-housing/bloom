@@ -211,6 +211,7 @@ export class Application extends AbstractEntity {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationPreference)
   preferences: ApplicationPreference[]
 
   @Column({ enum: ApplicationStatus })

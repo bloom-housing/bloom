@@ -253,7 +253,16 @@ describe("Applications", () => {
               {
                 key: "address",
                 type: InputType.address,
-                value: {},
+                value: {
+                  street: "",
+                  street2: "",
+                  city: "",
+                  state: "",
+                  zipCode: "",
+                  county: "",
+                  latitude: null,
+                  longitude: null,
+                },
               },
             ],
           },
