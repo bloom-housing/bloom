@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
-import { InputType } from "@bloom-housing/backend-core/types"
+import { InputType, AddressCreate } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
 
@@ -14,8 +14,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
   const listingPreferences = listingDto?.preferences
 
   const application = useContext(ApplicationContext)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const preferences = application.preferences as Record<string, any>[]
+  const preferences = application.preferences
 
   return (
     <GridSection
@@ -67,7 +66,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                         >
                           <DetailsAddressColumns
                             type={AddressColsType.preferences}
-                            addressObject={extra.value}
+                            addressObject={extra.value as AddressCreate}
                           />
                         </GridSection>
                       )
