@@ -58,6 +58,7 @@ export class FormMetadataOptions {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => FormMetadataExtraData)
   extraData?: FormMetadataExtraData[]
 }
 
@@ -69,6 +70,7 @@ export class FormMetadata {
 
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => FormMetadataOptions)
   options: FormMetadataOptions[]
 }
 
