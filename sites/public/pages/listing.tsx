@@ -42,7 +42,7 @@ interface ListingProps {
 const EventDateSection = (props: { event: ListingEvent }) => {
   return (
     <p className="text text-gray-800 pb-3 flex justify-between items-center">
-      <span className="inline-block">{moment(props.event.startTime).format("MMMM d, YYYY")}</span>
+      <span className="inline-block">{moment(props.event.startTime).format("MMMM D, YYYY")}</span>
       <span className="inline-block text-xs font-bold">
         {moment(props.event.startTime).format("hh:mma") +
           "-" +
@@ -52,19 +52,21 @@ const EventDateSection = (props: { event: ListingEvent }) => {
   )
 }
 
-const OpenHouseEventSection = (props: { openHouseEvent: ListingEvent }) => {
+const OpenHouseEventSection = (props: { openHouseEvents: ListingEvent[] }) => {
   return (
     <section className="aside-block bg-primary-lighter border-t">
       <h4 className="text-caps-tiny">{t("listings.openHouseEvent.header")}</h4>
-      <EventDateSection event={props.openHouseEvent} />
-      {props.openHouseEvent.url && (
-        <p className="text text-gray-800 pb-3">
-          <a href={props.openHouseEvent.url}>{t("listings.openHouseEvent.seeVideo")}</a>
-        </p>
-      )}
-      {props.openHouseEvent.note && (
-        <p className="text text-gray-600">{props.openHouseEvent.note}</p>
-      )}
+      {props.openHouseEvents.map((openHouseEvent, index) => (
+        <div key={`openHouses-${index}`}>
+          <EventDateSection event={openHouseEvent} />
+          {openHouseEvent.url && (
+            <p className="text text-gray-800 pb-3">
+              <a href={openHouseEvent.url}>{t("listings.openHouseEvent.seeVideo")}</a>
+            </p>
+          )}
+          {openHouseEvent.note && <p className="text text-gray-600">{openHouseEvent.note}</p>}
+        </div>
+      ))}
     </section>
   )
 }
@@ -178,9 +180,9 @@ export default class extends Component<ListingProps> {
       )
     }
 
-    let openHouseEvent: ListingEvent | null = null
+    let openHouseEvents: ListingEvent[] | null = null
     if (Array.isArray(listing.events)) {
-      openHouseEvent = listing.events.find((event) => event.type === ListingEventType.openHouse)
+      openHouseEvents = listing.events.filter((event) => event.type === ListingEventType.openHouse)
     }
 
     let publicLottery: ListingEvent | null = null
@@ -324,7 +326,7 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
-                  {openHouseEvent && <OpenHouseEventSection openHouseEvent={openHouseEvent} />}
+                  {openHouseEvents && <OpenHouseEventSection openHouseEvents={openHouseEvents} />}
                   <ApplicationSection
                     listing={listing}
                     internalFormRoute="/applications/start/choose-language"
