@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CsvEncoder } from "./csv-encoder.service"
 import { Injectable } from "@nestjs/common"
 import { CSVFormattingType } from "./formatting/application-formatting-metadata-factory"

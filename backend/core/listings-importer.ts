@@ -30,10 +30,11 @@ const instance = axios.create({
 
 serviceOptions.axios = instance
 
-const unitsService = new client.UnitsService()
 const preferencesService = new client.PreferencesService()
 const listingsService = new client.ListingsService()
+const propertyService = new client.PropertiesService()
 const authService = new client.AuthService()
+const amiChartService = new client.AmiChartsService()
 
 async function uploadEntity(entityKey, entityService, listing) {
   const newRecordsIds = await Promise.all(
@@ -42,7 +43,7 @@ async function uploadEntity(entityKey, entityService, listing) {
         const res = await entityService.create({
           body: obj,
         })
-        return { id: res.id }
+        return res
       } catch (e) {
         console.log(obj)
         console.log(e.response.data.message)
@@ -62,6 +63,38 @@ async function uploadListing(listing) {
   } catch (e) {
     console.log(listing)
     console.log(e.response.data.message)
+    process.exit(1)
+  }
+}
+
+async function uploadProperty(property) {
+  try {
+    return await propertyService.create({
+      body: property,
+    })
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
+async function getAmiChart(name) {
+  try {
+    const charts = await amiChartService.list()
+    return charts.filter((chart) => chart.name === name)[0]
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
+async function uploadAmiChart(data) {
+  try {
+    return await amiChartService.create({
+      body: data,
+    })
+  } catch (e) {
+    console.log(e.response)
     process.exit(1)
   }
 }
@@ -117,11 +150,25 @@ async function main() {
   })
 
   let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
-  const relationsKeys = ["units", "preferences"]
+  let property = listing.property
+  delete listing.property
+  const relationsKeys = []
   listing = reformatListing(listing, relationsKeys)
-  listing = await uploadEntity("units", unitsService, listing)
   listing = await uploadEntity("preferences", preferencesService, listing)
+
+  property.listings = [listing]
+  const amiChartName = listing.amiChart.name
+  let chart = await getAmiChart(amiChartName)
+  if (!chart) {
+    chart = await uploadAmiChart(listing.amiChart)
+  }
+
+  property.units.forEach((unit) => (unit.amiChart = chart))
+  property = await uploadProperty(property)
+  listing.property = property
+
   const newListing = await uploadListing(listing)
+
   console.log(newListing)
 }
 

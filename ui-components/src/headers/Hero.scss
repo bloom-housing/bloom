@@ -9,6 +9,10 @@
   @screen md {
     @apply py-20;
   }
+
+  &.is-centered {
+    background-position: center center;
+  }
 }
 
 .hero__title {

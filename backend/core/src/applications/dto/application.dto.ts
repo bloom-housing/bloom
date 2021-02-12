@@ -25,11 +25,6 @@ import {
   HouseholdMemberUpdateDto,
 } from "./household-member.dto"
 import {
-  ApplicationPreferencesCreateDto,
-  ApplicationPreferencesDto,
-  ApplicationPreferencesUpdateDto,
-} from "./application-preferences.dto"
-import {
   AccessibilityCreateDto,
   AccessibilityDto,
   AccessibilityUpdateDto,
@@ -46,7 +41,6 @@ export class ApplicationDto extends OmitType(Application, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "preferences",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -99,12 +93,6 @@ export class ApplicationDto extends OmitType(Application, [
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberDto)
   householdMembers: HouseholdMemberDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferencesDto)
-  preferences: ApplicationPreferencesDto
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
@@ -122,7 +110,6 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "preferences",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -172,12 +159,6 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberCreateDto)
   householdMembers: HouseholdMemberCreateDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferencesCreateDto)
-  preferences: ApplicationPreferencesCreateDto
 }
 
 export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
@@ -193,7 +174,6 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "preferences",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -265,10 +245,4 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberUpdateDto)
   householdMembers: HouseholdMemberUpdateDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferencesUpdateDto)
-  preferences: ApplicationPreferencesUpdateDto
 }

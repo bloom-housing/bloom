@@ -7,7 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { ListingsService } from "../listings/listings.service"
@@ -21,6 +21,7 @@ import { ResourceAction } from "../auth/resource_action.decorator"
 import { authzActions } from "../auth/authz.service"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
+import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -33,6 +34,7 @@ import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
   })
 )
+@ApiExtraModels(...applicationPreferenceExtraModels)
 export class ApplicationsSubmissionController {
   constructor(
     private readonly applicationsService: ApplicationsService,

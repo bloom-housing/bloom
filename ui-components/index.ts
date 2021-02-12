@@ -87,6 +87,7 @@ export * from "./src/notifications"
 export * from "./src/overlays/Overlay"
 export * from "./src/overlays/Modal"
 export * from "./src/overlays/Drawer"
+export * from "./src/overlays/LoadingOverlay"
 
 /* Page Components */
 export * from "./src/page_components/listing/AdditionalFees"

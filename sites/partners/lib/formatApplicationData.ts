@@ -7,7 +7,9 @@ import {
   ApplicationStatus,
   Address,
   HouseholdMember,
+  InputType,
 } from "@bloom-housing/backend-core/types"
+
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   FormTypes,
@@ -35,10 +37,14 @@ function getAddress(condition: boolean, addressData?: GetAddressType): GetAddres
 
 interface FormData extends FormTypes {
   householdMembers: HouseholdMember[]
+  submissionType: ApplicationSubmissionType
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const formatApplicationData = (data: FormData, listingId: string, editMode: boolean) => {
+/*
+  Format data which comes from react-hook-form into correct API format.
+*/
+
+export const mapFormToApi = (data: FormData, listingId: string, editMode: boolean) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -94,6 +100,61 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
     }
   })()
 
+  const preferences = (() => {
+    const CLAIMED_KEY = "claimed"
+    const preferencesFormData = data.application.preferences
+
+    const keys = Object.keys(preferencesFormData)
+
+    return keys.map((key) => {
+      const currentPreference = preferencesFormData[key]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const currentPreferenceValues = Object.values(currentPreference) as Record<string, any>
+      const claimed = currentPreferenceValues.map((c) => c.claimed).includes(true)
+
+      const options = Object.keys(currentPreference).map((option) => {
+        const currentOption = currentPreference[option]
+
+        // count keys except claimed
+        const extraKeys = Object.keys(currentOption).filter((item) => item !== CLAIMED_KEY)
+
+        const response = {
+          key: option,
+          checked: currentOption[CLAIMED_KEY],
+        }
+
+        // assign extra data and detect data type
+        if (extraKeys.length) {
+          const extraData = extraKeys.map((extraKey) => {
+            const type = (() => {
+              if (typeof currentOption[extraKey] === "boolean") return InputType.boolean
+              // if object includes "city" property, it should be an address
+              if (Object.keys(currentOption[extraKey]).includes("city")) return InputType.address
+
+              return InputType.text
+            })()
+
+            return {
+              key: extraKey,
+              type,
+              value: currentOption[extraKey],
+            }
+          })
+
+          Object.assign(response, { extraData })
+        }
+
+        return response
+      })
+
+      return {
+        key,
+        claimed,
+        options,
+      }
+    })
+  })()
+
   // additional phone
   const {
     additionalPhoneNumber: additionalPhoneNumberData,
@@ -103,7 +164,6 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
     contactPreferences,
     sendMailToMailingAddress,
     accessibility,
-    preferences,
     demographics,
     preferredUnit,
   } = data.application
@@ -142,7 +202,7 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
       ? false
       : null
 
-  const submissionType = ApplicationSubmissionType.paper
+  const submissionType = editMode ? data.submissionType : ApplicationSubmissionType.paper
   const status = ApplicationStatus.submitted
 
   const listing = {
@@ -181,7 +241,11 @@ export const formatApplicationData = (data: FormData, listingId: string, editMod
   return result
 }
 
-export const parseApplicationData = (applicationData: ApplicationUpdate) => {
+/*
+  Format data which comes from the API into correct react-hook-form format.
+*/
+
+export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const submissionDate = applicationData.submissionDate
     ? new Date(applicationData.submissionDate)
     : null
@@ -232,10 +296,49 @@ export const parseApplicationData = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
+  const preferences = (() => {
+    const preferencesFormData = {}
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const preferencesApiData = applicationData.preferences as Record<string, any>
+
+    preferencesApiData.forEach((item) => {
+      const options = item.options.reduce((acc, curr) => {
+        // extraData which comes from the API is an array, in the form we expect an object
+        const extraData =
+          curr?.extraData?.reduce((extraAcc, extraCurr) => {
+            // value - it can be string or nested address object
+            const value = extraCurr.value
+            Object.assign(extraAcc, {
+              [extraCurr.key]: value,
+            })
+
+            return extraAcc
+          }, {}) || {}
+
+        // each form option has "claimed" property - it's "checked" property in the API
+        const claimed = curr.checked
+
+        Object.assign(acc, {
+          [curr.key]: {
+            claimed,
+            ...extraData,
+          },
+        })
+        return acc
+      }, {})
+
+      Object.assign(preferencesFormData, {
+        [item.key]: options,
+      })
+    })
+
+    return preferencesFormData
+  })()
+
   const application: ApplicationTypes = (() => {
     const {
       language,
-      preferences,
       contactPreferences,
       sendMailToMailingAddress,
       mailingAddress,
