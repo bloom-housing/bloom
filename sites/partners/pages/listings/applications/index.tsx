@@ -161,6 +161,8 @@ const ApplicationsList = () => {
     return getColDefs(maxHouseholdSize)
   }, [maxHouseholdSize])
 
+  if (!applications) return null
+
   return (
     <Layout>
       <Head>

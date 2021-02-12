@@ -209,7 +209,8 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     id: listingId,
   }
 
-  const householdSize = householdMembers.length || 1
+  // we need to add primary applicant
+  const householdSize = householdMembers.length + 1 || 1
 
   const result: ApplicationUpdate = {
     submissionDate,
