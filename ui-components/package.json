@@ -10,7 +10,8 @@
     "build-storybook": "build-storybook -c .storybook",
     "start": "start-storybook -s ./public",
     "test": "jest",
-    "test:coverage": "jest --coverage --watchAll=false --testPathIgnorePatterns storyshots.test.tsx"
+    "test:coverage": "jest --coverage --watchAll=false --testPathIgnorePatterns storyshots.test.tsx",
+    "prettier": "prettier --write \"**/*.tsx\""
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
