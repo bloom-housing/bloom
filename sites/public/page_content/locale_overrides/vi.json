@@ -1,0 +1,35 @@
+{
+    "footer": {
+      "copyRight": "Alameda County © 2020 • Giữ Mọi Bản quyền",
+      "disclaimer": "Tuyên bố miễn trách nhiệm",
+      "getAssistance": "Nhận Hỗ trợ",
+      "giveFeedback": "Đưa ra Phản hồi",
+      "header": "Cổng thông tin về Gia cư của Quận Alameda là một dự án của",
+      "headerUrl": "https://www.acgov.org/cda/hcd/",
+      "headerLink": "Quận Alameda - Sở Gia cư và Phát triển Cộng đồng (HCD)",
+      "forAdditionalOpportunities": "Để có thêm các cơ hội tại Bay Area, vui lòng truy cập:",
+      "forGeneralInquiries": "Đối với các thắc mắc chung về chương trình, hoặc để tiếp cận các dịch vụ thông dịch cho nội dung trên trang web này qua điện thoại, quý vị có thể gọi cho HCD của Quận Alameda theo số 510-670-5404.",
+      "forListingQuestions": "Đối với các thắc mắc về danh sách nhà và đơn ghi danh, vui lòng liên hệ với Nhân viên Đại diện Bất động sản có trên mỗi danh sách nhà.",
+      "privacyPolicy": "Chính sách Quyền Riêng tư",
+      "SFHousingPortal": "Cổng thông tin về Gia cư của San Francisco",
+      "SFHousingUrl": "https://housing.sfgov.org"
+    },
+    "nav": {
+      "siteTitle": "Cổng thông tin về Gia cư của Quận Alameda",
+      "getFeedback": "Chúng tôi rất mong nhận được ",
+      "yourFeedback": "ý kiến phản hồi của quý vị",
+      "bonusFeedback": ""
+    },
+    "pageTitle": {
+      "additionalResources": "Các Cơ hội Nhà ở Bổ sung"
+    },
+    "pageDescription": {
+      "additionalResources": "Chúng tôi khuyến khích quý vị xem các nguồn thông tin trợ giúp về nhà ở giá phải chăng khác."
+    },
+    "region": {
+      "name": "Quận Alameda"
+    },
+    "listings": {
+      "depositOrMonthsRent": ""
+    }
+  }

@@ -1,0 +1,35 @@
+{
+    "footer": {
+      "copyRight": "阿拉米達縣 © 2020 • 版權所有",
+      "disclaimer": "免責聲明",
+      "getAssistance": "尋求協助",
+      "giveFeedback": "提供回饋意見",
+      "header": "阿拉米達縣房屋網站",
+      "headerUrl": "https://www.acgov.org/cda/hcd/",
+      "headerLink": "是阿拉米達縣房屋及社區發展部 (HCD) 推出的項目",
+      "forAdditionalOpportunities": "查詢灣區其他住房機會，請瀏覽：",
+      "forGeneralInquiries": "一般計劃查詢，或者想透過電話使用翻譯服務以了解本網站的內容，您可以致電 510-670-5404 聯絡阿拉米達縣房屋及社區發展部 (HCD)。",
+      "forListingQuestions": "若有上市名單和申請方面的疑問，請聯絡每個上市名單上顯示的物業經紀人。",
+      "privacyPolicy": "隱私權政策",
+      "SFHousingPortal": "三藩市房屋網站",
+      "SFHousingUrl": "https://housing.sfgov.org"
+    },
+    "nav": {
+      "siteTitle": "阿拉米達縣房屋網站",
+      "getFeedback": "我們希望獲得 ",
+      "yourFeedback": "您的回饋意見",
+      "bonusFeedback": "！為感謝您花時間提供回饋意見，您可獲得一張禮品卡。"
+    },
+    "pageTitle": {
+      "additionalResources": "其他住房機會"
+    },
+    "pageDescription": {
+      "additionalResources": "我們建議您瀏覽其他可負擔房屋資源。"
+    },
+    "region": {
+      "name": "阿拉米達縣"
+    },
+    "listings": {
+      "depositOrMonthsRent": ""
+    }
+  }

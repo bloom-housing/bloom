@@ -1,8 +1,35 @@
 {
+  "footer": {
+    "copyRight": "Condado de Alameda © 2020 • Todos los derechos reservados",
+    "disclaimer": "Exención de responsabilidades",
+    "getAssistance": "Obtener asistencia",
+    "giveFeedback": "Proporcione sus comentarios",
+    "header": "El Portal de Vivienda del Condado de Alameda es un proyecto del",
+    "headerUrl": "https://www.acgov.org/cda/hcd/",
+    "headerLink": "Condado de Alameda - Departamento de Desarrollo Comunitario y de Vivienda (HCD)",
+    "forAdditionalOpportunities": "Para ver oportunidades adicionales en el Área de la Bahía, sírvase visitar:",
+    "forGeneralInquiries": "Para obtener información general sobre el programa, o acceder a servicios de traducción del contenido de este sitio web por teléfono, puede llamar al HCD del Condado de Alameda al 510-670-5404.",
+    "forListingQuestions": "Si tiene alguna pregunta relacionada con los listados y la solicitud, sírvase poner en contacto con el Agente de la Propiedad que aparece indicado en cada listado.",
+    "privacyPolicy": "Política de privacidad",
+    "SFHousingPortal": "Portal de Vivienda de San Francisco",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
+  "nav": {
+    "siteTitle": "Portal de Vivienda del Condado de Alameda",
+    "getFeedback": "¡Nos encantaría recibir  ",
+    "yourFeedback": "sus comentarios",
+    "bonusFeedback": ""
+  },
   "pageTitle": {
-    "additionalResources": "Oportunidades de Vivienda Adicionales"
+    "additionalResources": "Oportunidades adicionales de vivienda"
   },
   "pageDescription": {
-    "additionalResources": "Lo alentamos a buscar otros recursos de vivienda asequible."
+    "additionalResources": "Le invitamos a consultar otros recursos de vivienda de precio accesible."
+  },
+  "region": {
+    "name": "Condado de Alameda"
+  },
+  "listings": {
+    "depositOrMonthsRent": ""
   }
 }
