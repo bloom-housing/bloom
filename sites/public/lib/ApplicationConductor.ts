@@ -141,10 +141,10 @@ export default class ApplicationConductor {
     this.listing.applicationConfig = { ...newConfig }
     this.steps = this._config.steps.map((step) => {
       const route = this.constructor["routes"][step.name] as StepRoute
-      if (route.definition) {
-        return new route.definition(this, step, route.url)
+      if (route?.definition) {
+        return new route.definition(this, step, route?.url)
       } else {
-        return new StepDefinition(this, step, route.url)
+        return new StepDefinition(this, step, route?.url)
       }
     })
   }
