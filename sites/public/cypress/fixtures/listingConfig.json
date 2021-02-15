@@ -1,11 +1,11 @@
 {
   "applicationConfig":{
     "sections":[
-       "You",
-       "Household",
-       "Income",
-       "Preferences",
-       "Review"
+       "you",
+       "household",
+       "income",
+       "preferences",
+       "review"
     ],
     "languages":[
        "en",
@@ -58,7 +58,7 @@
           "name":"preferencesLiveWork"
        },
        {
-         "name":"preferencesDisplaced"
+          "name":"preferencesDisplaced"
        },
        {
           "name":"generalPool"
