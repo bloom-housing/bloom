@@ -6,7 +6,7 @@ export function getColDefs(maxHouseholdSize: number) {
   const defs = [
     {
       headerName: t("application.details.submittedDate"),
-      field: "createdAt",
+      field: "submissionDate",
       sortable: true,
       unSortIcon: true,
       filter: false,
@@ -17,10 +17,12 @@ export function getColDefs(maxHouseholdSize: number) {
       valueFormatter: ({ value }) => {
         if (!value) return ""
 
-        const date = moment(value).format("MM/DD/YYYY")
-        const time = moment(value).format("HH:mm:ss A")
+        const date = moment(value)
 
-        return `${date} ${t("t.at")} ${time}`
+        const dateFormatted = date.utc().format("MM/DD/YYYY")
+        const timeFormatted = date.utc().format("hh:mm:ss A")
+
+        return `${dateFormatted} ${t("t.at")} ${timeFormatted}`
       },
     },
     {

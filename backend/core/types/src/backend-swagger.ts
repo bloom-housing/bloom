@@ -1138,7 +1138,7 @@ export interface FormMetadataOptions {
   key: string;
 
   /**  */
-  extraData: FormMetadataExtraData[];
+  extraData?: FormMetadataExtraData[];
 }
 
 export interface FormMetadata {
@@ -2256,6 +2256,28 @@ export interface HouseholdMember {
   workInRegion?: string;
 }
 
+export interface ApplicationPreferenceOption {
+  /**  */
+  extraData?: AllExtraDataTypes[];
+
+  /**  */
+  key: string;
+
+  /**  */
+  checked: boolean;
+}
+
+export interface ApplicationPreference {
+  /**  */
+  key: string;
+
+  /**  */
+  claimed: boolean;
+
+  /**  */
+  options: ApplicationPreferenceOption[];
+}
+
 export interface Application {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -2339,7 +2361,7 @@ export interface Application {
   preferredUnit: string[];
 
   /**  */
-  preferences: object;
+  preferences: ApplicationPreference[];
 
   /**  */
   acceptedTerms?: boolean;
@@ -2595,7 +2617,7 @@ export interface ApplicationCreate {
   preferredUnit: string[];
 
   /**  */
-  preferences: object;
+  preferences: ApplicationPreference[];
 
   /**  */
   acceptedTerms?: boolean;
@@ -2883,7 +2905,7 @@ export interface ApplicationUpdate {
   preferredUnit: string[];
 
   /**  */
-  preferences: object;
+  preferences: ApplicationPreference[];
 
   /**  */
   acceptedTerms?: boolean;
@@ -3229,3 +3251,4 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
+export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;

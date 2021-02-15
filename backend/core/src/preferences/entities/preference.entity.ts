@@ -5,17 +5,12 @@ import {
   ManyToOne,
   UpdateDateColumn,
   CreateDateColumn,
-  ManyToMany,
 } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import {
-  // ApplicationPreference,
-  FormMetadataExtraData,
-  FormMetadata,
-} from "../../applications/entities/application-preferences.entity"
+import { FormMetadata } from "../../applications/entities/application-preferences.entity"
 
 export class PreferenceLink {
   @Expose()
@@ -82,13 +77,6 @@ class Preference {
     onUpdate: "CASCADE",
   })
   listing: Listing
-
-  // TODO
-  // @ManyToMany(
-  //   () => ApplicationPreference,
-  //   (applicationPreference) => applicationPreference.preference
-  // )
-  // applicationPreferences: ApplicationPreference
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()

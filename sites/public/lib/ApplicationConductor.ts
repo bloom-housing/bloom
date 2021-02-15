@@ -10,6 +10,8 @@ import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
 import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
+import LiveWorkPreferenceStep from "./LiveWorkPreferenceStep"
+import DisplacedPreferenceStep from "./DisplacedPreferenceStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 
 export const loadApplicationFromAutosave = () => {
@@ -85,8 +87,13 @@ export default class ApplicationConductor {
     income: {
       url: "/applications/financial/income",
     },
-    preferencesIntroduction: {
-      url: "/applications/preferences/select",
+    preferencesLiveWork: {
+      url: "/applications/preferences/live-work",
+      definition: LiveWorkPreferenceStep,
+    },
+    preferencesDisplaced: {
+      url: "/applications/preferences/displaced",
+      definition: DisplacedPreferenceStep,
     },
     generalPool: {
       url: "/applications/preferences/general",
@@ -136,10 +143,10 @@ export default class ApplicationConductor {
     this.listing.applicationConfig = { ...newConfig }
     this.steps = this._config.steps.map((step) => {
       const route = this.constructor["routes"][step.name] as StepRoute
-      if (route.definition) {
-        return new route.definition(this, step, route.url)
+      if (route?.definition) {
+        return new route.definition(this, step, route?.url)
       } else {
-        return new StepDefinition(this, step, route.url)
+        return new StepDefinition(this, step, route?.url)
       }
     })
   }
@@ -152,8 +159,12 @@ export default class ApplicationConductor {
     return this.steps[this.currentStepIndex]
   }
 
-  totalNumberOfSections() {
+  get totalNumberOfSections() {
     return this.config.sections.length
+  }
+
+  get preferenceStepsTotal() {
+    return this.config.steps.filter((step) => step.name.includes("preference")).length
   }
 
   completeSection(section) {
@@ -161,7 +172,7 @@ export default class ApplicationConductor {
   }
 
   canJumpForwardToReview() {
-    return this.application.completedSections === this.totalNumberOfSections() - 1
+    return this.application.completedSections === this.totalNumberOfSections - 1
   }
 
   sync() {

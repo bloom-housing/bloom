@@ -215,15 +215,17 @@
       "dontWant": "Tôi không muốn lựa chọn ưu tiên này",
       "stillHaveOpportunity": "Quý vị vẫn sẽ có cơ hội yêu cầu các lựa chọn ưu tiên khác.",
       "youHaveClaimed": "Quý vị đã xác nhận:",
-      "liveIn": {
-        "label": "Sống tại <REGION> Ưu tiên",
-        "description": "Sống tại <REGION> bản sao ở đây…",
-        "link": "http://domain.com"
-      },
-      "workIn": {
-        "label": "Làm việc tại <REGION> Ưu tiên",
-        "description": "Làm việc tại <REGION> bản sao ở đây…",
-        "link": "http://domain.com"
+      "liveWork": {
+        "live": {
+          "label": "Sống tại <REGION> Ưu tiên",
+          "description": "Sống tại <REGION> bản sao ở đây…",
+          "link": "http://domain.com"
+        },
+        "work": {
+          "label": "Làm việc tại <REGION> Ưu tiên",
+          "description": "Làm việc tại <REGION> bản sao ở đây…",
+          "link": "http://domain.com"
+        }
       },
       "general": {
         "title": "Dựa trên thông tin quý vị đã nhập, hộ gia đình của quý vị chưa yêu cầu bất kỳ lựa chọn ưu tiên nhà ở nào.",

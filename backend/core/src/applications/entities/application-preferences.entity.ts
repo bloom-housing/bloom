@@ -4,16 +4,13 @@ import {
   IsBoolean,
   IsDefined,
   IsEnum,
+  IsOptional,
   IsString,
   MaxLength,
   ValidateNested,
 } from "class-validator"
-import { Column, Entity, ManyToOne } from "typeorm"
-import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApiProperty, getSchemaPath } from "@nestjs/swagger"
-import { Application } from "./application.entity"
-import { Preference } from "../../preferences/entities/preference.entity"
 import { InputType } from "../../shared/input-type"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 
@@ -58,9 +55,11 @@ export class FormMetadataOptions {
   key: string
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  extraData: FormMetadataExtraData[]
+  @Type(() => FormMetadataExtraData)
+  extraData?: FormMetadataExtraData[]
 }
 
 export class FormMetadata {
@@ -71,44 +70,63 @@ export class FormMetadata {
 
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => FormMetadataOptions)
   options: FormMetadataOptions[]
 }
 
-// TODO
-// @Entity()
-// export class ApplicationPreference extends AbstractEntity {
-//   @ManyToOne(() => Application, (application) => application.householdMembers)
-//   application: Application
-//
-//   @ManyToOne(() => Preference, (preference) => preference.applicationPreferences, { eager: true })
-//   preference: Preference
-//
-//   @Column("jsonb", { nullable: false })
-//   @Expose()
-//   @ApiProperty({
-//     type: "array",
-//     items: {
-//       oneOf: [
-//         { $ref: getSchemaPath(BooleanInput) },
-//         { $ref: getSchemaPath(TextInput) },
-//         { $ref: getSchemaPath(AddressInput) },
-//       ],
-//     },
-//   })
-//   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
-//   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-//   @Type(() => FormMetadataExtraData, {
-//     keepDiscriminatorProperty: true,
-//     discriminator: {
-//       property: "type",
-//       subTypes: [
-//         { value: BooleanInput, name: InputType.boolean },
-//         { value: TextInput, name: InputType.text },
-//         { value: AddressInput, name: InputType.address },
-//       ],
-//     },
-//   })
-//   data: Array<BooleanInput | TextInput | AddressInput>
-// }
+export class ApplicationPreferenceOption {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  key: string
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  checked: boolean
+
+  @Expose()
+  @ApiProperty({
+    type: "array",
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(BooleanInput) },
+        { $ref: getSchemaPath(TextInput) },
+        { $ref: getSchemaPath(AddressInput) },
+      ],
+    },
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => FormMetadataExtraData, {
+    keepDiscriminatorProperty: true,
+    discriminator: {
+      property: "type",
+      subTypes: [
+        { value: BooleanInput, name: InputType.boolean },
+        { value: TextInput, name: InputType.text },
+        { value: AddressInput, name: InputType.address },
+      ],
+    },
+  })
+  extraData?: Array<BooleanInput | TextInput | AddressInput>
+}
+
+export class ApplicationPreference {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  key: string
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  claimed: boolean
+
+  @Expose()
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationPreferenceOption)
+  options: Array<ApplicationPreferenceOption>
+}
 
 export const applicationPreferenceExtraModels = [BooleanInput, TextInput, AddressInput]

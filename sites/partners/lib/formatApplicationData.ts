@@ -16,6 +16,7 @@ import {
   YesNoAnswer,
   ApplicationTypes,
 } from "../src/applications/PaperApplicationForm/FormTypes"
+import moment from "moment"
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -48,6 +49,8 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
+    const TIME_24H_FORMAT = "MM/DD/YYYY HH:mm:ss"
+
     // rename default (wrong property names)
     const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
       data.dateSubmitted || {}
@@ -55,21 +58,14 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
 
-    const date = new Date()
+    const dateString = moment(
+      `${submissionMonth}/${submissionDay}/${submissionYear} ${hours}:${minutes}:${seconds} ${period}`,
+      "MM/DD/YYYY hh:mm:ss A"
+    ).format(TIME_24H_FORMAT)
 
-    date.setUTCDate(parseInt(submissionDay))
-    date.setUTCMonth(parseInt(submissionMonth) - 1)
-    date.setUTCFullYear(parseInt(submissionYear))
+    const formattedDate = moment(dateString, TIME_24H_FORMAT).utc(true).toDate()
 
-    if (hours && minutes && seconds && period) {
-      const hourNumber = parseInt(hours, 10)
-      const hour24Clock = period === "am" ? hourNumber : hourNumber + 12
-      date.setUTCHours(hour24Clock, parseInt(minutes), parseInt(seconds))
-    } else {
-      date.setUTCHours(0, 0, 0, 0)
-    }
-
-    return date
+    return formattedDate
   })()
 
   // create applicant
@@ -248,7 +244,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
 export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const submissionDate = applicationData.submissionDate
-    ? new Date(applicationData.submissionDate)
+    ? moment(new Date(applicationData.submissionDate)).utc()
     : null
 
   const dateOfBirth = (() => {
@@ -266,12 +262,12 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const incomeYear = incomePeriod === "perYear" ? applicationData.income : null
 
   const timeSubmitted = (() => {
-    const hoursNumber = submissionDate?.getUTCHours()
+    if (!submissionDate) return
 
-    const hours = (hoursNumber ? hoursNumber % 12 || 12 : "").toString()
-    const minutes = submissionDate?.getUTCMinutes()?.toString()
-    const seconds = submissionDate?.getUTCSeconds()?.toString()
-    const period: TimeFieldPeriod = hoursNumber > 12 ? "pm" : "am"
+    const hours = submissionDate.format("hh")
+    const minutes = submissionDate.format("mm")
+    const seconds = submissionDate.format("ss")
+    const period = submissionDate.format("A").toLowerCase() as TimeFieldPeriod
 
     return {
       hours,
@@ -282,11 +278,11 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   })()
 
   const dateSubmitted = (() => {
-    const birthMonth = (submissionDate?.getUTCMonth() + 1).toString()
-    const birthDay = submissionDate?.getUTCDate().toString()
-    const birthYear = submissionDate?.getUTCFullYear().toString()
-
     if (!submissionDate) return null
+
+    const birthMonth = submissionDate.format("MM")
+    const birthDay = submissionDate.format("DD")
+    const birthYear = submissionDate.format("YYYY")
 
     return {
       birthMonth,
@@ -300,8 +296,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const preferences = (() => {
     const preferencesFormData = {}
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const preferencesApiData = applicationData.preferences as Record<string, any>
+    const preferencesApiData = applicationData.preferences
 
     preferencesApiData.forEach((item) => {
       const options = item.options.reduce((acc, curr) => {

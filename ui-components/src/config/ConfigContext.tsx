@@ -6,7 +6,8 @@ type ConfigContextProps = {
   idleTimeout: number
 }
 
-const defaultTimeout = 5 * 60 * 1000
+const timeoutMinutes = parseInt(process.env.idleTimeout || process.env.IDLE_TIMEOUT || "5")
+const defaultTimeout = timeoutMinutes * 60 * 1000
 
 export const ConfigContext = createContext<ConfigContextProps>({
   storageType: "session",

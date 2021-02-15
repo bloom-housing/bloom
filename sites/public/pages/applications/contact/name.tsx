@@ -46,10 +46,6 @@ export default () => {
   const noEmail: boolean = watch("applicant.noEmail")
   const clientLoaded = OnClientSide()
 
-  {
-    clientLoaded && console.info("noEmail!", noEmail, application.applicant.noEmail)
-  }
-
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>

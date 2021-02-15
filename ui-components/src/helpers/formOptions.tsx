@@ -1,9 +1,15 @@
 import * as React from "react"
 import { t } from "./translator"
 import { Language } from "@bloom-housing/backend-core/types"
+
+export interface SelectOption {
+  value: string
+  label: string
+}
+
 interface FormOptionsProps {
-  options: string[]
-  keyPrefix: string
+  options: (string | SelectOption)[]
+  keyPrefix?: string
 }
 
 interface FieldGroupItem {
@@ -193,8 +199,8 @@ export const preferredUnit: FieldGroupItem[] = [
 export const applicationLanguageKeys = [Language.en, Language.es]
 
 export const FormOptions = (props: FormOptionsProps) => {
-  const options = props.options.map((option) => {
-    if (option == "") {
+  const options = props.options.map((option: string | SelectOption) => {
+    if (option == "" || option["value"] == "") {
       return (
         <option value="" key="select-one">
           {t("t.selectOne")}
@@ -202,8 +208,8 @@ export const FormOptions = (props: FormOptionsProps) => {
       )
     } else {
       return (
-        <option value={option} key={option}>
-          {t(`${props.keyPrefix}.${option}`)}
+        <option value={option["value"] || option} key={option["value"] || option}>
+          {option["label"] || t(`${props.keyPrefix}.${option as string}`)}
         </option>
       )
     }

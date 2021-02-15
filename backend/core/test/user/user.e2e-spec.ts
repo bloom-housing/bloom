@@ -18,6 +18,7 @@ import { UserCreateDto, UserDto, UserUpdateDto } from "../../src/user/dto/user.d
 // expect here so we need to re-declare it.
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
 declare const expect: jest.Expect
+jest.setTimeout(30000)
 
 describe("Applications", () => {
   let app: INestApplication

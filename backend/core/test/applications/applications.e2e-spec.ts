@@ -37,8 +37,6 @@ describe("Applications", () => {
   let user1AccessToken: string
   let user2AccessToken: string
   let adminAccessToken: string
-  let listingId: string
-  let listing: ListingDto
   let leasingAgent1AccessToken: string
   let leasingAgent1Profile: UserDto
   let leasingAgent2AccessToken: string
@@ -206,8 +204,6 @@ describe("Applications", () => {
     ).body
 
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    listing = res.body
-    listingId = res.body[0].id
     // Finding listings corresponding to leasing agents (permission wise)
     listing1Id = res.body.filter((listing: ListingDto) => {
       const leasingAgentsIds = listing.leasingAgents.map((agent) => agent.id)
@@ -257,7 +253,16 @@ describe("Applications", () => {
               {
                 key: "address",
                 type: InputType.address,
-                value: {},
+                value: {
+                  street: "",
+                  street2: "",
+                  city: "",
+                  state: "",
+                  zipCode: "",
+                  county: "",
+                  latitude: null,
+                  longitude: null,
+                },
               },
             ],
           },
