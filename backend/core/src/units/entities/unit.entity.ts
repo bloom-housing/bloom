@@ -18,7 +18,7 @@ import {
   ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
-import { AnyDict } from "../../lib/unit_transformations"
+import { AnyDict } from "../../shared/units-transformations"
 import { Property } from "../../property/entities/property.entity"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"

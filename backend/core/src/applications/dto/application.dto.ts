@@ -9,8 +9,8 @@ import {
 } from "class-validator"
 import { Application } from "../entities/application.entity"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IdDto } from "../../lib/id.dto"
-import { PaginationFactory } from "../../utils/pagination.dto"
+import { IdDto } from "../../shared/dto/id.dto"
+import { PaginationFactory } from "../../shared/dto/pagination.dto"
 import { ApplicantCreateDto, ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import {

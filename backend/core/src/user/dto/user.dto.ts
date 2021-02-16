@@ -11,7 +11,7 @@ import {
   ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { IdDto } from "../../lib/id.dto"
+import { IdDto } from "../../shared/dto/id.dto"
 
 export class UserDto extends OmitType(User, [
   "applications",

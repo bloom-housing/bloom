@@ -1,6 +1,6 @@
 import application from "../src/main"
 import request from "supertest"
-import listingsLoader from "../src/lib/listings_loader"
+import listingsLoader from "../src/shared/listings-loader"
 import { Listing } from "../types"
 
 describe("GET /", () => {
