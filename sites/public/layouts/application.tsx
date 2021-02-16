@@ -1,5 +1,6 @@
-import React, { useContext } from "react"
-import { useRouter } from "next/router"
+import React from "react"
+// import React, { useContext } from "react"
+// import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   LocalizedLink,
@@ -8,16 +9,16 @@ import {
   FooterNav,
   FooterSection,
   ExygyFooter,
-  UserNav,
+  // UserNav,
   t,
-  UserContext,
-  setSiteAlertMessage,
+  // UserContext,
+  // setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import SVG from "react-inlinesvg"
 
 const Layout = (props) => {
-  const { profile, signOut } = useContext(UserContext)
-  const router = useRouter()
+  // const { profile, signOut } = useContext(UserContext)
+  // const router = useRouter()
 
   const LANGUAGES =
     process.env.languages?.split(",")?.map((item) => ({
@@ -34,6 +35,7 @@ const Layout = (props) => {
         <SiteHeader
           skip={t("nav.skip")}
           logoSrc="/images/logo_glyph.svg"
+          logoClass="normal"
           notice={
             <>
               {t("nav.getFeedback")}
@@ -61,7 +63,7 @@ const Layout = (props) => {
               {t("nav.getAssistance")}
             </LocalizedLink>
           )}
-          <UserNav
+          {/* <UserNav
             signedIn={!!profile}
             signOut={async () => {
               setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
@@ -79,7 +81,7 @@ const Layout = (props) => {
             <LocalizedLink href="/account/settings" className="navbar-item">
               {t("nav.accountSettings")}
             </LocalizedLink>
-          </UserNav>
+          </UserNav> */}
         </SiteHeader>
         <main id="main-content">{props.children}</main>
       </div>

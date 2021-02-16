@@ -3,10 +3,10 @@
 Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
-import { useRouter } from "next/router"
+// import { useRouter } from "next/router"
 import {
-  AppearanceStyleType,
-  Button,
+  // AppearanceStyleType,
+  // Button,
   FormCard,
   imageUrlFromListing,
   t,
@@ -17,7 +17,7 @@ import React, { useContext } from "react"
 
 export default () => {
   const { application, listing } = useContext(AppSubmissionContext)
-  const router = useRouter()
+  // const router = useRouter()
 
   const imageUrl = imageUrlFromListing(listing)
 
@@ -72,7 +72,7 @@ export default () => {
           )}
         </div>
 
-        <div className="form-card__group">
+        {/* <div className="form-card__group">
           <h3 className="form-card__paragraph-title">
             {t("application.review.confirmation.createAccountTitle")}
           </h3>
@@ -80,10 +80,10 @@ export default () => {
           <p className="field-note mt-1">
             {t("application.review.confirmation.createAccountParagraph")}
           </p>
-        </div>
+        </div> */}
 
         <div className="form-card__pager">
-          <div className="form-card__pager-row primary">
+          {/* <div className="form-card__pager-row primary">
             <Button
               styleType={AppearanceStyleType.primary}
               onClick={() => {
@@ -98,7 +98,7 @@ export default () => {
             <a className="lined text-tiny" href="/">
               {t("application.review.confirmation.imdone")}
             </a>
-          </div>
+          </div> */}
 
           <div className="form-card__pager-row py-6">
             <Link href="/listings">
