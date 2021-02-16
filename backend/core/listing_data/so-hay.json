@@ -1,12 +1,13 @@
 {
   "id": "HOLNx_F7fUCeax5GCoIr9g",
-  "events":[
+  "events": [
     {
       "type": "openHouse",
       "startTime": "2021-03-03T14:00:00.000-08:00",
       "endTime": "2021-03-03T15:00:00.000-08:00",
       "url": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_M2E0MThlMTgtNGUwMi00ODk3LWFkYTQtMmM4YzYzNTIwMTUz%40thread.v2/0?context=%7b%22Tid%22%3a%2215cb6c53-0a50-4876-a66c-9a753d760a7d%22%2c%22Oid%22%3a%2267252afa-99d8-45f9-93b0-91c740661a60%22%7d"
-    },    {
+    },
+    {
       "type": "openHouse",
       "startTime": "2021-03-09T11:00:00.000-08:00",
       "endTime": "2021-03-09T12:00:00.000-08:00",
@@ -74,14 +75,58 @@
       "title": "DISPLACED TENANT HOUSING PREFERENCE /MISSION BOULEVARD CORRIDOR (SR 238) DISPLACED TENANT HOUSING PREFERENCE",
       "subtitle": "",
       "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.\nOR\n At least one member of my household is an SR 238 Program Participant as required under the terms of the SR 238 Settlement Implementation Project. Program Participants are tenants of previously sold Caltrans properties along the SR 238 Mission Boulevard Corridor and are given occupancy preference when new below-market housing is constructed in the Corridor.",
-      "links": []
+      "links": [],
+      "formMetadata": {
+        "key": "displacedTenant",
+        "options": [
+          {
+            "key": "general",
+            "extraData": [
+              {
+                "key": "name",
+                "type": "text"
+              },
+              {
+                "key": "address",
+                "type": "address"
+              }
+            ]
+          },
+          {
+            "key": "missionCorridor",
+            "extraData": [
+              {
+                "key": "name",
+                "type": "text"
+              },
+              {
+                "key": "address",
+                "type": "address"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "ordinal": 2,
       "title": "Live or Work in City of Hayward",
       "subtitle": "",
       "description": "For households in which at least one member lives or works in City of Hayward",
-      "links": []
+      "links": [],
+      "formMetadata": {
+        "key": "liveWork",
+        "options": [
+          {
+            "key": "live",
+            "extraData": []
+          },
+          {
+            "key": "work",
+            "extraData": []
+          }
+        ]
+      }
     }
   ],
   "property": {
