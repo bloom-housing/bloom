@@ -345,7 +345,7 @@ export const listingSeed1: ListingSeed = {
     // totalUnits: 2,
     status: ListingStatus.active,
     displayWaitlistSize: false,
-    CSVFormattingType: CSVFormattingType.basic,
+    CSVFormattingType: CSVFormattingType.withDisplaceeNameAndAddress,
   },
   amiChart: SanMateoHUD2019,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

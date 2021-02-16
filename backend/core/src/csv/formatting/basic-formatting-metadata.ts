@@ -16,6 +16,7 @@ import {
   formatApplicatonSubmissionDate,
   formatHoueholdMembers,
   formatHouseholdSize,
+  formatLivePreference,
   formatMonthlyIncome,
   formatPrimaryApplicantAdditionalPhone,
   formatPrimaryApplicantAdditionalPhoneType,
@@ -40,6 +41,7 @@ import {
   formatPrimaryApplicantWorkZip,
   formatRequestUnitType,
   formatVouchersOrSubsidies,
+  formatWorkPreference,
 } from "./format-blocks"
 
 export const basicFormattingMetadata = [
@@ -83,6 +85,8 @@ export const basicFormattingMetadata = [
   formatAccessibility,
   formatVouchersOrSubsidies,
   formatRequestUnitType,
+  formatLivePreference,
+  formatWorkPreference,
   formatHouseholdSize,
   formatHoueholdMembers,
 ]

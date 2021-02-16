@@ -14,8 +14,13 @@ import {
   formatAnnualIncome,
   formatApplicationNumber,
   formatApplicatonSubmissionDate,
+  formatDisplacedTenantPreferenceGeneralClaimed,
+  formatDisplacedTenantPreferenceGeneralData,
+  formatDisplacedTenantPreferenceMissionCorridorClaimed,
+  formatDisplacedTenantPreferenceMissionCorridorData,
   formatHoueholdMembers,
   formatHouseholdSize,
+  formatLivePreference,
   formatMonthlyIncome,
   formatPrimaryApplicantAdditionalPhone,
   formatPrimaryApplicantAdditionalPhoneType,
@@ -40,6 +45,7 @@ import {
   formatPrimaryApplicantWorkZip,
   formatRequestUnitType,
   formatVouchersOrSubsidies,
+  formatWorkPreference,
 } from "./format-blocks"
 
 export const haywardFormattingMetadata = [
@@ -83,6 +89,12 @@ export const haywardFormattingMetadata = [
   formatAccessibility,
   formatVouchersOrSubsidies,
   formatRequestUnitType,
+  formatLivePreference,
+  formatWorkPreference,
+  formatDisplacedTenantPreferenceGeneralClaimed,
+  formatDisplacedTenantPreferenceGeneralData,
+  formatDisplacedTenantPreferenceMissionCorridorClaimed,
+  formatDisplacedTenantPreferenceMissionCorridorData,
   formatHouseholdSize,
   formatHoueholdMembers,
 ]
