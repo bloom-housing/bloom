@@ -16,9 +16,7 @@ const AdditionalResources = () => {
         </title>
       </Head>
 
-      <PageHeader subtitle={subTitle} inverse={true}>
-        <>{pageTitle}</>
-      </PageHeader>
+      <PageHeader title={<>{pageTitle}</>} subtitle={subTitle} inverse={true}></PageHeader>
 
       <section className="px-5">
         <article className="markdown max-w-5xl m-auto md:flex">
