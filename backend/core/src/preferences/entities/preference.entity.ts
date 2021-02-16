@@ -82,6 +82,7 @@ class Preference {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => FormMetadata)
   formMetadata?: FormMetadata
 }
 
