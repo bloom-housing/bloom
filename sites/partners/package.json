@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -16,7 +16,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^0.3.8",
+    "@bloom-housing/ui-components": "^0.3.9",
     "@zeit/next-sass": "^1.0.1",
     "ag-grid-community": "^24.1.0",
     "ag-grid-react": "^24.1.0",
