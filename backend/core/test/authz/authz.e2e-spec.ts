@@ -8,6 +8,7 @@ import supertest from "supertest"
 import { applicationSetup, AppModule } from "../../src/app.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
+jest.setTimeout(30000)
 
 describe("Authz", () => {
   let app: INestApplication

@@ -19,26 +19,36 @@ import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
-  const { conductor, application, listing } = useFormConductor("preferencesIntroduction")
+  const { conductor, application, listing } = useFormConductor("preferencesLiveWork")
   const [showMore, setShowMore] = useState({})
   const currentPageSection = 4
 
-  const preferenceOptions = ["liveIn", "workIn"]
+  const preferenceOptions = ["live", "work"]
+  const pluckPreference = (key: string) =>
+    application.preferences.find((metadata) => metadata.key == key)
+  const liveWorkPreference = pluckPreference("liveWork")
 
   const toggleShowMoreForOption = (option) =>
     setShowMore({ ...showMore, [option]: !showMore[option] })
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm({
+  const { getValues, register, handleSubmit, errors, setValue, trigger } = useForm<
+    Record<string, any>
+  >({
+    defaultValues: {
+      live: liveWorkPreference?.options?.find((options) => options.key == "live").checked === true,
+      work: liveWorkPreference?.options?.find((options) => options.key == "work").checked === true,
+      none: liveWorkPreference?.claimed === false,
+    },
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    if (!data.none) {
+    /* if (!data.none) {
       conductor.completeSection(4)
-    }
+    } */
 
-    conductor.currentStep.save({ preferences: data })
+    conductor.currentStep.save({ ...data })
     conductor.routeToNextOrReturnUrl()
   }
 
@@ -59,6 +69,10 @@ export default () => {
           <h2 className="form-card__title is-borderless">{t("application.preferences.title")}</h2>
 
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
+
+          <p className="field-note mt-5 text-center">
+            {t("t.pageXofY", { num: 1, total: conductor.preferenceStepsTotal })}
+          </p>
         </div>
 
         {Object.entries(errors).length > 0 && (
@@ -79,7 +93,6 @@ export default () => {
                   type="checkbox"
                   id={option}
                   name={option}
-                  defaultChecked={application.preferences[option]}
                   ref={register}
                   onChange={() => {
                     setTimeout(() => {
@@ -89,7 +102,7 @@ export default () => {
                   }}
                 />
                 <label htmlFor={option} className="font-semibold uppercase tracking-wider">
-                  {t(`application.preferences.${option}.label`)}
+                  {t(`application.preferences.liveWork.${option}.label`)}
                 </label>
               </div>
 
@@ -108,15 +121,24 @@ export default () => {
 
               {showMore[option] && (
                 <p className="field-note mt-6 ml-8">
-                  {t(`application.preferences.${option}.description`)}
-                  <br />
-                  <a
-                    className="block pt-2"
-                    href={t(`application.preferences.${option}.link`)}
-                    target="_blank"
-                  >
-                    Link
-                  </a>
+                  {t(`application.preferences.liveWork.${option}.description`)}
+                  {!t(`application.preferences.liveWork.${option}.link`).includes(
+                    "application.preferences"
+                  ) && (
+                    <>
+                      <br />
+                      <a
+                        className="block pt-2"
+                        href={t(`application.preferences.liveWork.${option}.link`)}
+                        target="_blank"
+                      >
+                        {t(`application.preferences.liveWork.${option}.link`).replace(
+                          /https?:\/\//,
+                          ""
+                        )}
+                      </a>
+                    </>
+                  )}
                 </p>
               )}
             </div>
@@ -128,7 +150,6 @@ export default () => {
                 type="checkbox"
                 id="none"
                 name="none"
-                defaultChecked={application.preferences.none}
                 ref={register({
                   validate: {
                     somethingIsChecked: (value) => {

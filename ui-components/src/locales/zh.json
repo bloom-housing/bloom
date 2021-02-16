@@ -215,15 +215,17 @@
       "dontWant": "我不想要這項優先權",
       "stillHaveOpportunity": "您仍然有機會要求其他優先權。",
       "youHaveClaimed": "您已要求：",
-      "liveIn": {
-        "label": "住在 <REGION> 的優先權",
-        "description": "住在 <REGION>，內容從這裡開始…",
-        "link": "http://domain.com"
-      },
-      "workIn": {
-        "label": "在 <REGION> 工作優先權",
-        "description": "在 <REGION> 工作，內容從這裡開始…",
-        "link": "http://domain.com"
+      "liveWork": {
+        "live": {
+          "label": "住在 <REGION> 的優先權",
+          "description": "住在 <REGION>，內容從這裡開始…",
+          "link": "http://domain.com"
+        },
+        "work": {
+          "label": "在 <REGION> 工作優先權",
+          "description": "在 <REGION> 工作，內容從這裡開始…",
+          "link": "http://domain.com"
+        }
       },
       "general": {
         "title": "根據您填寫的資料，您的家庭沒有要求任何住房優先權。",

@@ -113,8 +113,8 @@ export default function ListingsList() {
     }, []) as Listing[]
   }, [leasingAgentInListings, listingDtos, profile.roles])
 
-  if (listingsError) return "An error has occurred."
   if (listingsLoading) return "Loading..."
+  if (listingsError) return "An error has occurred."
 
   return (
     <Layout>
@@ -122,19 +122,21 @@ export default function ListingsList() {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>{t("nav.listings")}</PageHeader>
+      <PageHeader title={t("nav.listings")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
-            <AgGridReact
-              gridOptions={gridOptions}
-              columnDefs={columnDefs}
-              rowData={filteredListings}
-              domLayout={"autoHeight"}
-              headerHeight={83}
-              rowHeight={58}
-              suppressScrollOnNewData={true}
-            ></AgGridReact>
+            {filteredListings?.length && (
+              <AgGridReact
+                gridOptions={gridOptions}
+                columnDefs={columnDefs}
+                rowData={filteredListings}
+                domLayout={"autoHeight"}
+                headerHeight={83}
+                rowHeight={58}
+                suppressScrollOnNewData={true}
+              ></AgGridReact>
+            )}
 
             <div className="data-pager">
               <div className="data-pager__control-group">

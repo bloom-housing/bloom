@@ -9,6 +9,7 @@ export interface SiteHeaderProps {
   notice: string | React.ReactNode
   children: React.ReactNode
   languages?: LangItem[]
+  logoClass?: string
 }
 
 export interface SiteHeaderState {
@@ -55,9 +56,9 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     )
   }
 
-  logo() {
+  logo(logoClass = "") {
     return (
-      <LocalizedLink className="navbar-item logo" href="/">
+      <LocalizedLink className={`navbar-item logo ${logoClass}`} href="/">
         <div className="logo__lockup">
           <img className="logo__image" src={this.props.logoSrc} alt={this.props.title} />
           <div className="logo__title">{this.props.title}</div>
@@ -97,7 +98,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
         <div className="navbar__wrapper">
           <nav className="navbar" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
-              {this.logo()}
+              {this.logo(this.props.logoClass)}
               {this.hamburgerMenu()}
             </div>
 

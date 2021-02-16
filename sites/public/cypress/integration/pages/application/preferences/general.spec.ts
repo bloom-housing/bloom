@@ -3,11 +3,7 @@ describe("applications/preferences/general", function () {
 
   beforeEach(() => {
     cy.loadConfig({
-      preferences: {
-        liveIn: false,
-        none: true,
-        workIn: false,
-      },
+      preferences: [],
     })
     cy.visit(route)
   })

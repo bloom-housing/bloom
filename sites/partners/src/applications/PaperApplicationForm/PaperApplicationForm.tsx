@@ -1,10 +1,20 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
+import {
+  ApiClientContext,
+  t,
+  Form,
+  AlertBox,
+  setSiteAlertMessage,
+  LoadingOverlay,
+  StatusBar,
+  AppearanceStyleType,
+  Button,
+} from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
-import { HouseholdMember, Application } from "@bloom-housing/backend-core/types"
-import { formatApplicationData, parseApplicationData } from "../../../lib/formatApplicationData"
-
+import { HouseholdMember, Application, ApplicationStatus } from "@bloom-housing/backend-core/types"
+import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
+import { useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
@@ -24,9 +34,15 @@ type ApplicationFormProps = {
   editMode?: boolean
 }
 
+type AlertErrorType = "api" | "form"
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
-  const defaultValues = editMode ? parseApplicationData(application) : {}
+  const { listingDto } = useSingleListingData(listingId)
+
+  const preferences = listingDto?.preferences
+
+  const defaultValues = editMode ? mapApiToForm(application) : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -36,7 +52,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const { applicationsService } = useContext(ApiClientContext)
 
-  const [alert, setAlert] = useState<AlertTypes | null>(null)
+  const [alert, setAlert] = useState<AlertErrorType | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
   useEffect(() => {
@@ -70,13 +87,15 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   */
   const onSubmit = async (data: FormTypes, redirect: "details" | "new") => {
     setAlert(null)
+    setLoading(true)
 
     const formData = {
       householdMembers,
+      submissionType: application?.submissionType,
       ...data,
     }
 
-    const body = formatApplicationData(formData, listingId, false)
+    const body = mapFormToApi(formData, listingId, editMode)
 
     try {
       const result = editMode
@@ -86,26 +105,33 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           })
         : await applicationsService.create({ body })
 
-      if (result) {
-        setAlert("success")
+      setLoading(false)
 
-        setTimeout(() => {
-          if (redirect === "details") {
-            void router.push(`/application?id=${result.id}`)
-          } else {
-            reset()
-            clearErrors()
-            setAlert(null)
-          }
-        }, 2000)
+      if (result) {
+        setSiteAlertMessage(
+          editMode
+            ? t("application.add.applicationUpdated")
+            : t("application.add.applicationSubmitted"),
+          "success"
+        )
+
+        if (redirect === "details") {
+          void router.push(`/application?id=${result.id}`)
+        } else {
+          reset()
+          clearErrors()
+          setAlert(null)
+          router.reload()
+        }
       }
     } catch (err) {
-      setAlert("alert")
+      setLoading(false)
+      setAlert("api")
     }
   }
 
   const onError = () => {
-    setAlert("alert")
+    setAlert("form")
   }
 
   async function deleteApplication() {
@@ -113,66 +139,88 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       await applicationsService.delete({ applicationId: application?.id })
       void router.push(`/listings/applications?listing=${listingId}`)
     } catch (err) {
-      setAlert("alert")
+      setAlert("api")
     }
   }
 
   return (
-    <FormProvider {...formMethods}>
-      <section className="bg-primary-lighter">
-        <div className="max-w-screen-xl px-5 my-5 mx-auto">
-          {alert && (
-            <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
-              {(() => {
-                if (alert === "success") {
-                  return editMode
-                    ? t("application.add.applicationUpdated")
-                    : t("application.add.applicationSubmitted")
-                }
+    <LoadingOverlay isLoading={loading}>
+      <>
+        <StatusBar
+          backButton={
+            <Button
+              inlineIcon="left"
+              icon="arrow-back"
+              onClick={() =>
+                editMode ? router.push(`/application?id=${application.id}`) : router.back()
+              }
+            >
+              {t("t.back")}
+            </Button>
+          }
+          tagStyle={
+            application?.status == ApplicationStatus.submitted
+              ? AppearanceStyleType.success
+              : AppearanceStyleType.primary
+          }
+          tagLabel={
+            application?.status
+              ? t(`application.details.applicationStatus.${application.status}`)
+              : t(`application.details.applicationStatus.draft`)
+          }
+        />
 
-                return t("application.add.applicationAddError")
-              })()}
-            </AlertBox>
-          )}
+        <FormProvider {...formMethods}>
+          <section className="bg-primary-lighter py-5">
+            <div className="max-w-screen-xl px-5 mx-auto">
+              {alert && (
+                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
+                  {alert === "form"
+                    ? t("application.add.applicationAddError")
+                    : t("errors.alert.badRequest")}
+                </AlertBox>
+              )}
 
-          <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
-            <div className="flex flex-row flex-wrap mt-5">
-              <div className="info-card md:w-9/12">
-                <FormApplicationData />
+              <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                <div className="flex flex-row flex-wrap">
+                  <div className="info-card md:w-9/12">
+                    <FormApplicationData />
 
-                <FormPrimaryApplicant />
+                    <FormPrimaryApplicant />
 
-                <FormAlternateContact />
+                    <FormAlternateContact />
 
-                <FormHouseholdMembers
-                  householdMembers={householdMembers}
-                  setHouseholdMembers={setHouseholdMembers}
-                />
+                    <FormHouseholdMembers
+                      householdMembers={householdMembers}
+                      setHouseholdMembers={setHouseholdMembers}
+                    />
 
-                <FormHouseholdDetails />
+                    <FormHouseholdDetails />
 
-                <FormPreferences />
+                    <FormPreferences preferences={preferences} />
 
-                <FormHouseholdIncome />
+                    <FormHouseholdIncome />
 
-                <FormDemographics />
+                    <FormDemographics />
 
-                <FormTerms />
-              </div>
+                    <FormTerms />
+                  </div>
 
-              <aside className="md:w-3/12 md:pl-6">
-                <Aside
-                  type={editMode ? "edit" : "add"}
-                  listingId={listingId}
-                  onDelete={() => deleteApplication()}
-                  triggerSubmitAndRedirect={triggerSubmitAndRedirect}
-                />
-              </aside>
+                  <aside className="md:w-3/12 md:pl-6">
+                    <Aside
+                      type={editMode ? "edit" : "add"}
+                      listingId={listingId}
+                      onDelete={() => deleteApplication()}
+                      triggerSubmitAndRedirect={triggerSubmitAndRedirect}
+                    />
+                  </aside>
+                </div>
+              </Form>
             </div>
-          </Form>
-        </div>
-      </section>
-    </FormProvider>
+          </section>
+        </FormProvider>
+      </>
+    </LoadingOverlay>
   )
 }
 

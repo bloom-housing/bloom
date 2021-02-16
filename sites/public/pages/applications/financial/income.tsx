@@ -65,7 +65,6 @@ export default () => {
   })
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
-    console.log(data)
     // Skip validation of total income if the applicant has income vouchers.
     const validationError = application.incomeVouchers
       ? null

@@ -218,15 +218,17 @@
       "dontWant": "No deseo esta preferencia",
       "stillHaveOpportunity": "Usted seguirá tendiendo la oportunidad de solicitar otras preferencias.",
       "youHaveClaimed": "Usted ha solicitado:",
-      "liveIn": {
-        "label": "Preferencia de vivir en <REGION>",
-        "description": "El texto de vivir en <REGION> va aquí...",
-        "link": "http://domain.com"
-      },
-      "workIn": {
-        "label": "Preferencia de trabajar en <REGION>",
-        "description": "El texto de trabajar en <REGION> va aquí...",
-        "link": "http://domain.com"
+      "liveWork": {
+        "live": {
+          "label": "Preferencia de vivir en <REGION>",
+          "description": "El texto de vivir en <REGION> va aquí...",
+          "link": "http://domain.com"
+        },
+        "work": {
+          "label": "Preferencia de trabajar en <REGION>",
+          "description": "El texto de trabajar en <REGION> va aquí...",
+          "link": "http://domain.com"
+        }
       },
       "general": {
         "title": "En base a la información que usted ingresó, su hogar no ha solicitado ninguna preferencia de vivienda.",
