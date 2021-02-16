@@ -13,7 +13,7 @@ export interface HeroProps {
   buttonLink: string
   listings?: Listing[]
   children?: React.ReactNode
-  isCentered?: boolean
+  centered?: boolean
 }
 
 const listingOpen = (listing: Listing) => {
@@ -33,8 +33,8 @@ const Hero = (props: HeroProps) => {
   if (props.backgroundImage) {
     styles = { backgroundImage: `url(${props.backgroundImage})` }
   }
-  if (props.isCentered) {
-    classNames = "is-cetered"
+  if (props.centered) {
+    classNames = "centered"
   }
   return (
     <div className={`hero ${classNames}`} style={styles}>
