@@ -68,6 +68,7 @@ export class FormMetadata {
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   key: string
 
+  @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => FormMetadataOptions)
