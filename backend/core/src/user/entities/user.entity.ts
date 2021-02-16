@@ -31,6 +31,9 @@ export class User {
   @Column("varchar", { select: false })
   passwordHash: string
 
+  @Column("varchar", { nullable: true })
+  resetToken: string
+
   @Column("varchar")
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })

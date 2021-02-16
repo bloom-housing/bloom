@@ -490,6 +490,17 @@
     "yourLotteryNumber": "Your confirmation number is"
   },
   "authentication": {
+    "forgotPassword": {
+      "changePassword": "Change Password",
+      "sendEmail": "Send email",
+      "success": "We've sent you an email. You'll receive an email with a link to reset your password.",
+      "errors": {
+        "tokenExpired": "Reset password token expired. Please request for a new one.",
+        "tokenMissing": "Token not found. Please request for a new one.",
+        "generic": "There was an error. Please try again, or contact support for help.",
+        "emailNotFound": "Email not found. Please make sure your email has an account with us and is confirmed."
+      }
+    },
     "timeout": {
       "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information and be logged out if you choose not to respond.",
       "action": "Stay logged in",

@@ -8,43 +8,40 @@ import {
   Form,
   FormCard,
   Icon,
-  LinkButton,
   UserContext,
   t,
   AlertBox,
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { emailRegex } from "../lib/helpers"
 import FormsLayout from "../layouts/forms"
-import Link from "next/link"
 
-const SignIn = () => {
-  const { login } = useContext(UserContext)
+const ForgotPassword = () => {
+  const router = useRouter()
+  const { forgotPassword } = useContext(UserContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
-  const router = useRouter()
   const [requestError, setRequestError] = useState<string>()
 
-  const onSubmit = async (data: { email: string; password: string }) => {
-    const { email, password } = data
+  const onSubmit = async (data: { email: string }) => {
+    const { email } = data
 
     try {
-      const user = await login(email, password)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
-      await router.push("/account/dashboard")
+      await forgotPassword(email)
+      setSiteAlertMessage(t(`authentication.forgotPassword.success`), "success")
+      await router.push("/")
       window.scrollTo(0, 0)
     } catch (err) {
-      const { status } = err.response || {}
-      if (status === 401) {
-        setRequestError(`${t("authentication.signIn.error")}: ${err.message}`)
+      const { status, data } = err.response || {}
+      if (status === 400) {
+        setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
       } else {
         console.error(err)
-        setRequestError(
-          `${t("authentication.signIn.error")}. ${t("authentication.signIn.errorGenericMessage")}`
-        )
+        setRequestError(`${t("authentication.forgotPassword.errors.generic")}`)
       }
     }
   }
@@ -54,7 +51,7 @@ const SignIn = () => {
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl" symbol="profile" />
-          <h2 className="form-card__title">Sign In</h2>
+          <h2 className="form-card__title">{t("authentication.forgotPassword.sendEmail")}</h2>
         </div>
         {requestError && (
           <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
@@ -68,27 +65,10 @@ const SignIn = () => {
               caps={true}
               name="email"
               label="Email"
-              validation={{ required: true }}
+              validation={{ required: true, pattern: emailRegex }}
               error={errors.email}
-              errorMessage="Please enter your login email"
+              errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
               register={register}
-            />
-
-            <aside className="float-right font-bold">
-              <Link href="/forgot-password">
-                <a>{t("authentication.signIn.forgotPassword")}</a>
-              </Link>
-            </aside>
-
-            <Field
-              caps={true}
-              name="password"
-              label="Password"
-              validation={{ required: true }}
-              error={errors.password}
-              errorMessage="Please enter your login password"
-              register={register}
-              type="password"
             />
 
             <div className="text-center mt-6">
@@ -98,19 +78,19 @@ const SignIn = () => {
                   //
                 }}
               >
-                Sign In
+                {t("authentication.forgotPassword.sendEmail")}
               </Button>
             </div>
+            <div className="text-center mt-6">
+              <a href="#" onClick={() => router.back()}>
+                {t("t.cancel")}
+              </a>
+            </div>
           </Form>
-        </div>
-        <div className="form-card__group text-center">
-          <h2 className="mb-6">Don't have an account?</h2>
-
-          <LinkButton href="/create-account">Create Account</LinkButton>
         </div>
       </FormCard>
     </FormsLayout>
   )
 }
 
-export { SignIn as default, SignIn }
+export { ForgotPassword as default, ForgotPassword }

@@ -10,19 +10,23 @@ import { createAction, createReducer } from "typesafe-actions"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
 import {
   createAxiosInstance,
+  forgotPassword,
   getProfile,
   login,
   register,
   scheduleTokenRefresh,
+  updatePassword,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
 import { UserCreate, User } from "@bloom-housing/backend-core/types"
 // External interface this context provides
 type ContextProps = {
+  forgotPassword: (email: string) => Promise<string>
   login: (email: string, password: string) => Promise<User>
   createUser: (user: UserCreate) => Promise<User>
   signOut: () => void
   // True when an API request is processing
+  updatePassword: (token: string, password: string, passwordConfirmation: string) => Promise<User>
   loading: boolean
   profile?: User
   accessToken?: string
@@ -164,6 +168,28 @@ export const UserProvider: FunctionComponent = ({ children }) => {
       }
     },
     signOut: () => dispatch(signOut()),
+    forgotPassword: async (email) => {
+      dispatch(startLoading())
+      try {
+        const message = await forgotPassword(apiUrl, email)
+        return message
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    updatePassword: async (token, password, passwordConfirmation) => {
+      dispatch(startLoading())
+      try {
+        const accessToken = await updatePassword(apiUrl, token, password, passwordConfirmation)
+        dispatch(saveToken({ accessToken, apiUrl, dispatch }))
+        const client = createAxiosInstance(apiUrl, accessToken)
+        const profile = await getProfile(client)
+        dispatch(saveProfile(profile))
+        return profile
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
   }
   return createElement(UserContext.Provider, { value: contextValues }, children)
 }
