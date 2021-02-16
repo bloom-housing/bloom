@@ -127,9 +127,14 @@
 }
 
 .form-card__header_nav {
-  @apply p-4;
+  @apply py-4;
   @apply bg-white;
   @apply rounded-b-lg;
+  @apply overflow-auto;
+
+  @screen md {
+    @apply p-4;
+  }
 
   @screen print {
     @apply py-0;
