@@ -47,6 +47,7 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps, translations } = this.props
+    const skipLoginRoutes = ["/forgot-password", "/reset-password"]
 
     // Setup translations via Polyglot
     addTranslation(translations.general)
@@ -68,7 +69,11 @@ class MyApp extends App {
     return (
       <ConfigProvider apiUrl={process.env.backendApiBase}>
         <UserProvider>
-          <RequireLogin signInPath="/sign-in" signInMessage={signInMessage}>
+          <RequireLogin
+            signInPath="/sign-in"
+            signInMessage={signInMessage}
+            skipForRoutes={skipLoginRoutes}
+          >
             <ApiClientProvider>
               {/* <Component {...pageProps} /> */}
               <div suppressHydrationWarning>

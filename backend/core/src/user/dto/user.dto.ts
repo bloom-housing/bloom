@@ -18,6 +18,7 @@ export class UserDto extends OmitType(User, [
   "isAdmin",
   "leasingAgentInListings",
   "passwordHash",
+  "resetToken",
 ] as const) {
   @Expose()
   @IsOptional()

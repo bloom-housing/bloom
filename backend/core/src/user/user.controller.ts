@@ -22,12 +22,14 @@ import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { AuthzGuard } from "../auth/authz.guard"
 import { Request as ExpressRequest } from "express"
+import { ForgotPasswordDto, ForgotPasswordResponseDto } from "./dto/forgot_password.dto"
+import { UpdatePasswordDto } from "./dto/update_password.dto"
+import { LoginResponseDto } from "../auth/dto/login.dto"
 
 @Controller("user")
 @ApiBearerAuth()
 @ApiTags("user")
 @ResourceType("user")
-@UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class UserController {
   constructor(
@@ -38,11 +40,13 @@ export class UserController {
   ) {}
 
   @Get()
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
   profile(@Request() req): UserDto {
     return mapTo(UserDto, req.user)
   }
 
   @Post()
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
   async create(@Body() dto: UserCreateDto): Promise<UserDtoWithAccessToken> {
     const user = await this.userService.createUser(dto)
@@ -52,7 +56,25 @@ export class UserController {
     return mapTo(UserDtoWithAccessToken, { ...user, accessToken })
   }
 
+  @Put("forgot-password")
+  @ApiOperation({ summary: "Forgot Password", operationId: "forgot-password" })
+  async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<ForgotPasswordResponseDto> {
+    const user = await this.userService.forgotPassword(dto.email)
+    void this.emailService.forgotPassword(user, dto.appUrl)
+    return mapTo(ForgotPasswordResponseDto, { message: "Email was sent" })
+  }
+
+  @Put("update-password")
+  @ApiOperation({ summary: "Update Password", operationId: "update-password" })
+  async updatePassword(@Body() dto: UpdatePasswordDto): Promise<LoginResponseDto> {
+    const user = await this.userService.updatePassword(dto)
+
+    const accessToken = this.authService.generateAccessToken(user)
+    return mapTo(LoginResponseDto, { accessToken })
+  }
+
   @Put(":id")
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Update user", operationId: "update" })
   async update(@Request() req: ExpressRequest, @Body() dto: UserUpdateDto): Promise<UserDto> {
     const user = await this.userService.find({ id: dto.id })
