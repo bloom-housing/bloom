@@ -52,11 +52,16 @@ const ApplicationFlaggedSetList = () => {
       },
       {
         headerName: t("application.household.primaryApplicant"),
-        field: `${primaryApplicant}`,
+        field: "applications",
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: `${primaryApplicant}`,
+        valueFormatter: ({ value }) => {
+          if (!value?.length) return
+
+          const { firstName, lastName } = value[0]?.applicant
+          return `${firstName} ${lastName}`
+        },
       },
       {
         headerName: t("flaggedSet.ruleName"),
@@ -94,6 +99,7 @@ const ApplicationFlaggedSetList = () => {
   return (
     <Layout>
       <section>
+        {console.log(appsData)}
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <div className="applications-table mt-5">
