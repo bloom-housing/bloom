@@ -1,5 +1,5 @@
-import { t } from "@bloom-housing/ui-components"
-import { ColumnApi } from "ag-grid-community"
+import { t, lRoute } from "@bloom-housing/ui-components"
+import { ColumnApi, GridOptions } from "ag-grid-community"
 import { AgGridReact } from "ag-grid-react"
 import { useRouter } from "next/router"
 import React, { useEffect, useMemo, useState } from "react"
@@ -26,19 +26,33 @@ const ApplicationFlaggedSetList = () => {
     return count
   }, [appsData])
 
-  const primaryApplicant = useMemo(() => {
-    let fullName
-    appsData?.items.forEach((item) => {
-      item.applications.forEach((app) => {
-        fullName = app.applicant.firstName + " " + app.applicant.lastName
-      })
-    })
-    return fullName
-  }, [appsData])
-
   const defaultColDef = {
     resizable: true,
     maxWidth: 300,
+  }
+
+  class formatLinkCell {
+    link: HTMLAnchorElement
+
+    init(params) {
+      this.link = document.createElement("a")
+      this.link.classList.add("text-blue-700")
+      this.link.setAttribute(
+        "href",
+        lRoute(`/listings/applications/flags/details?id=${params?.data?.id}`)
+      )
+      this.link.innerText = params.value
+    }
+
+    getGui() {
+      return this.link
+    }
+  }
+
+  const gridOptions: GridOptions = {
+    components: {
+      formatLinkCell: formatLinkCell,
+    },
   }
 
   const columnDefs = useMemo(
@@ -86,9 +100,10 @@ const ApplicationFlaggedSetList = () => {
         resizable: true,
         flex: 1,
         valueFormatter: ({ value }) => t(`flaggedSet.${value}`),
+        cellRenderer: "formatLinkCell",
       },
     ],
-    []
+    [pendingReviews]
   )
 
   // reset page to 1 when user change limit
@@ -99,11 +114,11 @@ const ApplicationFlaggedSetList = () => {
   return (
     <Layout>
       <section>
-        {console.log(appsData)}
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <div className="applications-table mt-5">
               <AgGridReact
+                gridOptions={gridOptions}
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
                 rowData={afs}
