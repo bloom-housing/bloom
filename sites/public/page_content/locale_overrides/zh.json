@@ -1,5 +1,15 @@
 {
   "application": {
+    "contact": {
+      "doYouWorkIn": "您是否在 City of Hayward 工作？",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "他們是否在 City of Hayward 工作？",
+        "workInRegionNote": ""
+      }
+    },
     "preferences": {
       "dontWant": "我不想使用這些優先權",
       "liveWork": {

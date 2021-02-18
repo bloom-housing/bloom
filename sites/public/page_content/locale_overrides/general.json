@@ -1,5 +1,15 @@
 {
   "application": {
+    "contact": {
+      "doYouWorkIn": "Do you work in City of Hayward?",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "Do they work in the City of Hayward?",
+        "workInRegionNote": ""
+      }
+    },
     "preferences": {
       "dontWant": "I don't want to claim any of these preferences",
       "liveWork": {

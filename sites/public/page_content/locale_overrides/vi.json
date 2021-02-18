@@ -1,5 +1,15 @@
 {
   "application": {
+    "contact": {
+      "doYouWorkIn": "Quý vị có làm việc tại City of Hayward không?",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "Họ có làm việc tại City of Hayward không?",
+        "workInRegionNote": ""
+      }
+    },
     "preferences": {
       "dontWant": "Tôi không muốn chọn bất kỳ ưu tiên nào trong số này",
       "liveWork": {
