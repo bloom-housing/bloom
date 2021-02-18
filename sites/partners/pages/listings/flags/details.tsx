@@ -18,7 +18,6 @@ import Layout from "../../../layouts/application"
 const ApplicationFlaggedSetDetails = () => {
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
   const router = useRouter()
-  const { watch } = useForm()
   const COLUMN_STATE_KEY = "column-state"
 
   function saveColumnState(api: ColumnApi) {
