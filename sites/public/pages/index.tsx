@@ -56,6 +56,7 @@ export default class extends Component<IndexProps> {
           buttonTitle={t("welcome.seeRentalListings")}
           buttonLink="/listings"
           listings={this.props.listings}
+          centered
         />
         <div className="homepage-extra">
           <MarkdownSection fullwidth={true}>
