@@ -43,4 +43,26 @@
     @apply py-2;
     @apply px-4;
   }
+
+  &.is-flagged {
+    @apply px-12;
+    @apply py-2;
+    @apply bg-warn-light;
+    @apply text-gray-750;
+    @apply rounded-full;
+    @apply font-semibold;
+    @apply font-alt-sans;
+    @apply uppercase;
+    @apply tracking-ultrawide;
+    @apply inline;
+    @apply text-tiny;
+    @apply leading-4;
+
+    &.is-small {
+      @apply text-2xs;
+      @apply py-1;
+      @apply px-3;
+      @apply leading-3;
+    }
+  }
 }

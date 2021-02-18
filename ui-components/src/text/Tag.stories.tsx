@@ -30,3 +30,9 @@ export const PillAndSuccess = () => (
     Pill Success
   </Tag>
 )
+
+export const PillAndFlagged = () => (
+  <Tag pillStyle={true} styleType={AppearanceStyleType.flagged}>
+     Flagged
+  </Tag>
+)

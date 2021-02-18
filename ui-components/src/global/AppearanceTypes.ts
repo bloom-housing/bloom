@@ -6,6 +6,7 @@ export enum AppearanceStyleType {
   warning = "is-warning",
   accentCool = "is-accent-cool",
   accentWarm = "is-accent-warm",
+  flagged = "is-flagged",
 }
 
 export enum AppearanceSizeType {

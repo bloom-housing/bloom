@@ -443,7 +443,7 @@ export function getColDefs(maxHouseholdSize: number) {
         valueFormatter: ({ value }) => {
           if (!value) return t("n/a")
 
-          return value[i]?.firstName ? value[i].firstName : t("t.n/a")
+          return value[0]?.firstName ? value[0].firstName : t("t.n/a")
         },
       },
       {
