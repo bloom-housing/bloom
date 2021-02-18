@@ -27,7 +27,7 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
-import { listingUrlSlug } from "../../lib/url_helper"
+import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { Address } from "../../shared/entities/address.entity"
