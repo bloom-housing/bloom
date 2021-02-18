@@ -82,7 +82,7 @@ export const formatPrimaryApplicantAdditionalPhone = {
   label: "Primary Applicant Additional Phone",
   discriminator: "",
   formatter: (application: Application) => {
-    return defaultFormatter(application.additionalPhone)
+    return defaultFormatter(application.additionalPhoneNumber)
   },
 }
 export const formatPrimaryApplicantAdditionalPhoneType = {
