@@ -8,6 +8,11 @@ import {
   streetFormatter,
 } from "../csv-builder.service"
 import { HouseholdMember } from "../../applications/entities/household-member.entity"
+import {
+  AddressInput,
+  ApplicationPreference,
+  TextInput,
+} from "../../applications/entities/application-preferences.entity"
 
 export const formatApplicationNumber = {
   label: "Application Number",
@@ -77,7 +82,7 @@ export const formatPrimaryApplicantAdditionalPhone = {
   label: "Primary Applicant Additional Phone",
   discriminator: "",
   formatter: (application: Application) => {
-    return defaultFormatter(application.additionalPhone)
+    return defaultFormatter(application.additionalPhoneNumber)
   },
 }
 export const formatPrimaryApplicantAdditionalPhoneType = {
@@ -410,4 +415,95 @@ export const formatHoueholdMembers = {
       },
     },
   ],
+}
+const preferenceClaimedFormatter = (
+  preferenceKey: string,
+  option: string,
+  application: Application
+) => {
+  const liveOrWorkPreferences = application.preferences.filter(
+    (pref) => pref.key === preferenceKey && pref.claimed
+  )
+  if (liveOrWorkPreferences.length !== 1) {
+    return ""
+  }
+  const liveOrWorkPreference: ApplicationPreference = liveOrWorkPreferences[0]
+  return liveOrWorkPreference.options.filter((pref) => pref.checked && pref.key === option).length
+    ? "claimed"
+    : ""
+}
+
+export const formatLivePreference = {
+  label: "Live preference",
+  discriminator: "",
+  formatter: preferenceClaimedFormatter.bind(this, "liveWork", "live"),
+}
+export const formatWorkPreference = {
+  label: "Work preference",
+  discriminator: "",
+  formatter: preferenceClaimedFormatter.bind(this, "liveWork", "work"),
+}
+
+const displacedTenantFormatter = (optionKey: string, application: Application) => {
+  const displacedTenantPreferences = application.preferences.filter(
+    (pref) => pref.key === "displacedTenant" && pref.claimed
+  )
+  if (displacedTenantPreferences.length !== 1) {
+    return ""
+  }
+  const displacedTenantSubPreference = displacedTenantPreferences[0].options.filter(
+    (pref) => pref.checked && pref.key === optionKey
+  )
+  if (!displacedTenantSubPreference.length) {
+    return ""
+  }
+  const nameExtraDataFilter = displacedTenantSubPreference[0].extraData.filter(
+    (val) => val.key === "name"
+  )
+  const addressExtraDataFilter = displacedTenantSubPreference[0].extraData.filter(
+    (val) => val.key === "address"
+  )
+  if (!nameExtraDataFilter.length || !addressExtraDataFilter.length) {
+    return ""
+  }
+  const nameExtraData = nameExtraDataFilter[0] as TextInput
+  const addressExtraData = addressExtraDataFilter[0] as AddressInput
+
+  return `Name: ${nameExtraData.value} Street: ${addressExtraData.value.street || ""}, Street2: ${
+    addressExtraData.value.street2 || ""
+  }, Zip Code: ${addressExtraData.value.zipCode || ""}, City: ${
+    addressExtraData.value.city || ""
+  }, County: ${addressExtraData.value.county || ""}, State: ${addressExtraData.value.state || ""}`
+}
+
+export const formatDisplacedTenantPreferenceGeneralClaimed = {
+  label: "Displaced tenant preference (general)",
+  discriminator: "",
+  formatter: preferenceClaimedFormatter.bind(this, "displacedTenant", "general"),
+}
+
+export const formatDisplacedTenantPreferenceGeneralData = {
+  label: "Displaced tenant preference (general) name and address",
+  discriminator: "",
+  formatter: displacedTenantFormatter.bind(this, "general"),
+}
+
+export const formatDisplacedTenantPreferenceMissionCorridorClaimed = {
+  label: "Displaced tenant preference (mission corridor)",
+  discriminator: "",
+  formatter: preferenceClaimedFormatter.bind(this, "displacedTenant", "missionCorridor"),
+}
+
+export const formatDisplacedTenantPreferenceMissionCorridorData = {
+  label: "Displaced tenant preference (mission corridor) name and address",
+  discriminator: "",
+  formatter: displacedTenantFormatter.bind(this, "missionCorridor"),
+}
+
+export const formatApplicationType = {
+  label: "Application Type",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return defaultFormatter(application.submissionType)
+  },
 }

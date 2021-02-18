@@ -78,11 +78,10 @@ export class ApplicationsCsvListQueryParams {
   @ApiProperty({
     type: String,
     example: "listingId",
-    required: false,
+    required: true,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  listingId?: string
+  listingId: string
 
   @Expose()
   @ApiProperty({
