@@ -499,3 +499,11 @@ export const formatDisplacedTenantPreferenceMissionCorridorData = {
   discriminator: "",
   formatter: displacedTenantFormatter.bind(this, "missionCorridor"),
 }
+
+export const formatApplicationType = {
+  label: "Application Type",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return defaultFormatter(application.submissionType)
+  },
+}

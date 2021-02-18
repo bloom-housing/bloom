@@ -13,6 +13,7 @@ import {
   formatAlternateContactZip,
   formatAnnualIncome,
   formatApplicationNumber,
+  formatApplicationType,
   formatApplicatonSubmissionDate,
   formatHoueholdMembers,
   formatHouseholdSize,
@@ -46,6 +47,7 @@ import {
 
 export const basicFormattingMetadata = [
   formatApplicationNumber,
+  formatApplicationType,
   formatApplicatonSubmissionDate,
   formatPrimaryApplicantFirstName,
   formatPrimaryApplicantMiddleName,

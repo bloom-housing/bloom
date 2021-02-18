@@ -13,6 +13,7 @@ import {
   formatAlternateContactZip,
   formatAnnualIncome,
   formatApplicationNumber,
+  formatApplicationType,
   formatApplicatonSubmissionDate,
   formatDisplacedTenantPreferenceGeneralClaimed,
   formatDisplacedTenantPreferenceGeneralData,
@@ -50,6 +51,7 @@ import {
 
 export const haywardFormattingMetadata = [
   formatApplicationNumber,
+  formatApplicationType,
   formatApplicatonSubmissionDate,
   formatPrimaryApplicantFirstName,
   formatPrimaryApplicantMiddleName,
