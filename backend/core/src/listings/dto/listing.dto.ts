@@ -8,7 +8,7 @@ import {
   PreferenceUpdateDto,
 } from "../../preferences/dto/preference.dto"
 import { OmitType } from "@nestjs/swagger"
-import { IdDto } from "../../lib/id.dto"
+import { IdDto } from "../../shared/dto/id.dto"
 import { PropertyDto } from "../../property/dto/property.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"

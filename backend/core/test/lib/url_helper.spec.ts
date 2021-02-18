@@ -1,4 +1,4 @@
-import { formatUrlSlug, listingUrlSlug } from "../../src/lib/url_helper"
+import { formatUrlSlug, listingUrlSlug } from "../../src/shared/url-helper"
 
 import { ArcherListing } from "../../types"
 

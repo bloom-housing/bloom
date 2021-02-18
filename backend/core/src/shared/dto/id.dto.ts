@@ -1,6 +1,6 @@
 import { IsString, IsUUID } from "class-validator"
 import { Expose } from "class-transformer"
-import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../validations-groups.enum"
 
 export class IdDto {
   @Expose()

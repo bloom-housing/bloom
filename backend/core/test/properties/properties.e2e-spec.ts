@@ -16,6 +16,7 @@ import { PropertiesModule } from "../../src/property/properties.module"
 // expect here so we need to re-declare it.
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
 declare const expect: jest.Expect
+jest.setTimeout(30000)
 
 describe("Properties", () => {
   let app: INestApplication

@@ -31,7 +31,7 @@ import {
 } from "./dto/application.dto"
 import { Expose, Transform } from "class-transformer"
 import { IsBoolean, IsOptional, IsString } from "class-validator"
-import { PaginationQueryParams } from "../utils/pagination.dto"
+import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import {
@@ -78,11 +78,10 @@ export class ApplicationsCsvListQueryParams {
   @ApiProperty({
     type: String,
     example: "listingId",
-    required: false,
+    required: true,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  listingId?: string
+  listingId: string
 
   @Expose()
   @ApiProperty({

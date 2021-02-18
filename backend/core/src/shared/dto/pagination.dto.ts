@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
 import { Expose, Transform, Type } from "class-transformer"
 import { IsNumber, IsOptional } from "class-validator"
-import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../validations-groups.enum"
 
 export class PaginationMeta implements IPaginationMeta {
   @Expose()
