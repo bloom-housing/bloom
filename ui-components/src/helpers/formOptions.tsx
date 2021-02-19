@@ -196,7 +196,7 @@ export const preferredUnit: FieldGroupItem[] = [
   },
 ]
 
-export const applicationLanguageKeys = [Language.en, Language.es]
+export const applicationLanguageKeys = [Language.en, Language.es, Language.zh, Language.vi]
 
 export const FormOptions = (props: FormOptionsProps) => {
   const options = props.options.map((option: string | SelectOption) => {
