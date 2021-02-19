@@ -2087,21 +2087,21 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                   <Component>
                     <tr>
                       <Component
-                        key=""
+                        key="header-0"
                       >
                         <th>
                           Name
                         </th>
                       </Component>
                       <Component
-                        key=""
+                        key="header-1"
                       >
                         <th>
                           Relationship
                         </th>
                       </Component>
                       <Component
-                        key=""
+                        key="header-2"
                       >
                         <th>
                           Date of Birth
@@ -2112,16 +2112,16 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                 </thead>
                 <tbody>
                   <Component
-                    id="row-"
-                    key=""
+                    id="standardrow-0"
+                    key="standardrow-0"
                   >
                     <tr
-                      id="row-"
+                      id="standardrow-0"
                     >
                       <Component
                         className="px-5 py-3"
                         headerLabel="Name"
-                        key=""
+                        key="standardcol-0"
                       >
                         <td
                           className="px-5 py-3"
@@ -2133,7 +2133,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                       <Component
                         className="px-5 py-3"
                         headerLabel="Relationship"
-                        key=""
+                        key="standardcol-1"
                       >
                         <td
                           className="px-5 py-3"
@@ -2145,7 +2145,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                       <Component
                         className="px-5 py-3"
                         headerLabel="Date of Birth"
-                        key=""
+                        key="standardcol-2"
                       >
                         <td
                           className="px-5 py-3"
@@ -2157,16 +2157,16 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                     </tr>
                   </Component>
                   <Component
-                    id="row-"
-                    key=""
+                    id="standardrow-1"
+                    key="standardrow-1"
                   >
                     <tr
-                      id="row-"
+                      id="standardrow-1"
                     >
                       <Component
                         className="px-5 py-3"
                         headerLabel="Name"
-                        key=""
+                        key="standardcol-0"
                       >
                         <td
                           className="px-5 py-3"
@@ -2178,7 +2178,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                       <Component
                         className="px-5 py-3"
                         headerLabel="Relationship"
-                        key=""
+                        key="standardcol-1"
                       >
                         <td
                           className="px-5 py-3"
@@ -2190,7 +2190,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                       <Component
                         className="px-5 py-3"
                         headerLabel="Date of Birth"
-                        key=""
+                        key="standardcol-2"
                       >
                         <td
                           className="px-5 py-3"
@@ -2202,16 +2202,16 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                     </tr>
                   </Component>
                   <Component
-                    id="row-"
-                    key=""
+                    id="standardrow-2"
+                    key="standardrow-2"
                   >
                     <tr
-                      id="row-"
+                      id="standardrow-2"
                     >
                       <Component
                         className="px-5 py-3"
                         headerLabel="Name"
-                        key=""
+                        key="standardcol-0"
                       >
                         <td
                           className="px-5 py-3"
@@ -2223,7 +2223,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                       <Component
                         className="px-5 py-3"
                         headerLabel="Relationship"
-                        key=""
+                        key="standardcol-1"
                       >
                         <td
                           className="px-5 py-3"
@@ -2235,7 +2235,7 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                       <Component
                         className="px-5 py-3"
                         headerLabel="Date of Birth"
-                        key=""
+                        key="standardcol-2"
                       >
                         <td
                           className="px-5 py-3"

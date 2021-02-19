@@ -9,9 +9,9 @@ export default {
 }
 
 const member = ({
-  birthMonth: null,
-  birthDay: null,
-  birthYear: null,
+  birthMonth: undefined,
+  birthDay: undefined,
+  birthYear: undefined,
 } as unknown) as HouseholdMember
 
 export const Default = () => (

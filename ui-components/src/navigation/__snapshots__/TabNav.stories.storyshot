@@ -17,7 +17,7 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
         role="tablist"
       >
         <Tab
-          href="javascript:alert('Other Tab')"
+          href="/other"
         >
           <li
             className="tab-nav__tab"
@@ -25,14 +25,14 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
             role="tab"
           >
             <LocalizedLink
-              href="javascript:alert('Other Tab')"
+              href="/other"
               tabIndex={-1}
             >
               <Link
-                href="javascript:alert('Other Tab')"
+                href="/other"
               >
                 <a
-                  href="javascript:alert('Other Tab')"
+                  href="/other"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                   tabIndex={-1}
@@ -45,7 +45,7 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
         </Tab>
         <Tab
           current={true}
-          href="javascript:alert('Default Tab')"
+          href="/default"
           tagContent="15"
         >
           <li
@@ -61,16 +61,16 @@ exports[`Storyshots Navigation/Tab Nav Default 1`] = `
                 }
               }
               className="is-active"
-              href="javascript:alert('Default Tab')"
+              href="/default"
               tabIndex={0}
             >
               <Link
-                href="javascript:alert('Default Tab')"
+                href="/default"
               >
                 <a
                   aria-current="page"
                   className="is-active"
-                  href="javascript:alert('Default Tab')"
+                  href="/default"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                   tabIndex={0}
@@ -114,7 +114,7 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
       >
         <Tab
           current={true}
-          href="javascript:alert('Other Tab')"
+          href="/other"
         >
           <li
             aria-selected="true"
@@ -129,16 +129,16 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
                 }
               }
               className="is-active"
-              href="javascript:alert('Other Tab')"
+              href="/other"
               tabIndex={0}
             >
               <Link
-                href="javascript:alert('Other Tab')"
+                href="/other"
               >
                 <a
                   aria-current="page"
                   className="is-active"
-                  href="javascript:alert('Other Tab')"
+                  href="/other"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                   tabIndex={0}
@@ -150,7 +150,7 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
           </li>
         </Tab>
         <Tab
-          href="javascript:alert('Default Tab')"
+          href="/default"
           tagContent="15"
         >
           <li
@@ -159,14 +159,14 @@ exports[`Storyshots Navigation/Tab Nav Other 1`] = `
             role="tab"
           >
             <LocalizedLink
-              href="javascript:alert('Default Tab')"
+              href="/default"
               tabIndex={-1}
             >
               <Link
-                href="javascript:alert('Default Tab')"
+                href="/default"
               >
                 <a
-                  href="javascript:alert('Default Tab')"
+                  href="/default"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                   tabIndex={-1}
