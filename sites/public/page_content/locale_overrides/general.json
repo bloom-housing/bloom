@@ -17,11 +17,11 @@
   "nav": {
     "siteTitle": "Alameda County Housing Portal",
     "getFeedback": "We'd love to get ",
-    "yourFeedback": "your feedback",
-    "bonusFeedback": "! Participate in a feedback session and you could receive a gift card for your time."
+    "yourFeedback": "your feedback!",
+    "bonusFeedback": ""
   },
   "pageTitle": {
-    "additionalResources": "Additional Housing Opportunities"
+    "additionalResources": "Additional Housing Opportunities and Resources"
   },
   "pageDescription": {
     "additionalResources": "We encourage you to browse other affordable housing resources."
