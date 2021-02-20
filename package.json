@@ -34,6 +34,7 @@
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.1",
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
@@ -68,5 +69,10 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --max-warnings 0"
+  },
+  "dependencies": {
+    "@types/xlsx": "0.0.36",
+    "file-saver": "^2.0.5",
+    "xlsx": "^0.16.9"
   }
 }
