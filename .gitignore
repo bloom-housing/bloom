@@ -83,3 +83,6 @@ yarn-error.log
 
 # VS code debugger config
 launch.json
+
+# Jest unit test coverage
+test-coverage/
