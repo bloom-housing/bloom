@@ -3294,7 +3294,8 @@ export enum ApplicationMethodType {
 
 export enum ListingEventType {
   'openHouse' = 'openHouse',
-  'publicLottery' = 'publicLottery'
+  'publicLottery' = 'publicLottery',
+  'lotteryResults' = 'lotteryResults'
 }
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;

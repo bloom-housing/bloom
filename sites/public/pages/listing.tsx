@@ -86,6 +86,26 @@ const PublicLotteryEvent = (props: { publicLottery: ListingEvent }) => {
   )
 }
 
+const LotteryResultsEvent = (props: { event: ListingEvent }) => {
+  const { event } = props
+  return (
+    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
+      <h4 className="text-caps-underline">{t("listings.lotteryResults.header")}</h4>
+      <p className="text text-gray-800 pb-3 flex justify-between items-center">
+        <span className="inline-block">{moment(props.event.startTime).format("MMMM D, YYYY")}</span>
+      </p>
+      {event.note && <p className="text text-gray-600">{event.note}</p>}
+      {!event.note && (
+        <p className="text text-gray-600">
+          {t("listings.lotteryResults.completeResultsWillBePosted", {
+            hour: moment(props.event.startTime).format("h a"),
+          })}
+        </p>
+      )}
+    </section>
+  )
+}
+
 export default class extends Component<ListingProps> {
   public static async getInitialProps({ query }) {
     const listingId = query.id
@@ -181,13 +201,33 @@ export default class extends Component<ListingProps> {
     }
 
     let openHouseEvents: ListingEvent[] | null = null
+    let publicLottery: ListingEvent | null = null
+    let lotteryResults: ListingEvent | null = null
     if (Array.isArray(listing.events)) {
-      openHouseEvents = listing.events.filter((event) => event.type === ListingEventType.openHouse)
+      listing.events.forEach((event) => {
+        switch (event.type) {
+          case ListingEventType.openHouse:
+            if (!openHouseEvents) {
+              openHouseEvents = []
+            }
+            openHouseEvents.push(event)
+            break
+          case ListingEventType.publicLottery:
+            publicLottery = event
+            break
+          case ListingEventType.lotteryResults:
+            lotteryResults = event
+            break
+        }
+      })
     }
 
-    let publicLottery: ListingEvent | null = null
-    if (Array.isArray(listing.events)) {
-      publicLottery = listing.events.find((event) => event.type === ListingEventType.publicLottery)
+    let lotterySection
+    if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
+      lotterySection = <PublicLotteryEvent publicLottery={publicLottery} />
+      if (moment(publicLottery.startTime) < moment() && lotteryResults && !lotteryResults.url) {
+        lotterySection = <LotteryResultsEvent event={lotteryResults} />
+      }
     }
 
     return (
@@ -326,13 +366,29 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
+                  {lotteryResults && lotteryResults.url && (
+                    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4 text-center">
+                      <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
+                      <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">
+                        {moment(lotteryResults.startTime).format("MMMM D, YYYY")}
+                      </p>
+                      <a
+                        className="button is-primary w-full mb-2"
+                        href={lotteryResults.url}
+                        title={t("listings.lotteryResults.downloadResults")}
+                        target="_blank"
+                      >
+                        {t("listings.lotteryResults.downloadResults")}
+                      </a>
+                    </section>
+                  )}
                   {openHouseEvents && <OpenHouseEventSection openHouseEvents={openHouseEvents} />}
                   <ApplicationSection
                     listing={listing}
                     internalFormRoute="/applications/start/choose-language"
                   />
                 </div>
-                {publicLottery && <PublicLotteryEvent publicLottery={publicLottery} />}
+                {lotterySection}
                 <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
               </aside>

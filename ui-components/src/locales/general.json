@@ -629,6 +629,11 @@
     "householdMaximumIncome": "Household Maximum Income",
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
+    "lotteryResults": {
+      "completeResultsWillBePosted": "Complete lottery results will be posted on this date by %{hour}%",
+      "downloadResults": "Download Results",
+      "header": "Lottery Results"
+    },
     "moreBuildingSelectionCriteria": "Find out more about Building Selection Criteria",
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
