@@ -15,14 +15,14 @@ export interface GroupedTableProps extends Omit<StandardTableProps, "data"> {
 export const GroupedTable = (props: GroupedTableProps) => {
   const { headers, data, cellClassName } = props
 
-  const headerLabels = Object.values(headers).map((col) => {
-    const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
+  const headerLabels = Object.values(headers).map((col, index) => {
+    const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return <HeaderCell key={uniqKey}>{col}</HeaderCell>
   })
 
   const body: React.ReactNode[] = []
 
-  data.forEach((group: GroupedTableGroup) => {
+  data.forEach((group: GroupedTableGroup, dataIndex) => {
     const colSpan = Object.keys(headers).length
 
     const groupHeader = group.header
@@ -31,9 +31,9 @@ export const GroupedTable = (props: GroupedTableProps) => {
 
     if (groupHeader) {
       body.push(
-        <Row key={process.env.NODE_ENV === "test" ? "" : nanoid()}>
+        <Row key={process.env.NODE_ENV === "test" ? "data-header" : nanoid()}>
           <Cell
-            key={process.env.NODE_ENV === "test" ? "" : nanoid()}
+            key={process.env.NODE_ENV === "test" ? "cell-header" : nanoid()}
             className={groupClassName}
             colSpan={colSpan}
           >
@@ -43,10 +43,14 @@ export const GroupedTable = (props: GroupedTableProps) => {
       )
     }
 
-    groupData.forEach((row: Record<string, React.ReactNode>) => {
-      const rowKey = (row["id"] as string) || (process.env.NODE_ENV === "test" ? "" : nanoid())
-      const cols = Object.keys(headers).map((colKey) => {
-        const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
+    groupData.forEach((row: Record<string, React.ReactNode>, groupDataIndex) => {
+      const rowKey = row["id"]
+        ? `row-${row["id"] as string}`
+        : process.env.NODE_ENV === "test"
+        ? `groupedrow-${dataIndex}-${groupDataIndex}`
+        : nanoid()
+      const cols = Object.keys(headers).map((colKey, colIndex) => {
+        const uniqKey = process.env.NODE_ENV === "test" ? `col-${colIndex}` : nanoid()
         const header = headers[colKey]
         const cell = row[colKey]
         return (
@@ -57,7 +61,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
       })
 
       body.push(
-        <Row id={"row-" + rowKey} key={rowKey} className={"group-" + groupClassName}>
+        <Row id={rowKey} key={rowKey} className={`group-${groupClassName}`}>
           {cols}
         </Row>
       )

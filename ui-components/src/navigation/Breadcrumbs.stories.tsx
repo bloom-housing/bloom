@@ -9,11 +9,9 @@ export default {
 
 export const Default = () => (
   <Breadcrumbs>
-    <BreadcrumbLink href="#">One</BreadcrumbLink>
-    <BreadcrumbLink href="#">
-      Two
-    </BreadcrumbLink>
-    <BreadcrumbLink current={true} href="#">
+    <BreadcrumbLink href="/One">One</BreadcrumbLink>
+    <BreadcrumbLink href="/Two">Two</BreadcrumbLink>
+    <BreadcrumbLink current={true} href="/Three">
       Three
     </BreadcrumbLink>
   </Breadcrumbs>

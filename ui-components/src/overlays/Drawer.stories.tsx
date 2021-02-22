@@ -3,7 +3,7 @@ import { Icon } from "../icons/Icon"
 import SVG from "react-inlinesvg"
 
 import { Drawer, DrawerSide } from "./Drawer"
-import { GridSection, GridCell } from "../sections/GridSection"
+import { GridSection } from "../sections/GridSection"
 import { ViewItem } from "../blocks/ViewItem"
 import { Field } from "../forms/Field"
 import { Button } from "../actions/Button"
@@ -31,10 +31,15 @@ export const Standard = () => {
         onClose={() => setDrawerState(!drawerState)}
         ariaDescription="My Drawer"
         actions={[
-          <Button onClick={() => setDrawerState(!drawerState)} styleType={AppearanceStyleType.primary}>
+          <Button 
+            key={0} 
+            onClick={() => setDrawerState(!drawerState)} 
+            styleType={AppearanceStyleType.primary}
+          >
             Submit
           </Button>,
           <Button
+            key={1}
             onClick={() => setDrawerState(!drawerState)}
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
@@ -71,10 +76,15 @@ export const StandardOnLeft = () => {
         ariaDescription="My Drawer"
         direction={DrawerSide.left}
         actions={[
-          <Button onClick={() => setDrawerState(!drawerState)} styleType={AppearanceStyleType.primary}>
+          <Button
+            key={0} 
+            onClick={() => setDrawerState(!drawerState)} 
+            styleType={AppearanceStyleType.primary}
+          >
             Submit
           </Button>,
           <Button
+            key={1}
             onClick={() => setDrawerState(!drawerState)}
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
