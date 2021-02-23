@@ -8,9 +8,16 @@
     "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
   },
   "applications": {
+    "begin": {
+      "en": "Begin",
+      "es": "Empezar",
+      "zh": "開始",
+      "vi": "Bắt đầu"
+    },
     "totalApplications": "Total Applications",
     "addApplication": "Add Application",
     "newApplication": "New Application",
+    "editApplication": "Edit Application",
     "applicationsReceived": "Applications Received",
     "table": {
       "applicationSubmissionDate": "Application Submission Date",
@@ -51,7 +58,8 @@
       "householdStreetAddress": "Household Street Address",
       "householdCity": "Household City",
       "householdState": "Household State",
-      "householdZip": "Household Zip"
+      "householdZip": "Household Zip",
+      "applicationType": "Application Type"
     }
   },
   "application": {
@@ -79,7 +87,11 @@
       "languageSubmittedIn": "Language Submitted In",
       "timeSubmitted": "Time Submitted",
       "dateSubmitted": "Date Submitted",
-      "applicationSubmitted": "Application Submitted"
+      "applicationSubmitted": "Application Submitted",
+      "applicationUpdated": "Application Updated",
+      "saveAndExit": "Save & exit",
+      "claimant": "Claimant",
+      "displacedAddress": "Displaced Address"
     },
     "details": {
       "applicationData": "Application Data",
@@ -104,7 +116,7 @@
       "workInRegion": "Work in Region",
       "signatureOnTerms": "Signature on Terms of Agreement",
       "submissionType": {
-        "electronical": "Electronical",
+        "electronical": "Electronic",
         "paper": "Paper"
       },
       "applicationStatus": {
@@ -317,26 +329,41 @@
       "title": "Your household may qualify for the following housing preferences.",
       "preamble": "If you qualify for this preference, you'll get a higher ranking.",
       "selectBelow": "If you have one of these housing preferences, select it below:",
-      "dontWant": "I don't want this preference",
+      "dontWant": "I don't want these preferences",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
-      "liveIn": {
-        "label": "Live in <REGION> Preference",
-        "description": "Live in <REGION> copy goes here…",
-        "link": "http://domain.com"
+      "liveWork": {
+        "live": {
+          "label": "Live in <REGION> Preference",
+          "description": "Live in <REGION> copy goes here…",
+          "link": "http://domain.com"
+        },
+        "work": {
+          "label": "Work in <REGION> Preference",
+          "description": "Work in <REGION> copy goes here…",
+          "link": "http://domain.com"
+        }
       },
-      "workIn": {
-        "label": "Work in <REGION> Preference",
-        "description": "Work in <REGION> copy goes here…",
-        "link": "http://domain.com"
+      "displacedTenant": {
+        "whichHouseholdMember": "Which household member is claiming this preference?",
+        "whatAddress": "What address was the household member displaced from?",
+        "general": {
+          "label": "Displaced Tenant Housing Preference",
+          "description": "Displaced Tenant copy goes here…",
+          "link": "http://domain.com"
+        }
       },
       "general": {
         "title": "Based on the information you have entered, your household has not claimed any housing preferences.",
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "liveIn": "Live",
-        "workIn": "Work"
+        "live": "Live",
+        "work": "Work",
+        "general": "General",
+        "missionCorridor": "Mission Corridor",
+        "name": "Claimant",
+        "address": "Displaced Address"
       }
     },
     "review": {
@@ -463,6 +490,17 @@
     "yourLotteryNumber": "Your confirmation number is"
   },
   "authentication": {
+    "forgotPassword": {
+      "changePassword": "Change Password",
+      "sendEmail": "Send email",
+      "success": "We've sent you an email. You'll receive an email with a link to reset your password.",
+      "errors": {
+        "tokenExpired": "Reset password token expired. Please request for a new one.",
+        "tokenMissing": "Token not found. Please request for a new one.",
+        "generic": "There was an error. Please try again, or contact support for help.",
+        "emailNotFound": "Email not found. Please make sure your email has an account with us and is confirmed."
+      }
+    },
     "timeout": {
       "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information and be logged out if you choose not to respond.",
       "action": "Stay logged in",
@@ -826,6 +864,7 @@
     "noneFound": "None found.",
     "occupancy": "Occupancy",
     "or": "or",
+    "pageXofY": "Page %{num} of %{total}",
     "people": "people",
     "person": "person",
     "perMonth": "per month",

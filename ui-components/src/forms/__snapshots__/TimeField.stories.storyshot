@@ -15,6 +15,7 @@ exports[`Storyshots Forms/Time Field Default 1`] = `
     name="time"
     register={[Function]}
     required={true}
+    watch={[Function]}
   >
     <fieldset
       id="time"
@@ -178,11 +179,11 @@ exports[`Storyshots Forms/Time Field Default 1`] = `
           defaultValue=""
           describedBy="time-error"
           error={false}
-          id="time.time"
+          id="time.period"
           keyPrefix="t"
           label="time"
           labelClassName="sr-only"
-          name="time.time"
+          name="time.period"
           options={
             Array [
               "am",
@@ -196,7 +197,7 @@ exports[`Storyshots Forms/Time Field Default 1`] = `
           >
             <label
               className="sr-only"
-              htmlFor="time.time"
+              htmlFor="time.period"
             >
               time
             </label>
@@ -206,8 +207,8 @@ exports[`Storyshots Forms/Time Field Default 1`] = `
                 aria-invalid={false}
                 className="input"
                 defaultValue=""
-                id="time.time"
-                name="time.time"
+                id="time.period"
+                name="time.period"
               >
                 <Component
                   keyPrefix="t"

@@ -8,17 +8,12 @@ import supertest from "supertest"
 import { applicationSetup, AppModule } from "../../src/app.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
+jest.setTimeout(30000)
 
 describe("Authz", () => {
   let app: INestApplication
   let userAccessToken: string
-  const adminOnlyEndpoints = [
-    "/applicationMethods",
-    "/assets",
-    "/listingEvents",
-    "/preferences",
-    "/units",
-  ]
+  const adminOnlyEndpoints = ["/preferences", "/units"]
   const applicationsEndpoint = "/applications"
   const listingsEndpoint = "/listings"
   const userEndpoint = "/user"

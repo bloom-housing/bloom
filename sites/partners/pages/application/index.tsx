@@ -9,8 +9,10 @@ import {
   Button,
   ApiClientContext,
   AlertBox,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../lib/hooks"
+
 import Layout from "../../layouts/application"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
@@ -18,7 +20,7 @@ import {
   MembersDrawer,
 } from "../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
 
-import { DetailsApplicationContext } from "../../src/applications/PaperApplicationDetails/DetailsApplicationContext"
+import { ApplicationContext } from "../../src/applications/ApplicationContext"
 import { DetailsApplicationData } from "../../src/applications/PaperApplicationDetails/sections/DetailsApplicationData"
 import { DetailsPrimaryApplicant } from "../../src/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
 import { DetailsAlternateContact } from "../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
@@ -27,14 +29,14 @@ import { DetailsHouseholdDetails } from "../../src/applications/PaperApplication
 import { DetailsPreferences } from "../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
 import { DetailsHouseholdIncome } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
-import { DetailsAside } from "../../src/applications/PaperApplicationDetails/DetailsAside"
+import { Aside } from "../../src/applications/Aside"
 
 export default function ApplicationsList() {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
-  const { applicationsService } = useContext(ApiClientContext)
 
+  const { applicationsService } = useContext(ApiClientContext)
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -74,23 +76,38 @@ export default function ApplicationsList() {
   if (!application) return null
 
   return (
-    <DetailsApplicationContext.Provider value={application}>
+    <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
         {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
-        <PageHeader>
-          <p className="font-sans font-semibold uppercase text-3xl">
-            {application.applicant.firstName} {application.applicant.lastName}
-          </p>
 
-          <p className="font-sans text-base mt-1">{application.id}</p>
+        <PageHeader
+          className="relative"
+          title={
+            <>
+              <p className="font-sans font-semibold uppercase text-3xl">
+                {application.applicant.firstName} {application.applicant.lastName}
+              </p>
+
+              <p className="font-sans text-base mt-1">{application.id}</p>
+            </>
+          }
+        >
+          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
+            <SiteAlert type="success" timeout={5000} dismissable />
+          </div>
         </PageHeader>
-
         <section className="border-t bg-white">
           <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-            <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
+            <Button
+              inlineIcon="left"
+              icon="arrow-back"
+              onClick={() =>
+                router.push(`/listings/applications?listing=${application.listing.id}`)
+              }
+            >
               {t("t.back")}
             </Button>
 
@@ -123,7 +140,7 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdDetails />
 
-                <DetailsPreferences />
+                <DetailsPreferences listingId={application?.listing?.id} />
 
                 <DetailsHouseholdIncome />
 
@@ -131,7 +148,11 @@ export default function ApplicationsList() {
               </div>
 
               <div className="md:w-3/12 pl-6">
-                <DetailsAside applicationId={applicationId} onDelete={deleteApplication} />
+                <Aside
+                  type="details"
+                  listingId={application?.listing?.id}
+                  onDelete={deleteApplication}
+                />
               </div>
             </div>
           </div>
@@ -143,6 +164,6 @@ export default function ApplicationsList() {
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
       />
-    </DetailsApplicationContext.Provider>
+    </ApplicationContext.Provider>
   )
 }

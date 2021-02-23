@@ -12,8 +12,6 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../user/entities/user.entity"
-import { Asset } from "../../assets/entities/asset.entity"
-import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { WhatToExpect } from "../../shared/dto/whatToExpect.dto"
 import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"
@@ -29,33 +27,91 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
-import { ListingEvent } from "../../listing-events/entities/listing-event.entity"
-import { listingUrlSlug } from "../../lib/url_helper"
+import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { CSVFormattingType } from "../../csv/formatting/application-formatting-metadata-factory"
 
 export enum ListingStatus {
   active = "active",
   pending = "pending",
 }
 
-export class AmiChartItem {
+export class Asset {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  percentOfAmi: number
+  label: string
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  householdSize: number
+  fileId: string
+}
 
+export enum ListingEventType {
+  openHouse = "openHouse",
+  publicLottery = "publicLottery",
+}
+
+export class ListingEvent {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingEventType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ListingEventType, enumName: "ListingEventType" })
+  type: ListingEventType
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  startTime: Date
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  endTime: Date
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  income: number
+  url?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  note?: string | null
+}
+
+export enum ApplicationMethodType {
+  Internal = "Internal",
+  FileDownload = "FileDownload",
+  ExternalLink = "ExternalLink",
+  PaperPickup = "PaperPickup",
+  POBox = "POBox",
+  LeasingAgent = "LeasingAgent",
+}
+
+export class ApplicationMethod {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ApplicationMethodType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ApplicationMethodType, enumName: "ApplicationMethodType" })
+  type: ApplicationMethodType
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  label: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  externalReference: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  acceptsPostmarkedApplications: boolean | null
 }
 
 @Entity({ name: "listings" })
@@ -84,21 +140,19 @@ class Listing extends BaseEntity {
   @Type(() => Preference)
   preferences: Preference[]
 
-  @OneToMany(() => ApplicationMethod, (applicationMethod) => applicationMethod.listing, {
-    cascade: true,
-  })
+  @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethod)
   applicationMethods: ApplicationMethod[]
 
-  @OneToMany(() => Asset, (asset) => asset.listing, { cascade: true })
+  @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Asset)
   assets: Asset[]
 
-  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing, { cascade: true })
+  @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEvent)
@@ -335,6 +389,12 @@ class Listing extends BaseEntity {
   @ApiProperty({ type: Boolean, default: false })
   @IsBoolean()
   displayWaitlistSize: boolean
+
+  @Column({ enum: CSVFormattingType, default: CSVFormattingType.basic })
+  @Expose()
+  @IsEnum(CSVFormattingType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: CSVFormattingType, enumName: "CSVFormattingType" })
+  CSVFormattingType: CSVFormattingType
 }
 
 export { Listing as default, Listing }

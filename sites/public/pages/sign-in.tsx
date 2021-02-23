@@ -16,6 +16,7 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
+import Link from "next/link"
 
 const SignIn = () => {
   const { login } = useContext(UserContext)
@@ -72,6 +73,12 @@ const SignIn = () => {
               errorMessage="Please enter your login email"
               register={register}
             />
+
+            <aside className="float-right font-bold">
+              <Link href="/forgot-password">
+                <a>{t("authentication.signIn.forgotPassword")}</a>
+              </Link>
+            </aside>
 
             <Field
               caps={true}

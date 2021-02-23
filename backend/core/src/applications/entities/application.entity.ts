@@ -11,6 +11,7 @@ import {
 import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import {
+  ArrayMaxSize,
   IsBoolean,
   IsDate,
   IsDefined,
@@ -18,6 +19,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
   ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
@@ -28,10 +30,10 @@ import { AlternateContact } from "./alternate-contact.entity"
 import { Accessibility } from "./accessibility.entity"
 import { Demographics } from "./demographics.entity"
 import { HouseholdMember } from "./household-member.entity"
-import { ApplicationPreferences } from "./application-preferences.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
+import { ApplicationPreference } from "./application-preferences.entity"
 
 export enum ApplicationStatus {
   draft = "draft",
@@ -70,6 +72,7 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
 
   @ManyToOne(() => User, (user) => user.applications, { nullable: true })
@@ -95,17 +98,21 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   additionalPhoneNumber?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   additionalPhoneNumberType?: string | null
 
   @Column("text", { array: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   contactPreferences: string[]
 
   @Column({ type: "integer", nullable: true })
@@ -118,6 +125,7 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   housingStatus?: string | null
 
   @Column({ type: "bool", nullable: true })
@@ -176,6 +184,7 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   income?: string | null
 
   @Column({ enum: IncomePeriod, nullable: true })
@@ -191,21 +200,24 @@ export class Application extends AbstractEntity {
   })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMember)
   householdMembers: HouseholdMember[]
 
   @Column({ type: "text", array: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   preferredUnit: string[]
 
-  @OneToOne(() => ApplicationPreferences, { eager: true, cascade: true })
-  @JoinColumn()
+  @Column({ type: "jsonb" })
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationPreferences)
-  preferences: ApplicationPreferences
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationPreference)
+  preferences: ApplicationPreference[]
 
   @Column({ enum: ApplicationStatus })
   @Expose()

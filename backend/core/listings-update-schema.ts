@@ -1,7 +1,6 @@
 import fs from "fs"
-import { ApplicationMethodType } from "./src/application-methods/entities/application-method.entity"
 import { plainToClass } from "class-transformer"
-import { ApplicationMethodCreateDto } from "./src/application-methods/dto/application-method.dto"
+import { ApplicationMethod, ApplicationMethodType } from "./src/listings/entities/listing.entity"
 
 if (process.argv.length < 3) {
   console.log("usage: listings-update-schema input_listing.json")
@@ -11,10 +10,10 @@ if (process.argv.length < 3) {
 const [listingFilePath] = process.argv.slice(2)
 
 function convertApplicationMethods(listing: any) {
-  const applicationMethods: Array<ApplicationMethodCreateDto> = []
+  const applicationMethods: Array<ApplicationMethod> = []
   if (listing.acceptsPostmarkedApplications) {
     applicationMethods.push(
-      plainToClass(ApplicationMethodCreateDto, {
+      plainToClass(ApplicationMethod, {
         type: ApplicationMethodType.LeasingAgent,
         acceptsPostmarkedApplications: listing.acceptsPostmarkedApplications as boolean,
       })
@@ -22,7 +21,7 @@ function convertApplicationMethods(listing: any) {
   }
   if (listing.acceptingApplicationsByPoBox) {
     applicationMethods.push(
-      plainToClass(ApplicationMethodCreateDto, {
+      plainToClass(ApplicationMethod, {
         type: ApplicationMethodType.POBox,
         acceptsPostmarkedApplications: false,
       })
@@ -30,7 +29,7 @@ function convertApplicationMethods(listing: any) {
   }
   if (listing.blankPaperApplicationCanBePickedUp) {
     applicationMethods.push(
-      plainToClass(ApplicationMethodCreateDto, {
+      plainToClass(ApplicationMethod, {
         type: ApplicationMethodType.PaperPickup,
         acceptsPostmarkedApplications: false,
       })
@@ -41,7 +40,7 @@ function convertApplicationMethods(listing: any) {
     listing.attachments.forEach((attachment) => {
       if (attachment.type === 1) {
         applicationMethods.push(
-          plainToClass(ApplicationMethodCreateDto, {
+          plainToClass(ApplicationMethod, {
             type: ApplicationMethodType.FileDownload,
             acceptsPostmarkedApplications: false,
             label: attachment.label,
@@ -50,7 +49,7 @@ function convertApplicationMethods(listing: any) {
         )
       } else if (attachment.type === 2) {
         applicationMethods.push(
-          plainToClass(ApplicationMethodCreateDto, {
+          plainToClass(ApplicationMethod, {
             type: ApplicationMethodType.ExternalLink,
             acceptsPostmarkedApplications: false,
             label: attachment.label,

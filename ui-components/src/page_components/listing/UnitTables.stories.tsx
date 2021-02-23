@@ -33,7 +33,7 @@ const summaries: {
       totalAvailable: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
-      rentAsPercentIncomeRange: { min: null, max: null },
+      rentAsPercentIncomeRange: { min: 10, max: 80 },
       rentRange: { min: "$719", max: "$1,104" },
       floorRange: { min: 2, max: 3 },
       areaRange: { min: 285, max: 285 },
@@ -45,7 +45,7 @@ const summaries: {
       totalAvailable: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
-      rentAsPercentIncomeRange: { min: null, max: null },
+      rentAsPercentIncomeRange: { min: 10, max: 80 },
       rentRange: { min: "$719", max: "$1,104" },
       areaRange: { min: 285, max: 285 },
     },
@@ -169,13 +169,13 @@ const amiValues = summaries.amiPercentages
 export const unitsSummaries = () => {
   return (
     <div>
-      {amiValues.map((percent) => {
+      {amiValues.map((percent, index) => {
         const byAMI = summaries.byAMI.find((item: { percent: string }) => {
           return parseInt(item.percent, 10) == percent
         })
 
         return (
-          <div>
+          <div key={index}>
             <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
             <StandardTable
               headers={unitSummariesHeaders}
@@ -192,7 +192,7 @@ export const unitsSummaries = () => {
 export const unitsSummariesGroupedByReservedTypes = () => {
   return (
     <div>
-      {amiValues.map((percent) => {
+      {amiValues.map((percent, index) => {
         const byAMI = summaries.byAMI.find((item: { percent: string }) => {
           return parseInt(item.percent, 10) == percent
         })
@@ -204,7 +204,7 @@ export const unitsSummariesGroupedByReservedTypes = () => {
           )
 
           return (
-            <div>
+            <div key={index}>
               <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
               <GroupedTable
                 headers={unitSummariesHeaders}

@@ -8,8 +8,9 @@
 }
 
 .progress-nav__item {
-  @apply text-xs;
-  @apply p-3;
+  @apply text-2xs;
+  @apply px-2;
+  @apply py-3;
   @apply relative;
   @apply text-center;
   @apply uppercase;
@@ -44,7 +45,7 @@
     @apply bg-gray-450;
     @apply w-full;
     @apply left-0;
-    top: .4rem;
+    top: 0.4rem;
     content: "";
     height: 1px;
   }
@@ -52,14 +53,14 @@
   &:first-of-type {
     &:after {
       left: 50%;
-    }  
+    }
   }
 
   &:last-of-type {
     &:after {
       @apply left-auto;
       right: 50%;
-    }  
+    }
   }
 
   &.is-active {
@@ -69,7 +70,7 @@
       @apply bg-primary;
       @apply top-0;
     }
-      
+
     a {
       @apply text-black;
       @apply font-bold;

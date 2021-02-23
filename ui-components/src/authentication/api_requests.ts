@@ -62,3 +62,27 @@ export const scheduleTokenRefresh = (
     }, Math.max(ttl - 60000, 0)) as unknown) as number
   }
 }
+
+export const forgotPassword = async (apiUrl: string, email: string) => {
+  const res = await axios.put<{ message: string }>(`${apiUrl}/user/forgot-password`, {
+    appUrl: window.location.origin,
+    email: email,
+  })
+  const { message } = res.data
+  return message
+}
+
+export const updatePassword = async (
+  apiUrl: string,
+  token: string,
+  password: string,
+  passwordConfirmation: string
+) => {
+  const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/update-password`, {
+    password: password,
+    passwordConfirmation: passwordConfirmation,
+    token: token,
+  })
+  const { accessToken } = res.data
+  return accessToken
+}

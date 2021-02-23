@@ -65,21 +65,21 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
           <Component>
             <tr>
               <Component
-                key=""
+                key="header-0"
               >
                 <th>
                   Name
                 </th>
               </Component>
               <Component
-                key=""
+                key="header-1"
               >
                 <th>
                   Relationship
                 </th>
               </Component>
               <Component
-                key=""
+                key="header-2"
               >
                 <th>
                   Date of Birth
@@ -91,16 +91,16 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
         <tbody>
           <Component
             className="group-undefined"
-            id="row-"
-            key=""
+            id="groupedrow-0-0"
+            key="groupedrow-0-0"
           >
             <tr
               className="group-undefined"
-              id="row-"
+              id="groupedrow-0-0"
             >
               <Component
                 headerLabel="Name"
-                key=""
+                key="col-0"
               >
                 <td
                   className="p-5"
@@ -111,7 +111,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Relationship"
-                key=""
+                key="col-1"
               >
                 <td
                   className="p-5"
@@ -122,7 +122,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Date of Birth"
-                key=""
+                key="col-2"
               >
                 <td
                   className="p-5"
@@ -135,16 +135,16 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
           </Component>
           <Component
             className="group-undefined"
-            id="row-"
-            key=""
+            id="groupedrow-0-1"
+            key="groupedrow-0-1"
           >
             <tr
               className="group-undefined"
-              id="row-"
+              id="groupedrow-0-1"
             >
               <Component
                 headerLabel="Name"
-                key=""
+                key="col-0"
               >
                 <td
                   className="p-5"
@@ -155,7 +155,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Relationship"
-                key=""
+                key="col-1"
               >
                 <td
                   className="p-5"
@@ -166,7 +166,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Date of Birth"
-                key=""
+                key="col-2"
               >
                 <td
                   className="p-5"
@@ -178,13 +178,13 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
             </tr>
           </Component>
           <Component
-            key=""
+            key="data-header"
           >
             <tr>
               <Component
                 className="reserved"
                 colSpan={3}
-                key=""
+                key="cell-header"
               >
                 <td
                   className="reserved"
@@ -197,16 +197,16 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
           </Component>
           <Component
             className="group-reserved"
-            id="row-"
-            key=""
+            id="groupedrow-1-0"
+            key="groupedrow-1-0"
           >
             <tr
               className="group-reserved"
-              id="row-"
+              id="groupedrow-1-0"
             >
               <Component
                 headerLabel="Name"
-                key=""
+                key="col-0"
               >
                 <td
                   className="p-5"
@@ -217,7 +217,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Relationship"
-                key=""
+                key="col-1"
               >
                 <td
                   className="p-5"
@@ -228,7 +228,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Date of Birth"
-                key=""
+                key="col-2"
               >
                 <td
                   className="p-5"
@@ -241,16 +241,16 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
           </Component>
           <Component
             className="group-reserved"
-            id="row-"
-            key=""
+            id="groupedrow-1-1"
+            key="groupedrow-1-1"
           >
             <tr
               className="group-reserved"
-              id="row-"
+              id="groupedrow-1-1"
             >
               <Component
                 headerLabel="Name"
-                key=""
+                key="col-0"
               >
                 <td
                   className="p-5"
@@ -261,7 +261,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Relationship"
-                key=""
+                key="col-1"
               >
                 <td
                   className="p-5"
@@ -272,7 +272,7 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               </Component>
               <Component
                 headerLabel="Date of Birth"
-                key=""
+                key="col-2"
               >
                 <td
                   className="p-5"

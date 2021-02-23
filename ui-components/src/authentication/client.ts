@@ -1,6 +1,11 @@
 import {
+<<<<<<< HEAD
   ApplicationFlaggedSetsService,
   ApplicationsService,
+=======
+  ApplicationsService,
+  ListingsService,
+>>>>>>> master
   serviceOptions,
 } from "@bloom-housing/backend-core/types"
 import { useAuthenticatedClient } from "./useAuthenticatedClient"
@@ -10,7 +15,11 @@ import { ConfigContext } from "../config/ConfigContext"
 
 type ContextProps = {
   applicationsService: ApplicationsService
+<<<<<<< HEAD
   applicationFlaggedSetService: ApplicationFlaggedSetsService
+=======
+  listingsService: ListingsService
+>>>>>>> master
 }
 
 export const ApiClientContext = createContext<Partial<ContextProps>>({})
@@ -28,7 +37,11 @@ export const ApiClientProvider: FunctionComponent = ({ children }) => {
     {
       value: {
         applicationsService: new ApplicationsService(),
+<<<<<<< HEAD
         applicationFlaggedSetService: new ApplicationFlaggedSetsService(),
+=======
+        listingsService: new ListingsService(),
+>>>>>>> master
       },
     },
     children

@@ -6,6 +6,6 @@ export default {
   title: "Headers/Page Header",
 }
 
-export const withTextContent = () => <PageHeader>Hello World</PageHeader>
+export const withTextContent = () => <PageHeader title="Hello World" />
 
-export const withSubtitle = () => <PageHeader subtitle="Here is a subtitle">Hello World</PageHeader>
+export const withSubtitle = () => <PageHeader title="Hello World" subtitle="Here is a subtitle" />

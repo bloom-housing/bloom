@@ -9,7 +9,7 @@ import { ApplicationsListQueryParams } from "./applications.controller"
 import { Request } from "express"
 import { ApplicationFlaggedSetService } from "../application-flagged-sets/application-flagged-set.service"
 import { REQUEST } from "@nestjs/core"
-import { CsvBuilder } from "../services/csv-builder.service"
+import { CsvBuilder } from "../csv/csv-builder.service"
 
 @Injectable()
 export class ApplicationsService {
@@ -30,6 +30,9 @@ export class ApplicationsService {
         ...(listingId && { listing: { id: listingId } }),
       },
       relations: ["listing", "user"],
+      order: {
+        createdAt: "DESC",
+      },
     })
   }
 
@@ -52,6 +55,9 @@ export class ApplicationsService {
           }),
         },
         relations: ["listing", "user"],
+        order: {
+          createdAt: "DESC",
+        },
       }
     )
   }
@@ -81,7 +87,11 @@ export class ApplicationsService {
         where: { id: applicationUpdateDto.id },
         relations: ["listing", "user"],
       }))
-    Object.assign(application, applicationUpdateDto)
+    Object.assign(application, {
+      ...applicationUpdateDto,
+      id: application.id,
+    })
+
     await this.repository.save(application)
     return application
   }

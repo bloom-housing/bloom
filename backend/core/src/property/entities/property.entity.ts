@@ -22,7 +22,7 @@ import {
 import { Listing } from "../../listings/entities/listing.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { Unit, UnitsSummarized } from "../../units/entities/unit.entity"
-import { transformUnits } from "../../lib/unit_transformations"
+import { transformUnits } from "../../shared/units-transformations"
 import { PropertyGroup } from "../../property-groups/entities/property-group.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"

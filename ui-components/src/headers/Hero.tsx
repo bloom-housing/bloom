@@ -13,6 +13,7 @@ export interface HeroProps {
   buttonLink: string
   listings?: Listing[]
   children?: React.ReactNode
+  centered?: boolean
 }
 
 const listingOpen = (listing: Listing) => {
@@ -21,6 +22,7 @@ const listingOpen = (listing: Listing) => {
 
 const Hero = (props: HeroProps) => {
   let subHeader, styles
+  let classNames = ""
   if (props.listings) {
     if (!props.listings.some(listingOpen) && !props.listings.some(openDateState)) {
       subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
@@ -31,8 +33,11 @@ const Hero = (props: HeroProps) => {
   if (props.backgroundImage) {
     styles = { backgroundImage: `url(${props.backgroundImage})` }
   }
+  if (props.centered) {
+    classNames = "centered"
+  }
   return (
-    <div className="hero" style={styles}>
+    <div className={`hero ${classNames}`} style={styles}>
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
       <LinkButton href={props.buttonLink}>{props.buttonTitle}</LinkButton>

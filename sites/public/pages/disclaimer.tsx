@@ -7,7 +7,7 @@ export default () => {
 
   return (
     <Layout>
-      <PageHeader inverse={true}>{pageTitle}</PageHeader>
+      <PageHeader inverse={true} title={pageTitle} />
       <MarkdownSection>
         <PageContent />
       </MarkdownSection>

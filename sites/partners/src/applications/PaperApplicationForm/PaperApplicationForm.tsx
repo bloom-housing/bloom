@@ -1,10 +1,20 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { ApiClientContext, t, Form, AlertBox, AlertTypes } from "@bloom-housing/ui-components"
-import { useForm, FormProvider, UseFormMethods } from "react-hook-form"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
-import { formatApplicationData } from "../../../lib/formatApplicationData"
-
+import {
+  ApiClientContext,
+  t,
+  Form,
+  AlertBox,
+  setSiteAlertMessage,
+  LoadingOverlay,
+  StatusBar,
+  AppearanceStyleType,
+  Button,
+} from "@bloom-housing/ui-components"
+import { useForm, FormProvider } from "react-hook-form"
+import { HouseholdMember, Application, ApplicationStatus } from "@bloom-housing/backend-core/types"
+import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
+import { useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
@@ -15,27 +25,45 @@ import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
 
-import { FormAside } from "./FormAside"
+import { Aside } from "../Aside"
 import { FormTypes } from "./FormTypes"
 
 type ApplicationFormProps = {
   listingId: string
+  application?: Application
   editMode?: boolean
 }
 
+type AlertErrorType = "api" | "form"
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
+const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
+  const { listingDto } = useSingleListingData(listingId)
+
+  const preferences = listingDto?.preferences
+
+  const defaultValues = editMode ? mapApiToForm(application) : {}
+
+  const formMethods = useForm<FormTypes>({
+    defaultValues,
+  })
+
   const router = useRouter()
 
   const { applicationsService } = useContext(ApiClientContext)
 
-  const [alert, setAlert] = useState<AlertTypes | null>(null)
+  const [alert, setAlert] = useState<AlertErrorType | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
-  const formMethods = useForm<UseFormMethods<FormTypes>>()
+  useEffect(() => {
+    if (application?.householdMembers) {
+      setHouseholdMembers(application.householdMembers)
+    }
+  }, [application, setHouseholdMembers])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, getValues, trigger } = formMethods
+  const { handleSubmit, trigger, clearErrors, reset } = formMethods
 
   const triggerSubmit = async (data: FormTypes) => onSubmit(data, "details")
 
@@ -43,9 +71,11 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
     const validation = await trigger()
 
     if (validation) {
-      const data: FormTypes = void getValues()
+      const data = formMethods.getValues()
 
-      void onSubmit(data, "new")
+      if (data) {
+        void onSubmit(data, "new")
+      }
     } else {
       onError()
     }
@@ -53,90 +83,144 @@ const ApplicationForm = ({ listingId, editMode }: ApplicationFormProps) => {
 
   /*
     @data: form data comes from the react-hook-form
-    @redirect: open application details or blank application form
+    @redirect: open application details or reset form
   */
   const onSubmit = async (data: FormTypes, redirect: "details" | "new") => {
     setAlert(null)
+    setLoading(true)
 
     const formData = {
       householdMembers,
+      submissionType: application?.submissionType,
       ...data,
     }
 
-    const body = formatApplicationData(formData, listingId, false)
+    const body = mapFormToApi(formData, listingId, editMode)
 
     try {
-      const result = await applicationsService.create({ body })
+      const result = editMode
+        ? await applicationsService.update({
+            applicationId: application.id,
+            body: { id: application.id, ...body },
+          })
+        : await applicationsService.create({ body })
+
+      setLoading(false)
 
       if (result) {
-        setAlert("success")
+        setSiteAlertMessage(
+          editMode
+            ? t("application.add.applicationUpdated")
+            : t("application.add.applicationSubmitted"),
+          "success"
+        )
 
-        setTimeout(() => {
-          if (redirect === "details") {
-            void router.push(`/application?id=${result.id}`)
-          } else {
-            void router.push(`/listings/applications/add?listing=${listingId}`)
-          }
-        }, 2000)
+        if (redirect === "details") {
+          void router.push(`/application?id=${result.id}`)
+        } else {
+          reset()
+          clearErrors()
+          setAlert(null)
+          router.reload()
+        }
       }
     } catch (err) {
-      setAlert("alert")
+      setLoading(false)
+      setAlert("api")
     }
   }
 
   const onError = () => {
-    setAlert("alert")
+    setAlert("form")
+  }
+
+  async function deleteApplication() {
+    try {
+      await applicationsService.delete({ applicationId: application?.id })
+      void router.push(`/listings/applications?listing=${listingId}`)
+    } catch (err) {
+      setAlert("api")
+    }
   }
 
   return (
-    <FormProvider {...formMethods}>
-      <section className="bg-primary-lighter">
-        <div className="max-w-screen-xl px-5 my-5 mx-auto">
-          {alert && (
-            <AlertBox onClose={() => setAlert(null)} closeable type={alert}>
-              {alert === "success"
-                ? t("application.add.applicationSubmitted")
-                : t("application.add.applicationAddError")}
-            </AlertBox>
-          )}
+    <LoadingOverlay isLoading={loading}>
+      <>
+        <StatusBar
+          backButton={
+            <Button
+              inlineIcon="left"
+              icon="arrow-back"
+              onClick={() =>
+                editMode ? router.push(`/application?id=${application.id}`) : router.back()
+              }
+            >
+              {t("t.back")}
+            </Button>
+          }
+          tagStyle={
+            application?.status == ApplicationStatus.submitted
+              ? AppearanceStyleType.success
+              : AppearanceStyleType.primary
+          }
+          tagLabel={
+            application?.status
+              ? t(`application.details.applicationStatus.${application.status}`)
+              : t(`application.details.applicationStatus.draft`)
+          }
+        />
 
-          <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
-            <div className="flex flex-row flex-wrap mt-5">
-              <div className="info-card md:w-9/12">
-                <FormApplicationData />
+        <FormProvider {...formMethods}>
+          <section className="bg-primary-lighter py-5">
+            <div className="max-w-screen-xl px-5 mx-auto">
+              {alert && (
+                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
+                  {alert === "form"
+                    ? t("application.add.applicationAddError")
+                    : t("errors.alert.badRequest")}
+                </AlertBox>
+              )}
 
-                <FormPrimaryApplicant />
+              <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                <div className="flex flex-row flex-wrap">
+                  <div className="info-card md:w-9/12">
+                    <FormApplicationData />
 
-                <FormAlternateContact />
+                    <FormPrimaryApplicant />
 
-                <FormHouseholdMembers
-                  householdMembers={householdMembers}
-                  setHouseholdMembers={setHouseholdMembers}
-                />
+                    <FormAlternateContact />
 
-                <FormHouseholdDetails />
+                    <FormHouseholdMembers
+                      householdMembers={householdMembers}
+                      setHouseholdMembers={setHouseholdMembers}
+                    />
 
-                <FormPreferences />
+                    <FormHouseholdDetails />
 
-                <FormHouseholdIncome />
+                    <FormPreferences preferences={preferences} />
 
-                <FormDemographics />
+                    <FormHouseholdIncome />
 
-                <FormTerms />
-              </div>
+                    <FormDemographics />
 
-              <aside className="md:w-3/12 md:pl-6">
-                <FormAside
-                  isEdit={false}
-                  triggerSubmitAndRedirect={triggerSubmitAndRedirect}
-                  listingId={listingId}
-                />
-              </aside>
+                    <FormTerms />
+                  </div>
+
+                  <aside className="md:w-3/12 md:pl-6">
+                    <Aside
+                      type={editMode ? "edit" : "add"}
+                      listingId={listingId}
+                      onDelete={() => deleteApplication()}
+                      triggerSubmitAndRedirect={triggerSubmitAndRedirect}
+                    />
+                  </aside>
+                </div>
+              </Form>
             </div>
-          </Form>
-        </div>
-      </section>
-    </FormProvider>
+          </section>
+        </FormProvider>
+      </>
+    </LoadingOverlay>
   )
 }
 

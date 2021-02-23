@@ -1,9 +1,15 @@
 import { t, GridCell, ViewItem } from "@bloom-housing/ui-components"
-import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
+import {
+  Application,
+  HouseholdMemberUpdate,
+  AddressCreate,
+} from "@bloom-housing/backend-core/types"
+import { YesNoAnswer } from "../PaperApplicationForm/FormTypes"
 
 type DetailsAddressColumnsProps = {
   type: AddressColsType
-  application: Application
+  application?: Application
+  addressObject?: AddressCreate
   householdMember?: HouseholdMemberUpdate
 }
 
@@ -14,11 +20,13 @@ export enum AddressColsType {
   "alternateAddress" = "alternateAddress",
   "memberResidence" = "memberResidence",
   "memberWork" = "memberWork",
+  "preferences" = "preferences",
 }
 
 const DetailsAddressColumns = ({
   type,
   application,
+  addressObject,
   householdMember,
 }: DetailsAddressColumnsProps) => {
   const address = {
@@ -43,7 +51,7 @@ const DetailsAddressColumns = ({
     }
 
     if (type === AddressColsType.work) {
-      if (application.applicant.workInRegion === "yes") {
+      if (application.applicant.workInRegion === YesNoAnswer.Yes) {
         address[item] = application.applicant.workAddress[item] || t("t.n/a")
       } else {
         address[item] = t("t.n/a")
@@ -63,13 +71,18 @@ const DetailsAddressColumns = ({
     }
 
     if (type === AddressColsType.memberResidence) {
-      if (householdMember?.sameAddress) {
+      console.log(householdMember)
+      if (householdMember?.sameAddress === "yes") {
         address[item] = application.applicant.address[item]
           ? application.applicant.address[item]
           : t("t.n/a")
       } else {
         address[item] = householdMember?.address[item] ? householdMember?.address[item] : t("t.n/a")
       }
+    }
+
+    if (type === AddressColsType.preferences && addressObject) {
+      address[item] = addressObject[item] ? addressObject[item] : t("t.n/a")
     }
   })
 

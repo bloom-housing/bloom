@@ -1,17 +1,75 @@
 import React from "react"
-import { shallow } from "enzyme"
+import { render, cleanup, fireEvent } from "@testing-library/react"
 import { Button } from "../../src/actions/Button"
 import { AppearanceSizeType } from "../../src/global/AppearanceTypes"
 
-const handleClick = (e: React.MouseEvent) => {
-  alert(`You clicked me! Event: ${e.type}`)
-}
+afterEach(cleanup)
 
-test("shows small button", () => {
-  const wrapper = shallow(
-    <Button size={AppearanceSizeType.small} onClick={handleClick}>
-      Small Button
-    </Button>
-  )
-  expect(wrapper.html()).toEqual('<button class="button is-small">Small Button</button>')
+describe("<Button>", () => {
+  it("calls onClick when clicked", () => {
+    const onClickSpy = jest.fn()
+    const { getByText } = render(
+      <Button size={AppearanceSizeType.small} onClick={onClickSpy}>
+        Button Content
+      </Button>
+    )
+
+    expect(getByText("Button Content")).not.toBeNull()
+    fireEvent.click(getByText("Button Content"))
+    expect(onClickSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it("adds correct classes for an inline left icon", () => {
+    const onClickSpy = jest.fn()
+    const { container, getByText } = render(
+      <Button
+        size={AppearanceSizeType.small}
+        onClick={onClickSpy}
+        inlineIcon={"left"}
+        icon={`some-jsx`}
+      >
+        Button Content
+      </Button>
+    )
+
+    expect(getByText("Button Content")).not.toBeNull()
+    expect(container.getElementsByClassName("inline-icon--left").length).toBe(1)
+  })
+
+  it("adds correct classes for an inline right icon", () => {
+    const onClickSpy = jest.fn()
+    const { container, getByText } = render(
+      <Button
+        size={AppearanceSizeType.small}
+        onClick={onClickSpy}
+        inlineIcon={"right"}
+        icon={`some-jsx`}
+      >
+        Button Content
+      </Button>
+    )
+
+    expect(getByText("Button Content")).not.toBeNull()
+    expect(container.getElementsByClassName("inline-icon--right").length).toBe(1)
+  })
+
+  it("adds correct classes for extra optional styles", () => {
+    const onClickSpy = jest.fn()
+    const { container, getByText } = render(
+      <Button
+        size={AppearanceSizeType.small}
+        onClick={onClickSpy}
+        unstyled={true}
+        fullWidth={true}
+        className={"extra-special-extra-class"}
+      >
+        Button Content
+      </Button>
+    )
+
+    expect(getByText("Button Content")).not.toBeNull()
+    expect(container.getElementsByClassName("is-unstyled").length).toBe(1)
+    expect(container.getElementsByClassName("is-fullwidth").length).toBe(1)
+    expect(container.getElementsByClassName("extra-special-extra-class").length).toBe(1)
+  })
 })

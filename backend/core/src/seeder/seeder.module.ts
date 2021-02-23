@@ -12,14 +12,11 @@ import { ApplicationsService } from "../applications/applications.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
 import { ConfigModule } from "@nestjs/config"
-import { CsvBuilder } from "../services/csv-builder.service"
-import { CsvEncoder } from "../services/csv-encoder.service"
+import { CsvBuilder } from "../csv/csv-builder.service"
+import { CsvEncoder } from "../csv/csv-encoder.service"
 import { PropertyGroup } from "../property-groups/entities/property-group.entity"
-import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
 import { Preference } from "../preferences/entities/preference.entity"
 import { Property } from "../property/entities/property.entity"
-import { Asset } from "../assets/entities/asset.entity"
-import { ListingEvent } from "../listing-events/entities/listing-event.entity"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/application-flagged-set.entity"
 import { ApplicationFlaggedSetService } from "../application-flagged-sets/application-flagged-set.service"
@@ -37,7 +34,6 @@ export class SeederModule {
           ...dbConfig,
         }),
         TypeOrmModule.forFeature([
-          Asset,
           Listing,
           Unit,
           Application,
@@ -45,8 +41,6 @@ export class SeederModule {
           Property,
           PropertyGroup,
           Preference,
-          ApplicationMethod,
-          ListingEvent,
           AmiChart,
           ApplicationFlaggedSet,
         ]),

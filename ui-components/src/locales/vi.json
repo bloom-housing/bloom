@@ -215,15 +215,17 @@
       "dontWant": "Tôi không muốn lựa chọn ưu tiên này",
       "stillHaveOpportunity": "Quý vị vẫn sẽ có cơ hội yêu cầu các lựa chọn ưu tiên khác.",
       "youHaveClaimed": "Quý vị đã xác nhận:",
-      "liveIn": {
-        "label": "Sống tại <REGION> Ưu tiên",
-        "description": "Sống tại <REGION> bản sao ở đây…",
-        "link": "http://domain.com"
-      },
-      "workIn": {
-        "label": "Làm việc tại <REGION> Ưu tiên",
-        "description": "Làm việc tại <REGION> bản sao ở đây…",
-        "link": "http://domain.com"
+      "liveWork": {
+        "live": {
+          "label": "Sống tại <REGION> Ưu tiên",
+          "description": "Sống tại <REGION> bản sao ở đây…",
+          "link": "http://domain.com"
+        },
+        "work": {
+          "label": "Làm việc tại <REGION> Ưu tiên",
+          "description": "Làm việc tại <REGION> bản sao ở đây…",
+          "link": "http://domain.com"
+        }
       },
       "general": {
         "title": "Dựa trên thông tin quý vị đã nhập, hộ gia đình của quý vị chưa yêu cầu bất kỳ lựa chọn ưu tiên nhà ở nào.",
@@ -461,9 +463,15 @@
     "occupancyDescriptionAllSro": "Số người ở của tòa nhà này giới hạn 1 người mỗi căn.",
     "occupancyDescriptionNoSro": "Giới hạn số người ở cho tòa nhà này dựa trên loại căn nhà.",
     "occupancyDescriptionSomeSro": "Số người ở của tòa nhà này thay đổi tùy theo loại căn nhà. SRO được giới hạn cho 1 người mỗi căn, bất kể độ tuổi. Đối với tất cả các căn nhà khác, giới hạn số người ở không tính trẻ em dưới 6 tuổi.",
+    "openHouseEvent": {
+      "header": "Gặp gỡ Cộng đồng"
+    },
     "percentAMIUnit": "%{percent}% Căn nhà AMI",
     "priorityUnits": "Các Căn nhà Ưu tiên",
     "priorityUnitsDescription": "Tòa nhà này có các căn nhà ở được dành riêng cho quý vị nếu bất kỳ điều nào sau đây đúng với quý vị hoặc một người nào đó trong hộ gia đình của quý vị:",
+    "publicLottery": {
+      "header": "Xổ số Công cộng"
+    },
     "remainingUnitsAfterPreferenceConsideration": "Sau khi tất cả những người nắm giữ phiếu chọn ưu tiên đã được xem xét, bất kỳ căn nhà còn lại sẽ dành cho các ứng viên hội đủ điều kiện khác.",
     "rentalHistory": "Lịch sử Thuê nhà",
     "requiredDocuments": "Các tài liệu Cần thiết",
@@ -650,6 +658,7 @@
     "floor": "sàn",
     "floors": "các sàn",
     "getDirections": "Lấy hướng dẫn chỉ đường",
+    "household": "Hộ Gia đình",
     "income": "Thu nhập",
     "letter": "Chữ cái",
     "less": "Ít hơn",
@@ -680,6 +689,7 @@
     "readLess": "đọc ít hơn",
     "readMore": "đọc nhiều hơn",
     "rent": "Thuê",
+    "review": "Xem xét",
     "seeDetails": "Xem Chi tiết",
     "seeListing": "Xem Danh sách",
     "selectOne": "Chọn Một",

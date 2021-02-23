@@ -6,7 +6,6 @@ import {
 } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
-import { lRoute } from "../../../helpers/localeRoute"
 import { Button } from "../../../actions/Button"
 import { LinkButton } from "../../../actions/LinkButton"
 import { SidebarAddress } from "./SidebarAddress"
@@ -32,7 +31,7 @@ const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMet
 
 const OrDivider = (props: { bgColor: string }) => (
   <div className="aside-block__divider">
-    <span className={`bg-${props.bgColor} aside-block__conjunction`}>or</span>
+    <span className={`bg-${props.bgColor} aside-block__conjunction`}>{t("t.or")}</span>
   </div>
 )
 
@@ -56,7 +55,7 @@ const Apply = (props: ApplyProps) => {
   const openDate = moment(listing.applicationOpenDate).format("MMMM D, YYYY")
 
   if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
-    onlineApplicationUrl = lRoute(`${internalFormRoute}?listingId=${listing.id}`)
+    onlineApplicationUrl = `${internalFormRoute}?listingId=${listing.id}`
   } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
     onlineApplicationUrl =
       getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)

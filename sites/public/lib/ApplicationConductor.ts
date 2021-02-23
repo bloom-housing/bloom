@@ -4,11 +4,14 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { blankApplication, lRoute } from "@bloom-housing/ui-components"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
+import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
+import LiveWorkPreferenceStep from "./LiveWorkPreferenceStep"
+import DisplacedPreferenceStep from "./DisplacedPreferenceStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 
 export const loadApplicationFromAutosave = () => {
@@ -62,6 +65,7 @@ export default class ApplicationConductor {
     },
     liveAlone: {
       url: "/applications/household/live-alone",
+      definition: LiveAloneStep,
     },
     householdMemberInfo: {
       url: "/applications/household/members-info",
@@ -83,8 +87,13 @@ export default class ApplicationConductor {
     income: {
       url: "/applications/financial/income",
     },
-    preferencesIntroduction: {
-      url: "/applications/preferences/select",
+    preferencesLiveWork: {
+      url: "/applications/preferences/live-work",
+      definition: LiveWorkPreferenceStep,
+    },
+    preferencesDisplaced: {
+      url: "/applications/preferences/displaced",
+      definition: DisplacedPreferenceStep,
     },
     generalPool: {
       url: "/applications/preferences/general",
@@ -134,10 +143,10 @@ export default class ApplicationConductor {
     this.listing.applicationConfig = { ...newConfig }
     this.steps = this._config.steps.map((step) => {
       const route = this.constructor["routes"][step.name] as StepRoute
-      if (route.definition) {
-        return new route.definition(this, step, route.url)
+      if (route?.definition) {
+        return new route.definition(this, step, route?.url)
       } else {
-        return new StepDefinition(this, step, route.url)
+        return new StepDefinition(this, step, route?.url)
       }
     })
   }
@@ -150,8 +159,12 @@ export default class ApplicationConductor {
     return this.steps[this.currentStepIndex]
   }
 
-  totalNumberOfSections() {
+  get totalNumberOfSections() {
     return this.config.sections.length
+  }
+
+  get preferenceStepsTotal() {
+    return this.config.steps.filter((step) => step.name.includes("preference")).length
   }
 
   completeSection(section) {
@@ -159,18 +172,18 @@ export default class ApplicationConductor {
   }
 
   canJumpForwardToReview() {
-    return this.application.completedSections === this.totalNumberOfSections() - 1
+    return this.application.completedSections === this.totalNumberOfSections - 1
   }
 
   sync() {
-    setTimeout(() => {
-      if (typeof window != "undefined") {
-        window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
-        if (this.listing) {
-          window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
-        }
+    // NOTE: had to remove timeout because of Next doing full-page reloads in
+    // some cases. Need to revisit after upgrading to v10
+    if (typeof window != "undefined") {
+      window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
+      if (this.listing) {
+        window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
       }
-    }, 800)
+    }
   }
 
   reset() {
@@ -197,8 +210,10 @@ export default class ApplicationConductor {
   }
 
   routeToNextOrReturnUrl(url?: string) {
-    this.returnToReview = false
-    void Router.push(this.nextOrReturnUrl(url)).then(() => window.scrollTo(0, 0))
+    void Router.push(lRoute(this.nextOrReturnUrl(url))).then(() => {
+      this.returnToReview = false
+      window.scrollTo(0, 0)
+    })
   }
 
   nextOrReturnUrl(url?: string) {

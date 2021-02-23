@@ -218,15 +218,17 @@
       "dontWant": "No deseo esta preferencia",
       "stillHaveOpportunity": "Usted seguirá tendiendo la oportunidad de solicitar otras preferencias.",
       "youHaveClaimed": "Usted ha solicitado:",
-      "liveIn": {
-        "label": "Preferencia de vivir en <REGION>",
-        "description": "El texto de vivir en <REGION> va aquí...",
-        "link": "http://domain.com"
-      },
-      "workIn": {
-        "label": "Preferencia de trabajar en <REGION>",
-        "description": "El texto de trabajar en <REGION> va aquí...",
-        "link": "http://domain.com"
+      "liveWork": {
+        "live": {
+          "label": "Preferencia de vivir en <REGION>",
+          "description": "El texto de vivir en <REGION> va aquí...",
+          "link": "http://domain.com"
+        },
+        "work": {
+          "label": "Preferencia de trabajar en <REGION>",
+          "description": "El texto de trabajar en <REGION> va aquí...",
+          "link": "http://domain.com"
+        }
       },
       "general": {
         "title": "En base a la información que usted ingresó, su hogar no ha solicitado ninguna preferencia de vivienda.",
@@ -461,9 +463,15 @@
     "occupancyDescriptionAllSro": "La ocupación de esta edificación está limitada a 1 persona por vivienda.",
     "occupancyDescriptionNoSro": "Los límites de ocupación de esta edificación están basados en el tipo de vivienda.",
     "occupancyDescriptionSomeSro": "La ocupación de esta edificación varía según el tipo de vivienda. Los SROs están limitados a 1 persona por vivienda, sin importar la edad. Para todos los demás tipos de vivienda, los límites de ocupación no toman en cuenta a niños menores de 6 años.",
+    "openHouseEvent": {
+      "header": "Eventos de puerta abierta"
+    },
     "percentAMIUnit": "Vivienda AMI de %{percent}%",
     "priorityUnits": "Viviendas prioritarias",
     "priorityUnitsDescription": "Esta edificación cuenta con viviendas apartadas si alguna de las siguientes condiciones se aplican a usted o a alguna persona de su hogar:",
+    "publicLottery": {
+      "header": "Lotería pública"
+    },
     "remainingUnitsAfterPreferenceConsideration": "Después de que se hayan tomado en consideración a los poseedores de preferencias, todas las viviendas restantes estarán a disposición de otros solicitantes calificados.",
     "rentalHistory": "Historial de alquiler",
     "requiredDocuments": "Documentos requeridos",
@@ -650,6 +658,7 @@
     "floor": "piso",
     "floors": "pisos",
     "getDirections": "Obtener instrucciones para llegar",
+    "household": "Hogar",
     "income": "Ingresos",
     "letter": "Carta",
     "less": "Menos",
@@ -680,6 +689,7 @@
     "readLess": "leer menos",
     "readMore": "leer más",
     "rent": "Alquiler",
+    "review": "Revisión",
     "seeDetails": "Consulte los detalles",
     "seeListing": "Ver el Listado",
     "selectOne": "Elija una opción",
@@ -691,6 +701,7 @@
     "squareFeet": "pies cuadrados",
     "submit": "Enviar",
     "text": "Texto",
+    "to": "a",
     "unit": "vivienda",
     "units": "viviendas",
     "unitAmenities": "Servicios en la vivienda",

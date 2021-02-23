@@ -15,6 +15,7 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { FormAddress } from "../FormAddress"
+import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 const FormPrimaryApplicant = () => {
   const formMethods = useFormContext()
@@ -28,7 +29,7 @@ const FormPrimaryApplicant = () => {
   }))
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
-  const workInRegionValue: "yes" | "no" = watch("application.applicant.workInRegion")
+  const workInRegionValue: YesNoAnswer = watch("application.applicant.workInRegion")
   const phoneValue: string = watch("phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
 
@@ -210,7 +211,7 @@ const FormPrimaryApplicant = () => {
                 label={t("t.yes")}
                 register={register}
                 inputProps={{
-                  value: "yes",
+                  value: YesNoAnswer.Yes,
                 }}
               />
 
@@ -222,7 +223,7 @@ const FormPrimaryApplicant = () => {
                 label={t("t.no")}
                 register={register}
                 inputProps={{
-                  value: "no",
+                  value: YesNoAnswer.No,
                 }}
               />
             </div>
@@ -245,7 +246,7 @@ const FormPrimaryApplicant = () => {
           register
         )}
 
-      {workInRegionValue === "yes" &&
+      {workInRegionValue === YesNoAnswer.Yes &&
         FormAddress(
           t("application.contact.workAddress"),
           "application.applicant.workAddress",

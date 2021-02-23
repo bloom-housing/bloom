@@ -11,7 +11,7 @@ import {
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsEmail, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsDate, IsEmail, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApiProperty } from "@nestjs/swagger"
 
@@ -31,6 +31,9 @@ export class User {
   @Column("varchar", { select: false })
   passwordHash: string
 
+  @Column("varchar", { nullable: true })
+  resetToken: string
+
   @Column("varchar")
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
@@ -39,17 +42,20 @@ export class User {
   @Column("varchar")
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   firstName: string
 
   @Column("varchar", { nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   middleName?: string
 
   @Column("varchar")
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   lastName: string
 
   @Column("timestamp without time zone")

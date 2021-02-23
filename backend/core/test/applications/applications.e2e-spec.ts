@@ -15,10 +15,11 @@ import {
   ApplicationUpdate,
   IncomePeriod,
   Language,
-} from "@bloom-housing/backend-core/types"
+} from "../../types"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
+import { InputType } from "../../src/shared/input-type"
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
@@ -30,6 +31,7 @@ import { ApplicationFlaggedSet } from "../../src/application-flagged-sets/entiti
 // expect here so we need to re-declare it.
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
 declare const expect: jest.Expect
+jest.setTimeout(30000)
 
 describe("Applications", () => {
   let app: INestApplication
@@ -118,7 +120,7 @@ describe("Applications", () => {
         lastName: "",
         agency: "",
         phoneNumber: "",
-        emailAddress: "",
+        emailAddress: "alternate@contact.com",
         mailingAddress: {
           street: "",
           city: "",
@@ -143,11 +145,7 @@ describe("Applications", () => {
       incomePeriod: IncomePeriod.perMonth,
       householdMembers: [],
       preferredUnit: ["a", "b"],
-      preferences: {
-        liveIn: false,
-        none: false,
-        workIn: false,
-      },
+      preferences: [],
     }
   }
 
@@ -230,6 +228,58 @@ describe("Applications", () => {
 
   it(`should allow a user to create and read his own application `, async () => {
     const body = getTestAppBody(listing1Id)
+    body.preferences = [
+      {
+        key: "liveWork",
+        claimed: true,
+        options: [
+          {
+            key: "live",
+            checked: true,
+          },
+          {
+            key: "work",
+            checked: false,
+          },
+        ],
+      },
+      {
+        key: "displacedTenant",
+        claimed: true,
+        options: [
+          {
+            key: "general",
+            checked: true,
+            extraData: [
+              {
+                key: "name",
+                type: InputType.text,
+                value: "Roger Thornhill",
+              },
+              {
+                key: "address",
+                type: InputType.address,
+                value: {
+                  street: "",
+                  street2: "",
+                  city: "",
+                  state: "",
+                  zipCode: "",
+                  county: "",
+                  latitude: null,
+                  longitude: null,
+                },
+              },
+            ],
+          },
+          {
+            key: "missionCorridor",
+            checked: false,
+          },
+        ],
+      },
+    ]
+
     let res = await supertest(app.getHttpServer())
       .post(`/applications/submit`)
       .send(body)
@@ -423,7 +473,7 @@ describe("Applications", () => {
     expect(createRes.body).toHaveProperty("updatedAt")
     expect(createRes.body).toHaveProperty("id")
     const res = await supertest(app.getHttpServer())
-      .get(`/applications/csv/?includeHeaders=true`)
+      .get(`/applications/csv/?includeHeaders=true&listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(typeof res.body === "string")

@@ -5,7 +5,7 @@ import { Field } from "./Field"
 import { Select } from "../forms/Select"
 import { UseFormMethods } from "react-hook-form"
 
-type TimeFieldPeriod = "am" | "pm"
+export type TimeFieldPeriod = "am" | "pm"
 
 export type TimeFieldValues = {
   hours?: string
@@ -75,7 +75,7 @@ const TimeField = ({
               hourRange: (value: string) => {
                 if (!required && !value?.length) return true
 
-                return parseInt(value) > 0 && parseInt(value) <= 11
+                return parseInt(value) > 0 && parseInt(value) <= 12
               },
             },
           }}

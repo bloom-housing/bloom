@@ -17,7 +17,7 @@ import { useApplicationsData } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { getColDefs } from "../../../src/applications/applicationsColDefs"
+import { getColDefs } from "../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 import * as XLSX from "xlsx"
 import { saveAs } from "file-saver"
@@ -188,13 +188,15 @@ const ApplicationsList = () => {
     return getColDefs(maxHouseholdSize)
   }, [maxHouseholdSize])
 
+  if (!applications) return null
+
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader>{t("applications.applicationsReceived")}</PageHeader>
+      <PageHeader title={t("applications.applicationsReceived")} />
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">

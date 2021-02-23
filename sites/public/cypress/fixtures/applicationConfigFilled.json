@@ -128,11 +128,22 @@
         "developerWebsite"
      ]
   },
-  "preferences":{
-     "none":false,
-     "liveIn":true,
-     "workIn":true
-  },
+  "preferences": [
+      {
+         "key": "liveWork",
+         "claimed": true,
+         "options": [
+            {
+               "key": "live",
+               "checked": true
+            },
+            {
+               "key": "work",
+               "checked": true
+            }
+         ]
+      }
+  ],
   "confirmationId":"",
   "status": "submitted",
   "submissionType": "electronical",

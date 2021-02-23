@@ -10,6 +10,7 @@ import {
   Language,
 } from "../applications/entities/application.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
+import { InputType } from "../shared/input-type"
 
 const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing"> = {
   acceptedTerms: true,
@@ -49,8 +50,8 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
       zipCode: "zip code",
     },
     otherType: "other",
-    phoneNumber: "1234566",
-    type: "type",
+    phoneNumber: "(123) 123-1231",
+    type: "friend",
   },
   appUrl: "",
   applicant: {
@@ -74,8 +75,8 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
     middleName: "Middle",
     noEmail: false,
     noPhone: false,
-    phoneNumber: "12345",
-    phoneNumberType: "mobile",
+    phoneNumber: "(123) 123-1231",
+    phoneNumberType: "cell",
     workAddress: {
       city: "city",
       county: "county",
@@ -120,8 +121,8 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
       noEmail: false,
       noPhone: false,
       orderId: 1,
-      phoneNumber: "12345",
-      phoneNumberType: "mobile",
+      phoneNumber: "(123) 123-1231",
+      phoneNumberType: "cell",
       relationship: "parent",
       sameAddress: "no",
       workAddress: {
@@ -155,12 +156,58 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
     street2: "street2",
     zipCode: "zip code",
   },
-  preferences: {
-    liveIn: false,
-    none: false,
-    workIn: false,
-  },
-  preferredUnit: ["preferred unit"],
+  preferences: [
+    {
+      key: "liveWork",
+      claimed: true,
+      options: [
+        {
+          key: "live",
+          checked: true,
+        },
+        {
+          key: "work",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "displacedTenant",
+      claimed: true,
+      options: [
+        {
+          key: "general",
+          checked: true,
+          extraData: [
+            {
+              key: "name",
+              type: InputType.text,
+              value: "Roger Thornhill",
+            },
+            {
+              key: "address",
+              type: InputType.address,
+              value: {
+                street: "Street",
+                street2: "Street2",
+                city: "City",
+                state: "state",
+                zipCode: "100200",
+                county: "Alameda",
+                latitude: null,
+                longitude: null,
+              },
+            },
+          ],
+        },
+        {
+          key: "missionCorridor",
+          checked: false,
+        },
+      ],
+    },
+  ],
+  preferredUnit: ["studio"],
   sendMailToMailingAddress: true,
   status: ApplicationStatus.submitted,
   submissionDate: new Date(),

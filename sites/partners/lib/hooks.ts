@@ -3,13 +3,25 @@ import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
 
-export function useListingsData() {
-  const fetcher = (url) => fetch(url).then((r) => r.json())
+export function useSingleListingData(listingId: string) {
+  const { listingsService } = useContext(ApiClientContext)
+  const fetcher = () => listingsService.retrieve({ listingId })
+
   const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
-  if (data && data.status == "ok") {
-    console.log(data)
-    console.log(`Listings Data Received: ${data.listings}`)
+
+  return {
+    listingDto: data,
+    listingLoading: !error && !data,
+    listingError: error,
   }
+}
+
+export function useListingsData() {
+  const { listingsService } = useContext(ApiClientContext)
+  const fetcher = () => listingsService.list()
+
+  const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
+
   return {
     listingDtos: data,
     listingsLoading: !error && !data,

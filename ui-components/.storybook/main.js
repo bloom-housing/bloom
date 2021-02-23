@@ -1,11 +1,13 @@
 const path = require("path")
-
+const { resolve } = require("path")
 const bloomTheme = require("../tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
+const { NormalModuleReplacementPlugin } = require("webpack")
 
 module.exports = {
   stories: ["../src/**/*.stories.@(tsx|mdx)"],
   addons: [
+    "@storybook/addon-actions",
     "@storybook/addon-docs",
     "@storybook/addon-a11y",
     "@storybook/addon-viewport",
@@ -53,6 +55,11 @@ module.exports = {
         },
       ],
     })
+
+    // Used to create actions in Storybook when NextJS links are clicked
+    config.plugins.push(
+      new NormalModuleReplacementPlugin(/next\/link/, resolve(__dirname, "next-link.js"))
+    )
 
     config.resolve.extensions.push(".ts", ".tsx")
     return config

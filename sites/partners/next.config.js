@@ -46,6 +46,8 @@ module.exports = withCSS(
           const translatablePaths = {
             "/": { page: "/" },
             "/sign-in": { page: "/sign-in" },
+            "/forgot-password": { page: "/forgot-password" },
+            "/reset-password": { page: "/reset-password" },
             "/listings/applications": { page: "/listings/applications" },
             "/listings/applications/add": { page: "/listings/applications/add" },
             "/application": { page: "/application" },

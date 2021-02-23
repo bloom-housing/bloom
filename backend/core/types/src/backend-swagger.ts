@@ -118,6 +118,48 @@ export class UserService {
     });
   }
   /**
+   * Forgot Password
+   */
+  forgotPassword(
+    params: {
+      /** requestBody */
+      body?: ForgotPassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ForgotPasswordResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/forgot-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update Password
+   */
+  updatePassword(
+    params: {
+      /** requestBody */
+      body?: UpdatePassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/update-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Update user
    */
   update(
@@ -469,110 +511,6 @@ export class ApplicationsService {
   }
 }
 
-export class AssetsService {
-  /**
-   * List assets
-   */
-  list(options: IRequestOptions = {}): Promise<Asset[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create asset
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: AssetCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update asset
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: AssetUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets/{assetId}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get asset by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      assetId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets/{assetId}';
-      url = url.replace('{assetId}', params['assetId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete asset by id
-   */
-  delete(
-    params: {
-      /**  */
-      assetId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/assets/{assetId}';
-      url = url.replace('{assetId}', params['assetId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class PreferencesService {
   /**
    * List preferences
@@ -677,110 +615,6 @@ export class PreferencesService {
   }
 }
 
-export class ApplicationMethodsService {
-  /**
-   * List applicationMethods
-   */
-  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create applicationMethod
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ApplicationMethodCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update applicationMethod
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ApplicationMethodUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods/{applicationMethodId}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get applicationMethod by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      applicationMethodId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods/{applicationMethodId}';
-      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete applicationMethod by id
-   */
-  delete(
-    params: {
-      /**  */
-      applicationMethodId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationMethods/{applicationMethodId}';
-      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class UnitsService {
   /**
    * List units
@@ -874,110 +708,6 @@ export class UnitsService {
     return new Promise((resolve, reject) => {
       let url = basePath + '/units/{unitId}';
       url = url.replace('{unitId}', params['unitId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
-export class ListingEventsService {
-  /**
-   * List listingEvents
-   */
-  list(options: IRequestOptions = {}): Promise<ListingEvent[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create listingEvent
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ListingEventCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ListingEvent> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update listingEvent
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ListingEventUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ListingEvent> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents/{listingEventId}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get listingEvent by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      listingEventId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ListingEvent> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents/{listingEventId}';
-      url = url.replace('{listingEventId}', params['listingEventId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Delete listingEvent by id
-   */
-  delete(
-    params: {
-      /**  */
-      listingEventId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listingEvents/{listingEventId}';
-      url = url.replace('{listingEventId}', params['listingEventId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
@@ -1421,6 +1151,35 @@ export interface UserWithAccessToken {
   accessToken: string;
 }
 
+export interface ForgotPassword {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface ForgotPasswordResponse {
+  /**  */
+  message: string;
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  token: string;
+}
+
+export interface LoginResponse {
+  /**  */
+  accessToken: string;
+}
+
 export interface UserUpdate {
   /**  */
   id?: string;
@@ -1452,57 +1211,36 @@ export interface Login {
   password: string;
 }
 
-export interface LoginResponse {
-  /**  */
-  accessToken: string;
-}
-
-export interface ApplicationMethod {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface Asset {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
 export interface PreferenceLink {
   /**  */
   title: string;
 
   /**  */
   url: string;
+}
+
+export interface FormMetadataExtraData {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+}
+
+export interface FormMetadataOptions {
+  /**  */
+  key: string;
+
+  /**  */
+  extraData?: FormMetadataExtraData[];
+}
+
+export interface FormMetadata {
+  /**  */
+  key: string;
+
+  /**  */
+  options: FormMetadataOptions[];
 }
 
 export interface Preference {
@@ -1529,6 +1267,9 @@ export interface Preference {
 
   /**  */
   links: PreferenceLink[];
+
+  /**  */
+  formMetadata?: FormMetadata;
 }
 
 export interface MinMaxCurrency {
@@ -1630,15 +1371,6 @@ export interface UnitsSummarized {
 }
 
 export interface AmiChartItem {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
   /**  */
   percentOfAmi: number;
 
@@ -1828,35 +1560,12 @@ export interface Property {
   yearBuilt: number;
 }
 
-export interface ListingEvent {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
-}
-
 export interface UserBasic {
   /**  */
   id: string;
+
+  /**  */
+  resetToken: string;
 
   /**  */
   email: string;
@@ -1875,6 +1584,45 @@ export interface UserBasic {
 
   /**  */
   updatedAt: Date;
+}
+
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  label: string;
+
+  /**  */
+  externalReference: string;
+
+  /**  */
+  acceptsPostmarkedApplications: boolean;
+}
+
+export interface Asset {
+  /**  */
+  label: string;
+
+  /**  */
+  fileId: string;
+}
+
+export interface ListingEvent {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  startTime: Date;
+
+  /**  */
+  endTime: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
 }
 
 export interface WhatToExpect {
@@ -1899,19 +1647,13 @@ export interface Listing {
   displayWaitlistSize: boolean;
 
   /**  */
-  applicationMethods: ApplicationMethod[];
-
-  /**  */
-  assets: Asset[];
+  CSVFormattingType: CSVFormattingType;
 
   /**  */
   preferences: Preference[];
 
   /**  */
   property: Property;
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -1933,6 +1675,15 @@ export interface Listing {
 
   /**  */
   updatedAt: Date;
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: Asset[];
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   applicationDueDate: Date;
@@ -2016,28 +1767,6 @@ export interface Listing {
   applicationConfig?: object;
 }
 
-export interface ApplicationMethodCreate {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface AssetCreate {
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
 export interface PreferenceCreate {
   /**  */
   ordinal: number;
@@ -2053,23 +1782,9 @@ export interface PreferenceCreate {
 
   /**  */
   links: PreferenceLink[];
-}
-
-export interface ListingEventCreate {
-  /**  */
-  type: ListingEventType;
 
   /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
+  formMetadata?: FormMetadata;
 }
 
 export interface AddressCreate {
@@ -2109,19 +1824,13 @@ export interface ListingCreate {
   displayWaitlistSize: boolean;
 
   /**  */
-  applicationMethods: ApplicationMethodCreate[];
-
-  /**  */
-  assets: AssetCreate[];
+  CSVFormattingType: CSVFormattingType;
 
   /**  */
   preferences: PreferenceCreate[];
 
   /**  */
   property: Id;
-
-  /**  */
-  events: ListingEventCreate[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -2134,6 +1843,15 @@ export interface ListingCreate {
 
   /**  */
   leasingAgents?: Id[];
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: Asset[];
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   applicationDueDate: Date;
@@ -2217,46 +1935,6 @@ export interface ListingCreate {
   applicationConfig?: object;
 }
 
-export interface ApplicationMethodUpdate {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  externalReference: string;
-
-  /**  */
-  acceptsPostmarkedApplications: boolean;
-}
-
-export interface AssetUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  label: string;
-
-  /**  */
-  fileId: string;
-}
-
 export interface PreferenceUpdate {
   /**  */
   ordinal: number;
@@ -2274,33 +1952,10 @@ export interface PreferenceUpdate {
   links: PreferenceLink[];
 
   /**  */
+  formMetadata?: FormMetadata;
+
+  /**  */
   id: string;
-}
-
-export interface ListingEventUpdate {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  startTime: Date;
-
-  /**  */
-  endTime: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
 }
 
 export interface AddressUpdate {
@@ -2349,6 +2004,9 @@ export interface ListingUpdate {
   displayWaitlistSize: boolean;
 
   /**  */
+  CSVFormattingType: CSVFormattingType;
+
+  /**  */
   id?: string;
 
   /**  */
@@ -2358,19 +2016,10 @@ export interface ListingUpdate {
   updatedAt?: Date;
 
   /**  */
-  applicationMethods: ApplicationMethodUpdate[];
-
-  /**  */
-  assets: AssetUpdate[];
-
-  /**  */
   preferences: PreferenceUpdate[];
 
   /**  */
   property: Id;
-
-  /**  */
-  events: ListingEventUpdate[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -2383,6 +2032,15 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgents?: Id[];
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: Asset[];
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   applicationDueDate: Date;
@@ -2464,6 +2122,39 @@ export interface ListingUpdate {
 
   /**  */
   applicationConfig?: object;
+}
+
+export interface BooleanInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: boolean;
+}
+
+export interface TextInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: string;
+}
+
+export interface AddressInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: AddressCreate;
 }
 
 export interface Applicant {
@@ -2662,24 +2353,26 @@ export interface HouseholdMember {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferences {
+export interface ApplicationPreferenceOption {
   /**  */
-  id: string;
+  extraData?: AllExtraDataTypes[];
 
   /**  */
-  createdAt: Date;
+  key: string;
 
   /**  */
-  updatedAt: Date;
+  checked: boolean;
+}
+
+export interface ApplicationPreference {
+  /**  */
+  key: string;
 
   /**  */
-  liveIn: boolean;
+  claimed: boolean;
 
   /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
+  options: ApplicationPreferenceOption[];
 }
 
 export interface Application {
@@ -2718,9 +2411,6 @@ export interface Application {
 
   /**  */
   householdMembers: HouseholdMember[];
-
-  /**  */
-  preferences: ApplicationPreferences;
 
   /**  */
   applicationFlaggedSets: Id[];
@@ -2769,6 +2459,9 @@ export interface Application {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: ApplicationPreference[];
 
   /**  */
   acceptedTerms?: boolean;
@@ -2953,17 +2646,6 @@ export interface HouseholdMemberCreate {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferencesCreate {
-  /**  */
-  liveIn: boolean;
-
-  /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
-}
-
 export interface ApplicationCreate {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -3002,9 +2684,6 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[];
 
   /**  */
-  preferences: ApplicationPreferencesCreate;
-
-  /**  */
   appUrl?: string;
 
   /**  */
@@ -3036,6 +2715,9 @@ export interface ApplicationCreate {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: ApplicationPreference[];
 
   /**  */
   acceptedTerms?: boolean;
@@ -3240,26 +2922,6 @@ export interface HouseholdMemberUpdate {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferencesUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  liveIn: boolean;
-
-  /**  */
-  none: boolean;
-
-  /**  */
-  workIn: boolean;
-}
-
 export interface ApplicationUpdate {
   /**  */
   incomePeriod?: IncomePeriod;
@@ -3310,9 +2972,6 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[];
 
   /**  */
-  preferences: ApplicationPreferencesUpdate;
-
-  /**  */
   appUrl?: string;
 
   /**  */
@@ -3344,6 +3003,9 @@ export interface ApplicationUpdate {
 
   /**  */
   preferredUnit: string[];
+
+  /**  */
+  preferences: ApplicationPreference[];
 
   /**  */
   acceptedTerms?: boolean;
@@ -3606,43 +3268,12 @@ export interface PropertyGroupUpdate {
   id: string;
 }
 
-export interface AmiChartItemCreate {
-  /**  */
-  percentOfAmi: number;
-
-  /**  */
-  householdSize: number;
-
-  /**  */
-  income: number;
-}
-
 export interface AmiChartCreate {
   /**  */
-  items: AmiChartItemCreate[];
+  items: AmiChartItem[];
 
   /**  */
   name: string;
-}
-
-export interface AmiChartItemUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  percentOfAmi: number;
-
-  /**  */
-  householdSize: number;
-
-  /**  */
-  income: number;
 }
 
 export interface AmiChartUpdate {
@@ -3656,7 +3287,7 @@ export interface AmiChartUpdate {
   updatedAt?: Date;
 
   /**  */
-  items: AmiChartItemUpdate[];
+  items: AmiChartItem[];
 
   /**  */
   name: string;
@@ -3703,6 +3334,17 @@ export enum ListingStatus {
   'pending' = 'pending'
 }
 
+export enum CSVFormattingType {
+  'basic' = 'basic',
+  'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
+}
+
+export enum InputType {
+  'boolean' = 'boolean',
+  'text' = 'text',
+  'address' = 'address'
+}
+export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -3711,7 +3353,7 @@ export enum ApplicationMethodType {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent'
 }
-export type CombinedAmiChartTypes = (AmiChart & any) | null;
+
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery'
@@ -3744,3 +3386,4 @@ export enum EnumApplicationFlaggedSetStatus {
   'flagged' = 'flagged',
   'resolved' = 'resolved'
 }
+export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
