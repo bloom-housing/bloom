@@ -10,7 +10,7 @@ import { LocalizedLink } from "../actions/LocalizedLink"
 interface AppStatusItemProps {
   application: Application
   listing: Listing
-  status: string
+  status: "inProgress" | "neverSubmitted" | "submitted"
   setDeletingApplication: (application: Application) => void
   lotteryNumber?: string
 }

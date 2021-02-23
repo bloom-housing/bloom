@@ -1,6 +1,9 @@
 import * as React from "react"
-
 import { ImageCard } from "./ImageCard"
+import { Listing } from "@bloom-housing/backend-core/types"
+import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
+
+const listing = Object.assign({}, ArcherListing) as Listing
 
 export default {
   title: "Blocks/Image Card",
@@ -19,4 +22,14 @@ export const imageWithTitleAndSubtitle = () => (
 
 export const withLink = () => (
   <ImageCard href="/listings" as="/listings" imageUrl="/images/listing.jpg" title="Hello World" />
+)
+
+export const withListing = () => (
+  <ImageCard
+    href="/listings"
+    as="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    listing={listing}
+  />
 )
