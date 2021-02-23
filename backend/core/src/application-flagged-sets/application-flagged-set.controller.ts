@@ -2,7 +2,7 @@ import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagg
 import { Expose } from "class-transformer"
 import { IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
-import { PaginationQueryParams } from "../utils/pagination.dto"
+import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ApplicationFlaggedSetService } from "./application-flagged-set.service"
 import {
   Controller,

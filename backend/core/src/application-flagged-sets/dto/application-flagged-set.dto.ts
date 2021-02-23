@@ -5,7 +5,7 @@ import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { UserDto } from "../../user/dto/user.dto"
 import { ApplicationDto } from "../../applications/dto/application.dto"
-import { PaginationFactory } from "../../utils/pagination.dto"
+import { PaginationFactory } from "../../shared/dto/pagination.dto"
 
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   "resolvingUserId",
