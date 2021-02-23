@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
-import { DeepPartial, Repository, SelectQueryBuilder } from "typeorm"
+import { DeepPartial, In, Repository, SelectQueryBuilder } from "typeorm"
 import { Request } from "express"
 import {
   ApplicationFlaggedSet,
@@ -12,6 +12,7 @@ import { paginate } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "../applications/applications.controller"
 import { Application } from "../applications/entities/application.entity"
 import { ApplicationFlaggedSetUpdateDto } from "./dto/application-flagged-set.dto"
+import { createQueryBuilder } from "typeorm"
 
 @Injectable()
 export class ApplicationFlaggedSetService {
@@ -89,6 +90,48 @@ export class ApplicationFlaggedSetService {
       },
     })
 
+    // const listApps = await this.applicationsRepository.find({
+    //   where: (qb: SelectQueryBuilder<ApplicationFlaggedSet>) => {
+    //     qb.where("ApplicationFlaggedSet.id = :id", {
+    //       id: "c76c3106-a401-42ba-9000-c9d644335173",
+    //     })
+    //   },
+    //   join: {
+    //     alias: "ApplicationFlaggedSet",
+    //     leftJoinAndSelect: {
+    //       afs: "ApplicationFlaggedSet.applications",
+    //       },
+    //     },
+    //   })
+    // console.log("NETRA unresolvedApps ",listApps)
+    // const afsId = ["91de589c-7449-45a6-bba1-73d878a74827"]
+    // const unresolvedApps = await this.afsRepository.find({
+    //   relations: ["applications"],
+    //   where: ({
+    //     id: "91de589c-7449-45a6-bba1-73d878a74827"
+    //   }),
+    // })
+    // // const unresolvedApps = await this.afsRepository.createQueryBuilder("afs")
+    // // .leftJoinAndSelect('afs.applications', 'applications')
+    // // .leftJoinAndSelect('applications.applicationFlaggedSets',"afs")
+    // // .where('afs.id = :value', { value: "91de589c-7449-45a6-bba1-73d878a74827" })
+    // // const unresolvedApps = await this.applicationsRepository.find({
+    // //   where: (qb: SelectQueryBuilder<Application>) => {
+    // //     qb.where("ApplicationFlaggedSet__application.id = :id", {
+    // //       id: afsId,
+    // //     })
+    // //   },
+    // //   join: {
+    // //     alias: "Application",
+    // //     leftJoinAndSelect: {
+    // //       afs: "Application.applicationFlaggedSets",
+    // //       afsApplications: "afs.applications",
+    // //     },
+    // //   },
+    // // })
+
+    // console.log("NETRA unresolvedApps ",listApps)
+
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
       [Rule.email]: emailRuleSet,
@@ -133,22 +176,31 @@ export class ApplicationFlaggedSetService {
   // Add resolved logic here
   // Not able to image how data is coming in and in what form?
   // I have no idea what have I written here
-  async update(afsUpdateDto: ApplicationFlaggedSetUpdateDto) {
-    const resolvedafs = await this.afsRepository.findOneOrFail({
-      where: { id: afsUpdateDto.id },
+  // async update(afsUpdateDto: ApplicationFlaggedSetUpdateDto) {
+  //   const resolvedafs = await this.afsRepository.findOneOrFail({
+  //     where: { id: afsUpdateDto.id },
+  //     relations: ["applications"],
+  //   })
+  //   resolvedafs.resolved = true
+  //   resolvedafs.resolvedTime = new Date()
+  //   const applicatonsInAFS = []
+  //   for (const application of applicatonsInAFS) {
+  //     const nonResolvedAfses = application.applicationFlaggedSets.filter(
+  //       (afs) => afs.id != afsUpdateDto.id
+  //     )
+  //     for (const afs of nonResolvedAfses) {
+  //       afs.remove(application.id)
+  //     }
+  //   }
+  //   await this.afsRepository.save(resolvedafs)
+  // }
+
+  async unresolvedList(afsId: string) {
+    return await this.afsRepository.find({
+      where: {
+        id: "91de589c-7449-45a6-bba1-73d878a74827",
+      },
       relations: ["applications"],
     })
-    resolvedafs.resolved = true
-    resolvedafs.resolvedTime = new Date()
-    const applicatonsInAFS = []
-    for (const application of applicatonsInAFS) {
-      const nonResolvedAfses = application.applicationFlaggedSets.filter(
-        (afs) => afs.id != afsUpdateDto.id
-      )
-      for (const afs of nonResolvedAfses) {
-        afs.remove(application.id)
-      }
-    }
-    await this.afsRepository.save(resolvedafs)
   }
 }

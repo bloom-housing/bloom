@@ -7,6 +7,7 @@ import { ApplicationFlaggedSetService } from "./application-flagged-set.service"
 import {
   Controller,
   Get,
+  Param,
   Query,
   Request,
   UseGuards,
@@ -17,7 +18,10 @@ import { ResourceType } from "../auth/resource_type.decorator"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Request as ExpressRequest } from "express"
 import { mapTo } from "../shared/mapTo"
-import { PaginatedApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
+import {
+  ApplicationFlaggedSetDto,
+  PaginatedApplicationFlaggedSetDto,
+} from "./dto/application-flagged-set.dto"
 import { AuthzGuard } from "../auth/authz.guard"
 
 export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams {
@@ -53,4 +57,14 @@ export class ApplicationFlaggedSetController {
     const response = await this.applicationFlaggedSetsService.list(queryParams)
     return mapTo(PaginatedApplicationFlaggedSetDto, response)
   }
+
+  // @Get(`:afsId`)
+  // @ApiOperation({ summary: "Get application by id", operationId: "unresolvedApps" })
+  // async unresolvedApps(
+  //   @Request() req: ExpressRequest,
+  //   @Param("afsId") afsId: string
+  // ): Promise<ApplicationFlaggedSetDto> {
+  //   const app = await this.applicationFlaggedSetsService.unresolvedList(afsId)
+  //   return mapTo(ApplicationFlaggedSetDto, app)
+  // }
 }
