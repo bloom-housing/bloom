@@ -2,7 +2,7 @@
 4.3 General Pool
 If all preferences are opted out the applicant is shown a screen confirming their placement in the General Pool
 */
-import React from "react"
+import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
@@ -17,12 +17,14 @@ import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
+  const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
   const currentPageSection = 4
 
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
+    if (!conductor.canJumpForwardToReview()) setHideReviewButton(true)
     conductor.completeSection(4)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
@@ -62,7 +64,7 @@ export default () => {
               </Button>
             </div>
 
-            {conductor.canJumpForwardToReview() && (
+            {!hideReviewButton && conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
                   unstyled={true}
