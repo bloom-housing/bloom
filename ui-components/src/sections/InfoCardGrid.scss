@@ -24,6 +24,7 @@
 .info-cards__grid {
   @screen md {
     @apply flex;
+    @apply flex-wrap;
   }
 
   .info-card {
