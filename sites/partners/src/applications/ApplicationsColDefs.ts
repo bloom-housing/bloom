@@ -92,7 +92,7 @@ export function getColDefs(maxHouseholdSize: number) {
 
         return data.incomePeriod === IncomePeriod.perYear
           ? formatIncome(value, data.incomePeriod, IncomePeriod.perYear)
-          : t("t.n/a")
+          : ""
       },
     },
     {
@@ -109,7 +109,7 @@ export function getColDefs(maxHouseholdSize: number) {
 
         return data.incomePeriod === IncomePeriod.perMonth
           ? formatIncome(value, data.incomePeriod, IncomePeriod.perMonth)
-          : t("t.n/a")
+          : ""
       },
     },
     {
@@ -129,15 +129,17 @@ export function getColDefs(maxHouseholdSize: number) {
     {
       headerName: t("applications.table.requestAda"),
       field: "accessibility",
-      sortable: true,
+      sortable: false,
       unSortIcon: true,
-      filter: false,
+      filter: true,
       width: 120,
       minWidth: 100,
-      valueFormatter: (data) => {
-        if (!data.value) return ""
+      valueGetter: (row) => {
+        if (!row?.data?.accessibility) return ""
 
-        const posiviveValues = Object.entries(data.value).reduce((acc, curr) => {
+        const { accessibility } = row.data
+
+        const posiviveValues = Object.entries(accessibility).reduce((acc, curr) => {
           if (curr[1] && !["id", "createdAt", "updatedAt"].includes(curr[0])) {
             acc.push(t(`application.ada.${curr[0]}`))
           }
@@ -151,15 +153,17 @@ export function getColDefs(maxHouseholdSize: number) {
     {
       headerName: t("applications.table.preferenceClaimed"),
       field: "preferences",
-      sortable: true,
+      sortable: false,
       unSortIcon: true,
-      filter: false,
+      filter: true,
       width: 150,
       minWidth: 100,
-      valueFormatter: ({ value }) => {
-        if (!value) return ""
+      valueGetter: (row) => {
+        if (!row?.data?.preferences) return ""
 
-        const claimed = value?.reduce((acc, curr) => {
+        const { preferences } = row.data
+
+        const claimed = preferences.reduce((acc, curr) => {
           const options = curr.options
             .filter((option) => option?.checked)
             ?.map((item) => t(`application.preferences.options.${item.key}`))
@@ -464,9 +468,9 @@ export function getColDefs(maxHouseholdSize: number) {
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return t("n/a")
+          if (!value) return ""
 
-          return value[i]?.firstName ? value[i].firstName : t("t.n/a")
+          return value[i]?.firstName ? value[i].firstName : ""
         },
       },
       {
@@ -477,9 +481,9 @@ export function getColDefs(maxHouseholdSize: number) {
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return t("t.n/a")
+          if (!value) return ""
 
-          return value[i]?.lastName ? value[i].lastName : t("t.n/a")
+          return value[i]?.lastName ? value[i].lastName : ""
         },
       },
       {
@@ -490,13 +494,13 @@ export function getColDefs(maxHouseholdSize: number) {
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return t("t.n/a")
+          if (!value) return ""
 
           const isValidDOB = !!value[i]?.birthMonth && !!value[i]?.birthDay && value[i]?.birthYear
 
           return isValidDOB
             ? `${value[i].birthMonth}/${value[i].birthDay}/${value[i].birthYear}`
-            : t("t.n/a")
+            : ""
         },
       },
       {
@@ -507,11 +511,11 @@ export function getColDefs(maxHouseholdSize: number) {
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return t("t.n/a")
+          if (!value) return ""
 
           return value[i]?.relationship
             ? t(`application.form.options.relationship.${value[i].relationship}`)
-            : t("t.n/a")
+            : ""
         },
       },
       {
@@ -522,7 +526,7 @@ export function getColDefs(maxHouseholdSize: number) {
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return t("t.n/a")
+          if (!value) return ""
           return formatYesNoLabel(value[i]?.sameAddress)
         },
       },
@@ -534,7 +538,7 @@ export function getColDefs(maxHouseholdSize: number) {
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (!value) return t("t.n/a")
+          if (!value) return ""
           return formatYesNoLabel(value[i]?.workInRegion)
         },
       }
