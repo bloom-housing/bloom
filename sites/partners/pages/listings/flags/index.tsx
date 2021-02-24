@@ -58,7 +58,7 @@ const ApplicationFlaggedSetList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        void router.push(lRoute(`/listings/flags/details?id=${params.data.id}`))
+        void router.push(lRoute(`/applicationFlaggedSets?id=${params.data.id}`))
       })
     }
 

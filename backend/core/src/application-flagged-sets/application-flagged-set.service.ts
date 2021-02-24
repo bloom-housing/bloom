@@ -90,48 +90,6 @@ export class ApplicationFlaggedSetService {
       },
     })
 
-    // const listApps = await this.applicationsRepository.find({
-    //   where: (qb: SelectQueryBuilder<ApplicationFlaggedSet>) => {
-    //     qb.where("ApplicationFlaggedSet.id = :id", {
-    //       id: "c76c3106-a401-42ba-9000-c9d644335173",
-    //     })
-    //   },
-    //   join: {
-    //     alias: "ApplicationFlaggedSet",
-    //     leftJoinAndSelect: {
-    //       afs: "ApplicationFlaggedSet.applications",
-    //       },
-    //     },
-    //   })
-    // console.log("NETRA unresolvedApps ",listApps)
-    // const afsId = ["91de589c-7449-45a6-bba1-73d878a74827"]
-    // const unresolvedApps = await this.afsRepository.find({
-    //   relations: ["applications"],
-    //   where: ({
-    //     id: "91de589c-7449-45a6-bba1-73d878a74827"
-    //   }),
-    // })
-    // // const unresolvedApps = await this.afsRepository.createQueryBuilder("afs")
-    // // .leftJoinAndSelect('afs.applications', 'applications')
-    // // .leftJoinAndSelect('applications.applicationFlaggedSets',"afs")
-    // // .where('afs.id = :value', { value: "91de589c-7449-45a6-bba1-73d878a74827" })
-    // // const unresolvedApps = await this.applicationsRepository.find({
-    // //   where: (qb: SelectQueryBuilder<Application>) => {
-    // //     qb.where("ApplicationFlaggedSet__application.id = :id", {
-    // //       id: afsId,
-    // //     })
-    // //   },
-    // //   join: {
-    // //     alias: "Application",
-    // //     leftJoinAndSelect: {
-    // //       afs: "Application.applicationFlaggedSets",
-    // //       afsApplications: "afs.applications",
-    // //     },
-    // //   },
-    // // })
-
-    // console.log("NETRA unresolvedApps ",listApps)
-
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
       [Rule.email]: emailRuleSet,
@@ -196,11 +154,14 @@ export class ApplicationFlaggedSetService {
   // }
 
   async unresolvedList(afsId: string) {
-    return await this.afsRepository.find({
+    return await this.afsRepository.findOneOrFail({
       where: {
-        id: "91de589c-7449-45a6-bba1-73d878a74827",
+        id: afsId,
       },
       relations: ["applications"],
+      order: {
+        createdAt: "DESC",
+      },
     })
   }
 }

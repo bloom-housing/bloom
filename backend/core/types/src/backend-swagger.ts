@@ -397,7 +397,7 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId?: string;
+      listingId: string;
       /**  */
       includeHeaders?: boolean;
       /**  */
@@ -1051,6 +1051,28 @@ export class ApplicationFlaggedSetsService {
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get application by id
+   */
+  unresolvedApps(
+    params: {
+      /**  */
+      afsId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationFlaggedSets/{afsId}';
+      url = url.replace('{afsId}', params['afsId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
       let data = null;
 
       configs.data = data;
@@ -3304,6 +3326,15 @@ export interface ApplicationFlaggedSet {
   resolvedApplication: Application;
 
   /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
   rule: string;
 
   /**  */
@@ -3382,8 +3413,8 @@ export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
+export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
 export enum EnumApplicationFlaggedSetStatus {
   'flagged' = 'flagged',
   'resolved' = 'resolved'
 }
-export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;

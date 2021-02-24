@@ -53,7 +53,7 @@ module.exports = withCSS(
             "/application": { page: "/application" },
             "/application/edit": { page: "/application/edit" },
             "/listings/flags": { page: "/listings/flags" },
-            "/listings/flags/details": { page: "/listings/flags/details" },
+            "/applicationFlaggedSets": { page: "/listings/flags/details" },
           }
 
           const languages = ["es", "zh", "vi"] // add new language codes here

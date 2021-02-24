@@ -91,6 +91,7 @@ const ApplicationsList = () => {
   const pageSizeOptions = ["8", "100", "500", "1000"]
   const pageJumpOptions = Array.from(Array(appsMeta?.totalPages).keys())?.map((item) => item + 1)
 
+
   // action buttons
   const onBtNext = () => {
     setPageIndex(pageIndex + 1)

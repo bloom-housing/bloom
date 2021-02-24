@@ -1,3 +1,4 @@
+import { Application, ApplicationFlaggedSet } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
   Button,
@@ -14,11 +15,22 @@ import React, { useState } from "react"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import Layout from "../../../layouts/application"
+import { useApplicationFlaggedSetData, useUnresolvedAFSData } from "../../../lib/hooks"
 
 const ApplicationFlaggedSetDetails = () => {
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
   const router = useRouter()
+  const { watch } = useForm()
+  const pageSize = watch("page-size", 8)
+  const [pageIndex, setPageIndex] = useState(1)
   const COLUMN_STATE_KEY = "column-state"
+
+  const listingId = router.query.listing as string
+  const afsId = router.query.id as string
+
+  const { appsData } = useApplicationFlaggedSetData(pageIndex, pageSize, listingId)
+  const { appsDataUnresolved } = useUnresolvedAFSData(afsId)
+  const afs = appsData?.items || []
 
   function saveColumnState(api: ColumnApi) {
     const columnState = api.getColumnState()
@@ -41,7 +53,7 @@ const ApplicationFlaggedSetDetails = () => {
     () => [
       {
         headerName: t("application.details.number"),
-        field: "rule",
+        field: "id",
         sortable: false,
         filter: false,
         resizable: true,
@@ -52,6 +64,12 @@ const ApplicationFlaggedSetDetails = () => {
         sortable: false,
         filter: false,
         resizable: true,
+        valueFormatter: ({ value }) => {
+          if (!value?.length) return
+
+          const { firstName } = value[0]?.applicant
+          return `${firstName}`
+        },
       },
       {
         headerName: t("application.name.lastName"),
@@ -100,7 +118,14 @@ const ApplicationFlaggedSetDetails = () => {
         <Head>
           <title>NAME AND DOB</title>
         </Head>
-        <PageHeader>NAME AND DOB</PageHeader>
+        <PageHeader
+          title={
+            <>
+              <p className="font-sans font-semibold uppercase text-3xl">
+                NAME 
+              </p>
+            </>
+          }>NAME AND DOB</PageHeader>
         <StatusBar
           backButton={
             <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>

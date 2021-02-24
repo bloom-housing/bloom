@@ -58,13 +58,13 @@ export class ApplicationFlaggedSetController {
     return mapTo(PaginatedApplicationFlaggedSetDto, response)
   }
 
-  // @Get(`:afsId`)
-  // @ApiOperation({ summary: "Get application by id", operationId: "unresolvedApps" })
-  // async unresolvedApps(
-  //   @Request() req: ExpressRequest,
-  //   @Param("afsId") afsId: string
-  // ): Promise<ApplicationFlaggedSetDto> {
-  //   const app = await this.applicationFlaggedSetsService.unresolvedList(afsId)
-  //   return mapTo(ApplicationFlaggedSetDto, app)
-  // }
+  @Get(`:afsId`)
+  @ApiOperation({ summary: "Get application by id", operationId: "unresolvedList" })
+  async unresolvedList(
+    @Request() req: ExpressRequest,
+    @Param("afsId") afsId: string
+  ): Promise<ApplicationFlaggedSetDto> {
+    const app = await this.applicationFlaggedSetsService.unresolvedList(afsId)
+    return mapTo(ApplicationFlaggedSetDto, app)
+  }
 }
