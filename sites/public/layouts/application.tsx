@@ -54,12 +54,9 @@ const Layout = (props) => {
           <LocalizedLink href="/listings" className="navbar-item">
             {t("nav.listings")}
           </LocalizedLink>
-          <a href="https://www.acgov.org/cda/hcd/index.htm" target="_blank" className="navbar-item">
-            {t("nav.getAssistance")}
-          </a>
           {/* Only show Get Assistance if housing counselor data is available */}
           {process.env.housingCounselorServiceUrl && (
-            <LocalizedLink href="/housing-counselors" className="navbar-item">
+            <LocalizedLink href={process.env.housingCounselorServiceUrl} className="navbar-item">
               {t("nav.getAssistance")}
             </LocalizedLink>
           )}
