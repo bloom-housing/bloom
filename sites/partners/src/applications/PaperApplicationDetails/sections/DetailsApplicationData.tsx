@@ -1,7 +1,16 @@
 import React, { useContext, useMemo } from "react"
-import moment from "moment"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
+
+type DateTimePST = {
+  hour: string
+  minute: string
+  second: string
+  dayPeriod: string
+  year: string
+  day: string
+  month: string
+}
 
 const DetailsApplicationData = () => {
   const application = useContext(ApplicationContext)
@@ -9,17 +18,37 @@ const DetailsApplicationData = () => {
   const applicationDate = useMemo(() => {
     if (!application) return null
 
-    const momentDate = moment(application.submissionDate)
-
-    const date = momentDate.utc().format("MM/DD/YYYY")
-    const time = `${momentDate.utc().format("hh:mm:ss A")} PT`
-
-    if (!momentDate.isValid()) {
+    if (!application.submissionDate) {
       return {
         date: t("t.n/a"),
         time: t("t.n/a"),
       }
     }
+
+    // convert date and time to PST
+    const ptFormat = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Los_Angeles",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      year: "numeric",
+      day: "numeric",
+      month: "numeric",
+    })
+
+    const originalDate = new Date(application.submissionDate)
+    const ptDateParts = ptFormat.formatToParts(originalDate)
+    const timeValues = ptDateParts.reduce((acc, curr) => {
+      Object.assign(acc, {
+        [curr.type]: curr.value,
+      })
+      return acc
+    }, {} as DateTimePST)
+
+    const { month, day, year, hour, minute, second, dayPeriod } = timeValues
+
+    const date = `${month}/${day}/${year}`
+    const time = `${hour}:${minute}:${second} ${dayPeriod} PT`
 
     return {
       date,
