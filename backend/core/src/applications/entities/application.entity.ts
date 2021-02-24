@@ -49,6 +49,8 @@ export enum ApplicationSubmissionType {
 export enum Language {
   en = "en",
   es = "es",
+  vi = "vi",
+  zh = "zh",
 }
 
 export enum IncomePeriod {

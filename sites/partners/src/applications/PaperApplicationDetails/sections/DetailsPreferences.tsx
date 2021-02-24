@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
 import { InputType, AddressCreate } from "@bloom-housing/backend-core/types"
@@ -11,10 +11,19 @@ type DetailsPreferencesProps = {
 
 const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
   const { listingDto } = useSingleListingData(listingId)
-  const listingPreferences = listingDto?.preferences
 
   const application = useContext(ApplicationContext)
-  const preferences = application.preferences
+
+  const listingPreferences = listingDto?.preferences
+  const preferences = application?.preferences
+
+  const hasMetaData = useMemo(() => {
+    return !!listingPreferences?.filter((preference) => preference?.formMetadata)?.length
+  }, [listingPreferences])
+
+  if (!hasMetaData) {
+    return null
+  }
 
   return (
     <GridSection
@@ -24,14 +33,14 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
       columns={2}
     >
       {listingPreferences?.map((listingPreference) => {
-        const optionKey = listingPreference.formMetadata.key
+        const optionKey = listingPreference?.formMetadata?.key
         const optionDetails = preferences.find((item) => item.key === optionKey)
 
         return (
           <GridCell key={listingPreference.id}>
             <ViewItem label={listingPreference.title}>
               {(() => {
-                if (!optionDetails.claimed) return t("t.none")
+                if (!optionDetails?.claimed) return t("t.none")
 
                 const options = optionDetails.options.filter((option) => option.checked)
 

@@ -3406,7 +3406,9 @@ export enum ApplicationStatus {
 
 export enum Language {
   'en' = 'en',
-  'es' = 'es'
+  'es' = 'es',
+  'zh' = 'zh',
+  'vi' = 'vi'
 }
 
 export enum ApplicationSubmissionType {
