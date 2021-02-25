@@ -1,6 +1,6 @@
-import moment from "moment"
 import { t, formatIncome, formatYesNoLabel } from "@bloom-housing/ui-components"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
+import { convertDataToPst } from "../../lib/helpers"
 
 export function getColDefs(maxHouseholdSize: number) {
   const defs = [
@@ -17,12 +17,9 @@ export function getColDefs(maxHouseholdSize: number) {
       valueFormatter: ({ value }) => {
         if (!value) return ""
 
-        const date = moment(value)
+        const dateTime = convertDataToPst(value)
 
-        const dateFormatted = date.utc().format("MM/DD/YYYY")
-        const timeFormatted = date.utc().format("hh:mm:ss A")
-
-        return `${dateFormatted} ${t("t.at")} ${timeFormatted}`
+        return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
       },
     },
     {
