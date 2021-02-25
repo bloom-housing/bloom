@@ -24,20 +24,20 @@ const AdditionalResources = () => {
 
       <PageHeader title={<>{pageTitle}</>} subtitle={subTitle} inverse={true}></PageHeader>
 
-      <section className="px-5">
+      <section className="md:px-5">
         <article className="markdown max-w-5xl m-auto md:flex">
-          <div className="md:w-8/12 md:pr-10 pt-10 md:py-10 serif-paragraphs">
+          <div className="pt-4 md:w-8/12 md:py-0 serif-paragraphs">
             <MarkdownSection>
               <PageContent />
             </MarkdownSection>
           </div>
-          <div className="md:border-l-4 border-gray-400 md:w-4/12 md:pl-10 py-10">
+          <aside className="pt-4 pb-10 md:w-4/12 md:pl-4 md:py-0 md:shadow-left">
             <MDXProvider components={components}>
               <MarkdownSection>
                 <SidebarContent />
               </MarkdownSection>
             </MDXProvider>
-          </div>
+          </aside>
         </article>
       </section>
     </Layout>
