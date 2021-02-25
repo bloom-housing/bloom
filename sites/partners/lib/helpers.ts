@@ -1,4 +1,5 @@
 import { t } from "@bloom-housing/ui-components"
+import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 type DateTimePST = {
   hour: string
@@ -12,7 +13,7 @@ type DateTimePST = {
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-export const convertDataToPst = (dateObj: Date) => {
+export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType) => {
   if (!dateObj) {
     return {
       date: t("t.n/a"),
@@ -20,7 +21,7 @@ export const convertDataToPst = (dateObj: Date) => {
     }
   }
 
-  // convert date and time to PST
+  // convert date and time to PST (electronical applications)
   const ptFormat = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Los_Angeles",
     hour: "numeric",
@@ -40,13 +41,27 @@ export const convertDataToPst = (dateObj: Date) => {
     return acc
   }, {} as DateTimePST)
 
-  const { month, day, year, hour, minute, second, dayPeriod } = timeValues
+  if (type === ApplicationSubmissionType.electronical) {
+    const { month, day, year, hour, minute, second, dayPeriod } = timeValues
 
-  const date = `${month}/${day}/${year}`
-  const time = `${hour}:${minute}:${second} ${dayPeriod} PT`
+    const date = `${month}/${day}/${year}`
+    const time = `${hour}:${minute}:${second} ${dayPeriod} PT`
 
-  return {
-    date,
-    time,
+    return {
+      date,
+      time,
+    }
+  }
+
+  if (type === ApplicationSubmissionType.paper) {
+    const { month, day, year, hour, minute, second, dayPeriod } = timeValues
+
+    const date = `${month}/${day}/${year}`
+    const time = `${hour}:${minute}:${second} ${dayPeriod} PT`
+
+    return {
+      date,
+      time,
+    }
   }
 }

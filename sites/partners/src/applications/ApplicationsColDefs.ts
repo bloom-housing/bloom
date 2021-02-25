@@ -1,5 +1,5 @@
 import { t, formatIncome, formatYesNoLabel } from "@bloom-housing/ui-components"
-import { IncomePeriod } from "@bloom-housing/backend-core/types"
+import { IncomePeriod, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 import { convertDataToPst } from "../../lib/helpers"
 
 export function getColDefs(maxHouseholdSize: number) {
@@ -14,10 +14,15 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 200,
       minWidth: 150,
       sort: "asc",
-      valueFormatter: ({ value }) => {
-        if (!value) return ""
+      valueGetter: ({ data }) => {
+        if (!data?.submissionDate) return ""
 
-        const dateTime = convertDataToPst(value)
+        const { submissionDate } = data
+
+        const dateTime = convertDataToPst(
+          submissionDate,
+          data?.submissionType || ApplicationSubmissionType.electronical
+        )
 
         return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
       },
