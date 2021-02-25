@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
-import { DeepPartial, In, Repository, SelectQueryBuilder } from "typeorm"
+import { Brackets, DeepPartial, Repository, SelectQueryBuilder } from "typeorm"
 import { Request } from "express"
 import {
   ApplicationFlaggedSet,
@@ -11,8 +11,6 @@ import {
 import { paginate } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "../applications/applications.controller"
 import { Application } from "../applications/entities/application.entity"
-import { ApplicationFlaggedSetUpdateDto } from "./dto/application-flagged-set.dto"
-import { createQueryBuilder } from "typeorm"
 
 @Injectable()
 export class ApplicationFlaggedSetService {
@@ -35,6 +33,31 @@ export class ApplicationFlaggedSetService {
   }
 
   async handleInsert(newApplication: Application) {
+    const firstNames = [
+      newApplication.applicant.firstName,
+      ...newApplication.householdMembers.map((householdMember) => householdMember.firstName),
+    ]
+
+    const lastNames = [
+      newApplication.applicant.lastName,
+      ...newApplication.householdMembers.map((householdMember) => householdMember.lastName),
+    ]
+
+    const birthMonths = [
+      newApplication.applicant.birthMonth,
+      ...newApplication.householdMembers.map((householdMember) => householdMember.birthMonth),
+    ]
+
+    const birthDays = [
+      newApplication.applicant.birthDay,
+      ...newApplication.householdMembers.map((householdMember) => householdMember.birthDay),
+    ]
+
+    const birthYears = [
+      newApplication.applicant.birthYear,
+      ...newApplication.householdMembers.map((householdMember) => householdMember.birthYear),
+    ]
+
     const nameDobRuleSet = await this.applicationsRepository.find({
       where: (qb: SelectQueryBuilder<Application>) => {
         qb.where("Application.id != :id", {
@@ -43,22 +66,57 @@ export class ApplicationFlaggedSetService {
           .andWhere("Application.listing.id = :listingId", {
             listingId: newApplication.listing.id,
           })
-          .andWhere("Application__applicant.firstName = :firstName", {
-            firstName: newApplication.applicant.firstName,
-          })
-          .andWhere("Application__applicant.lastName = :lastName", {
-            lastName: newApplication.applicant.lastName,
-          })
-          .andWhere("Application__applicant.birthMonth = :birthMonth", {
-            birthMonth: newApplication.applicant.birthMonth,
-          })
-          .andWhere("Application__applicant.birthDay = :birthDay", {
-            birthDay: newApplication.applicant.birthDay,
-          })
-          .andWhere("Application__applicant.birthYear = :birthYear", {
-            birthYear: newApplication.applicant.birthYear,
-          })
           .andWhere("Application.status = :status", { status: "submitted" })
+          .andWhere(
+            new Brackets((subQb) => {
+              subQb.where("Application__householdMembers.firstName IN (:...firstNames)", {
+                firstNames: firstNames,
+              })
+              subQb.orWhere("Application__applicant.firstName IN (:...firstNames)", {
+                firstNames: firstNames,
+              })
+            })
+          )
+          .andWhere(
+            new Brackets((subQb) => {
+              subQb.where("Application__householdMembers.lastName IN (:...lastNames)", {
+                lastNames: lastNames,
+              })
+              subQb.orWhere("Application__applicant.lastName IN (:...lastNames)", {
+                lastNames: lastNames,
+              })
+            })
+          )
+          .andWhere(
+            new Brackets((subQb) => {
+              subQb.where("Application__householdMembers.birthMonth IN (:...birthMonths)", {
+                birthMonths: birthMonths,
+              })
+              subQb.orWhere("Application__applicant.birthMonth IN (:...birthMonths)", {
+                birthMonths: birthMonths,
+              })
+            })
+          )
+          .andWhere(
+            new Brackets((subQb) => {
+              subQb.where("Application__householdMembers.birthDay IN (:...birthDays)", {
+                birthDays: birthDays,
+              })
+              subQb.orWhere("Application__applicant.birthDay IN (:...birthDays)", {
+                birthDays: birthDays,
+              })
+            })
+          )
+          .andWhere(
+            new Brackets((subQb) => {
+              subQb.where("Application__householdMembers.birthYear IN (:...birthYears)", {
+                birthYears: birthYears,
+              })
+              subQb.orWhere("Application__applicant.birthYear IN (:...birthYears)", {
+                birthYears: birthYears,
+              })
+            })
+          )
       },
       join: {
         alias: "Application",
@@ -69,30 +127,31 @@ export class ApplicationFlaggedSetService {
       },
     })
 
-    const emailRuleSet = await this.applicationsRepository.find({
-      where: (qb: SelectQueryBuilder<Application>) => {
-        qb.where("Application.id != :id", {
-          id: newApplication.id,
-        })
-          .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listing.id,
-          })
-          .andWhere("Application__applicant.emailAddress = :emailAddress", {
-            emailAddress: newApplication.applicant.emailAddress,
-          })
-      },
-      join: {
-        alias: "Application",
-        leftJoinAndSelect: {
-          afs: "Application.applicationFlaggedSets",
-          afsApplications: "afs.applications",
-        },
-      },
-    })
+    // const emailRuleSet = await this.applicationsRepository.find({
+    //   where: (qb: SelectQueryBuilder<Application>) => {
+    //     qb.where("Application.id != :id", {
+    //       id: newApplication.id,
+    //     })
+    //       .andWhere("Application.listing.id = :listingId", {
+    //         listingId: newApplication.listing.id,
+    //       })
+    //       .andWhere("Application__applicant.emailAddress = :emailAddress", {
+    //         emailAddress: newApplication.applicant.emailAddress,
+    //       })
+    //   },
+    //   join: {
+    //     alias: "Application",
+    //     leftJoinAndSelect: {
+    //       afs: "Application.applicationFlaggedSets",
+    //       afsApplications: "afs.applications",
+    //     },
+    //   },
+    // })
 
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
-      [Rule.email]: emailRuleSet,
+      // [Rule.email]: emailRuleSet,
+      [Rule.email]: [],
     }
 
     for (const [queryRule, exApplications] of Object.entries(queries)) {
