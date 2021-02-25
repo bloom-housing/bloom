@@ -9,29 +9,28 @@ import {
 } from "@bloom-housing/ui-components"
 import { ColumnApi, GridOptions } from "ag-grid-community"
 import { AgGridReact } from "ag-grid-react"
+import moment from "moment"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import Layout from "../../../layouts/application"
-import { useApplicationFlaggedSetData, useUnresolvedAFSData } from "../../../lib/hooks"
+import { useUnresolvedAFSData } from "../../../lib/hooks"
 
 const ApplicationFlaggedSetDetails = () => {
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
   const router = useRouter()
   const { watch } = useForm()
   const pageSize = watch("page-size", 8)
-  const [pageIndex, setPageIndex] = useState(1)
   const COLUMN_STATE_KEY = "column-state"
 
-  const listingId = router.query.listing as string
   const afsId = router.query.id as string
 
-  const { appsData } = useApplicationFlaggedSetData(pageIndex, pageSize, listingId)
   const { appsDataUnresolved } = useUnresolvedAFSData(afsId)
-  const afs = appsData?.items || []
+  const applications = appsDataUnresolved?.applications || []
 
+  console.log(" NETRA appsDataUnresolved", appsDataUnresolved, "APPLICATIONS  ", applications)
   function saveColumnState(api: ColumnApi) {
     const columnState = api.getColumnState()
     const columnStateJSON = JSON.stringify(columnState)
@@ -42,6 +41,7 @@ const ApplicationFlaggedSetDetails = () => {
     onColumnMoved: (params) => saveColumnState(params.columnApi),
   }
   function onGridReady(params) {
+    this.gridApi = params.api
     setGridColumnApi(params.columnApi)
     this.api.sizeColumnsToFit()
   }
@@ -49,6 +49,14 @@ const ApplicationFlaggedSetDetails = () => {
     resizable: true,
     maxWidth: 300,
   }
+
+  function onSelectionChanged() {
+    const selectedRows = this.api.getSelectedRows()
+    if (selectedRows) {
+      return false
+    }
+  }
+
   const columnDefs = useMemo(
     () => [
       {
@@ -57,37 +65,39 @@ const ApplicationFlaggedSetDetails = () => {
         sortable: false,
         filter: false,
         resizable: true,
+        checkboxSelection: true,
       },
       {
         headerName: t("application.name.firstName"),
-        field: "applicant",
+        field: "applicant.firstName",
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => {
-          if (!value?.length) return
-
-          const { firstName } = value[0]?.applicant
-          return `${firstName}`
-        },
       },
       {
         headerName: t("application.name.lastName"),
-        field: "rule",
+        field: "applicant.lastName",
         sortable: false,
         filter: false,
         resizable: true,
       },
       {
         headerName: t("applications.table.primaryDob"),
-        field: "rule",
+        field: "applicant",
         sortable: false,
         filter: false,
         resizable: true,
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          const isValidDOB = !!value?.birthMonth && !!value?.birthDay && value?.birthYear
+
+          return isValidDOB ? `${value.birthMonth}/${value.birthDay}/${value.birthYear}` : ""
+        },
       },
       {
         headerName: t("t.email"),
-        field: "status",
+        field: "applicant.emailAddress",
         sortable: false,
         filter: false,
         resizable: true,
@@ -95,7 +105,7 @@ const ApplicationFlaggedSetDetails = () => {
       },
       {
         headerName: t("t.phone"),
-        field: "status",
+        field: "applicant.phoneNumber",
         sortable: false,
         filter: false,
         resizable: true,
@@ -103,11 +113,22 @@ const ApplicationFlaggedSetDetails = () => {
       },
       {
         headerName: t("applications.table.applicationSubmissionDate"),
-        field: "status",
+        field: "submissionDate",
         sortable: false,
         filter: false,
         resizable: true,
         flex: 1,
+        sort: "asc",
+        valueFormatter: ({ value }) => {
+          if (!value) return ""
+
+          const date = moment(value)
+
+          const dateFormatted = date.utc().format("MM/DD/YYYY")
+          const timeFormatted = date.utc().format("hh:mm:ss A")
+
+          return `${dateFormatted} ${t("t.at")} ${timeFormatted}`
+        },
       },
     ],
     []
@@ -121,11 +142,10 @@ const ApplicationFlaggedSetDetails = () => {
         <PageHeader
           title={
             <>
-              <p className="font-sans font-semibold uppercase text-3xl">
-                NAME 
-              </p>
+              <p className="font-sans font-semibold uppercase text-3xl">NAME</p>
             </>
-          }>NAME AND DOB</PageHeader>
+          }
+        ></PageHeader>
         <StatusBar
           backButton={
             <Button inlineIcon="left" icon="arrow-back" onClick={() => router.back()}>
@@ -143,20 +163,24 @@ const ApplicationFlaggedSetDetails = () => {
                 gridOptions={gridOptions}
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
-                rowData={afs}
+                rowData={applications}
                 domLayout={"autoHeight"}
                 headerHeight={83}
                 rowHeight={58}
                 suppressPaginationPanel={true}
                 paginationPageSize={8}
                 suppressScrollOnNewData={true}
+                rowSelection={"multiple"}
+                rowMultiSelectWithClick={true}
+                groupSelectsChildren={false}
+                onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
             </div>
           </div>
         </article>
 
-        <Button className="mx-1" onClick={() => false}>
-          {t("applications.addApplication")}
+        <Button className="mx-1" onClick={() => false} disabled={true}>
+          Resolve Flag
         </Button>
 
         <Tag styleType={AppearanceStyleType.success}>Resolve Flag</Tag>

@@ -1060,13 +1060,13 @@ export class ApplicationFlaggedSetsService {
   /**
    * Get application by id
    */
-  unresolvedApps(
+  unresolvedList(
     params: {
       /**  */
       afsId: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationFlaggedSet[]> {
+  ): Promise<ApplicationFlaggedSet> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/applicationFlaggedSets/{afsId}';
       url = url.replace('{afsId}', params['afsId'] + '');
@@ -3407,8 +3407,8 @@ export enum ApplicationStatus {
 export enum Language {
   'en' = 'en',
   'es' = 'es',
-  'zh' = 'zh',
-  'vi' = 'vi'
+  'vi' = 'vi',
+  'zh' = 'zh'
 }
 
 export enum ApplicationSubmissionType {

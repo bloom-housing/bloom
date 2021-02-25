@@ -127,31 +127,30 @@ export class ApplicationFlaggedSetService {
       },
     })
 
-    // const emailRuleSet = await this.applicationsRepository.find({
-    //   where: (qb: SelectQueryBuilder<Application>) => {
-    //     qb.where("Application.id != :id", {
-    //       id: newApplication.id,
-    //     })
-    //       .andWhere("Application.listing.id = :listingId", {
-    //         listingId: newApplication.listing.id,
-    //       })
-    //       .andWhere("Application__applicant.emailAddress = :emailAddress", {
-    //         emailAddress: newApplication.applicant.emailAddress,
-    //       })
-    //   },
-    //   join: {
-    //     alias: "Application",
-    //     leftJoinAndSelect: {
-    //       afs: "Application.applicationFlaggedSets",
-    //       afsApplications: "afs.applications",
-    //     },
-    //   },
-    // })
+    const emailRuleSet = await this.applicationsRepository.find({
+      where: (qb: SelectQueryBuilder<Application>) => {
+        qb.where("Application.id != :id", {
+          id: newApplication.id,
+        })
+          .andWhere("Application.listing.id = :listingId", {
+            listingId: newApplication.listing.id,
+          })
+          .andWhere("Application__applicant.emailAddress = :emailAddress", {
+            emailAddress: newApplication.applicant.emailAddress,
+          })
+      },
+      join: {
+        alias: "Application",
+        leftJoinAndSelect: {
+          afs: "Application.applicationFlaggedSets",
+          afsApplications: "afs.applications",
+        },
+      },
+    })
 
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
-      // [Rule.email]: emailRuleSet,
-      [Rule.email]: [],
+      [Rule.email]: emailRuleSet,
     }
 
     for (const [queryRule, exApplications] of Object.entries(queries)) {

@@ -83,7 +83,7 @@ export function useApplicationFlaggedSetData(pageIndex: number, limit = 10, list
 export function useUnresolvedAFSData(afsId: string) {
   const { applicationFlaggedSetService } = useContext(ApiClientContext)
   const endpointUrl = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
-  const fetcher = () => applicationFlaggedSetService.unresolvedApps({ afsId })
+  const fetcher = () => applicationFlaggedSetService.unresolvedList({ afsId })
   const { data, error } = useSWR(endpointUrl, fetcher)
 
   return {
