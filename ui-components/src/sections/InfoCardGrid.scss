@@ -1,5 +1,9 @@
 .info-cards__header {
   @apply mb-4;
+
+  @screen md {
+    margin-right: 1rem;
+  }
 }
 
 .info-cards__title {
