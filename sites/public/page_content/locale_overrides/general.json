@@ -1,4 +1,43 @@
 {
+  "application": {
+    "contact": {
+      "doYouWorkIn": "Do you work in City of Hayward?",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "Do they work in the City of Hayward?",
+        "workInRegionNote": ""
+      }
+    },
+    "preferences": {
+      "dontWant": "I don't want to claim any of these preferences",
+      "liveWork": {
+        "live": {
+          "label": "Live in City of Hayward Preference",
+          "description": "At least one member of my household lives in the City of Hayward",
+          "link": "application.preferences"
+        },
+        "work": {
+          "label": "Work in City of Hayward Preference",
+          "description": "At least one member of my household works or has been offered work in the City of Hayward",
+          "link": "application.preferences"
+        }
+      },
+      "displacedTenant": {
+        "general": {
+          "label": "Displaced Tenant Housing Preference",
+          "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+          "link": "application.preferences"
+        },
+        "missionCorridor": {
+          "label": "Mission Boulevard Corridor (SR 238) Displaced Tenant Housing Preference",
+          "description": "At least one member of my household is an SR 238 Program Participant as required under the terms of the SR 238 Settlement Implementation Project. Program Participants are tenants of previously sold Caltrans properties along the SR 238 Mission Boulevard Corridor and are given occupancy preference when new below-market housing is constructed in the Corridor.",
+          "link": "https://www.hayward-ca.gov/238/background"
+        }
+      }
+    }
+  },
   "footer": {
     "copyRight": "Alameda County © 2020 • All Rights Reserved",
     "disclaimer": "Disclaimer",
