@@ -5,7 +5,7 @@ import {
   PageHeader,
   StatusBar,
   t,
-  Tag,
+  Tag
 } from "@bloom-housing/ui-components"
 import { ColumnApi, GridOptions } from "ag-grid-community"
 import { AgGridReact } from "ag-grid-react"
@@ -24,6 +24,8 @@ const ApplicationFlaggedSetDetails = () => {
   const { watch } = useForm()
   const pageSize = watch("page-size", 8)
   const COLUMN_STATE_KEY = "column-state"
+  const [disableBtn, setdisableBtn] = useState(true)
+  const [rowCount, setRowCount] = useState(0)
 
   const afsId = router.query.id as string
 
@@ -39,21 +41,27 @@ const ApplicationFlaggedSetDetails = () => {
   const gridOptions: GridOptions = {
     onSortChanged: (params) => saveColumnState(params.columnApi),
     onColumnMoved: (params) => saveColumnState(params.columnApi),
+    onSelectionChanged: onSelectionChanged
   }
+
   function onGridReady(params) {
-    this.gridApi = params.api
     setGridColumnApi(params.columnApi)
     this.api.sizeColumnsToFit()
   }
   const defaultColDef = {
     resizable: true,
-    maxWidth: 300,
+    maxWidth: 400
   }
 
   function onSelectionChanged() {
     const selectedRows = this.api.getSelectedRows()
-    if (selectedRows) {
-      return false
+    if (selectedRows.length > 0) {
+      setdisableBtn(false)
+      setRowCount(selectedRows.length)
+      console.log("NETRA ", rowCount)
+    } else {
+      setdisableBtn(true)
+      setRowCount(0)
     }
   }
 
@@ -65,21 +73,21 @@ const ApplicationFlaggedSetDetails = () => {
         sortable: false,
         filter: false,
         resizable: true,
-        checkboxSelection: true,
+        checkboxSelection: true
       },
       {
         headerName: t("application.name.firstName"),
         field: "applicant.firstName",
         sortable: false,
         filter: false,
-        resizable: true,
+        resizable: true
       },
       {
         headerName: t("application.name.lastName"),
         field: "applicant.lastName",
         sortable: false,
         filter: false,
-        resizable: true,
+        resizable: true
       },
       {
         headerName: t("applications.table.primaryDob"),
@@ -93,7 +101,7 @@ const ApplicationFlaggedSetDetails = () => {
           const isValidDOB = !!value?.birthMonth && !!value?.birthDay && value?.birthYear
 
           return isValidDOB ? `${value.birthMonth}/${value.birthDay}/${value.birthYear}` : ""
-        },
+        }
       },
       {
         headerName: t("t.email"),
@@ -101,7 +109,7 @@ const ApplicationFlaggedSetDetails = () => {
         sortable: false,
         filter: false,
         resizable: true,
-        flex: 1,
+        flex: 1
       },
       {
         headerName: t("t.phone"),
@@ -109,7 +117,7 @@ const ApplicationFlaggedSetDetails = () => {
         sortable: false,
         filter: false,
         resizable: true,
-        flex: 1,
+        flex: 1
       },
       {
         headerName: t("applications.table.applicationSubmissionDate"),
@@ -128,8 +136,8 @@ const ApplicationFlaggedSetDetails = () => {
           const timeFormatted = date.utc().format("hh:mm:ss A")
 
           return `${dateFormatted} ${t("t.at")} ${timeFormatted}`
-        },
-      },
+        }
+      }
     ],
     []
   )
@@ -173,17 +181,27 @@ const ApplicationFlaggedSetDetails = () => {
                 rowSelection={"multiple"}
                 rowMultiSelectWithClick={true}
                 groupSelectsChildren={false}
-                onSelectionChanged={onSelectionChanged}
+                // onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
             </div>
           </div>
+          <div className="data-pager__control-group">
+            <span className="data-pager__control">
+              <span className="field-label" id="lbTotalPages">
+                {rowCount}
+              </span>
+              <span className="field-label">{t("flaggedSet.markedDuplicate")}</span>
+            </span>
+            <Button
+              normalCase={false}
+              styleType={AppearanceStyleType.success}
+              onClick={() => false}
+              disabled={disableBtn}
+            >
+              {t("flaggedSet.resolveFlag")}
+            </Button>
+          </div>
         </article>
-
-        <Button className="mx-1" onClick={() => false} disabled={true}>
-          Resolve Flag
-        </Button>
-
-        <Tag styleType={AppearanceStyleType.success}>Resolve Flag</Tag>
       </section>
     </Layout>
   )

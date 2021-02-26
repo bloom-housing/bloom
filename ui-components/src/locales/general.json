@@ -931,8 +931,10 @@
   "flaggedSet": {
     "flaggedSet": "Flagged Set",
     "ruleName": "Rule Name",
-    "pendingReview": "Pending Review",
+    "NoOfApplications": "# Applications",
     "flagged": "Flagged",
-    "resolved": "Resolved"
+    "resolved": "Resolved",
+    "markedDuplicate": "applications marked as duplicate",
+    "resolveFlag": "Resolve Flag"
   }
 }

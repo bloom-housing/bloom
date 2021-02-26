@@ -1,6 +1,7 @@
 import {
   AppearanceSizeType,
   AppearanceStyleType,
+  Button,
   lRoute,
   t,
   Tag,
@@ -15,7 +16,7 @@ import { useApplicationFlaggedSetData } from "../../../lib/hooks"
 
 const ApplicationFlaggedSetList = () => {
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
-  const { watch } = useForm()
+  const { register, watch } = useForm()
   const router = useRouter()
   const pageSize = watch("page-size", 8)
   const [pageIndex, setPageIndex] = useState(1)
@@ -23,6 +24,7 @@ const ApplicationFlaggedSetList = () => {
 
   const listingId = router.query.listing as string
   const { appsData } = useApplicationFlaggedSetData(pageIndex, pageSize, listingId)
+  const appsMeta = appsData?.meta
   const afs = appsData?.items || []
 
   function saveColumnState(api: ColumnApi) {
@@ -37,24 +39,35 @@ const ApplicationFlaggedSetList = () => {
   }
   const defaultColDef = {
     resizable: true,
-    maxWidth: 300,
+    maxWidth: 400,
   }
 
+   // action buttons
+   const onBtNext = () => {
+    setPageIndex(pageIndex + 1)
+  }
+
+  const onBtPrevious = () => {
+    setPageIndex(pageIndex - 1)
+  }
+
+  const pageSizeOptions = ["8", "100", "500", "1000"]
+  const pageJumpOptions = Array.from(Array(appsMeta?.totalPages).keys())?.map((item) => item + 1)
+  
   class formatLinkCell {
     linkWithId: HTMLSpanElement
 
     init(params) {
+      console.log("NETRA PARAMS ", params)
       this.linkWithId = document.createElement("button")
       this.linkWithId.classList.add("text-blue-700")
 
-      let rule = params.data.rule
-      rule = rule.replace("and", "+")
       this.linkWithId.innerText =
         params.data.applications[0].applicant.firstName +
         " " +
         params.data.applications[0].applicant.lastName +
-        ": " +
-        rule
+        " + " +
+        params.data.applications.length
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
@@ -77,24 +90,17 @@ const ApplicationFlaggedSetList = () => {
   const columnDefs = useMemo(
     () => [
       {
-        headerName: t("flaggedSet.flaggedSet"),
-        field: "firstName&lastName&rule",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        cellRenderer: formatLinkCell,
-      },
-      {
         headerName: t("application.household.primaryApplicant"),
         field: "applications",
         sortable: false,
         filter: false,
-        resizable: true,
+        resizable: false,
+        cellRenderer: formatLinkCell,
         valueFormatter: ({ value }) => {
           if (!value?.length) return
-
+          console.log("NETRA Value", value.length)
           const { firstName, lastName } = value[0]?.applicant
-          return `${firstName} ${lastName}`
+          return `${firstName} ${lastName} + ` + value.length
         },
       },
       {
@@ -102,7 +108,7 @@ const ApplicationFlaggedSetList = () => {
         field: "rule",
         sortable: false,
         filter: false,
-        resizable: true,
+        resizable: false,
         valueFormatter: ({ value }) => {
           if (!value?.length) return
           value = value.replace("and", "+")
@@ -110,11 +116,11 @@ const ApplicationFlaggedSetList = () => {
         },
       },
       {
-        headerName: t("flaggedSet.pendingReview"),
+        headerName: t("flaggedSet.NoOfApplications"),
         field: "applications",
         sortable: false,
         filter: false,
-        resizable: true,
+        resizable: false,
         valueFormatter: ({ value }) => {
           if (!value?.length) return 0
           return value.length
@@ -125,7 +131,7 @@ const ApplicationFlaggedSetList = () => {
         field: "status",
         sortable: false,
         filter: false,
-        resizable: true,
+        resizable: false,
         flex: 1,
         cellRendererFramework: function (params) {
           if (params.data.status == "flagged") {
@@ -179,6 +185,65 @@ const ApplicationFlaggedSetList = () => {
                 paginationPageSize={8}
                 suppressScrollOnNewData={true}
               ></AgGridReact>
+                            <div className="data-pager">
+                <Button
+                  className="data-pager__previous data-pager__control"
+                  onClick={onBtPrevious}
+                  disabled={pageIndex === 1}
+                >
+                  {t("t.previous")}
+                </Button>
+
+                <div className="data-pager__control-group">
+                  <span className="data-pager__control">
+                    <span className="field-label" id="lbTotalPages">
+                      {appsMeta?.totalItems}
+                    </span>
+                    <span className="field-label">{t("applications.totalApplications")}</span>
+                  </span>
+
+                  <span className="field data-pager__control">
+                    <label className="field-label font-sans" htmlFor="page-size">
+                      {t("t.show")}
+                    </label>
+                    <select name="page-size" id="page-size" ref={register} defaultValue={8}>
+                      {pageSizeOptions.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </span>
+
+                  <span className="field data-pager__control">
+                    <label className="field-label font-sans" htmlFor="page-jump">
+                      {t("t.jumpTo")}
+                    </label>
+                    <select
+                      name="page-jump"
+                      id="page-jump"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setPageIndex(parseInt(e.target.value))
+                      }
+                      value={pageIndex}
+                    >
+                      {pageJumpOptions.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </span>
+                </div>
+
+                <Button
+                  className="data-pager__next data-pager__control"
+                  onClick={onBtNext}
+                  disabled={appsMeta?.totalPages === pageIndex}
+                >
+                  {t("t.next")}
+                </Button>
+              </div>
             </div>
           </div>
         </article>
