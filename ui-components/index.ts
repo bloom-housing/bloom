@@ -103,12 +103,16 @@ export * from "./src/page_components/listing/listing_sidebar/LeasingAgent"
 export * from "./src/page_components/listing/listing_sidebar/SidebarAddress"
 export * from "./src/page_components/listing/listing_sidebar/Waitlist"
 export * from "./src/page_components/listing/listing_sidebar/WhatToExpect"
+export * from "./src/page_components/listing/listing_sidebar/events/OpenHouseEvent"
+export * from "./src/page_components/listing/listing_sidebar/events/LotteryResultsEvent"
+export * from "./src/page_components/listing/listing_sidebar/events/PublicLotteryEvent"
 
 /* Responsive Wrappers */
 export * from "./src/sections/ResponsiveWrappers"
 
 /* Sections */
 export * from "./src/sections/ContentSection"
+export * from "./src/sections/EventDateSection"
 export * from "./src/sections/FooterSection"
 export * from "./src/sections/InfoCardGrid"
 export * from "./src/sections/ListSection"

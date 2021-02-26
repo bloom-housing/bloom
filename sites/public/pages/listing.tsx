@@ -31,79 +31,15 @@ import {
   t,
   UnitTables,
   WhatToExpect,
+  PublicLotteryEvent,
+  LotteryResultsEvent,
+  OpenHouseEvent,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import moment from "moment"
 
 interface ListingProps {
   listing: Listing
-}
-
-const EventDateSection = (props: { event: ListingEvent }) => {
-  return (
-    <p className="text text-gray-800 pb-3 flex justify-between items-center">
-      <span className="inline-block">{moment(props.event.startTime).format("MMMM D, YYYY")}</span>
-      <span className="inline-block text-xs font-bold">
-        {moment(props.event.startTime).format("hh:mma") +
-          "-" +
-          moment(props.event.endTime).format("hh:mma")}
-      </span>
-    </p>
-  )
-}
-
-const OpenHouseEventSection = (props: { openHouseEvents: ListingEvent[] }) => {
-  return (
-    <section className="aside-block bg-primary-lighter border-t">
-      <h4 className="text-caps-tiny">{t("listings.openHouseEvent.header")}</h4>
-      {props.openHouseEvents.map((openHouseEvent, index) => (
-        <div key={`openHouses-${index}`}>
-          <EventDateSection event={openHouseEvent} />
-          {openHouseEvent.url && (
-            <p className="text text-gray-800 pb-3">
-              <a href={openHouseEvent.url}>{t("listings.openHouseEvent.seeVideo")}</a>
-            </p>
-          )}
-          {openHouseEvent.note && <p className="text text-gray-600">{openHouseEvent.note}</p>}
-        </div>
-      ))}
-    </section>
-  )
-}
-
-const PublicLotteryEvent = (props: { publicLottery: ListingEvent }) => {
-  return (
-    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
-      <h4 className="text-caps-underline">{t("listings.publicLottery.header")}</h4>
-      <EventDateSection event={props.publicLottery} />
-      {props.publicLottery.url && (
-        <p className="text text-gray-800 pb-3">
-          <a href={props.publicLottery.url}>{t("listings.publicLottery.seeVideo")}</a>
-        </p>
-      )}
-      {props.publicLottery.note && <p className="text text-gray-600">{props.publicLottery.note}</p>}
-    </section>
-  )
-}
-
-const LotteryResultsEvent = (props: { event: ListingEvent }) => {
-  const { event } = props
-  return (
-    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
-      <h4 className="text-caps-underline">{t("listings.lotteryResults.header")}</h4>
-      <p className="text text-gray-800 pb-3 flex justify-between items-center">
-        <span className="inline-block">{moment(props.event.startTime).format("MMMM D, YYYY")}</span>
-      </p>
-      {event.note && <p className="text text-gray-600">{event.note}</p>}
-      {!event.note && (
-        <p className="text text-gray-600">
-          {t("listings.lotteryResults.completeResultsWillBePosted", {
-            hour: moment(props.event.startTime).format("h a"),
-          })}
-        </p>
-      )}
-    </section>
-  )
 }
 
 export default class extends Component<ListingProps> {
@@ -382,7 +318,7 @@ export default class extends Component<ListingProps> {
                       </a>
                     </section>
                   )}
-                  {openHouseEvents && <OpenHouseEventSection openHouseEvents={openHouseEvents} />}
+                  {openHouseEvents && <OpenHouseEvent openHouseEvents={openHouseEvents} />}
                   <ApplicationSection
                     listing={listing}
                     internalFormRoute="/applications/start/choose-language"

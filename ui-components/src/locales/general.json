@@ -630,7 +630,7 @@
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
     "lotteryResults": {
-      "completeResultsWillBePosted": "Complete lottery results will be posted on this date by %{hour}%",
+      "completeResultsWillBePosted": "Complete lottery results will be posted on this date by %{hour}.",
       "downloadResults": "Download Results",
       "header": "Lottery Results"
     },
