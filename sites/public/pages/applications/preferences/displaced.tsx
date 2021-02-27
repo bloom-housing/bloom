@@ -23,6 +23,7 @@ import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
   const { conductor, application, listing } = useFormConductor("preferencesDisplaced")
+  const [hideReviewButton, setHideReviewButton] = useState(false)
   const [showMore, setShowMore] = useState({})
   const currentPageSection = 4
 
@@ -60,11 +61,13 @@ export default () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    if (!data.none) {
-      conductor.completeSection(4)
-    }
+    if (!conductor.canJumpForwardToReview()) setHideReviewButton(true)
 
     conductor.currentStep.save({ ...data })
+    if (application.preferences.some((item) => item.claimed)) {
+      conductor.completeSection(4)
+      conductor.sync()
+    }
     conductor.routeToNextOrReturnUrl()
   }
 
@@ -309,7 +312,7 @@ export default () => {
               </Button>
             </div>
 
-            {conductor.canJumpForwardToReview() && (
+            {!hideReviewButton && conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
                   unstyled={true}

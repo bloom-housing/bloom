@@ -9,7 +9,7 @@ export default {
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
-export const ThreeColumns = () => (
+export const ThreeCards = () => (
   <InfoCardGrid
     title="Rentals"
     subtitle="Other rental housing funded by the City, as well as lists developed each month by community nonprofit agencies."
