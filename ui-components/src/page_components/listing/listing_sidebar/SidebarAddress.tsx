@@ -29,7 +29,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
     hours = (
       <>
         <h3 className="text-caps-tiny ">{t("leasingAgent.officeHours")}</h3>
-        <div className="text-gray-800 markdown">
+        <div className="text-gray-800 text-tiny markdown">
           <Markdown children={officeHours} options={{ disableParsingRawHTML: true }} />
         </div>
       </>
@@ -39,13 +39,14 @@ const SidebarAddress = (props: SidebarAddressProps) => {
   return (
     <>
       {address.street && (
-        <p className="text-gray-700 mb-4">
-          {mainAddress}
-          <br />
-          <a href={googleMapsHref} target="_blank">
-            <Icon symbol="map" size="medium" /> {t("t.getDirections")}
-          </a>
-        </p>
+        <>
+          <p className="text-gray-700 mb-1">{mainAddress}</p>
+          <p className="mb-4">
+            <a href={googleMapsHref} target="_blank">
+              <Icon symbol="map" size="medium" /> {t("t.getDirections")}
+            </a>
+          </p>
+        </>
       )}
       {hours}
     </>
