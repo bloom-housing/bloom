@@ -27,23 +27,8 @@ const ApplicationFlaggedSetList = () => {
   const appsMeta = appsData?.meta
   const afs = appsData?.items || []
 
-  function saveColumnState(api: ColumnApi) {
-    const columnState = api.getColumnState()
-    const columnStateJSON = JSON.stringify(columnState)
-    sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
-  }
-
-  function onGridReady(params) {
-    setGridColumnApi(params.columnApi)
-    this.api.sizeColumnsToFit()
-  }
-  const defaultColDef = {
-    resizable: true,
-    maxWidth: 400,
-  }
-
-   // action buttons
-   const onBtNext = () => {
+  // action buttons
+  const onBtNext = () => {
     setPageIndex(pageIndex + 1)
   }
 
@@ -53,12 +38,17 @@ const ApplicationFlaggedSetList = () => {
 
   const pageSizeOptions = ["8", "100", "500", "1000"]
   const pageJumpOptions = Array.from(Array(appsMeta?.totalPages).keys())?.map((item) => item + 1)
-  
+
+  function saveColumnState(api: ColumnApi) {
+    const columnState = api.getColumnState()
+    const columnStateJSON = JSON.stringify(columnState)
+    sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
+  }
+
   class formatLinkCell {
     linkWithId: HTMLSpanElement
 
     init(params) {
-      console.log("NETRA PARAMS ", params)
       this.linkWithId = document.createElement("button")
       this.linkWithId.classList.add("text-blue-700")
 
@@ -80,6 +70,11 @@ const ApplicationFlaggedSetList = () => {
     }
   }
 
+  function onGridReady(params) {
+    setGridColumnApi(params.columnApi)
+    this.api.sizeColumnsToFit()
+  }
+
   const gridOptions: GridOptions = {
     onSortChanged: (params) => saveColumnState(params.columnApi),
     onColumnMoved: (params) => saveColumnState(params.columnApi),
@@ -87,6 +82,12 @@ const ApplicationFlaggedSetList = () => {
       formatLinkCell: formatLinkCell,
     },
   }
+
+  const defaultColDef = {
+    resizable: true,
+    maxWidth: 400,
+  }
+  
   const columnDefs = useMemo(
     () => [
       {
@@ -98,7 +99,6 @@ const ApplicationFlaggedSetList = () => {
         cellRenderer: formatLinkCell,
         valueFormatter: ({ value }) => {
           if (!value?.length) return
-          console.log("NETRA Value", value.length)
           const { firstName, lastName } = value[0]?.applicant
           return `${firstName} ${lastName} + ` + value.length
         },
@@ -185,7 +185,7 @@ const ApplicationFlaggedSetList = () => {
                 paginationPageSize={8}
                 suppressScrollOnNewData={true}
               ></AgGridReact>
-                            <div className="data-pager">
+              <div className="data-pager">
                 <Button
                   className="data-pager__previous data-pager__control"
                   onClick={onBtPrevious}

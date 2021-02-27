@@ -11,7 +11,7 @@ import {
   ApiClientContext,
   debounce,
   lRoute,
-  LocalizedLink,
+  LocalizedLink
 } from "@bloom-housing/ui-components"
 import { useApplicationsData } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
@@ -19,9 +19,8 @@ import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
-import * as XLSX from "xlsx"
 import { saveAs } from "file-saver"
-
+import JSZip from "jszip"
 
 const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
@@ -100,41 +99,27 @@ const ApplicationsList = () => {
     setPageIndex(pageIndex - 1)
   }
 
-  // const onExport = async () => {
-  //   const content = await applicationsService.listAsCsv({ listingId, includeHeaders: true })
-  //   console.log(" NETRA ", content)
-  //   const now = new Date()
-  //   const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
-
-  //   const blob = new Blob([content, content], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;' })
-  //   console.log("netrea  ", blob)
-  //   const fileLink = document.createElement("a")
-
-  //   fileLink.setAttribute("download", `appplications-${listingId}-${dateString}.xls`)
-  //   fileLink.href = URL.createObjectURL(blob)
-
-  //   fileLink.click()
-
-  // }
-  function s2ab(s) {
-    let buf = new ArrayBuffer(s.length)
-    let view = new Uint8Array(buf)
-    for (let i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF
-    return buf
-  }
   const onExport = async () => {
+    const zip = new JSZip()
     const content = await applicationsService.listAsCsv({ listingId, includeHeaders: true })
+    const duplicateContent = await applicationsService.listAsCsv({
+      listingId,
+      includeHeaders: true,
+    })
     const now = new Date()
     const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
-    var blob, workBook = {SheetNames:[], Sheets:{}}
-    var workSheet1 = XLSX.read(content, {type: "binary", cellText: false, cellDates: true}).Sheets.Sheet1
-    workBook.SheetNames.push("Sheet1"); workBook.Sheets["Sheet1"] = workSheet1
-    
-    var workSheet2 = XLSX.read(content, {type: "binary", cellText: false, cellDates: true}).Sheets.Sheet1
-    workBook.SheetNames.push("Sheet2"); workBook.Sheets["Sheet2"] = workSheet2;
-    blob = new Blob([s2ab(XLSX.write(workBook, {bookType: "xlsx", type: "binary" }))], {
-	    type: "application/octet-stream"})
-    saveAs(blob, `appplications-${listingId}-${dateString}.xls`)
+
+    const blob = new Blob([content], { type: "text/csv" })
+
+    zip.file(`aplications-${listingId}-${dateString}` + ".csv", blob)
+    zip.file(`duplicateApplications-${listingId}-${dateString}` + ".csv", duplicateContent)
+    zip
+      .generateAsync({
+        type: "blob",
+      })
+      .then(function (content) {
+        saveAs(content, "Applications.zip")
+      })
   }
 
   // ag grid settings
