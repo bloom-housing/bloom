@@ -7,6 +7,7 @@ import { ApplicationFlaggedSetService } from "./application-flagged-set.service"
 import {
   Controller,
   Get,
+  Header,
   Param,
   Query,
   Request,
@@ -23,6 +24,13 @@ import {
   PaginatedApplicationFlaggedSetDto,
 } from "./dto/application-flagged-set.dto"
 import { AuthzGuard } from "../auth/authz.guard"
+import { ApplicationsCsvListQueryParams } from "../applications/applications.controller"
+import { authzActions, AuthzService } from "../auth/authz.service"
+import { CsvBuilder } from "../csv/csv-builder.service"
+import {
+  applicationFormattingMetadataAggregateFactory,
+  CSVFormattingType,
+} from "../csv/formatting/application-formatting-metadata-factory"
 
 export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -46,7 +54,11 @@ export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams 
   })
 )
 export class ApplicationFlaggedSetController {
-  constructor(private readonly applicationFlaggedSetsService: ApplicationFlaggedSetService) {}
+  constructor(
+    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetService,
+    private readonly authzService: AuthzService,
+    private readonly csvBuilder: CsvBuilder
+  ) {}
 
   @Get()
   @ApiOperation({ summary: "List application flagged sets", operationId: "list" })
@@ -66,5 +78,39 @@ export class ApplicationFlaggedSetController {
   ): Promise<ApplicationFlaggedSetDto> {
     const app = await this.applicationFlaggedSetsService.unresolvedList(afsId)
     return mapTo(ApplicationFlaggedSetDto, app)
+  }
+
+  private authorizeUserAction(user, app, action) {
+    return this.authzService.canOrThrow(user, "application", action, {
+      ...app,
+      user_id: app.user?.id,
+      listing_id: app.listing?.id,
+    })
+  }
+
+  @Get(`csv`)
+  @ApiOperation({ summary: "List duplicate applications as csv", operationId: "listAsCsv" })
+  @Header("Content-Type", "text/csv")
+  async listAsCsv(
+    @Request() req: ExpressRequest,
+    @Query() queryParams: ApplicationsCsvListQueryParams
+  ): Promise<string> {
+    const applications = await this.applicationFlaggedSetsService.listCsv(
+      queryParams.listingId,
+      null
+    )
+    console.log("Netra dup csv apps", applications)
+    await Promise.all(
+      applications.map(async (application) => {
+        await this.authorizeUserAction(req.user, application, authzActions.read)
+      })
+    )
+    return this.csvBuilder.build(
+      applications,
+      applicationFormattingMetadataAggregateFactory,
+      // Every application points to the same listing
+      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
+      queryParams.includeHeaders
+    )
   }
 }

@@ -11,7 +11,7 @@ import {
   ApiClientContext,
   debounce,
   lRoute,
-  LocalizedLink
+  LocalizedLink,
 } from "@bloom-housing/ui-components"
 import { useApplicationsData } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
@@ -42,6 +42,7 @@ const ApplicationsList = () => {
   const listingId = router.query.listing as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
   const { applicationsService } = useContext(ApiClientContext)
+  const { applicationFlaggedSetService } = useContext(ApiClientContext)
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
