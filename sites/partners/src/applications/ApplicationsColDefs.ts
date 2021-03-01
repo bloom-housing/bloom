@@ -87,11 +87,13 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 180,
       minWidth: 150,
       type: "rightAligned",
-      valueFormatter: ({ data, value }) => {
-        if (!value) return ""
+      valueGetter: (row) => {
+        if (!row?.data?.income || !row?.data?.incomePeriod) return ""
 
-        return data.incomePeriod === IncomePeriod.perYear
-          ? formatIncome(value, data.incomePeriod, IncomePeriod.perYear)
+        const { income, incomePeriod } = row.data
+
+        return incomePeriod === IncomePeriod.perYear
+          ? formatIncome(income, incomePeriod, IncomePeriod.perYear)
           : ""
       },
     },
@@ -104,11 +106,13 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 180,
       minWidth: 150,
       type: "rightAligned",
-      valueFormatter: ({ data, value }) => {
-        if (!value) return ""
+      valueGetter: (row) => {
+        if (!row?.data?.income || !row?.data?.incomePeriod) return ""
 
-        return data.incomePeriod === IncomePeriod.perMonth
-          ? formatIncome(value, data.incomePeriod, IncomePeriod.perMonth)
+        const { income, incomePeriod } = row.data
+
+        return incomePeriod === IncomePeriod.perYear
+          ? formatIncome(income, incomePeriod, IncomePeriod.perMonth)
           : ""
       },
     },
