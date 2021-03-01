@@ -34,6 +34,7 @@ import {
   PublicLotteryEvent,
   LotteryResultsEvent,
   OpenHouseEvent,
+  DownloadLotteryResults,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import moment from "moment"
@@ -160,7 +161,7 @@ export default class extends Component<ListingProps> {
 
     let lotterySection
     if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
-      lotterySection = <PublicLotteryEvent publicLottery={publicLottery} />
+      lotterySection = <PublicLotteryEvent event={publicLottery} />
       if (moment(publicLottery.startTime) < moment() && lotteryResults && !lotteryResults.url) {
         lotterySection = <LotteryResultsEvent event={lotteryResults} />
       }
@@ -302,23 +303,8 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
-                  {lotteryResults && lotteryResults.url && (
-                    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4 text-center">
-                      <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
-                      <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">
-                        {moment(lotteryResults.startTime).format("MMMM D, YYYY")}
-                      </p>
-                      <a
-                        className="button is-primary w-full mb-2"
-                        href={lotteryResults.url}
-                        title={t("listings.lotteryResults.downloadResults")}
-                        target="_blank"
-                      >
-                        {t("listings.lotteryResults.downloadResults")}
-                      </a>
-                    </section>
-                  )}
-                  {openHouseEvents && <OpenHouseEvent openHouseEvents={openHouseEvents} />}
+                  <DownloadLotteryResults event={lotteryResults} />
+                  {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
                   <ApplicationSection
                     listing={listing}
                     internalFormRoute="/applications/start/choose-language"

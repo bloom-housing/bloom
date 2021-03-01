@@ -3,11 +3,11 @@ import { ListingEvent } from "@bloom-housing/backend-core/types"
 import { EventDateSection } from "../../../../sections/EventDateSection"
 import { t } from "../../../../helpers/translator"
 
-const OpenHouseEvent = (props: { openHouseEvents: ListingEvent[] }) => {
+const OpenHouseEvent = (props: { events: ListingEvent[] }) => {
   return (
     <section className="aside-block bg-primary-lighter border-t">
       <h4 className="text-caps-tiny">{t("listings.openHouseEvent.header")}</h4>
-      {props.openHouseEvents.map((openHouseEvent, index) => (
+      {props.events.map((openHouseEvent, index) => (
         <div key={`openHouses-${index}`}>
           <EventDateSection event={openHouseEvent} />
           {openHouseEvent.url && (
