@@ -13,7 +13,7 @@ const LotteryResultsEvent = (props: { event: ListingEvent }) => {
       </p>
       {event.note && <p className="text text-gray-600">{event.note}</p>}
       {!event.note && (
-        <p className="text text-gray-600">
+        <p className="text-tiny text-gray-600">
           {t("listings.lotteryResults.completeResultsWillBePosted", {
             hour: moment(props.event.startTime).format("h a"),
           })}

@@ -15,7 +15,7 @@ const OpenHouseEvent = (props: { events: ListingEvent[] }) => {
               <a href={openHouseEvent.url}>{t("listings.openHouseEvent.seeVideo")}</a>
             </p>
           )}
-          {openHouseEvent.note && <p className="text text-gray-600">{openHouseEvent.note}</p>}
+          {openHouseEvent.note && <p className="text-tiny text-gray-600">{openHouseEvent.note}</p>}
         </div>
       ))}
     </section>

@@ -8,7 +8,7 @@ const EventDateSection = (props: { event: ListingEvent }) => {
       <span className="inline-block text-tiny uppercase">
         {moment(props.event.startTime).format("MMMM D, YYYY")}
       </span>
-      <span className="inline-block text-xs font-bold">
+      <span className="inline-block text-sm font-bold">
         {moment(props.event.startTime).format("hh:mma") +
           "-" +
           moment(props.event.endTime).format("hh:mma")}

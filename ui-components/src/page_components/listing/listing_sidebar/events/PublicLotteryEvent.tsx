@@ -14,7 +14,7 @@ const PublicLotteryEvent = (props: { event: ListingEvent }) => {
           <a href={event.url}>{t("listings.publicLottery.seeVideo")}</a>
         </p>
       )}
-      {event.note && <p className="text text-gray-600">{event.note}</p>}
+      {event.note && <p className="text-tiny text-gray-600">{event.note}</p>}
     </section>
   )
 }
