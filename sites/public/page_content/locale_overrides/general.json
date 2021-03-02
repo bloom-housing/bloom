@@ -31,5 +31,8 @@
   },
   "listings": {
     "depositOrMonthsRent": ""
+  },
+  "timeout": {
+    "afterMessage": "We care about your security. We ended your session due to inactivity. Please start a new application to continue."
   }
 }
