@@ -1,31 +1,31 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { DOBField } from "../../src/forms/DOBField"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
+import { TimeField } from "../../src/forms/TimeField"
+import { useForm } from "react-hook-form"
 
 afterEach(cleanup)
 
-const member = ({
-  birthMonth: "September",
-  birthDay: "6",
-  birthYear: "1994",
-} as unknown) as HouseholdMember
+const DefaultTimeField = () => {
+  const { register, watch, errors } = useForm({ mode: "onChange" })
+  return (
+    <TimeField
+      id="time"
+      label="Time"
+      name="time"
+      required={true}
+      register={register}
+      watch={watch}
+      error={!!errors?.time}
+    />
+  )
+}
 
-describe("<Component>", () => {
-  it("testing", () => {
-    const { debug } = render(
-      <DOBField
-        applicant={member}
-        required={true}
-        register={() => {
-          //
-        }}
-        error={{}}
-        watch={() => {
-          //
-        }}
-        label="Date of Birth"
-      />
-    )
+describe("<TimeField>", () => {
+  it("renders successfully", () => {
+    const { getByText } = render(<DefaultTimeField />)
+    expect(getByText("Time")).toBeTruthy()
+    expect(getByText("Hour")).toBeTruthy()
+    expect(getByText("minutes")).toBeTruthy()
+    expect(getByText("seconds")).toBeTruthy()
   })
 })
