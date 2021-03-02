@@ -87,30 +87,4 @@ export class ApplicationFlaggedSetController {
       listing_id: app.listing?.id,
     })
   }
-
-  @Get(`csv`)
-  @ApiOperation({ summary: "List duplicate applications as csv", operationId: "listAsCsv" })
-  @Header("Content-Type", "text/csv")
-  async listAsCsv(
-    @Request() req: ExpressRequest,
-    @Query() queryParams: ApplicationsCsvListQueryParams
-  ): Promise<string> {
-    const applications = await this.applicationFlaggedSetsService.listCsv(
-      queryParams.listingId,
-      null
-    )
-    console.log("Netra dup csv apps", applications)
-    await Promise.all(
-      applications.map(async (application) => {
-        await this.authorizeUserAction(req.user, application, authzActions.read)
-      })
-    )
-    return this.csvBuilder.build(
-      applications,
-      applicationFormattingMetadataAggregateFactory,
-      // Every application points to the same listing
-      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
-      queryParams.includeHeaders
-    )
-  }
 }

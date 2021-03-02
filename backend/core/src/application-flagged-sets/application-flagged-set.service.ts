@@ -11,7 +11,6 @@ import {
 import { paginate } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "../applications/applications.controller"
 import { Application } from "../applications/entities/application.entity"
-import { User } from "../user/entities/user.entity"
 
 @Injectable()
 export class ApplicationFlaggedSetService {
@@ -31,23 +30,6 @@ export class ApplicationFlaggedSetService {
         relations: ["applications"],
       }
     )
-  }
-
-  public async listCsv(listingId: string | null, user?: User) {
-    return this.applicationsRepository.find({
-      where: {
-        ...(user && { user: { id: user.id } }),
-        // Workaround for params.listingId resulting in:
-        // listing: {id: undefined}
-        // and query responding with 0 applications.
-        ...(listingId && { listing: { id: listingId } }),
-        status: "duplicate",
-      },
-      relations: ["listing", "user"],
-      order: {
-        createdAt: "DESC",
-      },
-    })
   }
 
   async handleInsert(newApplication: Application) {

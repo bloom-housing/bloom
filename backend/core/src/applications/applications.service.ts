@@ -99,4 +99,21 @@ export class ApplicationsService {
   async delete(applicationId: string) {
     return await this.repository.softRemove({ id: applicationId })
   }
+
+  public async listAsCsvDuplicateApplications(listingId: string | null, user?: User) {
+    return this.repository.find({
+      where: {
+        ...(user && { user: { id: user.id } }),
+        // Workaround for params.listingId resulting in:
+        // listing: {id: undefined}
+        // and query responding with 0 applications.
+        ...(listingId && { listing: { id: listingId } }),
+        status: "duplicate",
+      },
+      relations: ["listing", "user"],
+      order: {
+        createdAt: "DESC",
+      },
+    })
+  }
 }

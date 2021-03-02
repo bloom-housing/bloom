@@ -71,9 +71,7 @@
     "*.{js,ts,tsx}": "eslint --max-warnings 0"
   },
   "dependencies": {
-    "@types/xlsx": "0.0.36",
     "file-saver": "^2.0.5",
-    "jszip": "^3.6.0",
-    "xlsx": "^0.16.9"
+    "jszip": "^3.6.0"
   }
 }

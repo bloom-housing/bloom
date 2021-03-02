@@ -4,7 +4,7 @@ import { Expose, Type } from "class-transformer"
 import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { UserDto } from "../../user/dto/user.dto"
-import { ApplicationDto } from "../../applications/dto/application.dto"
+import { ApplicationCreateDto, ApplicationDto } from "../../applications/dto/application.dto"
 import { PaginationFactory } from "../../shared/dto/pagination.dto"
 
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
@@ -20,12 +20,12 @@ export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationDto)
-  applications: ApplicationDto
+  applications: ApplicationDto[]
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationDto)
-  resolvedApplication: ApplicationDto
+  resolvedApplication: ApplicationDto[]
 }
 
 export class PaginatedApplicationFlaggedSetDto extends PaginationFactory<ApplicationFlaggedSetDto>(
@@ -44,13 +44,13 @@ export class ApplicationFlaggedSetCreateDto extends OmitType(ApplicationFlaggedS
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationDto)
-  applications: ApplicationDto
+  @Type(() => ApplicationCreateDto)
+  applications: ApplicationCreateDto[]
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationDto)
-  resolvedApplication: ApplicationDto
+  @Type(() => ApplicationCreateDto)
+  resolvedApplication: ApplicationCreateDto[]
 }
 
 export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedSetDto, [
@@ -85,11 +85,11 @@ export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedS
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationDto)
-  applications: ApplicationDto[]
+  @Type(() => ApplicationFlaggedSetUpdateDto)
+  applications: ApplicationFlaggedSetUpdateDto[]
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationDto)
-  resolvedApplication: ApplicationDto
+  @Type(() => ApplicationFlaggedSetUpdateDto)
+  resolvedApplication: ApplicationFlaggedSetUpdateDto[]
 }

@@ -421,6 +421,35 @@ export class ApplicationsService {
     });
   }
   /**
+   * List duplicate applications as csv
+   */
+  listAsCsvDuplicateApplications(
+    params: {
+      /**  */
+      listingId: string;
+      /**  */
+      includeHeaders?: boolean;
+      /**  */
+      userId?: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications/flaggedCsv';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = {
+        listingId: params['listingId'],
+        includeHeaders: params['includeHeaders'],
+        userId: params['userId']
+      };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Get application by id
    */
   retrieve(
@@ -1073,35 +1102,6 @@ export class ApplicationFlaggedSetsService {
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * List duplicate applications as csv
-   */
-  listAsCsv(
-    params: {
-      /**  */
-      listingId: string;
-      /**  */
-      includeHeaders?: boolean;
-      /**  */
-      userId?: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationFlaggedSets/csv';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = {
-        listingId: params['listingId'],
-        includeHeaders: params['includeHeaders'],
-        userId: params['userId']
-      };
       let data = null;
 
       configs.data = data;
@@ -3349,10 +3349,10 @@ export interface ApplicationFlaggedSet {
   resolvingUserId: User;
 
   /**  */
-  applications: Application;
+  applications: Application[];
 
   /**  */
-  resolvedApplication: Application;
+  resolvedApplication: Application[];
 
   /**  */
   id: string;

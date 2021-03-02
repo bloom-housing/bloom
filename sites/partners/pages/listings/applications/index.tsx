@@ -42,7 +42,6 @@ const ApplicationsList = () => {
   const listingId = router.query.listing as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
   const { applicationsService } = useContext(ApiClientContext)
-  const { applicationFlaggedSetService } = useContext(ApiClientContext)
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
@@ -103,7 +102,7 @@ const ApplicationsList = () => {
   const onExport = async () => {
     const zip = new JSZip()
     const content = await applicationsService.listAsCsv({ listingId, includeHeaders: true })
-    const duplicateContent = await applicationsService.listAsCsv({
+    const duplicateContent = await applicationsService.listAsCsvDuplicateApplications({
       listingId,
       includeHeaders: true,
     })

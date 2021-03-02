@@ -66,7 +66,7 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @ApiProperty({
     type: String,
     example: "userId",
-    required: false,
+    required: false
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -149,6 +149,34 @@ export class ApplicationsController {
     @Query() queryParams: ApplicationsCsvListQueryParams
   ): Promise<string> {
     const applications = await this.applicationsService.list(queryParams.listingId, null)
+    await Promise.all(
+      applications.map(async (application) => {
+        await this.authorizeUserAction(req.user, application, authzActions.read)
+      })
+    )
+    return this.csvBuilder.build(
+      applications,
+      applicationFormattingMetadataAggregateFactory,
+      // Every application points to the same listing
+      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
+      queryParams.includeHeaders
+    )
+  }
+
+  @Get(`flaggedCsv`)
+  @ApiOperation({
+    summary: "List duplicate applications as csv",
+    operationId: "listAsCsvDuplicateApplications",
+  })
+  @Header("Content-Type", "text/csv")
+  async listAsCsvDuplicateApplications(
+    @Request() req: ExpressRequest,
+    @Query() queryParams: ApplicationsCsvListQueryParams
+  ): Promise<string> {
+    const applications = await this.applicationsService.listAsCsvDuplicateApplications(
+      queryParams.listingId,
+      null
+    )
     await Promise.all(
       applications.map(async (application) => {
         await this.authorizeUserAction(req.user, application, authzActions.read)
