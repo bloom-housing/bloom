@@ -1,31 +1,62 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { DOBField } from "../../src/forms/DOBField"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
+import { Select } from "../../src/forms/Select"
+import { useForm } from "react-hook-form"
 
 afterEach(cleanup)
 
-const member = ({
-  birthMonth: "September",
-  birthDay: "6",
-  birthYear: "1994",
-} as unknown) as HouseholdMember
+const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 
-describe("<Component>", () => {
-  it("testing", () => {
-    const { debug } = render(
-      <DOBField
-        applicant={member}
-        required={true}
-        register={() => {
-          //
-        }}
-        error={{}}
-        watch={() => {
-          //
-        }}
-        label="Date of Birth"
-      />
-    )
+const DefaultSelect = () => {
+  const { register } = useForm({ mode: "onChange" })
+  return (
+    <Select
+      id="application.demographics.ethnicity"
+      name="application.demographics.ethnicity"
+      placeholder={"Select One"}
+      label={"Ethnicity"}
+      labelClassName="sr-only"
+      register={register}
+      controlClassName="control"
+      options={ethnicityKeys}
+      keyPrefix="application.review.demographics.ethnicityOptions"
+    />
+  )
+}
+
+const ErrorSelect = () => {
+  const { register } = useForm({ mode: "onChange" })
+  return (
+    <Select
+      name="application.demographics.ethnicity"
+      placeholder={"Select One"}
+      label={"Ethnicity"}
+      labelClassName="sr-only"
+      register={register}
+      controlClassName="control"
+      options={ethnicityKeys}
+      keyPrefix="application.review.demographics.ethnicityOptions"
+      error={true}
+      errorMessage={"Uh oh!"}
+      describedBy={"Ethnicity"}
+    />
+  )
+}
+
+describe("<Select>", () => {
+  it("renders successfully", () => {
+    const { getByText } = render(<DefaultSelect />)
+    expect(getByText("Ethnicity")).toBeTruthy()
+    expect(getByText("Select One")).toBeTruthy()
+    expect(getByText("Hispanic / Latino")).toBeTruthy()
+    expect(getByText("Not Hispanic / Latino")).toBeTruthy()
+  })
+  it("renders with an error", () => {
+    const { getByText } = render(<ErrorSelect />)
+    expect(getByText("Ethnicity")).toBeTruthy()
+    expect(getByText("Select One")).toBeTruthy()
+    expect(getByText("Hispanic / Latino")).toBeTruthy()
+    expect(getByText("Not Hispanic / Latino")).toBeTruthy()
+    expect(getByText("Uh oh!")).toBeTruthy()
   })
 })

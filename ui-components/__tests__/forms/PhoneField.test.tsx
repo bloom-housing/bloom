@@ -1,31 +1,53 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
-import { DOBField } from "../../src/forms/DOBField"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
+import { render, cleanup, fireEvent, act } from "@testing-library/react"
+import { PhoneField } from "../../src/forms/PhoneField"
+import { useForm } from "react-hook-form"
 
 afterEach(cleanup)
 
-const member = ({
-  birthMonth: "September",
-  birthDay: "6",
-  birthYear: "1994",
-} as unknown) as HouseholdMember
+const DefaultPhoneField = () => {
+  const { control } = useForm({ mode: "onChange" })
+  return (
+    <PhoneField
+      id="additionalPhoneNumber"
+      name="additionalPhoneNumber"
+      label={"Your Second Phone Number"}
+      required={true}
+      caps={true}
+      error={false}
+      control={control}
+      controlClassName="control"
+    />
+  )
+}
 
-describe("<Component>", () => {
-  it("testing", () => {
-    const { debug } = render(
-      <DOBField
-        applicant={member}
-        required={true}
-        register={() => {
-          //
-        }}
-        error={{}}
-        watch={() => {
-          //
-        }}
-        label="Date of Birth"
-      />
-    )
+const ErrorPhoneField = () => {
+  const { control } = useForm({ mode: "onChange" })
+  return (
+    <PhoneField
+      id="additionalPhoneNumber"
+      name="additionalPhoneNumber"
+      label={"Your Second Phone Number"}
+      required={true}
+      error={true}
+      errorMessage={"Uh oh!"}
+      control={control}
+      controlClassName="control"
+      readerOnly={true}
+    />
+  )
+}
+
+describe("<PhoneField>", () => {
+  it("renders default state", () => {
+    const { getByText, getByPlaceholderText } = render(<DefaultPhoneField />)
+    expect(getByText("Your Second Phone Number")).toBeTruthy()
+    expect(getByPlaceholderText("(555) 555-5555")).toBeTruthy()
+  })
+  it("renders error state", () => {
+    const { getByText, getByPlaceholderText } = render(<ErrorPhoneField />)
+    expect(getByText("Your Second Phone Number")).toBeTruthy()
+    expect(getByPlaceholderText("(555) 555-5555")).toBeTruthy()
+    expect(getByText("Uh oh!")).toBeTruthy()
   })
 })
