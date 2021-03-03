@@ -73,7 +73,7 @@ details.disclosure {
   @apply px-1;
   @apply uppercase;
   @apply text-primary-dark;
-  @apply font-semibold ;
+  @apply font-semibold;
 }
 
 .notice-block {
@@ -89,8 +89,15 @@ details.disclosure {
   @apply bg-primary-lighter;
 }
 
+$shadow-left-slight: -3px 0px 3px -1px rgba(0, 0, 0, 0.1);
+
 .shadow-left {
-  box-shadow: -3px 0px 3px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow-left-slight;
+}
+.md\:shadow-left {
+  @screen md {
+    box-shadow: $shadow-left-slight;
+  }
 }
 
 // temp global style until status bar component

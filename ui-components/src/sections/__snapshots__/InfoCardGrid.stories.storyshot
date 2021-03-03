@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Sections/Info Card Grid Three Columns 1`] = `
+exports[`Storyshots Sections/Info Card Grid Three Cards 1`] = `
 <div
   style={
     Object {

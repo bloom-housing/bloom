@@ -5,15 +5,16 @@
   @apply border-gray-450;
   @apply mb-4;
   @apply bg-white;
+}
 
-  &.is-normal-primary-lighter {
-    @apply bg-primary-lighter;
+.info-card.is-normal-primary-lighter,
+.markdown .info-card {
+  @apply bg-primary-lighter;
 
-    .info-card__title {
-      @apply text-base;
-      @apply normal-case;
-      @apply tracking-normal;
-    }
+  .info-card__title {
+    @apply text-base;
+    @apply normal-case;
+    @apply tracking-normal;
   }
 }
 

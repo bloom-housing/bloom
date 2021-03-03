@@ -1,5 +1,9 @@
 .info-cards__header {
-  @apply mb-4;
+  @apply mb-3;
+
+  @screen md {
+    margin-right: 1rem;
+  }
 }
 
 .info-cards__title {
@@ -19,14 +23,20 @@
 
 .info-cards__subtitle {
   @apply font-serif;
+  @apply mb-5;
 }
 
 .info-cards__grid {
   @screen md {
     @apply flex;
+    @apply flex-wrap;
   }
 
   .info-card {
+    & > :not(.info-card__title) {
+      @apply text-tiny;
+    }
+
     @screen md {
       width: calc(50% - 1rem);
       margin-right: 1rem;
