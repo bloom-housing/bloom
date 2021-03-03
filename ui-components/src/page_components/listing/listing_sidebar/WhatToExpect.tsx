@@ -8,9 +8,9 @@ interface WhatToExpectProps {
 
 const WhatToExpect = (props: WhatToExpectProps) => {
   const listing = props.listing
-  let applicantsWillBeContacted = listing?.whatToExpect?.applicantsWillBeContacted
-  let allInfoWillBeVerified = listing?.whatToExpect?.allInfoWillBeVerified
-  let bePreparedIfChosen = listing?.whatToExpect?.bePreparedIfChosen
+  let applicantsWillBeContacted = listing.whatToExpect?.applicantsWillBeContacted
+  let allInfoWillBeVerified = listing.whatToExpect?.allInfoWillBeVerified
+  let bePreparedIfChosen = listing.whatToExpect?.bePreparedIfChosen
 
   applicantsWillBeContacted =
     applicantsWillBeContacted || applicantsWillBeContacted == ""
