@@ -74,8 +74,8 @@ export function getColDefs(maxHouseholdSize: number) {
       sortable: true,
       unSortIcon: true,
       filter: false,
-      width: 125,
-      minWidth: 120,
+      width: 140,
+      minWidth: 140,
       type: "rightAligned",
     },
     {
@@ -377,8 +377,8 @@ export function getColDefs(maxHouseholdSize: number) {
       field: "alternateContact.type",
       sortable: false,
       filter: false,
-      width: 125,
-      minWidth: 100,
+      width: 132,
+      minWidth: 132,
       valueFormatter: ({ data, value }) => {
         if (!value) return ""
 
@@ -504,8 +504,8 @@ export function getColDefs(maxHouseholdSize: number) {
         field: "householdMembers",
         sortable: false,
         filter: false,
-        width: 125,
-        minWidth: 100,
+        width: 132,
+        minWidth: 132,
         valueFormatter: ({ value }) => {
           if (!value) return t("t.n/a")
 
