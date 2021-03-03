@@ -21,6 +21,7 @@ import { getColDefs } from "../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
+import { stat } from "fs"
 
 const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
@@ -40,7 +41,14 @@ const ApplicationsList = () => {
   const [pageIndex, setPageIndex] = useState(1)
 
   const listingId = router.query.listing as string
-  const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+  const status = "submitted"
+  const { appsData } = useApplicationsData(
+    pageIndex,
+    pageSize,
+    listingId,
+    delayedFilterValue,
+    status
+  )
   const { applicationsService } = useContext(ApiClientContext)
 
   function fetchFilteredResults(value: string) {
@@ -101,17 +109,22 @@ const ApplicationsList = () => {
 
   const onExport = async () => {
     const zip = new JSZip()
-    const content = await applicationsService.listAsCsv({ listingId, includeHeaders: true })
-    const duplicateContent = await applicationsService.listAsCsvDuplicateApplications({
+    const content = await applicationsService.listAsCsv({
       listingId,
       includeHeaders: true,
+      status: "submitted",
+    })
+    const duplicateContent = await applicationsService.listAsCsv({
+      listingId,
+      includeHeaders: true,
+      status: "duplicate",
     })
     const now = new Date()
     const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
 
     const blob = new Blob([content], { type: "text/csv" })
 
-    zip.file(`aplications-${listingId}-${dateString}` + ".csv", blob)
+    zip.file(`applications-${listingId}-${dateString}` + ".csv", blob)
     zip.file(`duplicateApplications-${listingId}-${dateString}` + ".csv", duplicateContent)
     zip
       .generateAsync({

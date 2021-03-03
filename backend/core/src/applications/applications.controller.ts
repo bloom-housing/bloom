@@ -66,11 +66,21 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @ApiProperty({
     type: String,
     example: "userId",
-    required: false
+    required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   userId?: string
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "status",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  status?: string
 }
 
 export class ApplicationsCsvListQueryParams {
@@ -103,6 +113,15 @@ export class ApplicationsCsvListQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   userId?: string
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "status",
+    required: false,
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  status: string
 }
 
 @Controller("applications")
@@ -148,34 +167,10 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Query() queryParams: ApplicationsCsvListQueryParams
   ): Promise<string> {
-    const applications = await this.applicationsService.list(queryParams.listingId, null)
-    await Promise.all(
-      applications.map(async (application) => {
-        await this.authorizeUserAction(req.user, application, authzActions.read)
-      })
-    )
-    return this.csvBuilder.build(
-      applications,
-      applicationFormattingMetadataAggregateFactory,
-      // Every application points to the same listing
-      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
-      queryParams.includeHeaders
-    )
-  }
-
-  @Get(`flaggedCsv`)
-  @ApiOperation({
-    summary: "List duplicate applications as csv",
-    operationId: "listAsCsvDuplicateApplications",
-  })
-  @Header("Content-Type", "text/csv")
-  async listAsCsvDuplicateApplications(
-    @Request() req: ExpressRequest,
-    @Query() queryParams: ApplicationsCsvListQueryParams
-  ): Promise<string> {
-    const applications = await this.applicationsService.listAsCsvDuplicateApplications(
+    const applications = await this.applicationsService.list(
       queryParams.listingId,
-      null
+      null,
+      queryParams.status
     )
     await Promise.all(
       applications.map(async (application) => {

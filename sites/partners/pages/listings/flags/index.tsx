@@ -22,7 +22,9 @@ const ApplicationFlaggedSetList = () => {
   const [pageIndex, setPageIndex] = useState(1)
   const COLUMN_STATE_KEY = "column-state"
 
-  const listingId = router.query.listing as string
+  // const listingId = router.query.listing as string
+  // Hardcoded listing id for testing
+  const listingId = "5fd1a87d-8957-4e47-9104-f81b45f8eb6c"
   const { appsData } = useApplicationFlaggedSetData(pageIndex, pageSize, listingId)
   const appsMeta = appsData?.meta
   const afs = appsData?.items || []
@@ -87,7 +89,7 @@ const ApplicationFlaggedSetList = () => {
     resizable: true,
     maxWidth: 400,
   }
-  
+
   const columnDefs = useMemo(
     () => [
       {
