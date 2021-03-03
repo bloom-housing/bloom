@@ -149,7 +149,7 @@ export class ApplicationFlaggedSetService {
       },
     })
 
-    console.log(" NETRA EMAILRILESET ", emailRuleSet)
+    console.log(" NETRA emailRuleSet ", emailRuleSet)
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
       [Rule.email]: emailRuleSet,

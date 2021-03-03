@@ -13,7 +13,7 @@ import {
   Request,
   UseGuards,
   UsePipes,
-  ValidationPipe,
+  ValidationPipe
 } from "@nestjs/common"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
@@ -21,23 +21,15 @@ import { Request as ExpressRequest } from "express"
 import { mapTo } from "../shared/mapTo"
 import {
   ApplicationFlaggedSetDto,
-  PaginatedApplicationFlaggedSetDto,
+  PaginatedApplicationFlaggedSetDto
 } from "./dto/application-flagged-set.dto"
-import { AuthzGuard } from "../auth/authz.guard"
-import { ApplicationsCsvListQueryParams } from "../applications/applications.controller"
-import { authzActions, AuthzService } from "../auth/authz.service"
-import { CsvBuilder } from "../csv/csv-builder.service"
-import {
-  applicationFormattingMetadataAggregateFactory,
-  CSVFormattingType,
-} from "../csv/formatting/application-formatting-metadata-factory"
 
 export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
     type: String,
     example: "listingId",
-    required: false,
+    required: false
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -50,15 +42,11 @@ export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams 
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,
-    groups: [ValidationsGroupsEnum.default],
+    groups: [ValidationsGroupsEnum.default]
   })
 )
 export class ApplicationFlaggedSetController {
-  constructor(
-    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetService,
-    private readonly authzService: AuthzService,
-    private readonly csvBuilder: CsvBuilder
-  ) {}
+  constructor(private readonly applicationFlaggedSetsService: ApplicationFlaggedSetService) {}
 
   @Get()
   @ApiOperation({ summary: "List application flagged sets", operationId: "list" })
@@ -78,13 +66,5 @@ export class ApplicationFlaggedSetController {
   ): Promise<ApplicationFlaggedSetDto> {
     const app = await this.applicationFlaggedSetsService.unresolvedList(afsId)
     return mapTo(ApplicationFlaggedSetDto, app)
-  }
-
-  private authorizeUserAction(user, app, action) {
-    return this.authzService.canOrThrow(user, "application", action, {
-      ...app,
-      user_id: app.user?.id,
-      listing_id: app.listing?.id,
-    })
   }
 }

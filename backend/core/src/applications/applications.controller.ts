@@ -11,7 +11,7 @@ import {
   Request,
   UseGuards,
   UsePipes,
-  ValidationPipe,
+  ValidationPipe
 } from "@nestjs/common"
 import { Request as ExpressRequest } from "express"
 import { ApplicationsService } from "./applications.service"
@@ -27,7 +27,7 @@ import {
   ApplicationCreateDto,
   ApplicationDto,
   ApplicationUpdateDto,
-  PaginatedApplicationDto,
+  PaginatedApplicationDto
 } from "./dto/application.dto"
 import { Expose, Transform } from "class-transformer"
 import { IsBoolean, IsOptional, IsString } from "class-validator"
@@ -36,7 +36,7 @@ import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import {
   applicationFormattingMetadataAggregateFactory,
-  CSVFormattingType,
+  CSVFormattingType
 } from "../csv/formatting/application-formatting-metadata-factory"
 import { CsvBuilder } from "../csv/csv-builder.service"
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
@@ -46,7 +46,7 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @ApiProperty({
     type: String,
     example: "listingId",
-    required: false,
+    required: false
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -56,7 +56,7 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @ApiProperty({
     type: String,
     example: "search",
-    required: false,
+    required: false
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -71,6 +71,16 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   userId?: string
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "status",
+    required: false
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  status?: string
 }
 
 export class ApplicationsCsvListQueryParams {
@@ -78,7 +88,7 @@ export class ApplicationsCsvListQueryParams {
   @ApiProperty({
     type: String,
     example: "listingId",
-    required: true,
+    required: true
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   listingId: string
@@ -87,7 +97,7 @@ export class ApplicationsCsvListQueryParams {
   @ApiProperty({
     type: Boolean,
     example: true,
-    required: false,
+    required: false
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -98,11 +108,20 @@ export class ApplicationsCsvListQueryParams {
   @ApiProperty({
     type: String,
     example: "userId",
-    required: false,
+    required: false
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   userId?: string
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "status",
+    required: false
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  status: string
 }
 
 @Controller("applications")
@@ -113,7 +132,7 @@ export class ApplicationsCsvListQueryParams {
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,
-    groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
+    groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners]
   })
 )
 @ApiExtraModels(...applicationPreferenceExtraModels)
@@ -148,34 +167,10 @@ export class ApplicationsController {
     @Request() req: ExpressRequest,
     @Query() queryParams: ApplicationsCsvListQueryParams
   ): Promise<string> {
-    const applications = await this.applicationsService.list(queryParams.listingId, null)
-    await Promise.all(
-      applications.map(async (application) => {
-        await this.authorizeUserAction(req.user, application, authzActions.read)
-      })
-    )
-    return this.csvBuilder.build(
-      applications,
-      applicationFormattingMetadataAggregateFactory,
-      // Every application points to the same listing
-      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
-      queryParams.includeHeaders
-    )
-  }
-
-  @Get(`flaggedCsv`)
-  @ApiOperation({
-    summary: "List duplicate applications as csv",
-    operationId: "listAsCsvDuplicateApplications",
-  })
-  @Header("Content-Type", "text/csv")
-  async listAsCsvDuplicateApplications(
-    @Request() req: ExpressRequest,
-    @Query() queryParams: ApplicationsCsvListQueryParams
-  ): Promise<string> {
-    const applications = await this.applicationsService.listAsCsvDuplicateApplications(
+    const applications = await this.applicationsService.list(
       queryParams.listingId,
-      null
+      null,
+      queryParams.status
     )
     await Promise.all(
       applications.map(async (application) => {
@@ -241,7 +236,7 @@ export class ApplicationsController {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
       user_id: app.user?.id,
-      listing_id: app.listing?.id,
+      listing_id: app.listing?.id
     })
   }
 }

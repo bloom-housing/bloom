@@ -20,7 +20,8 @@ export class ApplicationsService {
     private readonly csvBuilder: CsvBuilder
   ) {}
 
-  public async list(listingId: string | null, user?: User) {
+  public async list(listingId: string | null, user?: User, status?: string) {
+    console.log("netra status", status)
     return this.repository.find({
       where: {
         ...(user && { user: { id: user.id } }),
@@ -28,6 +29,7 @@ export class ApplicationsService {
         // listing: {id: undefined}
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
+        status: status,
       },
       relations: ["listing", "user"],
       order: {
@@ -37,6 +39,7 @@ export class ApplicationsService {
   }
 
   async listPaginated(params: ApplicationsListQueryParams) {
+    console.log("netra statussss ", params.status)
     return paginate(
       this.repository,
       { limit: params.limit, page: params.page },
@@ -53,6 +56,7 @@ export class ApplicationsService {
               }
             ),
           }),
+          status: params.status,
         },
         relations: ["listing", "user"],
         order: {
@@ -98,22 +102,5 @@ export class ApplicationsService {
 
   async delete(applicationId: string) {
     return await this.repository.softRemove({ id: applicationId })
-  }
-
-  public async listAsCsvDuplicateApplications(listingId: string | null, user?: User) {
-    return this.repository.find({
-      where: {
-        ...(user && { user: { id: user.id } }),
-        // Workaround for params.listingId resulting in:
-        // listing: {id: undefined}
-        // and query responding with 0 applications.
-        ...(listingId && { listing: { id: listingId } }),
-        status: "duplicate",
-      },
-      relations: ["listing", "user"],
-      order: {
-        createdAt: "DESC",
-      },
-    })
   }
 }

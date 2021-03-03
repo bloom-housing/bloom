@@ -350,6 +350,8 @@ export class ApplicationsService {
       search?: string;
       /**  */
       userId?: string;
+      /**  */
+      status?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -362,7 +364,8 @@ export class ApplicationsService {
         limit: params['limit'],
         listingId: params['listingId'],
         search: params['search'],
-        userId: params['userId']
+        userId: params['userId'],
+        status: params['status']
       };
       let data = null;
 
@@ -402,6 +405,8 @@ export class ApplicationsService {
       includeHeaders?: boolean;
       /**  */
       userId?: string;
+      /**  */
+      status?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -412,36 +417,8 @@ export class ApplicationsService {
       configs.params = {
         listingId: params['listingId'],
         includeHeaders: params['includeHeaders'],
-        userId: params['userId']
-      };
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * List duplicate applications as csv
-   */
-  listAsCsvDuplicateApplications(
-    params: {
-      /**  */
-      listingId: string;
-      /**  */
-      includeHeaders?: boolean;
-      /**  */
-      userId?: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/flaggedCsv';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = {
-        listingId: params['listingId'],
-        includeHeaders: params['includeHeaders'],
-        userId: params['userId']
+        userId: params['userId'],
+        status: params['status']
       };
       let data = null;
 
