@@ -89,12 +89,9 @@ export class ApplicationFlaggedSet {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   applications: Application[]
 
-  @ManyToMany(
-    () => Application,
-    (resolvedApplication) => resolvedApplication.applicationFlaggedSets
-  )
+  @ManyToMany(() => Application)
   @JoinTable()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  resolvedApplication: Application[]
+  resolvedApplications: Application[]
 }

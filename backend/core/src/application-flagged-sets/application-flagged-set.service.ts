@@ -149,7 +149,6 @@ export class ApplicationFlaggedSetService {
       },
     })
 
-    console.log(" NETRA emailRuleSet ", emailRuleSet)
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
       [Rule.email]: emailRuleSet,
@@ -157,13 +156,10 @@ export class ApplicationFlaggedSetService {
 
     for (const [queryRule, exApplications] of Object.entries(queries)) {
       const visitedAfses = []
-      console.log("NETRA RULE ", queryRule)
       for (const exApplication of exApplications) {
-        console.log("NETRA EXAPP ", exApplication)
         const afsesMatchingRule = exApplication.applicationFlaggedSets.filter(
           (afs) => afs.rule === queryRule
         )
-        console.log("netra afsesMatchingRule", afsesMatchingRule)
         if (afsesMatchingRule.length === 0) {
           const newAfs: DeepPartial<ApplicationFlaggedSet> = {
             rule: queryRule,
@@ -185,7 +181,7 @@ export class ApplicationFlaggedSetService {
           }
         }
         if (afsesMatchingRule.length > 1) {
-          console.debug(
+          console.error(
             "There should be up to one AFS matching a rule for given application, " +
               "probably a logic error when creating AFSes"
           )
