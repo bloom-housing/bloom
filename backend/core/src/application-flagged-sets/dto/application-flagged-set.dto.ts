@@ -10,7 +10,7 @@ import { PaginationFactory } from "../../shared/dto/pagination.dto"
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   "resolvingUserId",
   "applications",
-  "resolvedApplication",
+  "resolvedApplications",
 ] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -25,7 +25,7 @@ export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationDto)
-  resolvedApplication: ApplicationDto[]
+  resolvedApplications: ApplicationDto[]
 }
 
 export class PaginatedApplicationFlaggedSetDto extends PaginationFactory<ApplicationFlaggedSetDto>(
@@ -35,7 +35,7 @@ export class PaginatedApplicationFlaggedSetDto extends PaginationFactory<Applica
 export class ApplicationFlaggedSetCreateDto extends OmitType(ApplicationFlaggedSetDto, [
   "resolvingUserId",
   "applications",
-  "resolvedApplication",
+  "resolvedApplications",
 ] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -50,7 +50,7 @@ export class ApplicationFlaggedSetCreateDto extends OmitType(ApplicationFlaggedS
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationCreateDto)
-  resolvedApplication: ApplicationCreateDto[]
+  resolvedApplications: ApplicationCreateDto[]
 }
 
 export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedSetDto, [
@@ -59,7 +59,7 @@ export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedS
   "updatedAt",
   "resolvingUserId",
   "applications",
-  "resolvedApplication",
+  "resolvedApplications",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -91,5 +91,5 @@ export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedS
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationFlaggedSetUpdateDto)
-  resolvedApplication: ApplicationFlaggedSetUpdateDto[]
+  resolvedApplications: ApplicationFlaggedSetUpdateDto[]
 }
