@@ -10,7 +10,6 @@ const listing = Object.assign({}, Gish) as any
 describe("<PreferencesList>", () => {
   it("renders without error", () => {
     const { debug, getByText } = render(<PreferencesList preferences={listing.preferences} />)
-    debug()
     expect(getByText(listing.preferences[0].title)).toBeTruthy()
     expect(getByText(listing.preferences[0].subtitle)).toBeTruthy()
     expect(getByText(listing.preferences[0].description)).toBeTruthy()

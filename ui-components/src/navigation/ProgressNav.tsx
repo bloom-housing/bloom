@@ -27,11 +27,11 @@ const ProgressNavItem = (props: {
 const ProgressNav = (props: {
   currentPageSection: number
   completedSections: number
-  labels?: string[]
+  labels: string[]
 }) => {
   return (
     <ul className={!OnClientSide() ? "invisible" : "progress-nav"}>
-      {(props.labels || []).map((label, i) => (
+      {props.labels.map((label, i) => (
         <ProgressNavItem
           key={label}
           // Sections are 1-indexed

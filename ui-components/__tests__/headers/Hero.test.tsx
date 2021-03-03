@@ -2,14 +2,12 @@ import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { Hero } from "../../src/headers/Hero"
 import Archer from "../../__tests__/fixtures/archer.json"
-import Triton from "../../__tests__/fixtures/triton-test.json"
 import { Listing } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 
 afterEach(cleanup)
 
 const archer = Object.assign({}, Archer) as any
-const triton = Object.assign({}, Triton) as any
 
 describe("<Component>", () => {
   it("renders with no listings", () => {
