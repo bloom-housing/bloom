@@ -3,7 +3,6 @@ import "./FieldSection.scss"
 
 export interface FieldSectionProps {
   title?: string
-  subtitle?: string
   className?: string
   tinted?: boolean
   insetGrid?: boolean

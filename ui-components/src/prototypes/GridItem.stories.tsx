@@ -1,7 +1,6 @@
 import React from "react"
 import { GridItem } from "./GridItem"
 import { Field } from "../forms/Field"
-import { FieldSection } from "./FieldSection"
 
 export default {
   title: "Prototypes/GridItem",
@@ -10,24 +9,12 @@ export default {
 
 export const Default = () => (
   <GridItem>
-    <Field
-      label="Alpha"
-      placeholder="Enter text"
-      name="label1"
-      register={() => {}}
-    />
+    <Field label="Alpha" placeholder="Enter text" name="label1" register={() => {}} />
   </GridItem>
 )
 
 export const TwoColumns = () => (
-  <GridItem
-    className="md:col-span-2"
-  >
-    <Field
-      label="Alpha"
-      placeholder="Enter text"
-      name="label1"
-      register={() => {}}
-    />
+  <GridItem className="md:col-span-2">
+    <Field label="Alpha" placeholder="Enter text" name="label1" register={() => {}} />
   </GridItem>
 )
