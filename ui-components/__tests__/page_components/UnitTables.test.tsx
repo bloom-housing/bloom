@@ -2,10 +2,6 @@ import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
 import { UnitTables } from "../../src/page_components/listing/UnitTables"
 import Archer from "../fixtures/archer.json"
-import {
-  unitSummariesTable,
-  groupNonReservedAndReservedSummaries,
-} from "../../src/helpers/tableSummaries"
 import { UnitSummary } from "@bloom-housing/backend-core/types"
 
 afterEach(cleanup)
