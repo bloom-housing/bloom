@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Brackets, DeepPartial, Repository, SelectQueryBuilder } from "typeorm"
+import { Brackets, DeepPartial, Repository, SelectQueryBuilder, Raw } from "typeorm"
 import { Request } from "express"
 import {
   ApplicationFlaggedSet,
@@ -31,6 +31,26 @@ export class ApplicationFlaggedSetService {
       }
     )
   }
+
+  // async list(params: ApplicationsListQueryParams) {
+  //   return paginate(
+  //     this.afsRepository,
+  //     { limit: params.limit, page: params.page },
+  //     {
+  //       where: (qb: SelectQueryBuilder<ApplicationFlaggedSet>) => {
+  //         qb.where("applicationFlaggedSet__applications.listingId = :id", {
+  //           id: params.listingId,
+  //         })
+  //       },
+  //       join: {
+  //         alias: "applicationFlaggedSet",
+  //         leftJoinAndSelect: {
+  //           afs: "applicationFlaggedSet.applications",
+  //         },
+  //       },
+  //     }
+  //   )
+  // }
 
   async handleInsert(newApplication: Application) {
     const firstNames = [

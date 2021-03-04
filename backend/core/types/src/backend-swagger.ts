@@ -3329,7 +3329,7 @@ export interface ApplicationFlaggedSet {
   applications: Application[];
 
   /**  */
-  resolvedApplication: Application[];
+  resolvedApplications: Application[];
 
   /**  */
   id: string;

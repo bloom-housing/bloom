@@ -136,27 +136,21 @@ const ApplicationFlaggedSetList = () => {
         resizable: false,
         flex: 1,
         cellRendererFramework: function (params) {
-          if (params.data.status == "flagged") {
-            return (
-              <Tag
-                pillStyle={true}
-                size={AppearanceSizeType.small}
-                styleType={AppearanceStyleType.flagged}
-              >
-                {params.data.status}
-              </Tag>
-            )
-          } else {
-            return (
-              <Tag
-                pillStyle={true}
-                size={AppearanceSizeType.small}
-                styleType={AppearanceStyleType.success}
-              >
-                {params.data.status}
-              </Tag>
-            )
-          }
+          return params.data.status == "flagged" 
+            ? <Tag
+            pillStyle={true}
+            size={AppearanceSizeType.small}
+            styleType={AppearanceStyleType.flagged}
+            >
+            {params.data.status}
+            </Tag>
+            : <Tag
+            pillStyle={true}
+            size={AppearanceSizeType.small}
+            styleType={AppearanceStyleType.success}
+            >
+            {params.data.status}
+            </Tag>
         },
       },
     ],

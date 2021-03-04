@@ -1,3 +1,4 @@
+import { ApplicationStatus, EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types/src/backend-swagger"
 import {
   AppearanceStyleType,
   Button,
@@ -60,6 +61,14 @@ const ApplicationFlaggedSetDetails = () => {
   function onGridReady(params) {
     setGridColumnApi(params.columnApi)
     this.api.sizeColumnsToFit()
+    for (const application of applications) {
+      if (application.status == "submitted") {
+        this.api.forEachNode(function (node) {
+          node.setSelected(node.data.status === ApplicationStatus.duplicate); 
+       }); 
+      }
+    }
+    this.gridApi = params.api;
   }
   const defaultColDef = {
     resizable: true,
@@ -75,6 +84,11 @@ const ApplicationFlaggedSetDetails = () => {
       setdisableBtn(true)
       setRowCount(0)
     }
+  }
+
+  function resolveApplication(){
+    // const selectedData = this.gridApi.selection.getSelectedRows()
+    console.log("Selected rows ")
   }
 
   const columnDefs = useMemo(
@@ -167,8 +181,6 @@ const ApplicationFlaggedSetDetails = () => {
               <p className="font-sans font-semibold uppercase text-3xl">
                 {applications[0].applicant.firstName} {applications[0].applicant.lastName}: {rule}
               </p>
-
-              <p className="font-sans text-base mt-1">{applications.id}</p>
             </>
           }
         ></PageHeader>
@@ -178,8 +190,16 @@ const ApplicationFlaggedSetDetails = () => {
               {t("t.back")}
             </Button>
           }
-          tagStyle={AppearanceStyleType.flagged}
-          tagLabel="FLAGGED"
+          tagStyle={
+            appsDataUnresolved?.status == EnumApplicationFlaggedSetStatus.resolved
+              ? AppearanceStyleType.success
+              : AppearanceStyleType.flagged
+          }
+          tagLabel={
+            appsDataUnresolved?.status == EnumApplicationFlaggedSetStatus.resolved
+              ? t(`flaggedSet.resolved`)
+              : t(`flaggedSet.flagged`)
+          }
         />
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
@@ -199,7 +219,7 @@ const ApplicationFlaggedSetDetails = () => {
                 rowSelection={"multiple"}
                 rowMultiSelectWithClick={true}
                 groupSelectsChildren={false}
-                // onSelectionChanged={onSelectionChanged}
+                suppressRowClickSelection={true}
               ></AgGridReact>
               <div className="data-pager">
                 <Button
@@ -273,7 +293,7 @@ const ApplicationFlaggedSetDetails = () => {
               className="data-pager"
               normalCase={false}
               styleType={AppearanceStyleType.success}
-              onClick={() => false}
+              onClick={resolveApplication}
               disabled={disableBtn}
             >
               {t("flaggedSet.resolveFlag")}
