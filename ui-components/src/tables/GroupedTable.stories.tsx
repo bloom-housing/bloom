@@ -46,11 +46,4 @@ const data = [
   },
 ]
 
-/*let i = 50
-while (i > 0) {
-  data.push(data[0])
-  data.push(data[1])
-  i--
-}*/
-
 export const Default = () => <GroupedTable headers={headers} data={data} />
