@@ -1,5 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
+import { t } from "../.."
 
 export interface TableHeaders {
   [key: string]: string
@@ -37,7 +38,7 @@ export const StandardTable = (props: StandardTableProps) => {
 
   const headerLabels = Object.values(headers).map((col, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <HeaderCell key={uniqKey}>{col}</HeaderCell>
+    return <HeaderCell key={uniqKey}>{t(col)}</HeaderCell>
   })
 
   const body = data.map((row: Record<string, React.ReactNode>, dataIndex) => {
