@@ -12,7 +12,7 @@ const application = {} as Application
 afterEach(cleanup)
 
 describe("<AppStatusItem>", () => {
-  it("for an in progress application", () => {
+  it("renders properly for an in progress application", () => {
     const setDeletingApplicationSpy = jest.fn()
     listing.applicationDueDate = new Date(moment().add(10, "days").format())
     const { getByText, queryByText } = render(
@@ -37,7 +37,7 @@ describe("<AppStatusItem>", () => {
     expect(setDeletingApplicationSpy).toHaveBeenCalledTimes(1)
   })
 
-  it("for a never submitted application", () => {
+  it("renders properly for a never submitted application", () => {
     const setDeletingApplicationSpy = jest.fn()
     const { getByText, queryByText } = render(
       <AppStatusItem
@@ -61,7 +61,7 @@ describe("<AppStatusItem>", () => {
     expect(setDeletingApplicationSpy).toHaveBeenCalledTimes(1)
   })
 
-  it("for a submitted application", () => {
+  it("renders properly for a submitted application", () => {
     const setDeletingApplicationSpy = jest.fn()
     const { getByText, queryByText } = render(
       <AppStatusItem

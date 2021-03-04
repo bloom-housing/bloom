@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, fireEvent, act } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { PhoneField } from "../../src/forms/PhoneField"
 import { useForm } from "react-hook-form"
 

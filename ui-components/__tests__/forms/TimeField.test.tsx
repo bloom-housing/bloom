@@ -21,7 +21,7 @@ const DefaultTimeField = () => {
 }
 
 describe("<TimeField>", () => {
-  it("renders successfully", () => {
+  it("renders defalt state", () => {
     const { getByText } = render(<DefaultTimeField />)
     expect(getByText("Time")).toBeTruthy()
     expect(getByText("Hour")).toBeTruthy()
