@@ -47,16 +47,16 @@ const FieldCustomProps = () => {
 }
 
 describe("<Field>", () => {
-  it("default", () => {
+  it("can render default state", () => {
     const { getByLabelText } = render(<FieldDefault />)
     expect(getByLabelText("Test Input Default")).toBeTruthy()
   })
-  it("error", () => {
+  it("can render error state", () => {
     const { getByText, getByLabelText } = render(<FieldError />)
     expect(getByText("Uh oh!")).toBeTruthy()
     expect(getByLabelText("Test Input Error")).toBeTruthy()
   })
-  it("custom", async () => {
+  it("can render custom state", async () => {
     const { getByText, getByLabelText } = render(<FieldCustomProps />)
     expect(getByText("Enter Here:")).toBeTruthy()
     expect(getByLabelText("Test Input Custom")).toBeTruthy()

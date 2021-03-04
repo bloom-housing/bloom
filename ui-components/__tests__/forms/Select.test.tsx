@@ -44,7 +44,7 @@ const ErrorSelect = () => {
 }
 
 describe("<Select>", () => {
-  it("renders successfully", () => {
+  it("renders default state", () => {
     const { getByText } = render(<DefaultSelect />)
     expect(getByText("Ethnicity")).toBeTruthy()
     expect(getByText("Select One")).toBeTruthy()

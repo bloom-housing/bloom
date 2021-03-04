@@ -9,7 +9,7 @@ afterEach(cleanup)
 
 const archer = Object.assign({}, Archer) as any
 
-describe("<Component>", () => {
+describe("<Hero>", () => {
   it("renders with no listings", () => {
     const { getByText } = render(
       <Hero title={<>Say Hello to Your Hero</>} buttonTitle="I am a Button" buttonLink="/listings">
