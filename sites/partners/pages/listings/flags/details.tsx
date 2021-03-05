@@ -66,11 +66,10 @@ const ApplicationFlaggedSetDetails = () => {
     for (const application of applications) {
       if (application.status == "submitted") {
         this.api.forEachNode(function (node) {
-          node.setSelected(node.data.status === ApplicationStatus.duplicate); 
+          node.setSelected(node.data.status === ApplicationStatus.duplicate)
        }); 
       }
     }
-    this.gridApi = params.api;
   }
   const defaultColDef = {
     resizable: true,
@@ -89,12 +88,10 @@ const ApplicationFlaggedSetDetails = () => {
     }
   }
 
-
   const resolveApplication = async () => {
     setClickStatus(1)
     const resolveId = []
     selectedRows.forEach((appId) => {
-      console.log("netra id ",appId.id)
       resolveId.push(appId.id)
     })
     // await appsDataUnresolved.resolve({
@@ -301,15 +298,15 @@ const ApplicationFlaggedSetDetails = () => {
               </span>
               <span className="field-label">{t("flaggedSet.markedDuplicate")}</span>
             </span>
-            { clickStatus == 1 ? 
+            { clickStatus == 1 ? (
                 <Button
                 className="data-pager__next data-pager__control"
                 onClick={resolveApplication}
                 disabled={true}
                 >
                 {t("flaggedSet.update")}
-                </Button>
-              :
+                </Button> 
+                 ) : (
                 <Button
                 className="data-pager"
                 normalCase={false}
@@ -319,7 +316,7 @@ const ApplicationFlaggedSetDetails = () => {
               >
                 {t("flaggedSet.resolveFlag")}
               </Button>
-              
+                 )
             }
 
           </div>

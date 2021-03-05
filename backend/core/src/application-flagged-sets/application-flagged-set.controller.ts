@@ -77,5 +77,4 @@ export class ApplicationFlaggedSetController {
   //   const app = await this.applicationFlaggedSetsService.getResolvedApplications(afsId, applicationIds, user)
   //   return mapTo(ApplicationFlaggedSetUpdateDto, app)
   // }
-
 }
