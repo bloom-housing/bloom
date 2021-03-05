@@ -589,28 +589,10 @@ describe("Applications", () => {
       const { createRes, firstName } = responses[index]
 
       expect(item.id === createRes.body.id)
+      expect(item).toMatchObject(createRes.body)
+      expect(item.applicant).toMatchObject(createRes.body.applicant)
       expect(item.applicant.firstName === firstName)
     }
-  })
-
-  it(`should allow an admin to search for users application using search query param v2`, async () => {
-    const body = getTestAppBody(listing1Id)
-    body.applicant.firstName = "MyName"
-    const createRes = await supertest(app.getHttpServer())
-      .post(`/applications/submit`)
-      .send(body)
-      .expect(201)
-    expect(createRes.body).toMatchObject(body)
-    expect(createRes.body).toHaveProperty("createdAt")
-    expect(createRes.body).toHaveProperty("updatedAt")
-    expect(createRes.body).toHaveProperty("id")
-    const res = await supertest(app.getHttpServer())
-      .get(`/applications/?search=MyName`)
-      .set(...setAuthorization(adminAccessToken))
-      .expect(200)
-    expect(Array.isArray(res.body.items)).toBe(true)
-    expect(res.body.items.length).toBe(1)
-    expect(res.body.items[0].id === createRes.body.id)
   })
 
   it(`should disallow an admin to order users application using bad orderBy query param`, async () => {

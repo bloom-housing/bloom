@@ -59,7 +59,17 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("application.user", "user")
     qb.leftJoinAndSelect("application.listing", "listing")
     qb.leftJoinAndSelect("application.applicant", "applicant")
+    qb.leftJoinAndSelect("applicant.address", "applicant_address")
+    qb.leftJoinAndSelect("applicant.workAddress", "applicant_workAddress")
+    qb.leftJoinAndSelect("application.alternateAddress", "alternateAddress")
+    qb.leftJoinAndSelect("application.mailingAddress", "mailingAddress")
+    qb.leftJoinAndSelect("application.alternateContact", "alternateContact")
+    qb.leftJoinAndSelect("alternateContact.mailingAddress", "alternateContact_mailingAddress")
+    qb.leftJoinAndSelect("application.accessibility", "accessibility")
+    qb.leftJoinAndSelect("application.demographics", "demographics")
+    qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
     qb.where("application.id IS NOT NULL")
+    qb.getMany()
     
 
     // --> Build additional query builder parts
@@ -69,7 +79,7 @@ export class ApplicationsService {
       }
     })
 
-    return paginate<Application>(qb, { limit: params.limit, page: params.page })
+    return paginate(qb, { limit: params.limit, page: params.page })
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
