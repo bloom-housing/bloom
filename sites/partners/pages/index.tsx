@@ -126,17 +126,15 @@ export default function ListingsList() {
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
-            {filteredListings?.length && (
-              <AgGridReact
-                gridOptions={gridOptions}
-                columnDefs={columnDefs}
-                rowData={filteredListings}
-                domLayout={"autoHeight"}
-                headerHeight={83}
-                rowHeight={58}
-                suppressScrollOnNewData={true}
-              ></AgGridReact>
-            )}
+            <AgGridReact
+              gridOptions={gridOptions}
+              columnDefs={columnDefs}
+              rowData={filteredListings}
+              domLayout={"autoHeight"}
+              headerHeight={83}
+              rowHeight={58}
+              suppressScrollOnNewData={true}
+            ></AgGridReact>
 
             <div className="data-pager">
               <div className="data-pager__control-group">

@@ -16,16 +16,16 @@ const listing = Object.assign({}, ArcherListing) as Listing
 const internalFormRoute = "/applications/start/choose-language"
 
 export const hardApplicationDeadline = () => {
-  listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
+  listing.applicationDueDate = new Date("2021-11-30T15:22:57.000-07:00")
   listing.applicationMethods[0].acceptsPostmarkedApplications = false
 
   return <Apply listing={listing} internalFormRoute={internalFormRoute} />
 }
 
 export const acceptsPostmarkedApplications = () => {
-  listing.applicationDueDate = "2021-11-30T15:22:57.000-07:00"
+  listing.applicationDueDate = new Date("2021-11-30T15:22:57.000-07:00")
   listing.applicationMethods[0].acceptsPostmarkedApplications = true
-  listing.postmarkedApplicationsReceivedByDate = "2021-12-05"
+  listing.postmarkedApplicationsReceivedByDate = new Date("2021-12-05")
 
   return <Apply listing={listing} internalFormRoute={internalFormRoute} />
 }
@@ -35,18 +35,12 @@ export const showsMultipleDownloadURLs = () => {
 
   const testMethod1: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
-    createdAt: new Date(),
-    id: "",
-    updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
   }
   const testMethod2: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
-    createdAt: new Date(),
-    id: "",
-    updatedAt: new Date(),
     label: "Spanish",
     externalReference: "#spanish",
     type: ApplicationMethodType.FileDownload,
@@ -64,11 +58,8 @@ export const linkDirectlyToInternalApplication = () => {
 
   const internalMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
-    createdAt: new Date(),
     externalReference: "",
-    id: "",
     label: "",
-    updatedAt: new Date(),
     type: ApplicationMethodType.Internal,
   }
 
@@ -84,19 +75,13 @@ export const linkToInternalApplicationAndDownloads = () => {
 
   const internalMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
-    createdAt: new Date(),
     externalReference: "",
-    id: "",
     label: "",
-    updatedAt: new Date(),
     type: ApplicationMethodType.Internal,
   }
 
   const downloadMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
-    createdAt: new Date(),
-    id: "",
-    updatedAt: new Date(),
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
@@ -114,9 +99,6 @@ export const linkDirectlyToExternalApplication = () => {
 
   const externalMethod: ApplicationMethod = {
     acceptsPostmarkedApplications: false,
-    createdAt: new Date(),
-    id: "",
-    updatedAt: new Date(),
     label: "External",
     externalReference: "https://icann.org",
     type: ApplicationMethodType.ExternalLink,

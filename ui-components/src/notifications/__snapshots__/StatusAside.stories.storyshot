@@ -25,7 +25,7 @@ exports[`Storyshots Notifications/Status Aside Only Timestamp 1`] = `
             fullWidth={true}
             onClick={[Function]}
             size="is-small"
-            type="is-secondary"
+            styleType="is-secondary"
           >
             Preview
           </Button>
@@ -50,7 +50,9 @@ exports[`Storyshots Notifications/Status Aside Only Timestamp 1`] = `
             <div
               className="grid-section__inner md:grid md:grid-cols-1 md:gap-2"
             >
-              <GridCell>
+              <GridCell
+                key="0"
+              >
                 <article
                   className="grid-item"
                 >
@@ -68,7 +70,9 @@ exports[`Storyshots Notifications/Status Aside Only Timestamp 1`] = `
                   </Button>
                 </article>
               </GridCell>
-              <GridCell>
+              <GridCell
+                key="1"
+              >
                 <article
                   className="grid-item"
                 >
@@ -76,7 +80,7 @@ exports[`Storyshots Notifications/Status Aside Only Timestamp 1`] = `
                     fullWidth={true}
                     onClick={[Function]}
                     size="is-small"
-                    type="is-secondary"
+                    styleType="is-secondary"
                   >
                     <button
                       className="button is-secondary is-small is-fullwidth"
@@ -144,7 +148,7 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
             fullWidth={true}
             onClick={[Function]}
             size="is-small"
-            type="is-secondary"
+            styleType="is-secondary"
           >
             Preview
           </Button>
@@ -156,7 +160,7 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
             fullWidth={true}
             onClick={[Function]}
             size="is-small"
-            type="is-primary"
+            styleType="is-primary"
           >
             Submit
           </Button>
@@ -180,7 +184,9 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
             <div
               className="grid-section__inner md:grid md:grid-cols-2 md:gap-2"
             >
-              <GridCell>
+              <GridCell
+                key="0"
+              >
                 <article
                   className="grid-item"
                 >
@@ -198,7 +204,9 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
                   </Button>
                 </article>
               </GridCell>
-              <GridCell>
+              <GridCell
+                key="1"
+              >
                 <article
                   className="grid-item"
                 >
@@ -206,7 +214,7 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
                     fullWidth={true}
                     onClick={[Function]}
                     size="is-small"
-                    type="is-secondary"
+                    styleType="is-secondary"
                   >
                     <button
                       className="button is-secondary is-small is-fullwidth"
@@ -218,6 +226,7 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
                 </article>
               </GridCell>
               <GridCell
+                key="2"
                 span={2}
               >
                 <article
@@ -227,7 +236,7 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
                     fullWidth={true}
                     onClick={[Function]}
                     size="is-small"
-                    type="is-primary"
+                    styleType="is-primary"
                   >
                     <button
                       className="button is-primary is-small is-fullwidth"
@@ -269,7 +278,7 @@ exports[`Storyshots Notifications/Status Aside With Buttons And Messages 1`] = `
                   <Tag
                     pillStyle={true}
                     size="is-small"
-                    type="is-success"
+                    styleType="is-success"
                   >
                     <span
                       className="tag is-success is-small is-pill"

@@ -41,7 +41,7 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   // TODO https://github.com/bloom-housing/bloom/issues/872
   const amiChartItems = units[0].amiChart.items
   const hmiHeaders = {
-    householdSize: bmrProgramChart ? "Unit Type" : "Household Size",
+    householdSize: bmrProgramChart ? "Unit Type" : "listings.householdSize",
   } as AnyDict
   const amiValues = amiPercentages
     .map((percent) => {
@@ -91,8 +91,8 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
       }
     })
   } else {
-    hmiHeaders["maxIncomeMonth"] = "Maximum Income/Month"
-    hmiHeaders["maxIncomeYear"] = "Maximum Income/Year"
+    hmiHeaders["maxIncomeMonth"] = "listings.maxIncomeMonth"
+    hmiHeaders["maxIncomeYear"] = "listings.maxIncomeYear"
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
       const columns = { householdSize: null }

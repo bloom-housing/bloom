@@ -11,7 +11,7 @@ const InfoCardGrid = (props: InfoCardGridProps) => (
   <section className="info-cards">
     <header className="info-cards__header">
       <h2 className="info-cards__title">{props.title}</h2>
-      <p className="info-cards__subtitle">{props.subtitle}</p>
+      {props.subtitle && <p className="info-cards__subtitle">{props.subtitle}</p>}
     </header>
     <div className="info-cards__grid">{props.children}</div>
   </section>
