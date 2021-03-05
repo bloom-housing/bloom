@@ -9,20 +9,17 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
   }
 >
   <DOBField
-    applicant={
-      Object {
-        "birthDay": undefined,
-        "birthMonth": undefined,
-        "birthYear": undefined,
-      }
-    }
-    error={Object {}}
+    atAge={true}
+    id="dateOfBirth"
     label="Date of Birth"
+    name="dateOfBirth"
     register={[Function]}
     required={true}
     watch={[Function]}
   >
-    <fieldset>
+    <fieldset
+      id="dateOfBirth"
+    >
       <legend
         className="field-label--caps"
       >
@@ -39,7 +36,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
             }
           }
           label="Month"
-          name="birthMonth"
+          name="dateOfBirth.birthMonth"
           placeholder="MM"
           readerOnly={true}
           register={[Function]}
@@ -57,7 +54,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
           >
             <label
               className="label sr-only"
-              htmlFor="birthMonth"
+              htmlFor="dateOfBirth.birthMonth"
             >
               Month
             </label>
@@ -65,13 +62,13 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
               className="control"
             >
               <input
-                aria-describedby="birthMonth-error"
+                aria-describedby="dateOfBirth.birthMonth-error"
                 aria-invalid={false}
                 className="input"
                 defaultValue=""
-                id="birthMonth"
+                id="dateOfBirth.birthMonth"
                 maxLength={2}
-                name="birthMonth"
+                name="dateOfBirth.birthMonth"
                 placeholder="MM"
                 type="text"
               />
@@ -86,7 +83,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
             }
           }
           label="Day"
-          name="birthDay"
+          name="dateOfBirth.birthDay"
           placeholder="DD"
           readerOnly={true}
           register={[Function]}
@@ -104,7 +101,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
           >
             <label
               className="label sr-only"
-              htmlFor="birthDay"
+              htmlFor="dateOfBirth.birthDay"
             >
               Day
             </label>
@@ -112,13 +109,13 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
               className="control"
             >
               <input
-                aria-describedby="birthDay-error"
+                aria-describedby="dateOfBirth.birthDay-error"
                 aria-invalid={false}
                 className="input"
                 defaultValue=""
-                id="birthDay"
+                id="dateOfBirth.birthDay"
                 maxLength={2}
-                name="birthDay"
+                name="dateOfBirth.birthDay"
                 placeholder="DD"
                 type="text"
               />
@@ -133,7 +130,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
             }
           }
           label="Year"
-          name="birthYear"
+          name="dateOfBirth.birthYear"
           placeholder="YYYY"
           readerOnly={true}
           register={[Function]}
@@ -151,7 +148,7 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
           >
             <label
               className="label sr-only"
-              htmlFor="birthYear"
+              htmlFor="dateOfBirth.birthYear"
             >
               Year
             </label>
@@ -159,13 +156,13 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
               className="control"
             >
               <input
-                aria-describedby="birthYear-error"
+                aria-describedby="dateOfBirth.birthYear-error"
                 aria-invalid={false}
                 className="input"
                 defaultValue=""
-                id="birthYear"
+                id="dateOfBirth.birthYear"
                 maxLength={4}
-                name="birthYear"
+                name="dateOfBirth.birthYear"
                 placeholder="YYYY"
                 type="text"
               />
