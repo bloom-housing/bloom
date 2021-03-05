@@ -25,6 +25,7 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { response } from "express"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -552,6 +553,78 @@ describe("Applications", () => {
       .send(newBody)
       .set(...setAuthorization(user2AccessToken))
       .expect(403)
+  })
+
+  it(`should allow an admin to order users application using orderBy and order query params`, async () => {
+    const firstNames = ['A FirstName', 'B FirstName', 'C FirstName']
+    const responses = []
+    const body = getTestAppBody(listing1Id)
+    
+    for ( const firstName of firstNames ) {
+      const initialBody = Object.assign({}, body)
+      initialBody.applicant.firstName = firstName
+
+      const createRes = await supertest(app.getHttpServer())
+        .post(`/applications/submit`)
+        .send(body)
+        .expect(201)
+      expect(createRes.body).toMatchObject(initialBody)
+      expect(createRes.body).toHaveProperty("createdAt")
+      expect(createRes.body).toHaveProperty("updatedAt")
+      expect(createRes.body).toHaveProperty("id")
+
+      responses.push({ initialBody, createRes, firstName })
+    }
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?orderBy=firstName&order=ASC`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(3)
+
+    for ( const index in res.body.items ) {
+      const item = res.body.items[index]
+      const { createRes, firstName } = responses[index]
+
+      expect(item.id === createRes.body.id)
+      expect(item.applicant.firstName === firstName)
+    }
+  })
+
+  it(`should allow an admin to search for users application using search query param v2`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.firstName = "MyName"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?search=MyName`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].id === createRes.body.id)
+  })
+
+  it(`should disallow an admin to order users application using bad orderBy query param`, async () => {
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?orderBy=XYZ`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(400)
+  })
+
+  it(`should disallow an admin to order users application using bad order query param`, async () => {
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?order=XYZ`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(400)
   })
 
   afterEach(() => {

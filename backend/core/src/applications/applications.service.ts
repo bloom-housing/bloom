@@ -4,7 +4,7 @@ import { ApplicationUpdateDto } from "./dto/application.dto"
 import { User } from "../user/entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Raw, Repository } from "typeorm"
-import { paginate } from "nestjs-typeorm-paginate"
+import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
 
 @Injectable()
@@ -29,30 +29,47 @@ export class ApplicationsService {
     })
   }
 
-  async listPaginated(params: ApplicationsListQueryParams) {
-    return paginate(
-      this.repository,
-      { limit: params.limit, page: params.page },
-      {
-        where: {
-          ...(params.userId && { user: { id: params.userId } }),
-          ...(params.listingId && { listing: { id: params.listingId } }),
-          ...(params.search && {
-            applicant: Raw(
-              () =>
-                `to_tsvector('english', concat_ws(' ', "Application__applicant")) @@ plainto_tsquery(:search)`,
-              {
-                search: params.search,
-              }
-            ),
-          }),
-        },
-        relations: ["listing", "user"],
-        order: {
-          createdAt: "DESC",
-        },
+  /**
+   * Get paginated list of Application entity
+   * 
+   * @param params: ApplicationsListQueryParams
+   * @returns Promise<Pagination<Application>>
+   */
+  async listPaginated(params: ApplicationsListQueryParams): Promise<Pagination<Application>>
+  {
+   
+    /**
+     * Map used to generate proper parts
+     * of query builder.
+     */
+    const paramsMap = {
+      userId: (qb, { userId }) => qb.andWhere("user.id = :id", { id: userId }),
+      listingId: (qb, { listingId }) => qb.andWhere("listing.id = :id", { id: listingId }),
+      orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
+      search: (qb, { search }) => qb.andWhere(
+          `to_tsvector('english', concat_ws(' ', "applicant")) @@ plainto_tsquery(:search)`, 
+          {
+            search
+          }
+      )
+    }
+
+    // --> Build main query
+    const qb = this.repository.createQueryBuilder("application")
+    qb.leftJoinAndSelect("application.user", "user")
+    qb.leftJoinAndSelect("application.listing", "listing")
+    qb.leftJoinAndSelect("application.applicant", "applicant")
+    qb.where("application.id IS NOT NULL")
+    
+
+    // --> Build additional query builder parts
+    Object.keys(paramsMap).forEach(paramKey => {
+      if ( params[paramKey] ) {
+        paramsMap[paramKey](qb, params)
       }
-    )
+    })
+
+    return paginate<Application>(qb, { limit: params.limit, page: params.page })
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {

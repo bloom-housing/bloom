@@ -30,12 +30,29 @@ import {
   PaginatedApplicationDto,
 } from "./dto/application.dto"
 import { Expose, Transform } from "class-transformer"
-import { IsBoolean, IsOptional, IsString } from "class-validator"
+import { IsBoolean, IsOptional, IsString, IsEnum, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import {
+  applicationFormattingMetadataAggregateFactory,
+  CSVFormattingType,
+} from "../csv/formatting/application-formatting-metadata-factory"
+import { CsvBuilder } from "../csv/csv-builder.service"
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
-import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
+
+enum OrderByParamEnum {
+  firstName = 'applicant.firstName',
+  lastName = 'applicant.lastName',
+  submissionDate = 'application.submissionDate',
+  createdAt = 'application.createdAt'
+}
+
+
+enum OrderParamEnum {
+  ASC = 'ASC',
+  DESC = 'DESC'
+}
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -67,6 +84,36 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   userId?: string
+
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(OrderByParamEnum),
+    example: "createdAt",
+    default: "createdAt",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsIn(Object.values(OrderByParamEnum),{ groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => ( (value) ? (OrderByParamEnum[value]) ? OrderByParamEnum[value] : value : OrderByParamEnum.createdAt ), {
+    toClassOnly: true,
+  })
+  orderBy?: OrderByParamEnum
+  
+  @Expose()
+  @ApiProperty({
+    enum: OrderParamEnum,
+    example: "DESC",
+    default: "DESC",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsIn(Object.keys(OrderParamEnum),{ groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => ( (value) ? value : OrderParamEnum.DESC ), {
+    toClassOnly: true,
+  })
+  order?: OrderParamEnum
 }
 
 export class ApplicationsCsvListQueryParams {
@@ -89,17 +136,6 @@ export class ApplicationsCsvListQueryParams {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
   includeHeaders?: boolean
-
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
-  includeDemographics?: boolean
 
   @Expose()
   @ApiProperty({
@@ -130,7 +166,7 @@ export class ApplicationsController {
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
     private readonly authzService: AuthzService,
-    private readonly applicationCsvExporter: ApplicationCsvExporter
+    private readonly csvBuilder: CsvBuilder
   ) {}
 
   @Get()
@@ -161,10 +197,12 @@ export class ApplicationsController {
         await this.authorizeUserAction(req.user, application, authzActions.read)
       })
     )
-    return this.applicationCsvExporter.export(
+    return this.csvBuilder.build(
       applications,
-      queryParams.includeHeaders,
-      queryParams.includeDemographics
+      applicationFormattingMetadataAggregateFactory,
+      // Every application points to the same listing
+      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
+      queryParams.includeHeaders
     )
   }
 
