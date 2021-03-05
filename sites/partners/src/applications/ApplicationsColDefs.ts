@@ -2,6 +2,30 @@ import moment from "moment"
 import { t, formatIncome, formatYesNoLabel } from "@bloom-housing/ui-components"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
 
+function compareDates(a, b, node, nextNode, isInverted) {
+  if (a && b && a.isSame(b)) {
+    return 0
+  } else if (a === "") {
+    return isInverted ? -1 : 1
+  } else if (b === "") {
+    return isInverted ? 1 : -1
+  } else {
+    return a.unix() - b.unix()
+  }
+}
+
+function compareStrings(a, b, node, nextNode, isInverted) {
+  if (a === b) {
+    return 0
+  } else if (a === "") {
+    return isInverted ? -1 : 1
+  } else if (b === "") {
+    return isInverted ? 1 : -1
+  } else {
+    return a.localeCompare(b)
+  }
+}
+
 export function getColDefs(maxHouseholdSize: number) {
   const defs = [
     {
@@ -14,16 +38,22 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 200,
       minWidth: 150,
       sort: "asc",
+      valueGetter: (row) => {
+        if (!row?.data?.submissionDate) return ""
+
+        const date = moment(row?.data?.submissionDate).utc()
+
+        return date
+      },
       valueFormatter: ({ value }) => {
-        if (!value) return ""
+        if (!value || !value.isValid()) return ""
 
-        const date = moment(value)
-
-        const dateFormatted = date.utc().format("MM/DD/YYYY")
-        const timeFormatted = date.utc().format("hh:mm:ss A")
+        const dateFormatted = value.format("MM/DD/YYYY")
+        const timeFormatted = value.format("hh:mm:ss A")
 
         return `${dateFormatted} ${t("t.at")} ${timeFormatted}`
       },
+      comparator: compareDates,
     },
     {
       headerName: t("application.details.number"),
@@ -47,6 +77,7 @@ export function getColDefs(maxHouseholdSize: number) {
       pinned: "left",
       type: "leftAligned",
       valueFormatter: ({ value }) => t(`application.details.submissionType.${value}`),
+      comparator: compareStrings,
     },
     {
       headerName: t("application.name.firstName"),
@@ -57,6 +88,7 @@ export function getColDefs(maxHouseholdSize: number) {
       pinned: "left",
       width: 125,
       minWidth: 100,
+      comparator: compareStrings,
     },
     {
       headerName: t("application.name.lastName"),
@@ -67,6 +99,7 @@ export function getColDefs(maxHouseholdSize: number) {
       pinned: "left",
       width: 125,
       minWidth: 100,
+      comparator: compareStrings,
     },
     {
       headerName: t("application.details.householdSize"),
@@ -96,6 +129,7 @@ export function getColDefs(maxHouseholdSize: number) {
           ? formatIncome(income, incomePeriod, IncomePeriod.perYear)
           : ""
       },
+      comparator: compareStrings,
     },
     {
       headerName: t("applications.table.declaredMonthlyIncome"),
@@ -115,6 +149,7 @@ export function getColDefs(maxHouseholdSize: number) {
           ? formatIncome(income, incomePeriod, IncomePeriod.perMonth)
           : ""
       },
+      comparator: compareStrings,
     },
     {
       headerName: t("applications.table.subsidyOrVoucher"),
@@ -129,6 +164,7 @@ export function getColDefs(maxHouseholdSize: number) {
 
         return data.value ? t("t.yes") : t("t.no")
       },
+      comparator: compareStrings,
     },
     {
       headerName: t("applications.table.requestAda"),
