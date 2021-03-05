@@ -1,16 +1,22 @@
-import moment from "moment"
 import { t, formatIncome, formatYesNoLabel } from "@bloom-housing/ui-components"
-import { IncomePeriod } from "@bloom-housing/backend-core/types"
+import { IncomePeriod, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import { convertDataToPst } from "../../lib/helpers"
+import moment from "moment"
 
 function compareDates(a, b, node, nextNode, isInverted) {
-  if (a && b && a.isSame(b)) {
+  const dateStringFormat = "MM/DD/YYYY at hh:mm:ss A"
+
+  const dateA = moment(a, dateStringFormat)
+  const dateB = moment(b, dateStringFormat)
+
+  if (a && b && dateA.isSame(dateB)) {
     return 0
   } else if (a === "") {
     return isInverted ? -1 : 1
   } else if (b === "") {
     return isInverted ? 1 : -1
   } else {
-    return a.unix() - b.unix()
+    return dateA.unix() - dateB.unix()
   }
 }
 
@@ -38,20 +44,17 @@ export function getColDefs(maxHouseholdSize: number) {
       width: 200,
       minWidth: 150,
       sort: "asc",
-      valueGetter: (row) => {
-        if (!row?.data?.submissionDate) return ""
+      valueGetter: ({ data }) => {
+        if (!data?.submissionDate) return ""
 
-        const date = moment(row?.data?.submissionDate).utc()
+        const { submissionDate } = data
 
-        return date
-      },
-      valueFormatter: ({ value }) => {
-        if (!value || !value.isValid()) return ""
+        const dateTime = convertDataToPst(
+          submissionDate,
+          data?.submissionType || ApplicationSubmissionType.electronical
+        )
 
-        const dateFormatted = value.format("MM/DD/YYYY")
-        const timeFormatted = value.format("hh:mm:ss A")
-
-        return `${dateFormatted} ${t("t.at")} ${timeFormatted}`
+        return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
       },
       comparator: compareDates,
     },

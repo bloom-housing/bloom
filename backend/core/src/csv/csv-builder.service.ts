@@ -157,11 +157,15 @@ export class CsvBuilder {
     arr: any[],
     formattingMetadataAggregateFactory: FormattingMetadataAggregateFactory,
     csvFormattingType: CSVFormattingType,
-    includeHeaders?: boolean
+    includeHeaders?: boolean,
+    extraFormatters?: Array<FormattingMetadata>
   ): string {
-    const formattingMetadataAggregate = formattingMetadataAggregateFactory(csvFormattingType)
+    let formattingMetadataAggregate = formattingMetadataAggregateFactory(csvFormattingType)
     if (!formattingMetadataAggregate) {
       return ""
+    }
+    if (extraFormatters) {
+      formattingMetadataAggregate = formattingMetadataAggregate.concat(extraFormatters)
     }
     const normalizedMetadataAggregate = this.normalizeMetadataArrays(
       arr,
