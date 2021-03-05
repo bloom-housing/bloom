@@ -1,4 +1,4 @@
-import { ApplicationStatus, EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types/src/backend-swagger"
+import { Application, ApplicationStatus, EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types/src/backend-swagger"
 import {
   AppearanceStyleType,
   Button,
@@ -26,6 +26,8 @@ const ApplicationFlaggedSetDetails = () => {
   const COLUMN_STATE_KEY = "column-state"
   const [disableBtn, setdisableBtn] = useState(true)
   const [rowCount, setRowCount] = useState(0)
+  const [selectedRows, setSelectedRows] = useState<Application[]>([])
+  const [clickStatus, setClickStatus] = useState(0)
 
   const afsId = router.query.id as string
 
@@ -76,19 +78,29 @@ const ApplicationFlaggedSetDetails = () => {
   }
 
   function onSelectionChanged() {
-    const selectedRows = this.api.getSelectedRows()
-    if (selectedRows.length > 0) {
+    setSelectedRows(this.api.getSelectedRows())
+    const rowsData = this.api.getSelectedRows()
+    if (rowsData.length > 0) {
       setdisableBtn(false)
-      setRowCount(selectedRows.length)
+      setRowCount(rowsData.length)
     } else {
       setdisableBtn(true)
       setRowCount(0)
     }
   }
 
-  function resolveApplication(){
-    // const selectedData = this.gridApi.selection.getSelectedRows()
-    console.log("Selected rows ")
+
+  const resolveApplication = async () => {
+    setClickStatus(1)
+    const resolveId = []
+    selectedRows.forEach((appId) => {
+      console.log("netra id ",appId.id)
+      resolveId.push(appId.id)
+    })
+    // await appsDataUnresolved.resolve({
+    //   resolveId: { ...resolveId },
+    //   afsId: { id: afsId},
+    // })
   }
 
   const columnDefs = useMemo(
@@ -289,15 +301,27 @@ const ApplicationFlaggedSetDetails = () => {
               </span>
               <span className="field-label">{t("flaggedSet.markedDuplicate")}</span>
             </span>
-            <Button
-              className="data-pager"
-              normalCase={false}
-              styleType={AppearanceStyleType.success}
-              onClick={resolveApplication}
-              disabled={disableBtn}
-            >
-              {t("flaggedSet.resolveFlag")}
-            </Button>
+            { clickStatus == 1 ? 
+                <Button
+                className="data-pager__next data-pager__control"
+                onClick={resolveApplication}
+                disabled={true}
+                >
+                {t("flaggedSet.update")}
+                </Button>
+              :
+                <Button
+                className="data-pager"
+                normalCase={false}
+                styleType={AppearanceStyleType.success}
+                onClick={resolveApplication}
+                disabled={disableBtn}
+              >
+                {t("flaggedSet.resolveFlag")}
+              </Button>
+              
+            }
+
           </div>
         </article>
       </section>

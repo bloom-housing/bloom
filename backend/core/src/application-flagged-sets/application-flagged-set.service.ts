@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Brackets, DeepPartial, Repository, SelectQueryBuilder, Raw } from "typeorm"
+import { Brackets, DeepPartial, Repository, SelectQueryBuilder, Raw, In } from "typeorm"
 import { Request } from "express"
 import {
   ApplicationFlaggedSet,
@@ -11,6 +11,8 @@ import {
 import { paginate } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "../applications/applications.controller"
 import { Application } from "../applications/entities/application.entity"
+import { date } from "joi"
+import { User } from "src/user/entities/user.entity"
 
 @Injectable()
 export class ApplicationFlaggedSetService {
@@ -213,8 +215,8 @@ export class ApplicationFlaggedSetService {
   // Add resolved logic here
   // Not able to image how data is coming in and in what form?
   // I have no idea what have I written here
-  // async update(afsUpdateDto: ApplicationFlaggedSetUpdateDto) {
-  //   const resolvedafs = await this.afsRepository.findOneOrFail({
+  // async update(afsId: string, applicationId: []) {
+  //   const resolveAfs = await this.afsRepository.findOneOrFail({
   //     where: { id: afsUpdateDto.id },
   //     relations: ["applications"],
   //   })
@@ -230,6 +232,47 @@ export class ApplicationFlaggedSetService {
   //     }
   //   }
   //   await this.afsRepository.save(resolvedafs)
+  // }
+
+  async getResolvedApplications(afsId: string, applicationIds: [], user: User) {
+    const resolvedSet = await this.afsRepository.find({
+      where: { 
+        id: afsId,
+        // applications: In(applicationId)
+      },
+      // relations: ["applications"],
+    })
+    console.log("netra resolvedSet ",resolvedSet)
+    const resolvedApplicationsList = await this.applicationsRepository.find({
+      where: { 
+        id: In(applicationIds),
+        // applications: In(applicationId)
+      },
+      // relations: ["applications"],
+    })
+    console.log("netra resolvedApplicationsList ",resolvedApplicationsList)
+    
+    const resolveAfs: DeepPartial<ApplicationFlaggedSet> = {
+      resolved: true,
+      resolvedTime: new Date,
+      resolvingUserId: user,
+      status: FlaggedSetStatus.resolved,
+    }
+    await this.afsRepository.save(resolveAfs)
+
+    
+  }
+  //   for (const [applications] of Object.entries(resolvedSet)) {
+  //     const afsesMatchingRule = exApplication.applicationFlaggedSets.filter(
+  //       (afs) => afs.rule === queryRule
+  //     )
+  //   }
+
+
+  //   for application in applications_with_afs_joined:
+  // afs_array_without_resolved_one = filter(lambda afs: afs.id != input_afs_id, application.afs)
+  // for afs in afs_array_without_resolved_one:
+  //   afs.remove(application.id)
   // }
 
   async unresolvedList(afsId: string) {

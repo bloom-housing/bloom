@@ -8,6 +8,7 @@ import {
   Controller,
   Get,
   Param,
+  Put,
   Query,
   Request,
   UsePipes,
@@ -18,6 +19,7 @@ import { Request as ExpressRequest } from "express"
 import { mapTo } from "../shared/mapTo"
 import {
   ApplicationFlaggedSetDto,
+  ApplicationFlaggedSetUpdateDto,
   PaginatedApplicationFlaggedSetDto,
 } from "./dto/application-flagged-set.dto"
 
@@ -64,4 +66,16 @@ export class ApplicationFlaggedSetController {
     const app = await this.applicationFlaggedSetsService.unresolvedList(afsId)
     return mapTo(ApplicationFlaggedSetDto, app)
   }
+
+  // @Put(`:afsID, :applicationIds`)
+  // @ApiOperation({ summary: "Resolve AFS", operationId: "resolveAfs" })
+  // async resolveAfs(
+  //   @Request() req: ExpressRequest,
+  //   @Param("afsId") afsId: string,
+  //   @Param("applicationIds") applicationIds: [],
+  // ): Promise<ApplicationFlaggedSetUpdateDto> {
+  //   const app = await this.applicationFlaggedSetsService.getResolvedApplications(afsId, applicationIds, user)
+  //   return mapTo(ApplicationFlaggedSetUpdateDto, app)
+  // }
+
 }

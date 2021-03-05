@@ -936,6 +936,7 @@
     "resolved": "Resolved",
     "markedDuplicate": "applications marked as duplicate",
     "resolveFlag": "Resolve Flag",
-    "siteTitle": "Flagged Applications"
+    "siteTitle": "Flagged Applications",
+    "update": "Update"
   }
 }
