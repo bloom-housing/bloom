@@ -37,7 +37,7 @@ const logo = <img src="/images/alameda-logo-white.svg" alt="Alameda Logo" />
 export const footer = () => (
   <SiteFooter>
     <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
-      <LocalizedLink href="#">Policy</LocalizedLink>
+      <LocalizedLink href="/policy">Policy</LocalizedLink>
     </FooterNav>
   </SiteFooter>
 )
@@ -46,7 +46,7 @@ export const withLogo = () => (
   <SiteFooter>
     <FooterSection>{logo}</FooterSection>
     <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
-      <LocalizedLink href="#">Policy</LocalizedLink>
+      <LocalizedLink href="/policy">Policy</LocalizedLink>
     </FooterNav>
   </SiteFooter>
 )
@@ -56,7 +56,7 @@ export const withLogoAndCredits = () => (
     <FooterSection>{logo}</FooterSection>
     <FooterSection>{credits}</FooterSection>
     <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
-      <LocalizedLink href="#">Policy</LocalizedLink>
+      <LocalizedLink href="/policy">Policy</LocalizedLink>
     </FooterNav>
     <FooterSection className="bg-black" small>
       <ExygyFooter />

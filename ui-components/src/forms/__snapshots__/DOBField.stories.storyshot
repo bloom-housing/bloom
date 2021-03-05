@@ -11,9 +11,9 @@ exports[`Storyshots Forms/Date of Birth Field Default 1`] = `
   <DOBField
     applicant={
       Object {
-        "birthDay": null,
-        "birthMonth": null,
-        "birthYear": null,
+        "birthDay": undefined,
+        "birthMonth": undefined,
+        "birthYear": undefined,
       }
     }
     error={Object {}}

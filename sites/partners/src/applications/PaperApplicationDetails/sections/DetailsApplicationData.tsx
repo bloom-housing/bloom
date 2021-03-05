@@ -1,7 +1,8 @@
 import React, { useContext, useMemo } from "react"
-import moment from "moment"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
+import { convertDataToPst } from "../../../../lib/helpers"
+import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 const DetailsApplicationData = () => {
   const application = useContext(ApplicationContext)
@@ -9,22 +10,10 @@ const DetailsApplicationData = () => {
   const applicationDate = useMemo(() => {
     if (!application) return null
 
-    const momentDate = moment(application.submissionDate)
-
-    const date = momentDate.utc().format("MM/DD/YYYY")
-    const time = momentDate.utc().format("hh:mm:ss A")
-
-    if (!momentDate.isValid()) {
-      return {
-        date: t("t.n/a"),
-        time: t("t.n/a"),
-      }
-    }
-
-    return {
-      date,
-      time,
-    }
+    return convertDataToPst(
+      application?.submissionDate,
+      application?.submissionType || ApplicationSubmissionType.electronical
+    )
   }, [application])
 
   return (

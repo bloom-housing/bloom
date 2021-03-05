@@ -11,6 +11,7 @@ import { ListingsModule } from "../listings/listings.module"
 import { Address } from "../shared/entities/address.entity"
 import { Applicant } from "./entities/applicant.entity"
 import { ApplicationsSubmissionController } from "./applications-submission.controller"
+import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { ApplicationsSubmissionController } from "./applications-submission.cont
     SharedModule,
     ListingsModule,
   ],
-  providers: [ApplicationsService, CsvEncoder, CsvBuilder],
+  providers: [ApplicationsService, CsvEncoder, CsvBuilder, ApplicationCsvExporter],
   exports: [ApplicationsService],
   controllers: [ApplicationsController, ApplicationsSubmissionController],
 })
