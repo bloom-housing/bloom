@@ -397,9 +397,11 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId?: string;
+      listingId: string;
       /**  */
       includeHeaders?: boolean;
+      /**  */
+      includeDemographics?: boolean;
       /**  */
       userId?: string;
     } = {} as any,
@@ -412,6 +414,7 @@ export class ApplicationsService {
       configs.params = {
         listingId: params['listingId'],
         includeHeaders: params['includeHeaders'],
+        includeDemographics: params['includeDemographics'],
         userId: params['userId']
       };
       let data = null;
@@ -1585,16 +1588,19 @@ export interface ListingEvent {
   type: ListingEventType;
 
   /**  */
-  startTime: Date;
+  startTime?: Date;
 
   /**  */
-  endTime: Date;
+  endTime?: Date;
 
   /**  */
   url?: string;
 
   /**  */
   note?: string;
+
+  /**  */
+  label?: string;
 }
 
 export interface WhatToExpect {
@@ -3315,8 +3321,8 @@ export enum ApplicationStatus {
 export enum Language {
   'en' = 'en',
   'es' = 'es',
-  'zh' = 'zh',
-  'vi' = 'vi'
+  'vi' = 'vi',
+  'zh' = 'zh'
 }
 
 export enum ApplicationSubmissionType {
