@@ -123,8 +123,11 @@ export const formatPrimaryApplicantResidenceState = {
 export const formatPrimaryApplicantResidenceZip = {
   label: "Primary Applicant Residence Zip",
   discriminator: "",
-  formatter: (application: Application) => application.applicant.address.zipCode,
+  formatter: (application: Application) => {
+    return defaultFormatter(application.applicant.address.zipCode)
+  },
 }
+
 export const formatPrimaryApplicantMailingStreetAddress = {
   label: "Primary Applicant Mailing Street Address",
   discriminator: "",

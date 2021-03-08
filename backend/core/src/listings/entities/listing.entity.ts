@@ -52,6 +52,7 @@ export class Asset {
 export enum ListingEventType {
   openHouse = "openHouse",
   publicLottery = "publicLottery",
+  lotteryResults = "lotteryResults",
 }
 
 export class ListingEvent {
