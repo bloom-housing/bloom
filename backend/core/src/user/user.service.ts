@@ -15,6 +15,7 @@ export const USER_ERRORS = {
   NOT_FOUND: { message: "emailNotFound", status: HttpStatus.BAD_REQUEST },
   TOKEN_EXPIRED: { message: "tokenExpired", status: HttpStatus.BAD_REQUEST },
   TOKEN_MISSING: { message: "tokenMissing", status: HttpStatus.BAD_REQUEST },
+  EMAIL_IN_USE: { message: "emailInUser", status: HttpStatus.BAD_REQUEST },
 }
 
 const generateSalt = (size = SALT_SIZE) => randomBytes(size)
@@ -92,7 +93,7 @@ export class UserService {
       await this.repo.save(user)
       return user
     } catch (err) {
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
   }
 

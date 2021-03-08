@@ -6,6 +6,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
@@ -21,6 +22,7 @@ export enum UserRole {
 }
 
 @Entity({ name: "user_accounts" })
+@Unique(["email"])
 @Index("user_accounts_email_unique_idx", { synchronize: false })
 export class User {
   @PrimaryGeneratedColumn("uuid")

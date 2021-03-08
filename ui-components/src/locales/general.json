@@ -515,6 +515,24 @@
       "forgotPassword": "Forgot password?",
       "success": "Welcome back, %{name}!"
     },
+    "createAccount": {
+      "yourName": "Your Name",
+      "firstName": "First Name",
+      "middleNameOptional": "Middle Name (optional)",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "yourDateOfBirth": "Your Date of Birth",
+      "email": "Email",
+      "emailPrivacy": "We will only use your email address to contact you about your application.",
+      "reEnterEmail": "Re-enter email address",
+      "reEnterPassword": "Re-enter your password",
+      "mustBe8Chars": "Must be 8 characters",
+      "password": "Passowrd",
+      "errors": {
+        "emailMismatch": "The emails do not match",
+        "passwordMismatch": "The passwors do not match"
+      }
+    },
     "signOut": {
       "success": "You have successfully logged out of your account."
     }

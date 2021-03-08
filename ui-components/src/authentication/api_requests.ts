@@ -18,7 +18,7 @@ export const login = async (apiBase: string, email: string, password: string) =>
 }
 
 export const register = async (apiBase: string, data: UserCreate) => {
-  const res = await axios.post<{ accessToken: string } & User>(`${apiBase}/auth/register`, data)
+  const res = await axios.post<{ accessToken: string } & User>(`${apiBase}/user`, data)
   const { accessToken, ...rest } = res.data
   const user = rest as User
   return { accessToken, user }

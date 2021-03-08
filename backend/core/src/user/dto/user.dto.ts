@@ -4,9 +4,11 @@ import { Expose, Type } from "class-transformer"
 import {
   IsDate,
   IsDefined,
+  IsEmail,
   IsOptional,
   IsString,
   IsUUID,
+  Matches,
   MaxLength,
   ValidateNested,
 } from "class-validator"
@@ -53,6 +55,17 @@ export class UserCreateDto extends OmitType(UserDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   password: string
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @Matches("password")
+  passwordConfirmation: string
+
+  @Expose()
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @Matches("email")
+  emailConfirmation: string
 }
 
 export class UserUpdateDto extends OmitType(UserDto, [
