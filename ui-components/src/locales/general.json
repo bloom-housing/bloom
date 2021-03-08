@@ -627,6 +627,7 @@
     "forIncomeCalculationsBMR": "Income calculations are based on unit type",
     "hideClosedListings": "Hide Closed Listings",
     "householdMaximumIncome": "Household Maximum Income",
+    "householdSize": "Household Size",
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
     "lotteryResults": {
@@ -634,6 +635,8 @@
       "downloadResults": "Download Results",
       "header": "Lottery Results"
     },
+    "maxIncomeMonth": "Maximum Income / Month",
+    "maxIncomeYear": "Maximum Income / Year",
     "moreBuildingSelectionCriteria": "Find out more about Building Selection Criteria",
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
