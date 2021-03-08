@@ -77,7 +77,7 @@ const Field = (props: FieldProps) => {
         {isRadioOrCheckbox && label}
       </div>
       {props.errorMessage && (
-        <ErrorMessage id={`${idOrName}-error`} error={props.error ?? true}>
+        <ErrorMessage id={`${idOrName}-error`} error={props.error}>
           {props.errorMessage}
         </ErrorMessage>
       )}
