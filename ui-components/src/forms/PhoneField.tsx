@@ -49,7 +49,7 @@ export const PhoneField = (props: {
             },
           }}
         />
-        <ErrorMessage id={`${props.id}-error`} error={props.error ?? true}>
+        <ErrorMessage id={`${props.id}-error`} error={props.error}>
           {props.errorMessage}
         </ErrorMessage>
       </div>
