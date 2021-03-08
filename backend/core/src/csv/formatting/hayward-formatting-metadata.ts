@@ -66,7 +66,6 @@ export const haywardFormattingMetadata = [
   formatPrimaryApplicantResidenceAddress,
   formatPrimaryApplicantResidenceCity,
   formatPrimaryApplicantResidenceZip,
-  formatPrimaryApplicantResidenceZip,
   formatPrimaryApplicantMailingStreetAddress,
   formatPrimaryApplicantMailingCity,
   formatPrimaryApplicantMailingState,

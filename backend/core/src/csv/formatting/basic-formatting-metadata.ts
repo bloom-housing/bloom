@@ -62,7 +62,6 @@ export const basicFormattingMetadata = [
   formatPrimaryApplicantResidenceAddress,
   formatPrimaryApplicantResidenceCity,
   formatPrimaryApplicantResidenceZip,
-  formatPrimaryApplicantResidenceZip,
   formatPrimaryApplicantMailingStreetAddress,
   formatPrimaryApplicantMailingCity,
   formatPrimaryApplicantMailingState,

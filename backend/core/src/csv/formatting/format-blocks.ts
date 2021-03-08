@@ -123,8 +123,11 @@ export const formatPrimaryApplicantResidenceState = {
 export const formatPrimaryApplicantResidenceZip = {
   label: "Primary Applicant Residence Zip",
   discriminator: "",
-  formatter: (application: Application) => application.applicant.address.zipCode,
+  formatter: (application: Application) => {
+    return defaultFormatter(application.applicant.address.zipCode)
+  },
 }
+
 export const formatPrimaryApplicantMailingStreetAddress = {
   label: "Primary Applicant Mailing Street Address",
   discriminator: "",
@@ -505,5 +508,45 @@ export const formatApplicationType = {
   discriminator: "",
   formatter: (application: Application) => {
     return defaultFormatter(application.submissionType)
+  },
+}
+
+export const formatDemographicsEthnicity = {
+  label: "Demographics Ethnicity",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return defaultFormatter(application.demographics.ethnicity)
+  },
+}
+
+export const formatDemographicsRace = {
+  label: "Demographics Race",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return defaultFormatter(application.demographics.race)
+  },
+}
+
+export const formatDemographicsGender = {
+  label: "Demographics Gender",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return defaultFormatter(application.demographics.gender)
+  },
+}
+
+export const formatDemographicsSexualOrientation = {
+  label: "Demographics Sexual Orientation",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return defaultFormatter(application.demographics.sexualOrientation)
+  },
+}
+
+export const formatDemographicsHowDidYouHear = {
+  label: "Demographics How Did You Hear About Us",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return joinArrayFormatter(application.demographics.howDidYouHear)
   },
 }

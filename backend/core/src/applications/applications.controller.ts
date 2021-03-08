@@ -34,12 +34,8 @@ import { IsBoolean, IsOptional, IsString } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import {
-  applicationFormattingMetadataAggregateFactory,
-  CSVFormattingType,
-} from "../csv/formatting/application-formatting-metadata-factory"
-import { CsvBuilder } from "../csv/csv-builder.service"
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
+import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -96,6 +92,17 @@ export class ApplicationsCsvListQueryParams {
 
   @Expose()
   @ApiProperty({
+    type: Boolean,
+    example: true,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
+  includeDemographics?: boolean
+
+  @Expose()
+  @ApiProperty({
     type: String,
     example: "userId",
     required: false,
@@ -123,7 +130,7 @@ export class ApplicationsController {
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
     private readonly authzService: AuthzService,
-    private readonly csvBuilder: CsvBuilder
+    private readonly applicationCsvExporter: ApplicationCsvExporter
   ) {}
 
   @Get()
@@ -154,12 +161,10 @@ export class ApplicationsController {
         await this.authorizeUserAction(req.user, application, authzActions.read)
       })
     )
-    return this.csvBuilder.build(
+    return this.applicationCsvExporter.export(
       applications,
-      applicationFormattingMetadataAggregateFactory,
-      // Every application points to the same listing
-      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
-      queryParams.includeHeaders
+      queryParams.includeHeaders,
+      queryParams.includeDemographics
     )
   }
 
