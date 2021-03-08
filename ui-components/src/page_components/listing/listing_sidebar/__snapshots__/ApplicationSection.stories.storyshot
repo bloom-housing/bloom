@@ -71059,6 +71059,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
             className="mb-4"
           >
             <a
+              className="inline-block pt-1"
               href="https://www.google.com/maps/place/98 Archer Street, San Jose, CA 95112"
               target="_blank"
             >
@@ -71186,6 +71187,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
             className="mb-4"
           >
             <a
+              className="inline-block pt-1"
               href="https://www.google.com/maps/place/98 Archer Street, San Jose, CA 95112"
               target="_blank"
             >
@@ -71276,6 +71278,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
             className="mb-4"
           >
             <a
+              className="inline-block pt-1"
               href="https://www.google.com/maps/place/98 Archer Street, San Jose, CA 95112"
               target="_blank"
             >
