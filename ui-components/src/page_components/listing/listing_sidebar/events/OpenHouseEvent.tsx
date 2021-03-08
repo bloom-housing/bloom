@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ListingEvent } from "@bloom-housing/backend-core/types"
-import { EventDateSection } from "../../../../sections/EventDateSection"
+import { EventDateSection } from "./EventDateSection"
 import { t } from "../../../../helpers/translator"
 
 const OpenHouseEvent = (props: { events: ListingEvent[] }) => {
