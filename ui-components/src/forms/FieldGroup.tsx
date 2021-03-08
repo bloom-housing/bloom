@@ -48,6 +48,7 @@ const FieldGroup = ({
               aria-invalid={!!error || false}
               type={type}
               id={item.id}
+              defaultValue={item.value || item.id}
               name={name}
               defaultChecked={item.defaultChecked || false}
               ref={register(validation)}
