@@ -63,14 +63,16 @@ export class ListingEvent {
   type: ListingEventType
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  startTime: Date
+  startTime?: Date
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  endTime: Date
+  endTime?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -81,6 +83,11 @@ export class ListingEvent {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   note?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  label?: string | null
 }
 
 export enum ApplicationMethodType {
