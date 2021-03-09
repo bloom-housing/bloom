@@ -33,7 +33,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
     const date = listing.applicationDueDate
     if (listing.applicationDueDate) {
       const dueDate = moment(date)
-      formattedDate = dueDate.format("MMM DD, YYYY") + " at " + dueDate.format("h:mm A")
+      formattedDate = dueDate.format("MMM. DD, YYYY") + " at " + dueDate.format("h:mm A")
 
       // if due date is in future, listing is open
       if (moment() < dueDate) {

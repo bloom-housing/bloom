@@ -12,7 +12,9 @@ const OpenHouseEvent = (props: { events: ListingEvent[] }) => {
           <EventDateSection event={openHouseEvent} />
           {openHouseEvent.url && (
             <p className="text text-gray-800 pb-3">
-              <a href={openHouseEvent.url}>{t("listings.openHouseEvent.seeVideo")}</a>
+              <a href={openHouseEvent.url}>
+                {openHouseEvent.label || t("listings.openHouseEvent.seeVideo")}
+              </a>
             </p>
           )}
           {openHouseEvent.note && <p className="text-tiny text-gray-600">{openHouseEvent.note}</p>}
