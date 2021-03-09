@@ -24778,7 +24778,13 @@ exports[`Storyshots Blocks/Application Status Item App Status Item Past Due 1`] 
                 }
               }
             >
-              98 Archer Street
+              <Markdown>
+                <span
+                  key="outer"
+                >
+                  98 Archer Street
+                </span>
+              </Markdown>
               <br />
               San Jose
               , 
@@ -72205,7 +72211,13 @@ exports[`Storyshots Blocks/Application Status Item App Status Item Pending 1`] =
                 }
               }
             >
-              98 Archer Street
+              <Markdown>
+                <span
+                  key="outer"
+                >
+                  98 Archer Street
+                </span>
+              </Markdown>
               <br />
               San Jose
               , 
@@ -119633,7 +119645,13 @@ exports[`Storyshots Blocks/Application Status Item App Status Item Submitted 1`]
                 }
               }
             >
-              98 Archer Street
+              <Markdown>
+                <span
+                  key="outer"
+                >
+                  98 Archer Street
+                </span>
+              </Markdown>
               <br />
               San Jose
               , 
