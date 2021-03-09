@@ -71046,7 +71046,13 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
                 }
               }
             >
-              98 Archer Street
+              <Markdown>
+                <span
+                  key="outer"
+                >
+                  98 Archer Street
+                </span>
+              </Markdown>
               <br />
               San Jose
               , 
@@ -71174,7 +71180,13 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
                 }
               }
             >
-              98 Archer Street
+              <Markdown>
+                <span
+                  key="outer"
+                >
+                  98 Archer Street
+                </span>
+              </Markdown>
               <br />
               San Jose
               , 
@@ -71213,7 +71225,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
         <p
           className="mt-4 text-tiny text-gray-750"
         >
-          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr 11, 2030 and received by mail no later than Dec 05, 2019. Applications received after Dec 05, 2019 via mail will not be accepted even if they are postmarked by Apr 11, 2030. Charities Housing  is not responsible for lost or delayed mail.
+          Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by Apr. 11, 2030 at 4 PM and received by mail no later than Dec. 05, 2019 at 12 AM. Applications received after Dec. 05, 2019 at 12 AM via mail will not be accepted even if they are postmarked by Apr. 11, 2030 at 4 PM. Charities Housing  is not responsible for lost or delayed mail.
         </p>
         <OrDivider
           bgColor="gray-100"
@@ -71265,7 +71277,13 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
                 }
               }
             >
-              98 Archer Street
+              <Markdown>
+                <span
+                  key="outer"
+                >
+                  98 Archer Street
+                </span>
+              </Markdown>
               <br />
               San Jose
               , 

@@ -1105,7 +1105,7 @@ exports[`Storyshots Notifications/Application Status Due Soon And Vivid 1`] = `
       </Icon>
         
       Application Due Date
-      : Apr 11, 2030 at 4:00 PM
+      : Apr. 11, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -3335,7 +3335,7 @@ exports[`Storyshots Notifications/Application Status Opened Already 1`] = `
       </Icon>
         
       Application Due Date
-      : Apr 11, 2030 at 4:00 PM
+      : Apr. 11, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -6679,7 +6679,7 @@ exports[`Storyshots Notifications/Application Status Past Due 1`] = `
       </Icon>
         
       Applications Closed
-      : Mar 22, 2030 at 4:00 PM
+      : Mar. 22, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG
@@ -7795,7 +7795,7 @@ exports[`Storyshots Notifications/Application Status Past Due And Vivid 1`] = `
       </Icon>
         
       Applications Closed
-      : Mar 22, 2030 at 4:00 PM
+      : Mar. 22, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG
