@@ -1125,7 +1125,13 @@ exports[`Storyshots Listing/Map Show BW Map With Pin 1`] = `
           }
         }
       >
-        98 Archer Street
+        <Markdown>
+          <span
+            key="outer"
+          >
+            98 Archer Street
+          </span>
+        </Markdown>
         <br />
         San Jose
         , 
@@ -1153,7 +1159,7 @@ exports[`Storyshots Listing/Map Show BW Map With Pin 1`] = `
       longitude={-121.910608}
       mapOptions={Object {}}
       mapStyle="mapbox://styles/mapbox/streets-v11"
-      mapboxApiAccessToken="no-token"
+      mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
       mapboxApiUrl="https://api.mapbox.com"
       maxPitch={60}
       maxZoom={24}
@@ -1238,7 +1244,7 @@ exports[`Storyshots Listing/Map Show BW Map With Pin 1`] = `
           longitude={-121.910608}
           mapOptions={Object {}}
           mapStyle="mapbox://styles/mapbox/streets-v11"
-          mapboxApiAccessToken="no-token"
+          mapboxApiAccessToken="pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
           mapboxApiUrl="https://api.mapbox.com"
           maxPitch={60}
           maxZoom={24}
