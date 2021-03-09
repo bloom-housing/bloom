@@ -69,12 +69,12 @@
     "name": "Alameda County"
   },
   "listings": {
-    "depositOrMonthsRent": ""
+    "depositOrMonthsRent": "",
+    "publicLottery": {
+      "header": "Lottery"
+    }
   },
   "timeout": {
     "afterMessage": "We care about your security. We ended your session due to inactivity. Please start a new application to continue."
-  },
-  "publicLottery": {
-    "header": "Lottery"
   }
 }
