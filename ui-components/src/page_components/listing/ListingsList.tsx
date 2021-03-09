@@ -12,7 +12,7 @@ export interface ListingsProps {
 }
 
 const imageUrlFromListing = (listing: Listing) => {
-  return listing.assets?.find((asset: Asset) => asset.label == "building")?.fileId
+  return listing?.assets?.find((asset: Asset) => asset.label == "building")?.fileId
 }
 
 const ListingsList = (props: ListingsProps) => {
