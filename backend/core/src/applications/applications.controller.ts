@@ -30,7 +30,7 @@ import {
   PaginatedApplicationDto,
 } from "./dto/application.dto"
 import { Expose, Transform } from "class-transformer"
-import { IsBoolean, IsOptional, IsString, IsEnum, IsIn } from "class-validator"
+import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
@@ -42,16 +42,15 @@ import { CsvBuilder } from "../csv/csv-builder.service"
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 
 enum OrderByParamEnum {
-  firstName = 'applicant.firstName',
-  lastName = 'applicant.lastName',
-  submissionDate = 'application.submissionDate',
-  createdAt = 'application.createdAt'
+  firstName = "applicant.firstName",
+  lastName = "applicant.lastName",
+  submissionDate = "application.submissionDate",
+  createdAt = "application.createdAt",
 }
 
-
 enum OrderParamEnum {
-  ASC = 'ASC',
-  DESC = 'DESC'
+  ASC = "ASC",
+  DESC = "DESC",
 }
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
@@ -94,12 +93,20 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsIn(Object.values(OrderByParamEnum),{ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => ( (value) ? (OrderByParamEnum[value]) ? OrderByParamEnum[value] : value : OrderByParamEnum.createdAt ), {
-    toClassOnly: true,
-  })
+  @IsIn(Object.values(OrderByParamEnum), { groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (value: string | undefined) =>
+      value
+        ? OrderByParamEnum[value]
+          ? OrderByParamEnum[value]
+          : value
+        : OrderByParamEnum.createdAt,
+    {
+      toClassOnly: true,
+    }
+  )
   orderBy?: OrderByParamEnum
-  
+
   @Expose()
   @ApiProperty({
     enum: OrderParamEnum,
@@ -109,8 +116,8 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsIn(Object.keys(OrderParamEnum),{ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => ( (value) ? value : OrderParamEnum.DESC ), {
+  @IsIn(Object.keys(OrderParamEnum), { groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => (value ? value : OrderParamEnum.DESC), {
     toClassOnly: true,
   })
   order?: OrderParamEnum

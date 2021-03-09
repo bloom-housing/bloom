@@ -25,7 +25,6 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
-import { response } from "express"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -556,11 +555,11 @@ describe("Applications", () => {
   })
 
   it(`should allow an admin to order users application using orderBy and order query params`, async () => {
-    const firstNames = ['A FirstName', 'B FirstName', 'C FirstName']
+    const firstNames = ["A FirstName", "B FirstName", "C FirstName"]
     const responses = []
     const body = getTestAppBody(listing1Id)
-    
-    for ( const firstName of firstNames ) {
+
+    for (const firstName of firstNames) {
       const initialBody = Object.assign({}, body)
       initialBody.applicant.firstName = firstName
 
@@ -584,7 +583,7 @@ describe("Applications", () => {
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(3)
 
-    for ( const index in res.body.items ) {
+    for (const index in res.body.items) {
       const item = res.body.items[index]
       const { createRes, firstName } = responses[index]
 
@@ -596,14 +595,14 @@ describe("Applications", () => {
   })
 
   it(`should disallow an admin to order users application using bad orderBy query param`, async () => {
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .get(`/applications/?orderBy=XYZ`)
       .set(...setAuthorization(adminAccessToken))
       .expect(400)
   })
 
   it(`should disallow an admin to order users application using bad order query param`, async () => {
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .get(`/applications/?order=XYZ`)
       .set(...setAuthorization(adminAccessToken))
       .expect(400)

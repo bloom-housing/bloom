@@ -3,7 +3,7 @@ import { Application } from "./entities/application.entity"
 import { ApplicationUpdateDto } from "./dto/application.dto"
 import { User } from "../user/entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Raw, Repository } from "typeorm"
+import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
 
@@ -31,13 +31,11 @@ export class ApplicationsService {
 
   /**
    * Get paginated list of Application entity
-   * 
+   *
    * @param params: ApplicationsListQueryParams
    * @returns Promise<Pagination<Application>>
    */
-  async listPaginated(params: ApplicationsListQueryParams): Promise<Pagination<Application>>
-  {
-   
+  async listPaginated(params: ApplicationsListQueryParams): Promise<Pagination<Application>> {
     /**
      * Map used to generate proper parts
      * of query builder.
@@ -46,12 +44,13 @@ export class ApplicationsService {
       userId: (qb, { userId }) => qb.andWhere("user.id = :id", { id: userId }),
       listingId: (qb, { listingId }) => qb.andWhere("listing.id = :id", { id: listingId }),
       orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
-      search: (qb, { search }) => qb.andWhere(
-          `to_tsvector('english', concat_ws(' ', "applicant")) @@ plainto_tsquery(:search)`, 
+      search: (qb, { search }) =>
+        qb.andWhere(
+          `to_tsvector('english', concat_ws(' ', "applicant")) @@ plainto_tsquery(:search)`,
           {
-            search
+            search,
           }
-      )
+        ),
     }
 
     // --> Build main query
@@ -69,12 +68,10 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("application.demographics", "demographics")
     qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
     qb.where("application.id IS NOT NULL")
-    qb.getMany()
-    
 
     // --> Build additional query builder parts
-    Object.keys(paramsMap).forEach(paramKey => {
-      if ( params[paramKey] ) {
+    Object.keys(paramsMap).forEach((paramKey) => {
+      if (params[paramKey]) {
         paramsMap[paramKey](qb, params)
       }
     })
