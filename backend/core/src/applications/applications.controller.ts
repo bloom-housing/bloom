@@ -34,10 +34,6 @@ import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import {
-  applicationFormattingMetadataAggregateFactory,
-  CSVFormattingType,
-} from "../csv/formatting/application-formatting-metadata-factory"
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 
