@@ -155,6 +155,55 @@ for application in applications_with_afs_joined:
     afs.remove(application.id)
 ```
 
+### Revised Resolving logic:
+1. As per the ticket #093, user can either mark the applications as duplicate or unmark the duplicate applications to active
+	### If we are calling the same endpoint to resolve appplications  (this approach can be complex)
+		
+		i. Input Params
+			- AfsID
+			- ApplicationId []
+			- status (resolve or active)
+		ii.   Based on status param execute resolved logic / unresolve logic
+		iii.   if status == "resolve"
+			- add applications ids to this AFS.resolvedApplications array
+  			- mark AFS.resolved to true (action has been taken)
+ 			- set resolvingUserId
+  			- set resolve time
+  			- mark application status to duplicate
+  		      if status = "active"
+		      	- remove applications ids from this AFS.resolvedApplications array
+		      	- add applications ids to this AFS.resolvedApplications array
+  			- mark AFS.resolved to true (action has been taken)
+ 			- set resolvingUserId
+  			- set resolve time
+  			- mark application status to submitted
+  	
+	### If we are calling different endpoint one to resolve (resolveApplication) and another to unresolve applications (unResolveApplication)
+	    
+	    1. resolveApplication: 
+			i. input params
+				- AfsID
+				- ApplicationId []
+			ii. Mark applications as resolved
+				- add applications ids to this AFS.resolvedApplications array
+				- mark AFS.resolved to true (action has been taken)
+				- set resolvingUserId
+				- set resolve time
+				- mark application status to duplicate
+  	     2. unResolveApplication:
+			i. input params
+				- AfsID
+				- ApplicationId []
+			ii. Remove applications from resolved
+				- remove applications ids from this AFS.resolvedApplications array
+				- add applications ids to this AFS.resolvedApplications array
+				- mark AFS.resolved to true (action has been taken)
+				- set resolvingUserId
+				- set resolve time
+				- mark application status to submitted
+  			- 
+  	Also, how to handle if secanrio where user unmarks the already resolved application (to make it active) and marks the other application to resolve it. Which application id to be sent to backend? How will we know which application Id to be marked resolved and which application id to be marked active?	
+	
 ### Querying applications:
 
 Logic of querying applications should be modified to accomodate: 
