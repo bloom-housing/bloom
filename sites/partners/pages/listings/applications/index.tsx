@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef, useMemo } from "react"
+import React, { useState, useEffect, useRef, useMemo } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
@@ -8,12 +8,11 @@ import {
   MetaTags,
   t,
   Button,
-  ApiClientContext,
   debounce,
   lRoute,
   LocalizedLink,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../../../lib/hooks"
+import { useApplicationsData, useListAsCsv } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
@@ -39,7 +38,6 @@ const ApplicationsList = () => {
 
   const listingId = router.query.listing as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
-  const { applicationsService } = useContext(ApiClientContext)
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
@@ -97,8 +95,11 @@ const ApplicationsList = () => {
     setPageIndex(pageIndex - 1)
   }
 
+  const { mutate: mutateCsv, loading: loadingCsv } = useListAsCsv(listingId, true)
+
   const onExport = async () => {
-    const content = await applicationsService.listAsCsv({ listingId, includeHeaders: true })
+    const content = await mutateCsv()
+
     const now = new Date()
     const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
 
@@ -186,7 +187,7 @@ const ApplicationsList = () => {
                   </Button>
                 </LocalizedLink>
 
-                <Button className="mx-1" onClick={() => onExport()}>
+                <Button className="mx-1" onClick={() => onExport()} loading={loadingCsv}>
                   {t("t.export")}
                 </Button>
               </div>
