@@ -302,7 +302,7 @@ const ApplicationFlaggedSetDetails = () => {
                 <Button
                 className="data-pager__next data-pager__control"
                 onClick={resolveApplication}
-                disabled={true}
+                disabled={false}
                 >
                 {t("flaggedSet.update")}
                 </Button> 
