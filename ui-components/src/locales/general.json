@@ -630,6 +630,11 @@
     "householdSize": "Household Size",
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
+    "lotteryResults": {
+      "completeResultsWillBePosted": "Complete lottery results will be posted on this date by %{hour}.",
+      "downloadResults": "Download Results",
+      "header": "Lottery Results"
+    },
     "maxIncomeMonth": "Maximum Income / Month",
     "maxIncomeYear": "Maximum Income / Year",
     "moreBuildingSelectionCriteria": "Find out more about Building Selection Criteria",

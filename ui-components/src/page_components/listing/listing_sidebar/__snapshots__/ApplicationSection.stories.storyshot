@@ -71032,7 +71032,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
           officeHours="Monday, Tuesday & Friday, 9:00AM - 5:00PM"
         >
           <p
-            className="text-gray-700 mb-4"
+            className="text-gray-700 mb-1"
           >
             <Component
               address={
@@ -71054,8 +71054,12 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
                
               95112
             </Component>
-            <br />
+          </p>
+          <p
+            className="mb-4"
+          >
             <a
+              className="inline-block pt-1"
               href="https://www.google.com/maps/place/98 Archer Street, San Jose, CA 95112"
               target="_blank"
             >
@@ -71083,7 +71087,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
             Office Hours
           </h3>
           <div
-            className="text-gray-800 markdown"
+            className="text-gray-800 text-tiny markdown"
           >
             <Markdown
               options={
@@ -71156,7 +71160,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
           }
         >
           <p
-            className="text-gray-700 mb-4"
+            className="text-gray-700 mb-1"
           >
             <Component
               address={
@@ -71178,8 +71182,12 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
                
               95112
             </Component>
-            <br />
+          </p>
+          <p
+            className="mb-4"
+          >
             <a
+              className="inline-block pt-1"
               href="https://www.google.com/maps/place/98 Archer Street, San Jose, CA 95112"
               target="_blank"
             >
@@ -71243,7 +71251,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
           officeHours="Monday, Tuesday & Friday, 9:00AM - 5:00PM"
         >
           <p
-            className="text-gray-700 mb-4"
+            className="text-gray-700 mb-1"
           >
             <Component
               address={
@@ -71265,8 +71273,12 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
                
               95112
             </Component>
-            <br />
+          </p>
+          <p
+            className="mb-4"
+          >
             <a
+              className="inline-block pt-1"
               href="https://www.google.com/maps/place/98 Archer Street, San Jose, CA 95112"
               target="_blank"
             >
@@ -71294,7 +71306,7 @@ exports[`Storyshots Listing Sidebar/Application Section Due Soon 1`] = `
             Office Hours
           </h3>
           <div
-            className="text-gray-800 markdown"
+            className="text-gray-800 text-tiny markdown"
           >
             <Markdown
               options={
