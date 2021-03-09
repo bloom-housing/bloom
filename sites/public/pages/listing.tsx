@@ -31,59 +31,16 @@ import {
   t,
   UnitTables,
   WhatToExpect,
+  PublicLotteryEvent,
+  LotteryResultsEvent,
+  OpenHouseEvent,
+  DownloadLotteryResults,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import moment from "moment"
 
 interface ListingProps {
   listing: Listing
-}
-
-const EventDateSection = (props: { event: ListingEvent }) => {
-  return (
-    <p className="text text-gray-800 pb-3 flex justify-between items-center">
-      <span className="inline-block">{moment(props.event.startTime).format("MMMM D, YYYY")}</span>
-      <span className="inline-block text-xs font-bold">
-        {moment(props.event.startTime).format("hh:mma") +
-          "-" +
-          moment(props.event.endTime).format("hh:mma")}
-      </span>
-    </p>
-  )
-}
-
-const OpenHouseEventSection = (props: { openHouseEvents: ListingEvent[] }) => {
-  return (
-    <section className="aside-block bg-primary-lighter border-t">
-      <h4 className="text-caps-tiny">{t("listings.openHouseEvent.header")}</h4>
-      {props.openHouseEvents.map((openHouseEvent, index) => (
-        <div key={`openHouses-${index}`}>
-          <EventDateSection event={openHouseEvent} />
-          {openHouseEvent.url && (
-            <p className="text text-gray-800 pb-3">
-              <a href={openHouseEvent.url}>{t("listings.openHouseEvent.seeVideo")}</a>
-            </p>
-          )}
-          {openHouseEvent.note && <p className="text text-gray-600">{openHouseEvent.note}</p>}
-        </div>
-      ))}
-    </section>
-  )
-}
-
-const PublicLotteryEvent = (props: { publicLottery: ListingEvent }) => {
-  return (
-    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
-      <h4 className="text-caps-underline">{t("listings.publicLottery.header")}</h4>
-      <EventDateSection event={props.publicLottery} />
-      {props.publicLottery.url && (
-        <p className="text text-gray-800 pb-3">
-          <a href={props.publicLottery.url}>{t("listings.publicLottery.seeVideo")}</a>
-        </p>
-      )}
-      {props.publicLottery.note && <p className="text text-gray-600">{props.publicLottery.note}</p>}
-    </section>
-  )
 }
 
 export default class extends Component<ListingProps> {
@@ -181,13 +138,33 @@ export default class extends Component<ListingProps> {
     }
 
     let openHouseEvents: ListingEvent[] | null = null
+    let publicLottery: ListingEvent | null = null
+    let lotteryResults: ListingEvent | null = null
     if (Array.isArray(listing.events)) {
-      openHouseEvents = listing.events.filter((event) => event.type === ListingEventType.openHouse)
+      listing.events.forEach((event) => {
+        switch (event.type) {
+          case ListingEventType.openHouse:
+            if (!openHouseEvents) {
+              openHouseEvents = []
+            }
+            openHouseEvents.push(event)
+            break
+          case ListingEventType.publicLottery:
+            publicLottery = event
+            break
+          case ListingEventType.lotteryResults:
+            lotteryResults = event
+            break
+        }
+      })
     }
 
-    let publicLottery: ListingEvent | null = null
-    if (Array.isArray(listing.events)) {
-      publicLottery = listing.events.find((event) => event.type === ListingEventType.publicLottery)
+    let lotterySection
+    if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
+      lotterySection = <PublicLotteryEvent event={publicLottery} />
+      if (moment(publicLottery.startTime) < moment() && lotteryResults && !lotteryResults.url) {
+        lotterySection = <LotteryResultsEvent event={lotteryResults} />
+      }
     }
 
     return (
@@ -326,13 +303,14 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
-                  {openHouseEvents && <OpenHouseEventSection openHouseEvents={openHouseEvents} />}
+                  <DownloadLotteryResults event={lotteryResults} />
+                  {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
                   <ApplicationSection
                     listing={listing}
                     internalFormRoute="/applications/start/choose-language"
                   />
                 </div>
-                {publicLottery && <PublicLotteryEvent publicLottery={publicLottery} />}
+                {lotterySection}
                 <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
               </aside>

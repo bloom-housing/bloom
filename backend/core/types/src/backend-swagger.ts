@@ -404,6 +404,8 @@ export class ApplicationsService {
       /**  */
       includeHeaders?: boolean;
       /**  */
+      includeDemographics?: boolean;
+      /**  */
       userId?: string;
       /**  */
       status?: string;
@@ -418,6 +420,7 @@ export class ApplicationsService {
         listingId: params['listingId'],
         includeHeaders: params['includeHeaders'],
         userId: params['userId'],
+        includeDemographics: params['includeDemographics'],
         status: params['status']
       };
       let data = null;
@@ -1641,16 +1644,19 @@ export interface ListingEvent {
   type: ListingEventType;
 
   /**  */
-  startTime: Date;
+  startTime?: Date;
 
   /**  */
-  endTime: Date;
+  endTime?: Date;
 
   /**  */
   url?: string;
 
   /**  */
   note?: string;
+
+  /**  */
+  label?: string;
 }
 
 export interface WhatToExpect {
@@ -3393,7 +3399,8 @@ export enum ApplicationMethodType {
 
 export enum ListingEventType {
   'openHouse' = 'openHouse',
-  'publicLottery' = 'publicLottery'
+  'publicLottery' = 'publicLottery',
+  'lotteryResults' = 'lotteryResults'
 }
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
