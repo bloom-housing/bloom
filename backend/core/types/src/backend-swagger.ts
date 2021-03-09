@@ -407,6 +407,8 @@ export class ApplicationsService {
       /**  */
       includeHeaders?: boolean;
       /**  */
+      includeDemographics?: boolean;
+      /**  */
       userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
@@ -418,6 +420,7 @@ export class ApplicationsService {
       configs.params = {
         listingId: params['listingId'],
         includeHeaders: params['includeHeaders'],
+        includeDemographics: params['includeDemographics'],
         userId: params['userId']
       };
       let data = null;
