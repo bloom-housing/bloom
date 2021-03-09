@@ -69,6 +69,9 @@
     "name": "阿拉米達縣"
   },
   "listings": {
-    "depositOrMonthsRent": ""
+    "depositOrMonthsRent": "",
+    "publicLottery": {
+      "header": "抽籤"
+    }
   }
 }

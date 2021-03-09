@@ -69,6 +69,9 @@
     "name": "Quận Alameda"
   },
   "listings": {
-    "depositOrMonthsRent": ""
+    "depositOrMonthsRent": "",
+    "publicLottery": {
+      "header": "XỔ SỐ"
+    }
   }
 }

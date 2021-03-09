@@ -10,8 +10,8 @@
     },
     {
       "type": "publicLottery",
-      "startTime": "2021-04-14T14:00:00.000-08:00",
-      "endTime": "2021-04-14T15:00:00.000-08:00"
+      "startTime": "2021-04-14T10:30:00.000-08:00",
+      "endTime": "2021-04-14T11:00:00.000-08:00"
     }
   ],
   "postmarkedApplicationsReceivedByDate": "2021-03-31T16:00:00.000-08:00",
