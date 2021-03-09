@@ -1,6 +1,7 @@
 @import "../global/mixins.scss";
 
 .button {
+  @apply relative;
   @apply rounded;
   @apply px-6;
   @apply py-4;
@@ -116,6 +117,13 @@
     @apply w-full;
   }
 
+  &.is-loading {
+
+    .button__content {
+      opacity: 0;
+    }
+  }
+
   @include filled-appearances;
   @include outlined-appearances;
 }
@@ -124,4 +132,12 @@ button {
   &.has-toggle {
     @include has-toggle;
   }
+}
+
+.button__loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 2px;
 }
