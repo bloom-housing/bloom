@@ -148,7 +148,7 @@ export function getColDefs(maxHouseholdSize: number) {
 
         const { income, incomePeriod } = row.data
 
-        return incomePeriod === IncomePeriod.perYear
+        return incomePeriod === IncomePeriod.perMonth
           ? formatIncome(income, incomePeriod, IncomePeriod.perMonth)
           : ""
       },
