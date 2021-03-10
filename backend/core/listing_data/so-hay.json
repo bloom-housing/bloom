@@ -29,7 +29,7 @@
   "buildingSelectionCriteria": null,
   "costsNotIncluded": "All utilties included in rent",
   "creditHistory": "We obtain a credit report on each applicant. Our credit reporting agency evaluates credit (which may include rent payment history) as an indicator of future rent payment performance. An unsatisfactory or insufficient finding will result in the requirement of an additional deposit, guarantor, or denial. Applicants are responsible for ensuring their credit history is accurate.",
-  "CSVFormattingType": "basic",
+  "CSVFormattingType": "withDisplaceeNameAndAddress",
   "depositMax": "3,526",
   "depositMin": "500",
   "programRules": null,
