@@ -1,34 +1,20 @@
 import React from "react"
 import "./AppStatusItem.scss"
 import moment from "moment"
-import { MultiLineAddress } from "../helpers/address"
-import { t } from "../helpers/translator"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { LocalizedLink } from "../actions/LocalizedLink"
+import { t } from "@bloom-housing/ui-components"
 
-// TODO status and lotteryNumber should be loaded from Application
 interface AppStatusItemProps {
   application: Application
   listing: Listing
-  status: "inProgress" | "neverSubmitted" | "submitted"
-  setDeletingApplication: (application: Application) => void
-  lotteryNumber?: string
 }
 
 const AppStatusItem = (props: AppStatusItemProps) => {
-  const { application, listing, status, lotteryNumber, setDeletingApplication } = props
+  const { application, listing } = props
+
   const applicationDueDate = moment(listing.applicationDueDate)
   const editDate = moment(application.updatedAt)
-  let statusText = t("application.statuses." + status)
-  const inProgress = status == "inProgress"
-  const active = inProgress && moment() < applicationDueDate
-  let statusClassNames = ""
-
-  if (inProgress && moment() > applicationDueDate) {
-    statusClassNames = "is-past-due"
-    statusText = t("application.statuses.neverSubmitted")
-  }
-  if (status == "submitted") statusClassNames = "is-submitted"
 
   return (
     <article className="status-item is-editable animated-fade">
@@ -42,32 +28,26 @@ const AppStatusItem = (props: AppStatusItemProps) => {
 
         <section className="status-item__content">
           <div className="status-item__details">
-            <p className="status-item__address">
-              <MultiLineAddress address={listing.property.buildingAddress} />
-            </p>
-            {lotteryNumber && (
-              <p className="status-item__number">
-                {t("application.yourLotteryNumber")} {lotteryNumber}
-              </p>
+            {application.id && (
+              <>
+                <span className="status-item__confirm-text">
+                  {t("application.yourLotteryNumber")}:
+                </span>
+                <br />
+                <span className="status-item__confirm-number">{application.id}</span>
+              </>
             )}
           </div>
 
           <div className="status-item__action">
             <p className="status-item__status">
-              <span className={"status-item__label " + statusClassNames}>
-                {t("application.status")}: {statusText}
+              <span className={"status-item__label"}>
+                {t("application.status")}: {t("application.statuses.submitted")}
               </span>
             </p>
-            {status == "submitted" && (
-              <a href="#" className="button small">
-                {t("application.viewApplication")}
-              </a>
-            )}
-            {active && (
-              <a href="#" className="button small primary">
-                {t("application.continueApplication")}
-              </a>
-            )}
+            <a href="#" className="button is-small">
+              {t("application.viewApplication")}
+            </a>
           </div>
         </section>
 
@@ -80,16 +60,6 @@ const AppStatusItem = (props: AppStatusItemProps) => {
             >
               {t("t.seeListing")}
             </LocalizedLink>
-            {status != "submitted" && (
-              <a
-                className="status-item__link alert lined"
-                onClick={() => {
-                  setDeletingApplication(application)
-                }}
-              >
-                {t("t.delete")}
-              </a>
-            )}
           </div>
 
           <div className="status-item__meta">

@@ -1,41 +1,32 @@
-import React, { useEffect, useState, Fragment } from "react"
+import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
 import {
-  AppearanceBorderType,
-  AppearanceStyleType,
-  AppStatusItem,
-  Button,
+  ApiClientContext,
   DashBlock,
   DashBlocks,
   HeaderBadge,
   LinkButton,
   MetaTags,
-  Modal,
   RequireLogin,
   t,
+  UserContext,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
-import moment from "moment"
-import { Application, ArcherListing } from "@bloom-housing/backend-core/types"
+import { PaginatedApplication } from "@bloom-housing/backend-core/types"
+import AppStatusItemWrapper from "./AppStatusItemWrapper"
 
 export default () => {
-  const [applications, setApplications] = useState([])
-  const [deletingApplication, setDeletingApplication] = useState(null)
-  const listing = Object.assign({}, ArcherListing)
+  const { applicationsService } = useContext(ApiClientContext)
+  const { profile } = useContext(UserContext)
+  const [applications, setApplications] = useState<PaginatedApplication>()
 
   useEffect(() => {
-    // applicationsService.list().then((apps) => {
-    //   setApplications(apps)
-    // })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const listing = {} as any
-    const application = {} as Application
-    listing.applicationDueDate = moment().add(10, "days").format()
-    application.listing = listing
-    // TODO: Fix the types here (and probably this shouldn't come from the frontend anyway)
-    // application.updatedAt = moment().toDate()
-    setApplications([application])
-  }, [])
+    if (profile) {
+      applicationsService.list({ userId: profile.id }).then((apps) => {
+        setApplications(apps)
+      })
+    }
+  }, [profile])
 
   const noApplicationsSection = (
     <div className="p-8">
@@ -43,41 +34,9 @@ export default () => {
       <LinkButton href="/listings">{t("listings.browseListings")}</LinkButton>
     </div>
   )
-  const modalActions = [
-    <Button
-      styleType={AppearanceStyleType.primary}
-      onClick={() => {
-        // applicationsService.delete(deletingApplication.id).then(() => {
-        const newApplications = [...applications]
-        const deletedAppIndex = applications.indexOf(deletingApplication, 0)
-        delete newApplications[deletedAppIndex]
-        setDeletingApplication(null)
-        setApplications(newApplications)
-        // })
-      }}
-    >
-      {t("t.delete")}
-    </Button>,
-    <Button
-      styleType={AppearanceStyleType.secondary}
-      border={AppearanceBorderType.borderless}
-      onClick={() => {
-        setDeletingApplication(null)
-      }}
-    >
-      {t("t.cancel")}
-    </Button>,
-  ]
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-        <Modal
-          open={deletingApplication}
-          title={t("application.deleteThisApplication")}
-          ariaDescription={t("application.deleteThisApplication")}
-          actions={modalActions}
-          hideCloseIcon
-        />
         <Layout>
           <Head>
             <title>{t("nav.myApplications")}</title>
@@ -88,16 +47,12 @@ export default () => {
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
                   <Fragment>
-                    {applications.map((application) => (
-                      <AppStatusItem
-                        key={application.id}
-                        status="inProgress"
-                        listing={listing}
-                        application={application}
-                        setDeletingApplication={setDeletingApplication}
-                      />
-                    ))}
-                    {applications.length == 0 && noApplicationsSection}
+                    {applications &&
+                      applications.items.length > 0 &&
+                      applications.items.map((application, index) => (
+                        <AppStatusItemWrapper key={index} application={application} />
+                      ))}
+                    {applications && applications.items.length == 0 && noApplicationsSection}
                   </Fragment>
                 </DashBlock>
               </DashBlocks>
