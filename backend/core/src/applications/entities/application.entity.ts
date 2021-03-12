@@ -38,7 +38,7 @@ import { ApplicationPreference } from "./application-preferences.entity"
 export enum ApplicationStatus {
   draft = "draft",
   submitted = "submitted",
-  removed = "duplicate",
+  duplicate = "duplicate",
 }
 
 export enum ApplicationSubmissionType {

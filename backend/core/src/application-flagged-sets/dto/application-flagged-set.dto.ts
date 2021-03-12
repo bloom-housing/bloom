@@ -1,11 +1,23 @@
 import { OmitType } from "@nestjs/swagger"
 import { ApplicationFlaggedSet } from "../entities/application-flagged-set.entity"
-import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { Expose, Transform, Type } from "class-transformer"
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsDate,
+  IsDefined,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  ValidateNested
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { UserDto } from "../../user/dto/user.dto"
 import { ApplicationCreateDto, ApplicationDto } from "../../applications/dto/application.dto"
 import { PaginationFactory } from "../../shared/dto/pagination.dto"
+import { IdDto } from "../../shared/dto/id.dto"
+import { HouseholdMemberUpdateDto } from "../../applications/dto/household-member.dto"
 
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   "resolvingUserId",
@@ -92,4 +104,18 @@ export class ApplicationFlaggedSetUpdateDto extends OmitType(ApplicationFlaggedS
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationFlaggedSetUpdateDto)
   resolvedApplications: ApplicationFlaggedSetUpdateDto[]
+}
+
+export class ApplicationFlaggedSetResolveDto {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  afsId: string
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(512, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  applicationIds: IdDto[]
 }
