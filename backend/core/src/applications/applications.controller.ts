@@ -37,14 +37,14 @@ import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 
-enum OrderByParamEnum {
+enum OrderByParam {
   firstName = "applicant.firstName",
   lastName = "applicant.lastName",
   submissionDate = "application.submissionDate",
   createdAt = "application.createdAt",
 }
 
-enum OrderParamEnum {
+enum OrderParam {
   ASC = "ASC",
   DESC = "DESC",
 }
@@ -82,41 +82,31 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
 
   @Expose()
   @ApiProperty({
-    enum: Object.keys(OrderByParamEnum),
+    enum: Object.keys(OrderByParam),
     example: "createdAt",
     default: "createdAt",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsIn(Object.values(OrderByParamEnum), { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value: string | undefined) =>
-      value
-        ? OrderByParamEnum[value]
-          ? OrderByParamEnum[value]
-          : value
-        : OrderByParamEnum.createdAt,
-    {
-      toClassOnly: true,
-    }
+  @IsIn(Object.values(OrderByParam), { groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) =>
+    value ? (OrderByParam[value] ? OrderByParam[value] : value) : OrderByParam.createdAt
   )
-  orderBy?: OrderByParamEnum
+  orderBy?: OrderByParam
 
   @Expose()
   @ApiProperty({
-    enum: OrderParamEnum,
+    enum: OrderParam,
     example: "DESC",
     default: "DESC",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsIn(Object.keys(OrderParamEnum), { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? value : OrderParamEnum.DESC), {
-    toClassOnly: true,
-  })
-  order?: OrderParamEnum
+  @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => (value ? value : OrderParam.DESC))
+  order?: OrderParam
 }
 
 export class ApplicationsCsvListQueryParams {
