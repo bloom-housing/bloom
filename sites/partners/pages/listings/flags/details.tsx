@@ -36,6 +36,7 @@ const ApplicationFlaggedSetDetails = () => {
   const appsMeta = appsDataUnresolved?.meta
   const rule = appsDataUnresolved?.rule.replace("and", "+")
 
+  console.log("netra appsDataUnresolved  ", appsDataUnresolved)
   // action buttons
   const onBtNext = () => {
     setPageIndex(pageIndex + 1)
