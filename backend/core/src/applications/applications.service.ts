@@ -21,7 +21,6 @@ export class ApplicationsService {
   ) {}
 
   public async list(listingId: string | null, user?: User, status?: string) {
-    console.log("netra status", status)
     return this.repository.find({
       where: {
         ...(user && { user: { id: user.id } }),
@@ -29,7 +28,7 @@ export class ApplicationsService {
         // listing: {id: undefined}
         // and query responding with 0 applications.
         ...(listingId && { listing: { id: listingId } }),
-        status: status,
+        ...(status && { status: status }),
       },
       relations: ["listing", "user"],
       order: {
@@ -39,7 +38,6 @@ export class ApplicationsService {
   }
 
   async listPaginated(params: ApplicationsListQueryParams) {
-    console.log("netra statussss ", params.status)
     return paginate(
       this.repository,
       { limit: params.limit, page: params.page },
@@ -47,6 +45,7 @@ export class ApplicationsService {
         where: {
           ...(params.userId && { user: { id: params.userId } }),
           ...(params.listingId && { listing: { id: params.listingId } }),
+          ...(params.status && { status: params.status }),
           ...(params.search && {
             applicant: Raw(
               () =>
@@ -56,7 +55,6 @@ export class ApplicationsService {
               }
             ),
           }),
-          status: params.status,
         },
         relations: ["listing", "user"],
         order: {

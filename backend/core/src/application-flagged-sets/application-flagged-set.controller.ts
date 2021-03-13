@@ -1,27 +1,36 @@
 import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
-import { Expose } from "class-transformer"
-import { IsOptional, IsString } from "class-validator"
+import { Expose, Type } from "class-transformer"
+import {
+  IsArray,
+  IsDefined,
+  IsOptional,
+  IsString,
+  MaxLength,
+  ValidateNested,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ApplicationFlaggedSetService } from "./application-flagged-set.service"
 import {
+  Body,
   Controller,
   Get,
-  Param,
+  Param, Post,
   Put,
   Query,
   Request,
   UsePipes,
-  ValidationPipe,
+  ValidationPipe
 } from "@nestjs/common"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Request as ExpressRequest } from "express"
 import { mapTo } from "../shared/mapTo"
 import {
-  ApplicationFlaggedSetDto,
+  ApplicationFlaggedSetDto, ApplicationFlaggedSetResolveDto,
   ApplicationFlaggedSetUpdateDto,
-  PaginatedApplicationFlaggedSetDto,
+  PaginatedApplicationFlaggedSetDto
 } from "./dto/application-flagged-set.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 export class ApplicationFlaggedSetListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -67,14 +76,13 @@ export class ApplicationFlaggedSetController {
     return mapTo(ApplicationFlaggedSetDto, app)
   }
 
-  // @Put(`:afsID, :applicationIds`)
-  // @ApiOperation({ summary: "Resolve AFS", operationId: "resolveAfs" })
-  // async resolveAfs(
-  //   @Request() req: ExpressRequest,
-  //   @Param("afsId") afsId: string,
-  //   @Param("applicationIds") applicationIds: [],
-  // ): Promise<ApplicationFlaggedSetUpdateDto> {
-  //   const app = await this.applicationFlaggedSetsService.getResolvedApplications(afsId, applicationIds, user)
-  //   return mapTo(ApplicationFlaggedSetUpdateDto, app)
-  // }
+  @Post()
+  @ApiOperation({ summary: "Resolve AFS", operationId: "resolveAfs" })
+  async resolveAfs(
+    @Request() req: ExpressRequest,
+    @Body() dto: ApplicationFlaggedSetResolveDto
+  ): Promise<void> {
+    await this.applicationFlaggedSetsService.resolve(dto, req.user)
+  }
 }
+

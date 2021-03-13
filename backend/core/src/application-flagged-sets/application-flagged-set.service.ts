@@ -1,18 +1,18 @@
-import { Inject, Injectable } from "@nestjs/common"
+import { Inject, Injectable, NotFoundException } from "@nestjs/common"
 import { REQUEST } from "@nestjs/core"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Brackets, DeepPartial, Repository, SelectQueryBuilder, Raw, In } from "typeorm"
+import { Brackets, DeepPartial, In, Repository, SelectQueryBuilder } from "typeorm"
 import { Request } from "express"
 import {
   ApplicationFlaggedSet,
   FlaggedSetStatus,
-  Rule
+  Rule,
 } from "./entities/application-flagged-set.entity"
 import { paginate } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "../applications/applications.controller"
-import { Application } from "../applications/entities/application.entity"
-import { date } from "joi"
+import { Application, ApplicationStatus } from "../applications/entities/application.entity"
 import { User } from "src/user/entities/user.entity"
+import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set.dto"
 
 @Injectable()
 export class ApplicationFlaggedSetService {
@@ -29,7 +29,13 @@ export class ApplicationFlaggedSetService {
       this.afsRepository,
       { limit: params.limit, page: params.page },
       {
-        relations: ["applications"]
+        join: {
+          alias: "AFS",
+          leftJoinAndSelect: {
+            afs: "AFS.applications",
+            afsApplications: "AFS.resolvedApplications",
+          },
+        },
       }
     )
   }
@@ -57,85 +63,85 @@ export class ApplicationFlaggedSetService {
   async handleInsert(newApplication: Application) {
     const firstNames = [
       newApplication.applicant.firstName,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.firstName)
+      ...newApplication.householdMembers.map((householdMember) => householdMember.firstName),
     ]
 
     const lastNames = [
       newApplication.applicant.lastName,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.lastName)
+      ...newApplication.householdMembers.map((householdMember) => householdMember.lastName),
     ]
 
     const birthMonths = [
       newApplication.applicant.birthMonth,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.birthMonth)
+      ...newApplication.householdMembers.map((householdMember) => householdMember.birthMonth),
     ]
 
     const birthDays = [
       newApplication.applicant.birthDay,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.birthDay)
+      ...newApplication.householdMembers.map((householdMember) => householdMember.birthDay),
     ]
 
     const birthYears = [
       newApplication.applicant.birthYear,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.birthYear)
+      ...newApplication.householdMembers.map((householdMember) => householdMember.birthYear),
     ]
 
     const nameDobRuleSet = await this.applicationsRepository.find({
       where: (qb: SelectQueryBuilder<Application>) => {
         qb.where("Application.id != :id", {
-          id: newApplication.id
+          id: newApplication.id,
         })
           .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listing.id
+            listingId: newApplication.listing.id,
           })
           .andWhere("Application.status = :status", { status: "submitted" })
           .andWhere(
             new Brackets((subQb) => {
               subQb.where("Application__householdMembers.firstName IN (:...firstNames)", {
-                firstNames: firstNames
+                firstNames: firstNames,
               })
               subQb.orWhere("Application__applicant.firstName IN (:...firstNames)", {
-                firstNames: firstNames
+                firstNames: firstNames,
               })
             })
           )
           .andWhere(
             new Brackets((subQb) => {
               subQb.where("Application__householdMembers.lastName IN (:...lastNames)", {
-                lastNames: lastNames
+                lastNames: lastNames,
               })
               subQb.orWhere("Application__applicant.lastName IN (:...lastNames)", {
-                lastNames: lastNames
+                lastNames: lastNames,
               })
             })
           )
           .andWhere(
             new Brackets((subQb) => {
               subQb.where("Application__householdMembers.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths
+                birthMonths: birthMonths,
               })
               subQb.orWhere("Application__applicant.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths
+                birthMonths: birthMonths,
               })
             })
           )
           .andWhere(
             new Brackets((subQb) => {
               subQb.where("Application__householdMembers.birthDay IN (:...birthDays)", {
-                birthDays: birthDays
+                birthDays: birthDays,
               })
               subQb.orWhere("Application__applicant.birthDay IN (:...birthDays)", {
-                birthDays: birthDays
+                birthDays: birthDays,
               })
             })
           )
           .andWhere(
             new Brackets((subQb) => {
               subQb.where("Application__householdMembers.birthYear IN (:...birthYears)", {
-                birthYears: birthYears
+                birthYears: birthYears,
               })
               subQb.orWhere("Application__applicant.birthYear IN (:...birthYears)", {
-                birthYears: birthYears
+                birthYears: birthYears,
               })
             })
           )
@@ -144,21 +150,21 @@ export class ApplicationFlaggedSetService {
         alias: "Application",
         leftJoinAndSelect: {
           afs: "Application.applicationFlaggedSets",
-          afsApplications: "afs.applications"
-        }
-      }
+          afsApplications: "afs.applications",
+        },
+      },
     })
 
     const emailRuleSet = await this.applicationsRepository.find({
       where: (qb: SelectQueryBuilder<Application>) => {
         qb.where("Application.id != :id", {
-          id: newApplication.id
+          id: newApplication.id,
         })
           .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listing.id
+            listingId: newApplication.listing.id,
           })
           .andWhere("Application__applicant.emailAddress = :emailAddress", {
-            emailAddress: newApplication.applicant.emailAddress
+            emailAddress: newApplication.applicant.emailAddress,
           })
           .andWhere("Application.status = :status", { status: "submitted" })
       },
@@ -166,14 +172,14 @@ export class ApplicationFlaggedSetService {
         alias: "Application",
         leftJoinAndSelect: {
           afs: "Application.applicationFlaggedSets",
-          afsApplications: "afs.applications"
-        }
-      }
+          afsApplications: "afs.applications",
+        },
+      },
     })
 
     const queries: Record<Rule, Application[]> = {
       [Rule.nameAndDOB]: nameDobRuleSet,
-      [Rule.email]: emailRuleSet
+      [Rule.email]: emailRuleSet,
     }
 
     for (const [queryRule, exApplications] of Object.entries(queries)) {
@@ -189,7 +195,7 @@ export class ApplicationFlaggedSetService {
             resolvedTime: null,
             resolvingUserId: null,
             status: FlaggedSetStatus.flagged,
-            applications: [newApplication, exApplication]
+            applications: [newApplication, exApplication],
           }
           await this.afsRepository.save(newAfs)
         } else {
@@ -239,18 +245,114 @@ export class ApplicationFlaggedSetService {
   //     status: FlaggedSetStatus.resolved,
   //     resolvedApplications: resolvedApplicationsList
   //   }
+  //   await this.afsRepository.save(resolvedafs)
+  // }
+
+  async getResolvedApplications(afsId: string, applicationIds: [], user: User) {
+    const resolvedSet = await this.afsRepository.find({
+      where: {
+        id: afsId,
+        // applications: In(applicationId)
+      },
+      // relations: ["applications"],
+    })
+    console.log("netra resolvedSet ", resolvedSet)
+    const resolvedApplicationsList = await this.applicationsRepository.find({
+      where: {
+        id: In(applicationIds),
+        // applications: In(applicationId)
+      },
+      // relations: ["applications"],
+    })
+    console.log("netra resolvedApplicationsList ", resolvedApplicationsList)
+
+    const resolveAfs: DeepPartial<ApplicationFlaggedSet> = {
+      resolved: true,
+      resolvedTime: new Date(),
+      resolvingUserId: user,
+      status: FlaggedSetStatus.resolved,
+    }
+    await this.afsRepository.save(resolveAfs)
+  }
+  //   for (const [applications] of Object.entries(resolvedSet)) {
+  //     const afsesMatchingRule = exApplication.applicationFlaggedSets.filter(
+  //       (afs) => afs.rule === queryRule
+  //     )
+  //   }
   //   await this.afsRepository.save(resolveAfs)
   // }
 
   async unresolvedList(afsId: string) {
     return await this.afsRepository.findOneOrFail({
       where: {
-        id: afsId
+        id: afsId,
       },
       relations: ["applications"],
       order: {
-        createdAt: "DESC"
-      }
+        createdAt: "DESC",
+      },
     })
+  }
+
+  async resolve(dto: ApplicationFlaggedSetResolveDto, user: User) {
+    const afs = await this.afsRepository.findOne({
+      where: {
+        id: dto.afsId,
+      },
+      join: {
+        alias: "AFS",
+        leftJoinAndSelect: {
+          afs: "AFS.applications",
+          afsApplications: "AFS.resolvedApplications",
+        },
+      },
+    })
+    if (!afs) {
+      throw new NotFoundException()
+    }
+    const applicationsToBeResolved = await this.applicationsRepository.find({
+      where: {
+        id: In(dto.applicationIds.map((app) => app.id)),
+      },
+      join: {
+        alias: "Application",
+        leftJoinAndSelect: {
+          afs: "Application.applicationFlaggedSets",
+          afsApplications: "afs.applications",
+          afsResolvedApplications: "afs.resolvedApplications",
+        },
+      },
+    })
+    await Promise.all(
+      applicationsToBeResolved.map(async (appToBeResolved) => {
+        appToBeResolved.status = ApplicationStatus.duplicate
+        await this.applicationsRepository.save(appToBeResolved)
+      })
+    )
+    afs.applications = afs.applications.filter(
+      (app) => !dto.applicationIds.map((a) => a.id).includes(app.id)
+    )
+    afs.resolvedApplications = applicationsToBeResolved
+    afs.resolved = true
+    afs.resolvingUserId = user
+    afs.resolvedTime = new Date()
+    await this.afsRepository.save(afs)
+
+    await Promise.all(
+      applicationsToBeResolved.map(async (appToBeResolved) => {
+        await Promise.all(
+          appToBeResolved.applicationFlaggedSets.map(async (afsOfResolvedApp) => {
+            if (afsOfResolvedApp.id === afs.id) {
+              return
+            }
+            afsOfResolvedApp.applications = afsOfResolvedApp.applications.filter(
+              (app) => app.id !== appToBeResolved.id
+            )
+            afs.resolvedApplications.push(appToBeResolved)
+            await this.afsRepository.save(afsOfResolvedApp)
+          })
+        )
+      })
+    )
   }
 }
