@@ -83,15 +83,13 @@ export class ApplicationFlaggedSet {
   @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
   status: FlaggedSetStatus
 
-  @ManyToMany(() => Application, (application) => application.applicationFlaggedSets, {
-    cascade: true,
-  })
+  @ManyToMany(() => Application, (application) => application.applicationFlaggedSets)
   @JoinTable()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   applications: Application[]
 
-  @ManyToMany(() => Application, { cascade: true })
+  @ManyToMany(() => Application)
   @JoinTable()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
