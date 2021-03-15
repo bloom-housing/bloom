@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class addResolvedApplications1615563446341 implements MigrationInterface {
-    name = 'addResolvedApplications1615563446341'
+export class addAfsRelatedMigrations1615819291878 implements MigrationInterface {
+    name = 'addAfsRelatedMigrations1615819291878'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "application_flagged_sets_resolved_applications_applications" ("application_flagged_sets_id" uuid NOT NULL, "applications_id" uuid NOT NULL, CONSTRAINT "PK_c01b3194002b7f1e1869cf27d52" PRIMARY KEY ("application_flagged_sets_id", "applications_id"))`);

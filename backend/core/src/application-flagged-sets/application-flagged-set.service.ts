@@ -289,6 +289,7 @@ export class ApplicationFlaggedSetService {
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto, user: User) {
+    // TODO Make it a transaction
     const afs = await this.afsRepository.findOne({
       where: {
         id: dto.afsId,
@@ -304,49 +305,38 @@ export class ApplicationFlaggedSetService {
     if (!afs) {
       throw new NotFoundException()
     }
-    const applicationsToBeResolved = await this.applicationsRepository.find({
-      where: {
-        id: In(dto.applicationIds.map((app) => app.id)),
-      },
-      join: {
-        alias: "Application",
-        leftJoinAndSelect: {
-          afs: "Application.applicationFlaggedSets",
-          afsApplications: "afs.applications",
-          afsResolvedApplications: "afs.resolvedApplications",
-        },
-      },
-    })
-    await Promise.all(
-      applicationsToBeResolved.map(async (appToBeResolved) => {
-        appToBeResolved.status = ApplicationStatus.duplicate
-        await this.applicationsRepository.save(appToBeResolved)
-      })
-    )
-    afs.applications = afs.applications.filter(
-      (app) => !dto.applicationIds.map((a) => a.id).includes(app.id)
-    )
-    afs.resolvedApplications = applicationsToBeResolved
     afs.resolved = true
     afs.resolvingUserId = user
     afs.resolvedTime = new Date()
     await this.afsRepository.save(afs)
-
-    await Promise.all(
-      applicationsToBeResolved.map(async (appToBeResolved) => {
-        await Promise.all(
-          appToBeResolved.applicationFlaggedSets.map(async (afsOfResolvedApp) => {
-            if (afsOfResolvedApp.id === afs.id) {
-              return
-            }
-            afsOfResolvedApp.applications = afsOfResolvedApp.applications.filter(
-              (app) => app.id !== appToBeResolved.id
-            )
-            afs.resolvedApplications.push(appToBeResolved)
-            await this.afsRepository.save(afsOfResolvedApp)
-          })
-        )
+    for (const appId of dto.applicationIds.map((app) => app.id)) {
+      const application = await this.applicationsRepository.findOne({
+        where: {
+          id: appId,
+        },
+        join: {
+          alias: "Application",
+          leftJoinAndSelect: {
+            afs: "Application.applicationFlaggedSets",
+            afsApplications: "afs.applications",
+            afsResolvedApplications: "afs.resolvedApplications",
+          },
+        },
       })
-    )
+      if (!application) {
+        // TODO Abort transaction here
+        throw new NotFoundException()
+      }
+      application.status = ApplicationStatus.duplicate
+      for (const afsToBeResolved of application.applicationFlaggedSets) {
+        afsToBeResolved.applications = afsToBeResolved.applications.filter(
+          (app) => app.id !== application.id
+        )
+        if (!afsToBeResolved.resolvedApplications.map((app) => app.id).includes(application.id)) {
+          afsToBeResolved.resolvedApplications.push(application)
+        }
+        await this.afsRepository.save(afsToBeResolved)
+      }
+    }
   }
 }
