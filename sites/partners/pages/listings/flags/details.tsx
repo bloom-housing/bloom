@@ -2,6 +2,7 @@ import { Application, ApplicationStatus, EnumApplicationFlaggedSetStatus } from 
 import {
   AppearanceStyleType,
   Button,
+  lRoute,
   PageHeader,
   StatusBar,
   t,
@@ -37,6 +38,7 @@ const ApplicationFlaggedSetDetails = () => {
   const rule = appsDataUnresolved?.rule.replace("and", "+")
 
   console.log("netra appsDataUnresolved  ", appsDataUnresolved)
+  console.log("netra applications  ", applications)
   // action buttons
   const onBtNext = () => {
     setPageIndex(pageIndex + 1)
@@ -55,10 +57,33 @@ const ApplicationFlaggedSetDetails = () => {
     sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
   }
 
+  class formatLinkCell {
+    linkWithId: HTMLSpanElement
+
+    init(params) {
+      this.linkWithId = document.createElement("button")
+      this.linkWithId.classList.add("text-blue-700")
+
+      this.linkWithId.innerText = params.value
+
+      this.linkWithId.addEventListener("click", function () {
+        void saveColumnState(params.columnApi)
+        void router.push(lRoute(`/application?id=${params.value}`))
+      })
+    }
+
+    getGui() {
+      return this.linkWithId
+    }
+  }
+
   const gridOptions: GridOptions = {
     onSortChanged: (params) => saveColumnState(params.columnApi),
     onColumnMoved: (params) => saveColumnState(params.columnApi),
     onSelectionChanged: onSelectionChanged,
+    components: {
+      formatLinkCell: formatLinkCell,
+    },
   }
 
   function onGridReady(params) {
@@ -110,6 +135,7 @@ const ApplicationFlaggedSetDetails = () => {
         filter: false,
         resizable: true,
         checkboxSelection: true,
+        cellRenderer: formatLinkCell,
       },
       {
         headerName: t("application.name.firstName"),

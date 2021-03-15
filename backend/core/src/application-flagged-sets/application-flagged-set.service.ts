@@ -29,13 +29,7 @@ export class ApplicationFlaggedSetService {
       this.afsRepository,
       { limit: params.limit, page: params.page },
       {
-        join: {
-          alias: "AFS",
-          leftJoinAndSelect: {
-            afs: "AFS.applications",
-            afsApplications: "AFS.resolvedApplications",
-          },
-        },
+        relations: ["applications"]
       }
     )
   }
