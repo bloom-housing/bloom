@@ -16,7 +16,8 @@ const AppStatusItemWrapper = (props: AppStatusItemWrapperProps) => {
       .then((retrievedListing) => {
         setListing(retrievedListing)
       })
-  }, [])
+      .catch((err) => console.error(`Error fetching listing: ${err}`))
+  }, [listingsService, props.application])
 
   return listing ? (
     <AppStatusItem application={props.application} listing={listing} key={props.application.id} />

@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
-import AppStatusItemWrapper from "./AppStatusItemWrapper"
+import { AppStatusItemWrapper } from "./AppStatusItemWrapper"
 
 export default () => {
   const { applicationsService } = useContext(ApiClientContext)
@@ -22,11 +22,14 @@ export default () => {
 
   useEffect(() => {
     if (profile) {
-      applicationsService.list({ userId: profile.id }).then((apps) => {
-        setApplications(apps)
-      })
+      applicationsService
+        .list({ userId: profile.id })
+        .then((apps) => {
+          setApplications(apps)
+        })
+        .catch((err) => console.error(`Error fetching applications: ${err}`))
     }
-  }, [profile])
+  }, [profile, applicationsService])
 
   const noApplicationsSection = (
     <div className="p-8">

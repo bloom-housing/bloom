@@ -45,7 +45,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
                 {t("application.status")}: {t("application.statuses.submitted")}
               </span>
             </p>
-            <a href="#" className="button is-small">
+            <a href={`application?id=${application.id}`} className="button is-small">
               {t("application.viewApplication")}
             </a>
           </div>

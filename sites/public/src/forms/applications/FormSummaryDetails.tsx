@@ -1,14 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
-import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
+import { MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
 import { Address } from "@bloom-housing/backend-core/types"
-
-const EditLink = (props: { href: string }) => (
-  <div className="float-right flex">
-    <LocalizedLink href={props.href}>
-      <a className="edit-link">{t("t.edit")}</a>
-    </LocalizedLink>
-  </div>
-)
 
 const accessibilityLabels = (accessibility) => {
   const labels = []
@@ -38,7 +30,7 @@ const reformatAddress = (address: Address) => {
   return newAddress
 }
 
-const FormSummaryDetails = ({ application, editMode = false }) => {
+const FormSummaryDetails = ({ application }) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
@@ -74,10 +66,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
   return (
     <>
-      <h3 className="form--card__sub-header">
-        {t("t.you")}
-        {editMode && <EditLink href="/applications/contact/name" />}
-      </h3>
+      <h3 className="form--card__sub-header">{t("t.you")}</h3>
 
       <div className="form-card__group mx-0">
         <ViewItem id="applicantName" label={t("t.name")}>
@@ -151,7 +140,6 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           <div id="alternateContact">
             <h3 className="form--card__sub-header">
               {t("application.alternateContact.type.label")}
-              {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
             </h3>
 
             <div className="form-card__group mx-0">
@@ -187,10 +175,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
       {application.householdSize > 1 && (
         <div id="householdMembers">
-          <h3 className="form--card__sub-header">
-            {t("application.household.householdMembers")}
-            {editMode && <EditLink href="/applications/household/add-members" />}
-          </h3>
+          <h3 className="form--card__sub-header">{t("application.household.householdMembers")}</h3>
 
           <div id="members" className="form-card__group info-group mx-0">
             {application.householdMembers.map((member) => (
@@ -218,10 +203,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
       )}
 
       <div id="householdDetails">
-        <h3 className="form--card__sub-header">
-          {t("application.review.householdDetails")}
-          {editMode && <EditLink href="/applications/household/preferred-units" />}
-        </h3>
+        <h3 className="form--card__sub-header">{t("application.review.householdDetails")}</h3>
 
         <div className="form-card__group mx-0">
           {application.preferredUnit && (
@@ -244,10 +226,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           </ViewItem>
         </div>
 
-        <h3 className="form--card__sub-header">
-          {t("t.income")}
-          {editMode && <EditLink href="/applications/financial/vouchers" />}
-        </h3>
+        <h3 className="form--card__sub-header">{t("t.income")}</h3>
 
         <div className="form-card__group border-b mx-0">
           <ViewItem id="incomeVouchers" label={t("application.review.voucherOrSubsidy")}>
@@ -261,10 +240,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           )}
         </div>
 
-        <h3 className="form--card__sub-header">
-          {t("t.preferences")}
-          {editMode && <EditLink href="/applications/preferences/live-work" />}
-        </h3>
+        <h3 className="form--card__sub-header">{t("t.preferences")}</h3>
 
         <div id="preferences" className="form-card__group border-b mx-0">
           {application.preferences.filter((item) => item.claimed == true).length == 0 ? (
