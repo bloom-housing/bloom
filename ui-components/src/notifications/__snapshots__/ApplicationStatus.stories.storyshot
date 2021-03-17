@@ -4451,7 +4451,7 @@ exports[`Storyshots Notifications/Application Status Opened Already 1`] = `
       </Icon>
         
       Application Due Date
-      : Apr 11, 2030 at 4:00 PM
+      : Apr. 11, 2030 at 4:00 PM
     </div>
   </ApplicationStatus>
   <InlineSVG

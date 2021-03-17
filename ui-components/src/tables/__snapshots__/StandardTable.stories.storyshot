@@ -525,9 +525,9 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
     }
     headers={
       Object {
-        "dob": "Date of Birth",
-        "name": "Name",
-        "relationship": "Relationship",
+        "dob": "application.household.member.dateOfBirth",
+        "name": "t.name",
+        "relationship": "t.relationship",
       }
     }
   >
@@ -577,34 +577,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-0"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -619,34 +619,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-1"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -661,34 +661,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-2"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -703,34 +703,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-3"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -745,34 +745,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-4"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -787,34 +787,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-5"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -829,34 +829,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-6"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -871,34 +871,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-7"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -913,34 +913,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-8"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -955,34 +955,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-9"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -997,34 +997,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-10"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1039,34 +1039,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-11"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1081,34 +1081,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-12"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1123,34 +1123,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-13"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1165,34 +1165,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-14"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1207,34 +1207,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-15"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1249,34 +1249,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-16"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1291,34 +1291,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-17"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1333,34 +1333,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-18"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1375,34 +1375,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-19"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1417,34 +1417,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-20"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1459,34 +1459,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-21"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1501,34 +1501,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-22"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1543,34 +1543,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-23"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1585,34 +1585,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-24"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1627,34 +1627,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-25"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1669,34 +1669,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-26"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1711,34 +1711,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-27"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1753,34 +1753,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-28"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1795,34 +1795,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-29"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1837,34 +1837,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-30"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1879,34 +1879,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-31"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -1921,34 +1921,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-32"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -1963,34 +1963,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-33"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2005,34 +2005,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-34"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2047,34 +2047,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-35"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2089,34 +2089,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-36"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2131,34 +2131,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-37"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2173,34 +2173,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-38"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2215,34 +2215,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-39"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2257,34 +2257,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-40"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2299,34 +2299,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-41"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2341,34 +2341,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-42"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2383,34 +2383,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-43"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2425,34 +2425,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-44"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2467,34 +2467,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-45"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2509,34 +2509,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-46"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2551,34 +2551,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-47"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2593,34 +2593,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-48"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2635,34 +2635,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-49"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2677,34 +2677,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-50"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2719,34 +2719,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-51"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2761,34 +2761,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-52"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2803,34 +2803,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-53"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2845,34 +2845,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-54"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2887,34 +2887,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-55"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -2929,34 +2929,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-56"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -2971,34 +2971,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-57"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3013,34 +3013,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-58"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3055,34 +3055,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-59"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3097,34 +3097,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-60"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3139,34 +3139,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-61"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3181,34 +3181,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-62"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3223,34 +3223,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-63"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3265,34 +3265,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-64"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3307,34 +3307,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-65"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3349,34 +3349,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-66"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3391,34 +3391,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-67"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3433,34 +3433,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-68"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3475,34 +3475,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-69"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3517,34 +3517,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-70"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3559,34 +3559,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-71"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3601,34 +3601,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-72"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3643,34 +3643,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-73"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3685,34 +3685,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-74"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3727,34 +3727,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-75"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3769,34 +3769,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-76"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3811,34 +3811,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-77"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3853,34 +3853,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-78"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3895,34 +3895,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-79"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -3937,34 +3937,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-80"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -3979,34 +3979,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-81"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4021,34 +4021,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-82"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4063,34 +4063,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-83"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4105,34 +4105,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-84"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4147,34 +4147,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-85"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4189,34 +4189,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-86"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4231,34 +4231,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-87"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4273,34 +4273,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-88"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4315,34 +4315,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-89"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4357,34 +4357,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-90"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4399,34 +4399,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-91"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4441,34 +4441,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-92"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4483,34 +4483,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-93"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4525,34 +4525,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-94"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4567,34 +4567,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-95"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4609,34 +4609,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-96"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4651,34 +4651,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-97"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4693,34 +4693,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-98"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4735,34 +4735,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-99"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>
@@ -4777,34 +4777,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-100"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1985
                 </td>
@@ -4819,34 +4819,34 @@ exports[`Storyshots Tables/StandardTable Default 1`] = `
               id="standardrow-101"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="name"
                 key="standardcol-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="relationship"
                 key="standardcol-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="dob"
                 key="standardcol-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="dob"
                 >
                   05/01/1975
                 </td>

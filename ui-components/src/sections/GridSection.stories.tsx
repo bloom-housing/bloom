@@ -302,11 +302,10 @@ export const GridSectionSingleColumnWarn = () => (
 )
 
 const headers = {
-  name: "Name",
-  relationship: "Relationship",
-  dob: "Date of Birth",
+  name: "t.name",
+  relationship: "t.relationship",
+  dob: "application.household.member.dateOfBirth",
 }
-
 const data = [
   {
     name: "Jim Halpert",

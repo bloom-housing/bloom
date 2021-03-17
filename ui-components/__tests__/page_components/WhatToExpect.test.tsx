@@ -2,7 +2,6 @@ import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { WhatToExpect } from "../../src/page_components/listing/listing_sidebar/WhatToExpect"
 import Archer from "../fixtures/archer.json"
-import Triton from "../fixtures/triton-test.json"
 import { t } from "../../src/helpers/translator"
 
 const archer = Object.assign({}, Archer) as any

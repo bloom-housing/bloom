@@ -5,9 +5,9 @@ import { MinimalTable } from "../../src/tables/MinimalTable"
 afterEach(cleanup)
 
 const headers = {
-  name: "Name",
-  relationship: "Relationship",
-  dob: "Date of Birth",
+  name: "t.name",
+  relationship: "t.relationship",
+  dob: "application.household.member.dateOfBirth",
 }
 
 const data = [
