@@ -2,6 +2,7 @@ import React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { Tag } from "../text/Tag"
 import "./TabNav.scss"
+import { AppearanceSizeType } from "../../src/global/AppearanceTypes"
 
 export interface TabProps {
   href: string
@@ -38,15 +39,25 @@ const Tab = (props: TabProps) => {
         tabIndex={props.current ? 0 : -1}
       >
         {props.children}
-        {props.tagContent && <Tag pillStyle={true}>{props.tagContent}</Tag>}
+        {props.tagContent && (
+          <Tag pillStyle={true} size={AppearanceSizeType.small}>
+            {props.tagContent}
+          </Tag>
+        )}
       </LocalizedLink>
     </li>
   )
 }
 
-const TabNav = (props: { children: React.ReactNode }) => {
+const TabNav = (props: { className: string; children: React.ReactNode }) => {
+  const classNames = ["tab-nav"]
+
+  if (props.className) {
+    classNames.push(props.className)
+  }
+
   return (
-    <nav className="tab-nav">
+    <nav className={classNames.join(" ")}>
       <ul role="tablist" aria-label="Secondary navigation">
         {props.children}
       </ul>

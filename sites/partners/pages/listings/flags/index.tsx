@@ -13,6 +13,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import Layout from "../../../layouts/application"
 import { useApplicationFlaggedSetData } from "../../../lib/hooks"
+import { ListingSecondaryNav } from "../../../src/listings/ListingSecondaryNav"
 
 const ApplicationFlaggedSetList = () => {
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
@@ -136,21 +137,23 @@ const ApplicationFlaggedSetList = () => {
         resizable: false,
         flex: 1,
         cellRendererFramework: function (params) {
-          return params.data.status == "flagged" 
-            ? <Tag
-            pillStyle={true}
-            size={AppearanceSizeType.small}
-            styleType={AppearanceStyleType.flagged}
+          return params.data.status == "flagged" ? (
+            <Tag
+              pillStyle={true}
+              size={AppearanceSizeType.small}
+              styleType={AppearanceStyleType.flagged}
             >
-            {params.data.status}
+              {params.data.status}
             </Tag>
-            : <Tag
-            pillStyle={true}
-            size={AppearanceSizeType.small}
-            styleType={AppearanceStyleType.success}
+          ) : (
+            <Tag
+              pillStyle={true}
+              size={AppearanceSizeType.small}
+              styleType={AppearanceStyleType.success}
             >
-            {params.data.status}
+              {params.data.status}
             </Tag>
+          )
         },
       },
     ],
@@ -164,6 +167,9 @@ const ApplicationFlaggedSetList = () => {
 
   return (
     <Layout>
+      {/* TODO: change translation and pass flags quantity */}
+      <ListingSecondaryNav title={"Flags"} listingId={listingId} flagsQty={0} />
+
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">

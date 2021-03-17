@@ -4,7 +4,6 @@ import moment from "moment"
 import Head from "next/head"
 import {
   Field,
-  PageHeader,
   MetaTags,
   t,
   Button,
@@ -19,9 +18,9 @@ import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
+import { ListingSecondaryNav } from "../../../src/listings/ListingSecondaryNav"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
-import { stat } from "fs"
 
 const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
@@ -199,7 +198,13 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("applications.applicationsReceived")} />
+
+      {/* TODO: pass flags quantity */}
+      <ListingSecondaryNav
+        title={t("applications.applicationsReceived")}
+        listingId={listingId}
+        flagsQty={0}
+      />
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -210,12 +215,7 @@ const ApplicationsList = () => {
               </div>
 
               <div className="flex-row">
-              <LocalizedLink href={`/listings/flags?listing=${listingId}`}>   
-                  <Button className="mx-1" onClick={() => false}>
-                    FLAGS
-                  </Button>
-                </LocalizedLink>
-                <LocalizedLink href={`/listings/applications/add?listing=${listingId}`}>   
+                <LocalizedLink href={`/listings/applications/add?listing=${listingId}`}>
                   <Button className="mx-1" onClick={() => false}>
                     {t("applications.addApplication")}
                   </Button>

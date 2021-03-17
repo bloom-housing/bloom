@@ -20,6 +20,27 @@ exports[`Storyshots Text/Tag Pill 1`] = `
 </div>
 `;
 
+exports[`Storyshots Text/Tag Pill And Flagged 1`] = `
+<div
+  style={
+    Object {
+      "padding": "1rem",
+    }
+  }
+>
+  <Tag
+    pillStyle={true}
+    styleType="is-flagged"
+  >
+    <span
+      className="tag is-flagged is-pill"
+    >
+      Flagged
+    </span>
+  </Tag>
+</div>
+`;
+
 exports[`Storyshots Text/Tag Pill And Success 1`] = `
 <div
   style={
