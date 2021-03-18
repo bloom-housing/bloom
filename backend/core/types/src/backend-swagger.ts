@@ -351,7 +351,9 @@ export class ApplicationsService {
       /**  */
       userId?: string;
       /**  */
-      status?: string;
+      orderBy?: string;
+      /**  */
+      order?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -365,7 +367,8 @@ export class ApplicationsService {
         listingId: params['listingId'],
         search: params['search'],
         userId: params['userId'],
-        status: params['status']
+        orderBy: params['orderBy'],
+        order: params['order']
       };
       let data = null;
 

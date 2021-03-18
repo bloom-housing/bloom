@@ -30,12 +30,24 @@ import {
   PaginatedApplicationDto,
 } from "./dto/application.dto"
 import { Expose, Transform } from "class-transformer"
-import { IsBoolean, IsOptional, IsString } from "class-validator"
+import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
+
+enum OrderByParam {
+  firstName = "applicant.firstName",
+  lastName = "applicant.lastName",
+  submissionDate = "application.submissionDate",
+  createdAt = "application.createdAt",
+}
+
+enum OrderParam {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 
 export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -70,13 +82,31 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
 
   @Expose()
   @ApiProperty({
-    type: String,
-    example: "status",
+    enum: Object.keys(OrderByParam),
+    example: "createdAt",
+    default: "createdAt",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  status?: string
+  @IsIn(Object.values(OrderByParam), { groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) =>
+    value ? (OrderByParam[value] ? OrderByParam[value] : value) : OrderByParam.createdAt
+  )
+  orderBy?: OrderByParam
+
+  @Expose()
+  @ApiProperty({
+    enum: OrderParam,
+    example: "DESC",
+    default: "DESC",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => (value ? value : OrderParam.DESC))
+  order?: OrderParam
 }
 
 export class ApplicationsCsvListQueryParams {

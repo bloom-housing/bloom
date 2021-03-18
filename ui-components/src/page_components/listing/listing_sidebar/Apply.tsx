@@ -146,10 +146,12 @@ const Apply = (props: ApplyProps) => {
                 {getMethod(listing.applicationMethods, ApplicationMethodType.POBox)
                   ?.acceptsPostmarkedApplications
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
-                      applicationDueDate: moment(listing.applicationDueDate).format("MMM DD, YYYY"),
+                      applicationDueDate: moment(listing.applicationDueDate).format(
+                        `MMM. DD, YYYY [${t("t.at")}] h A`
+                      ),
                       postmarkReceivedByDate: moment(
                         listing.postmarkedApplicationsReceivedByDate
-                      ).format("MMM DD, YYYY"),
+                      ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
                       developer: listing.property.developer,
                     })
                   : t("listings.apply.applicationsMustBeReceivedByDeadline")}
