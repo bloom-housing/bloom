@@ -34,20 +34,41 @@ export class ApplicationFlaggedSetService {
     )
   }
 
+  // public async list(params: ApplicationsListQueryParams) {
+  //   return await this.afsRepository
+  //   .createQueryBuilder('applicationsFlaggedSets')
+  //   .leftJoin('applicationsFlaggedSets.applications', 'application')
+  //   .leftJoinAndSelect('applicationsFlaggedSets.applications', 'afs')
+  //   .leftJoinAndSelect('applicationsFlaggedSets.applications.listing', 'listings')
+  //   .where('listings.id = :listingId', { listingId: params.listingId})
+  //   .getMany()
+  // }
+
+  // users = await userRepository
+  // .createQueryBuilder('user')
+  // .leftJoin('user.categories', 'category')
+  // .leftJoinAndSelect('user.categories', 'categorySelect')
+  // .where('category.categoryId = :id', { id: catId})
+  // .orderBy('user.age', 'DESC', 'NULLS LAST')
+  // .getMany();
+
+
   // async list(params: ApplicationsListQueryParams) {
   //   return paginate(
   //     this.afsRepository,
   //     { limit: params.limit, page: params.page },
   //     {
   //       where: (qb: SelectQueryBuilder<ApplicationFlaggedSet>) => {
-  //         qb.where("applicationFlaggedSet__applications.listingId = :id", {
+  //         qb.where("listing.id = :id", {
   //           id: params.listingId,
   //         })
   //       },
   //       join: {
-  //         alias: "applicationFlaggedSet",
+  //         alias: "AFS",
   //         leftJoinAndSelect: {
-  //           afs: "applicationFlaggedSet.applications",
+  //           afs: "AFS.applications",
+  //           afsApplications: "afs.applicationFlaggedSets",
+  //           afsListing: "afs.listing"
   //         },
   //       },
   //     }
@@ -281,7 +302,16 @@ export class ApplicationFlaggedSetService {
       where: {
         id: afsId,
       },
-      relations: ["applications"],
+      join: {
+        alias: "AFS",
+        leftJoinAndSelect: {
+          afs: "AFS.applications",
+          afsApplicant: "afs.applicant",
+          afsApplications: "AFS.resolvedApplications",
+          afsUnresolvedApplicant: "afsApplications.applicant",
+          afsListing: "afs.listing"
+        },
+      },
       order: {
         createdAt: "DESC",
       },

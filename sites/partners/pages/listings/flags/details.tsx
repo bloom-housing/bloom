@@ -34,11 +34,14 @@ const ApplicationFlaggedSetDetails = () => {
 
   const { appsDataUnresolved } = useUnresolvedAFSData(afsId)
   const applications = appsDataUnresolved?.applications || []
+  const unresolvedData = appsDataUnresolved?.resolvedApplications || []
   const appsMeta = appsDataUnresolved?.meta
   const rule = appsDataUnresolved?.rule.replace("and", "+")
 
-  console.log("netra appsDataUnresolved  ", appsDataUnresolved)
-  console.log("netra applications  ", applications)
+  applications.concat(unresolvedData)
+ 
+  const allApplications = applications.concat(unresolvedData)
+  console.log("netra allApplications  ", allApplications)
   // action buttons
   const onBtNext = () => {
     setPageIndex(pageIndex + 1)
@@ -245,7 +248,7 @@ const ApplicationFlaggedSetDetails = () => {
                 gridOptions={gridOptions}
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
-                rowData={applications}
+                rowData={allApplications}
                 domLayout={"autoHeight"}
                 headerHeight={83}
                 rowHeight={58}
