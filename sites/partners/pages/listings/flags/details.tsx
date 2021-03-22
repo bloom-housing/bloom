@@ -2,6 +2,7 @@ import { Application, ApplicationStatus, EnumApplicationFlaggedSetStatus } from 
 import {
   AppearanceStyleType,
   Button,
+  lRoute,
   PageHeader,
   StatusBar,
   t,
@@ -33,9 +34,14 @@ const ApplicationFlaggedSetDetails = () => {
 
   const { appsDataUnresolved } = useUnresolvedAFSData(afsId)
   const applications = appsDataUnresolved?.applications || []
+  const unresolvedData = appsDataUnresolved?.resolvedApplications || []
   const appsMeta = appsDataUnresolved?.meta
   const rule = appsDataUnresolved?.rule.replace("and", "+")
 
+  applications.concat(unresolvedData)
+ 
+  const allApplications = applications.concat(unresolvedData)
+  console.log("netra allApplications  ", allApplications)
   // action buttons
   const onBtNext = () => {
     setPageIndex(pageIndex + 1)
@@ -54,10 +60,33 @@ const ApplicationFlaggedSetDetails = () => {
     sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
   }
 
+  class formatLinkCell {
+    linkWithId: HTMLSpanElement
+
+    init(params) {
+      this.linkWithId = document.createElement("button")
+      this.linkWithId.classList.add("text-blue-700")
+
+      this.linkWithId.innerText = params.value
+
+      this.linkWithId.addEventListener("click", function () {
+        void saveColumnState(params.columnApi)
+        void router.push(lRoute(`/application?id=${params.value}`))
+      })
+    }
+
+    getGui() {
+      return this.linkWithId
+    }
+  }
+
   const gridOptions: GridOptions = {
     onSortChanged: (params) => saveColumnState(params.columnApi),
     onColumnMoved: (params) => saveColumnState(params.columnApi),
     onSelectionChanged: onSelectionChanged,
+    components: {
+      formatLinkCell: formatLinkCell,
+    },
   }
 
   function onGridReady(params) {
@@ -109,6 +138,7 @@ const ApplicationFlaggedSetDetails = () => {
         filter: false,
         resizable: true,
         checkboxSelection: true,
+        cellRenderer: formatLinkCell,
       },
       {
         headerName: t("application.name.firstName"),
@@ -218,7 +248,7 @@ const ApplicationFlaggedSetDetails = () => {
                 gridOptions={gridOptions}
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
-                rowData={applications}
+                rowData={allApplications}
                 domLayout={"autoHeight"}
                 headerHeight={83}
                 rowHeight={58}

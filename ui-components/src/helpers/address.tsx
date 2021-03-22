@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Address } from "@bloom-housing/backend-core/types"
+import Markdown from "markdown-to-jsx"
 interface AddressProps {
   address: Address
 }
@@ -19,7 +20,7 @@ export const MultiLineAddress = (props: AddressProps) => (
         <br />
       </>
     )}
-    {props.address.street}
+    <Markdown children={props.address.street || ""} />
     <br />
     {props.address.city}, {props.address.state} {props.address.zipCode}
   </>

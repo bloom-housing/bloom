@@ -29,16 +29,29 @@ export class ApplicationFlaggedSetService {
       this.afsRepository,
       { limit: params.limit, page: params.page },
       {
-        join: {
-          alias: "AFS",
-          leftJoinAndSelect: {
-            afs: "AFS.applications",
-            afsApplications: "AFS.resolvedApplications",
-          },
-        },
+        relations: ["applications"]
       }
     )
   }
+
+  // public async list(params: ApplicationsListQueryParams) {
+  //   return await this.afsRepository
+  //   .createQueryBuilder('applicationsFlaggedSets')
+  //   .leftJoin('applicationsFlaggedSets.applications', 'application')
+  //   .leftJoinAndSelect('applicationsFlaggedSets.applications', 'afs')
+  //   .leftJoinAndSelect('applicationsFlaggedSets.applications.listing', 'listings')
+  //   .where('listings.id = :listingId', { listingId: params.listingId})
+  //   .getMany()
+  // }
+
+  // users = await userRepository
+  // .createQueryBuilder('user')
+  // .leftJoin('user.categories', 'category')
+  // .leftJoinAndSelect('user.categories', 'categorySelect')
+  // .where('category.categoryId = :id', { id: catId})
+  // .orderBy('user.age', 'DESC', 'NULLS LAST')
+  // .getMany();
+
 
   // async list(params: ApplicationsListQueryParams) {
   //   return paginate(
@@ -46,14 +59,16 @@ export class ApplicationFlaggedSetService {
   //     { limit: params.limit, page: params.page },
   //     {
   //       where: (qb: SelectQueryBuilder<ApplicationFlaggedSet>) => {
-  //         qb.where("applicationFlaggedSet__applications.listingId = :id", {
+  //         qb.where("listing.id = :id", {
   //           id: params.listingId,
   //         })
   //       },
   //       join: {
-  //         alias: "applicationFlaggedSet",
+  //         alias: "AFS",
   //         leftJoinAndSelect: {
-  //           afs: "applicationFlaggedSet.applications",
+  //           afs: "AFS.applications",
+  //           afsApplications: "afs.applicationFlaggedSets",
+  //           afsListing: "afs.listing"
   //         },
   //       },
   //     }
@@ -218,24 +233,32 @@ export class ApplicationFlaggedSetService {
     }
   }
 
-  // Add resolved logic here
-  // Not able to image how data is coming in and in what form?
-  // I have no idea what have I written here
-  // async update(afsId: string, applicationId: []) {
-  //   const resolveAfs = await this.afsRepository.findOneOrFail({
-  //     where: { id: afsUpdateDto.id },
-  //     relations: ["applications"],
-  //   })
-  //   resolvedafs.resolved = true
-  //   resolvedafs.resolvedTime = new Date()
-  //   const applicatonsInAFS = []
-  //   for (const application of applicatonsInAFS) {
-  //     const nonResolvedAfses = application.applicationFlaggedSets.filter(
-  //       (afs) => afs.id != afsUpdateDto.id
-  //     )
-  //     for (const afs of nonResolvedAfses) {
-  //       afs.remove(application.id)
+  // async getResolvedApplications(afsId: string, applicationIds: [], user: User) {
+  //   // get the afs based on afsID
+  //   const resolvedSet = await this.afsRepository.find({
+  //     where: {
+  //       id: afsId
+  //       // applications: In(applicationId)
   //     }
+  //     // relations: ["applications"],
+  //   })
+    
+  //   // get the applications based on applicationIds
+  //   const resolvedApplicationsList = await this.applicationsRepository.find({
+  //     where: {
+  //       id: In(applicationIds)
+  //       // applications: In(applicationId)
+  //     },
+  //     relations: ["applicationFlaggedSets"],
+  //   })
+
+  //   // Update the AFS for resolved details
+  //   const resolveAfs: DeepPartial<ApplicationFlaggedSet> = {
+  //     resolved: true,
+  //     resolvedTime: new Date(),
+  //     resolvingUserId: user,
+  //     status: FlaggedSetStatus.resolved,
+  //     resolvedApplications: resolvedApplicationsList
   //   }
   //   await this.afsRepository.save(resolvedafs)
   // }
@@ -271,11 +294,7 @@ export class ApplicationFlaggedSetService {
   //       (afs) => afs.rule === queryRule
   //     )
   //   }
-
-  //   for application in applications_with_afs_joined:
-  // afs_array_without_resolved_one = filter(lambda afs: afs.id != input_afs_id, application.afs)
-  // for afs in afs_array_without_resolved_one:
-  //   afs.remove(application.id)
+  //   await this.afsRepository.save(resolveAfs)
   // }
 
   async unresolvedList(afsId: string) {
@@ -283,7 +302,16 @@ export class ApplicationFlaggedSetService {
       where: {
         id: afsId,
       },
-      relations: ["applications"],
+      join: {
+        alias: "AFS",
+        leftJoinAndSelect: {
+          afs: "AFS.applications",
+          afsApplicant: "afs.applicant",
+          afsApplications: "AFS.resolvedApplications",
+          afsUnresolvedApplicant: "afsApplications.applicant",
+          afsListing: "afs.listing"
+        },
+      },
       order: {
         createdAt: "DESC",
       },

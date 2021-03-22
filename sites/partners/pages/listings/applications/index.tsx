@@ -11,6 +11,7 @@ import {
   lRoute,
   LocalizedLink,
   ApiClientContext,
+  getOccupancyDescription,
 } from "@bloom-housing/ui-components"
 import { useApplicationsData, useListAsCsv } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
@@ -38,9 +39,10 @@ const ApplicationsList = () => {
 
   const pageSize = watch("page-size", 8)
   const [pageIndex, setPageIndex] = useState(1)
+  const [loadingCsv, setLoadingCsv] = useState(false)
 
   const listingId = router.query.listing as string
-  const status = "submitted"
+  let status = "submitted"
   const { appsData } = useApplicationsData(
     pageIndex,
     pageSize,
@@ -107,21 +109,23 @@ const ApplicationsList = () => {
     setPageIndex(pageIndex - 1)
   }
 
-  const { mutate: mutateCsv, loading: loadingCsv } = useListAsCsv(listingId, true)
+  // const { mutate: mutateCsv, loading: loadingCsv } = useListAsCsv(listingId, true, "status")
+
+  const mutateCsv = async (status?: "duplicate" | "submitted") => {
+    try {
+      const res = await applicationsService.listAsCsv({ listingId, includeHeaders: true, status })
+      setLoadingCsv(false)
+      return res
+    } catch (error) {
+      console.error(error)
+      setLoadingCsv(false)
+    }
+  }
 
   const onExport = async () => {
     const zip = new JSZip()
-    const activeContent = await applicationsService.listAsCsv({
-      listingId,
-      includeHeaders: true,
-      status: "submitted",
-    })
-    const duplicateContent = await applicationsService.listAsCsv({
-      listingId,
-      includeHeaders: true,
-      status: "duplicate",
-    })
-    const content = await mutateCsv()
+    const activeContent = await mutateCsv("submitted")
+    const duplicateContent = await mutateCsv("duplicate")
 
     const now = new Date()
     const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")

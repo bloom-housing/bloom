@@ -30,6 +30,7 @@ const ApplicationFlaggedSetList = () => {
   const appsMeta = appsData?.meta
   const afs = appsData?.items || []
 
+  console.log("netrA afs ",afs)
   // action buttons
   const onBtNext = () => {
     setPageIndex(pageIndex + 1)

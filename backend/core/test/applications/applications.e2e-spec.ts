@@ -515,13 +515,66 @@ describe("Applications", () => {
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(afsRes.body.items.length).toBe(0)
-  })
+    it(`should allow an admin to order users application using orderBy and order query params`, async () => {
+      const firstNames = ["A FirstName", "B FirstName", "C FirstName"]
+      const responses = []
+      const body = getTestAppBody(listing1Id)
 
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
+      for (const firstName of firstNames) {
+        const initialBody = Object.assign({}, body)
+        initialBody.applicant.firstName = firstName
 
-  afterAll(async () => {
-    await app.close()
+        const createRes = await supertest(app.getHttpServer())
+          .post(`/applications/submit`)
+          .send(body)
+          .expect(201)
+        expect(createRes.body).toMatchObject(initialBody)
+        expect(createRes.body).toHaveProperty("createdAt")
+        expect(createRes.body).toHaveProperty("updatedAt")
+        expect(createRes.body).toHaveProperty("id")
+
+        responses.push({ initialBody, createRes, firstName })
+      }
+
+      const res = await supertest(app.getHttpServer())
+        .get(`/applications/?orderBy=firstName&order=ASC`)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      expect(Array.isArray(res.body.items)).toBe(true)
+      expect(res.body.items.length).toBe(3)
+
+      for (const index in res.body.items) {
+        const item = res.body.items[index]
+        const { createRes, firstName } = responses[index]
+
+        expect(item.id === createRes.body.id)
+        expect(item).toMatchObject(createRes.body)
+        expect(item.applicant).toMatchObject(createRes.body.applicant)
+        expect(item.applicant.firstName === firstName)
+      }
+    })
+
+    it(`should disallow an admin to order users application using bad orderBy query param`, async () => {
+      await supertest(app.getHttpServer())
+        .get(`/applications/?orderBy=XYZ`)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(400)
+    })
+
+    it(`should disallow an admin to order users application using bad order query param`, async () => {
+      await supertest(app.getHttpServer())
+        .get(`/applications/?order=XYZ`)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(400)
+    })
+
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
+
+    afterAll(async () => {
+      await app.close()
+    })
   })
 })

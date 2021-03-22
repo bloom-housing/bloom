@@ -94,7 +94,7 @@ export function useUnresolvedAFSData(afsId: string) {
   }
 }
 
-export function useListAsCsv(listingId: string, includeHeaders: boolean) {
+export function useListAsCsv(listingId: string, includeHeaders: boolean, status: string) {
   const [loading, setLoading] = useState(false)
 
   const { applicationsService } = useContext(ApiClientContext)
@@ -102,7 +102,7 @@ export function useListAsCsv(listingId: string, includeHeaders: boolean) {
     setLoading(true)
 
     try {
-      const res = await applicationsService.listAsCsv({ listingId, includeHeaders })
+      const res = await applicationsService.listAsCsv({ listingId, includeHeaders, status })
       setLoading(false)
 
       return res
