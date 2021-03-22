@@ -29,3 +29,9 @@
   @apply m-auto;
   @apply max-w-5xl;
 }
+
+.page-header__secondary-nav {
+  @apply relative;
+
+  bottom: -2.5rem;
+}
