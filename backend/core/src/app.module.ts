@@ -17,6 +17,8 @@ import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import * as bodyParser from "body-parser"
+import { ThrottlerModule } from "@nestjs/throttler"
+import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -40,11 +42,17 @@ export class AppModule {
               .valid("development", "staging", "production", "test")
               .default("development"),
             DATABASE_URL: Joi.string().required(),
+            REDIS_URL: Joi.string().required(),
           }),
         }),
         TypeOrmModule.forRoot({
           ...dbOptions,
           autoLoadEntities: true,
+        }),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          storage: new ThrottlerStorageRedisService(process.env.REDIS_URL),
         }),
         UserModule,
         AuthModule,

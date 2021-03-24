@@ -22,12 +22,13 @@ import { authzActions } from "../auth/authz.service"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
+import { ThrottlerGuard, Throttle } from "@nestjs/throttler"
 
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
 @ResourceType("application")
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard, AuthzGuard, ThrottlerGuard)
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,
@@ -43,6 +44,7 @@ export class ApplicationsSubmissionController {
   ) {}
 
   @Post(`submit`)
+  @Throttle(2, 60)
   @ApiOperation({ summary: "Submit application", operationId: "submit" })
   @ResourceAction(authzActions.submit)
   async submit(
