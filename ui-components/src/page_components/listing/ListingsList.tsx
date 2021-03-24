@@ -45,8 +45,7 @@ const ListingsList = (props: ListingsProps) => {
             title={listing.name}
             subtitle={subtitle}
             imageUrl={imageUrl}
-            href={`listing/id=${listing.id}`}
-            as={`/listing/${listing.id}`}
+            href={`/listing/${listing.id}/${listing.urlSlug}`}
             listing={listing}
           />
         </div>
@@ -62,10 +61,7 @@ const ListingsList = (props: ListingsProps) => {
               />
             )}
           </div>
-          <LinkButton
-            href={`listing/id=${listing.id}`}
-            as={`/listing/${listing.id}/${listing.urlSlug}`}
-          >
+          <LinkButton href={`/listing/${listing.id}/${listing.urlSlug}`}>
             {t("t.seeDetails")}
           </LinkButton>
         </div>

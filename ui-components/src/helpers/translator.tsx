@@ -7,8 +7,8 @@ interface TranslatorConfig {
 const translatorConfig: TranslatorConfig = {}
 ;(global as any).Translator = translatorConfig
 
-export const addTranslation = (translationPhrases: any) => {
-  if (!translatorConfig.polyglot) {
+export const addTranslation = (translationPhrases: any, resetPolyglot = false) => {
+  if (!translatorConfig.polyglot || resetPolyglot) {
     // Set up the initial Polyglot instance and phrases
     translatorConfig.polyglot = new Polyglot({
       phrases: translationPhrases,
