@@ -46,6 +46,8 @@ export class UserDtoWithAccessToken extends UserDto {
 
 export class UserCreateDto extends OmitType(UserDto, [
   "id",
+  "confirmedAt",
+  "confirmationToken",
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
@@ -54,6 +56,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, { message: "password too weak" })
   password: string
 
   @Expose()
@@ -66,6 +69,12 @@ export class UserCreateDto extends OmitType(UserDto, [
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @Matches("email")
   emailConfirmation: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  appUrl?: string | null
 }
 
 export class UserUpdateDto extends OmitType(UserDto, [

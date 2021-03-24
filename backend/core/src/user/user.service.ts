@@ -7,6 +7,7 @@ import { UserCreateDto, UserDto } from "./dto/user.dto"
 import { encode, decode } from "jwt-simple"
 import moment from "moment"
 import { UpdatePasswordDto } from "./dto/update_password.dto"
+import { ConfirmDto } from "./dto/confirm.dto"
 
 // Length of hashed key, in bytes
 const SCRYPT_KEYLEN = 64
@@ -15,7 +16,7 @@ export const USER_ERRORS = {
   NOT_FOUND: { message: "emailNotFound", status: HttpStatus.BAD_REQUEST },
   TOKEN_EXPIRED: { message: "tokenExpired", status: HttpStatus.BAD_REQUEST },
   TOKEN_MISSING: { message: "tokenMissing", status: HttpStatus.BAD_REQUEST },
-  EMAIL_IN_USE: { message: "emailInUser", status: HttpStatus.BAD_REQUEST },
+  EMAIL_IN_USE: { message: "emailInUse", status: HttpStatus.BAD_REQUEST },
 }
 
 const generateSalt = (size = SALT_SIZE) => randomBytes(size)
@@ -80,20 +81,47 @@ export class UserService {
     return savedPasswordHash === verifyPasswordHash
   }
 
+  public async confirm(dto: ConfirmDto) {
+    const user = await this.repo.findOne({ confirmationToken: dto.token })
+    if (!user) {
+      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
+    }
+    user.confirmedAt = moment().toDate()
+    user.confirmationToken = null
+
+    try {
+      await this.repo.save(user)
+      return user
+    } catch (err) {
+      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+    }
+  }
+
   public async createUser(dto: UserCreateDto) {
+    let user = await this.findByEmail(dto.email)
+    if (user) {
+      if (!user.confirmedAt) {
+        return user
+      } else {
+        throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      }
+    }
     const { password } = dto
-    const user = new User()
+    user = new User()
     user.firstName = dto.firstName
     user.middleName = dto.middleName
     user.lastName = dto.lastName
     user.dob = dto.dob
     user.email = dto.email
+    const payload = { id: user.id, expiresAt: moment().add(1, "hour") }
+    const token = encode(payload, process.env.SECRET)
+    user.confirmationToken = token
     try {
       user.passwordHash = await passwordToHash(password)
       await this.repo.save(user)
       return user
     } catch (err) {
-      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
+      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
     }
   }
 

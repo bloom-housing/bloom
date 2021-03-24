@@ -36,6 +36,16 @@ export class User {
   @Column("varchar", { nullable: true })
   resetToken: string
 
+  @Column("varchar", { nullable: true })
+  confirmationToken?: string
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  confirmedAt?: Date | null
+
   @Column("varchar")
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })

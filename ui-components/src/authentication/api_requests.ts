@@ -18,7 +18,10 @@ export const login = async (apiBase: string, email: string, password: string) =>
 }
 
 export const register = async (apiBase: string, data: UserCreate) => {
-  const res = await axios.post<{ accessToken: string } & User>(`${apiBase}/user`, data)
+  const res = await axios.post<{ accessToken: string } & User>(`${apiBase}/user`, {
+    appUrl: window.location.origin,
+    ...data,
+  })
   const { accessToken, ...rest } = res.data
   const user = rest as User
   return { accessToken, user }
@@ -81,6 +84,14 @@ export const updatePassword = async (
   const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/update-password`, {
     password: password,
     passwordConfirmation: passwordConfirmation,
+    token: token,
+  })
+  const { accessToken } = res.data
+  return accessToken
+}
+
+export const confirmAccount = async (apiUrl: string, token: string) => {
+  const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/confirm`, {
     token: token,
   })
   const { accessToken } = res.data

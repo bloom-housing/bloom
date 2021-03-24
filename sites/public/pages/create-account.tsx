@@ -14,10 +14,11 @@ import {
   DOBField,
   AlertBox,
   SiteAlert,
+  Modal,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { useRedirectToPrevPage } from "../lib/hooks"
 import moment from "moment"
+import { useRouter } from "next/router"
 
 export default () => {
   const { createUser } = useContext(UserContext)
@@ -25,12 +26,13 @@ export default () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm()
   const [requestError, setRequestError] = useState<string>()
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const router = useRouter()
   const email = useRef({})
   const password = useRef({})
   email.current = watch("email", "")
   password.current = watch("password", "")
 
-  const redirectToPrev = useRedirectToPrevPage()
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
@@ -39,21 +41,14 @@ export default () => {
         dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
       })
 
-      await redirectToPrev()
+      setOpenModal(true)
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {
-        switch (data.message) {
-          case 'duplicate key value violates unique constraint "user_accounts_email_unique_idx"':
-            setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
-            break
-          default:
-            setRequestError(`${t("authentication.forgotPassword.errors.generic")}`)
-            break
-        }
+        setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
       } else {
         console.error(err)
-        setRequestError(`${t("authentication.forgotPassword.errors.generic")}`)
+        setRequestError(`${t("authentication.createAccount.errors.generic")}`)
       }
     }
   }
@@ -135,11 +130,20 @@ export default () => {
             <Field
               type="email"
               name="emailConfirmation"
-              // label={t("authentication.createAccount.email")}
               placeholder="example@web.com"
               validation={{
                 validate: (value) =>
                   value === email.current || t("authentication.createAccount.emailMismatch"),
+              }}
+              onPaste={(e) => {
+                e.preventDefault()
+                e.nativeEvent.stopImmediatePropagation()
+                return false
+              }}
+              onDrop={(e) => {
+                e.preventDefault()
+                e.nativeEvent.stopImmediatePropagation()
+                return false
               }}
               error={errors.emailConfirmation}
               errorMessage={t("authentication.createAccount.errors.emailMismatch")}
@@ -152,6 +156,7 @@ export default () => {
               caps={true}
               type="password"
               name="password"
+              note={t("authentication.createAccount.passwordInfo")}
               label={t("authentication.createAccount.password")}
               placeholder={t("authentication.createAccount.mustBe8Chars")}
               validation={{ required: true, minLength: 8 }}
@@ -168,7 +173,18 @@ export default () => {
               placeholder={t("authentication.createAccount.mustBe8Chars")}
               validation={{
                 validate: (value) =>
-                  value === password.current || t("authentication.createAccount.passwordMismatch"),
+                  value === password.current ||
+                  t("authentication.createAccount.errors.passwordMismatch"),
+              }}
+              onPaste={(e) => {
+                e.preventDefault()
+                e.nativeEvent.stopImmediatePropagation()
+                return false
+              }}
+              onDrop={(e) => {
+                e.preventDefault()
+                e.nativeEvent.stopImmediatePropagation()
+                return false
               }}
               error={errors.passwordConfirmation}
               errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
@@ -194,6 +210,41 @@ export default () => {
           <LinkButton href="/sign-in">{t("nav.signIn")}</LinkButton>
         </div>
       </FormCard>
+      <Modal
+        open={openModal}
+        title={t("authentication.createAccount.confirmationNeeded")}
+        ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
+          email: email.current,
+        })}
+        onClose={() => {
+          void router.push("/")
+          window.scrollTo(0, 0)
+        }}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.primary}
+            onClick={() => {
+              void router.push("/")
+              window.scrollTo(0, 0)
+            }}
+          >
+            {t("t.ok")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            onClick={() => {
+              void handleSubmit(onSubmit)()
+            }}
+          >
+            {t("authentication.createAccount.resendTheEmail")}
+          </Button>,
+        ]}
+      >
+        <>
+          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
+          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
+        </>
+      </Modal>
     </FormsLayout>
   )
 }

@@ -12,8 +12,11 @@ export interface FieldProps {
   type?: string
   id?: string
   name: string
+  note?: string
   label?: string
   defaultValue?: string | number
+  onDrop?: (e: any) => boolean
+  onPaste?: (e: any) => boolean
   placeholder?: string
   register: any // comes from React Hook Form
   validation?: Record<string, any>
@@ -56,9 +59,15 @@ const Field = (props: FieldProps) => {
 
   const idOrName = props.id || props.name
 
+  let note = <></>
+  if (props.note) {
+    note = <p className="text text-gray-600 text-sm pb-2">{props.note}</p>
+  }
+
   return (
     <div className={classes.join(" ")}>
       {!isRadioOrCheckbox && label}
+      {note}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
@@ -72,6 +81,8 @@ const Field = (props: FieldProps) => {
           placeholder={props.placeholder}
           ref={props.register(props.validation)}
           disabled={props.disabled}
+          onPaste={props.onPaste}
+          onDrop={props.onDrop}
           {...props.inputProps}
         />
         {isRadioOrCheckbox && label}

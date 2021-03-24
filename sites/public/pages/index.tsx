@@ -1,22 +1,29 @@
-import { Component } from "react"
+import React, { Component } from "react"
 import Head from "next/head"
 import { Listing } from "@bloom-housing/backend-core/types"
 import {
+  AlertBox,
   LinkButton,
   Hero,
   MarkdownSection,
   MetaTags,
   t,
   SiteAlert,
+  UserContext,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
+import { withRouter, NextRouter } from "next/router"
 
 interface IndexProps {
   listings: Listing[]
+  router: NextRouter
 }
 
-export default class extends Component<IndexProps> {
+class Index extends Component<IndexProps> {
+  static contextType = UserContext
+  state = { alertMessage: null, alertType: null }
+
   public static async getInitialProps() {
     let listings = []
     try {
@@ -27,6 +34,35 @@ export default class extends Component<IndexProps> {
     }
 
     return { listings }
+  }
+
+  componentDidMount() {
+    const { token } = this.props.router.query
+    const { confirmAccount, profile } = this.context
+    if (token && !profile) {
+      confirmAccount(token.toString())
+        .then(() => {
+          this.setState({
+            alertMessage: t(`authentication.createAccount.accountConfirmed`),
+            alertType: "success",
+          })
+          void this.props.router.push("/account/dashboard", undefined, { shallow: true })
+          window.scrollTo(0, 0)
+        })
+        .catch(() => {
+          this.setState({
+            alertMessage: t(`authentication.signIn.errorGenericMessage`),
+            alertType: "alert",
+          })
+        })
+    }
+  }
+
+  public closeAlert = () => {
+    this.setState({
+      alertMessage: null,
+      alertType: null,
+    })
   }
 
   public render() {
@@ -50,6 +86,11 @@ export default class extends Component<IndexProps> {
           <SiteAlert type="alert" className={alertClasses} />
           <SiteAlert type="success" className={alertClasses} timeout={30000} />
         </div>
+        {this.state.alertMessage && (
+          <AlertBox className="" onClose={() => this.closeAlert()} type={this.state.alertType}>
+            {this.state.alertMessage}
+          </AlertBox>
+        )}
         <Hero
           title={heroTitle}
           buttonTitle={t("welcome.seeRentalListings")}
@@ -70,3 +111,4 @@ export default class extends Component<IndexProps> {
     )
   }
 }
+export default withRouter(Index)

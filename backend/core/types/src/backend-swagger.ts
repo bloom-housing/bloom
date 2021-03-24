@@ -105,7 +105,7 @@ export class UserService {
       body?: UserCreate;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<UserWithAccessToken> {
+  ): Promise<User> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user';
 
@@ -121,6 +121,27 @@ export class UserService {
    * Forgot Password
    */
   forgotPassword(
+    params: {
+      /** requestBody */
+      body?: Confirm;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/confirm';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Forgot Password
+   */
+  forgotPassword1(
     params: {
       /** requestBody */
       body?: ForgotPassword;
@@ -1056,6 +1077,12 @@ export interface User {
   id: string;
 
   /**  */
+  confirmationToken?: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
   email: string;
 
   /**  */
@@ -1082,6 +1109,15 @@ export interface UserCreate {
   password: string;
 
   /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  emailConfirmation: string;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
   email: string;
 
   /**  */
@@ -1097,37 +1133,12 @@ export interface UserCreate {
   dob: Date;
 }
 
-export interface UserWithAccessToken {
+export interface Confirm {
   /**  */
-  roles: UserRole[];
+  token: string;
+}
 
-  /**  */
-  leasingAgentInListings?: Id[];
-
-  /**  */
-  id: string;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
+export interface LoginResponse {
   /**  */
   accessToken: string;
 }
@@ -1156,11 +1167,6 @@ export interface UpdatePassword {
   token: string;
 }
 
-export interface LoginResponse {
-  /**  */
-  accessToken: string;
-}
-
 export interface UserUpdate {
   /**  */
   id?: string;
@@ -1173,6 +1179,12 @@ export interface UserUpdate {
 
   /**  */
   dob: Date;
+
+  /**  */
+  confirmationToken?: string;
+
+  /**  */
+  confirmedAt?: Date;
 
   /**  */
   firstName: string;
@@ -1547,6 +1559,12 @@ export interface UserBasic {
 
   /**  */
   resetToken: string;
+
+  /**  */
+  confirmationToken?: string;
+
+  /**  */
+  confirmedAt?: Date;
 
   /**  */
   email: string;

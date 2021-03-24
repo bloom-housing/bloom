@@ -9,6 +9,7 @@ import {
 import { createAction, createReducer } from "typesafe-actions"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
 import {
+  confirmAccount,
   createAxiosInstance,
   forgotPassword,
   getProfile,
@@ -21,6 +22,7 @@ import { ConfigContext } from "../config/ConfigContext"
 import { UserCreate, User } from "@bloom-housing/backend-core/types"
 // External interface this context provides
 type ContextProps = {
+  confirmAccount: (token: string) => Promise<User>
   forgotPassword: (email: string) => Promise<string>
   login: (email: string, password: string) => Promise<User>
   createUser: (user: UserCreate) => Promise<User>
@@ -159,9 +161,7 @@ export const UserProvider: FunctionComponent = ({ children }) => {
     createUser: async (user: UserCreate) => {
       dispatch(startLoading())
       try {
-        const { accessToken, user: profile } = await register(apiUrl, user)
-        dispatch(saveToken({ accessToken, apiUrl, dispatch }))
-        dispatch(saveProfile(profile))
+        const { user: profile } = await register(apiUrl, user)
         return profile
       } finally {
         dispatch(stopLoading())
@@ -181,6 +181,19 @@ export const UserProvider: FunctionComponent = ({ children }) => {
       dispatch(startLoading())
       try {
         const accessToken = await updatePassword(apiUrl, token, password, passwordConfirmation)
+        dispatch(saveToken({ accessToken, apiUrl, dispatch }))
+        const client = createAxiosInstance(apiUrl, accessToken)
+        const profile = await getProfile(client)
+        dispatch(saveProfile(profile))
+        return profile
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    confirmAccount: async (token) => {
+      dispatch(startLoading())
+      try {
+        const accessToken = await confirmAccount(apiUrl, token)
         dispatch(saveToken({ accessToken, apiUrl, dispatch }))
         const client = createAxiosInstance(apiUrl, accessToken)
         const profile = await getProfile(client)

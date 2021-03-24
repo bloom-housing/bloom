@@ -516,6 +516,10 @@
       "success": "Welcome back, %{name}!"
     },
     "createAccount": {
+      "accountConfirmed": "Your account was successfully confirmed.",
+      "anEmailHasBeenSent": "An email has been sent to %{email}",
+      "confirmationInstruction": "Please click on the link in the email we sent you in order to complete account creation.",
+      "confirmationNeeded": "Confirmation needed",
       "yourName": "Your Name",
       "firstName": "First Name",
       "middleNameOptional": "Middle Name (optional)",
@@ -526,9 +530,12 @@
       "emailPrivacy": "We will only use your email address to contact you about your application.",
       "reEnterEmail": "Re-enter email address",
       "reEnterPassword": "Re-enter your password",
+      "resendTheEmail": "Resend the email",
       "mustBe8Chars": "Must be 8 characters",
-      "password": "Passowrd",
+      "password": "Password",
+      "passwordInfo": "Must be at least 8 characters and include at least 1 letter and at least one number.",
       "errors": {
+        "emailInUse": "Email is already in use",
         "emailMismatch": "The emails do not match",
         "passwordMismatch": "The passwors do not match"
       }
@@ -889,6 +896,7 @@
     "none": "None",
     "noneFound": "None found.",
     "occupancy": "Occupancy",
+    "ok": "OK",
     "or": "or",
     "pageXofY": "Page %{num} of %{total}",
     "people": "people",
