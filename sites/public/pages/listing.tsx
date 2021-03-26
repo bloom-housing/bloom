@@ -3,10 +3,9 @@ import ReactDOMServer from "react-dom/server"
 import Head from "next/head"
 import axios from "axios"
 import Markdown from "markdown-to-jsx"
-import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
-  ApplicationSection,
   ApplicationStatus,
   StandardTable,
   Description,
@@ -31,13 +30,9 @@ import {
   t,
   UnitTables,
   WhatToExpect,
-  PublicLotteryEvent,
-  LotteryResultsEvent,
-  OpenHouseEvent,
-  DownloadLotteryResults,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
-import moment from "moment"
+import EventSection from "../src/eventSection"
 
 interface ListingProps {
   listing: Listing
@@ -137,36 +132,6 @@ export default class extends Component<ListingProps> {
       )
     }
 
-    let openHouseEvents: ListingEvent[] | null = null
-    let publicLottery: ListingEvent | null = null
-    let lotteryResults: ListingEvent | null = null
-    if (Array.isArray(listing.events)) {
-      listing.events.forEach((event) => {
-        switch (event.type) {
-          case ListingEventType.openHouse:
-            if (!openHouseEvents) {
-              openHouseEvents = []
-            }
-            openHouseEvents.push(event)
-            break
-          case ListingEventType.publicLottery:
-            publicLottery = event
-            break
-          case ListingEventType.lotteryResults:
-            lotteryResults = event
-            break
-        }
-      })
-    }
-
-    let lotterySection
-    if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
-      lotterySection = <PublicLotteryEvent event={publicLottery} />
-      if (moment(publicLottery.startTime) < moment() && lotteryResults && !lotteryResults.url) {
-        lotterySection = <LotteryResultsEvent event={lotteryResults} />
-      }
-    }
-
     return (
       <Layout>
         <Head>
@@ -228,12 +193,9 @@ export default class extends Component<ListingProps> {
             )}
           </div>
           <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
-            {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-            <ApplicationSection
-              listing={listing}
-              internalFormRoute="/applications/start/choose-language"
-            />
+            <EventSection listing={listing} />
           </div>
+
           <ListingDetails>
             <ListingDetailItem
               imageAlt={t("listings.eligibilityNotebook")}
@@ -304,14 +266,9 @@ export default class extends Component<ListingProps> {
               <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
                 <div className="hidden md:block">
                   <ApplicationStatus listing={listing} />
-                  <DownloadLotteryResults event={lotteryResults} />
-                  {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-                  <ApplicationSection
-                    listing={listing}
-                    internalFormRoute="/applications/start/choose-language"
-                  />
+                  {/* <DownloadLotteryResults event={lotteryResults} /> */}
+                  <EventSection listing={listing} />
                 </div>
-                {lotterySection}
                 <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
               </aside>

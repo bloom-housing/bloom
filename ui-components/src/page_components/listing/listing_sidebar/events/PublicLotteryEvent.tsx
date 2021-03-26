@@ -6,7 +6,7 @@ import { EventDateSection } from "./EventDateSection"
 const PublicLotteryEvent = (props: { event: ListingEvent }) => {
   const { event } = props
   return (
-    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
+    <section className="aside-block">
       <h4 className="text-caps-underline">{t("listings.publicLottery.header")}</h4>
       <EventDateSection event={props.event} />
       {event.url && (
