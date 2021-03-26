@@ -17,7 +17,6 @@ import {
   ImageCard,
   imageUrlFromListing,
   InfoCard,
-  LeasingAgent,
   ListingDetailItem,
   ListingDetails,
   ListingMap,
@@ -29,7 +28,6 @@ import {
   TableHeaders,
   t,
   UnitTables,
-  WhatToExpect,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import EventSection from "../src/eventSection"
@@ -268,8 +266,6 @@ export default class extends Component<ListingProps> {
                   <ApplicationStatus listing={listing} />
                   <EventSection listing={listing} />
                 </div>
-                <WhatToExpect listing={listing} />
-                <LeasingAgent listing={listing} />
               </aside>
             </ListingDetailItem>
 

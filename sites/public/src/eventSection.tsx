@@ -2,9 +2,11 @@ import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-
 import {
   ApplicationSection,
   DownloadLotteryResults,
+  LeasingAgent,
   LotteryResultsEvent,
   OpenHouseEvent,
   PublicLotteryEvent,
+  WhatToExpect,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import React from "react"
@@ -55,6 +57,8 @@ const EventSection = (props: SideSectionsProps) => {
         internalFormRoute="/applications/start/choose-language"
       />
       {lotterySection}
+      <WhatToExpect listing={listing} />
+      <LeasingAgent listing={listing} />
     </div>
   )
 }
