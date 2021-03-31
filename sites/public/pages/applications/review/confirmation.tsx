@@ -87,7 +87,7 @@ export default () => {
             <Button
               styleType={AppearanceStyleType.primary}
               onClick={() => {
-                void router.push("/create-account").then(() => window.scrollTo(0, 0))
+                void router.push("/create-account")
               }}
             >
               {t("account.createAccount")}

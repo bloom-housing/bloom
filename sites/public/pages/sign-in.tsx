@@ -35,7 +35,6 @@ const SignIn = () => {
       const user = await login(email, password)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await router.push("/account/dashboard")
-      window.scrollTo(0, 0)
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {

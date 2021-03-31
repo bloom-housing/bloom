@@ -33,7 +33,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   useMemo(() => {
     addTranslation(translations.general, true)
-    if (locale && locale != "en" && translations[locale]) {
+    if (locale && locale !== "en" && translations[locale]) {
       addTranslation(translations[locale])
       if (overrideTranslations[locale]) {
         addTranslation(overrideTranslations[locale])

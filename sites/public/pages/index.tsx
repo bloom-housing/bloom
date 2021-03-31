@@ -62,7 +62,7 @@ export async function getStaticProps() {
     const response = await axios.get(process.env.listingServiceUrl)
     listings = response.data
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 
   return { props: { listings } }

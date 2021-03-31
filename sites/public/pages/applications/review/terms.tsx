@@ -8,7 +8,6 @@ import {
   Button,
   FormCard,
   ProgressNav,
-  lRoute,
   t,
   UserContext,
   ApiClientContext,
@@ -55,9 +54,7 @@ export default () => {
       })
       .then((result) => {
         conductor.currentStep.save({ confirmationId: result.id })
-        return router
-          .push(lRoute("/applications/review/confirmation"))
-          .then(() => window.scrollTo(0, 0))
+        return router.push("/applications/review/confirmation")
       })
       .catch((err) => console.error(`Error creating application: ${err}`))
   }

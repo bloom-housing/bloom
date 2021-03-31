@@ -1,17 +1,11 @@
 import * as React from "react"
-import { LocalizedLink } from "./LocalizedLink"
+import Link from "next/link"
 import "./Button.scss"
 import { buttonClassesForProps, buttonInner, ButtonProps } from "./Button"
 
 export interface LinkButtonProps extends Omit<ButtonProps, "onClick"> {
   href: string
   as?: string
-}
-
-export interface LinkProps {
-  href: string
-  as?: string
-  className?: string
 }
 
 const isExternalLink = (href: string) => {
@@ -21,17 +15,18 @@ const isExternalLink = (href: string) => {
 const LinkButton = (props: LinkButtonProps) => {
   const buttonClasses = buttonClassesForProps(props)
 
-  const linkProps = {
-    href: props.href,
-    className: buttonClasses.join(" "),
-  } as LinkProps
-
   if (isExternalLink(props.href)) {
-    return <a {...linkProps}>{buttonInner(props)}</a>
+    return (
+      <a href={props.href} className={props.className}>
+        {buttonInner(props)}
+      </a>
+    )
   } else {
-    if (props.as) linkProps.as = props.as
-
-    return <LocalizedLink {...linkProps}>{buttonInner(props)}</LocalizedLink>
+    return (
+      <Link href={props.href}>
+        <a className={buttonClasses.join(" ")}>{buttonInner(props)}</a>
+      </Link>
+    )
   }
 }
 

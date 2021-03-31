@@ -1,8 +1,8 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
+import Link from "next/link"
 import Head from "next/head"
 import {
-  LocalizedLink,
   SiteHeader,
   SiteFooter,
   FooterNav,
@@ -38,14 +38,14 @@ const Layout = (props) => {
           title={t("nav.siteTitle")}
           languages={languages}
         >
-          <LocalizedLink href="/listings" className="navbar-item">
-            {t("nav.listings")}
-          </LocalizedLink>
+          <Link href="/listings">
+            <a className="navbar-item">{t("nav.listings")}</a>
+          </Link>
           {/* Only show Get Assistance if housing counselor data is available */}
           {process.env.housingCounselorServiceUrl && (
-            <LocalizedLink href="/housing-counselors" className="navbar-item">
-              {t("nav.getAssistance")}
-            </LocalizedLink>
+            <Link href="/housing-counselors">
+              <a className="navbar-item">{t("nav.getAssistance")}</a>
+            </Link>
           )}
           <UserNav
             signedIn={!!profile}
@@ -53,18 +53,17 @@ const Layout = (props) => {
               setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
               await router.push("/sign-in")
               signOut()
-              window.scrollTo(0, 0)
             }}
           >
-            <LocalizedLink href="/account/dashboard" className="navbar-item">
-              {t("nav.myDashboard")}
-            </LocalizedLink>
-            <LocalizedLink href="/account/applications" className="navbar-item">
-              {t("nav.myApplications")}
-            </LocalizedLink>
-            <LocalizedLink href="/account/settings" className="navbar-item">
-              {t("nav.accountSettings")}
-            </LocalizedLink>
+            <Link href="/account/dashboard">
+              <a className="navbar-item">{t("nav.myDashboard")}</a>
+            </Link>
+            <Link href="/account/applications">
+              <a className="navbar-item">{t("nav.myApplications")}</a>
+            </Link>
+            <Link href="/account/settings">
+              <a className="navbar-item">{t("nav.accountSettings")}</a>
+            </Link>
           </UserNav>
         </SiteHeader>
         <main id="main-content">{props.children}</main>
@@ -72,8 +71,8 @@ const Layout = (props) => {
 
       <SiteFooter>
         <FooterNav copyright={t("footer.copyright")}>
-          <LocalizedLink href="/privacy">{t("pageTitle.privacy")}</LocalizedLink>
-          <LocalizedLink href="/disclaimer">{t("pageTitle.disclaimer")}</LocalizedLink>
+          <Link href="/privacy">{t("pageTitle.privacy")}</Link>
+          <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
         </FooterNav>
         <FooterSection className="bg-black" small>
           <ExygyFooter />

@@ -10,14 +10,12 @@ const HouseholdMemberForm = (props: { member: HouseholdMemberUpdate; type: strin
 
   const editMember = () => {
     if (member.orderId != undefined && member.orderId >= 0) {
-      void router
-        .push({
-          pathname: "/applications/household/member",
-          query: { memberId: member.orderId },
-        })
-        .then(() => window.scrollTo(0, 0))
+      void router.push({
+        pathname: "/applications/household/member",
+        query: { memberId: member.orderId },
+      })
     } else {
-      void router.push("/applications/contact/name").then(() => window.scrollTo(0, 0))
+      void router.push("/applications/contact/name")
     }
   }
   return (

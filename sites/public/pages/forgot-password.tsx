@@ -34,7 +34,6 @@ const ForgotPassword = () => {
       await forgotPassword(email)
       setSiteAlertMessage(t(`authentication.forgotPassword.success`), "success")
       await router.push("/")
-      window.scrollTo(0, 0)
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {
