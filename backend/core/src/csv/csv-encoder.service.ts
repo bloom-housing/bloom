@@ -47,6 +47,11 @@ export class CsvEncoder {
 
   private _encodeDoubleQuotes(input: string) {
     const regex = /"/gi
-    return input.replace(regex, '""')
+    try {
+      return input.replace(regex, '""')
+    } catch (e) {
+      console.error(e)
+      return "null"
+    }
   }
 }
