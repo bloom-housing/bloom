@@ -80,7 +80,7 @@ describe("Applications", () => {
     expect(res.body.email).toBe(user1Profile.email)
   })
 
-  it("should not allow user to create an account with week password", async () => {
+  it("should not allow user to create an account with weak password", async () => {
     const userCreateDto: UserCreateDto = {
       password: "abcdef",
       passwordConfirmation: "abcdef",

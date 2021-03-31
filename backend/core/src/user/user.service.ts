@@ -86,7 +86,7 @@ export class UserService {
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
-    user.confirmedAt = moment().toDate()
+    user.confirmedAt = new Date()
     user.confirmationToken = null
 
     try {

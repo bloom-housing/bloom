@@ -22,9 +22,11 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
   const userService = app.get<UserService>(UserService)
   const listing1 = await seedListing(app, newSeed())
-  listing1.leasingAgents.forEach((agent: User) => {
-    void userService.confirm({ token: agent.confirmationToken })
-  })
+  await Promise.all([
+    listing1.leasingAgents.map(async (agent: User) => {
+      await userService.confirm({ token: agent.confirmationToken })
+    }),
+  ])
   const listingSeed = newSeed()
   const listing2 = await seedListing(app, {
     ...listingSeed,
@@ -35,9 +37,11 @@ async function bootstrap() {
       },
     ],
   })
-  listing2.leasingAgents.forEach((agent: User) => {
-    void userService.confirm({ token: agent.confirmationToken })
-  })
+  await Promise.all([
+    listing2.leasingAgents.map(async (agent: User) => {
+      await userService.confirm({ token: agent.confirmationToken })
+    }),
+  ])
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
 

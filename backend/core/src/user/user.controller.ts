@@ -57,7 +57,7 @@ export class UserController {
   }
 
   @Put("confirm")
-  @ApiOperation({ summary: "Forgot Password", operationId: "forgot-password" })
+  @ApiOperation({ summary: "Confirm email", operationId: "confirm" })
   async confirm(@Body() dto: ConfirmDto): Promise<LoginResponseDto> {
     const user = await this.userService.confirm(dto)
     const accessToken = this.authService.generateAccessToken(user)
