@@ -13,6 +13,7 @@ import { UserModule } from "../../src/user/user.module"
 import supertest from "supertest"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { UserCreateDto, UserDto, UserUpdateDto } from "../../src/user/dto/user.dto"
+import { UserService } from "../../src/user/user.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -79,21 +80,86 @@ describe("Applications", () => {
     expect(res.body.email).toBe(user1Profile.email)
   })
 
-  it("should allow anonymous user to create an account", async () => {
+  it("should not allow user to create an account with week password", async () => {
     const userCreateDto: UserCreateDto = {
       password: "abcdef",
+      passwordConfirmation: "abcdef",
+      email: "abc@b.com",
+      emailConfirmation: "abc@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+  })
+
+  it("should not allow user to sign in before confirming the account", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "a1@b.com",
+      emailConfirmation: "a1@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(401)
+
+    const userService = app.get<UserService>(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+    await getUserAccessToken(app, userCreateDto.email, userCreateDto.password)
+  })
+
+  it("should not allow user to create an account without matching confirmation", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "abcdef2",
+      email: "a2@b.com",
+      emailConfirmation: "a2@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    let res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+    userCreateDto.passwordConfirmation = "Abcdef1!"
+    userCreateDto.emailConfirmation = "a1@b.com"
+    res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+    userCreateDto.emailConfirmation = "a2@b.com"
+    res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    expect(res.body.email).toBe(userCreateDto.email)
+  })
+
+  it("should allow anonymous user to create an account", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
       email: "a@b.com",
+      emailConfirmation: "a@b.com",
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
     }
     const res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto)
+    delete userCreateDto.passwordConfirmation
+    delete userCreateDto.emailConfirmation
+    delete userCreateDto.password
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).not.toHaveProperty("passwordHash")
-    delete userCreateDto.password
     expect(res.body).toMatchObject({
       ...userCreateDto,
       dob: userCreateDto.dob.toISOString(),
@@ -102,15 +168,18 @@ describe("Applications", () => {
 
   it("should not allow to create a new account with duplicate email", async () => {
     const userCreateDto: UserCreateDto = {
-      password: "abcdef",
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
       email: "b@c.com",
+      emailConfirmation: "b@c.com",
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
     }
-
     const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto).expect(201)
+    delete userCreateDto.passwordConfirmation
+    delete userCreateDto.emailConfirmation
     delete userCreateDto.password
     expect(res.body).toMatchObject({ ...userCreateDto, dob: userCreateDto.dob.toISOString() })
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)

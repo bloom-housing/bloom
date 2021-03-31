@@ -14,6 +14,7 @@ import {
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { IdDto } from "../../shared/dto/id.dto"
+import { Match } from "../../shared/match.decorator"
 
 export class UserDto extends OmitType(User, [
   "applications",
@@ -56,18 +57,21 @@ export class UserCreateDto extends OmitType(UserDto, [
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, { message: "password too weak" })
+  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, {
+    message: "password too weak",
+    groups: [ValidationsGroupsEnum.default],
+  })
   password: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @Matches("password")
+  @Match("password", { groups: [ValidationsGroupsEnum.default] })
   passwordConfirmation: string
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
-  @Matches("email")
+  @Match("email", { groups: [ValidationsGroupsEnum.default] })
   emailConfirmation: string
 
   @Expose()
