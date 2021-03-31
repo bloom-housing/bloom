@@ -243,6 +243,7 @@ exports[`Storyshots Forms/Time Field Default 1`] = `
       >
         <ErrorMessage
           error={false}
+          id="time-field-error"
         />
       </div>
     </fieldset>

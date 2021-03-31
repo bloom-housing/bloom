@@ -8,11 +8,10 @@ export default {
 }
 
 const headers = {
-  name: "Name",
-  relationship: "Relationship",
-  dob: "Date of Birth",
+  name: "t.name",
+  relationship: "t.relationship",
+  dob: "application.household.member.dateOfBirth",
 }
-
 const data = [
   {
     data: [
@@ -45,12 +44,5 @@ const data = [
     ],
   },
 ]
-
-/*let i = 50
-while (i > 0) {
-  data.push(data[0])
-  data.push(data[1])
-  i--
-}*/
 
 export const Default = () => <GroupedTable headers={headers} data={data} />

@@ -2037,9 +2037,9 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
           }
           headers={
             Object {
-              "dob": "Date of Birth",
-              "name": "Name",
-              "relationship": "Relationship",
+              "dob": "application.household.member.dateOfBirth",
+              "name": "t.name",
+              "relationship": "t.relationship",
             }
           }
         >
@@ -2066,9 +2066,9 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
             }
             headers={
               Object {
-                "dob": "Date of Birth",
-                "name": "Name",
-                "relationship": "Relationship",
+                "dob": "application.household.member.dateOfBirth",
+                "name": "t.name",
+                "relationship": "t.relationship",
               }
             }
             tableClassName="td-plain th-plain"
@@ -2120,36 +2120,36 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                     >
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Name"
+                        headerLabel="name"
                         key="standardcol-0"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Name"
+                          data-label="name"
                         >
                           Jim Halpert
                         </td>
                       </Component>
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Relationship"
+                        headerLabel="relationship"
                         key="standardcol-1"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Relationship"
+                          data-label="relationship"
                         >
                           Husband
                         </td>
                       </Component>
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Date of Birth"
+                        headerLabel="dob"
                         key="standardcol-2"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Date of Birth"
+                          data-label="dob"
                         >
                           05/01/1985
                         </td>
@@ -2165,36 +2165,36 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                     >
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Name"
+                        headerLabel="name"
                         key="standardcol-0"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Name"
+                          data-label="name"
                         >
                           Michael Scott
                         </td>
                       </Component>
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Relationship"
+                        headerLabel="relationship"
                         key="standardcol-1"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Relationship"
+                          data-label="relationship"
                         >
                           Friend
                         </td>
                       </Component>
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Date of Birth"
+                        headerLabel="dob"
                         key="standardcol-2"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Date of Birth"
+                          data-label="dob"
                         >
                           05/01/1975
                         </td>
@@ -2210,36 +2210,36 @@ exports[`Storyshots Sections/Grid Section Grid Section Table 1`] = `
                     >
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Name"
+                        headerLabel="name"
                         key="standardcol-0"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Name"
+                          data-label="name"
                         >
                           Jim Halpert
                         </td>
                       </Component>
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Relationship"
+                        headerLabel="relationship"
                         key="standardcol-1"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Relationship"
+                          data-label="relationship"
                         >
                           Husband
                         </td>
                       </Component>
                       <Component
                         className="px-5 py-3"
-                        headerLabel="Date of Birth"
+                        headerLabel="dob"
                         key="standardcol-2"
                       >
                         <td
                           className="px-5 py-3"
-                          data-label="Date of Birth"
+                          data-label="dob"
                         >
                           05/01/1985
                         </td>

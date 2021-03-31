@@ -50,5 +50,6 @@ module.exports = {
     "migration/",
     "**/*.stories.tsx",
     "**/.eslintrc.js",
+    "**/*.test.*",
   ],
 }

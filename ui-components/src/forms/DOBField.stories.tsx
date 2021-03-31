@@ -1,30 +1,25 @@
 import React from "react"
-
 import { DOBField } from "./DOBField"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
+import { useForm } from "react-hook-form"
 
 export default {
   title: "Forms/Date of Birth Field",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
-const member = ({
-  birthMonth: undefined,
-  birthDay: undefined,
-  birthYear: undefined,
-} as unknown) as HouseholdMember
+export const Default = () => {
+  const { register, watch, errors } = useForm({ mode: "onChange" })
 
-export const Default = () => (
-  <DOBField
-    applicant={member}
-    required={true}
-    register={() => {
-      //
-    }}
-    error={{}}
-    watch={() => {
-      //
-    }}
-    label="Date of Birth"
-  />
-)
+  return (
+    <DOBField
+      id="dateOfBirth"
+      name="dateOfBirth"
+      label="Date of Birth"
+      required={true}
+      register={register}
+      watch={watch}
+      error={errors?.dateOfBirth}
+      atAge={true}
+    />
+  )
+}

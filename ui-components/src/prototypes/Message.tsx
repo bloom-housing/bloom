@@ -4,7 +4,6 @@ import "./Message.scss"
 export interface MessageProps {
   children: React.ReactNode
   warning?: boolean
-  small?: boolean
 }
 
 const Message = (props: MessageProps) => {

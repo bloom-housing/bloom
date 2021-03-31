@@ -4,8 +4,13 @@
 process.env.TZ = "UTC"
 
 module.exports = {
-  testRegex: "/*.test.tsx$",
-  collectCoverageFrom: ["**/*.tsx", "!**/*.stories.tsx"],
+  testRegex: ["/*.test.tsx$", "/*.test.ts$"],
+  collectCoverageFrom: [
+    "**/*.tsx",
+    "!**/*.stories.tsx",
+    "<rootDir>/ui-components/src/helpers/*.ts",
+    "!<rootDir>/ui-components/src/helpers/blankApplication.ts",
+  ],
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "test-coverage",
   coverageThreshold: {

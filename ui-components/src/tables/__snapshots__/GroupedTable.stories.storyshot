@@ -45,9 +45,9 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
     }
     headers={
       Object {
-        "dob": "Date of Birth",
-        "name": "Name",
-        "relationship": "Relationship",
+        "dob": "application.household.member.dateOfBirth",
+        "name": "t.name",
+        "relationship": "t.relationship",
       }
     }
   >
@@ -68,21 +68,21 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
                 key="header-0"
               >
                 <th>
-                  Name
+                  t.name
                 </th>
               </Component>
               <Component
                 key="header-1"
               >
                 <th>
-                  Relationship
+                  t.relationship
                 </th>
               </Component>
               <Component
                 key="header-2"
               >
                 <th>
-                  Date of Birth
+                  application.household.member.dateOfBirth
                 </th>
               </Component>
             </tr>
@@ -99,34 +99,34 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               id="groupedrow-0-0"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="t.name"
                 key="col-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="t.name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="t.relationship"
                 key="col-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="t.relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="application.household.member.dateOfBirth"
                 key="col-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="application.household.member.dateOfBirth"
                 >
                   05/01/1985
                 </td>
@@ -143,34 +143,34 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               id="groupedrow-0-1"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="t.name"
                 key="col-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="t.name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="t.relationship"
                 key="col-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="t.relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="application.household.member.dateOfBirth"
                 key="col-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="application.household.member.dateOfBirth"
                 >
                   05/01/1975
                 </td>
@@ -205,34 +205,34 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               id="groupedrow-1-0"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="t.name"
                 key="col-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="t.name"
                 >
                   Jim Halpert
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="t.relationship"
                 key="col-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="t.relationship"
                 >
                   Husband
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="application.household.member.dateOfBirth"
                 key="col-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="application.household.member.dateOfBirth"
                 >
                   05/01/1985
                 </td>
@@ -249,34 +249,34 @@ exports[`Storyshots Tables/GroupedTable Default 1`] = `
               id="groupedrow-1-1"
             >
               <Component
-                headerLabel="Name"
+                headerLabel="t.name"
                 key="col-0"
               >
                 <td
                   className="p-5"
-                  data-label="Name"
+                  data-label="t.name"
                 >
                   Michael Scott
                 </td>
               </Component>
               <Component
-                headerLabel="Relationship"
+                headerLabel="t.relationship"
                 key="col-1"
               >
                 <td
                   className="p-5"
-                  data-label="Relationship"
+                  data-label="t.relationship"
                 >
                   Friend
                 </td>
               </Component>
               <Component
-                headerLabel="Date of Birth"
+                headerLabel="application.household.member.dateOfBirth"
                 key="col-2"
               >
                 <td
                   className="p-5"
-                  data-label="Date of Birth"
+                  data-label="application.household.member.dateOfBirth"
                 >
                   05/01/1975
                 </td>
