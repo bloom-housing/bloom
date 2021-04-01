@@ -1040,6 +1040,55 @@ export class AmiChartsService {
   }
 }
 
+export class ApplicationFlaggedSetsService {
+  /**
+   * List application flagged sets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number;
+      /**  */
+      limit?: number;
+      /**  */
+      listingId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationFlaggedSets';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Resolve application flagged set
+   */
+  resolve(
+    params: {
+      /** requestBody */
+      body?: ApplicationFlaggedSetResolve;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationFlaggedSets/resolve';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface Id {
   /**  */
   id: string;
@@ -2449,6 +2498,9 @@ export interface Application {
 
   /**  */
   submissionDate?: Date;
+
+  /**  */
+  markedAsDuplicate: boolean;
 }
 
 export interface PaginationMeta {
@@ -3274,6 +3326,54 @@ export interface AmiChartUpdate {
   name: string;
 }
 
+export interface ApplicationFlaggedSet {
+  /**  */
+  resolvingUser: Id;
+
+  /**  */
+  applications: Application[];
+
+  /**  */
+  listing: Id;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  rule: string;
+
+  /**  */
+  resolvedTime?: Date;
+
+  /**  */
+  status: EnumApplicationFlaggedSetStatus;
+
+  /**  */
+  listingId: string;
+}
+
+export interface PaginatedApplicationFlaggedSet {
+  /**  */
+  items: ApplicationFlaggedSet[];
+
+  /**  */
+  meta: PaginationMeta;
+}
+
+export interface ApplicationFlaggedSetResolve {
+  /**  */
+  afsId: string;
+
+  /**  */
+  applications: Id[];
+}
+
 export enum UserRole {
   'user' = 'user',
   'admin' = 'admin'
@@ -3336,3 +3436,7 @@ export enum ApplicationSubmissionType {
   'electronical' = 'electronical'
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
+export enum EnumApplicationFlaggedSetStatus {
+  'flagged' = 'flagged',
+  'resolved' = 'resolved'
+}
