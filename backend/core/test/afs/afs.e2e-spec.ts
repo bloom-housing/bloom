@@ -170,6 +170,9 @@ describe("ApplicationFlaggedSets", () => {
   })
 
   afterAll(async () => {
+    await householdMembersRepository.createQueryBuilder().delete().execute()
+    await applicationsRepository.createQueryBuilder().delete().execute()
+    await afsRepository.createQueryBuilder().delete().execute()
     await app.close()
   })
 })
