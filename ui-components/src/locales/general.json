@@ -551,7 +551,8 @@
     "selectOption": "Please select one of the options above.",
     "householdTooBig": "Your household size is too big.",
     "householdTooSmall": "Your household size is too small.",
-    "dateError": "Please enter a valid date"
+    "dateError": "Please enter a valid date",
+    "rateLimitExceeded": "Rate limit exceeded, try again later."
   },
   "footer": {
     "contact": "Contact",
