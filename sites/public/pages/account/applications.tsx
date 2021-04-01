@@ -50,12 +50,11 @@ export default () => {
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
                   <Fragment>
-                    {applications &&
-                      applications.items.length > 0 &&
-                      applications.items.map((application, index) => (
-                        <AppStatusItemWrapper key={index} application={application} />
-                      ))}
-                    {applications && applications.items.length == 0 && noApplicationsSection}
+                    {applications && applications.items.length > 0
+                      ? applications.items.map((application, index) => (
+                          <AppStatusItemWrapper key={index} application={application} />
+                        ))
+                      : noApplicationsSection}
                   </Fragment>
                 </DashBlock>
               </DashBlocks>
