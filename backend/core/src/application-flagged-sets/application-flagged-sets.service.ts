@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { Inject, Injectable, NotFoundException } from "@nestjs/common"
 import { ApplicationFlaggedSetsListQueryParams } from "./application-flagged-sets.controller"
 import { AuthzService } from "../auth/authz.service"
 import {
@@ -10,10 +10,15 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Brackets, DeepPartial, Repository, SelectQueryBuilder } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
+import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set.dto"
+import { REQUEST } from "@nestjs/core"
+import { Request as ExpressRequest } from "express"
+import { User } from "../user/entities/user.entity"
 
 @Injectable()
 export class ApplicationFlaggedSetsService {
   constructor(
+    @Inject(REQUEST) private request: ExpressRequest,
     private readonly authzService: AuthzService,
     @InjectRepository(Application)
     private readonly applicationsRepository: Repository<Application>,
@@ -31,6 +36,39 @@ export class ApplicationFlaggedSetsService {
         },
       }
     )
+  }
+
+  async resolve(dto: ApplicationFlaggedSetResolveDto) {
+    const afs = await this.afsRepository.findOne({
+      where: { id: dto.afsId },
+      relations: ["applications"],
+    })
+    if (!afs) {
+      throw new NotFoundException()
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    afs.resolvingUser = this.request.user as User
+    afs.resolvedTime = new Date()
+    afs.status = FlaggedSetStatus.resolved
+    const appsToBeResolved = afs.applications.filter((afsApp) =>
+      dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
+    )
+    const appsNotToBeResolved = afs.applications.filter(
+      (afsApp) => !dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
+    )
+
+    for (const appToBeResolved of appsToBeResolved) {
+      appToBeResolved.markedAsDuplicate = true
+      await this.applicationsRepository.save(appToBeResolved)
+    }
+
+    for (const appNotToBeResolved of appsNotToBeResolved) {
+      appNotToBeResolved.markedAsDuplicate = false
+      await this.applicationsRepository.save(appNotToBeResolved)
+    }
+    appsToBeResolved.forEach((app) => (app.markedAsDuplicate = true))
+    await this.afsRepository.save(afs)
+    return afs
   }
 
   async onApplicationSave(newApplication: Application) {
@@ -74,9 +112,8 @@ export class ApplicationFlaggedSetsService {
       if (afsesMatchingRule.length === 0) {
         const newAfs: DeepPartial<ApplicationFlaggedSet> = {
           rule: rule,
-          resolved: false,
           resolvedTime: null,
-          resolvingUserId: null,
+          resolvingUser: null,
           status: FlaggedSetStatus.flagged,
           applications: [newApplication, matchedApplication],
           listing: newApplication.listing,

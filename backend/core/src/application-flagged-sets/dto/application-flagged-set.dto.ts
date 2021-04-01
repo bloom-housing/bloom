@@ -1,21 +1,21 @@
 import { OmitType } from "@nestjs/swagger"
 import { ApplicationFlaggedSet } from "../entities/application-flagged-set.entity"
 import { Expose, Type } from "class-transformer"
-import { ArrayMaxSize, IsArray, IsDefined, IsString, ValidateNested } from "class-validator"
+import { ArrayMaxSize, IsArray, IsDefined, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApplicationDto } from "../../applications/dto/application.dto"
 import { PaginationFactory } from "../../shared/dto/pagination.dto"
 import { IdDto } from "../../shared/dto/id.dto"
 
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
-  "resolvingUserId",
+  "resolvingUser",
   "applications",
   "listing",
 ] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  resolvingUserId: IdDto
+  resolvingUser: IdDto
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -34,7 +34,7 @@ export class PaginatedApplicationFlaggedSetDto extends PaginationFactory<Applica
 
 export class ApplicationFlaggedSetResolveDto {
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   afsId: string
 
   @Expose()
@@ -43,5 +43,5 @@ export class ApplicationFlaggedSetResolveDto {
   @ArrayMaxSize(512, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
-  applicationIds: IdDto[]
+  applications: IdDto[]
 }

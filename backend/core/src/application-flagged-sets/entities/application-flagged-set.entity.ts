@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
-import { IsBoolean, IsDate, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsDate, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { Application } from "../../applications/entities/application.entity"
@@ -25,11 +25,6 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   rule: string
 
-  @Column({ type: "bool", nullable: false })
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  resolved: boolean
-
   @Column({ type: "timestamptz", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -42,7 +37,7 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => User)
-  resolvingUserId: User
+  resolvingUser: User
 
   @Column({ enum: FlaggedSetStatus, nullable: false, default: FlaggedSetStatus.flagged })
   @Expose()

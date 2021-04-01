@@ -1,12 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
+  Post,
   Query,
   Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
+import { Request as ExpressRequest } from "express"
 import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
@@ -18,7 +21,11 @@ import { IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
 import { ApplicationFlaggedSetsService } from "./application-flagged-sets.service"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
-import { PaginatedApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
+import {
+  ApplicationFlaggedSetDto,
+  ApplicationFlaggedSetResolveDto,
+  PaginatedApplicationFlaggedSetDto,
+} from "./dto/application-flagged-set.dto"
 
 export class ApplicationFlaggedSetsListQueryParams extends PaginationQueryParams {
   @Expose()
@@ -51,5 +58,14 @@ export class ApplicationFlaggedSetsController {
   ): Promise<PaginatedApplicationFlaggedSetDto> {
     const response = await this.applicationFlaggedSetsService.listPaginated(queryParams)
     return mapTo(PaginatedApplicationFlaggedSetDto, response)
+  }
+
+  @Post("resolve")
+  @ApiOperation({ summary: "Resolve application flagged set", operationId: "resolve" })
+  async resolve(
+    @Request() req: ExpressRequest,
+    @Body() dto: ApplicationFlaggedSetResolveDto
+  ): Promise<ApplicationFlaggedSetDto> {
+    return mapTo(ApplicationFlaggedSetDto, await this.applicationFlaggedSetsService.resolve(dto))
   }
 }

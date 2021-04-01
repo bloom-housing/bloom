@@ -17,6 +17,7 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
 import {
   ApplicationFlaggedSet,
+  FlaggedSetStatus,
   Rule,
 } from "../../src/application-flagged-sets/entities/application-flagged-set.entity"
 import { getTestAppBody } from "../lib/get-test-app-body"
@@ -74,46 +75,94 @@ describe("ApplicationFlaggedSets", () => {
   })
 
   it(`should mark two similar application as flagged`, async () => {
+    function checkAppsInAfsForRule(afsResponse, apps, rule) {
+      const afsesForRule = afsResponse.body.items.filter((item) => item.rule === rule)
+      expect(afsesForRule.length).toBe(1)
+      expect(afsesForRule[0].status).toBe(FlaggedSetStatus.flagged)
+      for (const appId of apps.map((app) => app.body.id)) {
+        expect(afsesForRule[0].applications.map((app) => app.id).includes(appId)).toBe(true)
+      }
+      expect(afsesForRule[0].applications.length).toBe(apps.length)
+    }
+
     const appContent = getTestAppBody(listing1Id)
+    const apps = []
+    for (const payload of [appContent, appContent]) {
+      const appRes = await supertest(app.getHttpServer())
+        .post("/applications/submit")
+        .send(payload)
+        .expect(201)
+      apps.push(appRes)
+    }
 
-    const app1 = await supertest(app.getHttpServer())
-      .post("/applications/submit")
-      .send(appContent)
-      .expect(201)
-
-    const app2 = await supertest(app.getHttpServer())
-      .post("/applications/submit")
-      .send(appContent)
-      .expect(201)
-
-    const app3 = await supertest(app.getHttpServer())
-      .post("/applications/submit")
-      .send(appContent)
-      .expect(201)
-
-    await new Promise((r) => setTimeout(r, 1000))
-
-    const afses = await supertest(app.getHttpServer())
+    let afses = await supertest(app.getHttpServer())
       .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
 
     expect(Array.isArray(afses.body.items)).toBe(true)
     expect(afses.body.items.length).toBe(2)
 
-    const afsesForNameAndDob = afses.body.items.filter((item) => item.rule === Rule.nameAndDOB)
-    expect(afsesForNameAndDob.length).toBe(1)
+    checkAppsInAfsForRule(afses, apps, Rule.nameAndDOB)
+    checkAppsInAfsForRule(afses, apps, Rule.email)
 
-    for (const appId of [app1, app2, app3].map((app) => app.body.id)) {
-      expect(afsesForNameAndDob[0].applications.map((app) => app.id).includes(appId)).toBe(true)
-    }
-    expect(afsesForNameAndDob[0].applications.length).toBe(3)
+    const app3 = await supertest(app.getHttpServer())
+      .post("/applications/submit")
+      .send(appContent)
+      .expect(201)
 
-    const afsesForEmail = afses.body.items.filter((item) => item.rule === Rule.email)
-    expect(afsesForEmail.length).toBe(1)
-    for (const appId of [app1, app2, app3].map((app) => app.body.id)) {
-      expect(afsesForEmail[0].applications.map((app) => app.id).includes(appId)).toBe(true)
+    apps.push(app3)
+
+    afses = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
+      .set(...setAuthorization(adminAccessToken))
+
+    expect(Array.isArray(afses.body.items)).toBe(true)
+    expect(afses.body.items.length).toBe(2)
+
+    checkAppsInAfsForRule(afses, apps, Rule.nameAndDOB)
+    checkAppsInAfsForRule(afses, apps, Rule.email)
+  })
+
+  it(`should resolve an application flagged set`, async () => {
+    const appContent1 = getTestAppBody(listing1Id)
+    const appContent2 = getTestAppBody(listing1Id)
+
+    appContent2.applicant.emailAddress = "another@email.com"
+    const apps = []
+
+    for (const payload of [appContent1, appContent2]) {
+      const appRes = await supertest(app.getHttpServer())
+        .post("/applications/submit")
+        .send(payload)
+        .expect(201)
+      apps.push(appRes)
     }
-    expect(afsesForEmail[0].applications.length).toBe(3)
+
+    const afses = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
+      .set(...setAuthorization(adminAccessToken))
+
+    let resolveRes = await supertest(app.getHttpServer())
+      .post(`/applicationFlaggedSets/resolve`)
+      .send({ afsId: afses.body.items[0].id, applications: [{ id: apps[0].body.id }] })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    let resolvedAfs = resolveRes.body
+    expect(resolvedAfs.status).toBe(FlaggedSetStatus.resolved)
+    expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === true).length).toBe(1)
+    expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === false).length).toBe(1)
+
+    resolveRes = await supertest(app.getHttpServer())
+      .post(`/applicationFlaggedSets/resolve`)
+      .send({ afsId: afses.body.items[0].id, applications: [{ id: apps[1].body.id }] })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    resolvedAfs = resolveRes.body
+    expect(resolvedAfs.status).toBe(FlaggedSetStatus.resolved)
+    expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === true).length).toBe(1)
+    expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === false).length).toBe(1)
   })
 
   afterEach(() => {
