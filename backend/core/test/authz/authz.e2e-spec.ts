@@ -26,7 +26,7 @@ describe("Authz", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
-    userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
+    userAccessToken = await getUserAccessToken(app, "test@example.com", "Abcdef1!")
   })
 
   describe("admin endpoints", () => {

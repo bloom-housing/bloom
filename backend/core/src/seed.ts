@@ -53,8 +53,8 @@ async function bootstrap() {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
-      password: "abcdef",
-      passwordConfirmation: "abcdef",
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
     })
   )
   await userService.confirm({ token: user1.confirmationToken })
@@ -67,8 +67,8 @@ async function bootstrap() {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
-      password: "ghijkl",
-      passwordConfirmation: "ghijkl",
+      password: "Ghijkl1!",
+      passwordConfirmation: "Ghijkl1!",
     })
   )
   await userService.confirm({ token: user2.confirmationToken })
@@ -81,8 +81,8 @@ async function bootstrap() {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
-      password: "abcdef",
-      passwordConfirmation: "abcdef",
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
     })
   )
 
