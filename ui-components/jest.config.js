@@ -30,7 +30,6 @@ module.exports = {
   rootDir: "..",
   roots: ["<rootDir>/ui-components"],
   transform: {
-    "^.+\\.stories\\.[t|j]sx$": "@storybook/addon-storyshots/injectFileName",
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
   setupFiles: ["dotenv/config"],
