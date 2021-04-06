@@ -10,7 +10,7 @@
     "build-storybook": "build-storybook -c .storybook",
     "start": "start-storybook -s ./public",
     "test": "jest -w 1",
-    "test:coverage": "jest -w 1 --coverage --watchAll=false --testPathIgnorePatterns storyshots.test.tsx",
+    "test:coverage": "jest -w 1 --coverage --watchAll=false",
     "prettier": "prettier --write \"**/*.tsx\""
   },
   "devDependencies": {
