@@ -1,91 +1,84 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import {
-  AppearanceStyleType,
   Button,
   Field,
   FormCard,
   Icon,
-  LinkButton,
   UserContext,
   Form,
   emailRegex,
   t,
+  setSiteAlertMessage,
+  AlertBox,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormsLayout from "../../layouts/forms"
-import { useRedirectToPrevPage } from "../../lib/hooks"
 
 export default () => {
-  // const { createUser } = useContext(UserContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
-  const { profile } = useContext(UserContext)
-  const redirectToPrev = useRedirectToPrevPage()
-  const onNameSubmit = async (data) => {
-    console.log("onNameSubmit")
-    try {
-      const { firstName, middleName, lastName } = data
-      // await createUser({
-      //   ...rest,
-      //   dob: `${birthYear}-${birthMonth}-${birthDay}`,
-      // })
+  const { profile, updatePassword, updateUser, accessToken } = useContext(UserContext)
 
-      // await redirectToPrev()
+  const [requestError, setRequestError] = useState<string>()
+
+  const onNameSubmit = async (data: {
+    firstName: string
+    middleName: string
+    lastName: string
+  }) => {
+    const { firstName, middleName, lastName } = data
+    try {
+      await updateUser({ ...profile, firstName, middleName, lastName })
+      setSiteAlertMessage("Name update successful", "success")
     } catch (err) {
-      // TODO: better error handling
-      const messages = err.response && err.response.data && err.response.data.message
-      console.error(messages)
+      console.error(err)
+      setRequestError(`${t("account.settings.errors.generic")}`)
     }
   }
 
-  const onBirthdateSubmit = async (data) => {
+  const onBirthdateSubmit = async (data: {
+    birthDay: string
+    birthMonth: string
+    birthYear: string
+  }) => {
+    const { birthDay, birthMonth, birthYear } = data
     try {
-      const { birthDay, birthMonth, birthYear, ...rest } = data
-      // await createUser({
-      //   ...rest,
-      //   dob: `${birthYear}-${birthMonth}-${birthDay}`,
-      // })
-
-      // await redirectToPrev()
+      await updateUser({ ...profile, dob: new Date(`${birthYear}-${birthMonth}-${birthDay}`) })
+      setSiteAlertMessage("Birthdate update successful", "success")
     } catch (err) {
-      // TODO: better error handling
-      const messages = err.response && err.response.data && err.response.data.message
-      console.error(messages)
+      console.error(err)
+      setRequestError(`${t("account.settings.errors.generic")}`)
     }
   }
 
-  const onEmailSubmit = async (data) => {
+  const onEmailSubmit = async (data: { email: string }) => {
+    const { email } = data
     try {
-      const { email } = data
-      // await createUser({
-      //   ...rest,
-      //   dob: `${birthYear}-${birthMonth}-${birthDay}`,
-      // })
-
-      // await redirectToPrev()
+      await updateUser({ ...profile, email })
+      setSiteAlertMessage("Email update successful", "success")
     } catch (err) {
-      // TODO: better error handling
-      const messages = err.response && err.response.data && err.response.data.message
-      console.error(messages)
+      console.error(err)
+      setRequestError(`${t("account.settings.errors.generic")}`)
     }
   }
 
-  const onPasswordSubmit = async (data) => {
+  const onPasswordSubmit = async (data: { password: string; passwordConfirmation: string }) => {
+    const { password, passwordConfirmation } = data
     try {
-      const { password } = data
-      // await createUser({
-      //   ...rest,
-      //   dob: `${birthYear}-${birthMonth}-${birthDay}`,
-      // })
-
-      // await redirectToPrev()
+      await updatePassword(accessToken, password, passwordConfirmation)
+      setSiteAlertMessage(t(`account.settings.passwordSuccess`), "success")
     } catch (err) {
-      // TODO: better error handling
-      const messages = err.response && err.response.data && err.response.data.message
-      console.error(messages)
+      const { status, data } = err.response || {}
+      if (status === 400) {
+        setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
+      } else {
+        console.error(err)
+        setRequestError(`${t("authentication.forgotPassword.errors.generic")}`)
+      }
     }
   }
 
@@ -96,6 +89,13 @@ export default () => {
           <Icon size="2xl" symbol="settings" />
           <h2 className="form-card__title">Account Settings</h2>
         </div>
+
+        {requestError && (
+          <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
+            {requestError}
+          </AlertBox>
+        )}
+        <SiteAlert type="notice" dismissable />
 
         <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
           <div className="form-card__group border-b">
@@ -129,12 +129,7 @@ export default () => {
               defaultValue={profile ? profile.lastName : null}
             />
             <div className="text-center">
-              <Button
-                onClick={() => {
-                  console.log("on button click")
-                }}
-                className={"items-center"}
-              >
+              <Button onClick={() => {}} className={"items-center"}>
                 Update
               </Button>
             </div>
@@ -169,12 +164,7 @@ export default () => {
               />
             </div>
             <div className="text-center mt-5">
-              <Button
-                onClick={() => {
-                  console.log("on button click")
-                }}
-                className={"items-center"}
-              >
+              <Button onClick={() => {}} className={"items-center"}>
                 Update
               </Button>
             </div>
@@ -195,12 +185,7 @@ export default () => {
               defaultValue={profile ? profile.email : null}
             />
             <div className="text-center">
-              <Button
-                onClick={() => {
-                  console.log("on button click")
-                }}
-                className={"items-center"}
-              >
+              <Button onClick={() => {}} className={"items-center"}>
                 Update
               </Button>
             </div>
@@ -217,7 +202,7 @@ export default () => {
               <Field
                 caps={true}
                 type="password"
-                name="password"
+                name="oldPassword"
                 label="Old Password"
                 placeholder="Old password"
                 validation={{ minLength: 8 }}
@@ -237,7 +222,7 @@ export default () => {
               <Field
                 caps={true}
                 type="password"
-                name="new-password"
+                name="password"
                 label="New Password"
                 placeholder="Must be 8 characters"
                 validation={{ minLength: 8 }}
@@ -256,7 +241,7 @@ export default () => {
               <Field
                 caps={true}
                 type="password"
-                name="new-password"
+                name="passwordConfirmation"
                 label="Confirm New Password"
                 placeholder="Must be 8 characters"
                 validation={{ minLength: 8 }}
@@ -268,12 +253,7 @@ export default () => {
             </div>
 
             <div className="text-center mt-5">
-              <Button
-                onClick={() => {
-                  console.log("on button click")
-                }}
-                className={"items-center"}
-              >
+              <Button onClick={() => {}} className={"items-center"}>
                 Update
               </Button>
             </div>

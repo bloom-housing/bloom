@@ -18,6 +18,7 @@ import {
   resendConfirmation,
   scheduleTokenRefresh,
   updatePassword,
+  updateUser,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
 import { User, UserCreate } from "@bloom-housing/backend-core/types"
@@ -31,6 +32,7 @@ type ContextProps = {
   signOut: () => void
   // True when an API request is processing
   updatePassword: (token: string, password: string, passwordConfirmation: string) => Promise<User>
+  updateUser: (user: User) => Promise<User>
   loading: boolean
   profile?: User
   accessToken?: string

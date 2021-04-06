@@ -48,7 +48,7 @@ export class UserService {
     return this.repo.findOne(options)
   }
 
-  async update(dto: Partial<UserDto>) {
+  public async update(dto: Partial<UserDto>) {
     const obj = await this.repo.findOne({
       where: {
         id: dto.id,
