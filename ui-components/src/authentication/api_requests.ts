@@ -100,7 +100,6 @@ export const updatePassword = async (
 }
 
 export const confirmAccount = async (apiUrl: string, token: string) => {
-  console.log(token)
   const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/confirm`, {
     token: token,
   })
