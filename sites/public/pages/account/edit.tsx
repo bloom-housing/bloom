@@ -1,4 +1,5 @@
 import React, { useContext } from "react"
+import moment from "moment"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
@@ -21,8 +22,10 @@ export default () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
+  const { profile } = useContext(UserContext)
   const redirectToPrev = useRedirectToPrevPage()
   const onNameSubmit = async (data) => {
+    console.log("onNameSubmit")
     try {
       const { firstName, middleName, lastName } = data
       // await createUser({
@@ -103,22 +106,27 @@ export default () => {
             <Field
               controlClassName="mt-2"
               name="firstName"
-              placeholder="First Name"
-              validation={{ required: true }}
+              placeholder={"First Name"}
               error={errors.firstName}
               errorMessage="Please enter a First Name"
               register={register}
+              defaultValue={profile ? profile.firstName : null}
             />
 
-            <Field name="middleName" placeholder="Middle Name (optional)" register={register} />
+            <Field
+              name="middleName"
+              placeholder="Middle Name (optional)"
+              register={register}
+              defaultValue={profile ? profile.middleName : null}
+            />
 
             <Field
               name="lastName"
               placeholder="Last Name"
-              validation={{ required: true }}
               error={errors.lastName}
               errorMessage="Please enter a Last Name"
               register={register}
+              defaultValue={profile ? profile.lastName : null}
             />
             <div className="text-center">
               <Button
@@ -142,22 +150,22 @@ export default () => {
                 name="birthMonth"
                 placeholder="MM"
                 error={errors.birthMonth}
-                validation={{ required: true }}
                 register={register}
+                defaultValue={profile ? moment(new Date(profile.dob)).format("MM") : null}
               />
               <Field
                 name="birthDay"
                 placeholder="DD"
                 error={errors.birthDay}
-                validation={{ required: true }}
                 register={register}
+                defaultValue={profile ? moment(new Date(profile.dob)).format("DD") : null}
               />
               <Field
                 name="birthYear"
                 placeholder="YYYY"
                 error={errors.birthYear}
-                validation={{ required: true }}
                 register={register}
+                defaultValue={profile ? moment(new Date(profile.dob)).format("YYYY") : null}
               />
             </div>
             <div className="text-center mt-5">
@@ -180,10 +188,11 @@ export default () => {
               name="email"
               label="Email"
               placeholder="example@web.com"
-              validation={{ required: true, pattern: emailRegex }}
+              validation={{ pattern: emailRegex }}
               error={errors.email}
               errorMessage="Please enter an email address"
               register={register}
+              defaultValue={profile ? profile.email : null}
             />
             <div className="text-center">
               <Button
@@ -209,9 +218,9 @@ export default () => {
                 caps={true}
                 type="password"
                 name="password"
-                label="Password"
-                placeholder="Must be 8 characters"
-                validation={{ required: true, minLength: 8 }}
+                label="Old Password"
+                placeholder="Old password"
+                validation={{ minLength: 8 }}
                 error={errors.password}
                 errorMessage="Please enter a valid password"
                 register={register}
@@ -222,6 +231,40 @@ export default () => {
                   <a>{t("authentication.signIn.forgotPassword")}</a>
                 </Link>
               </div>
+            </div>
+
+            <div className="mt-5">
+              <Field
+                caps={true}
+                type="password"
+                name="new-password"
+                label="New Password"
+                placeholder="Must be 8 characters"
+                validation={{ minLength: 8 }}
+                error={errors.password}
+                errorMessage="Please enter a valid password"
+                register={register}
+                className={"mb-1"}
+              />
+            </div>
+
+            <p className="field-note mb-4 mt-4">
+              {"Must be at least 8 characters and include at least 1 letter and at least 1 number."}
+            </p>
+
+            <div className="mt-5">
+              <Field
+                caps={true}
+                type="password"
+                name="new-password"
+                label="Confirm New Password"
+                placeholder="Must be 8 characters"
+                validation={{ minLength: 8 }}
+                error={errors.password}
+                errorMessage="Please enter a valid password"
+                register={register}
+                className={"mb-1"}
+              />
             </div>
 
             <div className="text-center mt-5">
