@@ -1,6 +1,15 @@
 import { useContext, useState } from "react"
 import useSWR from "swr"
 
+type UseApplicationsDataProps = {
+  pageIndex: number
+  limit: number
+  listingId: string
+  search?: string
+  orderBy?: string
+  order?: "ASC" | "DESC"
+}
+
 import { ApiClientContext } from "@bloom-housing/ui-components"
 
 export function useSingleListingData(listingId: string) {
@@ -29,15 +38,25 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData(pageIndex: number, limit = 10, listingId: string, search = "") {
+export function useApplicationsData({
+  pageIndex,
+  limit = 8,
+  listingId,
+  search = "",
+  orderBy = "",
+  order = "",
+}: UseApplicationsDataProps) {
   const { applicationsService } = useContext(ApiClientContext)
-  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}&search=${search}`
+  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}&search=${search}&orderBy=${orderBy}&order=${order}`
+
   const fetcher = () =>
     applicationsService.list({
       listingId,
       page: pageIndex,
       limit,
       search,
+      orderBy,
+      order,
     })
   const { data, error } = useSWR(endpoint, fetcher)
 

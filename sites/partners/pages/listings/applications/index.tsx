@@ -30,6 +30,8 @@ const ApplicationsList = () => {
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
 
+  const [columnOrder, setColumnOrder] = useState<Record<string, string>>()
+
   const filterField = watch("filter-input", "")
   const [delayedFilterValue, setDelayedFilterValue] = useState(filterField)
 
@@ -37,7 +39,14 @@ const ApplicationsList = () => {
   const [pageIndex, setPageIndex] = useState(1)
 
   const listingId = router.query.listing as string
-  const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+  const { appsData } = useApplicationsData({
+    pageIndex,
+    limit: pageSize,
+    listingId,
+    search: delayedFilterValue,
+    orderBy: columnOrder?.orderBy,
+    order: columnOrder?.order,
+  })
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
@@ -65,6 +74,35 @@ const ApplicationsList = () => {
 
   function onGridReady(params) {
     setGridColumnApi(params.columnApi)
+  }
+
+  function getColumnOrder(api: ColumnApi) {
+    const columnState = api.getColumnState()
+    const colToSort = columnState
+      .filter((col) =>
+        ["submissionDate", "applicant.firstName", "applicant.lastName"].includes(col.colId)
+      )
+      .filter((item) => item.sort)?.[0]
+
+    if (colToSort) {
+      const orderByName = (() => {
+        switch (colToSort.colId) {
+          case "applicant.firstName":
+            return "firstName"
+          case "applicant.lastName":
+            return "lastName"
+          default:
+            return colToSort.colId
+        }
+      })()
+
+      setColumnOrder({
+        orderBy: orderByName,
+        order: colToSort.sort.toUpperCase(),
+      })
+    } else {
+      setColumnOrder({})
+    }
   }
 
   const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
@@ -133,7 +171,10 @@ const ApplicationsList = () => {
   }
 
   const gridOptions: GridOptions = {
-    onSortChanged: (params) => saveColumnState(params.columnApi),
+    onSortChanged: (params) => {
+      getColumnOrder(params.columnApi)
+      saveColumnState(params.columnApi)
+    },
     onColumnMoved: (params) => saveColumnState(params.columnApi),
     components: {
       formatLinkCell: formatLinkCell,
@@ -200,7 +241,7 @@ const ApplicationsList = () => {
                 defaultColDef={defaultColDef}
                 columnDefs={columnDefs}
                 rowData={applications}
-                domLayout={"autoHeight"}
+                domLayout="autoHeight"
                 headerHeight={83}
                 rowHeight={58}
                 suppressPaginationPanel={true}
