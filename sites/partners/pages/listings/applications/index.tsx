@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react"
+import React, { useState, useEffect, useRef, useMemo, useContext } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
@@ -11,8 +11,11 @@ import {
   debounce,
   lRoute,
   LocalizedLink,
+  ApiClientContext,
+  SiteAlert,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData, useListAsCsv } from "../../../lib/hooks"
+import { useApplicationsData } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
@@ -23,6 +26,8 @@ const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
   const COLUMN_STATE_KEY = "column-state"
+
+  const { applicationsService } = useContext(ApiClientContext)
 
   const router = useRouter()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -38,6 +43,9 @@ const ApplicationsList = () => {
 
   const listingId = router.query.listing as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
@@ -95,20 +103,32 @@ const ApplicationsList = () => {
     setPageIndex(pageIndex - 1)
   }
 
-  const { mutate: mutateCsv, loading: loadingCsv } = useListAsCsv(listingId, true)
-
   const onExport = async () => {
-    const content = await mutateCsv()
+    setCsvExportError(false)
+    setCsvExportLoading(true)
 
-    const now = new Date()
-    const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
+    try {
+      const content = await applicationsService.listAsCsv({
+        listingId,
+        includeHeaders: true,
+      })
 
-    const blob = new Blob([content], { type: "text/csv" })
-    const fileLink = document.createElement("a")
-    fileLink.setAttribute("download", `appplications-${listingId}-${dateString}.csv`)
-    fileLink.href = URL.createObjectURL(blob)
+      const now = new Date()
+      const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
 
-    fileLink.click()
+      const blob = new Blob([content], { type: "text/csv" })
+      const fileLink = document.createElement("a")
+      fileLink.setAttribute("download", `appplications-${listingId}-${dateString}.csv`)
+      fileLink.href = URL.createObjectURL(blob)
+
+      fileLink.click()
+    } catch (err) {
+      setCsvExportError(true)
+      setSiteAlertMessage(t("errors.alert.timeoutPleaseTryAgain"), "alert")
+      console.error("error", err)
+    }
+
+    setCsvExportLoading(false)
   }
 
   // ag grid settings
@@ -170,7 +190,13 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("applications.applicationsReceived")} />
+      <PageHeader title={t("applications.applicationsReceived")} className="relative">
+        {csvExportError && (
+          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
+            <SiteAlert type="alert" timeout={5000} dismissable />
+          </div>
+        )}
+      </PageHeader>
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -187,9 +213,11 @@ const ApplicationsList = () => {
                   </Button>
                 </LocalizedLink>
 
-                <Button className="mx-1" onClick={() => onExport()} loading={loadingCsv}>
+                <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
                   {t("t.export")}
                 </Button>
+
+                {console.log(csvExportError)}
               </div>
             </div>
 
