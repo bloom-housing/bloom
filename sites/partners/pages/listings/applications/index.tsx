@@ -118,7 +118,7 @@ const ApplicationsList = () => {
 
       const blob = new Blob([content], { type: "text/csv" })
       const fileLink = document.createElement("a")
-      fileLink.setAttribute("download", `appplications-${listingId}-${dateString}.csv`)
+      fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
       fileLink.href = URL.createObjectURL(blob)
 
       fileLink.click()
