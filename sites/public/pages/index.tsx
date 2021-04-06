@@ -9,11 +9,11 @@ import {
   MetaTags,
   t,
   SiteAlert,
-  UserContext,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
 import { withRouter, NextRouter } from "next/router"
+import { ConfirmationModal } from "../src/ConfirmationModal"
 
 interface IndexProps {
   listings: Listing[]
@@ -21,7 +21,6 @@ interface IndexProps {
 }
 
 class Index extends Component<IndexProps> {
-  static contextType = UserContext
   state = { alertMessage: null, alertType: null }
 
   public static async getInitialProps() {
@@ -36,32 +35,17 @@ class Index extends Component<IndexProps> {
     return { listings }
   }
 
-  componentDidMount() {
-    const { token } = this.props.router.query
-    const { confirmAccount, profile } = this.context
-    if (token && !profile) {
-      confirmAccount(token.toString())
-        .then(() => {
-          this.setState({
-            alertMessage: t(`authentication.createAccount.accountConfirmed`),
-            alertType: "success",
-          })
-          void this.props.router.push("/account/dashboard", undefined, { shallow: true })
-          window.scrollTo(0, 0)
-        })
-        .catch(() => {
-          this.setState({
-            alertMessage: t(`authentication.signIn.errorGenericMessage`),
-            alertType: "alert",
-          })
-        })
-    }
-  }
-
   public closeAlert = () => {
     this.setState({
       alertMessage: null,
       alertType: null,
+    })
+  }
+
+  public setSiteAlertMessage = (message: string, alertType: string) => {
+    this.setState({
+      alertMessage: message,
+      alertType: alertType,
     })
   }
 
@@ -107,6 +91,7 @@ class Index extends Component<IndexProps> {
             </>
           </MarkdownSection>
         </div>
+        <ConfirmationModal setSiteAlertMessage={this.setSiteAlertMessage} />
       </Layout>
     )
   }

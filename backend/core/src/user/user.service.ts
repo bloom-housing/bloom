@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
 import { FindConditions, Repository } from "typeorm"
 import { scrypt, randomBytes } from "crypto"
-import { UserCreateDto, UserDto } from "./dto/user.dto"
+import { EmailDto, UserCreateDto, UserDto } from "./dto/user.dto"
 import { encode, decode } from "jwt-simple"
 import moment from "moment"
 import { UpdatePasswordDto } from "./dto/update_password.dto"
@@ -13,7 +13,9 @@ import { ConfirmDto } from "./dto/confirm.dto"
 const SCRYPT_KEYLEN = 64
 const SALT_SIZE = SCRYPT_KEYLEN
 export const USER_ERRORS = {
-  NOT_FOUND: { message: "emailNotFound", status: HttpStatus.BAD_REQUEST },
+  ACCOUNT_CONFIRMED: { message: "accountConfirmed", status: HttpStatus.NOT_ACCEPTABLE },
+  ERROR_SAVING: { message: "errorSaving", status: HttpStatus.BAD_REQUEST },
+  NOT_FOUND: { message: "emailNotFound", status: HttpStatus.NOT_FOUND },
   TOKEN_EXPIRED: { message: "tokenExpired", status: HttpStatus.BAD_REQUEST },
   TOKEN_MISSING: { message: "tokenMissing", status: HttpStatus.BAD_REQUEST },
   EMAIL_IN_USE: { message: "emailInUse", status: HttpStatus.BAD_REQUEST },
@@ -86,6 +88,10 @@ export class UserService {
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
+    const payload = decode(dto.token, process.env.SECRET)
+    if (moment(payload.expiresAt) < moment()) {
+      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
+    }
     user.confirmedAt = new Date()
     user.confirmationToken = null
 
@@ -97,14 +103,34 @@ export class UserService {
     }
   }
 
+  public async resendConfirmation(dto: EmailDto) {
+    const user = await this.findByEmail(dto.email)
+    if (user) {
+      if (!user.confirmedAt) {
+        const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
+        const token = encode(payload, process.env.SECRET)
+        user.confirmationToken = token
+        try {
+          await this.repo.save(user)
+          return user
+        } catch (err) {
+          throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
+        }
+      } else {
+        throw new HttpException(
+          USER_ERRORS.ACCOUNT_CONFIRMED.message,
+          USER_ERRORS.ACCOUNT_CONFIRMED.status
+        )
+      }
+    } else {
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+  }
+
   public async createUser(dto: UserCreateDto) {
     let user = await this.findByEmail(dto.email)
     if (user) {
-      if (!user.confirmedAt) {
-        return user
-      } else {
-        throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
-      }
+      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
     }
     const { password } = dto
     user = new User()
@@ -113,7 +139,7 @@ export class UserService {
     user.lastName = dto.lastName
     user.dob = dto.dob
     user.email = dto.email
-    const payload = { id: user.id, expiresAt: moment().add(1, "hour") }
+    const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
     const token = encode(payload, process.env.SECRET)
     user.confirmationToken = token
     try {

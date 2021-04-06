@@ -21,7 +21,8 @@ import moment from "moment"
 import { useRouter } from "next/router"
 
 export default () => {
-  const { createUser } = useContext(UserContext)
+  const { createUser, resendConfirmation } = useContext(UserContext)
+  const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm()
@@ -50,6 +51,7 @@ export default () => {
         console.error(err)
         setRequestError(`${t("authentication.createAccount.errors.generic")}`)
       }
+      window.scrollTo(0, 0)
     }
   }
 
@@ -133,7 +135,7 @@ export default () => {
               placeholder="example@web.com"
               validation={{
                 validate: (value) =>
-                  value === email.current || t("authentication.createAccount.emailMismatch"),
+                  value === email.current || t("authentication.createAccount.errors.emailMismatch"),
               }}
               onPaste={(e) => {
                 e.preventDefault()
@@ -159,7 +161,11 @@ export default () => {
               note={t("authentication.createAccount.passwordInfo")}
               label={t("authentication.createAccount.password")}
               placeholder={t("authentication.createAccount.mustBe8Chars")}
-              validation={{ required: true, minLength: 8 }}
+              validation={{
+                required: true,
+                minLength: 8,
+                pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/,
+              }}
               error={errors.password}
               errorMessage={t("authentication.signIn.passwordError")}
               register={register}
@@ -231,9 +237,11 @@ export default () => {
             {t("t.ok")}
           </Button>,
           <Button
+            disabled={confirmationResent}
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              void handleSubmit(onSubmit)()
+              setConfirmationResent(true)
+              void resendConfirmation(email.current.toString())
             }}
           >
             {t("authentication.createAccount.resendTheEmail")}

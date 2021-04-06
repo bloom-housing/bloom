@@ -15,17 +15,19 @@ import {
   getProfile,
   login,
   register,
+  resendConfirmation,
   scheduleTokenRefresh,
   updatePassword,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
-import { UserCreate, User } from "@bloom-housing/backend-core/types"
+import { User, UserCreate } from "@bloom-housing/backend-core/types"
 // External interface this context provides
 type ContextProps = {
   confirmAccount: (token: string) => Promise<User>
   forgotPassword: (email: string) => Promise<string>
   login: (email: string, password: string) => Promise<User>
-  createUser: (user: UserCreate) => Promise<User>
+  createUser: (user: UserCreate) => Promise<string>
+  resendConfirmation: (email: string) => Promise<string>
   signOut: () => void
   // True when an API request is processing
   updatePassword: (token: string, password: string, passwordConfirmation: string) => Promise<User>
@@ -161,8 +163,17 @@ export const UserProvider: FunctionComponent = ({ children }) => {
     createUser: async (user: UserCreate) => {
       dispatch(startLoading())
       try {
-        const { user: profile } = await register(apiUrl, user)
-        return profile
+        const { status: status } = await register(apiUrl, user)
+        return status
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    resendConfirmation: async (email: string) => {
+      dispatch(startLoading())
+      try {
+        const { status: status } = await resendConfirmation(apiUrl, email)
+        return status
       } finally {
         dispatch(stopLoading())
       }

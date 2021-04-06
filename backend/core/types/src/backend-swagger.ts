@@ -97,15 +97,15 @@ export class UserService {
     });
   }
   /**
-   * Create user
+   * Resend confirmation
    */
-  create(
+  confirmation(
     params: {
       /** requestBody */
-      body?: UserCreate;
+      body?: Email;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<User> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user';
 
@@ -118,9 +118,9 @@ export class UserService {
     });
   }
   /**
-   * Forgot Password
+   * Confirm email
    */
-  forgotPassword(
+  confirm(
     params: {
       /** requestBody */
       body?: Confirm;
@@ -141,7 +141,7 @@ export class UserService {
   /**
    * Forgot Password
    */
-  forgotPassword1(
+  forgotPassword(
     params: {
       /** requestBody */
       body?: ForgotPassword;
@@ -1131,6 +1131,19 @@ export interface UserCreate {
 
   /**  */
   dob: Date;
+}
+
+export interface Status {
+  /**  */
+  status: string;
+}
+
+export interface Email {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
 }
 
 export interface Confirm {

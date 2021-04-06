@@ -132,13 +132,12 @@ describe("Applications", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    let res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
     userCreateDto.passwordConfirmation = "Abcdef1!"
     userCreateDto.emailConfirmation = "a1@b.com"
-    res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
     userCreateDto.emailConfirmation = "a2@b.com"
-    res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
-    expect(res.body.email).toBe(userCreateDto.email)
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
   })
 
   it("should allow anonymous user to create an account", async () => {
@@ -156,14 +155,8 @@ describe("Applications", () => {
     delete userCreateDto.passwordConfirmation
     delete userCreateDto.emailConfirmation
     delete userCreateDto.password
-    expect(res.body).toHaveProperty("id")
-    expect(res.body).toHaveProperty("createdAt")
-    expect(res.body).toHaveProperty("updatedAt")
+    expect(res.body).toHaveProperty("status")
     expect(res.body).not.toHaveProperty("passwordHash")
-    expect(res.body).toMatchObject({
-      ...userCreateDto,
-      dob: userCreateDto.dob.toISOString(),
-    })
   })
 
   it("should not allow to create a new account with duplicate email", async () => {
@@ -178,10 +171,7 @@ describe("Applications", () => {
       dob: new Date(),
     }
     const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto).expect(201)
-    delete userCreateDto.passwordConfirmation
-    delete userCreateDto.emailConfirmation
-    delete userCreateDto.password
-    expect(res.body).toMatchObject({ ...userCreateDto, dob: userCreateDto.dob.toISOString() })
+    expect(res.body).toMatchObject({ status: "ok" })
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
   })
 
@@ -201,5 +191,55 @@ describe("Applications", () => {
       .put(`/user/${user2UpdateDto.id}`)
       .send(user2UpdateDto)
       .expect(403)
+  })
+
+  it("should allow user to resend confirmation", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "b1@b.com",
+      emailConfirmation: "b1@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    await supertest(app.getHttpServer())
+      .post("/user/resend-confirmation")
+      .send({ email: userCreateDto.email })
+      .expect(201)
+  })
+
+  it("should not allow user to resend confirmation if account is confirmed", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "b2@b.com",
+      emailConfirmation: "b2@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    const userService = app.get<UserService>(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+    await supertest(app.getHttpServer())
+      .post("/user/resend-confirmation")
+      .send({ email: userCreateDto.email })
+      .expect(406)
+  })
+
+  it("should return 404 if there is no user to resend confirmation to", async () => {
+    await supertest(app.getHttpServer())
+      .post("/user/resend-confirmation")
+      .send({ email: "unknown@email.com" })
+      .expect(404)
   })
 })
