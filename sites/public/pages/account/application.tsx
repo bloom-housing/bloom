@@ -30,6 +30,8 @@ export default () => {
   const { profile } = useContext(UserContext)
   const [application, setApplication] = useState<Application>()
   const [listing, setListing] = useState<Listing>()
+  const [unauthorized, setUnauthorized] = useState(false)
+  const [noApplication, setNoApplication] = useState(false)
   useEffect(() => {
     if (profile) {
       applicationsService
@@ -41,9 +43,16 @@ export default () => {
             .then((retrievedListing) => {
               setListing(retrievedListing)
             })
-            .catch((err) => console.error(`Error fetching listing: ${err}`))
+            .catch((err) => {
+              console.error(`Error fetching listing: ${err}`)
+            })
         })
-        .catch((err) => console.error(`Error fetching application: ${err}`))
+        .catch((err) => {
+          console.error(`Error fetching application: ${err}`)
+          if (`${err}`.indexOf("404") >= 0) setNoApplication(true)
+          if (`${err}`.indexOf("403") >= 0) setUnauthorized(true)
+          console.log(err)
+        })
     }
   }, [profile, applicationId, applicationsService, listingsService])
 
@@ -51,9 +60,25 @@ export default () => {
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <FormsLayout>
+          {noApplication && (
+            <FormCard header={t("account.application.error")}>
+              <p className="field-note mb-5">{t("account.application.noApplicationError")}</p>
+              <a href={`applications`} className="button is-small">
+                {t("account.application.return")}
+              </a>
+            </FormCard>
+          )}
+          {unauthorized && (
+            <FormCard header={t("account.application.error")}>
+              <p className="field-note mb-5">{t("account.application.noAccessError")}</p>
+              <a href={`applications`} className="button is-small">
+                {t("account.application.return")}
+              </a>
+            </FormCard>
+          )}
           {application && (
             <>
-              <FormCard header="Confirmation">
+              <FormCard header={t("account.application.confirmation")}>
                 <div className="py-2">
                   {listing && (
                     <Link
