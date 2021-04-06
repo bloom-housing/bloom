@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
@@ -59,29 +59,5 @@ export function useSingleApplicationData(applicationId: string) {
     application: data,
     applicationLoading: !error && !data,
     applicationError: error,
-  }
-}
-
-export function useListAsCsv(listingId: string, includeHeaders: boolean) {
-  const [loading, setLoading] = useState(false)
-
-  const { applicationsService } = useContext(ApiClientContext)
-  const mutate = async () => {
-    setLoading(true)
-
-    try {
-      const res = await applicationsService.listAsCsv({ listingId, includeHeaders })
-      setLoading(false)
-
-      return res
-    } catch (error) {
-      console.error(error)
-      setLoading(false)
-    }
-  }
-
-  return {
-    mutate,
-    loading,
   }
 }
