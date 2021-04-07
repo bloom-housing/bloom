@@ -105,25 +105,24 @@ export class UserService {
 
   public async resendConfirmation(dto: EmailDto) {
     const user = await this.findByEmail(dto.email)
-    if (user) {
-      if (!user.confirmedAt) {
-        const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
-        const token = encode(payload, process.env.SECRET)
-        user.confirmationToken = token
-        try {
-          await this.repo.save(user)
-          return user
-        } catch (err) {
-          throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
-        }
-      } else {
-        throw new HttpException(
-          USER_ERRORS.ACCOUNT_CONFIRMED.message,
-          USER_ERRORS.ACCOUNT_CONFIRMED.status
-        )
-      }
-    } else {
+    if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+    if (user.confirmedAt) {
+      throw new HttpException(
+        USER_ERRORS.ACCOUNT_CONFIRMED.message,
+        USER_ERRORS.ACCOUNT_CONFIRMED.status
+      )
+    } else {
+      const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
+      const token = encode(payload, process.env.SECRET)
+      user.confirmationToken = token
+      try {
+        await this.repo.save(user)
+        return user
+      } catch (err) {
+        throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
+      }
     }
   }
 
