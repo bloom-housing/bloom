@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react"
 import moment from "moment"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
   Button,
@@ -21,6 +22,7 @@ export default () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
+  const router = useRouter()
   const { profile, updatePassword, updateUser, accessToken } = useContext(UserContext)
 
   const [requestError, setRequestError] = useState<string>()
