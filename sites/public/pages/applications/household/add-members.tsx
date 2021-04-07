@@ -69,6 +69,11 @@ export default () => {
           <h2 className="form-card__title is-borderless mt-4">
             {t("application.household.addMembers.title")}
           </h2>
+          {application.wasAutofilled && (
+            <p className="mt-4 field-note">
+              Please double-check the information for each household member.
+            </p>
+          )}
         </div>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
