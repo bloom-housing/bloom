@@ -1,7 +1,8 @@
-import { Component } from "react"
+import React, { Component } from "react"
 import Head from "next/head"
 import { Listing } from "@bloom-housing/backend-core/types"
 import {
+  AlertBox,
   LinkButton,
   Hero,
   MarkdownSection,
@@ -11,12 +12,17 @@ import {
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
+import { withRouter, NextRouter } from "next/router"
+import { ConfirmationModal } from "../src/ConfirmationModal"
 
 interface IndexProps {
   listings: Listing[]
+  router: NextRouter
 }
 
-export default class extends Component<IndexProps> {
+class Index extends Component<IndexProps> {
+  state = { alertMessage: null, alertType: null }
+
   public static async getInitialProps() {
     let listings = []
     try {
@@ -27,6 +33,20 @@ export default class extends Component<IndexProps> {
     }
 
     return { listings }
+  }
+
+  public closeAlert = () => {
+    this.setState({
+      alertMessage: null,
+      alertType: null,
+    })
+  }
+
+  public setSiteAlertMessage = (message: string, alertType: string) => {
+    this.setState({
+      alertMessage: message,
+      alertType: alertType,
+    })
   }
 
   public render() {
@@ -50,6 +70,11 @@ export default class extends Component<IndexProps> {
           <SiteAlert type="alert" className={alertClasses} />
           <SiteAlert type="success" className={alertClasses} timeout={30000} />
         </div>
+        {this.state.alertMessage && (
+          <AlertBox className="" onClose={() => this.closeAlert()} type={this.state.alertType}>
+            {this.state.alertMessage}
+          </AlertBox>
+        )}
         <Hero
           title={heroTitle}
           buttonTitle={t("welcome.seeRentalListings")}
@@ -66,7 +91,9 @@ export default class extends Component<IndexProps> {
             </>
           </MarkdownSection>
         </div>
+        <ConfirmationModal setSiteAlertMessage={this.setSiteAlertMessage} />
       </Layout>
     )
   }
 }
+export default withRouter(Index)

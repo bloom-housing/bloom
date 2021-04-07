@@ -97,19 +97,40 @@ export class UserService {
     });
   }
   /**
-   * Create user
+   * Resend confirmation
    */
-  create(
+  confirmation(
     params: {
       /** requestBody */
-      body?: UserCreate;
+      body?: Email;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<UserWithAccessToken> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Confirm email
+   */
+  confirm(
+    params: {
+      /** requestBody */
+      body?: Confirm;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/confirm';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
       let data = params.body;
 
@@ -1056,6 +1077,12 @@ export interface User {
   id: string;
 
   /**  */
+  confirmationToken?: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
   email: string;
 
   /**  */
@@ -1082,6 +1109,15 @@ export interface UserCreate {
   password: string;
 
   /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  emailConfirmation: string;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
   email: string;
 
   /**  */
@@ -1097,37 +1133,25 @@ export interface UserCreate {
   dob: Date;
 }
 
-export interface UserWithAccessToken {
+export interface Status {
   /**  */
-  roles: UserRole[];
+  status: string;
+}
 
-  /**  */
-  leasingAgentInListings?: Id[];
-
-  /**  */
-  id: string;
-
+export interface Email {
   /**  */
   email: string;
 
   /**  */
-  firstName: string;
+  appUrl?: string;
+}
 
+export interface Confirm {
   /**  */
-  middleName?: string;
+  token: string;
+}
 
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
+export interface LoginResponse {
   /**  */
   accessToken: string;
 }
@@ -1156,11 +1180,6 @@ export interface UpdatePassword {
   token: string;
 }
 
-export interface LoginResponse {
-  /**  */
-  accessToken: string;
-}
-
 export interface UserUpdate {
   /**  */
   id?: string;
@@ -1173,6 +1192,12 @@ export interface UserUpdate {
 
   /**  */
   dob: Date;
+
+  /**  */
+  confirmationToken?: string;
+
+  /**  */
+  confirmedAt?: Date;
 
   /**  */
   firstName: string;
@@ -1547,6 +1572,12 @@ export interface UserBasic {
 
   /**  */
   resetToken: string;
+
+  /**  */
+  confirmationToken?: string;
+
+  /**  */
+  confirmedAt?: Date;
 
   /**  */
   email: string;

@@ -34,7 +34,7 @@ describe("Properties", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
-    adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "Abcdef1!")
   })
 
   it(`/GET `, async () => {

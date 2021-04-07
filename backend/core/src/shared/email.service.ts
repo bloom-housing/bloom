@@ -33,7 +33,8 @@ export class EmailService {
     Handlebars.registerPartial(parts)
   }
 
-  public async welcome(user: User) {
+  public async welcome(user: User, appUrl: string) {
+    const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
         `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
@@ -43,7 +44,15 @@ export class EmailService {
     }
     // TODO set locale for user
     // polyglot.locale(user.lang)
-    await this.send(user.email, "Welcome to Bloom", this.template("register-email")({ user: user }))
+    await this.send(
+      user.email,
+      "Welcome to Bloom",
+      this.template("register-email")({
+        user: user,
+        confirmationUrl: confirmationUrl,
+        appOptions: { appUrl: appUrl },
+      })
+    )
   }
 
   public async confirmation(listing: Listing, application: Application, appUrl: string) {

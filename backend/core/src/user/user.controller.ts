@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { UserCreateDto, UserDto, UserDtoWithAccessToken, UserUpdateDto } from "./dto/user.dto"
+import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email.service"
@@ -25,6 +25,8 @@ import { Request as ExpressRequest } from "express"
 import { ForgotPasswordDto, ForgotPasswordResponseDto } from "./dto/forgot_password.dto"
 import { UpdatePasswordDto } from "./dto/update_password.dto"
 import { LoginResponseDto } from "../auth/dto/login.dto"
+import { ConfirmDto } from "./dto/confirm.dto"
+import { StatusDto } from "../shared/dto/status.dto"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -48,12 +50,29 @@ export class UserController {
   @Post()
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
-  async create(@Body() dto: UserCreateDto): Promise<UserDtoWithAccessToken> {
+  async create(@Body() dto: UserCreateDto): Promise<StatusDto> {
     const user = await this.userService.createUser(dto)
-    const accessToken = this.authService.generateAccessToken(user)
     // noinspection ES6MissingAwait
-    void this.emailService.welcome(user)
-    return mapTo(UserDtoWithAccessToken, { ...user, accessToken })
+    void this.emailService.welcome(user, dto.appUrl)
+    return mapTo(StatusDto, { status: "ok" })
+  }
+
+  @Post("resend-confirmation")
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
+  async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
+    const user = await this.userService.resendConfirmation(dto)
+    // noinspection ES6MissingAwait
+    void this.emailService.welcome(user, dto.appUrl)
+    return mapTo(StatusDto, { status: "ok" })
+  }
+
+  @Put("confirm")
+  @ApiOperation({ summary: "Confirm email", operationId: "confirm" })
+  async confirm(@Body() dto: ConfirmDto): Promise<LoginResponseDto> {
+    const user = await this.userService.confirm(dto)
+    const accessToken = this.authService.generateAccessToken(user)
+    return mapTo(LoginResponseDto, { accessToken })
   }
 
   @Put("forgot-password")
