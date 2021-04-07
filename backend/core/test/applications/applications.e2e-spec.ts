@@ -106,9 +106,7 @@ describe("Applications", () => {
       const leasingAgentsIds = listing.leasingAgents.map((agent) => agent.id)
       return leasingAgentsIds.indexOf(leasingAgent2Profile.id) !== -1
     })[0].id
-  })
 
-  beforeEach(async () => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()
   })
@@ -501,7 +499,9 @@ describe("Applications", () => {
       .expect(400)
   })
 
-  afterEach(() => {
+  afterEach(async () => {
+    await householdMembersRepository.createQueryBuilder().delete().execute()
+    await applicationsRepository.createQueryBuilder().delete().execute()
     jest.clearAllMocks()
   })
 
