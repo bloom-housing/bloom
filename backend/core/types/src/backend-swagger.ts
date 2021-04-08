@@ -1191,7 +1191,7 @@ export interface UserUpdate {
   updatedAt?: Date;
 
   /**  */
-  dob: Date;
+  password?: string;
 
   /**  */
   confirmationToken?: string;
@@ -1207,6 +1207,9 @@ export interface UserUpdate {
 
   /**  */
   lastName: string;
+
+  /**  */
+  dob: Date;
 }
 
 export interface Login {

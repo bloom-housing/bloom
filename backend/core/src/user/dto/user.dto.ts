@@ -119,7 +119,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   updatedAt?: Date
 
   @Expose()
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  dob: Date
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  password?: string
 }

@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
+import { assignDefined } from "../shared/assign-defined"
 
 @Injectable()
 export class ApplicationsService {
@@ -104,7 +105,7 @@ export class ApplicationsService {
         where: { id: applicationUpdateDto.id },
         relations: ["listing", "user"],
       }))
-    Object.assign(application, {
+    assignDefined(application, {
       ...applicationUpdateDto,
       id: application.id,
     })
