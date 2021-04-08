@@ -3,11 +3,12 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
 import { FindConditions, Repository } from "typeorm"
 import { scrypt, randomBytes } from "crypto"
-import { EmailDto, UserCreateDto, UserDto } from "./dto/user.dto"
+import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
 import { encode, decode } from "jwt-simple"
 import moment from "moment"
 import { UpdatePasswordDto } from "./dto/update_password.dto"
 import { ConfirmDto } from "./dto/confirm.dto"
+import { assignDefined } from "../shared/assign-defined"
 
 // Length of hashed key, in bytes
 const SCRYPT_KEYLEN = 64
@@ -48,7 +49,7 @@ export class UserService {
     return this.repo.findOne(options)
   }
 
-  async update(dto: Partial<UserDto>) {
+  async update(dto: Partial<UserUpdateDto>) {
     const obj = await this.repo.findOne({
       where: {
         id: dto.id,
@@ -57,7 +58,18 @@ export class UserService {
     if (!obj) {
       throw new NotFoundException()
     }
-    Object.assign(obj, dto)
+
+    let passwordHash
+    if (dto.password) {
+      passwordHash = await passwordToHash(dto.password)
+      delete dto.password
+    }
+
+    assignDefined(obj, {
+      ...dto,
+      passwordHash,
+    })
+
     return await this.repo.save(obj)
   }
 
@@ -69,11 +81,6 @@ export class UserService {
       .from(User, "user")
       .where("user.id = :id", { id: user.id })
       .getOne()
-  }
-
-  public async storeUserPassword(user: User, password: string) {
-    const passwordHash = await passwordToHash(password)
-    await this.repo.update({ passwordHash }, user)
   }
 
   public async verifyUserPassword(user: User, password: string) {
