@@ -29,8 +29,9 @@ class AutofillCleaner {
       delete this.application[key]
     })
 
+    this.application["confirmationId"] = "" // only used on frontend
     this.application["completedSections"] = 0 // only used on frontend
-    this.application["wasAutofilled"] = true // only used on frontend
+    this.application["autofilled"] = true // only used on frontend
     this.application.submissionType = ApplicationSubmissionType.electronical
     this.application.language = Language.en
     this.application.acceptedTerms = false
@@ -53,14 +54,14 @@ class AutofillCleaner {
 
     if (this.application.alternateAddress) unsetIdentifiers(this.application.alternateAddress)
 
-    this.application.householdMembers.forEach((member, index) => {
-      unsetIdentifiers(member)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      member.id = index // id is a string on the server but we need an integer here
-      if (member.address) unsetIdentifiers(member.address)
-      if (member.workAddress) unsetIdentifiers(member.workAddress)
-    })
+    this.application.householdMembers
+      .sort((a, b) => a.orderId - b.orderId)
+      .forEach((member, index) => {
+        unsetIdentifiers(member)
+        member.orderId = index
+        if (member.address) unsetIdentifiers(member.address)
+        if (member.workAddress) unsetIdentifiers(member.workAddress)
+      })
     unsetIdentifiers(this.application.demographics)
 
     if (this.application.alternateContact) {

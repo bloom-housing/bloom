@@ -261,40 +261,43 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           )}
         </div>
 
-        <h3 className="form--card__sub-header">
-          {t("t.preferences")}
-          {editMode && <EditLink href="/applications/preferences/live-work" />}
-        </h3>
-
-        <div id="preferences" className="form-card__group border-b mx-0">
-          {application.preferences.filter((item) => item.claimed == true).length == 0 ? (
-            <p className="field-note text-black">
-              {t("application.preferences.general.title")}{" "}
-              {t("application.preferences.general.preamble")}
-            </p>
-          ) : (
-            <>
-              {application.preferences
-                .filter((item) => item.claimed === true)
-                .map((preference) =>
-                  preference.options
-                    .filter((item) => item.checked === true)
-                    .map((option) => (
-                      <ViewItem
-                        label={t("application.preferences.youHaveClaimed")}
-                        helper={
-                          preference.key == "displacedTenant" &&
-                          ["general", "missionCorridor"].includes(option.key) &&
-                          preferenceNameAddress(option)
-                        }
-                      >
-                        {t(`application.preferences.${preference.key}.${option.key}.label`)}
-                      </ViewItem>
-                    ))
-                )}
-            </>
-          )}
-        </div>
+        {!application.autofilled && (
+          <>
+            <h3 className="form--card__sub-header">
+              {t("t.preferences")}
+              {editMode && <EditLink href="/applications/preferences/live-work" />}
+            </h3>
+            <div id="preferences" className="form-card__group border-b mx-0">
+              {application.preferences.filter((item) => item.claimed == true).length == 0 ? (
+                <p className="field-note text-black">
+                  {t("application.preferences.general.title")}{" "}
+                  {t("application.preferences.general.preamble")}
+                </p>
+              ) : (
+                <>
+                  {application.preferences
+                    .filter((item) => item.claimed === true)
+                    .map((preference) =>
+                      preference.options
+                        .filter((item) => item.checked === true)
+                        .map((option) => (
+                          <ViewItem
+                            label={t("application.preferences.youHaveClaimed")}
+                            helper={
+                              preference.key == "displacedTenant" &&
+                              ["general", "missionCorridor"].includes(option.key) &&
+                              preferenceNameAddress(option)
+                            }
+                          >
+                            {t(`application.preferences.${preference.key}.${option.key}.label`)}
+                          </ViewItem>
+                        ))
+                    )}
+                </>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </>
   )

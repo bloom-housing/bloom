@@ -8,7 +8,7 @@ import {
 export const blankApplication = () => {
   return {
     loaded: false,
-    wasAutofilled: false,
+    autofilled: false,
     completedSections: 0,
     submissionType: ApplicationSubmissionType.electronical,
     language: Language.en,

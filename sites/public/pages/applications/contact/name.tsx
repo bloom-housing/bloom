@@ -3,7 +3,7 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import React from "react"
+import React, { useState } from "react"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -12,6 +12,7 @@ import {
   Field,
   Form,
   FormCard,
+  Icon,
   OnClientSide,
   ProgressNav,
   t,
@@ -23,6 +24,8 @@ import { useFormConductor } from "../../../lib/hooks"
 
 export default () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
+  const [autofilled, setAutofilled] = useState(false)
+
   const currentPageSection = 1
 
   /* Form Handler */
@@ -35,7 +38,9 @@ export default () => {
     },
   })
   const onSubmit = (data) => {
-    conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
+    if (!autofilled) {
+      conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
+    }
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
@@ -45,6 +50,20 @@ export default () => {
   const emailPresent: string = watch("applicant.emailAddress")
   const noEmail: boolean = watch("applicant.noEmail")
   const clientLoaded = OnClientSide()
+  if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
+
+  const AutofillIcon = () => {
+    return (
+      autofilled && (
+        <Icon
+          className="ml-2"
+          size="medium"
+          symbol="lock"
+          styleType={AppearanceStyleType.primary}
+        />
+      )
+    )
+  }
 
   return (
     <FormsLayout>
@@ -70,13 +89,17 @@ export default () => {
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b">
             <fieldset>
-              <legend className="field-label--caps">{t("application.name.yourName")}</legend>
+              <legend className="field-label--caps">
+                {t("application.name.yourName")}
+                <AutofillIcon />
+              </legend>
 
               <Field
                 name="applicant.firstName"
                 label={t("application.name.firstName")}
                 placeholder={t("application.name.firstName")}
                 readerOnly={true}
+                disabled={autofilled}
                 defaultValue={application.applicant.firstName}
                 validation={{ required: true }}
                 error={errors.applicant?.firstName}
@@ -88,6 +111,7 @@ export default () => {
                 name="applicant.middleName"
                 label={t("application.name.middleNameOptional")}
                 placeholder={t("application.name.middleNameOptional")}
+                disabled={autofilled}
                 readerOnly={true}
                 defaultValue={application.applicant.middleName}
                 register={register}
@@ -97,6 +121,7 @@ export default () => {
                 name="applicant.lastName"
                 label={t("application.name.lastName")}
                 placeholder={t("application.name.lastName")}
+                disabled={autofilled}
                 readerOnly={true}
                 defaultValue={application.applicant.lastName}
                 validation={{ required: true }}
@@ -110,6 +135,7 @@ export default () => {
           <div className="form-card__group border-b">
             <DOBField
               applicant={application.applicant}
+              disabled={autofilled}
               register={register}
               required={true}
               error={errors.applicant}
@@ -117,12 +143,20 @@ export default () => {
               id="applicant.dateOfBirth"
               watch={watch}
               atAge={true}
-              label={t("application.name.yourDateOfBirth")}
+              label={
+                <>
+                  {t("application.name.yourDateOfBirth")}
+                  <AutofillIcon />
+                </>
+              }
             />
           </div>
 
           <div className="form-card__group">
-            <h3 className="field-label--caps">{t("application.name.yourEmailAddress")}</h3>
+            <h3 className="field-label--caps">
+              {t("application.name.yourEmailAddress")}
+              <AutofillIcon />
+            </h3>
 
             <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 
@@ -137,7 +171,7 @@ export default () => {
               error={errors.applicant?.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               register={register}
-              disabled={clientLoaded && noEmail}
+              disabled={clientLoaded && (noEmail || autofilled)}
             />
 
             <Field
@@ -147,7 +181,7 @@ export default () => {
               label={t("application.name.noEmailAddress")}
               primary={true}
               register={register}
-              disabled={clientLoaded && emailPresent?.length > 0}
+              disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
               inputProps={{
                 defaultChecked: clientLoaded && noEmail,
               }}

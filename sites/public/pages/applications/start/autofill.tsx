@@ -32,7 +32,7 @@ export default () => {
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     if (previousApplication && useDetails) {
-      conductor.application = new AutofillCleaner(previousApplication).clean()
+      conductor.application = previousApplication
     } else {
       conductor.application = blankApplication()
     }
@@ -57,7 +57,7 @@ export default () => {
   )
   if (data) {
     if (data.items.length > 0) {
-      setPreviousApplication(data.items[0])
+      setPreviousApplication(new AutofillCleaner(data.items[0]).clean())
     } else {
       onSubmit()
     }

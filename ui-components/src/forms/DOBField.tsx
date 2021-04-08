@@ -13,7 +13,7 @@ export interface DOBFieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   errorMessage?: string
-  label: string
+  label: React.ReactNode
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,6 +24,7 @@ export interface DOBFieldProps {
   name?: string
   id?: string
   required?: boolean
+  disabled?: boolean
   readerOnly?: boolean
 }
 
@@ -62,6 +63,7 @@ const DOBField = (props: DOBFieldProps) => {
         <Field
           name={fieldName("birthMonth")}
           label={t("t.month")}
+          disabled={props.disabled}
           readerOnly={true}
           placeholder="MM"
           defaultValue={applicant?.birthMonth ? applicant.birthMonth : ""}
@@ -82,6 +84,7 @@ const DOBField = (props: DOBFieldProps) => {
         <Field
           name={fieldName("birthDay")}
           label={t("t.day")}
+          disabled={props.disabled}
           readerOnly={true}
           placeholder="DD"
           defaultValue={applicant?.birthDay ? applicant.birthDay : ""}
@@ -102,6 +105,7 @@ const DOBField = (props: DOBFieldProps) => {
         <Field
           name={fieldName("birthYear")}
           label={t("t.year")}
+          disabled={props.disabled}
           readerOnly={true}
           placeholder="YYYY"
           defaultValue={applicant?.birthYear ? applicant.birthYear : ""}

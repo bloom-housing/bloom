@@ -2,11 +2,19 @@ import React from "react"
 import { useRouter } from "next/router"
 import { HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 import { t } from "../helpers/translator"
+import { AppearanceStyleType } from "../global/AppearanceTypes"
+import { Icon } from "../icons/Icon"
 import { ViewItem } from "../blocks/ViewItem"
 
-const HouseholdMemberForm = (props: { member: HouseholdMemberUpdate; type: string }) => {
+const HouseholdMemberForm = (props: {
+  member: HouseholdMemberUpdate
+  type: string
+  editMode?: boolean
+}) => {
   const { member, type } = props
   const router = useRouter()
+  let editMode = props.editMode
+  if (props.editMode !== false) editMode = true
 
   const editMember = () => {
     if (member.orderId != undefined && member.orderId >= 0) {
@@ -23,9 +31,18 @@ const HouseholdMemberForm = (props: { member: HouseholdMemberUpdate; type: strin
   return (
     <ViewItem helper={type} className="pb-4 border-b text-left">
       {member.firstName} {member.lastName}
-      <a id="edit-member" className="edit-link" href="#" onClick={editMember}>
-        {t("t.edit")}
-      </a>
+      {editMode ? (
+        <a id="edit-member" className="edit-link" href="#" onClick={editMember}>
+          {t("t.edit")}
+        </a>
+      ) : (
+        <Icon
+          className="ml-2 absolute top-0 right-0"
+          size="medium"
+          symbol="lock"
+          styleType={AppearanceStyleType.primary}
+        />
+      )}
     </ViewItem>
   )
 }
