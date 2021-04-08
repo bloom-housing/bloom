@@ -62,7 +62,7 @@ const Layout = (props) => {
             <LocalizedLink href="/account/applications" className="navbar-item">
               {t("nav.myApplications")}
             </LocalizedLink>
-            <LocalizedLink href="/account/settings" className="navbar-item">
+            <LocalizedLink href="/account/edit" className="navbar-item">
               {t("nav.accountSettings")}
             </LocalizedLink>
           </UserNav>
