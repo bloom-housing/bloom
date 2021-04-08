@@ -23,7 +23,6 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
-  const { token } = router.query
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -46,8 +45,8 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   }
 
   useEffect(() => {
-    if (token && !profile) {
-      confirmAccount(token.toString())
+    if (router && router.query && router.query.token && !profile) {
+      confirmAccount(router.query.token.toString())
         .then(() => {
           setSiteAlertMessage(t(`authentication.createAccount.accountConfirmed`), "success")
 
