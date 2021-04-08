@@ -45,7 +45,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   }
 
   useEffect(() => {
-    if (router && router.query && router.query.token && !profile) {
+    if (router?.query?.token && !profile) {
       confirmAccount(router.query.token.toString())
         .then(() => {
           setSiteAlertMessage(t(`authentication.createAccount.accountConfirmed`), "success")
