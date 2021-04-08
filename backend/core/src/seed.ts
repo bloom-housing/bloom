@@ -36,6 +36,28 @@ async function bootstrap() {
         email: "leasing-agent-2@example.com",
       },
     ],
+    preferences: [
+      {
+        ordinal: 1,
+        title: "Yet another preference for live or work",
+        subtitle: "",
+        description: "Description",
+        links: [],
+        formMetadata: {
+          key: "liveWork",
+          options: [
+            {
+              key: "live",
+              extraData: [],
+            },
+            {
+              key: "work",
+              extraData: [],
+            },
+          ],
+        },
+      },
+    ],
   })
   await Promise.all([
     listing2.leasingAgents.map(async (agent: User) => {
