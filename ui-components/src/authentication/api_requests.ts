@@ -84,7 +84,7 @@ export const forgotPassword = async (apiUrl: string, email: string) => {
   return message
 }
 
-export const updatePassword = async (
+export const resetPassword = async (
   apiUrl: string,
   token: string,
   password: string,
