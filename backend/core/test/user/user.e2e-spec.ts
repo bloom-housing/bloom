@@ -45,8 +45,8 @@ describe("Applications", () => {
     app = applicationSetup(app)
     await app.init()
 
-    user1AccessToken = await getUserAccessToken(app, "test@example.com", "Abcdef1!")
-    user2AccessToken = await getUserAccessToken(app, "test2@example.com", "Ghijkl1!")
+    user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
+    user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
     user1Profile = (
       await supertest(app.getHttpServer())
