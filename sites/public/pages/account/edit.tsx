@@ -25,7 +25,6 @@ export default () => {
   const { profile } = useContext(UserContext)
   const { userService } = useContext(ApiClientContext)
   const [successAlert, setSuccessAlert] = useState<string>()
-  console.log(profile)
 
   const [requestError, setRequestError] = useState<string>()
 
@@ -40,7 +39,6 @@ export default () => {
         body: { ...profile, firstName, middleName, lastName },
       })
       setSuccessAlert("Name update successful")
-      console.log(result)
     } catch (err) {
       setRequestError(`${t("account.settings.errors.generic")}`)
       console.warn(err)
@@ -58,7 +56,6 @@ export default () => {
         body: { ...profile, dob: new Date(`${birthYear}-${birthMonth}-${birthDay}`) },
       })
       setSuccessAlert("Birthdate update successful")
-      console.log(result)
     } catch (err) {
       setRequestError(`${t("account.settings.errors.generic")}`)
       console.warn(err)
@@ -67,32 +64,30 @@ export default () => {
 
   const onEmailSubmit = async (data: { email: string }) => {
     // const { email } = data
-    // try {
-    //   const result = await userService.update({
-    //     body: { ...profile, email },
-    //   })
-    //   setSuccessAlert("Birthdate update successful")
-    //   console.log(result)
-    // } catch (err) {
-    //   setRequestError(`${t("account.settings.errors.generic")}`)
-    //   console.warn(err)
-    // }
+    // TODO: Hook up to backend
+    try {
+      const result = await userService.update({
+        body: { ...profile },
+      })
+      setSuccessAlert("Email update successful")
+    } catch (err) {
+      setRequestError(`${t("account.settings.errors.generic")}`)
+      console.warn(err)
+    }
   }
 
   const onPasswordSubmit = async (data: { password: string; passwordConfirmation: string }) => {
-    const { password, passwordConfirmation } = data
-    // try {
-    //   // await updatePassword(accessToken, password, passwordConfirmation)
-    //   setSiteAlertMessage(t(`account.settings.passwordSuccess`), "success")
-    // } catch (err) {
-    //   const { status, data } = err.response || {}
-    //   if (status === 400) {
-    //     // setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
-    //   } else {
-    //     console.error(err)
-    //     // setRequestError(`${t("authentication.forgotPassword.errors.generic")}`)
-    //   }
-    // }
+    // const { password, passwordConfirmation } = data
+    // TODO: Hook up to backend
+    try {
+      const result = await userService.update({
+        body: { ...profile },
+      })
+      setSuccessAlert("Password update successful")
+    } catch (err) {
+      setRequestError(`${t("account.settings.errors.generic")}`)
+      console.warn(err)
+    }
   }
 
   return (
@@ -149,7 +144,12 @@ export default () => {
                 defaultValue={profile ? profile.lastName : null}
               />
               <div className="text-center">
-                <Button onClick={() => {}} className={"items-center"}>
+                <Button
+                  onClick={() => {
+                    //
+                  }}
+                  className={"items-center"}
+                >
                   Update
                 </Button>
               </div>
@@ -184,7 +184,12 @@ export default () => {
                 />
               </div>
               <div className="text-center mt-5">
-                <Button onClick={() => {}} className={"items-center"}>
+                <Button
+                  onClick={() => {
+                    //
+                  }}
+                  className={"items-center"}
+                >
                   Update
                 </Button>
               </div>
@@ -205,7 +210,12 @@ export default () => {
                 defaultValue={profile ? profile.email : null}
               />
               <div className="text-center">
-                <Button onClick={() => {}} className={"items-center"}>
+                <Button
+                  onClick={() => {
+                    //
+                  }}
+                  className={"items-center"}
+                >
                   Update
                 </Button>
               </div>
@@ -275,7 +285,12 @@ export default () => {
               </div>
 
               <div className="text-center mt-5">
-                <Button onClick={() => {}} className={"items-center"}>
+                <Button
+                  onClick={() => {
+                    //
+                  }}
+                  className={"items-center"}
+                >
                   Update
                 </Button>
               </div>
