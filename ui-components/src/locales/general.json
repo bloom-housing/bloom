@@ -515,6 +515,40 @@
       "forgotPassword": "Forgot password?",
       "success": "Welcome back, %{name}!"
     },
+    "createAccount": {
+      "accountConfirmed": "Your account was successfully confirmed.",
+      "anEmailHasBeenSent": "An email has been sent to %{email}",
+      "confirmationInstruction": "Please click on the link in the email we sent you in order to complete account creation.",
+      "confirmationNeeded": "Confirmation needed",
+      "emailSent": "Confirmation email has been sent. Please check your inbox.",
+      "yourName": "Your Name",
+      "firstName": "First Name",
+      "middleNameOptional": "Middle Name (optional)",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "yourDateOfBirth": "Your Date of Birth",
+      "email": "Email",
+      "emailPrivacy": "We will only use your email address to contact you about your application.",
+      "reEnterEmail": "Re-enter email address",
+      "reEnterPassword": "Re-enter your password",
+      "resendTheEmail": "Resend the email",
+      "linkExpired": "Your link has expired",
+      "mustBe8Chars": "Must be 8 characters",
+      "password": "Password",
+      "passwordInfo": "Must be at least 8 characters and include at least 1 letter and at least one number.",
+      "resendEmailInfo": "Please click on the link in the email we send you within 24 hours in order to complete account creation.",
+      "resendAnEmailTo": "Resend an email to",
+      "errors": {
+        "errorSaving": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
+        "emailInUse": "Email is already in use",
+        "emailMismatch": "The emails do not match",
+        "emailNotFound": "Email not found. Please register first.",
+        "passwordMismatch": "The passwors do not match",
+        "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
+        "tokenExpired": "Your link has expired.",
+        "tokenMissing": "Wrong token provided."
+      }
+    },
     "signOut": {
       "success": "You have successfully logged out of your account."
     }
@@ -872,6 +906,7 @@
     "none": "None",
     "noneFound": "None found.",
     "occupancy": "Occupancy",
+    "ok": "OK",
     "or": "or",
     "pageXofY": "Page %{num} of %{total}",
     "people": "people",

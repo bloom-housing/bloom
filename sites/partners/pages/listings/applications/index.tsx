@@ -11,9 +11,8 @@ import {
   lRoute,
   LocalizedLink,
   ApiClientContext,
-  getOccupancyDescription,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData, useListAsCsv } from "../../../lib/hooks"
+import { useApplicationsData } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
@@ -27,6 +26,8 @@ const ApplicationsList = () => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
   const COLUMN_STATE_KEY = "column-state"
+
+  const { applicationsService } = useContext(ApiClientContext)
 
   const router = useRouter()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -42,7 +43,7 @@ const ApplicationsList = () => {
   const [loadingCsv, setLoadingCsv] = useState(false)
 
   const listingId = router.query.listing as string
-  let status = "submitted"
+  const status = "submitted"
   const { appsData } = useApplicationsData(
     pageIndex,
     pageSize,
@@ -50,8 +51,10 @@ const ApplicationsList = () => {
     delayedFilterValue,
     status
   )
-  const { applicationsService } = useContext(ApiClientContext)
   // const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
 
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
@@ -108,8 +111,6 @@ const ApplicationsList = () => {
   const onBtPrevious = () => {
     setPageIndex(pageIndex - 1)
   }
-
-  // const { mutate: mutateCsv, loading: loadingCsv } = useListAsCsv(listingId, true, "status")
 
   const mutateCsv = async (status?: "duplicate" | "submitted") => {
     try {
@@ -225,9 +226,11 @@ const ApplicationsList = () => {
                   </Button>
                 </LocalizedLink>
 
-                <Button className="mx-1" onClick={() => onExport()} loading={loadingCsv}>
+                <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
                   {t("t.export")}
                 </Button>
+
+                {console.log(csvExportError)}
               </div>
             </div>
 

@@ -2,7 +2,7 @@ import * as React from "react"
 import "./Icon.scss"
 
 export interface IconProps {
-  size: string
+  size: "tiny" | "small" | "medium" | "large" | "xlarge" | "2xl"
   symbol: string
   white?: boolean
   className?: string

@@ -29,7 +29,13 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData(pageIndex: number, limit = 10, listingId: string, search = "", status: string) {
+export function useApplicationsData(
+  pageIndex: number,
+  limit = 10,
+  listingId: string,
+  search = "",
+  status: string
+) {
   const { applicationsService } = useContext(ApiClientContext)
   const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}&search=${search}`
   const fetcher = () =>

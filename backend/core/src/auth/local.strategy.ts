@@ -16,7 +16,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.userService.findByEmail(email)
     if (user) {
       const validPassword = await this.userService.verifyUserPassword(user, password)
-      if (validPassword) {
+      if (validPassword && user.confirmedAt) {
         return user
       }
     }

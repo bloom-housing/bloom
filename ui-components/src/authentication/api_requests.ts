@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios"
 import { getTokenTtl } from "./token"
-import { UserCreate, User } from "@bloom-housing/backend-core/types"
+import { UserCreate, User, Status } from "@bloom-housing/backend-core/types"
 
 export const renewToken = async (client: AxiosInstance) => {
   const res = await client.post<{ accessToken: string }>("auth/token")
@@ -18,10 +18,22 @@ export const login = async (apiBase: string, email: string, password: string) =>
 }
 
 export const register = async (apiBase: string, data: UserCreate) => {
-  const res = await axios.post<{ accessToken: string } & User>(`${apiBase}/auth/register`, data)
-  const { accessToken, ...rest } = res.data
-  const user = rest as User
-  return { accessToken, user }
+  const res = await axios.post<{ accessToken: string } & Status>(`${apiBase}/user`, {
+    appUrl: window.location.origin,
+    ...data,
+  })
+  return { ...res.data }
+}
+
+export const resendConfirmation = async (apiBase: string, email: string) => {
+  const res = await axios.post<{ accessToken: string } & Status>(
+    `${apiBase}/user/resend-confirmation`,
+    {
+      appUrl: window.location.origin,
+      email: email,
+    }
+  )
+  return { ...res.data }
 }
 
 export const getProfile = async (client: AxiosInstance) => {
@@ -81,6 +93,15 @@ export const updatePassword = async (
   const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/update-password`, {
     password: password,
     passwordConfirmation: passwordConfirmation,
+    token: token,
+  })
+  const { accessToken } = res.data
+  return accessToken
+}
+
+export const confirmAccount = async (apiUrl: string, token: string) => {
+  console.log(token)
+  const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/confirm`, {
     token: token,
   })
   const { accessToken } = res.data

@@ -1,5 +1,7 @@
 <h1>{{t "register.welcome"}} {{> user-name }}</h1>
 <p>
-  {{t "register.welcomeMessage"}}
+  {{t "register.welcomeMessage" appOptions}}
+  {{t "register.toConfirmAccountMessage"}}
+  <a href="{{confirmationUrl}}">{{t "register.confirmMyAccount"}}</a>
 </p>
 {{> footer }}

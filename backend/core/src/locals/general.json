@@ -31,8 +31,10 @@
     "officeHours": "Office Hours:"
   },
   "register": {
+    "confirmMyAccount": "Confirm my account",
+    "toConfirmAccountMessage": "To complete your account creation, please click the link below:",
     "welcome": "Welcome",
-    "welcomeMessage": "Thank you for setting up your account on the Bloom Housing Portal. It will now be easier for you to start, save, and submit online applications for listings that appear on the site."
+    "welcomeMessage": "Thank you for setting up your account on %{appUrl}. It will now be easier for you to start, save, and submit online applications for listings that appear on the site."
   },
   "t": {
     "hello": "Hello"

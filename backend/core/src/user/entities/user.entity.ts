@@ -6,6 +6,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
@@ -21,6 +22,7 @@ export enum UserRole {
 }
 
 @Entity({ name: "user_accounts" })
+@Unique(["email"])
 @Index("user_accounts_email_unique_idx", { synchronize: false })
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -33,6 +35,16 @@ export class User {
 
   @Column("varchar", { nullable: true })
   resetToken: string
+
+  @Column("varchar", { nullable: true })
+  confirmationToken?: string
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  confirmedAt?: Date | null
 
   @Column("varchar")
   @Expose()
