@@ -16,7 +16,7 @@ describe("UserService", () => {
   let service: UserService
 
   beforeEach(async () => {
-    process.env.SECRET = "SECRET"
+    process.env.APP_SECRET = "SECRET"
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,

@@ -357,7 +357,7 @@ export const listingSeed1: ListingSeed = {
       middleName: "Middle",
       email: "leasing-agent-1@example.com",
       emailConfirmation: "leasing-agent-1@example.com",
-      password: "Abcdef1!",
+      password: "abcdef",
       passwordConfirmation: "Abcdef1",
       dob: new Date(),
     },

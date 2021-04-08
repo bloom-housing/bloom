@@ -88,7 +88,7 @@ export class UserService {
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
-    const payload = decode(dto.token, process.env.SECRET)
+    const payload = decode(dto.token, process.env.APP_SECRET)
     if (moment(payload.expiresAt) < moment()) {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
@@ -115,7 +115,7 @@ export class UserService {
       )
     } else {
       const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
-      const token = encode(payload, process.env.SECRET)
+      const token = encode(payload, process.env.APP_SECRET)
       user.confirmationToken = token
       try {
         await this.repo.save(user)
@@ -139,7 +139,7 @@ export class UserService {
     user.dob = dto.dob
     user.email = dto.email
     const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
-    const token = encode(payload, process.env.SECRET)
+    const token = encode(payload, process.env.APP_SECRET)
     user.confirmationToken = token
     try {
       user.passwordHash = await passwordToHash(password)
@@ -158,7 +158,7 @@ export class UserService {
 
     // Token expires in 24 hours
     const payload = { id: user.id, expiresAt: moment().add(1, "hour") }
-    const token = encode(payload, process.env.SECRET)
+    const token = encode(payload, process.env.APP_SECRET)
     user.resetToken = token
     await this.repo.save(user)
 
@@ -170,7 +170,7 @@ export class UserService {
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
-    const payload = decode(user.resetToken, process.env.SECRET)
+    const payload = decode(user.resetToken, process.env.APP_SECRET)
     if (moment(payload.expiresAt) < moment()) {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }

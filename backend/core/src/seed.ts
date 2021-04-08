@@ -53,7 +53,7 @@ async function bootstrap() {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
-      password: "Abcdef1!",
+      password: "abcdef",
       passwordConfirmation: "Abcdef1!",
     })
   )
@@ -67,7 +67,7 @@ async function bootstrap() {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
-      password: "Ghijkl1!",
+      password: "ghijkl",
       passwordConfirmation: "Ghijkl1!",
     })
   )
@@ -81,7 +81,7 @@ async function bootstrap() {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
-      password: "Abcdef1!",
+      password: "abcdef",
       passwordConfirmation: "Abcdef1!",
     })
   )

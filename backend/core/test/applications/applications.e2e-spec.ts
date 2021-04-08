@@ -171,22 +171,22 @@ describe("Applications", () => {
       getRepositoryToken(HouseholdMember)
     )
 
-    user1AccessToken = await getUserAccessToken(app, "test@example.com", "Abcdef1!")
+    user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
 
-    user2AccessToken = await getUserAccessToken(app, "test2@example.com", "Ghijkl1!")
+    user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
-    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "Abcdef1!")
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     leasingAgent1AccessToken = await getUserAccessToken(
       app,
       "leasing-agent-1@example.com",
-      "Abcdef1!"
+      "abcdef"
     )
 
     leasingAgent2AccessToken = await getUserAccessToken(
       app,
       "leasing-agent-2@example.com",
-      "Abcdef1!"
+      "abcdef"
     )
 
     leasingAgent1Profile = (
