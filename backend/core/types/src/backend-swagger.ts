@@ -97,9 +97,30 @@ export class UserService {
     });
   }
   /**
+   * Create user
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UserCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Resend confirmation
    */
-  confirmation(
+  resendConfirmation(
     params: {
       /** requestBody */
       body?: Email;
@@ -107,7 +128,7 @@ export class UserService {
     options: IRequestOptions = {}
   ): Promise<Status> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
+      let url = basePath + '/user/resend-confirmation';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -1241,6 +1262,9 @@ export interface UserUpdate {
 
   /**  */
   password?: string;
+
+  /**  */
+  currentPassword?: string;
 
   /**  */
   confirmationToken?: string;
