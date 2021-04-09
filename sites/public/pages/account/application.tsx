@@ -5,23 +5,13 @@ import {
   t,
   UserContext,
   FormCard,
+  dateToString,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import FormsLayout from "../../layouts/forms"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { useRouter } from "next/router"
-import moment from "moment"
-
-const dateSubmitted = (submissionDate: Date) => {
-  if (!submissionDate) return null
-  const formattedSubmissionDate = moment(new Date(submissionDate)).utc()
-  const month = formattedSubmissionDate.format("MMMM")
-  const day = formattedSubmissionDate.format("DD")
-  const year = formattedSubmissionDate.format("YYYY")
-
-  return `${month} ${day}, ${year}`
-}
 
 export default () => {
   const router = useRouter()
@@ -49,9 +39,13 @@ export default () => {
         })
         .catch((err) => {
           console.error(`Error fetching application: ${err}`)
-          if (`${err}`.indexOf("404") >= 0) setNoApplication(true)
-          if (`${err}`.indexOf("403") >= 0) setUnauthorized(true)
-          console.log(err)
+          const { status } = err.response || {}
+          if (status === 404) {
+            setNoApplication(true)
+          }
+          if (status === 403) {
+            setUnauthorized(true)
+          }
         })
     }
   }, [profile, applicationId, applicationsService, listingsService])
@@ -100,7 +94,7 @@ export default () => {
                   </h2>
                   <p className="field-note mt-4 text-center">
                     {t("application.confirmation.submitted")}
-                    {dateSubmitted(application.submissionDate)}
+                    {dateToString(application.submissionDate)}
                   </p>
                 </div>
                 <div className="form-card__group text-center">

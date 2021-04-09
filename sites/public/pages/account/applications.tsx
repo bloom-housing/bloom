@@ -19,6 +19,7 @@ export default () => {
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
   const [applications, setApplications] = useState<PaginatedApplication>()
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (profile) {
@@ -27,16 +28,26 @@ export default () => {
         .then((apps) => {
           setApplications(apps)
         })
-        .catch((err) => console.error(`Error fetching applications: ${err}`))
+        .catch((err) => {
+          console.error(`Error fetching applications: ${err}`)
+          setError(`${err}`)
+        })
     }
   }, [profile, applicationsService])
 
-  const noApplicationsSection = (
-    <div className="p-8">
-      <h2 className="pb-4">It looks like you haven't applied to any listings yet.</h2>
-      <LinkButton href="/listings">{t("listings.browseListings")}</LinkButton>
-    </div>
-  )
+  const noApplicationsSection = () => {
+    return error ? (
+      <div className="p-8">
+        <h2 className="pb-4">{`${t("account.errorFetchingApplications")}`}</h2>
+      </div>
+    ) : (
+      <div className="p-8">
+        <h2 className="pb-4">{t("account.noApplications")}</h2>
+        <LinkButton href="/listings">{t("listings.browseListings")}</LinkButton>
+      </div>
+    )
+  }
+
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -50,12 +61,13 @@ export default () => {
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
                   <Fragment>
-                    {applications && applications.items.length > 0
-                      ? applications.items.map((application, index) => (
-                          <AppStatusItemWrapper key={index} application={application} />
-                        ))
-                      : noApplicationsSection}
+                    {applications &&
+                      applications.items.length > 0 &&
+                      applications.items.map((application, index) => (
+                        <AppStatusItemWrapper key={index} application={application} />
+                      ))}
                   </Fragment>
+                  {!applications && noApplicationsSection()}
                 </DashBlock>
               </DashBlocks>
             </div>

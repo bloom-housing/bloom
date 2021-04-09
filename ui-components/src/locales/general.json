@@ -1,6 +1,8 @@
 {
   "account": {
     "accountSettings": "Account Settings",
+    "errorFetchingApplications": "Error fetching applications",
+    "noApplications": "It looks like you haven't applied to any listings yet.",
     "accountSettingsSubtitle": "Account Settings, email and password",
     "createAccount": "Create Account",
     "haveAnAccount": "Already have an account?",
