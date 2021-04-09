@@ -25,6 +25,7 @@ export class UserDto extends OmitType(User, [
   "leasingAgentInListings",
   "passwordHash",
   "resetToken",
+  "confirmationToken",
 ] as const) {
   @Expose()
   @IsOptional()
@@ -41,6 +42,7 @@ export class UserBasicDto extends OmitType(User, [
   "leasingAgentInListings",
   "passwordHash",
   "roles",
+  "confirmationToken",
 ] as const) {}
 
 export class UserDtoWithAccessToken extends UserDto {
@@ -63,7 +65,6 @@ export class EmailDto {
 export class UserCreateDto extends OmitType(UserDto, [
   "id",
   "confirmedAt",
-  "confirmationToken",
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
