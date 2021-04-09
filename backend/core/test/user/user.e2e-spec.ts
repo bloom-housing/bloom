@@ -181,6 +181,7 @@ describe("Applications", () => {
       dob: new Date(),
       firstName: "First",
       lastName: "Last",
+      email: "test@example.com",
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
