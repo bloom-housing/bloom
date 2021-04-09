@@ -90,6 +90,8 @@ jobs:
   cypress/run:
     executor: cypress-node
     steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - store_artifacts:
           path: temp/screenshots
 
