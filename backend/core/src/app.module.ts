@@ -42,7 +42,7 @@ export class AppModule {
               .valid("development", "staging", "production", "test")
               .default("development"),
             DATABASE_URL: Joi.string().required(),
-            REDIS_URL: Joi.string().required(),
+            REDIS_TLS_URL: Joi.string().required(),
           }),
         }),
         TypeOrmModule.forRoot({
@@ -52,7 +52,7 @@ export class AppModule {
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 5,
-          storage: new ThrottlerStorageRedisService(process.env.REDIS_URL),
+          storage: new ThrottlerStorageRedisService(process.env.REDIS_TLS_URL),
         }),
         UserModule,
         AuthModule,
