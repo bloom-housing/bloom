@@ -1,11 +1,20 @@
 {
   "account": {
     "accountSettings": "Account Settings",
+    "errorFetchingApplications": "Error fetching applications",
+    "noApplications": "It looks like you haven't applied to any listings yet.",
     "accountSettingsSubtitle": "Account Settings, email and password",
     "createAccount": "Create Account",
     "haveAnAccount": "Already have an account?",
     "myApplications": "My Applications",
-    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
+    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied",
+    "application": {
+      "confirmation": "Confirmation",
+      "error": "Error",
+      "noAccessError": "No application with that ID exists",
+      "noApplicationError": "No application with that ID exists",
+      "return": "Return to applications"
+    }
   },
   "applications": {
     "begin": {
