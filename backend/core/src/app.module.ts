@@ -19,6 +19,7 @@ import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import * as bodyParser from "body-parser"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
+import Redis from "ioredis"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -32,6 +33,23 @@ export function applicationSetup(app: INestApplication) {
 @Module({})
 export class AppModule {
   static register(dbOptions): DynamicModule {
+    /**
+     * DEV NOTE:
+     * This configuration is required due to issues with
+     * self signed certificates in Redis 6.
+     *
+     * { rejectUnauthorized: false } option is intentional and required
+     *
+     * Read more:
+     * https://help.heroku.com/HC0F8CUS/redis-connection-issues
+     * https://devcenter.heroku.com/articles/heroku-redis#ioredis-module
+     */
+    const redis = new Redis(process.env.REDIS_TLS_URL, {
+      tls: {
+        rejectUnauthorized: false,
+      },
+    })
+
     return {
       module: AppModule,
       imports: [
@@ -42,7 +60,7 @@ export class AppModule {
               .valid("development", "staging", "production", "test")
               .default("development"),
             DATABASE_URL: Joi.string().required(),
-            REDIS_URL: Joi.string().required(),
+            REDIS_TLS_URL: Joi.string().required(),
           }),
         }),
         TypeOrmModule.forRoot({
@@ -52,7 +70,7 @@ export class AppModule {
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 5,
-          storage: new ThrottlerStorageRedisService(process.env.REDIS_URL),
+          storage: new ThrottlerStorageRedisService(redis),
         }),
         UserModule,
         AuthModule,
