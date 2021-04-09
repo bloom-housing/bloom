@@ -70,7 +70,11 @@ export class AppModule {
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 5,
+<<<<<<< HEAD
           storage: new ThrottlerStorageRedisService(redis),
+=======
+          storage: new ThrottlerStorageRedisService(process.env.REDIS_TLS_URL),
+>>>>>>> 833a80bb9b54908c88a8a958f074cb23126d46e2
         }),
         UserModule,
         AuthModule,
