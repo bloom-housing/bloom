@@ -1147,9 +1147,6 @@ export interface User {
   id: string;
 
   /**  */
-  confirmationToken?: string;
-
-  /**  */
   confirmedAt?: Date;
 
   /**  */
@@ -1265,9 +1262,6 @@ export interface UserUpdate {
 
   /**  */
   currentPassword?: string;
-
-  /**  */
-  confirmationToken?: string;
 
   /**  */
   confirmedAt?: Date;
@@ -1648,9 +1642,6 @@ export interface UserBasic {
 
   /**  */
   resetToken: string;
-
-  /**  */
-  confirmationToken?: string;
 
   /**  */
   confirmedAt?: Date;
