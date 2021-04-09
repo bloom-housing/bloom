@@ -17,8 +17,23 @@
     },
     "settings": {
       "passwordSuccess": "Password successfully updated",
-      "errors": {
-        "generic": "There was an error. Please try again, or contact support for help."
+      "update": "Update",
+      "passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "alerts": {
+        "genericError": "There was an error. Please try again, or contact support for help.",
+        "nameSuccess": "Name update successful",
+        "dobSuccess": "Birthdate update successful",
+        "emailSuccess": "Email update successful",
+        "passwordSuccess": "Password update successful",
+        "passwordMatch": "New password fields do not match"
+      },
+      "placeholders": {
+        "month": "MM",
+        "day": "DD",
+        "year": "YYYY"
       }
     }
   },
