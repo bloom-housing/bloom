@@ -1,6 +1,7 @@
 import * as React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
-import { LanguageNav, LangItem } from "../navigation/LanguageNav"
+import { LangItem } from "../navigation/LanguageNav"
+import { RoutedLanguageNav } from "../navigation/RoutedLanguageNav"
 
 export interface SiteHeaderProps {
   logoSrc: string
@@ -91,7 +92,7 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
   render() {
     return (
       <>
-        {this.props.languages && <LanguageNav items={this.props.languages} />}
+        {this.props.languages && <RoutedLanguageNav items={this.props.languages} />}
 
         {this.skipLink()}
         {this.noticeBar()}

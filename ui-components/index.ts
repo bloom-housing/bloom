@@ -73,6 +73,7 @@ export * from "./src/lists/PreferencesList"
 
 /* Navigation */
 export * from "./src/navigation/FooterNav"
+export * from "./src/navigation/RoutedLanguageNav"
 export * from "./src/navigation/LanguageNav"
 export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/UserNav"

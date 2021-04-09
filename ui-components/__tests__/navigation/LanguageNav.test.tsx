@@ -1,32 +1,47 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
-import { LanguageNav } from "../../src/navigation/LanguageNav"
-import * as useLanguageChange from "../../src/helpers/useLanguageChange"
+import { render, cleanup, fireEvent } from "@testing-library/react"
+import { LanguageNav, LangItem } from "../../src/navigation/LanguageNav"
+
+const ENGLISH_LANG_ITEM: LangItem = {
+  prefix: "",
+  label: "English",
+}
+
+const SPANISH_LANG_ITEM: LangItem = {
+  prefix: "es",
+  label: "Spanish",
+}
 
 afterEach(cleanup)
 
 describe("<LanguageNav>", () => {
   it("renders without error", () => {
-    const useLanguageChangeSpy = jest.spyOn(useLanguageChange, "useLanguageChange")
+    const onChangeLanguageSpy = jest.fn()
     const { getByText } = render(
       <LanguageNav
-        items={[
-          {
-            prefix: "",
-            label: "English",
-          },
-          {
-            prefix: "es",
-            label: "Spanish",
-          },
-        ]}
+        onChangeLanguage={onChangeLanguageSpy}
+        currentLanguagePrefix={SPANISH_LANG_ITEM.prefix}
+        items={[ENGLISH_LANG_ITEM, SPANISH_LANG_ITEM]}
       />
     )
-    expect(useLanguageChangeSpy).toHaveBeenCalledWith([
-      { label: "English", prefix: "" },
-      { label: "Spanish", prefix: "es" },
-    ])
+
+    expect(onChangeLanguageSpy).toHaveBeenCalledTimes(0)
     expect(getByText("English")).toBeTruthy()
     expect(getByText("Spanish")).toBeTruthy()
+  })
+
+  it("calls onChangeLanguage", () => {
+    const onChangeLanguageSpy = jest.fn()
+    const {  getByText } = render(
+      <LanguageNav
+        onChangeLanguage={onChangeLanguageSpy}
+        currentLanguagePrefix={SPANISH_LANG_ITEM.prefix}
+        items={[ENGLISH_LANG_ITEM, SPANISH_LANG_ITEM]}
+      />
+    )
+
+    fireEvent.click(getByText("English"))
+
+    expect(onChangeLanguageSpy).toHaveBeenCalledTimes(1)
   })
 })

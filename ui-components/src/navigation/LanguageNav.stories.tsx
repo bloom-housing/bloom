@@ -1,6 +1,16 @@
 import React from "react"
 
-import { LanguageNav } from "./LanguageNav"
+import { LanguageNav, LangItem } from "./LanguageNav"
+
+const ENGLISH_LANG_ITEM: LangItem = {
+  prefix: "",
+  label: "English",
+}
+
+const SPANISH_LANG_ITEM: LangItem = {
+  prefix: "es",
+  label: "Spanish",
+}
 
 export default {
   title: "LanguageNav",
@@ -8,14 +18,9 @@ export default {
 }
 
 export const Default = () => (
-  <LanguageNav items={[
-    {
-      prefix: "",
-      label: "English",
-    },
-    {
-      prefix: "es",
-      label: "Spanish",
-    },
-  ]}/>
+  <LanguageNav
+    onChangeLanguage={(_) => {}}
+    currentLanguagePrefix={SPANISH_LANG_ITEM.prefix}
+    items={[ENGLISH_LANG_ITEM, SPANISH_LANG_ITEM]}
+  />
 )
