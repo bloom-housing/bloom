@@ -87,6 +87,16 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:partners
+  cypress\run:
+    executor: cypress-node
+    working_directory: sites/public
+    yarn: true
+    build: yarn test:backend:core:dbsetup
+    start: yarn dev:all
+    wait-on: "http://localhost:3000"
+    steps:
+      - store_artifacts:
+          path: temp/screenshots
 
 workflows:
   version: 2
@@ -111,11 +121,3 @@ workflows:
       - cypress/run:
           requires:
             - setup
-          executor: cypress-node
-          working_directory: sites/public
-          yarn: true
-          build: yarn test:backend:core:dbsetup
-          start: yarn dev:all
-          wait-on: "http://localhost:3000"
-          store-artifacts:
-            path: integration-tests/test-results
