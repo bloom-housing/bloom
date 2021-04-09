@@ -74,13 +74,12 @@ const Edit = () => {
   }
 
   const onEmailSubmit = async (data: { email: string }) => {
-    // const { email } = data
-    // TODO: Hook up to backend
+    const { email } = data
     setEmailAlert(null)
     try {
-      // await userService.update({
-      //   body: { ...profile, email },
-      // })
+      await userService.update({
+        body: { ...profile, email },
+      })
       setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
     } catch (err) {
       setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
