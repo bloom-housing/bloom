@@ -1,9 +1,16 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
 import { FindConditions, Repository } from "typeorm"
 import { scrypt, randomBytes } from "crypto"
-import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
+import { EmailDto, UserCreateDto, UserUpdateDto } from "./dto/user.dto"
 import { encode, decode } from "jwt-simple"
 import moment from "moment"
 import { UpdatePasswordDto } from "./dto/update_password.dto"
@@ -50,27 +57,35 @@ export class UserService {
   }
 
   async update(dto: Partial<UserUpdateDto>) {
-    const obj = await this.repo.findOne({
+    const user = await this.repo.findOne({
       where: {
         id: dto.id,
       },
     })
-    if (!obj) {
+    if (!user) {
       throw new NotFoundException()
     }
 
     let passwordHash
     if (dto.password) {
+      if (!dto.currentPassword) {
+        // Validation is handled at DTO definition level
+        throw new BadRequestException()
+      }
+      if (!(await this.verifyUserPassword(user, dto.currentPassword))) {
+        throw new UnauthorizedException("invalidPassword")
+      }
+
       passwordHash = await passwordToHash(dto.password)
       delete dto.password
     }
 
-    assignDefined(obj, {
+    assignDefined(user, {
       ...dto,
       passwordHash,
     })
 
-    return await this.repo.save(obj)
+    return await this.repo.save(user)
   }
 
   // passwordHash is a hidden field - we need to build a query to get it directly
