@@ -65,7 +65,7 @@ describe("Applications", () => {
       id: user1Profile.id,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      email: "change@email.com",
+      email: "test@example.com",
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -181,7 +181,7 @@ describe("Applications", () => {
       dob: new Date(),
       firstName: "First",
       lastName: "Last",
-      email: "test@example.com",
+      email: "test2@example.com",
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
