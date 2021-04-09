@@ -1218,6 +1218,9 @@ export interface UserUpdate {
   confirmedAt?: Date;
 
   /**  */
+  email: string;
+
+  /**  */
   firstName: string;
 
   /**  */
