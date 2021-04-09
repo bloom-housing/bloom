@@ -14,19 +14,28 @@ import {
   SiteAlert,
   ApiClientContext,
   RequireLogin,
+  AlertTypes,
+  passwordRegex,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormsLayout from "../../layouts/forms"
 
-export default () => {
+type AlertMessage = {
+  type: AlertTypes
+  message: string
+}
+
+const Edit = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const { profile } = useContext(UserContext)
   const { userService } = useContext(ApiClientContext)
-  const [successAlert, setSuccessAlert] = useState<string>()
-
-  const [requestError, setRequestError] = useState<string>()
+  const [passwordAlert, setPasswordAlert] = useState<AlertMessage>()
+  const [nameAlert, setNameAlert] = useState<AlertMessage>()
+  const [dobAlert, setDobAlert] = useState<AlertMessage>()
+  const [emailAlert, setEmailAlert] = useState<AlertMessage>()
+  const MIN_PASSWORD_LENGTH = 8
 
   const onNameSubmit = async (data: {
     firstName: string
@@ -34,13 +43,14 @@ export default () => {
     lastName: string
   }) => {
     const { firstName, middleName, lastName } = data
+    setNameAlert(null)
     try {
-      const result = await userService.update({
+      await userService.update({
         body: { ...profile, firstName, middleName, lastName },
       })
-      setSuccessAlert("Name update successful")
+      setNameAlert({ type: "success", message: `${t("account.settings.alerts.nameSuccess")}` })
     } catch (err) {
-      setRequestError(`${t("account.settings.errors.generic")}`)
+      setNameAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
       console.warn(err)
     }
   }
@@ -51,13 +61,14 @@ export default () => {
     birthYear: string
   }) => {
     const { birthDay, birthMonth, birthYear } = data
+    setDobAlert(null)
     try {
-      const result = await userService.update({
+      await userService.update({
         body: { ...profile, dob: new Date(`${birthYear}-${birthMonth}-${birthDay}`) },
       })
-      setSuccessAlert("Birthdate update successful")
+      setDobAlert({ type: "success", message: `${t("account.settings.alerts.dobSuccess")}` })
     } catch (err) {
-      setRequestError(`${t("account.settings.errors.generic")}`)
+      setDobAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
       console.warn(err)
     }
   }
@@ -65,27 +76,44 @@ export default () => {
   const onEmailSubmit = async (data: { email: string }) => {
     // const { email } = data
     // TODO: Hook up to backend
+    setEmailAlert(null)
     try {
-      const result = await userService.update({
-        body: { ...profile },
-      })
-      setSuccessAlert("Email update successful")
+      // await userService.update({
+      //   body: { ...profile, email },
+      // })
+      setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
     } catch (err) {
-      setRequestError(`${t("account.settings.errors.generic")}`)
+      setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
       console.warn(err)
     }
   }
 
-  const onPasswordSubmit = async (data: { password: string; passwordConfirmation: string }) => {
-    // const { password, passwordConfirmation } = data
-    // TODO: Hook up to backend
+  const onPasswordSubmit = async (data: {
+    password: string
+    passwordConfirmation: string
+    currentPassword: string
+  }) => {
+    const { password, passwordConfirmation, currentPassword } = data
+    setPasswordAlert(null)
+    if (passwordConfirmation !== password) {
+      setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.passwordMatch")}` })
+      return
+    }
     try {
-      const result = await userService.update({
-        body: { ...profile },
+      await userService.update({
+        body: { ...profile, password, currentPassword },
       })
-      setSuccessAlert("Password update successful")
+      setPasswordAlert({
+        type: "success",
+        message: `${t("account.settings.alerts.passwordSuccess")}`,
+      })
     } catch (err) {
-      setRequestError(`${t("account.settings.errors.generic")}`)
+      const { status } = err.response || {}
+      if (status === 401) {
+        setPasswordAlert({ type: "alert", message: `Invalid current password. Please try again.` })
+      } else {
+        setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
+      }
       console.warn(err)
     }
   }
@@ -98,48 +126,40 @@ export default () => {
             <Icon size="2xl" symbol="settings" />
             <h2 className="form-card__title">Account Settings</h2>
           </div>
-
-          {successAlert && (
-            <AlertBox type="success" onClose={() => setSuccessAlert(null)} inverted closeable>
-              {successAlert}
-            </AlertBox>
-          )}
-
-          {requestError && (
-            <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
-              {requestError}
-            </AlertBox>
-          )}
           <SiteAlert type="notice" dismissable />
-
           <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
+            {nameAlert && (
+              <AlertBox type={nameAlert.type} onClose={() => setNameAlert(null)} inverted closeable>
+                {nameAlert.message}
+              </AlertBox>
+            )}
             <div className="form-card__group border-b">
               <label className="field-label--caps" htmlFor="firstName">
-                Your Name
+                {t("application.name.yourName")}
               </label>
 
               <Field
                 controlClassName="mt-2"
                 name="firstName"
-                placeholder={"First Name"}
+                placeholder={`${t("application.name.firstName")}`}
                 error={errors.firstName}
-                errorMessage="Please enter a First Name"
+                errorMessage={t("errors.firstNameError")}
                 register={register}
                 defaultValue={profile ? profile.firstName : null}
               />
 
               <Field
                 name="middleName"
-                placeholder="Middle Name (optional)"
+                placeholder={`${t("application.name.middleNameOptional")}`}
                 register={register}
                 defaultValue={profile ? profile.middleName : null}
               />
 
               <Field
                 name="lastName"
-                placeholder="Last Name"
+                placeholder={`${t("application.name.lastName")}`}
                 error={errors.lastName}
-                errorMessage="Please enter a Last Name"
+                errorMessage={t("errors.lastNameError")}
                 register={register}
                 defaultValue={profile ? profile.lastName : null}
               />
@@ -150,34 +170,39 @@ export default () => {
                   }}
                   className={"items-center"}
                 >
-                  Update
+                  {t("account.settings.update")}
                 </Button>
               </div>
             </div>
           </Form>
           <Form id="update-birthdate" onSubmit={handleSubmit(onBirthdateSubmit)}>
+            {dobAlert && (
+              <AlertBox type={dobAlert.type} onClose={() => setDobAlert(null)} inverted closeable>
+                {dobAlert.message}
+              </AlertBox>
+            )}
             <div className="form-card__group border-b">
               <label className="field-label--caps" htmlFor="birthMonth">
-                Your Date of Birth
+                {`${t("application.name.yourDateOfBirth")}`}
               </label>
               <div className="field-group--dob mt-2">
                 <Field
                   name="birthMonth"
-                  placeholder="MM"
+                  placeholder={`${t("account.settings.placeholders.month")}`}
                   error={errors.birthMonth}
                   register={register}
                   defaultValue={profile ? moment(new Date(profile.dob)).utc().format("MM") : null}
                 />
                 <Field
                   name="birthDay"
-                  placeholder="DD"
+                  placeholder={`${t("account.settings.placeholders.day")}`}
                   error={errors.birthDay}
                   register={register}
                   defaultValue={profile ? moment(new Date(profile.dob)).utc().format("DD") : null}
                 />
                 <Field
                   name="birthYear"
-                  placeholder="YYYY"
+                  placeholder={`${t("account.settings.placeholders.year")}`}
                   error={errors.birthYear}
                   register={register}
                   defaultValue={profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null}
@@ -190,22 +215,32 @@ export default () => {
                   }}
                   className={"items-center"}
                 >
-                  Update
+                  {t("account.settings.update")}
                 </Button>
               </div>
             </div>
           </Form>
           <Form id="update-email" onSubmit={handleSubmit(onEmailSubmit)}>
+            {emailAlert && (
+              <AlertBox
+                type={emailAlert.type}
+                onClose={() => setEmailAlert(null)}
+                inverted
+                closeable
+              >
+                {emailAlert.message}
+              </AlertBox>
+            )}
             <div className="form-card__group border-b">
               <Field
                 caps={true}
                 type="email"
                 name="email"
-                label="Email"
+                label={`${t("t.email")}`}
                 placeholder="example@web.com"
                 validation={{ pattern: emailRegex }}
                 error={errors.email}
-                errorMessage="Please enter an email address"
+                errorMessage={`${t("errors.emailAddressError")}`}
                 register={register}
                 defaultValue={profile ? profile.email : null}
               />
@@ -216,28 +251,32 @@ export default () => {
                   }}
                   className={"items-center"}
                 >
-                  Update
+                  {t("account.settings.update")}
                 </Button>
               </div>
             </div>
           </Form>
           <Form id="update-password" onSubmit={handleSubmit(onPasswordSubmit)}>
+            {passwordAlert && (
+              <AlertBox
+                type={passwordAlert.type}
+                onClose={() => setPasswordAlert(null)}
+                inverted
+                closeable
+              >
+                {passwordAlert.message}
+              </AlertBox>
+            )}
             <div className="form-card__group border-b">
-              <p className="field-note mb-4">
-                {
-                  "When changing your password make sure you make note of it so you remember it in the future."
-                }
-              </p>
+              <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>
               <div className={"flex flex-col"}>
                 <Field
                   caps={true}
                   type="password"
-                  name="oldPassword"
-                  label="Old Password"
-                  placeholder="Old password"
-                  validation={{ minLength: 8 }}
+                  name="currentPassword"
+                  label={t("account.settings.currentPassword")}
+                  placeholder="Current password"
                   error={errors.password}
-                  errorMessage="Please enter a valid password"
                   register={register}
                   className={"mb-1"}
                 />
@@ -253,20 +292,22 @@ export default () => {
                   caps={true}
                   type="password"
                   name="password"
-                  label="New Password"
-                  placeholder="Must be 8 characters"
-                  validation={{ minLength: 8 }}
+                  label={t("account.settings.newPassword")}
+                  placeholder={t("authentication.createAccount.mustBe8Chars")}
+                  validation={{
+                    minLength: MIN_PASSWORD_LENGTH,
+                    pattern: passwordRegex,
+                  }}
                   error={errors.password}
-                  errorMessage="Please enter a valid password"
+                  errorMessage={t("authentication.signIn.passwordError")}
                   register={register}
                   className={"mb-1"}
                 />
               </div>
+              {errors.password && <p>{errors.password.message}</p>}
 
               <p className="field-note mb-4 mt-4">
-                {
-                  "Must be at least 8 characters and include at least 1 letter and at least 1 number."
-                }
+                {t("authentication.createAccount.passwordInfo")}
               </p>
 
               <div className="mt-5">
@@ -274,15 +315,19 @@ export default () => {
                   caps={true}
                   type="password"
                   name="passwordConfirmation"
-                  label="Confirm New Password"
-                  placeholder="Must be 8 characters"
-                  validation={{ minLength: 8 }}
+                  label={t("account.settings.confirmNewPassword")}
+                  placeholder={t("authentication.createAccount.mustBe8Chars")}
+                  validation={{
+                    minLength: MIN_PASSWORD_LENGTH,
+                    pattern: passwordRegex,
+                  }}
                   error={errors.password}
-                  errorMessage="Please enter a valid password"
+                  errorMessage={t("authentication.signIn.passwordError")}
                   register={register}
                   className={"mb-1"}
                 />
               </div>
+              {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
 
               <div className="text-center mt-5">
                 <Button
@@ -291,7 +336,7 @@ export default () => {
                   }}
                   className={"items-center"}
                 >
-                  Update
+                  {t("account.settings.update")}
                 </Button>
               </div>
             </div>
@@ -301,3 +346,5 @@ export default () => {
     </RequireLogin>
   )
 }
+
+export default Edit
