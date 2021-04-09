@@ -46,7 +46,7 @@ export class ApplicationsService {
       orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
       search: (qb, { search }) =>
         qb.andWhere(
-          `to_tsvector('english', concat_ws(' ', applicant.firstName, applicant.lastName)) @@ to_tsquery(CONCAT(CAST(plainto_tsquery(:search) as text), ':*'))`,
+          `to_tsvector('english', REGEXP_REPLACE(concat_ws(' ', applicant, alternateContact.emailAddress), '[_]|[-]', '/', 'g')) @@ to_tsquery(CONCAT(CAST(plainto_tsquery(REGEXP_REPLACE(:search, '[_]|[-]', '/', 'g')) as text), ':*'))`,
           {
             search,
           }
