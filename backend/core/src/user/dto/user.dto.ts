@@ -122,7 +122,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   updatedAt?: Date
 
   @Expose()
-  @IsOptional()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Matches(passwordRegex, {
     message: "passwordTooWeak",
