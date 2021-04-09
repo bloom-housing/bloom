@@ -100,7 +100,6 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "email",
   "leasingAgentInListings",
   "roles",
 ] as const) {
