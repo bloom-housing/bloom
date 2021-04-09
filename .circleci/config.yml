@@ -117,3 +117,5 @@ workflows:
           build: yarn test:backend:core:dbsetup
           start: yarn dev:all
           wait-on: "http://localhost:3000"
+          store-artifacts:
+            path: integration-tests/test-results
