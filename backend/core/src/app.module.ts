@@ -44,11 +44,14 @@ export class AppModule {
      * https://help.heroku.com/HC0F8CUS/redis-connection-issues
      * https://devcenter.heroku.com/articles/heroku-redis#ioredis-module
      */
-    const redis = new Redis(process.env.REDIS_TLS_URL, {
-      tls: {
-        rejectUnauthorized: false,
-      },
-    })
+    const redis =
+      "0" === process.env.REDIS_USE_TLS
+        ? new Redis(process.env.REDIS_URL)
+        : new Redis(process.env.REDIS_TLS_URL, {
+            tls: {
+              rejectUnauthorized: false,
+            },
+          })
 
     return {
       module: AppModule,
