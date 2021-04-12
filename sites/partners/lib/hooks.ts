@@ -3,6 +3,12 @@ import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
 
+type UseSingleApplicationDataProps = {
+  page?: number
+  limit?: number
+  listingId: string
+}
+
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(ApiClientContext)
   const fetcher = () => listingsService.retrieve({ listingId })
@@ -83,5 +89,30 @@ export function useListAsCsv(listingId: string, includeHeaders: boolean) {
   return {
     mutate,
     loading,
+  }
+}
+
+export function useFlaggedApplicationsList({
+  page,
+  limit,
+  listingId,
+}: UseSingleApplicationDataProps) {
+  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+
+  const params = {
+    page,
+    limit,
+    listingId,
+  }
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets`
+  const fetcher = () => applicationFlaggedSetsService.list(params)
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data: data,
+    loading: !error && !data,
+    error: error,
   }
 }
