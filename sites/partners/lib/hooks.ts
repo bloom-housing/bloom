@@ -111,8 +111,8 @@ export function useFlaggedApplicationsList({
   const { data, error } = useSWR(endpoint, fetcher)
 
   return {
-    data: data,
+    data,
+    error,
     loading: !error && !data,
-    error: error,
   }
 }
