@@ -192,6 +192,7 @@ const Edit = () => {
                   birthYear: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
                 }}
                 label={t("application.name.yourDateOfBirth")}
+                errorMessage={t("errors.dateOfBirthError")}
               />
               <div className="text-center mt-5">
                 <Button className="items-center">{t("account.settings.update")}</Button>
