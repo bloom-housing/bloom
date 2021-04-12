@@ -4,8 +4,13 @@
 process.env.TZ = "UTC"
 
 module.exports = {
-  testRegex: "/*.test.tsx$",
-  collectCoverageFrom: ["**/*.tsx", "!**/*.stories.tsx"],
+  testRegex: ["/*.test.tsx$", "/*.test.ts$"],
+  collectCoverageFrom: [
+    "**/*.tsx",
+    "!**/*.stories.tsx",
+    "<rootDir>/ui-components/src/helpers/*.ts",
+    "!<rootDir>/ui-components/src/helpers/blankApplication.ts",
+  ],
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "test-coverage",
   coverageThreshold: {
@@ -25,7 +30,6 @@ module.exports = {
   rootDir: "..",
   roots: ["<rootDir>/ui-components"],
   transform: {
-    "^.+\\.stories\\.[t|j]sx$": "@storybook/addon-storyshots/injectFileName",
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
   setupFiles: ["dotenv/config"],

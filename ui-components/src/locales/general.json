@@ -1,11 +1,20 @@
 {
   "account": {
     "accountSettings": "Account Settings",
+    "errorFetchingApplications": "Error fetching applications",
+    "noApplications": "It looks like you haven't applied to any listings yet.",
     "accountSettingsSubtitle": "Account Settings, email and password",
     "createAccount": "Create Account",
     "haveAnAccount": "Already have an account?",
     "myApplications": "My Applications",
-    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
+    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied",
+    "application": {
+      "confirmation": "Confirmation",
+      "error": "Error",
+      "noAccessError": "No application with that ID exists",
+      "noApplicationError": "No application with that ID exists",
+      "return": "Return to applications"
+    }
   },
   "applications": {
     "begin": {
@@ -471,7 +480,7 @@
     "timeout": {
       "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information if you choose not to respond.",
       "action": "Continue working",
-      "afterMessage": "We care about your security. We ended your session due to inactivity. Please log in or start a new application to continue."
+      "afterMessage": "We care about your security. We ended your session due to inactivity. Please start a new application to continue."
     },
     "continueApplication": "Continue Application",
     "applicationNeverSubmitted": "Your application was never submitted",
@@ -514,6 +523,41 @@
       "errorGenericMessage": "Please try again, or contact support for help.",
       "forgotPassword": "Forgot password?",
       "success": "Welcome back, %{name}!"
+    },
+    "createAccount": {
+      "accountConfirmed": "Your account was successfully confirmed.",
+      "anEmailHasBeenSent": "An email has been sent to %{email}",
+      "confirmationInstruction": "Please click on the link in the email we sent you in order to complete account creation.",
+      "confirmationNeeded": "Confirmation needed",
+      "emailSent": "Confirmation email has been sent. Please check your inbox.",
+      "yourName": "Your Name",
+      "firstName": "First Name",
+      "middleNameOptional": "Middle Name (optional)",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "yourDateOfBirth": "Your Date of Birth",
+      "email": "Email",
+      "emailPrivacy": "We will only use your email address to contact you about your application.",
+      "reEnterEmail": "Re-enter email address",
+      "reEnterPassword": "Re-enter your password",
+      "resendTheEmail": "Resend the email",
+      "linkExpired": "Your link has expired",
+      "mustBe8Chars": "Must be 8 characters",
+      "password": "Password",
+      "passwordInfo": "Must be at least 8 characters and include at least 1 letter and at least one number.",
+      "resendEmailInfo": "Please click on the link in the email we send you within 24 hours in order to complete account creation.",
+      "resendAnEmailTo": "Resend an email to",
+      "errors": {
+        "accountConfirmed": "Your account is already confirmed.",
+        "errorSaving": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
+        "emailInUse": "Email is already in use",
+        "emailMismatch": "The emails do not match",
+        "emailNotFound": "Email not found. Please register first.",
+        "passwordMismatch": "The passwors do not match",
+        "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
+        "tokenExpired": "Your link has expired.",
+        "tokenMissing": "Wrong token provided."
+      }
     },
     "signOut": {
       "success": "You have successfully logged out of your account."
@@ -632,7 +676,7 @@
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
     "lotteryResults": {
-      "completeResultsWillBePosted": "Complete lottery results will be posted on this date by %{hour}.",
+      "completeResultsWillBePosted": "Complete lottery results will be posted soon.",
       "downloadResults": "Download Results",
       "header": "Lottery Results"
     },
@@ -872,6 +916,7 @@
     "none": "None",
     "noneFound": "None found.",
     "occupancy": "Occupancy",
+    "ok": "OK",
     "or": "or",
     "pageXofY": "Page %{num} of %{total}",
     "people": "people",
@@ -929,7 +974,7 @@
     "seeRentalListings": "See Rentals",
     "title": "Apply for affordable housing in",
     "seeMoreOpportunities": "See more rental and ownership housing opportunities",
-    "viewAdditionalHousing": "View Additional Housing Details"
+    "viewAdditionalHousing": "View Additional Housing Opportunities and Resources"
   },
   "whatToExpect": {
     "label": "What to Expect",

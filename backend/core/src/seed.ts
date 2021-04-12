@@ -20,7 +20,13 @@ const newSeed = (): ListingSeed => {
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
+  const userService = app.get<UserService>(UserService)
   const listing1 = await seedListing(app, newSeed())
+  await Promise.all([
+    listing1.leasingAgents.map(async (agent: User) => {
+      await userService.confirm({ token: agent.confirmationToken })
+    }),
+  ])
   const listingSeed = newSeed()
   const listing2 = await seedListing(app, {
     ...listingSeed,
@@ -30,41 +36,75 @@ async function bootstrap() {
         email: "leasing-agent-2@example.com",
       },
     ],
+    preferences: [
+      {
+        ordinal: 1,
+        title: "Yet another preference for live or work",
+        subtitle: "",
+        description: "Description",
+        links: [],
+        formMetadata: {
+          key: "liveWork",
+          options: [
+            {
+              key: "live",
+              extraData: [],
+            },
+            {
+              key: "work",
+              extraData: [],
+            },
+          ],
+        },
+      },
+    ],
   })
+  await Promise.all([
+    listing2.leasingAgents.map(async (agent: User) => {
+      await userService.confirm({ token: agent.confirmationToken })
+    }),
+  ])
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
 
-  const userService = app.get<UserService>(UserService)
   const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
+      emailConfirmation: "test@example.com",
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
+      passwordConfirmation: "Abcdef1!",
     })
   )
+  await userService.confirm({ token: user1.confirmationToken })
 
   const user2 = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "test2@example.com",
+      emailConfirmation: "test2@example.com",
       firstName: "Second",
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
       password: "ghijkl",
+      passwordConfirmation: "Ghijkl1!",
     })
   )
+  await userService.confirm({ token: user2.confirmationToken })
 
   const admin = await userService.createUser(
     plainToClass(UserCreateDto, {
       email: "admin@example.com",
+      emailConfirmation: "admin@example.com",
       firstName: "Second",
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
+      passwordConfirmation: "Abcdef1!",
     })
   )
 
@@ -79,6 +119,7 @@ async function bootstrap() {
 
   admin.isAdmin = true
   await userRepo.save(admin)
+  await userService.confirm({ token: admin.confirmationToken })
 
   await app.close()
 }

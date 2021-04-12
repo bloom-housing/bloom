@@ -147,7 +147,9 @@ const TimeField = ({
       </div>
 
       <div id={`${id}-error`} className="field error">
-        <ErrorMessage error={error}>{t("errors.timeError")}</ErrorMessage>
+        <ErrorMessage id={"time-field-error"} error={error}>
+          {t("errors.timeError")}
+        </ErrorMessage>
       </div>
     </fieldset>
   )

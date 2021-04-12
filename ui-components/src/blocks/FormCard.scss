@@ -171,6 +171,9 @@
   @apply bg-gray-300;
   @apply flex;
   @apply justify-between;
+  @apply border-solid;
+  @apply border-t;
+  @apply border-gray-450;
 
   .edit-link {
     @apply self-center;

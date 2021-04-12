@@ -1,5 +1,5 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render } from "@testing-library/react"
 import { RequireLogin } from "../../src/authentication/RequireLogin"
 import { UserContext } from "../../src/authentication/UserContext"
 import { User } from "@bloom-housing/backend-core/types"
@@ -33,36 +33,51 @@ beforeEach(() => {
   mockPush.mockReset()
 })
 
-const renderComponent = () =>
-  mount(
-    <UserContext.Provider value={{ initialStateLoaded, profile }}>
-      <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
-        <div id="child" />
-      </RequireLogin>
-    </UserContext.Provider>
-  )
-
 const itShouldRender = () =>
   test("it renders successfully", () => {
-    const wrapper = renderComponent()
-    expect(wrapper.find("div#child").exists()).toBe(true)
+    const { getByLabelText } = render(
+      <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
+          <div aria-label="child" />
+        </RequireLogin>
+      </UserContext.Provider>
+    )
+    expect(getByLabelText("child")).toBeTruthy()
   })
 
 const itShouldNotRenderChildren = () =>
   test("it should not render children", () => {
-    const wrapper = renderComponent()
-    expect(wrapper.find("div#child").exists()).toBe(false)
+    const { queryByLabelText } = render(
+      <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
+          <div id="child" />
+        </RequireLogin>
+      </UserContext.Provider>
+    )
+    expect(queryByLabelText("child")).toBeFalsy()
   })
 
 const itShouldRedirect = () =>
   test("it should redirect", () => {
-    renderComponent()
+    const { container, getByText } = render(
+      <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
+          <div id="child" />
+        </RequireLogin>
+      </UserContext.Provider>
+    )
     expect(mockPush).toHaveBeenCalledWith("/sign-in")
   })
 
 const itShouldNotRedirect = () =>
   test("it should not redirect", () => {
-    renderComponent()
+    const { container, getByText } = render(
+      <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
+          <div id="child" />
+        </RequireLogin>
+      </UserContext.Provider>
+    )
     expect(mockPush).not.toHaveBeenCalled()
   })
 

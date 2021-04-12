@@ -6,10 +6,12 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
+import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 
 @Injectable()
 export class ApplicationsService {
   constructor(
+    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
     @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
@@ -46,7 +48,7 @@ export class ApplicationsService {
       orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
       search: (qb, { search }) =>
         qb.andWhere(
-          `to_tsvector('english', concat_ws(' ', "applicant")) @@ plainto_tsquery(:search)`,
+          `to_tsvector('english', REGEXP_REPLACE(concat_ws(' ', applicant, alternateContact.emailAddress), '[_]|[-]', '/', 'g')) @@ to_tsquery(CONCAT(CAST(plainto_tsquery(REGEXP_REPLACE(:search, '[_]|[-]', '/', 'g')) as text), ':*'))`,
           {
             search,
           }
@@ -67,6 +69,8 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("application.accessibility", "accessibility")
     qb.leftJoinAndSelect("application.demographics", "demographics")
     qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
+    qb.leftJoinAndSelect("householdMembers.address", "householdMembers_address")
+    qb.leftJoinAndSelect("householdMembers.workAddress", "householdMembers_workAddress")
     qb.where("application.id IS NOT NULL")
 
     // --> Build additional query builder parts
@@ -80,10 +84,12 @@ export class ApplicationsService {
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
-    return await this.repository.save({
+    const application = await this.repository.save({
       ...applicationCreateDto,
       user,
     })
+    await this.applicationFlaggedSetsService.onApplicationSave(application)
+    return application
   }
 
   async findOne(applicationId: string) {

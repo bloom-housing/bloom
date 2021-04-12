@@ -16,6 +16,7 @@ import Joi from "joi"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
+import { ApplicationFlaggedSetsModule } from "./application-flagged-sets/application-flagged-sets.module"
 import * as bodyParser from "body-parser"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
@@ -30,7 +31,9 @@ export function applicationSetup(app: INestApplication) {
   return app
 }
 
-@Module({})
+@Module({
+  imports: [ApplicationFlaggedSetsModule],
+})
 export class AppModule {
   static register(dbOptions): DynamicModule {
     /**

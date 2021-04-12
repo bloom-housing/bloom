@@ -1,6 +1,5 @@
 .status-item {
   @apply relative;
-  @apply text-sm;
   @apply text-gray-800;
   @apply border-b;
   @apply border-solid;
@@ -29,8 +28,8 @@
     @apply border-b;
     @apply border-solid;
     @apply border-gray-450;
-  }  
-}  
+  }
+}
 
 .status-item__title {
   @apply text-xl;
@@ -38,12 +37,12 @@
   @apply tracking-wider;
   @apply mb-0;
   @apply uppercase;
-} 
+}
 
 .status-item__due {
   @screen md {
-   @apply text-right;
-   @apply self-center;
+    @apply text-right;
+    @apply self-center;
   }
 }
 
@@ -54,8 +53,15 @@
   }
 }
 
-.status-item__details {
+.status-confirmation__number {
+  @apply pt-4;
+}
 
+.status-item__details {
+  @apply text-center;
+  @screen md {
+    @apply text-left;
+  }
 }
 
 .status-item__action {
@@ -102,35 +108,9 @@
 
 .status-item__label {
   @apply relative;
-
-  &.is-submitted,
-  &.is-past-due {
-    @apply pr-6;
-
-    &:after {
-      @apply absolute;
-      @apply bg-lush;
-      @apply h-3;
-      @apply w-3;
-      @apply right-0;
-      @apply block;
-      @apply rounded-full;
-      top: 50%;
-      content: '';
-      transform: translateY(-50%);
-    }
-  }
-
-  &.is-past-due {
-    &:after {
-      @apply bg-alert;
-    }  
-  }  
 }
 
 .status-item__link {
-  @apply mx-2;
-
   @screen md {
     @apply mr-4;
   }
@@ -140,9 +120,17 @@
   @apply text-sm;
 }
 
-.status-item__address,
-.status-item__number {
+.status-item__address {
   @apply mb-4;
+}
+
+.status-item__confirm-text {
+  @apply text-tiny;
+  @apply mb-4;
+}
+
+.status-item__confirm-number {
+  @apply text-lg;
 }
 
 .status-item__address {

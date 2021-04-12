@@ -22,6 +22,7 @@ export class ListingDto extends OmitType(Listing, [
   "leasingAgentAddress",
   "leasingAgents",
   "applications",
+  "applicationFlaggedSets",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

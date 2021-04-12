@@ -4,14 +4,17 @@ import { Expose, Type } from "class-transformer"
 import {
   IsDate,
   IsDefined,
+  IsEmail,
   IsOptional,
   IsString,
   IsUUID,
+  Matches,
   MaxLength,
   ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { IdDto } from "../../shared/dto/id.dto"
+import { Match } from "../../shared/match.decorator"
 
 export class UserDto extends OmitType(User, [
   "applications",
@@ -42,8 +45,22 @@ export class UserDtoWithAccessToken extends UserDto {
   accessToken: string
 }
 
+export class EmailDto {
+  @Expose()
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  email: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  appUrl?: string | null
+}
+
 export class UserCreateDto extends OmitType(UserDto, [
   "id",
+  "confirmedAt",
+  "confirmationToken",
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
@@ -52,7 +69,28 @@ export class UserCreateDto extends OmitType(UserDto, [
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, {
+    message: "passwordTooWeak",
+    groups: [ValidationsGroupsEnum.default],
+  })
   password: string
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @Match("password", { groups: [ValidationsGroupsEnum.default] })
+  passwordConfirmation: string
+
+  @Expose()
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @Match("email", { groups: [ValidationsGroupsEnum.default] })
+  emailConfirmation: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  appUrl?: string | null
 }
 
 export class UserUpdateDto extends OmitType(UserDto, [
