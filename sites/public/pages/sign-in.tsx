@@ -92,14 +92,7 @@ const SignIn = () => {
             />
 
             <div className="text-center mt-6">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  //
-                }}
-              >
-                Sign In
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>Sign In</Button>
             </div>
           </Form>
         </div>

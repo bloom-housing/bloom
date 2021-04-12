@@ -109,7 +109,11 @@ export default () => {
 
           <div className="form-card__group border-b">
             <DOBField
-              applicant={application.applicant}
+              defaultDOB={{
+                birthDay: application.applicant.birthDay,
+                birthMonth: application.applicant.birthMonth,
+                birthYear: application.applicant.birthYear,
+              }}
               register={register}
               required={true}
               error={errors.applicant}

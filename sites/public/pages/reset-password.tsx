@@ -83,12 +83,7 @@ const ResetPassword = () => {
             />
 
             <div className="text-center mt-6">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  //
-                }}
-              >
+              <Button styleType={AppearanceStyleType.primary}>
                 {t("authentication.forgotPassword.changePassword")}
               </Button>
             </div>

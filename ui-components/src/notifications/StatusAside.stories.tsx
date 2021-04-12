@@ -14,7 +14,7 @@ export const WithButtonsAndMessages = () => (
   <StatusAside
     actions={[
       <GridCell key={0}>
-        <Button fullWidth={true} size={AppearanceSizeType.small} onClick={() => {}}>
+        <Button fullWidth={true} size={AppearanceSizeType.small}>
           Save
         </Button>
       </GridCell>,
@@ -23,7 +23,6 @@ export const WithButtonsAndMessages = () => (
           styleType={AppearanceStyleType.secondary}
           fullWidth={true}
           size={AppearanceSizeType.small}
-          onClick={() => {}}
         >
           Preview
         </Button>
@@ -33,7 +32,6 @@ export const WithButtonsAndMessages = () => (
           styleType={AppearanceStyleType.primary}
           fullWidth={true}
           size={AppearanceSizeType.small}
-          onClick={() => {}}
         >
           Submit
         </Button>
@@ -57,7 +55,7 @@ export const OnlyTimestamp = () => (
     columns={1}
     actions={[
       <GridCell key={0}>
-        <Button fullWidth={true} size={AppearanceSizeType.small} onClick={() => {}}>
+        <Button fullWidth={true} size={AppearanceSizeType.small}>
           Save
         </Button>
       </GridCell>,
@@ -66,7 +64,6 @@ export const OnlyTimestamp = () => (
           styleType={AppearanceStyleType.secondary}
           fullWidth={true}
           size={AppearanceSizeType.small}
-          onClick={() => {}}
         >
           Preview
         </Button>
