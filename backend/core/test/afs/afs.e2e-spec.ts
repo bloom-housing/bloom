@@ -36,6 +36,12 @@ describe("ApplicationFlaggedSets", () => {
   let householdMembersRepository: Repository<HouseholdMember>
   let listing1Id: string
 
+  const setupDb = async () => {
+    await householdMembersRepository.createQueryBuilder().delete().execute()
+    await applicationsRepository.createQueryBuilder().delete().execute()
+    await afsRepository.createQueryBuilder().delete().execute()
+  }
+
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
     const testEmailService = { confirmation: async () => {} }
@@ -66,12 +72,7 @@ describe("ApplicationFlaggedSets", () => {
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     const listings = await supertest(app.getHttpServer()).get("/listings").expect(200)
     listing1Id = listings.body[0].id
-  })
-
-  beforeEach(async () => {
-    await householdMembersRepository.createQueryBuilder().delete().execute()
-    await applicationsRepository.createQueryBuilder().delete().execute()
-    await afsRepository.createQueryBuilder().delete().execute()
+    await setupDb()
   })
 
   it(`should mark two similar application as flagged`, async () => {
@@ -165,14 +166,12 @@ describe("ApplicationFlaggedSets", () => {
     expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === false).length).toBe(1)
   })
 
-  afterEach(() => {
+  afterEach(async () => {
+    await setupDb()
     jest.clearAllMocks()
   })
 
   afterAll(async () => {
-    await householdMembersRepository.createQueryBuilder().delete().execute()
-    await applicationsRepository.createQueryBuilder().delete().execute()
-    await afsRepository.createQueryBuilder().delete().execute()
     await app.close()
   })
 })
