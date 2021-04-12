@@ -247,4 +247,9 @@ export class Application extends AbstractEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   submissionDate?: Date | null
+
+  @Column({ type: "bool", default: false })
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  markedAsDuplicate: boolean
 }

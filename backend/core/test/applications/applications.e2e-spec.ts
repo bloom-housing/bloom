@@ -9,13 +9,6 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import { EmailService } from "../../src/shared/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import {
-  ApplicationStatus,
-  ApplicationSubmissionType,
-  ApplicationUpdate,
-  IncomePeriod,
-  Language,
-} from "../../types"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
@@ -25,6 +18,7 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { getTestAppBody } from "../lib/get-test-app-body"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -45,107 +39,6 @@ describe("Applications", () => {
   let householdMembersRepository: Repository<HouseholdMember>
   let listing1Id: string
   let listing2Id: string
-
-  const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listingId?: string) => {
-    return {
-      appUrl: "",
-      listing: {
-        id: listingId,
-      },
-      language: Language.en,
-      status: ApplicationStatus.submitted,
-      submissionType: ApplicationSubmissionType.electronical,
-      acceptedTerms: false,
-      applicant: {
-        firstName: "Applicant",
-        middleName: "Middlename",
-        lastName: "",
-        birthMonth: "",
-        birthDay: "",
-        birthYear: "",
-        emailAddress: null,
-        noEmail: false,
-        phoneNumber: "",
-        phoneNumberType: "",
-        noPhone: false,
-        workInRegion: null,
-        address: {
-          street: "",
-          street2: "",
-          city: "",
-          state: "",
-          zipCode: "",
-          county: "",
-          latitude: null,
-          longitude: null,
-        },
-        workAddress: {
-          street: "",
-          street2: "",
-          city: "",
-          state: "",
-          zipCode: "",
-          county: "",
-          latitude: null,
-          longitude: null,
-        },
-      },
-      additionalPhone: true,
-      additionalPhoneNumber: "12345",
-      additionalPhoneNumberType: "cell",
-      contactPreferences: ["a", "b"],
-      householdSize: 1,
-      housingStatus: "status",
-      sendMailToMailingAddress: true,
-      mailingAddress: {
-        street: "",
-        street2: "",
-        city: "",
-        state: "",
-        zipCode: "",
-      },
-      alternateAddress: {
-        street: "",
-        street2: "",
-        city: "",
-        state: "",
-        zipCode: "",
-      },
-      alternateContact: {
-        type: "",
-        otherType: "",
-        firstName: "",
-        lastName: "",
-        agency: "",
-        phoneNumber: "",
-        emailAddress: "alternate@contact.com",
-        mailingAddress: {
-          street: "",
-          city: "",
-          state: "",
-          zipCode: "",
-        },
-      },
-      accessibility: {
-        mobility: null,
-        vision: null,
-        hearing: null,
-      },
-      demographics: {
-        ethnicity: "",
-        race: "",
-        gender: "",
-        sexualOrientation: "",
-        howDidYouHear: [],
-      },
-      incomeVouchers: true,
-      income: "100.00",
-      incomePeriod: IncomePeriod.perMonth,
-      householdMembers: [],
-      preferredUnit: ["a", "b"],
-      preferences: [],
-    }
-  }
 
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -213,9 +106,7 @@ describe("Applications", () => {
       const leasingAgentsIds = listing.leasingAgents.map((agent) => agent.id)
       return leasingAgentsIds.indexOf(leasingAgent2Profile.id) !== -1
     })[0].id
-  })
 
-  beforeEach(async () => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()
   })
@@ -653,7 +544,9 @@ describe("Applications", () => {
       .expect(400)
   })
 
-  afterEach(() => {
+  afterEach(async () => {
+    await householdMembersRepository.createQueryBuilder().delete().execute()
+    await applicationsRepository.createQueryBuilder().delete().execute()
     jest.clearAllMocks()
   })
 

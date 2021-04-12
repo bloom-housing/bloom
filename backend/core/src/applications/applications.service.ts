@@ -6,10 +6,12 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
+import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 
 @Injectable()
 export class ApplicationsService {
   constructor(
+    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
     @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
@@ -82,10 +84,12 @@ export class ApplicationsService {
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
-    return await this.repository.save({
+    const application = await this.repository.save({
       ...applicationCreateDto,
       user,
     })
+    await this.applicationFlaggedSetsService.onApplicationSave(application)
+    return application
   }
 
   async findOne(applicationId: string) {
