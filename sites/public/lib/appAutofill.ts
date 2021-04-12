@@ -20,7 +20,6 @@ class AutofillCleaner {
       removeAdditionalKeys().
       removeLiveWorkAddresses()
 
-    console.info("Behold!", this.application)
     return this.application
   }
 

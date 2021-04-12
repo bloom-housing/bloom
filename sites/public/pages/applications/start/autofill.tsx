@@ -48,7 +48,6 @@ export default () => {
       order: "DESC",
       limit: 1,
     })
-    console.debug(res)
     return res
   }
   const { data } = useSWR(
