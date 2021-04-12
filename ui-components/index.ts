@@ -75,6 +75,7 @@ export * from "./src/navigation/FooterNav"
 export * from "./src/navigation/LanguageNav"
 export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/UserNav"
+export * from "./src/navigation/ListingSecondaryNav"
 
 /* Notifications */
 export * from "./src/notifications/ApplicationStatus"
