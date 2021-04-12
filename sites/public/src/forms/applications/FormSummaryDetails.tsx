@@ -38,7 +38,7 @@ const reformatAddress = (address: Address) => {
   return newAddress
 }
 
-const FormSummaryDetails = ({ application, editMode = false }) => {
+const FormSummaryDetails = ({ application, editMode = false, hidePreferences = false }) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
@@ -261,7 +261,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
           )}
         </div>
 
-        {!application.autofilled && (
+        {!hidePreferences && (
           <>
             <h3 className="form--card__sub-header">
               {t("t.preferences")}

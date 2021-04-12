@@ -70,9 +70,7 @@ export default () => {
             {t("application.household.addMembers.title")}
           </h2>
           {application.autofilled && (
-            <p className="mt-4 field-note">
-              Please double-check the information for each household member.
-            </p>
+            <p className="mt-4 field-note">{t("application.household.addMembers.doubleCheck")}</p>
           )}
         </div>
 

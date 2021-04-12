@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 
 afterEach(cleanup)
 // Could not figure out how to test the field validations from here given this documentation: https://react-hook-form.com/advanced-usage/#TestingForm
-const Optional = () => {
+const Optional = ({ disabled = false }) => {
   const { register, watch, errors } = useForm({ mode: "onChange" })
   return (
     <DOBField
@@ -15,6 +15,7 @@ const Optional = () => {
       required={false}
       register={register}
       watch={watch}
+      disabled={disabled || undefined}
       error={errors?.dateOfBirth}
       atAge={true}
     />
@@ -27,5 +28,10 @@ describe("<DOBField>", () => {
     expect(getByLabelText("Month")).not.toBeNull()
     expect(getByLabelText("Day")).not.toBeNull()
     expect(getByLabelText("Year")).not.toBeNull()
+  })
+
+  it("can toggle all internal fields to be disabled", () => {
+    const { container } = render(<Optional disabled={true} />)
+    expect(container.querySelectorAll("input[disabled]").length).toBe(3)
   })
 })

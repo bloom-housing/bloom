@@ -77,16 +77,17 @@ export default () => {
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">
-            Save time by using the details from your last application
+            {t("application.autofill.saveTime")}
           </h2>
         </div>
         <div className="form-card__pager-row px-16">
-          <p className="field-note py-2">
-            We'll simply pre-fill your application with the following details, and you can make
-            updates as you go.
-          </p>
+          <p className="field-note py-2">{t("application.autofill.prefillYourApplication")}</p>
         </div>
-        <FormSummaryDetails application={previousApplication} editMode={false} />
+        <FormSummaryDetails
+          application={previousApplication}
+          editMode={false}
+          hidePreferences={true}
+        />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
@@ -96,7 +97,7 @@ export default () => {
                   useDetails = true
                 }}
               >
-                {"Start with these details"}
+                {t("application.autofill.start")}
               </Button>
             </div>
             <div className="form-card__pager-row">
@@ -107,7 +108,7 @@ export default () => {
                   useDetails = false
                 }}
               >
-                {"Reset and start fresh"}
+                {t("application.autofill.reset")}
               </Button>
             </div>
           </div>
