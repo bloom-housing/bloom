@@ -3,7 +3,7 @@ import "./AppStatusItem.scss"
 import moment from "moment"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { LocalizedLink } from "../actions/LocalizedLink"
-import { t } from "@bloom-housing/ui-components"
+import { t } from "../helpers/translator"
 
 interface AppStatusItemProps {
   application: Application
