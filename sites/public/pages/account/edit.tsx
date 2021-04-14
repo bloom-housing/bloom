@@ -129,7 +129,7 @@ const Edit = () => {
         <FormCard>
           <div className="form-card__lead text-center border-b mx-0">
             <Icon size="2xl" symbol="settings" />
-            <h2 className="form-card__title">${t("account.accountSettings")}</h2>
+            <h2 className="form-card__title">{t("account.accountSettings")}</h2>
           </div>
           <SiteAlert type="notice" dismissable />
           <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
