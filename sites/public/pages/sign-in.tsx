@@ -74,7 +74,7 @@ const SignIn = () => {
               register={register}
             />
 
-            <aside className="float-right font-bold">
+            <aside className="float-right text-tiny font-semibold">
               <Link href="/forgot-password">
                 <a>{t("authentication.signIn.forgotPassword")}</a>
               </Link>

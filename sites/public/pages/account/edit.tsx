@@ -267,77 +267,76 @@ const Edit = () => {
               </AlertBox>
             )}
             <div className="form-card__group border-b">
-              <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>
-              <div className={"flex flex-col"}>
-                <Field
-                  caps={true}
-                  type="password"
-                  name="currentPassword"
-                  label={t("account.settings.currentPassword")}
-                  placeholder="Current password"
-                  error={errors.password}
-                  register={register}
-                  className={"mb-1"}
-                />
-                <div className="float-left font-bold">
-                  <Link href="/forgot-password">
-                    <a>{t("authentication.signIn.forgotPassword")}</a>
-                  </Link>
+              <fieldset>
+                <legend className="field-label--caps">{t("authentication.createAccount.password")}</legend>
+                <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>
+                <div className={"flex flex-col"}>
+                  <Field
+                    caps={true}
+                    type="password"
+                    name="currentPassword"
+                    label={t("account.settings.currentPassword")}
+                    readerOnly={true}
+                    placeholder="Current password"
+                    error={errors.password}
+                    register={register}
+                    className={"mb-1"}
+                  />
+                  <div className="float-left text-tiny font-semibold">
+                    <Link href="/forgot-password">
+                      <a>{t("authentication.signIn.forgotPassword")}</a>
+                    </Link>
+                  </div>
                 </div>
-              </div>
 
-              <div className="mt-5">
-                <Field
-                  caps={true}
-                  type="password"
-                  name="password"
-                  label={t("account.settings.newPassword")}
-                  placeholder={t("authentication.createAccount.mustBe8Chars")}
-                  validation={{
-                    minLength: MIN_PASSWORD_LENGTH,
-                    pattern: passwordRegex,
-                  }}
-                  error={errors.password}
-                  errorMessage={t("authentication.signIn.passwordError")}
-                  register={register}
-                  className={"mb-1"}
-                />
-              </div>
-              {errors.password && <p>{errors.password.message}</p>}
+                <div className="mt-5">
+                  <Field
+                    type="password"
+                    name="password"
+                    label={t("account.settings.newPassword")}
+                    note={t("authentication.createAccount.passwordInfo")}
+                    placeholder={t("authentication.createAccount.mustBe8Chars")}
+                    validation={{
+                      minLength: MIN_PASSWORD_LENGTH,
+                      pattern: passwordRegex,
+                    }}
+                    error={errors.password}
+                    errorMessage={t("authentication.signIn.passwordError")}
+                    register={register}
+                    className={"mb-1"}
+                  />
+                </div>
+                {errors.password && <p>{errors.password.message}</p>}
 
-              <p className="field-note mb-4 mt-4">
-                {t("authentication.createAccount.passwordInfo")}
-              </p>
+                <div className="mt-5">
+                  <Field
+                    type="password"
+                    name="passwordConfirmation"
+                    label={t("account.settings.confirmNewPassword")}
+                    placeholder={t("authentication.createAccount.mustBe8Chars")}
+                    validation={{
+                      minLength: MIN_PASSWORD_LENGTH,
+                      pattern: passwordRegex,
+                    }}
+                    error={errors.password}
+                    errorMessage={t("authentication.signIn.passwordError")}
+                    register={register}
+                    className={"mb-1"}
+                  />
+                </div>
+                {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
 
-              <div className="mt-5">
-                <Field
-                  caps={true}
-                  type="password"
-                  name="passwordConfirmation"
-                  label={t("account.settings.confirmNewPassword")}
-                  placeholder={t("authentication.createAccount.mustBe8Chars")}
-                  validation={{
-                    minLength: MIN_PASSWORD_LENGTH,
-                    pattern: passwordRegex,
-                  }}
-                  error={errors.password}
-                  errorMessage={t("authentication.signIn.passwordError")}
-                  register={register}
-                  className={"mb-1"}
-                />
-              </div>
-              {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
-
-              <div className="text-center mt-5">
-                <Button
-                  onClick={() => {
-                    //
-                  }}
-                  className={"items-center"}
-                >
-                  {t("account.settings.update")}
-                </Button>
-              </div>
+                <div className="text-center mt-5">
+                  <Button
+                    onClick={() => {
+                      //
+                    }}
+                    className={"items-center"}
+                  >
+                    {t("account.settings.update")}
+                  </Button>
+                </div>
+              </fieldset>
             </div>
           </Form>
         </FormCard>

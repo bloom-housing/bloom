@@ -126,7 +126,7 @@ export default () => {
               errorMessage={t("authentication.signIn.loginError")}
               register={register}
             />
-            <p className="text text-gray-600 text-sm">
+            <p className="text text-gray-750 text-tiny">
               {t("authentication.createAccount.reEnterEmail")}
             </p>
             <Field
@@ -170,7 +170,7 @@ export default () => {
               errorMessage={t("authentication.signIn.passwordError")}
               register={register}
             />
-            <p className="text text-gray-600 text-sm">
+            <p className="text text-gray-750 text-tiny">
               {t("authentication.createAccount.reEnterPassword")}
             </p>
             <Field
