@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { Inject, Injectable, Scope } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
 import { ApplicationUpdateDto } from "./dto/application.dto"
 import { User } from "../user/entities/user.entity"
@@ -7,16 +7,25 @@ import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
+import { authzActions, AuthzService } from "../auth/authz.service"
+import { Request as ExpressRequest } from "express"
+import { ListingsService } from "../listings/listings.service"
+import { EmailService } from "../shared/email.service"
+import { REQUEST } from "@nestjs/core"
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
   constructor(
+    @Inject(REQUEST) private req: ExpressRequest,
     private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
+    private readonly authzService: AuthzService,
+    private readonly listingsService: ListingsService,
+    private readonly emailService: EmailService,
     @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
   public async list(listingId: string | null, user?: User) {
-    return this.repository.find({
+    const applications = await this.repository.find({
       where: {
         ...(user && { user: { id: user.id } }),
         // Workaround for params.listingId resulting in:
@@ -29,6 +38,12 @@ export class ApplicationsService {
         createdAt: "DESC",
       },
     })
+    await Promise.all(
+      applications.map(async (application) => {
+        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+      })
+    )
+    return applications
   }
 
   /**
@@ -80,34 +95,44 @@ export class ApplicationsService {
       }
     })
 
-    return paginate(qb, { limit: params.limit, page: params.page })
+    const result = await paginate(qb, { limit: params.limit, page: params.page })
+    await Promise.all(
+      result.items.map(async (application) => {
+        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+      })
+    )
+    return result
   }
 
-  async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
-    const application = await this.repository.save({
-      ...applicationCreateDto,
-      user,
-    })
-    await this.applicationFlaggedSetsService.onApplicationSave(application)
+  async submit(applicationCreateDto: ApplicationUpdateDto) {
+    applicationCreateDto.submissionDate = new Date()
+    await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
+    const application = await this._create(applicationCreateDto)
     return application
   }
 
+  async create(applicationCreateDto: ApplicationUpdateDto) {
+    await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
+    return this._create(applicationCreateDto)
+  }
+
   async findOne(applicationId: string) {
-    return await this.repository.findOneOrFail({
+    const application = await this.repository.findOneOrFail({
       where: {
         id: applicationId,
       },
       relations: ["listing", "user"],
     })
+    await this.authorizeUserAction(this.req.user, application, authzActions.read)
+    return application
   }
 
-  async update(applicationUpdateDto: ApplicationUpdateDto, existing?: Application) {
-    const application =
-      existing ||
-      (await this.repository.findOneOrFail({
-        where: { id: applicationUpdateDto.id },
-        relations: ["listing", "user"],
-      }))
+  async update(applicationUpdateDto: ApplicationUpdateDto) {
+    const application = await this.repository.findOneOrFail({
+      where: { id: applicationUpdateDto.id },
+      relations: ["listing", "user"],
+    })
+    await this.authorizeUserAction(this.req.user, application, authzActions.update)
     Object.assign(application, {
       ...applicationUpdateDto,
       id: application.id,
@@ -118,6 +143,28 @@ export class ApplicationsService {
   }
 
   async delete(applicationId: string) {
+    await this.findOne(applicationId)
     return await this.repository.softRemove({ id: applicationId })
+  }
+
+  private async _create(applicationCreateDto: ApplicationUpdateDto) {
+    const application = await this.repository.save({
+      ...applicationCreateDto,
+      user: this.req.user,
+    })
+    const listing = await this.listingsService.findOne(application.listing.id)
+    if (application.applicant.emailAddress) {
+      await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
+    }
+    await this.applicationFlaggedSetsService.onApplicationSave(application)
+    return application
+  }
+
+  private async authorizeUserAction(user, app, action) {
+    return this.authzService.canOrThrow(user, "application", action, {
+      ...app,
+      user_id: app.user?.id,
+      listing_id: app.listing?.id,
+    })
   }
 }
