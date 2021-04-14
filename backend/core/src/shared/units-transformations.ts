@@ -41,7 +41,7 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   // TODO https://github.com/bloom-housing/bloom/issues/872
   const amiChartItems = units[0].amiChart.items
   const hmiHeaders = {
-    householdSize: bmrProgramChart ? "Unit Type" : "listings.householdSize",
+    householdSize: bmrProgramChart ? "t.unitType" : "listings.householdSize",
   } as AnyDict
   const amiValues = amiPercentages
     .map((percent) => {
