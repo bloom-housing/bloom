@@ -45,8 +45,9 @@ describe("Properties", () => {
     expect(Array.isArray(res.body)).toBe(true)
   })
 
-  afterEach(() => {
+  afterEach((done) => {
     jest.clearAllMocks()
+    done()
   })
 
   afterAll(async () => {

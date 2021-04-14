@@ -199,8 +199,9 @@ describe("Authz", () => {
     })
   })
 
-  afterEach(() => {
+  afterEach((done) => {
     jest.clearAllMocks()
+    done()
   })
 
   afterAll(async () => {

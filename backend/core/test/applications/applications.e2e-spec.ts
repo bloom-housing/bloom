@@ -565,10 +565,11 @@ describe("Applications", () => {
     }
   })
 
-  afterEach(async () => {
+  afterEach(async (done) => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()
     jest.clearAllMocks()
+    done()
   })
 
   afterAll(async () => {

@@ -43,14 +43,15 @@ describe("Listings", () => {
     expect(res.body.length).toEqual(0)
   })
 
-  it("should return only active listings", async () => {
+  it("should return only active listings", async (done) => {
     const query = "/?jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
     expect(res.body.length).toEqual(2)
   })
 
-  afterEach(() => {
+  afterEach((done) => {
     jest.clearAllMocks()
+    done()
   })
 
   afterAll(async () => {
