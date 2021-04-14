@@ -4,8 +4,6 @@ This is the repository for the Bloom affordable housing system.
 
 ## System Overview
 
-An overview of the system will go here.
-
 ### Applications
 
 This repository contains refence implementations for each of the two main user-facing applications in the system:
