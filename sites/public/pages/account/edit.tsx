@@ -241,7 +241,9 @@ const Edit = () => {
             )}
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">{t("authentication.createAccount.password")}</legend>
+                <legend className="field-label--caps">
+                  {t("authentication.createAccount.password")}
+                </legend>
                 <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>
                 <div className={"flex flex-col"}>
                   <Field
