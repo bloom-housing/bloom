@@ -52,14 +52,7 @@ export default () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  //
-                }}
-              >
-                {t("t.confirm")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("t.confirm")}</Button>
             </Form>
           </div>
         </div>

@@ -33,6 +33,7 @@ import { Property } from "../../property/entities/property.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { CSVFormattingType } from "../../csv/formatting/application-formatting-metadata-factory"
+import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
 
 export enum ListingStatus {
   active = "active",
@@ -177,6 +178,12 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Application)
   applications: Application[]
+
+  @OneToMany(() => ApplicationFlaggedSet, (afs) => afs.listing)
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationFlaggedSet)
+  applicationFlaggedSets: ApplicationFlaggedSet[]
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()

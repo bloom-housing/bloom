@@ -16,6 +16,8 @@ import {
   RequireLogin,
   AlertTypes,
   passwordRegex,
+  DOBField,
+  DOBFieldValues,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormsLayout from "../../layouts/forms"
@@ -28,7 +30,7 @@ type AlertMessage = {
 const Edit = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, watch } = useForm()
   const { profile } = useContext(UserContext)
   const { userService } = useContext(ApiClientContext)
   const [passwordAlert, setPasswordAlert] = useState<AlertMessage>()
@@ -50,25 +52,26 @@ const Edit = () => {
       })
       setNameAlert({ type: "success", message: `${t("account.settings.alerts.nameSuccess")}` })
     } catch (err) {
-      setNameAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
+      setNameAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
     }
   }
 
-  const onBirthdateSubmit = async (data: {
-    birthDay: string
-    birthMonth: string
-    birthYear: string
-  }) => {
-    const { birthDay, birthMonth, birthYear } = data
+  const onBirthdateSubmit = async (data: { dateOfBirth: DOBFieldValues }) => {
+    const { dateOfBirth } = data
     setDobAlert(null)
     try {
       await userService.update({
-        body: { ...profile, dob: new Date(`${birthYear}-${birthMonth}-${birthDay}`) },
+        body: {
+          ...profile,
+          dob: new Date(
+            `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
+          ),
+        },
       })
       setDobAlert({ type: "success", message: `${t("account.settings.alerts.dobSuccess")}` })
     } catch (err) {
-      setDobAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
+      setDobAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
     }
   }
@@ -82,7 +85,7 @@ const Edit = () => {
       })
       setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
     } catch (err) {
-      setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
+      setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
     }
   }
@@ -109,9 +112,12 @@ const Edit = () => {
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {
-        setPasswordAlert({ type: "alert", message: `Invalid current password. Please try again.` })
+        setPasswordAlert({
+          type: "alert",
+          message: `${t("account.settings.alerts.currentPassword")}`,
+        })
       } else {
-        setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.generic")}` })
+        setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       }
       console.warn(err)
     }
@@ -123,7 +129,7 @@ const Edit = () => {
         <FormCard>
           <div className="form-card__lead text-center border-b mx-0">
             <Icon size="2xl" symbol="settings" />
-            <h2 className="form-card__title">Account Settings</h2>
+            <h2 className="form-card__title">{t("account.accountSettings")}</h2>
           </div>
           <SiteAlert type="notice" dismissable />
           <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
@@ -151,7 +157,7 @@ const Edit = () => {
                 name="middleName"
                 placeholder={`${t("application.name.middleNameOptional")}`}
                 register={register}
-                defaultValue={profile ? profile.middleName : null}
+                defaultValue={profile ? profile?.middleName : null}
               />
 
               <Field
@@ -163,14 +169,7 @@ const Edit = () => {
                 defaultValue={profile ? profile.lastName : null}
               />
               <div className="text-center">
-                <Button
-                  onClick={() => {
-                    //
-                  }}
-                  className={"items-center"}
-                >
-                  {t("account.settings.update")}
-                </Button>
+                <Button className="items-center">{t("account.settings.update")}</Button>
               </div>
             </div>
           </Form>
@@ -181,41 +180,22 @@ const Edit = () => {
               </AlertBox>
             )}
             <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="birthMonth">
-                {`${t("application.name.yourDateOfBirth")}`}
-              </label>
-              <div className="field-group--dob mt-2">
-                <Field
-                  name="birthMonth"
-                  placeholder={`${t("account.settings.placeholders.month")}`}
-                  error={errors.birthMonth}
-                  register={register}
-                  defaultValue={profile ? moment(new Date(profile.dob)).utc().format("MM") : null}
-                />
-                <Field
-                  name="birthDay"
-                  placeholder={`${t("account.settings.placeholders.day")}`}
-                  error={errors.birthDay}
-                  register={register}
-                  defaultValue={profile ? moment(new Date(profile.dob)).utc().format("DD") : null}
-                />
-                <Field
-                  name="birthYear"
-                  placeholder={`${t("account.settings.placeholders.year")}`}
-                  error={errors.birthYear}
-                  register={register}
-                  defaultValue={profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null}
-                />
-              </div>
+              <DOBField
+                id="dateOfBirth"
+                name="dateOfBirth"
+                register={register}
+                error={errors?.dateOfBirth}
+                watch={watch}
+                defaultDOB={{
+                  birthDay: profile ? moment(new Date(profile.dob)).utc().format("DD") : null,
+                  birthMonth: profile ? moment(new Date(profile.dob)).utc().format("MM") : null,
+                  birthYear: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
+                }}
+                label={t("application.name.yourDateOfBirth")}
+                errorMessage={t("errors.dateOfBirthError")}
+              />
               <div className="text-center mt-5">
-                <Button
-                  onClick={() => {
-                    //
-                  }}
-                  className={"items-center"}
-                >
-                  {t("account.settings.update")}
-                </Button>
+                <Button className="items-center">{t("account.settings.update")}</Button>
               </div>
             </div>
           </Form>
@@ -244,14 +224,7 @@ const Edit = () => {
                 defaultValue={profile ? profile.email : null}
               />
               <div className="text-center">
-                <Button
-                  onClick={() => {
-                    //
-                  }}
-                  className={"items-center"}
-                >
-                  {t("account.settings.update")}
-                </Button>
+                <Button className={"items-center"}>{t("account.settings.update")}</Button>
               </div>
             </div>
           </Form>

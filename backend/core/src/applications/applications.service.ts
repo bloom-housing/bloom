@@ -6,11 +6,13 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
+import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { assignDefined } from "../shared/assign-defined"
 
 @Injectable()
 export class ApplicationsService {
   constructor(
+    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
     @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
@@ -47,7 +49,7 @@ export class ApplicationsService {
       orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
       search: (qb, { search }) =>
         qb.andWhere(
-          `to_tsvector('english', concat_ws(' ', "applicant")) @@ plainto_tsquery(:search)`,
+          `to_tsvector('english', REGEXP_REPLACE(concat_ws(' ', applicant, alternateContact.emailAddress), '[_]|[-]', '/', 'g')) @@ to_tsquery(CONCAT(CAST(plainto_tsquery(REGEXP_REPLACE(:search, '[_]|[-]', '/', 'g')) as text), ':*'))`,
           {
             search,
           }
@@ -83,10 +85,12 @@ export class ApplicationsService {
   }
 
   async create(applicationCreateDto: ApplicationUpdateDto, user?: User) {
-    return await this.repository.save({
+    const application = await this.repository.save({
       ...applicationCreateDto,
       user,
     })
+    await this.applicationFlaggedSetsService.onApplicationSave(application)
+    return application
   }
 
   async findOne(applicationId: string) {
