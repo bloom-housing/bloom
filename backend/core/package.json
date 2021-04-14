@@ -23,7 +23,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./jest-e2e.json --runInBand",
-    "test:e2e:local": "psql -c 'DROP DATABASE IF EXISTS bloom_test' && psql -c 'CREATE DATABASE bloom_test' && ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts migration:run && ts-node src/seed.ts --test && jest --config ./jest-e2e.json",
+    "test:e2e:local": "psql -c 'DROP DATABASE IF EXISTS bloom_test' && psql -c 'CREATE DATABASE bloom_test' && ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts migration:run && ts-node src/seed.ts --test && jest --config ./jest-e2e.json --runInBand",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "herokusetup": "node heroku.setup.js",
     "generate:client": "ts-node generate-axios-client.ts",
