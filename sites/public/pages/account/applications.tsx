@@ -10,6 +10,7 @@ import {
   RequireLogin,
   t,
   UserContext,
+  LoadingOverlay,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
@@ -20,6 +21,7 @@ export default () => {
   const { profile } = useContext(UserContext)
   const [applications, setApplications] = useState<PaginatedApplication>()
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (profile) {
@@ -27,10 +29,12 @@ export default () => {
         .list({ userId: profile.id })
         .then((apps) => {
           setApplications(apps)
+          setLoading(false)
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
           setError(`${err}`)
+          setLoading(false)
         })
     }
   }, [profile, applicationsService])
@@ -49,14 +53,14 @@ export default () => {
   }
 
   return (
-    <>
-      <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-        <Layout>
-          <Head>
-            <title>{t("nav.myApplications")}</title>
-          </Head>
-          <MetaTags title={t("nav.myApplications")} description="" />
-          <section className="bg-gray-300">
+    <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
+      <Layout>
+        <Head>
+          <title>{t("nav.myApplications")}</title>
+        </Head>
+        <MetaTags title={t("nav.myApplications")} description="" />
+        <section className="bg-gray-300">
+          <LoadingOverlay isLoading={loading}>
             <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
@@ -67,13 +71,13 @@ export default () => {
                         <AppStatusItemWrapper key={index} application={application} />
                       ))}
                   </Fragment>
-                  {!applications && noApplicationsSection()}
+                  {!applications && !loading && noApplicationsSection()}
                 </DashBlock>
               </DashBlocks>
             </div>
-          </section>
-        </Layout>
-      </RequireLogin>
-    </>
+          </LoadingOverlay>
+        </section>
+      </Layout>
+    </RequireLogin>
   )
 }

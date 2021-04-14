@@ -11,8 +11,6 @@ import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-except
 import { logger } from "./middleware/logger.middleware"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
-import { ConfigModule } from "@nestjs/config"
-import Joi from "joi"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
@@ -21,6 +19,7 @@ import * as bodyParser from "body-parser"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
 import Redis from "ioredis"
+import { SharedModule } from "./shared/shared.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -59,16 +58,6 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        ConfigModule.forRoot({
-          validationSchema: Joi.object({
-            PORT: Joi.number().default(3100).required(),
-            NODE_ENV: Joi.string()
-              .valid("development", "staging", "production", "test")
-              .default("development"),
-            DATABASE_URL: Joi.string().required(),
-            REDIS_TLS_URL: Joi.string().required(),
-          }),
-        }),
         TypeOrmModule.forRoot({
           ...dbOptions,
           autoLoadEntities: true,
@@ -87,6 +76,7 @@ export class AppModule {
         PropertiesModule,
         PropertyGroupsModule,
         AmiChartsModule,
+        SharedModule,
       ],
     }
   }

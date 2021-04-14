@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common"
+import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { ApplicationFlaggedSetsListQueryParams } from "./application-flagged-sets.controller"
 import { AuthzService } from "../auth/authz.service"
 import {
@@ -15,7 +15,7 @@ import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { User } from "../user/entities/user.entity"
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
   constructor(
     @Inject(REQUEST) private request: ExpressRequest,
