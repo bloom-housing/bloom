@@ -6,7 +6,7 @@ import { AgGridReact } from "ag-grid-react"
 import { useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { t, ListingSecondaryNav, Tag } from "@bloom-housing/ui-components"
-import { cols } from "../../../src/flags/cols"
+import { getCols } from "../../../src/flags/cols"
 
 const FlagsPage = () => {
   const router = useRouter()
@@ -25,7 +25,7 @@ const FlagsPage = () => {
     maxWidth: 300,
   }
 
-  const columns = useMemo(() => [...cols], [])
+  const columns = useMemo(() => getCols(), [])
 
   return (
     <Layout>
