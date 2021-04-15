@@ -1,0 +1,60 @@
+import { t } from "@bloom-housing/ui-components"
+
+export const getCols = () => [
+  {
+    headerName: t("application.details.number"),
+    sortable: false,
+    filter: false,
+    resizable: true,
+    minWidth: 300,
+    flex: 1,
+  },
+  {
+    headerName: t("application.name.firstName"),
+    field: "applications",
+    sortable: false,
+    filter: false,
+    resizable: false,
+    flex: 1,
+  },
+  {
+    headerName: t("application.name.lastName"),
+    field: "rule",
+    sortable: false,
+    filter: false,
+    resizable: false,
+    flex: 1,
+  },
+  {
+    headerName: t("applications.table.primaryDob"),
+    field: "applications",
+    sortable: false,
+    filter: false,
+    resizable: false,
+    flex: 1,
+  },
+  {
+    headerName: t("t.email"),
+    field: "status",
+    sortable: false,
+    filter: false,
+    resizable: false,
+    flex: 1,
+  },
+  {
+    headerName: t("t.phone"),
+    field: "status",
+    sortable: false,
+    filter: false,
+    resizable: false,
+    flex: 1,
+  },
+  {
+    headerName: t("applications.table.applicationSubmissionDate"),
+    field: "status",
+    sortable: false,
+    filter: false,
+    resizable: false,
+    flex: 1,
+  },
+]

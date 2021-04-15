@@ -6,7 +6,7 @@ import { AgGridReact } from "ag-grid-react"
 import { useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { t, ListingSecondaryNav } from "@bloom-housing/ui-components"
-import { getCols } from "../../../src/flags/cols"
+import { getCols } from "../../../src/flags/flagSetsCols"
 
 const FlagsPage = () => {
   const router = useRouter()
@@ -73,8 +73,6 @@ const FlagsPage = () => {
           </div>
         </div>
       </article>
-
-      {console.log(data)}
     </Layout>
   )
 }

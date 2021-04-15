@@ -20,7 +20,11 @@ export const getCols = () => [
 
       const firstApplicant = `${applicant.firstName} ${applicant.lastName}`
 
-      return <Link href={`/flag/?id=${data.id}`}>{`${firstApplicant}: ${rule}`}</Link>
+      return (
+        <Link
+          href={`/listings/flags/details?id=${data.id}&listing=${data.listing.id}`}
+        >{`${firstApplicant}: ${rule}`}</Link>
+      )
     },
   },
   {
