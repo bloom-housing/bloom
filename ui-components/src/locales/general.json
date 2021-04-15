@@ -492,7 +492,8 @@
   "flags": {
     "flaggedSet": "Flagged Set",
     "ruleName": "Rule Name",
-    "pendingReview": "Pending Review"
+    "pendingReview": "Pending Review",
+    "totalSets": "Total Sets"
   },
   "authentication": {
     "forgotPassword": {

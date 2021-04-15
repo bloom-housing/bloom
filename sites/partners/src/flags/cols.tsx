@@ -1,15 +1,10 @@
-import {
-  t,
-  AppearanceStyleType,
-  AppearanceSizeType,
-  AppearanceShadeType,
-} from "@bloom-housing/ui-components"
+import { t, AppearanceStyleType, AppearanceSizeType, Tag } from "@bloom-housing/ui-components"
 import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
 export const getCols = () => [
   {
     headerName: t("flags.flaggedSet"),
-    field: "rule",
+    colId: "flaggedSet",
     sortable: false,
     filter: false,
     resizable: true,
@@ -28,6 +23,7 @@ export const getCols = () => [
   },
   {
     headerName: t("application.household.primaryApplicant"),
+    colId: "primaryApplicant",
     field: "applications",
     sortable: false,
     filter: false,
@@ -58,6 +54,7 @@ export const getCols = () => [
   },
   {
     headerName: t("flags.ruleName"),
+    colId: "rule",
     field: "rule",
     sortable: false,
     filter: false,
@@ -66,6 +63,7 @@ export const getCols = () => [
   },
   {
     headerName: `# ${t("nav.applications")}`,
+    colId: "applications",
     field: "applications",
     sortable: false,
     filter: false,
@@ -75,21 +73,23 @@ export const getCols = () => [
   },
   {
     headerName: t("application.status"),
+    colId: "status",
     field: "status",
     sortable: false,
     filter: false,
     resizable: false,
     flex: 1,
-    cellRenderer: "tag",
-    cellRendererParams: ({ value }) => ({
-      pillStyle: true,
-      children: value,
-      shade: AppearanceShadeType.light,
-      size: AppearanceSizeType.small,
-      styleType:
-        value === EnumApplicationFlaggedSetStatus.flagged
-          ? AppearanceStyleType.alert
-          : AppearanceStyleType.success,
-    }),
+    cellRendererFramework: ({ data }) => {
+      const styleType =
+        data.status === EnumApplicationFlaggedSetStatus.flagged
+          ? AppearanceStyleType.info
+          : AppearanceStyleType.success
+
+      return (
+        <Tag pillStyle={true} size={AppearanceSizeType.small} styleType={styleType}>
+          {data.status}
+        </Tag>
+      )
+    },
   },
 ]

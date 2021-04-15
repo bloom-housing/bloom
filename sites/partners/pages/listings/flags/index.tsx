@@ -5,7 +5,7 @@ import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
-import { t, ListingSecondaryNav, Tag } from "@bloom-housing/ui-components"
+import { t, ListingSecondaryNav } from "@bloom-housing/ui-components"
 import { getCols } from "../../../src/flags/cols"
 
 const FlagsPage = () => {
@@ -16,16 +16,20 @@ const FlagsPage = () => {
     listingId,
   })
 
-  const agGridComponents = {
-    tag: Tag,
-  }
-
   const defaultColDef = {
     resizable: true,
     maxWidth: 300,
   }
 
   const columns = useMemo(() => getCols(), [])
+
+  const StatusTag = () => <strong>test</strong>
+
+  const frameworkComponents = {
+    statusTag: StatusTag,
+  }
+
+  if (!data) return null
 
   return (
     <Layout>
@@ -51,8 +55,21 @@ const FlagsPage = () => {
               rowHeight={58}
               defaultColDef={defaultColDef}
               suppressScrollOnNewData={true}
-              frameworkComponents={agGridComponents}
+              frameworkComponents={frameworkComponents}
+              immutableData={true}
+              getRowNodeId={(data) => data.row}
             ></AgGridReact>
+
+            <div className="data-pager">
+              <div className="data-pager__control-group">
+                <span className="data-pager__control">
+                  <span className="field-label" id="lbTotalPages">
+                    {data?.items?.length}
+                  </span>
+                  <span className="field-label">{t("flags.totalSets")}</span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </article>
