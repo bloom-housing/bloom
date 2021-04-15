@@ -13,8 +13,7 @@ const HouseholdMemberForm = (props: {
 }) => {
   const { member, type } = props
   const router = useRouter()
-  let editMode = props.editMode
-  if (props.editMode !== false) editMode = true
+  const editMode = props.editMode !== false // undefined should default to true
 
   const editMember = () => {
     if (member.orderId != undefined && member.orderId >= 0) {

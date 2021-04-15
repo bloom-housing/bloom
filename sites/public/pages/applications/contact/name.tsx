@@ -52,7 +52,7 @@ export default () => {
   const clientLoaded = OnClientSide()
   if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
 
-  const AutofillIcon = () => {
+  const LockIcon = () => {
     return (
       autofilled && (
         <Icon
@@ -91,7 +91,7 @@ export default () => {
             <fieldset>
               <legend className="field-label--caps">
                 {t("application.name.yourName")}
-                <AutofillIcon />
+                <LockIcon />
               </legend>
 
               <Field
@@ -146,7 +146,7 @@ export default () => {
               label={
                 <>
                   {t("application.name.yourDateOfBirth")}
-                  <AutofillIcon />
+                  <LockIcon />
                 </>
               }
             />
@@ -155,7 +155,7 @@ export default () => {
           <div className="form-card__group">
             <h3 className="field-label--caps">
               {t("application.name.yourEmailAddress")}
-              <AutofillIcon />
+              <LockIcon />
             </h3>
 
             <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
