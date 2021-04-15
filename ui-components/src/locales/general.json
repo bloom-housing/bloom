@@ -493,7 +493,9 @@
     "flaggedSet": "Flagged Set",
     "ruleName": "Rule Name",
     "pendingReview": "Pending Review",
-    "totalSets": "Total Sets"
+    "totalSets": "Total Sets",
+    "resolveFlag": "Resolve Flag",
+    "markedAsDuplicate": "%{quantity} applications marked as duplicate"
   },
   "authentication": {
     "forgotPassword": {

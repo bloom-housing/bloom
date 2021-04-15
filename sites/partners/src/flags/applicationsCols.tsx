@@ -1,60 +1,88 @@
 import { t } from "@bloom-housing/ui-components"
+import { convertDataToPst } from "../../lib/helpers"
+import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 export const getCols = () => [
   {
     headerName: t("application.details.number"),
-    sortable: false,
+    field: "id",
+    sortable: true,
     filter: false,
     resizable: true,
-    minWidth: 300,
+    unSortIcon: true,
+    minWidth: 250,
     flex: 1,
+    headerCheckboxSelection: true,
+    checkboxSelection: true,
   },
   {
     headerName: t("application.name.firstName"),
-    field: "applications",
-    sortable: false,
+    field: "applicant.firstName",
+    sortable: true,
     filter: false,
-    resizable: false,
+    resizable: true,
+    unSortIcon: true,
     flex: 1,
   },
   {
     headerName: t("application.name.lastName"),
-    field: "rule",
-    sortable: false,
+    field: "applicant.lastName",
+    sortable: true,
     filter: false,
-    resizable: false,
+    resizable: true,
+    unSortIcon: true,
     flex: 1,
   },
   {
     headerName: t("applications.table.primaryDob"),
-    field: "applications",
+    field: "applicant",
     sortable: false,
     filter: false,
-    resizable: false,
+    resizable: true,
+    unSortIcon: true,
     flex: 1,
+    valueFormatter: ({ value }) => {
+      if (!value) return ""
+
+      const isValidDOB = !!value?.birthMonth && !!value?.birthDay && value?.birthYear
+
+      return isValidDOB ? `${value.birthMonth}/${value.birthDay}/${value.birthYear}` : ""
+    },
   },
   {
     headerName: t("t.email"),
-    field: "status",
+    field: "applicant.emailAddress",
     sortable: false,
     filter: false,
-    resizable: false,
+    resizable: true,
     flex: 1,
   },
   {
     headerName: t("t.phone"),
-    field: "status",
+    field: "applicant.phoneNumber",
     sortable: false,
     filter: false,
-    resizable: false,
+    resizable: true,
     flex: 1,
   },
   {
     headerName: t("applications.table.applicationSubmissionDate"),
-    field: "status",
+    field: "submissionDate",
     sortable: false,
     filter: false,
-    resizable: false,
+    resizable: true,
     flex: 1,
+    valueGetter: ({ data }) => {
+      if (!data?.submissionDate) return ""
+
+      const { submissionDate } = data
+
+      const dateTime = convertDataToPst(
+        submissionDate,
+        data?.submissionType || ApplicationSubmissionType.electronical
+      )
+
+      return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
+    },
   },
 ]
