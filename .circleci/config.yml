@@ -22,6 +22,10 @@ executors:
           # Never do this in production or with any sensitive / non-test data:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: bloom
+    environment:
+      REDIS_TLS_URL: "rediss://localhost:6379/0"
+      REDIS_URL: "redis://localhost:6379/0"
+      REDIS_USE_TLS: "0"
 
 jobs:
   setup:
