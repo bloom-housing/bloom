@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { t, AppearanceStyleType, AppearanceSizeType, Tag } from "@bloom-housing/ui-components"
 import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
@@ -10,16 +12,26 @@ export const getCols = () => [
     resizable: true,
     minWidth: 300,
     flex: 1,
-    valueGetter: ({ data }) => {
-      if (!data?.applications || !data?.rule) return ""
+    cellRendererFramework: ({ data }) => {
+      if (!data?.applications || !data?.rule || !data?.id) return ""
 
       const { applicant } = data?.applications?.[0]
       const rule = data?.rule
 
       const firstApplicant = `${applicant.firstName} ${applicant.lastName}`
 
-      return `${firstApplicant}: ${rule}`
+      return <Link href={`/flag/?id=${data.id}`}>{`${firstApplicant}: ${rule}`}</Link>
     },
+    // valueGetter: ({ data }) => {
+    //   if (!data?.applications || !data?.rule) return ""
+
+    //   const { applicant } = data?.applications?.[0]
+    //   const rule = data?.rule
+
+    //   const firstApplicant = `${applicant.firstName} ${applicant.lastName}`
+
+    //   return `${firstApplicant}: ${rule}`
+    // },
   },
   {
     headerName: t("application.household.primaryApplicant"),
