@@ -6,7 +6,7 @@
     "haveAnAccount": "Quý vị đã có một tài khoản chưa?",
     "myApplications": "Đơn ghi danh của tôi",
     "myApplicationsSubtitle": "Xem ngày rút thăm và danh sách các bất động sản mà quý vị đã ghi danh"
-  },
+  }, 
   "application": {
     "form": {
       "general": {
@@ -227,6 +227,10 @@
           "link": "http://domain.com"
         }
       },
+      "displacedTenant": {
+        "whichHouseholdMember": "Thành viên hộ gia đình nào đang yêu cầu lựa chọn này?",
+        "whatAddress": "Địa chỉ mà thành viên hộ gia đình này đã chuyển khỏi là gì?"
+      },
       "general": {
         "title": "Dựa trên thông tin quý vị đã nhập, hộ gia đình của quý vị chưa yêu cầu bất kỳ lựa chọn ưu tiên nhà ở nào.",
         "preamble": "Quý vị sẽ thuộc nhóm các ứng viên chung."
@@ -329,7 +333,7 @@
     "timeout": {
       "text": "Để bảo vệ danh tính của quý vị, phiên truy cập của quý vị sẽ hết hạn sau một phút do không có hoạt động. Quý vị sẽ mất mọi thông tin chưa được lưu nếu quý vị lựa chọn không trả lời.",
       "action": "Tiếp tục làm đơn",
-      "afterMessage": "Chúng tôi quan tâm đến sự bảo mật của quý vị. Chúng tôi đã chấm dứt phiên truy cập của quý vị do không có hoạt động nào. Vui lòng đăng nhập hoặc bắt đầu làm một đơn ghi danh mới để tiếp tục."
+      "afterMessage": "Chúng tôi quan tâm đến sự bảo mật của quý vị. Chúng tôi đã chấm dứt phiên truy cập của quý vị do không có hoạt động nào. Vui lòng bắt đầu làm một đơn ghi danh mới để tiếp tục."
     },
     "continueApplication": "Tiếp tục làm Đơn ghi danh",
     "applicationNeverSubmitted": "Đơn ghi danh của quý vị chưa bao giờ được gửi",
@@ -458,6 +462,11 @@
     "householdSize": "Quy mô Hộ Gia đình",
     "importantProgramRules": "Các Quy tắc Quan trọng của Chương trình",
     "includesPriorityUnits": "Bao gồm các Căn nhà Ưu tiên cho %{priorities}",
+    "lotteryResults": {
+      "completeResultsWillBePosted": "Toàn bộ kết quả quay xổ số sẽ sớm được đăng.",
+      "downloadResults": "Tải xuống Kết quả",
+      "header": "Kết quả Xổ số"
+    },
     "maxIncomeMonth": "Thu nhập Tối đa / Tháng",
     "maxIncomeYear": "Thu nhập Tối đa / Năm",
     "moreBuildingSelectionCriteria": "Tìm hiểu thêm về Tiêu chí Lựa chọn Tòa nhà",
@@ -720,7 +729,7 @@
     "seeRentalListings": "Xem Thông tin Thuê nhà",
     "title": "Ghi danh nhà ở giá phải chăng tại",
     "seeMoreOpportunities": "Xem thêm cơ hội thuê nhà và sở hữu nhà ở",
-    "viewAdditionalHousing": "Xem Thông tin Chi tiết Bổ sung về Nhà ở"
+    "viewAdditionalHousing": "Xem Các Cơ hội Nhà ở và các Nguồn Hỗ trợ Bổ sung"
   },
   "whatToExpect": {
     "label": "Những điều Sẽ xảy ra",

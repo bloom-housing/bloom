@@ -13,6 +13,7 @@ p, admin, listingEvent, true, .*
 p, admin, property, true, .*
 p, admin, propertyGroup, true, .*
 p, admin, amiChart, true, .*
+p, admin, applicationFlaggedSet, true, .*
 
 p, admin, listing, true, .*
 p, anonymous, listing, true, read

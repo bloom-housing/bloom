@@ -8,20 +8,15 @@ import {
   Post,
   Put,
   Query,
-  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { Request as ExpressRequest } from "express"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
-import { authzActions, AuthzService } from "../auth/authz.service"
-import { EmailService } from "../shared/email.service"
-import { ListingsService } from "../listings/listings.service"
 import { mapTo } from "../shared/mapTo"
 import {
   ApplicationCreateDto,
@@ -167,40 +162,20 @@ export class ApplicationsCsvListQueryParams {
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
-    private readonly emailService: EmailService,
-    private readonly listingsService: ListingsService,
-    private readonly authzService: AuthzService,
     private readonly applicationCsvExporter: ApplicationCsvExporter
   ) {}
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
-  async list(
-    @Request() req: ExpressRequest,
-    @Query() queryParams: ApplicationsListQueryParams
-  ): Promise<PaginatedApplicationDto> {
-    const response = await this.applicationsService.listPaginated(queryParams)
-    await Promise.all(
-      response.items.map(async (application) => {
-        await this.authorizeUserAction(req.user, application, authzActions.read)
-      })
-    )
-    return mapTo(PaginatedApplicationDto, response)
+  async list(@Query() queryParams: ApplicationsListQueryParams): Promise<PaginatedApplicationDto> {
+    return mapTo(PaginatedApplicationDto, await this.applicationsService.listPaginated(queryParams))
   }
 
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
-  async listAsCsv(
-    @Request() req: ExpressRequest,
-    @Query() queryParams: ApplicationsCsvListQueryParams
-  ): Promise<string> {
+  async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
     const applications = await this.applicationsService.list(queryParams.listingId, null)
-    await Promise.all(
-      applications.map(async (application) => {
-        await this.authorizeUserAction(req.user, application, authzActions.read)
-      })
-    )
     return this.applicationCsvExporter.export(
       applications,
       queryParams.includeHeaders,
@@ -210,55 +185,30 @@ export class ApplicationsController {
 
   @Post()
   @ApiOperation({ summary: "Create application", operationId: "create" })
-  async create(
-    @Request() req: ExpressRequest,
-    @Body() applicationCreateDto: ApplicationCreateDto
-  ): Promise<ApplicationDto> {
-    await this.authorizeUserAction(req.user, applicationCreateDto, authzActions.create)
-    const application = await this.applicationsService.create(applicationCreateDto, req.user)
-    const listing = await this.listingsService.findOne(application.listing.id)
-    if (application.applicant.emailAddress) {
-      await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
-    }
+  async create(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
+    const application = await this.applicationsService.create(applicationCreateDto)
     return mapTo(ApplicationDto, application)
   }
 
   @Get(`:applicationId`)
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  async retrieve(
-    @Request() req: ExpressRequest,
-    @Param("applicationId") applicationId: string
-  ): Promise<ApplicationDto> {
+  async retrieve(@Param("applicationId") applicationId: string): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, authzActions.read)
     return mapTo(ApplicationDto, app)
   }
 
   @Put(`:applicationId`)
   @ApiOperation({ summary: "Update application by id", operationId: "update" })
   async update(
-    @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
   ): Promise<ApplicationDto> {
-    const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, authzActions.update)
-    return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto, app))
+    return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto))
   }
 
   @Delete(`:applicationId`)
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Request() req: ExpressRequest, @Param("applicationId") applicationId: string) {
-    const app = await this.applicationsService.findOne(applicationId)
-    await this.authorizeUserAction(req.user, app, authzActions.delete)
+  async delete(@Param("applicationId") applicationId: string) {
     await this.applicationsService.delete(applicationId)
-  }
-
-  private authorizeUserAction(user, app, action) {
-    return this.authzService.canOrThrow(user, "application", action, {
-      ...app,
-      user_id: app.user?.id,
-      listing_id: app.listing?.id,
-    })
   }
 }
