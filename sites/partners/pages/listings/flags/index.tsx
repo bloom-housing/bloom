@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
@@ -25,6 +25,8 @@ const FlagsPage = () => {
     maxWidth: 300,
   }
 
+  const columns = useMemo(() => [...cols], [])
+
   return (
     <Layout>
       <Head>
@@ -42,7 +44,7 @@ const FlagsPage = () => {
         <div className="ag-theme-alpine ag-theme-bloom">
           <div className="applications-table mt-5">
             <AgGridReact
-              columnDefs={cols}
+              columnDefs={columns}
               rowData={data?.items}
               domLayout="autoHeight"
               headerHeight={83}
