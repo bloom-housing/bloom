@@ -88,7 +88,7 @@ jobs:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:partners
   cypress/run:
-    executor: standard-node
+    executor: cypress-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
