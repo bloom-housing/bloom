@@ -92,13 +92,13 @@ jobs:
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-       - run: 
+      - run:
           name: Start app in the background
           command: yarn dev:all
           background: true
-      - run: 
-        name: wait for localhost to load
-        command: yarn wait-on http://localhost:3000
+      - run:
+          name: wait for localhost to load
+          command: yarn wait-on http://localhost:3000
       - run:
           name: Running Cypress tests
           command: yarn test:app:public
