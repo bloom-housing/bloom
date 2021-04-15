@@ -22,6 +22,7 @@ import { ApplicationFlaggedSetsService } from "../application-flagged-sets/appli
 import { AuthzService } from "../auth/authz.service"
 import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/application-flagged-set.entity"
 import { ApplicationsModule } from "../applications/applications.module"
+import { ThrottlerModule } from "@nestjs/throttler"
 
 @Module({})
 export class SeederModule {
@@ -35,6 +36,11 @@ export class SeederModule {
         ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot({
           ...dbConfig,
+        }),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          ignoreUserAgents: [/^node-superagent.*$/],
         }),
         TypeOrmModule.forFeature([
           Listing,
