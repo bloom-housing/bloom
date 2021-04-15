@@ -137,7 +137,6 @@ export class ApplicationsService {
       }))
     await this.authorizeUserAction(this.req.user, application, authzActions.update)
     assignDefined(application, {
-
       ...applicationUpdateDto,
       id: application.id,
     })
