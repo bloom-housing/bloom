@@ -23,6 +23,7 @@ export default () => {
   const { conductor, application, listing } = context
   const { initialStateLoaded, profile } = useContext(UserContext)
   const { applicationsService } = useContext(ApiClientContext)
+  const [submitted, setSubmitted] = useState(false)
   const [previousApplication, setPreviousApplication] = useState<Application>(null)
 
   const currentPageSection = 1
@@ -31,14 +32,18 @@ export default () => {
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
-    if (previousApplication && useDetails) {
-      conductor.application = previousApplication
-    } else {
-      conductor.application = blankApplication()
+    if (!submitted) {
+      // Necessary to avoid infinite rerenders
+      setSubmitted(true)
+      if (previousApplication && useDetails) {
+        conductor.application = previousApplication
+      } else {
+        conductor.application = blankApplication()
+      }
+      context.syncApplication(conductor.application)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
     }
-    context.syncApplication(conductor.application)
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
   }
 
   const fetcher = async () => {
