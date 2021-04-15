@@ -489,6 +489,11 @@
     "viewApplication": "View Application",
     "yourLotteryNumber": "Your confirmation number is"
   },
+  "flags": {
+    "flaggedSet": "Flagged Set",
+    "ruleName": "Rule Name",
+    "pendingReview": "Pending Review"
+  },
   "authentication": {
     "forgotPassword": {
       "changePassword": "Change Password",

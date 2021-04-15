@@ -5,7 +5,7 @@ import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
-import { t, ListingSecondaryNav } from "@bloom-housing/ui-components"
+import { t, ListingSecondaryNav, Tag } from "@bloom-housing/ui-components"
 import { cols } from "../../../src/flags/cols"
 
 const FlagsPage = () => {
@@ -15,6 +15,15 @@ const FlagsPage = () => {
   const { data } = useFlaggedApplicationsList({
     listingId,
   })
+
+  const agGridComponents = {
+    tag: Tag,
+  }
+
+  const defaultColDef = {
+    resizable: true,
+    maxWidth: 300,
+  }
 
   return (
     <Layout>
@@ -29,25 +38,22 @@ const FlagsPage = () => {
         flagsQty={data?.meta?.totalItems}
       />
 
-      <div className="applications-table mt-5">
-        {data && (
-          <div className="ag-theme-alpine ag-theme-bloom">
+      <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4 w-full">
+        <div className="ag-theme-alpine ag-theme-bloom">
+          <div className="applications-table mt-5">
             <AgGridReact
-              // onGridReady={onGridReady}
-              // gridOptions={gridOptions}
-              // defaultColDef={defaultColDef}
               columnDefs={cols}
               rowData={data?.items}
               domLayout="autoHeight"
               headerHeight={83}
               rowHeight={58}
+              defaultColDef={defaultColDef}
               suppressScrollOnNewData={true}
-              // suppressPaginationPanel={true}
-              // paginationPageSize={8}
+              frameworkComponents={agGridComponents}
             ></AgGridReact>
           </div>
-        )}
-      </div>
+        </div>
+      </article>
 
       {console.log(data)}
     </Layout>
