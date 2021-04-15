@@ -22,16 +22,6 @@ export const getCols = () => [
 
       return <Link href={`/flag/?id=${data.id}`}>{`${firstApplicant}: ${rule}`}</Link>
     },
-    // valueGetter: ({ data }) => {
-    //   if (!data?.applications || !data?.rule) return ""
-
-    //   const { applicant } = data?.applications?.[0]
-    //   const rule = data?.rule
-
-    //   const firstApplicant = `${applicant.firstName} ${applicant.lastName}`
-
-    //   return `${firstApplicant}: ${rule}`
-    // },
   },
   {
     headerName: t("application.household.primaryApplicant"),
