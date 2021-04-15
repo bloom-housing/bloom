@@ -48,9 +48,10 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     if (router?.query?.token && !profile) {
       confirmAccount(router.query.token.toString())
         .then(() => {
-          setSiteAlertMessage(t(`authentication.createAccount.accountConfirmed`), "success")
-
-          void router.push("/account/dashboard", undefined, { shallow: true })
+          void router.push({
+            pathname: "/account/dashboard",
+            query: { alert: t(`authentication.createAccount.accountConfirmed`) },
+          })
           window.scrollTo(0, 0)
         })
         .catch(() => {

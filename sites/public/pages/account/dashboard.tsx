@@ -9,10 +9,29 @@ import {
   RequireLogin,
   t,
   SiteAlert,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
+import { NextRouter, withRouter } from "next/router"
 
-export default class extends Component {
+interface DashboardProps {
+  router: NextRouter
+}
+
+class Dashboard extends Component<DashboardProps> {
+  state = { alertMessage: null }
+  public componentDidMount() {
+    const alert = this.props.router.query?.alert
+    this.setState({ alertMessage: alert })
+  }
+
+  public closeAlert = () => {
+    void this.props.router.push("/account/dashboard", undefined, { shallow: true })
+    this.setState({
+      alertMessage: null,
+    })
+  }
+
   public render() {
     const settingsIcon = (
       <span className="header-badge">
@@ -26,6 +45,11 @@ export default class extends Component {
             <title>{t("nav.myDashboard")}</title>
           </Head>
           <MetaTags title={t("nav.myDashboard")} description="" />
+          {this.state.alertMessage && (
+            <AlertBox className="" onClose={() => this.closeAlert()} type="success">
+              {this.state.alertMessage}
+            </AlertBox>
+          )}
           <section className="bg-gray-300">
             <div className="max-w-5xl mx-auto md:py-8">
               <SiteAlert type="success" className="md:mb-8" timeout={30000} />
@@ -53,3 +77,5 @@ export default class extends Component {
     )
   }
 }
+
+export default withRouter(Dashboard)

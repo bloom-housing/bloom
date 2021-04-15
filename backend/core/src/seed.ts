@@ -9,63 +9,86 @@ import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./user/entities/user.entity"
 import { makeNewApplication } from "./seeds/applications"
+import { INestApplicationContext } from "@nestjs/common"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
-const newSeed = (): ListingSeed => {
+const newListingSeed = (): ListingSeed => {
   return JSON.parse(JSON.stringify(listingSeed1)) as ListingSeed
 }
 
-async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
+const seedListings = async (app: INestApplicationContext) => {
+  let listingSeed = newListingSeed()
+  listingSeed.listing.name = "Triton (2pref)"
+  const listing1 = await seedListing(app, listingSeed)
   const userService = app.get<UserService>(UserService)
-  const listing1 = await seedListing(app, newSeed())
   await Promise.all([
     listing1.leasingAgents.map(async (agent: User) => {
       await userService.confirm({ token: agent.confirmationToken })
     }),
   ])
-  const listingSeed = newSeed()
-  const listing2 = await seedListing(app, {
-    ...listingSeed,
-    leasingAgents: [
-      {
-        ...listingSeed.leasingAgents[0],
-        email: "leasing-agent-2@example.com",
+
+  // Listing 2
+  listingSeed = newListingSeed()
+  listingSeed.listing.name = "Test listing (1pref)"
+  listingSeed.preferences = [
+    {
+      ordinal: 1,
+      title: "Yet another preference for live or work",
+      subtitle: "",
+      description: "Description",
+      links: [],
+      formMetadata: {
+        key: "liveWork",
+        options: [
+          {
+            key: "live",
+            extraData: [],
+          },
+          {
+            key: "work",
+            extraData: [],
+          },
+        ],
       },
-    ],
-    preferences: [
-      {
-        ordinal: 1,
-        title: "Yet another preference for live or work",
-        subtitle: "",
-        description: "Description",
-        links: [],
-        formMetadata: {
-          key: "liveWork",
-          options: [
-            {
-              key: "live",
-              extraData: [],
-            },
-            {
-              key: "work",
-              extraData: [],
-            },
-          ],
-        },
-      },
-    ],
-  })
+    },
+  ]
+  listingSeed.leasingAgents = [
+    {
+      ...listingSeed.leasingAgents[0],
+      email: "leasing-agent-2@example.com",
+    },
+  ]
+  const listing2 = await seedListing(app, listingSeed)
+
+  listingSeed = newListingSeed()
+  listingSeed.listing.name = "Test listing (0pref)"
+  listingSeed.leasingAgents = [
+    {
+      ...listingSeed.leasingAgents[0],
+      email: "leasing-agent-3@example.com",
+    },
+  ]
+  listingSeed.preferences = []
+  const listing3 = await seedListing(app, listingSeed)
+
   await Promise.all([
     listing2.leasingAgents.map(async (agent: User) => {
       await userService.confirm({ token: agent.confirmationToken })
     }),
   ])
 
+  return [listing1, listing2, listing3]
+}
+
+async function seed() {
+  const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
+  const userService = app.get<UserService>(UserService)
+
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
+  const listings = await seedListings(app)
 
   const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
@@ -109,12 +132,12 @@ async function bootstrap() {
   )
 
   for (let i = 0; i < 10; i++) {
-    await Promise.all([
-      await makeNewApplication(app, listing1, user1),
-      await makeNewApplication(app, listing1, user2),
-      await makeNewApplication(app, listing2, user1),
-      await makeNewApplication(app, listing2, user2),
-    ])
+    for (const listing of listings) {
+      await Promise.all([
+        await makeNewApplication(app, listing, user1),
+        await makeNewApplication(app, listing, user2),
+      ])
+    }
   }
 
   admin.isAdmin = true
@@ -123,4 +146,5 @@ async function bootstrap() {
 
   await app.close()
 }
-void bootstrap()
+
+void seed()
