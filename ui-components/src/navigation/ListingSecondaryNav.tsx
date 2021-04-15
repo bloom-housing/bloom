@@ -7,7 +7,7 @@ type ListingSecondaryNavProps = {
   flagsQty: number
 }
 
-const ListingSecondaryNav = ({ title, listingId, flagsQty = 0 }: ListingSecondaryNavProps) => {
+const ListingSecondaryNav = ({ title, listingId, flagsQty }: ListingSecondaryNavProps) => {
   const elements = [
     {
       label: t("nav.applications"),

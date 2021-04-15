@@ -751,7 +751,8 @@
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "siteTitle": "Housing Portal",
-    "skip": "Skip to main content"
+    "skip": "Skip to main content",
+    "flags": "Flags"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",

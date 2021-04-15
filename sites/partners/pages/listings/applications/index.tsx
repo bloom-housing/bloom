@@ -4,7 +4,7 @@ import moment from "moment"
 import Head from "next/head"
 import {
   Field,
-  PageHeader,
+  ListingSecondaryNav,
   MetaTags,
   t,
   Button,
@@ -12,7 +12,7 @@ import {
   lRoute,
   LocalizedLink,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData, useListAsCsv } from "../../../lib/hooks"
+import { useApplicationsData, useListAsCsv, useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
@@ -42,6 +42,10 @@ const ApplicationsList = () => {
   function fetchFilteredResults(value: string) {
     setDelayedFilterValue(value)
   }
+
+  const { data: flaggedApps } = useFlaggedApplicationsList({
+    listingId,
+  })
 
   // load table state on initial render & pagination change (because the new data comes from API)
   useEffect(() => {
@@ -170,7 +174,13 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("applications.applicationsReceived")} />
+
+      {/* TODO: replace with correct total FLAGGED items */}
+      <ListingSecondaryNav
+        title={t("applications.applicationsReceived")}
+        listingId={listingId}
+        flagsQty={flaggedApps?.meta?.totalItems}
+      />
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
