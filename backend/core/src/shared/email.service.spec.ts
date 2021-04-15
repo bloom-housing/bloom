@@ -51,9 +51,7 @@ describe("EmailService", () => {
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
       expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome to Bloom")
       // Check if translation is working correctly
-      expect(sendMock.mock.calls[0][0].html.substring(0, 28)).toEqual(
-        "<h1>Welcome Test \n User</h1>"
-      )
+      expect(sendMock.mock.calls[0][0].html.substring(0, 26)).toEqual("<h1>Hello Test \n User</h1>")
     })
   })
 
