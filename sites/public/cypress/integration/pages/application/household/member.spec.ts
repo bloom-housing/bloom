@@ -81,8 +81,8 @@ describe("applications/household/member", function () {
     cy.getByID("workAddress.street").type(this.data["workAddress.street"])
     cy.getByID("workAddress.street2").type(this.data["workAddress.street2"])
     cy.getByID("workAddress.city").type(this.data["workAddress.city"])
-    cy.getByID("workAddress.state").select(this.data["workAddress.state"])
     cy.getByID("workAddress.zipCode").type(this.data["workAddress.zipCode"])
+    cy.getByID("workAddress.state").select(this.data["workAddress.state"])
 
     cy.getByID("save-member").click()
 
