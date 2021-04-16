@@ -1,7 +1,5 @@
 import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
-import {
-  PaginatedApplicationFlaggedSetQueryParams,
-} from "./application-flagged-sets.controller"
+import { PaginatedApplicationFlaggedSetQueryParams } from "./application-flagged-sets.controller"
 import { AuthzService } from "../auth/authz.service"
 import {
   ApplicationFlaggedSet,
@@ -12,7 +10,10 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Brackets, DeepPartial, Repository, SelectQueryBuilder } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
-import { ApplicationFlaggedSetResolveDto, PaginatedApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
+import {
+  ApplicationFlaggedSetResolveDto,
+  PaginatedApplicationFlaggedSetDto,
+} from "./dto/application-flagged-set.dto"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { User } from "../user/entities/user.entity"
@@ -38,13 +39,15 @@ export class ApplicationFlaggedSetsService {
         },
       }
     )
-    const countTotalFlagged = await this.afsRepository.count({where: {status: FlaggedSetStatus.flagged}})
+    const countTotalFlagged = await this.afsRepository.count({
+      where: { status: FlaggedSetStatus.flagged },
+    })
     return {
       ...results,
       meta: {
         ...results.meta,
-        totalFlagged: countTotalFlagged
-      }
+        totalFlagged: countTotalFlagged,
+      },
     }
   }
 
