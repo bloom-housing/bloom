@@ -10,7 +10,7 @@ import {
 import { Application } from "../entities/application.entity"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IdDto } from "../../shared/dto/id.dto"
-import { PaginationFactory } from "../../shared/dto/pagination.dto"
+import { PaginationFactory, PaginationMeta } from "../../shared/dto/pagination.dto"
 import { ApplicantCreateDto, ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import {
@@ -95,7 +95,12 @@ export class ApplicationDto extends OmitType(Application, [
   householdMembers: HouseholdMemberDto[]
 }
 
-export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
+export class ApplicationPaginationMeta extends PaginationMeta {}
+
+export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {
+  @Expose()
+  meta: ApplicationPaginationMeta
+}
 
 export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",
