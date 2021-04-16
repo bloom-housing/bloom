@@ -117,6 +117,4 @@ workflows:
           build: yarn test:backend:core:dbsetup
           start: yarn dev:all
           wait-on: "http://localhost:3000"
-          post-steps:
-            - store_artifacts:
-                path: artifacts
+          store_artifacts: true
