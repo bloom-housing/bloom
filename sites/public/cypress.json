@@ -3,5 +3,5 @@
   "defaultCommandTimeout": 100000,
   "projectId": "bloom-public-reference",
   "pageLoadTimeout": 100000,
-  "video": false
+  "video": true
 }
