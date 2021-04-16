@@ -1,14 +1,13 @@
 import { Inject, Injectable, Scope } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
 import { ApplicationUpdateDto } from "./dto/application.dto"
-import { User } from "../user/entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { PaginatedApplicationListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { authzActions, AuthzService } from "../auth/authz.service"
-import { query, Request as ExpressRequest } from "express"
+import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email.service"
 import { REQUEST } from "@nestjs/core"
@@ -35,7 +34,9 @@ export class ApplicationsService {
     return result
   }
 
-  async listPaginated(params: PaginatedApplicationListQueryParams): Promise<Pagination<Application>> {
+  async listPaginated(
+    params: PaginatedApplicationListQueryParams
+  ): Promise<Pagination<Application>> {
     const qb = this._getQb(params)
     const result = await paginate(qb, { limit: params.limit, page: params.page })
     await Promise.all(

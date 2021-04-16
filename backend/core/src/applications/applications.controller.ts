@@ -111,16 +111,19 @@ export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => {
-    switch(value) {
-      case "true":
-        return true
-      case "false":
-        return false
-      default:
-        return undefined
-    }
-  }, { toClassOnly: true })
+  @Transform(
+    (value: string | undefined) => {
+      switch (value) {
+        case "true":
+          return true
+        case "false":
+          return false
+        default:
+          return undefined
+      }
+    },
+    { toClassOnly: true }
+  )
   markedAsDuplicate?: boolean
 }
 
@@ -168,7 +171,9 @@ export class ApplicationsController {
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
-  async list(@Query() queryParams: PaginatedApplicationListQueryParams): Promise<PaginatedApplicationDto> {
+  async list(
+    @Query() queryParams: PaginatedApplicationListQueryParams
+  ): Promise<PaginatedApplicationDto> {
     return mapTo(PaginatedApplicationDto, await this.applicationsService.listPaginated(queryParams))
   }
 
