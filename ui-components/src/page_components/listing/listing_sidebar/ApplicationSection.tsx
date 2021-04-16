@@ -28,7 +28,7 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
   return (
     <div>
       {showWaitlist(listing) && (
-        <section className="aside-block bg-primary-lighter border-t">
+        <section className="aside-block is-tinted">
           <Waitlist listing={listing} />
         </section>
       )}
