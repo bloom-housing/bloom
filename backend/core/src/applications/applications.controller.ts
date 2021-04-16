@@ -102,6 +102,16 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? value : OrderParam.DESC))
   order?: OrderParam
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "markedAsDuplicate",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  markedAsDuplicate?: boolean
 }
 
 export class ApplicationsCsvListQueryParams {
@@ -145,6 +155,16 @@ export class ApplicationsCsvListQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   userId?: string
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "markedAsDuplicate",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  markedAsDuplicate?: boolean
 }
 
 @Controller("applications")
@@ -175,7 +195,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
-    const applications = await this.applicationsService.list(queryParams.listingId, null)
+    const applications = await this.applicationsService.list(queryParams)
     return this.applicationCsvExporter.export(
       applications,
       queryParams.includeHeaders,
