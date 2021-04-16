@@ -575,7 +575,7 @@
         "emailInUse": "Email is already in use",
         "emailMismatch": "The emails do not match",
         "emailNotFound": "Email not found. Please register first.",
-        "passwordMismatch": "The passwors do not match",
+        "passwordMismatch": "The passwords do not match",
         "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
         "tokenExpired": "Your link has expired.",
         "tokenMissing": "Wrong token provided."

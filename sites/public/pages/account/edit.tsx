@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useRef } from "react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import {
@@ -38,6 +38,8 @@ const Edit = () => {
   const [dobAlert, setDobAlert] = useState<AlertMessage>()
   const [emailAlert, setEmailAlert] = useState<AlertMessage>()
   const MIN_PASSWORD_LENGTH = 8
+  const password = useRef({})
+  password.current = watch("password", "")
 
   const onNameSubmit = async (data: {
     firstName: string
@@ -253,7 +255,7 @@ const Edit = () => {
                     label={t("account.settings.currentPassword")}
                     readerOnly={true}
                     placeholder="Current password"
-                    error={errors.password}
+                    error={errors.currentPassword}
                     register={register}
                     className={"mb-1"}
                   />
@@ -281,7 +283,6 @@ const Edit = () => {
                     className={"mb-1"}
                   />
                 </div>
-                {errors.password && <p>{errors.password.message}</p>}
 
                 <div className="mt-5">
                   <Field
@@ -290,26 +291,19 @@ const Edit = () => {
                     label={t("account.settings.confirmNewPassword")}
                     placeholder={t("authentication.createAccount.mustBe8Chars")}
                     validation={{
-                      minLength: MIN_PASSWORD_LENGTH,
-                      pattern: passwordRegex,
+                      validate: (value) =>
+                        value === password.current ||
+                        t("authentication.createAccount.errors.passwordMismatch"),
                     }}
-                    error={errors.password}
-                    errorMessage={t("authentication.signIn.passwordError")}
+                    error={errors.passwordConfirmation}
+                    errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
                     register={register}
                     className={"mb-1"}
                   />
                 </div>
-                {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
 
                 <div className="text-center mt-5">
-                  <Button
-                    onClick={() => {
-                      //
-                    }}
-                    className={"items-center"}
-                  >
-                    {t("account.settings.update")}
-                  </Button>
+                  <Button className={"items-center"}>{t("account.settings.update")}</Button>
                 </div>
               </fieldset>
             </div>
