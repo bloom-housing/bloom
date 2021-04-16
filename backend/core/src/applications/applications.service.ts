@@ -5,7 +5,7 @@ import { User } from "../user/entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
-import { ApplicationsListQueryParams } from "./applications.controller"
+import { PaginatedApplicationListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { query, Request as ExpressRequest } from "express"
@@ -24,7 +24,7 @@ export class ApplicationsService {
     @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
-  public async list(params: ApplicationsListQueryParams) {
+  public async list(params: PaginatedApplicationListQueryParams) {
     const qb = this._getQb(params)
     const result = await qb.getMany()
     await Promise.all(
@@ -35,7 +35,7 @@ export class ApplicationsService {
     return result
   }
 
-  async listPaginated(params: ApplicationsListQueryParams): Promise<Pagination<Application>> {
+  async listPaginated(params: PaginatedApplicationListQueryParams): Promise<Pagination<Application>> {
     const qb = this._getQb(params)
     const result = await paginate(qb, { limit: params.limit, page: params.page })
     await Promise.all(
@@ -89,7 +89,7 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  private _getQb(params: ApplicationsListQueryParams) {
+  private _getQb(params: PaginatedApplicationListQueryParams) {
     /**
      * Map used to generate proper parts
      * of query builder.

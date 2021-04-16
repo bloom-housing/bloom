@@ -44,7 +44,7 @@ enum OrderParam {
   DESC = "DESC",
 }
 
-export class ApplicationsListQueryParams extends PaginationQueryParams {
+export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
     type: String,
@@ -106,24 +106,25 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
     type: Boolean,
-    example: "markedAsDuplicate",
+    example: true,
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => {
+    switch(value) {
+      case "true":
+        return true
+      case "false":
+        return false
+      default:
+        return undefined
+    }
+  }, { toClassOnly: true })
   markedAsDuplicate?: boolean
 }
 
-export class ApplicationsCsvListQueryParams {
-  @Expose()
-  @ApiProperty({
-    type: String,
-    example: "listingId",
-    required: true,
-  })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  listingId: string
-
+export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQueryParams {
   @Expose()
   @ApiProperty({
     type: Boolean,
@@ -145,26 +146,6 @@ export class ApplicationsCsvListQueryParams {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
   includeDemographics?: boolean
-
-  @Expose()
-  @ApiProperty({
-    type: String,
-    example: "userId",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  userId?: string
-
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: "markedAsDuplicate",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  markedAsDuplicate?: boolean
 }
 
 @Controller("applications")
@@ -187,7 +168,7 @@ export class ApplicationsController {
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
-  async list(@Query() queryParams: ApplicationsListQueryParams): Promise<PaginatedApplicationDto> {
+  async list(@Query() queryParams: PaginatedApplicationListQueryParams): Promise<PaginatedApplicationDto> {
     return mapTo(PaginatedApplicationDto, await this.applicationsService.listPaginated(queryParams))
   }
 
