@@ -32,7 +32,7 @@ jobs:
     executor: standard-node
     steps:
       - checkout
-      - run: yarn install --frozen-lockfile
+      - run: yarn install
       - save_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
