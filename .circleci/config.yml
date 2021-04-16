@@ -119,4 +119,4 @@ workflows:
           wait-on: "http://localhost:3000"
           post-steps:
             - store_artifacts:
-              path: artifacts
+                path: artifacts
