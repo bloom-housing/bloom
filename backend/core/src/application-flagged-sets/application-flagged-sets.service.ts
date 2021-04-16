@@ -12,7 +12,6 @@ import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
 import {
   ApplicationFlaggedSetResolveDto,
-  PaginatedApplicationFlaggedSetDto,
 } from "./dto/application-flagged-set.dto"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
