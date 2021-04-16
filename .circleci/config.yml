@@ -32,7 +32,7 @@ jobs:
     executor: standard-node
     steps:
       - checkout
-      - run: yarn install --frozen-lockfile
+      - run: yarn install
       - save_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -87,23 +87,6 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:partners
-  cypress/run:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run:
-          name: Start app in the background
-          command: yarn dev:all
-          background: true
-      - run:
-          name: wait for localhost to load
-          command: yarn wait-on http://localhost:3000
-      - run:
-          name: Running Cypress tests
-          command: yarn test:app:public
-      - store_artifacts:
-          path: temp/screenshots
 
 workflows:
   version: 2
@@ -128,4 +111,12 @@ workflows:
       - cypress/run:
           requires:
             - setup
+          executor: cypress-node
+          working_directory: sites/public
           yarn: true
+          build: yarn test:backend:core:dbsetup
+          start: yarn dev:all
+          wait-on: "http://localhost:3000"
+          post-steps:
+            - store_artifacts:
+              path: artifacts
