@@ -113,7 +113,7 @@ workflows:
             - setup
           executor: cypress-node
           working_directory: /tmp
-          yarn: true
+          install-command: yarn install
           build: yarn test:backend:core:dbsetup
           start: yarn dev:all
           wait-on: "http://localhost:3000"
