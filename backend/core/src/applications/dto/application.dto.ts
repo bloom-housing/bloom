@@ -95,12 +95,7 @@ export class ApplicationDto extends OmitType(Application, [
   householdMembers: HouseholdMemberDto[]
 }
 
-export class ApplicationPaginationMeta extends PaginationMeta {}
-
-export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {
-  @Expose()
-  meta: ApplicationPaginationMeta
-}
+export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
 
 export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",

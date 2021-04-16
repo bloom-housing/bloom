@@ -145,15 +145,23 @@ describe("ApplicationFlaggedSets", () => {
       apps.push(appRes)
     }
 
-    const afses = await supertest(app.getHttpServer())
+    let afses = await supertest(app.getHttpServer())
       .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
+
+    expect(afses.body.meta.totalFlagged).toBe(2)
 
     let resolveRes = await supertest(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
       .send({ afsId: afses.body.items[0].id, applications: [{ id: apps[0].body.id }] })
       .set(...setAuthorization(adminAccessToken))
       .expect(201)
+
+    afses = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
+      .set(...setAuthorization(adminAccessToken))
+
+    expect(afses.body.meta.totalFlagged).toBe(1)
 
     let resolvedAfs = resolveRes.body
     expect(resolvedAfs.status).toBe(FlaggedSetStatus.resolved)
@@ -170,6 +178,12 @@ describe("ApplicationFlaggedSets", () => {
     expect(resolvedAfs.status).toBe(FlaggedSetStatus.resolved)
     expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === true).length).toBe(1)
     expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === false).length).toBe(1)
+
+    afses = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
+      .set(...setAuthorization(adminAccessToken))
+
+    expect(afses.body.meta.totalFlagged).toBe(0)
   })
 
   afterEach(async () => {
