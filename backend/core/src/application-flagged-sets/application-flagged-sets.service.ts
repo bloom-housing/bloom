@@ -10,9 +10,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Brackets, DeepPartial, Repository, SelectQueryBuilder } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
-import {
-  ApplicationFlaggedSetResolveDto,
-} from "./dto/application-flagged-set.dto"
+import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set.dto"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { User } from "../user/entities/user.entity"
