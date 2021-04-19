@@ -72,8 +72,8 @@ describe("applications/household/member", function () {
     cy.getByID("addressStreet").type(this.data["addressStreet"])
     cy.getByID("addressStreet2").type(this.data["addressStreet2"])
     cy.getByID("addressCity").type(this.data["addressCity"])
-    cy.getByID("addressState").select(this.data["addressState"])
     cy.getByID("addressZipCode").type(this.data["addressZipCode"])
+    cy.getByID("addressState").select(this.data["addressState"])
 
     // fill region details
     cy.getByID("workInRegionYes").check()
