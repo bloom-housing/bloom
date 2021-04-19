@@ -7,6 +7,7 @@ import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { ApplicationsListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
+import { assignDefined } from "../shared/assign-defined"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
@@ -127,13 +128,15 @@ export class ApplicationsService {
     return application
   }
 
-  async update(applicationUpdateDto: ApplicationUpdateDto) {
-    const application = await this.repository.findOneOrFail({
-      where: { id: applicationUpdateDto.id },
-      relations: ["listing", "user"],
-    })
+  async update(applicationUpdateDto: ApplicationUpdateDto, existing?: Application) {
+    const application =
+      existing ||
+      (await this.repository.findOneOrFail({
+        where: { id: applicationUpdateDto.id },
+        relations: ["listing", "user"],
+      }))
     await this.authorizeUserAction(this.req.user, application, authzActions.update)
-    Object.assign(application, {
+    assignDefined(application, {
       ...applicationUpdateDto,
       id: application.id,
     })

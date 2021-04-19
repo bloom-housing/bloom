@@ -14,6 +14,28 @@
       "noAccessError": "No application with that ID exists",
       "noApplicationError": "No application with that ID exists",
       "return": "Return to applications"
+    },
+    "settings": {
+      "passwordSuccess": "Password successfully updated",
+      "update": "Update",
+      "passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "alerts": {
+        "genericError": "There was an error. Please try again, or contact support for help.",
+        "nameSuccess": "Name update successful",
+        "dobSuccess": "Birthdate update successful",
+        "emailSuccess": "Email update successful",
+        "currentPassword": "Invalid current password. Please try again.",
+        "passwordSuccess": "Password update successful",
+        "passwordMatch": "New password fields do not match"
+      },
+      "placeholders": {
+        "month": "MM",
+        "day": "DD",
+        "year": "YYYY"
+      }
     }
   },
   "applications": {
@@ -553,7 +575,7 @@
         "emailInUse": "Email is already in use",
         "emailMismatch": "The emails do not match",
         "emailNotFound": "Email not found. Please register first.",
-        "passwordMismatch": "The passwors do not match",
+        "passwordMismatch": "The passwords do not match",
         "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
         "tokenExpired": "Your link has expired.",
         "tokenMissing": "Wrong token provided."

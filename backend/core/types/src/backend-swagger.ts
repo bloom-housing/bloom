@@ -97,9 +97,30 @@ export class UserService {
     });
   }
   /**
+   * Create user
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UserCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Resend confirmation
    */
-  confirmation(
+  resendConfirmation(
     params: {
       /** requestBody */
       body?: Email;
@@ -107,7 +128,7 @@ export class UserService {
     options: IRequestOptions = {}
   ): Promise<Status> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
+      let url = basePath + '/user/resend-confirmation';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -1126,9 +1147,6 @@ export interface User {
   id: string;
 
   /**  */
-  confirmationToken?: string;
-
-  /**  */
   confirmedAt?: Date;
 
   /**  */
@@ -1240,13 +1258,16 @@ export interface UserUpdate {
   updatedAt?: Date;
 
   /**  */
-  dob: Date;
+  password?: string;
 
   /**  */
-  confirmationToken?: string;
+  currentPassword?: string;
 
   /**  */
   confirmedAt?: Date;
+
+  /**  */
+  email: string;
 
   /**  */
   firstName: string;
@@ -1256,6 +1277,9 @@ export interface UserUpdate {
 
   /**  */
   lastName: string;
+
+  /**  */
+  dob: Date;
 }
 
 export interface Login {
@@ -1621,9 +1645,6 @@ export interface UserBasic {
 
   /**  */
   resetToken: string;
-
-  /**  */
-  confirmationToken?: string;
 
   /**  */
   confirmedAt?: Date;

@@ -61,7 +61,7 @@ const Field = (props: FieldProps) => {
 
   let note = <></>
   if (props.note) {
-    note = <p className="text text-gray-600 text-sm pb-2">{props.note}</p>
+    note = <p className="field-note mb-4">{props.note}</p>
   }
 
   return (

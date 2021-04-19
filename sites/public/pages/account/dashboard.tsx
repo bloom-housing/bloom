@@ -63,7 +63,7 @@ class Dashboard extends Component<DashboardProps> {
                     icon={<HeaderBadge />}
                   ></DashBlock>
                   <DashBlock
-                    href="/account/settings"
+                    href="/account/edit"
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}
                     icon={settingsIcon}

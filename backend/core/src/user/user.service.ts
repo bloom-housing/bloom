@@ -1,13 +1,21 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
 import { FindConditions, Repository } from "typeorm"
 import { scrypt, randomBytes } from "crypto"
-import { EmailDto, UserCreateDto, UserDto } from "./dto/user.dto"
+import { EmailDto, UserCreateDto, UserUpdateDto } from "./dto/user.dto"
 import { encode, decode } from "jwt-simple"
 import moment from "moment"
 import { UpdatePasswordDto } from "./dto/update_password.dto"
 import { ConfirmDto } from "./dto/confirm.dto"
+import { assignDefined } from "../shared/assign-defined"
 
 // Length of hashed key, in bytes
 const SCRYPT_KEYLEN = 64
@@ -48,17 +56,36 @@ export class UserService {
     return this.repo.findOne(options)
   }
 
-  async update(dto: Partial<UserDto>) {
-    const obj = await this.repo.findOne({
+  async update(dto: Partial<UserUpdateDto>) {
+    const user = await this.repo.findOne({
       where: {
         id: dto.id,
       },
     })
-    if (!obj) {
+    if (!user) {
       throw new NotFoundException()
     }
-    Object.assign(obj, dto)
-    return await this.repo.save(obj)
+
+    let passwordHash
+    if (dto.password) {
+      if (!dto.currentPassword) {
+        // Validation is handled at DTO definition level
+        throw new BadRequestException()
+      }
+      if (!(await this.verifyUserPassword(user, dto.currentPassword))) {
+        throw new UnauthorizedException("invalidPassword")
+      }
+
+      passwordHash = await passwordToHash(dto.password)
+      delete dto.password
+    }
+
+    assignDefined(user, {
+      ...dto,
+      passwordHash,
+    })
+
+    return await this.repo.save(user)
   }
 
   // passwordHash is a hidden field - we need to build a query to get it directly
@@ -69,11 +96,6 @@ export class UserService {
       .from(User, "user")
       .where("user.id = :id", { id: user.id })
       .getOne()
-  }
-
-  public async storeUserPassword(user: User, password: string) {
-    const passwordHash = await passwordToHash(password)
-    await this.repo.update({ passwordHash }, user)
   }
 
   public async verifyUserPassword(user: User, password: string) {
