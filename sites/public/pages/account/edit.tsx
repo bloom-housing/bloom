@@ -99,6 +99,10 @@ const Edit = () => {
   }) => {
     const { password, passwordConfirmation, currentPassword } = data
     setPasswordAlert(null)
+    if (passwordConfirmation === "" || password === "") {
+      setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.passwordEmpty")}` })
+      return
+    }
     if (passwordConfirmation !== password) {
       setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.passwordMatch")}` })
       return
