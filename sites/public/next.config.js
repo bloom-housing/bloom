@@ -91,6 +91,9 @@ module.exports = withCSS(
               "/applications/start/what-to-expect": {
                 page: "/applications/start/what-to-expect",
               },
+              "/applications/start/autofill": {
+                page: "/applications/start/autofill",
+              },
               "/applications/review/confirmation": {
                 page: "/applications/review/confirmation",
               },

@@ -189,6 +189,12 @@
       "chooseYourLanguage": "Choose Your Language",
       "signInSaveTime": "Signing in could save you time by starting with details of your last application, and allow you to check the status of this application at any time."
     },
+    "autofill": {
+      "saveTime": "Save time by using the details from your last application",
+      "prefillYourApplication": "We'll simply pre-fill your application with the following details, and you can make updates as you go.",
+      "start": "Start with these details",
+      "reset": "Reset and start fresh"
+    },
     "name": {
       "title": "What's your name?",
       "yourName": "Your Name",
@@ -271,7 +277,8 @@
       "addMembers": {
         "addHouseholdMember": "+ Add Household Member",
         "done": "Done adding people",
-        "title": "Tell us about your household."
+        "title": "Tell us about your household.",
+        "doubleCheck": "Please double-check the information for each household member."
       },
       "householdMember": "Household Member",
       "householdMembers": "Household Members",
