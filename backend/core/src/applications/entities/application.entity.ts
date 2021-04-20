@@ -1,12 +1,4 @@
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from "typeorm"
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm"
 import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import {
@@ -19,7 +11,7 @@ import {
   IsOptional,
   IsString,
   MaxLength,
-  ValidateNested,
+  ValidateNested
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
@@ -32,6 +24,7 @@ import { HouseholdMember } from "./household-member.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApplicationPreference } from "./application-preferences.entity"
+import { Language } from "../../shared/types/language-enum"
 
 export enum ApplicationStatus {
   draft = "draft",
@@ -42,13 +35,6 @@ export enum ApplicationStatus {
 export enum ApplicationSubmissionType {
   paper = "paper",
   electronical = "electronical",
-}
-
-export enum Language {
-  en = "en",
-  es = "es",
-  vi = "vi",
-  zh = "zh",
 }
 
 export enum IncomePeriod {
