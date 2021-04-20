@@ -60,26 +60,6 @@ describe("Applications", () => {
     ).body
   })
 
-  it("should not allow user to change the email, change should be ignored", async () => {
-    const userUpdateDto: UserUpdateDto = {
-      id: user1Profile.id,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      email: "change@email.com",
-      firstName: "First",
-      middleName: "Mid",
-      lastName: "Last",
-      dob: new Date(),
-    }
-    const res = await supertest(app.getHttpServer())
-      .put(`/user/${user1Profile.id}`)
-      .send(userUpdateDto)
-      .set(...setAuthorization(user1AccessToken))
-      .expect(200)
-    expect(res.body.id).toBe(user1Profile.id)
-    expect(res.body.email).toBe(user1Profile.email)
-  })
-
   it("should not allow user to create an account with weak password", async () => {
     const userCreateDto: UserCreateDto = {
       password: "abcdef",
@@ -181,6 +161,7 @@ describe("Applications", () => {
       dob: new Date(),
       firstName: "First",
       lastName: "Last",
+      email: "test2@example.com",
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)

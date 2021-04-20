@@ -5,16 +5,19 @@ import {
   IsDate,
   IsDefined,
   IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
   Matches,
   MaxLength,
+  ValidateIf,
   ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { IdDto } from "../../shared/dto/id.dto"
 import { Match } from "../../shared/match.decorator"
+import { passwordRegex } from "../../shared/password-regex"
 
 export class UserDto extends OmitType(User, [
   "applications",
@@ -22,6 +25,7 @@ export class UserDto extends OmitType(User, [
   "leasingAgentInListings",
   "passwordHash",
   "resetToken",
+  "confirmationToken",
 ] as const) {
   @Expose()
   @IsOptional()
@@ -38,6 +42,7 @@ export class UserBasicDto extends OmitType(User, [
   "leasingAgentInListings",
   "passwordHash",
   "roles",
+  "confirmationToken",
 ] as const) {}
 
 export class UserDtoWithAccessToken extends UserDto {
@@ -60,7 +65,6 @@ export class EmailDto {
 export class UserCreateDto extends OmitType(UserDto, [
   "id",
   "confirmedAt",
-  "confirmationToken",
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
@@ -68,8 +72,7 @@ export class UserCreateDto extends OmitType(UserDto, [
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, {
+  @Matches(passwordRegex, {
     message: "passwordTooWeak",
     groups: [ValidationsGroupsEnum.default],
   })
@@ -97,7 +100,6 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "email",
   "leasingAgentInListings",
   "roles",
 ] as const) {
@@ -119,7 +121,16 @@ export class UserUpdateDto extends OmitType(UserDto, [
   updatedAt?: Date
 
   @Expose()
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  dob: Date
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(passwordRegex, {
+    message: "passwordTooWeak",
+    groups: [ValidationsGroupsEnum.default],
+  })
+  password?: string
+
+  @Expose()
+  @ValidateIf((o) => o.password, { groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
+  currentPassword?: string
 }

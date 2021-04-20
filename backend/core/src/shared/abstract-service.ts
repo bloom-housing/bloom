@@ -5,6 +5,7 @@ import { FindConditions } from "typeorm/find-options/FindConditions"
 import { ObjectLiteral } from "typeorm/common/ObjectLiteral"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type"
+import { assignDefined } from "./assign-defined"
 
 export interface GenericUpdateDto {
   id?: string
@@ -62,7 +63,7 @@ export function AbstractServiceFactory<T, TCreateDto, TUpdateDto extends Generic
       if (!obj) {
         throw new NotFoundException()
       }
-      Object.assign(obj, dto)
+      assignDefined(obj, dto)
       await this.repository.save(obj)
       return obj
     }

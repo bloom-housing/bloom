@@ -17,7 +17,7 @@ import {
   register,
   resendConfirmation,
   scheduleTokenRefresh,
-  updatePassword,
+  resetPassword,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
 import { User, UserCreate } from "@bloom-housing/backend-core/types"
@@ -30,7 +30,7 @@ type ContextProps = {
   resendConfirmation: (email: string) => Promise<string>
   signOut: () => void
   // True when an API request is processing
-  updatePassword: (token: string, password: string, passwordConfirmation: string) => Promise<User>
+  resetPassword: (token: string, password: string, passwordConfirmation: string) => Promise<User>
   loading: boolean
   profile?: User
   accessToken?: string
@@ -188,10 +188,10 @@ export const UserProvider: FunctionComponent = ({ children }) => {
         dispatch(stopLoading())
       }
     },
-    updatePassword: async (token, password, passwordConfirmation) => {
+    resetPassword: async (token, password, passwordConfirmation) => {
       dispatch(startLoading())
       try {
-        const accessToken = await updatePassword(apiUrl, token, password, passwordConfirmation)
+        const accessToken = await resetPassword(apiUrl, token, password, passwordConfirmation)
         dispatch(saveToken({ accessToken, apiUrl, dispatch }))
         const client = createAxiosInstance(apiUrl, accessToken)
         const profile = await getProfile(client)

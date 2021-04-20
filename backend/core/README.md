@@ -56,6 +56,19 @@ Applying migrations:
 yarn db:migration:run
 ```
 
+### Installing Redis
+
+You can install Redis using Homebrew with the following command: `brew install redis`.
+
+To start Redis:
+`redis-server`.
+
+To have launch Redis as background service and restart at login:
+`brew services start redis`.
+
+Test if Redis is working:
+`redis-cli ping`
+
 ### Running Tests
 
 End-to-end tests:

@@ -74,7 +74,7 @@ const SignIn = () => {
               register={register}
             />
 
-            <aside className="float-right font-bold">
+            <aside className="float-right text-tiny font-semibold">
               <Link href="/forgot-password">
                 <a>{t("authentication.signIn.forgotPassword")}</a>
               </Link>
@@ -92,14 +92,7 @@ const SignIn = () => {
             />
 
             <div className="text-center mt-6">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  //
-                }}
-              >
-                Sign In
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>Sign In</Button>
             </div>
           </Form>
         </div>

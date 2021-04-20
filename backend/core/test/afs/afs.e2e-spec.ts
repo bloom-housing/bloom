@@ -15,6 +15,7 @@ import dbOptions = require("../../ormconfig.test")
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { ThrottlerModule } from "@nestjs/throttler"
 import {
   ApplicationFlaggedSet,
   FlaggedSetStatus,
@@ -53,6 +54,11 @@ describe("ApplicationFlaggedSets", () => {
         ListingsModule,
         ApplicationsModule,
         TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, HouseholdMember]),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          ignoreUserAgents: [/^node-superagent.*$/],
+        }),
       ],
     })
       .overrideProvider(EmailService)

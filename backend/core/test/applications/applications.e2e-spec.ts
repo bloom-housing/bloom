@@ -18,6 +18,7 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { ThrottlerModule } from "@nestjs/throttler"
 import { getTestAppBody } from "../lib/get-test-app-body"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -51,6 +52,11 @@ describe("Applications", () => {
         ListingsModule,
         ApplicationsModule,
         TypeOrmModule.forFeature([Application, HouseholdMember]),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          ignoreUserAgents: [/^node-superagent.*$/],
+        }),
       ],
     })
       .overrideProvider(EmailService)
@@ -542,6 +548,21 @@ describe("Applications", () => {
       .get(`/applications/?order=XYZ`)
       .set(...setAuthorization(adminAccessToken))
       .expect(400)
+  })
+
+  it(`should disallow a user to send too mutch application submits`, async () => {
+    const body = getTestAppBody(listing1Id)
+    const failAfter = 2
+
+    for (let i = 0; i < failAfter + 1; i++) {
+      const expect = i < failAfter ? 201 : 429
+      await supertest(app.getHttpServer())
+        .post(`/applications/submit`)
+        .set("User-Agent", "faked")
+        .send(body)
+        .set(...setAuthorization(user1AccessToken))
+        .expect(expect)
+    }
   })
 
   afterEach(async () => {
