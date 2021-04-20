@@ -1797,6 +1797,21 @@ export interface Asset {
 export interface ListingEvent {
   /**  */
   type: ListingEventType;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
 }
 
 export interface WhatToExpect {

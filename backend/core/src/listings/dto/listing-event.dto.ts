@@ -1,10 +1,10 @@
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsEnum, IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { ListingEventType } from "./listing-event-type-enum"
+import { ListingEventType } from "../types/listing-event-type-enum"
 import { ApiProperty } from "@nestjs/swagger"
 
-export class ListingEvent {
+export class ListingEventDto {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(ListingEventType, { groups: [ValidationsGroupsEnum.default] })
