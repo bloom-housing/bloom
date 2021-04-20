@@ -2,7 +2,7 @@ import { Expose } from "class-transformer"
 import { IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 
-export class Asset {
+export class AssetDto {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   label: string

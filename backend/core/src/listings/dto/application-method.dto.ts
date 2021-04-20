@@ -1,10 +1,10 @@
 import { Expose } from "class-transformer"
 import { IsBoolean, IsEnum, IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { ApplicationMethodType } from "./application-method-type-enum.ts"
 import { ApiProperty } from "@nestjs/swagger"
+import { ApplicationMethodType } from "../types/application-method-type-enum"
 
-export class ApplicationMethod {
+export class ApplicationMethodDto {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(ApplicationMethodType, { groups: [ValidationsGroupsEnum.default] })

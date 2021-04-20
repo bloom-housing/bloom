@@ -34,9 +34,9 @@ import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { CSVFormattingType } from "../../csv/formatting/application-formatting-metadata-factory"
 import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
 import { ListingStatus } from "../types/listing-status-enum"
-import { Asset } from "../types/asset"
 import { ListingEvent } from "../types/listing-event"
-import { ApplicationMethod } from "../types/application-method"
+import { ApplicationMethodDto } from "../dto/application-method.dto"
+import { AssetDto } from "../dto/asset.dto"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -67,14 +67,14 @@ class Listing extends BaseEntity {
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationMethod)
-  applicationMethods: ApplicationMethod[]
+  @Type(() => ApplicationMethodDto)
+  applicationMethods: ApplicationMethodDto[]
 
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Asset)
-  assets: Asset[]
+  @Type(() => AssetDto)
+  assets: AssetDto[]
 
   @Column("jsonb")
   @Expose()

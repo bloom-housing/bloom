@@ -1,7 +1,5 @@
 import {
   Listing,
-
-
 } from "../listings/entities/listing.entity"
 import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
@@ -10,7 +8,7 @@ import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
 import { BaseEntity, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { Unit } from "../.."
+import { ApplicationMethodType, AssetDto, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
@@ -22,20 +20,18 @@ import { UserCreateDto } from "../user/dto/user.dto"
 import { CSVFormattingType } from "../csv/formatting/application-formatting-metadata-factory"
 import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { ListingStatus } from "../listings/types/listing-status-enum"
-import { Asset } from "../listings/types/asset"
 import { ListingEvent } from "../listings/types/listing-event"
-import { ApplicationMethodType } from "../listings/types/application-method-type-enum.ts"
-import { ApplicationMethod } from "../listings/types/application-method"
+import { ApplicationMethodDto } from "../listings/dto/application-method.dto"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
   amiChart: AmiChartCreateDto
   units: Array<Omit<UnitCreateDto, "property">>
-  applicationMethods: Array<Omit<ApplicationMethod, "listing">>
+  applicationMethods: Array<Omit<ApplicationMethodDto, "listing">>
   property: Omit<PropertyCreateDto, "propertyGroups" | "listings" | "units" | "unitsSummarized">
   preferences: Array<Omit<PreferenceCreateDto, "listing">>
   listingEvents: Array<Omit<ListingEvent, "listing">>
-  assets: Array<Omit<Asset, "listing">>
+  assets: Array<Omit<AssetDto, "listing">>
   listing: Omit<
     ListingCreateDto,
     | keyof BaseEntity
