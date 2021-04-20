@@ -13,7 +13,7 @@ describe("<ReferralApplication>", () => {
         title={"For further information"}
       />
     )
-    expect(getByText("211")).toBeTruthy()
+    expect(getByText("211", { exact: false })).toBeTruthy()
     expect(getByText("Referral description")).toBeTruthy()
     expect(getByText("For further information")).toBeTruthy()
   })
