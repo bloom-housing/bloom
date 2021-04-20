@@ -5,6 +5,7 @@ import {
   ApplicationSubmissionType,
   Language,
 } from "@bloom-housing/backend-core/types"
+import { blankApplication } from "@bloom-housing/ui-components"
 
 class AutofillCleaner {
   application: Application = null
@@ -75,16 +76,7 @@ class AutofillCleaner {
 
   removeLiveWorkAddresses() {
     this.application.applicant.workInRegion = null
-    this.application.applicant.workAddress = {
-      street: "",
-      street2: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      county: "",
-      latitude: null,
-      longitude: null,
-    } as Address
+    this.application.applicant.workAddress = blankApplication().applicant.workAddress as Address
 
     return this
   }
