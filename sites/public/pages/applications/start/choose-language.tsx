@@ -41,7 +41,7 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
-    if (!context.listing) {
+    if (!context.listing || context.listing.id != listingId) {
       void loadListing(listingId, setListing, conductor, context)
     } else {
       setListing(context.listing)
@@ -79,7 +79,7 @@ export default () => {
         />
       </FormCard>
 
-      <FormCard>
+      <FormCard className="overflow-hidden">
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">
             {t("application.chooseLanguage.letsGetStarted")}
@@ -116,7 +116,7 @@ export default () => {
             </div>
           </Form>
 
-          {initialStateLoaded && !profile ? (
+          {initialStateLoaded && !profile && (
             <div className="form-card__pager-row primary px-4 border-t border-gray-450">
               <h2 className="form-card__title w-full border-none pt-0 mt-0">
                 {t("account.haveAnAccount")}
@@ -130,8 +130,6 @@ export default () => {
                 </LinkButton>
               </div>
             </div>
-          ) : (
-            <div className="py-4"></div>
           )}
         </div>
       </FormCard>
