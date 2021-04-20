@@ -21,7 +21,7 @@ const newListingSeed = (): ListingSeed => {
 
 const seedListings = async (app: INestApplicationContext) => {
   let listingSeed = newListingSeed()
-  //Listing1 (2pref)
+  listingSeed.listing.name = "Triton (2pref)"
   const listing1 = await seedListing(app, listingSeed)
   const userService = app.get<UserService>(UserService)
   await Promise.all([
@@ -30,8 +30,9 @@ const seedListings = async (app: INestApplicationContext) => {
     }),
   ])
 
-  // Listing 2 (1pref)
+  // Listing 2
   listingSeed = newListingSeed()
+  listingSeed.listing.name = "Test listing (1pref)"
   listingSeed.preferences = [
     {
       ordinal: 1,
@@ -62,8 +63,8 @@ const seedListings = async (app: INestApplicationContext) => {
   ]
   const listing2 = await seedListing(app, listingSeed)
 
-  // Listing 3 (0pref)
   listingSeed = newListingSeed()
+  listingSeed.listing.name = "Test listing (0pref)"
   listingSeed.leasingAgents = [
     {
       ...listingSeed.leasingAgents[0],

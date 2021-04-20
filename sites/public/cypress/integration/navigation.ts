@@ -24,7 +24,7 @@ describe("Navigating around the site", () => {
 
         // Check that the URL got re-written with a URL slug
         cy.location().should((loc) => {
-          expect(loc.pathname).to.contain("the_triton_55_triton_park_lane_foster_city_ca")
+          expect(loc.pathname).to.contain("triton_55_triton_park_lane_foster_city_ca")
         })
       })
   })
