@@ -1,11 +1,7 @@
 import {
-  ApplicationMethod,
-  ApplicationMethodType,
-  Asset,
   Listing,
-  ListingEvent,
-  ListingEventType,
-  ListingStatus,
+
+
 } from "../listings/entities/listing.entity"
 import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
@@ -24,6 +20,12 @@ import { SanMateoHUD2019 } from "./ami-charts"
 import { InputType } from "../shared/input-type"
 import { UserCreateDto } from "../user/dto/user.dto"
 import { CSVFormattingType } from "../csv/formatting/application-formatting-metadata-factory"
+import { ListingEventType } from "../listings/types/listing-event-type-enum"
+import { ListingStatus } from "../listings/types/listing-status-enum"
+import { Asset } from "../listings/types/asset"
+import { ListingEvent } from "../listings/types/listing-event"
+import { ApplicationMethodType } from "../listings/types/application-method-type-enum.ts"
+import { ApplicationMethod } from "../listings/types/application-method"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {

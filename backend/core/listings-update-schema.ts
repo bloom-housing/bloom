@@ -1,6 +1,7 @@
 import fs from "fs"
 import { plainToClass } from "class-transformer"
-import { ApplicationMethod, ApplicationMethodType } from "./src/listings/entities/listing.entity"
+import { ApplicationMethodType } from "./src/listings/types/application-method-type-enum.ts"
+import { ApplicationMethod } from "./src/listings/types/application-method"
 
 if (process.argv.length < 3) {
   console.log("usage: listings-update-schema input_listing.json")
