@@ -57,6 +57,9 @@ describe("applications/household/member", function () {
   })
 
   it("should save form values and redirect to the next step", function () {
+    cy.get("form").should("be.visible")
+    cy.location("pathname").should("include", route)
+
     // initial fields
     cy.getByID("firstName").type(this.data["firstName"])
     cy.getByID("middleName").type(this.data["middleName"])
