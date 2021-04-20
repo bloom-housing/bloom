@@ -7,7 +7,6 @@ import {
   ApplicationStatus,
   ApplicationSubmissionType,
   IncomePeriod,
-
 } from "../applications/entities/application.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { InputType } from "../shared/types/input-type"

@@ -1,6 +1,4 @@
-import {
-  Listing,
-} from "../listings/entities/listing.entity"
+import { Listing } from "../listings/entities/listing.entity"
 import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
 import { PropertyCreateDto } from "../property/dto/property.dto"
