@@ -15,6 +15,8 @@ import Joi from "joi"
           .default("development"),
         DATABASE_URL: Joi.string().required(),
         REDIS_TLS_URL: Joi.string().required(),
+        THROTTLE_TTL: Joi.number().default(1),
+        THROTTLE_LIMIT: Joi.number().default(9999999999999999),
       }),
     }),
     SendGridModule.forRootAsync({

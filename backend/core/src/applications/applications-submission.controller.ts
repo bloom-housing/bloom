@@ -29,7 +29,6 @@ export class ApplicationsSubmissionController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Post(`submit`)
-  @Throttle(2, 60)
   @ApiOperation({ summary: "Submit application", operationId: "submit" })
   @ResourceAction(authzActions.submit)
   async submit(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
