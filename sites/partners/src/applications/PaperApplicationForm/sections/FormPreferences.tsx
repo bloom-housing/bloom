@@ -1,56 +1,19 @@
 import React, { useMemo, useCallback } from "react"
-import { t, GridSection, ViewItem, GridCell, Field } from "@bloom-housing/ui-components"
-import { useFormContext, UseFormMethods } from "react-hook-form"
-import { Preference, FormMetadataOptions, InputType } from "@bloom-housing/backend-core/types"
-import { FormAddress } from "../FormAddress"
+import {
+  Field,
+  t,
+  ExtraField,
+  PREFERENCES_FORM_PATH,
+  GridSection,
+  ViewItem,
+  GridCell,
+} from "@bloom-housing/ui-components"
 
-const PREFERENCES_FORM_PATH = "application.preferences"
+import { useFormContext } from "react-hook-form"
+import { Preference, FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 type FormPreferencesProps = {
   preferences: Preference[]
-}
-
-type ExtraFieldProps = {
-  metaKey: string
-  optionKey: string
-  extraKey: string
-  type: InputType
-  register: UseFormMethods["register"]
-}
-
-const ExtraField = ({ metaKey, optionKey, extraKey, type, register }: ExtraFieldProps) => {
-  const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
-
-  return (
-    <div className="my-4" key={FIELD_NAME}>
-      {(() => {
-        if (type === InputType.text) {
-          return (
-            <Field
-              id={FIELD_NAME}
-              name={FIELD_NAME}
-              type="text"
-              label={t(`application.preferences.options.${extraKey}`)}
-              register={register}
-            />
-          )
-        }
-
-        if (type === InputType.address) {
-          return (
-            <div className="pb-4">
-              {FormAddress(
-                t("application.preferences.options.address"),
-                FIELD_NAME,
-                "preference",
-                register
-              )}
-            </div>
-          )
-        }
-      })()}
-    </div>
-  )
 }
 
 const FormPreferences = ({ preferences }: FormPreferencesProps) => {
