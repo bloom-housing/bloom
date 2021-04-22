@@ -34,7 +34,7 @@ describe("Navigating around the site", () => {
     cy.get("article.listings-row a")
       .first()
       .then(function ($a) {
-        cy.visit(`${$a.prop("href")}/_55_triton_park_lane_foster_city_ca`)
+        cy.visit(`${$a.prop("href")}/test_listing_1_pref_55_triton_park_lane_foster_city_ca`)
         // Check that the listing page sidebar apply section text is present on the page
         cy.contains("Apply Online")
       })
