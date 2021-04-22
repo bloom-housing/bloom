@@ -11,19 +11,19 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { DefaultAuthGuard } from "../auth/default.guard"
 import { AuthzGuard } from "../auth/authz.guard"
 import { ResourceType } from "../auth/resource_type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { TranslationsService } from "./translations.service"
 import { TranslationCreateDto, TranslationDto, TranslationUpdateDto } from "./dto/translation.dto"
+import { OptionalAuthGuard } from "../auth/optional-auth.guard"
 
-@Controller("translations")
+@Controller("/translations")
 @ApiTags("translations")
 @ApiBearerAuth()
 @ResourceType("translation")
-@UseGuards(DefaultAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class TranslationsController {
   constructor(private readonly translationsService: TranslationsService) {}
