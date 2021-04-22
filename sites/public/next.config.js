@@ -170,7 +170,6 @@ module.exports = withCSS(
               "/account/application": { page: "/account/application" },
               "/account/edit": { page: "/account/edit" },
               "/account/dashboard": { page: "/account/dashboard" },
-              "/account/settings": { page: "/account/settings" },
             })
             const languages = ["es", "zh", "vi"] // add new language codes here
             const languagePaths = {}
