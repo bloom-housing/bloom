@@ -135,7 +135,7 @@ const Apply = (props: ApplyProps) => {
         ApplicationMethodType.POBox,
         ApplicationMethodType.LeasingAgent,
       ]) && (
-        <section className="aside-block bg-gray-100">
+        <section className="aside-block is-tinted bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
           {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) && (
             <>

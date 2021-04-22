@@ -6,7 +6,7 @@ import moment from "moment"
 const LotteryResultsEvent = (props: { event: ListingEvent }) => {
   const { event } = props
   return (
-    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
+    <section className="aside-block">
       <h4 className="text-caps-underline">{t("listings.lotteryResults.header")}</h4>
       <p className="text text-gray-800 pb-3 flex justify-between items-center">
         <span className="inline-block">{moment(props.event.startTime).format("MMMM D, YYYY")}</span>
