@@ -114,7 +114,9 @@ workflows:
           executor: cypress-node
           working_directory: sites/public
           yarn: true
-          build: yarn test:backend:core:dbsetup
-          start: yarn dev:all
+          build: |
+            yarn test:backend:core:dbsetup
+            yarn build:app:public
+          start: yarn test:cypress:public
           wait-on: "http://localhost:3000"
           store_artifacts: true
