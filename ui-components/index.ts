@@ -65,6 +65,7 @@ export * from "./src/helpers/validators"
 export * from "./src/helpers/blankApplication"
 export * from "./src/helpers/formatYesNoLabel"
 export * from "./src/helpers/preferences"
+export * from "./src/helpers/resolveObject"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
