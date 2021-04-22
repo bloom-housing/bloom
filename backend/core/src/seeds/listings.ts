@@ -233,7 +233,7 @@ export const listingSeed1: ListingSeed = {
             extraData: [
               {
                 key: "name",
-                type: InputType.text,
+                type: InputType.hhMemberSelect,
               },
               {
                 key: "address",
@@ -246,7 +246,7 @@ export const listingSeed1: ListingSeed = {
             extraData: [
               {
                 key: "name",
-                type: InputType.text,
+                type: InputType.hhMemberSelect,
               },
               {
                 key: "address",

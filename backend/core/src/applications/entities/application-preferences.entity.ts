@@ -107,6 +107,7 @@ export class ApplicationPreferenceOption {
         { value: BooleanInput, name: InputType.boolean },
         { value: TextInput, name: InputType.text },
         { value: AddressInput, name: InputType.address },
+        { value: TextInput, name: InputType.hhMemberSelect },
       ],
     },
   })
