@@ -3,6 +3,7 @@ export * from "./src/actions/Button"
 export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
+export * from "./src/actions/ExpandableContent"
 
 /* Blocks */
 export * from "./src/blocks/AppStatusItem"
@@ -63,6 +64,7 @@ export * from "./src/helpers/formatIncome"
 export * from "./src/helpers/validators"
 export * from "./src/helpers/blankApplication"
 export * from "./src/helpers/formatYesNoLabel"
+export * from "./src/helpers/preferences"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
