@@ -3499,10 +3499,7 @@ export interface Translation {
   updatedAt: Date;
 
   /**  */
-  key: string;
-
-  /**  */
-  text: string;
+  translations: object;
 }
 
 export interface TranslationCreate {
@@ -3513,10 +3510,7 @@ export interface TranslationCreate {
   language: Language;
 
   /**  */
-  key: string;
-
-  /**  */
-  text: string;
+  translations: object;
 }
 
 export interface TranslationUpdate {
@@ -3536,10 +3530,7 @@ export interface TranslationUpdate {
   updatedAt?: Date;
 
   /**  */
-  key: string;
-
-  /**  */
-  text: string;
+  translations: object;
 }
 
 export interface ApplicationFlaggedSet {
