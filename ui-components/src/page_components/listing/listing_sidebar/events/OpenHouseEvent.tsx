@@ -5,7 +5,7 @@ import { t } from "../../../../helpers/translator"
 
 const OpenHouseEvent = (props: { events: ListingEvent[] }) => {
   return (
-    <section className="aside-block bg-primary-lighter border-t">
+    <section className="aside-block">
       <h4 className="text-caps-tiny">{t("listings.openHouseEvent.header")}</h4>
       {props.events.map((openHouseEvent, index) => (
         <div key={`openHouses-${index}`}>

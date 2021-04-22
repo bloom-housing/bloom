@@ -53,9 +53,38 @@ details.disclosure {
 }
 
 .aside-block {
-  @apply border-b;
   @apply border-gray-400;
   @apply p-5;
+  @apply pb-2;
+  @apply -mx-4;
+
+  &.is-tinted {
+    @apply bg-primary-lighter;
+    @apply border-t;
+  }
+  &:not(.is-tinted) + &.is-tinted {
+    @apply mt-3;
+  }
+
+  &.is-tinted,
+  &:last-of-type {
+    @apply pb-5;
+  }
+
+  @screen md {
+    @apply border-b;
+    @apply pb-5;
+    @apply mx-0;
+
+    &.is-tinted {
+      @apply mt-0;
+    }
+
+    &:not(.is-tinted) + &.is-tinted {
+      @apply border-t-0;
+      @apply mt-0;
+    }
+  }
 }
 
 .aside-block__divider {

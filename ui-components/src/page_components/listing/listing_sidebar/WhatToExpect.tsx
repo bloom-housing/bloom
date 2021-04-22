@@ -28,7 +28,7 @@ const WhatToExpect = (props: WhatToExpectProps) => {
       : t("whatToExpect.bePreparedIfChosen")
 
   return (
-    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
+    <section className="aside-block">
       <h4 className="text-caps-underline">{t("whatToExpect.label")}</h4>
       <p className="text-tiny text-gray-800">{applicantsWillBeContacted}</p>
       <details className="disclosure">
