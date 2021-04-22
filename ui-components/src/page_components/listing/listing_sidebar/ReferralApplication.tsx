@@ -12,7 +12,7 @@ const ReferralApplication = (props: ReferralApplicationProps) => {
   const linkedPhoneNumber = `tel:${props.phoneNumber.replace(/[-()]/g, "")}`
 
   return (
-    <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4">
+    <section className="aside-block">
       <h2 className="text-caps-underline">{props.title}</h2>
       <p>
         <a href={linkedPhoneNumber}>
