@@ -1,5 +1,5 @@
 import React from "react"
-import { InputType } from "@bloom-housing/backend-core/types"
+import { InputType, HouseholdMember } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
 import { stateKeys } from "./formOptions"
@@ -10,6 +10,7 @@ type ExtraFieldProps = {
   extraKey: string
   type: InputType
   register: UseFormMethods["register"]
+  householdMembers?: HouseholdMember[]
 }
 
 type AddressType =
@@ -28,7 +29,14 @@ export const PREFERENCES_FORM_PATH = "application.preferences"
 /*
   It generates inner fields for preferences form
 */
-export const ExtraField = ({ metaKey, optionKey, extraKey, type, register }: ExtraFieldProps) => {
+export const ExtraField = ({
+  metaKey,
+  optionKey,
+  extraKey,
+  type,
+  register,
+  householdMembers,
+}: ExtraFieldProps) => {
   const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
 
   return (
@@ -54,6 +62,29 @@ export const ExtraField = ({ metaKey, optionKey, extraKey, type, register }: Ext
                 register
               )}
             </div>
+          )
+        } else if (type === InputType.hhMemberSelect) {
+          const options =
+            householdMembers?.map((item) => {
+              if (!item?.firstName || !item?.firstName) return ""
+
+              const option = `${item.firstName} ${item.lastName}`
+              return {
+                label: option,
+                value: option,
+              }
+            }) || []
+
+          return (
+            <Select
+              id={FIELD_NAME}
+              name={FIELD_NAME}
+              label={t(`application.preferences.options.${extraKey}`)}
+              // labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={options}
+            />
           )
         }
 
