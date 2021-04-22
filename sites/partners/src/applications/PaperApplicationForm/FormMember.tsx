@@ -14,9 +14,9 @@ import {
   FieldGroup,
   Button,
   Form,
+  FormAddress,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { FormAddress } from "./FormAddress"
 import { YesNoAnswer } from "./FormTypes"
 
 type ApplicationFormMemberProps = {
@@ -208,16 +208,23 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           </GridCell>
         </GridSection>
 
-        {sameAddressField === YesNoAnswer.No &&
-          FormAddress(
-            t("application.details.residenceAddress"),
-            "address",
-            "residence-member",
-            register
-          )}
+        {sameAddressField === YesNoAnswer.No && (
+          <FormAddress
+            subtitle={t("application.details.residenceAddress")}
+            dataKey="address"
+            type="residence-member"
+            register={register}
+          />
+        )}
 
-        {workInRegionField === YesNoAnswer.Yes &&
-          FormAddress(t("application.contact.workAddress"), "workAddress", "work", register)}
+        {workInRegionField === YesNoAnswer.Yes && (
+          <FormAddress
+            subtitle={t("application.contact.workAddress")}
+            dataKey="workAddress"
+            type="work"
+            register={register}
+          />
+        )}
       </div>
 
       <div className="mt-6">

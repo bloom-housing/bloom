@@ -18,8 +18,18 @@ type ExtraFieldProps = {
   extraKey: string
   type: InputType
   register: UseFormMethods["register"]
+  errors?: UseFormMethods["errors"]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hhMembersOptions?: SelectOption[]
+}
+
+type FormAddressProps = {
+  subtitle: string
+  dataKey: string
+  type: AddressType
+  register: UseFormMethods["register"]
+  errors?: UseFormMethods["errors"]
+  required?: boolean
 }
 
 type AddressType =
@@ -44,6 +54,7 @@ export const ExtraField = ({
   extraKey,
   type,
   register,
+  errors,
   hhMembersOptions,
 }: ExtraFieldProps) => {
   const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
@@ -59,17 +70,22 @@ export const ExtraField = ({
               type="text"
               label={t(`application.preferences.options.${extraKey}`)}
               register={register}
+              validation={{ required: true }}
+              error={errors?.[FIELD_NAME]}
+              errorMessage={t("errors.requiredFieldError")}
             />
           )
         } else if (type === InputType.address) {
           return (
             <div className="pb-4">
-              {FormAddress(
-                t("application.preferences.options.address"),
-                FIELD_NAME,
-                "preference",
-                register
-              )}
+              <FormAddress
+                subtitle={t("application.preferences.options.address")}
+                dataKey={FIELD_NAME}
+                type="preference"
+                register={register}
+                errors={errors}
+                required={true}
+              />
             </div>
           )
         } else if (type === InputType.hhMemberSelect) {
@@ -81,6 +97,9 @@ export const ExtraField = ({
                 type="text"
                 label={t(`application.preferences.options.${extraKey}`)}
                 register={register}
+                validation={{ required: true }}
+                error={errors?.[FIELD_NAME]}
+                errorMessage={t("errors.requiredFieldError")}
               />
             )
 
@@ -92,6 +111,9 @@ export const ExtraField = ({
               register={register}
               controlClassName="control"
               options={hhMembersOptions}
+              validation={{ required: true }}
+              error={errors?.[FIELD_NAME]}
+              errorMessage={t("errors.requiredFieldError")}
             />
           )
         }
@@ -102,89 +124,105 @@ export const ExtraField = ({
   )
 }
 
-export const FormAddress = (
-  subtitle: string,
-  dataKey: string,
-  type: AddressType,
-  register: UseFormMethods["register"]
-) => {
+export const FormAddress = ({
+  subtitle,
+  dataKey,
+  type,
+  register,
+  errors,
+  required,
+}: FormAddressProps) => {
   return (
-    <GridSection subtitle={subtitle}>
-      <GridCell span={2}>
-        <ViewItem label={t("application.contact.streetAddress")}>
-          <Field
-            id={`${dataKey}.street`}
-            name={`${dataKey}.street`}
-            label={t("application.contact.streetAddress")}
-            placeholder={t("application.contact.streetAddress")}
-            register={register}
-            readerOnly
-          />
-        </ViewItem>
-      </GridCell>
-      <GridCell>
-        <ViewItem label={t("application.contact.apt")}>
-          <Field
-            id={`${dataKey}.street2`}
-            name={`${dataKey}.street2`}
-            label={t("application.contact.apt")}
-            placeholder={t("application.contact.apt")}
-            register={register}
-            readerOnly
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("application.contact.city")}>
-          <Field
-            id={`${dataKey}.city`}
-            name={`${dataKey}.city`}
-            label={t("application.contact.cityName")}
-            placeholder={t("application.contact.cityName")}
-            register={register}
-            readerOnly
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell className="md:grid md:grid-cols-2 md:gap-8" span={2}>
-        <ViewItem label={t("application.contact.state")} className="mb-0">
-          <Select
-            id={`${dataKey}.state`}
-            name={`${dataKey}.state`}
-            label={t("application.contact.state")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={stateKeys}
-            keyPrefix="states"
-          />
-        </ViewItem>
-
-        <ViewItem label={t("application.contact.zip")}>
-          <Field
-            id={`${dataKey}.zipCode`}
-            name={`${dataKey}.zipCode`}
-            label={t("application.contact.zip")}
-            placeholder={t("application.contact.zipCode")}
-            register={register}
-            readerOnly
-          />
-        </ViewItem>
-      </GridCell>
-
-      {type === "residence" && (
+    <>
+      <GridSection subtitle={subtitle}>
         <GridCell span={2}>
-          <Field
-            id="application.sendMailToMailingAddress"
-            name="application.sendMailToMailingAddress"
-            type="checkbox"
-            label={t("application.contact.sendMailToMailingAddress")}
-            register={register}
-          />
+          <ViewItem label={t("application.contact.streetAddress")}>
+            <Field
+              id={`${dataKey}.street`}
+              name={`${dataKey}.street`}
+              label={t("application.contact.streetAddress")}
+              placeholder={t("application.contact.streetAddress")}
+              register={register}
+              validation={{ required }}
+              error={errors?.[`${dataKey}.street`]}
+              errorMessage={t("errors.streetError")}
+              readerOnly
+            />
+          </ViewItem>
         </GridCell>
-      )}
-    </GridSection>
+        <GridCell>
+          <ViewItem label={t("application.contact.apt")}>
+            <Field
+              id={`${dataKey}.street2`}
+              name={`${dataKey}.street2`}
+              label={t("application.contact.apt")}
+              placeholder={t("application.contact.apt")}
+              register={register}
+              readerOnly
+            />
+          </ViewItem>
+        </GridCell>
+
+        <GridCell>
+          <ViewItem label={t("application.contact.city")}>
+            <Field
+              id={`${dataKey}.city`}
+              name={`${dataKey}.city`}
+              label={t("application.contact.cityName")}
+              placeholder={t("application.contact.cityName")}
+              register={register}
+              validation={{ required }}
+              error={errors?.[`${dataKey}.city`]}
+              errorMessage={t("errors.cityError")}
+              readerOnly
+            />
+          </ViewItem>
+        </GridCell>
+
+        <GridCell className="md:grid md:grid-cols-2 md:gap-8" span={2}>
+          <ViewItem label={t("application.contact.state")} className="mb-0">
+            <Select
+              id={`${dataKey}.state`}
+              name={`${dataKey}.state`}
+              label={t("application.contact.state")}
+              labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={stateKeys}
+              keyPrefix="states"
+              validation={{ required }}
+              error={errors?.[`${dataKey}.state`]}
+              errorMessage={t("errors.stateError")}
+            />
+          </ViewItem>
+
+          <ViewItem label={t("application.contact.zip")}>
+            <Field
+              id={`${dataKey}.zipCode`}
+              name={`${dataKey}.zipCode`}
+              label={t("application.contact.zip")}
+              placeholder={t("application.contact.zipCode")}
+              register={register}
+              validation={{ required }}
+              error={errors?.[`${dataKey}.zipCode`]}
+              errorMessage={t("errors.zipCodeError")}
+              readerOnly
+            />
+          </ViewItem>
+        </GridCell>
+
+        {type === "residence" && (
+          <GridCell span={2}>
+            <Field
+              id="application.sendMailToMailingAddress"
+              name="application.sendMailToMailingAddress"
+              type="checkbox"
+              label={t("application.contact.sendMailToMailingAddress")}
+              register={register}
+            />
+          </GridCell>
+        )}
+      </GridSection>
+    </>
   )
 }

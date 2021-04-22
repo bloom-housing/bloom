@@ -25,7 +25,7 @@ const PreferencesStart = () => {
   const currentPageSection = 4
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, handleSubmit } = useForm()
+  const { register, setValue, watch, handleSubmit, errors } = useForm()
 
   const onSubmit = (data) => {
     console.log("submit", data)
@@ -104,6 +104,8 @@ const PreferencesStart = () => {
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
         </div>
 
+        {console.log("errors", errors)}
+
         {/* {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
             {t("errors.errorsToResolve")}
@@ -166,6 +168,7 @@ const PreferencesStart = () => {
                               extraKey={extra.key}
                               type={extra.type}
                               register={register}
+                              errors={errors}
                               hhMembersOptions={hhMmembersOptions}
                             />
                           ))}
