@@ -383,6 +383,9 @@
           "label": "Displaced Tenant Housing Preference",
           "description": "Displaced Tenant copy goes here…",
           "link": "http://domain.com"
+        },
+        "missionCorridor": {
+          "label": "Mission Corridor"
         }
       },
       "general": {
