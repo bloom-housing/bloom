@@ -1,7 +1,15 @@
 import React from "react"
-import { InputType, HouseholdMember } from "@bloom-housing/backend-core/types"
+import { InputType } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
-import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
+import {
+  t,
+  GridSection,
+  ViewItem,
+  GridCell,
+  Field,
+  Select,
+  SelectOption,
+} from "@bloom-housing/ui-components"
 import { stateKeys } from "./formOptions"
 
 type ExtraFieldProps = {
@@ -10,7 +18,8 @@ type ExtraFieldProps = {
   extraKey: string
   type: InputType
   register: UseFormMethods["register"]
-  householdMembers?: HouseholdMember[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  hhMembersOptions?: SelectOption[]
 }
 
 type AddressType =
@@ -35,7 +44,7 @@ export const ExtraField = ({
   extraKey,
   type,
   register,
-  householdMembers,
+  hhMembersOptions,
 }: ExtraFieldProps) => {
   const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
 
@@ -64,26 +73,25 @@ export const ExtraField = ({
             </div>
           )
         } else if (type === InputType.hhMemberSelect) {
-          const options =
-            householdMembers?.map((item) => {
-              if (!item?.firstName || !item?.firstName) return ""
-
-              const option = `${item.firstName} ${item.lastName}`
-              return {
-                label: option,
-                value: option,
-              }
-            }) || []
+          if (!hhMembersOptions)
+            return (
+              <Field
+                id={FIELD_NAME}
+                name={FIELD_NAME}
+                type="text"
+                label={t(`application.preferences.options.${extraKey}`)}
+                register={register}
+              />
+            )
 
           return (
             <Select
               id={FIELD_NAME}
               name={FIELD_NAME}
               label={t(`application.preferences.options.${extraKey}`)}
-              // labelClassName="sr-only"
               register={register}
               controlClassName="control"
-              options={options}
+              options={hhMembersOptions}
             />
           )
         }

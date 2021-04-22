@@ -7,6 +7,7 @@ import {
   GridSection,
   ViewItem,
   GridCell,
+  SelectOption,
 } from "@bloom-housing/ui-components"
 
 import { useFormContext } from "react-hook-form"
@@ -14,9 +15,10 @@ import { Preference, FormMetadataOptions } from "@bloom-housing/backend-core/typ
 
 type FormPreferencesProps = {
   preferences: Preference[]
+  hhMembersOptions?: SelectOption[]
 }
 
-const FormPreferences = ({ preferences }: FormPreferencesProps) => {
+const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -83,6 +85,7 @@ const FormPreferences = ({ preferences }: FormPreferencesProps) => {
                             extraKey={extra.key}
                             type={extra.type}
                             register={register}
+                            hhMembersOptions={hhMembersOptions}
                           />
                         ))}
                     </React.Fragment>
