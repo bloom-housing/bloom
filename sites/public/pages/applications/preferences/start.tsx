@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import {
-  // AlertBox,
+  AlertBox,
   Form,
   FormCard,
   ProgressNav,
@@ -19,16 +19,52 @@ import { useFormConductor } from "../../../lib/hooks"
 import { FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 const PreferencesStart = () => {
+  const [isAlert, setAlert] = useState(false)
+
   const { conductor, application, listing } = useFormConductor("preferencesStart")
   const preferences = listing?.preferences
 
   const currentPageSection = 4
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, handleSubmit, errors } = useForm()
+  const { register, setValue, watch, handleSubmit, errors, getValues, setError } = useForm()
+
+  const validateForm = () => {
+    const data = getValues()
+
+    const preferences = data?.application.preferences
+    const preferenceEntries = Object.entries(preferences)
+
+    /*
+      check if at least one preference is checked or none is selected
+    */
+    const errorObj = preferenceEntries.reduce((acc, curr) => {
+      const isOptionChecked = Object.values(curr[1])
+        .map((item) => item?.claimed)
+        .includes(true)
+
+      const isNoneChecked = data?.[`${curr[0]}-none`]
+
+      const isClaimed = isOptionChecked || isNoneChecked
+
+      Object.assign(acc, { [curr[0]]: isClaimed })
+
+      return acc
+    }, {})
+
+    Object.entries(errorObj).forEach((item) => {
+      if (!item[1]) {
+        console.log(PREFERENCES_FORM_PATH, data)
+        // setError()
+      }
+    })
+
+    console.log("...checking errors")
+
+    setAlert(!Object.values(errorObj).includes(true) || !!errors)
+  }
 
   const onSubmit = (data) => {
-    console.log("submit", data)
     // conductor.currentStep.save({ ...data })
     // conductor.routeToNextOrReturnUrl()
   }
@@ -104,11 +140,11 @@ const PreferencesStart = () => {
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
         </div>
 
-        {/* {Object.entries(errors).length > 0 && (
+        {isAlert && (
           <AlertBox type="alert" inverted closeable>
             {t("errors.errorsToResolve")}
           </AlertBox>
-        )} */}
+        )}
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <>
@@ -199,6 +235,7 @@ const PreferencesStart = () => {
                 <Button
                   styleType={AppearanceStyleType.primary}
                   onClick={() => {
+                    validateForm()
                     conductor.returnToReview = false
                   }}
                 >
