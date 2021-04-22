@@ -9,6 +9,7 @@ import {
   Field,
   Select,
   SelectOption,
+  resolveObject,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "./formOptions"
 
@@ -144,7 +145,7 @@ export const FormAddress = ({
               placeholder={t("application.contact.streetAddress")}
               register={register}
               validation={{ required }}
-              error={errors?.[`${dataKey}.street`]}
+              error={!!resolveObject(`${dataKey}.street`, errors)}
               errorMessage={t("errors.streetError")}
               readerOnly
             />
@@ -172,7 +173,7 @@ export const FormAddress = ({
               placeholder={t("application.contact.cityName")}
               register={register}
               validation={{ required }}
-              error={errors?.[`${dataKey}.city`]}
+              error={!!resolveObject(`${dataKey}.city`, errors)}
               errorMessage={t("errors.cityError")}
               readerOnly
             />
@@ -191,7 +192,7 @@ export const FormAddress = ({
               options={stateKeys}
               keyPrefix="states"
               validation={{ required }}
-              error={errors?.[`${dataKey}.state`]}
+              error={!!resolveObject(`${dataKey}.state`, errors)}
               errorMessage={t("errors.stateError")}
             />
           </ViewItem>
@@ -204,7 +205,7 @@ export const FormAddress = ({
               placeholder={t("application.contact.zipCode")}
               register={register}
               validation={{ required }}
-              error={errors?.[`${dataKey}.zipCode`]}
+              error={!!resolveObject(`${dataKey}.zipCode`, errors)}
               errorMessage={t("errors.zipCodeError")}
               readerOnly
             />

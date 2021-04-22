@@ -104,8 +104,6 @@ const PreferencesStart = () => {
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
         </div>
 
-        {console.log("errors", errors)}
-
         {/* {Object.entries(errors).length > 0 && (
           <AlertBox type="alert" inverted closeable>
             {t("errors.errorsToResolve")}
