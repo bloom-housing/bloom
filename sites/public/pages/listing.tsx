@@ -81,11 +81,7 @@ export default class extends Component<ListingProps> {
       })
       .sort()
 
-    const deriveHmiHeaders = listing.property.unitsSummarized.hmi.columns as TableHeaders
-    const hmiHeaders = {}
-    for (const [key, value] of Object.entries(deriveHmiHeaders)) {
-      hmiHeaders[key] = t(value)
-    }
+    const hmiHeaders = listing.property.unitsSummarized.hmi.columns as TableHeaders
 
     const hmiData = listing.property.unitsSummarized.hmi.rows.map((row) => {
       return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
