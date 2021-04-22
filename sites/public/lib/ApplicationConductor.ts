@@ -13,6 +13,7 @@ import HouseholdMemberStep from "./HouseholdMemberStep"
 import LiveWorkPreferenceStep from "./LiveWorkPreferenceStep"
 import DisplacedPreferenceStep from "./DisplacedPreferenceStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
+import PreferencesStep from "./PreferencesStep"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -87,6 +88,10 @@ export default class ApplicationConductor {
     income: {
       url: "/applications/financial/income",
     },
+    preferencesStart: {
+      url: "/applications/preferences/start",
+      definition: PreferencesStep,
+    },
     preferencesLiveWork: {
       url: "/applications/preferences/live-work",
       definition: LiveWorkPreferenceStep,
@@ -110,6 +115,7 @@ export default class ApplicationConductor {
     },
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   application: Record<string, any> = {}
   steps: StepDefinition[] = []
   returnToReview = false
