@@ -263,7 +263,7 @@ const FormSummaryDetails = ({ application, editMode = false }) => {
 
         <h3 className="form--card__sub-header">
           {t("t.preferences")}
-          {editMode && <EditLink href="/applications/preferences/live-work" />}
+          {editMode && <EditLink href="/applications/preferences/start" />}
         </h3>
 
         <div id="preferences" className="form-card__group border-b mx-0">

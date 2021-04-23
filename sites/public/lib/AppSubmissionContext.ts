@@ -54,12 +54,12 @@ export const retrieveApplicationConfig = () => {
       {
         name: "preferencesStart",
       },
-      {
-        name: "preferencesLiveWork",
-      },
-      {
-        name: "preferencesDisplaced",
-      },
+      // {
+      //   name: "preferencesLiveWork",
+      // },
+      // {
+      //   name: "preferencesDisplaced",
+      // },
       {
         name: "generalPool",
       },

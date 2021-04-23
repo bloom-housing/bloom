@@ -13,6 +13,7 @@ import {
   Button,
   AppearanceStyleType,
   resolveObject,
+  mapPreferencesToApi,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -47,9 +48,11 @@ const PreferencesStart = () => {
   }, [preferences])
 
   const onSubmit = (data) => {
-    console.log("Submit!", data)
-    // conductor.currentStep.save({ ...data })
-    // conductor.routeToNextOrReturnUrl()
+    const body = mapPreferencesToApi(data)
+
+    conductor.currentStep.save(body)
+    // conductor.completeSection(4)
+    conductor.routeToNextOrReturnUrl()
   }
 
   const buildOptionName = useCallback((metaKey: string, option: string) => {
@@ -147,8 +150,6 @@ const PreferencesStart = () => {
             <div className="form-card__group px-0 pb-3">
               <p className="field-note">{t("application.preferences.selectBelow")}</p>
             </div>
-
-            {console.log("errors: ", errors)}
 
             {preferences?.map((preference) => (
               <div key={preference.id}>

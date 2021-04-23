@@ -90,7 +90,6 @@ export const ExtraField = ({
             </div>
           )
         } else if (type === InputType.hhMemberSelect) {
-          console.log("options", hhMembersOptions)
           if (!hhMembersOptions)
             return (
               <Field
@@ -230,4 +229,61 @@ export const FormAddress = ({
       </GridSection>
     </>
   )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const mapPreferencesToApi = (data: Record<string, any>) => {
+  const CLAIMED_KEY = "claimed"
+  const preferencesFormData = data.application.preferences
+
+  const keys = Object.keys(preferencesFormData)
+
+  return keys.map((key) => {
+    const currentPreference = preferencesFormData[key]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const currentPreferenceValues = Object.values(currentPreference) as Record<string, any>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const claimed = currentPreferenceValues.map((c: { claimed: any }) => c.claimed).includes(true)
+
+    const options = Object.keys(currentPreference).map((option) => {
+      const currentOption = currentPreference[option]
+
+      // count keys except claimed
+      const extraKeys = Object.keys(currentOption).filter((item) => item !== CLAIMED_KEY)
+
+      const response = {
+        key: option,
+        checked: currentOption[CLAIMED_KEY],
+      }
+
+      // assign extra data and detect data type
+      if (extraKeys.length) {
+        const extraData = extraKeys.map((extraKey) => {
+          const type = (() => {
+            if (typeof currentOption[extraKey] === "boolean") return InputType.boolean
+            // if object includes "city" property, it should be an address
+            if (Object.keys(currentOption[extraKey]).includes("city")) return InputType.address
+
+            return InputType.text
+          })()
+
+          return {
+            key: extraKey,
+            type,
+            value: currentOption[extraKey],
+          }
+        })
+
+        Object.assign(response, { extraData })
+      }
+
+      return response
+    })
+
+    return {
+      key,
+      claimed,
+      options,
+    }
+  })
 }
