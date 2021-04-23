@@ -20,13 +20,6 @@ describe("Navigating around the site", () => {
     cy.contains("Rent affordable housing")
   })
 
-  it("Loads a listing page", () => {
-    cy.visit("/listings")
-    cy.get("article.listings-row a").first().click()
-    cy.location("pathname").should("include", "/listing/")
-    cy.contains("Apply Online")
-  })
-
   it("Loads a non-listing-related page directly", () => {
     cy.visit("/disclaimer")
 
