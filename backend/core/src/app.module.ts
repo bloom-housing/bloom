@@ -20,6 +20,7 @@ import { ThrottlerModule } from "@nestjs/throttler"
 import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
 import Redis from "ioredis"
 import { SharedModule } from "./shared/shared.module"
+import { TranslationsModule } from "./translations/translations.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -77,6 +78,7 @@ export class AppModule {
         PropertyGroupsModule,
         AmiChartsModule,
         SharedModule,
+        TranslationsModule,
       ],
     }
   }
