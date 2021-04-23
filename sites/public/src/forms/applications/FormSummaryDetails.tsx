@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { Address } from "@bloom-housing/backend-core/types"
+import { Address, AllExtraDataTypes, InputType } from "@bloom-housing/backend-core/types"
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">
@@ -61,15 +61,29 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
     }
   }
 
-  const preferenceNameAddress = (option) => {
-    return `
-      ${option.extraData[0].value},
-      ${option.extraData[1].value.street},
-      ${option.extraData[1].value.street2 ? `${option.extraData[1].value.street2},` : ""}
-      ${option.extraData[1].value.city},
-      ${option.extraData[1].value.state}
-      ${option.extraData[1].value.zipCode}
-    `
+  const preferenceHelperText = (extraData?: AllExtraDataTypes[]) => {
+    if (!extraData) return
+
+    return extraData.reduce((acc, item) => {
+      if (
+        item.type === InputType.text ||
+        (item.type === InputType.hhMemberSelect && typeof item.value === "string")
+      ) {
+        acc += `${item.value.toString()}, `
+      }
+
+      if (item.type === InputType.address && typeof item.value === "object") {
+        acc += `
+          ${item.value.street},
+          ${item.value.street2 ?? ""},
+          ${item.value.city},
+          ${item.value.state}
+          ${item.value.zipCode}
+          `
+      }
+
+      return acc
+    }, "")
   }
 
   return (
@@ -283,11 +297,7 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
                         .map((option) => (
                           <ViewItem
                             label={t("application.preferences.youHaveClaimed")}
-                            helper={
-                              preference.key == "displacedTenant" &&
-                              ["general", "missionCorridor"].includes(option.key) &&
-                              preferenceNameAddress(option)
-                            }
+                            helper={preferenceHelperText(option?.extraData)}
                           >
                             {t(`application.preferences.${preference.key}.${option.key}.label`)}
                           </ViewItem>
