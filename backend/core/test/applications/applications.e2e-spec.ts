@@ -54,7 +54,7 @@ describe("Applications", () => {
         TypeOrmModule.forFeature([Application, HouseholdMember]),
         ThrottlerModule.forRoot({
           ttl: 60,
-          limit: 5,
+          limit: 2,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
       ],

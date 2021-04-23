@@ -67,9 +67,9 @@ export class AppModule {
           imports: [ConfigModule],
           inject: [ConfigService],
           useFactory: (config: ConfigService) => ({
-            ttl: config.get('THROTTLE_TTL'),
-            limit: config.get('THROTTLE_LIMIT'),
-            storage: new ThrottlerStorageRedisService(redis)
+            ttl: config.get("THROTTLE_TTL"),
+            limit: config.get("THROTTLE_LIMIT"),
+            storage: new ThrottlerStorageRedisService(redis),
           }),
         }),
         UserModule,
