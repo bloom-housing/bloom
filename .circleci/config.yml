@@ -117,6 +117,6 @@ workflows:
           build: |
             yarn test:backend:core:dbsetup
             yarn build:app:public
-          start: yarn test:cypress:public
+          start: yarn cypress:app:public
           wait-on: "http://localhost:3000"
           store_artifacts: true
