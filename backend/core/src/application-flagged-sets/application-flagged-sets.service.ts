@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
-import { ApplicationFlaggedSetsListQueryParams } from "./application-flagged-sets.controller"
+import { PaginatedApplicationFlaggedSetQueryParams } from "./application-flagged-sets.controller"
 import { AuthzService } from "../auth/authz.service"
 import {
   ApplicationFlaggedSet,
@@ -25,8 +25,8 @@ export class ApplicationFlaggedSetsService {
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>
   ) {}
-  async listPaginated(queryParams: ApplicationFlaggedSetsListQueryParams) {
-    return await paginate<ApplicationFlaggedSet>(
+  async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
+    const results = await paginate<ApplicationFlaggedSet>(
       this.afsRepository,
       { limit: queryParams.limit, page: queryParams.page },
       {
@@ -36,6 +36,25 @@ export class ApplicationFlaggedSetsService {
         },
       }
     )
+    const countTotalFlagged = await this.afsRepository.count({
+      where: { status: FlaggedSetStatus.flagged },
+    })
+    return {
+      ...results,
+      meta: {
+        ...results.meta,
+        totalFlagged: countTotalFlagged,
+      },
+    }
+  }
+
+  async findOneById(afsId: string) {
+    return await this.afsRepository.findOneOrFail({
+      relations: ["listing", "applications"],
+      where: {
+        id: afsId,
+      },
+    })
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {

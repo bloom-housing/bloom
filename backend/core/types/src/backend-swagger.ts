@@ -396,6 +396,8 @@ export class ApplicationsService {
       orderBy?: string;
       /**  */
       order?: string;
+      /**  */
+      markedAsDuplicate?: boolean;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -410,7 +412,8 @@ export class ApplicationsService {
         search: params['search'],
         userId: params['userId'],
         orderBy: params['orderBy'],
-        order: params['order']
+        order: params['order'],
+        markedAsDuplicate: params['markedAsDuplicate']
       };
       let data = null;
 
@@ -445,13 +448,25 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId: string;
+      page?: number;
+      /**  */
+      limit?: number;
+      /**  */
+      listingId?: string;
+      /**  */
+      search?: string;
+      /**  */
+      userId?: string;
+      /**  */
+      orderBy?: string;
+      /**  */
+      order?: string;
+      /**  */
+      markedAsDuplicate?: boolean;
       /**  */
       includeHeaders?: boolean;
       /**  */
       includeDemographics?: boolean;
-      /**  */
-      userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -460,10 +475,16 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = {
+        page: params['page'],
+        limit: params['limit'],
         listingId: params['listingId'],
+        search: params['search'],
+        userId: params['userId'],
+        orderBy: params['orderBy'],
+        order: params['order'],
+        markedAsDuplicate: params['markedAsDuplicate'],
         includeHeaders: params['includeHeaders'],
-        includeDemographics: params['includeDemographics'],
-        userId: params['userId']
+        includeDemographics: params['includeDemographics']
       };
       let data = null;
 
@@ -1206,6 +1227,28 @@ export class ApplicationFlaggedSetsService {
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Retrieve application flagged set by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      afsId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationFlaggedSets/{afsId}';
+      url = url.replace('{afsId}', params['afsId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
       let data = null;
 
       configs.data = data;
@@ -3565,12 +3608,32 @@ export interface ApplicationFlaggedSet {
   listingId: string;
 }
 
+export interface ApplicationFlaggedSetPaginationMeta {
+  /**  */
+  currentPage: number;
+
+  /**  */
+  itemCount: number;
+
+  /**  */
+  itemsPerPage: number;
+
+  /**  */
+  totalItems: number;
+
+  /**  */
+  totalPages: number;
+
+  /**  */
+  totalFlagged: number;
+}
+
 export interface PaginatedApplicationFlaggedSet {
   /**  */
   items: ApplicationFlaggedSet[];
 
   /**  */
-  meta: PaginationMeta;
+  meta: ApplicationFlaggedSetPaginationMeta;
 }
 
 export interface ApplicationFlaggedSetResolve {

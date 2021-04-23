@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Request,
@@ -27,7 +28,7 @@ import {
   PaginatedApplicationFlaggedSetDto,
 } from "./dto/application-flagged-set.dto"
 
-export class ApplicationFlaggedSetsListQueryParams extends PaginationQueryParams {
+export class PaginatedApplicationFlaggedSetQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
     type: String,
@@ -54,10 +55,21 @@ export class ApplicationFlaggedSetsController {
   @Get()
   @ApiOperation({ summary: "List application flagged sets", operationId: "list" })
   async list(
-    @Query() queryParams: ApplicationFlaggedSetsListQueryParams
+    @Query() queryParams: PaginatedApplicationFlaggedSetQueryParams
   ): Promise<PaginatedApplicationFlaggedSetDto> {
-    const response = await this.applicationFlaggedSetsService.listPaginated(queryParams)
-    return mapTo(PaginatedApplicationFlaggedSetDto, response)
+    return mapTo(
+      PaginatedApplicationFlaggedSetDto,
+      await this.applicationFlaggedSetsService.listPaginated(queryParams)
+    )
+  }
+
+  @Get(`:afsId`)
+  @ApiOperation({ summary: "Retrieve application flagged set by id", operationId: "retrieve" })
+  async retrieve(@Param("afsId") afsId: string): Promise<ApplicationFlaggedSetDto> {
+    return mapTo(
+      ApplicationFlaggedSetDto,
+      await this.applicationFlaggedSetsService.findOneById(afsId)
+    )
   }
 
   @Post("resolve")
