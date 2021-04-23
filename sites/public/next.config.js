@@ -160,6 +160,16 @@ module.exports = withCSS(
               "/applications/contact/name": {
                 page: "/applications/contact/name",
               },
+              "/disclaimer": { page: "/disclaimer" },
+              "/privacy": { page: "/privacy" },
+              "/sign-in": { page: "/sign-in" },
+              "/forgot-password": { page: "/forgot-password" },
+              "/reset-password": { page: "/reset-password" },
+              "/create-account": { page: "/create-account" },
+              "/account/applications": { page: "/account/applications" },
+              "/account/application": { page: "/account/application" },
+              "/account/edit": { page: "/account/edit" },
+              "/account/dashboard": { page: "/account/dashboard" },
             })
             const languages = ["es", "zh", "vi"] // add new language codes here
             const languagePaths = {}
@@ -176,17 +186,7 @@ module.exports = withCSS(
             })
 
             // combine the map of all various types of page paths
-            return Object.assign({}, languagePaths, {
-              "/disclaimer": { page: "/disclaimer" },
-              "/privacy": { page: "/privacy" },
-              "/sign-in": { page: "/sign-in" },
-              "/forgot-password": { page: "/forgot-password" },
-              "/reset-password": { page: "/reset-password" },
-              "/create-account": { page: "/create-account" },
-              "/account/applications": { page: "/account/applications" },
-              "/account/dashboard": { page: "/account/dashboard" },
-              "/account/settings": { page: "/account/settings" },
-            })
+            return languagePaths
           },
         })
       )
