@@ -155,12 +155,16 @@ const PreferencesStart = () => {
               <p className="field-note">{t("application.preferences.selectBelow")}</p>
             </div>
 
-            {preferences?.map((preference) => {
+            {preferences?.map((preference, index) => {
               const noneOptionKey = `${PREFERENCES_FORM_PATH}.${preference.formMetadata.key}-none`
 
               return (
                 <div key={preference.id}>
-                  <fieldset className="form-card__group px-0 border-b">
+                  <fieldset
+                    className={`form-card__group px-0 ${
+                      index + 1 !== preferences.length ? "border-b" : ""
+                    }`}
+                  >
                     <p className="field-note mb-8">{preference.title}</p>
 
                     {preference?.formMetadata?.options?.map((option) => {
