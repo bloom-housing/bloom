@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
-import { ValidationsGroupsEnum } from "../validations-groups.enum"
+import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 
 @Entity()
 export class Address {

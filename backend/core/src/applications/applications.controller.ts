@@ -14,9 +14,9 @@ import {
 } from "@nestjs/common"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
-import { OptionalAuthGuard } from "../auth/optional-auth.guard"
-import { AuthzGuard } from "../auth/authz.guard"
-import { ResourceType } from "../auth/resource_type.decorator"
+import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
+import { AuthzGuard } from "../auth/guards/authz.guard"
+import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import {
   ApplicationCreateDto,
@@ -27,10 +27,10 @@ import {
 import { Expose, Transform } from "class-transformer"
 import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
-import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
+import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 
 enum OrderByParam {
   firstName = "applicant.firstName",
@@ -162,7 +162,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(...applicationPreferenceExtraModels)
+@ApiExtraModels(...applicationPreferenceApiExtraModels)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,

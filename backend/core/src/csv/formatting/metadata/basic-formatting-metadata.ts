@@ -15,10 +15,6 @@ import {
   formatApplicationNumber,
   formatApplicationType,
   formatApplicatonSubmissionDate,
-  formatDisplacedTenantPreferenceGeneralClaimed,
-  formatDisplacedTenantPreferenceGeneralData,
-  formatDisplacedTenantPreferenceMissionCorridorClaimed,
-  formatDisplacedTenantPreferenceMissionCorridorData,
   formatHoueholdMembers,
   formatHouseholdSize,
   formatLivePreference,
@@ -47,9 +43,9 @@ import {
   formatRequestUnitType,
   formatVouchersOrSubsidies,
   formatWorkPreference,
-} from "./format-blocks"
+} from "../formatters"
 
-export const haywardFormattingMetadata = [
+export const basicFormattingMetadata = [
   formatApplicationNumber,
   formatApplicationType,
   formatApplicatonSubmissionDate,
@@ -92,10 +88,6 @@ export const haywardFormattingMetadata = [
   formatRequestUnitType,
   formatLivePreference,
   formatWorkPreference,
-  formatDisplacedTenantPreferenceGeneralClaimed,
-  formatDisplacedTenantPreferenceGeneralData,
-  formatDisplacedTenantPreferenceMissionCorridorClaimed,
-  formatDisplacedTenantPreferenceMissionCorridorData,
   formatHouseholdSize,
   formatHoueholdMembers,
 ]

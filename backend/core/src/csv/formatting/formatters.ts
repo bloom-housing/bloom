@@ -1,18 +1,42 @@
 import { Application } from "../../applications/entities/application.entity"
-import {
-  booleanFormatter,
-  defaultFormatter,
-  dobFormatter,
-  joinArrayFormatter,
-  keysToJoinedStringFormatter,
-  streetFormatter,
-} from "../csv-builder.service"
 import { HouseholdMember } from "../../applications/entities/household-member.entity"
-import {
-  AddressInput,
-  ApplicationPreference,
-  TextInput,
-} from "../../applications/entities/application-preferences.entity"
+import { ApplicationPreference } from "../../applications/entities/application-preferences.entity"
+import { TextInput } from "../../applications/types/form-metadata/text-input"
+import { AddressInput } from "../../applications/types/form-metadata/address-input"
+
+export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
+export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
+export const streetFormatter = (obj?: { street?: string; street2?: string }) => {
+  if (!obj) {
+    return defaultFormatter(obj)
+  }
+  if (!obj.street && !obj.street2) {
+    return ""
+  }
+  if (!obj.street) {
+    return obj.street2
+  }
+  if (!obj.street2) {
+    return obj.street
+  }
+  return `${obj.street}, ${obj.street2}`
+}
+export const dobFormatter = (obj?: {
+  birthMonth?: string
+  birthDay?: string
+  birthYear?: string
+}) => {
+  // TODO Use locale variable Date string
+  return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : defaultFormatter(obj)
+}
+export const joinArrayFormatter = (obj?: string[]) => (obj ? obj.join(",") : "")
+export const keysToJoinedStringFormatter = (obj: any) => {
+  if (!obj) {
+    return defaultFormatter(obj)
+  }
+  const keys = Object.keys(obj).filter((key) => obj[key])
+  return keys.join(",")
+}
 
 export const formatApplicationNumber = {
   label: "Application Number",

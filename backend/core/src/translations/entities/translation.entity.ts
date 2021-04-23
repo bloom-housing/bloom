@@ -2,14 +2,11 @@ import { Column, Entity, Index } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose } from "class-transformer"
 import { IsEnum, IsJSON } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { CountyCode } from "../../shared/types/county-code"
 import { Language } from "../../shared/types/language-enum"
-
-export type TranslationsType = {
-  [key: string]: string | TranslationsType
-}
+import { TranslationsType } from "../types/translations-type"
 
 @Entity()
 @Index(["countyCode", "language"], { unique: true })

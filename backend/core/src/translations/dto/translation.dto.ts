@@ -1,7 +1,7 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsOptional, IsUUID } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Translation } from "../entities/translation.entity"
 
 export class TranslationDto extends OmitType(Translation, [] as const) {}

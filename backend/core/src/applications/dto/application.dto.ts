@@ -29,7 +29,7 @@ import {
   AccessibilityDto,
   AccessibilityUpdateDto,
 } from "./accessibility.dto"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class ApplicationDto extends OmitType(Application, [
   "listing",

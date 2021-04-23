@@ -3,12 +3,12 @@ import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
 import Handlebars from "handlebars"
 import path from "path"
-import { User } from "../user/entities/user.entity"
-import { Listing } from "../listings/entities/listing.entity"
+import { User } from "../../user/entities/user.entity"
+import { Listing } from "../../listings/entities/listing.entity"
 import Polyglot from "node-polyglot"
 import fs from "fs"
 import { ConfigService } from "@nestjs/config"
-import { Application } from "../applications/entities/application.entity"
+import { Application } from "../../applications/entities/application.entity"
 
 @Injectable()
 export class EmailService {
@@ -124,17 +124,23 @@ export class EmailService {
 
   private template(view: string) {
     return Handlebars.compile(
-      fs.readFileSync(path.join(path.resolve(__dirname, "..", "views"), `/${view}.hbs`), "utf8")
+      fs.readFileSync(
+        path.join(path.resolve(__dirname, "..", "..", "views"), `/${view}.hbs`),
+        "utf8"
+      )
     )
   }
 
   private partial(view: string) {
-    return fs.readFileSync(path.join(path.resolve(__dirname, "..", "views"), `/${view}`), "utf8")
+    return fs.readFileSync(
+      path.join(path.resolve(__dirname, "..", "..", "views"), `/${view}`),
+      "utf8"
+    )
   }
 
   private partials() {
     const partials = {}
-    const dirName = path.resolve(__dirname, "..", "views/partials")
+    const dirName = path.resolve(__dirname, "..", "..", "views/partials")
 
     fs.readdirSync(dirName).forEach((filename) => {
       partials[filename.slice(0, -4)] = this.partial("partials/" + filename)
@@ -144,7 +150,9 @@ export class EmailService {
   }
 
   private translations() {
-    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "locals/general.json"), "utf8"))
+    return JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, "..", "..", "locals/general.json"), "utf8")
+    )
   }
 
   private async send(to: string, subject: string, body: string, retry?: number) {

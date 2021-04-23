@@ -2,13 +2,9 @@ import { OmitType } from "@nestjs/swagger"
 import { Preference } from "../entities/preference.entity"
 import { Expose } from "class-transformer"
 import { IsString, IsUUID } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
-export class PreferenceDto extends OmitType(Preference, [
-  "listing",
-  // TODO
-  // "applicationPreferences",
-] as const) {}
+export class PreferenceDto extends OmitType(Preference, ["listing"] as const) {}
 
 export class PreferenceCreateDto extends OmitType(PreferenceDto, [
   "id",
