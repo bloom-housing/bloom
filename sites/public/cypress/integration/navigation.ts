@@ -49,15 +49,8 @@ describe("Navigating around the site", () => {
     cy.contains("Endorsement Disclaimers")
   })
 
-  it("Can navigate to all page types after initial site load", () => {
+  it("Can navigate to listings after initial site load", () => {
     cy.visit("/")
-
-    // Click on the Disclaimer page link in the footer
-    cy.get("footer a").contains("Disclaimer").click()
-
-    // Should be on the disclaimer page
-    cy.location("pathname").should("equal", "/disclaimer")
-    cy.contains("Endorsement Disclaimers")
 
     // Click on the listings page link in the header nav
     cy.get(".navbar").contains("Listings").click()
@@ -67,7 +60,7 @@ describe("Navigating around the site", () => {
     cy.contains("Rent affordable housing")
 
     // Click on a listing item on the listings page
-    cy.contains("See Details").last().click({ force: true })
+    cy.get("a").contains("See Details").first().should("be.visible").click({ force: true })
 
     // Should be on the listing page
     cy.location("pathname").should("include", "/listing/")
@@ -83,5 +76,16 @@ describe("Navigating around the site", () => {
     // Check that the homepage banner text is present on the page
     cy.url().should("eq", `${Cypress.config("baseUrl")}/`)
     cy.contains("Apply for affordable housing")
+  })
+
+  it("Can navigate to all page types after initial site load", () => {
+    cy.visit("/")
+
+    // Click on the Disclaimer page link in the footer
+    cy.get("footer a").contains("Disclaimer").click()
+
+    // Should be on the disclaimer page
+    cy.location("pathname").should("equal", "/disclaimer")
+    cy.contains("Endorsement Disclaimers")
   })
 })
