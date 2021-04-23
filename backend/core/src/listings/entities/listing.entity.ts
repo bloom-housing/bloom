@@ -18,7 +18,6 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDate,
-  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -34,94 +33,10 @@ import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { CSVFormattingType } from "../../csv/formatting/application-formatting-metadata-factory"
 import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
-
-export enum ListingStatus {
-  active = "active",
-  pending = "pending",
-}
-
-export class Asset {
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  label: string
-
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  fileId: string
-}
-
-export enum ListingEventType {
-  openHouse = "openHouse",
-  publicLottery = "publicLottery",
-  lotteryResults = "lotteryResults",
-}
-
-export class ListingEvent {
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(ListingEventType, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: ListingEventType, enumName: "ListingEventType" })
-  type: ListingEventType
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  startTime?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  endTime?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  url?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  note?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  label?: string | null
-}
-
-export enum ApplicationMethodType {
-  Internal = "Internal",
-  FileDownload = "FileDownload",
-  ExternalLink = "ExternalLink",
-  PaperPickup = "PaperPickup",
-  POBox = "POBox",
-  LeasingAgent = "LeasingAgent",
-}
-
-export class ApplicationMethod {
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(ApplicationMethodType, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: ApplicationMethodType, enumName: "ApplicationMethodType" })
-  type: ApplicationMethodType
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  label: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  externalReference: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  acceptsPostmarkedApplications: boolean | null
-}
+import { ListingStatus } from "../types/listing-status-enum"
+import { ListingEventDto } from "../dto/listing-event.dto"
+import { ApplicationMethodDto } from "../dto/application-method.dto"
+import { AssetDto } from "../dto/asset.dto"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -152,20 +67,20 @@ class Listing extends BaseEntity {
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationMethod)
-  applicationMethods: ApplicationMethod[]
+  @Type(() => ApplicationMethodDto)
+  applicationMethods: ApplicationMethodDto[]
 
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Asset)
-  assets: Asset[]
+  @Type(() => AssetDto)
+  assets: AssetDto[]
 
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingEvent)
-  events: ListingEvent[]
+  @Type(() => ListingEventDto)
+  events: ListingEventDto[]
 
   @ManyToOne(() => Property, (property) => property.listings, { nullable: false })
   @Expose()

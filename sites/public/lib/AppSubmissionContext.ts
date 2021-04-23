@@ -16,6 +16,9 @@ export const retrieveApplicationConfig = () => {
         name: "whatToExpect",
       },
       {
+        name: "autofill",
+      },
+      {
         name: "primaryApplicantName",
       },
       {

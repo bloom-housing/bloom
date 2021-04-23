@@ -11,7 +11,7 @@ import {
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApiProperty, getSchemaPath } from "@nestjs/swagger"
-import { InputType } from "../../shared/input-type"
+import { InputType } from "../../shared/types/input-type"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 
 export class FormMetadataExtraData {

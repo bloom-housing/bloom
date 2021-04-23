@@ -1,12 +1,4 @@
-import {
-  ApplicationMethod,
-  ApplicationMethodType,
-  Asset,
-  Listing,
-  ListingEvent,
-  ListingEventType,
-  ListingStatus,
-} from "../listings/entities/listing.entity"
+import { Listing } from "../listings/entities/listing.entity"
 import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
 import { PropertyCreateDto } from "../property/dto/property.dto"
@@ -14,26 +6,30 @@ import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
 import { BaseEntity, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { Unit } from "../.."
+import { ApplicationMethodType, AssetDto, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { User } from "../user/entities/user.entity"
 import { UserService } from "../user/user.service"
 import { SanMateoHUD2019 } from "./ami-charts"
-import { InputType } from "../shared/input-type"
+import { InputType } from "../shared/types/input-type"
 import { UserCreateDto } from "../user/dto/user.dto"
 import { CSVFormattingType } from "../csv/formatting/application-formatting-metadata-factory"
+import { ListingEventType } from "../listings/types/listing-event-type-enum"
+import { ListingStatus } from "../listings/types/listing-status-enum"
+import { ListingEventDto } from "../listings/dto/listing-event.dto"
+import { ApplicationMethodDto } from "../listings/dto/application-method.dto"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
   amiChart: AmiChartCreateDto
   units: Array<Omit<UnitCreateDto, "property">>
-  applicationMethods: Array<Omit<ApplicationMethod, "listing">>
+  applicationMethods: Array<Omit<ApplicationMethodDto, "listing">>
   property: Omit<PropertyCreateDto, "propertyGroups" | "listings" | "units" | "unitsSummarized">
   preferences: Array<Omit<PreferenceCreateDto, "listing">>
-  listingEvents: Array<Omit<ListingEvent, "listing">>
-  assets: Array<Omit<Asset, "listing">>
+  listingEvents: Array<Omit<ListingEventDto, "listing">>
+  assets: Array<Omit<AssetDto, "listing">>
   listing: Omit<
     ListingCreateDto,
     | keyof BaseEntity

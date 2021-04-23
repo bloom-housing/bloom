@@ -2,19 +2,21 @@ import ApplicationConductor from "./ApplicationConductor"
 
 export default class StepDefinition {
   conductor: ApplicationConductor
-  application: Record<string, any> = {}
   step: Record<string, any>
   url: string
 
   constructor(conductor, step, url) {
     this.step = step
     this.conductor = conductor
-    this.application = conductor.application
     this.url = url
   }
 
   get name() {
     return this.step.name
+  }
+
+  get application() {
+    return this.conductor.application
   }
 
   save(formData: Record<string, any>) {

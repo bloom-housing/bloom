@@ -7,10 +7,10 @@ import {
   ApplicationStatus,
   ApplicationSubmissionType,
   IncomePeriod,
-  Language,
 } from "../applications/entities/application.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { InputType } from "../shared/input-type"
+import { InputType } from "../shared/types/input-type"
+import { Language } from "../shared/types/language-enum"
 
 const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing"> = {
   acceptedTerms: true,

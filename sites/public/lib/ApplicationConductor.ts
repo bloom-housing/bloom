@@ -47,6 +47,9 @@ export default class ApplicationConductor {
     whatToExpect: {
       url: "/applications/start/what-to-expect",
     },
+    autofill: {
+      url: "/applications/start/autofill",
+    },
     primaryApplicantName: {
       url: "/applications/contact/name",
     },

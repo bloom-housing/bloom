@@ -4,7 +4,7 @@ import { Expose, Type } from "class-transformer"
 import { ArrayMaxSize, IsArray, IsDefined, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
 import { ApplicationDto } from "../../applications/dto/application.dto"
-import { PaginationFactory } from "../../shared/dto/pagination.dto"
+import { PaginationFactory, PaginationMeta } from "../../shared/dto/pagination.dto"
 import { IdDto } from "../../shared/dto/id.dto"
 
 export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
@@ -28,9 +28,17 @@ export class ApplicationFlaggedSetDto extends OmitType(ApplicationFlaggedSet, [
   listing: IdDto
 }
 
+export class ApplicationFlaggedSetPaginationMeta extends PaginationMeta {
+  @Expose()
+  totalFlagged: number
+}
+
 export class PaginatedApplicationFlaggedSetDto extends PaginationFactory<ApplicationFlaggedSetDto>(
   ApplicationFlaggedSetDto
-) {}
+) {
+  @Expose()
+  meta: ApplicationFlaggedSetPaginationMeta
+}
 
 export class ApplicationFlaggedSetResolveDto {
   @Expose()

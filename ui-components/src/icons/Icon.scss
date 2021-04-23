@@ -50,3 +50,9 @@ a svg use {
 .bg-alert-light svg use {
   fill: $tailwind-alert;
 }
+
+.ui-icon {
+  &.is-primary svg use {
+    fill: $tailwind-primary;
+  }
+}
