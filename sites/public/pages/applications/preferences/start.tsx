@@ -53,7 +53,6 @@ const PreferencesStart = () => {
   }, [preferences])
 
   const onSubmit = (data) => {
-    // console.log(data)
     const body = mapPreferencesToApi(data)
 
     conductor.currentStep.save(body)
@@ -134,8 +133,6 @@ const PreferencesStart = () => {
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
         />
       </FormCard>
-
-      {console.log(mapApiToPreferencesForm(application.preferences))}
 
       <FormCard>
         <FormBackLink url={conductor.determinePreviousUrl()} />
