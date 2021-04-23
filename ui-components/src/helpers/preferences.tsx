@@ -72,7 +72,7 @@ export const ExtraField = ({
               label={t(`application.preferences.options.${extraKey}`)}
               register={register}
               validation={{ required: true }}
-              error={errors?.[FIELD_NAME]}
+              error={!!resolveObject(FIELD_NAME, errors)}
               errorMessage={t("errors.requiredFieldError")}
             />
           )
@@ -90,6 +90,7 @@ export const ExtraField = ({
             </div>
           )
         } else if (type === InputType.hhMemberSelect) {
+          console.log("options", hhMembersOptions)
           if (!hhMembersOptions)
             return (
               <Field
@@ -99,23 +100,26 @@ export const ExtraField = ({
                 label={t(`application.preferences.options.${extraKey}`)}
                 register={register}
                 validation={{ required: true }}
-                error={errors?.[FIELD_NAME]}
+                error={!!resolveObject(FIELD_NAME, errors)}
                 errorMessage={t("errors.requiredFieldError")}
               />
             )
 
           return (
-            <Select
-              id={FIELD_NAME}
-              name={FIELD_NAME}
-              label={t(`application.preferences.options.${extraKey}`)}
-              register={register}
-              controlClassName="control"
-              options={hhMembersOptions}
-              validation={{ required: true }}
-              error={errors?.[FIELD_NAME]}
-              errorMessage={t("errors.requiredFieldError")}
-            />
+            <>
+              <Select
+                id={FIELD_NAME}
+                name={FIELD_NAME}
+                label={t(`application.preferences.options.${extraKey}`)}
+                register={register}
+                controlClassName="control"
+                placeholder={t("t.selectOne")}
+                options={hhMembersOptions}
+                validation={{ required: true }}
+                error={!!resolveObject(FIELD_NAME, errors)}
+                errorMessage={t("errors.requiredFieldError")}
+              />
+            </>
           )
         }
 

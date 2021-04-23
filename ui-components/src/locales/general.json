@@ -385,7 +385,8 @@
           "link": "http://domain.com"
         },
         "missionCorridor": {
-          "label": "Mission Corridor"
+          "label": "Mission Corridor",
+          "description": "Mission Corridor copy goes here…"
         }
       },
       "general": {

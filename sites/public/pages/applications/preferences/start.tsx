@@ -12,6 +12,7 @@ import {
   ExpandableContent,
   Button,
   AppearanceStyleType,
+  resolveObject,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -19,52 +20,34 @@ import { useFormConductor } from "../../../lib/hooks"
 import { FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 const PreferencesStart = () => {
-  const [isAlert, setAlert] = useState(false)
-
   const { conductor, application, listing } = useFormConductor("preferencesStart")
   const preferences = listing?.preferences
 
   const currentPageSection = 4
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, handleSubmit, errors, getValues, setError } = useForm()
+  const { register, setValue, watch, handleSubmit, errors, getValues, trigger } = useForm()
 
-  const validateForm = () => {
-    const data = getValues()
+  /*
+    It creates string path for each preference option - for error validation purposes
+  */
+  const preferenceOptionObjectPaths = useMemo(() => {
+    return preferences?.reduce((acc, item) => {
+      const preferenceName = item.formMetadata?.key
+      const optionPaths = item.formMetadata?.options?.map(
+        (option) => `${PREFERENCES_FORM_PATH}.${preferenceName}.${option.key}.claimed`
+      )
 
-    const preferences = data?.application.preferences
-    const preferenceEntries = Object.entries(preferences)
-
-    /*
-      check if at least one preference is checked or none is selected
-    */
-    const errorObj = preferenceEntries.reduce((acc, curr) => {
-      const isOptionChecked = Object.values(curr[1])
-        .map((item) => item?.claimed)
-        .includes(true)
-
-      const isNoneChecked = data?.[`${curr[0]}-none`]
-
-      const isClaimed = isOptionChecked || isNoneChecked
-
-      Object.assign(acc, { [curr[0]]: isClaimed })
+      Object.assign(acc, {
+        [preferenceName]: optionPaths,
+      })
 
       return acc
     }, {})
-
-    Object.entries(errorObj).forEach((item) => {
-      if (!item[1]) {
-        console.log(PREFERENCES_FORM_PATH, data)
-        // setError()
-      }
-    })
-
-    console.log("...checking errors")
-
-    setAlert(!Object.values(errorObj).includes(true) || !!errors)
-  }
+  }, [preferences])
 
   const onSubmit = (data) => {
+    console.log("Submit!", data)
     // conductor.currentStep.save({ ...data })
     // conductor.routeToNextOrReturnUrl()
   }
@@ -91,14 +74,24 @@ const PreferencesStart = () => {
     preferenceKeys.forEach((k) => setValue(buildOptionName(metaKey, k), false))
   }
 
+  /*
+    It creates values for household member select input (InputType.hhMemberSelect)
+  */
   const hhMmembersOptions = useMemo(() => {
     const { applicant } = application
 
-    const option = `${applicant.firstName} ${applicant.lastName}`
-    const primaryApplicant = {
-      label: option,
-      value: option,
-    }
+    const primaryApplicant = (() => {
+      if (!applicant?.firstName || !applicant?.lastName) return []
+
+      const option = `${applicant.firstName} ${applicant.lastName}`
+
+      return [
+        {
+          label: option,
+          value: option,
+        },
+      ]
+    })()
 
     const otherMembers =
       application.householdMembers?.map((item) => {
@@ -109,15 +102,18 @@ const PreferencesStart = () => {
         }
       }) || []
 
-    return [primaryApplicant, ...otherMembers]
+    return [...primaryApplicant, ...otherMembers]
   }, [application])
 
-  // fix for rehydration
+  /*
+    Rehydration fix
+  */
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
     setHasMounted(true)
   }, [])
-  if (!hasMounted) {
+
+  if (!hasMounted || !preferenceOptionObjectPaths) {
     return null
   }
 
@@ -140,7 +136,7 @@ const PreferencesStart = () => {
           <p className="field-note mt-5">{t("application.preferences.preamble")}</p>
         </div>
 
-        {isAlert && (
+        {!!Object.keys(errors).length && (
           <AlertBox type="alert" inverted closeable>
             {t("errors.errorsToResolve")}
           </AlertBox>
@@ -152,28 +148,41 @@ const PreferencesStart = () => {
               <p className="field-note">{t("application.preferences.selectBelow")}</p>
             </div>
 
+            {console.log("errors: ", errors)}
+
             {preferences?.map((preference) => (
-              <div>
+              <div key={preference.id}>
                 <fieldset className="form-card__group px-0 border-b">
                   <p className="field-note mb-8">{preference.title}</p>
 
                   {preference?.formMetadata?.options?.map((option) => {
                     return (
                       <div className="mb-5" key={option.key}>
-                        <Field
-                          id={buildOptionName(preference.formMetadata.key, option.key)}
-                          name={buildOptionName(preference.formMetadata.key, option.key)}
-                          type="checkbox"
-                          label={t(
-                            `application.preferences.${preference.formMetadata.key}.${option.key}.label`
-                          )}
-                          register={register}
-                          inputProps={{
-                            onChange: () => {
-                              setValue(`${preference.formMetadata.key}-none`, false)
-                            },
-                          }}
-                        />
+                        <div
+                          className={`mb-5 field ${
+                            resolveObject(`${preference.formMetadata.key}-none`, errors)
+                              ? "error"
+                              : ""
+                          }`}
+                        >
+                          <Field
+                            id={buildOptionName(preference.formMetadata.key, option.key)}
+                            name={buildOptionName(preference.formMetadata.key, option.key)}
+                            type="checkbox"
+                            label={t(
+                              `application.preferences.${preference.formMetadata.key}.${option.key}.label`
+                            )}
+                            register={register}
+                            inputProps={{
+                              onChange: () => {
+                                setTimeout(() => {
+                                  setValue(`${preference.formMetadata.key}-none`, false)
+                                  void trigger(`${preference.formMetadata.key}-none`)
+                                }, 1)
+                              },
+                            }}
+                          />
+                        </div>
 
                         <div className="ml-8 -mt-3">
                           <ExpandableContent>
@@ -183,7 +192,7 @@ const PreferencesStart = () => {
                               )}
                               <br />
                               {preference?.links?.map((link) => (
-                                <a className="block pt-2" href={link.url}>
+                                <a key={link.url} className="block pt-2" href={link.url}>
                                   {link.title}
                                 </a>
                               ))}
@@ -211,20 +220,41 @@ const PreferencesStart = () => {
                   })}
 
                   {preference?.formMetadata && (
-                    <Field
-                      id={`${preference.formMetadata.key}-none`}
-                      name={`${preference.formMetadata.key}-none`}
-                      type="checkbox"
-                      label={t("t.none")}
-                      register={register}
-                      inputProps={{
-                        onChange: () =>
-                          uncheckPreference(
-                            preference.formMetadata.key,
-                            preference.formMetadata?.options
-                          ),
-                      }}
-                    />
+                    <div
+                      className={`mb-5 field ${
+                        resolveObject(`${preference.formMetadata.key}-none`, errors) ? "error" : ""
+                      }`}
+                    >
+                      <Field
+                        id={`${preference.formMetadata.key}-none`}
+                        name={`${preference.formMetadata.key}-none`}
+                        type="checkbox"
+                        label={t("t.none")}
+                        register={register}
+                        inputProps={{
+                          onChange: (e) => {
+                            if (e.target.checked) {
+                              setValue(`${preference.formMetadata.key}-none`, true)
+
+                              uncheckPreference(
+                                preference.formMetadata.key,
+                                preference.formMetadata?.options
+                              )
+                              void trigger(`${preference.formMetadata.key}-none`)
+                            }
+                          },
+                        }}
+                        validation={{
+                          validate: {
+                            somethingIsChecked: (value) =>
+                              value ||
+                              preferenceOptionObjectPaths[
+                                preference.formMetadata.key
+                              ].some((option) => getValues(option)),
+                          },
+                        }}
+                      />
+                    </div>
                   )}
                 </fieldset>
               </div>
@@ -235,7 +265,6 @@ const PreferencesStart = () => {
                 <Button
                   styleType={AppearanceStyleType.primary}
                   onClick={() => {
-                    validateForm()
                     conductor.returnToReview = false
                   }}
                 >
