@@ -14,6 +14,7 @@ import {
   AppearanceStyleType,
   resolveObject,
   mapPreferencesToApi,
+  mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -27,7 +28,11 @@ const PreferencesStart = () => {
   const currentPageSection = 4
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, handleSubmit, errors, getValues, trigger } = useForm()
+  const { register, setValue, watch, handleSubmit, errors, getValues, trigger } = useForm({
+    defaultValues: {
+      application: { preferences: mapApiToPreferencesForm(application.preferences) },
+    },
+  })
 
   /*
     It creates string path for each preference option - for error validation purposes
@@ -48,10 +53,10 @@ const PreferencesStart = () => {
   }, [preferences])
 
   const onSubmit = (data) => {
+    // console.log(data)
     const body = mapPreferencesToApi(data)
 
     conductor.currentStep.save(body)
-    // conductor.completeSection(4)
     conductor.routeToNextOrReturnUrl()
   }
 
@@ -130,6 +135,8 @@ const PreferencesStart = () => {
         />
       </FormCard>
 
+      {console.log(mapApiToPreferencesForm(application.preferences))}
+
       <FormCard>
         <FormBackLink url={conductor.determinePreviousUrl()} />
 
@@ -151,115 +158,117 @@ const PreferencesStart = () => {
               <p className="field-note">{t("application.preferences.selectBelow")}</p>
             </div>
 
-            {preferences?.map((preference) => (
-              <div key={preference.id}>
-                <fieldset className="form-card__group px-0 border-b">
-                  <p className="field-note mb-8">{preference.title}</p>
+            {preferences?.map((preference) => {
+              const noneOptionKey = `${PREFERENCES_FORM_PATH}.${preference.formMetadata.key}-none`
 
-                  {preference?.formMetadata?.options?.map((option) => {
-                    return (
-                      <div className="mb-5" key={option.key}>
-                        <div
-                          className={`mb-5 field ${
-                            resolveObject(`${preference.formMetadata.key}-none`, errors)
-                              ? "error"
-                              : ""
-                          }`}
-                        >
-                          <Field
-                            id={buildOptionName(preference.formMetadata.key, option.key)}
-                            name={buildOptionName(preference.formMetadata.key, option.key)}
-                            type="checkbox"
-                            label={t(
-                              `application.preferences.${preference.formMetadata.key}.${option.key}.label`
-                            )}
-                            register={register}
-                            inputProps={{
-                              onChange: () => {
-                                setTimeout(() => {
-                                  setValue(`${preference.formMetadata.key}-none`, false)
-                                  void trigger(`${preference.formMetadata.key}-none`)
-                                }, 1)
-                              },
-                            }}
-                          />
-                        </div>
+              return (
+                <div key={preference.id}>
+                  <fieldset className="form-card__group px-0 border-b">
+                    <p className="field-note mb-8">{preference.title}</p>
 
-                        <div className="ml-8 -mt-3">
-                          <ExpandableContent>
-                            <p className="field-note mt-6">
-                              {t(
-                                `application.preferences.${preference.formMetadata.key}.${option.key}.description`
+                    {preference?.formMetadata?.options?.map((option) => {
+                      return (
+                        <div className="mb-5" key={option.key}>
+                          <div
+                            className={`mb-5 field ${
+                              resolveObject(noneOptionKey, errors) ? "error" : ""
+                            }`}
+                          >
+                            <Field
+                              id={buildOptionName(preference.formMetadata.key, option.key)}
+                              name={buildOptionName(preference.formMetadata.key, option.key)}
+                              type="checkbox"
+                              label={t(
+                                `application.preferences.${preference.formMetadata.key}.${option.key}.label`
                               )}
-                              <br />
-                              {preference?.links?.map((link) => (
-                                <a key={link.url} className="block pt-2" href={link.url}>
-                                  {link.title}
-                                </a>
-                              ))}
-                            </p>
-                          </ExpandableContent>
-                        </div>
-
-                        {watchPreferences[
-                          buildOptionName(preference.formMetadata.key, option.key)
-                        ] &&
-                          option.extraData?.map((extra) => (
-                            <ExtraField
-                              key={extra.key}
-                              metaKey={preference.formMetadata.key}
-                              optionKey={option.key}
-                              extraKey={extra.key}
-                              type={extra.type}
                               register={register}
-                              errors={errors}
-                              hhMembersOptions={hhMmembersOptions}
+                              inputProps={{
+                                onChange: () => {
+                                  setTimeout(() => {
+                                    setValue(noneOptionKey, false)
+                                    void trigger(noneOptionKey)
+                                  }, 1)
+                                },
+                              }}
                             />
-                          ))}
+                          </div>
+
+                          <div className="ml-8 -mt-3">
+                            <ExpandableContent>
+                              <p className="field-note mt-6">
+                                {t(
+                                  `application.preferences.${preference.formMetadata.key}.${option.key}.description`
+                                )}
+                                <br />
+                                {preference?.links?.map((link) => (
+                                  <a key={link.url} className="block pt-2" href={link.url}>
+                                    {link.title}
+                                  </a>
+                                ))}
+                              </p>
+                            </ExpandableContent>
+                          </div>
+
+                          {watchPreferences[
+                            buildOptionName(preference.formMetadata.key, option.key)
+                          ] &&
+                            option.extraData?.map((extra) => (
+                              <ExtraField
+                                key={extra.key}
+                                metaKey={preference.formMetadata.key}
+                                optionKey={option.key}
+                                extraKey={extra.key}
+                                type={extra.type}
+                                register={register}
+                                errors={errors}
+                                hhMembersOptions={hhMmembersOptions}
+                              />
+                            ))}
+                        </div>
+                      )
+                    })}
+
+                    {preference?.formMetadata && (
+                      <div
+                        className={`mb-5 field ${
+                          resolveObject(noneOptionKey, errors) ? "error" : ""
+                        }`}
+                      >
+                        <Field
+                          id={noneOptionKey}
+                          name={noneOptionKey}
+                          type="checkbox"
+                          label={t("t.none")}
+                          register={register}
+                          inputProps={{
+                            onChange: (e) => {
+                              if (e.target.checked) {
+                                setValue(noneOptionKey, true)
+
+                                uncheckPreference(
+                                  preference.formMetadata.key,
+                                  preference.formMetadata?.options
+                                )
+                                void trigger(noneOptionKey)
+                              }
+                            },
+                          }}
+                          validation={{
+                            validate: {
+                              somethingIsChecked: (value) =>
+                                value ||
+                                preferenceOptionObjectPaths[
+                                  preference.formMetadata.key
+                                ].some((option) => getValues(option)),
+                            },
+                          }}
+                        />
                       </div>
-                    )
-                  })}
-
-                  {preference?.formMetadata && (
-                    <div
-                      className={`mb-5 field ${
-                        resolveObject(`${preference.formMetadata.key}-none`, errors) ? "error" : ""
-                      }`}
-                    >
-                      <Field
-                        id={`${preference.formMetadata.key}-none`}
-                        name={`${preference.formMetadata.key}-none`}
-                        type="checkbox"
-                        label={t("t.none")}
-                        register={register}
-                        inputProps={{
-                          onChange: (e) => {
-                            if (e.target.checked) {
-                              setValue(`${preference.formMetadata.key}-none`, true)
-
-                              uncheckPreference(
-                                preference.formMetadata.key,
-                                preference.formMetadata?.options
-                              )
-                              void trigger(`${preference.formMetadata.key}-none`)
-                            }
-                          },
-                        }}
-                        validation={{
-                          validate: {
-                            somethingIsChecked: (value) =>
-                              value ||
-                              preferenceOptionObjectPaths[
-                                preference.formMetadata.key
-                              ].some((option) => getValues(option)),
-                          },
-                        }}
-                      />
-                    </div>
-                  )}
-                </fieldset>
-              </div>
-            ))}
+                    )}
+                  </fieldset>
+                </div>
+              )
+            })}
 
             <div className="form-card__pager">
               <div className="form-card__pager-row primary">

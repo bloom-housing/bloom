@@ -57,61 +57,67 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
   return (
     <GridSection title={t("application.details.preferences")} separator grid={false}>
       <GridSection columns={2}>
-        {preferences?.map((preference) => (
-          <GridCell key={preference.id}>
-            <ViewItem label={preference.title}>
-              <fieldset className="mt-4">
-                {preference?.formMetadata?.options?.map((option) => {
-                  return (
-                    <React.Fragment key={option.key}>
-                      <Field
-                        id={buildOptionName(preference.formMetadata.key, option.key)}
-                        name={buildOptionName(preference.formMetadata.key, option.key)}
-                        type="checkbox"
-                        label={t(`application.preferences.options.${option.key}`)}
-                        register={register}
-                        inputProps={{
-                          onChange: () => {
-                            setValue(`${preference.formMetadata.key}-none`, false)
-                          },
-                        }}
-                      />
-                      {watchPreferences[buildOptionName(preference.formMetadata.key, option.key)] &&
-                        option.extraData?.map((extra) => (
-                          <ExtraField
-                            key={extra.key}
-                            metaKey={preference.formMetadata.key}
-                            optionKey={option.key}
-                            extraKey={extra.key}
-                            type={extra.type}
-                            register={register}
-                            hhMembersOptions={hhMembersOptions}
-                          />
-                        ))}
-                    </React.Fragment>
-                  )
-                })}
+        {preferences?.map((preference) => {
+          const noneOptionKey = `${PREFERENCES_FORM_PATH}.${preference.formMetadata.key}-none`
 
-                {preference?.formMetadata && (
-                  <Field
-                    id={`${preference.formMetadata.key}-none`}
-                    name={`${preference.formMetadata.key}-none`}
-                    type="checkbox"
-                    label={t("t.none")}
-                    register={register}
-                    inputProps={{
-                      onChange: () =>
-                        uncheckPreference(
-                          preference.formMetadata.key,
-                          preference.formMetadata?.options
-                        ),
-                    }}
-                  />
-                )}
-              </fieldset>
-            </ViewItem>
-          </GridCell>
-        ))}
+          return (
+            <GridCell key={preference.id}>
+              <ViewItem label={preference.title}>
+                <fieldset className="mt-4">
+                  {preference?.formMetadata?.options?.map((option) => {
+                    return (
+                      <React.Fragment key={option.key}>
+                        <Field
+                          id={buildOptionName(preference.formMetadata.key, option.key)}
+                          name={buildOptionName(preference.formMetadata.key, option.key)}
+                          type="checkbox"
+                          label={t(`application.preferences.options.${option.key}`)}
+                          register={register}
+                          inputProps={{
+                            onChange: () => {
+                              setValue(noneOptionKey, false)
+                            },
+                          }}
+                        />
+                        {watchPreferences[
+                          buildOptionName(preference.formMetadata.key, option.key)
+                        ] &&
+                          option.extraData?.map((extra) => (
+                            <ExtraField
+                              key={extra.key}
+                              metaKey={preference.formMetadata.key}
+                              optionKey={option.key}
+                              extraKey={extra.key}
+                              type={extra.type}
+                              register={register}
+                              hhMembersOptions={hhMembersOptions}
+                            />
+                          ))}
+                      </React.Fragment>
+                    )
+                  })}
+
+                  {preference?.formMetadata && (
+                    <Field
+                      id={noneOptionKey}
+                      name={noneOptionKey}
+                      type="checkbox"
+                      label={t("t.none")}
+                      register={register}
+                      inputProps={{
+                        onChange: () =>
+                          uncheckPreference(
+                            preference.formMetadata.key,
+                            preference.formMetadata?.options
+                          ),
+                      }}
+                    />
+                  )}
+                </fieldset>
+              </ViewItem>
+            </GridCell>
+          )
+        })}
       </GridSection>
     </GridSection>
   )

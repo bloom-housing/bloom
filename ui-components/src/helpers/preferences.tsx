@@ -1,5 +1,5 @@
 import React from "react"
-import { InputType } from "@bloom-housing/backend-core/types"
+import { InputType, ApplicationPreference } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
   t,
@@ -286,4 +286,52 @@ export const mapPreferencesToApi = (data: Record<string, any>) => {
       options,
     }
   })
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) => {
+  const preferencesFormData = {}
+
+  preferences.forEach((item) => {
+    const options = item.options.reduce((acc, curr) => {
+      // extraData which comes from the API is an array, in the form we expect an object
+      const extraData =
+        curr?.extraData?.reduce((extraAcc, extraCurr) => {
+          // value - it can be string or nested address object
+          const value = extraCurr.value
+          Object.assign(extraAcc, {
+            [extraCurr.key]: value,
+          })
+
+          return extraAcc
+        }, {}) || {}
+
+      // each form option has "claimed" property - it's "checked" property in the API
+      const claimed = curr.checked
+
+      Object.assign(acc, {
+        [curr.key]: {
+          claimed,
+          ...extraData,
+        },
+      })
+      return acc
+    }, {})
+
+    Object.assign(preferencesFormData, {
+      [item.key]: options,
+    })
+  })
+
+  const noneValues = preferences.reduce((acc, item) => {
+    const isClaimed = item.claimed
+
+    Object.assign(acc, {
+      [`${item.key}-none`]: !isClaimed,
+    })
+
+    return acc
+  }, {})
+
+  return { ...preferencesFormData, ...noneValues }
 }

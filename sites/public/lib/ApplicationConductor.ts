@@ -208,7 +208,6 @@ export default class ApplicationConductor {
   }
 
   routeToNextOrReturnUrl(url?: string) {
-    console.log("next url", this.determineNextUrl())
     void Router.push(lRoute(this.nextOrReturnUrl(url))).then(() => {
       this.returnToReview = false
       window.scrollTo(0, 0)
@@ -232,11 +231,8 @@ export default class ApplicationConductor {
   }
 
   determineNextUrl() {
-    console.log("determine next", this.currentStepIndex)
     let i = this.currentStepIndex + 1
     let nextUrl = ""
-
-    console.log("next url: ", this.steps[i])
 
     while (i < this.steps.length) {
       const nextStep = this.steps[i]

@@ -9,7 +9,11 @@ import {
   HouseholdMember,
 } from "@bloom-housing/backend-core/types"
 
-import { TimeFieldPeriod, mapPreferencesToApi } from "@bloom-housing/ui-components"
+import {
+  TimeFieldPeriod,
+  mapPreferencesToApi,
+  mapApiToPreferencesForm,
+} from "@bloom-housing/ui-components"
 import {
   FormTypes,
   YesNoAnswer,
@@ -239,44 +243,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
-  const preferences = (() => {
-    const preferencesFormData = {}
-
-    const preferencesApiData = applicationData.preferences
-
-    preferencesApiData.forEach((item) => {
-      const options = item.options.reduce((acc, curr) => {
-        // extraData which comes from the API is an array, in the form we expect an object
-        const extraData =
-          curr?.extraData?.reduce((extraAcc, extraCurr) => {
-            // value - it can be string or nested address object
-            const value = extraCurr.value
-            Object.assign(extraAcc, {
-              [extraCurr.key]: value,
-            })
-
-            return extraAcc
-          }, {}) || {}
-
-        // each form option has "claimed" property - it's "checked" property in the API
-        const claimed = curr.checked
-
-        Object.assign(acc, {
-          [curr.key]: {
-            claimed,
-            ...extraData,
-          },
-        })
-        return acc
-      }, {})
-
-      Object.assign(preferencesFormData, {
-        [item.key]: options,
-      })
-    })
-
-    return preferencesFormData
-  })()
+  const preferences = mapApiToPreferencesForm(applicationData.preferences)
 
   const application: ApplicationTypes = (() => {
     const {
