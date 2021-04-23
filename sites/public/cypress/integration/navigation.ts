@@ -22,13 +22,9 @@ describe("Navigating around the site", () => {
 
   it("Loads a listing page", () => {
     cy.visit("/listings")
-    cy.get("article.listings-row a")
-      .first()
-      .then(function ($a) {
-        cy.visit($a.prop("href"))
-        // Check that the listing page sidebar apply section text is present on the page
-        cy.contains("Apply Online")
-      })
+    cy.get("article.listings-row a").first().click()
+    cy.location("pathname").should("include", "/listing/")
+    cy.contains("Apply Online")
   })
 
   it("Loads a non-listing-related page directly", () => {
