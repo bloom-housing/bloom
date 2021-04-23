@@ -10,8 +10,6 @@ import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
 import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
-// import LiveWorkPreferenceStep from "./LiveWorkPreferenceStep"
-// import DisplacedPreferenceStep from "./DisplacedPreferenceStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesStartStep from "./PreferencesStartStep"
 
