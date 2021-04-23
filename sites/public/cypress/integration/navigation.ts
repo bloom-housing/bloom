@@ -70,7 +70,7 @@ describe("Navigating around the site", () => {
     cy.get("article")
       .first()
       .within(() => {
-        cy.get("a").last().contains("See Details").click()
+        cy.get("a").last().contains("See Details").click({ force: true })
       })
 
     // Should be on the listing page
