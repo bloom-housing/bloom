@@ -67,11 +67,7 @@ describe("Navigating around the site", () => {
     cy.contains("Rent affordable housing")
 
     // Click on a listing item on the listings page
-    cy.get("article")
-      .first()
-      .within(() => {
-        cy.contains("See Details").last().click({ force: true })
-      })
+    cy.contains("See Details").last().click({ force: true })
 
     // Should be on the listing page
     cy.location("pathname").should("include", "/listing/")
