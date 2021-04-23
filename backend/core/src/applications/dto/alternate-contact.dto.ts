@@ -3,7 +3,7 @@ import { AlternateContact } from "../entities/alternate-contact.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class AlternateContactDto extends OmitType(AlternateContact, ["mailingAddress"]) {
   @Expose()

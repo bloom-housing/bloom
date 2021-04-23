@@ -11,7 +11,7 @@ import { OmitType } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { PropertyDto } from "../../property/dto/property.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../user/dto/user.dto"
 
 export class ListingDto extends OmitType(Listing, [

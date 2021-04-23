@@ -1,11 +1,7 @@
-import { FormattingMetadataAggregateFactory } from "../csv-builder.service"
-import { haywardFormattingMetadata } from "./hayward-formatting-metadata"
-import { basicFormattingMetadata } from "./basic-formatting-metadata"
-
-export enum CSVFormattingType {
-  basic = "basic",
-  withDisplaceeNameAndAddress = "withDisplaceeNameAndAddress",
-}
+import { haywardFormattingMetadata } from "./metadata/hayward-formatting-metadata"
+import { basicFormattingMetadata } from "./metadata/basic-formatting-metadata"
+import { CSVFormattingType } from "../types/csv-formatting-type-enum"
+import { FormattingMetadataAggregateFactory } from "../types/formatting-metadata-aggregate-factory"
 
 export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAggregateFactory = (
   type: CSVFormattingType

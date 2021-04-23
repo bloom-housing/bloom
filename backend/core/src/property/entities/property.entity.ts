@@ -21,11 +21,12 @@ import {
 } from "class-validator"
 import { Listing } from "../../listings/entities/listing.entity"
 import { ApiProperty } from "@nestjs/swagger"
-import { Unit, UnitsSummarized } from "../../units/entities/unit.entity"
+import { Unit } from "../../units/entities/unit.entity"
 import { transformUnits } from "../../shared/units-transformations"
 import { PropertyGroup } from "../../property-groups/entities/property-group.entity"
 import { Address } from "../../shared/entities/address.entity"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { UnitsSummarized } from "../../units/types/units-summarized"
 
 @Entity()
 export class Property {

@@ -1,5 +1,5 @@
 import { PrimaryColumn, CreateDateColumn, Entity } from "typeorm"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Type } from "class-transformer"
 import { IsDate, IsString } from "class-validator"
 

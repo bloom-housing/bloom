@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer"
 import { IsBoolean, IsEnum, IsOptional, IsString } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { ApplicationMethodType } from "../types/application-method-type-enum"
 

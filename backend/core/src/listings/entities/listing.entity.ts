@@ -30,13 +30,13 @@ import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { Address } from "../../shared/entities/address.entity"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { CSVFormattingType } from "../../csv/formatting/application-formatting-metadata-factory"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingEventDto } from "../dto/listing-event.dto"
 import { ApplicationMethodDto } from "../dto/application-method.dto"
 import { AssetDto } from "../dto/asset.dto"
+import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {

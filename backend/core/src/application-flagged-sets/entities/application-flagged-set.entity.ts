@@ -2,20 +2,12 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "ty
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { IsDate, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Expose, Type } from "class-transformer"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../.."
-
-export enum Rule {
-  nameAndDOB = "Name and DOB",
-  email = "Email",
-}
-
-export enum FlaggedSetStatus {
-  flagged = "flagged",
-  resolved = "resolved",
-}
+import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
+import { Rule } from "../types/rule-enum"
 
 @Entity()
 export class ApplicationFlaggedSet extends AbstractEntity {

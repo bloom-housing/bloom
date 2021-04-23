@@ -2,7 +2,7 @@ import { Expose, Type } from "class-transformer"
 import { IsDate, IsOptional, IsUUID } from "class-validator"
 import { OmitType } from "@nestjs/swagger"
 import { Address } from "../entities/address.entity"
-import { ValidationsGroupsEnum } from "../validations-groups.enum"
+import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 
 export class AddressDto extends OmitType(Address, []) {}
 export class AddressCreateDto extends OmitType(Address, ["id", "createdAt", "updatedAt"]) {}

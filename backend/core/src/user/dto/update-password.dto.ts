@@ -1,7 +1,7 @@
 import { IsString, Matches, MaxLength } from "class-validator"
 import { Expose } from "class-transformer"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { Match } from "../../shared/match.decorator"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
 
 export class UpdatePasswordDto {

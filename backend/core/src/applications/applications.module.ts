@@ -13,7 +13,7 @@ import { Applicant } from "./entities/applicant.entity"
 import { ApplicationsSubmissionController } from "./applications-submission.controller"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
-import { EmailService } from "../shared/email.service"
+import { EmailService } from "../shared/services/email.service"
 
 @Module({
   imports: [

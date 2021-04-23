@@ -6,7 +6,7 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EmailService } from "../../src/shared/email.service"
+import { EmailService } from "../../src/shared/services/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
@@ -16,12 +16,10 @@ import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
 import { ThrottlerModule } from "@nestjs/throttler"
-import {
-  ApplicationFlaggedSet,
-  FlaggedSetStatus,
-  Rule,
-} from "../../src/application-flagged-sets/entities/application-flagged-set.entity"
+import { ApplicationFlaggedSet } from "../../src/application-flagged-sets/entities/application-flagged-set.entity"
 import { getTestAppBody } from "../lib/get-test-app-body"
+import { FlaggedSetStatus } from "../../src/application-flagged-sets/types/flagged-set-status-enum"
+import { Rule } from "../../src/application-flagged-sets/types/rule-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -45,7 +43,9 @@ describe("ApplicationFlaggedSets", () => {
 
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    const testEmailService = { confirmation: async () => {} }
+    const testEmailService = {
+      confirmation: async () => {},
+    }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [
