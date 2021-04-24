@@ -1,4 +1,4 @@
-import { AbstractServiceFactory } from "../shared/abstract-service"
+import { AbstractServiceFactory } from "../shared/services/abstract-service"
 import { Injectable, Scope } from "@nestjs/common"
 import { Translation } from "./entities/translation.entity"
 import { TranslationCreateDto, TranslationUpdateDto } from "./dto/translation.dto"

@@ -14,9 +14,9 @@ import {
   ValidateIf,
   ValidateNested,
 } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
-import { Match } from "../../shared/match.decorator"
+import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
 
 export class UserDto extends OmitType(User, [

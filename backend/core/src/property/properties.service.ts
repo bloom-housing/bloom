@@ -1,4 +1,4 @@
-import { AbstractServiceFactory } from "../shared/abstract-service"
+import { AbstractServiceFactory } from "../shared/services/abstract-service"
 import { PropertyCreateDto, PropertyUpdateDto } from "./dto/property.dto"
 import { Property } from "./entities/property.entity"
 

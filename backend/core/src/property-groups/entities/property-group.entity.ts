@@ -10,7 +10,7 @@ import {
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsString, IsUUID } from "class-validator"
 import { Property } from "../../property/entities/property.entity"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 @Entity()
 export class PropertyGroup {

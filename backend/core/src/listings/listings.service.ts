@@ -6,10 +6,6 @@ import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 
-export enum ListingsResponseStatus {
-  ok = "ok",
-}
-
 @Injectable()
 export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly repository: Repository<Listing>) {}

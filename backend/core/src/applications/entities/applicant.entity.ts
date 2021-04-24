@@ -12,7 +12,7 @@ import {
   IsEmail,
 } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 @Entity()
 export class Applicant extends AbstractEntity {

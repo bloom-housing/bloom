@@ -13,13 +13,9 @@ import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsEmail, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
-
-export enum UserRole {
-  user = "user",
-  admin = "admin",
-}
+import { UserRole } from "../types/user-role-enum"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
