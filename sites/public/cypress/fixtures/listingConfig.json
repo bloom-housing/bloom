@@ -55,10 +55,7 @@
           "name":"income"
        },
        {
-          "name":"preferencesLiveWork"
-       },
-       {
-          "name":"preferencesDisplaced"
+          "name":"preferencesAll"
        },
        {
           "name":"generalPool"

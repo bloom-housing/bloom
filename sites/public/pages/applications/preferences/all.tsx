@@ -22,7 +22,7 @@ import { useFormConductor } from "../../../lib/hooks"
 import { FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 const PreferencesAll = () => {
-  const { conductor, application, listing } = useFormConductor("PreferencesAll")
+  const { conductor, application, listing } = useFormConductor("preferencesAll")
   const preferences = listing?.preferences
 
   const currentPageSection = 4
@@ -53,6 +53,7 @@ const PreferencesAll = () => {
   }, [preferences])
 
   const onSubmit = (data) => {
+    console.log("submit")
     const body = mapPreferencesToApi(data)
 
     conductor.currentStep.save(body)
