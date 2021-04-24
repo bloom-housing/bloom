@@ -55,14 +55,8 @@ export const retrieveApplicationConfig = () => {
         name: "income",
       },
       {
-        name: "preferencesStart",
+        name: "preferencesAll",
       },
-      // {
-      //   name: "preferencesLiveWork",
-      // },
-      // {
-      //   name: "preferencesDisplaced",
-      // },
       {
         name: "generalPool",
       },

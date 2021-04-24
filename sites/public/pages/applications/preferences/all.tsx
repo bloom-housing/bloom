@@ -21,8 +21,8 @@ import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
-const PreferencesStart = () => {
-  const { conductor, application, listing } = useFormConductor("preferencesStart")
+const PreferencesAll = () => {
+  const { conductor, application, listing } = useFormConductor("PreferencesAll")
   const preferences = listing?.preferences
 
   const currentPageSection = 4
@@ -306,4 +306,4 @@ const PreferencesStart = () => {
   )
 }
 
-export default PreferencesStart
+export default PreferencesAll

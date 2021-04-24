@@ -112,8 +112,8 @@ module.exports = withCSS(
               "/applications/preferences/general": {
                 page: "/applications/preferences/general",
               },
-              "/applications/preferences/start": {
-                page: "/applications/preferences/start",
+              "/applications/preferences/all": {
+                page: "/applications/preferences/all",
               },
               "/applications/preferences/displaced": {
                 page: "/applications/preferences/displaced",

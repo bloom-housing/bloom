@@ -1,6 +1,6 @@
 import StepDefinition from "./StepDefinition"
 
-export default class PreferencesStartStep extends StepDefinition {
+export default class PreferencesAllStep extends StepDefinition {
   skipStep() {
     return !this.conductor.listing.preferences.length
   }

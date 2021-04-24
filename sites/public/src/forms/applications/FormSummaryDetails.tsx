@@ -279,7 +279,7 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
           <>
             <h3 className="form--card__sub-header">
               {t("t.preferences")}
-              {editMode && <EditLink href="/applications/preferences/start" />}
+              {editMode && <EditLink href="/applications/preferences/all" />}
             </h3>
             <div id="preferences" className="form-card__group border-b mx-0">
               {application.preferences.filter((item) => item.claimed == true).length == 0 ? (

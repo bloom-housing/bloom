@@ -11,7 +11,7 @@ import AlternateContactStep from "./AlternateContactStep"
 import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
-import PreferencesStartStep from "./PreferencesStartStep"
+import PreferencesAllStep from "./PreferencesAllStep"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -89,9 +89,9 @@ export default class ApplicationConductor {
     income: {
       url: "/applications/financial/income",
     },
-    preferencesStart: {
-      url: "/applications/preferences/start",
-      definition: PreferencesStartStep,
+    preferencesAll: {
+      url: "/applications/preferences/all",
+      definition: PreferencesAllStep,
     },
     generalPool: {
       url: "/applications/preferences/general",
