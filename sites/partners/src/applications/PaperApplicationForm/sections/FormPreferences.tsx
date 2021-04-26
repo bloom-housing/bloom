@@ -4,6 +4,7 @@ import {
   t,
   ExtraField,
   PREFERENCES_FORM_PATH,
+  PREFERENCES_NONE_FORM_PATH,
   GridSection,
   ViewItem,
   GridCell,
@@ -58,7 +59,7 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
     <GridSection title={t("application.details.preferences")} separator grid={false}>
       <GridSection columns={2}>
         {preferences?.map((preference) => {
-          const noneOptionKey = `${PREFERENCES_FORM_PATH}.${preference.formMetadata.key}-none`
+          const noneOptionKey = `${PREFERENCES_NONE_FORM_PATH}.${preference.formMetadata.key}-none`
 
           return (
             <GridCell key={preference.id}>

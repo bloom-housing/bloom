@@ -9,6 +9,7 @@ import {
   t,
   ExtraField,
   PREFERENCES_FORM_PATH,
+  PREFERENCES_NONE_FORM_PATH,
   ExpandableContent,
   Button,
   AppearanceStyleType,
@@ -157,7 +158,7 @@ const PreferencesAll = () => {
             </div>
 
             {preferences?.map((preference, index) => {
-              const noneOptionKey = `${PREFERENCES_FORM_PATH}.${preference.formMetadata.key}-none`
+              const noneOptionKey = `${PREFERENCES_NONE_FORM_PATH}.${preference.formMetadata.key}-none`
 
               return (
                 <div key={preference.id}>

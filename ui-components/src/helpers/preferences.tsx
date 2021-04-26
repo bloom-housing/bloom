@@ -44,8 +44,8 @@ type AddressType =
 /*
   Path to the preferences from listing object
 */
-export const PREFERENCES_FORM_PATH = "application.preferences"
-
+export const PREFERENCES_FORM_PATH = "application.preferences.options"
+export const PREFERENCES_NONE_FORM_PATH = "application.preferences.none"
 /*
   It generates inner fields for preferences form
 */
@@ -234,7 +234,9 @@ export const FormAddress = ({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mapPreferencesToApi = (data: Record<string, any>) => {
   const CLAIMED_KEY = "claimed"
-  const preferencesFormData = data.application.preferences
+  const preferencesFormData = data.application.preferences.options
+
+  console.log("mapPreferencesToApi", preferencesFormData)
 
   const keys = Object.keys(preferencesFormData)
 
@@ -333,5 +335,5 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
     return acc
   }, {})
 
-  return { ...preferencesFormData, ...noneValues }
+  return { options: preferencesFormData, none: noneValues }
 }
