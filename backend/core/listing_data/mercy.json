@@ -1,0 +1,637 @@
+{
+  "id": "HOLNx_F7fUCeax5GCoIr9g",
+  "events": [],
+  "postmarkedApplicationsReceivedByDate": "2021-05-15T16:00:00.000-08:00",
+  "applicationAddress": {
+    "city": "San Leandro",
+    "street": "1475 167th Avenue, Management Office",
+    "zipCode": "94578",
+    "state": "CA",
+    "latitude": null,
+    "longitude": null
+  },
+  "applicationDueDate": null,
+  "applicationOrganization": "Mercy Housing",
+  "applicationPhone": "510-962-8120",
+  "buildingSelectionCriteria": "PDF to be sent for link week of 4/9",
+  "costsNotIncluded": "PG&E, phone, cable, internet",
+  "creditHistory": "Management staff will request credit histories on each adult member of each applicant household. It is the applicant’s responsibility that at least one household member can demonstrate utilities can be put in their name. For this to be demonstrated, at least one household member must have a credit report that shows no utility accounts in default. Applicants who cannot have utilities put in their name will be considered ineligible. Any currently open bankruptcy proceeding of any of the household members will be considered a disqualifying condition. Applicants will not be considered to have a poor credit history when they were delinquent in rent because they were withholding rent due to substandard housing conditions in a manner consistent with local ordinance; or had a poor rent paying history clearly related to an excessive rent relative to their income, and responsible efforts were made to resolve the non-payment problem. If there is a finding of any kind which would negatively impact an application, the applicant will be notified in writing. The applicant then shall have 14 calendar days in which such a finding may be appealed to staff for consideration.",
+  "CSVFormattingType": "withDisplaceeNameAndAddress",
+  "depositMax": "1,468",
+  "depositMin": "1,223",
+  "programRules": "Tax Credit student rules",
+  "externalId": null,
+  "waitlistMaxSize": null,
+  "name": "1475 167th Avenue",
+  "waitlistCurrentSize": null,
+  "prioritiesDescriptor": null,
+  "requiredDocuments": "Current government issued photo ID, social security cards, birth certificates for minors, proof of income, proof of assets",
+  "reservedCommunityMaximumAge": null,
+  "reservedCommunityMinimumAge": null,
+  "reservedDescriptor": null,
+  "status": "active",
+  "createdAt": "2020-11-06T15:11:26.446-08:00",
+  "updatedAt": "2020-11-06T11:47:47.150-08:00",
+  "groupId": 1,
+  "hideUnitFeatures": false,
+  "disableUnitsAccordion": true,
+  "applicationFee": "30.00",
+  "criminalBackground": "Staff will hire a contractor to run a credit check and criminal background check on all applicants and it will check court evidence of evictions (and, unlawful detainers), or judgments against the applicant and evidence of criminal convictions. The purpose of these checks is to obtain information on the applicant’s past history of meeting financial obligations records for and future ability to make timely rent payments.  1.  Each record will be assessed individually, in which only the 'directly-related' convictions and unresolved arrests in the record are considered. In considering whether a conviction/unresolved arrest is directly-related, the housing provider shall look at whether the conduct has a direct and specific negative bearing on the safety of persons or property, given the nature of the housing, whether the housing offers the opportunity for the same/similar offense to occur, whether circumstances leading to the conduct will recur in the housing, and whether supportive services that might reduce the likelihood of a recurrence are available on-site.  2.  If denied as a result of the report the applicant will be provided with a copy of the background report and told which conviction or unresolved arrest is the basis for the potential denial. The applicant will have 14 days to respond orally or in writing to show that there shouldn’t be a denial. The applicant can respond by:  \n  * Pointing out any inaccuracies in the report.  * Providing evidence of rehabilitation. Evidence of rehabilitation include but not limited to satisfying parole/probation (however inability to pay fines, fess and restitution due to indigence shall not be considered noncompliance with terms and conditions of parole and/or probation), receiving education/training, participating in alcohol/drug treatment programs, letters of recommendation, age at the time of conviction.  * Explaining any mitigating factors about the circumstances of the conviction. Mitigating factors include physical or emotional abuse, coercion, untreated abuse/mental illness that led to the conviction.  \n The decision will be made at the discretion of the Regional Vice President and/or Compliance Supervisor.",
+  "leasingAgentEmail": "laura.weller@mercyhousing.org",
+  "leasingAgentName": "Laura Weller",
+  "leasingAgentAddress": {
+    "city": "San Leandro",
+    "street": "1475 167th Avenue, Management Office",
+    "zipCode": "94578",
+    "state": "CA",
+    "latitude": 37.693612,
+    "longitude": -122.109824
+  },
+  "leasingAgentOfficeHours": "9am-4:30pm; no walk-ins during covid-19 so please call to schedule appointment",
+  "leasingAgentPhone": "510-962-8120",
+  "leasingAgentTitle": "Property Manager",
+  "rentalHistory": "Will request phone references from the applicant's current landlord and former landlords for the past two (2) years. If the landlord provides a good reference, staff will move forward with the application process. If the landlord provides a negative reference that documents lease violation or evictions, staff will request a written reference from the Landlord. If the landlord provides a negative reference indicating that the applicant was chronically late with rent payments, was evicted at any time during the past two (2) years for non-payment of rent, had documented lease violations or had other landlord/tenant legal action initiated for actions within their control, any one of these circumstances shall be grounds for an ineligibility determination. Applicants who have failed to pay amounts due or failed to reach a satisfactory agreement to pay those amounts will also be considered ineligible. If there is no landlord history; it will be considered a neutral reference and the application will continue on through the eligibility process. Alternative references may be requested if there is no landlord history. Alternatives references may include written references of social workers, employers and/or others involved with the applicant in a professional capacity. References from person(s) with whom they have had a professional relationship to demonstrate their ability to meet the financial conditions of the lease. (Letters of reference from family members will not be accepted.) Applicants who have resided in homes they owned during the prior three years or more can provide proof of timely mortgage, insurance or property tax payments in order to demonstrate their ability to meet the financial requirements of the lease. If there is a finding of any kind which would negatively impact an application, the applicant will be notified in writing. The applicant then shall have 14 calendar days in which such a finding may be appealed to staff for consideration.",
+  "preferences": [
+    {
+      "ordinal": 1,
+      "title": "Live/Work in Alameda County",
+      "subtitle": "",
+      "description": "At least one household member lives or works in Alameda County",
+      "links": [],
+      "formMetadata": {
+        "key": "liveWork",
+        "options": [
+          {
+            "key": "live",
+            "extraData": []
+          },
+          {
+            "key": "work",
+            "extraData": []
+          }
+        ]
+      }
+    }
+  ],
+  "property": {
+    "createdAt": "2021-02-02T17:00:00.000-08:00",
+    "updatedAt": "2021-02-02T17:00:00.000-08:00",
+    "householdSizeMin": 1,
+    "householdSizeMax": 5,
+    "smokingPolicy": "Non-smoking community",
+    "unitsAvailable": 15,
+    "unitsSummarized": null,
+    "unitAmenities": "Quartz kitchen counters, refrigerator, electric stove with smart burners, dishwasher, mini-split AC/Heat, vinyl flooring",
+    "developer": "Mercy Housing California",
+    "yearBuilt": 1950,
+    "accessibility": "Accesible path of travel throughout property, pool lift, 16 mobility units, 4 Hearing Visual Impairment units",
+    "amenities": "Clubhouse including meeting room, tot lot, laundry room, pool, (outdoor) BBQ area, gated parking",
+    "buildingTotalUnits": 79,
+    "buildingAddress": {
+      "county": "Alameda",
+      "city": "San Leandro",
+      "street": "1475 167th Avenue, Management Office",
+      "zipCode": "94578",
+      "state": "CA",
+      "latitude": 37.693612,
+      "longitude": -122.109824
+    },
+    "neighborhood": "Ashland",
+    "petPolicy": "No pets; assistance animals with approval",
+    "units": [
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 2,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 2,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1468",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "605",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "42288",
+        "monthlyIncomeMin": "3524",
+        "floor": 1,
+        "annualIncomeMax": "84600",
+        "maxOccupancy": 5,
+        "minOccupancy": 2,
+        "monthlyRent": "1762",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "822",
+        "status": "available",
+        "unitType": "twoBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "42288",
+        "monthlyIncomeMin": "3524",
+        "floor": 2,
+        "annualIncomeMax": "84600",
+        "maxOccupancy": 5,
+        "minOccupancy": 2,
+        "monthlyRent": "1762",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": "Mobility and hearing",
+        "reservedType": null,
+        "sqFeet": "822",
+        "status": "available",
+        "unitType": "twoBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      }
+    ]
+  },
+  "applicationMethods": [
+    {
+      "type": "LeasingAgent",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": true
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/mercy.jpg"
+    }
+  ],
+  "amiChart": {
+    "name": "AlamedaCountyTCAC2021",
+    "items": [
+      {
+        "percentOfAmi": 80,
+        "householdSize": 1,
+        "income": 76720
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 2,
+        "income": 87680
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 3,
+        "income": 98640
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 4,
+        "income": 109600
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 5,
+        "income": 11840
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 6,
+        "income": 127200
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 7,
+        "income": 135920
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 8,
+        "income": 144720
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 1,
+        "income": 57540
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 2,
+        "income": 65760
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 3,
+        "income": 73980
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 4,
+        "income": 82200
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 5,
+        "income": 88800
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 6,
+        "income": 95400
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 7,
+        "income": 101940
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 8,
+        "income": 108540
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 1,
+        "income": 47950
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 2,
+        "income": 54800
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 3,
+        "income": 61650
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 4,
+        "income": 68500
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 5,
+        "income": 74000
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 6,
+        "income": 79500
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 7,
+        "income": 84950
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 8,
+        "income": 90450
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 1,
+        "income": 28770
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 2,
+        "income": 32880
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 3,
+        "income": 36990
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 4,
+        "income": 41100
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 5,
+        "income": 44400
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 6,
+        "income": 47700
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 7,
+        "income": 50970
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 8,
+        "income": 54270
+      }
+    ]
+  }
+}
