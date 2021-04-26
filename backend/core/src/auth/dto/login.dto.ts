@@ -1,6 +1,6 @@
 import { IsEmail, IsString } from "class-validator"
 import { Expose } from "class-transformer"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class LoginDto {
   @Expose()

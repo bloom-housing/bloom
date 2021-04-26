@@ -1,6 +1,8 @@
+import React, { useState } from "react"
 import Head from "next/head"
 import { Listing } from "@bloom-housing/backend-core/types"
 import {
+  AlertBox,
   LinkButton,
   Hero,
   MarkdownSection,
@@ -10,19 +12,28 @@ import {
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
+import { ConfirmationModal } from "../src/ConfirmationModal"
 
 interface IndexProps {
   listings: Listing[]
 }
 
 export default function Home(props: IndexProps) {
+  const blankAlertInfo = () => {
+    return {
+      alertMessage: null,
+      alertType: null,
+    }
+  }
+
+  const [alertInfo, setAlertInfo] = useState(blankAlertInfo())
+
   const heroTitle = (
     <>
       {t("welcome.title")} <em>{t("region.name")}</em>
     </>
   )
 
-  //    const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
@@ -36,6 +47,15 @@ export default function Home(props: IndexProps) {
         <SiteAlert type="alert" className={alertClasses} />
         <SiteAlert type="success" className={alertClasses} timeout={30000} />
       </div>
+      {alertInfo.alertMessage && (
+        <AlertBox
+          className=""
+          onClose={() => setAlertInfo(blankAlertInfo())}
+          type={alertInfo.alertType}
+        >
+          {alertInfo.alertMessage}
+        </AlertBox>
+      )}
       <Hero
         title={heroTitle}
         buttonTitle={t("welcome.seeRentalListings")}
@@ -52,6 +72,9 @@ export default function Home(props: IndexProps) {
           </>
         </MarkdownSection>
       </div>
+      <ConfirmationModal
+        setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
+      />
     </Layout>
   )
 }

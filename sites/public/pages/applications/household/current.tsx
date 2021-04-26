@@ -56,14 +56,7 @@ export default () => {
         <Form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
           (FORM)
           <div className="text-center mt-6">
-            <Button
-              styleType={AppearanceStyleType.primary}
-              onClick={() => {
-                //
-              }}
-            >
-              Next
-            </Button>
+            <Button styleType={AppearanceStyleType.primary}>Next</Button>
           </div>
         </Form>
       </FormCard>

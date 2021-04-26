@@ -1,10 +1,12 @@
+import { AppearanceStyleType } from "../global/AppearanceTypes"
 import * as React from "react"
 import "./Icon.scss"
 
 export interface IconProps {
-  size: string
+  size: "tiny" | "small" | "medium" | "large" | "xlarge" | "2xl"
   symbol: string
   white?: boolean
+  styleType?: AppearanceStyleType
   className?: string
 }
 
@@ -12,13 +14,9 @@ const Icon = (props: IconProps) => {
   const wrapperClasses = ["ui-icon"]
   wrapperClasses.push(`ui-${props.size}`)
 
-  if (props.white) {
-    wrapperClasses.push("ui-white")
-  }
-
-  if (props.className) {
-    wrapperClasses.push(props.className)
-  }
+  if (props.white) wrapperClasses.push("ui-white")
+  if (props.styleType) wrapperClasses.push(props.styleType)
+  if (props.className) wrapperClasses.push(props.className)
 
   return (
     <span className={wrapperClasses.join(" ")}>

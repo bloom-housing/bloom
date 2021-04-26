@@ -78,7 +78,7 @@ Cypress.Commands.add("logout", () =>
 Cypress.Commands.add("createUser", (user: UserFields, { apiBase = "http://localhost:3100" } = {}) =>
   cy
     .request({
-      url: `${apiBase}/auth/register`,
+      url: `${apiBase}/user`,
       method: "POST",
       body: user,
     })

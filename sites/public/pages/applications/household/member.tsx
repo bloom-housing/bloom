@@ -173,7 +173,11 @@ export default () => {
                 <DOBField
                   id="applicant.member.dateOfBirth"
                   required={true}
-                  applicant={member}
+                  defaultDOB={{
+                    birthDay: member.birthDay,
+                    birthMonth: member.birthMonth,
+                    birthYear: member.birthYear,
+                  }}
                   register={register}
                   error={errors}
                   watch={watch}
@@ -379,13 +383,7 @@ export default () => {
 
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
-                  <Button
-                    id="save-member"
-                    styleType={AppearanceStyleType.primary}
-                    onClick={() => {
-                      //
-                    }}
-                  >
+                  <Button id="save-member" styleType={AppearanceStyleType.primary}>
                     {saveText}
                   </Button>
                 </div>

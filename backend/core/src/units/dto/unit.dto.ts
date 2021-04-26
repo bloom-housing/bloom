@@ -3,7 +3,7 @@ import { Unit } from "../entities/unit.entity"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChartDto } from "../../ami-charts/dto/ami-chart.dto"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class UnitDto extends OmitType(Unit, ["property", "amiChart"] as const) {
   @Exclude()

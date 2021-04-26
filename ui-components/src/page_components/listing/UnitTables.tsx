@@ -42,10 +42,10 @@ const UnitTables = (props: UnitTablesProps) => {
   const unitSummaries = props.unitSummaries
 
   const unitsHeaders = {
-    number: capitalize(t("t.unit") + " #"),
-    sqFeet: capitalize(t("t.area")),
-    numBathrooms: capitalize(t("listings.bath") + "s"),
-    floor: capitalize(t("t.floor")),
+    number: "t.unit",
+    sqFeet: "t.area",
+    numBathrooms: "listings.bath",
+    floor: "t.floor",
   }
 
   const toggleTable = (event: React.MouseEvent) => {

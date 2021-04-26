@@ -47,6 +47,7 @@ export * from "./src/headers/SiteHeader"
 /* Helpers */
 export * from "./src/helpers/address"
 export * from "./src/helpers/capitalize"
+export * from "./src/helpers/dateToString"
 export * from "./src/helpers/formOptions"
 export * from "./src/helpers/mergeDeep"
 export * from "./src/helpers/localeRoute"

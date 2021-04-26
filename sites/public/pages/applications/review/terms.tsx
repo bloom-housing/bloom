@@ -13,10 +13,11 @@ import {
   ApiClientContext,
   FieldGroup,
   Form,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -25,6 +26,8 @@ export default () => {
   const { applicationsService } = useContext(ApiClientContext)
   const { profile } = useContext(UserContext)
   const router = useRouter()
+
+  const [apiError, setApiError] = useState<boolean>(false)
 
   const currentPageSection = 5
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
@@ -56,7 +59,11 @@ export default () => {
         conductor.currentStep.save({ confirmationId: result.id })
         return router.push("/applications/review/confirmation")
       })
-      .catch((err) => console.error(`Error creating application: ${err}`))
+      .catch((err) => {
+        setApiError(true)
+        window.scrollTo(0, 0)
+        console.error(`Error creating application: ${err}`)
+      })
   }
 
   const agreeField = [
@@ -80,6 +87,13 @@ export default () => {
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.review.terms.title")}</h2>
         </div>
+
+        {apiError && (
+          <AlertBox type="alert" inverted onClose={() => setApiError(false)}>
+            {t("errors.rateLimitExceeded")}
+          </AlertBox>
+        )}
+
         <Form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
             <Markdown options={{ disableParsingRawHTML: false }}>

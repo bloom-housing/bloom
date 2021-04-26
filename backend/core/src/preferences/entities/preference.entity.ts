@@ -1,25 +1,17 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  UpdateDateColumn,
   CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
-import { FormMetadata } from "../../applications/entities/application-preferences.entity"
-
-export class PreferenceLink {
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  title: string
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  url: string
-}
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { FormMetadata } from "../../applications/types/form-metadtaa/form-metadata"
+import { PreferenceLink } from "../types/preference-link"
 
 @Entity({ name: "preferences" })
 class Preference {

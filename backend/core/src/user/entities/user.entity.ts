@@ -6,21 +6,19 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsEmail, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
-
-export enum UserRole {
-  user = "user",
-  admin = "admin",
-}
+import { UserRole } from "../types/user-role-enum"
 
 @Entity({ name: "user_accounts" })
+@Unique(["email"])
 @Index("user_accounts_email_unique_idx", { synchronize: false })
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -33,6 +31,16 @@ export class User {
 
   @Column("varchar", { nullable: true })
   resetToken: string
+
+  @Column("varchar", { nullable: true })
+  confirmationToken?: string
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  confirmedAt?: Date | null
 
   @Column("varchar")
   @Expose()

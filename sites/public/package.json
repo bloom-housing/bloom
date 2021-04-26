@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -13,10 +13,11 @@
     "start": "next start",
     "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev",
-    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
+    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\"",
+    "build:headers": "node scripts/build-headers.js"
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^0.3.10",
+    "@bloom-housing/ui-components": "^0.3.11",
     "@mdx-js/loader": "1.6.18",
     "@next/mdx": "^10.1.0",
     "axios": "^0.21.1",
@@ -31,7 +32,8 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^6.9.2",
-    "react-inlinesvg": "^2.1.1"
+    "react-inlinesvg": "^2.1.1",
+    "swr": "^0.5.5"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^10.1.0",

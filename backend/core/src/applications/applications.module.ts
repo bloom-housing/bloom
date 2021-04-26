@@ -12,6 +12,8 @@ import { Address } from "../shared/entities/address.entity"
 import { Applicant } from "./entities/applicant.entity"
 import { ApplicationsSubmissionController } from "./applications-submission.controller"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
+import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
+import { EmailService } from "../shared/services/email.service"
 
 @Module({
   imports: [
@@ -19,8 +21,9 @@ import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
     AuthModule,
     SharedModule,
     ListingsModule,
+    ApplicationFlaggedSetsModule,
   ],
-  providers: [ApplicationsService, CsvEncoder, CsvBuilder, ApplicationCsvExporter],
+  providers: [ApplicationsService, CsvEncoder, CsvBuilder, ApplicationCsvExporter, EmailService],
   exports: [ApplicationsService],
   controllers: [ApplicationsController, ApplicationsSubmissionController],
 })

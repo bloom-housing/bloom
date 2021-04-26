@@ -1,7 +1,6 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
-import { HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 
 export type DOBFieldValues = {
@@ -13,22 +12,23 @@ export interface DOBFieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   errorMessage?: string
-  label: string
+  label: React.ReactNode
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   watch: any // comes from React Hook Form
-  applicant?: HouseholdMemberUpdate
+  defaultDOB?: DOBFieldValues
   atAge?: boolean
   validateHhAge?: boolean
   name?: string
   id?: string
   required?: boolean
+  disabled?: boolean
   readerOnly?: boolean
 }
 
 const DOBField = (props: DOBFieldProps) => {
-  const { applicant, error, register, watch, atAge, validateHhAge, name, id, errorMessage } = props
+  const { defaultDOB, error, register, watch, atAge, validateHhAge, name, id, errorMessage } = props
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
   }
@@ -62,9 +62,10 @@ const DOBField = (props: DOBFieldProps) => {
         <Field
           name={fieldName("birthMonth")}
           label={t("t.month")}
+          disabled={props.disabled}
           readerOnly={true}
           placeholder="MM"
-          defaultValue={applicant?.birthMonth ? applicant.birthMonth : ""}
+          defaultValue={defaultDOB?.birthMonth ? defaultDOB.birthMonth : ""}
           error={error?.birthMonth}
           validation={{
             required: props.required,
@@ -82,9 +83,10 @@ const DOBField = (props: DOBFieldProps) => {
         <Field
           name={fieldName("birthDay")}
           label={t("t.day")}
+          disabled={props.disabled}
           readerOnly={true}
           placeholder="DD"
-          defaultValue={applicant?.birthDay ? applicant.birthDay : ""}
+          defaultValue={defaultDOB?.birthDay ? defaultDOB.birthDay : ""}
           error={error?.birthDay}
           validation={{
             required: props.required,
@@ -102,9 +104,10 @@ const DOBField = (props: DOBFieldProps) => {
         <Field
           name={fieldName("birthYear")}
           label={t("t.year")}
+          disabled={props.disabled}
           readerOnly={true}
           placeholder="YYYY"
-          defaultValue={applicant?.birthYear ? applicant.birthYear : ""}
+          defaultValue={defaultDOB?.birthYear ? defaultDOB.birthYear : ""}
           error={error?.birthYear}
           validation={{
             required: props.required,

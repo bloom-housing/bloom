@@ -1,17 +1,15 @@
 import { Injectable } from "@nestjs/common"
 import { CsvBuilder } from "./csv-builder.service"
 import { Application } from "../applications/entities/application.entity"
-import {
-  applicationFormattingMetadataAggregateFactory,
-  CSVFormattingType,
-} from "./formatting/application-formatting-metadata-factory"
+import { applicationFormattingMetadataAggregateFactory } from "./formatting/application-formatting-metadata-factory"
 import {
   formatDemographicsEthnicity,
   formatDemographicsGender,
   formatDemographicsHowDidYouHear,
   formatDemographicsRace,
   formatDemographicsSexualOrientation,
-} from "./formatting/format-blocks"
+} from "./formatting/formatters"
+import { CSVFormattingType } from "./types/csv-formatting-type-enum"
 
 @Injectable()
 export class ApplicationCsvExporter {

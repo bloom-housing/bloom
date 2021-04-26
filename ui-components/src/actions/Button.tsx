@@ -7,7 +7,7 @@ export interface ButtonProps extends AppearanceProps {
   id?: string
   type?: "button" | "submit" | "reset"
   children: React.ReactNode
-  onClick: (e: React.MouseEvent) => void
+  onClick?: (e: React.MouseEvent) => void
   icon?: string
   inlineIcon?: "left" | "right"
   unstyled?: boolean

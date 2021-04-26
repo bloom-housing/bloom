@@ -61,7 +61,9 @@ export const ListingView = (props: ListingProps) => {
       return percentInt
     })
     .sort()
+
   const hmiHeaders = listing.property.unitsSummarized.hmi.columns as TableHeaders
+
   const hmiData = listing.property.unitsSummarized.hmi.rows.map((row) => {
     return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
   })
@@ -158,10 +160,6 @@ export const ListingView = (props: ListingProps) => {
         </div>
       </header>
 
-      <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light block text-center md:mx-3">
-        <ApplicationStatus listing={listing} />
-      </div>
-
       <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
         {amiValues.length > 1 &&
           amiValues.map((percent) => {
@@ -193,11 +191,15 @@ export const ListingView = (props: ListingProps) => {
           />
         )}
       </div>
-      <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
-        <ApplicationSection
-          listing={listing}
-          internalFormRoute="/applications/start/choose-language"
-        />
+      <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
+        <ApplicationStatus listing={listing} />
+        <div className="mx-4">
+          <DownloadLotteryResults event={lotteryResults} />
+          <ApplicationSection
+            listing={listing}
+            internalFormRoute="/applications/start/choose-language"
+          />
+        </div>
       </div>
       <ListingDetails>
         <ListingDetailItem
@@ -274,6 +276,12 @@ export const ListingView = (props: ListingProps) => {
                 internalFormRoute="/applications/start/choose-language"
               />
             </div>
+
+            {openHouseEvents && (
+              <div className="mb-2 md:hidden">
+                <OpenHouseEvent events={openHouseEvents} />
+              </div>
+            )}
             {lotterySection}
             <WhatToExpect listing={listing} />
             <LeasingAgent listing={listing} />

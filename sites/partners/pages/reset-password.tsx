@@ -19,7 +19,7 @@ import FormsLayout from "../layouts/forms"
 const ResetPassword = () => {
   const router = useRouter()
   const { token } = router.query
-  const { updatePassword } = useContext(UserContext)
+  const { resetPassword } = useContext(UserContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -31,7 +31,7 @@ const ResetPassword = () => {
     const { password, passwordConfirmation } = data
 
     try {
-      const user = await updatePassword(token.toString(), password, passwordConfirmation)
+      const user = await resetPassword(token.toString(), password, passwordConfirmation)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await router.push("/")
       window.scrollTo(0, 0)
@@ -83,12 +83,7 @@ const ResetPassword = () => {
             />
 
             <div className="text-center mt-6">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  //
-                }}
-              >
+              <Button styleType={AppearanceStyleType.primary}>
                 {t("authentication.forgotPassword.changePassword")}
               </Button>
             </div>

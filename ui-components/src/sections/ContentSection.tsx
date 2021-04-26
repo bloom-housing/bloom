@@ -4,7 +4,6 @@ import "./ContentSection.scss"
 export interface ContentSectionProps {
   title?: string
   subtitle?: string
-  icon?: string
   children: React.ReactNode
 }
 
