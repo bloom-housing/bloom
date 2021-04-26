@@ -236,8 +236,6 @@ export const mapPreferencesToApi = (data: Record<string, any>) => {
   const CLAIMED_KEY = "claimed"
   const preferencesFormData = data.application.preferences.options
 
-  console.log("mapPreferencesToApi", preferencesFormData)
-
   const keys = Object.keys(preferencesFormData)
 
   return keys.map((key) => {
