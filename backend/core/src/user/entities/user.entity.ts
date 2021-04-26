@@ -110,7 +110,7 @@ export class User {
 
   @Column({ enum: Language, nullable: true })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: Language, enumName: "Language" })
   language?: Language | null
