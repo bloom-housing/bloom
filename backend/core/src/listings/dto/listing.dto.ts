@@ -45,7 +45,7 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
+  @Type(() => AddressDto)
   applicationPickUpAddress: AddressDto | null
 
   @Expose()

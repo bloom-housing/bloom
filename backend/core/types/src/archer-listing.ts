@@ -569,10 +569,17 @@ export const ArcherListing: Listing = {
   disableUnitsAccordion: false,
   events: [],
   urlSlug: "listing-slug-abcdef",
-  whatToExpect: "What to expect",
+  whatToExpect: {
+    allInfoWillBeVerified: "",
+    applicantsWillBeContacted: "",
+    bePreparedIfChosen: "",
+  },
   status: ListingStatus.active,
   postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationAddress: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
@@ -644,6 +651,9 @@ export const ArcherListing: Listing = {
   criminalBackground:
     "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   leasingAgentAddress: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
