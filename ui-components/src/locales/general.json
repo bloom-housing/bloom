@@ -401,11 +401,6 @@
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "live": "Live",
-        "work": "Work",
-        "general": "Displacee Tenant",
-        "missionCorridor": "Mission Corridor",
-        "name": "Claimant",
         "address": "Displaced Address"
       }
     },
