@@ -173,6 +173,7 @@ export const listingSeed1: ListingSeed = {
     // TODO Added arbitrarily, not existent in seeds:
     householdSizeMin: 2,
     householdSizeMax: 2,
+    servicesOffered: "",
   },
   preferences: [
     {
@@ -274,6 +275,7 @@ export const listingSeed1: ListingSeed = {
     postmarkedApplicationsReceivedByDate: new Date("2021-12-10T20:00:00.000Z"),
     disableUnitsAccordion: false,
     rentalAssistance: "",
+    specialNotes: "",
 
     whatToExpect: {
       applicantsWillBeContacted: "Applicant will be contacted",
