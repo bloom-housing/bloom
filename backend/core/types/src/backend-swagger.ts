@@ -1471,6 +1471,9 @@ export interface FormMetadata {
 
 export interface Preference {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   id: string;
 
   /**  */
@@ -1490,9 +1493,6 @@ export interface Preference {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -1888,13 +1888,13 @@ export interface Listing {
   property: Property;
 
   /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
+  applicationAddress: Address;
 
   /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+  applicationPickUpAddress: Address;
 
   /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress: Address;
 
   /**  */
   leasingAgents?: UserBasic[];
@@ -2001,6 +2001,9 @@ export interface Listing {
 
 export interface PreferenceCreate {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -2011,9 +2014,6 @@ export interface PreferenceCreate {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -2169,6 +2169,9 @@ export interface ListingCreate {
 
 export interface PreferenceUpdate {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -2179,9 +2182,6 @@ export interface PreferenceUpdate {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -2587,13 +2587,13 @@ export interface HouseholdMember {
 
 export interface ApplicationPreferenceOption {
   /**  */
-  extraData?: AllExtraDataTypes[];
-
-  /**  */
   key: string;
 
   /**  */
   checked: boolean;
+
+  /**  */
+  extraData?: AllExtraDataTypes[];
 }
 
 export interface ApplicationPreference {
@@ -3664,7 +3664,7 @@ export enum InputType {
   'text' = 'text',
   'address' = 'address'
 }
-export type CombinedAmiChartTypes = (AmiChart & any) | null;
+export type CombinedAmiChartTypes = AmiChart;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -3679,10 +3679,10 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
-export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
-export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
-export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
-export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export type CombinedApplicationAddressTypes = AddressUpdate;
+export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
+export type CombinedLeasingAgentAddressTypes = AddressUpdate;
+export type CombinedWhatToExpectTypes = WhatToExpect;
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'

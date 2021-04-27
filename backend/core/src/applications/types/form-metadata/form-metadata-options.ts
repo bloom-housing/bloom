@@ -2,11 +2,13 @@ import { Expose, Type } from "class-transformer"
 import { ArrayMaxSize, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../../shared/types/validations-groups-enum"
 import { FormMetadataExtraData } from "./form-metadata-extra-data"
+import { ApiProperty } from "@nestjs/swagger"
 
 export class FormMetadataOptions {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   key: string
 
   @Expose()
@@ -14,5 +16,6 @@ export class FormMetadataOptions {
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => FormMetadataExtraData)
-  extraData?: FormMetadataExtraData[]
+  @ApiProperty({ type: [FormMetadataExtraData], required: false })
+  extraData?: FormMetadataExtraData[] | null
 }

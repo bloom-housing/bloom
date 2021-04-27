@@ -19,15 +19,18 @@ export class ApplicationPreferenceOption {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   key: string
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   checked: boolean
 
   @Expose()
   @ApiProperty({
     type: "array",
+    required: false,
     items: {
       oneOf: [
         { $ref: getSchemaPath(BooleanInput) },
