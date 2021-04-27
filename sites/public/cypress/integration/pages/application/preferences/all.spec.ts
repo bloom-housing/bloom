@@ -117,10 +117,10 @@ describe("applications/preferences/all", function () {
       "application.preferences.options.displacedTenant.missionCorridor.address.zipCode"
     ).type(this.data.address["zipCode"])
 
-    // cy.goNext()
+    cy.goNext()
 
     // skip general lottery info (preferences all selected)
-    // cy.isNextRouteValid("preferencesAll", 1)
+    cy.isNextRouteValid("preferencesAll", 1)
 
     // test first preference submission
     cy.getSubmissionContext()

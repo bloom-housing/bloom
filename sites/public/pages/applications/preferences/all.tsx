@@ -54,7 +54,6 @@ const PreferencesAll = () => {
   }, [preferences])
 
   const onSubmit = (data) => {
-    console.log("submit")
     const body = mapPreferencesToApi(data)
 
     conductor.currentStep.save(body)
