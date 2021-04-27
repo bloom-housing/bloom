@@ -1,0 +1,668 @@
+{
+  "id": "HOLNx_F7fUCeax5GCoIr9g",
+  "events": [],
+  "postmarkedApplicationsReceivedByDate": "2021-05-31T16:00:00.000-08:00",
+  "applicationAddress": {
+    "city": "Fremont",
+    "street": "39155 Liberty Street",
+    "zipCode": "94536",
+    "state": "CA",
+    "latitude": null,
+    "longitude": null
+  },
+  "applicationDueDate": "2021-05-31T16:00:00.000-08:00",
+  "applicationOrganization": "John Stewart Company",
+  "applicationPhone": "510-894-2890",
+  "buildingSelectionCriteria": null,
+  "costsNotIncluded": null,
+  "creditHistory": "To be used to determine income eligibility only",
+  "CSVFormattingType": "withDisplaceeNameAndAddress",
+  "depositMax": "800",
+  "depositMin": "800",
+  "programRules": "Resident Selection Criteria",
+  "externalId": null,
+  "waitlistMaxSize": 150,
+  "name": "City Center Apartments",
+  "waitlistCurrentSize": 0,
+  "prioritiesDescriptor": "All units are fully adaptable. Fully built out ADA units will be assigned on a first come first need basis with the exception of a few ADA units set aside for VASH veterans",
+  "requiredDocuments": "INCOME: Tax return, paystubs, SS Awared letter or Assistance Award letter, pension statement.  ASSETS: 6 months’ bank statements (checking), 1 month bank statement (savings), copy od EBT cart and balance. ",
+  "reservedCommunityMaximumAge": null,
+  "reservedCommunityMinimumAge": null,
+  "reservedDescriptor": null,
+  "status": "active",
+  "createdAt": "2020-11-06T15:11:26.446-08:00",
+  "updatedAt": "2020-11-06T11:47:47.150-08:00",
+  "groupId": 1,
+  "hideUnitFeatures": false,
+  "disableUnitsAccordion": true,
+  "applicationFee": "32.00",
+  "criminalBackground": "Serious felony offenses and/or continued and ongoing criminal activity will be grounds for rejection",
+  "leasingAgentEmail": "citycenterapts@jsco.net",
+  "leasingAgentName": "Lynn Newton",
+  "leasingAgentAddress": {
+    "city": "Fremont",
+    "street": "39155 Liberty Street",
+    "zipCode": "94536",
+    "state": "CA",
+    "latitude": 37.550675,
+    "longitude": -121.983552
+  },
+  "leasingAgentOfficeHours": "Mon-Fri 9AM-5PM.",
+  "leasingAgentPhone": "510-894-2890",
+  "leasingAgentTitle": "Property Manager",
+  "rentalHistory": "Must provide 2 years' residency",
+  "preferences": [
+    {
+      "ordinal": 1,
+      "title": "Live/Work in Alameda County",
+      "subtitle": "",
+      "description": "At least one household member lives or works in Alameda County",
+      "links": [],
+      "formMetadata": {
+        "key": "liveWork",
+        "options": [
+          {
+            "key": "live",
+            "extraData": []
+          },
+          {
+            "key": "work",
+            "extraData": []
+          }
+        ]
+      }
+    }
+  ],
+  "property": {
+    "createdAt": "2021-02-02T17:00:00.000-08:00",
+    "updatedAt": "2021-02-02T17:00:00.000-08:00",
+    "householdSizeMin": 1,
+    "householdSizeMax": 5,
+    "smokingPolicy": "No Smoking",
+    "unitsAvailable": 14,
+    "unitsSummarized": null,
+    "unitAmenities": "Refrigerator, stove, microwave, AC/Heat",
+    "developer": "Allied Housing, Inc.",
+    "yearBuilt": 2021,
+    "accessibility": "ADA Compliant",
+    "amenities": "on-site Property Managent, resident services, community room, outdoor recreation area, dog run, resident storages",
+    "buildingTotalUnits": 60,
+    "buildingAddress": {
+      "county": "Alameda",
+      "city": "Fremont",
+      "street": "38631 Fremont Blvd",
+      "zipCode": "94538",
+      "state": "CA",
+      "latitude": 37.549257,
+      "longitude": -121.992633
+    },
+    "neighborhood": "Glenmoor",
+    "petPolicy": "Pet Friendly",
+    "units": [
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "40",
+        "annualIncomeMin": "21936",
+        "monthlyIncomeMin": "1828",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "914",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "40",
+        "annualIncomeMin": "21936",
+        "monthlyIncomeMin": "1828",
+        "floor": 4,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "914",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "27408",
+        "monthlyIncomeMin": "2284",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1142",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "27408",
+        "monthlyIncomeMin": "2284",
+        "floor": 4,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1142",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "27408",
+        "monthlyIncomeMin": "2284",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1142",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "50",
+        "annualIncomeMin": "27408",
+        "monthlyIncomeMin": "2284",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1142",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "32904",
+        "monthlyIncomeMin": "2742",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1371",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "32904",
+        "monthlyIncomeMin": "2742",
+        "floor": 4,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1371",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "32904",
+        "monthlyIncomeMin": "2742",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1371",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "32904",
+        "monthlyIncomeMin": "2742",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1371",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "32904",
+        "monthlyIncomeMin": "2742",
+        "floor": 1,
+        "annualIncomeMax": "62640",
+        "maxOccupancy": 2,
+        "minOccupancy": 1,
+        "monthlyRent": "1371",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "357",
+        "status": "available",
+        "unitType": "studio",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "70500",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1438",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "625",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 4,
+        "annualIncomeMax": "70500",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1438",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "625",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      },
+      {
+        "id": "AmVp9wBP7kSMil8mTBw1_Q",
+        "amiPercentage": "60",
+        "annualIncomeMin": "35232",
+        "monthlyIncomeMin": "2936",
+        "floor": 1,
+        "annualIncomeMax": "70500",
+        "maxOccupancy": 3,
+        "minOccupancy": 1,
+        "monthlyRent": "1438",
+        "numBathrooms": 1,
+        "numBedrooms": null,
+        "number": null,
+        "priorityType": null,
+        "reservedType": null,
+        "sqFeet": "625",
+        "status": "available",
+        "unitType": "oneBdrm",
+        "createdAt": "2020-02-18T21:20:34.291Z",
+        "updatedAt": "2020-02-18T21:20:34.291Z",
+        "listingId": "HOLNx_F7fUCeax5GCoIr5g",
+        "amiChart": "AlamedaCountyTCAC2021",
+        "bmrProgramChart": false,
+        "monthlyRentAsPercentOfIncome": null
+      }
+    ]
+  },
+  "applicationMethods": [
+    {
+      "type": "PaperPickup",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "LeasingAgent",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "Internal",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "English",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_English_Final.pdf"
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "Spanish",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_Spanish_Final.pdf"
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "Vietnamese",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_Vietnamese_Final.pdf"
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "Chinese",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_Chinese_Final.pdf"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/city-center.jpg"
+    }
+  ],
+  "amiChart": {
+    "name": "AlamedaCountyTCAC2021",
+    "items": [
+      {
+        "percentOfAmi": 80,
+        "householdSize": 1,
+        "income": 76720
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 2,
+        "income": 87680
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 3,
+        "income": 98640
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 4,
+        "income": 109600
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 5,
+        "income": 11840
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 6,
+        "income": 127200
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 7,
+        "income": 135920
+      },
+      {
+        "percentOfAmi": 80,
+        "householdSize": 8,
+        "income": 144720
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 1,
+        "income": 57540
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 2,
+        "income": 65760
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 3,
+        "income": 73980
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 4,
+        "income": 82200
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 5,
+        "income": 88800
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 6,
+        "income": 95400
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 7,
+        "income": 101940
+      },
+      {
+        "percentOfAmi": 60,
+        "householdSize": 8,
+        "income": 108540
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 1,
+        "income": 47950
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 2,
+        "income": 54800
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 3,
+        "income": 61650
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 4,
+        "income": 68500
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 5,
+        "income": 74000
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 6,
+        "income": 79500
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 7,
+        "income": 84950
+      },
+      {
+        "percentOfAmi": 50,
+        "householdSize": 8,
+        "income": 90450
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 1,
+        "income": 28770
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 2,
+        "income": 32880
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 3,
+        "income": 36990
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 4,
+        "income": 41100
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 5,
+        "income": 44400
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 6,
+        "income": 47700
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 7,
+        "income": 50970
+      },
+      {
+        "percentOfAmi": 30,
+        "householdSize": 8,
+        "income": 54270
+      }
+    ]
+  }
+}
