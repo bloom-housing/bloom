@@ -41,7 +41,7 @@ describe("applications/financial/income", function () {
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
 
-    cy.isNextRouteValid("income", 1)
+    cy.isNextRouteValid("income")
   })
 
   it("Should show error when annual income is lower than allowed", function () {
@@ -127,7 +127,7 @@ describe("applications/financial/income", function () {
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
 
-    cy.isNextRouteValid("income", 1)
+    cy.isNextRouteValid("income")
 
     cy.getSubmissionContext().should("include", {
       income: `${incomeMonthlyAllowed}`,
