@@ -14,5 +14,6 @@ export class FormMetadataExtraData {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   key: string
 }

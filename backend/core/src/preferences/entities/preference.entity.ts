@@ -10,8 +10,9 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { FormMetadata } from "../../applications/types/form-metadtaa/form-metadata"
+import { FormMetadata } from "../../applications/types/form-metadata/form-metadata"
 import { PreferenceLink } from "../types/preference-link"
+import { ApiProperty } from "@nestjs/swagger"
 
 @Entity({ name: "preferences" })
 class Preference {
@@ -62,6 +63,7 @@ class Preference {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceLink)
+  @ApiProperty({ type: [PreferenceLink] })
   links: PreferenceLink[] | null
 
   @ManyToOne(() => Listing, (listing) => listing.preferences, {

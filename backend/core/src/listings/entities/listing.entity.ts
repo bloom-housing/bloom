@@ -316,7 +316,7 @@ class Listing extends BaseEntity {
     nullable: false,
   })
   @Expose()
-  @ApiProperty({ type: Boolean, default: false })
+  @ApiProperty()
   @IsBoolean()
   displayWaitlistSize: boolean
 

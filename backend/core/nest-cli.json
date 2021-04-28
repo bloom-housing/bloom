@@ -3,11 +3,15 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "plugins": [
-      "@nestjs/swagger/plugin"
-    ],
-    "dtoFileNameSuffix": [
-      "dto.ts",
-      "entity.ts"
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "dtoFileNameSuffix": ["dto.ts", "entity.ts"],
+          "controllerFileNameSuffix": ["controller.ts"],
+          "classValidatorShim": false,
+          "introspectComments": true
+        }
+      }
     ],
     "assets": [
       { "include": "auth/*.{conf,csv}", "outDir": "dist/src" },
