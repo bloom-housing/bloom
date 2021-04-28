@@ -2,12 +2,7 @@ describe("applications/review/confirmation", function () {
   const route = "/applications/review/confirmation"
 
   beforeEach(() => {
-    cy.loadConfig(
-      {
-        confirmationId: "123",
-      },
-      "applicationConfigFilled.json"
-    )
+    cy.loadConfig({}, "applicationConfigFilled.json", { confirmationId: "123" })
     cy.visit(route)
   })
 

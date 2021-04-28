@@ -28,7 +28,7 @@ describe("applications/financial/income", function () {
   })
 
   it("Should do not check income when user selected voucher in the previous step", function () {
-    cy.loadConfig({
+    cy.loadConfig({}, "applicationConfigBlank.json", {
       incomeVouchers: true,
     })
     cy.visit(route)
@@ -41,7 +41,7 @@ describe("applications/financial/income", function () {
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
 
-    cy.isNextRouteValid("income")
+    cy.isNextRouteValid("income", 1)
   })
 
   it("Should show error when annual income is lower than allowed", function () {
@@ -127,7 +127,7 @@ describe("applications/financial/income", function () {
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
 
-    cy.isNextRouteValid("income")
+    cy.isNextRouteValid("income", 1)
 
     cy.getSubmissionContext().should("include", {
       income: `${incomeMonthlyAllowed}`,
