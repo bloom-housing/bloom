@@ -169,7 +169,7 @@ async function main() {
 
   const newListing = await uploadListing(listing)
 
-  console.log(newListing)
+  console.log("Success, New Listing: ", newListing)
 }
 
 void main()
