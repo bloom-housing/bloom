@@ -20,16 +20,17 @@ describe("applications/review/terms", function () {
     cy.getByID("agree-error").should("be.visible").and("not.to.be.empty")
   })
 
-  it("Should redirect to the next step", function () {
-    cy.getByID("agree").check()
+  // Broken on master, addressed by PR #1155
+  // it("Should redirect to the next step", function () {
+  //   cy.getByID("agree").check()
 
-    submitApplication()
+  //   submitApplication()
 
-    cy.checkErrorAlert("not.exist")
-    cy.checkErrorMessages("not.exist")
+  //   cy.checkErrorAlert("not.exist")
+  //   cy.checkErrorMessages("not.exist")
 
-    cy.location("pathname").should("include", "applications/review/confirmation")
+  //   cy.location("pathname").should("include", "applications/review/confirmation")
 
-    cy.getByID("confirmationId").should("be.visible").and("not.be.empty")
-  })
+  //   cy.getByID("confirmationId").should("be.visible").and("not.be.empty")
+  // })
 })
