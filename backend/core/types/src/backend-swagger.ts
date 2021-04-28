@@ -1900,13 +1900,13 @@ export interface Listing {
   property: Property;
 
   /**  */
-  applicationAddress: Address;
+  applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  applicationPickUpAddress: Address;
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  leasingAgentAddress: Address;
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
   leasingAgents?: UserBasic[];
@@ -3683,7 +3683,7 @@ export enum InputType {
   'text' = 'text',
   'address' = 'address'
 }
-export type CombinedAmiChartTypes = AmiChart;
+export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -3698,10 +3698,10 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
-export type CombinedApplicationAddressTypes = AddressUpdate;
-export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
-export type CombinedLeasingAgentAddressTypes = AddressUpdate;
-export type CombinedWhatToExpectTypes = WhatToExpect;
+export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
+export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'
