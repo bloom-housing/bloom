@@ -401,7 +401,8 @@
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "address": "Displaced Address"
+        "address": "Displaced Address",
+        "name": "Claimant"
       }
     },
     "review": {
