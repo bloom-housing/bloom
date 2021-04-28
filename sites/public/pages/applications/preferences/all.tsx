@@ -182,7 +182,8 @@ const PreferencesAll = () => {
                                 name={buildOptionName(preference.formMetadata.key, option.key)}
                                 type="checkbox"
                                 label={t(
-                                  `application.preferences.${preference.formMetadata.key}.${option.key}.label`
+                                  `application.preferences.${preference.formMetadata.key}.${option.key}.label`,
+                                  { city: listing.property.buildingAddress.city }
                                 )}
                                 register={register}
                                 inputProps={{

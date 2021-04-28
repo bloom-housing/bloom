@@ -373,12 +373,12 @@
       "youHaveClaimed": "You have claimed:",
       "liveWork": {
         "live": {
-          "label": "Live in <REGION> Preference",
+          "label": "Live in %{city} Preference",
           "description": "Live in <REGION> copy goes here…",
           "link": "http://domain.com"
         },
         "work": {
-          "label": "Work in <REGION> Preference",
+          "label": "Work in %{city} Preference",
           "description": "Work in <REGION> copy goes here…",
           "link": "http://domain.com"
         }
