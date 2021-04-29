@@ -1,8 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { HttpException } from "@nestjs/common"
-import { UserService, USER_ERRORS } from "./user.service"
+import { UserService } from "./user.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
+import { USER_ERRORS } from "./user-errors"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -16,7 +17,7 @@ describe("UserService", () => {
   let service: UserService
 
   beforeEach(async () => {
-    process.env.SECRET = "SECRET"
+    process.env.APP_SECRET = "SECRET"
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,

@@ -13,10 +13,10 @@ import {
 import { PreferencesService } from "../preferences/preferences.service"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { PreferenceCreateDto, PreferenceDto, PreferenceUpdateDto } from "./dto/preference.dto"
-import { AuthzGuard } from "../auth/authz.guard"
-import { ResourceType } from "../auth/resource_type.decorator"
+import { AuthzGuard } from "../auth/guards/authz.guard"
+import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
-import { OptionalAuthGuard } from "../auth/optional-auth.guard"
+import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 
 @Controller("/preferences")

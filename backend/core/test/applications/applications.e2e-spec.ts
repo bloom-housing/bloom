@@ -6,25 +6,20 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EmailService } from "../../src/shared/email.service"
+import { EmailService } from "../../src/shared/services/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import {
-  ApplicationStatus,
-  ApplicationSubmissionType,
-  ApplicationUpdate,
-  IncomePeriod,
-  Language,
-} from "../../types"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
-import { InputType } from "../../src/shared/input-type"
+import { InputType } from "../../src/shared/types/input-type"
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { ThrottlerModule } from "@nestjs/throttler"
+import { getTestAppBody } from "../lib/get-test-app-body"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -46,107 +41,6 @@ describe("Applications", () => {
   let listing1Id: string
   let listing2Id: string
 
-  const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listingId?: string) => {
-    return {
-      appUrl: "",
-      listing: {
-        id: listingId,
-      },
-      language: Language.en,
-      status: ApplicationStatus.submitted,
-      submissionType: ApplicationSubmissionType.electronical,
-      acceptedTerms: false,
-      applicant: {
-        firstName: "Applicant",
-        middleName: "Middlename",
-        lastName: "",
-        birthMonth: "",
-        birthDay: "",
-        birthYear: "",
-        emailAddress: null,
-        noEmail: false,
-        phoneNumber: "",
-        phoneNumberType: "",
-        noPhone: false,
-        workInRegion: null,
-        address: {
-          street: "",
-          street2: "",
-          city: "",
-          state: "",
-          zipCode: "",
-          county: "",
-          latitude: null,
-          longitude: null,
-        },
-        workAddress: {
-          street: "",
-          street2: "",
-          city: "",
-          state: "",
-          zipCode: "",
-          county: "",
-          latitude: null,
-          longitude: null,
-        },
-      },
-      additionalPhone: true,
-      additionalPhoneNumber: "12345",
-      additionalPhoneNumberType: "cell",
-      contactPreferences: ["a", "b"],
-      householdSize: 1,
-      housingStatus: "status",
-      sendMailToMailingAddress: true,
-      mailingAddress: {
-        street: "",
-        street2: "",
-        city: "",
-        state: "",
-        zipCode: "",
-      },
-      alternateAddress: {
-        street: "",
-        street2: "",
-        city: "",
-        state: "",
-        zipCode: "",
-      },
-      alternateContact: {
-        type: "",
-        otherType: "",
-        firstName: "",
-        lastName: "",
-        agency: "",
-        phoneNumber: "",
-        emailAddress: "alternate@contact.com",
-        mailingAddress: {
-          street: "",
-          city: "",
-          state: "",
-          zipCode: "",
-        },
-      },
-      accessibility: {
-        mobility: null,
-        vision: null,
-        hearing: null,
-      },
-      demographics: {
-        ethnicity: "",
-        race: "",
-        gender: "",
-        sexualOrientation: "",
-        howDidYouHear: [],
-      },
-      incomeVouchers: true,
-      income: "100.00",
-      incomePeriod: IncomePeriod.perMonth,
-      householdMembers: [],
-      preferredUnit: ["a", "b"],
-      preferences: [],
-    }
-  }
-
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
     const testEmailService = { confirmation: async () => {} }
@@ -158,6 +52,11 @@ describe("Applications", () => {
         ListingsModule,
         ApplicationsModule,
         TypeOrmModule.forFeature([Application, HouseholdMember]),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          ignoreUserAgents: [/^node-superagent.*$/],
+        }),
       ],
     })
       .overrideProvider(EmailService)
@@ -213,9 +112,7 @@ describe("Applications", () => {
       const leasingAgentsIds = listing.leasingAgents.map((agent) => agent.id)
       return leasingAgentsIds.indexOf(leasingAgent2Profile.id) !== -1
     })[0].id
-  })
 
-  beforeEach(async () => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()
   })
@@ -456,6 +353,51 @@ describe("Applications", () => {
     expect(res.body.items[0]).toMatchObject(createRes.body)
   })
 
+  it(`should allow an admin to search for users application using search query param with partial textquery`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.firstName = "John"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?search=joh`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].id === createRes.body.id)
+    expect(res.body.items[0]).toMatchObject(createRes.body)
+  })
+
+  it(`should allow an admin to search for users application using email as textquery`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.firstName = "John"
+    body.applicant.emailAddress = "john-doe@contact.com"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?search=john-doe@contact.com`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].id === createRes.body.id)
+    expect(res.body.items[0]).toMatchObject(createRes.body)
+  })
+
   it(`should allow exporting applications as CSV`, async () => {
     const body = getTestAppBody(listing1Id)
     const createRes = await supertest(app.getHttpServer())
@@ -554,7 +496,78 @@ describe("Applications", () => {
       .expect(403)
   })
 
-  afterEach(() => {
+  it(`should allow an admin to order users application using orderBy and order query params`, async () => {
+    const firstNames = ["A FirstName", "B FirstName", "C FirstName"]
+    const responses = []
+    const body = getTestAppBody(listing1Id)
+
+    for (const firstName of firstNames) {
+      const initialBody = Object.assign({}, body)
+      initialBody.applicant.firstName = firstName
+
+      const createRes = await supertest(app.getHttpServer())
+        .post(`/applications/submit`)
+        .send(body)
+        .expect(201)
+      expect(createRes.body).toMatchObject(initialBody)
+      expect(createRes.body).toHaveProperty("createdAt")
+      expect(createRes.body).toHaveProperty("updatedAt")
+      expect(createRes.body).toHaveProperty("id")
+
+      responses.push({ initialBody, createRes, firstName })
+    }
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?orderBy=firstName&order=ASC`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(3)
+
+    for (const index in res.body.items) {
+      const item = res.body.items[index]
+      const { createRes, firstName } = responses[index]
+
+      expect(item.id === createRes.body.id)
+      expect(item).toMatchObject(createRes.body)
+      expect(item.applicant).toMatchObject(createRes.body.applicant)
+      expect(item.applicant.firstName === firstName)
+    }
+  })
+
+  it(`should disallow an admin to order users application using bad orderBy query param`, async () => {
+    await supertest(app.getHttpServer())
+      .get(`/applications/?orderBy=XYZ`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(400)
+  })
+
+  it(`should disallow an admin to order users application using bad order query param`, async () => {
+    await supertest(app.getHttpServer())
+      .get(`/applications/?order=XYZ`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(400)
+  })
+
+  it(`should disallow a user to send too mutch application submits`, async () => {
+    const body = getTestAppBody(listing1Id)
+    const failAfter = 2
+
+    for (let i = 0; i < failAfter + 1; i++) {
+      const expect = i < failAfter ? 201 : 429
+      await supertest(app.getHttpServer())
+        .post(`/applications/submit`)
+        .set("User-Agent", "faked")
+        .send(body)
+        .set(...setAuthorization(user1AccessToken))
+        .expect(expect)
+    }
+  })
+
+  afterEach(async () => {
+    await householdMembersRepository.createQueryBuilder().delete().execute()
+    await applicationsRepository.createQueryBuilder().delete().execute()
     jest.clearAllMocks()
   })
 

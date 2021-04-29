@@ -1,11 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing"
-import {
-  CsvBuilder,
-  defaultFormatter,
-  FormattingMetadataAggregateFactory,
-} from "./csv-builder.service"
+import { CsvBuilder } from "./csv-builder.service"
 import { CsvEncoder } from "./csv-encoder.service"
-import { CSVFormattingType } from "./formatting/application-formatting-metadata-factory"
+import { CSVFormattingType } from "./types/csv-formatting-type-enum"
+import { FormattingMetadataAggregateFactory } from "./types/formatting-metadata-aggregate-factory"
+import { defaultFormatter } from "./formatting/formatters"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

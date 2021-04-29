@@ -2,7 +2,7 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
-import React, { useState } from "react"
+import React from "react"
 import {
   AppearanceSizeType,
   Button,

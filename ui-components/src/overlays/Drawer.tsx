@@ -8,6 +8,7 @@ export enum DrawerSide {
   right = "right",
 }
 
+// Ensure each action has a unique key
 export interface DrawerProps extends OverlayProps {
   title?: string
   subtitle?: string

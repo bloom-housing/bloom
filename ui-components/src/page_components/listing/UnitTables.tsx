@@ -5,7 +5,6 @@ import { MinMax, UnitSummary, Unit } from "@bloom-housing/backend-core/types"
 import { StandardTable } from "../../tables/StandardTable"
 import { t } from "../../helpers/translator"
 import { numberOrdinal } from "../../helpers/numberOrdinal"
-import { capitalize } from "../../helpers/capitalize"
 
 const formatRange = (range: MinMax, ordinalize?: boolean) => {
   let min: string | number = range.min
@@ -42,10 +41,10 @@ const UnitTables = (props: UnitTablesProps) => {
   const unitSummaries = props.unitSummaries
 
   const unitsHeaders = {
-    number: capitalize(t("t.unit") + " #"),
-    sqFeet: capitalize(t("t.area")),
-    numBathrooms: capitalize(t("listings.bath") + "s"),
-    floor: capitalize(t("t.floor")),
+    number: "t.unit",
+    sqFeet: "t.area",
+    numBathrooms: "listings.bath",
+    floor: "t.floor",
   }
 
   const toggleTable = (event: React.MouseEvent) => {

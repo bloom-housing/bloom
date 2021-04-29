@@ -50,7 +50,6 @@ export class CsvEncoder {
     try {
       return input.replace(regex, '""')
     } catch (e) {
-      console.error(e)
       return "null"
     }
   }

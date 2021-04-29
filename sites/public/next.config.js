@@ -92,6 +92,9 @@ module.exports = withCSS(
               "/applications/start/what-to-expect": {
                 page: "/applications/start/what-to-expect",
               },
+              "/applications/start/autofill": {
+                page: "/applications/start/autofill",
+              },
               "/applications/review/confirmation": {
                 page: "/applications/review/confirmation",
               },
@@ -110,11 +113,8 @@ module.exports = withCSS(
               "/applications/preferences/general": {
                 page: "/applications/preferences/general",
               },
-              "/applications/preferences/live-work": {
-                page: "/applications/preferences/live-work",
-              },
-              "/applications/preferences/displaced": {
-                page: "/applications/preferences/displaced",
+              "/applications/preferences/all": {
+                page: "/applications/preferences/all",
               },
               "/applications/household/ada": {
                 page: "/applications/household/ada",
@@ -158,6 +158,16 @@ module.exports = withCSS(
               "/applications/contact/name": {
                 page: "/applications/contact/name",
               },
+              "/disclaimer": { page: "/disclaimer" },
+              "/privacy": { page: "/privacy" },
+              // "/sign-in": { page: "/sign-in" },
+              // "/forgot-password": { page: "/forgot-password" },
+              // "/reset-password": { page: "/reset-password" },
+              // "/create-account": { page: "/create-account" },
+              "/account/applications": { page: "/account/applications" },
+              "/account/application": { page: "/account/application" },
+              "/account/edit": { page: "/account/edit" },
+              "/account/dashboard": { page: "/account/dashboard" },
             })
             const languages = ["es", "zh", "vi"] // add new language codes here
             const languagePaths = {}
@@ -174,17 +184,7 @@ module.exports = withCSS(
             })
 
             // combine the map of all various types of page paths
-            return Object.assign({}, languagePaths, {
-              "/disclaimer": { page: "/disclaimer" },
-              "/privacy": { page: "/privacy" },
-              // "/sign-in": { page: "/sign-in" },
-              // "/forgot-password": { page: "/forgot-password" },
-              // "/reset-password": { page: "/reset-password" },
-              // "/create-account": { page: "/create-account" },
-              "/account/applications": { page: "/account/applications" },
-              "/account/dashboard": { page: "/account/dashboard" },
-              "/account/settings": { page: "/account/settings" },
-            })
+            return languagePaths
           },
         })
       )

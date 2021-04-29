@@ -29,7 +29,7 @@ import {
   AccessibilityDto,
   AccessibilityUpdateDto,
 } from "./accessibility.dto"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class ApplicationDto extends OmitType(Application, [
   "listing",
@@ -110,6 +110,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "accessibility",
   "demographics",
   "householdMembers",
+  "markedAsDuplicate",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -174,6 +175,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "accessibility",
   "demographics",
   "householdMembers",
+  "markedAsDuplicate",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
