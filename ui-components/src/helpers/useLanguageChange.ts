@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useContext } from "react"
 import { useRouter } from "next/router"
-import { Language } from "../navigation/LanguageNav"
+import { LanguageNavLang } from "../navigation/LanguageNav"
 import { t } from "../helpers/translator"
 import { OnClientSide, ConfigContext } from "@bloom-housing/ui-components"
 
-export function useLanguageChange(language: Language) {
+export function useLanguageChange(language: LanguageNavLang) {
   const router = useRouter()
   const isClient = OnClientSide()
   const { setLanguage } = useContext(ConfigContext)

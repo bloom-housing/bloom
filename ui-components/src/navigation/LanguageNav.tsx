@@ -8,13 +8,13 @@ export type LangItem = {
   label: string
 }
 
-export interface Language {
+export interface LanguageNavLang {
   list: LangItem[]
   codes: string[]
 }
 
 export interface LanguageNavProps {
-  language: Language
+  language: LanguageNavLang
 }
 
 const LanguageNav = ({ language }: LanguageNavProps) => {

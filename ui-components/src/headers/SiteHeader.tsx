@@ -2,7 +2,7 @@ import * as React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 
-export interface Language {
+export interface SiteHeaderLanguage {
   list: LangItem[]
   codes: string[]
 }
@@ -13,7 +13,7 @@ export interface SiteHeaderProps {
   skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
-  language?: Language
+  language?: SiteHeaderLanguage
   logoClass?: string
 }
 
