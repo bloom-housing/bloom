@@ -1,21 +1,39 @@
+import { useEffect, useMemo } from "react"
 import { useRouter } from "next/router"
 import { LangItem } from "../navigation/LanguageNav"
+import { t } from "../helpers/translator"
+import { OnClientSide } from "@bloom-housing/ui-components"
 
 export function useLanguageChange(languages: LangItem[]) {
   const router = useRouter()
+  const isClient = OnClientSide()
+
+  const routePrefix = t("config.routePrefix")
+
+  const pathname = isClient ? window.location.pathname : ""
+
+  const pathIncludesLang = useMemo(
+    () =>
+      languages.filter((item) => {
+        const pattern = new RegExp(`^/(${item.prefix})(/|$)`, "gm")
+
+        return item.prefix !== "" && pattern.test(pathname)
+      }),
+    [languages, pathname]
+  )
+
+  useEffect(() => {
+    if (!pathIncludesLang.length) {
+      console.log("en")
+    } else {
+      console.log(pathIncludesLang[0].prefix)
+    }
+  }, [pathIncludesLang, routePrefix])
 
   function change(prefix: string): void {
-    if (typeof window == "undefined") return
-
-    const pathname = window.location.pathname
+    if (!isClient) return
 
     let newPath = pathname
-
-    const pathIncludesLang = languages.filter((item) => {
-      const pattern = new RegExp(`^/(${item.prefix})(/|$)`, "gm")
-
-      return item.prefix !== "" && pattern.test(pathname)
-    })
 
     if (pathIncludesLang.length && prefix === "") {
       newPath = pathname.replace(
