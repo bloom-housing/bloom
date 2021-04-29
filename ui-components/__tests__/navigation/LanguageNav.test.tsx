@@ -10,7 +10,8 @@ describe("<LanguageNav>", () => {
     const useLanguageChangeSpy = jest.spyOn(useLanguageChange, "useLanguageChange")
     const { getByText } = render(
       <LanguageNav
-        items={[
+      language={{
+        list: [
           {
             prefix: "",
             label: "English",
@@ -19,7 +20,9 @@ describe("<LanguageNav>", () => {
             prefix: "es",
             label: "Spanish",
           },
-        ]}
+        ],
+        codes: ['en', 'es']
+      }}
       />
     )
     expect(useLanguageChangeSpy).toHaveBeenCalledWith([
