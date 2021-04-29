@@ -390,6 +390,10 @@
           "label": "Displaced Tenant Housing Preference",
           "description": "Displaced Tenant copy goes here…",
           "link": "http://domain.com"
+        },
+        "missionCorridor": {
+          "label": "Mission Corridor",
+          "description": "Mission Corridor copy goes here…"
         }
       },
       "general": {
@@ -397,12 +401,8 @@
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "live": "Live",
-        "work": "Work",
-        "general": "Displacee Tenant",
-        "missionCorridor": "Mission Corridor",
-        "name": "Claimant",
-        "address": "Displaced Address"
+        "address": "Displaced Address",
+        "name": "Claimant"
       }
     },
     "review": {
@@ -626,7 +626,8 @@
     "householdTooBig": "Your household size is too big.",
     "householdTooSmall": "Your household size is too small.",
     "dateError": "Please enter a valid date",
-    "rateLimitExceeded": "Rate limit exceeded, try again later."
+    "rateLimitExceeded": "Rate limit exceeded, try again later.",
+    "requiredFieldError": "This field is required."
   },
   "footer": {
     "contact": "Contact",

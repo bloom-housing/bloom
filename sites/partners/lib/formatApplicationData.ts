@@ -7,10 +7,13 @@ import {
   ApplicationStatus,
   Address,
   HouseholdMember,
-  InputType,
 } from "@bloom-housing/backend-core/types"
 
-import { TimeFieldPeriod } from "@bloom-housing/ui-components"
+import {
+  TimeFieldPeriod,
+  mapPreferencesToApi,
+  mapApiToPreferencesForm,
+} from "@bloom-housing/ui-components"
 import {
   FormTypes,
   YesNoAnswer,
@@ -96,60 +99,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     }
   })()
 
-  const preferences = (() => {
-    const CLAIMED_KEY = "claimed"
-    const preferencesFormData = data.application.preferences
-
-    const keys = Object.keys(preferencesFormData)
-
-    return keys.map((key) => {
-      const currentPreference = preferencesFormData[key]
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const currentPreferenceValues = Object.values(currentPreference) as Record<string, any>
-      const claimed = currentPreferenceValues.map((c) => c.claimed).includes(true)
-
-      const options = Object.keys(currentPreference).map((option) => {
-        const currentOption = currentPreference[option]
-
-        // count keys except claimed
-        const extraKeys = Object.keys(currentOption).filter((item) => item !== CLAIMED_KEY)
-
-        const response = {
-          key: option,
-          checked: currentOption[CLAIMED_KEY],
-        }
-
-        // assign extra data and detect data type
-        if (extraKeys.length) {
-          const extraData = extraKeys.map((extraKey) => {
-            const type = (() => {
-              if (typeof currentOption[extraKey] === "boolean") return InputType.boolean
-              // if object includes "city" property, it should be an address
-              if (Object.keys(currentOption[extraKey]).includes("city")) return InputType.address
-
-              return InputType.text
-            })()
-
-            return {
-              key: extraKey,
-              type,
-              value: currentOption[extraKey],
-            }
-          })
-
-          Object.assign(response, { extraData })
-        }
-
-        return response
-      })
-
-      return {
-        key,
-        claimed,
-        options,
-      }
-    })
-  })()
+  const preferences = mapPreferencesToApi(data)
 
   // additional phone
   const {
@@ -293,44 +243,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
-  const preferences = (() => {
-    const preferencesFormData = {}
-
-    const preferencesApiData = applicationData.preferences
-
-    preferencesApiData.forEach((item) => {
-      const options = item.options.reduce((acc, curr) => {
-        // extraData which comes from the API is an array, in the form we expect an object
-        const extraData =
-          curr?.extraData?.reduce((extraAcc, extraCurr) => {
-            // value - it can be string or nested address object
-            const value = extraCurr.value
-            Object.assign(extraAcc, {
-              [extraCurr.key]: value,
-            })
-
-            return extraAcc
-          }, {}) || {}
-
-        // each form option has "claimed" property - it's "checked" property in the API
-        const claimed = curr.checked
-
-        Object.assign(acc, {
-          [curr.key]: {
-            claimed,
-            ...extraData,
-          },
-        })
-        return acc
-      }, {})
-
-      Object.assign(preferencesFormData, {
-        [item.key]: options,
-      })
-    })
-
-    return preferencesFormData
-  })()
+  const preferences = mapApiToPreferencesForm(applicationData.preferences)
 
   const application: ApplicationTypes = (() => {
     const {

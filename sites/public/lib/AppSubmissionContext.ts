@@ -1,6 +1,7 @@
 import React from "react"
 import ApplicationConductor from "./ApplicationConductor"
 import { blankApplication } from "@bloom-housing/ui-components"
+import { Listing } from "@bloom-housing/backend-core/types"
 
 export const retrieveApplicationConfig = () => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
@@ -54,10 +55,7 @@ export const retrieveApplicationConfig = () => {
         name: "income",
       },
       {
-        name: "preferencesLiveWork",
-      },
-      {
-        name: "preferencesDisplaced",
+        name: "preferencesAll",
       },
       {
         name: "generalPool",
@@ -78,7 +76,7 @@ export const retrieveApplicationConfig = () => {
 export const AppSubmissionContext = React.createContext({
   conductor: {} as ApplicationConductor,
   application: blankApplication(),
-  listing: null,
+  listing: null as Listing,
   /* eslint-disable */
   syncApplication: (data) => {},
   syncListing: (data) => {},

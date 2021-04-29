@@ -3662,7 +3662,8 @@ export enum CSVFormattingType {
 export enum InputType {
   'boolean' = 'boolean',
   'text' = 'text',
-  'address' = 'address'
+  'address' = 'address',
+  'hhMemberSelect' = 'hhMemberSelect'
 }
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
