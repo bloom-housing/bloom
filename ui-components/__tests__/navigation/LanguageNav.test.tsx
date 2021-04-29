@@ -8,9 +8,8 @@ afterEach(cleanup)
 describe("<LanguageNav>", () => {
   it("renders without error", () => {
     const useLanguageChangeSpy = jest.spyOn(useLanguageChange, "useLanguageChange")
-    const { getByText } = render(
-      <LanguageNav
-      language={{
+    const props = {
+      language: {
         list: [
           {
             prefix: "",
@@ -22,13 +21,13 @@ describe("<LanguageNav>", () => {
           },
         ],
         codes: ['en', 'es']
-      }}
-      />
+      }
+    }
+
+    const { getByText } = render(
+      <LanguageNav language={props.language} />
     )
-    expect(useLanguageChangeSpy).toHaveBeenCalledWith([
-      { label: "English", prefix: "" },
-      { label: "Spanish", prefix: "es" },
-    ])
+    expect(useLanguageChangeSpy).toHaveBeenCalledWith(props.language)
     expect(getByText("English")).toBeTruthy()
     expect(getByText("Spanish")).toBeTruthy()
   })
