@@ -36,9 +36,15 @@ const PreferencesAll = () => {
   })
 
   /*
-    It creates string path for each preference option - for error validation purposes
+    It collects all checkbox ids for each preference to check if at least one checkbox / preference is checked.
+    Validation is used in 'somethingIsChecked' validator.
+    E.g.
+
+    liveWork:
+      application.preferences.options.liveWork.live.claimed
+      application.preferences.options.liveWork.work.claimed
   */
-  const preferenceOptionObjectPaths = useMemo(() => {
+  const preferenceCheckboxIds = useMemo(() => {
     return preferences?.reduce((acc, item) => {
       const preferenceName = item.formMetadata?.key
       const optionPaths = item.formMetadata?.options?.map(
@@ -121,7 +127,7 @@ const PreferencesAll = () => {
     setHasMounted(true)
   }, [])
 
-  if (!hasMounted || !preferenceOptionObjectPaths) {
+  if (!hasMounted || !preferenceCheckboxIds) {
     return null
   }
 
@@ -166,6 +172,7 @@ const PreferencesAll = () => {
                       index + 1 !== preferences.length ? "border-b" : ""
                     }`}
                   >
+                    {console.log()}
                     <fieldset>
                       <legend className="field-label--caps mb-8">{preference.title}</legend>
 
@@ -260,7 +267,7 @@ const PreferencesAll = () => {
                               validate: {
                                 somethingIsChecked: (value) =>
                                   value ||
-                                  preferenceOptionObjectPaths[
+                                  preferenceCheckboxIds[
                                     preference.formMetadata.key
                                   ].some((option) => getValues(option)),
                               },
