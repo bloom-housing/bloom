@@ -1783,6 +1783,9 @@ export interface Property {
   unitAmenities: string;
 
   /**  */
+  servicesOffered?: string;
+
+  /**  */
   yearBuilt: number;
 }
 
@@ -1987,6 +1990,9 @@ export interface Listing {
   requiredDocuments: string;
 
   /**  */
+  specialNotes?: string;
+
+  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -2153,6 +2159,9 @@ export interface ListingCreate {
 
   /**  */
   requiredDocuments: string;
+
+  /**  */
+  specialNotes?: string;
 
   /**  */
   waitlistCurrentSize: number;
@@ -2342,6 +2351,9 @@ export interface ListingUpdate {
 
   /**  */
   requiredDocuments: string;
+
+  /**  */
+  specialNotes?: string;
 
   /**  */
   waitlistCurrentSize: number;
@@ -3408,6 +3420,9 @@ export interface PropertyCreate {
   unitAmenities: string;
 
   /**  */
+  servicesOffered?: string;
+
+  /**  */
   yearBuilt: number;
 }
 
@@ -3459,6 +3474,9 @@ export interface PropertyUpdate {
 
   /**  */
   unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
 
   /**  */
   yearBuilt: number;
