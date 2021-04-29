@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useEffect } from "react"
+import React, { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import {
   AlertBox,
@@ -16,6 +16,8 @@ import {
   resolveObject,
   mapPreferencesToApi,
   mapApiToPreferencesForm,
+  getPreferenceOptionName,
+  OnClientSide,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -23,6 +25,8 @@ import { useFormConductor } from "../../../lib/hooks"
 import { FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 const PreferencesAll = () => {
+  const clientLoaded = OnClientSide()
+
   const { conductor, application, listing } = useFormConductor("preferencesAll")
   const preferences = listing?.preferences
 
@@ -66,26 +70,22 @@ const PreferencesAll = () => {
     conductor.routeToNextOrReturnUrl()
   }
 
-  const buildOptionName = useCallback((metaKey: string, option: string) => {
-    return `${PREFERENCES_FORM_PATH}.${metaKey}.${option}.claimed`
-  }, [])
-
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     preferences?.forEach((preference) =>
       preference?.formMetadata?.options.forEach((option) =>
-        keys.push(buildOptionName(preference?.formMetadata.key, option.key))
+        keys.push(getPreferenceOptionName(preference?.formMetadata.key, option.key))
       )
     )
 
     return keys
-  }, [preferences, buildOptionName])
+  }, [preferences])
 
   const watchPreferences = watch(allOptionFieldNames)
 
-  function uncheckPreference(metaKey: string, options: FormMetadataOptions[]) {
+  const uncheckPreference = (metaKey: string, options: FormMetadataOptions[]) => {
     const preferenceKeys = options?.map((option) => option.key)
-    preferenceKeys.forEach((k) => setValue(buildOptionName(metaKey, k), false))
+    preferenceKeys.forEach((k) => setValue(getPreferenceOptionName(metaKey, k), false))
   }
 
   /*
@@ -119,15 +119,7 @@ const PreferencesAll = () => {
     return [...primaryApplicant, ...otherMembers]
   }, [application])
 
-  /*
-    Rehydration fix
-  */
-  const [hasMounted, setHasMounted] = useState(false)
-  useEffect(() => {
-    setHasMounted(true)
-  }, [])
-
-  if (!hasMounted || !preferenceCheckboxIds) {
+  if (!clientLoaded || !preferenceCheckboxIds) {
     return null
   }
 
@@ -185,8 +177,14 @@ const PreferencesAll = () => {
                               }`}
                             >
                               <Field
-                                id={buildOptionName(preference.formMetadata.key, option.key)}
-                                name={buildOptionName(preference.formMetadata.key, option.key)}
+                                id={getPreferenceOptionName(
+                                  preference.formMetadata.key,
+                                  option.key
+                                )}
+                                name={getPreferenceOptionName(
+                                  preference.formMetadata.key,
+                                  option.key
+                                )}
                                 type="checkbox"
                                 label={t(
                                   `application.preferences.${preference.formMetadata.key}.${option.key}.label`
@@ -220,7 +218,7 @@ const PreferencesAll = () => {
                             </div>
 
                             {watchPreferences[
-                              buildOptionName(preference.formMetadata.key, option.key)
+                              getPreferenceOptionName(preference.formMetadata.key, option.key)
                             ] &&
                               option.extraData?.map((extra) => (
                                 <ExtraField

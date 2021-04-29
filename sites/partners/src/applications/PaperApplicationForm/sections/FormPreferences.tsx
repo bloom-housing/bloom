@@ -1,9 +1,9 @@
-import React, { useMemo, useCallback } from "react"
+import React, { useMemo } from "react"
 import {
   Field,
   t,
   ExtraField,
-  PREFERENCES_FORM_PATH,
+  getPreferenceOptionName,
   PREFERENCES_NONE_FORM_PATH,
   GridSection,
   ViewItem,
@@ -25,10 +25,6 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = formMethods
 
-  const buildOptionName = useCallback((metaKey: string, option: string) => {
-    return `${PREFERENCES_FORM_PATH}.${metaKey}.${option}.claimed`
-  }, [])
-
   const hasMetaData = useMemo(() => {
     return !!preferences?.filter((preference) => preference?.formMetadata)?.length
   }, [preferences])
@@ -37,18 +33,18 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
     const keys = []
     preferences?.forEach((preference) =>
       preference?.formMetadata?.options.forEach((option) =>
-        keys.push(buildOptionName(preference?.formMetadata.key, option.key))
+        keys.push(getPreferenceOptionName(preference?.formMetadata.key, option.key))
       )
     )
 
     return keys
-  }, [preferences, buildOptionName])
+  }, [preferences])
 
   const watchPreferences = watch(allOptionFieldNames)
 
   function uncheckPreference(metaKey: string, options: FormMetadataOptions[]) {
     const preferenceKeys = options?.map((option) => option.key)
-    preferenceKeys.forEach((k) => setValue(buildOptionName(metaKey, k), false))
+    preferenceKeys.forEach((k) => setValue(getPreferenceOptionName(metaKey, k), false))
   }
 
   if (!hasMetaData) {
@@ -69,8 +65,8 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
                     return (
                       <React.Fragment key={option.key}>
                         <Field
-                          id={buildOptionName(preference.formMetadata.key, option.key)}
-                          name={buildOptionName(preference.formMetadata.key, option.key)}
+                          id={getPreferenceOptionName(preference.formMetadata.key, option.key)}
+                          name={getPreferenceOptionName(preference.formMetadata.key, option.key)}
                           type="checkbox"
                           label={t(`application.preferences.options.${option.key}`)}
                           register={register}
@@ -81,7 +77,7 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
                           }}
                         />
                         {watchPreferences[
-                          buildOptionName(preference.formMetadata.key, option.key)
+                          getPreferenceOptionName(preference.formMetadata.key, option.key)
                         ] &&
                           option.extraData?.map((extra) => (
                             <ExtraField

@@ -335,3 +335,11 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
 
   return { options: preferencesFormData, none: noneValues }
 }
+
+/*
+  It generates checkbox name in proper prefrences structure
+*/
+
+export const getPreferenceOptionName = (metaKey: string, option: string) => {
+  return `${PREFERENCES_FORM_PATH}.${metaKey}.${option}.claimed`
+}
