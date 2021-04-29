@@ -10,6 +10,10 @@
         "workInRegionNote": ""
       }
     },
+    "referralApplication": {
+      "instructions": "The permanent supportive housing units are referred directly through Alameda County's Coordinated Entry System. Households experiencing homelessness can call 211 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+      "furtherInformation": "For further information"
+    },
     "preferences": {
       "dontWant": "I don't want to claim any of these preferences",
       "liveWork": {
