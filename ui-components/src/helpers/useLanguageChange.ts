@@ -1,48 +1,49 @@
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useContext } from "react"
 import { useRouter } from "next/router"
-import { LangItem } from "../navigation/LanguageNav"
+import { Language } from "../navigation/LanguageNav"
 import { t } from "../helpers/translator"
-import { OnClientSide } from "@bloom-housing/ui-components"
+import { OnClientSide, ConfigContext } from "@bloom-housing/ui-components"
 
-export function useLanguageChange(languages: LangItem[]) {
+export function useLanguageChange(language: Language) {
   const router = useRouter()
   const isClient = OnClientSide()
+  const { setLanguage } = useContext(ConfigContext)
 
   const routePrefix = t("config.routePrefix")
 
   const pathname = isClient ? window.location.pathname : ""
 
-  const pathIncludesLang = useMemo(
+  const activeLangInPath = useMemo(
     () =>
-      languages.filter((item) => {
+      language.list.filter((item) => {
         const pattern = new RegExp(`^/(${item.prefix})(/|$)`, "gm")
 
         return item.prefix !== "" && pattern.test(pathname)
       }),
-    [languages, pathname]
+    [language, pathname]
   )
 
   useEffect(() => {
-    if (!pathIncludesLang.length) {
-      console.log("en")
+    if (!activeLangInPath.length) {
+      setLanguage(language.codes?.[0] || "en")
     } else {
-      console.log(pathIncludesLang[0].prefix)
+      setLanguage(activeLangInPath[0].prefix)
     }
-  }, [pathIncludesLang, routePrefix])
+  }, [activeLangInPath, routePrefix, setLanguage, language])
 
   function change(prefix: string): void {
     if (!isClient) return
 
     let newPath = pathname
 
-    if (pathIncludesLang.length && prefix === "") {
+    if (activeLangInPath.length && prefix === "") {
       newPath = pathname.replace(
-        `${pathIncludesLang[0].prefix}${pathname.length > 3 ? `/` : ``}`,
+        `${activeLangInPath[0].prefix}${pathname.length > 3 ? `/` : ``}`,
         ``
       )
-    } else if (!pathIncludesLang.length && prefix !== "") {
+    } else if (!activeLangInPath.length && prefix !== "") {
       newPath = `/${prefix + pathname}`
-    } else if (pathIncludesLang.length) {
+    } else if (activeLangInPath.length) {
       newPath = newPath.replace(/^\/.*?(\/|$)/, `/${prefix}$1`)
     }
 
