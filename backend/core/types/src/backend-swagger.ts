@@ -1288,6 +1288,9 @@ export interface User {
   roles: UserRole[];
 
   /**  */
+  language?: Language;
+
+  /**  */
   leasingAgentInListings?: Id[];
 
   /**  */
@@ -1319,6 +1322,9 @@ export interface User {
 }
 
 export interface UserCreate {
+  /**  */
+  language?: Language;
+
   /**  */
   password: string;
 
@@ -1395,6 +1401,9 @@ export interface UpdatePassword {
 }
 
 export interface UserUpdate {
+  /**  */
+  language?: Language;
+
   /**  */
   id?: string;
 
@@ -1790,6 +1799,9 @@ export interface Property {
 }
 
 export interface UserBasic {
+  /**  */
+  language?: Language;
+
   /**  */
   id: string;
 
@@ -3667,6 +3679,13 @@ export enum UserRole {
   'admin' = 'admin'
 }
 
+export enum Language {
+  'en' = 'en',
+  'es' = 'es',
+  'vi' = 'vi',
+  'zh' = 'zh'
+}
+
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending'
@@ -3711,13 +3730,6 @@ export enum ApplicationStatus {
   'draft' = 'draft',
   'submitted' = 'submitted',
   'removed' = 'removed'
-}
-
-export enum Language {
-  'en' = 'en',
-  'es' = 'es',
-  'vi' = 'vi',
-  'zh' = 'zh'
 }
 
 export enum ApplicationSubmissionType {
