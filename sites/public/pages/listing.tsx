@@ -350,6 +350,12 @@ export default class extends Component<ListingProps> {
                     term={t("t.unitAmenities")}
                     description={listing.property.unitAmenities}
                   />
+                  {listing.property.servicesOffered && (
+                    <Description
+                      term={t("t.servicesOffered")}
+                      description={listing.property.servicesOffered}
+                    />
+                  )}
                   <Description
                     term={t("t.accessibility")}
                     description={listing.property.accessibility}
@@ -384,7 +390,7 @@ export default class extends Component<ListingProps> {
                 </ListingDetailItem>
               )}
 
-            {(listing.requiredDocuments || listing.programRules) && (
+            {(listing.requiredDocuments || listing.programRules || listing.specialNotes) && (
               <ListingDetailItem
                 imageAlt={t("listings.additionalInformationEnvelope")}
                 imageSrc="/images/listing-legal.svg"
@@ -409,6 +415,17 @@ export default class extends Component<ListingProps> {
                       <p className="text-sm text-gray-700">
                         <Markdown
                           children={listing.programRules}
+                          options={{ disableParsingRawHTML: true }}
+                        />
+                      </p>
+                    </div>
+                  )}
+                  {listing.specialNotes && (
+                    <div className="info-card">
+                      <h3 className="text-serif-lg">{t("listings.specialNotes")}</h3>
+                      <p className="text-sm text-gray-700">
+                        <Markdown
+                          children={listing.specialNotes}
                           options={{ disableParsingRawHTML: true }}
                         />
                       </p>

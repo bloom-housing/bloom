@@ -131,6 +131,12 @@ export class Property {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   unitAmenities: string | null
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  servicesOffered?: string | null
+
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
