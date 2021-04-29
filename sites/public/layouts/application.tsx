@@ -21,6 +21,10 @@ const Layout = (props) => {
 
   const LANGUAGE_CODES = process.env.languages?.split(",")
 
+  /*
+    It creates prefixes and translated labels for each language.
+    First prefix is always empty, because path does not include language code.
+  */
   const LANGUAGES =
     LANGUAGE_CODES?.map((item, index) => ({
       prefix: index === 0 ? "" : item,
