@@ -6,13 +6,13 @@ import {
   LinkButton,
   Hero,
   MarkdownSection,
-  MetaTags,
   t,
   SiteAlert,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
 import { ConfirmationModal } from "../src/ConfirmationModal"
+import { MetaTags } from "../src/MetaTags"
 
 interface IndexProps {
   listings: Listing[]

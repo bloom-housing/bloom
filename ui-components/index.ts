@@ -19,9 +19,6 @@ export * from "./src/blocks/ViewItem"
 export * from "./src/authentication"
 export * from "./src/config"
 
-/* Elements */
-export * from "./src/elements/MetaTags"
-
 /* Footers */
 export * from "./src/footers/ExygyFooter"
 export * from "./src/footers/SiteFooter"

@@ -1,32 +1,24 @@
-import * as React from "react"
-import Link from "next/link"
-import { lRoute } from "../helpers/localeRoute"
+import React, { createElement, useContext } from "react"
+import { LinkProps, NavigationContext } from "../config/NavigationContext"
 
 export interface LocalizedLinkProps {
+  children?: React.ReactNode
   href: string
-  as?: string
   className?: string
-  children?: any
   aria?: Record<string, string>
   tabIndex?: number
 }
 
 const LocalizedLink = (props: LocalizedLinkProps) => {
+  const { linkComponent } = useContext(NavigationContext)
   const ariaAttributes = props.aria || {}
-  const localizedProps: LocalizedLinkProps = { href: "" }
-  if (props.as) {
-    localizedProps.as = lRoute(props.as)
-    localizedProps.href = props.href
-  } else {
-    localizedProps.href = lRoute(props.href)
-  }
 
-  return (
-    <Link {...localizedProps}>
-      <a className={props.className} tabIndex={props.tabIndex} {...ariaAttributes}>
-        {props.children}
-      </a>
-    </Link>
+  return createElement<LinkProps>(
+    linkComponent,
+    { href: props.href },
+    <a className={props.className} tabIndex={props.tabIndex} {...ariaAttributes}>
+      {props.children}
+    </a>
   )
 }
 

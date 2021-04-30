@@ -1,5 +1,5 @@
-import React from "react"
-import { useRouter } from "next/router"
+import React, { useContext } from "react"
+import { NavigationContext } from "../config/NavigationContext"
 import { HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 import { t } from "../helpers/translator"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
@@ -12,7 +12,7 @@ const HouseholdMemberForm = (props: {
   editMode?: boolean
 }) => {
   const { member, type } = props
-  const router = useRouter()
+  const { router } = useContext(NavigationContext)
   const editMode = props.editMode !== false // undefined should default to true
 
   const editMember = () => {

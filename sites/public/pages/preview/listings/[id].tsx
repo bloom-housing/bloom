@@ -2,9 +2,10 @@ import React from "react"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { imageUrlFromListing, MetaTags, t } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, t } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"
+import { MetaTags } from "../../../src/MetaTags"
 
 interface ListingProps {
   listing: Listing

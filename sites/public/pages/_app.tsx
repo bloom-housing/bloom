@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import {
   addTranslation,
+  NavigationContext,
   UserProvider,
   ConfigProvider,
   ApiClientProvider,
@@ -16,6 +17,7 @@ import ApplicationConductor, {
   loadSavedListing,
 } from "../lib/ApplicationConductor"
 import { translations, overrideTranslations } from "../src/translations"
+import Link from "next/link"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
@@ -62,24 +64,31 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   })
 
   return (
-    <AppSubmissionContext.Provider
+    <NavigationContext.Provider
       value={{
-        conductor: conductor,
-        application: application,
-        listing: savedListing,
-        syncApplication: setApplication,
-        syncListing: setSavedListing,
+        linkComponent: Link,
+        router: router,
       }}
     >
-      <ConfigProvider apiUrl={process.env.backendApiBase}>
-        <UserProvider>
-          <ApiClientProvider>
-            <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-            <Component {...pageProps} />
-          </ApiClientProvider>
-        </UserProvider>
-      </ConfigProvider>
-    </AppSubmissionContext.Provider>
+      <AppSubmissionContext.Provider
+        value={{
+          conductor: conductor,
+          application: application,
+          listing: savedListing,
+          syncApplication: setApplication,
+          syncListing: setSavedListing,
+        }}
+      >
+        <ConfigProvider apiUrl={process.env.backendApiBase}>
+          <UserProvider>
+            <ApiClientProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+              <Component {...pageProps} />
+            </ApiClientProvider>
+          </UserProvider>
+        </ConfigProvider>
+      </AppSubmissionContext.Provider>
+    </NavigationContext.Provider>
   )
 }
 

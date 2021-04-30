@@ -1,11 +1,10 @@
-import * as React from "react"
-import Link from "next/link"
+import React, { useContext } from "react"
 import "./Button.scss"
 import { buttonClassesForProps, buttonInner, ButtonProps } from "./Button"
+import { LinkProps, NavigationContext } from "../config/NavigationContext"
 
 export interface LinkButtonProps extends Omit<ButtonProps, "onClick"> {
   href: string
-  as?: string
 }
 
 const isExternalLink = (href: string) => {
@@ -13,6 +12,7 @@ const isExternalLink = (href: string) => {
 }
 
 const LinkButton = (props: LinkButtonProps) => {
+  const { linkComponent } = useContext(NavigationContext)
   const buttonClasses = buttonClassesForProps(props)
 
   if (isExternalLink(props.href)) {
@@ -22,10 +22,10 @@ const LinkButton = (props: LinkButtonProps) => {
       </a>
     )
   } else {
-    return (
-      <Link href={props.href}>
-        <a className={buttonClasses.join(" ")}>{buttonInner(props)}</a>
-      </Link>
+    return React.createElement<LinkProps>(
+      linkComponent,
+      { href: props.href },
+      <a className={buttonClasses.join(" ")}>{buttonInner(props)}</a>
     )
   }
 }

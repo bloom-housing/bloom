@@ -1,17 +1,16 @@
-import { Component } from "react"
 import Head from "next/head"
 import axios from "axios"
 import moment from "moment"
 import {
   ListingsGroup,
   ListingsList,
-  MetaTags,
   PageHeader,
   openDateState,
   t,
 } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 import Layout from "../layouts/application"
+import { MetaTags } from "../src/MetaTags"
 
 export interface ListingsProps {
   openListings: Listing[]

@@ -1,7 +1,7 @@
-import * as React from "react"
+import React, { useContext } from "react"
+import { NavigationContext } from "../config/NavigationContext"
 import "./LanguageNav.scss"
 import { t } from "../helpers/translator"
-import { useRouter } from "next/router"
 
 export type LangItem = {
   prefix: string
@@ -14,7 +14,7 @@ export interface LanguageNavProps {
 
 const LanguageNav = ({ items }: LanguageNavProps) => {
   const routePrefix = t("config.routePrefix")
-  const router = useRouter()
+  const { router } = useContext(NavigationContext)
 
   return (
     <div className="language-bar">
