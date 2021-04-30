@@ -1,7 +1,7 @@
 {
   "config": {
     "routePrefix": "es"
-  }, 
+  },
   "account": {
     "accountSettings": "Configuraciones de la cuenta",
     "accountSettingsSubtitle": "Configuraciones de la cuenta, email y contraseña",
@@ -40,6 +40,12 @@
       "letsGetStarted": "Empecemos su solicitud",
       "chooseYourLanguage": "Elija su idioma",
       "signInSaveTime": "Iniciar sesión podría ahorrarle tiempo al empezar con los detalles de su última solicitud, y permitirle verificar el estatus de esta solicitud en cualquier momento."
+    },
+    "autofill": {
+      "saveTime": "Ahorre tiempo cargando los detalles de su última solicitud",
+      "prefillYourApplication": "Simplemente rellenaremos automáticamente su solicitud con los siguientes detalles, y usted puede actualizarlos mientras los vaya completando.",
+      "start": "Empezar con estos detalles",
+      "reset": "Empezar de cero"
     },
     "start": {
       "whatToExpect": {
