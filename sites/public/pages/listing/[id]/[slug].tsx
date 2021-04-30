@@ -31,11 +31,11 @@ export default function ListingPage(props: ListingProps) {
   )
 }
 
-export async function getStaticPaths(context: any) {
+export async function getStaticPaths(context: { locales: Array<string> }) {
   const response = await axios.get(process.env.listingServiceUrl)
 
   return {
-    paths: context.locales.flatMap((locale: any) =>
+    paths: context.locales.flatMap((locale: string) =>
       response.data.map((listing) => ({
         params: { id: listing.id, slug: listing.urlSlug },
         locale: locale,
@@ -45,7 +45,7 @@ export async function getStaticPaths(context: any) {
   }
 }
 
-export async function getStaticProps(context: any) {
+export async function getStaticProps(context: { params: Record<string, string> }) {
   const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
 
   return {

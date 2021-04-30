@@ -1,7 +1,7 @@
 import Head from "next/head"
 import axios from "axios"
 
-export default function ListingRedirect(props: any) {
+export default function ListingRedirect(props: Record<string, string>) {
   return (
     <Head>
       <meta httpEquiv="refresh" content={`0; url=${props.to}`} />
@@ -9,7 +9,7 @@ export default function ListingRedirect(props: any) {
   )
 }
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: { params: Record<string, string> }) {
   let response
 
   try {

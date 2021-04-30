@@ -31,7 +31,7 @@ export default function ListingPage(props: ListingProps) {
   )
 }
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: { params: Record<string, string> }) {
   let response
 
   try {
