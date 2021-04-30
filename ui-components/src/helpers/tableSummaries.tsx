@@ -16,7 +16,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
         </>
       )
 
-    const getRent = (rentMin: string, rentMax: string, percent: boolean = false) => {
+    const getRent = (rentMin: string, rentMax: string, percent = false) => {
       const unit = percent ? `% ${t("t.income")}` : ` ${t("t.perMonth")}`
       return rentMin == rentMax ? (
         <>
