@@ -3,7 +3,7 @@
   "version": "0.3.11",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect=9229' next -p ${NEXTJS_PORT:-3000}",
@@ -12,9 +12,12 @@
     "export": "next export",
     "start": "next start",
     "dev:listings": "cd ../../backend/core && yarn dev",
+    "dev:cypress": "NODE_OPTIONS='--inspect=9229' next start -p ${NEXTJS_PORT:-3000}",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev",
-    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\"",
-    "build:headers": "node scripts/build-headers.js"
+    "build:headers": "node scripts/build-headers.js",
+    "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev:cypress",
+    "dev:all-cypress": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait-cypress\"",
+    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
     "@bloom-housing/ui-components": "^0.3.11",

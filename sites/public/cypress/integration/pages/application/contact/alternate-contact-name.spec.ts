@@ -27,7 +27,7 @@ describe("applications/contact/alternate-contact-name", function () {
 
   it("Should display initial form errors with agency field", function () {
     // set initial value for type to show additional agency step
-    cy.loadConfig({
+    cy.loadConfig({}, "applicationConfigBlank.json", {
       "alternateContact.type": "caseManager",
     })
     cy.visit(route)
@@ -44,7 +44,7 @@ describe("applications/contact/alternate-contact-name", function () {
   })
 
   it("Should save form values and redirect to the next step", function () {
-    cy.loadConfig({
+    cy.loadConfig({}, "applicationConfigBlank.json", {
       "alternateContact.type": "caseManager",
     })
     cy.visit(route)

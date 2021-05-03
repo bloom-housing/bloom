@@ -14,7 +14,7 @@
     ]
   },
   "repository": "https://github.com/Exygy/bloom.git",
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",

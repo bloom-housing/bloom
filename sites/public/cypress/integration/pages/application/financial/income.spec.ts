@@ -28,7 +28,7 @@ describe("applications/financial/income", function () {
   })
 
   it("Should do not check income when user selected voucher in the previous step", function () {
-    cy.loadConfig({
+    cy.loadConfig({}, "applicationConfigBlank.json", {
       incomeVouchers: true,
     })
     cy.visit(route)

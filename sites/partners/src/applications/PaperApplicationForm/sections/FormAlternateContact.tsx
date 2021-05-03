@@ -10,8 +10,8 @@ import {
   emailRegex,
   PhoneField,
   altContactRelationshipKeys,
+  FormAddress,
 } from "@bloom-housing/ui-components"
-import { FormAddress } from "../FormAddress"
 
 const FormAlternateContact = () => {
   const formMethods = useFormContext()
@@ -138,12 +138,12 @@ const FormAlternateContact = () => {
       </GridSection>
 
       <GridSection grid={false}>
-        {FormAddress(
-          t("application.contact.mailingAddress"),
-          "application.alternateContact.mailingAddress",
-          "alternate",
-          register
-        )}
+        <FormAddress
+          subtitle={t("application.contact.mailingAddress")}
+          dataKey="application.alternateContact.mailingAddress"
+          type="alternate"
+          register={register}
+        />
       </GridSection>
     </GridSection>
   )

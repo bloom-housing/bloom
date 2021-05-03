@@ -131,6 +131,12 @@ export class Property {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   unitAmenities: string | null
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  servicesOffered?: string | null
+
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -138,7 +144,7 @@ export class Property {
   yearBuilt: number | null
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ type: UnitsSummarized })
   get unitsSummarized(): UnitsSummarized | undefined {
     if (Array.isArray(this.units) && this.units.length > 0) {
       return transformUnits(this.units)

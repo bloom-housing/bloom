@@ -1288,6 +1288,9 @@ export interface User {
   roles: UserRole[];
 
   /**  */
+  language?: Language;
+
+  /**  */
   leasingAgentInListings?: Id[];
 
   /**  */
@@ -1319,6 +1322,9 @@ export interface User {
 }
 
 export interface UserCreate {
+  /**  */
+  language?: Language;
+
   /**  */
   password: string;
 
@@ -1396,6 +1402,9 @@ export interface UpdatePassword {
 
 export interface UserUpdate {
   /**  */
+  language?: Language;
+
+  /**  */
   id?: string;
 
   /**  */
@@ -1471,6 +1480,9 @@ export interface FormMetadata {
 
 export interface Preference {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   id: string;
 
   /**  */
@@ -1490,9 +1502,6 @@ export interface Preference {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -1783,10 +1792,16 @@ export interface Property {
   unitAmenities: string;
 
   /**  */
+  servicesOffered?: string;
+
+  /**  */
   yearBuilt: number;
 }
 
 export interface UserBasic {
+  /**  */
+  language?: Language;
+
   /**  */
   id: string;
 
@@ -1987,6 +2002,9 @@ export interface Listing {
   requiredDocuments: string;
 
   /**  */
+  specialNotes?: string;
+
+  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -2001,6 +2019,9 @@ export interface Listing {
 
 export interface PreferenceCreate {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -2011,9 +2032,6 @@ export interface PreferenceCreate {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -2155,6 +2173,9 @@ export interface ListingCreate {
   requiredDocuments: string;
 
   /**  */
+  specialNotes?: string;
+
+  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -2169,6 +2190,9 @@ export interface ListingCreate {
 
 export interface PreferenceUpdate {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -2179,9 +2203,6 @@ export interface PreferenceUpdate {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -2342,6 +2363,9 @@ export interface ListingUpdate {
 
   /**  */
   requiredDocuments: string;
+
+  /**  */
+  specialNotes?: string;
 
   /**  */
   waitlistCurrentSize: number;
@@ -2587,13 +2611,13 @@ export interface HouseholdMember {
 
 export interface ApplicationPreferenceOption {
   /**  */
-  extraData?: AllExtraDataTypes[];
-
-  /**  */
   key: string;
 
   /**  */
   checked: boolean;
+
+  /**  */
+  extraData?: AllExtraDataTypes[];
 }
 
 export interface ApplicationPreference {
@@ -3408,6 +3432,9 @@ export interface PropertyCreate {
   unitAmenities: string;
 
   /**  */
+  servicesOffered?: string;
+
+  /**  */
   yearBuilt: number;
 }
 
@@ -3459,6 +3486,9 @@ export interface PropertyUpdate {
 
   /**  */
   unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
 
   /**  */
   yearBuilt: number;
@@ -3649,6 +3679,13 @@ export enum UserRole {
   'admin' = 'admin'
 }
 
+export enum Language {
+  'en' = 'en',
+  'es' = 'es',
+  'vi' = 'vi',
+  'zh' = 'zh'
+}
+
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending'
@@ -3662,7 +3699,8 @@ export enum CSVFormattingType {
 export enum InputType {
   'boolean' = 'boolean',
   'text' = 'text',
-  'address' = 'address'
+  'address' = 'address',
+  'hhMemberSelect' = 'hhMemberSelect'
 }
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
@@ -3692,13 +3730,6 @@ export enum ApplicationStatus {
   'draft' = 'draft',
   'submitted' = 'submitted',
   'removed' = 'removed'
-}
-
-export enum Language {
-  'en' = 'en',
-  'es' = 'es',
-  'vi' = 'vi',
-  'zh' = 'zh'
 }
 
 export enum ApplicationSubmissionType {

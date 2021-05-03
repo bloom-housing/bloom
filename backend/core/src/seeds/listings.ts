@@ -173,6 +173,7 @@ export const listingSeed1: ListingSeed = {
     // TODO Added arbitrarily, not existent in seeds:
     householdSizeMin: 2,
     householdSizeMax: 2,
+    servicesOffered: "",
   },
   preferences: [
     {
@@ -181,7 +182,16 @@ export const listingSeed1: ListingSeed = {
       subtitle: "",
       description:
         "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
-      links: [],
+      links: [
+        {
+          title: "example.com",
+          url: "https://example.com",
+        },
+        {
+          title: "example2.com",
+          url: "https://example2.com",
+        },
+      ],
       formMetadata: {
         key: "liveWork",
         options: [
@@ -202,7 +212,16 @@ export const listingSeed1: ListingSeed = {
       subtitle: "",
       description:
         "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
-      links: [],
+      links: [
+        {
+          title: "example.com",
+          url: "https://example.com",
+        },
+        {
+          title: "example2.com",
+          url: "https://example2.com",
+        },
+      ],
       formMetadata: {
         key: "displacedTenant",
         options: [
@@ -211,7 +230,7 @@ export const listingSeed1: ListingSeed = {
             extraData: [
               {
                 key: "name",
-                type: InputType.text,
+                type: InputType.hhMemberSelect,
               },
               {
                 key: "address",
@@ -224,7 +243,7 @@ export const listingSeed1: ListingSeed = {
             extraData: [
               {
                 key: "name",
-                type: InputType.text,
+                type: InputType.hhMemberSelect,
               },
               {
                 key: "address",
@@ -274,6 +293,7 @@ export const listingSeed1: ListingSeed = {
     postmarkedApplicationsReceivedByDate: new Date("2021-12-10T20:00:00.000Z"),
     disableUnitsAccordion: false,
     rentalAssistance: "",
+    specialNotes: "",
 
     whatToExpect: {
       applicantsWillBeContacted: "Applicant will be contacted",

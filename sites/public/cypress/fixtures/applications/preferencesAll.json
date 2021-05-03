@@ -1,0 +1,10 @@
+{
+  "claimant": "First Name Last Name",
+  "address": {
+    "street": "Street",
+    "street2": "1010",
+    "city": "San Francisco",
+    "state": "California",
+    "zipCode": "94016"
+  }
+}
