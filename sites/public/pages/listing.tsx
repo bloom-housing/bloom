@@ -35,7 +35,6 @@ import {
   LotteryResultsEvent,
   OpenHouseEvent,
   DownloadLotteryResults,
-  ReferralApplication,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import moment from "moment"
@@ -310,18 +309,10 @@ export default class extends Component<ListingProps> {
                   <ApplicationStatus listing={listing} />
                   <DownloadLotteryResults event={lotteryResults} />
                   {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-                  {listing.applicationMethods.length > 0 ? (
-                    <ApplicationSection
-                      listing={listing}
-                      internalFormRoute="/applications/start/choose-language"
-                    />
-                  ) : (
-                    <ReferralApplication
-                      phoneNumber={"211"}
-                      description={t("application.referralApplication.instructions")}
-                      title={t("application.referralApplication.furtherInformation")}
-                    />
-                  )}
+                  <ApplicationSection
+                    listing={listing}
+                    internalFormRoute="/applications/start/choose-language"
+                  />
                 </div>
 
                 {openHouseEvents && (
