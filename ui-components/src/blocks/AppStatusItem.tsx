@@ -55,8 +55,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
           <div className="status-item_links">
             <LocalizedLink
               className="status-item__link lined"
-              href={`listing/id=${listing.id}`}
-              as={`/listing/${listing.id}/${listing.urlSlug}`}
+              href={`/listing/${listing.id}/${listing.urlSlug}`}
             >
               {t("t.seeListing")}
             </LocalizedLink>

@@ -1,8 +1,9 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
-import { PageHeader, MetaTags, t, lRoute, UserContext } from "@bloom-housing/ui-components"
+import { PageHeader, t, lRoute, UserContext } from "@bloom-housing/ui-components"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts/application"
+import { MetaTags } from "../src/MetaTags"
 import moment from "moment"
 import { UserRole, Listing } from "@bloom-housing/backend-core/types"
 

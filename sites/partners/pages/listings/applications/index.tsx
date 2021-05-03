@@ -5,7 +5,6 @@ import Head from "next/head"
 import {
   Field,
   PageHeader,
-  MetaTags,
   t,
   Button,
   debounce,
@@ -20,6 +19,7 @@ import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../src/applications/ApplicationsColDefs"
+import { MetaTags } from "../../../src/MetaTags"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {

@@ -1,11 +1,12 @@
 import React from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { MetaTags, PageHeader, t } from "@bloom-housing/ui-components"
+import { PageHeader, t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import PaperApplicationForm from "../../src/applications/PaperApplicationForm/PaperApplicationForm"
 import { useSingleApplicationData } from "../../lib/hooks"
 import { ApplicationContext } from "../../src/applications/ApplicationContext"
+import { MetaTags } from "../../src/MetaTags"
 
 const NewApplication = () => {
   const metaDescription = ""
