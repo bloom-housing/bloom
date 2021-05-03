@@ -315,7 +315,7 @@ export default class extends Component<ListingProps> {
                     />
                   ) : (
                     <ReferralApplication
-                      phoneNumber={"211"}
+                      phoneNumber={t("application.referralApplication.phoneNumber")}
                       description={t("application.referralApplication.instructions")}
                       title={t("application.referralApplication.furtherInformation")}
                     />
