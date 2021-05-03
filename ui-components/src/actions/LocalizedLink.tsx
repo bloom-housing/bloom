@@ -1,25 +1,11 @@
-import React, { createElement, useContext } from "react"
+import React, { PropsWithChildren, useContext } from "react"
 import { LinkProps, NavigationContext } from "../config/NavigationContext"
 
-export interface LocalizedLinkProps {
-  children?: React.ReactNode
-  href: string
-  className?: string
-  aria?: Record<string, string>
-  tabIndex?: number
-}
+// Legacy use only, deprecated
+const LocalizedLink = (props: PropsWithChildren<LinkProps>) => {
+  const { LinkComponent } = useContext(NavigationContext)
 
-const LocalizedLink = (props: LocalizedLinkProps) => {
-  const { linkComponent } = useContext(NavigationContext)
-  const ariaAttributes = props.aria || {}
-
-  return createElement<LinkProps>(
-    linkComponent,
-    { href: props.href },
-    <a className={props.className} tabIndex={props.tabIndex} {...ariaAttributes}>
-      {props.children}
-    </a>
-  )
+  return <LinkComponent {...props}>{props.children}</LinkComponent>
 }
 
 export { LocalizedLink as default, LocalizedLink }

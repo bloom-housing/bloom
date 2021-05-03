@@ -1,18 +1,15 @@
 import React, { useContext } from "react"
 import "./Button.scss"
 import { buttonClassesForProps, buttonInner, ButtonProps } from "./Button"
-import { LinkProps, NavigationContext } from "../config/NavigationContext"
+import { NavigationContext } from "../config/NavigationContext"
+import { isExternalLink } from "../helpers/links"
 
 export interface LinkButtonProps extends Omit<ButtonProps, "onClick"> {
   href: string
 }
 
-const isExternalLink = (href: string) => {
-  return href.startsWith("http")
-}
-
 const LinkButton = (props: LinkButtonProps) => {
-  const { linkComponent } = useContext(NavigationContext)
+  const { LinkComponent } = useContext(NavigationContext)
   const buttonClasses = buttonClassesForProps(props)
 
   if (isExternalLink(props.href)) {
@@ -22,10 +19,10 @@ const LinkButton = (props: LinkButtonProps) => {
       </a>
     )
   } else {
-    return React.createElement<LinkProps>(
-      linkComponent,
-      { href: props.href },
-      <a className={buttonClasses.join(" ")}>{buttonInner(props)}</a>
+    return (
+      <LinkComponent href={props.href} className={buttonClasses.join(" ")}>
+        {buttonInner(props)}
+      </LinkComponent>
     )
   }
 }

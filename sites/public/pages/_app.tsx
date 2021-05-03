@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import {
   addTranslation,
+  GenericRouter,
   NavigationContext,
   UserProvider,
   ConfigProvider,
@@ -17,7 +18,7 @@ import ApplicationConductor, {
   loadSavedListing,
 } from "../lib/ApplicationConductor"
 import { translations, overrideTranslations } from "../src/translations"
-import Link from "next/link"
+import LinkComponent from "../src/LinkComponent"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
@@ -66,8 +67,8 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   return (
     <NavigationContext.Provider
       value={{
-        linkComponent: Link,
-        router: router,
+        LinkComponent,
+        router: router as GenericRouter,
       }}
     >
       <AppSubmissionContext.Provider

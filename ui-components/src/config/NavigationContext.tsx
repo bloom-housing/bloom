@@ -5,21 +5,28 @@ type Url = UrlObject | string
 
 export interface LinkProps {
   href: string
+  aria?: Record<string, string>
+  className?: string
+  tabIndex?: number
+}
+
+export interface GenericRouterOptions {
+  locale?: string
 }
 
 export interface GenericRouter {
-  push: (url: Url, as?: Url, options?: Record<string, any>) => void
+  push: (url: Url, as?: Url, options?: GenericRouterOptions) => void
   pathname: string
   asPath: string
 }
 
 export interface NavigationContextProps {
-  linkComponent: FunctionComponent<LinkProps>
+  LinkComponent: FunctionComponent<LinkProps>
   router: GenericRouter
 }
 
 export const NavigationContext = createContext<NavigationContextProps>({
-  linkComponent: () => <></>,
+  LinkComponent: () => <></>,
   router: {
     push: () => {
       // no-op
