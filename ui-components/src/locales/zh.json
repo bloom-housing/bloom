@@ -6,7 +6,7 @@
     "haveAnAccount": "已開立帳戶？",
     "myApplications": "我的申請",
     "myApplicationsSubtitle": "查看您已申請物業的抽簽日期和上市名單"
-  }, 
+  },
   "application": {
     "form": {
       "general": {
@@ -37,6 +37,12 @@
       "letsGetStarted": "我們來展開申請程序",
       "chooseYourLanguage": "選擇您使用的語言",
       "signInSaveTime": "登入網站從上次申請的詳情開始，這可節省您的時間，並讓您隨時查看這次申請的進展情況。"
+    },
+    "autofill": {
+      "saveTime": "使用上次申請中的詳細資料可節省時間",
+      "prefillYourApplication": "我們只要將以下詳細資料預先填入您的申請，您就可隨時隨地進行更新。",
+      "start": "開始使用這些詳細資料",
+      "reset": "重設並開始重新整理"
     },
     "start": {
       "whatToExpect": {
