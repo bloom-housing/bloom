@@ -1,4 +1,5 @@
-import { createContext, createElement, FunctionComponent, useState } from "react"
+import { createContext, createElement, FunctionComponent, useEffect, useState } from "react"
+import axios from "axios"
 
 type ConfigContextProps = {
   storageType: "local" | "session"
@@ -25,6 +26,15 @@ export const ConfigProvider: FunctionComponent<{
   idleTimeout?: number
 }> = ({ apiUrl, storageType = "session", idleTimeout = defaultTimeout, children }) => {
   const [language, setLanguage] = useState("")
+
+  useEffect(() => {
+    axios.interceptors.request.use((config) => {
+      config.headers["county-code"] = process.env.countyCode
+      config.headers["lang"] = language
+      return config
+    }),
+      [language]
+  })
 
   return createElement(
     ConfigContext.Provider,

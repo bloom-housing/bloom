@@ -12,7 +12,7 @@ export class TranslationsService extends AbstractServiceFactory<
   TranslationUpdateDto
 >(Translation) {
   public async getTranslationByLanguageAndCountyCode(language: Language, countyCode: CountyCode) {
-    return this.list({
+    return this.findOne({
       where: {
         language,
         countyCode,

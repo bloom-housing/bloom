@@ -9,6 +9,8 @@ import Polyglot from "node-polyglot"
 import fs from "fs"
 import { ConfigService } from "@nestjs/config"
 import { Application } from "../../applications/entities/application.entity"
+import { TranslationsService } from "../../translations/translations.service"
+import { CountyCode, Language } from "@bloom-housing/backend-core/types"
 
 @Injectable()
 export class EmailService {
@@ -16,7 +18,8 @@ export class EmailService {
 
   constructor(
     private readonly sendGrid: SendGridService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly translationservice: TranslationsService
   ) {
     const polyglot = new Polyglot({
       phrases: this.translations(),
@@ -33,8 +36,10 @@ export class EmailService {
     Handlebars.registerPartial(parts)
   }
 
-  public async welcome(user: User, appUrl: string) {
+  public async welcome(user: User, appUrl: string, countyCode: CountyCode) {
+    const language = user.language || Language.en
     const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
+    void this.loadTranslations(countyCode, language)
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
         `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
@@ -42,8 +47,7 @@ export class EmailService {
         )}...`
       )
     }
-    // TODO set locale for user
-    // polyglot.locale(user.lang)
+    this.polyglot.locale(language)
     await this.send(
       user.email,
       "Welcome to Bloom",
@@ -120,6 +124,14 @@ export class EmailService {
         user: user,
       })
     )
+  }
+
+  private async loadTranslations(countyCode: CountyCode, language: Language) {
+    const translation = await this.translationservice.getTranslationByLanguageAndCountyCode(
+      language,
+      countyCode
+    )
+    this.polyglot.replace(translation.translations)
   }
 
   private template(view: string) {

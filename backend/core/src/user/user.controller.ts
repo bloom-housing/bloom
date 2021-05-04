@@ -1,5 +1,6 @@
 import {
   Controller,
+  Headers,
   Request,
   Get,
   UseGuards,
@@ -50,20 +51,20 @@ export class UserController {
   @Post()
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
-  async create(@Body() dto: UserCreateDto): Promise<StatusDto> {
+  async create(@Body() dto: UserCreateDto, @Headers() headers): Promise<StatusDto> {
     const user = await this.userService.createUser(dto)
     // noinspection ES6MissingAwait
-    void this.emailService.welcome(user, dto.appUrl)
+    void this.emailService.welcome(user, dto.appUrl, headers["county-code"])
     return mapTo(StatusDto, { status: "ok" })
   }
 
   @Post("resend-confirmation")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
-  async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
+  async confirmation(@Body() dto: EmailDto, @Headers() headers): Promise<StatusDto> {
     const user = await this.userService.resendConfirmation(dto)
     // noinspection ES6MissingAwait
-    void this.emailService.welcome(user, dto.appUrl)
+    void this.emailService.welcome(user, dto.appUrl, headers["county-code"])
     return mapTo(StatusDto, { status: "ok" })
   }
 
