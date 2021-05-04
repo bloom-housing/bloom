@@ -1,7 +1,7 @@
 {
   "id": "HOLNx_F7fUCeax5GCoIr9g",
   "events": [],
-  "postmarkedApplicationsReceivedByDate": "2021-05-31T16:00:00.000-08:00",
+  "postmarkedApplicationsReceivedByDate": "2021-05-31T17:00:00.000-08:00",
   "applicationAddress": {
     "city": "Fremont",
     "street": "39155 Liberty Street",
@@ -10,22 +10,22 @@
     "latitude": null,
     "longitude": null
   },
-  "applicationDueDate": "2021-05-31T16:00:00.000-08:00",
+  "applicationDueDate": "2021-05-31T17:00:00.000-08:00",
   "applicationOrganization": "John Stewart Company",
   "applicationPhone": "510-894-2890",
-  "buildingSelectionCriteria": null,
+  "buildingSelectionCriteria": "Resident Selection Criteria can be downloaded here: https://drive.google.com/file/d/1naF0Il86mcd2Lstn2gxdgQTS0pgvbdjg/view",
   "costsNotIncluded": null,
   "creditHistory": "To be used to determine income eligibility only",
   "CSVFormattingType": "withDisplaceeNameAndAddress",
   "depositMax": "800",
   "depositMin": "800",
-  "programRules": "Resident Selection Criteria",
+  "programRules": null,
   "externalId": null,
   "waitlistMaxSize": 150,
   "name": "City Center Apartments",
   "waitlistCurrentSize": 0,
   "prioritiesDescriptor": "All units are fully adaptable. Fully built out ADA units will be assigned on a first come first need basis with the exception of a few ADA units set aside for VASH veterans",
-  "requiredDocuments": "INCOME: Tax return, paystubs, SS Awared letter or Assistance Award letter, pension statement.  ASSETS: 6 months’ bank statements (checking), 1 month bank statement (savings), copy od EBT cart and balance. ",
+  "requiredDocuments": "INCOME: Tax return, paystubs, SS Awared letter or Assistance Award letter, pension statement.  ASSETS: 6 months’ bank statements (checking), 1 month bank statement (savings), copy of EBT cart and balance.",
   "reservedCommunityMaximumAge": null,
   "reservedCommunityMinimumAge": null,
   "reservedDescriptor": null,
@@ -35,7 +35,7 @@
   "groupId": 1,
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
-  "applicationFee": "32.00",
+  "applicationFee": "0.00",
   "criminalBackground": "Serious felony offenses and/or continued and ongoing criminal activity will be grounds for rejection",
   "leasingAgentEmail": "citycenterapts@jsco.net",
   "leasingAgentName": "Lynn Newton",
@@ -84,8 +84,8 @@
     "unitAmenities": "Refrigerator, stove, microwave, AC/Heat",
     "developer": "Allied Housing, Inc.",
     "yearBuilt": 2021,
-    "accessibility": "ADA Compliant",
-    "amenities": "on-site Property Managent, resident services, community room, outdoor recreation area, dog run, resident storages",
+    "accessibility": "All units are fully adaptable. Fully built out ADA units will be assigned on a first come first need basis.",
+    "amenities": "On-site Property Managent, resident services, community room, outdoor recreation area, dog run, resident storages",
     "buildingTotalUnits": 60,
     "buildingAddress": {
       "county": "Alameda",
@@ -471,25 +471,25 @@
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "English",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_English_Final.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Eng.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Spanish",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_Spanish_Final.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Spanish.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Vietnamese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_Vietnamese_Final.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Chinese.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Chinese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/SoHay_Chinese_Final.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Viet.pdf"
     }
   ],
   "assets": [
@@ -624,6 +624,46 @@
         "income": 90450
       },
       {
+        "percentOfAmi": 40,
+        "householdSize": 1,
+        "income": 38360
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 2,
+        "income": 43840
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 3,
+        "income": 49320
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 4,
+        "income": 54800
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 5,
+        "income": 59200
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 6,
+        "income": 63600
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 7,
+        "income": 67960
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 8,
+        "income": 72360
+      },
+      {
         "percentOfAmi": 30,
         "householdSize": 1,
         "income": 28770
@@ -662,6 +702,46 @@
         "percentOfAmi": 30,
         "householdSize": 8,
         "income": 54270
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 1,
+        "income": 19180
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 2,
+        "income": 21920
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 3,
+        "income": 24660
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 4,
+        "income": 27400
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 5,
+        "income": 29600
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 6,
+        "income": 31800
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 7,
+        "income": 33980
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 8,
+        "income": 36180
       }
     ]
   }
