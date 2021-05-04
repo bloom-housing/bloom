@@ -4,7 +4,7 @@
   "postmarkedApplicationsReceivedByDate": "2021-05-15T16:00:00.000-08:00",
   "applicationAddress": {
     "city": "San Leandro",
-    "street": "1475 167th Avenue, Management Office",
+    "street": "1475 167th Avenue",
     "zipCode": "94578",
     "state": "CA",
     "latitude": null,
@@ -21,9 +21,9 @@
   "depositMin": "1,223",
   "programRules": "Tax Credit student rules",
   "externalId": null,
-  "waitlistMaxSize": null,
+  "waitlistMaxSize": 100,
   "name": "1475 167th Avenue",
-  "waitlistCurrentSize": null,
+  "waitlistCurrentSize": 100,
   "prioritiesDescriptor": null,
   "requiredDocuments": "Current government issued photo ID, social security cards, birth certificates for minors, proof of income, proof of assets",
   "reservedCommunityMaximumAge": null,
@@ -41,7 +41,7 @@
   "leasingAgentName": "Laura Weller",
   "leasingAgentAddress": {
     "city": "San Leandro",
-    "street": "1475 167th Avenue, Management Office",
+    "street": "1475 167th Avenue",
     "zipCode": "94578",
     "state": "CA",
     "latitude": 37.693612,
@@ -90,7 +90,7 @@
     "buildingAddress": {
       "county": "Alameda",
       "city": "San Leandro",
-      "street": "1475 167th Avenue, Management Office",
+      "street": "1475 167th Avenue",
       "zipCode": "94578",
       "state": "CA",
       "latitude": 37.693612,
@@ -103,12 +103,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "50",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "2568",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -128,12 +128,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "50",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "2568",
         "floor": 2,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -153,12 +153,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "50",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "2568",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -178,12 +178,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "50",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "2568",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -203,12 +203,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "50",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "2568",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -228,12 +228,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "50",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "2568",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -253,12 +253,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "60",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "3082",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -278,12 +278,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "60",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "3082",
         "floor": 2,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -303,12 +303,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "60",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "3082",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -328,12 +328,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "60",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "3082",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -353,12 +353,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "60",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "3082",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -378,12 +378,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "60",
         "annualIncomeMin": "35232",
-        "monthlyIncomeMin": "2936",
+        "monthlyIncomeMin": "3082",
         "floor": 1,
         "annualIncomeMax": "62640",
         "maxOccupancy": 3,
         "minOccupancy": 1,
-        "monthlyRent": "1468",
+        "monthlyRent": "1284",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -403,7 +403,7 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "50",
         "annualIncomeMin": "42288",
-        "monthlyIncomeMin": "3524",
+        "monthlyIncomeMin": "3082",
         "floor": 1,
         "annualIncomeMax": "84600",
         "maxOccupancy": 5,
@@ -428,12 +428,12 @@
         "id": "AmVp9wBP7kSMil8mTBw1_Q",
         "amiPercentage": "60",
         "annualIncomeMin": "42288",
-        "monthlyIncomeMin": "3524",
+        "monthlyIncomeMin": "3698",
         "floor": 2,
         "annualIncomeMax": "84600",
         "maxOccupancy": 5,
         "minOccupancy": 2,
-        "monthlyRent": "1762",
+        "monthlyRent": "1849",
         "numBathrooms": 1,
         "numBedrooms": null,
         "number": null,
@@ -459,6 +459,34 @@
     {
       "type": "PaperPickup",
       "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "Internal",
+      "acceptsPostmarkedApplications": true
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "English",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Eng.pdf"
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "Spanish",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Spanish.pdf"
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "Vietnamese",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Chinese.pdf"
+    },
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "label": "Chinese",
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Viet.pdf"
     }
   ],
   "assets": [
@@ -593,6 +621,46 @@
         "income": 90450
       },
       {
+        "percentOfAmi": 40,
+        "householdSize": 1,
+        "income": 38360
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 2,
+        "income": 43840
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 3,
+        "income": 49320
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 4,
+        "income": 54800
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 5,
+        "income": 59200
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 6,
+        "income": 63600
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 7,
+        "income": 67960
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 8,
+        "income": 72360
+      },
+      {
         "percentOfAmi": 30,
         "householdSize": 1,
         "income": 28770
@@ -631,6 +699,46 @@
         "percentOfAmi": 30,
         "householdSize": 8,
         "income": 54270
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 1,
+        "income": 19180
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 2,
+        "income": 21920
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 3,
+        "income": 24660
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 4,
+        "income": 27400
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 5,
+        "income": 29600
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 6,
+        "income": 31800
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 7,
+        "income": 33980
+      },
+      {
+        "percentOfAmi": 20,
+        "householdSize": 8,
+        "income": 36180
       }
     ]
   }
