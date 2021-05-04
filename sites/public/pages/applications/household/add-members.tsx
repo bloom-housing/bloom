@@ -69,6 +69,9 @@ export default () => {
           <h2 className="form-card__title is-borderless mt-4">
             {t("application.household.addMembers.title")}
           </h2>
+          {application.autofilled && (
+            <p className="mt-4 field-note">{t("application.household.addMembers.doubleCheck")}</p>
+          )}
         </div>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -87,6 +90,7 @@ export default () => {
             <HouseholdMemberForm
               member={applicant}
               type={t("application.household.primaryApplicant")}
+              editMode={!application.autofilled}
             />
             {membersSection}
           </div>

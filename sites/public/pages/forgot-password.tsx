@@ -72,12 +72,7 @@ const ForgotPassword = () => {
             />
 
             <div className="text-center mt-6">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  //
-                }}
-              >
+              <Button styleType={AppearanceStyleType.primary}>
                 {t("authentication.forgotPassword.sendEmail")}
               </Button>
             </div>

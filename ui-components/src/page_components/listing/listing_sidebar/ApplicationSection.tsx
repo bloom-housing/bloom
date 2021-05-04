@@ -26,14 +26,14 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
   if (nowTime > dueDate) return null
 
   return (
-    <div>
+    <>
       {showWaitlist(listing) && (
-        <section className="aside-block bg-primary-lighter border-t">
+        <section className="aside-block is-tinted">
           <Waitlist listing={listing} />
         </section>
       )}
       <Apply listing={listing} internalFormRoute={props.internalFormRoute} />
-    </div>
+    </>
   )
 }
 

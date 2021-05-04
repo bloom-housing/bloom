@@ -26,14 +26,14 @@ describe("Listings", () => {
 
   it("should return all listings", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    expect(res.body.length).toEqual(2)
+    expect(res.body.length).toEqual(3)
   })
 
   it("should return only the specified listings", async () => {
     const query =
       "/?jsonpath=%24%5B%3F%28%40.applicationAddress.city%3D%3D%22Foster%20City%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.length).toEqual(2)
+    expect(res.body.length).toEqual(3)
     expect(res.body[0].applicationAddress.city).toEqual("Foster City")
   })
 
@@ -46,7 +46,7 @@ describe("Listings", () => {
   it("should return only active listings", async () => {
     const query = "/?jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.length).toEqual(2)
+    expect(res.body.length).toEqual(3)
   })
 
   afterEach(() => {

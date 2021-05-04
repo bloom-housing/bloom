@@ -3,6 +3,7 @@ import { GridSection } from "../sections/GridSection"
 
 import "./StatusAside.scss"
 
+// Ensure each action has a unique key
 export interface StatusAsideProps {
   actions: React.ReactNode[]
   columns?: number

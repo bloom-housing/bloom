@@ -12,6 +12,7 @@ import {
   LinkButton,
   FormCard,
   ProgressNav,
+  UserContext,
   t,
   Form,
 } from "@bloom-housing/ui-components"
@@ -34,12 +35,13 @@ export default () => {
   const [listing, setListing] = useState(null)
   const [newLocale, setNewLocale] = useState("")
   const context = useContext(AppSubmissionContext)
+  const { initialStateLoaded, profile } = useContext(UserContext)
   const { conductor, application } = context
 
   const listingId = router.query.listingId
 
   useEffect(() => {
-    if (!context.listing) {
+    if (!context.listing || context.listing.id != listingId) {
       void loadListing(listingId, setListing, conductor, context)
     } else {
       setListing(context.listing)
@@ -77,7 +79,7 @@ export default () => {
         />
       </FormCard>
 
-      <FormCard>
+      <FormCard className="overflow-hidden">
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">
             {t("application.chooseLanguage.letsGetStarted")}
@@ -114,19 +116,21 @@ export default () => {
             </div>
           </Form>
 
-          <div className="form-card__pager-row primary px-4 border-t border-gray-450">
-            <h2 className="form-card__title w-full border-none pt-0 mt-0">
-              {t("account.haveAnAccount")}
-            </h2>
+          {initialStateLoaded && !profile && (
+            <div className="form-card__pager-row primary px-4 border-t border-gray-450">
+              <h2 className="form-card__title w-full border-none pt-0 mt-0">
+                {t("account.haveAnAccount")}
+              </h2>
 
-            <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
+              <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
 
-            <div>
-              <LinkButton href="/sign-in?redirectUrl=/applications/start/choose-language">
-                {t("nav.signIn")}
-              </LinkButton>
+              <div>
+                <LinkButton href="/sign-in?redirectUrl=/applications/start/choose-language">
+                  {t("nav.signIn")}
+                </LinkButton>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </FormCard>
     </FormsLayout>

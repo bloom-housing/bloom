@@ -8,7 +8,6 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserService } from "../user/user.service"
 import { User } from "../user/entities/user.entity"
 import { ListingsService } from "../listings/listings.service"
-import { ApplicationsService } from "../applications/applications.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
 import { ConfigModule } from "@nestjs/config"
@@ -21,6 +20,8 @@ import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { AuthzService } from "../auth/authz.service"
 import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/application-flagged-set.entity"
+import { ApplicationsModule } from "../applications/applications.module"
+import { ThrottlerModule } from "@nestjs/throttler"
 
 @Module({})
 export class SeederModule {
@@ -29,10 +30,16 @@ export class SeederModule {
     return {
       module: SeederModule,
       imports: [
+        ApplicationsModule,
         UserModule,
         ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot({
           ...dbConfig,
+        }),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          ignoreUserAgents: [/^node-superagent.*$/],
         }),
         TypeOrmModule.forFeature([
           Listing,
@@ -51,7 +58,6 @@ export class SeederModule {
         ApplicationFlaggedSetsService,
         UserService,
         ListingsService,
-        ApplicationsService,
         CsvBuilder,
         CsvEncoder,
       ],

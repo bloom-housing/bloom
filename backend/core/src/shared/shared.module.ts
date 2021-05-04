@@ -1,18 +1,20 @@
 import { Module } from "@nestjs/common"
 import { SendGridModule } from "@anchan828/nest-sendgrid"
-import { EmailService } from "./email.service"
+import { EmailService } from "./services/email.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import Joi from "joi"
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       validationSchema: Joi.object({
-        EMAIL_API_KEY: Joi.string().required(),
-        EMAIL_FROM_ADDRESS: Joi.string().required(),
+        PORT: Joi.number().default(3100).required(),
         NODE_ENV: Joi.string()
           .valid("development", "staging", "production", "test")
           .default("development"),
+        DATABASE_URL: Joi.string().required(),
+        REDIS_TLS_URL: Joi.string().required(),
       }),
     }),
     SendGridModule.forRootAsync({

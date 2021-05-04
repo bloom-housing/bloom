@@ -11,13 +11,16 @@ import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-except
 import { logger } from "./middleware/logger.middleware"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
-import { ConfigModule } from "@nestjs/config"
-import Joi from "joi"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
 import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import { ApplicationFlaggedSetsModule } from "./application-flagged-sets/application-flagged-sets.module"
 import * as bodyParser from "body-parser"
+import { ThrottlerModule } from "@nestjs/throttler"
+import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
+import Redis from "ioredis"
+import { SharedModule } from "./shared/shared.module"
+import { TranslationsModule } from "./translations/translations.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -33,21 +36,37 @@ export function applicationSetup(app: INestApplication) {
 })
 export class AppModule {
   static register(dbOptions): DynamicModule {
+    /**
+     * DEV NOTE:
+     * This configuration is required due to issues with
+     * self signed certificates in Redis 6.
+     *
+     * { rejectUnauthorized: false } option is intentional and required
+     *
+     * Read more:
+     * https://help.heroku.com/HC0F8CUS/redis-connection-issues
+     * https://devcenter.heroku.com/articles/heroku-redis#ioredis-module
+     */
+    const redis =
+      "0" === process.env.REDIS_USE_TLS
+        ? new Redis(process.env.REDIS_URL)
+        : new Redis(process.env.REDIS_TLS_URL, {
+            tls: {
+              rejectUnauthorized: false,
+            },
+          })
+
     return {
       module: AppModule,
       imports: [
-        ConfigModule.forRoot({
-          validationSchema: Joi.object({
-            PORT: Joi.number().default(3100).required(),
-            NODE_ENV: Joi.string()
-              .valid("development", "staging", "production", "test")
-              .default("development"),
-            DATABASE_URL: Joi.string().required(),
-          }),
-        }),
         TypeOrmModule.forRoot({
           ...dbOptions,
           autoLoadEntities: true,
+        }),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          storage: new ThrottlerStorageRedisService(redis),
         }),
         UserModule,
         AuthModule,
@@ -58,6 +77,8 @@ export class AppModule {
         PropertiesModule,
         PropertyGroupsModule,
         AmiChartsModule,
+        SharedModule,
+        TranslationsModule,
       ],
     }
   }

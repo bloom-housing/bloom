@@ -156,14 +156,7 @@ const Demographics = () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  //
-                }}
-              >
-                Next
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>Next</Button>
             </div>
           </div>
 

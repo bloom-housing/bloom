@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import useSWR from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
@@ -35,16 +35,36 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData(pageIndex: number, limit = 10, listingId: string, search = "") {
+export function useApplicationsData(
+  pageIndex: number,
+  limit = 10,
+  listingId: string,
+  search: string
+) {
   const { applicationsService } = useContext(ApiClientContext)
-  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}&search=${search}`
-  const fetcher = () =>
-    applicationsService.list({
-      listingId,
-      page: pageIndex,
-      limit,
-      search,
-    })
+
+  const searchParams = new URLSearchParams()
+  searchParams.append("listingId", listingId)
+  searchParams.append("page", pageIndex.toString())
+  searchParams.append("limit", limit.toString())
+
+  if (search) {
+    searchParams.append("search", search)
+  }
+
+  const endpoint = `${process.env.backendApiBase}/applications?${searchParams.toString()}`
+
+  const params = {
+    listingId,
+    page: pageIndex,
+    limit,
+  }
+
+  if (search) {
+    Object.assign(params, search)
+  }
+
+  const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
 
   return {
@@ -65,54 +85,5 @@ export function useSingleApplicationData(applicationId: string) {
     application: data,
     applicationLoading: !error && !data,
     applicationError: error,
-  }
-}
-
-export function useListAsCsv(listingId: string, includeHeaders: boolean) {
-  const [loading, setLoading] = useState(false)
-
-  const { applicationsService } = useContext(ApiClientContext)
-  const mutate = async () => {
-    setLoading(true)
-
-    try {
-      const res = await applicationsService.listAsCsv({ listingId, includeHeaders })
-      setLoading(false)
-
-      return res
-    } catch (error) {
-      console.error(error)
-      setLoading(false)
-    }
-  }
-
-  return {
-    mutate,
-    loading,
-  }
-}
-
-export function useFlaggedApplicationsList({
-  page,
-  limit,
-  listingId,
-}: UseSingleApplicationDataProps) {
-  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
-
-  const params = {
-    page,
-    limit,
-    listingId,
-  }
-
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets`
-  const fetcher = () => applicationFlaggedSetsService.list(params)
-
-  const { data, error } = useSWR(endpoint, fetcher)
-
-  return {
-    data,
-    error,
-    loading: !error && !data,
   }
 }

@@ -8,7 +8,7 @@ const DownloadLotteryResults = (props: { event: ListingEvent }) => {
   return (
     <>
       {event && event.url && (
-        <section className="aside-block -mx-4 pt-0 md:mx-0 md:pt-4 text-center">
+        <section className="aside-block text-center">
           <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
           <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">
             {moment(event.startTime).format("MMMM D, YYYY")}

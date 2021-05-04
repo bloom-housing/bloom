@@ -153,10 +153,10 @@ export const unitsListWithDisabledAccordion = () => {
 }
 
 const unitSummariesHeaders = {
-  unitType: "Unit Type",
-  minimumIncome: "Minimum Income",
-  rent: "Rent",
-  availability: "Availability",
+  unitType: "t.unitType",
+  minimumIncome: "t.minimumIncome",
+  rent: "t.rent",
+  availability: "t.availability",
 }
 
 const amiValues = summaries.amiPercentages

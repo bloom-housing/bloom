@@ -3,7 +3,7 @@ import { IsDefined, IsString, IsUUID, ValidateNested } from "class-validator"
 import { IdDto } from "../../shared/dto/id.dto"
 import { PropertyGroup } from "../entities/property-group.entity"
 import { OmitType } from "@nestjs/swagger"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class PropertyGroupDto extends OmitType(PropertyGroup, ["properties"] as const) {
   @Expose()

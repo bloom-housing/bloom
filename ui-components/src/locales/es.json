@@ -41,6 +41,12 @@
       "chooseYourLanguage": "Elija su idioma",
       "signInSaveTime": "Iniciar sesión podría ahorrarle tiempo al empezar con los detalles de su última solicitud, y permitirle verificar el estatus de esta solicitud en cualquier momento."
     },
+    "autofill": {
+      "saveTime": "Ahorre tiempo cargando los detalles de su última solicitud",
+      "prefillYourApplication": "Simplemente rellenaremos automáticamente su solicitud con los siguientes detalles, y usted puede actualizarlos mientras los vaya completando.",
+      "start": "Empezar con estos detalles",
+      "reset": "Empezar de cero"
+    },
     "start": {
       "whatToExpect": {
         "title": "Esto es lo que puede esperar de esta solicitud.",
@@ -230,6 +236,10 @@
           "link": "http://domain.com"
         }
       },
+      "displacedTenant": {
+        "whichHouseholdMember": "¿Qué miembro del hogar solicita esta preferencia?",
+        "whatAddress": "¿De qué dirección fue desplazado el miembro del hogar?"
+      },
       "general": {
         "title": "En base a la información que usted ingresó, su hogar no ha solicitado ninguna preferencia de vivienda.",
         "preamble": "Estará en el grupo general de solicitantes."
@@ -332,7 +342,7 @@
     "timeout": {
       "text": "Para proteger su identidad, su sesión concluirá en un minuto debido a inactividad. Si decide no responder, perderá toda la información que no haya guardado.",
       "action": "Seguir trabajando",
-      "afterMessage": "Su seguridad es importante para nosotros. Concluimos su sesión debido a inactividad. Sírvase volver a iniciar sesión o empiece una nueva solicitud para continuar."
+      "afterMessage": "Su seguridad es importante para nosotros. Concluimos su sesión debido a inactividad. Sírvase iniciar una nueva solicitud para continuar."
     },
     "continueApplication": "Continuar la solicitud",
     "applicationNeverSubmitted": "Su solicitud nunca fue enviada",
@@ -458,6 +468,11 @@
     "householdSize": "Tamaño del hogar",
     "importantProgramRules": "Reglas importantes del programa",
     "includesPriorityUnits": "Incluye viviendas prioritarias para %{priorities}",
+    "lotteryResults": {
+      "completeResultsWillBePosted": "Los resultados de la lotería serán publicados pronto.",
+      "downloadResults": "Descargar resultados",
+      "header": "Resultados de la lotería"
+    },
     "maxIncomeMonth": "Ingresos máximos / Mes",
     "maxIncomeYear": "Ingresos máximos / Año",
     "moreBuildingSelectionCriteria": "Obtenga más información sobre los Criterios de Selección de Edificaciones",
@@ -721,7 +736,7 @@
     "seeRentalListings": "Ver viviendas en alquiler",
     "title": "Haga su solicitud de vivienda de precio accesible en",
     "seeMoreOpportunities": "Ver más oportunidades de alquiler y propiedad de vivienda",
-    "viewAdditionalHousing": "Ver detalles adicionales sobre la vivienda"
+    "viewAdditionalHousing": "Vea Oportunidades y recursos adicionales de vivienda"
   },
   "whatToExpect": {
     "label": "Lo que puede esperar",

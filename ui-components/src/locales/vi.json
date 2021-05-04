@@ -38,6 +38,12 @@
       "chooseYourLanguage": "Lựa chọn Ngôn ngữ của Quý vị",
       "signInSaveTime": "Việc đăng nhập có thể giúp quý vị tiết kiệm thời gian bằng cách bắt đầu với các thông tin chi tiết về đơn ghi danh gần đây nhất của quý vị và cho phép quý vị kiểm tra trạng thái của đơn ghi danh này bất kỳ lúc nào."
     },
+    "autofill": {
+      "saveTime": "Tiết kiệm thời gian bằng cách sử dụng các chi tiết từ đơn lần trước của quý vị",
+      "prefillYourApplication": "Chúng tôi sẽ điền trước đơn của quý vị với những thông tin chi tiết sau, và quý vị có thể cập nhật các thông tin đó trong quá trình làm đơn.",
+      "start": "Bắt đầu với Những Chi tiết Này",
+      "reset": "Thiết lập lại và bắt đầu từ đầu"
+    },
     "start": {
       "whatToExpect": {
         "title": "Dưới đây là những điều sẽ xảy ra trong đơn ghi danh này.",
@@ -227,6 +233,10 @@
           "link": "http://domain.com"
         }
       },
+      "displacedTenant": {
+        "whichHouseholdMember": "Thành viên hộ gia đình nào đang yêu cầu lựa chọn này?",
+        "whatAddress": "Địa chỉ mà thành viên hộ gia đình này đã chuyển khỏi là gì?"
+      },
       "general": {
         "title": "Dựa trên thông tin quý vị đã nhập, hộ gia đình của quý vị chưa yêu cầu bất kỳ lựa chọn ưu tiên nhà ở nào.",
         "preamble": "Quý vị sẽ thuộc nhóm các ứng viên chung."
@@ -329,7 +339,7 @@
     "timeout": {
       "text": "Để bảo vệ danh tính của quý vị, phiên truy cập của quý vị sẽ hết hạn sau một phút do không có hoạt động. Quý vị sẽ mất mọi thông tin chưa được lưu nếu quý vị lựa chọn không trả lời.",
       "action": "Tiếp tục làm đơn",
-      "afterMessage": "Chúng tôi quan tâm đến sự bảo mật của quý vị. Chúng tôi đã chấm dứt phiên truy cập của quý vị do không có hoạt động nào. Vui lòng đăng nhập hoặc bắt đầu làm một đơn ghi danh mới để tiếp tục."
+      "afterMessage": "Chúng tôi quan tâm đến sự bảo mật của quý vị. Chúng tôi đã chấm dứt phiên truy cập của quý vị do không có hoạt động nào. Vui lòng bắt đầu làm một đơn ghi danh mới để tiếp tục."
     },
     "continueApplication": "Tiếp tục làm Đơn ghi danh",
     "applicationNeverSubmitted": "Đơn ghi danh của quý vị chưa bao giờ được gửi",
@@ -458,6 +468,11 @@
     "householdSize": "Quy mô Hộ Gia đình",
     "importantProgramRules": "Các Quy tắc Quan trọng của Chương trình",
     "includesPriorityUnits": "Bao gồm các Căn nhà Ưu tiên cho %{priorities}",
+    "lotteryResults": {
+      "completeResultsWillBePosted": "Toàn bộ kết quả quay xổ số sẽ sớm được đăng.",
+      "downloadResults": "Tải xuống Kết quả",
+      "header": "Kết quả Xổ số"
+    },
     "maxIncomeMonth": "Thu nhập Tối đa / Tháng",
     "maxIncomeYear": "Thu nhập Tối đa / Năm",
     "moreBuildingSelectionCriteria": "Tìm hiểu thêm về Tiêu chí Lựa chọn Tòa nhà",
@@ -720,7 +735,7 @@
     "seeRentalListings": "Xem Thông tin Thuê nhà",
     "title": "Ghi danh nhà ở giá phải chăng tại",
     "seeMoreOpportunities": "Xem thêm cơ hội thuê nhà và sở hữu nhà ở",
-    "viewAdditionalHousing": "Xem Thông tin Chi tiết Bổ sung về Nhà ở"
+    "viewAdditionalHousing": "Xem Các Cơ hội Nhà ở và các Nguồn Hỗ trợ Bổ sung"
   },
   "whatToExpect": {
     "label": "Những điều Sẽ xảy ra",

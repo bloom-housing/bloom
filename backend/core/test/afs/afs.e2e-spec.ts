@@ -6,7 +6,7 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EmailService } from "../../src/shared/email.service"
+import { EmailService } from "../../src/shared/services/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
@@ -15,12 +15,11 @@ import dbOptions = require("../../ormconfig.test")
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
-import {
-  ApplicationFlaggedSet,
-  FlaggedSetStatus,
-  Rule,
-} from "../../src/application-flagged-sets/entities/application-flagged-set.entity"
+import { ThrottlerModule } from "@nestjs/throttler"
+import { ApplicationFlaggedSet } from "../../src/application-flagged-sets/entities/application-flagged-set.entity"
 import { getTestAppBody } from "../lib/get-test-app-body"
+import { FlaggedSetStatus } from "../../src/application-flagged-sets/types/flagged-set-status-enum"
+import { Rule } from "../../src/application-flagged-sets/types/rule-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -36,9 +35,17 @@ describe("ApplicationFlaggedSets", () => {
   let householdMembersRepository: Repository<HouseholdMember>
   let listing1Id: string
 
+  const setupDb = async () => {
+    await householdMembersRepository.createQueryBuilder().delete().execute()
+    await applicationsRepository.createQueryBuilder().delete().execute()
+    await afsRepository.createQueryBuilder().delete().execute()
+  }
+
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    const testEmailService = { confirmation: async () => {} }
+    const testEmailService = {
+      confirmation: async () => {},
+    }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -47,6 +54,11 @@ describe("ApplicationFlaggedSets", () => {
         ListingsModule,
         ApplicationsModule,
         TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, HouseholdMember]),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          ignoreUserAgents: [/^node-superagent.*$/],
+        }),
       ],
     })
       .overrideProvider(EmailService)
@@ -66,12 +78,7 @@ describe("ApplicationFlaggedSets", () => {
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     const listings = await supertest(app.getHttpServer()).get("/listings").expect(200)
     listing1Id = listings.body[0].id
-  })
-
-  beforeEach(async () => {
-    await householdMembersRepository.createQueryBuilder().delete().execute()
-    await applicationsRepository.createQueryBuilder().delete().execute()
-    await afsRepository.createQueryBuilder().delete().execute()
+    await setupDb()
   })
 
   it(`should mark two similar application as flagged`, async () => {
@@ -138,15 +145,23 @@ describe("ApplicationFlaggedSets", () => {
       apps.push(appRes)
     }
 
-    const afses = await supertest(app.getHttpServer())
+    let afses = await supertest(app.getHttpServer())
       .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
+
+    expect(afses.body.meta.totalFlagged).toBe(1)
 
     let resolveRes = await supertest(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
       .send({ afsId: afses.body.items[0].id, applications: [{ id: apps[0].body.id }] })
       .set(...setAuthorization(adminAccessToken))
       .expect(201)
+
+    afses = await supertest(app.getHttpServer())
+      .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
+      .set(...setAuthorization(adminAccessToken))
+
+    expect(afses.body.meta.totalFlagged).toBe(0)
 
     let resolvedAfs = resolveRes.body
     expect(resolvedAfs.status).toBe(FlaggedSetStatus.resolved)
@@ -165,14 +180,12 @@ describe("ApplicationFlaggedSets", () => {
     expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === false).length).toBe(1)
   })
 
-  afterEach(() => {
+  afterEach(async () => {
+    await setupDb()
     jest.clearAllMocks()
   })
 
   afterAll(async () => {
-    await householdMembersRepository.createQueryBuilder().delete().execute()
-    await applicationsRepository.createQueryBuilder().delete().execute()
-    await afsRepository.createQueryBuilder().delete().execute()
     await app.close()
   })
 })

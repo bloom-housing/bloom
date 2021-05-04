@@ -21,11 +21,12 @@ import {
 } from "class-validator"
 import { Listing } from "../../listings/entities/listing.entity"
 import { ApiProperty } from "@nestjs/swagger"
-import { Unit, UnitsSummarized } from "../../units/entities/unit.entity"
+import { Unit } from "../../units/entities/unit.entity"
 import { transformUnits } from "../../shared/units-transformations"
 import { PropertyGroup } from "../../property-groups/entities/property-group.entity"
 import { Address } from "../../shared/entities/address.entity"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { UnitsSummarized } from "../../units/types/units-summarized"
 
 @Entity()
 export class Property {
@@ -130,6 +131,12 @@ export class Property {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   unitAmenities: string | null
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  servicesOffered?: string | null
+
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -137,7 +144,7 @@ export class Property {
   yearBuilt: number | null
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ type: UnitsSummarized })
   get unitsSummarized(): UnitsSummarized | undefined {
     if (Array.isArray(this.units) && this.units.length > 0) {
       return transformUnits(this.units)

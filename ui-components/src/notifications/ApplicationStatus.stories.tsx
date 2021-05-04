@@ -39,6 +39,8 @@ days = 10
 listing2.applicationDueDate = moment().add(days, "days").format()
 export const openSoon = () => <ApplicationStatus listing={listing2} />
 
+export const openSoonVivid = () => <ApplicationStatus listing={listing2} vivid />
+
 const listing3 = Object.assign({}, Archer) as any
 days = 5
 listing3.applicationOpenDate = moment().subtract(days, "days").format()
@@ -57,3 +59,5 @@ days = 15
 listing5.applicationOpenDate = moment().subtract(days, "days").format()
 listing5.applicationDueDate = null
 export const openedWithFCFS = () => <ApplicationStatus listing={listing5} />
+
+export const openedWithFCFSVivid = () => <ApplicationStatus listing={listing5} vivid />

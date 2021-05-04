@@ -6,18 +6,19 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EmailService } from "../../src/shared/email.service"
+import { EmailService } from "../../src/shared/services/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
-import { InputType } from "../../src/shared/input-type"
+import { InputType } from "../../src/shared/types/input-type"
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
+import { ThrottlerModule } from "@nestjs/throttler"
 import { getTestAppBody } from "../lib/get-test-app-body"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -51,6 +52,11 @@ describe("Applications", () => {
         ListingsModule,
         ApplicationsModule,
         TypeOrmModule.forFeature([Application, HouseholdMember]),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 5,
+          ignoreUserAgents: [/^node-superagent.*$/],
+        }),
       ],
     })
       .overrideProvider(EmailService)
@@ -347,6 +353,51 @@ describe("Applications", () => {
     expect(res.body.items[0]).toMatchObject(createRes.body)
   })
 
+  it(`should allow an admin to search for users application using search query param with partial textquery`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.firstName = "John"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?search=joh`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].id === createRes.body.id)
+    expect(res.body.items[0]).toMatchObject(createRes.body)
+  })
+
+  it(`should allow an admin to search for users application using email as textquery`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.firstName = "John"
+    body.applicant.emailAddress = "john-doe@contact.com"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/applications/?search=john-doe@contact.com`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(Array.isArray(res.body.items)).toBe(true)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].id === createRes.body.id)
+    expect(res.body.items[0]).toMatchObject(createRes.body)
+  })
+
   it(`should allow exporting applications as CSV`, async () => {
     const body = getTestAppBody(listing1Id)
     const createRes = await supertest(app.getHttpServer())
@@ -497,6 +548,21 @@ describe("Applications", () => {
       .get(`/applications/?order=XYZ`)
       .set(...setAuthorization(adminAccessToken))
       .expect(400)
+  })
+
+  it(`should disallow a user to send too mutch application submits`, async () => {
+    const body = getTestAppBody(listing1Id)
+    const failAfter = 2
+
+    for (let i = 0; i < failAfter + 1; i++) {
+      const expect = i < failAfter ? 201 : 429
+      await supertest(app.getHttpServer())
+        .post(`/applications/submit`)
+        .set("User-Agent", "faked")
+        .send(body)
+        .set(...setAuthorization(user1AccessToken))
+        .expect(expect)
+    }
   })
 
   afterEach(async () => {

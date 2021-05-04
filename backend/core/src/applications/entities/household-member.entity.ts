@@ -13,7 +13,7 @@ import {
 } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 import { Application } from "./application.entity"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 @Entity()
 export class HouseholdMember extends AbstractEntity {

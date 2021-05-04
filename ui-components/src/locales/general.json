@@ -1,11 +1,43 @@
 {
   "account": {
     "accountSettings": "Account Settings",
+    "errorFetchingApplications": "Error fetching applications",
+    "noApplications": "It looks like you haven't applied to any listings yet.",
     "accountSettingsSubtitle": "Account Settings, email and password",
     "createAccount": "Create Account",
     "haveAnAccount": "Already have an account?",
     "myApplications": "My Applications",
-    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied"
+    "myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied",
+    "application": {
+      "confirmation": "Confirmation",
+      "error": "Error",
+      "noAccessError": "No application with that ID exists",
+      "noApplicationError": "No application with that ID exists",
+      "return": "Return to applications"
+    },
+    "settings": {
+      "passwordSuccess": "Password successfully updated",
+      "update": "Update",
+      "passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "alerts": {
+        "genericError": "There was an error. Please try again, or contact support for help.",
+        "nameSuccess": "Name update successful",
+        "dobSuccess": "Birthdate update successful",
+        "emailSuccess": "Email update successful",
+        "currentPassword": "Invalid current password. Please try again.",
+        "passwordSuccess": "Password update successful",
+        "passwordMatch": "New password fields do not match",
+        "passwordEmpty": "Password fields may not be empty"
+      },
+      "placeholders": {
+        "month": "MM",
+        "day": "DD",
+        "year": "YYYY"
+      }
+    }
   },
   "applications": {
     "begin": {
@@ -93,6 +125,11 @@
       "claimant": "Claimant",
       "displacedAddress": "Displaced Address"
     },
+    "referralApplication": {
+      "instructions": "The permanent supportive housing units are referred directly through <COUNTY> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+      "furtherInformation": "For further information",
+      "phoneNumber": "211"
+    },
     "details": {
       "applicationData": "Application Data",
       "number": "Application Number",
@@ -156,6 +193,12 @@
       "letsGetStarted": "Let’s get started on your application",
       "chooseYourLanguage": "Choose Your Language",
       "signInSaveTime": "Signing in could save you time by starting with details of your last application, and allow you to check the status of this application at any time."
+    },
+    "autofill": {
+      "saveTime": "Save time by using the details from your last application",
+      "prefillYourApplication": "We'll simply pre-fill your application with the following details, and you can make updates as you go.",
+      "start": "Start with these details",
+      "reset": "Reset and start fresh"
     },
     "name": {
       "title": "What's your name?",
@@ -239,7 +282,8 @@
       "addMembers": {
         "addHouseholdMember": "+ Add Household Member",
         "done": "Done adding people",
-        "title": "Tell us about your household."
+        "title": "Tell us about your household.",
+        "doubleCheck": "Please double-check the information for each household member."
       },
       "householdMember": "Household Member",
       "householdMembers": "Household Members",
@@ -351,6 +395,10 @@
           "label": "Displaced Tenant Housing Preference",
           "description": "Displaced Tenant copy goes here…",
           "link": "http://domain.com"
+        },
+        "missionCorridor": {
+          "label": "Mission Corridor",
+          "description": "Mission Corridor copy goes here…"
         }
       },
       "general": {
@@ -358,12 +406,8 @@
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "live": "Live",
-        "work": "Work",
-        "general": "Displacee Tenant",
-        "missionCorridor": "Mission Corridor",
-        "name": "Claimant",
-        "address": "Displaced Address"
+        "address": "Displaced Address",
+        "name": "Claimant"
       }
     },
     "review": {
@@ -471,7 +515,7 @@
     "timeout": {
       "text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information if you choose not to respond.",
       "action": "Continue working",
-      "afterMessage": "We care about your security. We ended your session due to inactivity. Please log in or start a new application to continue."
+      "afterMessage": "We care about your security. We ended your session due to inactivity. Please start a new application to continue."
     },
     "continueApplication": "Continue Application",
     "applicationNeverSubmitted": "Your application was never submitted",
@@ -523,6 +567,41 @@
       "forgotPassword": "Forgot password?",
       "success": "Welcome back, %{name}!"
     },
+    "createAccount": {
+      "accountConfirmed": "Your account was successfully confirmed.",
+      "anEmailHasBeenSent": "An email has been sent to %{email}",
+      "confirmationInstruction": "Please click on the link in the email we sent you in order to complete account creation.",
+      "confirmationNeeded": "Confirmation needed",
+      "emailSent": "Confirmation email has been sent. Please check your inbox.",
+      "yourName": "Your Name",
+      "firstName": "First Name",
+      "middleNameOptional": "Middle Name (optional)",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "yourDateOfBirth": "Your Date of Birth",
+      "email": "Email",
+      "emailPrivacy": "We will only use your email address to contact you about your application.",
+      "reEnterEmail": "Re-enter email address",
+      "reEnterPassword": "Re-enter your password",
+      "resendTheEmail": "Resend the email",
+      "linkExpired": "Your link has expired",
+      "mustBe8Chars": "Must be 8 characters",
+      "password": "Password",
+      "passwordInfo": "Must be at least 8 characters and include at least 1 letter and at least one number.",
+      "resendEmailInfo": "Please click on the link in the email we send you within 24 hours in order to complete account creation.",
+      "resendAnEmailTo": "Resend an email to",
+      "errors": {
+        "accountConfirmed": "Your account is already confirmed.",
+        "errorSaving": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
+        "emailInUse": "Email is already in use",
+        "emailMismatch": "The emails do not match",
+        "emailNotFound": "Email not found. Please register first.",
+        "passwordMismatch": "The passwords do not match",
+        "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
+        "tokenExpired": "Your link has expired.",
+        "tokenMissing": "Wrong token provided."
+      }
+    },
     "signOut": {
       "success": "You have successfully logged out of your account."
     }
@@ -559,7 +638,9 @@
     "selectOption": "Please select one of the options above.",
     "householdTooBig": "Your household size is too big.",
     "householdTooSmall": "Your household size is too small.",
-    "dateError": "Please enter a valid date"
+    "dateError": "Please enter a valid date",
+    "rateLimitExceeded": "Rate limit exceeded, try again later.",
+    "requiredFieldError": "This field is required."
   },
   "footer": {
     "contact": "Contact",
@@ -639,7 +720,7 @@
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
     "lotteryResults": {
-      "completeResultsWillBePosted": "Complete lottery results will be posted on this date by %{hour}.",
+      "completeResultsWillBePosted": "Complete lottery results will be posted soon.",
       "downloadResults": "Download Results",
       "header": "Lottery Results"
     },
@@ -670,7 +751,8 @@
     "reservedTypePlural": {
       "family": "families",
       "senior": "seniors",
-      "veteran": "veterans"
+      "veteran": "veterans",
+      "specialNeeds": "special needs"
     },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
@@ -699,6 +781,7 @@
     "showClosedListings": "Show Closed Listings",
     "singleRoomOccupancy": "Single Room Occupancy",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
+    "specialNotes": "Special Notes",
     "totalListings": "Total Listings",
     "unitTypes": {
       "oneBdrm": "1 BR",
@@ -880,6 +963,7 @@
     "none": "None",
     "noneFound": "None found.",
     "occupancy": "Occupancy",
+    "ok": "OK",
     "or": "or",
     "pageXofY": "Page %{num} of %{total}",
     "people": "people",
@@ -906,6 +990,7 @@
     "seeDetails": "See Details",
     "seeListing": "See Listing",
     "selectOne": "Select One",
+    "servicesOffered": "Services Offered",
     "show": "Show",
     "showLess": "show less",
     "showMore": "show more",
@@ -937,7 +1022,7 @@
     "seeRentalListings": "See Rentals",
     "title": "Apply for affordable housing in",
     "seeMoreOpportunities": "See more rental and ownership housing opportunities",
-    "viewAdditionalHousing": "View Additional Housing Details"
+    "viewAdditionalHousing": "View Additional Housing Opportunities and Resources"
   },
   "whatToExpect": {
     "label": "What to Expect",

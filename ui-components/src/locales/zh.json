@@ -38,6 +38,12 @@
       "chooseYourLanguage": "選擇您使用的語言",
       "signInSaveTime": "登入網站從上次申請的詳情開始，這可節省您的時間，並讓您隨時查看這次申請的進展情況。"
     },
+    "autofill": {
+      "saveTime": "使用上次申請中的詳細資料可節省時間",
+      "prefillYourApplication": "我們只要將以下詳細資料預先填入您的申請，您就可隨時隨地進行更新。",
+      "start": "開始使用這些詳細資料",
+      "reset": "重設並開始重新整理"
+    },
     "start": {
       "whatToExpect": {
         "title": "這次申請預期事項。",
@@ -227,6 +233,10 @@
           "link": "http://domain.com"
         }
       },
+      "displacedTenant": {
+        "whichHouseholdMember": "哪一位家庭成員在使用此優先權？",
+        "whatAddress": "這位家庭成員是從哪個地址被迫搬遷？"
+      },
       "general": {
         "title": "根據您填寫的資料，您的家庭沒有要求任何住房優先權。",
         "preamble": "您將被分配到一般申請人組別。"
@@ -329,7 +339,7 @@
     "timeout": {
       "text": "為了保護您的身份，您的工作階段將因閒置而在一分鐘後到期。如果您選擇不回應，則將失去任何未經儲存的資料。",
       "action": "繼續進行",
-      "afterMessage": "我們關心您的網上安全。由於網頁閒置，我們已結束您的工作階段。請登入或開始新的申請以便繼續。"
+      "afterMessage": "我們關心您的網上安全。由於網頁閒置，我們已結束您的工作階段。請展開全新申請以便繼續。"
     },
     "continueApplication": "繼續申請程序",
     "applicationNeverSubmitted": "您的申請從未提交",
@@ -458,6 +468,11 @@
     "householdSize": "家庭人數",
     "importantProgramRules": "重要計劃規則",
     "includesPriorityUnits": "包括為 %{priorities} 提供的優先單位",
+    "lotteryResults": {
+      "completeResultsWillBePosted": "全部抽籤結果將很快發佈。",
+      "downloadResults": "下載結果",
+      "header": "抽籤結果"
+    },
     "maxIncomeMonth": "最高收入 / 月",
     "maxIncomeYear": "最高收入 / 年",
     "moreBuildingSelectionCriteria": "了解「樓宇選擇標準」詳情",
@@ -720,7 +735,7 @@
     "seeRentalListings": "查看租賃部分",
     "title": "申請此地的可負擔房屋：",
     "seeMoreOpportunities": "查看更多租賃和自購住房的機會",
-    "viewAdditionalHousing": "查看其他住房詳情"
+    "viewAdditionalHousing": "瀏覽其他住房機會和資源"
   },
   "whatToExpect": {
     "label": "預期事項",

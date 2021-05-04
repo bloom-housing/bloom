@@ -15,42 +15,38 @@ export default {
   ],
 }
 
-const noop = () => {
-  // intentionally blank
-}
-
 export const AlertBoxAlert = () => (
-  <AlertBox onClose={noop} type="alert">
+  <AlertBox onClose={() => {}} type="alert">
     Some warning
   </AlertBox>
 )
 
 export const AlertBoxAlertInvert = () => (
-  <AlertBox onClose={noop} type="alert" inverted>
+  <AlertBox onClose={() => {}} type="alert" inverted>
     Some warning
   </AlertBox>
 )
 
 export const AlertBoxNotice = () => (
-  <AlertBox onClose={noop} type="notice">
+  <AlertBox onClose={() => {}} type="notice">
     Some warning
   </AlertBox>
 )
 
 export const AlertBoxNoticeInvert = () => (
-  <AlertBox onClose={noop} type="notice" inverted>
+  <AlertBox onClose={() => {}} type="notice" inverted>
     Some warning
   </AlertBox>
 )
 
 export const AlertBoxSuccess = () => (
-  <AlertBox onClose={noop} type="success">
+  <AlertBox onClose={() => {}} type="success">
     Some warning
   </AlertBox>
 )
 
 export const AlertBoxSuccessInvert = () => (
-  <AlertBox onClose={noop} type="success" inverted>
+  <AlertBox onClose={() => {}} type="success" inverted>
     Some warning
   </AlertBox>
 )

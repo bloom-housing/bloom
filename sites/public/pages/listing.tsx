@@ -35,6 +35,7 @@ import {
   LotteryResultsEvent,
   OpenHouseEvent,
   DownloadLotteryResults,
+  ReferralApplication,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import moment from "moment"
@@ -80,7 +81,9 @@ export default class extends Component<ListingProps> {
         return percentInt
       })
       .sort()
+
     const hmiHeaders = listing.property.unitsSummarized.hmi.columns as TableHeaders
+
     const hmiData = listing.property.unitsSummarized.hmi.rows.map((row) => {
       return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
     })
@@ -190,10 +193,6 @@ export default class extends Component<ListingProps> {
             </div>
           </header>
 
-          <div className="w-full md:w-2/3 mt-3 md:hidden bg-primary-light block text-center md:mx-3">
-            <ApplicationStatus listing={listing} />
-          </div>
-
           <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
             {amiValues.length > 1 &&
               amiValues.map((percent) => {
@@ -227,11 +226,15 @@ export default class extends Component<ListingProps> {
               />
             )}
           </div>
-          <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3">
-            <ApplicationSection
-              listing={listing}
-              internalFormRoute="/applications/start/choose-language"
-            />
+          <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
+            <ApplicationStatus listing={listing} />
+            <div className="mx-4">
+              <DownloadLotteryResults event={lotteryResults} />
+              <ApplicationSection
+                listing={listing}
+                internalFormRoute="/applications/start/choose-language"
+              />
+            </div>
           </div>
           <ListingDetails>
             <ListingDetailItem
@@ -305,11 +308,25 @@ export default class extends Component<ListingProps> {
                   <ApplicationStatus listing={listing} />
                   <DownloadLotteryResults event={lotteryResults} />
                   {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-                  <ApplicationSection
-                    listing={listing}
-                    internalFormRoute="/applications/start/choose-language"
-                  />
+                  {listing.applicationMethods.length > 0 ? (
+                    <ApplicationSection
+                      listing={listing}
+                      internalFormRoute="/applications/start/choose-language"
+                    />
+                  ) : (
+                    <ReferralApplication
+                      phoneNumber={t("application.referralApplication.phoneNumber")}
+                      description={t("application.referralApplication.instructions")}
+                      title={t("application.referralApplication.furtherInformation")}
+                    />
+                  )}
                 </div>
+
+                {openHouseEvents && (
+                  <div className="mb-2 md:hidden">
+                    <OpenHouseEvent events={openHouseEvents} />
+                  </div>
+                )}
                 {lotterySection}
                 <WhatToExpect listing={listing} />
                 <LeasingAgent listing={listing} />
@@ -342,6 +359,12 @@ export default class extends Component<ListingProps> {
                     term={t("t.unitAmenities")}
                     description={listing.property.unitAmenities}
                   />
+                  {listing.property.servicesOffered && (
+                    <Description
+                      term={t("t.servicesOffered")}
+                      description={listing.property.servicesOffered}
+                    />
+                  )}
                   <Description
                     term={t("t.accessibility")}
                     description={listing.property.accessibility}
@@ -376,7 +399,7 @@ export default class extends Component<ListingProps> {
                 </ListingDetailItem>
               )}
 
-            {(listing.requiredDocuments || listing.programRules) && (
+            {(listing.requiredDocuments || listing.programRules || listing.specialNotes) && (
               <ListingDetailItem
                 imageAlt={t("listings.additionalInformationEnvelope")}
                 imageSrc="/images/listing-legal.svg"
@@ -401,6 +424,17 @@ export default class extends Component<ListingProps> {
                       <p className="text-sm text-gray-700">
                         <Markdown
                           children={listing.programRules}
+                          options={{ disableParsingRawHTML: true }}
+                        />
+                      </p>
+                    </div>
+                  )}
+                  {listing.specialNotes && (
+                    <div className="info-card">
+                      <h3 className="text-serif-lg">{t("listings.specialNotes")}</h3>
+                      <p className="text-sm text-gray-700">
+                        <Markdown
+                          children={listing.specialNotes}
                           options={{ disableParsingRawHTML: true }}
                         />
                       </p>
