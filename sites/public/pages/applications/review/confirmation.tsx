@@ -3,13 +3,13 @@
 Application confirmation with lottery number (confirmation number)
 */
 import Link from "next/link"
-// import { useRouter } from "next/router"
+import { useRouter } from "next/router"
 import {
-  // AppearanceStyleType,
-  // Button,
+  AppearanceStyleType,
+  Button,
   FormCard,
   imageUrlFromListing,
-  // UserContext,
+  UserContext,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -18,8 +18,8 @@ import React, { useContext } from "react"
 
 export default () => {
   const { application, listing } = useContext(AppSubmissionContext)
-  // const { initialStateLoaded, profile } = useContext(UserContext)
-  // const router = useRouter()
+  const { initialStateLoaded, profile } = useContext(UserContext)
+  const router = useRouter()
 
   const imageUrl = imageUrlFromListing(listing)
 
@@ -74,7 +74,7 @@ export default () => {
           )}
         </div>
 
-        {/* {initialStateLoaded && !profile && (
+        {initialStateLoaded && !profile && (
           <div className="form-card__group">
             <h3 className="form-card__paragraph-title">
               {t("application.review.confirmation.createAccountTitle")}
@@ -84,10 +84,10 @@ export default () => {
               {t("application.review.confirmation.createAccountParagraph")}
             </p>
           </div>
-        )} */}
+        )}
 
         <div className="form-card__pager">
-          {/* {initialStateLoaded && !profile && (
+          {initialStateLoaded && !profile && (
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
@@ -98,7 +98,7 @@ export default () => {
                 {t("account.createAccount")}
               </Button>
             </div>
-          )} */}
+          )}
 
           <div className="form-card__pager-row py-6">
             <a className="lined text-tiny" href="/">
