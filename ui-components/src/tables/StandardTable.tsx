@@ -36,9 +36,18 @@ export interface StandardTableProps {
 export const StandardTable = (props: StandardTableProps) => {
   const { headers, data, cellClassName } = props
 
+  // Translation strings are optionally passed in with arguments with format `key,argumentName:argumentValue`
+  const getTranslatedHeader = (headerKey: string) => {
+    if (headerKey.indexOf(",") >= 0) {
+      const translation = headerKey.split(",")
+      const argument = translation[1].split(":")
+      return t(translation[0], { [argument[0]]: argument[1] })
+    } else return t(headerKey)
+  }
+
   const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <HeaderCell key={uniqKey}>{t(header)}</HeaderCell>
+    return <HeaderCell key={uniqKey}>{getTranslatedHeader(header)}</HeaderCell>
   })
 
   const body = data.map((row: Record<string, React.ReactNode>, dataIndex) => {
@@ -51,7 +60,11 @@ export const StandardTable = (props: StandardTableProps) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const cell = row[colKey]
       return (
-        <Cell key={uniqKey} headerLabel={t(headers[colKey])} className={cellClassName}>
+        <Cell
+          key={uniqKey}
+          headerLabel={getTranslatedHeader(headers[colKey])}
+          className={cellClassName}
+        >
           {cell}
         </Cell>
       )
