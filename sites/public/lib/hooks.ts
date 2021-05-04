@@ -1,16 +1,19 @@
 import { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import { AppSubmissionContext } from "./AppSubmissionContext"
+import { ParsedUrlQuery } from "querystring"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
 
-  return (queryParams: Record<string, any> = {}) => {
+  return (queryParams: ParsedUrlQuery = {}) => {
     const redirectUrl = router.query.redirectUrl
+    const redirectParams = { ...queryParams }
+    if (router.query.listingId) redirectParams.listingId = router.query.listingId
 
     return router.push({
       pathname: redirectUrl && typeof redirectUrl === "string" ? redirectUrl : defaultPath,
-      query: queryParams,
+      query: redirectParams,
     })
   }
 }
