@@ -9,10 +9,10 @@ import {
   Button,
   ImageCard,
   imageUrlFromListing,
-  // LinkButton,
+  LinkButton,
   FormCard,
   ProgressNav,
-  // UserContext,
+  UserContext,
   t,
   Form,
 } from "@bloom-housing/ui-components"
@@ -35,7 +35,7 @@ export default () => {
   const [listing, setListing] = useState(null)
   const [newLocale, setNewLocale] = useState("")
   const context = useContext(AppSubmissionContext)
-  // const { initialStateLoaded, profile } = useContext(UserContext)
+  const { initialStateLoaded, profile } = useContext(UserContext)
   const { conductor, application } = context
 
   const listingId = router.query.listingId as string
@@ -116,7 +116,7 @@ export default () => {
             </div>
           </Form>
 
-          {/* {initialStateLoaded && !profile && (
+          {initialStateLoaded && !profile && (
             <div className="form-card__pager-row primary px-4 border-t border-gray-450">
               <h2 className="form-card__title w-full border-none pt-0 mt-0">
                 {t("account.haveAnAccount")}
@@ -130,7 +130,7 @@ export default () => {
                 </LinkButton>
               </div>
             </div>
-          )} */}
+          )}
         </div>
       </FormCard>
     </FormsLayout>
