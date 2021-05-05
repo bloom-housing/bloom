@@ -19,14 +19,12 @@ interface IndexProps {
 }
 
 export default function Home(props: IndexProps) {
-  const blankAlertInfo = () => {
-    return {
-      alertMessage: null,
-      alertType: null,
-    }
+  const blankAlertInfo = {
+    alertMessage: null,
+    alertType: null,
   }
 
-  const [alertInfo, setAlertInfo] = useState(blankAlertInfo())
+  const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
 
   const heroTitle = (
     <>
@@ -50,7 +48,7 @@ export default function Home(props: IndexProps) {
       {alertInfo.alertMessage && (
         <AlertBox
           className=""
-          onClose={() => setAlertInfo(blankAlertInfo())}
+          onClose={() => setAlertInfo(blankAlertInfo)}
           type={alertInfo.alertType}
         >
           {alertInfo.alertMessage}

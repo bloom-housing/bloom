@@ -10,12 +10,9 @@ export const useRedirectToPrevPage = (defaultPath = "/") => {
     const redirectUrl =
       typeof router.query.redirectUrl === "string" && isInternalLink(router.query.redirectUrl)
         ? router.query.redirectUrl
-        : null
+        : defaultPath
 
-    return router.push({
-      pathname: redirectUrl || defaultPath,
-      query: queryParams,
-    })
+    return router.push({ pathname: redirectUrl, query: queryParams })
   }
 }
 
