@@ -71,8 +71,12 @@ const Layout = (props) => {
 
       <SiteFooter>
         <FooterNav copyright={t("footer.copyright")}>
-          <Link href="/privacy">{t("pageTitle.privacy")}</Link>
-          <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
+          <Link href="/privacy">
+            <a>{t("pageTitle.privacy")}</a>
+          </Link>
+          <Link href="/disclaimer">
+            <a>{t("pageTitle.disclaimer")}</a>
+          </Link>
         </FooterNav>
         <FooterSection className="bg-black" small>
           <ExygyFooter />
