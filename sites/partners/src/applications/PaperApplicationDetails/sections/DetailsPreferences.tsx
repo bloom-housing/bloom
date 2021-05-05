@@ -33,12 +33,12 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
       columns={2}
     >
       {listingPreferences?.map((listingPreference) => {
-        const optionKey = listingPreference?.formMetadata?.key
-        const optionDetails = preferences.find((item) => item.key === optionKey)
+        const metaKey = listingPreference?.formMetadata?.key
+        const optionDetails = preferences.find((item) => item.key === metaKey)
 
         return (
           <GridCell key={listingPreference.id}>
-            <ViewItem label={listingPreference.title}>
+            <ViewItem label={t(`application.preferences.${metaKey}.title`)}>
               {(() => {
                 if (!optionDetails?.claimed) return t("t.none")
 
@@ -48,10 +48,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                   const extra = option.extraData?.map((extra) => {
                     if (extra.type === InputType.text)
                       return (
-                        <ViewItem
-                          key={extra.key}
-                          label={t(`application.preferences.options.${extra.key}`)}
-                        >
+                        <ViewItem key={extra.key} label={t(`application.preferences.options.name`)}>
                           {extra.value}
                         </ViewItem>
                       )
@@ -83,7 +80,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
 
                   return (
                     <div key={option.key}>
-                      <p>{t(`application.preferences.options.${option.key}`)}</p>
+                      <p>{t(`application.preferences.${metaKey}.${option.key}.label`)}</p>
                       <div className="my-5">{extra}</div>
                     </div>
                   )

@@ -377,6 +377,7 @@
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
       "liveWork": {
+        "title": "Live or Work in <REGION>",
         "live": {
           "label": "Live in <REGION> Preference",
           "description": "Live in <REGION> copy goes here…",
@@ -389,6 +390,7 @@
         }
       },
       "displacedTenant": {
+        "title": "Displaced Tenant Housing Preference",
         "whichHouseholdMember": "Which household member is claiming this preference?",
         "whatAddress": "What address was the household member displaced from?",
         "general": {
