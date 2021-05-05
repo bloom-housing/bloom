@@ -13,7 +13,7 @@ import {
   ApiClientContext,
   SiteAlert,
   setSiteAlertMessage,
-  ListingSecondaryNav,
+  ApplicationSecondaryNav,
 } from "@bloom-housing/ui-components"
 import { useApplicationsData, useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
@@ -195,7 +195,7 @@ const ApplicationsList = () => {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <ListingSecondaryNav
+      <ApplicationSecondaryNav
         title={t("applications.applicationsReceived")}
         listingId={listingId}
         flagsQty={flaggedApps?.meta?.totalFlagged}
@@ -205,7 +205,7 @@ const ApplicationsList = () => {
             <SiteAlert type="alert" timeout={5000} dismissable />
           </div>
         )}
-      </ListingSecondaryNav>
+      </ApplicationSecondaryNav>
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">

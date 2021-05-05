@@ -79,7 +79,6 @@ export * from "./src/navigation/FooterNav"
 export * from "./src/navigation/LanguageNav"
 export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/UserNav"
-export * from "./src/navigation/ListingSecondaryNav"
 
 /* Notifications */
 export * from "./src/notifications/ApplicationStatus"
@@ -114,6 +113,7 @@ export * from "./src/page_components/listing/listing_sidebar/events/OpenHouseEve
 export * from "./src/page_components/listing/listing_sidebar/events/LotteryResultsEvent"
 export * from "./src/page_components/listing/listing_sidebar/events/PublicLotteryEvent"
 export * from "./src/page_components/listing/listing_sidebar/events/EventDateSection"
+export * from "./src/page_components/application/ApplicationSecondaryNav"
 
 /* Responsive Wrappers */
 export * from "./src/sections/ResponsiveWrappers"

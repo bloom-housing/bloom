@@ -5,7 +5,7 @@ import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
-import { t, ListingSecondaryNav } from "@bloom-housing/ui-components"
+import { t, ApplicationSecondaryNav } from "@bloom-housing/ui-components"
 import { getCols } from "../../../src/flags/flagSetsCols"
 
 const FlagsPage = () => {
@@ -37,7 +37,7 @@ const FlagsPage = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
 
-      <ListingSecondaryNav
+      <ApplicationSecondaryNav
         title={t("nav.flags")}
         listingId={listingId}
         flagsQty={data?.meta?.totalFlagged}

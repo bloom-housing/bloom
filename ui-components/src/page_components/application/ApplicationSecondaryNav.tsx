@@ -1,19 +1,19 @@
 import React from "react"
 import { PageHeader, t } from "@bloom-housing/ui-components"
 
-type ListingSecondaryNavProps = {
+type ApplicationSecondaryNavProps = {
   title: string
   listingId: string
   flagsQty: number
   children?: React.ReactChild
 }
 
-const ListingSecondaryNav = ({
+const ApplicationSecondaryNav = ({
   title,
   listingId,
   flagsQty,
   children,
-}: ListingSecondaryNavProps) => {
+}: ApplicationSecondaryNavProps) => {
   const elements = [
     {
       label: t("nav.applications"),
@@ -33,4 +33,4 @@ const ListingSecondaryNav = ({
   )
 }
 
-export { ListingSecondaryNav as default, ListingSecondaryNav }
+export { ApplicationSecondaryNav as default, ApplicationSecondaryNav }
