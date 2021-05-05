@@ -68,7 +68,9 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
                           id={getPreferenceOptionName(preference.formMetadata.key, option.key)}
                           name={getPreferenceOptionName(preference.formMetadata.key, option.key)}
                           type="checkbox"
-                          label={t(`application.preferences.options.${option.key}`)}
+                          label={t(
+                            `application.preferences.${preference?.formMetadata?.key}.${option.key}.label`
+                          )}
                           register={register}
                           inputProps={{
                             onChange: () => {
