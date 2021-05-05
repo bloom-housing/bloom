@@ -5,9 +5,15 @@ type ListingSecondaryNavProps = {
   title: string
   listingId: string
   flagsQty: number
+  children?: React.ReactChild
 }
 
-const ListingSecondaryNav = ({ title, listingId, flagsQty }: ListingSecondaryNavProps) => {
+const ListingSecondaryNav = ({
+  title,
+  listingId,
+  flagsQty,
+  children,
+}: ListingSecondaryNavProps) => {
   const elements = [
     {
       label: t("nav.applications"),
@@ -20,7 +26,11 @@ const ListingSecondaryNav = ({ title, listingId, flagsQty }: ListingSecondaryNav
     },
   ]
 
-  return <PageHeader title={title} tabNav={elements} />
+  return (
+    <PageHeader title={title} tabNav={elements}>
+      {children}
+    </PageHeader>
+  )
 }
 
 export { ListingSecondaryNav as default, ListingSecondaryNav }

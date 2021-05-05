@@ -37,11 +37,10 @@ const FlagsPage = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
 
-      {/* TODO: replace with correct total FLAGGED items */}
       <ListingSecondaryNav
         title={t("nav.flags")}
         listingId={listingId}
-        flagsQty={data?.meta?.totalItems}
+        flagsQty={data?.meta?.totalFlagged}
       />
 
       <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4 w-full">

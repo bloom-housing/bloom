@@ -4,9 +4,9 @@ import useSWR from "swr"
 import { ApiClientContext } from "@bloom-housing/ui-components"
 
 type UseSingleApplicationDataProps = {
+  listingId: string
   page?: number
   limit?: number
-  listingId: string
 }
 
 export function useSingleListingData(listingId: string) {
@@ -85,5 +85,28 @@ export function useSingleApplicationData(applicationId: string) {
     application: data,
     applicationLoading: !error && !data,
     applicationError: error,
+  }
+}
+
+export function useFlaggedApplicationsList({
+  listingId,
+  page,
+  limit,
+}: UseSingleApplicationDataProps) {
+  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets`
+  const fetcher = () =>
+    applicationFlaggedSetsService.list({
+      listingId,
+      page,
+      limit,
+    })
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    error,
   }
 }

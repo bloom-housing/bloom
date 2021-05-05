@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
 import {
-  PageHeader,
   Field,
   MetaTags,
   t,
@@ -14,8 +13,9 @@ import {
   ApiClientContext,
   SiteAlert,
   setSiteAlertMessage,
+  ListingSecondaryNav,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../../../lib/hooks"
+import { useApplicationsData, useFlaggedApplicationsList } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
@@ -43,6 +43,10 @@ const ApplicationsList = () => {
 
   const listingId = router.query.listing as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+
+  const { data: flaggedApps } = useFlaggedApplicationsList({
+    listingId,
+  })
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
@@ -189,14 +193,19 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
+
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("applications.applicationsReceived")} className="relative">
+      <ListingSecondaryNav
+        title={t("applications.applicationsReceived")}
+        listingId={listingId}
+        flagsQty={flaggedApps?.meta?.totalFlagged}
+      >
         {csvExportError && (
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
             <SiteAlert type="alert" timeout={5000} dismissable />
           </div>
         )}
-      </PageHeader>
+      </ListingSecondaryNav>
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
