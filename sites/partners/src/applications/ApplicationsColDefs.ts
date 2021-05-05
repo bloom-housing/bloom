@@ -209,7 +209,7 @@ export function getColDefs(maxHouseholdSize: number) {
         const claimed = preferences.reduce((acc, curr) => {
           const options = curr.options
             .filter((option) => option?.checked)
-            ?.map((item) => t(`application.preferences.options.${item.key}`))
+            ?.map((item) => t(`application.preferences.${curr.key}.${item.key}.label`))
 
           if (curr?.claimed) {
             acc.push(options.join(", "))
