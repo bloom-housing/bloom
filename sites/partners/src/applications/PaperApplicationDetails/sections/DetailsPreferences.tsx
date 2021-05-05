@@ -38,7 +38,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
 
         return (
           <GridCell key={listingPreference.id}>
-            <ViewItem label={listingPreference.title}>
+            <ViewItem label={t(`application.preferences.${metaKey}.title`)}>
               {(() => {
                 if (!optionDetails?.claimed) return t("t.none")
 

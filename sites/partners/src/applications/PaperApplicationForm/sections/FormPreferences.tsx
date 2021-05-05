@@ -55,11 +55,12 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
     <GridSection title={t("application.details.preferences")} separator grid={false}>
       <GridSection columns={2}>
         {preferences?.map((preference) => {
+          const metaKey = preference?.formMetadata?.key
           const noneOptionKey = `${PREFERENCES_NONE_FORM_PATH}.${preference.formMetadata.key}-none`
 
           return (
             <GridCell key={preference.id}>
-              <ViewItem label={preference.title}>
+              <ViewItem label={t(`application.preferences.${metaKey}.title`)}>
                 <fieldset className="mt-4">
                   {preference?.formMetadata?.options?.map((option) => {
                     return (
