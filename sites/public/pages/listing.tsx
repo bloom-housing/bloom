@@ -230,10 +230,18 @@ export default class extends Component<ListingProps> {
             <ApplicationStatus listing={listing} />
             <div className="mx-4">
               <DownloadLotteryResults event={lotteryResults} />
-              <ApplicationSection
-                listing={listing}
-                internalFormRoute="/applications/start/choose-language"
-              />
+              {listing.applicationMethods.length > 0 ? (
+                <ApplicationSection
+                  listing={listing}
+                  internalFormRoute="/applications/start/choose-language"
+                />
+              ) : (
+                <ReferralApplication
+                  phoneNumber={t("application.referralApplication.phoneNumber")}
+                  description={t("application.referralApplication.instructions")}
+                  title={t("application.referralApplication.furtherInformation")}
+                />
+              )}
             </div>
           </div>
           <ListingDetails>
