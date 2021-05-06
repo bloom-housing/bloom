@@ -1,16 +1,16 @@
 {
   "id": "HOLNx_F7fUCeax5GCoIr9g",
   "events": [],
-  "postmarkedApplicationsReceivedByDate": "2021-05-15T16:00:00.000-08:00",
+  "postmarkedApplicationsReceivedByDate": "2021-05-26T17:00:00.000-07:00",
   "applicationAddress": {
-    "city": "San Leandro",
+    "city": "San Leandro (Ashland)",
     "street": "1475 167th Avenue",
     "zipCode": "94578",
     "state": "CA",
     "latitude": null,
     "longitude": null
   },
-  "applicationDueDate": "2021-05-15T16:00:00.000-08:00",
+  "applicationDueDate": "2021-05-26T17:00:00.000-07:00",
   "applicationOrganization": "Mercy Housing",
   "applicationPhone": "510-962-8120",
   "buildingSelectionCriteria": "PDF to be sent for link week of 4/9",
@@ -40,7 +40,7 @@
   "leasingAgentEmail": "laura.weller@mercyhousing.org",
   "leasingAgentName": "Laura Weller",
   "leasingAgentAddress": {
-    "city": "San Leandro",
+    "city": "San Leandro (Ashland)",
     "street": "1475 167th Avenue",
     "zipCode": "94578",
     "state": "CA",
@@ -91,7 +91,7 @@
     "buildingTotalUnits": 79,
     "buildingAddress": {
       "county": "Alameda",
-      "city": "San Leandro",
+      "city": "San Leandro (Ashland)",
       "street": "1475 167th Avenue",
       "zipCode": "94578",
       "state": "CA",
