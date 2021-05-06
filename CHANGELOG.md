@@ -13,15 +13,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added:
 
   - This new Changelog format! =)
+  - Add missing listing fields ([#1186](https://github.com/bloom-housing/bloom/pull/1186)) (Marcin Jędras)
 
 - Changed:
 
+  - Dynamic preferences (switch from hardcoded preference options) ([#1167](https://github.com/bloom-housing/bloom/pull/1167)) (dominikx96)
   - Update license ([#1189](https://github.com/bloom-housing/bloom/pull/1189)) (Emily Jablonski)
+  - Bump ssri from 6.0.1 to 6.0.2 ([#1194](https://github.com/bloom-housing/bloom/pull/1194)) (dependabot)
 
 ### Backend
 
 - Added:
 
+  - User language ([#1181](https://github.com/bloom-housing/bloom/pull/1181)) (Michał Plebański)
   - ApiProperty to files that have no .dto.ts suffixes ([#1180](https://github.com/bloom-housing/bloom/pull/1180)) (Michał Plebański)
   - Get AFS by id and pagination meta for totalFlagged ([#1137](https://github.com/bloom-housing/bloom/pull/1137)) (Michał Plebański)
   - Translations module and county codes for frontend ([#1145](https://github.com/bloom-housing/bloom/pull/1145)) (Michał Plebański)
@@ -33,8 +37,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Frontend
 
+- Added:
+
+  - Support rent as percent income ([#1195](https://github.com/bloom-housing/bloom/pull/1195)) (Emily Jablonski)
+
 - Fixed:
 
+  - Preferences translations in Partners ([#1206](https://github.com/bloom-housing/bloom/pull/1206)) (dominikx96)
+  - Referral application section on mobile ([#1201](https://github.com/bloom-housing/bloom/pull/1201))
+  - Use correct listingId when redirecting from Sign In ([#1147](https://github.com/bloom-housing/bloom/pull/1147)) (Jared White)
   - Flaky cypress tests ([#1115](https://github.com/bloom-housing/bloom/pull/1115)) (Emily Jablonski)
   - 404 issues in my application and settings ([#1164](https://github.com/bloom-housing/bloom/pull/1164)) (Emily Jablonski)
 
@@ -42,6 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Added:
 
+  - New application autofill translations ([#1196](https://github.com/bloom-housing/bloom/pull/1196)) (Emily Jablonski)
   - New referral component ([#1146](https://github.com/bloom-housing/bloom/pull/1146)) (Emily Jablonski)
 
 - Changed:
@@ -58,8 +70,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Changed:
 
-- Bump elliptic from 6.5.3 to 6.5.4 ([#1062](https://github.com/bloom-housing/bloom/pull/1062)) (dependabot)
-- Bump y18n from 4.0.0 to 4.0.1 ([#1093](https://github.com/bloom-housing/bloom/pull/1093)) (dependabot)
+  - Bump elliptic from 6.5.3 to 6.5.4 ([#1062](https://github.com/bloom-housing/bloom/pull/1062)) (dependabot)
+  - Bump y18n from 4.0.0 to 4.0.1 ([#1093](https://github.com/bloom-housing/bloom/pull/1093)) (dependabot)
 
 ### Backend
 
