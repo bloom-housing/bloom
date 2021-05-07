@@ -11,6 +11,8 @@ export interface HeroProps {
   backgroundImage?: string
   buttonTitle: string
   buttonLink: string
+  secondaryButtonTitle?: string
+  secondaryButtonLink?: string
   listings?: Listing[]
   children?: React.ReactNode
   centered?: boolean
@@ -41,6 +43,9 @@ const Hero = (props: HeroProps) => {
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
       <LinkButton href={props.buttonLink}>{props.buttonTitle}</LinkButton>
+      {props.secondaryButtonTitle && props.secondaryButtonLink && (
+        <LinkButton href={props.secondaryButtonLink}>{props.secondaryButtonTitle}</LinkButton>
+      )}
     </div>
   )
 }
