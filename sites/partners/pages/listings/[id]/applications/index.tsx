@@ -14,12 +14,12 @@ import {
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../../../lib/hooks"
-import Layout from "../../../layouts/application"
+import { useApplicationsData } from "../../../../lib/hooks"
+import Layout from "../../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { getColDefs } from "../../../src/applications/ApplicationsColDefs"
-import { MetaTags } from "../../../src/MetaTags"
+import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
+import { MetaTags } from "../../../../src/MetaTags"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {
