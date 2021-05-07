@@ -1,7 +1,5 @@
 import { Module } from "@nestjs/common"
-import { SendGridModule } from "@anchan828/nest-sendgrid"
-import { EmailService } from "./services/email.service"
-import { ConfigModule, ConfigService } from "@nestjs/config"
+import { ConfigModule } from "@nestjs/config"
 import Joi from "joi"
 
 @Module({
@@ -17,15 +15,8 @@ import Joi from "joi"
         REDIS_TLS_URL: Joi.string().required(),
       }),
     }),
-    SendGridModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        apikey: configService.get<string>("EMAIL_API_KEY"),
-      }),
-    }),
   ],
-  providers: [EmailService],
-  exports: [EmailService],
+  providers: [],
+  exports: [],
 })
 export class SharedModule {}

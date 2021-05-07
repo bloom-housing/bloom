@@ -3,7 +3,7 @@ import { INestApplication } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { EmailService } from "../../src/shared/services/email.service"
+import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 
 // Use require because of the CommonJS/AMD style export.
@@ -25,7 +25,7 @@ describe("Applications", () => {
   let app: INestApplication
   let user1AccessToken: string
   let user2AccessToken: string
-  let user1Profile: UserDto
+  // let user1Profile: UserDto
   let user2Profile: UserDto
 
   beforeAll(async () => {
@@ -48,11 +48,11 @@ describe("Applications", () => {
     user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
     user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
-    user1Profile = (
-      await supertest(app.getHttpServer())
-        .get("/user")
-        .set(...setAuthorization(user1AccessToken))
-    ).body
+    // user1Profile = (
+    //   await supertest(app.getHttpServer())
+    //     .get("/user")
+    //     .set(...setAuthorization(user1AccessToken))
+    // ).body
     user2Profile = (
       await supertest(app.getHttpServer())
         .get("/user")

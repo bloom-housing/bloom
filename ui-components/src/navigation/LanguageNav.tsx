@@ -2,6 +2,7 @@ import * as React from "react"
 import "./LanguageNav.scss"
 import { t } from "../helpers/translator"
 import { useLanguageChange } from "../helpers/useLanguageChange"
+import { Language } from "@bloom-housing/backend-core/types"
 
 export type LangItem = {
   prefix: string
@@ -10,7 +11,7 @@ export type LangItem = {
 
 export interface LanguageNavLang {
   list: LangItem[]
-  codes: string[]
+  codes: Language[]
 }
 
 export interface LanguageNavProps {

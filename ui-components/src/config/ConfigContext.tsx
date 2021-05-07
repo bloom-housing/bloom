@@ -1,12 +1,12 @@
-import { createContext, createElement, FunctionComponent, useEffect, useState } from "react"
-import axios from "axios"
+import { createContext, createElement, FunctionComponent, useState } from "react"
+import { Language } from "@bloom-housing/backend-core/types"
 
 type ConfigContextProps = {
   storageType: "local" | "session"
   apiUrl: string
   idleTimeout: number
-  language: string
-  setLanguage: (lang: string) => void
+  language: Language
+  setLanguage: (language: Language) => void
 }
 
 const timeoutMinutes = parseInt(process.env.idleTimeout || process.env.IDLE_TIMEOUT || "5")
@@ -16,7 +16,7 @@ export const ConfigContext = createContext<ConfigContextProps>({
   storageType: "session",
   apiUrl: "",
   idleTimeout: defaultTimeout,
-  language: "",
+  language: Language.en,
   setLanguage: () => undefined,
 })
 
@@ -25,16 +25,17 @@ export const ConfigProvider: FunctionComponent<{
   storageType?: ConfigContextProps["storageType"]
   idleTimeout?: number
 }> = ({ apiUrl, storageType = "session", idleTimeout = defaultTimeout, children }) => {
-  const [language, setLanguage] = useState("")
+  const [language, setLanguage] = useState(Language.en)
 
-  useEffect(() => {
-    axios.interceptors.request.use((config) => {
-      config.headers["county-code"] = process.env.countyCode
-      config.headers["lang"] = language
-      return config
-    }),
-      [language]
-  })
+  // TODO: After adding Next v10 find a way to pass language to headers
+  // useEffect(() => {
+  //   axios.interceptors.request.use((config) => {
+  //     config.headers["county-code"] = process.env.countyCode
+  //     config.headers["language"] = language
+  //     return config
+  //   }),
+  //     [language]
+  // })
 
   return createElement(
     ConfigContext.Provider,

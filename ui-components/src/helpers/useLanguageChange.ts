@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import { LanguageNavLang } from "../navigation/LanguageNav"
 import { t } from "../helpers/translator"
 import { OnClientSide, ConfigContext } from "@bloom-housing/ui-components"
+import { Language } from "@bloom-housing/backend-core/types"
 
 export function useLanguageChange(language: LanguageNavLang) {
   const router = useRouter()
@@ -25,9 +26,11 @@ export function useLanguageChange(language: LanguageNavLang) {
 
   useEffect(() => {
     if (!activeLangInPath.length) {
-      setLanguage(language.codes?.[0] || "en")
+      setLanguage(language.codes?.[0] || Language.en)
     } else {
-      setLanguage(activeLangInPath[0].prefix)
+      const lang =
+        activeLangInPath[0].prefix == "" ? Language.en : Language[activeLangInPath[0].prefix]
+      setLanguage(lang)
     }
   }, [activeLangInPath, routePrefix, setLanguage, language])
 

@@ -10,8 +10,10 @@ import { assignDefined } from "../shared/assign-defined"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
-import { EmailService } from "../shared/services/email.service"
+import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
+import { CountyCode } from "../shared/types/county-code"
+import { Language } from "../shared/types/language-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -48,16 +50,24 @@ export class ApplicationsService {
     return result
   }
 
-  async submit(applicationCreateDto: ApplicationUpdateDto) {
+  async submit(
+    applicationCreateDto: ApplicationUpdateDto,
+    countyCode: CountyCode,
+    language: Language
+  ) {
     applicationCreateDto.submissionDate = new Date()
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    const application = await this._create(applicationCreateDto)
+    const application = await this._create(applicationCreateDto, countyCode, language)
     return application
   }
 
-  async create(applicationCreateDto: ApplicationUpdateDto) {
+  async create(
+    applicationCreateDto: ApplicationUpdateDto,
+    countyCode: CountyCode,
+    language: Language
+  ) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
-    return this._create(applicationCreateDto)
+    return this._create(applicationCreateDto, countyCode, language)
   }
 
   async findOne(applicationId: string) {
@@ -142,14 +152,24 @@ export class ApplicationsService {
     })
     return qb
   }
-  private async _create(applicationCreateDto: ApplicationUpdateDto) {
+  private async _create(
+    applicationCreateDto: ApplicationUpdateDto,
+    countyCode: CountyCode,
+    language: Language
+  ) {
     const application = await this.repository.save({
       ...applicationCreateDto,
       user: this.req.user,
     })
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {
-      await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
+      await this.emailService.confirmation(
+        listing,
+        application,
+        applicationCreateDto.appUrl,
+        countyCode,
+        language
+      )
     }
     await this.applicationFlaggedSetsService.onApplicationSave(application)
     return application

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
   Button,
+  ConfigContext,
   Field,
   Form,
   FormCard,
@@ -19,6 +20,7 @@ import FormsLayout from "../layouts/forms"
 
 const ForgotPassword = () => {
   const router = useRouter()
+  const { language } = useContext(ConfigContext)
   const { forgotPassword } = useContext(UserContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -31,7 +33,7 @@ const ForgotPassword = () => {
     const { email } = data
 
     try {
-      await forgotPassword(email)
+      await forgotPassword(email, language)
       setSiteAlertMessage(t(`authentication.forgotPassword.success`), "success")
       await router.push("/")
       window.scrollTo(0, 0)

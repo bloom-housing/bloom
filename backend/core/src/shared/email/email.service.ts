@@ -10,7 +10,8 @@ import fs from "fs"
 import { ConfigService } from "@nestjs/config"
 import { Application } from "../../applications/entities/application.entity"
 import { TranslationsService } from "../../translations/translations.service"
-import { CountyCode, Language } from "@bloom-housing/backend-core/types"
+import { CountyCode } from "../types/county-code"
+import { Language } from "../types/language-enum"
 
 @Injectable()
 export class EmailService {
@@ -19,13 +20,12 @@ export class EmailService {
   constructor(
     private readonly sendGrid: SendGridService,
     private readonly configService: ConfigService,
-    private readonly translationservice: TranslationsService
+    private readonly translationService: TranslationsService
   ) {
-    const polyglot = new Polyglot({
+    this.polyglot = new Polyglot({
       phrases: this.translations(),
     })
-    this.polyglot = polyglot
-
+    const polyglot = this.polyglot
     Handlebars.registerHelper("t", function (
       phrase: string,
       options?: number | Polyglot.InterpolationOptions
@@ -38,8 +38,8 @@ export class EmailService {
 
   public async welcome(user: User, appUrl: string, countyCode: CountyCode) {
     const language = user.language || Language.en
+    void (await this.loadTranslations(countyCode, language))
     const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
-    void this.loadTranslations(countyCode, language)
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
         `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
@@ -47,7 +47,6 @@ export class EmailService {
         )}...`
       )
     }
-    this.polyglot.locale(language)
     await this.send(
       user.email,
       "Welcome to Bloom",
@@ -59,7 +58,14 @@ export class EmailService {
     )
   }
 
-  public async confirmation(listing: Listing, application: Application, appUrl: string) {
+  public async confirmation(
+    listing: Listing,
+    application: Application,
+    appUrl: string,
+    countyCode: CountyCode,
+    language: Language
+  ) {
+    void (await this.loadTranslations(countyCode, language))
     let whatToExpectText
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
@@ -103,7 +109,8 @@ export class EmailService {
     )
   }
 
-  public async forgotPassword(user: User, appUrl: string) {
+  public async forgotPassword(user: User, appUrl: string, countyCode: CountyCode) {
+    void (await this.loadTranslations(countyCode, user.language))
     const compiledTemplate = this.template("forgot-password")
     const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
 
@@ -127,7 +134,7 @@ export class EmailService {
   }
 
   private async loadTranslations(countyCode: CountyCode, language: Language) {
-    const translation = await this.translationservice.getTranslationByLanguageAndCountyCode(
+    const translation = await this.translationService.getTranslationByLanguageAndCountyCode(
       language,
       countyCode
     )

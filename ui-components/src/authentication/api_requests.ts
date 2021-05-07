@@ -1,6 +1,14 @@
 import axios, { AxiosInstance } from "axios"
 import { getTokenTtl } from "./token"
-import { UserCreate, User, Status } from "@bloom-housing/backend-core/types"
+import { UserCreate, User, Status, Language } from "@bloom-housing/backend-core/types"
+
+const axiosWithHeaders = (language: Language) =>
+  axios.create({
+    headers: {
+      "county-code": process.env.countyCode,
+      language: language,
+    },
+  })
 
 export const renewToken = async (client: AxiosInstance) => {
   const res = await client.post<{ accessToken: string }>("auth/token")
@@ -25,8 +33,8 @@ export const register = async (apiBase: string, data: UserCreate) => {
   return { ...res.data }
 }
 
-export const resendConfirmation = async (apiBase: string, email: string) => {
-  const res = await axios.post<{ accessToken: string } & Status>(
+export const resendConfirmation = async (apiBase: string, email: string, language: Language) => {
+  const res = await axiosWithHeaders(language).post<{ accessToken: string } & Status>(
     `${apiBase}/user/resend-confirmation`,
     {
       appUrl: window.location.origin,
@@ -46,6 +54,7 @@ export const createAxiosInstance = (apiUrl: string, accessToken: string) =>
     baseURL: apiUrl,
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      "county-code": process.env.countyCode,
     },
   })
 
@@ -75,11 +84,14 @@ export const scheduleTokenRefresh = (
   }
 }
 
-export const forgotPassword = async (apiUrl: string, email: string) => {
-  const res = await axios.put<{ message: string }>(`${apiUrl}/user/forgot-password`, {
-    appUrl: window.location.origin,
-    email: email,
-  })
+export const forgotPassword = async (apiUrl: string, email: string, language: Language) => {
+  const res = await axiosWithHeaders(language).put<{ message: string }>(
+    `${apiUrl}/user/forgot-password`,
+    {
+      appUrl: window.location.origin,
+      email: email,
+    }
+  )
   const { message } = res.data
   return message
 }
@@ -88,13 +100,17 @@ export const resetPassword = async (
   apiUrl: string,
   token: string,
   password: string,
-  passwordConfirmation: string
+  passwordConfirmation: string,
+  language: Language
 ) => {
-  const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/update-password`, {
-    password: password,
-    passwordConfirmation: passwordConfirmation,
-    token: token,
-  })
+  const res = await axiosWithHeaders(language).put<{ accessToken: string }>(
+    `${apiUrl}/user/update-password`,
+    {
+      password: password,
+      passwordConfirmation: passwordConfirmation,
+      token: token,
+    }
+  )
   const { accessToken } = res.data
   return accessToken
 }

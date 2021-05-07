@@ -15,7 +15,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
-import { EmailService } from "../shared/services/email.service"
+import { EmailService } from "../shared/email/email.service"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -78,9 +78,12 @@ export class UserController {
 
   @Put("forgot-password")
   @ApiOperation({ summary: "Forgot Password", operationId: "forgot-password" })
-  async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<ForgotPasswordResponseDto> {
+  async forgotPassword(
+    @Body() dto: ForgotPasswordDto,
+    @Headers() headers
+  ): Promise<ForgotPasswordResponseDto> {
     const user = await this.userService.forgotPassword(dto.email)
-    void this.emailService.forgotPassword(user, dto.appUrl)
+    void this.emailService.forgotPassword(user, dto.appUrl, headers["county-code"])
     return mapTo(ForgotPasswordResponseDto, { message: "Email was sent" })
   }
 

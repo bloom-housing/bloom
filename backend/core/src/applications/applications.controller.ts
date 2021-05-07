@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Header,
+  Headers,
   Param,
   Post,
   Put,
@@ -191,8 +192,15 @@ export class ApplicationsController {
 
   @Post()
   @ApiOperation({ summary: "Create application", operationId: "create" })
-  async create(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
-    const application = await this.applicationsService.create(applicationCreateDto)
+  async create(
+    @Body() applicationCreateDto: ApplicationCreateDto,
+    @Headers() headers
+  ): Promise<ApplicationDto> {
+    const application = await this.applicationsService.create(
+      applicationCreateDto,
+      headers["county-code"],
+      headers["language"]
+    )
     return mapTo(ApplicationDto, application)
   }
 
