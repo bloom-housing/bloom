@@ -22,6 +22,12 @@ const listingOpen = (listing: Listing) => {
   return moment() < moment(listing.applicationDueDate)
 }
 
+const HeroButton = (props: { title: string; href: string }) => (
+  <span className="hero__button">
+    <LinkButton href={props.href}>{props.title}</LinkButton>
+  </span>
+)
+
 const Hero = (props: HeroProps) => {
   let subHeader, styles
   let classNames = ""
@@ -42,9 +48,9 @@ const Hero = (props: HeroProps) => {
     <div className={`hero ${classNames}`} style={styles}>
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
-      <LinkButton href={props.buttonLink}>{props.buttonTitle}</LinkButton>
+      <HeroButton href={props.buttonLink} title={props.buttonTitle} />
       {props.secondaryButtonTitle && props.secondaryButtonLink && (
-        <LinkButton href={props.secondaryButtonLink}>{props.secondaryButtonTitle}</LinkButton>
+        <HeroButton href={props.secondaryButtonLink} title={props.secondaryButtonTitle} />
       )}
     </div>
   )
