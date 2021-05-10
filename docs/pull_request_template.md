@@ -1,10 +1,16 @@
 # Pull Request Template
 
+## Issue
+
+Addresses # (issue)
+- [ ] This change addresses the issue in full
+- [ ] This change addresses only certain aspects of the issue
+- [ ] This change is a dependency for another issue
+- [ ] This change has a dependency from another issue
+
 ## Description
 
 Please include a summary of the change and which issue is addressed. Please also include relevant motivation and context. List any dependencies that are required for this change.
-
-Addresses # (issue)
 
 ## Type of change
 
