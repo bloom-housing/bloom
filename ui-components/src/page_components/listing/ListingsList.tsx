@@ -51,7 +51,11 @@ const ListingsList = (props: ListingsProps) => {
           />
         </div>
         <div className="listings-row_content">
-          <h4 className="listings-row_title">{t("listings.waitlist.open")}</h4>
+          {listing.waitlistMaxSize !== null &&
+            listing.waitlistCurrentSize !== null &&
+            listing.waitlistCurrentSize < listing.waitlistMaxSize && (
+              <h4 className="listings-row_title">{t("listings.waitlist.open")}</h4>
+            )}
           <div className="listings-row_table">
             {unitSummaries && (
               <GroupedTable
