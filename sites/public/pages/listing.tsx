@@ -98,8 +98,8 @@ export default class extends Component<ListingProps> {
 
     const occupancyDescription = getOccupancyDescription(listing)
     const occupancyHeaders = {
-      unitType: t("t.unitType"),
-      occupancy: t("t.occupancy"),
+      unitType: "t.unitType",
+      occupancy: "t.occupancy",
     }
     const occupancyData = occupancyTable(listing)
 
