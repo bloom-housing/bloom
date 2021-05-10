@@ -11,7 +11,7 @@ const NewApplication = () => {
   const metaImage = "" // TODO: replace with hero image
 
   const router = useRouter()
-  const listingId = router.query.listing as string
+  const listingId = router.query.id as string
 
   return (
     <Layout>

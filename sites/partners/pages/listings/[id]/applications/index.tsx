@@ -41,7 +41,7 @@ const ApplicationsList = () => {
   const pageSize = watch("page-size", 8)
   const [pageIndex, setPageIndex] = useState(1)
 
-  const listingId = router.query.listing as string
+  const listingId = router.query.id as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
@@ -143,7 +143,7 @@ const ApplicationsList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        void router.push(lRoute(`/application?id=${params.value}`))
+        void router.push(lRoute(`/application/${params.value}`))
       })
     }
 
@@ -207,7 +207,7 @@ const ApplicationsList = () => {
               </div>
 
               <div className="flex-row">
-                <LocalizedLink href={`/listings/applications/add?listing=${listingId}`}>
+                <LocalizedLink href={`/listings/${listingId}/applications/add`}>
                   <Button className="mx-1" onClick={() => false}>
                     {t("applications.addApplication")}
                   </Button>
@@ -216,8 +216,6 @@ const ApplicationsList = () => {
                 <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
                   {t("t.export")}
                 </Button>
-
-                {console.log(csvExportError)}
               </div>
             </div>
 

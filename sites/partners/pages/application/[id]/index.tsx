@@ -44,7 +44,7 @@ export default function ApplicationsList() {
   async function deleteApplication() {
     try {
       await applicationsService.delete({ applicationId })
-      void router.push(`/listings/applications?listing=${application?.listing?.id}`)
+      void router.push(`/listings/${application?.listing?.id}/applications`)
     } catch (err) {
       setErrorAlert(true)
     }
@@ -104,9 +104,7 @@ export default function ApplicationsList() {
             <Button
               inlineIcon="left"
               icon="arrow-back"
-              onClick={() =>
-                router.push(`/listings/applications?listing=${application.listing.id}`)
-              }
+              onClick={() => router.push(`/listings/${application.listing.id}/applications`)}
             >
               {t("t.back")}
             </Button>
