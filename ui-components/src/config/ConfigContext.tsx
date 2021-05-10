@@ -27,16 +27,6 @@ export const ConfigProvider: FunctionComponent<{
 }> = ({ apiUrl, storageType = "session", idleTimeout = defaultTimeout, children }) => {
   const [language, setLanguage] = useState(Language.en)
 
-  // TODO: After adding Next v10 find a way to pass language to headers
-  // useEffect(() => {
-  //   axios.interceptors.request.use((config) => {
-  //     config.headers["county-code"] = process.env.countyCode
-  //     config.headers["language"] = language
-  //     return config
-  //   }),
-  //     [language]
-  // })
-
   return createElement(
     ConfigContext.Provider,
     {
