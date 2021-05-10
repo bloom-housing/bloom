@@ -1,4 +1,4 @@
-import { t } from "../.."
+import { t } from "./translator"
 
 // translationKey must be in the format `key,argumentName:argumentValue,argumentName:argumentValue`
 // any number of arguments can be passed, returns a fully translated string
