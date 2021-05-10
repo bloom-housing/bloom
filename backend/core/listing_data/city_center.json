@@ -16,7 +16,7 @@
   "buildingSelectionCriteria": "https://drive.google.com/file/d/1naF0Il86mcd2Lstn2gxdgQTS0pgvbdjg/view",
   "costsNotIncluded": null,
   "creditHistory": "To be used to determine income eligibility only",
-  "CSVFormattingType": "withDisplaceeNameAndAddress",
+  "CSVFormattingType": "basic",
   "depositMax": "800",
   "depositMin": "800",
   "programRules": null,

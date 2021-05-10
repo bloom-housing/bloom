@@ -17,7 +17,7 @@
   "buildingSelectionCriteria": null,
   "costsNotIncluded": "For those without an income, rent is $50/month.",
   "creditHistory": "",
-  "CSVFormattingType": "withDisplaceeNameAndAddress",
+  "CSVFormattingType": "basic",
   "depositMax": "500",
   "depositMin": "500",
   "programRules": "LIHTC",
