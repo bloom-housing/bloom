@@ -77,9 +77,7 @@ export class UserController {
 
   @Put("forgot-password")
   @ApiOperation({ summary: "Forgot Password", operationId: "forgot-password" })
-  async forgotPassword(
-    @Body() dto: ForgotPasswordDto,
-  ): Promise<ForgotPasswordResponseDto> {
+  async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<ForgotPasswordResponseDto> {
     const user = await this.userService.forgotPassword(dto.email)
     void this.emailService.forgotPassword(user, dto.appUrl)
     return mapTo(ForgotPasswordResponseDto, { message: "Email was sent" })

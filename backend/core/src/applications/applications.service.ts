@@ -49,18 +49,14 @@ export class ApplicationsService {
     return result
   }
 
-  async submit(
-    applicationCreateDto: ApplicationUpdateDto,
-  ) {
+  async submit(applicationCreateDto: ApplicationUpdateDto) {
     applicationCreateDto.submissionDate = new Date()
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
     const application = await this._create(applicationCreateDto)
     return application
   }
 
-  async create(
-    applicationCreateDto: ApplicationUpdateDto,
-  ) {
+  async create(applicationCreateDto: ApplicationUpdateDto) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
     return this._create(applicationCreateDto)
   }
@@ -147,20 +143,14 @@ export class ApplicationsService {
     })
     return qb
   }
-  private async _create(
-    applicationCreateDto: ApplicationUpdateDto,
-  ) {
+  private async _create(applicationCreateDto: ApplicationUpdateDto) {
     const application = await this.repository.save({
       ...applicationCreateDto,
       user: this.req.user,
     })
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {
-      await this.emailService.confirmation(
-        listing,
-        application,
-        applicationCreateDto.appUrl,
-      )
+      await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
     }
     await this.applicationFlaggedSetsService.onApplicationSave(application)
     return application

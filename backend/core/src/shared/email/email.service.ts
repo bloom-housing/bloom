@@ -13,7 +13,7 @@ import { TranslationsService } from "../../translations/translations.service"
 import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
 
-@Injectable({scope: Scope.REQUEST})
+@Injectable({ scope: Scope.REQUEST })
 export class EmailService {
   polyglot: Polyglot
 
@@ -58,11 +58,7 @@ export class EmailService {
     )
   }
 
-  public async confirmation(
-    listing: Listing,
-    application: Application,
-    appUrl: string,
-  ) {
+  public async confirmation(listing: Listing, application: Application, appUrl: string) {
     void (await this.loadTranslations(listing.countyCode, application.language || Language.en))
     let whatToExpectText
     const listingUrl = `${appUrl}/listing/${listing.id}`
