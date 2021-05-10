@@ -1,4 +1,11 @@
-import { AmiChart, ApplicationMethodType, CountyCode, CSVFormattingType, Listing, ListingStatus } from "./types"
+import {
+  AmiChart,
+  ApplicationMethodType,
+  CountyCode,
+  CSVFormattingType,
+  Listing,
+  ListingStatus,
+} from "./types"
 
 export const SanMateoHUD2019: AmiChart = {
   id: "ami_chart_id",
