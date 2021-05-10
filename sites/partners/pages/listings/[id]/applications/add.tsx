@@ -3,13 +3,9 @@ import Head from "next/head"
 import { PageHeader, SiteAlert, t } from "@bloom-housing/ui-components"
 import Layout from "../../../../layouts/application"
 import PaperApplicationForm from "../../../../src/applications/PaperApplicationForm/PaperApplicationForm"
-import { MetaTags } from "../../../../src/MetaTags"
 import { useRouter } from "next/router"
 
 const NewApplication = () => {
-  const metaDescription = ""
-  const metaImage = "" // TODO: replace with hero image
-
   const router = useRouter()
   const listingId = router.query.id as string
 
@@ -18,7 +14,6 @@ const NewApplication = () => {
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
 
       <PageHeader className="relative" title={t("applications.newApplication")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">

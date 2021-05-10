@@ -19,12 +19,9 @@ import Layout from "../../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
-import { MetaTags } from "../../../../src/MetaTags"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
   const COLUMN_STATE_KEY = "column-state"
 
   const { applicationsService } = useContext(ApiClientContext)
@@ -189,7 +186,7 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+
       <PageHeader title={t("applications.applicationsReceived")} className="relative">
         {csvExportError && (
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">

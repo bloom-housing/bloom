@@ -81,7 +81,6 @@ export default function ApplicationsList() {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
-        {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
 
         <PageHeader
           className="relative"
