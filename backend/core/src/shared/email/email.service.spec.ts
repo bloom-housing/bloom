@@ -4,10 +4,9 @@ import { User } from "../../user/entities/user.entity"
 import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
 import { ArcherListing } from "../../../types"
-import { EmailModule } from "./email.module"
 import { TypeOrmModule } from "@nestjs/typeorm"
+import { TranslationsService } from "../../translations/translations.service"
 const dbOptions = require("../../../ormconfig.test")
-
 
 declare const expect: jest.Expect
 const user = new User()
@@ -31,12 +30,26 @@ describe("EmailService", () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        EmailModule,
         ConfigModule,
         SendGridModule.forRoot({
           apikey: "SG.fake",
         }),
-      ]
+      ],
+      providers: [
+        EmailService,
+        {
+          provide: TranslationsService,
+          useFactory: () => {
+            let getTranslationByLanguageAndCountyCodeMock = jest.fn()
+            getTranslationByLanguageAndCountyCodeMock.mockReturnValue({translations: {
+              // TODO Add translations?
+              }})
+            return {
+              getTranslationByLanguageAndCountyCode: getTranslationByLanguageAndCountyCodeMock,
+            }
+          },
+        },
+      ],
     }).compile()
     sendGridService = module.get<SendGridService>(SendGridService)
     service = await module.resolve(EmailService)
