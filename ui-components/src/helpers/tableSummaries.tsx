@@ -15,15 +15,32 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
           <strong>{unitSummary.minIncomeRange.max}</strong>
         </>
       )
-    const rent =
-      unitSummary.rentRange.min == unitSummary.rentRange.max ? (
-        <strong>{unitSummary.rentRange.min}</strong>
+
+    const getRent = (rentMin: string, rentMax: string, percent = false) => {
+      const unit = percent ? `% ${t("t.income")}` : ` ${t("t.perMonth")}`
+      return rentMin == rentMax ? (
+        <>
+          <strong>{rentMin}</strong>
+          {unit}
+        </>
       ) : (
         <>
-          <strong>{unitSummary.rentRange.min}</strong> {t("t.to")}{" "}
-          <strong>{unitSummary.rentRange.max}</strong>
+          <strong>{rentMin}</strong>
+          {unit} {t("t.to")} <strong>{rentMax}</strong>
+          {unit}
         </>
       )
+    }
+
+    // Use rent as percent income if available, otherwise use exact rent
+    const rent = unitSummary.rentAsPercentIncomeRange.min
+      ? getRent(
+          unitSummary.rentAsPercentIncomeRange.min.toString(),
+          unitSummary.rentAsPercentIncomeRange.max.toString(),
+          true
+        )
+      : getRent(unitSummary.rentRange.min, unitSummary.rentRange.min)
+
     return {
       unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
       minimumIncome: (
@@ -31,11 +48,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
           {minIncome} {t("t.perMonth")}
         </>
       ),
-      rent: (
-        <>
-          {rent} {t("t.perMonth")}
-        </>
-      ),
+      rent: <>{rent}</>,
       availability: (
         <>
           {unitSummary.totalAvailable > 0 ? (

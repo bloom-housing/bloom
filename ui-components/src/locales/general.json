@@ -125,6 +125,11 @@
       "claimant": "Claimant",
       "displacedAddress": "Displaced Address"
     },
+    "referralApplication": {
+      "instructions": "The permanent supportive housing units are referred directly through <COUNTY> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+      "furtherInformation": "For further information",
+      "phoneNumber": "211"
+    },
     "details": {
       "applicationData": "Application Data",
       "number": "Application Number",
@@ -372,6 +377,7 @@
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
       "liveWork": {
+        "title": "Live or Work in <REGION>",
         "live": {
           "label": "Live in <REGION> Preference",
           "description": "Live in <REGION> copy goes here…",
@@ -384,6 +390,7 @@
         }
       },
       "displacedTenant": {
+        "title": "Displaced Tenant Housing Preference",
         "whichHouseholdMember": "Which household member is claiming this preference?",
         "whatAddress": "What address was the household member displaced from?",
         "general": {
@@ -738,7 +745,8 @@
     "reservedTypePlural": {
       "family": "families",
       "senior": "seniors",
-      "veteran": "veterans"
+      "veteran": "veterans",
+      "specialNeeds": "special needs"
     },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
