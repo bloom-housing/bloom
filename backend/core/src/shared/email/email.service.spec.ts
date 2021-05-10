@@ -4,6 +4,10 @@ import { User } from "../../user/entities/user.entity"
 import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
 import { ArcherListing } from "../../../types"
+import { EmailModule } from "./email.module"
+import { TypeOrmModule } from "@nestjs/typeorm"
+const dbOptions = require("../../../ormconfig.test")
+
 
 declare const expect: jest.Expect
 const user = new User()
@@ -23,21 +27,21 @@ describe("EmailService", () => {
   let service: EmailService
   let sendGridService: SendGridService
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        EmailModule,
         ConfigModule,
         SendGridModule.forRoot({
           apikey: "SG.fake",
         }),
-      ],
-      providers: [EmailService],
+      ]
     }).compile()
     sendGridService = module.get<SendGridService>(SendGridService)
-    service = module.get(EmailService)
+    service = await module.resolve(EmailService)
     sendMock = jest.fn()
     sendGridService.send = sendMock
-    // jest.spyOn(catsService, 'findAll').mockImplementation
   })
 
   it("should be defined", () => {

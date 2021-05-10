@@ -14,7 +14,7 @@ import { EmailModule } from "../shared/email/email.module"
     TypeOrmModule.forFeature([User]),
     forwardRef(() => AuthModule),
     SharedModule,
-    EmailModule,
+    forwardRef(() => EmailModule),
   ],
   providers: [UserService],
   exports: [UserService],
