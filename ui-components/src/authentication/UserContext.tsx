@@ -20,22 +20,17 @@ import {
   resetPassword,
 } from "./api_requests"
 import { ConfigContext } from "../config/ConfigContext"
-import { Language, User, UserCreate } from "@bloom-housing/backend-core/types"
+import { User, UserCreate } from "@bloom-housing/backend-core/types"
 // External interface this context provides
 type ContextProps = {
   confirmAccount: (token: string) => Promise<User>
-  forgotPassword: (email: string, language: Language) => Promise<string>
+  forgotPassword: (email: string) => Promise<string>
   login: (email: string, password: string) => Promise<User>
   createUser: (user: UserCreate) => Promise<string>
-  resendConfirmation: (email: string, language: Language) => Promise<string>
+  resendConfirmation: (email: string) => Promise<string>
   signOut: () => void
   // True when an API request is processing
-  resetPassword: (
-    token: string,
-    password: string,
-    passwordConfirmation: string,
-    language: Language
-  ) => Promise<User>
+  resetPassword: (token: string, password: string, passwordConfirmation: string) => Promise<User>
   loading: boolean
   profile?: User
   accessToken?: string
@@ -174,35 +169,29 @@ export const UserProvider: FunctionComponent = ({ children }) => {
         dispatch(stopLoading())
       }
     },
-    resendConfirmation: async (email: string, language: Language) => {
+    resendConfirmation: async (email: string) => {
       dispatch(startLoading())
       try {
-        const { status: status } = await resendConfirmation(apiUrl, email, language)
+        const { status: status } = await resendConfirmation(apiUrl, email)
         return status
       } finally {
         dispatch(stopLoading())
       }
     },
     signOut: () => dispatch(signOut()),
-    forgotPassword: async (email, language) => {
+    forgotPassword: async (email) => {
       dispatch(startLoading())
       try {
-        const message = await forgotPassword(apiUrl, email, language)
+        const message = await forgotPassword(apiUrl, email)
         return message
       } finally {
         dispatch(stopLoading())
       }
     },
-    resetPassword: async (token, password, passwordConfirmation, language) => {
+    resetPassword: async (token, password, passwordConfirmation) => {
       dispatch(startLoading())
       try {
-        const accessToken = await resetPassword(
-          apiUrl,
-          token,
-          password,
-          passwordConfirmation,
-          language
-        )
+        const accessToken = await resetPassword(apiUrl, token, password, passwordConfirmation)
         dispatch(saveToken({ accessToken, apiUrl, dispatch }))
         const client = createAxiosInstance(apiUrl, accessToken)
         const profile = await getProfile(client)

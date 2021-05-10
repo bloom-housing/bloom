@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
   Button,
-  ConfigContext,
   Field,
   Form,
   FormCard,
@@ -21,7 +20,6 @@ const ResetPassword = () => {
   const router = useRouter()
   const { token } = router.query
   const { resetPassword } = useContext(UserContext)
-  const { language } = useContext(ConfigContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -33,7 +31,7 @@ const ResetPassword = () => {
     const { password, passwordConfirmation } = data
 
     try {
-      const user = await resetPassword(token.toString(), password, passwordConfirmation, language)
+      const user = await resetPassword(token.toString(), password, passwordConfirmation)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await router.push("/account/applications")
       window.scrollTo(0, 0)
