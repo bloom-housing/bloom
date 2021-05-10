@@ -5,7 +5,6 @@ import { UserCreate, User, Status, Language } from "@bloom-housing/backend-core/
 const axiosWithHeaders = (language: Language) =>
   axios.create({
     headers: {
-      "county-code": process.env.countyCode,
       language: language,
     },
   })
@@ -54,7 +53,6 @@ export const createAxiosInstance = (apiUrl: string, accessToken: string) =>
     baseURL: apiUrl,
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      "county-code": process.env.countyCode,
     },
   })
 

@@ -135,6 +135,7 @@ export class UserService {
     user.dob = dto.dob
     user.email = dto.email
     user.language = dto.language
+    user.countyCode = dto.countyCode
     const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
     const token = encode(payload, process.env.APP_SECRET)
     user.confirmationToken = token

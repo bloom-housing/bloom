@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common"
+import { Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
 import Handlebars from "handlebars"
@@ -13,7 +13,7 @@ import { TranslationsService } from "../../translations/translations.service"
 import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
 
-@Injectable()
+@Injectable({scope: Scope.REQUEST})
 export class EmailService {
   polyglot: Polyglot
 
@@ -36,9 +36,9 @@ export class EmailService {
     Handlebars.registerPartial(parts)
   }
 
-  public async welcome(user: User, appUrl: string, countyCode: CountyCode) {
+  public async welcome(user: User, appUrl: string) {
     const language = user.language || Language.en
-    void (await this.loadTranslations(countyCode, language))
+    void (await this.loadTranslations(user.countyCode, language))
     const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
@@ -62,10 +62,8 @@ export class EmailService {
     listing: Listing,
     application: Application,
     appUrl: string,
-    countyCode: CountyCode,
-    language: Language
   ) {
-    void (await this.loadTranslations(countyCode, language))
+    void (await this.loadTranslations(listing.countyCode, application.language || Language.en))
     let whatToExpectText
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
@@ -109,8 +107,8 @@ export class EmailService {
     )
   }
 
-  public async forgotPassword(user: User, appUrl: string, countyCode: CountyCode) {
-    void (await this.loadTranslations(countyCode, user.language))
+  public async forgotPassword(user: User, appUrl: string) {
+    void (await this.loadTranslations(user.countyCode, user.language))
     const compiledTemplate = this.template("forgot-password")
     const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
 

@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common"
 import { SendGridModule } from "@anchan828/nest-sendgrid"
 import { TranslationsModule } from "../../translations/translations.module"
-// import { TranslationsService } from "../../translations/translations.service"
 import { EmailService } from "./email.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { SharedModule } from "../shared.module"

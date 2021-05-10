@@ -1,6 +1,5 @@
 import {
   Controller,
-  Headers,
   Request,
   Get,
   UseGuards,
@@ -51,20 +50,20 @@ export class UserController {
   @Post()
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
-  async create(@Body() dto: UserCreateDto, @Headers() headers): Promise<StatusDto> {
+  async create(@Body() dto: UserCreateDto): Promise<StatusDto> {
     const user = await this.userService.createUser(dto)
     // noinspection ES6MissingAwait
-    void this.emailService.welcome(user, dto.appUrl, headers["county-code"])
+    void this.emailService.welcome(user, dto.appUrl)
     return mapTo(StatusDto, { status: "ok" })
   }
 
   @Post("resend-confirmation")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
-  async confirmation(@Body() dto: EmailDto, @Headers() headers): Promise<StatusDto> {
+  async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
     const user = await this.userService.resendConfirmation(dto)
     // noinspection ES6MissingAwait
-    void this.emailService.welcome(user, dto.appUrl, headers["county-code"])
+    void this.emailService.welcome(user, dto.appUrl)
     return mapTo(StatusDto, { status: "ok" })
   }
 
@@ -80,10 +79,9 @@ export class UserController {
   @ApiOperation({ summary: "Forgot Password", operationId: "forgot-password" })
   async forgotPassword(
     @Body() dto: ForgotPasswordDto,
-    @Headers() headers
   ): Promise<ForgotPasswordResponseDto> {
     const user = await this.userService.forgotPassword(dto.email)
-    void this.emailService.forgotPassword(user, dto.appUrl, headers["county-code"])
+    void this.emailService.forgotPassword(user, dto.appUrl)
     return mapTo(ForgotPasswordResponseDto, { message: "Email was sent" })
   }
 

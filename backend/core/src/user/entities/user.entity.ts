@@ -17,6 +17,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { ApiProperty } from "@nestjs/swagger"
 import { UserRole } from "../types/user-role-enum"
 import { Language } from "../../shared/types/language-enum"
+import { CountyCode } from "../../shared/types/county-code"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
@@ -114,4 +115,11 @@ export class User {
   @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: Language, enumName: "Language" })
   language?: Language | null
+
+  @Column({ enum: CountyCode, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(CountyCode, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: CountyCode, enumName: "CountyCode", required: false })
+  countyCode?: CountyCode | null
 }

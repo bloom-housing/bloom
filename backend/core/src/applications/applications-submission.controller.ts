@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Headers,
   Post,
   UseGuards,
   UsePipes,
@@ -42,12 +41,9 @@ export class ApplicationsSubmissionController {
   @ResourceAction(authzActions.submit)
   async submit(
     @Body() applicationCreateDto: ApplicationCreateDto,
-    @Headers() headers
   ): Promise<ApplicationDto> {
     const application = await this.applicationsService.submit(
-      applicationCreateDto,
-      headers["county-code"],
-      headers["language"]
+      applicationCreateDto
     )
     return mapTo(ApplicationDto, application)
   }

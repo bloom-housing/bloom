@@ -37,6 +37,7 @@ import { ListingEventDto } from "../dto/listing-event.dto"
 import { ApplicationMethodDto } from "../dto/application-method.dto"
 import { AssetDto } from "../dto/asset.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
+import { CountyCode } from "../../shared/types/county-code"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -331,6 +332,12 @@ class Listing extends BaseEntity {
   @IsEnum(CSVFormattingType, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: CSVFormattingType, enumName: "CSVFormattingType" })
   CSVFormattingType: CSVFormattingType
+
+  @Column({ enum: CountyCode, default: CountyCode.alameda })
+  @Expose()
+  @IsEnum(CountyCode, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: CountyCode, enumName: "CountyCode" })
+  countyCode: CountyCode
 }
 
 export { Listing as default, Listing }

@@ -13,7 +13,6 @@ import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
 import { CountyCode } from "../shared/types/county-code"
-import { Language } from "../shared/types/language-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -52,22 +51,18 @@ export class ApplicationsService {
 
   async submit(
     applicationCreateDto: ApplicationUpdateDto,
-    countyCode: CountyCode,
-    language: Language
   ) {
     applicationCreateDto.submissionDate = new Date()
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    const application = await this._create(applicationCreateDto, countyCode, language)
+    const application = await this._create(applicationCreateDto)
     return application
   }
 
   async create(
     applicationCreateDto: ApplicationUpdateDto,
-    countyCode: CountyCode,
-    language: Language
   ) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
-    return this._create(applicationCreateDto, countyCode, language)
+    return this._create(applicationCreateDto)
   }
 
   async findOne(applicationId: string) {
@@ -154,8 +149,6 @@ export class ApplicationsService {
   }
   private async _create(
     applicationCreateDto: ApplicationUpdateDto,
-    countyCode: CountyCode,
-    language: Language
   ) {
     const application = await this.repository.save({
       ...applicationCreateDto,
@@ -167,8 +160,6 @@ export class ApplicationsService {
         listing,
         application,
         applicationCreateDto.appUrl,
-        countyCode,
-        language
       )
     }
     await this.applicationFlaggedSetsService.onApplicationSave(application)
