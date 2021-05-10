@@ -13,8 +13,8 @@ import {
   phoneNumberKeys,
   contactPreferencesKeys,
   FieldGroup,
+  FormAddress,
 } from "@bloom-housing/ui-components"
-import { FormAddress } from "../FormAddress"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 const FormPrimaryApplicant = () => {
@@ -231,28 +231,30 @@ const FormPrimaryApplicant = () => {
         </GridCell>
       </GridSection>
 
-      {FormAddress(
-        t("application.details.residenceAddress"),
-        "application.applicant.address",
-        "residence",
-        register
+      <FormAddress
+        subtitle={t("application.details.residenceAddress")}
+        dataKey="application.applicant.address"
+        type="residence"
+        register={register}
+      />
+
+      {mailingAddressValue && (
+        <FormAddress
+          subtitle={t("application.contact.mailingAddress")}
+          dataKey="application.mailingAddress"
+          type="mailing"
+          register={register}
+        />
       )}
 
-      {mailingAddressValue &&
-        FormAddress(
-          t("application.contact.mailingAddress"),
-          "application.mailingAddress",
-          "mailing",
-          register
-        )}
-
-      {workInRegionValue === YesNoAnswer.Yes &&
-        FormAddress(
-          t("application.contact.workAddress"),
-          "application.applicant.workAddress",
-          "work",
-          register
-        )}
+      {workInRegionValue === YesNoAnswer.Yes && (
+        <FormAddress
+          subtitle={t("application.contact.workAddress")}
+          dataKey="application.applicant.workAddress"
+          type="work"
+          register={register}
+        />
+      )}
     </GridSection>
   )
 }

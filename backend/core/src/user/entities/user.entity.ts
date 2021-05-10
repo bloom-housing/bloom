@@ -12,14 +12,11 @@ import {
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsEmail, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { IsDate, IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
-
-export enum UserRole {
-  user = "user",
-  admin = "admin",
-}
+import { UserRole } from "../types/user-role-enum"
+import { Language } from "../../shared/types/language-enum"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
@@ -110,4 +107,11 @@ export class User {
   get roles(): UserRole[] {
     return [UserRole.user, ...(this.isAdmin ? [UserRole.admin] : [])]
   }
+
+  @Column({ enum: Language, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: Language, enumName: "Language" })
+  language?: Language | null
 }

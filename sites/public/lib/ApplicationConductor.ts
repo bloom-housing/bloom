@@ -10,9 +10,8 @@ import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
 import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
-import LiveWorkPreferenceStep from "./LiveWorkPreferenceStep"
-import DisplacedPreferenceStep from "./DisplacedPreferenceStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
+import PreferencesAllStep from "./PreferencesAllStep"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -90,13 +89,9 @@ export default class ApplicationConductor {
     income: {
       url: "/applications/financial/income",
     },
-    preferencesLiveWork: {
-      url: "/applications/preferences/live-work",
-      definition: LiveWorkPreferenceStep,
-    },
-    preferencesDisplaced: {
-      url: "/applications/preferences/displaced",
-      definition: DisplacedPreferenceStep,
+    preferencesAll: {
+      url: "/applications/preferences/all",
+      definition: PreferencesAllStep,
     },
     generalPool: {
       url: "/applications/preferences/general",
@@ -113,6 +108,7 @@ export default class ApplicationConductor {
     },
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   application: Record<string, any> = {}
   steps: StepDefinition[] = []
   returnToReview = false

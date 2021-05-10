@@ -1,10 +1,10 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Marcin Jedras <marcin.jedras@exygy.com>",
   "private": false,
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",

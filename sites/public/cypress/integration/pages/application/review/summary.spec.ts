@@ -48,24 +48,14 @@ describe("applications/review/summary", function () {
   })
 
   it("Should not render 'Alternate Contact' section when type is empty", function () {
-    cy.loadConfig(
-      {
-        "alternateContact.type": "",
-      },
-      "applicationConfigFilled.json"
-    )
+    cy.loadConfig({}, "applicationConfigFilled.json", { "alternateContact.type": "" })
     cy.visit(route)
 
     cy.getByID("alternateContact").should("not.be.visible")
   })
 
   it("Should not render 'Alternate Contact' section when type is noContact", function () {
-    cy.loadConfig(
-      {
-        "alternateContact.type": "noContact",
-      },
-      "applicationConfigFilled.json"
-    )
+    cy.loadConfig({}, "applicationConfigFilled.json", { "alternateContact.type": "noContact" })
     cy.visit(route)
 
     cy.getByID("alternateContact").should("not.be.visible")
@@ -93,12 +83,9 @@ describe("applications/review/summary", function () {
   })
 
   it("Should not render 'Household Members' section when householdSize is <= 1", function () {
-    cy.loadConfig(
-      {
-        householdSize: 1,
-      },
-      "applicationConfigFilled.json"
-    )
+    cy.loadConfig({}, "applicationConfigFilled.json", {
+      householdSize: 1,
+    })
     cy.visit(route)
 
     cy.getByID("householdMembers").should("not.be.visible")

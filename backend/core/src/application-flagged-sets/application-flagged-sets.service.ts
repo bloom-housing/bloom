@@ -1,11 +1,7 @@
 import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
-import { ApplicationFlaggedSetsListQueryParams } from "./application-flagged-sets.controller"
+import { PaginatedApplicationFlaggedSetQueryParams } from "./application-flagged-sets.controller"
 import { AuthzService } from "../auth/authz.service"
-import {
-  ApplicationFlaggedSet,
-  FlaggedSetStatus,
-  Rule,
-} from "./entities/application-flagged-set.entity"
+import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Brackets, DeepPartial, Repository, SelectQueryBuilder } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
@@ -14,6 +10,8 @@ import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set.d
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { User } from "../user/entities/user.entity"
+import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
+import { Rule } from "./types/rule-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -25,8 +23,8 @@ export class ApplicationFlaggedSetsService {
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>
   ) {}
-  async listPaginated(queryParams: ApplicationFlaggedSetsListQueryParams) {
-    return await paginate<ApplicationFlaggedSet>(
+  async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
+    const results = await paginate<ApplicationFlaggedSet>(
       this.afsRepository,
       { limit: queryParams.limit, page: queryParams.page },
       {
@@ -36,6 +34,25 @@ export class ApplicationFlaggedSetsService {
         },
       }
     )
+    const countTotalFlagged = await this.afsRepository.count({
+      where: { status: FlaggedSetStatus.flagged },
+    })
+    return {
+      ...results,
+      meta: {
+        ...results.meta,
+        totalFlagged: countTotalFlagged,
+      },
+    }
+  }
+
+  async findOneById(afsId: string) {
+    return await this.afsRepository.findOneOrFail({
+      relations: ["listing", "applications"],
+      where: {
+        id: afsId,
+      },
+    })
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {

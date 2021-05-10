@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -9,40 +8,15 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
 import { FindConditions, Repository } from "typeorm"
-import { scrypt, randomBytes } from "crypto"
+import { randomBytes, scrypt } from "crypto"
 import { EmailDto, UserCreateDto, UserUpdateDto } from "./dto/user.dto"
-import { encode, decode } from "jwt-simple"
+import { decode, encode } from "jwt-simple"
 import moment from "moment"
-import { UpdatePasswordDto } from "./dto/update_password.dto"
+import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { ConfirmDto } from "./dto/confirm.dto"
 import { assignDefined } from "../shared/assign-defined"
-
-// Length of hashed key, in bytes
-const SCRYPT_KEYLEN = 64
-const SALT_SIZE = SCRYPT_KEYLEN
-export const USER_ERRORS = {
-  ACCOUNT_CONFIRMED: { message: "accountConfirmed", status: HttpStatus.NOT_ACCEPTABLE },
-  ERROR_SAVING: { message: "errorSaving", status: HttpStatus.BAD_REQUEST },
-  NOT_FOUND: { message: "emailNotFound", status: HttpStatus.NOT_FOUND },
-  TOKEN_EXPIRED: { message: "tokenExpired", status: HttpStatus.BAD_REQUEST },
-  TOKEN_MISSING: { message: "tokenMissing", status: HttpStatus.BAD_REQUEST },
-  EMAIL_IN_USE: { message: "emailInUse", status: HttpStatus.BAD_REQUEST },
-}
-
-const generateSalt = (size = SALT_SIZE) => randomBytes(size)
-
-const hashPassword = (password: string, salt: Buffer) =>
-  new Promise<string>((resolve, reject) =>
-    scrypt(password, salt, SCRYPT_KEYLEN, (err, key) =>
-      err ? reject(err) : resolve(key.toString("hex"))
-    )
-  )
-
-const passwordToHash = async (password: string) => {
-  const salt = generateSalt()
-  const hash = await hashPassword(password, salt)
-  return `${salt.toString("hex")}#${hash}`
-}
+import { SALT_SIZE, SCRYPT_KEYLEN } from "./constants"
+import { USER_ERRORS } from "./user-errors"
 
 @Injectable()
 export class UserService {
@@ -76,7 +50,7 @@ export class UserService {
         throw new UnauthorizedException("invalidPassword")
       }
 
-      passwordHash = await passwordToHash(dto.password)
+      passwordHash = await this.passwordToHash(dto.password)
       delete dto.password
     }
 
@@ -101,7 +75,7 @@ export class UserService {
   public async verifyUserPassword(user: User, password: string) {
     const userWithPassword = await this.getUserWithPassword(user)
     const [salt, savedPasswordHash] = userWithPassword.passwordHash.split("#")
-    const verifyPasswordHash = await hashPassword(password, Buffer.from(salt, "hex"))
+    const verifyPasswordHash = await this.hashPassword(password, Buffer.from(salt, "hex"))
     return savedPasswordHash === verifyPasswordHash
   }
 
@@ -164,7 +138,7 @@ export class UserService {
     const token = encode(payload, process.env.APP_SECRET)
     user.confirmationToken = token
     try {
-      user.passwordHash = await passwordToHash(password)
+      user.passwordHash = await this.passwordToHash(password)
       await this.repo.save(user)
       return user
     } catch (err) {
@@ -196,10 +170,28 @@ export class UserService {
     if (moment(payload.expiresAt) < moment()) {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
-    user.passwordHash = await passwordToHash(dto.password)
+    user.passwordHash = await this.passwordToHash(dto.password)
     user.resetToken = null
     await this.repo.save(user)
 
     return user
+  }
+
+  private async passwordToHash(password: string) {
+    const salt = this.generateSalt()
+    const hash = await this.hashPassword(password, salt)
+    return `${salt.toString("hex")}#${hash}`
+  }
+
+  private async hashPassword(password: string, salt: Buffer) {
+    return new Promise<string>((resolve, reject) =>
+      scrypt(password, salt, SCRYPT_KEYLEN, (err, key) =>
+        err ? reject(err) : resolve(key.toString("hex"))
+      )
+    )
+  }
+
+  private generateSalt(size = SALT_SIZE) {
+    return randomBytes(size)
   }
 }

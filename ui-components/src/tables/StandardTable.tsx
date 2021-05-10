@@ -36,9 +36,9 @@ export interface StandardTableProps {
 export const StandardTable = (props: StandardTableProps) => {
   const { headers, data, cellClassName } = props
 
-  const headerLabels = Object.values(headers).map((col, index) => {
+  const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <HeaderCell key={uniqKey}>{t(col)}</HeaderCell>
+    return <HeaderCell key={uniqKey}>{t(header)}</HeaderCell>
   })
 
   const body = data.map((row: Record<string, React.ReactNode>, dataIndex) => {
@@ -49,10 +49,9 @@ export const StandardTable = (props: StandardTableProps) => {
       : nanoid()
     const cols = Object.keys(headers).map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
-      const header = colKey
       const cell = row[colKey]
       return (
-        <Cell key={uniqKey} headerLabel={header} className={cellClassName}>
+        <Cell key={uniqKey} headerLabel={t(headers[colKey])} className={cellClassName}>
           {cell}
         </Cell>
       )

@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer"
 import { ArrayMaxSize, IsOptional, IsString, MaxLength } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class HousingCounselor {
   @Expose()

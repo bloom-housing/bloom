@@ -51,5 +51,6 @@ module.exports = {
     "**/*.stories.tsx",
     "**/.eslintrc.js",
     "**/*.test.*",
+    "sites/public/scripts/build-headers.js"
   ],
 }

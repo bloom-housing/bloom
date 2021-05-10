@@ -18,7 +18,7 @@ describe("<ApplicationSection>", () => {
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
     )
     expect(getByText(listing.waitlistMaxSize)).toBeTruthy()
-    expect(getAllByText(listing.applicationAddress.street).length).toBe(4)
+    expect(getAllByText(listing.applicationAddress.street || "").length).toBe(4)
     expect(getAllByText(listing.leasingAgentOfficeHours).length).toBe(2)
   })
   it("renders nothing if applications are closed", () => {
@@ -31,6 +31,6 @@ describe("<ApplicationSection>", () => {
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
     )
     expect(queryByText(listing.waitlistMaxSize)).toBeNull()
-    expect(queryByText(listing.applicationAddress.street)).toBeNull()
+    expect(queryByText(listing.applicationAddress.street || "")).toBeNull()
   })
 })

@@ -396,6 +396,8 @@ export class ApplicationsService {
       orderBy?: string;
       /**  */
       order?: string;
+      /**  */
+      markedAsDuplicate?: boolean;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
@@ -410,7 +412,8 @@ export class ApplicationsService {
         search: params['search'],
         userId: params['userId'],
         orderBy: params['orderBy'],
-        order: params['order']
+        order: params['order'],
+        markedAsDuplicate: params['markedAsDuplicate']
       };
       let data = null;
 
@@ -445,13 +448,25 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId: string;
+      page?: number;
+      /**  */
+      limit?: number;
+      /**  */
+      listingId?: string;
+      /**  */
+      search?: string;
+      /**  */
+      userId?: string;
+      /**  */
+      orderBy?: string;
+      /**  */
+      order?: string;
+      /**  */
+      markedAsDuplicate?: boolean;
       /**  */
       includeHeaders?: boolean;
       /**  */
       includeDemographics?: boolean;
-      /**  */
-      userId?: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -460,10 +475,16 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = {
+        page: params['page'],
+        limit: params['limit'],
         listingId: params['listingId'],
+        search: params['search'],
+        userId: params['userId'],
+        orderBy: params['orderBy'],
+        order: params['order'],
+        markedAsDuplicate: params['markedAsDuplicate'],
         includeHeaders: params['includeHeaders'],
-        includeDemographics: params['includeDemographics'],
-        userId: params['userId']
+        includeDemographics: params['includeDemographics']
       };
       let data = null;
 
@@ -1082,6 +1103,110 @@ export class AmiChartsService {
   }
 }
 
+export class TranslationsService {
+  /**
+   * List translations
+   */
+  list(options: IRequestOptions = {}): Promise<Translation[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/translations';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create translation
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: TranslationCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Translation> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/translations';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update translation
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: TranslationUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Translation> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/translations/{translationId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get translation by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      translationId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Translation> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/translations/{translationId}';
+      url = url.replace('{translationId}', params['translationId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete translation by id
+   */
+  delete(
+    params: {
+      /**  */
+      translationId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/translations/{translationId}';
+      url = url.replace('{translationId}', params['translationId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class ApplicationFlaggedSetsService {
   /**
    * List application flagged sets
@@ -1102,6 +1227,28 @@ export class ApplicationFlaggedSetsService {
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Retrieve application flagged set by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      afsId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationFlaggedSets/{afsId}';
+      url = url.replace('{afsId}', params['afsId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
       let data = null;
 
       configs.data = data;
@@ -1141,6 +1288,9 @@ export interface User {
   roles: UserRole[];
 
   /**  */
+  language?: Language;
+
+  /**  */
   leasingAgentInListings?: Id[];
 
   /**  */
@@ -1172,6 +1322,9 @@ export interface User {
 }
 
 export interface UserCreate {
+  /**  */
+  language?: Language;
+
   /**  */
   password: string;
 
@@ -1249,6 +1402,9 @@ export interface UpdatePassword {
 
 export interface UserUpdate {
   /**  */
+  language?: Language;
+
+  /**  */
   id?: string;
 
   /**  */
@@ -1324,6 +1480,9 @@ export interface FormMetadata {
 
 export interface Preference {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   id: string;
 
   /**  */
@@ -1343,9 +1502,6 @@ export interface Preference {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -1636,10 +1792,16 @@ export interface Property {
   unitAmenities: string;
 
   /**  */
+  servicesOffered?: string;
+
+  /**  */
   yearBuilt: number;
 }
 
 export interface UserBasic {
+  /**  */
+  language?: Language;
+
   /**  */
   id: string;
 
@@ -1840,6 +2002,9 @@ export interface Listing {
   requiredDocuments: string;
 
   /**  */
+  specialNotes?: string;
+
+  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -1854,6 +2019,9 @@ export interface Listing {
 
 export interface PreferenceCreate {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -1864,9 +2032,6 @@ export interface PreferenceCreate {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -2008,6 +2173,9 @@ export interface ListingCreate {
   requiredDocuments: string;
 
   /**  */
+  specialNotes?: string;
+
+  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -2022,6 +2190,9 @@ export interface ListingCreate {
 
 export interface PreferenceUpdate {
   /**  */
+  links: PreferenceLink[];
+
+  /**  */
   ordinal: number;
 
   /**  */
@@ -2032,9 +2203,6 @@ export interface PreferenceUpdate {
 
   /**  */
   description: string;
-
-  /**  */
-  links: PreferenceLink[];
 
   /**  */
   formMetadata?: FormMetadata;
@@ -2195,6 +2363,9 @@ export interface ListingUpdate {
 
   /**  */
   requiredDocuments: string;
+
+  /**  */
+  specialNotes?: string;
 
   /**  */
   waitlistCurrentSize: number;
@@ -2440,13 +2611,13 @@ export interface HouseholdMember {
 
 export interface ApplicationPreferenceOption {
   /**  */
-  extraData?: AllExtraDataTypes[];
-
-  /**  */
   key: string;
 
   /**  */
   checked: boolean;
+
+  /**  */
+  extraData?: AllExtraDataTypes[];
 }
 
 export interface ApplicationPreference {
@@ -3261,6 +3432,9 @@ export interface PropertyCreate {
   unitAmenities: string;
 
   /**  */
+  servicesOffered?: string;
+
+  /**  */
   yearBuilt: number;
 }
 
@@ -3312,6 +3486,9 @@ export interface PropertyUpdate {
 
   /**  */
   unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
 
   /**  */
   yearBuilt: number;
@@ -3378,6 +3555,57 @@ export interface AmiChartUpdate {
   name: string;
 }
 
+export interface Translation {
+  /**  */
+  countyCode: CountyCode;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  translations: object;
+}
+
+export interface TranslationCreate {
+  /**  */
+  countyCode: CountyCode;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  translations: object;
+}
+
+export interface TranslationUpdate {
+  /**  */
+  countyCode: CountyCode;
+
+  /**  */
+  language: Language;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  translations: object;
+}
+
 export interface ApplicationFlaggedSet {
   /**  */
   resolvingUser: Id;
@@ -3410,12 +3638,32 @@ export interface ApplicationFlaggedSet {
   listingId: string;
 }
 
+export interface ApplicationFlaggedSetPaginationMeta {
+  /**  */
+  currentPage: number;
+
+  /**  */
+  itemCount: number;
+
+  /**  */
+  itemsPerPage: number;
+
+  /**  */
+  totalItems: number;
+
+  /**  */
+  totalPages: number;
+
+  /**  */
+  totalFlagged: number;
+}
+
 export interface PaginatedApplicationFlaggedSet {
   /**  */
   items: ApplicationFlaggedSet[];
 
   /**  */
-  meta: PaginationMeta;
+  meta: ApplicationFlaggedSetPaginationMeta;
 }
 
 export interface ApplicationFlaggedSetResolve {
@@ -3431,6 +3679,13 @@ export enum UserRole {
   'admin' = 'admin'
 }
 
+export enum Language {
+  'en' = 'en',
+  'es' = 'es',
+  'vi' = 'vi',
+  'zh' = 'zh'
+}
+
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending'
@@ -3444,7 +3699,8 @@ export enum CSVFormattingType {
 export enum InputType {
   'boolean' = 'boolean',
   'text' = 'text',
-  'address' = 'address'
+  'address' = 'address',
+  'hhMemberSelect' = 'hhMemberSelect'
 }
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
@@ -3476,18 +3732,15 @@ export enum ApplicationStatus {
   'removed' = 'removed'
 }
 
-export enum Language {
-  'en' = 'en',
-  'es' = 'es',
-  'vi' = 'vi',
-  'zh' = 'zh'
-}
-
 export enum ApplicationSubmissionType {
   'paper' = 'paper',
   'electronical' = 'electronical'
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
+export enum CountyCode {
+  'Alameda' = 'Alameda',
+  'San Mateo' = 'San Mateo'
+}
 export enum EnumApplicationFlaggedSetStatus {
   'flagged' = 'flagged',
   'resolved' = 'resolved'
