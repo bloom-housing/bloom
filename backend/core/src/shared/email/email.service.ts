@@ -12,7 +12,6 @@ import { Application } from "../../applications/entities/application.entity"
 import { TranslationsService } from "../../translations/translations.service"
 import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
-import { EntityColumnNotFound } from "typeorm/error/EntityColumnNotFound"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -24,7 +23,7 @@ export class EmailService {
     private readonly translationService: TranslationsService
   ) {
     this.polyglot = new Polyglot({
-      phrases: this.translations(),
+      phrases: {}
     })
     const polyglot = this.polyglot
     Handlebars.registerHelper("t", function (
@@ -162,12 +161,6 @@ export class EmailService {
     })
 
     return partials
-  }
-
-  private translations() {
-    return JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, "..", "..", "locals/general.json"), "utf8")
-    )
   }
 
   private async send(to: string, subject: string, body: string, retry?: number) {
