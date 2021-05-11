@@ -20,7 +20,7 @@ describe("TranslationsService", () => {
         TranslationsService,
         {
           provide: getRepositoryToken(Translation),
-          useValue: {findOne: translationRepositoryFindOneMock},
+          useValue: { findOne: translationRepositoryFindOneMock },
         },
       ],
     }).compile()
@@ -35,10 +35,15 @@ describe("TranslationsService", () => {
 
   describe("Translations queries", () => {
     it("Should return translations for given county code and language", async () => {
-      const result = await service.getTranslationByLanguageAndCountyCode(Language.en, CountyCode.alameda);
+      const result = await service.getTranslationByLanguageAndCountyCode(
+        Language.en,
+        CountyCode.alameda
+      )
       expect(result).toStrictEqual({})
       expect(translationRepositoryFindOneMock.mock.calls[0][0].where.language).toEqual(Language.en)
-      expect(translationRepositoryFindOneMock.mock.calls[0][0].where.countyCode).toEqual(CountyCode.alameda)
+      expect(translationRepositoryFindOneMock.mock.calls[0][0].where.countyCode).toEqual(
+        CountyCode.alameda
+      )
     })
   })
 

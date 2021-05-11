@@ -10,7 +10,6 @@ import { Translation } from "../../translations/entities/translation.entity"
 import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
 import { Repository } from "typeorm"
-import { HouseholdMember } from "../../applications/entities/household-member.entity"
 
 const dbOptions = require("../../../ormconfig.test")
 
@@ -111,7 +110,7 @@ describe("EmailService", () => {
     })
   })
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     sendGridService = module.get<SendGridService>(SendGridService)
     sendMock = jest.fn()
     sendGridService.send = sendMock

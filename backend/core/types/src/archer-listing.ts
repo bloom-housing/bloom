@@ -1,4 +1,10 @@
-import { AmiChart, ApplicationMethodType, CountyCode, Listing, ListingStatus } from "./backend-swagger"
+import {
+  AmiChart,
+  ApplicationMethodType,
+  CountyCode,
+  Listing,
+  ListingStatus,
+} from "./backend-swagger"
 
 const amiChart: AmiChart = {
   id: "somerandomid",
