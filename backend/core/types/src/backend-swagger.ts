@@ -1291,9 +1291,6 @@ export interface User {
   language?: Language;
 
   /**  */
-  countyCode?: CountyCode;
-
-  /**  */
   leasingAgentInListings?: Id[];
 
   /**  */
@@ -1327,9 +1324,6 @@ export interface User {
 export interface UserCreate {
   /**  */
   language?: Language;
-
-  /**  */
-  countyCode?: CountyCode;
 
   /**  */
   password: string;
@@ -1409,9 +1403,6 @@ export interface UpdatePassword {
 export interface UserUpdate {
   /**  */
   language?: Language;
-
-  /**  */
-  countyCode?: CountyCode;
 
   /**  */
   id?: string;
@@ -1810,9 +1801,6 @@ export interface Property {
 export interface UserBasic {
   /**  */
   language?: Language;
-
-  /**  */
-  countyCode?: CountyCode;
 
   /**  */
   id: string;
@@ -3707,12 +3695,6 @@ export enum Language {
   'zh' = 'zh'
 }
 
-export enum CountyCode {
-  'Alameda' = 'Alameda',
-  'San Mateo' = 'San Mateo',
-  'San Jose' = 'San Jose'
-}
-
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending'
@@ -3721,6 +3703,12 @@ export enum ListingStatus {
 export enum CSVFormattingType {
   'basic' = 'basic',
   'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
+}
+
+export enum CountyCode {
+  'Alameda' = 'Alameda',
+  'San Mateo' = 'San Mateo',
+  'San Jose' = 'San Jose'
 }
 
 export enum InputType {
