@@ -8,7 +8,7 @@ export class CountyCodeResolverService {
   constructor(@Inject(REQUEST) private req: ExpressRequest) {}
 
   getCountyCode(): CountyCode {
-    let countyCode: CountyCode | undefined = CountyCode[this.req.get("county-code")]
+    const countyCode: CountyCode | undefined = CountyCode[this.req.get("county-code")]
     if (!countyCode) {
       return CountyCode.alameda
     }
