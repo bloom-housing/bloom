@@ -1,12 +1,12 @@
 {
   "application": {
     "contact": {
-      "doYouWorkIn": "Quý vị có làm việc tại City of Hayward không?",
+      "doYouWorkIn": "Quý vị có làm việc tại %{county} không?",
       "doYouWorkInDescription": ""
     },
     "household": {
       "member": {
-        "workInRegion": "Họ có làm việc tại City of Hayward không?",
+        "workInRegion": "Họ có làm việc tại %{county} không?",
         "workInRegionNote": ""
       }
     },
@@ -14,26 +14,22 @@
       "dontWant": "Tôi không muốn chọn bất kỳ ưu tiên nào trong số này",
       "liveWork": {
         "live": {
-          "label": "Sống tại City of Hayward Ưu tiên",
-          "description": "Ít nhất một thành viên trong hộ gia đình tôi sống tại Thành phố Hayward",
-          "link": "application.preferences"
+          "label": "Sống tại %{county} Ưu tiên",
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi sống tại %{county}"
         },
         "work": {
-          "label": "Làm việc tại City of Hayward Ưu tiên",
-          "description": "Ít nhất một thành viên trong hộ gia đình tôi đã làm việc hoặc được đề nghị làm việc tại Thành phố Hayward",
-          "link": "application.preferences"
+          "label": "Làm việc tại %{county} Ưu tiên",
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi đã làm việc hoặc được đề nghị làm việc tại %{county}"
         }
       },
       "displacedTenant": {
         "general": {
           "label": "Lựa chọn Ưu tiên Nhà ở dành cho Người Thuê Nhà phải Chuyển chỗ",
-          "description": "Ít nhất một thành viên trong hộ gia đình tôi phải chuyển chỗ ở khỏi một bất động sản gia cư do hoạt động xây dựng lại bởi Cơ quan Quản lý Nhà Ở Hayward (Hayward Housing Authority), Cơ quan Tái Phát triển hay Thành phố Hayward.",
-          "link": "application.preferences"
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi phải chuyển chỗ ở khỏi một bất động sản gia cư do hoạt động xây dựng lại bởi Cơ quan Quản lý Nhà Ở Hayward (Hayward Housing Authority), Cơ quan Tái Phát triển hay Thành phố Hayward."
         },
         "missionCorridor": {
           "label": "Mission Boulevard Corridor (SR 238) Lựa chọn Ưu tiên Nhà ở dành cho Người Thuê Nhà phải Chuyển chỗ",
-          "description": "Ít nhất một thành viên trong gia đình tôi là Người Tham gia Chương trình SR 238 theo yêu cầu của các điều khoản của Dự án Triển khai Tái Định cư SR 238. Những Người Tham gia Chương trình là người thuê nhà của các bất động sản Caltrans trước đây đã bán dọc theo Hành lang SR 238 Mission Boulevard và đang được ưu tiên cho cư ngụ khi có nhà ở mới thấp hơn giá thị trường được xây dựng trong Hành lang.",
-          "link": "https://www.hayward-ca.gov/238/background"
+          "description": "Ít nhất một thành viên trong gia đình tôi là Người Tham gia Chương trình SR 238 theo yêu cầu của các điều khoản của Dự án Triển khai Tái Định cư SR 238. Những Người Tham gia Chương trình là người thuê nhà của các bất động sản Caltrans trước đây đã bán dọc theo Hành lang SR 238 Mission Boulevard và đang được ưu tiên cho cư ngụ khi có nhà ở mới thấp hơn giá thị trường được xây dựng trong Hành lang."
         }
       }
     }

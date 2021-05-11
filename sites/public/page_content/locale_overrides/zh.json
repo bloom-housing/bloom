@@ -1,12 +1,12 @@
 {
   "application": {
     "contact": {
-      "doYouWorkIn": "您是否在 City of Hayward 工作？",
+      "doYouWorkIn": "您是否在 %{county} 工作？",
       "doYouWorkInDescription": ""
     },
     "household": {
       "member": {
-        "workInRegion": "他們是否在 City of Hayward 工作？",
+        "workInRegion": "他們是否在 %{county} 工作？",
         "workInRegionNote": ""
       }
     },
@@ -14,26 +14,22 @@
       "dontWant": "我不想使用這些優先權",
       "liveWork": {
         "live": {
-          "label": "住在 City of Hayward 的優先權",
+          "label": "住在 %{county} 的優先權",
           "description": "我家至少有一人住在 Hayward 市",
-          "link": "application.preferences"
         },
         "work": {
-          "label": "在 City of Hayward 工作優先權",
-          "description": "我家至少有一人在 Hayward 市工作或獲得工作機會",
-          "link": "application.preferences"
+          "label": "在 %{county} 工作優先權",
+          "description": "我家至少有一人在 %{county} 市工作或獲得工作機會",
         }
       },
       "displacedTenant": {
         "general": {
           "label": "無居所租客房屋優先權",
-          "description": "由於 Hayward 房屋管理局、重建管理局或 Hayward 市政府進行重建活動，我家至少有一人被迫搬出住宅物業。",
-          "link": "application.preferences"
+          "description": "由於 Hayward 房屋管理局、重建管理局或 Hayward 市政府進行重建活動，我家至少有一人被迫搬出住宅物業。"
         },
         "missionCorridor": {
           "label": "Mission Boulevard Corridor (SR 238) 無居所租客房屋優先權",
-          "description": "根據 SR 238 和解實施項目條款規定，我家至少有一人是 SR 238 計劃參與者。計劃參與者是 SR 238 Mission Boulevard 走廊沿線先前已出售的 Caltrans 物業租戶；此走廊興建低於市價的全新住房時，計劃參與者有入住優先權。",
-          "link": "https://www.hayward-ca.gov/238/background"
+          "description": "根據 SR 238 和解實施項目條款規定，我家至少有一人是 SR 238 計劃參與者。計劃參與者是 SR 238 Mission Boulevard 走廊沿線先前已出售的 Caltrans 物業租戶；此走廊興建低於市價的全新住房時，計劃參與者有入住優先權。"
         }
       }
     }
