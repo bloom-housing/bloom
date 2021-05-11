@@ -32,7 +32,7 @@ const HouseholdMemberForm = (props: {
           {t("t.edit")}
         </a>
       ) : (
-        <Icon className="ml-2 absolute top-0 right-0" size="medium" symbol="lock" fill="#0077DA" />
+        <Icon className="ml-2 absolute top-0 right-0" size="medium" symbol="lock" fill="primary" />
       )}
     </ViewItem>
   )

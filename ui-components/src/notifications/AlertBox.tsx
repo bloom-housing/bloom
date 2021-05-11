@@ -45,7 +45,7 @@ const AlertBox = (props: AlertBoxProps) => {
         <Icon
           size="medium"
           symbol={icons[props.type || "alert"]}
-          fill={props.inverted ? "#ffffff" : undefined}
+          fill={props.inverted ? "white" : undefined}
         />
       </span>
       <span className="alert-box__body">

@@ -108,11 +108,18 @@ const IconMap = {
 
 export type IconTypes = keyof typeof IconMap
 
+export type IconFill = "white" | "primary"
+
+const IconFillColors = {
+  white: "#ffffff",
+  primary: "#0077DA",
+}
+
 export interface IconProps {
   size: "tiny" | "small" | "medium" | "large" | "xlarge" | "2xl" | "3xl"
   symbol: IconTypes
   className?: string
-  fill?: string
+  fill?: IconFill
 }
 
 const Icon = (props: IconProps) => {
@@ -125,7 +132,7 @@ const Icon = (props: IconProps) => {
 
   return (
     <span className={wrapperClasses.join(" ")}>
-      <SpecificIcon fill={props.fill} />
+      <SpecificIcon fill={props.fill ? IconFillColors[props.fill] : undefined} />
     </span>
   )
 }

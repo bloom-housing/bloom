@@ -11,7 +11,7 @@ describe("<Icon>", () => {
   })
   it("can render with a custom class", () => {
     const { container } = render(
-      <Icon size="2xl" symbol="profile" fill={"#ffffff"} className={"custom-class"} />
+      <Icon size="2xl" symbol="profile" fill={"white"} className={"custom-class"} />
     )
     expect(container.getElementsByClassName("custom-class").length).toBe(1)
   })

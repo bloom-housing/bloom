@@ -53,7 +53,7 @@ export default () => {
   if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
 
   const LockIcon = () => {
-    return autofilled && <Icon className="ml-2" size="medium" symbol="lock" fill="#0077DA" />
+    return autofilled && <Icon className="ml-2" size="medium" symbol="lock" fill="primary" />
   }
 
   return (
