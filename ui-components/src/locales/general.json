@@ -238,7 +238,7 @@
       "sendMailToMailingAddress": "Send my mail to a different address",
       "mailingAddress": "Mailing Address",
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
-      "doYouWorkIn": "Do you work in <REGION>?",
+      "doYouWorkIn": "Do you work in %{county} County?",
       "doYouWorkInDescription": "TBD",
       "workAddress": "Work Address"
     },
@@ -318,7 +318,7 @@
         "title": "Tell us about this person",
         "updateHouseholdMember": "Update Household Member",
         "whatReletionship": "What is their relationship to you",
-        "workInRegion": "Do they work in <REGION>?",
+        "workInRegion": "Do they work in %{county} County?",
         "workInRegionNote": "TBD"
       },
       "membersInfo": {
@@ -377,15 +377,15 @@
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
       "liveWork": {
-        "title": "Live or Work in <REGION>",
+        "title": "Live or Work in %{county} County?",
         "live": {
-          "label": "Live in <REGION> Preference",
-          "description": "Live in <REGION> copy goes here…",
+          "label": "Live in %{county} County Preference",
+          "description": "Live in %{county} copy goes here…",
           "link": "http://domain.com"
         },
         "work": {
-          "label": "Work in <REGION> Preference",
-          "description": "Work in <REGION> copy goes here…",
+          "label": "Work in %{county} County Preference",
+          "description": "Work in %{county} copy goes here…",
           "link": "http://domain.com"
         }
       },

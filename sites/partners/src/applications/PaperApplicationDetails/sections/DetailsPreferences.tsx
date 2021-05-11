@@ -38,7 +38,11 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
 
         return (
           <GridCell key={listingPreference.id}>
-            <ViewItem label={t(`application.preferences.${metaKey}.title`)}>
+            <ViewItem
+              label={t(`application.preferences.${metaKey}.title`, {
+                county: listingDto?.countyCode,
+              })}
+            >
               {(() => {
                 if (!optionDetails?.claimed) return t("t.none")
 
@@ -48,7 +52,12 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                   const extra = option.extraData?.map((extra) => {
                     if (extra.type === InputType.text)
                       return (
-                        <ViewItem key={extra.key} label={t(`application.preferences.options.name`)}>
+                        <ViewItem
+                          key={extra.key}
+                          label={t(`application.preferences.options.name`, {
+                            county: listingDto?.countyCode,
+                          })}
+                        >
                           {extra.value}
                         </ViewItem>
                       )
@@ -57,7 +66,9 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                       return (
                         <ViewItem
                           key={extra.key}
-                          label={t(`application.preferences.options.${extra.key}`)}
+                          label={t(`application.preferences.options.${extra.key}`, {
+                            county: listingDto?.countyCode,
+                          })}
                         >
                           {extra.value ? t("t.yes") : t("t.no")}
                         </ViewItem>
@@ -67,7 +78,9 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                       return (
                         <GridSection
                           key={extra.key}
-                          subtitle={t(`application.preferences.options.address`)}
+                          subtitle={t(`application.preferences.options.address`, {
+                            county: listingDto?.countyCode,
+                          })}
                           columns={3}
                         >
                           <DetailsAddressColumns
@@ -80,7 +93,11 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
 
                   return (
                     <div key={option.key}>
-                      <p>{t(`application.preferences.${metaKey}.${option.key}.label`)}</p>
+                      <p>
+                        {t(`application.preferences.${metaKey}.${option.key}.label`, {
+                          county: listingDto?.countyCode,
+                        })}
+                      </p>
                       <div className="my-5">{extra}</div>
                     </div>
                   )

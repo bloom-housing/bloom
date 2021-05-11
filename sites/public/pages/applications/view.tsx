@@ -53,7 +53,7 @@ export default () => {
           <p className="font-serif text-3xl my-0">{application.confirmationId}</p>
         </div>
 
-        <FormSummaryDetails application={application} editMode={false} />
+        <FormSummaryDetails listing={listing} application={application} editMode={false} />
 
         <div className="form-card__pager hide-for-print">
           <div className="form-card__pager-row py-6">

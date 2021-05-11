@@ -40,11 +40,14 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
-      await createUser({
-        ...rest,
-        dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
-        language,
-      })
+      await createUser(
+        {
+          ...rest,
+          dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+          language,
+        },
+        language
+      )
 
       setOpenModal(true)
     } catch (err) {

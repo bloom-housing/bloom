@@ -32,7 +32,7 @@ function compareStrings(a, b, node, nextNode, isInverted) {
   }
 }
 
-export function getColDefs(maxHouseholdSize: number) {
+export function getColDefs(maxHouseholdSize: number, countyCode: string) {
   const defs = [
     {
       headerName: t("application.details.submittedDate"),
@@ -208,7 +208,7 @@ export function getColDefs(maxHouseholdSize: number) {
 
         const claimed = preferences.reduce((acc, curr) => {
           if (curr.claimed) {
-            acc.push(t(`application.preferences.${curr.key}.title`))
+            acc.push(t(`application.preferences.${curr.key}.title`, { county: countyCode }))
           }
 
           return acc

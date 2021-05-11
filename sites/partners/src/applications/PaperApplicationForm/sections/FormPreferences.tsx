@@ -15,11 +15,12 @@ import { useFormContext } from "react-hook-form"
 import { Preference, FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 type FormPreferencesProps = {
+  county: string
   preferences: Preference[]
   hhMembersOptions?: SelectOption[]
 }
 
-const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps) => {
+const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferencesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -60,7 +61,11 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
 
           return (
             <GridCell key={preference.id}>
-              <ViewItem label={t(`application.preferences.${metaKey}.title`)}>
+              <ViewItem
+                label={t(`application.preferences.${metaKey}.title`, {
+                  county,
+                })}
+              >
                 <fieldset className="mt-4">
                   {preference?.formMetadata?.options?.map((option) => {
                     return (
@@ -70,7 +75,10 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
                           name={getPreferenceOptionName(preference.formMetadata.key, option.key)}
                           type="checkbox"
                           label={t(
-                            `application.preferences.${preference?.formMetadata?.key}.${option.key}.label`
+                            `application.preferences.${preference?.formMetadata?.key}.${option.key}.label`,
+                            {
+                              county,
+                            }
                           )}
                           register={register}
                           inputProps={{
