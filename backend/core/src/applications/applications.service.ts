@@ -10,7 +10,7 @@ import { assignDefined } from "../shared/assign-defined"
 import { authzActions, AuthzService } from "../auth/authz.service"
 import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
-import { EmailService } from "../shared/services/email.service"
+import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
 
 @Injectable({ scope: Scope.REQUEST })

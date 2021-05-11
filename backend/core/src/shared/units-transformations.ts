@@ -61,7 +61,8 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   //    year) per household size.
   if (amiValues.length > 1) {
     amiValues.forEach((percent) => {
-      hmiHeaders[`ami${percent}`] = `${percent}% AMI Units`
+      // Pass translation with its respective argument with format `key,argumentName:argumentValue`
+      hmiHeaders[`ami${percent}`] = `listings.percentAMIUnit,percent:${percent}`
     })
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {

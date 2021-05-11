@@ -36,6 +36,7 @@ module.exports = withCSS(
         env: {
           backendApiBase: BACKEND_API_BASE,
           listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+          countyCode: process.env.COUNTY_CODE,
         },
         sassLoaderOptions: {
           additionalData: tailwindVars,
