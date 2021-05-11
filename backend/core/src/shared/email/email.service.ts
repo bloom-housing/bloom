@@ -12,6 +12,7 @@ import { Application } from "../../applications/entities/application.entity"
 import { TranslationsService } from "../../translations/translations.service"
 import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
+import { CountyCodeResolverService } from "../services/county-code-resolver.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -20,10 +21,11 @@ export class EmailService {
   constructor(
     private readonly sendGrid: SendGridService,
     private readonly configService: ConfigService,
-    private readonly translationService: TranslationsService
+    private readonly translationService: TranslationsService,
+    private readonly countyCodeResolverService: CountyCodeResolverService
   ) {
     this.polyglot = new Polyglot({
-      phrases: {}
+      phrases: {},
     })
     const polyglot = this.polyglot
     Handlebars.registerHelper("t", function (
@@ -39,7 +41,7 @@ export class EmailService {
   public async welcome(user: User, appUrl: string) {
     const language = user.language || Language.en
     // NOTE What to do when user has no countyCode e.g. an admin?
-    void (await this.loadTranslations(user.countyCode, language))
+    void (await this.loadTranslations(this.countyCodeResolverService.getCountyCode(), language))
     const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
@@ -105,7 +107,10 @@ export class EmailService {
   }
 
   public async forgotPassword(user: User, appUrl: string) {
-    void (await this.loadTranslations(user.countyCode, user.language))
+    void (await this.loadTranslations(
+      this.countyCodeResolverService.getCountyCode(),
+      user.language
+    ))
     const compiledTemplate = this.template("forgot-password")
     const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
 

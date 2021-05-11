@@ -12,7 +12,6 @@ import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
-import { CountyCode } from "../shared/types/county-code"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {

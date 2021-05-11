@@ -5,7 +5,6 @@ export class addCountyCodeToListingAndUser1620653590005 implements MigrationInte
   name = "addCountyCodeToListingAndUser1620653590005"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "user_accounts" ADD "county_code" character varying`)
     await queryRunner.query(
       `ALTER TABLE "listings" ADD "county_code" character varying NOT NULL DEFAULT 'Alameda'`
     )
@@ -23,6 +22,5 @@ export class addCountyCodeToListingAndUser1620653590005 implements MigrationInte
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "listings" DROP COLUMN "county_code"`)
-    await queryRunner.query(`ALTER TABLE "user_accounts" DROP COLUMN "county_code"`)
   }
 }

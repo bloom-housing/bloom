@@ -13,7 +13,6 @@ import { Applicant } from "./entities/applicant.entity"
 import { ApplicationsSubmissionController } from "./applications-submission.controller"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
-import { EmailService } from "../shared/email/email.service"
 import { EmailModule } from "../shared/email/email.module"
 import { TranslationsModule } from "../translations/translations.module"
 
@@ -27,7 +26,7 @@ import { TranslationsModule } from "../translations/translations.module"
     TranslationsModule,
     EmailModule,
   ],
-  providers: [ApplicationsService, CsvEncoder, CsvBuilder, ApplicationCsvExporter, EmailService],
+  providers: [ApplicationsService, CsvEncoder, CsvBuilder, ApplicationCsvExporter],
   exports: [ApplicationsService],
   controllers: [ApplicationsController, ApplicationsSubmissionController],
 })
