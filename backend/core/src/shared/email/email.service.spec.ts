@@ -12,13 +12,14 @@ import { Language } from "../types/language-enum"
 import { Repository } from "typeorm"
 
 import dbOptions = require("../../../ormconfig.test")
+import { CountyCodeResolverService } from "../services/county-code-resolver.service"
+import { REQUEST } from "@nestjs/core"
 
 declare const expect: jest.Expect
 const user = new User()
 user.firstName = "Test"
 user.lastName = "User"
 user.email = "test@xample.com"
-user.countyCode = CountyCode.alameda
 
 const listing = Object.assign({}, ArcherListing)
 
@@ -43,7 +44,19 @@ describe("EmailService", () => {
           apikey: "SG.fake",
         }),
       ],
-      providers: [EmailService, TranslationsService],
+      providers: [
+        EmailService,
+        TranslationsService,
+        CountyCodeResolverService,
+        {
+          provide: REQUEST,
+          useValue: {
+            get: () => {
+              return { "county-code": CountyCode.alameda }
+            },
+          },
+        },
+      ],
     }).compile()
 
     const translationsRepository = module.get<Repository<Translation>>(
