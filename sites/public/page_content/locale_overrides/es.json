@@ -15,11 +15,13 @@
       "liveWork": {
         "live": {
           "label": "Preferencia de vivir en %{county}",
-          "description": "Al menos un miembro de mi hogar vive en %{county}"
+          "description": "Al menos un miembro de mi hogar vive en %{county}",
+          "link": "application.preferences"
         },
         "work": {
-          "label": "Preferencia de trabajar en %{county}",
-          "description": "Al menos un miembro de mi hogar trabaja o le han ofrecido trabajo en %{county}"
+          "label": "Preferencia de trabajar en City of Hayward",
+          "description": "Al menos un miembro de mi hogar trabaja o le han ofrecido trabajo en %{county}",
+          "link": "application.preferences"
         }
       },
       "displacedTenant": {
