@@ -470,25 +470,25 @@
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "English",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Eng.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_English.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Spanish",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Spanish.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Spanish.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Vietnamese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Chinese.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Vietnamese.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Chinese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Viet.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Chinese.pdf"
     }
   ],
   "assets": [

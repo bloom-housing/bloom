@@ -13,7 +13,7 @@
   "applicationDueDate": "2021-05-26T17:00:00.000-07:00",
   "applicationOrganization": "John Stewart Company",
   "applicationPhone": "510-894-2890",
-  "buildingSelectionCriteria": "https://drive.google.com/file/d/1naF0Il86mcd2Lstn2gxdgQTS0pgvbdjg/view",
+  "buildingSelectionCriteria": "https://drive.google.com/file/d/1_U1tHEDMLF9D8AsNnJoGopA82UStsKZy/view",
   "costsNotIncluded": null,
   "creditHistory": "To be used to determine income eligibility only",
   "CSVFormattingType": "basic",
@@ -471,25 +471,25 @@
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "English",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Eng.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_English.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Spanish",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Spanish.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Spanish.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Vietnamese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Chinese.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Vietnamese.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Chinese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+App+Viet.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Chinese.pdf"
     }
   ],
   "assets": [
