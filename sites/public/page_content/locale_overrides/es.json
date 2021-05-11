@@ -18,7 +18,7 @@
           "description": "Al menos un miembro de mi hogar vive en %{county}"
         },
         "work": {
-          "label": "Preferencia de trabajar en City of Hayward",
+          "label": "Preferencia de trabajar en %{county}",
           "description": "Al menos un miembro de mi hogar trabaja o le han ofrecido trabajo en %{county}"
         }
       },
