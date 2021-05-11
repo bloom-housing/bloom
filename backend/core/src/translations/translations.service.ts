@@ -5,7 +5,7 @@ import { TranslationCreateDto, TranslationUpdateDto } from "./dto/translation.dt
 import { CountyCode } from "../shared/types/county-code"
 import { Language } from "../shared/types/language-enum"
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class TranslationsService extends AbstractServiceFactory<
   Translation,
   TranslationCreateDto,
