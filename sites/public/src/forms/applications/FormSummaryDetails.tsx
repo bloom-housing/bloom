@@ -1,6 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { Address, AllExtraDataTypes, InputType } from "@bloom-housing/backend-core/types"
+import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
+
+type FormSummaryDetailsProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  application: any
+  listing: Listing
+  editMode?: boolean
+  hidePreferences?: boolean
+}
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">
@@ -38,7 +46,12 @@ const reformatAddress = (address: Address) => {
   return newAddress
 }
 
-const FormSummaryDetails = ({ application, editMode = false, hidePreferences = false }) => {
+const FormSummaryDetails = ({
+  application,
+  listing,
+  editMode = false,
+  hidePreferences = false,
+}: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
@@ -284,7 +297,9 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
             <div id="preferences" className="form-card__group border-b mx-0">
               {application.preferences.filter((item) => item.claimed == true).length == 0 ? (
                 <p className="field-note text-black">
-                  {t("application.preferences.general.title")}{" "}
+                  {t("application.preferences.general.title", {
+                    county: listing?.countyCode,
+                  })}{" "}
                   {t("application.preferences.general.preamble")}
                 </p>
               ) : (
@@ -299,7 +314,9 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
                             label={t("application.preferences.youHaveClaimed")}
                             helper={preferenceHelperText(option?.extraData)}
                           >
-                            {t(`application.preferences.${preference.key}.${option.key}.label`)}
+                            {t(`application.preferences.${preference.key}.${option.key}.label`, {
+                              county: listing?.countyCode,
+                            })}
                           </ViewItem>
                         ))
                     )}

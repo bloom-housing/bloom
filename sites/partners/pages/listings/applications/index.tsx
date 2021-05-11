@@ -15,7 +15,7 @@ import {
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { useApplicationsData } from "../../../lib/hooks"
+import { useApplicationsData, useSingleListingData } from "../../../lib/hooks"
 import Layout from "../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
@@ -43,6 +43,8 @@ const ApplicationsList = () => {
 
   const listingId = router.query.listing as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+  const { listingDto } = useSingleListingData(listingId)
+  const countyCode = listingDto?.countyCode
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
@@ -179,8 +181,8 @@ const ApplicationsList = () => {
   }, [appsData])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize)
-  }, [maxHouseholdSize])
+    return getColDefs(maxHouseholdSize, countyCode)
+  }, [maxHouseholdSize, countyCode])
 
   if (!applications) return null
 

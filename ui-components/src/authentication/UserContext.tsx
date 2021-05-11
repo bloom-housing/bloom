@@ -26,7 +26,7 @@ type ContextProps = {
   confirmAccount: (token: string, language: string) => Promise<User>
   forgotPassword: (email: string, language: string) => Promise<string>
   login: (email: string, password: string) => Promise<User>
-  createUser: (user: UserCreate) => Promise<string>
+  createUser: (user: UserCreate, language: string) => Promise<string>
   resendConfirmation: (email: string, language: string) => Promise<string>
   signOut: () => void
   // True when an API request is processing
@@ -160,10 +160,10 @@ export const UserProvider: FunctionComponent = ({ children }) => {
         dispatch(stopLoading())
       }
     },
-    createUser: async (user: UserCreate) => {
+    createUser: async (user: UserCreate, language: string) => {
       dispatch(startLoading())
       try {
-        const { status: status } = await register(apiUrl, user)
+        const { status: status } = await register(apiUrl, user, language)
         return status
       } finally {
         dispatch(stopLoading())

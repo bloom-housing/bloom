@@ -52,7 +52,7 @@
     "incomeValue": "$3000.00 per month"
   },
   "prefences": {
-    "region": "Live in <REGION> Preference",
-    "work": "Work in <REGION> Preference"
+    "region": "Live in",
+    "work": "Work in"
   }
 }

@@ -25,11 +25,14 @@ export const login = async (apiBase: string, email: string, password: string) =>
   return accessToken
 }
 
-export const register = async (apiBase: string, data: UserCreate) => {
-  const res = await axios.post<{ accessToken: string } & Status>(`${apiBase}/user`, {
-    appUrl: window.location.origin,
-    ...data,
-  })
+export const register = async (apiBase: string, data: UserCreate, language: string) => {
+  const res = await axiosWithHeaders(language).post<{ accessToken: string } & Status>(
+    `${apiBase}/user`,
+    {
+      appUrl: window.location.origin,
+      ...data,
+    }
+  )
   return { ...res.data }
 }
 

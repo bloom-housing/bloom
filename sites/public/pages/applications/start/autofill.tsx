@@ -90,6 +90,7 @@ export default () => {
         </div>
         <FormSummaryDetails
           application={previousApplication}
+          listing={listing}
           editMode={false}
           hidePreferences={true}
         />

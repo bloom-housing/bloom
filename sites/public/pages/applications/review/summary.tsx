@@ -41,7 +41,7 @@ export default () => {
           </h2>
         </div>
 
-        <FormSummaryDetails application={application} editMode />
+        <FormSummaryDetails application={application} listing={listing} editMode />
 
         <div className="form-card__group">
           <p className="field-note text-gray-800 text-center">
