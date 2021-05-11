@@ -245,7 +245,7 @@ export default () => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setConfirmationResent(true)
-              void resendConfirmation(email.current.toString())
+              void resendConfirmation(email.current.toString(), language)
             }}
           >
             {t("authentication.createAccount.resendTheEmail")}
