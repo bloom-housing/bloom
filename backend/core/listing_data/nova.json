@@ -20,7 +20,7 @@
   "CSVFormattingType": "basic",
   "depositMax": "500",
   "depositMin": "500",
-  "programRules": "LIHTC",
+  "programRules": "This property follows the California Tax Credit Allocation Committee's Low Income Housing Tax Credit Program (LIHTC).",
   "externalId": null,
   "waitlistMaxSize": null,
   "name": "Nova",
@@ -51,6 +51,7 @@
   "leasingAgentOfficeHours": "Monday - Friday, 8:00AM - 5:00PM",
   "leasingAgentPhone": "(714) 282-2520",
   "leasingAgentTitle": "Community Manager",
+  "rentalAssistance": "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
   "rentalHistory": "",
   "preferences": [],
   "property": {
@@ -64,7 +65,7 @@
     "unitAmenities": "Furnished with bed, mattress, refrigerator and microwave",
     "developer": "Affirmed Housing",
     "yearBuilt": 2021,
-    "accessibility": "All units with adaptability features, with some mobility and heaering/vision units. Priorities units including 6 ADA Mobility units and 3 ADA Hearing/Vision units.",
+    "accessibility": "All units with adaptability features, with some mobility and hearing/vision units. Priorities units including 6 ADA Mobility units and 3 ADA Hearing/Vision units.",
     "amenities": "Community room with kitchen, Supportive Services",
     "buildingTotalUnits": 56,
     "buildingAddress": {
