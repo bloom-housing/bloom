@@ -16,7 +16,7 @@ const ReferralApplication = (props: ReferralApplicationProps) => {
       <h2 className="text-caps-underline">{props.title}</h2>
       <p>
         <a href={linkedPhoneNumber}>
-          <Icon symbol="phone" size="medium" /> {t("t.call")} {props.phoneNumber}
+          <Icon symbol="phone" size="medium" fill={"#0077DA"} /> {t("t.call")} {props.phoneNumber}
         </a>
       </p>
       <p className="text-tiny mt-4 text-gray-800">{props.description}</p>
