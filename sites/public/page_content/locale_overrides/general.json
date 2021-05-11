@@ -1,12 +1,12 @@
 {
   "application": {
     "contact": {
-      "doYouWorkIn": "Do you work in Alameda County?",
+      "doYouWorkIn": "Do you work in %{county} County?",
       "doYouWorkInDescription": ""
     },
     "household": {
       "member": {
-        "workInRegion": "Do they work in the Alameda County?",
+        "workInRegion": "Do they work in the %{county} County?",
         "workInRegionNote": ""
       }
     },
@@ -16,14 +16,14 @@
     },
     "preferences": {
       "liveWork": {
-        "title": "Live or Work in Alameda County",
+        "title": "Live or Work in %{county} County",
         "live": {
-          "label": "Live in Alameda County Preference",
-          "description": "At least one member of my household lives in the Alameda County"
+          "label": "Live in %{county} County Preference",
+          "description": "At least one member of my household lives in the %{county} County"
         },
         "work": {
-          "label": "Work in Alameda County Preference",
-          "description": "At least one member of my household works or has been offered work in the Alameda County"
+          "label": "Work in %{county} County Preference",
+          "description": "At least one member of my household works or has been offered work in the %{county} County"
         }
       },
       "displacedTenant": {
