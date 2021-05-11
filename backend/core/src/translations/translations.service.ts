@@ -25,6 +25,7 @@ export class TranslationsService extends AbstractServiceFactory<
       })
     } catch (e) {
       if (e instanceof EntityColumnNotFound && language != Language.en) {
+        console.warn(`Fetching translations for ${language} failed, defaulting to english.`)
         return this.findOne({
           where: {
             language: Language.en,
