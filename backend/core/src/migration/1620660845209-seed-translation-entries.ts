@@ -56,14 +56,10 @@ export class seedTranslationEntries1620660845209 implements MigrationInterface {
         hello: "Hello",
       },
     }
-    for (const countyCode in CountyCode) {
-      for (const language in Language) {
-        await queryRunner.query(
-          `INSERT into "translations" (county_code, language, translations) VALUES ($1, $2, $3)`,
-          [countyCode, language, defaultTranslation]
-        )
-      }
-    }
+    await queryRunner.query(
+      `INSERT into "translations" (county_code, language, translations) VALUES ($1, $2, $3)`,
+      [CountyCode.alameda, Language.en, defaultTranslation]
+    )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {}

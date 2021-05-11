@@ -35,7 +35,7 @@ describe("TranslationsService", () => {
 
   describe("Translations queries", () => {
     it("Should return translations for given county code and language", async () => {
-      const result = await service.getTranslationByLanguageAndCountyCode(
+      const result = await service.getTranslationByLanguageAndCountyCodeOrDefaultEn(
         Language.en,
         CountyCode.alameda
       )

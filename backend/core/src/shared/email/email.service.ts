@@ -130,24 +130,10 @@ export class EmailService {
   }
 
   private async loadTranslations(countyCode: CountyCode, language: Language) {
-    let translation
-    try {
-      translation = await this.translationService.getTranslationByLanguageAndCountyCode(
-        language,
-        countyCode
-      )
-      this.polyglot.replace(translation.translations)
-    } catch (e) {
-      if (e instanceof EntityColumnNotFound && language != Language.en) {
-        console.warn(`Translations for ${language} not found, defaulting to english.`)
-        translation = await this.translationService.getTranslationByLanguageAndCountyCode(
-          Language.en,
-          countyCode
-        )
-      } else {
-        throw e
-      }
-    }
+    const translation = await this.translationService.getTranslationByLanguageAndCountyCodeOrDefaultEn(
+      language,
+      countyCode
+    )
     this.polyglot.replace(translation.translations)
   }
 
