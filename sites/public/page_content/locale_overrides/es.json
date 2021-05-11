@@ -25,7 +25,7 @@
       "displacedTenant": {
         "general": {
           "label": "Preferencia de vivienda para inquilinos desplazados",
-          "description": "Al menos un miembro de mi hogar fue desplazado de una propiedad residencial debido a la actividad de reurbanización por parte de la Autoridad de Vivienda de Hayward, la Agencia de Reurbanización o la Ciudad de Hayward.",
+          "description": "Al menos un miembro de mi hogar fue desplazado de una propiedad residencial debido a la actividad de reurbanización por parte de la Autoridad de Vivienda de Hayward, la Agencia de Reurbanización o la Ciudad de Hayward."
         },
         "missionCorridor": {
           "label": "Preferencia de vivienda para inquilinos desplazados de Mission Boulevard Corridor (SR 238)",
