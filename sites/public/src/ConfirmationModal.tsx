@@ -3,6 +3,7 @@ import {
   Button,
   Modal,
   UserContext,
+  ConfigContext,
   t,
   Form,
   Field,
@@ -20,6 +21,7 @@ export interface ConfirmationModalProps {
 const ConfirmationModal = (props: ConfirmationModalProps) => {
   const { setSiteAlertMessage } = props
   const { resendConfirmation, profile, confirmAccount } = useContext(UserContext)
+  const { language } = useContext(ConfigContext)
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
@@ -33,7 +35,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   const onSubmit = async ({ email }) => {
     try {
-      await resendConfirmation(email)
+      await resendConfirmation(email, language)
 
       setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
       setOpenModal(false)
@@ -46,7 +48,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   useEffect(() => {
     if (router?.query?.token && !profile) {
-      confirmAccount(router.query.token.toString())
+      confirmAccount(router.query.token.toString(), language)
         .then(() => {
           void router.push({
             pathname: "/account/dashboard",
