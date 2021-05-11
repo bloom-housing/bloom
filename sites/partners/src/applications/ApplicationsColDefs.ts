@@ -207,12 +207,8 @@ export function getColDefs(maxHouseholdSize: number) {
         const { preferences } = row.data
 
         const claimed = preferences.reduce((acc, curr) => {
-          const options = curr.options
-            .filter((option) => option?.checked)
-            ?.map((item) => t(`application.preferences.options.${item.key}`))
-
-          if (curr?.claimed) {
-            acc.push(options.join(", "))
+          if (curr.claimed) {
+            acc.push(t(`application.preferences.${curr.key}.title`))
           }
 
           return acc

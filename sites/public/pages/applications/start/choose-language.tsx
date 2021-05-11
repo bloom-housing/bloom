@@ -125,7 +125,9 @@ export default () => {
               <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
 
               <div>
-                <LinkButton href="/sign-in?redirectUrl=/applications/start/choose-language">
+                <LinkButton
+                  href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
+                >
                   {t("nav.signIn")}
                 </LinkButton>
               </div>

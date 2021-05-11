@@ -230,10 +230,18 @@ export default class extends Component<ListingProps> {
             <ApplicationStatus listing={listing} />
             <div className="mx-4">
               <DownloadLotteryResults event={lotteryResults} />
-              <ApplicationSection
-                listing={listing}
-                internalFormRoute="/applications/start/choose-language"
-              />
+              {listing.applicationMethods.length > 0 ? (
+                <ApplicationSection
+                  listing={listing}
+                  internalFormRoute="/applications/start/choose-language"
+                />
+              ) : (
+                <ReferralApplication
+                  phoneNumber={t("application.referralApplication.phoneNumber")}
+                  description={t("application.referralApplication.instructions")}
+                  title={t("application.referralApplication.furtherInformation")}
+                />
+              )}
             </div>
           </div>
           <ListingDetails>
@@ -274,16 +282,20 @@ export default class extends Component<ListingProps> {
                   subtitle={t("listings.sections.additionalEligibilitySubtitle")}
                 >
                   <>
-                    <InfoCard title={t("listings.creditHistory")}>
-                      <ExpandableText className="text-sm text-gray-700">
-                        {listing.creditHistory}
-                      </ExpandableText>
-                    </InfoCard>
-                    <InfoCard title={t("listings.rentalHistory")}>
-                      <ExpandableText className="text-sm text-gray-700">
-                        {listing.rentalHistory}
-                      </ExpandableText>
-                    </InfoCard>
+                    {listing.creditHistory && (
+                      <InfoCard title={t("listings.creditHistory")}>
+                        <ExpandableText className="text-sm text-gray-700">
+                          {listing.creditHistory}
+                        </ExpandableText>
+                      </InfoCard>
+                    )}
+                    {listing.rentalHistory && (
+                      <InfoCard title={t("listings.rentalHistory")}>
+                        <ExpandableText className="text-sm text-gray-700">
+                          {listing.rentalHistory}
+                        </ExpandableText>
+                      </InfoCard>
+                    )}
                     {listing.criminalBackground && (
                       <InfoCard title={t("listings.criminalBackground")}>
                         <ExpandableText className="text-sm text-gray-700">
