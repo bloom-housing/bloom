@@ -16,7 +16,14 @@ export default {
 
 export const Default = () => (
   <LoadingOverlay isLoading={true}>
-    <div style={{ backgroundColor: "green", color: "white", padding: "15em" }}>
+    <div
+      style={{
+        backgroundColor: "green",
+        color: "white",
+        padding: "10em 1em 20em",
+        textAlign: "center",
+      }}
+    >
       child content here
     </div>
   </LoadingOverlay>
