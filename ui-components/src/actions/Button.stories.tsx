@@ -88,7 +88,7 @@ export const unstyled = () => (
 
 export const inlineIcon = () => (
   <>
-    <Button inlineIcon="left" icon="arrow-back" onClick={() => alert("Click!")}>
+    <Button inlineIcon="left" icon="arrowBack" onClick={() => alert("Click!")}>
       Go Back
     </Button>
     <br />

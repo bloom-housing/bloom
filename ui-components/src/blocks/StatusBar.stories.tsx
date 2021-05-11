@@ -23,7 +23,7 @@ const handleClick = (e: React.MouseEvent) => {
 export const StatusBarSuccessAndBackButton = () => (
   <StatusBar
     backButton={
-      <Button inlineIcon="left" icon="arrow-back" onClick={handleClick}>
+      <Button inlineIcon="left" icon="arrowBack" onClick={handleClick}>
         Back
       </Button>
     }
