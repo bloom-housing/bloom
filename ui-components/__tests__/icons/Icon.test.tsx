@@ -15,8 +15,4 @@ describe("<Icon>", () => {
     )
     expect(container.getElementsByClassName("custom-class").length).toBe(1)
   })
-  it("supports different appearance types", () => {
-    const { container } = render(<Icon size="2xl" symbol="profile" />)
-    expect(container.querySelectorAll(".ui-icon.is-primary").length).toBe(1)
-  })
 })

@@ -41,8 +41,8 @@ export const ArrowBack = (props: IconProps) => {
   return (
     <svg viewBox={"0 0 5 8"} fill={props.fill ?? "#000000"}>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M.205 3.483L3.35.105c.136-.14.359-.14.496 0l.496.508a.366.366 0 0 1 0 .508l-2.4 2.616a.366.366 0 0 0 0 .508l2.4 2.634a.366.366 0 0 1 0 .508l-.496.508a.345.345 0 0 1-.496 0L.205 4.499a.73.73 0 0 1 0-1.016z"
         fill="#0077DA"
       />
