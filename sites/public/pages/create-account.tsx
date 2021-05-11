@@ -16,12 +16,14 @@ import {
   SiteAlert,
   Modal,
   passwordRegex,
+  ConfigContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import moment from "moment"
 import { useRouter } from "next/router"
 
 export default () => {
+  const { language } = useContext(ConfigContext)
   const { createUser, resendConfirmation } = useContext(UserContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
@@ -41,6 +43,7 @@ export default () => {
       await createUser({
         ...rest,
         dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        language,
       })
 
       setOpenModal(true)
@@ -242,7 +245,7 @@ export default () => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setConfirmationResent(true)
-              void resendConfirmation(email.current.toString())
+              void resendConfirmation(email.current.toString(), language)
             }}
           >
             {t("authentication.createAccount.resendTheEmail")}

@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect=9229' next -p ${NEXTJS_PORT:-3000}",
+    "dev": "next -p ${NEXTJS_PORT:-3000}",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "export": "next export",
@@ -14,7 +14,6 @@
     "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:cypress": "NODE_OPTIONS='--inspect=9229' next start -p ${NEXTJS_PORT:-3000}",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev",
-    "build:headers": "node scripts/build-headers.js",
     "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev:cypress",
     "dev:all-cypress": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait-cypress\"",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""

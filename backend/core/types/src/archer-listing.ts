@@ -1,4 +1,10 @@
-import { ListingStatus, AmiChart, ApplicationMethodType, Listing } from "./backend-swagger"
+import {
+  AmiChart,
+  ApplicationMethodType,
+  CountyCode,
+  Listing,
+  ListingStatus,
+} from "./backend-swagger"
 
 const amiChart: AmiChart = {
   id: "somerandomid",
@@ -577,6 +583,7 @@ export const ArcherListing: Listing = {
   applicationPickUpAddressOfficeHours: "",
   depositMax: "",
   disableUnitsAccordion: false,
+  countyCode: CountyCode.Alameda,
   events: [],
   urlSlug: "listing-slug-abcdef",
   whatToExpect: {

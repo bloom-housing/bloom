@@ -8,7 +8,7 @@ import { CountyCode } from "../../shared/types/county-code"
 import { Language } from "../../shared/types/language-enum"
 import { TranslationsType } from "../types/translations-type"
 
-@Entity()
+@Entity({ name: "translations" })
 @Index(["countyCode", "language"], { unique: true })
 export class Translation extends AbstractEntity {
   @Column({ enum: CountyCode })
