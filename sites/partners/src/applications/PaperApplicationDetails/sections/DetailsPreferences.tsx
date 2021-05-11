@@ -32,8 +32,6 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
       inset
       columns={2}
     >
-      {console.log(listingDto?.countyCode)}
-
       {listingPreferences?.map((listingPreference) => {
         const metaKey = listingPreference?.formMetadata?.key
         const optionDetails = preferences.find((item) => item.key === metaKey)
