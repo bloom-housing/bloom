@@ -11,7 +11,7 @@ import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
 import { Repository } from "typeorm"
 
-const dbOptions = require("../../../ormconfig.test")
+import dbOptions = require("../../../ormconfig.test")
 
 declare const expect: jest.Expect
 const user = new User()

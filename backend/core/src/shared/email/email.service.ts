@@ -12,6 +12,7 @@ import { Application } from "../../applications/entities/application.entity"
 import { TranslationsService } from "../../translations/translations.service"
 import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
+import { EntityColumnNotFound } from "typeorm/error/EntityColumnNotFound"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -38,6 +39,7 @@ export class EmailService {
 
   public async welcome(user: User, appUrl: string) {
     const language = user.language || Language.en
+    // NOTE What to do when user has no countyCode e.g. an admin?
     void (await this.loadTranslations(user.countyCode, language))
     const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
     if (this.configService.get<string>("NODE_ENV") === "production") {
@@ -128,10 +130,24 @@ export class EmailService {
   }
 
   private async loadTranslations(countyCode: CountyCode, language: Language) {
-    const translation = await this.translationService.getTranslationByLanguageAndCountyCode(
-      language,
-      countyCode
-    )
+    let translation
+    try {
+      translation = await this.translationService.getTranslationByLanguageAndCountyCode(
+        language,
+        countyCode
+      )
+      this.polyglot.replace(translation.translations)
+    } catch (e) {
+      if (e instanceof EntityColumnNotFound && language != Language.en) {
+        console.warn(`Translations for ${language} not found, defaulting to english.`)
+        translation = await this.translationService.getTranslationByLanguageAndCountyCode(
+          Language.en,
+          countyCode
+        )
+      } else {
+        throw e
+      }
+    }
     this.polyglot.replace(translation.translations)
   }
 
