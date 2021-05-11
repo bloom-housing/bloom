@@ -51,7 +51,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
 
   return (
     <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
-      <Icon size="medium" symbol="clock" white={vivid} /> &nbsp;
+      <Icon size="medium" symbol="clock" fill={vivid ? "#ffffff" : undefined} /> &nbsp;
       {content}
       {formattedDate != "" ? `: ${formattedDate}` : ""}
     </div>

@@ -27,14 +27,15 @@ const LeasingAgent = (props: LeasingAgentProps) => {
 
       <p className="mt-5">
         <a href={phoneNumber}>
-          <Icon symbol="phone" size="medium" /> {t("t.call")} {listing.leasingAgentPhone}
+          <Icon symbol="phone" size="medium" fill="#0077DA" /> {t("t.call")}{" "}
+          {listing.leasingAgentPhone}
         </a>
       </p>
       <p className="text-sm text-gray-700">{t("leasingAgent.dueToHighCallVolume")}</p>
 
       <p className="my-5">
         <a href={`mailto:${listing.leasingAgentEmail}`}>
-          <Icon symbol="mail" size="medium" /> {t("t.email")}
+          <Icon symbol="mail" size="medium" fill="#0077DA" /> {t("t.email")}
         </a>
       </p>
       <SidebarAddress

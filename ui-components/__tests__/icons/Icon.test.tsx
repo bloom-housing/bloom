@@ -11,14 +11,12 @@ describe("<Icon>", () => {
   })
   it("can render with a custom class", () => {
     const { container } = render(
-      <Icon size="2xl" symbol="profile" white={true} className={"custom-class"} />
+      <Icon size="2xl" symbol="profile" fill={"#ffffff"} className={"custom-class"} />
     )
     expect(container.getElementsByClassName("custom-class").length).toBe(1)
   })
   it("supports different appearance types", () => {
-    const { container } = render(
-      <Icon size="2xl" symbol="profile" styleType={AppearanceStyleType.primary} />
-    )
+    const { container } = render(<Icon size="2xl" symbol="profile" />)
     expect(container.querySelectorAll(".ui-icon.is-primary").length).toBe(1)
   })
 })
