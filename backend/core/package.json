@@ -26,6 +26,7 @@
     "test:e2e:local": "psql -c 'DROP DATABASE IF EXISTS bloom_test' && psql -c 'CREATE DATABASE bloom_test' && ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts migration:run && ts-node src/seed.ts --test && jest --config ./jest-e2e.json --runInBand --forceExit",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "herokusetup": "node heroku.setup.js",
+    "heroku-postbuild": "rimraf dist && nest build && yarn run db:migration:run",
     "generate:client": "ts-node generate-axios-client.ts",
     "migrator": "ts-node migrator.ts"
   },
