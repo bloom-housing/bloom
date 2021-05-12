@@ -9,7 +9,6 @@ import {
   FormCard,
   ProgressNav,
   UserContext,
-  blankApplication,
   t,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
@@ -37,9 +36,8 @@ export default () => {
       setSubmitted(true)
       if (previousApplication && useDetails) {
         conductor.application = previousApplication
-      } else {
-        conductor.application = blankApplication()
       }
+
       context.syncApplication(conductor.application)
       conductor.sync()
       conductor.routeToNextOrReturnUrl()
@@ -61,7 +59,7 @@ export default () => {
   )
   if (data) {
     if (data.items.length > 0) {
-      setPreviousApplication(new AutofillCleaner(data.items[0]).clean())
+      setPreviousApplication(new AutofillCleaner(data.items[0], application).clean())
     } else {
       onSubmit()
     }
