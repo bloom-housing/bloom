@@ -15,17 +15,17 @@
       "liveWork": {
         "live": {
           "label": "住在 %{county} 的優先權",
-          "description": "我家至少有一人住在 Hayward 市"
+          "description": "我家至少有一人住在 %{county}"
         },
         "work": {
           "label": "在 %{county} 工作優先權",
-          "description": "我家至少有一人在 %{county} 市工作或獲得工作機會"
+          "description": "我家至少有一人在 %{county}工作或獲得工作機會"
         }
       },
       "displacedTenant": {
         "general": {
           "label": "無居所租客房屋優先權",
-          "description": "由於 Hayward 房屋管理局、重建管理局或 Hayward 市政府進行重建活動，我家至少有一人被迫搬出住宅物業。"
+          "description": "由於 %{county} 房屋管理局、重建管理局或 %{county} 市政府進行重建活動，我家至少有一人被迫搬出住宅物業。"
         },
         "missionCorridor": {
           "label": "Mission Boulevard Corridor (SR 238) 無居所租客房屋優先權",
