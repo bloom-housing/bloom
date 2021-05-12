@@ -41,6 +41,8 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
+    if (!listingId) return
+
     if (!context.listing || context.listing.id != listingId) {
       void loadListing(listingId, setListing, conductor, context)
     } else {
