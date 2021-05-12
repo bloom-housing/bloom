@@ -15,11 +15,11 @@
       "liveWork": {
         "live": {
           "label": "Sống tại %{county} Ưu tiên",
-          "description": "Ít nhất một thành viên trong hộ gia đình tôi sống tại %{county}"
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi sống tại Thành phố %{county}"
         },
         "work": {
           "label": "Làm việc tại %{county} Ưu tiên",
-          "description": "Ít nhất một thành viên trong hộ gia đình tôi đã làm việc hoặc được đề nghị làm việc tại %{county}"
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi đã làm việc hoặc được đề nghị làm việc tại Thành phố %{county}"
         }
       },
       "displacedTenant": {
