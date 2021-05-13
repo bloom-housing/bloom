@@ -53,6 +53,7 @@
   "leasingAgentPhone": "510-894-2890",
   "leasingAgentTitle": "Property Manager",
   "rentalHistory": "Must provide 2 years' residency",
+  "specialNotes": "If you need help reading the AMI table, here is an example: a 2-person household cannot earn more than $65,760 a year to qualify for the 60% AMI",
   "preferences": [
     {
       "ordinal": 1,
@@ -78,7 +79,7 @@
   "property": {
     "createdAt": "2021-02-02T17:00:00.000-08:00",
     "updatedAt": "2021-02-02T17:00:00.000-08:00",
-    "servicesOffered": "Include but are not limited to resident services, wellness specialist, harm reduction specitlist, clinician",
+    "servicesOffered": "Include but are not limited to resident services, wellness specialist, harm reduction specialist, clinician",
     "householdSizeMin": 1,
     "householdSizeMax": 5,
     "smokingPolicy": "No Smoking",
