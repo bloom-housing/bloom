@@ -13,6 +13,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ApplicationsService } from "./applications.service"
+import { ListingsService } from "../listings/listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
@@ -166,7 +167,8 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
-    private readonly applicationCsvExporter: ApplicationCsvExporter
+    private readonly applicationCsvExporter: ApplicationCsvExporter,
+    private readonly listingsService: ListingsService
   ) {}
 
   @Get()
@@ -182,8 +184,16 @@ export class ApplicationsController {
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
     const applications = await this.applicationsService.list(queryParams)
+    let format = null
+
+    if (applications.length) {
+      const listing = await this.listingsService.findOne(applications[0].listingId)
+      format = listing?.CSVFormattingType
+    }
+
     return this.applicationCsvExporter.export(
       applications,
+      format,
       queryParams.includeHeaders,
       queryParams.includeDemographics
     )

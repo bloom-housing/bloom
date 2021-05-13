@@ -19,7 +19,7 @@ import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
 import { ThrottlerModule } from "@nestjs/throttler"
-import { getTestAppBody } from "../lib/get-test-app-body"
+import { getTestAppBody, getTestAppListedResponseBody } from "../lib/get-test-app-body"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -170,6 +170,7 @@ describe("Applications", () => {
         ],
       },
     ]
+    const responseBody = getTestAppListedResponseBody(body)
 
     let res = await supertest(app.getHttpServer())
       .post(`/applications/submit`)
@@ -191,7 +192,7 @@ describe("Applications", () => {
       .expect(200)
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
-    expect(res.body.items[0]).toMatchObject(body)
+    expect(res.body.items[0]).toMatchObject(responseBody)
   })
 
   it(`should not allow leasing agents to list all applications, but should allow to list owned`, async () => {
@@ -343,14 +344,16 @@ describe("Applications", () => {
     expect(createRes.body).toHaveProperty("createdAt")
     expect(createRes.body).toHaveProperty("updatedAt")
     expect(createRes.body).toHaveProperty("id")
+
+    const responseBody = getTestAppListedResponseBody(createRes.body)
     const res = await supertest(app.getHttpServer())
       .get(`/applications/?search=MyName`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
-    expect(res.body.items[0].id === createRes.body.id)
-    expect(res.body.items[0]).toMatchObject(createRes.body)
+    expect(res.body.items[0].id === responseBody.id)
+    expect(res.body.items[0]).toMatchObject(responseBody)
   })
 
   it(`should allow an admin to search for users application using search query param with partial textquery`, async () => {
@@ -365,14 +368,15 @@ describe("Applications", () => {
     expect(createRes.body).toHaveProperty("updatedAt")
     expect(createRes.body).toHaveProperty("id")
 
+    const responseBody = getTestAppListedResponseBody(createRes.body)
     const res = await supertest(app.getHttpServer())
       .get(`/applications/?search=joh`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
-    expect(res.body.items[0].id === createRes.body.id)
-    expect(res.body.items[0]).toMatchObject(createRes.body)
+    expect(res.body.items[0].id === responseBody.id)
+    expect(res.body.items[0]).toMatchObject(responseBody)
   })
 
   it(`should allow an admin to search for users application using email as textquery`, async () => {
@@ -388,14 +392,15 @@ describe("Applications", () => {
     expect(createRes.body).toHaveProperty("updatedAt")
     expect(createRes.body).toHaveProperty("id")
 
+    const responseBody = getTestAppListedResponseBody(createRes.body)
     const res = await supertest(app.getHttpServer())
       .get(`/applications/?search=john-doe@contact.com`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
-    expect(res.body.items[0].id === createRes.body.id)
-    expect(res.body.items[0]).toMatchObject(createRes.body)
+    expect(res.body.items[0].id === responseBody.id)
+    expect(res.body.items[0]).toMatchObject(responseBody)
   })
 
   it(`should allow exporting applications as CSV`, async () => {
@@ -528,10 +533,10 @@ describe("Applications", () => {
     for (const index in res.body.items) {
       const item = res.body.items[index]
       const { createRes, firstName } = responses[index]
-
-      expect(item.id === createRes.body.id)
-      expect(item).toMatchObject(createRes.body)
-      expect(item.applicant).toMatchObject(createRes.body.applicant)
+      const responseBody = getTestAppListedResponseBody(createRes.body)
+      expect(item.id === responseBody.id)
+      expect(item).toMatchObject(responseBody)
+      expect(item.applicant).toMatchObject(responseBody.applicant)
       expect(item.applicant.firstName === firstName)
     }
   })

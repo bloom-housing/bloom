@@ -32,6 +32,7 @@ export class ApplicationsService {
         await this.authorizeUserAction(this.req.user, application, authzActions.read)
       })
     )
+
     return result
   }
 
@@ -103,8 +104,9 @@ export class ApplicationsService {
         qb.andWhere("application.markedAsDuplicate = :markedAsDuplicate", {
           markedAsDuplicate: markedAsDuplicate,
         }),
-      userId: (qb, { userId }) => qb.andWhere("user.id = :id", { id: userId }),
-      listingId: (qb, { listingId }) => qb.andWhere("listing.id = :id", { id: listingId }),
+      userId: (qb, { userId }) => qb.andWhere("application.user_id = :uid", { uid: userId }),
+      listingId: (qb, { listingId }) =>
+        qb.andWhere("application.listing_id = :lid", { lid: listingId }),
       orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
       search: (qb, { search }) =>
         qb.andWhere(
@@ -117,8 +119,6 @@ export class ApplicationsService {
 
     // --> Build main query
     const qb = this.repository.createQueryBuilder("application")
-    qb.leftJoinAndSelect("application.user", "user")
-    qb.leftJoinAndSelect("application.listing", "listing")
     qb.leftJoinAndSelect("application.applicant", "applicant")
     qb.leftJoinAndSelect("applicant.address", "applicant_address")
     qb.leftJoinAndSelect("applicant.workAddress", "applicant_workAddress")
@@ -140,6 +140,7 @@ export class ApplicationsService {
         paramsMap[paramKey](qb, params)
       }
     })
+
     return qb
   }
   private async _create(applicationCreateDto: ApplicationUpdateDto) {
@@ -158,8 +159,8 @@ export class ApplicationsService {
   private async authorizeUserAction(user, app, action) {
     return this.authzService.canOrThrow(user, "application", action, {
       ...app,
-      user_id: app.user?.id,
-      listing_id: app.listing?.id,
+      user_id: app.user?.id ?? app.userId ?? null,
+      listing_id: app.listing?.id ?? app.listingId ?? null,
     })
   }
 }

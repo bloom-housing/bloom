@@ -95,7 +95,10 @@ export class ApplicationDto extends OmitType(Application, [
   householdMembers: HouseholdMemberDto[]
 }
 
-export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
+export class ListedApplicationDto extends OmitType(ApplicationDto, ["listing"] as const) {}
+export class PaginatedApplicationDto extends PaginationFactory<ListedApplicationDto>(
+  ListedApplicationDto
+) {}
 
 export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",

@@ -2413,6 +2413,28 @@ export interface AddressInput {
   value: AddressCreate;
 }
 
+export interface ApplicationPreferenceOption {
+  /**  */
+  key: string;
+
+  /**  */
+  checked: boolean;
+
+  /**  */
+  extraData?: AllExtraDataTypes[];
+}
+
+export interface ApplicationPreference {
+  /**  */
+  key: string;
+
+  /**  */
+  claimed: boolean;
+
+  /**  */
+  options: ApplicationPreferenceOption[];
+}
+
 export interface Applicant {
   /**  */
   address: Address;
@@ -2609,29 +2631,7 @@ export interface HouseholdMember {
   workInRegion?: string;
 }
 
-export interface ApplicationPreferenceOption {
-  /**  */
-  key: string;
-
-  /**  */
-  checked: boolean;
-
-  /**  */
-  extraData?: AllExtraDataTypes[];
-}
-
-export interface ApplicationPreference {
-  /**  */
-  key: string;
-
-  /**  */
-  claimed: boolean;
-
-  /**  */
-  options: ApplicationPreferenceOption[];
-}
-
-export interface Application {
+export interface ListedApplication {
   /**  */
   incomePeriod?: IncomePeriod;
 
@@ -2643,30 +2643,6 @@ export interface Application {
 
   /**  */
   submissionType: ApplicationSubmissionType;
-
-  /**  */
-  listing: Id;
-
-  /**  */
-  applicant: Applicant;
-
-  /**  */
-  mailingAddress: Address;
-
-  /**  */
-  alternateAddress: Address;
-
-  /**  */
-  alternateContact: AlternateContact;
-
-  /**  */
-  accessibility: Accessibility;
-
-  /**  */
-  demographics: Demographics;
-
-  /**  */
-  householdMembers: HouseholdMember[];
 
   /**  */
   id: string;
@@ -2682,6 +2658,12 @@ export interface Application {
 
   /**  */
   appUrl?: string;
+
+  /**  */
+  userId?: string;
+
+  /**  */
+  listingId?: string;
 
   /**  */
   additionalPhone?: boolean;
@@ -2724,6 +2706,27 @@ export interface Application {
 
   /**  */
   markedAsDuplicate: boolean;
+
+  /**  */
+  applicant: Applicant;
+
+  /**  */
+  mailingAddress: Address;
+
+  /**  */
+  alternateAddress: Address;
+
+  /**  */
+  alternateContact: AlternateContact;
+
+  /**  */
+  accessibility: Accessibility;
+
+  /**  */
+  demographics: Demographics;
+
+  /**  */
+  householdMembers: HouseholdMember[];
 }
 
 export interface PaginationMeta {
@@ -2745,7 +2748,7 @@ export interface PaginationMeta {
 
 export interface PaginatedApplication {
   /**  */
-  items: Application[];
+  items: ListedApplication[];
 
   /**  */
   meta: PaginationMeta;
@@ -2943,6 +2946,12 @@ export interface ApplicationCreate {
   appUrl?: string;
 
   /**  */
+  userId?: string;
+
+  /**  */
+  listingId?: string;
+
+  /**  */
   additionalPhone?: boolean;
 
   /**  */
@@ -2980,6 +2989,107 @@ export interface ApplicationCreate {
 
   /**  */
   submissionDate?: Date;
+}
+
+export interface Application {
+  /**  */
+  incomePeriod?: IncomePeriod;
+
+  /**  */
+  status: ApplicationStatus;
+
+  /**  */
+  language?: Language;
+
+  /**  */
+  submissionType: ApplicationSubmissionType;
+
+  /**  */
+  listing: Id;
+
+  /**  */
+  applicant: Applicant;
+
+  /**  */
+  mailingAddress: Address;
+
+  /**  */
+  alternateAddress: Address;
+
+  /**  */
+  alternateContact: AlternateContact;
+
+  /**  */
+  accessibility: Accessibility;
+
+  /**  */
+  demographics: Demographics;
+
+  /**  */
+  householdMembers: HouseholdMember[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  deletedAt?: Date;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
+  userId?: string;
+
+  /**  */
+  listingId?: string;
+
+  /**  */
+  additionalPhone?: boolean;
+
+  /**  */
+  additionalPhoneNumber?: string;
+
+  /**  */
+  additionalPhoneNumberType?: string;
+
+  /**  */
+  contactPreferences: string[];
+
+  /**  */
+  householdSize?: number;
+
+  /**  */
+  housingStatus?: string;
+
+  /**  */
+  sendMailToMailingAddress?: boolean;
+
+  /**  */
+  incomeVouchers?: boolean;
+
+  /**  */
+  income?: string;
+
+  /**  */
+  preferredUnit: string[];
+
+  /**  */
+  preferences: ApplicationPreference[];
+
+  /**  */
+  acceptedTerms?: boolean;
+
+  /**  */
+  submissionDate?: Date;
+
+  /**  */
+  markedAsDuplicate: boolean;
 }
 
 export interface ApplicantUpdate {
@@ -3229,6 +3339,12 @@ export interface ApplicationUpdate {
 
   /**  */
   appUrl?: string;
+
+  /**  */
+  userId?: string;
+
+  /**  */
+  listingId?: string;
 
   /**  */
   additionalPhone?: boolean;

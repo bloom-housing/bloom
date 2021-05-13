@@ -1,10 +1,19 @@
 import {
+  ListedApplication,
   ApplicationStatus,
   ApplicationSubmissionType,
   ApplicationUpdate,
   IncomePeriod,
   Language,
 } from "../../types"
+
+export const getTestAppListedResponseBody = (
+  body: ApplicationUpdate
+): Partial<ListedApplication> => {
+  const newBody = Object.assign({}, body)
+  delete newBody.listing
+  return newBody as Partial<ListedApplication>
+}
 
 export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listingId?: string) => {
   return {
