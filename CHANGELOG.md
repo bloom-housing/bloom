@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - This new Changelog format! =)
+  - New GitHub template for pull requests ([#1208](https://github.com/bloom-housing/bloom/pull/1208)) (Sean Albert)
   - Add missing listing fields ([#1186](https://github.com/bloom-housing/bloom/pull/1186)) (Marcin Jędras)
 
 - Changed:
@@ -19,10 +20,17 @@ All notable changes to this project will be documented in this file. The format 
   - Update license ([#1189](https://github.com/bloom-housing/bloom/pull/1189)) (Emily Jablonski)
   - Bump ssri from 6.0.1 to 6.0.2 ([#1194](https://github.com/bloom-housing/bloom/pull/1194)) (dependabot)
 
+- Fixed:
+
+  - StandardTable translation issue and BMR display ([#1203](https://github.com/bloom-housing/bloom/pull/1194)) (Emily Jablonski)
+
 ### Backend
 
 - Added:
 
+  - Missing resident state to CSV formatters ([#1223](https://github.com/bloom-housing/bloom/pull/1223)) (Michał Plebański)
+  - ENV variables to control rate limits ([#1155](https://github.com/bloom-housing/bloom/pull/1155)) (Bartłomiej Ponikiewski)
+    - Adjust via THROTTLE_TTL and THROTTLE_LIMIT
   - User language ([#1181](https://github.com/bloom-housing/bloom/pull/1181)) (Michał Plebański)
   - ApiProperty to files that have no .dto.ts suffixes ([#1180](https://github.com/bloom-housing/bloom/pull/1180)) (Michał Plebański)
   - Get AFS by id and pagination meta for totalFlagged ([#1137](https://github.com/bloom-housing/bloom/pull/1137)) (Michał Plebański)
@@ -30,6 +38,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
 
+  - Bump handlebars from 4.7.6 to 4.7.7 ([#1218](https://github.com/bloom-housing/bloom/pull/1218)) (dependabot)
   - Downgrade nestjs/swagger ([#1188](https://github.com/bloom-housing/bloom/pull/1188)) (Michał Plebański)
   - Refactor: backend directories structure ([#1166](https://github.com/bloom-housing/bloom/pull/1166)) (Michał Plebański)
 
@@ -37,10 +46,12 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
+  - Make additional eligibility sections optional ([#1213](https://github.com/bloom-housing/bloom/pull/1213)) (Emily Jablonski)
   - Support rent as percent income ([#1195](https://github.com/bloom-housing/bloom/pull/1195)) (Emily Jablonski)
 
 - Fixed:
 
+  - Birthdate localizing issues ([#1202](https://github.com/bloom-housing/bloom/pull/1202))
   - Preferences translations in Partners ([#1206](https://github.com/bloom-housing/bloom/pull/1206)) (dominikx96)
   - Referral application section on mobile ([#1201](https://github.com/bloom-housing/bloom/pull/1201))
   - Use correct listingId when redirecting from Sign In ([#1147](https://github.com/bloom-housing/bloom/pull/1147)) (Jared White)
