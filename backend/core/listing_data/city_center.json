@@ -25,6 +25,7 @@
   "waitlistMaxSize": 200,
   "name": "City Center Apartments",
   "waitlistCurrentSize": 0,
+  "displayWaitlistSize": true,
   "prioritiesDescriptor": "All units are fully adaptable. Fully built out ADA units will be assigned on a first come first need basis with the exception of a few ADA units set aside for VASH veterans",
   "requiredDocuments": "INCOME: Tax return, paystubs, SS Awared letter or Assistance Award letter, pension statement.  ASSETS: 6 months’ bank statements (checking), 1 month bank statement (savings), copy of EBT cart and balance.  HOUSING PREFERENCE: Applicants who either live and or work within the County of Alameda: paystubs / tax return or another form of independent verification to verify employment; and or a lease or a copy of a utility bill to verify residency.",
   "reservedCommunityMaximumAge": null,
