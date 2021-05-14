@@ -119,11 +119,7 @@ export default () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                loading={submitting}
-                styleType={AppearanceStyleType.primary}
-                onClick={() => false}
-              >
+              <Button loading={submitting} styleType={AppearanceStyleType.primary}>
                 {t("t.submit")}
               </Button>
             </div>
