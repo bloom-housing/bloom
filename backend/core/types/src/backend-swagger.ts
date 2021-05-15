@@ -291,7 +291,18 @@ export class ListingsService {
   create(
     params: {
       /** requestBody */
-      body?: ListingCreate;
+      body?: {
+        name: string;
+        applicationDueDate?: Date;
+        preferences: Preference[];
+        property: Property;
+        status: ListingStatus;
+        CSVFormattingType: CSVFormattingType;
+        countyCode: CountyCode;
+        asset: Asset[];
+        applicationMethods: ApplicationMethod[];
+        events: ListingEvent[]
+      };
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
@@ -336,7 +347,18 @@ export class ListingsService {
       /**  */
       listingId: string;
       /** requestBody */
-      body?: ListingUpdate;
+      body?: {
+        name: string;
+        applicationDueDate?: Date;
+        preferences: Preference[];
+        property: Property;
+        status: ListingStatus;
+        CSVFormattingType: CSVFormattingType;
+        countyCode: CountyCode;
+        asset: Asset[];
+        applicationMethods: ApplicationMethod[];
+        events: ListingEvent[]
+      };
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
@@ -3697,7 +3719,8 @@ export enum Language {
 
 export enum ListingStatus {
   'active' = 'active',
-  'pending' = 'pending'
+  'pending' = 'pending',
+  'closed' = 'closed'
 }
 
 export enum CSVFormattingType {

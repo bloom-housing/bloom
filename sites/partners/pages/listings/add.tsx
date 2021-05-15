@@ -1,16 +1,12 @@
 import React from "react"
 import Head from "next/head"
 import { MetaTags, PageHeader, SiteAlert, t } from "@bloom-housing/ui-components"
-import Layout from "../../../layouts"
-import PaperApplicationForm from "../../../src/applications/PaperApplicationForm/PaperApplicationForm"
-import { useRouter } from "next/router"
+import Layout from "../../layouts"
+import PaperListingForm from "../../src/listings/PaperListingForm"
 
-const NewApplication = () => {
+const NewListing = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
-
-  const router = useRouter()
-  const listingId = router.query.listing as string
 
   return (
     <Layout>
@@ -19,15 +15,15 @@ const NewApplication = () => {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
 
-      <PageHeader className="relative" title={t("applications.newApplication")}>
+      <PageHeader className="relative" title={t("listings.newListing")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
           <SiteAlert type="success" timeout={5000} dismissable />
         </div>
       </PageHeader>
 
-      <PaperApplicationForm listingId={listingId} />
+      <PaperListingForm />
     </Layout>
   )
 }
 
-export default NewApplication
+export default NewListing

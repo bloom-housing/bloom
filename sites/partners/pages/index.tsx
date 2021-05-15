@@ -1,13 +1,21 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
-import { PageHeader, MetaTags, t, lRoute, UserContext } from "@bloom-housing/ui-components"
-import { useListingsData } from "../lib/hooks"
-import Layout from "../layouts/application"
+import {
+  Button,
+  PageHeader,
+  MetaTags,
+  t,
+  lRoute,
+  UserContext,
+  LocalizedLink,
+} from "@bloom-housing/ui-components"
 import moment from "moment"
 import { UserRole, Listing } from "@bloom-housing/backend-core/types"
-
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
+
+import { useListingsData } from "../lib/hooks"
+import Layout from "../layouts"
 
 export default function ListingsList() {
   const { profile } = useContext(UserContext)
@@ -86,7 +94,7 @@ export default function ListingsList() {
         cellRenderer: "formatWaitlistStatus",
       },
       {
-        headerName: t("listings.listingStatus"),
+        headerName: t("listings.listingStatusText"),
         field: "status",
         sortable: false,
         filter: false,
@@ -126,24 +134,36 @@ export default function ListingsList() {
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
-            <AgGridReact
-              gridOptions={gridOptions}
-              columnDefs={columnDefs}
-              rowData={filteredListings}
-              domLayout={"autoHeight"}
-              headerHeight={83}
-              rowHeight={58}
-              suppressScrollOnNewData={true}
-            ></AgGridReact>
+            <div className="flex justify-between">
+              <div className="w-56"></div>
+              <div className="flex-row">
+                <LocalizedLink href={`/listings/add`}>
+                  <Button className="mx-1" onClick={() => false}>
+                    {t("listings.addListing")}
+                  </Button>
+                </LocalizedLink>
+              </div>
+            </div>
+            <div className="applications-table mt-5">
+              <AgGridReact
+                gridOptions={gridOptions}
+                columnDefs={columnDefs}
+                rowData={filteredListings}
+                domLayout={"autoHeight"}
+                headerHeight={83}
+                rowHeight={58}
+                suppressScrollOnNewData={true}
+              ></AgGridReact>
 
-            <div className="data-pager">
-              <div className="data-pager__control-group">
-                <span className="data-pager__control">
-                  <span className="field-label" id="lbTotalPages">
-                    {filteredListings?.length}
+              <div className="data-pager">
+                <div className="data-pager__control-group">
+                  <span className="data-pager__control">
+                    <span className="field-label" id="lbTotalPages">
+                      {filteredListings?.length}
+                    </span>
+                    <span className="field-label">{t("listings.totalListings")}</span>
                   </span>
-                  <span className="field-label">{t("listings.totalListings")}</span>
-                </span>
+                </div>
               </div>
             </div>
           </div>
