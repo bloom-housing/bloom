@@ -218,8 +218,6 @@ const ApplicationsList = () => {
                 <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
                   {t("t.export")}
                 </Button>
-
-                {console.log(csvExportError)}
               </div>
             </div>
 

@@ -17,13 +17,14 @@ import Layout from "../../layouts"
 import Aside from "../../src/listings/Aside"
 import { ListingContext } from "../../src/listings/ListingContext"
 import DetailListingData from "../../src/listings/PaperListingDetails/sections/DetailListingData"
+import DetailProperty from "../../src/listings/PaperListingDetails/sections/DetailProperty"
 
 export default function ApplicationsList() {
   const router = useRouter()
   const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
   const [errorAlert, setErrorAlert] = useState(false)
-
+  console.log("listingDto = ", listingDto)
   const listingStatus = useMemo(() => {
     switch (listingDto?.status) {
       case ListingStatus.active:
@@ -97,6 +98,7 @@ export default function ApplicationsList() {
             <div className="flex flex-row flex-wrap ">
               <div className="info-card md:w-9/12">
                 <DetailListingData />
+                <DetailProperty />
               </div>
 
               <div className="md:w-3/12 pl-6">

@@ -758,6 +758,8 @@
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
     "property": {
+      "id": "Property ID",
+      "title": "Property Data",
       "developer": "Housing Developer",
       "buildingAddress": "Address"
     },

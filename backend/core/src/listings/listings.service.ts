@@ -33,7 +33,7 @@ export class ListingsService {
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)
     }
-    console.log(listings)
+
     return listings
   }
 
