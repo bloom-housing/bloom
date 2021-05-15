@@ -1,4 +1,5 @@
 import {
+  AfterLoad,
   BaseEntity,
   Column,
   CreateDateColumn,
@@ -338,6 +339,13 @@ class Listing extends BaseEntity {
   @IsEnum(CountyCode, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: CountyCode, enumName: "CountyCode" })
   countyCode: CountyCode
+
+  applicationCount: number
+
+  @AfterLoad()
+  setComputed() {
+    this.applicationCount = this.applications ? this.applications.length : 0
+  }
 }
 
 export { Listing as default, Listing }

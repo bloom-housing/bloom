@@ -16,6 +16,7 @@ import { useSingleListingData } from "../../lib/hooks"
 import Layout from "../../layouts"
 import Aside from "../../src/listings/Aside"
 import { ListingContext } from "../../src/listings/ListingContext"
+import DetailListingData from "../../src/listings/PaperListingDetails/sections/DetailListingData"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -94,7 +95,9 @@ export default function ApplicationsList() {
             )}
 
             <div className="flex flex-row flex-wrap ">
-              <div className="info-card md:w-9/12"></div>
+              <div className="info-card md:w-9/12">
+                <DetailListingData />
+              </div>
 
               <div className="md:w-3/12 pl-6">
                 <Aside type="details" />

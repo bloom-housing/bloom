@@ -712,6 +712,12 @@
     "deleteListingDescription": "Deleting this listing means you will lose all the information you've entered.",
     "depositOrMonthsRent": "or one month's rent",
     "depositMayBeHigherForLowerCredit": "May be higher for lower credit scores",
+    "details": {
+      "listingData": "Listing Data",
+      "createdDate": "Date Created",
+      "updatedDate": "Date Updated",
+      "id": "Listing ID"
+    },
     "developer": "Housing Developer",
     "developmentalDisabilities": "Persons with developmental disabilities",
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
@@ -837,7 +843,8 @@
     "additionalInformationEnvelope": "Additional Information Envelope",
     "listingName": "Listing Name",
     "applicationsSubmitted": "Applications Submitted",
-    "listingStatusText": "Listing Status"
+    "listingStatusText": "Listing Status",
+    "applications": "Applications"
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",

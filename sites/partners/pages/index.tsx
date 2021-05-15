@@ -26,12 +26,25 @@ export default function ListingsList() {
     init(params) {
       this.link = document.createElement("a")
       this.link.classList.add("text-blue-700")
-      this.link.setAttribute("href", lRoute(`/listings/applications?listing=${params.data.id}`))
-      this.link.innerText = params.value
+      this.link.innerText = params.valueFormatted || params.value
     }
 
     getGui() {
       return this.link
+    }
+  }
+
+  class ApplicationsLink extends formatLinkCell {
+    init(params) {
+      super.init(params)
+      this.link.setAttribute("href", lRoute(`/listings/applications?listing=${params.data.id}`))
+    }
+  }
+
+  class ListingsLink extends formatLinkCell {
+    init(params) {
+      super.init(params)
+      this.link.setAttribute("href", lRoute(`/listings?id=${params.data.id}`))
     }
   }
 
@@ -52,8 +65,9 @@ export default function ListingsList() {
 
   const gridOptions: GridOptions = {
     components: {
-      formatLinkCell: formatLinkCell,
+      ApplicationsLink: ApplicationsLink,
       formatWaitlistStatus: formatWaitlistStatus,
+      ListingsLink: ListingsLink,
     },
   }
 
@@ -68,7 +82,16 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        cellRenderer: "formatLinkCell",
+        cellRenderer: "ListingsLink",
+      },
+      {
+        headerName: t("listings.applications"),
+        field: "applicationCount",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        cellRenderer: "ApplicationsLink",
+        valueFormatter: ({ value }) => `${value} to Review`,
       },
       {
         headerName: t("listings.applicationDeadline"),
@@ -107,7 +130,6 @@ export default function ListingsList() {
   )
 
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
-
   // filter listings to show items depends on user role
   const filteredListings = useMemo(() => {
     if (profile.roles.includes(UserRole.admin)) return listingDtos

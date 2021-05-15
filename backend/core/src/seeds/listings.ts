@@ -41,6 +41,8 @@ export interface ListingSeed {
     | "assets"
     | "preferences"
     | "leasingAgents"
+    | "applicationCount"
+    | "setComputed"
   >
   leasingAgents: UserCreateDto[]
 }
@@ -74,7 +76,10 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
   })
   await unitsRepo.save(unitsToBeCreated)
 
-  const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug"> = {
+  const listingCreateDto: Omit<
+    ListingCreateDto,
+    keyof BaseEntity | "applicationCount" | "setComputed" | "urlSlug"
+  > = {
     ...seed.listing,
     property,
     leasingAgents: leasingAgents,
