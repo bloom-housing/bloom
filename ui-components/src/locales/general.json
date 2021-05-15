@@ -675,6 +675,7 @@
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
+    "applicationTitle": "Application Data",
     "applicationAddress": "Address",
     "applicationDeadline": "Application Due Date",
     "applicationFCFS": "First Come First Serve",

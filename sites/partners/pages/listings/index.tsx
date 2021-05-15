@@ -18,6 +18,7 @@ import Aside from "../../src/listings/Aside"
 import { ListingContext } from "../../src/listings/ListingContext"
 import DetailListingData from "../../src/listings/PaperListingDetails/sections/DetailListingData"
 import DetailProperty from "../../src/listings/PaperListingDetails/sections/DetailProperty"
+import DetailApplication from "../../src/listings/PaperListingDetails/sections/DetailApplication"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -99,6 +100,7 @@ export default function ApplicationsList() {
               <div className="info-card md:w-9/12">
                 <DetailListingData />
                 <DetailProperty />
+                <DetailApplication />
               </div>
 
               <div className="md:w-3/12 pl-6">
