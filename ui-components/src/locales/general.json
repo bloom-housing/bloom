@@ -664,6 +664,7 @@
   "listings": {
     "active": "Accepting Applications",
     "pending": "Coming Soon",
+    "closed": "Closed",
     "actions": {
       "publish": "Publish",
       "draft": "Save as Draft",

@@ -26,31 +26,31 @@ const DetailApplication = () => {
       <GridSection subtitle={t("listings.applicationAddress")} columns={3}>
         <GridCell>
           <ViewItem label={t("application.contact.streetAddress")}>
-            {listing.applicationAddress.street}
+            {listing.applicationAddress?.street}
           </ViewItem>
         </GridCell>
 
         <GridCell span={2}>
           <ViewItem label={t("application.contact.apt")}>
-            {listing.applicationAddress.street2}
+            {listing.applicationAddress?.street2}
           </ViewItem>
         </GridCell>
 
         <GridCell>
           <ViewItem label={t("application.contact.city")}>
-            {listing.applicationAddress.city}
+            {listing.applicationAddress?.city}
           </ViewItem>
         </GridCell>
 
         <GridCell>
           <ViewItem label={t("application.contact.state")}>
-            {listing.applicationAddress.state}
+            {listing.applicationAddress?.state}
           </ViewItem>
         </GridCell>
 
         <GridCell>
           <ViewItem label={t("application.contact.zip")}>
-            {listing.applicationAddress.zipCode}
+            {listing.applicationAddress?.zipCode}
           </ViewItem>
         </GridCell>
       </GridSection>

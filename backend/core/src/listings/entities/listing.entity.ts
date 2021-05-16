@@ -27,6 +27,7 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
+import moment from "moment"
 import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
@@ -345,6 +346,9 @@ class Listing extends BaseEntity {
   @AfterLoad()
   setComputed() {
     this.applicationCount = this.applications ? this.applications.length : 0
+    if (moment(this.applicationDueDate).isBefore()) {
+      this.status = ListingStatus.closed
+    }
   }
 }
 

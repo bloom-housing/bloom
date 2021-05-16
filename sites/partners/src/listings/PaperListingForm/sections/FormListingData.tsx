@@ -13,18 +13,17 @@ const FormListingData = () => {
       <GridSection grid={false} separator>
         <GridSection columns={3}>
           <Field
-            id="listing.name"
-            name="listing.name"
+            id="name"
+            name="name"
             label={t("listings.listingName")}
             placeholder={t("listings.listingName")}
             register={register}
-            validation={{ required: true }}
           />
         </GridSection>
         <GridSection grid={false} separator>
           <FormAddress
             subtitle={t("listings.property.buildingAddress")}
-            dataKey="listing.property.buildingAddress"
+            dataKey="property.buildingAddress"
             type="mailing"
             register={register}
           />
@@ -33,15 +32,15 @@ const FormListingData = () => {
       <GridSection grid={false} separator>
         <GridSection columns={3}>
           <Field
-            id="listing.property.developer"
-            name="listing.property.developer"
+            id="property.developer"
+            name="property.developer"
             label={t("listings.property.developer")}
             placeholder={t("listings.property.developer")}
             register={register}
           />
           <Field
-            id="listing.applicationDeadline"
-            name="listing.applicationDeadline"
+            id="applicationDueDate"
+            name="applicationDueDate"
             label={t("listings.applicationDeadline")}
             placeholder="MM-DD-YYYY"
             register={register}

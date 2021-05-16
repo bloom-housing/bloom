@@ -25,7 +25,7 @@ export default function ApplicationsList() {
   const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
   const [errorAlert, setErrorAlert] = useState(false)
-  console.log("listingDto = ", listingDto)
+
   const listingStatus = useMemo(() => {
     switch (listingDto?.status) {
       case ListingStatus.active:

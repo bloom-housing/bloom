@@ -7,7 +7,9 @@ export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(ApiClientContext)
   const fetcher = () => listingsService.retrieve({ listingId })
 
-  const { data, error } = useSWR(`${process.env.listingServiceUrl}/?action=retrieve`, fetcher)
+  const { data, error } = useSWR(`${process.env.listingServiceUrl}/?action=retrieve`, fetcher, {
+    refreshInterval: 500,
+  })
 
   return {
     listingDto: data,
@@ -20,7 +22,9 @@ export function useListingsData() {
   const { listingsService } = useContext(ApiClientContext)
   const fetcher = () => listingsService.list()
 
-  const { data, error } = useSWR(`${process.env.listingServiceUrl}/?action=list`, fetcher)
+  const { data, error } = useSWR(`${process.env.listingServiceUrl}/?action=list`, fetcher, {
+    refreshInterval: 500,
+  })
 
   return {
     listingDtos: data,

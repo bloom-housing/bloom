@@ -15,13 +15,8 @@ import { useForm, FormProvider } from "react-hook-form"
 import {
   Listing,
   ListingStatus,
-  Preference,
-  Property,
   CSVFormattingType,
   CountyCode,
-  Asset,
-  ApplicationMethod,
-  ListingEvent,
 } from "@bloom-housing/backend-core/types"
 
 import Aside from "../Aside"
@@ -34,38 +29,25 @@ type ListingFormProps = {
 
 type AlertErrorType = "api" | "form"
 
-interface FormInputs {
-  name: string
-  applicationDueDate?: Date
-  preferences: Preference[]
-  property: Property
-  status: ListingStatus
-  CSVFormattingType?: CSVFormattingType
-  countyCode: CountyCode
-  assets: Asset[]
-  applicationMethods: ApplicationMethod[]
-  events: ListingEvent[]
+const defaults: Listing = {
+  applicationMethods: [],
+  assets: [],
+  name: "",
+  preferences: [],
+  property: {
+    buildingAddress: {},
+    units: [],
+  },
+  countyCode: CountyCode.Alameda,
+  CSVFormattingType: CSVFormattingType.basic,
+  events: [],
+  status: ListingStatus.pending,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
-  const defaultValues = editMode
-    ? listing
-    : {
-        name: "",
-        preferences: [],
-        property: {
-          developer: "",
-        },
-        status: ListingStatus.pending,
-        CSVFormattingType: CSVFormattingType.basic,
-        countyCode: CountyCode.Alameda,
-        assets: [],
-        applicationMethods: [],
-        events: [],
-      }
-
-  const formMethods = useForm<FormInputs>({
+  const defaultValues = editMode ? listing : defaults
+  const formMethods = useForm<Listing>({
     defaultValues,
   })
 
@@ -79,29 +61,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, clearErrors, reset, trigger, getValues } = formMethods
 
-  const triggerSubmit = async (data: FormInputs) => onSubmit(data, "details")
+  const triggerSubmit = async (data: Listing) => onSubmit(data, "details")
 
   const setStatusAndSubmit = async (status: ListingStatus) => {
     const validation = await trigger()
 
     if (validation) {
       let data = getValues()
-      // TODO: replace with real fields
-      console.log("data before = ", data)
+      // just for the poc
+      if (!data.property.id) {
+        data.property.id = "4b237295-38a8-4795-95fd-1bec08723e6d"
+      }
+
       data = {
+        ...defaultValues,
         ...data,
         status,
-        CSVFormattingType: CSVFormattingType.basic,
-        countyCode: CountyCode.Alameda,
-        preferences: [],
-        assets: [],
-        applicationMethods: [],
-        events: [],
-        applicationDueDate: new Date(data.applicationDueDate),
-      }
-      data.property = {
-        ...data.property,
-        id: "4b237295-38a8-4795-95fd-1bec08723e6d",
       }
 
       if (data) {
@@ -114,10 +89,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     @data: form data comes from the react-hook-form
     @redirect: open listing details or reset form
   */
-  const onSubmit = async (data: FormInputs, redirect: "details" | "new") => {
+  const onSubmit = async (data: Listing, redirect: "details" | "new") => {
     setAlert(null)
     setLoading(true)
-    console.log("onSubmit data = ", data)
     try {
       const result = editMode
         ? await listingsService.update({
@@ -125,17 +99,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             body: { ...data },
           })
         : await listingsService.create({ body: data })
-      console.log("result = ", result)
       setLoading(false)
 
       if (result) {
         setSiteAlertMessage(
-          editMode ? t("listing.listingUpdated") : t("listing.listingSubmitted"),
+          editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
           "success"
         )
 
         if (redirect === "details") {
-          void router.push(`/listing?id=${result.id}`)
+          void router.push(`/listings?id=${result.id}`)
         } else {
           reset()
           clearErrors()

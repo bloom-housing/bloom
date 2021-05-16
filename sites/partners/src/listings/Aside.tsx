@@ -75,16 +75,18 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
           >
             {t("listings.actions.draft")}
           </Button>
-        </GridCell>,
-        <GridCell key="btn-preview">
-          <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
-            {t("listings.actions.preview")}
-          </Button>
         </GridCell>
       )
     }
 
-    elements.push(cancel)
+    elements.push(
+      <GridCell key="btn-preview">
+        <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+          {t("listings.actions.preview")}
+        </Button>
+      </GridCell>,
+      cancel
+    )
 
     return elements
   }, [lisitngId, setStatusAndSubmit, type])

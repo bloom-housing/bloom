@@ -11,8 +11,8 @@ import { User } from "../user/entities/user.entity"
 @Module({
   imports: [
     CacheModule.register({
-      ttl: 24 * 60 * 60,
-      max: 10,
+      ttl: 1, // we need different caching strategies per app (public vs partners)
+      max: 1,
     }),
     TypeOrmModule.forFeature([Listing, Preference, Unit, User]),
     AuthModule,
