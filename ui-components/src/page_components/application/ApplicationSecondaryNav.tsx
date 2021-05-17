@@ -27,7 +27,7 @@ const ApplicationSecondaryNav = ({
   ]
 
   return (
-    <PageHeader title={title} tabNav={elements}>
+    <PageHeader title={title} tabNav={process.env.showDuplicates ? elements : []}>
       {children}
     </PageHeader>
   )

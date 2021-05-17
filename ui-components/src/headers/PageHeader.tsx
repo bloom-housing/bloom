@@ -40,7 +40,7 @@ const PageHeader = (props: PageHeaderProps) => {
         {props.subtitle && <p className="page-header__lead"> {props.subtitle}</p>}
         {props.children}
 
-        {props?.tabNav && (
+        {!!props?.tabNav?.length && (
           <TabNav className="page-header__secondary-nav">
             {props.tabNav?.map((tab) => (
               <Tab
