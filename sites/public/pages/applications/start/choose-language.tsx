@@ -39,14 +39,17 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
-    if (!listingId) return
+    if (!listingId) {
+      void router.push("/")
+      return
+    }
 
     if (!context.listing || context.listing.id != listingId) {
       void loadListing(listingId, setListing, conductor, context)
     } else {
       setListing(context.listing)
     }
-  }, [conductor, context, listingId])
+  }, [router, conductor, context, listingId])
 
   const currentPageSection = 1
 
