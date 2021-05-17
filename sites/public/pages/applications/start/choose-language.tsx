@@ -44,7 +44,7 @@ export default () => {
       return
     }
 
-    if (!context.listing || context.listing.id != listingId) {
+    if (!context.listing || context.listing.id !== listingId) {
       void loadListing(listingId, setListing, conductor, context)
     } else {
       setListing(context.listing)
