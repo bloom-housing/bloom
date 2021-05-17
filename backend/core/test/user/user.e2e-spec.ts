@@ -3,7 +3,7 @@ import { INestApplication } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { EmailService } from "../../src/shared/services/email.service"
+import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 
 // Use require because of the CommonJS/AMD style export.

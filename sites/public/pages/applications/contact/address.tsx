@@ -392,7 +392,9 @@ export default () => {
 
           <div className="form-card__group">
             <fieldset>
-              <legend className="field-label--caps">{t("application.contact.doYouWorkIn")}</legend>
+              <legend className="field-label--caps">
+                {t("application.contact.doYouWorkIn", { county: listing?.countyCode })}
+              </legend>
 
               <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 

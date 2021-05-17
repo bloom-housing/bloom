@@ -15,11 +15,12 @@ import { useFormContext } from "react-hook-form"
 import { Preference, FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 type FormPreferencesProps = {
+  county: string
   preferences: Preference[]
   hhMembersOptions?: SelectOption[]
 }
 
-const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps) => {
+const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferencesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -55,11 +56,16 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
     <GridSection title={t("application.details.preferences")} separator grid={false}>
       <GridSection columns={2}>
         {preferences?.map((preference) => {
+          const metaKey = preference?.formMetadata?.key
           const noneOptionKey = `${PREFERENCES_NONE_FORM_PATH}.${preference.formMetadata.key}-none`
 
           return (
             <GridCell key={preference.id}>
-              <ViewItem label={preference.title}>
+              <ViewItem
+                label={t(`application.preferences.${metaKey}.title`, {
+                  county,
+                })}
+              >
                 <fieldset className="mt-4">
                   {preference?.formMetadata?.options?.map((option) => {
                     return (
@@ -68,7 +74,12 @@ const FormPreferences = ({ preferences, hhMembersOptions }: FormPreferencesProps
                           id={getPreferenceOptionName(preference.formMetadata.key, option.key)}
                           name={getPreferenceOptionName(preference.formMetadata.key, option.key)}
                           type="checkbox"
-                          label={t(`application.preferences.options.${option.key}`)}
+                          label={t(
+                            `application.preferences.${preference?.formMetadata?.key}.${option.key}.label`,
+                            {
+                              county,
+                            }
+                          )}
                           register={register}
                           inputProps={{
                             onChange: () => {

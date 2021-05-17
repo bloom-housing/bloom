@@ -48,6 +48,7 @@ module.exports = withCSS(
             gtmKey: process.env.GTM_KEY || null,
             languages: process.env.LANGUAGES || "en",
             idleTimeout: process.env.IDLE_TIMEOUT,
+            countyCode: process.env.COUNTY_CODE,
           },
           sassLoaderOptions: {
             additionalData: tailwindVars,

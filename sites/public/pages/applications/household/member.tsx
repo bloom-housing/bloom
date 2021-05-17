@@ -278,7 +278,9 @@ export default () => {
               <div className="form-card__group border-b">
                 <fieldset>
                   <legend className="field-label--caps">
-                    {t("application.household.member.workInRegion")}
+                    {t("application.household.member.workInRegion", {
+                      county: listing?.countyCode,
+                    })}
                   </legend>
                   <FieldGroup
                     name="workInRegion"
