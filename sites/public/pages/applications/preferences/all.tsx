@@ -71,8 +71,7 @@ const PreferencesAll = () => {
 
   const onSubmit = (data) => {
     const body = mapPreferencesToApi(data)
-
-    conductor.currentStep.save(body)
+    conductor.currentStep.save([...conductor.currentStep.application.preferences, body[0]])
     if (page !== uniquePages.length) {
       setPage(page + 1)
       return
