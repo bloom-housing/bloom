@@ -93,6 +93,17 @@
     }
   }
 
+  &.has-icon-left {
+    .button__icon {
+      @apply mr-3;
+    }
+  }
+  &.has-icon-right {
+    .button__icon {
+      @apply ml-3;
+    }
+  }
+
   &.is-text-caps {
     @apply text-primary-dark;
     @apply normal-case;
@@ -118,7 +129,6 @@
   }
 
   &.is-loading {
-
     .button__content {
       opacity: 0;
     }

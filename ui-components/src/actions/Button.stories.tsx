@@ -23,9 +23,25 @@ const BorderTypeStory = { ...AppearanceBorderType, default: undefined }
 export const standard = () => {
   const styleSelect = select("Appearance Style", StyleTypeStory, undefined)
   const borderSelect = select("Appearance Border", BorderTypeStory, undefined)
+  const iconSelect = select(
+    "Icon",
+    { arrowBack: "arrowBack", arrowForward: "arrowForward", default: undefined },
+    undefined
+  )
+  const iconPlacementSelect = select(
+    "Icon Placement",
+    { left: "left", right: "right", default: undefined },
+    undefined
+  )
 
   return (
-    <Button styleType={styleSelect} border={borderSelect} onClick={handleClick}>
+    <Button
+      styleType={styleSelect}
+      border={borderSelect}
+      icon={iconSelect}
+      iconPlacement={iconPlacementSelect}
+      onClick={handleClick}
+    >
       {text("Label", "Hello Storybook")}
     </Button>
   )
