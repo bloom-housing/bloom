@@ -37,6 +37,7 @@ import { Language } from "../../shared/types/language-enum"
 import { ApplicationStatus } from "../types/application-status-enum"
 import { ApplicationSubmissionType } from "../types/application-submission-type-enum"
 import { IncomePeriod } from "../types/income-period-enum"
+import { IdDto } from "../../shared/dto/id.dto"
 
 @Entity({ name: "applications" })
 export class Application extends AbstractEntity {
@@ -55,13 +56,37 @@ export class Application extends AbstractEntity {
   appUrl?: string | null
 
   @ManyToOne(() => User, (user) => user.applications, { nullable: true })
-  user: User | null
+  @Expose()
+  @ApiProperty({ type: IdDto })
+  @Type(() => IdDto)
+  get user(): IdDto | null {
+    return this.userId
+      ? {
+          id: this.userId,
+        }
+      : null
+  }
+
+  set user(user: IdDto) {
+    this.userId = user.id
+  }
 
   @RelationId((application: Application) => application.user)
   userId?: string
 
   @ManyToOne(() => Listing, (listing) => listing.applications)
-  listing: Listing
+  @Expose()
+  @ApiProperty({ type: IdDto })
+  @Type(() => IdDto)
+  get listing(): IdDto {
+    return {
+      id: this.listingId,
+    }
+  }
+
+  set listing(listing: IdDto) {
+    this.listingId = listing.id
+  }
 
   @RelationId((application: Application) => application.listing)
   listingId?: string

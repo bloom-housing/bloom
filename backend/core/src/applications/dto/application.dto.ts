@@ -32,8 +32,6 @@ import {
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class ApplicationDto extends OmitType(Application, [
-  "listing",
-  "user",
   "applicant",
   "mailingAddress",
   "alternateAddress",
@@ -42,16 +40,6 @@ export class ApplicationDto extends OmitType(Application, [
   "demographics",
   "householdMembers",
 ] as const) {
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  listing: IdDto
-
-  @Exclude()
-  @ApiHideProperty()
-  user
-
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicantDto)
@@ -95,17 +83,13 @@ export class ApplicationDto extends OmitType(Application, [
   householdMembers: HouseholdMemberDto[]
 }
 
-export class ListedApplicationDto extends OmitType(ApplicationDto, ["listing"] as const) {}
-export class PaginatedApplicationDto extends PaginationFactory<ListedApplicationDto>(
-  ListedApplicationDto
-) {}
+export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
 
 export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "id",
   "createdAt",
   "updatedAt",
   "deletedAt",
-  "listing",
   "applicant",
   "mailingAddress",
   "alternateAddress",
@@ -114,13 +98,8 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "markedAsDuplicate",
+  "user"
 ] as const) {
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  listing: IdDto
-
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -179,6 +158,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "markedAsDuplicate",
+  "user"
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

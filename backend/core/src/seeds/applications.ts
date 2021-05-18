@@ -218,8 +218,10 @@ export const makeNewApplication = async (
   user?: User
 ) => {
   const dto: ApplicationCreateDto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
-  dto.user = user
   dto.listing = listing
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
-  return await applicationRepo.save(dto)
+  return await applicationRepo.save({
+    ...dto,
+    user
+  })
 }
