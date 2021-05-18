@@ -2,16 +2,12 @@ import React from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { PageHeader, t } from "@bloom-housing/ui-components"
-import Layout from "../../layouts/application"
-import PaperApplicationForm from "../../src/applications/PaperApplicationForm/PaperApplicationForm"
-import { useSingleApplicationData } from "../../lib/hooks"
-import { ApplicationContext } from "../../src/applications/ApplicationContext"
-import { MetaTags } from "../../src/MetaTags"
+import Layout from "../../../layouts/application"
+import PaperApplicationForm from "../../../src/applications/PaperApplicationForm/PaperApplicationForm"
+import { useSingleApplicationData } from "../../../lib/hooks"
+import { ApplicationContext } from "../../../src/applications/ApplicationContext"
 
 const NewApplication = () => {
-  const metaDescription = ""
-  const metaImage = "" // TODO: replace with hero image
-
   const router = useRouter()
   const applicationId = router.query.id as string
 
@@ -25,8 +21,6 @@ const NewApplication = () => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
-
-        <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
 
         <PageHeader
           title={
