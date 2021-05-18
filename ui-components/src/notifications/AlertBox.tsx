@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import type { ReactNode } from "react"
-import { Icon, IconTypes } from "../icons/Icon"
+import { Icon, IconTypes, IconFillColors } from "../icons/Icon"
 import type { AlertTypes } from "./alertTypes"
 import { colorClasses } from "./alertTypes"
 import "./AlertBox.scss"
@@ -45,7 +45,7 @@ const AlertBox = (props: AlertBoxProps) => {
         <Icon
           size="medium"
           symbol={icons[props.type || "alert"]}
-          fill={props.inverted ? "white" : undefined}
+          fill={props.inverted ? IconFillColors.white : undefined}
         />
       </span>
       <span className="alert-box__body">

@@ -1,18 +1,9 @@
 import React from "react"
-
-import SVG from "react-inlinesvg"
 import { Icon } from "./Icon"
 
 export default {
   title: "Icons/Icon",
-  decorators: [
-    (storyFn: any) => (
-      <div style={{ padding: "1rem" }}>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-  ],
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 export const IconApplication = () => <Icon size="large" symbol="application" />
