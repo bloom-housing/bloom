@@ -494,16 +494,7 @@ export const Spinner = (props: IconProps) => {
         stroke-width="9"
         r="32"
         stroke-dasharray="150.79644737231007 52.26548245743669"
-      >
-        <animateTransform
-          attributeName="transform"
-          type="rotate"
-          repeatCount="indefinite"
-          dur="1s"
-          values="0 50 50;360 50 50"
-          keyTimes="0;1"
-        />
-      </circle>
+      ></circle>
     </svg>
   )
 }
