@@ -53,7 +53,11 @@ export const big = () => (
 )
 
 export const SmallAndPrimary = () => (
-  <Button size={AppearanceSizeType.small} styleType={AppearanceStyleType.primary} onClick={handleClick}>
+  <Button
+    size={AppearanceSizeType.small}
+    styleType={AppearanceStyleType.primary}
+    onClick={handleClick}
+  >
     Small and Primary Button
   </Button>
 )
@@ -93,6 +97,12 @@ export const inlineIcon = () => (
       Go Forward
     </Button>
   </>
+)
+
+export const loading = () => (
+  <Button styleType={AppearanceStyleType.primary} loading={true} onClick={handleClick}>
+    Loading Button
+  </Button>
 )
 
 // TODO: replace with tailwind markup, if it matters
