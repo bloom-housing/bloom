@@ -491,10 +491,10 @@ export const Spinner = (props: IconProps) => {
         cy="50"
         fill="none"
         stroke="currentColor"
-        stroke-width="9"
+        strokeWidth="9"
         r="32"
-        stroke-dasharray="150.79644737231007 52.26548245743669"
-      ></circle>
+        strokeDasharray="150.79644737231007 52.26548245743669"
+      />
     </svg>
   )
 }

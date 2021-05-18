@@ -124,7 +124,7 @@ export interface IconProps {
 }
 
 const Icon = (props: IconProps) => {
-  const wrapperClasses = ["ui-icon", "relative"]
+  const wrapperClasses = ["ui-icon"]
   wrapperClasses.push(`ui-${props.size}`)
   if (props.className) wrapperClasses.push(props.className)
   if (props.symbol == "spinner") wrapperClasses.push("spinner-animation")
