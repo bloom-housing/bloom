@@ -39,6 +39,7 @@ module.exports = withCSS(
     withMDX(
       withSass(
         withTM({
+          target: "serverless",
           env: {
             backendApiBase: BACKEND_API_BASE,
             listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
