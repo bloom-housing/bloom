@@ -43,7 +43,10 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink url={conductor.determinePreviousUrl()} />
+        <FormBackLink
+          url={conductor.determinePreviousUrl()}
+          onClick={() => conductor.setNavigatedBack(true)}
+        />
 
         <h2 className="form-card__title is-borderless">Reserved Unit Conditionals</h2>
 

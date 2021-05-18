@@ -55,7 +55,10 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink url={conductor.determinePreviousUrl()} />
+        <FormBackLink
+          url={conductor.determinePreviousUrl()}
+          onClick={() => conductor.setNavigatedBack(true)}
+        />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">

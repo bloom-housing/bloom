@@ -26,11 +26,10 @@ import { FormMetadataOptions } from "@bloom-housing/backend-core/types"
 
 const PreferencesAll = () => {
   const clientLoaded = OnClientSide()
-
   const { conductor, application, listing } = useFormConductor("preferencesAll")
-  const [page, setPage] = useState(1)
   const preferences = listing?.preferences
   const uniquePages: number[] = [...Array.from(new Set(preferences?.map((item) => item.page)))]
+  const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages.length : 1)
   const preferencesByPage = preferences?.reduce((acc, item) => {
     if (item.page === page) return [...acc, item]
     else return acc
@@ -71,7 +70,12 @@ const PreferencesAll = () => {
 
   const onSubmit = (data) => {
     const body = mapPreferencesToApi(data)
-    conductor.currentStep.save([...conductor.currentStep.application.preferences, body[0]])
+    const currentPreferences = conductor.currentStep.application.preferences.filter(
+      (preference) => {
+        return preference.key !== body[0].key
+      }
+    )
+    conductor.currentStep.save([...currentPreferences, body[0]])
     if (page !== uniquePages.length) {
       setPage(page + 1)
       return
@@ -143,7 +147,14 @@ const PreferencesAll = () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink url={conductor.determinePreviousUrl()} />
+        <FormBackLink
+          url={conductor.determinePreviousUrl()}
+          onClick={() => {
+            conductor.setNavigatedBack(true)
+            setPage(page - 1)
+          }}
+          static={page === uniquePages.length}
+        />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.preferences.title")}</h2>
@@ -294,6 +305,7 @@ const PreferencesAll = () => {
                   styleType={AppearanceStyleType.primary}
                   onClick={() => {
                     conductor.returnToReview = false
+                    conductor.setNavigatedBack(false)
                   }}
                 >
                   {t("t.next")}

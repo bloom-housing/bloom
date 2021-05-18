@@ -194,6 +194,7 @@ export default () => {
                 styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
+                  conductor.setNavigatedBack(false)
                 }}
               >
                 {t("t.next")}
