@@ -83,5 +83,13 @@ Unit tests:
 yarn test
 ```
 
+### Translations
 
+Backend keeps translations for email related content in the DB in table `translations` .
+There is an endpoint `/translations` exposing CRUD operations on this table (admin only).
+Translations are defined for each county code and language pair e.g. (Alameda, en). To modify a particular
+translation pair:
 
+1. Fetch `GET /translations` and list all the translations
+2. Find an ID of a pair that interest you
+3. Use `PUT /translations/:translationId` to modify it's content

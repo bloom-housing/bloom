@@ -41,6 +41,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const { listingDto } = useSingleListingData(listingId)
 
   const preferences = listingDto?.preferences
+  const countyCode = listingDto?.countyCode
 
   const defaultValues = editMode ? mapApiToForm(application) : {}
 
@@ -197,7 +198,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormHouseholdDetails />
 
-                    <FormPreferences preferences={preferences} />
+                    <FormPreferences preferences={preferences} county={countyCode} />
 
                     <FormHouseholdIncome />
 

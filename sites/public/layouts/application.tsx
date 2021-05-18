@@ -36,7 +36,10 @@ const Layout = (props) => {
           logoSrc="/images/logo_glyph.svg"
           notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
           title={t("nav.siteTitle")}
-          languages={languages}
+          language={{
+            list: languages,
+            codes: router?.locales,
+          }}
         >
           <Link href="/listings">
             <a className="navbar-item">{t("nav.listings")}</a>

@@ -40,6 +40,7 @@ module.exports = withCSS(
             listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
             gtmKey: process.env.GTM_KEY || null,
             idleTimeout: process.env.IDLE_TIMEOUT,
+            countyCode: process.env.COUNTY_CODE,
           },
           i18n: {
             locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

@@ -1897,6 +1897,9 @@ export interface Listing {
   CSVFormattingType: CSVFormattingType;
 
   /**  */
+  countyCode: CountyCode;
+
+  /**  */
   preferences: Preference[];
 
   /**  */
@@ -2075,6 +2078,9 @@ export interface ListingCreate {
 
   /**  */
   CSVFormattingType: CSVFormattingType;
+
+  /**  */
+  countyCode: CountyCode;
 
   /**  */
   preferences: PreferenceCreate[];
@@ -2258,6 +2264,9 @@ export interface ListingUpdate {
 
   /**  */
   CSVFormattingType: CSVFormattingType;
+
+  /**  */
+  countyCode: CountyCode;
 
   /**  */
   id?: string;
@@ -3696,6 +3705,12 @@ export enum CSVFormattingType {
   'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
 }
 
+export enum CountyCode {
+  'Alameda' = 'Alameda',
+  'San Mateo' = 'San Mateo',
+  'San Jose' = 'San Jose'
+}
+
 export enum InputType {
   'boolean' = 'boolean',
   'text' = 'text',
@@ -3737,10 +3752,6 @@ export enum ApplicationSubmissionType {
   'electronical' = 'electronical'
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
-export enum CountyCode {
-  'Alameda' = 'Alameda',
-  'San Mateo' = 'San Mateo'
-}
 export enum EnumApplicationFlaggedSetStatus {
   'flagged' = 'flagged',
   'resolved' = 'resolved'

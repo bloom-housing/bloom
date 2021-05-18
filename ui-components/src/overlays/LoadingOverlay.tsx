@@ -1,4 +1,5 @@
 import React, { useMemo } from "react"
+import { Icon } from "../icons/Icon"
 import "./LoadingOverlay.scss"
 
 type LoadingOverlayProps = {
@@ -12,8 +13,7 @@ const LoadingOverlay = ({ isLoading, children }: LoadingOverlayProps) => {
 
     return (
       <div className="loading-overlay">
-        <span className="spinner"></span>
-
+        <Icon size="3xl" symbol="spinner" className="loading-overlay__spinner" />
         {children}
       </div>
     )

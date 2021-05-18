@@ -2,6 +2,14 @@ import axios, { AxiosInstance } from "axios"
 import { getTokenTtl } from "./token"
 import { UserCreate, User, Status } from "@bloom-housing/backend-core/types"
 
+const axiosWithHeaders = (language: string) =>
+  axios.create({
+    headers: {
+      language: language,
+      "county-code": process.env.countyCode,
+    },
+  })
+
 export const renewToken = async (client: AxiosInstance) => {
   const res = await client.post<{ accessToken: string }>("auth/token")
   const { accessToken } = res.data
@@ -17,16 +25,19 @@ export const login = async (apiBase: string, email: string, password: string) =>
   return accessToken
 }
 
-export const register = async (apiBase: string, data: UserCreate) => {
-  const res = await axios.post<{ accessToken: string } & Status>(`${apiBase}/user`, {
-    appUrl: window.location.origin,
-    ...data,
-  })
+export const register = async (apiBase: string, data: UserCreate, language: string) => {
+  const res = await axiosWithHeaders(language).post<{ accessToken: string } & Status>(
+    `${apiBase}/user`,
+    {
+      appUrl: window.location.origin,
+      ...data,
+    }
+  )
   return { ...res.data }
 }
 
-export const resendConfirmation = async (apiBase: string, email: string) => {
-  const res = await axios.post<{ accessToken: string } & Status>(
+export const resendConfirmation = async (apiBase: string, email: string, language: string) => {
+  const res = await axiosWithHeaders(language).post<{ accessToken: string } & Status>(
     `${apiBase}/user/resend-confirmation`,
     {
       appUrl: window.location.origin,
@@ -75,11 +86,14 @@ export const scheduleTokenRefresh = (
   }
 }
 
-export const forgotPassword = async (apiUrl: string, email: string) => {
-  const res = await axios.put<{ message: string }>(`${apiUrl}/user/forgot-password`, {
-    appUrl: window.location.origin,
-    email: email,
-  })
+export const forgotPassword = async (apiUrl: string, email: string, language: string) => {
+  const res = await axiosWithHeaders(language).put<{ message: string }>(
+    `${apiUrl}/user/forgot-password`,
+    {
+      appUrl: window.location.origin,
+      email: email,
+    }
+  )
   const { message } = res.data
   return message
 }
@@ -99,10 +113,13 @@ export const resetPassword = async (
   return accessToken
 }
 
-export const confirmAccount = async (apiUrl: string, token: string) => {
-  const res = await axios.put<{ accessToken: string }>(`${apiUrl}/user/confirm`, {
-    token: token,
-  })
+export const confirmAccount = async (apiUrl: string, token: string, language: string) => {
+  const res = await axiosWithHeaders(language).put<{ accessToken: string }>(
+    `${apiUrl}/user/confirm`,
+    {
+      token: token,
+    }
+  )
   const { accessToken } = res.data
   return accessToken
 }

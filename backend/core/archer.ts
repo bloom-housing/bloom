@@ -1,4 +1,11 @@
-import { AmiChart, ApplicationMethodType, CSVFormattingType, Listing, ListingStatus } from "./types"
+import {
+  AmiChart,
+  ApplicationMethodType,
+  CountyCode,
+  CSVFormattingType,
+  Listing,
+  ListingStatus,
+} from "./types"
 
 export const SanMateoHUD2019: AmiChart = {
   id: "ami_chart_id",
@@ -240,6 +247,7 @@ export const ArcherListing: Listing = {
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
+  countyCode: CountyCode["San Jose"],
   depositMax: "",
   disableUnitsAccordion: false,
   events: [],

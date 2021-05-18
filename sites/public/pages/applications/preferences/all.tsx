@@ -187,7 +187,8 @@ const PreferencesAll = () => {
                                 )}
                                 type="checkbox"
                                 label={t(
-                                  `application.preferences.${preference.formMetadata.key}.${option.key}.label`
+                                  `application.preferences.${preference.formMetadata.key}.${option.key}.label`,
+                                  { county: listing?.countyCode }
                                 )}
                                 register={register}
                                 inputProps={{
@@ -205,7 +206,8 @@ const PreferencesAll = () => {
                               <ExpandableContent>
                                 <p className="field-note mb-8">
                                   {t(
-                                    `application.preferences.${preference.formMetadata.key}.${option.key}.description`
+                                    `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
+                                    { county: listing?.countyCode }
                                   )}
                                   <br />
                                   {preference?.links?.map((link) => (

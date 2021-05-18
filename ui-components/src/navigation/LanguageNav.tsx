@@ -8,11 +8,16 @@ export type LangItem = {
   label: string
 }
 
-export interface LanguageNavProps {
-  items: LangItem[]
+export interface LanguageNavLang {
+  list: LangItem[]
+  codes: string[]
 }
 
-const LanguageNav = ({ items }: LanguageNavProps) => {
+export interface LanguageNavProps {
+  language: LanguageNavLang
+}
+
+const LanguageNav = ({ language }: LanguageNavProps) => {
   const routePrefix = t("config.routePrefix")
   const { router } = useContext(NavigationContext)
 
@@ -21,7 +26,7 @@ const LanguageNav = ({ items }: LanguageNavProps) => {
       <div className="language-bar__inner">
         <nav className="language-nav">
           <ul className="language-nav__list">
-            {items?.map((item) => (
+            {language.list?.map((item) => (
               <li
                 key={item.prefix}
                 onClick={() => {
