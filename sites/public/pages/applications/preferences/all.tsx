@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AlertBox,
@@ -28,7 +28,13 @@ const PreferencesAll = () => {
   const clientLoaded = OnClientSide()
 
   const { conductor, application, listing } = useFormConductor("preferencesAll")
+  const [page, setPage] = useState(1)
   const preferences = listing?.preferences
+  const uniquePages: number[] = [...Array.from(new Set(preferences?.map((item) => item.page)))]
+  const preferencesByPage = preferences?.reduce((acc, item) => {
+    if (item.page === page) return [...acc, item]
+    else return acc
+  }, [])
 
   const currentPageSection = 4
 
@@ -49,7 +55,7 @@ const PreferencesAll = () => {
       application.preferences.options.liveWork.work.claimed
   */
   const preferenceCheckboxIds = useMemo(() => {
-    return preferences?.reduce((acc, item) => {
+    return preferencesByPage?.reduce((acc, item) => {
       const preferenceName = item.formMetadata?.key
       const optionPaths = item.formMetadata?.options?.map(
         (option) => `${PREFERENCES_FORM_PATH}.${preferenceName}.${option.key}.claimed`
@@ -61,25 +67,29 @@ const PreferencesAll = () => {
 
       return acc
     }, {})
-  }, [preferences])
+  }, [preferencesByPage])
 
   const onSubmit = (data) => {
     const body = mapPreferencesToApi(data)
 
     conductor.currentStep.save(body)
+    if (page !== uniquePages.length) {
+      setPage(page + 1)
+      return
+    }
     conductor.routeToNextOrReturnUrl()
   }
 
   const allOptionFieldNames = useMemo(() => {
     const keys = []
-    preferences?.forEach((preference) =>
+    preferencesByPage?.forEach((preference) =>
       preference?.formMetadata?.options.forEach((option) =>
         keys.push(getPreferenceOptionName(preference?.formMetadata.key, option.key))
       )
     )
 
     return keys
-  }, [preferences])
+  }, [preferencesByPage])
 
   const watchPreferences = watch(allOptionFieldNames)
 
@@ -154,17 +164,15 @@ const PreferencesAll = () => {
               <p className="field-note">{t("application.preferences.selectBelow")}</p>
             </div>
 
-            {preferences?.map((preference, index) => {
+            {preferencesByPage?.map((preference, index) => {
               const noneOptionKey = `${PREFERENCES_NONE_FORM_PATH}.${preference.formMetadata.key}-none`
-
               return (
                 <div key={preference.id}>
                   <div
                     className={`form-card__group px-0 ${
-                      index + 1 !== preferences.length ? "border-b" : ""
+                      index + 1 !== preferencesByPage.length ? "border-b" : ""
                     }`}
                   >
-                    {console.log()}
                     <fieldset>
                       <legend className="field-label--caps mb-8">{preference.title}</legend>
 

@@ -78,6 +78,12 @@ class Preference {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => FormMetadata)
   formMetadata?: FormMetadata
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  page: number | null
 }
 
 export { Preference as default, Preference }
