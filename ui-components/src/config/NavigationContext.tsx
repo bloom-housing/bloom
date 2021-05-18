@@ -26,7 +26,7 @@ export interface NavigationContextProps {
 }
 
 export const NavigationContext = createContext<NavigationContextProps>({
-  LinkComponent: () => <></>,
+  LinkComponent: (props) => <a href={props.href}>{props.children}</a>,
   router: {
     push: () => {
       // no-op
