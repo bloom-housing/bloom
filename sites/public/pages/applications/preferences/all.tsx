@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import {
   AlertBox,
@@ -30,19 +30,25 @@ const PreferencesAll = () => {
   const preferences = listing?.preferences
   const uniquePages: number[] = [...Array.from(new Set(preferences?.map((item) => item.page)))]
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages.length : 1)
-  const preferencesByPage = preferences?.reduce((acc, item) => {
-    if (item.page === page) return [...acc, item]
-    else return acc
-  }, [])
+  const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
+  const preferencesByPage = preferences?.filter((item) => {
+    return item.page === page
+  })
 
   const currentPageSection = 4
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, handleSubmit, errors, getValues, trigger } = useForm({
+  const { register, setValue, watch, handleSubmit, errors, getValues, trigger, reset } = useForm({
     defaultValues: {
-      application: { preferences: mapApiToPreferencesForm(application.preferences) },
+      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
     },
   })
+
+  useEffect(() => {
+    reset({
+      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
+    })
+  }, [page, applicationPreferences, reset])
 
   /*
     It collects all checkbox ids for each preference to check if at least one checkbox / preference is checked.
@@ -76,6 +82,7 @@ const PreferencesAll = () => {
       }
     )
     conductor.currentStep.save([...currentPreferences, body[0]])
+    setApplicationPreferences([...currentPreferences, body[0]])
     if (page !== uniquePages.length) {
       setPage(page + 1)
       return
