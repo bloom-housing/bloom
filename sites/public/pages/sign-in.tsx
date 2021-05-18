@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react"
+import Link from "next/link"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
@@ -13,7 +14,6 @@ import {
   AlertBox,
   SiteAlert,
   setSiteAlertMessage,
-  LocalizedLink,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
@@ -74,9 +74,9 @@ const SignIn = () => {
             />
 
             <aside className="float-right text-tiny font-semibold">
-              <LocalizedLink href="/forgot-password">
+              <Link href="/forgot-password">
                 <a>{t("authentication.signIn.forgotPassword")}</a>
-              </LocalizedLink>
+              </Link>
             </aside>
 
             <Field
