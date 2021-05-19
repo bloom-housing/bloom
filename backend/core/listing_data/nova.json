@@ -1615,6 +1615,86 @@
         "income": 90450
       },
       {
+        "percentOfAmi": 45,
+        "householdSize": 1,
+        "income": 43155
+      },
+      {
+        "percentOfAmi": 45,
+        "householdSize": 2,
+        "income": 49320
+      },
+      {
+        "percentOfAmi": 45,
+        "householdSize": 3,
+        "income": 55485
+      },
+      {
+        "percentOfAmi": 45,
+        "householdSize": 4,
+        "income": 61650
+      },
+      {
+        "percentOfAmi": 45,
+        "householdSize": 5,
+        "income": 66600
+      },
+      {
+        "percentOfAmi": 45,
+        "householdSize": 6,
+        "income": 71550
+      },
+      {
+        "percentOfAmi": 45,
+        "householdSize": 7,
+        "income": 76455
+      },
+      {
+        "percentOfAmi": 45,
+        "householdSize": 8,
+        "income": 81405
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 1,
+        "income": 38360
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 2,
+        "income": 43840
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 3,
+        "income": 49320
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 4,
+        "income": 54800
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 5,
+        "income": 59200
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 6,
+        "income": 63600
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 7,
+        "income": 67960
+      },
+      {
+        "percentOfAmi": 40,
+        "householdSize": 8,
+        "income": 72360
+      },
+      {
         "percentOfAmi": 30,
         "householdSize": 1,
         "income": 28770
