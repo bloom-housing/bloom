@@ -51,6 +51,8 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
+  - Add spinner to the Application Form terms page upon submit ([#1225](https://github.com/bloom-housing/bloom/pull/1225)) (Jared White)
+    - The loading overlay in ui-components was updated to use the same spinner as the button component
   - Birthdate localizing issues ([#1202](https://github.com/bloom-housing/bloom/pull/1202))
   - Preferences translations in Partners ([#1206](https://github.com/bloom-housing/bloom/pull/1206)) (dominikx96)
   - Referral application section on mobile ([#1201](https://github.com/bloom-housing/bloom/pull/1201))
