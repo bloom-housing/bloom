@@ -76,13 +76,17 @@ const PreferencesAll = () => {
 
   const onSubmit = (data) => {
     const body = mapPreferencesToApi(data)
-    const currentPreferences = conductor.currentStep.application.preferences.filter(
-      (preference) => {
-        return preference.key !== body[0].key
-      }
-    )
-    conductor.currentStep.save([...currentPreferences, body[0]])
-    setApplicationPreferences([...currentPreferences, body[0]])
+    if (uniquePages.length > 1) {
+      const currentPreferences = conductor.currentStep.application.preferences.filter(
+        (preference) => {
+          return preference.key !== body[0].key
+        }
+      )
+      conductor.currentStep.save([...currentPreferences, body[0]])
+      setApplicationPreferences([...currentPreferences, body[0]])
+    } else {
+      conductor.currentStep.save(body)
+    }
     if (page !== uniquePages.length) {
       setPage(page + 1)
       return
