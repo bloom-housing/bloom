@@ -24,12 +24,8 @@ export const occupancyTable = (listing: Listing) => {
           ? uniqueOccupancyArray[uniqueOccupancyArray.length - 1]
           : null
       if (lastEntry && lastEntry.unitType === thisEntry.unitType) {
-        if (lastEntry.max < thisEntry.max) {
-          lastEntry.max = thisEntry.max
-        }
-        if (lastEntry.min > thisEntry.min) {
-          lastEntry.min = thisEntry.min
-        }
+        if (lastEntry.max < thisEntry.max) lastEntry.max = thisEntry.max
+        if (lastEntry.min > thisEntry.min) lastEntry.min = thisEntry.min
       } else {
         uniqueOccupancyArray.push(thisEntry)
       }
