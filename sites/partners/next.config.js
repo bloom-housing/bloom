@@ -7,6 +7,7 @@ const withCSS = require("@zeit/next-css")
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
+const withMDX = require("@next/mdx")()
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
@@ -31,47 +32,26 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 // https://www.npmjs.com/package/next-transpile-modules
 module.exports = withCSS(
   withBundleAnalyzer(
-    withSass(
-      withTM({
-        env: {
-          backendApiBase: BACKEND_API_BASE,
-          listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
-          countyCode: process.env.COUNTY_CODE,
-        },
-        sassLoaderOptions: {
-          additionalData: tailwindVars,
-        },
-        // exportPathMap adapted from https://github.com/zeit/next.js/blob/canary/examples/with-static-export/next.config.js
-        exportPathMap() {
-          // define page paths for various available languages
-          const translatablePaths = {
-            "/": { page: "/" },
-            "/sign-in": { page: "/sign-in" },
-            "/forgot-password": { page: "/forgot-password" },
-            "/reset-password": { page: "/reset-password" },
-            "/listings/applications": { page: "/listings/applications" },
-            "/listings/applications/add": { page: "/listings/applications/add" },
-            "/application": { page: "/application" },
-            "/application/edit": { page: "/application/edit" },
-          }
-
-          const languages = ["es", "zh", "vi"] // add new language codes here
-          const languagePaths = {}
-          Object.entries(translatablePaths).forEach(([key, value]) => {
-            languagePaths[key] = value
-            languages.forEach((language) => {
-              const query = Object.assign({}, value.query)
-              query.language = language
-              languagePaths[`/${language}${key.replace(/^\/$/, "")}`] = {
-                ...value,
-                query: query,
-              }
-            })
-          })
-
-          return languagePaths
-        },
-      })
+    withMDX(
+      withSass(
+        withTM({
+          target: "serverless",
+          env: {
+            backendApiBase: BACKEND_API_BASE,
+            listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+            gtmKey: process.env.GTM_KEY || null,
+            idleTimeout: process.env.IDLE_TIMEOUT,
+            countyCode: process.env.COUNTY_CODE,
+          },
+          i18n: {
+            locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
+            defaultLocale: "en",
+          },
+          sassLoaderOptions: {
+            additionalData: tailwindVars,
+          },
+        })
+      )
     )
   )
 )

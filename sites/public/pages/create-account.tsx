@@ -16,14 +16,12 @@ import {
   SiteAlert,
   Modal,
   passwordRegex,
-  ConfigContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import moment from "moment"
 import { useRouter } from "next/router"
 
 export default () => {
-  const { language } = useContext(ConfigContext)
   const { createUser, resendConfirmation } = useContext(UserContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
@@ -32,6 +30,7 @@ export default () => {
   const [requestError, setRequestError] = useState<string>()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
+  const language = router.locale
   const email = useRef({})
   const password = useRef({})
   email.current = watch("email", "")
