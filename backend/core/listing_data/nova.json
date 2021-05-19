@@ -20,7 +20,7 @@
   "CSVFormattingType": "basic",
   "depositMax": "500",
   "depositMin": "500",
-  "programRules": "This property follows the California Tax Credit Allocation Committee's Low Income Housing Tax Credit Program (LIHTC).",
+  "programRules": "This property follows the California Tax Credit Allocation Committee's Low Income Housing Tax Credit Program (LIHTC). Compliance Monitoring Manual: https://www.treasurer.ca.gov/ctcac/compliance/manual/manual.pdf",
   "externalId": null,
   "waitlistMaxSize": null,
   "name": "Nova",
@@ -49,7 +49,7 @@
     "longitude": -122.2679097
   },
   "leasingAgentOfficeHours": "Monday - Friday, 8:00AM - 5:00PM",
-  "leasingAgentPhone": "(714) 282-2520",
+  "leasingAgentPhone": "(510) 977-9780",
   "leasingAgentTitle": "Community Manager",
   "rentalAssistance": "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
   "rentalHistory": "",
