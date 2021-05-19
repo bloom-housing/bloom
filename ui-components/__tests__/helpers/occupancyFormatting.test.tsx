@@ -185,7 +185,7 @@ describe("occupancy formatting helper", () => {
       },
     ])
   })
-  it("properly creates occupany table with multitple unit rows", () => {
+  it("properly creates occupancy table with multiple unit rows", () => {
     expect(occupancyTable(MultipleUnitRowsListing)).toStrictEqual([
       {
         occupancy: "1-7 people",
