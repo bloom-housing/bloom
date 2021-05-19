@@ -153,9 +153,6 @@ const getUnitSummary = (unit: Unit) => {
     summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
   }
   summary.areaRange = minMaxValue(summary.areaRange, parseFloat(unit.sqFeet))
-  if (unit.status == "available") {
-    summary.totalAvailable += 1
-  }
 
   if (summary.minIncomeRange) {
     summary.minIncomeRange = minMaxInCurrency(summary.minIncomeRange)
@@ -173,12 +170,27 @@ const summarizeUnits = (units: Units, reservedType?: string): UnitSummary[] => {
   const summaries: UnitSummary[] = []
   let currentUnitType = units[0].unitType
   let currentUnitRent = units[0].monthlyRent
-  summaries.push(getUnitSummary(units[0]))
-  units.forEach((unit) => {
-    if (unit.unitType === currentUnitType && unit.monthlyRent === currentUnitRent) return
-    summaries.push(getUnitSummary(unit))
-    currentUnitType = unit.unitType
-    currentUnitRent = unit.monthlyRent
+  let numAvailable = 0
+
+  // Assumes units are listed in groups by unitType and rent type
+  // Allows for multiples rows under one unit type if the rent methods differ
+  units.forEach((unit, index) => {
+    if (unit.unitType !== currentUnitType || unit.monthlyRent !== currentUnitRent) {
+      const summary = getUnitSummary(units[index - 1])
+      summary.totalAvailable = numAvailable
+      summaries.push(summary)
+      currentUnitType = unit.unitType
+      currentUnitRent = unit.monthlyRent
+      numAvailable = 1
+    } else {
+      numAvailable += 1
+    }
+    if (index === units.length - 1) {
+      const summary = getUnitSummary(unit)
+      summary.totalAvailable = numAvailable
+      summaries.push(summary)
+      return
+    }
   })
 
   return summaries.filter((item) => Object.keys(item).length > 0)
@@ -228,7 +240,7 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
   data.byUnitType = summarizeUnits(units)
   data.byNonReservedUnitType = summarizeUnits(nonReservedUnits)
   data.byReservedType = summarizeReservedTypes(units, data.reservedTypes)
-  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes, data.unitTypes)
+  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes)
   data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
   return data
 }
