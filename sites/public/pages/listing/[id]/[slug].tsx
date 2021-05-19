@@ -32,7 +32,16 @@ export default function ListingPage(props: ListingProps) {
 }
 
 export async function getStaticPaths(context: { locales: Array<string> }) {
-  const response = await axios.get(process.env.listingServiceUrl)
+  let response
+
+  try {
+    response = await axios.get(process.env.listingServiceUrl)
+  } catch (e) {
+    return {
+      paths: [],
+      fallback: false,
+    }
+  }
 
   return {
     paths: context.locales.flatMap((locale: string) =>
