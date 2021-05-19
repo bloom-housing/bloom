@@ -2,20 +2,49 @@ import * as React from "react"
 import { t } from "./translator"
 import { Listing } from "@bloom-housing/backend-core/types"
 
+type OccupancyData = {
+  max: number
+  min: number
+  unitType: string
+}
+
 export const occupancyTable = (listing: Listing) => {
   let occupancyData = [] as any
-
   if (listing.property.unitsSummarized) {
-    occupancyData = listing.property.unitsSummarized.byUnitType.map((unitSummary) => {
+    const uniqueOccupancyArray: OccupancyData[] = []
+    // Massage multiple unit rows into one occupany row with an encompassing range
+    listing.property.unitsSummarized.byUnitType.forEach((data) => {
+      const thisEntry = {
+        max: data.occupancyRange.max,
+        min: data.occupancyRange.min,
+        unitType: data.unitType,
+      }
+      const lastEntry =
+        uniqueOccupancyArray.length >= 1
+          ? uniqueOccupancyArray[uniqueOccupancyArray.length - 1]
+          : null
+      if (lastEntry && lastEntry.unitType === thisEntry.unitType) {
+        if (lastEntry.max < thisEntry.max) {
+          lastEntry.max = thisEntry.max
+        }
+        if (lastEntry.min < thisEntry.min) {
+          lastEntry.min = thisEntry.min
+        }
+      } else {
+        uniqueOccupancyArray.push(thisEntry)
+      }
+    })
+
+    occupancyData = uniqueOccupancyArray.map((unitSummary) => {
       let occupancy = ""
 
-      if (unitSummary.occupancyRange.max == null) {
-        occupancy = `at least ${unitSummary.occupancyRange.min} ${
-          unitSummary.occupancyRange.min == 1 ? t("t.person") : t("t.people")
+      if (unitSummary.max == null) {
+        occupancy = `at least ${unitSummary.min} ${
+          unitSummary.min == 1 ? t("t.person") : t("t.people")
         }`
-      } else if (unitSummary.occupancyRange.max > 1) {
-        occupancy = `${unitSummary.occupancyRange.min}-${unitSummary.occupancyRange.max} ${
-          unitSummary.occupancyRange.max == 1 ? t("t.person") : t("t.people")
+      } else if (unitSummary.max > 1) {
+        occupancy = `${unitSummary.min}-${unitSummary.max} ${
+          unitSummary.max == 1 ? t("t.person") : t("t.people")
         }`
       } else {
         occupancy = `1 ${t("t.person")}`
