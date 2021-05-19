@@ -124,6 +124,9 @@ function reformatListing(listing, relationsKeys: string[]) {
   if (!("status" in listing)) {
     listing.status = ListingStatus.active
   }
+  if (!("countyCode" in listing)) {
+    listing.countyCode = "Alameda"
+  }
   try {
     delete listing["id"]
   } catch (e) {
