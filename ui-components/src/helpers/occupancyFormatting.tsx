@@ -27,7 +27,7 @@ export const occupancyTable = (listing: Listing) => {
         if (lastEntry.max < thisEntry.max) {
           lastEntry.max = thisEntry.max
         }
-        if (lastEntry.min < thisEntry.min) {
+        if (lastEntry.min > thisEntry.min) {
           lastEntry.min = thisEntry.min
         }
       } else {
