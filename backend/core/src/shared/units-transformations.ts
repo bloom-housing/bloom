@@ -115,98 +115,88 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   return { columns: hmiHeaders, rows: hmiRows }
 }
 
-const summarizeUnits = (
-  units: Units,
-  unitTypes: string[],
-  reservedType?: string
-): UnitSummary[] => {
+const getUnitSummary = (unit: Unit) => {
+  const summary = {} as UnitSummary
+  summary.unitType = unit.unitType
+  if (!summary.totalAvailable) {
+    summary.totalAvailable = 0
+  }
+  const minIncomeRange = minMaxValue(
+    {
+      min: parseFloat(summary.minIncomeRange?.min),
+      max: parseFloat(summary.minIncomeRange?.max),
+    },
+    parseFloat(unit.monthlyIncomeMin)
+  )
+  summary.minIncomeRange = {
+    min: minIncomeRange.min.toPrecision(2),
+    max: minIncomeRange.max.toPrecision(2),
+  }
+
+  summary.occupancyRange = minMaxValue(summary.occupancyRange, unit.minOccupancy, unit.maxOccupancy)
+  summary.rentAsPercentIncomeRange = minMaxValue(
+    summary.rentAsPercentIncomeRange,
+    parseFloat(unit.monthlyRentAsPercentOfIncome)
+  )
+  const rentRange = minMaxValue(
+    {
+      min: parseFloat(summary.rentRange?.min),
+      max: parseFloat(summary.rentRange?.max),
+    },
+    Number.parseFloat(unit.monthlyRent)
+  )
+  summary.rentRange = {
+    min: rentRange.min.toPrecision(2),
+    max: rentRange.max.toPrecision(2),
+  }
+  if (unit.floor) {
+    summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
+  }
+  summary.areaRange = minMaxValue(summary.areaRange, parseFloat(unit.sqFeet))
+  if (unit.status == "available") {
+    summary.totalAvailable += 1
+  }
+
+  if (summary.minIncomeRange) {
+    summary.minIncomeRange = minMaxInCurrency(summary.minIncomeRange)
+  }
+  if (summary.rentRange) {
+    summary.rentRange = minMaxInCurrency(summary.rentRange)
+  }
+  return summary
+}
+
+const summarizeUnits = (units: Units, reservedType?: string): UnitSummary[] => {
   if (!reservedType) {
     reservedType = null
   }
-  const summaries = unitTypes.map(
-    (unitType: string): UnitSummary => {
-      const summary = {} as UnitSummary
-      const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
-      const finalSummary = Array.from(unitsByType).reduce((summary, unit) => {
-        summary.unitType = unitType
-        if (!summary.totalAvailable) {
-          summary.totalAvailable = 0
-        }
-        const minIncomeRange = minMaxValue(
-          {
-            min: parseFloat(summary.minIncomeRange?.min),
-            max: parseFloat(summary.minIncomeRange?.max),
-          },
-          parseFloat(unit.monthlyIncomeMin)
-        )
-        summary.minIncomeRange = {
-          min: minIncomeRange.min.toPrecision(2),
-          max: minIncomeRange.max.toPrecision(2),
-        }
-
-        summary.occupancyRange = minMaxValue(
-          summary.occupancyRange,
-          unit.minOccupancy,
-          unit.maxOccupancy
-        )
-        summary.rentAsPercentIncomeRange = minMaxValue(
-          summary.rentAsPercentIncomeRange,
-          parseFloat(unit.monthlyRentAsPercentOfIncome)
-        )
-        const rentRange = minMaxValue(
-          {
-            min: parseFloat(summary.rentRange?.min),
-            max: parseFloat(summary.rentRange?.max),
-          },
-          Number.parseFloat(unit.monthlyRent)
-        )
-        summary.rentRange = {
-          min: rentRange.min.toPrecision(2),
-          max: rentRange.max.toPrecision(2),
-        }
-        if (unit.floor) {
-          summary.floorRange = minMaxValue(summary.floorRange, unit.floor)
-        }
-        summary.areaRange = minMaxValue(summary.areaRange, parseFloat(unit.sqFeet))
-        if (unit.status == "available") {
-          summary.totalAvailable += 1
-        }
-
-        return summary
-      }, summary)
-
-      if (finalSummary.minIncomeRange) {
-        finalSummary.minIncomeRange = minMaxInCurrency(finalSummary.minIncomeRange)
-      }
-      if (finalSummary.rentRange) {
-        finalSummary.rentRange = minMaxInCurrency(finalSummary.rentRange)
-      }
-
-      return finalSummary
-    }
-  )
+  const summaries: UnitSummary[] = []
+  let currentUnitType = units[0].unitType
+  let currentUnitRent = units[0].monthlyRent
+  summaries.push(getUnitSummary(units[0]))
+  units.forEach((unit) => {
+    if (unit.unitType === currentUnitType && unit.monthlyRent === currentUnitRent) return
+    summaries.push(getUnitSummary(unit))
+    currentUnitType = unit.unitType
+    currentUnitRent = unit.monthlyRent
+  })
 
   return summaries.filter((item) => Object.keys(item).length > 0)
 }
 
-const summarizeReservedTypes = (units: Units, reservedTypes: string[], unitTypes: string[]) => {
+const summarizeReservedTypes = (units: Units, reservedTypes: string[]) => {
   return reservedTypes
     .map((reservedType: string) => {
       const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
       return {
         reservedType: reservedType,
-        byUnitType: summarizeUnits(unitsByReservedType, unitTypes),
+        byUnitType: summarizeUnits(unitsByReservedType),
       }
     })
     .filter((item) => item.byUnitType.length > 0)
 }
 
-const summarizeByAmi = (
-  units: Units,
-  amiPercentages: string[],
-  reservedTypes: string[],
-  unitTypes: string[]
-) => {
+const summarizeByAmi = (units: Units, amiPercentages: string[], reservedTypes: string[]) => {
   return amiPercentages.map((percent: string) => {
     const unitsByAmiPercentage = units.filter((unit: Unit) => unit.amiPercentage == percent)
     const nonReservedUnitsByAmiPercentage = unitsByAmiPercentage.filter(
@@ -214,8 +204,8 @@ const summarizeByAmi = (
     )
     return {
       percent: percent,
-      byNonReservedUnitType: summarizeUnits(nonReservedUnitsByAmiPercentage, unitTypes),
-      byReservedType: summarizeReservedTypes(unitsByAmiPercentage, reservedTypes, unitTypes),
+      byNonReservedUnitType: summarizeUnits(nonReservedUnitsByAmiPercentage),
+      byReservedType: summarizeReservedTypes(unitsByAmiPercentage, reservedTypes),
     }
   })
 }
@@ -235,9 +225,9 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
   const nonReservedUnits = units.filter((unit: Unit) => unit.reservedType == null)
-  data.byUnitType = summarizeUnits(units, data.unitTypes)
-  data.byNonReservedUnitType = summarizeUnits(nonReservedUnits, data.unitTypes)
-  data.byReservedType = summarizeReservedTypes(units, data.reservedTypes, data.unitTypes)
+  data.byUnitType = summarizeUnits(units)
+  data.byNonReservedUnitType = summarizeUnits(nonReservedUnits)
+  data.byReservedType = summarizeReservedTypes(units, data.reservedTypes)
   data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes, data.unitTypes)
   data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
   return data
