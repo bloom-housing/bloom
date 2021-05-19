@@ -19,10 +19,10 @@
   "scripts": {
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",
     "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test",
-    "build:app:public": "cd sites/public && yarn build",
+    "build:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn build",
     "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn dev",
     "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test",
-    "build:app:partners": "cd sites/partners && yarn build",
+    "build:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn build",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
