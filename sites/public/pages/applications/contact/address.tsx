@@ -28,7 +28,7 @@ import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/hel
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
@@ -542,3 +542,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationAddress

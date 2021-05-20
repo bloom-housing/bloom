@@ -23,7 +23,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationName = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
 
@@ -220,3 +220,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationName

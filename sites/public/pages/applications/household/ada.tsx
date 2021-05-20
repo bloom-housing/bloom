@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationAda = () => {
   const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
   const currentPageSection = 2
 
@@ -81,7 +81,6 @@ export default () => {
 
         <div className="form-card__group">
           <fieldset>
-            <legend className="sr-only">{t("application.ada.legend")}</legend>
             <p className="field-note mb-4">{t("errors.selectAllThatApply")}</p>
 
             <div className="field">
@@ -208,3 +207,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationAda

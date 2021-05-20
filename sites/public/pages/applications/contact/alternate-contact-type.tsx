@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationAlternateContactType = () => {
   const { conductor, application, listing } = useFormConductor("alternateContactType")
   const currentPageSection = 1
 
@@ -140,3 +140,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationAlternateContactType

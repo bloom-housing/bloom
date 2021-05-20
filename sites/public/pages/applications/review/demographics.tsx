@@ -25,7 +25,7 @@ import {
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-const Demographics = () => {
+const ApplicationDemographics = () => {
   const { conductor, application, listing } = useFormConductor("demographics")
   const currentPageSection = 5
 
@@ -174,4 +174,4 @@ const Demographics = () => {
   )
 }
 
-export default Demographics
+export default ApplicationDemographics

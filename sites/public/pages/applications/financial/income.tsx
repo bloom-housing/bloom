@@ -49,7 +49,7 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
   return null
 }
 
-export default () => {
+const ApplicationIncome = () => {
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
   const currentPageSection = 3
@@ -222,3 +222,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationIncome

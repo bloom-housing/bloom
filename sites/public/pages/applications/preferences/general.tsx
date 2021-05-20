@@ -16,7 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationPreferencesGeneral = () => {
   const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
   const currentPageSection = 4
@@ -87,3 +87,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationPreferencesGeneral

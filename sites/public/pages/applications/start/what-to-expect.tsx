@@ -14,7 +14,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationWhatToExpect = () => {
   const { conductor, application, listing } = useFormConductor("whatToExpect")
   const currentPageSection = 1
 
@@ -61,3 +61,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationWhatToExpect

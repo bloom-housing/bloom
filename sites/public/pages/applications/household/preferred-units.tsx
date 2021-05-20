@@ -19,7 +19,7 @@ import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOpti
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationPreferredUnits = () => {
   const { conductor, application, listing } = useFormConductor("preferredUnitSize")
   const currentPageSection = 2
 
@@ -106,3 +106,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationPreferredUnits

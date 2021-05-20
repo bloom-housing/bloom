@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 
-export default () => {
+const ApplicationUnits = () => {
   const { conductor, application } = useContext(AppSubmissionContext)
   const currentPageSection = 2
 
@@ -62,3 +62,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationUnits

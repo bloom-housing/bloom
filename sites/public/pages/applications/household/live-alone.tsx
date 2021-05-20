@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationLiveAlone = () => {
   const { conductor, application, listing } = useFormConductor("liveAlone")
   const [validateHousehold, setValidateHousehold] = useState(true)
   const currentPageSection = 2
@@ -99,3 +99,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationLiveAlone

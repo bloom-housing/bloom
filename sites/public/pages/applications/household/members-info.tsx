@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationMembersInfo = () => {
   const { conductor, application, listing } = useFormConductor("householdMemberInfo")
   const router = useRouter()
   const currentPageSection = 2
@@ -80,3 +80,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationMembersInfo

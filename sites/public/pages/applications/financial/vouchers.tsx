@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationVouchers = () => {
   const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
   const currentPageSection = 3
 
@@ -128,3 +128,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationVouchers
