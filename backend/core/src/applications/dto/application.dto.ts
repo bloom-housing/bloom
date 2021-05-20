@@ -31,6 +31,12 @@ import {
 } from "./accessibility.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
+// TODO: Experiment with implementing entity Class and omitting `user` and `listing` +  providing
+//       getter methods based on userId and listingId
+export class ApplicationDto2 implements Omit<Application, "applicant" | "mailingAddress"> {
+
+}
+
 export class ApplicationDto extends OmitType(Application, [
   "applicant",
   "mailingAddress",
