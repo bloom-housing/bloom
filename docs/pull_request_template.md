@@ -17,6 +17,8 @@ Please include a summary of the change and which issue is addressed. Please also
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Prototype/POC (not to merge)
+- [ ] This change is a refactor/address technical debt
 - [ ] This change requires a documentation update
 - [ ] This change requires a SQL Script
 
@@ -41,3 +43,4 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] New and existing unit tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published in downstream modules
 - [ ] I have assigned reviewers
+- [ ] I have updated the changelog to include a description of my changes
