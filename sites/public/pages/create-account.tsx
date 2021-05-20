@@ -30,6 +30,7 @@ export default () => {
   const [requestError, setRequestError] = useState<string>()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
+  const language = router.locale
   const email = useRef({})
   const password = useRef({})
   email.current = watch("email", "")
@@ -38,10 +39,14 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
-      await createUser({
-        ...rest,
-        dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
-      })
+      await createUser(
+        {
+          ...rest,
+          dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+          language,
+        },
+        language
+      )
 
       setOpenModal(true)
     } catch (err) {
@@ -242,7 +247,7 @@ export default () => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setConfirmationResent(true)
-              void resendConfirmation(email.current.toString())
+              void resendConfirmation(email.current.toString(), language)
             }}
           >
             {t("authentication.createAccount.resendTheEmail")}

@@ -25,7 +25,7 @@ export default () => {
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
-    void router.push("/applications/household/ada").then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/ada")
   }
 
   return (

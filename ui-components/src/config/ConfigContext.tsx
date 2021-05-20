@@ -19,8 +19,8 @@ export const ConfigProvider: FunctionComponent<{
   apiUrl: string
   storageType?: ConfigContextProps["storageType"]
   idleTimeout?: number
-}> = ({ apiUrl, storageType = "session", idleTimeout = defaultTimeout, children }) =>
-  createElement(
+}> = ({ apiUrl, storageType = "session", idleTimeout = defaultTimeout, children }) => {
+  return createElement(
     ConfigContext.Provider,
     {
       value: {
@@ -31,5 +31,6 @@ export const ConfigProvider: FunctionComponent<{
     },
     children
   )
+}
 
 export default ConfigContext

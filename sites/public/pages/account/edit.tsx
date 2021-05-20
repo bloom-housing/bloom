@@ -66,9 +66,9 @@ const Edit = () => {
       await userService.update({
         body: {
           ...profile,
-          dob: new Date(
+          dob: moment(
             `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
-          ),
+          ).toDate(),
         },
       })
       setDobAlert({ type: "success", message: `${t("account.settings.alerts.dobSuccess")}` })

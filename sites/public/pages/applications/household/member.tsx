@@ -15,7 +15,6 @@ import {
   FormCard,
   FormOptions,
   ProgressNav,
-  lRoute,
   relationshipKeys,
   t,
 } from "@bloom-housing/ui-components"
@@ -53,9 +52,7 @@ export default () => {
   const onSubmit = (data) => {
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
-    void router
-      .push(lRoute("/applications/household/add-members"))
-      .then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/add-members")
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -65,9 +62,7 @@ export default () => {
       application.householdMembers.splice(member.orderId, 1)
       conductor.sync()
     }
-    void router
-      .push(lRoute("/applications/household/add-members"))
-      .then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/add-members")
   }
 
   const sameAddress = watch("sameAddress")
@@ -278,7 +273,9 @@ export default () => {
               <div className="form-card__group border-b">
                 <fieldset>
                   <legend className="field-label--caps">
-                    {t("application.household.member.workInRegion")}
+                    {t("application.household.member.workInRegion", {
+                      county: listing?.countyCode,
+                    })}
                   </legend>
                   <FieldGroup
                     name="workInRegion"

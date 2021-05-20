@@ -20,6 +20,7 @@ import { ListingStatus } from "../listings/types/listing-status-enum"
 import { ListingEventDto } from "../listings/dto/listing-event.dto"
 import { ApplicationMethodDto } from "../listings/dto/application-method.dto"
 import { CSVFormattingType } from "../csv/types/csv-formatting-type-enum"
+import { CountyCode } from "../shared/types/county-code"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
@@ -40,6 +41,7 @@ export interface ListingSeed {
     | "assets"
     | "preferences"
     | "leasingAgents"
+    | "showWaitlist"
   >
   leasingAgents: UserCreateDto[]
 }
@@ -73,7 +75,7 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
   })
   await unitsRepo.save(unitsToBeCreated)
 
-  const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug"> = {
+  const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug" | "showWaitlist"> = {
     ...seed.listing,
     property,
     leasingAgents: leasingAgents,
@@ -290,6 +292,7 @@ export const listingSeed1: ListingSeed = {
       longitude: -121.91071,
     },
     applicationPickUpAddressOfficeHours: "10AM to 12AM",
+    countyCode: CountyCode.alameda,
     postmarkedApplicationsReceivedByDate: new Date("2021-12-10T20:00:00.000Z"),
     disableUnitsAccordion: false,
     rentalAssistance: "",

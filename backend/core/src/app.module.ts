@@ -20,6 +20,7 @@ import { ThrottlerModule } from "@nestjs/throttler"
 import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
 import Redis from "ioredis"
 import { SharedModule } from "./shared/shared.module"
+import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TranslationsModule } from "./translations/translations.module"
 
 export function applicationSetup(app: INestApplication) {
@@ -63,10 +64,14 @@ export class AppModule {
           ...dbOptions,
           autoLoadEntities: true,
         }),
-        ThrottlerModule.forRoot({
-          ttl: 60,
-          limit: 5,
-          storage: new ThrottlerStorageRedisService(redis),
+        ThrottlerModule.forRootAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (config: ConfigService) => ({
+            ttl: config.get("THROTTLE_TTL"),
+            limit: config.get("THROTTLE_LIMIT"),
+            storage: new ThrottlerStorageRedisService(redis),
+          }),
         }),
         UserModule,
         AuthModule,

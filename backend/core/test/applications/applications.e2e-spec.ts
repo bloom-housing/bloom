@@ -6,7 +6,7 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EmailService } from "../../src/shared/services/email.service"
+import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
@@ -54,7 +54,7 @@ describe("Applications", () => {
         TypeOrmModule.forFeature([Application, HouseholdMember]),
         ThrottlerModule.forRoot({
           ttl: 60,
-          limit: 5,
+          limit: 2,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
       ],

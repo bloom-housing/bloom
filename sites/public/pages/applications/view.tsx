@@ -18,17 +18,12 @@ export default () => {
     return moment().format(DATE_FORMAT)
   }, [])
 
-  const origin = typeof window !== "undefined" ? window.location.origin : ""
-
   return (
     <FormsLayout>
       <FormCard header="Confirmation">
         <div className="py-2">
           {listing && (
-            <Link
-              href={`listing/id=${listing.id}`}
-              as={`${origin}/listing/${listing.id}/${listing.urlSlug}`}
-            >
+            <Link href={`listing/${listing.id}/${listing.urlSlug}`}>
               <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
             </Link>
           )}
@@ -53,7 +48,7 @@ export default () => {
           <p className="font-serif text-3xl my-0">{application.confirmationId}</p>
         </div>
 
-        <FormSummaryDetails application={application} editMode={false} />
+        <FormSummaryDetails listing={listing} application={application} editMode={false} />
 
         <div className="form-card__pager hide-for-print">
           <div className="form-card__pager-row py-6">
