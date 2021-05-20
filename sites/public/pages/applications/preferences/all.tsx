@@ -196,8 +196,8 @@ const ApplicationPreferencesAll = () => {
                     }`}
                   >
                     <fieldset>
-                      <legend className="field-label--caps mb-8">{preference.title}</legend>
-
+                      <legend className="field-label--caps mb-4">{preference.title}</legend>
+                      <p className="field-note mb-8">{preference.description}</p>
                       {preference?.formMetadata?.options?.map((option) => {
                         return (
                           <div className="mb-5" key={option.key}>
@@ -232,22 +232,27 @@ const ApplicationPreferencesAll = () => {
                               />
                             </div>
 
-                            <div className="ml-8 -mt-3">
-                              <ExpandableContent>
-                                <p className="field-note mb-8">
-                                  {t(
-                                    `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
-                                    { county: listing?.countyCode }
-                                  )}
-                                  <br />
-                                  {preference?.links?.map((link) => (
-                                    <a key={link.url} className="block pt-2" href={link.url}>
-                                      {link.title}
-                                    </a>
-                                  ))}
-                                </p>
-                              </ExpandableContent>
-                            </div>
+                            {t(
+                              `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
+                              { county: listing?.countyCode }
+                            ) !== "" && (
+                              <div className="ml-8 -mt-3">
+                                <ExpandableContent>
+                                  <p className="field-note mb-8">
+                                    {t(
+                                      `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
+                                      { county: listing?.countyCode }
+                                    )}
+                                    <br />
+                                    {preference?.links?.map((link) => (
+                                      <a key={link.url} className="block pt-2" href={link.url}>
+                                        {link.title}
+                                      </a>
+                                    ))}
+                                  </p>
+                                </ExpandableContent>
+                              </div>
+                            )}
 
                             {watchPreferences[
                               getPreferenceOptionName(preference.formMetadata.key, option.key)
