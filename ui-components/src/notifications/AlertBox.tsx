@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import type { ReactNode } from "react"
-import { Icon } from "../icons/Icon"
+import { Icon, IconTypes, IconFillColors } from "../icons/Icon"
 import type { AlertTypes } from "./alertTypes"
 import { colorClasses } from "./alertTypes"
 import "./AlertBox.scss"
@@ -14,7 +14,7 @@ export interface AlertBoxProps {
   className?: string
 }
 
-const icons: { [k in AlertTypes]: string } = {
+const icons: { [k in AlertTypes]: IconTypes } = {
   alert: "warning",
   notice: "info",
   success: "check",
@@ -42,7 +42,11 @@ const AlertBox = (props: AlertBoxProps) => {
   return showing ? (
     <div className={classNames} role="alert">
       <span className="alert-box__icon">
-        <Icon size="medium" symbol={icons[props.type || "alert"]} white={props.inverted} />
+        <Icon
+          size="medium"
+          symbol={icons[props.type || "alert"]}
+          fill={props.inverted ? IconFillColors.white : undefined}
+        />
       </span>
       <span className="alert-box__body">
         {typeof props.children === "string" ? <p>{props.children}</p> : props.children}

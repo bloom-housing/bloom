@@ -3,7 +3,7 @@ import moment from "moment"
 import { t } from "../helpers/translator"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { openDateState } from "../helpers/state"
-import { Icon } from "../icons/Icon"
+import { Icon, IconFillColors } from "../icons/Icon"
 import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
@@ -51,7 +51,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
 
   return (
     <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
-      <Icon size="medium" symbol="clock" white={vivid} /> &nbsp;
+      <Icon size="medium" symbol="clock" fill={vivid ? IconFillColors.white : undefined} /> &nbsp;
       {content}
       {formattedDate != "" ? `: ${formattedDate}` : ""}
     </div>
