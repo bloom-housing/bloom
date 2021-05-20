@@ -5,7 +5,7 @@ const FormBackLink = (props: { url: string; onClick: () => void; static?: boolea
     <p className="form-card__back" onClick={props.onClick}>
       {props.static ? (
         <span tabIndex={0} onClick={props.onClick} className={"button is-inline inline-icon--left"}>
-          <Icon symbol={"arrow-back"} size={"tiny"} className={"button__icon"} />
+          <Icon symbol={"arrowBack"} size={"tiny"} className={"button__icon"} />
           {t("t.back")}
         </span>
       ) : (
