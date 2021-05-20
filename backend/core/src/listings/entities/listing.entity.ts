@@ -338,6 +338,17 @@ class Listing extends BaseEntity {
   @IsEnum(CountyCode, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: CountyCode, enumName: "CountyCode" })
   countyCode: CountyCode
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  get showWaitlist(): boolean {
+    return (
+      this.waitlistMaxSize !== null &&
+      this.waitlistCurrentSize !== null &&
+      this.waitlistCurrentSize < this.waitlistMaxSize
+    )
+  }
 }
 
 export { Listing as default, Listing }
