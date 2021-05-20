@@ -7,7 +7,7 @@ export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(ApiClientContext)
   const fetcher = () => listingsService.retrieve({ listingId })
 
-  const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
 
   return {
     listingDto: data,
@@ -20,7 +20,7 @@ export function useListingsData() {
   const { listingsService } = useContext(ApiClientContext)
   const fetcher = () => listingsService.list()
 
-  const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/listings`, fetcher)
 
   return {
     listingDtos: data,
