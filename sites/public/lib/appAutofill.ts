@@ -3,19 +3,16 @@ import {
   Application,
   ApplicationStatus,
   ApplicationSubmissionType,
-  Language,
 } from "@bloom-housing/backend-core/types"
 import { blankApplication } from "@bloom-housing/ui-components"
 
 class AutofillCleaner {
   application: Application = null
-  contextApplication: Application = null
 
   // provide context value to override current application language choosen by user on the first step
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(application: Application, contextApplication: any) {
+  constructor(application: Application) {
     this.application = application
-    this.contextApplication = contextApplication
   }
 
   clean() {
@@ -40,7 +37,6 @@ class AutofillCleaner {
     this.application.acceptedTerms = false
     this.application.status = ApplicationStatus.submitted
     this.application.preferences = []
-    this.application.language = this.contextApplication.language || Language.en
 
     return this
   }

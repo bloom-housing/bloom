@@ -3,6 +3,7 @@ import { useContext, useState } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
 import {
   ApiClientContext,
+  blankApplication,
   AppearanceStyleType,
   Button,
   Form,
@@ -35,7 +36,18 @@ export default () => {
       // Necessary to avoid infinite rerenders
       setSubmitted(true)
       if (previousApplication && useDetails) {
-        conductor.application = previousApplication
+        const withUpdatedLang = {
+          ...previousApplication,
+          language: conductor.application.language,
+        }
+
+        conductor.application = withUpdatedLang
+      } else {
+        const newApplication = {
+          ...blankApplication(),
+          language: conductor.application.language,
+        }
+        conductor.application = newApplication
       }
 
       context.syncApplication(conductor.application)
@@ -59,7 +71,7 @@ export default () => {
   )
   if (data) {
     if (data.items.length > 0) {
-      setPreviousApplication(new AutofillCleaner(data.items[0], application).clean())
+      setPreviousApplication(new AutofillCleaner(data.items[0]).clean())
     } else {
       onSubmit()
     }
