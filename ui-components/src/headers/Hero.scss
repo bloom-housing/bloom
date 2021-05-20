@@ -15,6 +15,10 @@
   }
 }
 
+.hero__button {
+  @apply px-5;
+}
+
 .hero__title {
   @apply text-4xl;
   @apply mb-5;
