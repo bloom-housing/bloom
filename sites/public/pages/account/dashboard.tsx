@@ -5,7 +5,6 @@ import {
   DashBlocks,
   HeaderBadge,
   Icon,
-  MetaTags,
   RequireLogin,
   t,
   SiteAlert,
@@ -13,6 +12,7 @@ import {
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { NextRouter, withRouter } from "next/router"
+import { MetaTags } from "../../src/MetaTags"
 
 interface DashboardProps {
   router: NextRouter

@@ -56,9 +56,7 @@ export default () => {
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     conductor.sync()
-    void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
-      window.scrollTo(0, 0)
-    })
+    void router.push(`${newLocale}${conductor.determineNextUrl()}`)
   }
 
   return (

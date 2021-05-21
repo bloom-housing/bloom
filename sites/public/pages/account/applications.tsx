@@ -6,7 +6,6 @@ import {
   DashBlocks,
   HeaderBadge,
   LinkButton,
-  MetaTags,
   RequireLogin,
   t,
   UserContext,
@@ -15,6 +14,7 @@ import {
 import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { AppStatusItemWrapper } from "./AppStatusItemWrapper"
+import { MetaTags } from "../../src/MetaTags"
 
 export default () => {
   const { applicationsService } = useContext(ApiClientContext)

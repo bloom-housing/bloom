@@ -1,14 +1,14 @@
 import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
-import { Icon } from "../icons/Icon"
+import { Icon, IconTypes } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
   type?: "button" | "submit" | "reset"
   children: React.ReactNode
   onClick?: (e: React.MouseEvent) => void
-  icon?: string
+  icon?: IconTypes
   inlineIcon?: "left" | "right"
   unstyled?: boolean
   fullWidth?: boolean
