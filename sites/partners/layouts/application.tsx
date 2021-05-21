@@ -10,7 +10,6 @@ import {
   t,
   UserContext,
 } from "@bloom-housing/ui-components"
-import SVG from "react-inlinesvg"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
@@ -49,7 +48,6 @@ const Layout = (props) => {
             <ExygyFooter />
           </FooterSection>
         </SiteFooter>
-        <SVG src="/images/icons.svg" />
       </div>
     </div>
   )

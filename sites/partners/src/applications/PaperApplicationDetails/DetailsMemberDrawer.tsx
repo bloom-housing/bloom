@@ -94,17 +94,18 @@ const DetailsMemberDrawer = ({
               }
             />
           </GridSection>
-
           <GridSection grid={false} columns={2}>
-            <GridSection subtitle={t("application.details.residenceAddress")} columns={3}>
-              <DetailsAddressColumns
-                type={AddressColsType.memberResidence}
-                application={application}
-                householdMember={membersDrawer}
-              />
-            </GridSection>
+            {!(membersDrawer?.sameAddress === YesNoAnswer.Yes) && (
+              <GridSection subtitle={t("application.details.residenceAddress")} columns={3}>
+                <DetailsAddressColumns
+                  type={AddressColsType.memberResidence}
+                  application={application}
+                  householdMember={membersDrawer}
+                />
+              </GridSection>
+            )}
 
-            {membersDrawer?.workInRegion && (
+            {membersDrawer?.workInRegion === YesNoAnswer.Yes && (
               <GridSection subtitle={t("application.contact.workAddress")} columns={3}>
                 <DetailsAddressColumns
                   type={AddressColsType.memberWork}

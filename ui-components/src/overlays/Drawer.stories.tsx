@@ -1,6 +1,4 @@
 import React, { useState } from "react"
-import { Icon } from "../icons/Icon"
-import SVG from "react-inlinesvg"
 
 import { Drawer, DrawerSide } from "./Drawer"
 import { GridSection } from "../sections/GridSection"
@@ -11,14 +9,7 @@ import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceT
 
 export default {
   title: "Overlays/Drawer",
-  decorators: [
-    (storyFn: any) => (
-      <div>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-  ],
+  decorators: [(storyFn: any) => <div>{storyFn()}</div>],
 }
 
 export const Standard = () => {
@@ -31,9 +22,9 @@ export const Standard = () => {
         onClose={() => setDrawerState(!drawerState)}
         ariaDescription="My Drawer"
         actions={[
-          <Button 
-            key={0} 
-            onClick={() => setDrawerState(!drawerState)} 
+          <Button
+            key={0}
+            onClick={() => setDrawerState(!drawerState)}
             styleType={AppearanceStyleType.primary}
           >
             Submit
@@ -77,8 +68,8 @@ export const StandardOnLeft = () => {
         direction={DrawerSide.left}
         actions={[
           <Button
-            key={0} 
-            onClick={() => setDrawerState(!drawerState)} 
+            key={0}
+            onClick={() => setDrawerState(!drawerState)}
             styleType={AppearanceStyleType.primary}
           >
             Submit

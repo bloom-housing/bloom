@@ -1,19 +1,11 @@
 import React from "react"
-import SVG from "react-inlinesvg"
 import { Button } from "../actions/Button"
 import { StatusBar } from "./StatusBar"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Blocks/Status Bar",
-  decorators: [
-    (storyFn: any) => (
-      <div style={{ padding: "1rem" }}>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-  ],
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 const handleClick = (e: React.MouseEvent) => {
@@ -23,7 +15,7 @@ const handleClick = (e: React.MouseEvent) => {
 export const StatusBarSuccessAndBackButton = () => (
   <StatusBar
     backButton={
-      <Button inlineIcon="left" icon="arrow-back" onClick={handleClick}>
+      <Button inlineIcon="left" icon="arrowBack" onClick={handleClick}>
         Back
       </Button>
     }

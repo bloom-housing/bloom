@@ -3,19 +3,11 @@ import * as React from "react"
 import moment from "moment"
 import { ApplicationStatus } from "./ApplicationStatus"
 import Archer from "../../__tests__/fixtures/archer.json"
-import SVG from "react-inlinesvg"
 
 export default {
   component: ApplicationStatus,
   title: "Notifications/Application Status",
-  decorators: [
-    (storyFn: any) => (
-      <div>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-  ],
+  decorators: [(storyFn: any) => <div>{storyFn()}</div>],
 }
 
 const listing = Object.assign({}, Archer) as any

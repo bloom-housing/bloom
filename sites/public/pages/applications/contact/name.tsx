@@ -13,6 +13,7 @@ import {
   Form,
   FormCard,
   Icon,
+  IconFillColors,
   OnClientSide,
   ProgressNav,
   t,
@@ -55,12 +56,7 @@ export default () => {
   const LockIcon = () => {
     return (
       autofilled && (
-        <Icon
-          className="ml-2"
-          size="medium"
-          symbol="lock"
-          styleType={AppearanceStyleType.primary}
-        />
+        <Icon className="ml-2" size="medium" symbol="lock" fill={IconFillColors.primary} />
       )
     )
   }
