@@ -23,7 +23,6 @@ import {
   ListingDetails,
   ListingMap,
   ListSection,
-  MetaTags,
   occupancyTable,
   OneLineAddress,
   PreferencesList,
@@ -37,6 +36,7 @@ import {
   DownloadLotteryResults,
   ReferralApplication,
 } from "@bloom-housing/ui-components"
+import { MetaTags } from "../src/MetaTags"
 import Layout from "../layouts/application"
 import moment from "moment"
 
