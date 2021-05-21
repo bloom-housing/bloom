@@ -21,7 +21,7 @@ const newListingSeed = (): ListingSeed => {
 
 const seedListings = async (app: INestApplicationContext) => {
   let listingSeed = newListingSeed()
-  listingSeed.listing.name = "Triton (2pref) test"
+  listingSeed.listing.name = "Triton (2pref)"
   const listing1 = await seedListing(app, listingSeed)
   const userService = app.get<UserService>(UserService)
   await Promise.all([

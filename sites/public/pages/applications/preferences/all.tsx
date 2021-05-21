@@ -31,10 +31,9 @@ const ApplicationPreferencesAll = () => {
   const uniquePages: number[] = [...Array.from(new Set(preferences?.map((item) => item.page)))]
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
-  // const preferencesByPage = preferences?.filter((item) => {
-  //   return item.page === page
-  // })
-  const preferencesByPage = preferences
+  const preferencesByPage = preferences?.filter((item) => {
+    return item.page === page
+  })
 
   const currentPageSection = 4
 
@@ -236,27 +235,22 @@ const ApplicationPreferencesAll = () => {
                               />
                             </div>
 
-                            {t(
-                              `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
-                              { county: listing?.countyCode }
-                            ) !== "" && (
-                              <div className="ml-8 -mt-3">
-                                <ExpandableContent>
-                                  <p className="field-note mb-8">
-                                    {t(
-                                      `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
-                                      { county: listing?.countyCode }
-                                    )}
-                                    <br />
-                                    {preference?.links?.map((link) => (
-                                      <a key={link.url} className="block pt-2" href={link.url}>
-                                        {link.title}
-                                      </a>
-                                    ))}
-                                  </p>
-                                </ExpandableContent>
-                              </div>
-                            )}
+                            <div className="ml-8 -mt-3">
+                              <ExpandableContent>
+                                <p className="field-note mb-8">
+                                  {t(
+                                    `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
+                                    { county: listing?.countyCode }
+                                  )}
+                                  <br />
+                                  {preference?.links?.map((link) => (
+                                    <a key={link.url} className="block pt-2" href={link.url}>
+                                      {link.title}
+                                    </a>
+                                  ))}
+                                </p>
+                              </ExpandableContent>
+                            </div>
 
                             {watchPreferences[
                               getPreferenceOptionName(preference.formMetadata.key, option.key)
