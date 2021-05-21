@@ -32,7 +32,7 @@ const ApplicationPreferencesAll = () => {
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
   const preferencesByPage = preferences?.filter((item) => {
-    return item.page === page
+    return item.page === 1
   })
 
   const currentPageSection = 4
@@ -85,13 +85,16 @@ const ApplicationPreferencesAll = () => {
       conductor.currentStep.save([...currentPreferences, body[0]])
       setApplicationPreferences([...currentPreferences, body[0]])
     } else {
+      conductor.completeSection(4)
       conductor.currentStep.save(body)
     }
     if (page !== uniquePages.length) {
       setPage(page + 1)
       return
+    } else {
+      conductor.completeSection(4)
     }
-    conductor.completeSection(5)
+
     conductor.routeToNextOrReturnUrl()
   }
 
