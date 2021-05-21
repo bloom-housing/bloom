@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+### Backend
+
+### Frontend
+
+### UI Components
+
+## 1.0.0 / 2021-05-21
+
+### General
+
 - Added:
 
   - This new Changelog format! =)
