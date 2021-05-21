@@ -9,8 +9,6 @@ import { blankApplication } from "@bloom-housing/ui-components"
 class AutofillCleaner {
   application: Application = null
 
-  // provide context value to override current application language choosen by user on the first step
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(application: Application) {
     this.application = application
   }
