@@ -31,9 +31,10 @@ const ApplicationPreferencesAll = () => {
   const uniquePages: number[] = [...Array.from(new Set(preferences?.map((item) => item.page)))]
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
-  const preferencesByPage = preferences?.filter((item) => {
-    return item.page === 1
-  })
+  // const preferencesByPage = preferences?.filter((item) => {
+  //   return item.page === page
+  // })
+  const preferencesByPage = preferences
 
   const currentPageSection = 4
 
