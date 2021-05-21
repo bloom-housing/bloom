@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext, useEffect } from "react"
-import { useRouter } from "next/router"
 import { setSiteAlertMessage } from "../notifications/SiteAlert"
+import { NavigationContext } from "../config/NavigationContext"
 import { UserContext } from "./UserContext"
 
 // See https://github.com/Microsoft/TypeScript/issues/14094
@@ -26,7 +26,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   signInMessage,
   ...rest
 }) => {
-  const router = useRouter()
+  const { router } = useContext(NavigationContext)
   const { profile, initialStateLoaded } = useContext(UserContext)
 
   // Parse just the pathname portion of the signInPath (in case we want to pass URL params)

@@ -1,6 +1,6 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
-import { Icon } from "../../../icons/Icon"
+import { Icon, IconFillColors } from "../../../icons/Icon"
 import { Address } from "@bloom-housing/backend-core/types"
 import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
 import { t } from "../../../helpers/translator"
@@ -43,7 +43,8 @@ const SidebarAddress = (props: SidebarAddressProps) => {
           <p className="text-gray-700 mb-1">{mainAddress}</p>
           <p className="mb-4">
             <a href={googleMapsHref} className="inline-block pt-1" target="_blank">
-              <Icon symbol="map" size="medium" /> {t("t.getDirections")}
+              <Icon symbol="map" size="medium" fill={IconFillColors.primary} />{" "}
+              {t("t.getDirections")}
             </a>
           </p>
         </>

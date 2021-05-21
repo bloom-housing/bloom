@@ -1,7 +1,7 @@
 import fs from "fs"
 import { plainToClass } from "class-transformer"
-import { ApplicationMethodType } from "./src/listings/types/application-method-type-enum"
-import { ApplicationMethodDto } from "./src/listings/dto/application-method.dto"
+import { ApplicationMethodType } from "../src/listings/types/application-method-type-enum"
+import { ApplicationMethodDto } from "../src/listings/dto/application-method.dto"
 
 if (process.argv.length < 3) {
   console.log("usage: listings-update-schema input_listing.json")
@@ -10,6 +10,7 @@ if (process.argv.length < 3) {
 
 const [listingFilePath] = process.argv.slice(2)
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertApplicationMethods(listing: any) {
   const applicationMethods: Array<ApplicationMethodDto> = []
   if (listing.acceptsPostmarkedApplications) {

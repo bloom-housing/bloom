@@ -1,20 +1,12 @@
 import React, { useState } from "react"
 import "./Modal.scss"
 import { Modal } from "./Modal"
-import SVG from "react-inlinesvg"
 import { Button } from "../actions/Button"
 import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Overlays/Modal",
-  decorators: [
-    (storyFn: any) => (
-      <div style={{ padding: "1rem" }}>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-  ],
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 const noop = () => {

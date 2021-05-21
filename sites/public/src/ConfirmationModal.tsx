@@ -3,7 +3,6 @@ import {
   Button,
   Modal,
   UserContext,
-  ConfigContext,
   t,
   Form,
   Field,
@@ -21,10 +20,11 @@ export interface ConfirmationModalProps {
 const ConfirmationModal = (props: ConfirmationModalProps) => {
   const { setSiteAlertMessage } = props
   const { resendConfirmation, profile, confirmAccount } = useContext(UserContext)
-  const { language } = useContext(ConfigContext)
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
+  const language = router.locale
+
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887

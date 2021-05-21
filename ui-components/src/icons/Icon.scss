@@ -1,3 +1,16 @@
+@keyframes icons-svg-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+.spinner-animation > svg {
+  animation: icons-svg-spin 1s linear infinite;
+}
+
 .ui-icon svg {
   @apply inline-block;
   @apply align-middle;
@@ -37,6 +50,11 @@
 .ui-2xl svg {
   @apply w-12;
   @apply h-12;
+}
+
+.ui-3xl svg {
+  @apply w-16;
+  @apply h-16;
 }
 
 .ui-white svg use {

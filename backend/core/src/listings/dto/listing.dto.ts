@@ -73,6 +73,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "leasingAgentAddress",
   "leasingAgents",
   "urlSlug",
+  "showWaitlist",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -123,6 +124,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "leasingAgentAddress",
   "urlSlug",
   "leasingAgents",
+  "showWaitlist",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

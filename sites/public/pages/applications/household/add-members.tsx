@@ -10,7 +10,6 @@ import {
   FormCard,
   HouseholdMemberForm,
   ProgressNav,
-  lRoute,
   t,
   HouseholdSizeField,
   Form,
@@ -38,7 +37,7 @@ export default () => {
   }
 
   const onAddMember = () => {
-    void router.push(lRoute("/applications/household/member")).then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/member")
   }
 
   const applicant = application.applicant

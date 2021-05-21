@@ -40,3 +40,14 @@ export const withBackground = () => (
     backgroundImage="/images/banner.png"
   />
 )
+
+export const withSecondaryButton = () => (
+  <Hero
+    title={<>Say Hello to Your Hero</>}
+    buttonTitle="Rental Listings"
+    buttonLink="/listings"
+    secondaryButtonTitle="Sale Listings"
+    secondaryButtonLink="/listings/for-sale"
+    backgroundImage="/images/banner.png"
+  />
+)

@@ -1,8 +1,8 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
+import Link from "next/link"
 import Head from "next/head"
 import {
-  LocalizedLink,
   SiteHeader,
   SiteFooter,
   FooterNav,
@@ -13,21 +13,14 @@ import {
   UserContext,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import SVG from "react-inlinesvg"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(UserContext)
   const router = useRouter()
 
-  const LANGUAGE_CODES = process.env.languages?.split(",")
-
-  /*
-    It creates prefixes and translated labels for each language.
-    First prefix is always empty, because path does not include language code.
-  */
-  const LANGUAGES =
-    LANGUAGE_CODES?.map((item, index) => ({
-      prefix: index === 0 ? "" : item,
+  const languages =
+    router?.locales?.map((item) => ({
+      prefix: item === "en" ? "" : item,
       label: t(`languages.${item}`),
     })) || []
 
@@ -55,18 +48,18 @@ const Layout = (props) => {
           }
           title={t("nav.siteTitle")}
           language={{
-            list: LANGUAGES,
-            codes: LANGUAGE_CODES,
+            list: languages,
+            codes: router?.locales,
           }}
         >
-          <LocalizedLink href="/listings" className="navbar-item">
-            {t("nav.listings")}
-          </LocalizedLink>
+          <Link href="/listings">
+            <a className="navbar-item">{t("nav.listings")}</a>
+          </Link>
           {/* Only show Get Assistance if housing counselor data is available */}
           {process.env.housingCounselorServiceUrl && (
-            <LocalizedLink href={process.env.housingCounselorServiceUrl} className="navbar-item">
-              {t("nav.getAssistance")}
-            </LocalizedLink>
+            <Link href={process.env.housingCounselorServiceUrl}>
+              <a className="navbar-item">{t("nav.getAssistance")}</a>
+            </Link>
           )}
           <UserNav
             signedIn={!!profile}
@@ -74,18 +67,17 @@ const Layout = (props) => {
               setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
               await router.push("/sign-in")
               signOut()
-              window.scrollTo(0, 0)
             }}
           >
-            <LocalizedLink href="/account/dashboard" className="navbar-item">
-              {t("nav.myDashboard")}
-            </LocalizedLink>
-            <LocalizedLink href="/account/applications" className="navbar-item">
-              {t("nav.myApplications")}
-            </LocalizedLink>
-            <LocalizedLink href="/account/edit" className="navbar-item">
-              {t("nav.accountSettings")}
-            </LocalizedLink>
+            <Link href="/account/dashboard">
+              <a className="navbar-item">{t("nav.myDashboard")}</a>
+            </Link>
+            <Link href="/account/applications">
+              <a className="navbar-item">{t("nav.myApplications")}</a>
+            </Link>
+            <Link href="/account/edit">
+              <a className="navbar-item">{t("nav.accountSettings")}</a>
+            </Link>
           </UserNav>
         </SiteHeader>
         <main id="main-content">{props.children}</main>
@@ -139,13 +131,12 @@ const Layout = (props) => {
           <a href="https://www.acgov.org/government/legal.htm" target="_blank">
             {t("footer.disclaimer")}
           </a>
-          <LocalizedLink href="/privacy">{t("footer.privacyPolicy")}</LocalizedLink>
+          <Link href="/privacy">{t("footer.privacyPolicy")}</Link>
         </FooterNav>
         <FooterSection className="bg-black" small>
           <ExygyFooter />
         </FooterSection>
       </SiteFooter>
-      <SVG src="/images/icons.svg" />
     </div>
   )
 }
