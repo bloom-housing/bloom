@@ -1,10 +1,8 @@
-import {
-  MinMax,
-  MinMaxCurrency,
-  Unit,
-  UnitsSummarized,
-  UnitSummary,
-} from "../units/entities/unit.entity"
+import { Unit } from "../units/entities/unit.entity"
+import { MinMax } from "../units/types/min-max"
+import { MinMaxCurrency } from "../units/types/min-max-currency"
+import { UnitSummary } from "../units/types/unit-summary"
+import { UnitsSummarized } from "../units/types/units-summarized"
 
 export type AnyDict = { [key: string]: any }
 type Units = Unit[]
@@ -41,7 +39,7 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   // TODO https://github.com/bloom-housing/bloom/issues/872
   const amiChartItems = units[0].amiChart.items
   const hmiHeaders = {
-    householdSize: bmrProgramChart ? "Unit Type" : "listings.householdSize",
+    householdSize: bmrProgramChart ? "t.unitType" : "listings.householdSize",
   } as AnyDict
   const amiValues = amiPercentages
     .map((percent) => {
@@ -63,7 +61,8 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   //    year) per household size.
   if (amiValues.length > 1) {
     amiValues.forEach((percent) => {
-      hmiHeaders[`ami${percent}`] = `${percent}% AMI Units`
+      // Pass translation with its respective argument with format `key,argumentName:argumentValue`
+      hmiHeaders[`ami${percent}`] = `listings.percentAMIUnit,percent:${percent}`
     })
 
     new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {

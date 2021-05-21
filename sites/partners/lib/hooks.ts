@@ -7,7 +7,7 @@ export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(ApiClientContext)
   const fetcher = () => listingsService.retrieve({ listingId })
 
-  const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
 
   return {
     listingDto: data,
@@ -20,7 +20,7 @@ export function useListingsData() {
   const { listingsService } = useContext(ApiClientContext)
   const fetcher = () => listingsService.list()
 
-  const { data, error } = useSWR(process.env.listingServiceUrl, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/listings`, fetcher)
 
   return {
     listingDtos: data,
@@ -29,16 +29,36 @@ export function useListingsData() {
   }
 }
 
-export function useApplicationsData(pageIndex: number, limit = 10, listingId: string, search = "") {
+export function useApplicationsData(
+  pageIndex: number,
+  limit = 10,
+  listingId: string,
+  search: string
+) {
   const { applicationsService } = useContext(ApiClientContext)
-  const endpoint = `${process.env.backendApiBase}/applications?listingId=${listingId}&page=${pageIndex}&limit=${limit}&search=${search}`
-  const fetcher = () =>
-    applicationsService.list({
-      listingId,
-      page: pageIndex,
-      limit,
-      search,
-    })
+
+  const searchParams = new URLSearchParams()
+  searchParams.append("listingId", listingId)
+  searchParams.append("page", pageIndex.toString())
+  searchParams.append("limit", limit.toString())
+
+  if (search) {
+    searchParams.append("search", search)
+  }
+
+  const endpoint = `${process.env.backendApiBase}/applications?${searchParams.toString()}`
+
+  const params = {
+    listingId,
+    page: pageIndex,
+    limit,
+  }
+
+  if (search) {
+    Object.assign(params, search)
+  }
+
+  const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
 
   return {

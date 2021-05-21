@@ -1,6 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { t } from "../.."
+import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
 
 export interface TableHeaders {
   [key: string]: string
@@ -36,9 +36,9 @@ export interface StandardTableProps {
 export const StandardTable = (props: StandardTableProps) => {
   const { headers, data, cellClassName } = props
 
-  const headerLabels = Object.values(headers).map((col, index) => {
+  const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <HeaderCell key={uniqKey}>{t(col)}</HeaderCell>
+    return <HeaderCell key={uniqKey}>{getTranslationWithArguments(header)}</HeaderCell>
   })
 
   const body = data.map((row: Record<string, React.ReactNode>, dataIndex) => {
@@ -49,10 +49,13 @@ export const StandardTable = (props: StandardTableProps) => {
       : nanoid()
     const cols = Object.keys(headers).map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
-      const header = colKey
       const cell = row[colKey]
       return (
-        <Cell key={uniqKey} headerLabel={header} className={cellClassName}>
+        <Cell
+          key={uniqKey}
+          headerLabel={getTranslationWithArguments(headers[colKey])}
+          className={cellClassName}
+        >
           {cell}
         </Cell>
       )

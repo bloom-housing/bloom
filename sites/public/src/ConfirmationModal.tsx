@@ -23,6 +23,8 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
+  const language = router.locale
+
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -33,7 +35,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   const onSubmit = async ({ email }) => {
     try {
-      await resendConfirmation(email)
+      await resendConfirmation(email, language)
 
       setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
       setOpenModal(false)
@@ -46,7 +48,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   useEffect(() => {
     if (router?.query?.token && !profile) {
-      confirmAccount(router.query.token.toString())
+      confirmAccount(router.query.token.toString(), language)
         .then(() => {
           void router.push({
             pathname: "/account/dashboard",

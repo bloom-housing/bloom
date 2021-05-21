@@ -1,18 +1,9 @@
 import React from "react"
-
-import SVG from "react-inlinesvg"
 import { AlertBox } from "./AlertBox"
 
 export default {
   title: "Notifications/Alert Box",
-  decorators: [
-    (storyFn: any) => (
-      <div style={{ padding: "1rem" }}>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-  ],
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 export const AlertBoxAlert = () => (

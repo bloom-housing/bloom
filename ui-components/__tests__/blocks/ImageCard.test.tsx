@@ -23,7 +23,6 @@ describe("<ImageCard>", () => {
         title={"My Building"}
         subtitle={"The Address"}
         href="/listings"
-        as="/listings"
       />
     )
     expect(getByAltText("My Building").closest("a")?.getAttribute("href")).toBe("/listings")

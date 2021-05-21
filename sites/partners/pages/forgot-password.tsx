@@ -31,7 +31,7 @@ const ForgotPassword = () => {
     const { email } = data
 
     try {
-      await forgotPassword(email)
+      await forgotPassword(email, "en")
       setSiteAlertMessage(t(`authentication.forgotPassword.success`), "success")
       await router.push("/")
       window.scrollTo(0, 0)

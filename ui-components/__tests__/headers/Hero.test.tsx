@@ -54,4 +54,20 @@ describe("<Hero>", () => {
     expect(getByText("Say Hello to Your Hero")).toBeTruthy()
     expect(getByText("I am a Button")).toBeTruthy()
   })
+
+  it("renders with multiple buttons if provided", () => {
+    const { getByText } = render(
+      <Hero
+        title={<>Say Hello to Your Hero</>}
+        buttonTitle="I am a Button"
+        buttonLink="/listings/for-rent"
+        secondaryButtonTitle="I am another Button"
+        secondaryButtonLink="/listings/for-sale"
+        backgroundImage={"url"}
+      />
+    )
+    expect(getByText("Say Hello to Your Hero")).toBeTruthy()
+    expect(getByText("I am a Button")).toBeTruthy()
+    expect(getByText("I am another Button")).toBeTruthy()
+  })
 })

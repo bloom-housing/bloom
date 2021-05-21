@@ -1,6 +1,6 @@
 import { useContext } from "react"
-import { useRouter } from "next/router"
 import { UserContext } from "./UserContext"
+import { NavigationContext } from "../config/NavigationContext"
 
 /**
  * Require a logged in user. Waits on initial load, then initiates a redirect to `redirectPath` if user is not
@@ -8,7 +8,7 @@ import { UserContext } from "./UserContext"
  */
 function useRequireLoggedInUser(redirectPath: string) {
   const { profile, initialStateLoaded } = useContext(UserContext)
-  const router = useRouter()
+  const { router } = useContext(NavigationContext)
 
   if (initialStateLoaded && !profile) {
     void router.push(redirectPath)

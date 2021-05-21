@@ -1,6 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { Tag } from "../../src/text/Tag"
+import { AppearanceStyleType, AppearanceShadeType } from "../../src/global/AppearanceTypes"
 
 afterEach(cleanup)
 
@@ -11,7 +12,13 @@ describe("<Tag>", () => {
   })
   it("renders with custom props", () => {
     const { container, getByText } = render(
-      <Tag className={"custom-class"} pillStyle={true}>
+      <Tag
+        className={"custom-class"}
+        pillStyle={true}
+        styleType={AppearanceStyleType.success}
+        shade={AppearanceShadeType.light}
+        fillContainer={true}
+      >
         Children go here
       </Tag>
     )

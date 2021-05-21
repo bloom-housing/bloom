@@ -1,60 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CsvEncoder } from "./csv-encoder.service"
 import { Injectable } from "@nestjs/common"
-import { CSVFormattingType } from "./formatting/application-formatting-metadata-factory"
-
-export type FormattingMetadata = {
-  label: string
-  discriminator: string
-  formatter: (obj) => string
-  type?: "array" | "object"
-}
-
-export type FormattingMetadataArray = {
-  discriminator: string
-  type: string
-  items: FormattingMetadata[]
-  size: number | null
-}
-
-export type FormattingMetadataAggregate = Array<FormattingMetadata | FormattingMetadataArray>
-export type FormattingMetadataAggregateFactory = (
-  type: CSVFormattingType
-) => FormattingMetadataAggregate
-
-export const defaultFormatter = (obj?) => (obj ? obj.toString() : "")
-export const booleanFormatter = (obj?: boolean) => (obj ? "Yes" : "No")
-export const streetFormatter = (obj?: { street?: string; street2?: string }) => {
-  if (!obj) {
-    return defaultFormatter(obj)
-  }
-  if (!obj.street && !obj.street2) {
-    return ""
-  }
-  if (!obj.street) {
-    return obj.street2
-  }
-  if (!obj.street2) {
-    return obj.street
-  }
-  return `${obj.street}, ${obj.street2}`
-}
-export const dobFormatter = (obj?: {
-  birthMonth?: string
-  birthDay?: string
-  birthYear?: string
-}) => {
-  // TODO Use locale variable Date string
-  return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : defaultFormatter(obj)
-}
-export const joinArrayFormatter = (obj?: string[]) => (obj ? obj.join(",") : "")
-export const keysToJoinedStringFormatter = (obj: any) => {
-  if (!obj) {
-    return defaultFormatter(obj)
-  }
-  const keys = Object.keys(obj).filter((key) => obj[key])
-  return keys.join(",")
-}
+import { CSVFormattingType } from "./types/csv-formatting-type-enum"
+import { FormattingMetadata } from "./types/formatting-metadata"
+import { FormattingMetadataArray } from "./types/formatting-metadata-array"
+import { FormattingMetadataAggregate } from "./types/formatting-metadata-aggregate"
+import { FormattingMetadataAggregateFactory } from "./types/formatting-metadata-aggregate-factory"
 
 @Injectable()
 export class CsvBuilder {

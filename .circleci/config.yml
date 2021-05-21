@@ -16,6 +16,7 @@ executors:
   cypress-node:
     docker:
       - image: "cypress/base:12.18.2"
+      - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
           POSTGRES_USER: bloom-ci
@@ -32,7 +33,7 @@ jobs:
     executor: standard-node
     steps:
       - checkout
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
       - save_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -114,6 +115,9 @@ workflows:
           executor: cypress-node
           working_directory: sites/public
           yarn: true
-          build: yarn test:backend:core:dbsetup
-          start: yarn dev:all
+          build: |
+            yarn test:backend:core:dbsetup
+            yarn build:app:public
+          start: yarn dev:all-cypress
           wait-on: "http://localhost:3000"
+          store_artifacts: true

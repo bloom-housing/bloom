@@ -4,15 +4,14 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { blankApplication, lRoute } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/ui-components"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
 import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
-import LiveWorkPreferenceStep from "./LiveWorkPreferenceStep"
-import DisplacedPreferenceStep from "./DisplacedPreferenceStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
+import PreferencesAllStep from "./PreferencesAllStep"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -90,13 +89,9 @@ export default class ApplicationConductor {
     income: {
       url: "/applications/financial/income",
     },
-    preferencesLiveWork: {
-      url: "/applications/preferences/live-work",
-      definition: LiveWorkPreferenceStep,
-    },
-    preferencesDisplaced: {
-      url: "/applications/preferences/displaced",
-      definition: DisplacedPreferenceStep,
+    preferencesAll: {
+      url: "/applications/preferences/all",
+      definition: PreferencesAllStep,
     },
     generalPool: {
       url: "/applications/preferences/general",
@@ -113,6 +108,7 @@ export default class ApplicationConductor {
     },
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   application: Record<string, any> = {}
   steps: StepDefinition[] = []
   returnToReview = false
@@ -209,13 +205,12 @@ export default class ApplicationConductor {
   }
 
   routeTo(url: string) {
-    void Router.push(url).then(() => window.scrollTo(0, 0))
+    void Router.push(url)
   }
 
   routeToNextOrReturnUrl(url?: string) {
-    void Router.push(lRoute(this.nextOrReturnUrl(url))).then(() => {
+    void Router.push(this.nextOrReturnUrl(url)).then(() => {
       this.returnToReview = false
-      window.scrollTo(0, 0)
     })
   }
 

@@ -1,12 +1,16 @@
 import {
-  AmiChartCreate,
+  AmiChart,
   ApplicationMethodType,
+  CountyCode,
   CSVFormattingType,
   Listing,
   ListingStatus,
 } from "./types"
 
-export const SanMateoHUD2019: AmiChartCreate = {
+export const SanMateoHUD2019: AmiChart = {
+  id: "ami_chart_id",
+  createdAt: new Date(),
+  updatedAt: new Date(),
   name: "SanMateoHUD2019",
   items: [
     {
@@ -243,6 +247,7 @@ export const ArcherListing: Listing = {
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
+  countyCode: CountyCode["San Jose"],
   depositMax: "",
   disableUnitsAccordion: false,
   events: [],
@@ -255,6 +260,9 @@ export const ArcherListing: Listing = {
   status: ListingStatus.active,
   postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationAddress: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
@@ -333,6 +341,9 @@ export const ArcherListing: Listing = {
     "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   CSVFormattingType: CSVFormattingType.basic,
   leasingAgentAddress: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",

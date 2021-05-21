@@ -1,6 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { Address } from "@bloom-housing/backend-core/types"
+import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
+
+type FormSummaryDetailsProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  application: any
+  listing: Listing
+  editMode?: boolean
+  hidePreferences?: boolean
+}
 
 const EditLink = (props: { href: string }) => (
   <div className="float-right flex">
@@ -38,7 +46,12 @@ const reformatAddress = (address: Address) => {
   return newAddress
 }
 
-const FormSummaryDetails = ({ application, editMode = false, hidePreferences = false }) => {
+const FormSummaryDetails = ({
+  application,
+  listing,
+  editMode = false,
+  hidePreferences = false,
+}: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
@@ -61,15 +74,29 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
     }
   }
 
-  const preferenceNameAddress = (option) => {
-    return `
-      ${option.extraData[0].value},
-      ${option.extraData[1].value.street},
-      ${option.extraData[1].value.street2 ? `${option.extraData[1].value.street2},` : ""}
-      ${option.extraData[1].value.city},
-      ${option.extraData[1].value.state}
-      ${option.extraData[1].value.zipCode}
-    `
+  const preferenceHelperText = (extraData?: AllExtraDataTypes[]) => {
+    if (!extraData) return
+
+    return extraData.reduce((acc, item) => {
+      if (
+        item.type === InputType.text ||
+        (item.type === InputType.hhMemberSelect && typeof item.value === "string")
+      ) {
+        acc += `${item.value.toString()}, `
+      }
+
+      if (item.type === InputType.address && typeof item.value === "object") {
+        acc += `
+          ${item.value.street},
+          ${item.value.street2 ?? ""},
+          ${item.value.city},
+          ${item.value.state}
+          ${item.value.zipCode}
+          `
+      }
+
+      return acc
+    }, "")
   }
 
   return (
@@ -265,12 +292,14 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
           <>
             <h3 className="form--card__sub-header">
               {t("t.preferences")}
-              {editMode && <EditLink href="/applications/preferences/live-work" />}
+              {editMode && <EditLink href="/applications/preferences/all" />}
             </h3>
             <div id="preferences" className="form-card__group border-b mx-0">
               {application.preferences.filter((item) => item.claimed == true).length == 0 ? (
                 <p className="field-note text-black">
-                  {t("application.preferences.general.title")}{" "}
+                  {t("application.preferences.general.title", {
+                    county: listing?.countyCode,
+                  })}{" "}
                   {t("application.preferences.general.preamble")}
                 </p>
               ) : (
@@ -283,13 +312,11 @@ const FormSummaryDetails = ({ application, editMode = false, hidePreferences = f
                         .map((option) => (
                           <ViewItem
                             label={t("application.preferences.youHaveClaimed")}
-                            helper={
-                              preference.key == "displacedTenant" &&
-                              ["general", "missionCorridor"].includes(option.key) &&
-                              preferenceNameAddress(option)
-                            }
+                            helper={preferenceHelperText(option?.extraData)}
                           >
-                            {t(`application.preferences.${preference.key}.${option.key}.label`)}
+                            {t(`application.preferences.${preference.key}.${option.key}.label`, {
+                              county: listing?.countyCode,
+                            })}
                           </ViewItem>
                         ))
                     )}

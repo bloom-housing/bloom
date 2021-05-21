@@ -21,13 +21,12 @@ export const imageWithTitleAndSubtitle = () => (
 )
 
 export const withLink = () => (
-  <ImageCard href="/listings" as="/listings" imageUrl="/images/listing.jpg" title="Hello World" />
+  <ImageCard href="/listings" imageUrl="/images/listing.jpg" title="Hello World" />
 )
 
 export const withListing = () => (
   <ImageCard
     href="/listings"
-    as="/listings"
     imageUrl="/images/listing.jpg"
     title="Hello World"
     listing={listing}

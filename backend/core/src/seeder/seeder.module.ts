@@ -8,7 +8,6 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserService } from "../user/user.service"
 import { User } from "../user/entities/user.entity"
 import { ListingsService } from "../listings/listings.service"
-import { ApplicationsService } from "../applications/applications.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
 import { ConfigModule } from "@nestjs/config"

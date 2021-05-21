@@ -11,9 +11,9 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { DefaultAuthGuard } from "../auth/default.guard"
-import { AuthzGuard } from "../auth/authz.guard"
-import { ResourceType } from "../auth/resource_type.decorator"
+import { DefaultAuthGuard } from "../auth/guards/default.guard"
+import { AuthzGuard } from "../auth/guards/authz.guard"
+import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { PropertiesService } from "./properties.service"
 import { PropertyCreateDto, PropertyDto, PropertyUpdateDto } from "./dto/property.dto"

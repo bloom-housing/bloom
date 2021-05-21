@@ -32,7 +32,7 @@ function compareStrings(a, b, node, nextNode, isInverted) {
   }
 }
 
-export function getColDefs(maxHouseholdSize: number) {
+export function getColDefs(maxHouseholdSize: number, countyCode: string) {
   const defs = [
     {
       headerName: t("application.details.submittedDate"),
@@ -207,12 +207,8 @@ export function getColDefs(maxHouseholdSize: number) {
         const { preferences } = row.data
 
         const claimed = preferences.reduce((acc, curr) => {
-          const options = curr.options
-            .filter((option) => option?.checked)
-            ?.map((item) => t(`application.preferences.options.${item.key}`))
-
-          if (curr?.claimed) {
-            acc.push(options.join(", "))
+          if (curr.claimed) {
+            acc.push(t(`application.preferences.${curr.key}.title`, { county: countyCode }))
           }
 
           return acc

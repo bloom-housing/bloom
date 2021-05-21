@@ -1,10 +1,10 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "0.3.10",
+  "version": "1.0.0",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Marcin Jedras <marcin.jedras@exygy.com>",
   "private": false,
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
@@ -26,7 +26,8 @@
     "test:e2e:local": "psql -c 'DROP DATABASE IF EXISTS bloom_test' && psql -c 'CREATE DATABASE bloom_test' && ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts migration:run && ts-node src/seed.ts --test && jest --config ./jest-e2e.json --runInBand --forceExit",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "herokusetup": "node heroku.setup.js",
-    "generate:client": "ts-node generate-axios-client.ts",
+    "heroku-postbuild": "rimraf dist && nest build && yarn run db:migration:run",
+    "generate:client": "ts-node scripts/generate-axios-client.ts",
     "migrator": "ts-node migrator.ts"
   },
   "dependencies": {

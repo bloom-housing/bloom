@@ -125,6 +125,11 @@
       "claimant": "Claimant",
       "displacedAddress": "Displaced Address"
     },
+    "referralApplication": {
+      "instructions": "The permanent supportive housing units are referred directly through <COUNTY> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+      "furtherInformation": "For further information",
+      "phoneNumber": "211"
+    },
     "details": {
       "applicationData": "Application Data",
       "number": "Application Number",
@@ -233,7 +238,7 @@
       "sendMailToMailingAddress": "Send my mail to a different address",
       "mailingAddress": "Mailing Address",
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
-      "doYouWorkIn": "Do you work in <REGION>?",
+      "doYouWorkIn": "Do you work in %{county} County?",
       "doYouWorkInDescription": "TBD",
       "workAddress": "Work Address"
     },
@@ -313,7 +318,7 @@
         "title": "Tell us about this person",
         "updateHouseholdMember": "Update Household Member",
         "whatReletionship": "What is their relationship to you",
-        "workInRegion": "Do they work in <REGION>?",
+        "workInRegion": "Do they work in %{county} County?",
         "workInRegionNote": "TBD"
       },
       "membersInfo": {
@@ -372,24 +377,30 @@
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
       "liveWork": {
+        "title": "Live or Work in %{county} County?",
         "live": {
-          "label": "Live in <REGION> Preference",
-          "description": "Live in <REGION> copy goes here…",
+          "label": "Live in %{county} County Preference",
+          "description": "Live in %{county} copy goes here…",
           "link": "http://domain.com"
         },
         "work": {
-          "label": "Work in <REGION> Preference",
-          "description": "Work in <REGION> copy goes here…",
+          "label": "Work in %{county} County Preference",
+          "description": "Work in %{county} copy goes here…",
           "link": "http://domain.com"
         }
       },
       "displacedTenant": {
+        "title": "Displaced Tenant Housing Preference",
         "whichHouseholdMember": "Which household member is claiming this preference?",
         "whatAddress": "What address was the household member displaced from?",
         "general": {
           "label": "Displaced Tenant Housing Preference",
           "description": "Displaced Tenant copy goes here…",
           "link": "http://domain.com"
+        },
+        "missionCorridor": {
+          "label": "Mission Corridor",
+          "description": "Mission Corridor copy goes here…"
         }
       },
       "general": {
@@ -397,12 +408,8 @@
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "live": "Live",
-        "work": "Work",
-        "general": "Displacee Tenant",
-        "missionCorridor": "Mission Corridor",
-        "name": "Claimant",
-        "address": "Displaced Address"
+        "address": "Displaced Address",
+        "name": "Claimant"
       }
     },
     "review": {
@@ -626,7 +633,8 @@
     "householdTooBig": "Your household size is too big.",
     "householdTooSmall": "Your household size is too small.",
     "dateError": "Please enter a valid date",
-    "rateLimitExceeded": "Rate limit exceeded, try again later."
+    "rateLimitExceeded": "Rate limit exceeded, try again later.",
+    "requiredFieldError": "This field is required."
   },
   "footer": {
     "contact": "Contact",
@@ -737,7 +745,8 @@
     "reservedTypePlural": {
       "family": "families",
       "senior": "seniors",
-      "veteran": "veterans"
+      "veteran": "veterans",
+      "specialNeeds": "special needs"
     },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
@@ -766,6 +775,7 @@
     "showClosedListings": "Show Closed Listings",
     "singleRoomOccupancy": "Single Room Occupancy",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
+    "specialNotes": "Special Notes",
     "totalListings": "Total Listings",
     "unitTypes": {
       "oneBdrm": "1 BR",
@@ -973,6 +983,7 @@
     "seeDetails": "See Details",
     "seeListing": "See Listing",
     "selectOne": "Select One",
+    "servicesOffered": "Services Offered",
     "show": "Show",
     "showLess": "show less",
     "showMore": "show more",

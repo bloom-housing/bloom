@@ -14,9 +14,9 @@ import {
 } from "@nestjs/common"
 import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
-import { OptionalAuthGuard } from "../auth/optional-auth.guard"
-import { AuthzGuard } from "../auth/authz.guard"
-import { ResourceType } from "../auth/resource_type.decorator"
+import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
+import { AuthzGuard } from "../auth/guards/authz.guard"
+import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import {
   ApplicationCreateDto,
@@ -27,10 +27,10 @@ import {
 import { Expose, Transform } from "class-transformer"
 import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
-import { ValidationsGroupsEnum } from "../shared/validations-groups.enum"
+import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { applicationPreferenceExtraModels } from "./entities/application-preferences.entity"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
+import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 
 enum OrderByParam {
   firstName = "applicant.firstName",
@@ -44,7 +44,7 @@ enum OrderParam {
   DESC = "DESC",
 }
 
-export class ApplicationsListQueryParams extends PaginationQueryParams {
+export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
     type: String,
@@ -102,18 +102,32 @@ export class ApplicationsListQueryParams extends PaginationQueryParams {
   @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? value : OrderParam.DESC))
   order?: OrderParam
-}
 
-export class ApplicationsCsvListQueryParams {
   @Expose()
   @ApiProperty({
-    type: String,
-    example: "listingId",
-    required: true,
+    type: Boolean,
+    example: true,
+    required: false,
   })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  listingId: string
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (value: string | undefined) => {
+      switch (value) {
+        case "true":
+          return true
+        case "false":
+          return false
+        default:
+          return undefined
+      }
+    },
+    { toClassOnly: true }
+  )
+  markedAsDuplicate?: boolean
+}
 
+export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQueryParams {
   @Expose()
   @ApiProperty({
     type: Boolean,
@@ -135,16 +149,6 @@ export class ApplicationsCsvListQueryParams {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
   includeDemographics?: boolean
-
-  @Expose()
-  @ApiProperty({
-    type: String,
-    example: "userId",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  userId?: string
 }
 
 @Controller("applications")
@@ -158,7 +162,7 @@ export class ApplicationsCsvListQueryParams {
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(...applicationPreferenceExtraModels)
+@ApiExtraModels(...applicationPreferenceApiExtraModels)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
@@ -167,7 +171,9 @@ export class ApplicationsController {
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
-  async list(@Query() queryParams: ApplicationsListQueryParams): Promise<PaginatedApplicationDto> {
+  async list(
+    @Query() queryParams: PaginatedApplicationListQueryParams
+  ): Promise<PaginatedApplicationDto> {
     return mapTo(PaginatedApplicationDto, await this.applicationsService.listPaginated(queryParams))
   }
 
@@ -175,7 +181,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
-    const applications = await this.applicationsService.list(queryParams.listingId, null)
+    const applications = await this.applicationsService.list(queryParams)
     return this.applicationCsvExporter.export(
       applications,
       queryParams.includeHeaders,

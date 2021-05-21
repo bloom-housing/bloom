@@ -14,16 +14,16 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
-import { EmailService } from "../shared/email.service"
-import { ResourceType } from "../auth/resource_type.decorator"
+import { EmailService } from "../shared/email/email.service"
+import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { authzActions, AuthzService } from "../auth/authz.service"
-import { OptionalAuthGuard } from "../auth/optional-auth.guard"
+import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { AuthzGuard } from "../auth/authz.guard"
+import { AuthzGuard } from "../auth/guards/authz.guard"
 import { Request as ExpressRequest } from "express"
-import { ForgotPasswordDto, ForgotPasswordResponseDto } from "./dto/forgot_password.dto"
-import { UpdatePasswordDto } from "./dto/update_password.dto"
+import { ForgotPasswordDto, ForgotPasswordResponseDto } from "./dto/forgot-password.dto"
+import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { LoginResponseDto } from "../auth/dto/login.dto"
 import { ConfirmDto } from "./dto/confirm.dto"
 import { StatusDto } from "../shared/dto/status.dto"
@@ -52,8 +52,7 @@ export class UserController {
   @ApiOperation({ summary: "Create user", operationId: "create" })
   async create(@Body() dto: UserCreateDto): Promise<StatusDto> {
     const user = await this.userService.createUser(dto)
-    // noinspection ES6MissingAwait
-    void this.emailService.welcome(user, dto.appUrl)
+    await this.emailService.welcome(user, dto.appUrl)
     return mapTo(StatusDto, { status: "ok" })
   }
 
@@ -62,8 +61,7 @@ export class UserController {
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
   async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
     const user = await this.userService.resendConfirmation(dto)
-    // noinspection ES6MissingAwait
-    void this.emailService.welcome(user, dto.appUrl)
+    await this.emailService.welcome(user, dto.appUrl)
     return mapTo(StatusDto, { status: "ok" })
   }
 
@@ -79,7 +77,7 @@ export class UserController {
   @ApiOperation({ summary: "Forgot Password", operationId: "forgot-password" })
   async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<ForgotPasswordResponseDto> {
     const user = await this.userService.forgotPassword(dto.email)
-    void this.emailService.forgotPassword(user, dto.appUrl)
+    await this.emailService.forgotPassword(user, dto.appUrl)
     return mapTo(ForgotPasswordResponseDto, { message: "Email was sent" })
   }
 

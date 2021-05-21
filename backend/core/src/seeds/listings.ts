@@ -1,12 +1,4 @@
-import {
-  ApplicationMethod,
-  ApplicationMethodType,
-  Asset,
-  Listing,
-  ListingEvent,
-  ListingEventType,
-  ListingStatus,
-} from "../listings/entities/listing.entity"
+import { Listing } from "../listings/entities/listing.entity"
 import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
 import { PropertyCreateDto } from "../property/dto/property.dto"
@@ -14,26 +6,31 @@ import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
 import { BaseEntity, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { Unit } from "../.."
+import { ApplicationMethodType, AssetDto, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { User } from "../user/entities/user.entity"
 import { UserService } from "../user/user.service"
 import { SanMateoHUD2019 } from "./ami-charts"
-import { InputType } from "../shared/input-type"
+import { InputType } from "../shared/types/input-type"
 import { UserCreateDto } from "../user/dto/user.dto"
-import { CSVFormattingType } from "../csv/formatting/application-formatting-metadata-factory"
+import { ListingEventType } from "../listings/types/listing-event-type-enum"
+import { ListingStatus } from "../listings/types/listing-status-enum"
+import { ListingEventDto } from "../listings/dto/listing-event.dto"
+import { ApplicationMethodDto } from "../listings/dto/application-method.dto"
+import { CSVFormattingType } from "../csv/types/csv-formatting-type-enum"
+import { CountyCode } from "../shared/types/county-code"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
   amiChart: AmiChartCreateDto
   units: Array<Omit<UnitCreateDto, "property">>
-  applicationMethods: Array<Omit<ApplicationMethod, "listing">>
+  applicationMethods: Array<Omit<ApplicationMethodDto, "listing">>
   property: Omit<PropertyCreateDto, "propertyGroups" | "listings" | "units" | "unitsSummarized">
   preferences: Array<Omit<PreferenceCreateDto, "listing">>
-  listingEvents: Array<Omit<ListingEvent, "listing">>
-  assets: Array<Omit<Asset, "listing">>
+  listingEvents: Array<Omit<ListingEventDto, "listing">>
+  assets: Array<Omit<AssetDto, "listing">>
   listing: Omit<
     ListingCreateDto,
     | keyof BaseEntity
@@ -44,6 +41,7 @@ export interface ListingSeed {
     | "assets"
     | "preferences"
     | "leasingAgents"
+    | "showWaitlist"
   >
   leasingAgents: UserCreateDto[]
 }
@@ -77,7 +75,7 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
   })
   await unitsRepo.save(unitsToBeCreated)
 
-  const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug"> = {
+  const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug" | "showWaitlist"> = {
     ...seed.listing,
     property,
     leasingAgents: leasingAgents,
@@ -177,6 +175,7 @@ export const listingSeed1: ListingSeed = {
     // TODO Added arbitrarily, not existent in seeds:
     householdSizeMin: 2,
     householdSizeMax: 2,
+    servicesOffered: "",
   },
   preferences: [
     {
@@ -185,7 +184,16 @@ export const listingSeed1: ListingSeed = {
       subtitle: "",
       description:
         "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
-      links: [],
+      links: [
+        {
+          title: "example.com",
+          url: "https://example.com",
+        },
+        {
+          title: "example2.com",
+          url: "https://example2.com",
+        },
+      ],
       formMetadata: {
         key: "liveWork",
         options: [
@@ -206,7 +214,16 @@ export const listingSeed1: ListingSeed = {
       subtitle: "",
       description:
         "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
-      links: [],
+      links: [
+        {
+          title: "example.com",
+          url: "https://example.com",
+        },
+        {
+          title: "example2.com",
+          url: "https://example2.com",
+        },
+      ],
       formMetadata: {
         key: "displacedTenant",
         options: [
@@ -215,7 +232,7 @@ export const listingSeed1: ListingSeed = {
             extraData: [
               {
                 key: "name",
-                type: InputType.text,
+                type: InputType.hhMemberSelect,
               },
               {
                 key: "address",
@@ -228,7 +245,7 @@ export const listingSeed1: ListingSeed = {
             extraData: [
               {
                 key: "name",
-                type: InputType.text,
+                type: InputType.hhMemberSelect,
               },
               {
                 key: "address",
@@ -275,9 +292,11 @@ export const listingSeed1: ListingSeed = {
       longitude: -121.91071,
     },
     applicationPickUpAddressOfficeHours: "10AM to 12AM",
+    countyCode: CountyCode.alameda,
     postmarkedApplicationsReceivedByDate: new Date("2021-12-10T20:00:00.000Z"),
     disableUnitsAccordion: false,
     rentalAssistance: "",
+    specialNotes: "",
 
     whatToExpect: {
       applicantsWillBeContacted: "Applicant will be contacted",

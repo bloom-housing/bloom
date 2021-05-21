@@ -10,13 +10,14 @@ describe("<LoadingOverlay>", () => {
       <LoadingOverlay isLoading={true}>Children go here</LoadingOverlay>
     )
     expect(getByText("Children go here")).toBeTruthy()
-    expect(container.getElementsByClassName("spinner").length).toBe(1)
+    expect(container.getElementsByClassName("loading-overlay__spinner").length).toBe(1)
   })
   it("renders while not loading", () => {
     const { container, getByText } = render(
       <LoadingOverlay isLoading={false}>Children go here</LoadingOverlay>
     )
     expect(getByText("Children go here")).toBeTruthy()
-    expect(container.getElementsByClassName("spinner").length).toBe(0)
+    expect(container.getElementsByClassName("loading-overlay").length).toBe(0)
+    expect(container.getElementsByClassName("loading-overlay__spinner").length).toBe(0)
   })
 })

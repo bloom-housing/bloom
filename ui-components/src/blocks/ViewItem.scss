@@ -44,8 +44,9 @@
   }
 
   // do not change font-family for inputs
-  .field .control .input {
+  .field .control .input, .error-message {
     @apply font-sans;
+    @apply font-normal;
   }
 }
 

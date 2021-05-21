@@ -6,7 +6,7 @@
     "haveAnAccount": "Quý vị đã có một tài khoản chưa?",
     "myApplications": "Đơn ghi danh của tôi",
     "myApplicationsSubtitle": "Xem ngày rút thăm và danh sách các bất động sản mà quý vị đã ghi danh"
-  }, 
+  },
   "application": {
     "form": {
       "general": {
@@ -37,6 +37,12 @@
       "letsGetStarted": "Hãy bắt đầu làm đơn ghi danh của quý vị",
       "chooseYourLanguage": "Lựa chọn Ngôn ngữ của Quý vị",
       "signInSaveTime": "Việc đăng nhập có thể giúp quý vị tiết kiệm thời gian bằng cách bắt đầu với các thông tin chi tiết về đơn ghi danh gần đây nhất của quý vị và cho phép quý vị kiểm tra trạng thái của đơn ghi danh này bất kỳ lúc nào."
+    },
+    "autofill": {
+      "saveTime": "Tiết kiệm thời gian bằng cách sử dụng các chi tiết từ đơn lần trước của quý vị",
+      "prefillYourApplication": "Chúng tôi sẽ điền trước đơn của quý vị với những thông tin chi tiết sau, và quý vị có thể cập nhật các thông tin đó trong quá trình làm đơn.",
+      "start": "Bắt đầu với Những Chi tiết Này",
+      "reset": "Thiết lập lại và bắt đầu từ đầu"
     },
     "start": {
       "whatToExpect": {
