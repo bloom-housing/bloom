@@ -11,7 +11,10 @@
   ],
   "environments": {
     "review": {
-      "addons": ["heroku-postgresql:hobby-dev"]
+      "addons": ["heroku-postgresql:hobby-dev"],
+      "scripts": {
+        "postdeploy": "cd backend/core && yarn db:seed"
+      }
     }
   }
 }
