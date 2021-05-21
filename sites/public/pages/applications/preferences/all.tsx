@@ -77,6 +77,7 @@ const ApplicationPreferencesAll = () => {
   const onSubmit = (data) => {
     const body = mapPreferencesToApi(data)
     if (uniquePages.length > 1) {
+      // If we've split preferences across multiple pages, save the data in segments
       const currentPreferences = conductor.currentStep.application.preferences.filter(
         (preference) => {
           return preference.key !== body[0].key
@@ -85,16 +86,14 @@ const ApplicationPreferencesAll = () => {
       conductor.currentStep.save([...currentPreferences, body[0]])
       setApplicationPreferences([...currentPreferences, body[0]])
     } else {
-      conductor.completeSection(4)
+      // Otherwise, submit all at once
       conductor.currentStep.save(body)
     }
     if (page !== uniquePages.length) {
       setPage(page + 1)
       return
-    } else {
-      conductor.completeSection(4)
     }
-
+    conductor.completeSection(4)
     conductor.routeToNextOrReturnUrl()
   }
 
