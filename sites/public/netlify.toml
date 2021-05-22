@@ -9,7 +9,6 @@ YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"
 
 # reminder: URLs and fragments should *not* have a trailing /
-BACKEND_API_BASE = "https://listings-next.bloom.exygy.dev"
 LISTINGS_QUERY = "/listings"
 
 [context.production.environment]
