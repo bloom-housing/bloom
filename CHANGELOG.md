@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file. The format 
 (_Note:_ it our intention to improve our release process going forward by using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).)
 
 ## Unreleased
-
 ### General
 
 ### Backend
 
 ### Frontend
+- Fixed:
+  -  Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) Dominik Barcikowski
 
 ### UI Components
 
