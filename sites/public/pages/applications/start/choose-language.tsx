@@ -14,12 +14,11 @@ import {
   ProgressNav,
   UserContext,
   t,
-  Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useContext, useEffect, useState } from "react"
+import { Language } from "@bloom-housing/backend-core/types"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
@@ -33,7 +32,6 @@ const loadListing = async (listingId, stateFunction, conductor, context) => {
 export default () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
-  const [newLocale, setNewLocale] = useState("")
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(UserContext)
   const { conductor, application } = context
@@ -41,22 +39,31 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
-    if (!context.listing || context.listing.id != listingId) {
+    if (!listingId) {
+      void router.push("/")
+      return
+    }
+
+    if (!context.listing || context.listing.id !== listingId) {
       void loadListing(listingId, setListing, conductor, context)
     } else {
       setListing(context.listing)
     }
-  }, [conductor, context, listingId])
+  }, [router, conductor, context, listingId])
 
   const currentPageSection = 1
 
   const imageUrl = listing?.assets ? imageUrlFromListing(listing) : ""
 
-  /* Form Handler */
-  const { handleSubmit } = useForm()
-  const onSubmit = () => {
-    conductor.sync()
-    void router.push(`${newLocale}${conductor.determineNextUrl()}`)
+  const onLanguageSelect = (language: Language) => {
+    conductor.currentStep.save({
+      language,
+    })
+
+    const newLocale = language == "en" ? "" : `/${language}`
+    void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
+      window.scrollTo(0, 0)
+    })
   }
 
   return (
@@ -91,28 +98,26 @@ export default () => {
         )}
 
         <div className="form-card__pager">
-          <Form className="" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-card__pager-row primary px-4">
-              {listing?.applicationConfig.languages.length > 1 && (
-                <>
-                  <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
-                    {t("application.chooseLanguage.chooseYourLanguage")}
-                  </h3>
+          <div className="form-card__pager-row primary px-4">
+            {listing?.applicationConfig.languages.length > 1 && (
+              <>
+                <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
+                  {t("application.chooseLanguage.chooseYourLanguage")}
+                </h3>
 
-                  {listing.applicationConfig.languages.map((lang) => (
-                    <Button
-                      className="language-select mx-1"
-                      onClick={() => {
-                        setNewLocale(lang == "en" ? "" : `/${lang}`)
-                      }}
-                    >
-                      {t(`applications.begin.${lang}`)}
-                    </Button>
-                  ))}
-                </>
-              )}
-            </div>
-          </Form>
+                {listing.applicationConfig.languages.map((lang) => (
+                  <Button
+                    className="language-select mx-1"
+                    onClick={() => {
+                      onLanguageSelect(lang)
+                    }}
+                  >
+                    {t(`applications.begin.${lang}`)}
+                  </Button>
+                ))}
+              </>
+            )}
+          </div>
 
           {initialStateLoaded && !profile && (
             <div className="form-card__pager-row primary px-4 border-t border-gray-450">
