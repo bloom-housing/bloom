@@ -41,3 +41,9 @@ export const AlertBoxSuccessInvert = () => (
     Some warning
   </AlertBox>
 )
+
+export const AlertBoxFullWidth = () => (
+  <AlertBox onClose={() => {}} type="success" fullWidth>
+    Some warning
+  </AlertBox>
+)
