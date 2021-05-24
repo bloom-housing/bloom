@@ -12,6 +12,7 @@ export interface AlertBoxProps {
   children: ReactNode
   inverted?: boolean
   className?: string
+  fullWidth?: boolean
 }
 
 const icons: { [k in AlertTypes]: IconTypes } = {
@@ -29,6 +30,7 @@ const AlertBox = (props: AlertBoxProps) => {
     colorClasses[props.type || "alert"],
     ...(props.inverted ? ["invert"] : []),
     ...(props.className ? [props.className] : []),
+    ...(props.fullWidth ? [] : ["px-4"]),
   ].join(" ")
 
   if (onClose) closeable = true
@@ -39,8 +41,8 @@ const AlertBox = (props: AlertBoxProps) => {
     }
   }
 
-  return showing ? (
-    <div className={classNames} role="alert">
+  let innerSection = (
+    <>
       <span className="alert-box__icon">
         <Icon
           size="medium"
@@ -59,6 +61,15 @@ const AlertBox = (props: AlertBoxProps) => {
           &times;
         </button>
       )}
+    </>
+  )
+  if (props.fullWidth) {
+    innerSection = <div className="alert-box_inner">{innerSection}</div>
+  }
+
+  return showing ? (
+    <div className={classNames} role="alert">
+      {innerSection}
     </div>
   ) : null
 }
