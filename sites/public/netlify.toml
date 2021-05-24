@@ -9,12 +9,7 @@ YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"
 
 # reminder: URLs and fragments should *not* have a trailing /
-BACKEND_API_BASE = "https://listings-next.bloom.exygy.dev"
 LISTINGS_QUERY = "/listings"
-
-# update this for your preview
-[context.deploy-preview.environment]
-BACKEND_API_BASE = "https://bloom-refere-feat-prefe-m3lbsl.herokuapp.com"
 
 [context.production.environment]
 GTM_KEY = "GTM-W8LH9F9"
