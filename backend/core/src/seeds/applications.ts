@@ -10,7 +10,7 @@ import { ApplicationStatus } from "../applications/types/application-status-enum
 import { ApplicationSubmissionType } from "../applications/types/application-submission-type-enum"
 import { IncomePeriod } from "../applications/types/income-period-enum"
 
-const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing"> = {
+const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing" | "listingId"> = {
   acceptedTerms: true,
   accessibility: {
     hearing: false,
@@ -218,8 +218,10 @@ export const makeNewApplication = async (
   user?: User
 ) => {
   const dto: ApplicationCreateDto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
-  dto.user = user
   dto.listing = listing
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
-  return await applicationRepo.save(dto)
+  return await applicationRepo.save({
+    ...dto,
+    user
+  })
 }

@@ -1,14 +1,19 @@
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
+import { ApiProperty, OmitType } from "@nestjs/swagger"
 import {
   ArrayMaxSize,
+  IsBoolean,
   IsDate,
   IsDefined,
+  IsEnum,
+  IsNumber,
   IsOptional,
+  IsString,
   IsUUID,
+  MaxLength,
   ValidateNested,
 } from "class-validator"
 import { Application } from "../entities/application.entity"
-import { Exclude, Expose, Type } from "class-transformer"
+import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IdDto } from "../../shared/dto/id.dto"
 import { PaginationFactory } from "../../shared/dto/pagination.dto"
 import { ApplicantCreateDto, ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
@@ -30,32 +35,110 @@ import {
   AccessibilityUpdateDto,
 } from "./accessibility.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { IncomePeriod } from "../types/income-period-enum"
+import { ApplicationStatus } from "../types/application-status-enum"
+import { Language } from "../../shared/types/language-enum"
+import { ApplicationSubmissionType } from "../types/application-submission-type-enum"
+import { ApplicationPreference } from "../entities/application-preferences.entity"
 
-export class ApplicationDto extends OmitType(Application, [
-  "listing",
-  "user",
-  "applicant",
-  "mailingAddress",
-  "alternateAddress",
-  "alternateContact",
-  "accessibility",
-  "demographics",
-  "householdMembers",
-] as const) {
+export class ApplicationDto
+  implements
+    Omit<
+      Application,
+      | "applicant"
+      | "listing"
+      | "user"
+      | "mailingAddress"
+      | "alternateAddress"
+      | "alternateContact"
+      | "householdMembers"
+    > {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  id: string
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  createdAt: Date
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  updatedAt: Date
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  deletedAt?: Date
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  markedAsDuplicate: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  appUrl?: string
+
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  listing: IdDto
+  user?: IdDto | undefined
 
-  @Exclude()
-  @ApiHideProperty()
-  user
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  listing: IdDto | undefined
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicantDto)
   applicant: ApplicantDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  additionalPhone?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
+  additionalPhoneNumber?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
+  additionalPhoneNumberType?: string
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
+  contactPreferences: string[]
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  householdSize?: number
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
+  housingStatus?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  sendMailToMailingAddress?: boolean
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -88,11 +171,67 @@ export class ApplicationDto extends OmitType(Application, [
   demographics: DemographicsDto
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  incomeVouchers?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  income?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsEnum(IncomePeriod, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: IncomePeriod, enumName: "IncomePeriod" })
+  incomePeriod?: IncomePeriod
+
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberDto)
   householdMembers: HouseholdMemberDto[]
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
+  preferredUnit: string[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationPreference)
+  preferences: ApplicationPreference[]
+
+  @Expose()
+  @IsEnum(ApplicationStatus, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ApplicationStatus, enumName: "ApplicationStatus" })
+  status: ApplicationStatus
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: Language, enumName: "Language" })
+  language?: Language
+
+  @Expose()
+  @IsEnum(ApplicationSubmissionType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ApplicationSubmissionType, enumName: "ApplicationSubmissionType" })
+  submissionType: ApplicationSubmissionType
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  acceptedTerms?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  submissionDate?: Date
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
@@ -102,6 +241,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "createdAt",
   "updatedAt",
   "deletedAt",
+  "user",
   "listing",
   "applicant",
   "mailingAddress",
@@ -167,6 +307,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "createdAt",
   "updatedAt",
   "deletedAt",
+  "user",
   "listing",
   "applicant",
   "mailingAddress",

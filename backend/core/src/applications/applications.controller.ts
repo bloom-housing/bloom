@@ -200,7 +200,8 @@ export class ApplicationsController {
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
   async retrieve(@Param("applicationId") applicationId: string): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
-    return mapTo(ApplicationDto, app)
+    const result =  mapTo(ApplicationDto, app)
+    return result
   }
 
   @Put(`:applicationId`)
