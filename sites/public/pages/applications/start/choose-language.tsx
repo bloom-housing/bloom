@@ -39,7 +39,7 @@ export default () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
-    if (!listingId) {
+    if (router.isReady && !listingId) {
       void router.push("/")
       return
     }
