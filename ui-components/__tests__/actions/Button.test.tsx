@@ -26,7 +26,7 @@ describe("<Button>", () => {
         size={AppearanceSizeType.small}
         onClick={onClickSpy}
         inlineIcon={"left"}
-        icon={`some-jsx`}
+        icon={`arrowDown`}
       >
         Button Content
       </Button>
@@ -43,7 +43,7 @@ describe("<Button>", () => {
         size={AppearanceSizeType.small}
         onClick={onClickSpy}
         inlineIcon={"right"}
-        icon={`some-jsx`}
+        icon={`arrowDown`}
       >
         Button Content
       </Button>

@@ -20,7 +20,7 @@ describe("<StatusBar>", () => {
     const { getByText } = render(
       <StatusBar
         backButton={
-          <Button inlineIcon="left" icon="arrow-back" onClick={onClickSpy}>
+          <Button inlineIcon="left" icon="arrowBack" onClick={onClickSpy}>
             Back
           </Button>
         }

@@ -151,7 +151,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           backButton={
             <Button
               inlineIcon="left"
-              icon="arrow-back"
+              icon="arrowBack"
               onClick={() =>
                 editMode ? router.push(`/application/${application.id}`) : router.back()
               }

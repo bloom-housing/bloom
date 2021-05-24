@@ -102,7 +102,7 @@ export default function ApplicationsList() {
           <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
             <Button
               inlineIcon="left"
-              icon="arrow-back"
+              icon="arrowBack"
               onClick={() => router.push(`/listings/${application.listing.id}/applications`)}
             >
               {t("t.back")}

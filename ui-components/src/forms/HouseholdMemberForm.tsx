@@ -2,8 +2,7 @@ import React, { useContext } from "react"
 import { NavigationContext } from "../config/NavigationContext"
 import { HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 import { t } from "../helpers/translator"
-import { AppearanceStyleType } from "../global/AppearanceTypes"
-import { Icon } from "../icons/Icon"
+import { Icon, IconFillColors } from "../icons/Icon"
 import { ViewItem } from "../blocks/ViewItem"
 
 const HouseholdMemberForm = (props: {
@@ -37,7 +36,7 @@ const HouseholdMemberForm = (props: {
           className="ml-2 absolute top-0 right-0"
           size="medium"
           symbol="lock"
-          styleType={AppearanceStyleType.primary}
+          fill={IconFillColors.primary}
         />
       )}
     </ViewItem>
