@@ -163,35 +163,31 @@ const getUnitSummary = (unit: Unit) => {
   return summary
 }
 
+type UnitMap = {
+  [key: string]: Unit[]
+}
+
+// Allows for multiples rows under one unit type if the rent methods differ
 const summarizeUnits = (units: Units, reservedType?: string): UnitSummary[] => {
   if (!reservedType) {
     reservedType = null
   }
   const summaries: UnitSummary[] = []
-  let currentUnitType = units[0].unitType
-  let currentUnitRent = units[0].monthlyRent
-  let numAvailable = 0
+  const unitMap: UnitMap = {}
 
-  // Assumes units are listed in groups by unitType and rent type
-  // Allows for multiples rows under one unit type if the rent methods differ
-  units.forEach((unit, index) => {
-    if (unit.unitType !== currentUnitType || unit.monthlyRent !== currentUnitRent) {
-      const summary = getUnitSummary(units[index - 1])
-      summary.totalAvailable = numAvailable
-      summaries.push(summary)
-      currentUnitType = unit.unitType
-      currentUnitRent = unit.monthlyRent
-      numAvailable = 1
-    } else {
-      numAvailable += 1
-    }
-    if (index === units.length - 1) {
-      const summary = getUnitSummary(unit)
-      summary.totalAvailable = numAvailable
-      summaries.push(summary)
-      return
-    }
+  units.forEach((unit) => {
+    const currentUnitType = unit.unitType
+    const currentUnitRent = unit.monthlyRent
+    const thisKey = currentUnitType.concat(currentUnitRent)
+    if (!(thisKey in unitMap)) unitMap[thisKey] = []
+    unitMap[thisKey].push(unit)
   })
+
+  for (const key in unitMap) {
+    const summary = getUnitSummary(unitMap[key][0])
+    summary.totalAvailable = unitMap[key].length
+    summaries.push(summary)
+  }
 
   return summaries.filter((item) => Object.keys(item).length > 0)
 }
