@@ -26,7 +26,9 @@ export const Textarea = (props: TextareaProps) => {
 
   return (
     <>
-      <span className={labelClassnames.join(" ")}>{props.label}</span>
+      <label className={labelClassnames.join(" ")} htmlFor={props.label}>
+        {props.label}
+      </label>
       <textarea
         className={textareaClassnames.join(" ")}
         rows={props.rows ?? 4}
@@ -34,6 +36,7 @@ export const Textarea = (props: TextareaProps) => {
         wrap={props.wrap ?? "soft"}
         maxLength={props.maxLength ?? 150}
         placeholder={props.placeholder ?? t("t.description")}
+        name={props.label}
       />
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
     </>
