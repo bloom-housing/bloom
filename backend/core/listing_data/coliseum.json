@@ -11,6 +11,7 @@
     "latitude": 37.7549632,
     "longitude": -122.1968792
   },
+  "countyCode": "Alameda",
   "applicationDueDate": "2021-06-14T17:00:00.000-07:00",
   "applicationOrganization": "John Stewart Company",
   "applicationPhone": "",
@@ -37,7 +38,7 @@
   "hideUnitFeatures": false,
   "disableUnitsAccordion": true,
   "applicationFee": "12",
-  "criminalBackground": "Prohibited",
+  "criminalBackground": "In the application of the City of Oakland’s Fair Chance Access to Housing Ordinance, criminal background checks will not be performed on applications for the 21 apartments not supported by the Project-Based Section 8 Vouchers (PBVs). For the 37 PBV units, the Oakland Housing Authority will perform background checks as mandated under federal and state laws.",
   "leasingAgentEmail": "coliseum@jsco.net",
   "leasingAgentName": "",
   "leasingAgentAddress": {
@@ -56,10 +57,11 @@
   "specialNotes": null,
   "preferences": [
     {
+      "page": 1,
       "ordinal": 1,
-      "title": "Live/Work in Alameda County",
+      "title": "Alameda County Resident/Workforce Preference",
       "subtitle": "",
-      "description": "At least one household member lives or works in Alameda County",
+      "description": "Preference for eligible households in which at least one member lives or works in Alameda County.",
       "links": [],
       "formMetadata": {
         "key": "liveWork",
@@ -70,6 +72,46 @@
           },
           {
             "key": "work",
+            "extraData": []
+          }
+        ]
+      }
+    },
+    {
+      "page": 2,
+      "ordinal": 2,
+      "title": "Oakland Housing Authority Project-Based Voucher",
+      "subtitle": "",
+      "description": "You are currently applying to be in a general applicant list at Coliseum Place. The apartments for lease in this application process have rental subsidies provided by the Oakland Housing Authority. With that subsidy, tenant households pay 30% of their income as rent. These tenants are required to verify their income annually with the property manager as well as the Oakland Housing Authority. Please answer the following housing preference questions to determine your eligibility for these specific units,",
+      "links": [],
+      "formMetadata": {
+        "key": "PBV",
+        "hideGenericDecline": true,
+        "options": [
+          {
+            "key": "residency",
+            "extraData": []
+          },
+          {
+            "key": "family",
+            "extraData": []
+          },
+          {
+            "key": "veteran",
+            "extraData": []
+          },
+          {
+            "key": "homeless",
+            "extraData": []
+          },
+          {
+            "key": "noneApplyButConsider",
+            "description": false,
+            "extraData": []
+          },
+          {
+            "key": "doNotConsider",
+            "description": false,
             "extraData": []
           }
         ]
