@@ -272,7 +272,7 @@ const ApplicationPreferencesAll = () => {
                         )
                       })}
 
-                      {preference?.formMetadata && (
+                      {preference?.formMetadata && !preference.formMetadata.hideGenericDecline && (
                         <div
                           className={`mb-5 field ${
                             resolveObject(noneOptionKey, errors) ? "error" : ""

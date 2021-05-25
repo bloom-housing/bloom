@@ -1479,6 +1479,9 @@ export interface FormMetadata {
 
   /**  */
   options: FormMetadataOptions[];
+
+  /**  */
+  hideGenericDecline?: boolean;
 }
 
 export interface Preference {
