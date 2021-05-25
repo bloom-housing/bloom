@@ -18,4 +18,9 @@ export class FormMetadataOptions {
   @Type(() => FormMetadataExtraData)
   @ApiProperty({ type: [FormMetadataExtraData], required: false })
   extraData?: FormMetadataExtraData[] | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  description?: boolean
 }

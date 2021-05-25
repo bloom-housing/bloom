@@ -1225,6 +1225,9 @@ export interface FormMetadataOptions {
   key: string;
 
   /**  */
+  description?: boolean;
+
+  /**  */
   extraData: FormMetadataExtraData[];
 }
 
