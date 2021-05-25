@@ -37,6 +37,7 @@ export const Textarea = (props: TextareaProps) => {
         maxLength={props.maxLength ?? 150}
         placeholder={props.placeholder ?? t("t.description")}
         name={props.label}
+        id={props.label}
       />
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
     </>
