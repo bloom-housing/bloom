@@ -26,6 +26,31 @@
           "description": "At least one member of my household works or has been offered work in the %{county} County"
         }
       },
+      "PBV": {
+        "residency": {
+          "label": "Residency",
+          "description": "You have lived and/or worked in the City of Oakland when you submitted your initial application and/or at the time of your application interview for a Project-Based Voucher at Coliseum Place and can verify your previous residency/employment at the applicant interview."
+        },
+        "family": {
+          "label": "Family",
+          "description": "You are a family with two or more persons, or a single person applicant that is 62 years of age or older, or a single person applicant with a disability."
+        },
+        "veteran": {
+          "label": "Veteran",
+          "description": "You are a Veteran or active member of the military."
+        },
+        "homeless": {
+          "label": "Homeless",
+          "description": "You are an individual or family who meets the McKinney-Vento Act definition of homelessness. Family is identified as: individuals who lack a fixed, regular, and adequate nighttime residence and: (i) children and youths who are sharing the housing of other persons due to loss of housing, economic hardship, or a similar reason; are living in motels, hotels, trailer parks, or camping grounds due to the lack of alternative adequate accommodations; are living in emergency or transitional shelters; or are abandoned in hospitals; (ii) children and youths who have a primary nighttime residence that is a public or private place not designed for or ordinarily used as a regular sleeping accommodation for human beings; (iii) children and youths who are living in cars, parks, public spaces, abandoned buildings, substandard housing, bus or train stations, or similar settings; and (iv) migratory children who qualify as homeless for the purposes of this subtitle because the children are living in circumstances described in clauses (i) through (iii).",
+          "link": "https://uscode.house.gov/view.xhtml?path=/prelim@title42/chapter119/subchapter6/partB&edition=prelim"
+        },
+        "noneApplyButConsider": {
+          "label": "None of these preferences apply to me, but I would like to be considered"
+        },
+        "doNotConsider": {
+          "label": "I don't want to be considered for Oakland Housing Authority project-based voucher units"
+        }
+      },
       "displacedTenant": {
         "title": "Displaced Tenant Housing Preference",
         "whichHouseholdMember": "Which household member is claiming this preference?",
