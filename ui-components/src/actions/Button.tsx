@@ -10,7 +10,9 @@ export interface ButtonProps extends AppearanceProps {
   onClick?: (e: React.MouseEvent) => void
   icon?: IconTypes
   iconPlacement?: "left" | "right"
+  // TODO: inlineIcon is deprecated
   inlineIcon?: "left" | "right"
+  inline?: boolean
   unstyled?: boolean
   fullWidth?: boolean
   className?: string
@@ -20,13 +22,11 @@ export interface ButtonProps extends AppearanceProps {
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
   const classNames = ["button"].concat(classNamesForAppearanceTypes(props))
+  const inline = props.inline || props.inlineIcon
+  const iconPlacement = props.iconPlacement || props.inlineIcon || "right"
 
-  if (props.inlineIcon) {
-    classNames.push("is-inline")
-    classNames.push(`inline-icon--${props.inlineIcon}`)
-  } else if (props.icon) {
-    classNames.push(`has-icon-${props.iconPlacement || "right"}`)
-  }
+  if (props.inlineIcon || props.icon) classNames.push(`has-icon-${iconPlacement}`)
+  if (inline) classNames.push("is-inline")
   if (props.unstyled) classNames.push("is-unstyled")
   if (props.fullWidth) classNames.push("is-fullwidth")
   if (props.className) classNames.push(props.className)
