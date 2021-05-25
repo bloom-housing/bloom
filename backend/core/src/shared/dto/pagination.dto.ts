@@ -1,7 +1,6 @@
-import { ClassType } from "class-transformer/ClassTransformer"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
-import { Expose, Transform, Type } from "class-transformer"
+import { ClassConstructor, Expose, Transform, Type } from "class-transformer"
 import { IsNumber, IsOptional } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 
@@ -23,7 +22,9 @@ export interface Pagination<T> {
   meta: PaginationMeta
 }
 
-export function PaginationFactory<T>(classType: ClassType<T>): ClassType<Pagination<T>> {
+export function PaginationFactory<T>(
+  classType: ClassConstructor<T>
+): ClassConstructor<Pagination<T>> {
   class PaginationHost implements Pagination<T> {
     @ApiProperty({ type: () => classType, isArray: true })
     @Expose()
@@ -45,7 +46,7 @@ export class PaginationQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
+  @Transform(({ value }) => (value ? parseInt(value) : 1), {
     toClassOnly: true,
   })
   page?: number
@@ -59,7 +60,7 @@ export class PaginationQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : 10), {
+  @Transform(({ value }) => (value ? parseInt(value) : 10), {
     toClassOnly: true,
   })
   limit?: number

@@ -24,13 +24,14 @@ import {
   ApplicationUpdateDto,
   PaginatedApplicationDto,
 } from "./dto/application.dto"
-import { Expose, Transform } from "class-transformer"
+import { Expose, serialize, Transform } from "class-transformer"
 import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
+import { ListingsService } from "../listings/listings.service"
 
 enum OrderByParam {
   firstName = "applicant.firstName",
@@ -85,7 +86,7 @@ export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsIn(Object.values(OrderByParam), { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) =>
+  @Transform(({ value }) =>
     value ? (OrderByParam[value] ? OrderByParam[value] : value) : OrderByParam.createdAt
   )
   orderBy?: OrderByParam
@@ -100,7 +101,7 @@ export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? value : OrderParam.DESC))
+  @Transform(({ value }) => (value ? value : OrderParam.DESC))
   order?: OrderParam
 
   @Expose()
@@ -112,7 +113,7 @@ export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
-    (value: string | undefined) => {
+    ({ value }) => {
       switch (value) {
         case "true":
           return true
@@ -136,7 +137,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
+  @Transform(({ value }) => value === "true", { toClassOnly: true })
   includeHeaders?: boolean
 
   @Expose()
@@ -147,7 +148,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
+  @Transform(({ value }) => value === "true", { toClassOnly: true })
   includeDemographics?: boolean
 }
 
@@ -166,6 +167,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
+    private readonly listingsService: ListingsService,
     private readonly applicationCsvExporter: ApplicationCsvExporter
   ) {}
 
@@ -182,8 +184,10 @@ export class ApplicationsController {
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
     const applications = await this.applicationsService.list(queryParams)
+    const listing = await this.listingsService.findOne(queryParams.listingId)
     return this.applicationCsvExporter.export(
       applications,
+      listing.CSVFormattingType,
       queryParams.includeHeaders,
       queryParams.includeDemographics
     )
