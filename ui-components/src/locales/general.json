@@ -962,6 +962,7 @@
     "delete": "Delete",
     "deposit": "Deposit",
     "done": "Done",
+    "description": "Enter Description",
     "export": "Export",
     "enterAmount": "Enter amount",
     "filter": "Filter",
