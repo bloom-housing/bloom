@@ -11,9 +11,3 @@ NEXT_TELEMETRY_DISABLED = "1"
 # reminder: URLs and fragments should *not* have a trailing /
 BACKEND_API_BASE = "https://listings-next.bloom.exygy.dev"
 LISTINGS_QUERY = "/listings"
-
-[context.production.environment]
-GTM_KEY = "GTM-TBD"
-
-[context.branch-deploy.environment]
-GTM_KEY = "GTM-TBD"
