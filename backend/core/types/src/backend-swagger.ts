@@ -1900,6 +1900,9 @@ export interface Listing {
   countyCode: CountyCode;
 
   /**  */
+  showWaitlist: boolean;
+
+  /**  */
   preferences: Preference[];
 
   /**  */
@@ -2018,9 +2021,6 @@ export interface Listing {
 
   /**  */
   applicationConfig?: object;
-
-  /** */
-  showWaitlist?: boolean;
 }
 
 export interface PreferenceCreate {
@@ -2657,10 +2657,13 @@ export interface Application {
   submissionType: ApplicationSubmissionType;
 
   /**  */
+  applicant: Applicant;
+
+  /**  */
   listing: Id;
 
   /**  */
-  applicant: Applicant;
+  user?: Id;
 
   /**  */
   mailingAddress: Address;

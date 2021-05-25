@@ -54,7 +54,7 @@ export class ApplicationDto extends OmitType(Application, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   @Transform(
-    ({ obj }) => {
+    (value, obj) => {
       return plainToClass(IdDto, { id: obj.listingId })
     },
     { toClassOnly: true }
@@ -66,7 +66,7 @@ export class ApplicationDto extends OmitType(Application, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   @Transform(
-    ({ obj }) => {
+    (value, obj) => {
       return obj.userId ? plainToClass(IdDto, { id: obj.userId }) : undefined
     },
     { toClassOnly: true }

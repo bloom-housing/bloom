@@ -5,7 +5,7 @@ import { ObjectLiteral } from "typeorm/common/ObjectLiteral"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type"
 import { assignDefined } from "../assign-defined"
-import { ClassConstructor } from "class-transformer"
+import { ClassType } from "class-transformer/ClassTransformer"
 
 export interface GenericUpdateDto {
   id?: string
@@ -29,8 +29,8 @@ export interface AbstractService<T, TCreateDto, TUpdateDto> {
 }
 
 export function AbstractServiceFactory<T, TCreateDto, TUpdateDto extends GenericUpdateDto>(
-  entity: EntityClassOrSchema & ClassConstructor<T>
-): ClassConstructor<AbstractService<T, TCreateDto, TUpdateDto>> {
+  entity: EntityClassOrSchema & ClassType<T>
+): ClassType<AbstractService<T, TCreateDto, TUpdateDto>> {
   class AbstractServiceHost<T> implements AbstractService<T, TCreateDto, TUpdateDto> {
     @Inject(getRepositoryToken(entity)) repository: Repository<T>
 
