@@ -20,6 +20,10 @@ export class FormMetadata {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
   hideGenericDecline?: boolean
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  customSelectText?: string
 }

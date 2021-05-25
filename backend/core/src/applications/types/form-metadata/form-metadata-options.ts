@@ -21,6 +21,5 @@ export class FormMetadataOptions {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
   description?: boolean
 }
