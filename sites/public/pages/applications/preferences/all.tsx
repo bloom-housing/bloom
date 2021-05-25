@@ -167,7 +167,7 @@ const ApplicationPreferencesAll = () => {
             conductor.setNavigatedBack(true)
             setPage(page - 1)
           }}
-          static={page === uniquePages.length}
+          custom={page === uniquePages.length}
         />
 
         <div className="form-card__lead border-b">
