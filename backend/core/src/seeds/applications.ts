@@ -162,12 +162,12 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
         {
           key: "live",
           checked: true,
-          extraData: []
+          extraData: [],
         },
         {
           key: "work",
           checked: false,
-          extraData: []
+          extraData: [],
         },
       ],
     },
@@ -203,7 +203,7 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
         {
           key: "missionCorridor",
           checked: false,
-          extraData: []
+          extraData: [],
         },
       ],
     },
@@ -225,6 +225,6 @@ export const makeNewApplication = async (
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
   return await applicationRepo.save({
     ...dto,
-    user
+    user,
   })
 }
