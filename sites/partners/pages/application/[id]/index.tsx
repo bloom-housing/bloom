@@ -11,25 +11,25 @@ import {
   AlertBox,
   SiteAlert,
 } from "@bloom-housing/ui-components"
-import { useSingleApplicationData } from "../../lib/hooks"
+import { useSingleApplicationData } from "../../../lib/hooks"
 
-import Layout from "../../layouts/application"
+import Layout from "../../../layouts/application"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,
   MembersDrawer,
-} from "../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
+} from "../../../src/applications/PaperApplicationDetails/DetailsMemberDrawer"
 
-import { ApplicationContext } from "../../src/applications/ApplicationContext"
-import { DetailsApplicationData } from "../../src/applications/PaperApplicationDetails/sections/DetailsApplicationData"
-import { DetailsPrimaryApplicant } from "../../src/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
-import { DetailsAlternateContact } from "../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
-import { DetailsHouseholdMembers } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
-import { DetailsHouseholdDetails } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
-import { DetailsPreferences } from "../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
-import { DetailsHouseholdIncome } from "../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
-import { DetailsTerms } from "../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
-import { Aside } from "../../src/applications/Aside"
+import { ApplicationContext } from "../../../src/applications/ApplicationContext"
+import { DetailsApplicationData } from "../../../src/applications/PaperApplicationDetails/sections/DetailsApplicationData"
+import { DetailsPrimaryApplicant } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
+import { DetailsAlternateContact } from "../../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
+import { DetailsHouseholdMembers } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
+import { DetailsHouseholdDetails } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
+import { DetailsPreferences } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
+import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
+import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
+import { Aside } from "../../../src/applications/Aside"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -44,7 +44,7 @@ export default function ApplicationsList() {
   async function deleteApplication() {
     try {
       await applicationsService.delete({ applicationId })
-      void router.push(`/listings/applications?listing=${application?.listing?.id}`)
+      void router.push(`/listings/${application?.listing?.id}/applications`)
     } catch (err) {
       setErrorAlert(true)
     }
@@ -81,7 +81,6 @@ export default function ApplicationsList() {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
-        {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
 
         <PageHeader
           className="relative"
@@ -103,10 +102,8 @@ export default function ApplicationsList() {
           <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
             <Button
               inlineIcon="left"
-              icon="arrow-back"
-              onClick={() =>
-                router.push(`/listings/applications?listing=${application.listing.id}`)
-              }
+              icon="arrowBack"
+              onClick={() => router.push(`/listings/${application.listing.id}/applications`)}
             >
               {t("t.back")}
             </Button>

@@ -1,5 +1,4 @@
 import React from "react"
-import Link from "next/link"
 import { MinimalTable } from "../tables/MinimalTable"
 import { ViewItem } from "../blocks/ViewItem"
 import { GridSection, GridCell } from "./GridSection"

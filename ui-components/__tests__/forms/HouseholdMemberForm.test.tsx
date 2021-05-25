@@ -18,11 +18,11 @@ const Member2 = ({
 } as unknown) as HouseholdMember
 
 describe("<HouseholdMemberForm>", () => {
-  const useRouter = jest.spyOn(require("next/router"), "useRouter")
+  const useContext = jest.spyOn(require("react"), "useContext")
 
   it("renders as a primary applicant", () => {
     const router = { push: jest.fn().mockImplementation(() => Promise.resolve()) }
-    useRouter.mockReturnValue(router)
+    useContext.mockReturnValue({ router })
     global.scrollTo = jest.fn()
 
     const { getByText } = render(
@@ -35,7 +35,7 @@ describe("<HouseholdMemberForm>", () => {
   })
   it("renders as a household member", () => {
     const router = { push: jest.fn().mockImplementation(() => Promise.resolve()) }
-    useRouter.mockReturnValue(router)
+    useContext.mockReturnValue({ router })
     global.scrollTo = jest.fn()
 
     const { getByText } = render(

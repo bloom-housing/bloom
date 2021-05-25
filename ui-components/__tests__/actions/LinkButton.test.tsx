@@ -16,20 +16,14 @@ describe("<LinkButton>", () => {
   })
 
   it("correctly passes in an internal link", () => {
-    const { getByText } = render(<LinkButton href={`listing/id=1`}>Button Content</LinkButton>)
+    const { getByText } = render(<LinkButton href="/listing/id=1">Button Content</LinkButton>)
 
     expect(getByText("Button Content").closest("a")?.getAttribute("href")).toBe("/listing/id=1")
   })
 
   it("correctly passes in an internal link with as prop", () => {
-    const { getByText } = render(
-      <LinkButton href={`listing/id=1`} as={`/listing/1/listing-slug-abcdef`}>
-        Button Content
-      </LinkButton>
-    )
+    const { getByText } = render(<LinkButton href="/listing/id=1">Button Content</LinkButton>)
 
-    expect(getByText("Button Content").closest("a")?.getAttribute("href")).toBe(
-      "/listing/1/listing-slug-abcdef"
-    )
+    expect(getByText("Button Content").closest("a")?.getAttribute("href")).toBe("/listing/id=1")
   })
 })

@@ -45,13 +45,14 @@ const ListingsList = (props: ListingsProps) => {
             title={listing.name}
             subtitle={subtitle}
             imageUrl={imageUrl}
-            href={`listing/id=${listing.id}`}
-            as={`/listing/${listing.id}`}
+            href={`/listing/${listing.id}/${listing.urlSlug}`}
             listing={listing}
           />
         </div>
         <div className="listings-row_content">
-          <h4 className="listings-row_title">{t("listings.waitlist.open")}</h4>
+          {listing.showWaitlist && (
+            <h4 className="listings-row_title">{t("listings.waitlist.open")}</h4>
+          )}
           <div className="listings-row_table">
             {unitSummaries && (
               <GroupedTable
@@ -62,10 +63,7 @@ const ListingsList = (props: ListingsProps) => {
               />
             )}
           </div>
-          <LinkButton
-            href={`listing/id=${listing.id}`}
-            as={`/listing/${listing.id}/${listing.urlSlug}`}
-          >
+          <LinkButton href={`/listing/${listing.id}/${listing.urlSlug}`}>
             {t("t.seeDetails")}
           </LinkButton>
         </div>
