@@ -1505,6 +1505,9 @@ export interface Preference {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /** */
+  page: number
 }
 
 export interface MinMaxCurrency {
@@ -2041,6 +2044,9 @@ export interface PreferenceCreate {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /** */
+  page: number
 }
 
 export interface AddressCreate {
@@ -2218,6 +2224,9 @@ export interface PreferenceUpdate {
 
   /**  */
   id: string;
+
+  /** */
+  page: number
 }
 
 export interface AddressUpdate {
