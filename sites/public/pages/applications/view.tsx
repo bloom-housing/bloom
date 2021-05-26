@@ -11,7 +11,7 @@ import { useContext, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT } from "../../lib/constants"
 
-export default () => {
+const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
 
   const confirmationDate = useMemo(() => {
@@ -61,3 +61,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationView

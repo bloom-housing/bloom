@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 (_Note:_ it our intention to improve our release process going forward by using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).)
 
 ## Unreleased
+
 ### General
 
 ### Backend
@@ -12,8 +13,19 @@ All notable changes to this project will be documented in this file. The format 
   -  Poor TypeORM performance in `/applications` endpoint [issue #1131](https://github.com/bloom-housing/bloom/issues/1131)
 
 ### Frontend
+
+- Added:
+
+  - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
+
 - Fixed:
-  -  Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) Dominik Barcikowski
+
+  - Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) Dominik Barcikowski
+  - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) Dominik Barcikowski
+
+- Changed:
+
+  - Allow preferences to have optional descriptions and an optional generic decline ([#1267](https://github.com/bloom-housing/bloom/pull/1267)) Emily Jablonski
 
 ### UI Components
 
