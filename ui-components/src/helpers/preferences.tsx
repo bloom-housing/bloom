@@ -1,5 +1,10 @@
 import React from "react"
-import { InputType, ApplicationPreference } from "@bloom-housing/backend-core/types"
+import {
+  InputType,
+  ApplicationPreference,
+  FormMetadataOptions,
+  Preference,
+} from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
   t,
@@ -339,11 +344,70 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
 /*
   It generates checkbox name in proper prefrences structure
 */
-
-export const getPreferenceOptionName = (metaKey: string, option: string) => {
-  return `${PREFERENCES_FORM_PATH}.${metaKey}.${option}.claimed`
+export const getPreferenceOptionName = (
+  option: FormMetadataOptions,
+  key: string,
+  metaKey: string
+) => {
+  if (option.exclusive) return getExclusivePreferenceOptionName(key)
+  else return getNormalPreferenceOptionName(metaKey, key)
 }
 
-export const getExclusivePreferenceOptionName = (key: string) => {
+export const getNormalPreferenceOptionName = (metaKey: string, key: string) => {
+  return `${PREFERENCES_FORM_PATH}.${metaKey}.${key}.claimed`
+}
+
+export const getExclusivePreferenceOptionName = (key: string | undefined) => {
   return `${PREFERENCES_NONE_FORM_PATH}.${key}-none`
+}
+
+/*
+  Create an array of all exclusive keys from a preference set
+*/
+export const getExclusiveKeys = (preferences: Preference[]) => {
+  const exclusive: string[] = []
+  preferences?.forEach((preference) => {
+    preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
+      if (option.exclusive) exclusive.push(getExclusivePreferenceOptionName(option.key))
+    })
+    if (!preference?.formMetadata?.hideGenericDecline)
+      exclusive.push(getExclusivePreferenceOptionName(preference?.formMetadata?.key))
+  })
+  return exclusive
+}
+
+const uncheckPreference = (
+  metaKey: string,
+  options: FormMetadataOptions[] | undefined,
+  setValue: (key: string, value: boolean) => void
+) => {
+  options?.forEach((option) => {
+    setValue(getPreferenceOptionName(option, option.key, metaKey), false)
+  })
+}
+
+/*
+  Set the value of an exclusive checkbox, unchecking all the appropriate boxes in response to the value
+*/
+export const setExclusive = (
+  value: boolean,
+  setValue: (key: string, value: boolean) => void,
+  exclusiveKeys: string[],
+  key?: string,
+  preference?: Preference
+) => {
+  if (value) {
+    // Uncheck all other keys if setting an exclusive key to true
+    uncheckPreference(
+      preference?.formMetadata?.key ?? "",
+      preference?.formMetadata?.options,
+      setValue
+    )
+    setValue(key ?? "", true)
+  } else {
+    // Uncheck all exclusive keys if setting a normal key to true
+    exclusiveKeys.forEach((key) => {
+      setValue(key, false)
+    })
+  }
 }

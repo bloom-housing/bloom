@@ -15,8 +15,10 @@ import {
   mapPreferencesToApi,
   mapApiToPreferencesForm,
   getPreferenceOptionName,
-  OnClientSide,
   getExclusivePreferenceOptionName,
+  OnClientSide,
+  getExclusiveKeys,
+  setExclusive,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -37,46 +39,13 @@ const ApplicationPreferencesAll = () => {
   const currentPageSection = 4
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, handleSubmit, errors, getValues, trigger, reset } = useForm({
+  const { register, setValue, watch, handleSubmit, errors, getValues, reset } = useForm({
     defaultValues: {
       application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
     },
   })
 
-  /*
-    Create an array of all exclusive keys on this page
-  */
-  const getExclusiveKeys = () => {
-    const exclusive = []
-    preferencesByPage?.forEach((preference) => {
-      preference.formMetadata.options.forEach((option) => {
-        if (option.exclusive) exclusive.push(getExclusivePreferenceOptionName(option.key))
-      })
-      if (!preference.formMetadata.hideGenericDecline)
-        exclusive.push(getExclusivePreferenceOptionName(preference.formMetadata.key))
-    })
-    return exclusive
-  }
-
-  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys())
-
-  /*
-    Set the value of an exclusive checkbox, unchecking all the appropriate boxes in response to the value
-  */
-  const setExclusive = (value: boolean, key?: string, preference?: Preference) => {
-    if (value) {
-      // Uncheck all other keys if setting an exclusive key to true
-      uncheckPreference(preference.formMetadata.key, preference.formMetadata.options)
-      setValue(key, true)
-      void trigger(key)
-    } else {
-      // Uncheck all exclusive keys if setting a normal key to true
-      exclusiveKeys.forEach((key) => {
-        setValue(key, false)
-        void trigger(key)
-      })
-    }
-  }
+  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(preferencesByPage))
 
   /*
     Required to keep the form up to date before submitting this section if you're moving between pages
@@ -85,7 +54,7 @@ const ApplicationPreferencesAll = () => {
     reset({
       application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
     })
-    setExclusiveKeys(getExclusiveKeys())
+    setExclusiveKeys(getExclusiveKeys(preferencesByPage))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationPreferences, reset])
 
@@ -102,8 +71,7 @@ const ApplicationPreferencesAll = () => {
     return preferencesByPage?.reduce((acc, item) => {
       const preferenceName = item.formMetadata?.key
       const optionPaths = item.formMetadata?.options?.map((option) => {
-        if (!option.exclusive) return getPreferenceOptionName(preferenceName, option.key)
-        else return getExclusivePreferenceOptionName(option.key)
+        return getPreferenceOptionName(option, option.key, preferenceName)
       })
 
       Object.assign(acc, {
@@ -149,9 +117,7 @@ const ApplicationPreferencesAll = () => {
     const keys = []
     preferencesByPage?.forEach((preference) =>
       preference?.formMetadata?.options.forEach((option) => {
-        if (!option.exclusive)
-          keys.push(getPreferenceOptionName(preference?.formMetadata.key, option.key))
-        else keys.push(getExclusivePreferenceOptionName(option.key))
+        keys.push(getPreferenceOptionName(option, option.key, preference?.formMetadata?.key))
       })
     )
 
@@ -159,17 +125,6 @@ const ApplicationPreferencesAll = () => {
   }, [preferencesByPage])
 
   const watchPreferences = watch(allOptionFieldNames)
-
-  /*
-    Unchecks all preferences, both normal and exclusive
-  */
-  const uncheckPreference = (metaKey: string, options: FormMetadataOptions[]) => {
-    options.forEach((option) => {
-      if (option.exclusive) setValue(getExclusivePreferenceOptionName(option.key), false)
-      else setValue(getPreferenceOptionName(metaKey, option.key), false)
-    })
-  }
-
   /*
     Creates values for household member select input if relevant (InputType.hhMemberSelect)
   */
@@ -218,7 +173,7 @@ const ApplicationPreferencesAll = () => {
           inputProps={{
             onChange: (e) => {
               if (e.target.checked) {
-                setExclusive(true, noneKey, preference)
+                setExclusive(true, setValue, exclusiveKeys, noneKey, preference)
               }
             },
           }}
@@ -248,8 +203,8 @@ const ApplicationPreferencesAll = () => {
       <div className="mb-5" key={option.key}>
         <div className={`mb-5 field ${resolveObject(noneKey, errors) ? "error" : ""}`}>
           <Field
-            id={getPreferenceOptionName(preference.formMetadata.key, option.key)}
-            name={getPreferenceOptionName(preference.formMetadata.key, option.key)}
+            id={getPreferenceOptionName(option, option.key, preference.formMetadata.key)}
+            name={getPreferenceOptionName(option, option.key, preference.formMetadata.key)}
             type="checkbox"
             label={t(`application.preferences.${preference.formMetadata.key}.${option.key}.label`, {
               county: listing?.countyCode,
@@ -258,7 +213,7 @@ const ApplicationPreferencesAll = () => {
             inputProps={{
               onChange: () => {
                 setTimeout(() => {
-                  setExclusive(false)
+                  setExclusive(false, setValue, exclusiveKeys)
                 }, 1)
               },
             }}
@@ -284,7 +239,9 @@ const ApplicationPreferencesAll = () => {
           </div>
         )}
 
-        {watchPreferences[getPreferenceOptionName(preference.formMetadata.key, option.key)] &&
+        {watchPreferences[
+          getPreferenceOptionName(option, option.key, preference.formMetadata.key)
+        ] &&
           option.extraData?.map((extra) => (
             <ExtraField
               key={extra.key}
