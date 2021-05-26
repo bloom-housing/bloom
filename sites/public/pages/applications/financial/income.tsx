@@ -49,7 +49,7 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
   return null
 }
 
-export default () => {
+const ApplicationIncome = () => {
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
   const currentPageSection = 3
@@ -115,7 +115,10 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink url={conductor.determinePreviousUrl()} />
+        <FormBackLink
+          url={conductor.determinePreviousUrl()}
+          onClick={() => conductor.setNavigatedBack(true)}
+        />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
@@ -193,6 +196,7 @@ export default () => {
                 styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
+                  conductor.setNavigatedBack(false)
                 }}
               >
                 {t("t.next")}
@@ -218,3 +222,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationIncome
