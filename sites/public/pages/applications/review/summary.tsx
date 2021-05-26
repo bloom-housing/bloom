@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationSummary = () => {
   const { conductor, application, listing } = useFormConductor("summary")
   const currentPageSection = 5
 
@@ -60,3 +60,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationSummary

@@ -113,6 +113,7 @@ export default class ApplicationConductor {
   steps: StepDefinition[] = []
   returnToReview = false
   currentStepIndex = 0
+  navigatedThroughBack = false
 
   private _config: ApplicationFormConfig = {
     sections: [],
@@ -164,6 +165,10 @@ export default class ApplicationConductor {
 
   get preferenceStepsTotal() {
     return this.config.steps.filter((step) => step.name.includes("preference")).length
+  }
+
+  setNavigatedBack(navigated) {
+    this.navigatedThroughBack = navigated
   }
 
   completeSection(section) {
@@ -250,7 +255,6 @@ export default class ApplicationConductor {
   determinePreviousUrl() {
     let i = this.currentStepIndex - 1
     let previousUrl = ""
-
     while (i >= 0) {
       const previousStep = this.steps[i]
       if (previousStep && !previousStep.skipStep()) {

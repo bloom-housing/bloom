@@ -28,7 +28,7 @@ import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/hel
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
@@ -99,7 +99,10 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink url={conductor.determinePreviousUrl()} />
+        <FormBackLink
+          url={conductor.determinePreviousUrl()}
+          onClick={() => conductor.setNavigatedBack(true)}
+        />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
@@ -512,6 +515,7 @@ export default () => {
                 styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
+                  conductor.setNavigatedBack(false)
                 }}
               >
                 {t("t.next")}
@@ -525,6 +529,7 @@ export default () => {
                   className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true
+                    conductor.setNavigatedBack(false)
                   }}
                 >
                   {t("application.form.general.saveAndReturn")}
@@ -537,3 +542,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationAddress
