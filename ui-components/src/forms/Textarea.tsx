@@ -5,6 +5,7 @@ import { t } from "../helpers/translator"
 type WrapOptions = "soft" | "hard"
 
 export interface TextareaProps {
+  id?: string
   resize?: boolean
   cols?: number
   rows?: number
@@ -26,7 +27,7 @@ export const Textarea = (props: TextareaProps) => {
 
   return (
     <>
-      <label className={labelClassnames.join(" ")} htmlFor={props.label}>
+      <label className={labelClassnames.join(" ")} htmlFor={props.id ?? props.label}>
         {props.label}
       </label>
       <textarea
@@ -37,7 +38,7 @@ export const Textarea = (props: TextareaProps) => {
         maxLength={props.maxLength ?? 150}
         placeholder={props.placeholder ?? t("t.description")}
         name={props.label}
-        id={props.label}
+        id={props.id ?? props.label}
         disabled={props.disabled}
       />
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
