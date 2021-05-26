@@ -36,7 +36,7 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
     const keys = []
     preferences?.forEach((preference) =>
       preference?.formMetadata?.options.forEach((option) =>
-        keys.push(getPreferenceOptionName(option, preference?.formMetadata.key, option.key))
+        keys.push(getPreferenceOptionName(option, option.key, preference?.formMetadata.key))
       )
     )
 
