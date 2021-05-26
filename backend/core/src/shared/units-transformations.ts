@@ -266,7 +266,7 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
   data.byNonReservedUnitType = summarizeUnitsByTypeAndRent(nonReservedUnits)
   data.byUnitType = summarizeUnitsByType(units, data.unitTypes)
   data.byReservedType = summarizeReservedTypes(units, data.reservedTypes)
-  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.unitTypes)
+  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes)
   data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
   return data
 }
