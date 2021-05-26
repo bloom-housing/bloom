@@ -115,8 +115,8 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   return { columns: hmiHeaders, rows: hmiRows }
 }
 
-const getUnitSummary = (unit: Unit) => {
-  const summary = {} as UnitSummary
+const getUnitSummary = (unit: Unit, existingSummary?: UnitSummary) => {
+  const summary = existingSummary ?? ({} as UnitSummary)
   summary.unitType = unit.unitType
   if (!summary.totalAvailable) {
     summary.totalAvailable = 0
@@ -168,7 +168,7 @@ type UnitMap = {
 }
 
 // Allows for multiples rows under one unit type if the rent methods differ
-const summarizeUnits = (units: Units, reservedType?: string): UnitSummary[] => {
+const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitSummary[] => {
   if (!reservedType) {
     reservedType = null
   }
@@ -192,16 +192,45 @@ const summarizeUnits = (units: Units, reservedType?: string): UnitSummary[] => {
   return summaries.filter((item) => Object.keys(item).length > 0)
 }
 
+// One row per unit type
+const summarizeUnitsByType = (
+  units: Units,
+  unitTypes: string[],
+  reservedType?: string
+): UnitSummary[] => {
+  if (!reservedType) {
+    reservedType = null
+  }
+  const summaries = unitTypes.map(
+    (unitType: string): UnitSummary => {
+      const summary = {} as UnitSummary
+      const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
+      const finalSummary = Array.from(unitsByType).reduce((summary, unit) => {
+        return getUnitSummary(unit, summary)
+      }, summary)
+      if (finalSummary.minIncomeRange) {
+        finalSummary.minIncomeRange = minMaxInCurrency(finalSummary.minIncomeRange)
+      }
+      if (finalSummary.rentRange) {
+        finalSummary.rentRange = minMaxInCurrency(finalSummary.rentRange)
+      }
+
+      return finalSummary
+    }
+  )
+  return summaries.filter((item) => Object.keys(item).length > 0)
+}
+
 const summarizeReservedTypes = (units: Units, reservedTypes: string[]) => {
   return reservedTypes
     .map((reservedType: string) => {
       const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
       return {
         reservedType: reservedType,
-        byUnitType: summarizeUnits(unitsByReservedType),
+        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(unitsByReservedType),
       }
     })
-    .filter((item) => item.byUnitType.length > 0)
+    .filter((item) => item.byUnitTypeAndRent.length > 0)
 }
 
 const summarizeByAmi = (units: Units, amiPercentages: string[], reservedTypes: string[]) => {
@@ -212,7 +241,7 @@ const summarizeByAmi = (units: Units, amiPercentages: string[], reservedTypes: s
     )
     return {
       percent: percent,
-      byNonReservedUnitType: summarizeUnits(nonReservedUnitsByAmiPercentage),
+      byNonReservedUnitType: summarizeUnitsByTypeAndRent(nonReservedUnitsByAmiPercentage),
       byReservedType: summarizeReservedTypes(unitsByAmiPercentage, reservedTypes),
     }
   })
@@ -233,10 +262,11 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
   const nonReservedUnits = units.filter((unit: Unit) => unit.reservedType == null)
-  data.byUnitType = summarizeUnits(units)
-  data.byNonReservedUnitType = summarizeUnits(nonReservedUnits)
+  data.byUnitTypeAndRent = summarizeUnitsByTypeAndRent(units)
+  data.byNonReservedUnitType = summarizeUnitsByTypeAndRent(nonReservedUnits)
+  data.byUnitType = summarizeUnitsByType(units, data.unitTypes)
   data.byReservedType = summarizeReservedTypes(units, data.reservedTypes)
-  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes)
+  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.unitTypes)
   data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
   return data
 }

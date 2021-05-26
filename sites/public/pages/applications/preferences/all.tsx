@@ -164,7 +164,6 @@ const PreferencesAll = () => {
                       index + 1 !== preferences.length ? "border-b" : ""
                     }`}
                   >
-                    {console.log()}
                     <fieldset>
                       <legend className="field-label--caps mb-8">{preference.title}</legend>
 
