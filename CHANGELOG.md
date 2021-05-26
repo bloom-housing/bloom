@@ -12,6 +12,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Frontend
 
+- Added:
+
+  - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
+
 ### UI Components
 
 ## 1.0.0 / 2021-05-21
