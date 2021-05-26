@@ -107,11 +107,13 @@
           },
           {
             "key": "noneApplyButConsider",
+            "exclusive": true,
             "description": false,
             "extraData": []
           },
           {
             "key": "doNotConsider",
+            "exclusive": true,
             "description": false,
             "extraData": []
           }
@@ -136,6 +138,7 @@
           },
           {
             "key": "doNotConsider",
+            "exclusive": true,
             "description": false,
             "extraData": []
           }
