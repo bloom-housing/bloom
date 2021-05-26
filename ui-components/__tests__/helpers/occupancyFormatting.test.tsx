@@ -85,87 +85,6 @@ ArcherListing.property.unitsSummarized = {
   ],
 }
 
-let MultipleUnitRowsListing = Object.assign({}, Archer) as any
-MultipleUnitRowsListing.property = {}
-MultipleUnitRowsListing.property.unitsSummarized = {}
-MultipleUnitRowsListing.property.unitsSummarized = {
-  unitTypes: ["threeBdrm", "twoBdrm", "SRO"],
-  byUnitType: [
-    {
-      unitType: "oneBdrm",
-      minIncomeRange: {
-        min: "10",
-        max: "20",
-      },
-      occupancyRange: {
-        min: 2,
-        max: 6,
-      },
-      rentAsPercentIncomeRange: {
-        min: null,
-        max: null,
-      },
-      rentRange: {
-        min: "100",
-        max: "200",
-      },
-      totalAvailable: 8,
-      areaRange: {
-        min: 5,
-        max: 60,
-      },
-    },
-    {
-      unitType: "oneBdrm",
-      minIncomeRange: {
-        min: "10",
-        max: "20",
-      },
-      occupancyRange: {
-        min: 2,
-        max: 6,
-      },
-      rentAsPercentIncomeRange: {
-        min: "30",
-        max: "30",
-      },
-      rentRange: {
-        min: null,
-        max: null,
-      },
-      totalAvailable: 8,
-      areaRange: {
-        min: 5,
-        max: 60,
-      },
-    },
-    {
-      unitType: "oneBdrm",
-      minIncomeRange: {
-        min: "10",
-        max: "20",
-      },
-      occupancyRange: {
-        min: 1,
-        max: 7,
-      },
-      rentAsPercentIncomeRange: {
-        min: "30",
-        max: "30",
-      },
-      rentRange: {
-        min: null,
-        max: null,
-      },
-      totalAvailable: 8,
-      areaRange: {
-        min: 5,
-        max: 60,
-      },
-    },
-  ],
-}
-
 afterEach(cleanup)
 
 describe("occupancy formatting helper", () => {
@@ -182,14 +101,6 @@ describe("occupancy formatting helper", () => {
       {
         occupancy: "1 person",
         unitType: <strong>Single Room Occupancy</strong>,
-      },
-    ])
-  })
-  it("properly creates occupancy table with multiple unit rows", () => {
-    expect(occupancyTable(MultipleUnitRowsListing)).toStrictEqual([
-      {
-        occupancy: "1-7 people",
-        unitType: <strong>1 BR</strong>,
       },
     ])
   })
