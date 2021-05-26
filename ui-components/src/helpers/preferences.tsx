@@ -343,3 +343,7 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
 export const getPreferenceOptionName = (metaKey: string, option: string) => {
   return `${PREFERENCES_FORM_PATH}.${metaKey}.${option}.claimed`
 }
+
+export const getExclusivePreferenceOptionName = (key: string) => {
+  return `${PREFERENCES_NONE_FORM_PATH}.${key}-none`
+}
