@@ -35,7 +35,7 @@ export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
 }
 
 export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
-  const iconSize = props.inlineIcon ? "tiny" : "small"
+  const iconSize = props.inline || props.inlineIcon ? "tiny" : "small"
 
   if (props.icon) {
     return props.inlineIcon == "left" || props.iconPlacement == "left" ? (
