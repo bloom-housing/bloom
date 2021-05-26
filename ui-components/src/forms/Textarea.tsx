@@ -38,6 +38,7 @@ export const Textarea = (props: TextareaProps) => {
         placeholder={props.placeholder ?? t("t.description")}
         name={props.label}
         id={props.label}
+        disabled={props.disabled}
       />
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
     </>
