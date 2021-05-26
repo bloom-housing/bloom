@@ -1557,7 +1557,7 @@ export interface UnitSummaryByReservedType {
   reservedType: string;
 
   /**  */
-  byUnitType: UnitSummary[];
+  byUnitTypeAndRent: UnitSummary[];
 }
 
 export interface UnitSummaryByAMI {
@@ -1594,6 +1594,9 @@ export interface UnitsSummarized {
 
   /**  */
   byUnitType: UnitSummary[];
+
+  /**  */
+  byUnitTypeAndRent: UnitSummary[];
 
   /**  */
   byNonReservedUnitType: UnitSummary[];

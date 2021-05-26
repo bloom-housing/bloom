@@ -14,6 +14,10 @@ All notable changes to this project will be documented in this file. The format 
   -  Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) Dominik Barcikowski
   -  Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) Dominik Barcikowski
 
+- Added:
+
+  - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
+
 ### UI Components
 
 ## 1.0.0 / 2021-05-21
