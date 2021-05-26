@@ -81,15 +81,26 @@
     @apply m-0;
     @apply no-underline;
 
-    &.inline-icon--left {
+    &.has-icon-left {
       .button__icon {
         @apply mr-1;
       }
     }
-    &.inline-icon--right {
+    &.has-icon-right {
       .button__icon {
         @apply ml-1;
       }
+    }
+  }
+
+  &.has-icon-left {
+    .button__icon {
+      @apply mr-3;
+    }
+  }
+  &.has-icon-right {
+    .button__icon {
+      @apply ml-3;
     }
   }
 
@@ -118,7 +129,6 @@
   }
 
   &.is-loading {
-
     .button__content {
       opacity: 0;
     }

@@ -9,7 +9,10 @@ export interface ButtonProps extends AppearanceProps {
   children: React.ReactNode
   onClick?: (e: React.MouseEvent) => void
   icon?: IconTypes
+  iconPlacement?: "left" | "right"
+  // TODO: inlineIcon is deprecated
   inlineIcon?: "left" | "right"
+  inline?: boolean
   unstyled?: boolean
   fullWidth?: boolean
   className?: string
@@ -19,10 +22,11 @@ export interface ButtonProps extends AppearanceProps {
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
   const classNames = ["button"].concat(classNamesForAppearanceTypes(props))
-  if (props.inlineIcon) {
-    classNames.push("is-inline")
-    classNames.push(`inline-icon--${props.inlineIcon}`)
-  }
+  const inline = props.inline || props.inlineIcon
+  const iconPlacement = props.iconPlacement || props.inlineIcon || "right"
+
+  if (props.inlineIcon || props.icon) classNames.push(`has-icon-${iconPlacement}`)
+  if (inline) classNames.push("is-inline")
   if (props.unstyled) classNames.push("is-unstyled")
   if (props.fullWidth) classNames.push("is-fullwidth")
   if (props.className) classNames.push(props.className)
@@ -31,16 +35,18 @@ export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
 }
 
 export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
+  const iconSize = props.inline || props.inlineIcon ? "tiny" : "small"
+
   if (props.icon) {
-    return props.inlineIcon == "left" ? (
+    return props.inlineIcon == "left" || props.iconPlacement == "left" ? (
       <>
-        <Icon className="button__icon" size="tiny" symbol={props.icon} />
+        <Icon className="button__icon" size={iconSize} symbol={props.icon} />
         <span className="button__content">{props.children}</span>
       </>
     ) : (
       <>
         <span className="button__content">{props.children}</span>
-        <Icon className="button__icon" size="tiny" symbol={props.icon} />
+        <Icon className="button__icon" size={iconSize} symbol={props.icon} />
       </>
     )
   } else if (props.loading) {
