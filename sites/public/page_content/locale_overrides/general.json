@@ -27,6 +27,7 @@
         }
       },
       "PBV": {
+        "title": "Oakland Housing Authority",
         "residency": {
           "label": "Residency",
           "description": "You have lived and/or worked in the City of Oakland when you submitted your initial application and/or at the time of your application interview for a Project-Based Voucher at Coliseum Place and can verify your previous residency/employment at the applicant interview."
@@ -49,6 +50,16 @@
         },
         "doNotConsider": {
           "label": "I don't want to be considered for Oakland Housing Authority project-based voucher units"
+        }
+      },
+      "HOPWA": {
+        "title": "Housing Opportunities for Persons with AIDS",
+        "hopwa": {
+          "label": "Housing Opportunities for Persons with AIDS",
+          "description": "If you have questions about HOPWA eligibility or need support in submitting this application, please contact AHIP (AIDS Housing Information Project) at (510) 537-2600 or (510) 695-5222."
+        },
+        "doNotConsider": {
+          "label": "I don't want to be considered"
         }
       },
       "displacedTenant": {

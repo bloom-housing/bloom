@@ -107,11 +107,38 @@
           },
           {
             "key": "noneApplyButConsider",
+            "exclusive": true,
             "description": false,
             "extraData": []
           },
           {
             "key": "doNotConsider",
+            "exclusive": true,
+            "description": false,
+            "extraData": []
+          }
+        ]
+      }
+    },
+    {
+      "page": 3,
+      "ordinal": 3,
+      "title": "Housing Opportunities for Persons with AIDS",
+      "subtitle": "",
+      "description": "There are apartments set-aside for households eligible for the HOPWA program (Housing Opportunities for Persons with AIDS), which are households where a person has been medically diagnosed with HIV/AIDS. These apartments also have Project-Based Section rental subsidies (tenant pays 30% of household income).",
+      "links": [],
+      "formMetadata": {
+        "key": "HOPWA",
+        "customSelectText": "Please indicate if you are interested in applying for one of these HOPWA apartments",
+        "hideGenericDecline": true,
+        "options": [
+          {
+            "key": "hopwa",
+            "extraData": []
+          },
+          {
+            "key": "doNotConsider",
+            "exclusive": true,
             "description": false,
             "extraData": []
           }
