@@ -26,7 +26,7 @@ import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
 
-export default () => {
+const ApplicationMember = () => {
   let memberId, member, saveText, cancelText
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
@@ -402,3 +402,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationMember

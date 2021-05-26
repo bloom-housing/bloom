@@ -4,6 +4,7 @@ describe("My applications page", function () {
     cy.getByID("email").type("admin@example.com")
     cy.getByID("password").type("abcdef")
     cy.get("button").contains("Sign In").click()
+    cy.url().should("include", "/account/dashboard")
     cy.visit("/account/applications")
     cy.contains("My Applications")
   })
