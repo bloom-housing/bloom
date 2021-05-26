@@ -413,6 +413,15 @@
           "label": "I don't want to be considered for [housing authority] project-based voucher units"
         }
       },
+      "HOPWA": {
+        "hopwa": {
+          "label": "Housing Opportunities for Persons with AIDS",
+          "description": "%{county} copy goes here…"
+        },
+        "doNotConsider": {
+          "label": "I don't want to be considered"
+        }
+      },
       "displacedTenant": {
         "title": "Displaced Tenant Housing Preference",
         "whichHouseholdMember": "Which household member is claiming this preference?",
