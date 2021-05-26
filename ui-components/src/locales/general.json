@@ -392,27 +392,25 @@
       "PBV": {
         "residency": {
           "label": "Residency",
-          "description": "You have lived and or worked in the City of Oakland when you submitted your initial application and/or at the time of your application interview for a Project-Based Voucher at Coliseum Place and can verify your previous residency/employment at the applicant interview."
+          "description": "%{county} copy goes here…"
         },
         "family": {
           "label": "Family",
-          "description": ""
+          "description": "%{county} copy goes here…"
         },
         "veteran": {
           "label": "Veteran",
-          "description": ""
+          "description": "%{county} copy goes here…"
         },
         "homeless": {
           "label": "Homeless",
-          "description": ""
+          "description": "%{county} copy goes here…"
         },
         "noneApplyButConsider": {
-          "label": "None of these preferences apply to me, but I would like to be considered",
-          "description": ""
+          "label": "None of these preferences apply to me, but I would like to be considered"
         },
         "doNotConsider": {
-          "label": "I don't want to be considered for Oakland Housing Authority project-based voucher units",
-          "description": ""
+          "label": "I don't want to be considered for [housing authority] project-based voucher units"
         }
       },
       "displacedTenant": {
