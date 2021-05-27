@@ -25,9 +25,6 @@ export class ListingDto extends OmitType(Listing, [
   "applicationFlaggedSets",
 ] as const) {
   @Expose()
-  applicationCount: number
-
-  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceDto)

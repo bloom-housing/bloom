@@ -86,12 +86,11 @@ export default function ListingsList() {
       },
       {
         headerName: t("listings.applications"),
-        field: "applicationCount",
+        field: "name",
         sortable: false,
         filter: false,
         resizable: true,
         cellRenderer: "ApplicationsLink",
-        valueFormatter: ({ value }) => `${value} to Review`,
       },
       {
         headerName: t("listings.applicationDeadline"),

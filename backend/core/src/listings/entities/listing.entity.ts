@@ -341,11 +341,8 @@ class Listing extends BaseEntity {
   @ApiProperty({ enum: CountyCode, enumName: "CountyCode" })
   countyCode: CountyCode
 
-  applicationCount: number
-
   @AfterLoad()
   setComputed() {
-    this.applicationCount = this.applications ? this.applications.length : 0
     if (moment(this.applicationDueDate).isBefore()) {
       this.status = ListingStatus.closed
     }
