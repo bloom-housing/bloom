@@ -23,11 +23,31 @@ const BorderTypeStory = { ...AppearanceBorderType, default: undefined }
 export const standard = () => {
   const styleSelect = select("Appearance Style", StyleTypeStory, undefined)
   const borderSelect = select("Appearance Border", BorderTypeStory, undefined)
+  const iconSelect = select(
+    "Icon",
+    { arrowBack: "arrowBack", arrowForward: "arrowForward", default: undefined },
+    undefined
+  )
+  const iconPlacementSelect = select(
+    "Icon Placement",
+    { left: "left", right: "right", default: undefined },
+    undefined
+  )
 
   return (
-    <Button styleType={styleSelect} border={borderSelect} onClick={handleClick}>
-      {text("Label", "Hello Storybook")}
-    </Button>
+    <>
+      <Button
+        styleType={styleSelect}
+        border={borderSelect}
+        icon={iconSelect}
+        iconPlacement={iconPlacementSelect}
+        onClick={handleClick}
+      >
+        {text("Label", "Hello Storybook")}
+      </Button>
+
+      <p className="mt-10">Try out different styles with the Knobs below.</p>
+    </>
   )
 }
 
@@ -85,6 +105,11 @@ export const inlineIcon = () => (
     <br />
     <br />
     <Button inlineIcon="right" icon="right" onClick={() => alert("Click!")}>
+      Go Forward
+    </Button>
+    <br />
+    <br />
+    <Button inlineIcon="right" icon="arrowForward" onClick={() => alert("Click!")}>
       Go Forward
     </Button>
   </>

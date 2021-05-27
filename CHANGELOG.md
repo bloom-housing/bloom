@@ -27,6 +27,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ### UI Components
 
+- Added:
+
+  - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
+
 ## 1.0.0 / 2021-05-21
 
 ### General
