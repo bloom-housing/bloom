@@ -1484,7 +1484,7 @@ export interface FormMetadata {
   hideGenericDecline?: boolean;
 
   /** */
-  customSelectText?: boolean
+  customSelectText?: string
 }
 
 export interface Preference {
