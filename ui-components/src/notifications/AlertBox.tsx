@@ -12,7 +12,8 @@ export interface AlertBoxProps {
   children: ReactNode
   inverted?: boolean
   className?: string
-  fullWidth?: boolean
+  boundToLayoutWidth?: boolean
+  narrow?: boolean
 }
 
 const icons: { [k in AlertTypes]: IconTypes } = {
@@ -30,7 +31,8 @@ const AlertBox = (props: AlertBoxProps) => {
     colorClasses[props.type || "alert"],
     ...(props.inverted ? ["invert"] : []),
     ...(props.className ? [props.className] : []),
-    ...(props.fullWidth ? [] : ["px-4"]),
+    ...(props.boundToLayoutWidth ? [] : ["fullWidth"]),
+    ...(props.narrow ? ["narrow"] : []),
   ].join(" ")
 
   if (onClose) closeable = true
@@ -63,7 +65,7 @@ const AlertBox = (props: AlertBoxProps) => {
       )}
     </>
   )
-  if (props.fullWidth) {
+  if (props.boundToLayoutWidth) {
     innerSection = <div className="alert-box_inner">{innerSection}</div>
   }
 

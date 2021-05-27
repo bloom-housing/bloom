@@ -15,6 +15,14 @@
     @apply items-center;
   }
 
+  &.fullWidth {
+    @apply px-4;
+  }
+
+  &.narrow {
+    @apply py-2;
+  }
+
   // Inverts color scheme of alert
   &.invert {
     @apply text-white;
