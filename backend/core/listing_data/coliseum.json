@@ -5,16 +5,16 @@
   "applicationAddress": {
     "county": "Alameda",
     "city": "Oakland",
-    "street": "3300 Hawley Street",
+    "street": "1701 Martin Luther King Way",
     "zipCode": "94621",
     "state": "CA",
     "latitude": 37.7549632,
     "longitude": -122.1968792
   },
   "countyCode": "Alameda",
-  "applicationDueDate": "2021-06-14T17:00:00.000-07:00",
+  "applicationDueDate": "2021-06-15T11:00:00.000-07:00",
   "applicationOrganization": "John Stewart Company",
-  "applicationPhone": "",
+  "applicationPhone": "(510) 625-1632",
   "buildingSelectionCriteria": null,
   "costsNotIncluded": "Electricity, phone, TV, internet, and cable not included. For the PBV units, deposit is one month of the tenant-paid portion of rent (30% of income).",
   "creditHistory": "Management staff will request credit histories on each adult member of each applicant household. It is the applicant’s responsibility that at least one household member can demonstrate utilities can be put in their name. For this to be demonstrated, at least one household member must have a credit report that shows no utility accounts in default. Applicants who cannot have utilities put in their name will be considered ineligible. Any currently open bankruptcy proceeding of any of the household members will be considered a disqualifying condition. Applicants will not be considered to have a poor credit history when they were delinquent in rent because they were withholding rent due to substandard housing conditions in a manner consistent with local ordinance; or had a poor rent paying history clearly related to an excessive rent relative to their income, and responsible efforts were made to resolve the non-payment problem. If there is a finding of any kind which would negatively impact an application, the applicant will be notified in writing. The applicant then shall have 14 calendar days in which such a finding may be appealed to staff for consideration.",
@@ -27,7 +27,7 @@
   "name": "Coliseum Place",
   "waitlistCurrentSize": 0,
   "prioritiesDescriptor": "3 apartments are set-aside households eligible for the HOPWA program (Housing Opportunities for Persons with AIDS), which are households where a person has been medically diagnosed with HIV/AIDS. 15 apartments are for those with mobility impairments and one of these units also has features for the hearing/visually impaired. Two additional apartments have features for the hearing/visually impaired.",
-  "requiredDocuments": "",
+  "requiredDocuments": "Application Document Checklist: https://drive.google.com/file/d/1_6LnXBawa4XxAopxJP8_Eai1Eo4FUS3I/view?usp=sharing",
   "reservedCommunityMaximumAge": null,
   "reservedCommunityMinimumAge": "18",
   "reservedDescriptor": null,
@@ -42,19 +42,19 @@
   "leasingAgentEmail": "coliseum@jsco.net",
   "leasingAgentName": "",
   "leasingAgentAddress": {
-    "county": "Alameda",
-    "city": "Oakland",
-    "street": "3300 Hawley Street",
-    "zipCode": "94621",
-    "state": "CA",
+    "county": "",
+    "city": "",
+    "street": "",
+    "zipCode": "",
+    "state": "",
     "latitude": 37.7549632,
     "longitude": -122.1968792
   },
-  "leasingAgentOfficeHours": null,
-  "leasingAgentPhone": "",
+  "leasingAgentOfficeHours": "Tuesdays & Thursdays, 9:00am to 5:00pm",
+  "leasingAgentPhone": "(510) 625-1632",
   "leasingAgentTitle": "Property Manager",
   "rentalHistory": "Two years' landlord history or homeless verification",
-  "specialNotes": null,
+  "specialNotes": "Priority Units: 3 apartments are set-aside for households eligible for the HOPWA program (Housing Opportunities for Persons with AIDS), which are households where a person has been medically diagnosed with HIV/AIDS. These 3 apartments also have Project-Based Section rental subsidies (tenant pays 30% of household income). 15 apartments are for those with mobility impairments and one of these units also has features for the hearing/visually impaired. Two additional apartments have features for the hearing/visually impaired. All units require eligibility requirements beyond income qualification: The waiting list will be ordered by incorporating the Alameda County preference for eligible households in which at least one member lives or works in the County. Three (3) apartments are restricted to households eligible under the HOPWA (Housing Opportunities for Persons with AIDS), which are households where a person has been medically diagnosed with HIV/AIDS. These apartments also receive PBV’s from OHA. For the twenty-five (25) apartments that have Project-Based Section 8 Vouchers from OHA, applicants will be called for an interview in the order according to the site-based waiting list compiled from the initial application and lotter process specifically for the PBV units.  The waiting list order for these apartments will also incorporate the local preferences required by OHA.  These preferences are: * A Residency preference (Applicants who live or work in the City of Oakland at the time of the application interview and/or applicants that lived or worked in the City of Oakland at the time of submitting their initial application and can verify their previous residency/employment at the applicant interview, qualify for this preference). * A Family preference (Applicant families with two or more persons, or a single person applicant that is 62 years of age or older, or a single person applicant with a disability, qualify for this preference). * A Veteran and active members of the military preference.  Per OHA policy, a Veteran is a person who served in the active military, naval, or air service and who was discharged or released from such service under conditions other than dishonorable. * A Homeless preference.  Applicant families who meet the McKinney-Vento Act definition of homeless qualify for this preference (see definition below). Each PBV applicant will receive one point for each preference for which it is eligible and the site-based PBV waiting list will be prioritized by the number of points applicants have from these preferences. Applicants for the PBV units must comply with OHA’s policy regarding Social Security Numbers.  The applicant and all members of the applicant’s household must disclose the complete and accurate social security number (SSN) assigned to each household member, and they must provide the documentation necessary to verify each SSN. As an EveryOne Home partner, each applicant’s individual circumstances will be evaluated, alternative forms of verification and additional information submitted by the applicant will considered, and reasonable accommodations will be provided when requested and if verified and necessary. Persons with disabilities are encouraged to apply.",
   "preferences": [
     {
       "page": 1,
@@ -82,7 +82,7 @@
       "ordinal": 2,
       "title": "Oakland Housing Authority Project-Based Voucher",
       "subtitle": "",
-      "description": "You are currently applying to be in a general applicant list at Coliseum Place. The apartments for lease in this application process have rental subsidies provided by the Oakland Housing Authority. With that subsidy, tenant households pay 30% of their income as rent. These tenants are required to verify their income annually with the property manager as well as the Oakland Housing Authority.",
+      "description": "You are currently applying to be in a general applicant waiting list at Coliseum Place.  Of the total apartments available in this application process, several have Project-Based Vouchers for rental subsidy assistance from the Oakland Housing Authority. With that subsidy, tenant households pay 30% of their income as rent. These tenants are required to verify their income annually with the property manager as well as the Oakland Housing Authority.  If you are interested in these apartments, the following preferences also apply: * Residency: You have lived and/or worked in the City of Oakland when you submitted your initial application and/or at the time of your application interview for a Project-Based Voucher at Coliseum Place and can verify your previous residency/employment at the applicant interview. * Family: You are a family with two or more persons, or a single person applicant that is 62 years of age or older, or a single person applicant with a disability. * Veteran: You are a Veteran or active member of the military. * Homeless: You are an individual or family who meets the McKinney-Vento Act definition of homelessness. Family is identified as: individuals who lack a fixed, regular, and adequate nighttime residence and: (i) children and youths who are sharing the housing of other persons due to loss of housing, economic hardship, or a similar reason; are living in motels, hotels, trailer parks, or camping grounds due to the lack of alternative adequate accommodations; are living in emergency or transitional shelters; or are abandoned in hospitals; (ii) children and youths who have a primary nighttime residence that is a public or private place not designed for or ordinarily used as a regular sleeping accommodation for human beings; (iii) children and youths who are living in cars, parks, public spaces, abandoned buildings, substandard housing, bus or train stations, or similar settings; and (iv) migratory children who qualify as homeless for the purposes of this subtitle because the children are living in circumstances described in clauses (i) through (iii).",
       "links": [],
       "formMetadata": {
         "key": "PBV",
@@ -153,13 +153,13 @@
     "householdSizeMin": 1,
     "householdSizeMax": 7,
     "smokingPolicy": "No smoking",
-    "unitsAvailable": 58,
+    "unitsAvailable": 46,
     "unitsSummarized": null,
     "unitAmenities": null,
     "developer": "Resources for Community Development",
     "yearBuilt": 2021,
     "accessibility": "Fifteen (15) units are designed for residents with mobility impairments per HUD/U.F.A.S. guidelines with one (1) of these units further designed for residents with auditory or visual impairments.  There are two (2) additional units with features for those with auditory or visual impairments.  All the other units are adaptable. Accessible features in the property include: * 36” wide entries and doorways * Kitchens built to the accessibility standards of the California Building Code, including appliance controls and switch outlets within reach, and work surfaces and storage at accessible heights * Bathrooms built to the accessibility standards of the California Building Code, including grab bars, flexible shower spray hose, switch outlets within reach, and in-tub seats. * Closet rods and shelves at mobility height. * Window blinds/shades able to be used without grasping or twisting * Units for the Hearing & Visually Impaired will have a horn & strobe for fire alarm and a flashing light doorbell. The 44 non-ADA units are built to Adaptable standards.",
-    "amenities": "Clubhouse including meeting room, tot lot, laundry room, pool, (outdoor) BBQ area, gated parking",
+    "amenities": "Community room, bike parking, courtyard off the community room, 2nd floor courtyard.",
     "buildingTotalUnits": 58,
     "buildingAddress": {
       "county": "Alameda",
@@ -1328,11 +1328,7 @@
   },
   "applicationMethods": [
     {
-      "type": "LeasingAgent",
-      "acceptsPostmarkedApplications": true
-    },
-    {
-      "type": "PaperPickup",
+      "type": "POBox",
       "acceptsPostmarkedApplications": true
     },
     {
