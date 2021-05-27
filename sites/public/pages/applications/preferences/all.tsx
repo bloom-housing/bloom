@@ -212,9 +212,7 @@ const ApplicationPreferencesAll = () => {
             register={register}
             inputProps={{
               onChange: () => {
-                setTimeout(() => {
-                  setExclusive(false, setValue, exclusiveKeys)
-                }, 1)
+                setExclusive(false, setValue, exclusiveKeys)
               },
             }}
           />
