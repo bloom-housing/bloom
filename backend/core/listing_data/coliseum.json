@@ -154,6 +154,7 @@
     "householdSizeMax": 7,
     "smokingPolicy": "No smoking",
     "unitsAvailable": 46,
+    "postmarkedApplicationsReceivedByDate": "2021-06-15T11:00:00.000-07:00",
     "unitsSummarized": null,
     "unitAmenities": null,
     "developer": "Resources for Community Development",
