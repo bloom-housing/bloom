@@ -46,7 +46,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
           unstyled
           fullWidth
           className="bg-opacity-0"
-          href={`/listings/applications?listing=${listingId}`}
+          href={`/listings/${listingId}/applications`}
         >
           {t("t.cancel")}
         </LinkButton>
@@ -56,7 +56,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
     if (type === "details") {
       elements.push(
         <GridCell key="btn-submitNew">
-          <LocalizedLink href={`/application/edit?id=${applicationId}`}>
+          <LocalizedLink href={`/application/${applicationId}/edit`}>
             <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
               {t("t.edit")}
             </Button>

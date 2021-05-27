@@ -341,6 +341,17 @@ class Listing extends BaseEntity {
   @ApiProperty({ enum: CountyCode, enumName: "CountyCode" })
   countyCode: CountyCode
 
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  get showWaitlist(): boolean {
+    return (
+      this.waitlistMaxSize !== null &&
+      this.waitlistCurrentSize !== null &&
+      this.waitlistCurrentSize < this.waitlistMaxSize
+    )
+  }
+
   @AfterLoad()
   setComputed() {
     if (moment(this.applicationDueDate).isBefore()) {

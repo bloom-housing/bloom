@@ -1489,6 +1489,9 @@ export interface FormMetadataOptions {
   key: string;
 
   /**  */
+  description?: boolean;
+
+  /**  */
   extraData?: FormMetadataExtraData[];
 }
 
@@ -1498,6 +1501,12 @@ export interface FormMetadata {
 
   /**  */
   options: FormMetadataOptions[];
+
+  /**  */
+  hideGenericDecline?: boolean;
+
+  /** */
+  customSelectText?: boolean
 }
 
 export interface Preference {
@@ -1527,6 +1536,9 @@ export interface Preference {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /** */
+  page: number
 }
 
 export interface MinMaxCurrency {
@@ -1576,7 +1588,7 @@ export interface UnitSummaryByReservedType {
   reservedType: string;
 
   /**  */
-  byUnitType: UnitSummary[];
+  byUnitTypeAndRent: UnitSummary[];
 }
 
 export interface UnitSummaryByAMI {
@@ -1613,6 +1625,9 @@ export interface UnitsSummarized {
 
   /**  */
   byUnitType: UnitSummary[];
+
+  /**  */
+  byUnitTypeAndRent: UnitSummary[];
 
   /**  */
   byNonReservedUnitType: UnitSummary[];
@@ -2040,6 +2055,9 @@ export interface Listing {
 
   /**  */
   applicationConfig?: object;
+
+  /** */
+  showWaitlist?: boolean;
 }
 
 export interface PreferenceCreate {
@@ -2060,6 +2078,9 @@ export interface PreferenceCreate {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /** */
+  page: number
 }
 
 export interface AddressCreate {
@@ -2237,6 +2258,9 @@ export interface PreferenceUpdate {
 
   /**  */
   id: string;
+
+  /** */
+  page: number
 }
 
 export interface AddressUpdate {

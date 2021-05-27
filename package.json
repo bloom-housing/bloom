@@ -26,6 +26,7 @@
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
+    "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "test:shared:ui": "cd ui-components && yarn && yarn test",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",

@@ -10,7 +10,6 @@ import {
   FormCard,
   HouseholdMemberForm,
   ProgressNav,
-  lRoute,
   t,
   HouseholdSizeField,
   Form,
@@ -20,7 +19,7 @@ import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationAddMembers = () => {
   const { conductor, application, listing } = useFormConductor("addMembers")
   const router = useRouter()
   const currentPageSection = 2
@@ -37,7 +36,7 @@ export default () => {
   }
 
   const onAddMember = () => {
-    void router.push(lRoute("/applications/household/member")).then(() => window.scrollTo(0, 0))
+    void router.push("/applications/household/member")
   }
 
   const applicant = application.applicant
@@ -63,7 +62,10 @@ export default () => {
       </FormCard>
 
       <FormCard>
-        <FormBackLink url={conductor.determinePreviousUrl()} />
+        <FormBackLink
+          url={conductor.determinePreviousUrl()}
+          onClick={() => conductor.setNavigatedBack(true)}
+        />
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">
@@ -136,3 +138,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationAddMembers

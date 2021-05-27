@@ -56,11 +56,6 @@ module.exports = {
       ],
     })
 
-    // Used to create actions in Storybook when NextJS links are clicked
-    config.plugins.push(
-      new NormalModuleReplacementPlugin(/next\/link/, resolve(__dirname, "next-link.js"))
-    )
-
     config.resolve.extensions.push(".ts", ".tsx")
     return config
   },

@@ -13,6 +13,7 @@ import {
   Form,
   FormCard,
   Icon,
+  IconFillColors,
   OnClientSide,
   ProgressNav,
   t,
@@ -22,7 +23,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 
-export default () => {
+const ApplicationName = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
 
@@ -55,12 +56,7 @@ export default () => {
   const LockIcon = () => {
     return (
       autofilled && (
-        <Icon
-          className="ml-2"
-          size="medium"
-          symbol="lock"
-          styleType={AppearanceStyleType.primary}
-        />
+        <Icon className="ml-2" size="medium" symbol="lock" fill={IconFillColors.primary} />
       )
     )
   }
@@ -198,6 +194,7 @@ export default () => {
                 styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   conductor.returnToReview = false
+                  conductor.setNavigatedBack(false)
                 }}
               >
                 {t("t.next")}
@@ -223,3 +220,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationName

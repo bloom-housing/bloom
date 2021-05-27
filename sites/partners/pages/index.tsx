@@ -1,13 +1,12 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import {
-  Button,
   PageHeader,
-  MetaTags,
   t,
   lRoute,
   UserContext,
   LocalizedLink,
+  Button,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { UserRole, Listing } from "@bloom-housing/backend-core/types"
@@ -16,6 +15,7 @@ import { GridOptions } from "ag-grid-community"
 
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
+import { MetaTags } from "../src/MetaTags"
 
 export default function ListingsList() {
   const { profile } = useContext(UserContext)
@@ -26,6 +26,7 @@ export default function ListingsList() {
     init(params) {
       this.link = document.createElement("a")
       this.link.classList.add("text-blue-700")
+      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
       this.link.innerText = params.valueFormatted || params.value
     }
 
