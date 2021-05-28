@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
+  RelationId,
 } from "typeorm"
 import { User } from "../../user/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
@@ -56,8 +57,16 @@ export class Application extends AbstractEntity {
   @ManyToOne(() => User, (user) => user.applications, { nullable: true })
   user: User | null
 
+  @RelationId((application: Application) => application.user)
+  @Expose()
+  userId?: string
+
   @ManyToOne(() => Listing, (listing) => listing.applications)
   listing: Listing
+
+  @RelationId((application: Application) => application.listing)
+  @Expose()
+  listingId: string
 
   @OneToOne(() => Applicant, { eager: true, cascade: true })
   @JoinColumn()

@@ -39,7 +39,6 @@ export class ApplicationPreferenceOption {
       ],
     },
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => FormMetadataExtraData, {
@@ -53,5 +52,5 @@ export class ApplicationPreferenceOption {
       ],
     },
   })
-  extraData?: Array<BooleanInput | TextInput | AddressInput>
+  extraData: Array<BooleanInput | TextInput | AddressInput>
 }

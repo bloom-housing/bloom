@@ -16,6 +16,7 @@ export class ApplicationCsvExporter {
   constructor(private readonly csvBuilder: CsvBuilder) {}
   export(
     applications: Application[],
+    csvFormattingType: CSVFormattingType,
     includeHeaders?: boolean,
     includeDemographics?: boolean
   ): string {
@@ -23,7 +24,7 @@ export class ApplicationCsvExporter {
       applications,
       applicationFormattingMetadataAggregateFactory,
       // Every application points to the same listing
-      applications.length ? applications[0].listing.CSVFormattingType : CSVFormattingType.basic,
+      csvFormattingType,
       includeHeaders,
       includeDemographics
         ? [

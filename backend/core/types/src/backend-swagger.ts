@@ -1492,6 +1492,9 @@ export interface FormMetadataOptions {
   description?: boolean;
 
   /**  */
+  exclusive?: boolean;
+
+  /**  */
   extraData?: FormMetadataExtraData[];
 }
 
@@ -1506,7 +1509,7 @@ export interface FormMetadata {
   hideGenericDecline?: boolean;
 
   /** */
-  customSelectText?: boolean
+  customSelectText?: string
 }
 
 export interface Preference {
@@ -1937,6 +1940,9 @@ export interface Listing {
   countyCode: CountyCode;
 
   /**  */
+  showWaitlist: boolean;
+
+  /**  */
   preferences: Preference[];
 
   /**  */
@@ -2055,9 +2061,6 @@ export interface Listing {
 
   /**  */
   applicationConfig?: object;
-
-  /** */
-  showWaitlist?: boolean;
 }
 
 export interface PreferenceCreate {
@@ -2700,10 +2703,13 @@ export interface Application {
   submissionType: ApplicationSubmissionType;
 
   /**  */
+  applicant: Applicant;
+
+  /**  */
   listing: Id;
 
   /**  */
-  applicant: Applicant;
+  user?: Id;
 
   /**  */
   mailingAddress: Address;
