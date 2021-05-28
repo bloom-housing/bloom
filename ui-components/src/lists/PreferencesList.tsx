@@ -19,36 +19,38 @@ const getOrdinal = (n: number) => {
 
 const PreferencesList = (props: PreferencesListProps) => {
   const preferences = props.preferences.map((preference: Preference, index: number) => {
-    const itemClasses = ["preferences-list__item", "info-card"]
+    if (!preference.formMetadata?.hideFromListing) {
+      const itemClasses = ["preferences-list__item", "info-card"]
 
-    if (!preference.subtitle && !preference.description && !preference.links) {
-      itemClasses.push("preferences-list__item--title-only")
-    }
+      if (!preference.subtitle && !preference.description && !preference.links) {
+        itemClasses.push("preferences-list__item--title-only")
+      }
 
-    return (
-      <li key={index} className={itemClasses.join(" ")}>
-        <div className="preferences-list__number">
-          {preference.ordinal}
-          <sup>{getOrdinal(preference.ordinal)}</sup>
-        </div>
-        <h4 className="info-card__title">{preference.title}</h4>
-        {preference.subtitle && (
-          <div className="preferences-list__subtitle">{preference.subtitle}</div>
-        )}
-        {preference.description && (
-          <div className="preferences-list__description">{preference.description}</div>
-        )}
-        {preference.links && (
-          <div className="preferences-list__links">
-            {preference.links.map((link: PreferenceLink, linkIndex: number) => (
-              <span key={linkIndex}>
-                <a href={link.url}>{link.title}</a>
-              </span>
-            ))}
+      return (
+        <li key={index} className={itemClasses.join(" ")}>
+          <div className="preferences-list__number">
+            {preference.ordinal}
+            <sup>{getOrdinal(preference.ordinal)}</sup>
           </div>
-        )}
-      </li>
-    )
+          <h4 className="info-card__title">{preference.title}</h4>
+          {preference.subtitle && (
+            <div className="preferences-list__subtitle">{preference.subtitle}</div>
+          )}
+          {preference.description && (
+            <div className="preferences-list__description">{preference.description}</div>
+          )}
+          {preference.links && (
+            <div className="preferences-list__links">
+              {preference.links.map((link: PreferenceLink, linkIndex: number) => (
+                <span key={linkIndex}>
+                  <a href={link.url}>{link.title}</a>
+                </span>
+              ))}
+            </div>
+          )}
+        </li>
+      )
+    } else return
   })
 
   return <ol className="preferences-list">{preferences}</ol>
