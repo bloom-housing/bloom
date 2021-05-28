@@ -23,7 +23,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { FormMetadataOptions, Preference } from "@bloom-housing/backend-core/types"
+import { FormMetadataExtraData, Preference } from "@bloom-housing/backend-core/types"
 
 const ApplicationPreferencesAll = () => {
   const clientLoaded = OnClientSide()
@@ -39,7 +39,7 @@ const ApplicationPreferencesAll = () => {
   const currentPageSection = 4
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, handleSubmit, errors, getValues, reset } = useForm({
+  const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
     defaultValues: {
       application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
     },
@@ -71,8 +71,10 @@ const ApplicationPreferencesAll = () => {
     return preferencesByPage?.reduce((acc, item) => {
       const preferenceName = item.formMetadata?.key
       const optionPaths = item.formMetadata?.options?.map((option) => {
-        return getPreferenceOptionName(option, option.key, preferenceName)
+        return getPreferenceOptionName(option.key, preferenceName)
       })
+      if (!item.formMetadata.hideGenericDecline)
+        optionPaths.push(getExclusivePreferenceOptionName(item?.formMetadata?.key))
 
       Object.assign(acc, {
         [preferenceName]: optionPaths,
@@ -117,7 +119,7 @@ const ApplicationPreferencesAll = () => {
     const keys = []
     preferencesByPage?.forEach((preference) =>
       preference?.formMetadata?.options.forEach((option) => {
-        keys.push(getPreferenceOptionName(option, option.key, preference?.formMetadata?.key))
+        keys.push(getPreferenceOptionName(option.key, preference?.formMetadata?.key))
       })
     )
 
@@ -159,71 +161,59 @@ const ApplicationPreferencesAll = () => {
   }
 
   /*
-    Builds the JSX of an exclusive option, which includes the logic to uncheck all other boxes if checked
+    Builds the JSX of a preference option
   */
-  const getExclusiveOption = (label: string, noneKey: string, preference: Preference) => {
-    return (
-      <div className={`mb-5 field ${resolveObject(noneKey, errors) ? "error" : ""}`}>
-        <Field
-          id={noneKey}
-          name={noneKey}
-          type="checkbox"
-          label={label}
-          register={register}
-          inputProps={{
-            onChange: (e) => {
-              if (e.target.checked) {
-                setExclusive(true, setValue, exclusiveKeys, noneKey, preference)
-              }
-            },
-          }}
-          validation={{
-            validate: {
-              somethingIsChecked: (value) =>
-                value ||
-                preferenceCheckboxIds[preference.formMetadata.key].some((option) =>
-                  getValues(option)
-                ),
-            },
-          }}
-        />
-      </div>
-    )
-  }
-
-  /*
-    Builds the JSX of a normal option, which includes the logic to uncheck all exclusive boxes if checked and to include an optional description or member select
-  */
-  const getNormalOption = (
-    option: FormMetadataOptions,
-    noneKey: string,
-    preference: Preference
+  const getOption = (
+    optionKey: string | null,
+    optionName: string,
+    description: boolean,
+    exclusive: boolean,
+    extraData: FormMetadataExtraData[],
+    preference: Preference,
+    label?: string
   ) => {
     return (
-      <div className="mb-5" key={option.key}>
-        <div className={`mb-5 field ${resolveObject(noneKey, errors) ? "error" : ""}`}>
+      <div className="mb-5" key={optionKey}>
+        <div className={`mb-5 field ${resolveObject(optionName, errors) ? "error" : ""}`}>
           <Field
-            id={getPreferenceOptionName(option, option.key, preference.formMetadata.key)}
-            name={getPreferenceOptionName(option, option.key, preference.formMetadata.key)}
+            id={optionName}
+            name={optionName}
             type="checkbox"
-            label={t(`application.preferences.${preference.formMetadata.key}.${option.key}.label`, {
-              county: listing?.countyCode,
-            })}
+            label={
+              label ??
+              t(`application.preferences.${preference.formMetadata.key}.${optionKey}.label`, {
+                county: listing?.countyCode,
+              })
+            }
             register={register}
             inputProps={{
-              onChange: () => {
-                setExclusive(false, setValue, exclusiveKeys)
+              onChange: (e) => {
+                if (e.target.checked) {
+                  void trigger()
+                }
+                if (exclusive && e.target.checked)
+                  setExclusive(true, setValue, exclusiveKeys, optionName, preference)
+                if (!exclusive) setExclusive(false, setValue, exclusiveKeys, optionName, preference)
+              },
+            }}
+            validation={{
+              validate: {
+                somethingIsChecked: (value) =>
+                  value ||
+                  preferenceCheckboxIds[preference.formMetadata.key].some((option) =>
+                    getValues(option)
+                  ),
               },
             }}
           />
         </div>
 
-        {!(option.description === false) && (
+        {!(description === false) && (
           <div className="ml-8 -mt-3">
             <ExpandableContent>
               <p className="field-note mb-8">
                 {t(
-                  `application.preferences.${preference.formMetadata.key}.${option.key}.description`,
+                  `application.preferences.${preference.formMetadata.key}.${optionKey}.description`,
                   { county: listing?.countyCode }
                 )}
                 <br />
@@ -237,14 +227,12 @@ const ApplicationPreferencesAll = () => {
           </div>
         )}
 
-        {watchPreferences[
-          getPreferenceOptionName(option, option.key, preference.formMetadata.key)
-        ] &&
-          option.extraData?.map((extra) => (
+        {watchPreferences[optionName] &&
+          extraData.map((extra) => (
             <ExtraField
               key={extra.key}
               metaKey={preference.formMetadata.key}
-              optionKey={option.key}
+              optionKey={optionKey}
               extraKey={extra.key}
               type={extra.type}
               register={register}
@@ -316,27 +304,27 @@ const ApplicationPreferencesAll = () => {
                         <legend className="field-label--caps mb-4">{preference.title}</legend>
                         <p className="field-note mb-8">{preference.description}</p>
                         {preference?.formMetadata?.options?.map((option) => {
-                          const noneOptionKey = getExclusivePreferenceOptionName(option.key)
-
-                          return option.exclusive
-                            ? getExclusiveOption(
-                                t(
-                                  `application.preferences.${preference.formMetadata.key}.${option.key}.label`,
-                                  { county: listing?.countyCode }
-                                ),
-                                noneOptionKey,
-                                preference
-                              )
-                            : getNormalOption(option, noneOptionKey, preference)
+                          return getOption(
+                            option.key,
+                            getPreferenceOptionName(option.key, preference.formMetadata.key),
+                            option.description,
+                            option.exclusive,
+                            option.extraData,
+                            preference
+                          )
                         })}
 
                         {/** If we haven't hidden the generic decline, include it at the end */}
                         {preference?.formMetadata &&
                           !preference.formMetadata.hideGenericDecline &&
-                          getExclusiveOption(
-                            t("application.preferences.dontWant"),
+                          getOption(
+                            null,
                             getExclusivePreferenceOptionName(preference?.formMetadata?.key),
-                            preference
+                            false,
+                            true,
+                            [],
+                            preference,
+                            t("application.preferences.dontWant")
                           )}
                       </fieldset>
                     </div>

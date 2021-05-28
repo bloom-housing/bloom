@@ -14,7 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 
 import { useFormContext } from "react-hook-form"
-import { Preference, FormMetadataOptions } from "@bloom-housing/backend-core/types"
+import { Preference, FormMetadataExtraData } from "@bloom-housing/backend-core/types"
 
 type FormPreferencesProps = {
   county: string
@@ -36,7 +36,7 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
     const keys = []
     preferences?.forEach((preference) =>
       preference?.formMetadata?.options.forEach((option) =>
-        keys.push(getPreferenceOptionName(option, option.key, preference?.formMetadata.key))
+        keys.push(getPreferenceOptionName(option.key, preference?.formMetadata.key))
       )
     )
 
@@ -51,50 +51,44 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
     return null
   }
 
-  const getExclusiveOption = (label: string, noneKey: string, preference: Preference) => {
+  const getOption = (
+    optionKey: string | null,
+    optionName: string,
+    exclusive: boolean,
+    extraData: FormMetadataExtraData[],
+    preference: Preference,
+    label?: string
+  ) => {
     return (
-      <Field
-        id={noneKey}
-        name={noneKey}
-        type="checkbox"
-        label={label}
-        register={register}
-        inputProps={{
-          onChange: (e) => {
-            if (e.target.checked) {
-              setExclusive(true, setValue, exclusiveKeys, noneKey, preference)
-            }
-          },
-        }}
-      />
-    )
-  }
-
-  const getNormalOption = (option: FormMetadataOptions, preference: Preference) => {
-    return (
-      <React.Fragment key={option.key}>
+      <React.Fragment key={optionKey}>
         <Field
-          id={getPreferenceOptionName(option, option.key, preference.formMetadata.key)}
-          name={getPreferenceOptionName(option, option.key, preference.formMetadata.key)}
+          id={optionName}
+          name={optionName}
           type="checkbox"
-          label={t(`application.preferences.${preference?.formMetadata?.key}.${option.key}.label`, {
-            county,
-          })}
+          label={
+            label ??
+            t(`application.preferences.${preference?.formMetadata?.key}.${optionKey}.label`, {
+              county,
+            })
+          }
           register={register}
           inputProps={{
-            onChange: () => {
-              setExclusive(false, setValue, exclusiveKeys)
+            onChange: (e) => {
+              if (exclusive && e.target.checked) {
+                setExclusive(true, setValue, exclusiveKeys, optionName, preference)
+              }
+              if (!exclusive) {
+                setExclusive(false, setValue, exclusiveKeys, optionName, preference)
+              }
             },
           }}
         />
-        {watchPreferences[
-          getPreferenceOptionName(option, option.key, preference.formMetadata.key)
-        ] &&
-          option.extraData?.map((extra) => (
+        {watchPreferences[optionName] &&
+          extraData?.map((extra) => (
             <ExtraField
               key={extra.key}
               metaKey={preference.formMetadata.key}
-              optionKey={option.key}
+              optionKey={optionKey}
               extraKey={extra.key}
               type={extra.type}
               register={register}
@@ -120,26 +114,24 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
               >
                 <fieldset className="mt-4">
                   {preference?.formMetadata?.options?.map((option) => {
-                    const noneOptionKey = getExclusivePreferenceOptionName(option.key)
-
-                    return option.exclusive
-                      ? getExclusiveOption(
-                          t(
-                            `application.preferences.${preference.formMetadata.key}.${option.key}.label`,
-                            { county }
-                          ),
-                          noneOptionKey,
-                          preference
-                        )
-                      : getNormalOption(option, preference)
+                    return getOption(
+                      option.key,
+                      getPreferenceOptionName(option.key, preference.formMetadata.key),
+                      option.exclusive,
+                      option.extraData,
+                      preference
+                    )
                   })}
 
                   {preference?.formMetadata &&
                     !preference.formMetadata.hideGenericDecline &&
-                    getExclusiveOption(
-                      t("t.none"),
+                    getOption(
+                      null,
                       getExclusivePreferenceOptionName(preference?.formMetadata?.key),
-                      preference
+                      true,
+                      [],
+                      preference,
+                      t("application.preferences.dontWant")
                     )}
                 </fieldset>
               </ViewItem>

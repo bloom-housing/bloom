@@ -344,12 +344,8 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
 /*
   It generates checkbox name in proper prefrences structure
 */
-export const getPreferenceOptionName = (
-  option: FormMetadataOptions,
-  key: string,
-  metaKey: string
-) => {
-  if (option.exclusive) return getExclusivePreferenceOptionName(key)
+export const getPreferenceOptionName = (key: string, metaKey: string, noneOption?: boolean) => {
+  if (noneOption) return getExclusivePreferenceOptionName(key)
   else return getNormalPreferenceOptionName(metaKey, key)
 }
 
@@ -361,17 +357,28 @@ export const getExclusivePreferenceOptionName = (key: string | undefined) => {
   return `${PREFERENCES_NONE_FORM_PATH}.${key}-none`
 }
 
+export type ExclusiveKey = {
+  optionKey: string
+  preferenceKey: string | undefined
+}
 /*
   Create an array of all exclusive keys from a preference set
 */
 export const getExclusiveKeys = (preferences: Preference[]) => {
-  const exclusive: string[] = []
+  const exclusive: ExclusiveKey[] = []
   preferences?.forEach((preference) => {
     preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
-      if (option.exclusive) exclusive.push(getExclusivePreferenceOptionName(option.key))
+      if (option.exclusive)
+        exclusive.push({
+          optionKey: getPreferenceOptionName(option.key, preference?.formMetadata?.key ?? ""),
+          preferenceKey: preference?.formMetadata?.key,
+        })
     })
     if (!preference?.formMetadata?.hideGenericDecline)
-      exclusive.push(getExclusivePreferenceOptionName(preference?.formMetadata?.key))
+      exclusive.push({
+        optionKey: getExclusivePreferenceOptionName(preference?.formMetadata?.key),
+        preferenceKey: preference?.formMetadata?.key,
+      })
   })
   return exclusive
 }
@@ -382,7 +389,7 @@ const uncheckPreference = (
   setValue: (key: string, value: boolean) => void
 ) => {
   options?.forEach((option) => {
-    setValue(getPreferenceOptionName(option, option.key, metaKey), false)
+    setValue(getPreferenceOptionName(option.key, metaKey), false)
   })
 }
 
@@ -392,9 +399,9 @@ const uncheckPreference = (
 export const setExclusive = (
   value: boolean,
   setValue: (key: string, value: boolean) => void,
-  exclusiveKeys: string[],
-  key?: string,
-  preference?: Preference
+  exclusiveKeys: ExclusiveKey[],
+  key: string,
+  preference: Preference
 ) => {
   if (value) {
     // Uncheck all other keys if setting an exclusive key to true
@@ -405,9 +412,11 @@ export const setExclusive = (
     )
     setValue(key ?? "", true)
   } else {
+    console.warn(exclusiveKeys)
     // Uncheck all exclusive keys if setting a normal key to true
-    exclusiveKeys.forEach((key) => {
-      setValue(key, false)
+    exclusiveKeys.forEach((thisKey) => {
+      if (thisKey.preferenceKey === preference?.formMetadata?.key)
+        setValue(thisKey.optionKey, false)
     })
   }
 }
