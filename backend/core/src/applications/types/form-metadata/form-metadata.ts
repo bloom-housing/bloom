@@ -26,4 +26,8 @@ export class FormMetadata {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   customSelectText?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  hideFromListing?: boolean
 }
