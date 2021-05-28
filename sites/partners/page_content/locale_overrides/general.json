@@ -8,7 +8,10 @@
     },
     "preferences": {
       "PBV": {
-        "title": "Oakland Housing Authority"
+        "title": "Oakland Housing Authority",
+        "doNotConsider": {
+          "label": "I don't want to be considered for Oakland Housing Authority project-based voucher units"
+        }
       }
     }
   }
