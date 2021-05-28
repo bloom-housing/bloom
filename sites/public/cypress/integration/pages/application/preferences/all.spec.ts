@@ -134,10 +134,12 @@ describe("applications/preferences/all", function () {
             {
               key: "live",
               checked: true,
+              extraData: [],
             },
             {
               key: "work",
               checked: true,
+              extraData: [],
             },
           ],
         },

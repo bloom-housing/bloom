@@ -1,6 +1,7 @@
 [build]
 
 command = "yarn run build"
+ignore = "/bin/false"
 
 [build.environment]
 

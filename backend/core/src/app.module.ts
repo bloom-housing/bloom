@@ -1,4 +1,4 @@
-import { DynamicModule, INestApplication, Module } from "@nestjs/common"
+import { ClassSerializerInterceptor, DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
@@ -22,6 +22,7 @@ import Redis from "ioredis"
 import { SharedModule } from "./shared/shared.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TranslationsModule } from "./translations/translations.module"
+import { Reflector } from "@nestjs/core"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -29,6 +30,9 @@ export function applicationSetup(app: INestApplication) {
   app.useGlobalFilters(new EntityNotFoundExceptionFilter())
   app.use(bodyParser.json({ limit: "50mb" }))
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector), { excludeExtraneousValues: true })
+  )
   return app
 }
 

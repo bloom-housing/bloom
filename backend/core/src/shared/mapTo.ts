@@ -1,6 +1,5 @@
+import { ClassTransformOptions, plainToClass } from "class-transformer"
 import { ClassType } from "class-transformer/ClassTransformer"
-import { ClassTransformOptions } from "class-transformer/ClassTransformOptions"
-import { plainToClass } from "class-transformer"
 
 export function mapTo<T, V>(cls: ClassType<T>, plain: V[], options?: ClassTransformOptions): T[]
 export function mapTo<T, V>(cls: ClassType<T>, plain: V, options?: ClassTransformOptions): T

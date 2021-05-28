@@ -9,17 +9,23 @@ All notable changes to this project will be documented in this file. The format 
 ### General
 
 ### Backend
+- Fixed:
+  -  Poor TypeORM performance in `/applications` endpoint [issue #1131](https://github.com/bloom-housing/bloom/issues/1131)
 
 ### Frontend
 
 - Added:
 
   - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
+  - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
+  - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
 
 - Fixed:
 
-  - Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) Dominik Barcikowski
-  - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) Dominik Barcikowski
+  - Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) (Dominik Barcikowski)
+  - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) (Dominik Barcikowski)
+  - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
+  - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
 
 - Changed:
 

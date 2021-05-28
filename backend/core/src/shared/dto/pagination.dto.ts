@@ -1,9 +1,9 @@
-import { ClassType } from "class-transformer/ClassTransformer"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
 import { Expose, Transform, Type } from "class-transformer"
 import { IsNumber, IsOptional } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
+import { ClassType } from "class-transformer/ClassTransformer"
 
 export class PaginationMeta implements IPaginationMeta {
   @Expose()
