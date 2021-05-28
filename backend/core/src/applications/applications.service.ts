@@ -1,6 +1,6 @@
 import { Inject, Injectable, Scope } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
-import { ApplicationCreateDto, ApplicationDto, ApplicationUpdateDto } from "./dto/application.dto"
+import { ApplicationCreateDto, ApplicationUpdateDto } from "./dto/application.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
@@ -152,8 +152,12 @@ export class ApplicationsService {
     return application
   }
 
-  private async authorizeUserAction(user, app: Application | ApplicationCreateDto, action) {
-    let resource: any = app
+  private async authorizeUserAction<T extends Application | ApplicationCreateDto>(
+    user,
+    app: T,
+    action
+  ) {
+    let resource: T = app
 
     if (app instanceof Application) {
       resource = {
