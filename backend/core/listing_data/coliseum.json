@@ -11,7 +11,7 @@
     "longitude": -122.1968792
   },
   "countyCode": "Alameda",
-  "applicationDueDate": "2021-06-15T11:00:00.000-07:00",
+  "applicationDueDate": "2021-06-15T12:00:00.000-07:00",
   "applicationOrganization": "John Stewart Company",
   "applicationPhone": "(510) 625-1632",
   "buildingSelectionCriteria": null,
@@ -26,7 +26,7 @@
   "name": "Coliseum Place",
   "waitlistCurrentSize": 0,
   "prioritiesDescriptor": "3 apartments are set-aside households eligible for the HOPWA program (Housing Opportunities for Persons with AIDS), which are households where a person has been medically diagnosed with HIV/AIDS. 15 apartments are for those with mobility impairments and one of these units also has features for the hearing/visually impaired. Two additional apartments have features for the hearing/visually impaired.",
-  "requiredDocuments": "Application Document Checklist: https://drive.google.com/file/d/1_6LnXBawa4XxAopxJP8_Eai1Eo4FUS3I/view?usp=sharing",
+  "requiredDocuments": "Application Document Checklist: https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Tax+Credit+Application+Interview+Checklist.pdf",
   "reservedCommunityMaximumAge": null,
   "reservedCommunityMinimumAge": "18",
   "reservedDescriptor": null,
@@ -41,15 +41,15 @@
   "leasingAgentEmail": "coliseum@jsco.net",
   "leasingAgentName": "",
   "leasingAgentAddress": {
-    "county": "",
-    "city": "",
-    "street": "",
-    "zipCode": "",
-    "state": "",
+    "county": "Alameda",
+    "city": "Oakland",
+    "street": "1701 Martin Luther King Way",
+    "zipCode": "94621",
+    "state": "CA",
     "latitude": 37.7549632,
     "longitude": -122.1968792
   },
-  "leasingAgentOfficeHours": "Tuesdays & Thursdays, 9:00am to 5:00pm",
+  "leasingAgentOfficeHours": "Tuesdays & Thursdays, 9:00am to 5:00pm | Persons with disabilities who are unable to access the on-line application may request a Reasonable Accommodation by calling (510) 649-5739 for assistance. A TDD line is available at (415) 345-4470.",
   "leasingAgentPhone": "(510) 625-1632",
   "leasingAgentTitle": "Property Manager",
   "rentalHistory": "Two years' landlord history or homeless verification",
@@ -72,6 +72,12 @@
           {
             "key": "work",
             "extraData": []
+          }
+        ],
+        "links": [
+          {
+            "title": "Measure A1 Implementation Policies",
+            "url": "https://www.acgov.org/cda/documents/broadway/D-MeasureA-1-Implementation-Policies.pdf"
           }
         ]
       }
@@ -1330,36 +1336,36 @@
   },
   "applicationMethods": [
     {
-      "type": "POBox",
-      "acceptsPostmarkedApplications": true
+      "type": "LeasingAgent",
+      "acceptsPostmarkedApplications": false
     },
     {
       "type": "Internal",
-      "acceptsPostmarkedApplications": true
+      "acceptsPostmarkedApplications": false
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "English",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_English.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+ENG.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Spanish",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Spanish.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+Spanish.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Vietnamese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Vietnamese.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+Viet.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Chinese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Chinese.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+Chinese.pdf"
     }
   ],
   "assets": [
