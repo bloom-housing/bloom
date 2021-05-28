@@ -280,6 +280,8 @@ export const mapPreferencesToApi = (data: Record<string, any>) => {
         })
 
         Object.assign(response, { extraData })
+      } else {
+        Object.assign(response, { extraData: [] })
       }
 
       return response

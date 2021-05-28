@@ -21,9 +21,10 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
-  - Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) Dominik Barcikowski
-  - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) Dominik Barcikowski
+  - Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) (Dominik Barcikowski)
+  - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) (Dominik Barcikowski)
   - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
+  - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
 
 - Changed:
 
