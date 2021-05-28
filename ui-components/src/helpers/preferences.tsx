@@ -412,7 +412,6 @@ export const setExclusive = (
     )
     setValue(key ?? "", true)
   } else {
-    console.warn(exclusiveKeys)
     // Uncheck all exclusive keys if setting a normal key to true
     exclusiveKeys.forEach((thisKey) => {
       if (thisKey.preferenceKey === preference?.formMetadata?.key)

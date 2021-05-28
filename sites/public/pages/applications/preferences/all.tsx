@@ -287,47 +287,39 @@ const ApplicationPreferencesAll = () => {
           <>
             {preferencesByPage?.map((preference, index) => {
               return (
-                <>
-                  <div className="form-card__group px-0 pb-0">
-                    <p className="field-note">
-                      {preference.formMetadata.customSelectText ??
-                        t("application.preferences.selectBelow")}
-                    </p>
-                  </div>
-                  <div key={preference.id}>
-                    <div
-                      className={`form-card__group px-0 ${
-                        index + 1 !== preferencesByPage.length ? "border-b" : ""
-                      }`}
-                    >
-                      <fieldset>
-                        <legend className="field-label--caps mb-4">{preference.title}</legend>
-                        <p className="field-note mb-8">{preference.description}</p>
-                        {preference?.formMetadata?.options?.map((option) => {
-                          return getOption(
-                            option.key,
-                            getPreferenceOptionName(option.key, preference.formMetadata.key),
-                            option.description,
-                            option.exclusive,
-                            option.extraData,
-                            preference
-                          )
-                        })}
+                <div key={preference.id}>
+                  <div
+                    className={`form-card__group px-0 ${
+                      index + 1 !== preferencesByPage.length ? "border-b" : ""
+                    }`}
+                  >
+                    <fieldset>
+                      <legend className="field-label--caps mb-4">{preference.title}</legend>
+                      <p className="field-note mb-8">{preference.description}</p>
+                      {preference?.formMetadata?.options?.map((option) => {
+                        return getOption(
+                          option.key,
+                          getPreferenceOptionName(option.key, preference.formMetadata.key),
+                          option.description,
+                          option.exclusive,
+                          option.extraData,
+                          preference
+                        )
+                      })}
 
-                        {/** If we haven't hidden the generic decline, include it at the end */}
-                        {preference?.formMetadata &&
-                          !preference.formMetadata.hideGenericDecline &&
-                          getOption(
-                            null,
-                            getExclusivePreferenceOptionName(preference?.formMetadata?.key),
-                            false,
-                            true,
-                            [],
-                            preference,
-                            t("application.preferences.dontWant")
-                          )}
-                      </fieldset>
-                    </div>
+                      {/** If we haven't hidden the generic decline, include it at the end */}
+                      {preference?.formMetadata &&
+                        !preference.formMetadata.hideGenericDecline &&
+                        getOption(
+                          null,
+                          getExclusivePreferenceOptionName(preference?.formMetadata?.key),
+                          false,
+                          true,
+                          [],
+                          preference,
+                          t("application.preferences.dontWant")
+                        )}
+                    </fieldset>
                   </div>
                 </div>
               )
