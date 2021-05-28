@@ -81,12 +81,13 @@
       "ordinal": 2,
       "title": "Oakland Housing Authority Project-Based Voucher",
       "subtitle": "",
-      "description": "You are currently applying to be in a general applicant waiting list at Coliseum Place.  Of the total apartments available in this application process, several have Project-Based Vouchers for rental subsidy assistance from the Oakland Housing Authority. With that subsidy, tenant households pay 30% of their income as rent. These tenants are required to verify their income annually with the property manager as well as the Oakland Housing Authority.  If you are interested in these apartments, the following preferences also apply: * Residency: You have lived and/or worked in the City of Oakland when you submitted your initial application and/or at the time of your application interview for a Project-Based Voucher at Coliseum Place and can verify your previous residency/employment at the applicant interview. * Family: You are a family with two or more persons, or a single person applicant that is 62 years of age or older, or a single person applicant with a disability. * Veteran: You are a Veteran or active member of the military. * Homeless: You are an individual or family who meets the McKinney-Vento Act definition of homelessness. Family is identified as: individuals who lack a fixed, regular, and adequate nighttime residence and: (i) children and youths who are sharing the housing of other persons due to loss of housing, economic hardship, or a similar reason; are living in motels, hotels, trailer parks, or camping grounds due to the lack of alternative adequate accommodations; are living in emergency or transitional shelters; or are abandoned in hospitals; (ii) children and youths who have a primary nighttime residence that is a public or private place not designed for or ordinarily used as a regular sleeping accommodation for human beings; (iii) children and youths who are living in cars, parks, public spaces, abandoned buildings, substandard housing, bus or train stations, or similar settings; and (iv) migratory children who qualify as homeless for the purposes of this subtitle because the children are living in circumstances described in clauses (i) through (iii).",
+      "description": "You are currently applying to be in a general applicant waiting list at Coliseum Place.  Of the total apartments available in this application process, several have Project-Based Vouchers for rental subsidy assistance from the Oakland Housing Authority. With that subsidy, tenant households pay 30% of their income as rent. These tenants are required to verify their income annually with the property manager as well as the Oakland Housing Authority.  If you are interested in these apartments, the following preferences also apply.",
       "links": [],
       "formMetadata": {
         "key": "PBV",
         "customSelectText": "Please select any of the following that apply to you",
         "hideGenericDecline": true,
+        "hideFromListing": true,
         "options": [
           {
             "key": "residency",
@@ -130,6 +131,7 @@
         "key": "HOPWA",
         "customSelectText": "Please indicate if you are interested in applying for one of these HOPWA apartments",
         "hideGenericDecline": true,
+        "hideFromListing": true,
         "options": [
           {
             "key": "hopwa",
