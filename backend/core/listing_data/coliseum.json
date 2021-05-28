@@ -11,7 +11,7 @@
     "longitude": -122.1968792
   },
   "countyCode": "Alameda",
-  "applicationDueDate": "2021-06-15T11:00:00.000-07:00",
+  "applicationDueDate": "2021-06-15T12:00:00.000-07:00",
   "applicationOrganization": "John Stewart Company",
   "applicationPhone": "(510) 625-1632",
   "buildingSelectionCriteria": null,
@@ -41,11 +41,11 @@
   "leasingAgentEmail": "coliseum@jsco.net",
   "leasingAgentName": "",
   "leasingAgentAddress": {
-    "county": "",
-    "city": "",
-    "street": "",
-    "zipCode": "",
-    "state": "",
+    "county": "Alameda",
+    "city": "Oakland",
+    "street": "1701 Martin Luther King Way",
+    "zipCode": "94621",
+    "state": "CA",
     "latitude": 37.7549632,
     "longitude": -122.1968792
   },
@@ -1330,12 +1330,12 @@
   },
   "applicationMethods": [
     {
-      "type": "POBox",
-      "acceptsPostmarkedApplications": true
+      "type": "LeasingAgent",
+      "acceptsPostmarkedApplications": false
     },
     {
       "type": "Internal",
-      "acceptsPostmarkedApplications": true
+      "acceptsPostmarkedApplications": false
     },
     {
       "type": "FileDownload",
