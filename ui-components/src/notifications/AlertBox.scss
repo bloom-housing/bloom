@@ -1,10 +1,27 @@
 .alert-box {
   @apply relative;
-  @apply p-4;
+  @apply py-4;
   @apply pr-10;
   @apply leading-snug;
   @apply flex;
   @apply items-center;
+
+  .alert-box_inner {
+    @apply m-auto;
+    @apply max-w-5xl;
+    @apply px-4;
+    @apply flex-1;
+    @apply flex;
+    @apply items-center;
+  }
+
+  &.fullWidth {
+    @apply px-4;
+  }
+
+  &.narrow {
+    @apply py-2;
+  }
 
   // Inverts color scheme of alert
   &.invert {
