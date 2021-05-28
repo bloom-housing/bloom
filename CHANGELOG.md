@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
+  - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
 
 - Fixed:
 
