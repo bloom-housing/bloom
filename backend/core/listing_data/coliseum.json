@@ -26,7 +26,7 @@
   "name": "Coliseum Place",
   "waitlistCurrentSize": 0,
   "prioritiesDescriptor": "3 apartments are set-aside households eligible for the HOPWA program (Housing Opportunities for Persons with AIDS), which are households where a person has been medically diagnosed with HIV/AIDS. 15 apartments are for those with mobility impairments and one of these units also has features for the hearing/visually impaired. Two additional apartments have features for the hearing/visually impaired.",
-  "requiredDocuments": "Application Document Checklist: https://drive.google.com/file/d/1_6LnXBawa4XxAopxJP8_Eai1Eo4FUS3I/view?usp=sharing",
+  "requiredDocuments": "Application Document Checklist: https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Tax+Credit+Application+Interview+Checklist.pdf",
   "reservedCommunityMaximumAge": null,
   "reservedCommunityMinimumAge": "18",
   "reservedDescriptor": null,
@@ -72,6 +72,12 @@
           {
             "key": "work",
             "extraData": []
+          }
+        ],
+        "links": [
+          {
+            "title": "Measure A1 Implementation Policies",
+            "url": "https://www.acgov.org/cda/documents/broadway/D-MeasureA-1-Implementation-Policies.pdf"
           }
         ]
       }
@@ -1341,25 +1347,25 @@
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "English",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_English.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+ENG.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Spanish",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Spanish.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+Spanish.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Vietnamese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Vietnamese.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+Viet.pdf"
     },
     {
       "type": "FileDownload",
       "acceptsPostmarkedApplications": false,
       "label": "Chinese",
-      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda_County_Final_Chinese.pdf"
+      "externalReference": "https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Alameda+County+Coliseum+Place+App+Chinese.pdf"
     }
   ],
   "assets": [
