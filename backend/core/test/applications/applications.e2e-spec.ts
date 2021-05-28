@@ -127,10 +127,12 @@ describe("Applications", () => {
           {
             key: "live",
             checked: true,
+            extraData: [],
           },
           {
             key: "work",
             checked: false,
+            extraData: [],
           },
         ],
       },
@@ -166,6 +168,7 @@ describe("Applications", () => {
           {
             key: "missionCorridor",
             checked: false,
+            extraData: [],
           },
         ],
       },
