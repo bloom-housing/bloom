@@ -3,7 +3,6 @@
 Total pre-tax household income from all sources
 */
 import React, { useState } from "react"
-import { Listing } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -22,8 +21,9 @@ import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
 type IncomeError = "low" | "high" | null
-type IncomePeriod = "perMonth" | "perYear"
+// type IncomePeriod = "perMonth" | "perYear"
 
+// TODO: toggle this verification off at the jurisdiction level with a feature flag
 // function verifyIncome(listing: Listing, income: number, period: IncomePeriod): IncomeError {
 //   // Look through all the units on this listing to see what the absolute max/min income requirements are.
 //   const [annualMin, annualMax, monthlyMin] = listing.property.units.reduce(
@@ -65,13 +65,15 @@ const ApplicationIncome = () => {
   })
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
-    // Skip validation of total income if the applicant has income vouchers.
 
-    // Skip validation entirely for SoHay listing -JW
-    /*    const validationError = application.incomeVouchers
-      ? null
-      : verifyIncome(listing, income, incomePeriod) */
+    // TODO: toggle this verification off at the jurisdiction level with a feature flag
+    // Skip validation of total income if the applicant has income vouchers.
+    // const validationError = application.incomeVouchers
+    //   ? null
+    //   : verifyIncome(listing, income, incomePeriod)
+
     const validationError = null
+
     setIncomeError(validationError)
 
     if (!validationError) {

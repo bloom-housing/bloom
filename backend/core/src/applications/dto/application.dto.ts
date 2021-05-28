@@ -1,4 +1,4 @@
-import { ApiHideProperty, OmitType } from "@nestjs/swagger"
+import { OmitType } from "@nestjs/swagger"
 import {
   ArrayMaxSize,
   IsDate,
@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from "class-validator"
 import { Application } from "../entities/application.entity"
-import { Exclude, Expose, Type } from "class-transformer"
+import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IdDto } from "../../shared/dto/id.dto"
 import { PaginationFactory } from "../../shared/dto/pagination.dto"
 import { ApplicantCreateDto, ApplicantDto, ApplicantUpdateDto } from "./applicant.dto"
@@ -33,7 +33,9 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 
 export class ApplicationDto extends OmitType(Application, [
   "listing",
+  "listingId",
   "user",
+  "userId",
   "applicant",
   "mailingAddress",
   "alternateAddress",
@@ -43,19 +45,33 @@ export class ApplicationDto extends OmitType(Application, [
   "householdMembers",
 ] as const) {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  listing: IdDto
-
-  @Exclude()
-  @ApiHideProperty()
-  user
-
-  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicantDto)
   applicant: ApplicantDto
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  @Transform(
+    (value, obj) => {
+      return plainToClass(IdDto, { id: obj.listingId })
+    },
+    { toClassOnly: true }
+  )
+  listing: IdDto
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  @Transform(
+    (value, obj) => {
+      return obj.userId ? plainToClass(IdDto, { id: obj.userId }) : undefined
+    },
+    { toClassOnly: true }
+  )
+  user?: IdDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -102,8 +118,9 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "createdAt",
   "updatedAt",
   "deletedAt",
-  "listing",
   "applicant",
+  "listing",
+  "user",
   "mailingAddress",
   "alternateAddress",
   "alternateContact",
@@ -167,8 +184,9 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "createdAt",
   "updatedAt",
   "deletedAt",
-  "listing",
   "applicant",
+  "listing",
+  "user",
   "mailingAddress",
   "alternateAddress",
   "alternateContact",

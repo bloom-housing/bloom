@@ -31,6 +31,7 @@ import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
+import { ListingsService } from "../listings/listings.service"
 
 enum OrderByParam {
   firstName = "applicant.firstName",
@@ -166,6 +167,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
+    private readonly listingsService: ListingsService,
     private readonly applicationCsvExporter: ApplicationCsvExporter
   ) {}
 
@@ -182,8 +184,10 @@ export class ApplicationsController {
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
     const applications = await this.applicationsService.list(queryParams)
+    const listing = await this.listingsService.findOne(queryParams.listingId)
     return this.applicationCsvExporter.export(
       applications,
+      listing.CSVFormattingType,
       queryParams.includeHeaders,
       queryParams.includeDemographics
     )

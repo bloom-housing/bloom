@@ -24,7 +24,8 @@ const ApplicationAddMembers = () => {
   const router = useRouter()
   const currentPageSection = 2
   const householdSize = application.householdMembers.length + 1
-  const shouldValidationHouseholdSize = false // switched off for SoHay
+  // TODO: toggle this verification off at the jurisdiction level with a feature flag
+  const shouldValidateHouseholdSize = false
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -79,7 +80,7 @@ const ApplicationAddMembers = () => {
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div>
-            {shouldValidationHouseholdSize && (
+            {shouldValidateHouseholdSize && (
               <HouseholdSizeField
                 listing={listing}
                 householdSize={householdSize}
