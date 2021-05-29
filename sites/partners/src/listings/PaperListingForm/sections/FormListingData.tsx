@@ -32,6 +32,13 @@ const FormListingData = () => {
       <GridSection grid={false} separator>
         <GridSection columns={3}>
           <Field
+            id="property.id"
+            name="property.id"
+            label="Property ID (can't save without this for now)"
+            placeholder="Property ID"
+            register={register}
+          />
+          <Field
             id="property.developer"
             name="property.developer"
             label={t("listings.property.developer")}

@@ -47,7 +47,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
     if (type === "details") {
       elements.push(
         <GridCell key="btn-submitNew">
-          <LocalizedLink href={`/listings/edit?id=${lisitngId}`}>
+          <LocalizedLink href={`/listings/${lisitngId}/edit`}>
             <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
               {t("t.edit")}
             </Button>

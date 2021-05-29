@@ -1,5 +1,4 @@
 import {
-  AfterLoad,
   BaseEntity,
   Column,
   CreateDateColumn,
@@ -27,7 +26,6 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
-import moment from "moment"
 import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
@@ -350,13 +348,6 @@ class Listing extends BaseEntity {
       this.waitlistCurrentSize !== null &&
       this.waitlistCurrentSize < this.waitlistMaxSize
     )
-  }
-
-  @AfterLoad()
-  setComputed() {
-    if (moment(this.applicationDueDate).isBefore()) {
-      this.status = ListingStatus.closed
-    }
   }
 }
 

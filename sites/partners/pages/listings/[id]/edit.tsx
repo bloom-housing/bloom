@@ -1,13 +1,14 @@
 import React from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { MetaTags, PageHeader, t } from "@bloom-housing/ui-components"
-import Layout from "../../layouts"
-import PaperListingForm from "../../src/listings/PaperListingForm"
-import { useSingleListingData } from "../../lib/hooks"
-import { ListingContext } from "../../src/listings/ListingContext"
+import { PageHeader, t } from "@bloom-housing/ui-components"
+import Layout from "../../../layouts"
+import PaperListingForm from "../../../src/listings/PaperListingForm"
+import { useSingleListingData } from "../../../lib/hooks"
+import { ListingContext } from "../../../src/listings/ListingContext"
+import { MetaTags } from "../../../src/MetaTags"
 
-const NewApplication = () => {
+const NewListing = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
 
@@ -45,4 +46,4 @@ const NewApplication = () => {
   )
 }
 
-export default NewApplication
+export default NewListing

@@ -11,14 +11,14 @@ import {
   SiteAlert,
 } from "@bloom-housing/ui-components"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
-import { useSingleListingData } from "../../lib/hooks"
+import { useSingleListingData } from "../../../lib/hooks"
 
-import Layout from "../../layouts"
-import Aside from "../../src/listings/Aside"
-import { ListingContext } from "../../src/listings/ListingContext"
-import DetailListingData from "../../src/listings/PaperListingDetails/sections/DetailListingData"
-import DetailProperty from "../../src/listings/PaperListingDetails/sections/DetailProperty"
-import DetailApplication from "../../src/listings/PaperListingDetails/sections/DetailApplication"
+import Layout from "../../../layouts"
+import Aside from "../../../src/listings/Aside"
+import { ListingContext } from "../../../src/listings/ListingContext"
+import DetailListingData from "../../../src/listings/PaperListingDetails/sections/DetailListingData"
+import DetailProperty from "../../../src/listings/PaperListingDetails/sections/DetailProperty"
+import DetailApplication from "../../../src/listings/PaperListingDetails/sections/DetailApplication"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -57,7 +57,6 @@ export default function ApplicationsList() {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
-        {/* <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} /> */}
 
         <PageHeader
           className="relative"
@@ -75,7 +74,7 @@ export default function ApplicationsList() {
         </PageHeader>
         <section className="border-t bg-white">
           <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-            <Button inlineIcon="left" icon="arrow-back" onClick={() => router.push("/")}>
+            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.push("/")}>
               {t("t.back")}
             </Button>
 

@@ -291,18 +291,7 @@ export class ListingsService {
   create(
     params: {
       /** requestBody */
-      body?: Listing/* {
-        name: string;
-        applicationDueDate?: Date;
-        preferences: Preference[];
-        property: Property;
-        status: ListingStatus;
-        CSVFormattingType: CSVFormattingType;
-        countyCode: CountyCode;
-        asset: Asset[];
-        applicationMethods: ApplicationMethod[];
-        events: ListingEvent[]
-      }; */
+      body?: ListingCreate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
@@ -347,18 +336,7 @@ export class ListingsService {
       /**  */
       listingId: string;
       /** requestBody */
-      body?: Listing/* {
-        name: string;
-        applicationDueDate?: Date;
-        preferences: Preference[];
-        property: Property;
-        status: ListingStatus;
-        CSVFormattingType: CSVFormattingType;
-        countyCode: CountyCode;
-        asset: Asset[];
-        applicationMethods: ApplicationMethod[];
-        events: ListingEvent[]
-      }; */
+      body?: ListingUpdate;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
@@ -1746,13 +1724,13 @@ export interface Unit {
 
 export interface Address {
   /**  */
-  id?: string;
+  id: string;
 
   /**  */
-  createdAt?: Date;
+  createdAt: Date;
 
   /**  */
-  updatedAt?: Date;
+  updatedAt: Date;
 
   /**  */
   placeName?: string;
@@ -1784,7 +1762,7 @@ export interface Address {
 
 export interface Property {
   /**  */
-  unitsSummarized?: UnitsSummarized;
+  unitsSummarized: UnitsSummarized;
 
   /**  */
   units: Unit[];
@@ -1793,52 +1771,52 @@ export interface Property {
   buildingAddress: Address;
 
   /**  */
-  id?: string;
+  id: string;
 
   /**  */
   createdAt?: Date;
 
   /**  */
-  updatedAt?: Date;
+  updatedAt: Date;
 
   /**  */
-  accessibility?: string;
+  accessibility: string;
 
   /**  */
-  amenities?: string;
+  amenities: string;
 
   /**  */
-  buildingTotalUnits?: number;
+  buildingTotalUnits: number;
 
   /**  */
-  developer?: string;
+  developer: string;
 
   /**  */
-  householdSizeMax?: number;
+  householdSizeMax: number;
 
   /**  */
-  householdSizeMin?: number;
+  householdSizeMin: number;
 
   /**  */
-  neighborhood?: string;
+  neighborhood: string;
 
   /**  */
-  petPolicy?: string;
+  petPolicy: string;
 
   /**  */
-  smokingPolicy?: string;
+  smokingPolicy: string;
 
   /**  */
-  unitsAvailable?: number;
+  unitsAvailable: number;
 
   /**  */
-  unitAmenities?: string;
+  unitAmenities: string;
 
   /**  */
   servicesOffered?: string;
 
   /**  */
-  yearBuilt?: number;
+  yearBuilt: number;
 }
 
 export interface UserBasic {
@@ -1931,10 +1909,10 @@ export interface Listing {
   status: ListingStatus;
 
   /**  */
-  urlSlug?: string;
+  urlSlug: string;
 
   /**  */
-  displayWaitlistSize?: boolean;
+  displayWaitlistSize: boolean;
 
   /**  */
   CSVFormattingType: CSVFormattingType;
@@ -1952,25 +1930,25 @@ export interface Listing {
   property: Property;
 
   /**  */
-  applicationAddress?: CombinedApplicationAddressTypes;
+  applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
-  applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  leasingAgentAddress?: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
   leasingAgents?: UserBasic[];
 
   /**  */
-  id?: string;
+  id: string;
 
   /**  */
-  createdAt?: Date;
+  createdAt: Date;
 
   /**  */
-  updatedAt?: Date;
+  updatedAt: Date;
 
   /**  */
   applicationMethods: ApplicationMethod[];
@@ -1982,85 +1960,85 @@ export interface Listing {
   events: ListingEvent[];
 
   /**  */
-  applicationDueDate?: Date;
+  applicationDueDate: Date;
 
   /**  */
-  applicationOpenDate?: Date;
+  applicationOpenDate: Date;
 
   /**  */
-  applicationFee?: string;
+  applicationFee: string;
 
   /**  */
-  applicationOrganization?: string;
+  applicationOrganization: string;
 
   /**  */
-  applicationPickUpAddressOfficeHours?: string;
+  applicationPickUpAddressOfficeHours: string;
 
   /**  */
-  buildingSelectionCriteria?: string;
+  buildingSelectionCriteria: string;
 
   /**  */
-  costsNotIncluded?: string;
+  costsNotIncluded: string;
 
   /**  */
-  creditHistory?: string;
+  creditHistory: string;
 
   /**  */
-  criminalBackground?: string;
+  criminalBackground: string;
 
   /**  */
-  depositMin?: string;
+  depositMin: string;
 
   /**  */
-  depositMax?: string;
+  depositMax: string;
 
   /**  */
-  disableUnitsAccordion?: boolean;
+  disableUnitsAccordion: boolean;
 
   /**  */
-  leasingAgentEmail?: string;
+  leasingAgentEmail: string;
 
   /**  */
-  leasingAgentName?: string;
+  leasingAgentName: string;
 
   /**  */
-  leasingAgentOfficeHours?: string;
+  leasingAgentOfficeHours: string;
 
   /**  */
-  leasingAgentPhone?: string;
+  leasingAgentPhone: string;
 
   /**  */
-  leasingAgentTitle?: string;
+  leasingAgentTitle: string;
 
   /**  */
   name: string;
 
   /**  */
-  postmarkedApplicationsReceivedByDate?: Date;
+  postmarkedApplicationsReceivedByDate: Date;
 
   /**  */
-  programRules?: string;
+  programRules: string;
 
   /**  */
-  rentalAssistance?: string;
+  rentalAssistance: string;
 
   /**  */
-  rentalHistory?: string;
+  rentalHistory: string;
 
   /**  */
-  requiredDocuments?: string;
+  requiredDocuments: string;
 
   /**  */
-  specialNotes?: string;
+  specialNotes?: string
 
   /**  */
-  waitlistCurrentSize?: number;
+  waitlistCurrentSize: number;
 
   /**  */
-  waitlistMaxSize?: number;
+  waitlistMaxSize: number;
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes;
+  whatToExpect: CombinedWhatToExpectTypes;
 
   /**  */
   applicationConfig?: object;
@@ -2132,7 +2110,7 @@ export interface ListingCreate {
   countyCode: CountyCode;
 
   /**  */
-  preferences: PreferenceCreate[];
+  preferences?: PreferenceCreate[];
 
   /**  */
   property: Id;
@@ -2330,7 +2308,7 @@ export interface ListingUpdate {
   updatedAt?: Date;
 
   /**  */
-  preferences: PreferenceUpdate[];
+  preferences?: PreferenceUpdate[];
 
   /**  */
   property: Id;

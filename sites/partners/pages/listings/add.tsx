@@ -1,8 +1,9 @@
 import React from "react"
 import Head from "next/head"
-import { MetaTags, PageHeader, SiteAlert, t } from "@bloom-housing/ui-components"
+import { PageHeader, SiteAlert, t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
 import PaperListingForm from "../../src/listings/PaperListingForm"
+import { MetaTags } from "../../src/MetaTags"
 
 const NewListing = () => {
   const metaDescription = ""

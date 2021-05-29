@@ -1,13 +1,6 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
-import {
-  PageHeader,
-  t,
-  lRoute,
-  UserContext,
-  LocalizedLink,
-  Button,
-} from "@bloom-housing/ui-components"
+import { PageHeader, t, lRoute, UserContext } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { UserRole, Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
@@ -35,20 +28,6 @@ export default function ListingsList() {
     }
   }
 
-  class ApplicationsLink extends formatLinkCell {
-    init(params) {
-      super.init(params)
-      this.link.setAttribute("href", lRoute(`/listings/applications?listing=${params.data.id}`))
-    }
-  }
-
-  class ListingsLink extends formatLinkCell {
-    init(params) {
-      super.init(params)
-      this.link.setAttribute("href", lRoute(`/listings?id=${params.data.id}`))
-    }
-  }
-
   class formatWaitlistStatus {
     text: HTMLSpanElement
 
@@ -66,9 +45,8 @@ export default function ListingsList() {
 
   const gridOptions: GridOptions = {
     components: {
-      ApplicationsLink: ApplicationsLink,
+      formatLinkCell: formatLinkCell,
       formatWaitlistStatus: formatWaitlistStatus,
-      ListingsLink: ListingsLink,
     },
   }
 
@@ -78,20 +56,12 @@ export default function ListingsList() {
   const columnDefs = useMemo(
     () => [
       {
-        headerName: t("listings.listingName"),
-        field: "name",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        cellRenderer: "ListingsLink",
-      },
-      {
         headerName: t("listings.applications"),
         field: "name",
         sortable: false,
         filter: false,
         resizable: true,
-        cellRenderer: "ApplicationsLink",
+        cellRenderer: "formatLinkCell",
       },
       {
         headerName: t("listings.applicationDeadline"),
@@ -159,11 +129,12 @@ export default function ListingsList() {
             <div className="flex justify-between">
               <div className="w-56"></div>
               <div className="flex-row">
+                {/* TODO, put behind a flag
                 <LocalizedLink href={`/listings/add`}>
                   <Button className="mx-1" onClick={() => false}>
                     {t("listings.addListing")}
                   </Button>
-                </LocalizedLink>
+                </LocalizedLink> */}
               </div>
             </div>
             <div className="applications-table mt-5">

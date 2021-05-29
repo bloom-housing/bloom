@@ -13,8 +13,9 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
-  Listing,
+  ListingCreate,
   ListingStatus,
+  ListingUpdate,
   CSVFormattingType,
   CountyCode,
 } from "@bloom-housing/backend-core/types"
@@ -22,32 +23,69 @@ import {
 import Aside from "../Aside"
 import FormListingData from "./sections/FormListingData"
 
+type FormListing = ListingCreate & ListingUpdate
+
 type ListingFormProps = {
-  listing?: Listing
+  listing?: FormListing
   editMode?: boolean
 }
 
 type AlertErrorType = "api" | "form"
 
-const defaults: Listing = {
+const defaultAddress = {
+  city: "",
+  state: "",
+  street: "",
+  zipCode: "",
+}
+
+const defaults: FormListing = {
+  applicationAddress: defaultAddress,
+  applicationDueDate: new Date(),
+  applicationFee: "0",
   applicationMethods: [],
+  applicationOpenDate: new Date(),
+  applicationOrganization: "",
+  applicationPickUpAddress: defaultAddress,
+  applicationPickUpAddressOfficeHours: "",
   assets: [],
-  name: "",
-  preferences: [],
-  property: {
-    buildingAddress: {},
-    units: [],
-  },
+  buildingSelectionCriteria: "",
   countyCode: CountyCode.Alameda,
+  costsNotIncluded: "",
+  creditHistory: "",
+  criminalBackground: "",
   CSVFormattingType: CSVFormattingType.basic,
+  depositMax: "",
+  depositMin: "",
+  disableUnitsAccordion: false,
+  displayWaitlistSize: false,
   events: [],
+  leasingAgentAddress: defaultAddress,
+  leasingAgentEmail: "test@email.com",
+  leasingAgentName: "",
+  leasingAgentOfficeHours: "",
+  leasingAgentPhone: "",
+  leasingAgentTitle: "",
+  name: "",
+  postmarkedApplicationsReceivedByDate: new Date(),
+  preferences: [],
+  programRules: "",
+  property: {
+    id: "", // FYI listings won't save without an actual ID
+  },
+  rentalAssistance: "",
+  rentalHistory: "",
+  requiredDocuments: "",
   status: ListingStatus.pending,
+  waitlistCurrentSize: 0,
+  waitlistMaxSize: 0,
+  whatToExpect: [],
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : defaults
-  const formMethods = useForm<Listing>({
+  const formMethods = useForm<FormListing>({
     defaultValues,
   })
 
@@ -61,18 +99,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, clearErrors, reset, trigger, getValues } = formMethods
 
-  const triggerSubmit = async (data: Listing) => onSubmit(data, "details")
+  const triggerSubmit = async (data: FormListing) => onSubmit(data, "details")
 
   const setStatusAndSubmit = async (status: ListingStatus) => {
     const validation = await trigger()
 
     if (validation) {
       let data = getValues()
-      // just for the poc
-      if (!data.property.id) {
-        data.property.id = "4b237295-38a8-4795-95fd-1bec08723e6d"
-      }
-
       data = {
         ...defaultValues,
         ...data,
@@ -89,14 +122,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     @data: form data comes from the react-hook-form
     @redirect: open listing details or reset form
   */
-  const onSubmit = async (data: Listing, redirect: "details" | "new") => {
+  const onSubmit = async (data: FormListing, redirect: "details" | "new") => {
     setAlert(null)
     setLoading(true)
     try {
       const result = editMode
         ? await listingsService.update({
-            listingId: listing?.id,
-            body: { ...data },
+            listingId: listing.id,
+            body: { id: listing.id, ...data },
           })
         : await listingsService.create({ body: data })
       setLoading(false)
@@ -108,7 +141,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         )
 
         if (redirect === "details") {
-          void router.push(`/listings?id=${result.id}`)
+          void router.push(`/listings/${result.id}`)
         } else {
           reset()
           clearErrors()
@@ -133,8 +166,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           backButton={
             <Button
               inlineIcon="left"
-              icon="arrow-back"
-              onClick={() => (editMode ? router.push(`/listing?id=${listing?.id}`) : router.back())}
+              icon="arrowBack"
+              onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
             >
               {t("t.back")}
             </Button>
