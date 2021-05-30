@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
 
-import { useFlaggedApplicationsList } from "../../../../lib/hooks"
+import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
 import Layout from "../../../../layouts/application"
 import { t, ApplicationSecondaryNav } from "@bloom-housing/ui-components"
 import { getCols } from "../../../../src/flags/flagSetsCols"
@@ -12,9 +12,13 @@ const FlagsPage = () => {
   const router = useRouter()
   const listingId = router.query.id as string
 
+  const { listingDto } = useSingleListingData(listingId)
+
   const { data } = useFlaggedApplicationsList({
     listingId,
   })
+
+  const listingName = listingDto?.name
 
   const defaultColDef = {
     resizable: true,
@@ -38,12 +42,10 @@ const FlagsPage = () => {
       </Head>
 
       <ApplicationSecondaryNav
-        title={t("nav.flags")}
+        title={listingName}
         listingId={listingId}
         flagsQty={data?.meta?.totalFlagged}
       />
-
-      {console.log(data)}
 
       <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4 w-full">
         <div className="ag-theme-alpine ag-theme-bloom">

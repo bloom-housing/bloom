@@ -46,6 +46,7 @@ const ApplicationsList = () => {
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
+  const listingName = listingDto?.name
 
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
@@ -198,7 +199,7 @@ const ApplicationsList = () => {
       </Head>
 
       <ApplicationSecondaryNav
-        title={t("applications.applicationsReceived")}
+        title={listingName}
         listingId={listingId}
         flagsQty={flaggedApps?.meta?.totalFlagged}
       >
