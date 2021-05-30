@@ -110,3 +110,20 @@ export function useFlaggedApplicationsList({
     error,
   }
 }
+
+export function useSingleFlaggedApplication(afsId: string) {
+  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
+  const fetcher = () =>
+    applicationFlaggedSetsService.retrieve({
+      afsId,
+    })
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    error,
+  }
+}

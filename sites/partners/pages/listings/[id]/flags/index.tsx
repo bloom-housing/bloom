@@ -6,7 +6,7 @@ import { AgGridReact } from "ag-grid-react"
 import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
 import Layout from "../../../../layouts/application"
 import { t, ApplicationSecondaryNav } from "@bloom-housing/ui-components"
-import { getCols } from "../../../../src/flags/flagSetsCols"
+import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
 
 const FlagsPage = () => {
   const router = useRouter()
@@ -25,13 +25,7 @@ const FlagsPage = () => {
     maxWidth: 300,
   }
 
-  const columns = useMemo(() => getCols(), [])
-
-  const StatusTag = () => <strong>test</strong>
-
-  const frameworkComponents = {
-    statusTag: StatusTag,
-  }
+  const columns = useMemo(() => getFlagSetCols(), [])
 
   if (!data) return null
 
@@ -58,7 +52,6 @@ const FlagsPage = () => {
               rowHeight={58}
               defaultColDef={defaultColDef}
               suppressScrollOnNewData={true}
-              frameworkComponents={frameworkComponents}
               immutableData={true}
               getRowNodeId={(data) => data.row}
             ></AgGridReact>

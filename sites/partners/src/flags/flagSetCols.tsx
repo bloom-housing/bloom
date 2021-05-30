@@ -3,7 +3,7 @@ import Link from "next/link"
 import { t, AppearanceStyleType, AppearanceSizeType, Tag } from "@bloom-housing/ui-components"
 import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
-export const getCols = () => [
+export const getFlagSetCols = () => [
   {
     headerName: t("flags.flaggedSet"),
     colId: "flaggedSet",
@@ -22,7 +22,7 @@ export const getCols = () => [
 
       return (
         <Link
-          href={`/listings/flags/details?id=${data.id}&listing=${data.listing.id}`}
+          href={`/listings/${data.listing.id}/flags/${data.id}`}
         >{`${firstApplicant}: ${rule}`}</Link>
       )
     },

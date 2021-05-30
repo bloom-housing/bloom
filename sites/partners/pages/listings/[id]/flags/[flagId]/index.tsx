@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useCallback } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
+import { GridApi, RowNode } from "ag-grid-community"
 
 import Layout from "../../../../../layouts/application"
 import {
@@ -12,34 +13,36 @@ import {
   AppearanceSizeType,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
-import { useFlaggedApplicationsList } from "../../../../../lib/hooks"
+import { useSingleFlaggedApplication } from "../../../../../lib/hooks"
 import { getCols } from "../../../../../src/flags/applicationsCols"
 import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
   const router = useRouter()
-  const flagsetId = router.query.id as string
-  const listingId = router.query.listing as string
+  const flagsetId = router.query.flagId as string
+  const listingId = router.query.id as string
 
-  const [gridApi, setGridApi] = useState(null)
-  const [gridColumnApi, setGridColumnApi] = useState(null)
+  const [gridApi, setGridApi] = useState<GridApi>(null)
+  const [selectedRows, setSelectedRows] = useState<RowNode[]>([])
 
   const columns = useMemo(() => getCols(), [])
 
-  const { data } = useFlaggedApplicationsList({
-    listingId,
-  })
-
-  const flagset = useMemo(() => {
-    if (!data) return
-
-    return data.items.filter((item) => item.id === flagsetId)?.[0]
-  }, [data, flagsetId])
+  const { data } = useSingleFlaggedApplication(flagsetId)
 
   const onGridReady = (params) => {
     setGridApi(params.api)
-    setGridColumnApi(params.columnApi)
   }
+
+  const onSelectionChanged = () => {
+    const selected = gridApi.getSelectedNodes()
+    setSelectedRows(selected)
+  }
+
+  const resolveFlag = useCallback(() => {
+    console.log("on resolve click", selectedRows)
+  }, [selectedRows])
+
+  if (!data) return null
 
   return (
     <Layout>
@@ -51,9 +54,7 @@ const Flag = () => {
         className="relative"
         title={
           <>
-            <p className="font-sans font-semibold uppercase text-3xl">Flag Set</p>
-
-            <p className="font-sans text-base mt-1">ID</p>
+            <p className="font-sans font-semibold uppercase text-3xl">{data.rule}</p>
           </>
         }
       />
@@ -62,8 +63,8 @@ const Flag = () => {
         <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
           <Button
             inlineIcon="left"
-            icon="arrow-back"
-            onClick={() => router.push(`/listings/applications?listing=${listingId}`)}
+            icon="arrowBack"
+            onClick={() => router.push(`/listings/${listingId}/flags`)}
           >
             {t("t.back")}
           </Button>
@@ -73,12 +74,12 @@ const Flag = () => {
               pillStyle={true}
               size={AppearanceSizeType.normal}
               styleType={
-                flagset?.status === EnumApplicationFlaggedSetStatus.resolved
+                data.status === EnumApplicationFlaggedSetStatus.resolved
                   ? AppearanceStyleType.success
                   : AppearanceStyleType.info
               }
             >
-              {flagset?.status}
+              {data.status}
             </Tag>
           </div>
         </div>
@@ -90,13 +91,14 @@ const Flag = () => {
             <div className="applications-table mt-5">
               <AgGridReact
                 columnDefs={columns}
-                rowData={flagset?.applications}
+                rowData={data.applications}
                 domLayout="autoHeight"
                 headerHeight={83}
                 rowHeight={58}
                 suppressScrollOnNewData={true}
-                rowSelection={"multiple"}
+                rowSelection="multiple"
                 onGridReady={onGridReady}
+                onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
 
               <div className="data-pager">
@@ -110,22 +112,20 @@ const Flag = () => {
           <div className="flex flex-row justify-between items-center mt-5">
             <span className="font-sans text-sm font-semibold">
               {t("flags.markedAsDuplicate", {
-                quantity: "TEST",
+                quantity: selectedRows.length,
               })}
             </span>
 
             <Button
               type="button"
-              onClick={() => console.log("resolve")}
+              onClick={resolveFlag}
               styleType={AppearanceStyleType.success}
-              disabled
+              disabled={selectedRows.length === 0}
             >
               {t("flags.resolveFlag")}
             </Button>
           </div>
         </div>
-
-        {console.log(flagset?.applications, gridApi, gridColumnApi)}
       </section>
     </Layout>
   )
