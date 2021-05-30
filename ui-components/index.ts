@@ -64,6 +64,7 @@ export * from "./src/helpers/formatYesNoLabel"
 export * from "./src/helpers/getTranslationWithArguments"
 export * from "./src/helpers/preferences"
 export * from "./src/helpers/resolveObject"
+export * from "./src/helpers/useMutate"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"

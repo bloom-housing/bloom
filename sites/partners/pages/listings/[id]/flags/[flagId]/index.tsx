@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react"
+import React, { useMemo, useState, useCallback, useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
@@ -12,12 +12,16 @@ import {
   Tag,
   AppearanceSizeType,
   AppearanceStyleType,
+  useMutate,
+  ApiClientContext,
 } from "@bloom-housing/ui-components"
 import { useSingleFlaggedApplication } from "../../../../../lib/hooks"
 import { getCols } from "../../../../../src/flags/applicationsCols"
 import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
+  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+
   const router = useRouter()
   const flagsetId = router.query.flagId as string
   const listingId = router.query.id as string
@@ -29,6 +33,8 @@ const Flag = () => {
 
   const { data } = useSingleFlaggedApplication(flagsetId)
 
+  const { mutate, isSuccess, isLoading, isError } = useMutate()
+
   const onGridReady = (params) => {
     setGridApi(params.api)
   }
@@ -39,8 +45,16 @@ const Flag = () => {
   }
 
   const resolveFlag = useCallback(() => {
-    console.log("on resolve click", selectedRows)
-  }, [selectedRows])
+    void mutate(() =>
+      applicationFlaggedSetsService.resolve({
+        body: {
+          afsId: "",
+          applications: [1],
+        },
+      })
+    )
+    // console.log("on resolve click", selectedRows)
+  }, [applicationFlaggedSetsService, mutate])
 
   if (!data) return null
 
@@ -126,6 +140,12 @@ const Flag = () => {
             </Button>
           </div>
         </div>
+
+        {console.log({
+          isSuccess,
+          isLoading,
+          isError,
+        })}
       </section>
     </Layout>
   )
