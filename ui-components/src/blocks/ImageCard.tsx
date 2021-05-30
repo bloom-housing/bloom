@@ -9,7 +9,6 @@ export interface ImageCardProps {
   subtitle?: string
   title: string
   href?: string
-  as?: string
   listing?: Listing
 }
 
@@ -41,9 +40,9 @@ const ImageCard = (props: ImageCardProps) => {
 
   let card = image
 
-  if (props.href && props.as) {
+  if (props.href) {
     card = (
-      <LocalizedLink className="block" href={props.href} as={props.as}>
+      <LocalizedLink className="block" href={props.href}>
         {image}
       </LocalizedLink>
     )

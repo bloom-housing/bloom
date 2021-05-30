@@ -4,7 +4,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { blankApplication, lRoute } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/ui-components"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
@@ -113,6 +113,7 @@ export default class ApplicationConductor {
   steps: StepDefinition[] = []
   returnToReview = false
   currentStepIndex = 0
+  navigatedThroughBack = false
 
   private _config: ApplicationFormConfig = {
     sections: [],
@@ -166,6 +167,10 @@ export default class ApplicationConductor {
     return this.config.steps.filter((step) => step.name.includes("preference")).length
   }
 
+  setNavigatedBack(navigated) {
+    this.navigatedThroughBack = navigated
+  }
+
   completeSection(section) {
     this.application.completedSections = Math.max(section, this.application.completedSections)
   }
@@ -205,13 +210,12 @@ export default class ApplicationConductor {
   }
 
   routeTo(url: string) {
-    void Router.push(url).then(() => window.scrollTo(0, 0))
+    void Router.push(url)
   }
 
   routeToNextOrReturnUrl(url?: string) {
-    void Router.push(lRoute(this.nextOrReturnUrl(url))).then(() => {
+    void Router.push(this.nextOrReturnUrl(url)).then(() => {
       this.returnToReview = false
-      window.scrollTo(0, 0)
     })
   }
 
@@ -251,7 +255,6 @@ export default class ApplicationConductor {
   determinePreviousUrl() {
     let i = this.currentStepIndex - 1
     let previousUrl = ""
-
     while (i >= 0) {
       const previousStep = this.steps[i]
       if (previousStep && !previousStep.skipStep()) {

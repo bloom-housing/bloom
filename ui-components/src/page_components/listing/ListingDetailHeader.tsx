@@ -17,7 +17,7 @@ const ListingDetailHeader = (props: ListingDetailHeaderProps) => (
     <hgroup className="detail-header__hgroup">
       <h2 className="detail-header__title">{props.title}</h2>
       <span className="detail-header__subtitle">{props.subtitle}</span>
-      <Icon symbol="arrow-down" size="medium" />
+      <Icon symbol="arrowDown" size="medium" />
     </hgroup>
   </header>
 )

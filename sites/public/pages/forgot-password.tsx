@@ -9,7 +9,6 @@ import {
   FormCard,
   Icon,
   UserContext,
-  ConfigContext,
   t,
   AlertBox,
   SiteAlert,
@@ -21,7 +20,7 @@ import FormsLayout from "../layouts/forms"
 const ForgotPassword = () => {
   const router = useRouter()
   const { forgotPassword } = useContext(UserContext)
-  const { language } = useContext(ConfigContext)
+  const language = router.locale
 
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -37,7 +36,6 @@ const ForgotPassword = () => {
       await forgotPassword(email, language)
       setSiteAlertMessage(t(`authentication.forgotPassword.success`), "success")
       await router.push("/")
-      window.scrollTo(0, 0)
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {

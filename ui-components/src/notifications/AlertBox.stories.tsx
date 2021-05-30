@@ -1,18 +1,9 @@
 import React from "react"
-
-import SVG from "react-inlinesvg"
 import { AlertBox } from "./AlertBox"
 
 export default {
   title: "Notifications/Alert Box",
-  decorators: [
-    (storyFn: any) => (
-      <div style={{ padding: "1rem" }}>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-  ],
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
 export const AlertBoxAlert = () => (
@@ -47,6 +38,18 @@ export const AlertBoxSuccess = () => (
 
 export const AlertBoxSuccessInvert = () => (
   <AlertBox onClose={() => {}} type="success" inverted>
+    Some warning
+  </AlertBox>
+)
+
+export const AlertBoxBoundToLayoutWidth = () => (
+  <AlertBox onClose={() => {}} type="success" boundToLayoutWidth>
+    Some warning
+  </AlertBox>
+)
+
+export const AlertBoxNarrow = () => (
+  <AlertBox onClose={() => {}} type="success" narrow>
     Some warning
   </AlertBox>
 )

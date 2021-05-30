@@ -8,6 +8,39 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+### Backend
+- Fixed:
+  -  Poor TypeORM performance in `/applications` endpoint [issue #1131](https://github.com/bloom-housing/bloom/issues/1131)
+
+### Frontend
+
+- Added:
+
+  - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
+  - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
+  - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
+
+- Fixed:
+
+  - Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) (Dominik Barcikowski)
+  - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) (Dominik Barcikowski)
+  - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
+  - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
+
+- Changed:
+
+  - Allow preferences to have optional descriptions and an optional generic decline ([#1267](https://github.com/bloom-housing/bloom/pull/1267)) Emily Jablonski
+
+### UI Components
+
+- Added:
+
+  - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
+
+## 1.0.0 / 2021-05-21
+
+### General
+
 - Added:
 
   - This new Changelog format! =)
@@ -16,6 +49,10 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
 
+  - Upgrade the public + partners apps to Next v10 along with new architectural patterns [#1087](https://github.com/bloom-housing/bloom/pull/1087))
+    - **Breaking Change**: you will need to update any downstream app to Next 10 and provide a `NavigationContext` in order for the `ui-components` package to work. Also all handling of locales and i18n routing has been refactored to leverage Next 10.
+    - If hosting on Netlify, make sure you've installed the Next plugin for SSR routes after upgrading to Next 10.
+    - The `ui-components` package no longer has a dependency on Next and can be imported into generalized React codebases.
   - Dynamic preferences (switch from hardcoded preference options) ([#1167](https://github.com/bloom-housing/bloom/pull/1167)) (dominikx96)
   - Update license ([#1189](https://github.com/bloom-housing/bloom/pull/1189)) (Emily Jablonski)
   - Bump ssri from 6.0.1 to 6.0.2 ([#1194](https://github.com/bloom-housing/bloom/pull/1194)) (dependabot)
@@ -51,6 +88,8 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
+  - Add spinner to the Application Form terms page upon submit ([#1225](https://github.com/bloom-housing/bloom/pull/1225)) (Jared White)
+    - The loading overlay in ui-components was updated to use the same spinner as the button component
   - Birthdate localizing issues ([#1202](https://github.com/bloom-housing/bloom/pull/1202))
   - Preferences translations in Partners ([#1206](https://github.com/bloom-housing/bloom/pull/1206)) (dominikx96)
   - Referral application section on mobile ([#1201](https://github.com/bloom-housing/bloom/pull/1201))

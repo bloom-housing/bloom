@@ -16,5 +16,5 @@ export class UnitSummaryByReservedType {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitSummary)
   @ApiProperty({ type: [UnitSummary] })
-  byUnitType: UnitSummary[]
+  byUnitTypeAndRent: UnitSummary[]
 }

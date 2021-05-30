@@ -1467,6 +1467,12 @@ export interface FormMetadataOptions {
   key: string;
 
   /**  */
+  description?: boolean;
+
+  /**  */
+  exclusive?: boolean;
+
+  /**  */
   extraData?: FormMetadataExtraData[];
 }
 
@@ -1476,6 +1482,15 @@ export interface FormMetadata {
 
   /**  */
   options: FormMetadataOptions[];
+
+  /**  */
+  hideGenericDecline?: boolean;
+
+  /** */
+  customSelectText?: string
+
+  /** */
+  hideFromListing?: boolean
 }
 
 export interface Preference {
@@ -1505,6 +1520,9 @@ export interface Preference {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /** */
+  page: number
 }
 
 export interface MinMaxCurrency {
@@ -1554,7 +1572,7 @@ export interface UnitSummaryByReservedType {
   reservedType: string;
 
   /**  */
-  byUnitType: UnitSummary[];
+  byUnitTypeAndRent: UnitSummary[];
 }
 
 export interface UnitSummaryByAMI {
@@ -1591,6 +1609,9 @@ export interface UnitsSummarized {
 
   /**  */
   byUnitType: UnitSummary[];
+
+  /**  */
+  byUnitTypeAndRent: UnitSummary[];
 
   /**  */
   byNonReservedUnitType: UnitSummary[];
@@ -1900,6 +1921,9 @@ export interface Listing {
   countyCode: CountyCode;
 
   /**  */
+  showWaitlist: boolean;
+
+  /**  */
   preferences: Preference[];
 
   /**  */
@@ -2038,6 +2062,9 @@ export interface PreferenceCreate {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /** */
+  page: number
 }
 
 export interface AddressCreate {
@@ -2215,6 +2242,9 @@ export interface PreferenceUpdate {
 
   /**  */
   id: string;
+
+  /** */
+  page: number
 }
 
 export interface AddressUpdate {
@@ -2654,10 +2684,13 @@ export interface Application {
   submissionType: ApplicationSubmissionType;
 
   /**  */
+  applicant: Applicant;
+
+  /**  */
   listing: Id;
 
   /**  */
-  applicant: Applicant;
+  user?: Id;
 
   /**  */
   mailingAddress: Address;

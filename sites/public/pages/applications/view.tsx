@@ -11,24 +11,19 @@ import { useContext, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT } from "../../lib/constants"
 
-export default () => {
+const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
 
   const confirmationDate = useMemo(() => {
     return moment().format(DATE_FORMAT)
   }, [])
 
-  const origin = typeof window !== "undefined" ? window.location.origin : ""
-
   return (
     <FormsLayout>
       <FormCard header="Confirmation">
         <div className="py-2">
           {listing && (
-            <Link
-              href={`listing/id=${listing.id}`}
-              as={`${origin}/listing/${listing.id}/${listing.urlSlug}`}
-            >
+            <Link href={`listing/${listing.id}/${listing.urlSlug}`}>
               <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
             </Link>
           )}
@@ -66,3 +61,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationView

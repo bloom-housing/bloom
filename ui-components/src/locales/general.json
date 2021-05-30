@@ -389,6 +389,41 @@
           "link": "http://domain.com"
         }
       },
+      "PBV": {
+        "title": "%{county} copy goes here…",
+        "residency": {
+          "label": "Residency",
+          "description": "%{county} copy goes here…"
+        },
+        "family": {
+          "label": "Family",
+          "description": "%{county} copy goes here…"
+        },
+        "veteran": {
+          "label": "Veteran",
+          "description": "%{county} copy goes here…"
+        },
+        "homeless": {
+          "label": "Homeless",
+          "description": "%{county} copy goes here…"
+        },
+        "noneApplyButConsider": {
+          "label": "None of these preferences apply to me, but I would like to be considered"
+        },
+        "doNotConsider": {
+          "label": "I don't want to be considered for [housing authority] project-based voucher units"
+        }
+      },
+      "HOPWA": {
+        "title": "Housing Opportunities for Persons with AIDS",
+        "hopwa": {
+          "label": "Housing Opportunities for Persons with AIDS",
+          "description": "%{county} copy goes here…"
+        },
+        "doNotConsider": {
+          "label": "I don't want to be considered"
+        }
+      },
       "displacedTenant": {
         "title": "Displaced Tenant Housing Preference",
         "whichHouseholdMember": "Which household member is claiming this preference?",

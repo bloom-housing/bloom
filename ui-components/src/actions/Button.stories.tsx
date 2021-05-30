@@ -1,7 +1,6 @@
 import * as React from "react"
 
 import { withKnobs, text, select } from "@storybook/addon-knobs"
-import SVG from "react-inlinesvg"
 import { Button } from "../actions/Button"
 import {
   AppearanceBorderType,
@@ -11,15 +10,7 @@ import {
 
 export default {
   title: "Actions/Button",
-  decorators: [
-    (storyFn: any) => (
-      <div>
-        {storyFn()}
-        <SVG src="/images/icons.svg" />
-      </div>
-    ),
-    withKnobs,
-  ],
+  decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
 }
 
 const handleClick = (e: React.MouseEvent) => {
@@ -32,11 +23,31 @@ const BorderTypeStory = { ...AppearanceBorderType, default: undefined }
 export const standard = () => {
   const styleSelect = select("Appearance Style", StyleTypeStory, undefined)
   const borderSelect = select("Appearance Border", BorderTypeStory, undefined)
+  const iconSelect = select(
+    "Icon",
+    { arrowBack: "arrowBack", arrowForward: "arrowForward", default: undefined },
+    undefined
+  )
+  const iconPlacementSelect = select(
+    "Icon Placement",
+    { left: "left", right: "right", default: undefined },
+    undefined
+  )
 
   return (
-    <Button styleType={styleSelect} border={borderSelect} onClick={handleClick}>
-      {text("Label", "Hello Storybook")}
-    </Button>
+    <>
+      <Button
+        styleType={styleSelect}
+        border={borderSelect}
+        icon={iconSelect}
+        iconPlacement={iconPlacementSelect}
+        onClick={handleClick}
+      >
+        {text("Label", "Hello Storybook")}
+      </Button>
+
+      <p className="mt-10">Try out different styles with the Knobs below.</p>
+    </>
   )
 }
 
@@ -53,7 +64,11 @@ export const big = () => (
 )
 
 export const SmallAndPrimary = () => (
-  <Button size={AppearanceSizeType.small} styleType={AppearanceStyleType.primary} onClick={handleClick}>
+  <Button
+    size={AppearanceSizeType.small}
+    styleType={AppearanceStyleType.primary}
+    onClick={handleClick}
+  >
     Small and Primary Button
   </Button>
 )
@@ -84,7 +99,7 @@ export const unstyled = () => (
 
 export const inlineIcon = () => (
   <>
-    <Button inlineIcon="left" icon="arrow-back" onClick={() => alert("Click!")}>
+    <Button inlineIcon="left" icon="arrowBack" onClick={() => alert("Click!")}>
       Go Back
     </Button>
     <br />
@@ -92,7 +107,18 @@ export const inlineIcon = () => (
     <Button inlineIcon="right" icon="right" onClick={() => alert("Click!")}>
       Go Forward
     </Button>
+    <br />
+    <br />
+    <Button inlineIcon="right" icon="arrowForward" onClick={() => alert("Click!")}>
+      Go Forward
+    </Button>
   </>
+)
+
+export const loading = () => (
+  <Button styleType={AppearanceStyleType.primary} loading={true} onClick={handleClick}>
+    Loading Button
+  </Button>
 )
 
 // TODO: replace with tailwind markup, if it matters

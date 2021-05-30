@@ -4,7 +4,6 @@ import moment from "moment"
 import Head from "next/head"
 import {
   Field,
-  MetaTags,
   t,
   Button,
   debounce,
@@ -19,16 +18,14 @@ import {
   useApplicationsData,
   useSingleListingData,
   useFlaggedApplicationsList,
-} from "../../../lib/hooks"
-import Layout from "../../../layouts/application"
+} from "../../../../lib/hooks"
+import Layout from "../../../../layouts/application"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { getColDefs } from "../../../src/applications/ApplicationsColDefs"
+import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
 const ApplicationsList = () => {
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
   const COLUMN_STATE_KEY = "column-state"
 
   const { applicationsService } = useContext(ApiClientContext)
@@ -45,7 +42,7 @@ const ApplicationsList = () => {
   const pageSize = watch("page-size", 8)
   const [pageIndex, setPageIndex] = useState(1)
 
-  const listingId = router.query.listing as string
+  const listingId = router.query.id as string
   const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
@@ -153,7 +150,7 @@ const ApplicationsList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        void router.push(lRoute(`/application?id=${params.value}`))
+        void router.push(lRoute(`/application/${params.value}`))
       })
     }
 
@@ -200,7 +197,6 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitle")}</title>
       </Head>
 
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <ApplicationSecondaryNav
         title={t("applications.applicationsReceived")}
         listingId={listingId}
@@ -222,7 +218,7 @@ const ApplicationsList = () => {
               </div>
 
               <div className="flex-row">
-                <LocalizedLink href={`/listings/applications/add?listing=${listingId}`}>
+                <LocalizedLink href={`/listings/${listingId}/applications/add`}>
                   <Button className="mx-1" onClick={() => false}>
                     {t("applications.addApplication")}
                   </Button>
@@ -231,8 +227,6 @@ const ApplicationsList = () => {
                 <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
                   {t("t.export")}
                 </Button>
-
-                {console.log(csvExportError)}
               </div>
             </div>
 

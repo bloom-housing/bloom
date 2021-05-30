@@ -135,11 +135,13 @@
          "options": [
             {
                "key": "live",
-               "checked": true
+               "checked": true,
+               "extraData": []
             },
             {
                "key": "work",
-               "checked": true
+               "checked": true,
+               "extraData": []
             }
          ]
       }

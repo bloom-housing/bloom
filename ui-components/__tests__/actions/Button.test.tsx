@@ -26,14 +26,14 @@ describe("<Button>", () => {
         size={AppearanceSizeType.small}
         onClick={onClickSpy}
         inlineIcon={"left"}
-        icon={`some-jsx`}
+        icon={`arrowDown`}
       >
         Button Content
       </Button>
     )
 
     expect(getByText("Button Content")).not.toBeNull()
-    expect(container.getElementsByClassName("inline-icon--left").length).toBe(1)
+    expect(container.getElementsByClassName("has-icon-left").length).toBe(1)
   })
 
   it("adds correct classes for an inline right icon", () => {
@@ -43,14 +43,48 @@ describe("<Button>", () => {
         size={AppearanceSizeType.small}
         onClick={onClickSpy}
         inlineIcon={"right"}
-        icon={`some-jsx`}
+        icon={`arrowDown`}
       >
         Button Content
       </Button>
     )
 
     expect(getByText("Button Content")).not.toBeNull()
-    expect(container.getElementsByClassName("inline-icon--right").length).toBe(1)
+    expect(container.getElementsByClassName("has-icon-right").length).toBe(1)
+  })
+
+  it("adds correct classes for a standard left icon", () => {
+    const onClickSpy = jest.fn()
+    const { container, getByText } = render(
+      <Button
+        size={AppearanceSizeType.small}
+        onClick={onClickSpy}
+        iconPlacement={"left"}
+        icon={`arrowDown`}
+      >
+        Button Content
+      </Button>
+    )
+
+    expect(getByText("Button Content")).not.toBeNull()
+    expect(container.getElementsByClassName("has-icon-left").length).toBe(1)
+  })
+
+  it("adds correct classes for a standard right icon", () => {
+    const onClickSpy = jest.fn()
+    const { container, getByText } = render(
+      <Button
+        size={AppearanceSizeType.small}
+        onClick={onClickSpy}
+        iconPlacement={"right"}
+        icon={`arrowDown`}
+      >
+        Button Content
+      </Button>
+    )
+
+    expect(getByText("Button Content")).not.toBeNull()
+    expect(container.getElementsByClassName("has-icon-right").length).toBe(1)
   })
 
   it("adds correct classes for extra optional styles", () => {
