@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
 
-import Layout from "../../../../layouts/application"
+import Layout from "../../../../../layouts/application"
 import {
   t,
   Button,
@@ -12,8 +12,8 @@ import {
   AppearanceSizeType,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
-import { useFlaggedApplicationsList } from "../../../../lib/hooks"
-import { getCols } from "../../../../src/flags/applicationsCols"
+import { useFlaggedApplicationsList } from "../../../../../lib/hooks"
+import { getCols } from "../../../../../src/flags/applicationsCols"
 import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
