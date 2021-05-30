@@ -2,6 +2,7 @@ import * as React from "react"
 import { useRouter } from "next/router"
 import "./PageHeader.scss"
 import { Tab, TabNav } from "../navigation/TabNav"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 
 type TabNavItem = {
   label: string
@@ -48,6 +49,7 @@ const PageHeader = (props: PageHeaderProps) => {
                 tagContent={tab?.content}
                 current={tab.path === currentPath}
                 href={tab.path}
+                tagSize={AppearanceSizeType.small}
               >
                 {tab.label}
               </Tab>

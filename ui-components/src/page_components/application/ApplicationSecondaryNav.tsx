@@ -17,11 +17,11 @@ const ApplicationSecondaryNav = ({
   const elements = [
     {
       label: t("nav.applications"),
-      path: `/listings/applications?listing=${listingId}`,
+      path: `/listings/${listingId}/applications`,
     },
     {
       label: t("nav.flags"),
-      path: `/listings/flags?listing=${listingId}`,
+      path: `/listings/${listingId}/flags`,
       content: <>{flagsQty}</>,
     },
   ]
