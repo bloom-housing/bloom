@@ -9,15 +9,18 @@ import {
   t,
   Button,
   PageHeader,
-  Tag,
-  AppearanceSizeType,
+  AlertBox,
   AppearanceStyleType,
   useMutate,
   ApiClientContext,
+  StatusBar,
 } from "@bloom-housing/ui-components"
 import { useSingleFlaggedApplication } from "../../../../../lib/hooks"
 import { getCols } from "../../../../../src/flags/applicationsCols"
-import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
+import {
+  EnumApplicationFlaggedSetStatus,
+  ApplicationFlaggedSet,
+} from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
   const { applicationFlaggedSetsService } = useContext(ApiClientContext)
@@ -31,9 +34,9 @@ const Flag = () => {
 
   const columns = useMemo(() => getCols(), [])
 
-  const { data } = useSingleFlaggedApplication(flagsetId)
+  const { data, revalidate } = useSingleFlaggedApplication(flagsetId)
 
-  const { mutate, isSuccess, isLoading, isError } = useMutate()
+  const { mutate, reset, isSuccess, isLoading, isError } = useMutate<ApplicationFlaggedSet>()
 
   const onGridReady = (params) => {
     setGridApi(params.api)
@@ -44,17 +47,35 @@ const Flag = () => {
     setSelectedRows(selected)
   }
 
+  const deselectAll = useCallback(() => {
+    gridApi.deselectAll()
+  }, [gridApi])
+
   const resolveFlag = useCallback(() => {
+    const applicationIds = selectedRows.map((item) => ({ id: item.data.id }))
+
+    void reset()
+
     void mutate(() =>
       applicationFlaggedSetsService.resolve({
         body: {
-          afsId: "",
-          applications: [1],
+          afsId: flagsetId,
+          applications: applicationIds,
         },
       })
-    )
-    // console.log("on resolve click", selectedRows)
-  }, [applicationFlaggedSetsService, mutate])
+    ).then(() => {
+      deselectAll()
+      void revalidate()
+    })
+  }, [
+    mutate,
+    reset,
+    revalidate,
+    deselectAll,
+    selectedRows,
+    applicationFlaggedSetsService,
+    flagsetId,
+  ])
 
   if (!data) return null
 
@@ -74,33 +95,38 @@ const Flag = () => {
       />
 
       <div className="border-t bg-white">
-        <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-          <Button
-            inlineIcon="left"
-            icon="arrowBack"
-            onClick={() => router.push(`/listings/${listingId}/flags`)}
-          >
-            {t("t.back")}
-          </Button>
-
-          <div className="status-bar__status md:pl-4 md:w-3/12">
-            <Tag
-              pillStyle={true}
-              size={AppearanceSizeType.normal}
-              styleType={
-                data.status === EnumApplicationFlaggedSetStatus.resolved
-                  ? AppearanceStyleType.success
-                  : AppearanceStyleType.info
-              }
+        <StatusBar
+          backButton={
+            <Button
+              inlineIcon="left"
+              icon="arrowBack"
+              onClick={() => router.push(`/listings/${listingId}/flags`)}
             >
-              {data.status}
-            </Tag>
-          </div>
-        </div>
+              {t("t.back")}
+            </Button>
+          }
+          tagStyle={
+            data.status === EnumApplicationFlaggedSetStatus.resolved
+              ? AppearanceStyleType.success
+              : AppearanceStyleType.info
+          }
+          tagLabel={data.status}
+        />
       </div>
 
       <section>
         <div className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4 w-full">
+          {(isSuccess || isError) && (
+            <AlertBox
+              className="mb-5"
+              type={isSuccess ? "success" : "alert"}
+              closeable
+              onClose={() => reset()}
+            >
+              {isSuccess ? "Updated" : t("account.settings.alerts.genericError")}
+            </AlertBox>
+          )}
+
           <div className="ag-theme-alpine ag-theme-bloom">
             <div className="applications-table mt-5">
               <AgGridReact
@@ -111,6 +137,7 @@ const Flag = () => {
                 rowHeight={58}
                 suppressScrollOnNewData={true}
                 rowSelection="multiple"
+                rowMultiSelectWithClick={true}
                 onGridReady={onGridReady}
                 onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
@@ -133,19 +160,20 @@ const Flag = () => {
             <Button
               type="button"
               onClick={resolveFlag}
-              styleType={AppearanceStyleType.success}
+              styleType={
+                data.status === EnumApplicationFlaggedSetStatus.resolved
+                  ? AppearanceStyleType.secondary
+                  : AppearanceStyleType.success
+              }
               disabled={selectedRows.length === 0}
+              loading={isLoading}
             >
-              {t("flags.resolveFlag")}
+              {data.status === EnumApplicationFlaggedSetStatus.resolved
+                ? t("account.settings.update")
+                : t("flags.resolveFlag")}
             </Button>
           </div>
         </div>
-
-        {console.log({
-          isSuccess,
-          isLoading,
-          isError,
-        })}
       </section>
     </Layout>
   )

@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { t } from "@bloom-housing/ui-components"
 import { convertDataToPst } from "../../lib/helpers"
 import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
@@ -14,6 +16,10 @@ export const getCols = () => [
     flex: 1,
     headerCheckboxSelection: true,
     checkboxSelection: true,
+    cellRendererFramework: ({ data }) => {
+      if (!data?.id) return ""
+      return <Link href={`/application/${data.id}`}>{data.id}</Link>
+    },
   },
   {
     headerName: t("application.name.firstName"),

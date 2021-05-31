@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
 
@@ -122,7 +122,10 @@ export function useSingleFlaggedApplication(afsId: string) {
 
   const { data, error } = useSWR(endpoint, fetcher)
 
+  const revalidate = () => mutate(endpoint)
+
   return {
+    revalidate,
     data,
     error,
   }
