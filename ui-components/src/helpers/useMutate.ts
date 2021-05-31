@@ -1,12 +1,12 @@
 import { useState } from "react"
 
-const useMutate = () => {
-  const [data, setData] = useState<unknown>()
+const useMutate = <UseMutateResponse>() => {
+  const [data, setData] = useState<UseMutateResponse | undefined>(undefined)
   const [isSuccess, setSuccess] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [isError, setError] = useState(null)
 
-  const mutate = async (mutateFn: (args?: unknown) => unknown) => {
+  const mutate = async (mutateFn: (args?: unknown) => Promise<UseMutateResponse>) => {
     try {
       setLoading(true)
       const response = await mutateFn()
@@ -17,7 +17,6 @@ const useMutate = () => {
       setSuccess(false)
       setLoading(false)
       setError(err)
-      console.error(err)
     }
   }
 
