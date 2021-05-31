@@ -36,6 +36,7 @@ export * from "./src/forms/Form"
 export * from "./src/forms/TimeField"
 /* Global */
 export * from "./src/global/AppearanceTypes"
+export * from "./src/global/vendor/AgPagination"
 
 /* Headers */
 export * from "./src/headers/Hero"
