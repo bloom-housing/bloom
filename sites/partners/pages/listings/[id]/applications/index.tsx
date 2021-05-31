@@ -13,6 +13,8 @@ import {
   SiteAlert,
   setSiteAlertMessage,
   ApplicationSecondaryNav,
+  AgPagination,
+  AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
 import {
   useApplicationsData,
@@ -29,21 +31,22 @@ const ApplicationsList = () => {
   const COLUMN_STATE_KEY = "column-state"
 
   const { applicationsService } = useContext(ApiClientContext)
-
   const router = useRouter()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
 
+  /* Filter input */
   const filterField = watch("filter-input", "")
   const [delayedFilterValue, setDelayedFilterValue] = useState(filterField)
 
-  const pageSize = watch("page-size", 8)
-  const [pageIndex, setPageIndex] = useState(1)
+  /* Pagination */
+  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
+  const [currentPage, setCurrentPage] = useState<number>(1)
 
   const listingId = router.query.id as string
-  const { appsData } = useApplicationsData(pageIndex, pageSize, listingId, delayedFilterValue)
+  const { appsData } = useApplicationsData(currentPage, itemsPerPage, listingId, delayedFilterValue)
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
@@ -52,14 +55,15 @@ const ApplicationsList = () => {
     listingId,
   })
 
+  /* CSV export */
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
 
-  function fetchFilteredResults(value: string) {
+  const fetchFilteredResults = (value: string) => {
     setDelayedFilterValue(value)
   }
 
-  // load table state on initial render & pagination change (because the new data comes from API)
+  // Load a table state on initial render & pagination change (because the new data comes from the API)
   useEffect(() => {
     const savedColumnState = sessionStorage.getItem(COLUMN_STATE_KEY)
 
@@ -71,7 +75,7 @@ const ApplicationsList = () => {
         applyOrder: true,
       })
     }
-  }, [gridColumnApi, pageIndex])
+  }, [gridColumnApi, currentPage])
 
   function saveColumnState(api: ColumnApi) {
     const columnState = api.getColumnState()
@@ -87,29 +91,17 @@ const ApplicationsList = () => {
 
   // reset page to 1 when user change limit
   useEffect(() => {
-    setPageIndex(1)
-  }, [pageSize])
+    setCurrentPage(1)
+  }, [itemsPerPage])
 
   // fetch filtered data
   useEffect(() => {
-    setPageIndex(1)
+    setCurrentPage(1)
     debounceFilter.current(filterField)
   }, [filterField])
 
   const applications = appsData?.items || []
   const appsMeta = appsData?.meta
-
-  const pageSizeOptions = ["8", "100", "500", "1000"]
-  const pageJumpOptions = Array.from(Array(appsMeta?.totalPages).keys())?.map((item) => item + 1)
-
-  // action buttons
-  const onBtNext = () => {
-    setPageIndex(pageIndex + 1)
-  }
-
-  const onBtPrevious = () => {
-    setPageIndex(pageIndex - 1)
-  }
 
   const onExport = async () => {
     setCsvExportError(false)
@@ -133,7 +125,7 @@ const ApplicationsList = () => {
     } catch (err) {
       setCsvExportError(true)
       setSiteAlertMessage(t("errors.alert.timeoutPleaseTryAgain"), "alert")
-      console.error("error", err)
+      console.error(err)
     }
 
     setCsvExportLoading(false)
@@ -246,65 +238,14 @@ const ApplicationsList = () => {
                 suppressScrollOnNewData={true}
               ></AgGridReact>
 
-              <div className="data-pager">
-                <Button
-                  className="data-pager__previous data-pager__control"
-                  onClick={onBtPrevious}
-                  disabled={pageIndex === 1}
-                >
-                  {t("t.previous")}
-                </Button>
-
-                <div className="data-pager__control-group">
-                  <span className="data-pager__control">
-                    <span className="field-label" id="lbTotalPages">
-                      {appsMeta?.totalItems}
-                    </span>
-                    <span className="field-label">{t("applications.totalApplications")}</span>
-                  </span>
-
-                  <span className="field data-pager__control">
-                    <label className="field-label font-sans" htmlFor="page-size">
-                      {t("t.show")}
-                    </label>
-                    <select name="page-size" id="page-size" ref={register} defaultValue={8}>
-                      {pageSizeOptions.map((item) => (
-                        <option key={item} value={item}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </span>
-
-                  <span className="field data-pager__control">
-                    <label className="field-label font-sans" htmlFor="page-jump">
-                      {t("t.jumpTo")}
-                    </label>
-                    <select
-                      name="page-jump"
-                      id="page-jump"
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        setPageIndex(parseInt(e.target.value))
-                      }
-                      value={pageIndex}
-                    >
-                      {pageJumpOptions.map((item) => (
-                        <option key={item} value={item}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </span>
-                </div>
-
-                <Button
-                  className="data-pager__next data-pager__control"
-                  onClick={onBtNext}
-                  disabled={appsMeta?.totalPages === pageIndex}
-                >
-                  {t("t.next")}
-                </Button>
-              </div>
+              <AgPagination
+                totalItems={appsMeta?.totalItems}
+                totalPages={appsMeta?.totalPages}
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                setCurrentPage={setCurrentPage}
+                setItemsPerPage={setItemsPerPage}
+              />
             </div>
           </div>
         </article>
