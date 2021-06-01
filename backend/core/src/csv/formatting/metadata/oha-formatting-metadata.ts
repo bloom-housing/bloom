@@ -15,6 +15,7 @@ import {
   formatApplicationNumber,
   formatApplicationType,
   formatApplicatonSubmissionDate,
+  formatHOPWAPreference,
   formatHoueholdMembers,
   formatHouseholdSize,
   formatLivePreference,
@@ -92,6 +93,7 @@ export const ohaFormattingMetadata = [
   formatLivePreference,
   formatWorkPreference,
   formatOHAPreference,
+  formatHOPWAPreference,
   formatHouseholdSize,
   formatHoueholdMembers,
 ]
