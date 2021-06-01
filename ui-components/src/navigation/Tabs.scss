@@ -29,6 +29,9 @@
   &[aria-selected="true"] {
     border-bottom-color: $tailwind-primary;
   }
+  &[aria-disabled="true"] {
+    @apply text-gray-600;
+  }
 }
 
 .tabs__panel {

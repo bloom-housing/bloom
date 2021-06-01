@@ -13,6 +13,7 @@ export const Default = () => {
         <Tab>Title 1</Tab>
         <Tab>Title 2</Tab>
         <Tab>Long Tab Title 3</Tab>
+        <Tab disabled>Disabled Tab</Tab>
       </TabList>
 
       <TabPanel>
@@ -26,6 +27,9 @@ export const Default = () => {
       <TabPanel>
         <h2>Any kind of content here</h2>
         <p>Woo hoo</p>
+      </TabPanel>
+      <TabPanel>
+        <p>This is disabled</p>
       </TabPanel>
     </Tabs>
   )
