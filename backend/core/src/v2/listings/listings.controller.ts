@@ -4,6 +4,6 @@ import { Controller, Get } from "@nestjs/common"
 export class ListingsController {
   @Get()
   list() {
-    return [1,2,3]
+    return [1, 2, 3]
   }
 }

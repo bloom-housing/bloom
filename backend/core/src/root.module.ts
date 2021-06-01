@@ -24,15 +24,14 @@ export class ModuleUtils {
 
 @Module({})
 export class RootModule extends ModuleUtils {
-
   static register(dbOptions): DynamicModule {
     return {
       module: RootModule,
       imports: [
         RouterModule.forRoutes(routes),
         AppModule.register(dbOptions),
-        AppModuleV2.register(dbOptions)
-      ]
+        AppModuleV2.register(dbOptions),
+      ],
     }
   }
 }

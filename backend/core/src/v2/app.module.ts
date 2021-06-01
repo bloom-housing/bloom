@@ -1,16 +1,12 @@
 import { DynamicModule, Module } from "@nestjs/common"
 import { ListingsModule } from "./listings/listings.module"
 
-@Module({
-})
+@Module({})
 export class AppModule {
   static register(dbOptions): DynamicModule {
     return {
       module: AppModule,
-      imports: [
-        ListingsModule
-      ],
+      imports: [ListingsModule],
     }
   }
 }
-

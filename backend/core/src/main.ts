@@ -8,7 +8,7 @@ import { ModuleUtils, RootModule } from "./root.module"
 
 let app
 async function bootstrap() {
-  const apiFactory = new NestFactoryStatic();
+  const apiFactory = new NestFactoryStatic()
   app = await apiFactory.create(RootModule.register(dbOptions))
   app = ModuleUtils.setupMiddlewares(app)
   const conn = getConnection()
@@ -32,7 +32,7 @@ async function bootstrap() {
     .setVersion("1.0")
     .addBearerAuth()
     .build()
-  const document = SwaggerModule.createDocument(app, config, {ignoreGlobalPrefix: false})
+  const document = SwaggerModule.createDocument(app, config, { ignoreGlobalPrefix: false })
   SwaggerModule.setup("docs", app, document)
   const configService: ConfigService = app.get(ConfigService)
   await app.listen(configService.get<number>("PORT"))
