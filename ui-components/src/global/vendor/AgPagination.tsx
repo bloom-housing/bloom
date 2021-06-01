@@ -6,6 +6,7 @@ type AgPaginationProps = {
   totalPages: number
   currentPage: number
   itemsPerPage: number
+  quantityLabel?: string
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>
   setItemsPerPage: React.Dispatch<React.SetStateAction<number>>
   onPageChange?: (page: number) => void
@@ -19,6 +20,7 @@ const AgPagination = ({
   totalPages,
   currentPage,
   itemsPerPage,
+  quantityLabel,
   setCurrentPage,
   setItemsPerPage,
   onPageChange,
@@ -54,7 +56,7 @@ const AgPagination = ({
           <span className="field-label" id="lbTotalPages">
             {totalItems}
           </span>
-          <span className="field-label">{t("applications.totalApplications")}</span>
+          {quantityLabel && <span className="field-label">{quantityLabel}</span>}
         </span>
 
         <span className="field data-pager__control">
@@ -64,7 +66,6 @@ const AgPagination = ({
           <select
             name="page-size"
             id="page-size"
-            defaultValue={AG_PER_PAGE_OPTIONS[0]}
             value={itemsPerPage}
             onChange={({ target }) => onRowLimitChange(target.value)}
           >

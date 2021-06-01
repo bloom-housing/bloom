@@ -1,21 +1,37 @@
-import React, { useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
 import Layout from "../../../../layouts/application"
-import { t, ApplicationSecondaryNav } from "@bloom-housing/ui-components"
+import {
+  t,
+  ApplicationSecondaryNav,
+  AgPagination,
+  AG_PER_PAGE_OPTIONS,
+} from "@bloom-housing/ui-components"
 import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
 
 const FlagsPage = () => {
   const router = useRouter()
   const listingId = router.query.id as string
 
+  /* Pagination */
+  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+
+  // reset page to 1 when user change limit
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [itemsPerPage])
+
   const { listingDto } = useSingleListingData(listingId)
 
   const { data } = useFlaggedApplicationsList({
     listingId,
+    page: currentPage,
+    limit: itemsPerPage,
   })
 
   const listingName = listingDto?.name
@@ -51,21 +67,17 @@ const FlagsPage = () => {
               headerHeight={83}
               rowHeight={58}
               defaultColDef={defaultColDef}
-              suppressScrollOnNewData={true}
-              immutableData={true}
-              getRowNodeId={(data) => data.row}
             ></AgGridReact>
 
-            <div className="data-pager">
-              <div className="data-pager__control-group">
-                <span className="data-pager__control">
-                  <span className="field-label" id="lbTotalPages">
-                    {data?.items?.length}
-                  </span>
-                  <span className="field-label">{t("flags.totalSets")}</span>
-                </span>
-              </div>
-            </div>
+            <AgPagination
+              totalItems={data?.meta.totalItems}
+              totalPages={data?.meta.totalPages}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              quantityLabel={t("applications.totalSets")}
+              setCurrentPage={setCurrentPage}
+              setItemsPerPage={setItemsPerPage}
+            />
           </div>
         </div>
       </article>

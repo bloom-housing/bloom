@@ -53,6 +53,8 @@ const ApplicationsList = () => {
 
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
+    page: 1,
+    limit: 1,
   })
 
   /* CSV export */
@@ -243,6 +245,7 @@ const ApplicationsList = () => {
                 totalPages={appsMeta?.totalPages}
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
+                quantityLabel={t("applications.totalApplications")}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
               />
