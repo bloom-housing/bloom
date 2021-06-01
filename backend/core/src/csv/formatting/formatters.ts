@@ -574,3 +574,37 @@ export const formatDemographicsHowDidYouHear = {
     return joinArrayFormatter(application.demographics.howDidYouHear)
   },
 }
+
+export const formatOHAPreference = {
+  label: "Oakland Housing Authority Project Based Vouchers",
+  discriminator: "",
+  formatter: (application: Application) => {
+    const pbvPreferences = application.preferences.filter((pref) => pref.key === "PBV")
+    if (pbvPreferences.length !== 1) {
+      return ""
+    }
+    return (
+      pbvPreferences[0].options
+        .filter((option) => option.checked)
+        .map((option) => option.key)
+        .join(",") || ""
+    )
+  },
+}
+
+export const formatHOPWAPreference = {
+  label: "Housing Opportunities for Persons with AIDS",
+  discriminator: "",
+  formatter: (application: Application) => {
+    const hopwaPreferences = application.preferences.filter((pref) => pref.key === "HOPWA")
+    if (hopwaPreferences.length !== 1) {
+      return ""
+    }
+    return (
+      hopwaPreferences[0].options
+        .filter((option) => option.checked)
+        .map((option) => option.key)
+        .join(",") || ""
+    )
+  },
+}
