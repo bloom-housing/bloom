@@ -5,8 +5,8 @@ import { ApiClientContext } from "@bloom-housing/ui-components"
 
 type UseSingleApplicationDataProps = {
   listingId: string
-  page?: number
-  limit?: number
+  page: number
+  limit: number
 }
 
 export function useSingleListingData(listingId: string) {
@@ -95,7 +95,13 @@ export function useFlaggedApplicationsList({
 }: UseSingleApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(ApiClientContext)
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets`
+  const searchParams = new URLSearchParams()
+  searchParams.append("listingId", listingId)
+  searchParams.append("page", page.toString())
+  searchParams.append("limit", limit.toString())
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${searchParams.toString()}`
+
   const fetcher = () =>
     applicationFlaggedSetsService.list({
       listingId,
