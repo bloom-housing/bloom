@@ -1,8 +1,8 @@
-import React, { useMemo, useState, useCallback, useContext } from "react"
+import React, { useMemo, useState, useCallback, useContext, useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
-import { GridApi, RowNode } from "ag-grid-community"
+import { GridApi, RowNode, GridOptions } from "ag-grid-community"
 
 import Layout from "../../../../../layouts/application"
 import {
@@ -38,6 +38,31 @@ const Flag = () => {
 
   const { mutate, reset, isSuccess, isLoading, isError } = useMutate<ApplicationFlaggedSet>()
 
+  const gridOptions: GridOptions = {
+    getRowNodeId: (data) => data.id,
+  }
+
+  /* It selects all flagged rows on init and update (revalidate). */
+  const selectFlaggedApps = useCallback(() => {
+    if (!data) return
+
+    const duplicateIds = data.applications
+      .filter((item) => item.markedAsDuplicate)
+      .map((item) => item.id)
+
+    gridApi.forEachNode((row) => {
+      if (duplicateIds.includes(row.id)) {
+        gridApi.selectNode(row, true)
+      }
+    })
+  }, [data, gridApi])
+
+  useEffect(() => {
+    if (!gridApi) return
+
+    selectFlaggedApps()
+  }, [data, gridApi, selectFlaggedApps])
+
   const onGridReady = (params) => {
     setGridApi(params.api)
   }
@@ -52,7 +77,7 @@ const Flag = () => {
   }, [gridApi])
 
   const resolveFlag = useCallback(() => {
-    const applicationIds = selectedRows.map((item) => ({ id: item.data.id }))
+    const applicationIds = selectedRows?.map((item) => ({ id: item.data.id })) || []
 
     void reset()
 
@@ -132,6 +157,7 @@ const Flag = () => {
               <AgGridReact
                 columnDefs={columns}
                 rowData={data.applications}
+                gridOptions={gridOptions}
                 domLayout="autoHeight"
                 headerHeight={83}
                 rowHeight={58}
@@ -165,7 +191,10 @@ const Flag = () => {
                   ? AppearanceStyleType.secondary
                   : AppearanceStyleType.success
               }
-              disabled={selectedRows.length === 0}
+              disabled={
+                selectedRows.length === 0 &&
+                data.status !== EnumApplicationFlaggedSetStatus.resolved
+              }
               loading={isLoading}
             >
               {data.status === EnumApplicationFlaggedSetStatus.resolved
