@@ -55,7 +55,7 @@ export function useApplicationsData(
   }
 
   if (search) {
-    Object.assign(params, search)
+    Object.assign(params, { search })
   }
 
   const fetcher = () => applicationsService.list(params)
