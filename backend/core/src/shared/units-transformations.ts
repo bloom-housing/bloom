@@ -144,7 +144,7 @@ const getDefaultSummaryRanges = (unit: Unit) => {
   } as UnitSummary
 }
 
-const getUnitSummary = (unit: Unit, existingSummary?: UnitSummary) => {
+const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
   if (!existingSummary) {
     return getDefaultSummaryRanges(unit)
   }
@@ -156,6 +156,7 @@ const getUnitSummary = (unit: Unit, existingSummary?: UnitSummary) => {
     getPrecisionNumber(unit.monthlyIncomeMin)
   )
 
+  // Occupancy Range
   summary.occupancyRange = minMax(summary.occupancyRange, unit.minOccupancy)
   summary.occupancyRange = minMax(summary.occupancyRange, unit.maxOccupancy)
 
@@ -181,6 +182,8 @@ type UnitMap = {
   [key: string]: Unit[]
 }
 
+const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+
 // Allows for multiples rows under one unit type if the rent methods differ
 const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitSummary[] => {
   if (!reservedType) {
@@ -198,9 +201,8 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
   })
 
   for (const key in unitMap) {
-    let finalSummary = {} as UnitSummary
-    finalSummary = unitMap[key].reduce((summary, unit, index) => {
-      return getUnitSummary(unit, index === 0 ? null : summary)
+    const finalSummary = unitMap[key].reduce((summary, unit, index) => {
+      return getUnitsSummary(unit, index === 0 ? null : summary)
     }, {} as UnitSummary)
     finalSummary.totalAvailable = unitMap[key].length
     summaries.push(finalSummary)
@@ -208,7 +210,7 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
 
   return summaries.sort((a, b) => {
     return (
-      Number(a.unitType[0]) - Number(b.unitType[0]) ||
+      UnitTypeSort.indexOf(a.unitType[0]) - UnitTypeSort.indexOf(b.unitType[0]) ||
       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     )
   })
@@ -228,7 +230,7 @@ const summarizeUnitsByType = (
       const summary = {} as UnitSummary
       const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
       const finalSummary = Array.from(unitsByType).reduce((summary, unit, index) => {
-        return getUnitSummary(unit, index === 0 ? null : summary)
+        return getUnitsSummary(unit, index === 0 ? null : summary)
       }, summary)
       return finalSummary
     }
