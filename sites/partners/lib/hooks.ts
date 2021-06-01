@@ -55,8 +55,10 @@ export function useApplicationsData(
   }
 
   if (search) {
-    Object.assign(params, search)
+    Object.assign(params, { search })
   }
+
+  console.log("params", params)
 
   const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
