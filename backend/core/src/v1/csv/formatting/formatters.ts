@@ -591,3 +591,20 @@ export const formatOHAPreference = {
     )
   },
 }
+
+export const formatHOPWAPreference = {
+  label: "Housing Opportunities for Persons with AIDS",
+  discriminator: "",
+  formatter: (application: Application) => {
+    const hopwaPreferences = application.preferences.filter((pref) => pref.key === "HOPWA")
+    if (hopwaPreferences.length !== 1) {
+      return ""
+    }
+    return (
+      hopwaPreferences[0].options
+        .filter((option) => option.checked)
+        .map((option) => option.key)
+        .join(",") || ""
+    )
+  },
+}
