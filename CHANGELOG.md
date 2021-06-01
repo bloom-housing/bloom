@@ -9,16 +9,20 @@ All notable changes to this project will be documented in this file. The format 
 ### General
 
 ### Backend
+
 - Fixed:
-  -  Poor TypeORM performance in `/applications` endpoint [issue #1131](https://github.com/bloom-housing/bloom/issues/1131)
+
+  - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
+
 - Added:
-  -  Added "closed" to ListingStatus enum
+  - Added "closed" to ListingStatus enum
   - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
-  -  Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences)
+  - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)
 
 ### Frontend
 
 - Added:
+
   - Listings Management pieces added to Parnter's app, including add and detail pages
     - add accessible at `/listings/add`
     - detail page accessible at `/listings/[id]`
@@ -33,6 +37,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
   - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
   - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
+  - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
 
 - Changed:
 
