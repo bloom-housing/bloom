@@ -1,8 +1,8 @@
-import { Unit } from "../units/entities/unit.entity"
-import { MinMax } from "../units/types/min-max"
-import { MinMaxCurrency } from "../units/types/min-max-currency"
-import { UnitSummary } from "../units/types/unit-summary"
-import { UnitsSummarized } from "../units/types/units-summarized"
+import { Unit } from "../v1/units/entities/unit.entity"
+import { MinMax } from "../v1/units/types/min-max"
+import { MinMaxCurrency } from "../v1/units/types/min-max-currency"
+import { UnitSummary } from "../v1/units/types/unit-summary"
+import { UnitsSummarized } from "../v1/units/types/units-summarized"
 
 export type AnyDict = { [key: string]: any }
 type Units = Unit[]

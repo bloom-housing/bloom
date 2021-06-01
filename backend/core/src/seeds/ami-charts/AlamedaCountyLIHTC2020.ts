@@ -1,5 +1,5 @@
 import { BaseEntity } from "typeorm"
-import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
+import { AmiChartCreateDto } from "../../v1/ami-charts/dto/ami-chart.dto"
 
 export const AlamedaCountyLIHTC2020: Omit<AmiChartCreateDto, keyof BaseEntity> = {
   name: "AlamedaCountyLIHTC2020",

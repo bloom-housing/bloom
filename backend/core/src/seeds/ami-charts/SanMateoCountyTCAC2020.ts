@@ -1,4 +1,4 @@
-import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
+import { AmiChartCreateDto } from "../../v1/ami-charts/dto/ami-chart.dto"
 import { BaseEntity } from "typeorm"
 
 export const SanMateoCounty2020: Omit<AmiChartCreateDto, keyof BaseEntity> = {

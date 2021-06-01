@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
-import { ApplicationPreference } from "../applications/entities/application-preferences.entity"
+import { ApplicationPreference } from "../v1/applications/entities/application-preferences.entity"
 
 export class updateExtraDataInApplicationPreferences1622194142757 implements MigrationInterface {
   name = "updateExtraDataInApplicationPreferences1622194142757"
