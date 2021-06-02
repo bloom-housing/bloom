@@ -6,7 +6,12 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { DefaultAuthGuard } from "../auth/guards/default.guard"
 import { AssetsService } from "./services/assets.service"
-import { AssetCreateDto, AssetDto, CreateUploadUrlDto } from "./dto/asset.dto"
+import {
+  AssetCreateDto,
+  AssetDto,
+  CreatePresignedUploadMetadataDto,
+  CreatePresignedUploadMetadataResponseDto,
+} from "./dto/asset.dto"
 
 @Controller("assets")
 @ApiTags("assets")
@@ -28,9 +33,14 @@ export class AssetsController {
     return mapTo(AssetDto, asset)
   }
 
-  @Post("/upload-url")
-  @ApiOperation({ summary: "Create upload url", operationId: "createUploadUrl" })
-  async createUploadURL(@Body() createUploadUrlDto: CreateUploadUrlDto): Promise<string> {
-    return await this.assetsService.createUploadUrl(createUploadUrlDto)
+  @Post("/presigned-upload-metadata")
+  @ApiOperation({
+    summary: "Create presigned upload metadata",
+    operationId: "createPresignedUploadMetadata",
+  })
+  async createPresignedUploadMetadata(
+    @Body() createPresignedUploadMetadataDto: CreatePresignedUploadMetadataDto
+  ): Promise<CreatePresignedUploadMetadataResponseDto> {
+    return await this.assetsService.createPresignedUploadMetadata(createPresignedUploadMetadataDto)
   }
 }

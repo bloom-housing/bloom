@@ -7,10 +7,14 @@ import { Asset } from "../../src/assets/entities/asset.entity"
 import { UploadService } from "../../src/assets/services/upload.service"
 import { SharedModule } from "../../src/shared/shared.module"
 import { AuthzService } from "../../src/auth/authz.service"
+import { CreatePresignedUploadMetadataResponseDto } from "../../src/assets/dto/asset.dto"
 
 class FakeUploadService implements UploadService {
-  getPresignedUploadUrl(key: string): string {
-    return "fake" + key
+  createPresignedUploadMetadata(): CreatePresignedUploadMetadataResponseDto {
+    const response = new CreatePresignedUploadMetadataResponseDto()
+    response.signature = "fake"
+    response.timestamp = "fake"
+    return response
   }
 }
 
@@ -49,8 +53,13 @@ describe("AssetsController", () => {
 
     it("should create a presigned url for upload", async () => {
       const publicId = "publicId"
-      const url = await assetsController.createUploadURL({ publicId })
-      expect(url).toBe("fake" + publicId)
+      const createPresignedUploadMetadataResponseDto = await assetsController.createPresignedUploadMetadata(
+        { publicId }
+      )
+      expect(createPresignedUploadMetadataResponseDto).toHaveProperty("signature")
+      expect(createPresignedUploadMetadataResponseDto.signature).toBe("fake")
+      expect(createPresignedUploadMetadataResponseDto).toHaveProperty("timestamp")
+      expect(createPresignedUploadMetadataResponseDto.timestamp).toBe("fake")
     })
   })
 })

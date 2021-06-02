@@ -9,7 +9,7 @@ export class AssetDto extends OmitType(Asset, [] as const) {}
 
 export class AssetCreateDto extends OmitType(AssetDto, ["id", "createdAt", "updatedAt"] as const) {}
 
-export class CreateUploadUrlDto {
+export class CreatePresignedUploadMetadataDto {
   @Column({ type: "text" })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -22,4 +22,12 @@ export class CreateUploadUrlDto {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   eager?: string
+}
+
+export class CreatePresignedUploadMetadataResponseDto {
+  @Expose()
+  timestamp: string
+
+  @Expose()
+  signature: string
 }

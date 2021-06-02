@@ -1,5 +1,9 @@
 import { Injectable } from "@nestjs/common"
-import { AssetCreateDto, CreateUploadUrlDto } from "../dto/asset.dto"
+import {
+  AssetCreateDto,
+  CreatePresignedUploadMetadataDto,
+  CreatePresignedUploadMetadataResponseDto,
+} from "../dto/asset.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { Asset } from "../entities/asset.entity"
@@ -16,9 +20,11 @@ export class AssetsService {
     return await this.repository.save(assetCreateDto)
   }
 
-  createUploadUrl(createUploadUrlDto: CreateUploadUrlDto): Promise<string> {
+  createPresignedUploadMetadata(
+    createUploadUrlDto: CreatePresignedUploadMetadataDto
+  ): Promise<CreatePresignedUploadMetadataResponseDto> {
     return Promise.resolve(
-      this.uploadService.getPresignedUploadUrl(
+      this.uploadService.createPresignedUploadMetadata(
         createUploadUrlDto.publicId,
         createUploadUrlDto.eager
       )
