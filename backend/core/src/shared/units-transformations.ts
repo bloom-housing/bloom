@@ -112,11 +112,11 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
 }
 
 const getCurrenyString = (initialValue: string) => {
-  return usd.format(getPrecisionNumber(initialValue))
+  return usd.format(getRoundedNumber(initialValue))
 }
 
-const getPrecisionNumber = (initialValue: string) => {
-  return parseFloat(parseFloat(initialValue).toPrecision(2))
+const getRoundedNumber = (initialValue: string) => {
+  return parseFloat(parseFloat(initialValue).toFixed(2))
 }
 
 const getDefaultSummaryRanges = (unit: Unit) => {
@@ -153,7 +153,7 @@ const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
   // Income Range
   summary.minIncomeRange = minMaxCurrency(
     summary.minIncomeRange,
-    getPrecisionNumber(unit.monthlyIncomeMin)
+    getRoundedNumber(unit.monthlyIncomeMin)
   )
 
   // Occupancy Range
@@ -165,7 +165,7 @@ const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
     summary.rentAsPercentIncomeRange,
     parseFloat(unit.monthlyRentAsPercentOfIncome)
   )
-  summary.rentRange = minMaxCurrency(summary.rentRange, getPrecisionNumber(unit.monthlyRent))
+  summary.rentRange = minMaxCurrency(summary.rentRange, getRoundedNumber(unit.monthlyRent))
 
   // Floor Range
   if (unit.floor) {
