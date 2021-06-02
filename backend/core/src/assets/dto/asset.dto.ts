@@ -2,7 +2,7 @@ import { OmitType } from "@nestjs/swagger"
 import { Asset } from "../entities/asset.entity"
 import { Expose } from "class-transformer"
 import { Column } from "typeorm"
-import { IsString, MaxLength } from "class-validator"
+import { IsOptional, IsString, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class AssetDto extends OmitType(Asset, [] as const) {}
@@ -14,5 +14,12 @@ export class CreateUploadUrlDto {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
-  key: string
+  publicId: string
+
+  @Column({ type: "text" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  eager?: string
 }

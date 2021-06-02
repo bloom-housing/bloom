@@ -18,6 +18,8 @@ import Joi from "joi"
         THROTTLE_TTL: Joi.number().default(1),
         THROTTLE_LIMIT: Joi.number().default(9999999999999999),
         APP_SECRET: Joi.string().required().min(16),
+        CLOUDINARY_SECRET: Joi.string().required(),
+        CLOUDINARY_KEY: Joi.string().required(),
       }),
     }),
   ],

@@ -16,7 +16,12 @@ export class AssetsService {
     return await this.repository.save(assetCreateDto)
   }
 
-  async createUploadUrl(createUploadUrlDto: CreateUploadUrlDto) {
-    return this.uploadService.getPresignedUploadUrl(createUploadUrlDto.key)
+  createUploadUrl(createUploadUrlDto: CreateUploadUrlDto): Promise<string> {
+    return Promise.resolve(
+      this.uploadService.getPresignedUploadUrl(
+        createUploadUrlDto.publicId,
+        createUploadUrlDto.eager
+      )
+    )
   }
 }

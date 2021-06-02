@@ -9,8 +9,8 @@ import { SharedModule } from "../../src/shared/shared.module"
 import { AuthzService } from "../../src/auth/authz.service"
 
 class FakeUploadService implements UploadService {
-  getPresignedUploadUrl(key: string): Promise<string> {
-    return Promise.resolve("fake" + key)
+  getPresignedUploadUrl(key: string): string {
+    return "fake" + key
   }
 }
 
@@ -48,9 +48,9 @@ describe("AssetsController", () => {
     })
 
     it("should create a presigned url for upload", async () => {
-      const key = "key"
-      const url = await assetsController.createUploadURL({ key })
-      expect(url).toBe("fake" + key)
+      const publicId = "publicId"
+      const url = await assetsController.createUploadURL({ publicId })
+      expect(url).toBe("fake" + publicId)
     })
   })
 })
