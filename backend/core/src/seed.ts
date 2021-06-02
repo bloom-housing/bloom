@@ -1,7 +1,7 @@
 import { SeederModule } from "./seeder/seeder.module"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
-import { ListingSeed, listingSeed1, seedListing } from "./seeds/listings"
+import { ListingSeed, defaultListingSeed, seedListing } from "./seeds/listings"
 import { UserService } from "./user/user.service"
 import { plainToClass } from "class-transformer"
 import { UserCreateDto } from "./user/dto/user.dto"
@@ -15,24 +15,25 @@ const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
-const newListingSeed = (): ListingSeed => {
-  return JSON.parse(JSON.stringify(listingSeed1)) as ListingSeed
+const newDefaultListingSeed = (): ListingSeed => {
+  return JSON.parse(JSON.stringify(defaultListingSeed)) as ListingSeed
 }
 
 const seedListings = async (app: INestApplicationContext) => {
-  let listingSeed = newListingSeed()
-  listingSeed.listing.name = "Triton (2pref)"
-  const listing1 = await seedListing(app, listingSeed)
+  // Two preferences
+  let listingSeed = newDefaultListingSeed()
+  listingSeed.listing.name = "Two Preferences"
+  const twoPreferencesListing = await seedListing(app, listingSeed)
   const userService = app.get<UserService>(UserService)
   await Promise.all([
-    listing1.leasingAgents.map(async (agent: User) => {
+    twoPreferencesListing.leasingAgents.map(async (agent: User) => {
       await userService.confirm({ token: agent.confirmationToken })
     }),
   ])
 
-  // Listing 2
-  listingSeed = newListingSeed()
-  listingSeed.listing.name = "Test listing (1pref)"
+  // One preference
+  listingSeed = newDefaultListingSeed()
+  listingSeed.listing.name = "One preference"
   listingSeed.preferences = [
     {
       ordinal: 1,
@@ -62,10 +63,16 @@ const seedListings = async (app: INestApplicationContext) => {
       email: "leasing-agent-2@example.com",
     },
   ]
-  const listing2 = await seedListing(app, listingSeed)
+  const onePreferenceListing = await seedListing(app, listingSeed)
+  await Promise.all([
+    onePreferenceListing.leasingAgents.map(async (agent: User) => {
+      await userService.confirm({ token: agent.confirmationToken })
+    }),
+  ])
 
-  listingSeed = newListingSeed()
-  listingSeed.listing.name = "Test listing (0pref)"
+  // No preferences
+  listingSeed = newDefaultListingSeed()
+  listingSeed.listing.name = "No preferences"
   listingSeed.leasingAgents = [
     {
       ...listingSeed.leasingAgents[0],
@@ -73,15 +80,14 @@ const seedListings = async (app: INestApplicationContext) => {
     },
   ]
   listingSeed.preferences = []
-  const listing3 = await seedListing(app, listingSeed)
-
+  const noPreferencesListing = await seedListing(app, listingSeed)
   await Promise.all([
-    listing2.leasingAgents.map(async (agent: User) => {
+    noPreferencesListing.leasingAgents.map(async (agent: User) => {
       await userService.confirm({ token: agent.confirmationToken })
     }),
   ])
 
-  return [listing1, listing2, listing3]
+  return [twoPreferencesListing, onePreferenceListing, noPreferencesListing]
 }
 
 async function seed() {

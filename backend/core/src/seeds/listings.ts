@@ -9,25 +9,31 @@ import { getRepositoryToken } from "@nestjs/typeorm"
 import { ApplicationMethodType, AssetDto, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
-import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { User } from "../user/entities/user.entity"
 import { UserService } from "../user/user.service"
-import { SanMateoHUD2019 } from "./ami-charts"
-import { InputType } from "../shared/types/input-type"
 import { UserCreateDto } from "../user/dto/user.dto"
-import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { ListingStatus } from "../listings/types/listing-status-enum"
 import { ListingEventDto } from "../listings/dto/listing-event.dto"
 import { ApplicationMethodDto } from "../listings/dto/application-method.dto"
 import { CSVFormattingType } from "../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../shared/types/county-code"
+import { ListingEventType } from "../listings/types/listing-event-type-enum"
+import { InputType } from "../shared/types/input-type"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
   amiChart: AmiChartCreateDto
   units: Array<Omit<UnitCreateDto, "property">>
   applicationMethods: Array<Omit<ApplicationMethodDto, "listing">>
-  property: Omit<PropertyCreateDto, "propertyGroups" | "listings" | "units" | "unitsSummarized">
+  property: Omit<
+    PropertyCreateDto,
+    | "propertyGroups"
+    | "listings"
+    | "units"
+    | "unitsSummarized"
+    | "householdSizeMin"
+    | "householdSizeMax"
+  >
   preferences: Array<Omit<PreferenceCreateDto, "listing">>
   listingEvents: Array<Omit<ListingEventDto, "listing">>
   assets: Array<Omit<AssetDto, "listing">>
@@ -87,300 +93,598 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
   return await listingsRepo.save(listingCreateDto)
 }
 
-export const listingSeed1: ListingSeed = {
-  units: [
+const defaultAmiChart: AmiChartCreateDto = {
+  name: "AlamedaCountyTCAC2021",
+  items: [
     {
-      amiPercentage: "80.0",
-      annualIncomeMin: "58152.0",
-      monthlyIncomeMin: "4858.0",
-      floor: null,
-      annualIncomeMax: "103350.0",
-      maxOccupancy: 2,
-      minOccupancy: 1,
-      monthlyRent: "2429.0",
-      numBathrooms: 1,
-      numBedrooms: null,
-      number: "265",
-      priorityType: null,
-      reservedType: null,
-      sqFeet: "750",
-      status: "available",
-      unitType: "oneBdrm",
-      monthlyRentAsPercentOfIncome: null,
-      amiChart: null,
+      percentOfAmi: 80,
+      householdSize: 1,
+      income: 76720,
     },
     {
-      amiPercentage: "80.0",
-      annualIncomeMin: "85368.0",
-      monthlyIncomeMin: "5992.0",
-      floor: null,
-      annualIncomeMax: "160150.0",
-      maxOccupancy: 7,
-      minOccupancy: 5,
-      monthlyRent: "2996.0",
-      numBathrooms: 1,
-      numBedrooms: null,
-      number: "448",
-      priorityType: null,
-      reservedType: null,
+      percentOfAmi: 80,
+      householdSize: 2,
+      income: 87680,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 3,
+      income: 98640,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 4,
+      income: 109600,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 5,
+      income: 11840,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 6,
+      income: 127200,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 7,
+      income: 135920,
+    },
+    {
+      percentOfAmi: 80,
+      householdSize: 8,
+      income: 144720,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 1,
+      income: 57540,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 2,
+      income: 65760,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 3,
+      income: 73980,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 4,
+      income: 82200,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 5,
+      income: 88800,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 6,
+      income: 95400,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 7,
+      income: 101940,
+    },
+    {
+      percentOfAmi: 60,
+      householdSize: 8,
+      income: 108540,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 1,
+      income: 47950,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 2,
+      income: 54800,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 3,
+      income: 61650,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 4,
+      income: 68500,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 5,
+      income: 74000,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 6,
+      income: 79500,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 7,
+      income: 84950,
+    },
+    {
+      percentOfAmi: 50,
+      householdSize: 8,
+      income: 90450,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 1,
+      income: 43155,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 2,
+      income: 49320,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 3,
+      income: 55485,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 4,
+      income: 61650,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 5,
+      income: 66600,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 6,
+      income: 71550,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 7,
+      income: 76455,
+    },
+    {
+      percentOfAmi: 45,
+      householdSize: 8,
+      income: 81405,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 1,
+      income: 38360,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 2,
+      income: 43840,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 3,
+      income: 49320,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 4,
+      income: 54800,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 5,
+      income: 59200,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 6,
+      income: 63600,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 7,
+      income: 67960,
+    },
+    {
+      percentOfAmi: 40,
+      householdSize: 8,
+      income: 72360,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 1,
+      income: 28770,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 2,
+      income: 32880,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 3,
+      income: 36990,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 4,
+      income: 41100,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 5,
+      income: 44400,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 6,
+      income: 47700,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 7,
+      income: 50970,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 8,
+      income: 54270,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 1,
+      income: 19180,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 2,
+      income: 21920,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 3,
+      income: 24660,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 4,
+      income: 27400,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 5,
+      income: 29600,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 6,
+      income: 31800,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 7,
+      income: 33980,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 8,
+      income: 36180,
+    },
+  ],
+}
 
-      sqFeet: "1304",
-      status: "available",
-      unitType: "threeBdrm",
-      monthlyRentAsPercentOfIncome: null,
-      amiChart: null,
-    },
-  ],
-  applicationMethods: [
-    {
-      type: ApplicationMethodType.POBox,
-      acceptsPostmarkedApplications: false,
-      label: "Label",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.PaperPickup,
-      acceptsPostmarkedApplications: false,
-      label: "Label",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.Internal,
-      acceptsPostmarkedApplications: false,
-      label: "Label",
-      externalReference: "",
-    },
-  ],
-  property: {
-    amenities: "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
-    accessibility:
-      "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
-    buildingAddress: {
-      city: "Foster City",
-      street: "55 Triton Park Lane",
-      zipCode: "94404",
-      state: "CA",
-      latitude: 37.55695,
-      longitude: -122.27521,
-    },
-    developer: "Thompson Dorfman, LLC",
-    neighborhood: "Foster City",
-    petPolicy:
-      "Pets allowed except the following; pit bull, malamute, akita, rottweiler, doberman, staffordshire terrier, presa canario, chowchow, american bull dog, karelian bear dog, st bernard, german shepherd, husky, great dane, any hybrid or mixed breed of the aforementioned breeds. 50 pound weight limit. 2 pets per household limit. $500 pet deposit per pet. $60 pet rent per pet.",
-    smokingPolicy: "Non-Smoking",
-    yearBuilt: 2018,
-    unitAmenities: "Washer and dryer, AC and Heater, Gas Stove",
-    buildingTotalUnits: 48,
-    unitsAvailable: 2,
-    // TODO Added arbitrarily, not existent in seeds:
-    householdSizeMin: 2,
-    householdSizeMax: 2,
-    servicesOffered: "",
-  },
-  preferences: [
-    {
-      ordinal: 1,
-      title: "Live or Work in Hayward",
-      subtitle: "",
-      description:
-        "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
-      links: [
+const defaultPreferences: Array<Omit<PreferenceCreateDto, "listing">> = [
+  {
+    ordinal: 1,
+    title: "Live or Work in Hayward",
+    subtitle: "",
+    description:
+      "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
+    links: [
+      {
+        title: "example.com",
+        url: "https://example.com",
+      },
+      {
+        title: "example2.com",
+        url: "https://example2.com",
+      },
+    ],
+    formMetadata: {
+      key: "liveWork",
+      options: [
         {
-          title: "example.com",
-          url: "https://example.com",
+          key: "live",
+          extraData: [],
         },
         {
-          title: "example2.com",
-          url: "https://example2.com",
+          key: "work",
+          extraData: [],
         },
       ],
-      formMetadata: {
-        key: "liveWork",
-        options: [
-          {
-            key: "live",
-            extraData: [],
-          },
-          {
-            key: "work",
-            extraData: [],
-          },
-        ],
-      },
-      page: 1,
     },
-    {
-      ordinal: 2,
-      title: "Displaced Tenant Housing Preference",
-      subtitle: "",
-      description:
-        "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
-      links: [
+    page: 1,
+  },
+  {
+    ordinal: 2,
+    title: "Displaced Tenant Housing Preference",
+    subtitle: "",
+    description:
+      "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+    links: [
+      {
+        title: "example.com",
+        url: "https://example.com",
+      },
+      {
+        title: "example2.com",
+        url: "https://example2.com",
+      },
+    ],
+    formMetadata: {
+      key: "displacedTenant",
+      options: [
         {
-          title: "example.com",
-          url: "https://example.com",
+          key: "general",
+          extraData: [
+            {
+              key: "name",
+              type: InputType.hhMemberSelect,
+            },
+            {
+              key: "address",
+              type: InputType.address,
+            },
+          ],
         },
         {
-          title: "example2.com",
-          url: "https://example2.com",
+          key: "missionCorridor",
+          extraData: [
+            {
+              key: "name",
+              type: InputType.hhMemberSelect,
+            },
+            {
+              key: "address",
+              type: InputType.address,
+            },
+          ],
         },
       ],
-      formMetadata: {
-        key: "displacedTenant",
-        options: [
-          {
-            key: "general",
-            extraData: [
-              {
-                key: "name",
-                type: InputType.hhMemberSelect,
-              },
-              {
-                key: "address",
-                type: InputType.address,
-              },
-            ],
-          },
-          {
-            key: "missionCorridor",
-            extraData: [
-              {
-                key: "name",
-                type: InputType.hhMemberSelect,
-              },
-              {
-                key: "address",
-                type: InputType.address,
-              },
-            ],
-          },
-        ],
-      },
-      page: 2,
     },
-  ],
-  listingEvents: [
-    {
-      startTime: new Date("2020-12-12T20:00:00.000Z"),
-      endTime: new Date("2020-12-12T20:00:00.000Z"),
-      note: "Note",
-      type: ListingEventType.openHouse,
-      url: "",
-    },
-    {
-      startTime: new Date("2020-12-12T20:00:00.000Z"),
-      endTime: new Date("2020-12-12T20:00:00.000Z"),
-      note: "Note",
-      type: ListingEventType.publicLottery,
-      url: "",
-    },
-  ],
-  assets: [
-    {
-      // TODO
-      label: "building",
-      fileId:
-        "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
-    },
-  ],
-  listing: {
-    applicationOpenDate: new Date("2020-10-12T20:00:00.000Z"),
-    applicationPickUpAddress: {
-      city: "San Jose",
-      street: "98 Archer Street",
-      zipCode: "95112",
-      state: "CA",
-      latitude: 37.36537,
-      longitude: -121.91071,
-    },
-    applicationPickUpAddressOfficeHours: "10AM to 12AM",
-    countyCode: CountyCode.alameda,
-    postmarkedApplicationsReceivedByDate: new Date("2021-12-10T20:00:00.000Z"),
-    disableUnitsAccordion: false,
-    rentalAssistance: "",
-    specialNotes: "",
-
-    whatToExpect: {
-      applicantsWillBeContacted: "Applicant will be contacted",
-      allInfoWillBeVerified: "All info will be verified",
-      bePreparedIfChosen: "Be Prepared if chosen",
-    },
-    applicationAddress: {
-      city: "Foster City",
-      street: "55 Triton Park Lane",
-      zipCode: "94404",
-      state: "CA",
-      latitude: 37.55695,
-      longitude: -122.27521,
-    },
-    applicationDueDate: new Date("2037-12-19T17:00:00.000-07:00"),
-    applicationOrganization: "Triton",
-    // TODO confirm not used anywhere
-    // applicationPhone: "(650) 437-2039",
-    buildingSelectionCriteria:
-      "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/The_Triton_BMRRentalInformation.pdf",
-    costsNotIncluded:
-      "Residents responsible for PG&E, Internet, Utilities - water, sewer, trash, admin fee. Pet Deposit is $500 with a $60 monthly pet rent. Residents required to maintain a renter's insurance policy as outlined in the lease agreement. Rent is due by the 3rd of each month. Late fee is $50.00. Resident to pay $25 for each returned check or rejected electronic payment. For additional returned checks, resident will pay a charge of $50.00.",
-    creditHistory:
-      "No collections, no bankruptcy, income is twice monthly rent.<br/>A credit report will be completed on all applicants to verify credit ratings. Income plus verified credit history will be entered into a credit scoring model to determine rental eligibility and security deposit levels. All decisions for residency are based on a system which considers credit history, rent history, income qualifications, and employment history. An approved decision based on the system does not automatically constittute an approval of residency. Applicant(s) and occupant(s) aged 18 years or older MUST also pass the criminal background check based on the criteria contained herein to be approved for residency. <br/>Credit recommendations other than an accept decision, will require a rental verification. Applications for residency will automatically be denied for the following reasons:<br/>a. An outstanding debt to a previous landlord or an outstanding NSF check must be paid in full<br/>b. An unsatisfied breach of a prior lease or a prior eviction of any applicant or occupant<br/>c. More than four (4) late pays and two (2) NSF's in the last twenty-four (24) months ",
-    depositMax: "800.0",
-    depositMin: "500.0",
-    programRules: null,
-    // TODO confirm not used anywhere
-    // externalId: null,
-    waitlistMaxSize: 600,
-    name: "The Triton",
-    waitlistCurrentSize: 400,
-    // TODO confirm not used anywhere
-    // prioritiesDescriptor: null,
-    requiredDocuments:
-      "Due at interview - Paystubs, 3 months’ bank statements, recent tax returns or non-tax affidavit, recent retirement statement, application to lease, application qualifying criteria, social security card, state or nation ID. For self-employed, copy of IRS Tax Return including schedule C and current or most recent clients. Unemployment if applicable. Child support/Alimony; current notice from DA office, a court order or a letter from the provider with copies of last two checks. Any other income etc",
-    // TODO confirm not used anywhere
-    // reservedCommunityMaximumAge: 0,
-    // TODO confirm not used anywhere
-    // reservedCommunityMinimumAge: 0,
-    // TODO confirm not used anywhere
-    // reservedDescriptor: null,
-    // TODO confirm not used anywhere
-    // groupId: 2,
-    // TODO confirm not used anywhere
-    // hideUnitFeatures: false,
-    applicationFee: "38.0",
-    criminalBackground:
-      "A criminal background investigation will be obtained on each applicant. As criminal background checks are done county by county and will be ran for all counties in which the applicant lived, Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
-    leasingAgentAddress: {
-      city: "Foster City",
-      street: "55 Triton Park Lane",
-      zipCode: "94404",
-      state: "CA",
-      latitude: 37.55695,
-      longitude: -122.27521,
-    },
-    leasingAgentEmail: "thetriton@legacypartners.com",
-    leasingAgentName: "Francis Santos",
-    leasingAgentOfficeHours: "Monday - Friday, 9:00 am - 5:00 pm",
-    leasingAgentPhone: "650-437-2039",
-    leasingAgentTitle: "Business Manager",
-    rentalHistory: "No evictions.",
-    // TODO confirm not used anywhere
-    // totalUnits: 2,
-    status: ListingStatus.active,
-    displayWaitlistSize: false,
-    CSVFormattingType: CSVFormattingType.withDisplaceeNameAndAddress,
+    page: 2,
   },
-  amiChart: SanMateoHUD2019,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  leasingAgents: [
-    {
-      firstName: "First",
-      lastName: "Last",
-      middleName: "Middle",
-      email: "leasing-agent-1@example.com",
-      emailConfirmation: "leasing-agent-1@example.com",
-      password: "abcdef",
-      passwordConfirmation: "Abcdef1",
-      dob: new Date(),
-    },
-  ],
+]
+
+const defaultListingEvents: Array<Omit<ListingEventDto, "listing">> = [
+  {
+    startTime: new Date("2020-12-12T20:00:00.000Z"),
+    endTime: new Date("2020-12-12T20:00:00.000Z"),
+    note: "Note",
+    type: ListingEventType.openHouse,
+    url: "",
+  },
+  {
+    startTime: new Date("2020-12-12T20:00:00.000Z"),
+    endTime: new Date("2020-12-12T20:00:00.000Z"),
+    note: "Note",
+    type: ListingEventType.publicLottery,
+    url: "",
+  },
+]
+
+const defaultAssets: Array<Omit<AssetDto, "listing">> = [
+  {
+    label: "building",
+    fileId:
+      "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+  },
+]
+
+const defaultProperty: Omit<
+  PropertyCreateDto,
+  | "propertyGroups"
+  | "listings"
+  | "units"
+  | "unitsSummarized"
+  | "householdSizeMin"
+  | "householdSizeMax"
+> = {
+  smokingPolicy: "Custom smoking text",
+  unitsAvailable: 2,
+  unitAmenities: "Custom unit amenities text",
+  developer: "Developer",
+  yearBuilt: 2021,
+  accessibility: "Custom accessibility text",
+  amenities: "Custom property amenities text",
+  buildingTotalUnits: 100,
+  buildingAddress: {
+    city: "San Francisco",
+    state: "CA",
+    street: "548 Market Street",
+    street2: "Suite #59930",
+    zipCode: "94104",
+    latitude: 37.789673,
+    longitude: -122.40151,
+  },
+  neighborhood: null,
+  petPolicy: "Custom pet text",
+}
+
+const defaultUnits: Array<Omit<UnitCreateDto, "property">> = [
+  {
+    amiPercentage: "30",
+    annualIncomeMin: "36168",
+    monthlyIncomeMin: "3014",
+    floor: 1,
+    annualIncomeMax: "45600",
+    maxOccupancy: 3,
+    minOccupancy: 1,
+    monthlyRent: "1219",
+    numBathrooms: 1,
+    numBedrooms: 1,
+    number: null,
+    priorityType: "Mobility and hearing",
+    reservedType: null,
+    sqFeet: "635",
+    status: "available",
+    unitType: "oneBdrm",
+    bmrProgramChart: false,
+    amiChart: defaultAmiChart as AmiChart,
+    monthlyRentAsPercentOfIncome: null,
+  },
+  {
+    amiPercentage: "30",
+    annualIncomeMin: "41616",
+    monthlyIncomeMin: "3468",
+    floor: 2,
+    annualIncomeMax: "66600",
+    maxOccupancy: 5,
+    minOccupancy: 2,
+    monthlyRent: "1387",
+    numBathrooms: 1,
+    numBedrooms: 2,
+    number: null,
+    priorityType: "Mobility and hearing",
+    reservedType: null,
+    sqFeet: "748",
+    status: "available",
+    unitType: "twoBdrm",
+    bmrProgramChart: false,
+    amiChart: defaultAmiChart as AmiChart,
+    monthlyRentAsPercentOfIncome: null,
+  },
+]
+
+const defaultApplicationMethods: Array<Omit<ApplicationMethodDto, "listing">> = [
+  {
+    type: ApplicationMethodType.POBox,
+    acceptsPostmarkedApplications: false,
+    label: "Label",
+    externalReference: "",
+  },
+  {
+    type: ApplicationMethodType.PaperPickup,
+    acceptsPostmarkedApplications: false,
+    label: "Label",
+    externalReference: "",
+  },
+  {
+    type: ApplicationMethodType.Internal,
+    acceptsPostmarkedApplications: false,
+    label: "Label",
+    externalReference: "",
+  },
+]
+
+const defaultListingAgents: UserCreateDto[] = [
+  {
+    firstName: "First",
+    lastName: "Last",
+    middleName: "Middle",
+    email: "leasing-agent-1@example.com",
+    emailConfirmation: "leasing-agent-1@example.com",
+    password: "Abcdef1",
+    passwordConfirmation: "Abcdef1",
+    dob: new Date(),
+  },
+]
+
+const getFutureDate = (daysInFuture: number) => {
+  const someDate = new Date()
+  someDate.setDate(someDate.getDate() + daysInFuture)
+  return someDate
+}
+
+const defaultListing: Omit<
+  ListingCreateDto,
+  | keyof BaseEntity
+  | "property"
+  | "urlSlug"
+  | "applicationMethods"
+  | "events"
+  | "assets"
+  | "preferences"
+  | "leasingAgents"
+  | "showWaitlist"
+> = {
+  applicationOpenDate: getFutureDate(10),
+  postmarkedApplicationsReceivedByDate: null,
+  applicationAddress: {
+    city: "San Francisco",
+    state: "CA",
+    street: "548 Market Street",
+    street2: "Suite #59930",
+    zipCode: "94104",
+    latitude: 37.789673,
+    longitude: -122.40151,
+  },
+  applicationPickUpAddress: {
+    city: "San Francisco",
+    state: "CA",
+    street: "548 Market Street",
+    street2: "Suite #59930",
+    zipCode: "94104",
+    latitude: 37.789673,
+    longitude: -122.40151,
+  },
+  countyCode: CountyCode.alameda,
+  displayWaitlistSize: false,
+  whatToExpect: {
+    applicantsWillBeContacted: "Applicant will be contacted text",
+    allInfoWillBeVerified: "All info will be verified text",
+    bePreparedIfChosen: "Be prepared if chosen text",
+  },
+  applicationPickUpAddressOfficeHours: "",
+  applicationDueDate: null,
+  applicationOrganization: "Application Organization",
+  buildingSelectionCriteria: null,
+  costsNotIncluded: "Custom costs not included text",
+  creditHistory: "",
+  CSVFormattingType: CSVFormattingType.basic,
+  depositMax: "500",
+  depositMin: "500",
+  programRules: "Custom program rules text",
+  waitlistMaxSize: null,
+  name: "Default Listing Seed",
+  waitlistCurrentSize: null,
+  requiredDocuments: "Custom required documents text",
+  status: ListingStatus.active,
+  disableUnitsAccordion: true,
+  applicationFee: "0",
+  criminalBackground: "Custom criminal background text",
+  leasingAgentEmail: "hello@exygy.com",
+  leasingAgentName: "Leasing Agent Name",
+  leasingAgentAddress: {
+    city: "San Francisco",
+    state: "CA",
+    street: "548 Market Street",
+    street2: "Suite #59930",
+    zipCode: "94104",
+    latitude: 37.789673,
+    longitude: -122.40151,
+  },
+  leasingAgentOfficeHours: "Monday - Friday, 8:00AM - 5:00PM",
+  leasingAgentPhone: "(415) 992-7251",
+  leasingAgentTitle: "Leasing Agent Title",
+  rentalAssistance: "Custom rental assistance text",
+  rentalHistory: "",
+}
+
+export const defaultListingSeed: ListingSeed = {
+  amiChart: defaultAmiChart,
+  units: defaultUnits,
+  applicationMethods: defaultApplicationMethods,
+  property: defaultProperty,
+  preferences: defaultPreferences,
+  listingEvents: defaultListingEvents,
+  assets: defaultAssets,
+  listing: defaultListing,
+  leasingAgents: defaultListingAgents,
 }
