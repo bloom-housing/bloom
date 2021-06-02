@@ -8,6 +8,7 @@
 }
 
 .tabs__tab {
+  @apply text-gray-800;
   @apply px-6;
   @apply pt-3;
   padding-bottom: 0.65rem;
@@ -26,11 +27,17 @@
   &:last-of-type {
     @apply rounded-tr-lg;
   }
+  &:hover {
+    border-bottom-color: map-get($tailwind-gray, 400);
+  }
   &[aria-selected="true"] {
+    @apply text-black;
     border-bottom-color: $tailwind-primary;
   }
   &[aria-disabled="true"] {
     @apply text-gray-600;
+    @apply cursor-not-allowed;
+    border-bottom-color: transparent;
   }
 }
 
