@@ -28,7 +28,14 @@ export interface NavigationContextProps {
 export const NavigationContext = createContext<NavigationContextProps>({
   // Replace with an official app solution
   LinkComponent: (props) => (
-    <a className={props.className} href={props.href}>
+    <a
+      className={props.className}
+      href={props.href}
+      onClick={(e) => {
+        e.preventDefault()
+        alert(`You clicked: ${props.href}`)
+      }}
+    >
       {props.children}
     </a>
   ),
