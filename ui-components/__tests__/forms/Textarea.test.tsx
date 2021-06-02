@@ -6,12 +6,13 @@ afterEach(cleanup)
 
 describe("<Textarea>", () => {
   it("renders default state", () => {
-    const { getByText } = render(<Textarea label={"Textarea Label"} />)
+    const { getByText } = render(<Textarea name={"textarea-test"} label={"Textarea Label"} />)
     expect(getByText("Textarea Label")).toBeTruthy()
   })
   it("renders with custom props", () => {
     const { getByPlaceholderText, getByText } = render(
       <Textarea
+        name={"textarea-test"}
         label={"Textarea Label"}
         cols={5}
         rows={10}
