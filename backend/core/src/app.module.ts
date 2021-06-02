@@ -37,9 +37,7 @@ export function applicationSetup(app: INestApplication) {
   return app
 }
 
-@Module({
-  imports: [ApplicationFlaggedSetsModule, AssetsModule],
-})
+@Module({})
 export class AppModule {
   static register(dbOptions): DynamicModule {
     /**
@@ -89,6 +87,8 @@ export class AppModule {
         AmiChartsModule,
         SharedModule,
         TranslationsModule,
+        ApplicationFlaggedSetsModule,
+        AssetsModule,
       ],
     }
   }
