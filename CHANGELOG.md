@@ -9,11 +9,10 @@ All notable changes to this project will be documented in this file. The format 
 ### General
 
 ### Backend
-
 - Fixed:
-
   -  Poor TypeORM performance in `/applications` endpoint [issue #1131](https://github.com/bloom-housing/bloom/issues/1131)
-  -  Add "ohaFormat" to CSV exporter
+- Added:
+  -  Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences)
 
 ### Frontend
 
@@ -29,6 +28,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) (Dominik Barcikowski)
   - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
   - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
+  - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
 
 - Changed:
 
