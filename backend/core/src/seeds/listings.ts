@@ -972,8 +972,9 @@ const liveWorkPreference: Omit<PreferenceCreateDto, "listing"> = {
   },
 }
 
-const displaceePreference = {
+const displaceePreference: Omit<PreferenceCreateDto, "listing"> = {
   ordinal: 1,
+  page: 1,
   title: "Displacee Tenant Housing",
   subtitle: "Displacee Tenant Housing subtitle",
   description:
@@ -987,11 +988,11 @@ const displaceePreference = {
         extraData: [
           {
             key: "name",
-            type: "text",
+            type: InputType.text,
           },
           {
             key: "address",
-            type: "address",
+            type: InputType.address,
           },
         ],
       },
@@ -1000,11 +1001,11 @@ const displaceePreference = {
         extraData: [
           {
             key: "name",
-            type: "text",
+            type: InputType.text,
           },
           {
             key: "address",
-            type: "address",
+            type: InputType.address,
           },
         ],
       },
@@ -1620,7 +1621,7 @@ export const defaultListingSeed: ListingSeed = {
   leasingAgents: defaultLeasingAgents,
   listing: { ...defaultListing, name: "Test: Default, Two Preferences" },
   listingEvents: defaultListingEvents,
-  preferences: defaultPreferences,
+  preferences: [liveWorkPreference, { ...displaceePreference, ordinal: 2 }],
   property: defaultProperty,
   units: defaultUnits,
 }
