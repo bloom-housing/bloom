@@ -2,14 +2,14 @@ import useSWR from "swr"
 import { useContext, useState } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
 import {
-  ApiClientContext,
+  AuthContext,
   blankApplication,
   AppearanceStyleType,
   Button,
   Form,
   FormCard,
   ProgressNav,
-  UserContext,
+  AuthContext,
   t,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
@@ -21,8 +21,8 @@ import AutofillCleaner from "../../../lib/appAutofill"
 export default () => {
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
-  const { initialStateLoaded, profile } = useContext(UserContext)
-  const { applicationsService } = useContext(ApiClientContext)
+  const { initialStateLoaded, profile } = useContext(AuthContext)
+  const { applicationsService } = useContext(AuthContext)
   const [submitted, setSubmitted] = useState(false)
   const [previousApplication, setPreviousApplication] = useState<Application>(null)
 

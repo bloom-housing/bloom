@@ -2,7 +2,7 @@ import {
   AppearanceStyleType,
   Button,
   Modal,
-  UserContext,
+  AuthContext,
   t,
   Form,
   Field,
@@ -19,7 +19,7 @@ export interface ConfirmationModalProps {
 
 const ConfirmationModal = (props: ConfirmationModalProps) => {
   const { setSiteAlertMessage } = props
-  const { resendConfirmation, profile, confirmAccount } = useContext(UserContext)
+  const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()

@@ -7,7 +7,7 @@ import {
   FormCard,
   Icon,
   LinkButton,
-  UserContext,
+  AuthContext,
   Form,
   emailRegex,
   t,
@@ -22,7 +22,7 @@ import moment from "moment"
 import { useRouter } from "next/router"
 
 export default () => {
-  const { createUser, resendConfirmation } = useContext(UserContext)
+  const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method

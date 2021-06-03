@@ -8,7 +8,7 @@ import {
   Form,
   FormCard,
   Icon,
-  UserContext,
+  AuthContext,
   t,
   AlertBox,
   SiteAlert,
@@ -19,7 +19,7 @@ import FormsLayout from "../layouts/forms"
 
 const ForgotPassword = () => {
   const router = useRouter()
-  const { forgotPassword } = useContext(UserContext)
+  const { forgotPassword } = useContext(AuthContext)
   const language = router.locale
 
   /* Form Handler */

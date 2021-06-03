@@ -243,6 +243,7 @@ export const SanMateoHUD2019: AmiChart = {
 
 export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
+  showWaitlist: true,
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationPickUpAddress: undefined,
