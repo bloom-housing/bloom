@@ -157,6 +157,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       headers: {
         language: router.locale,
         countyCode: process.env.countyCode,
+        appUrl: window.location.origin,
         ...(state.accessToken && { Authorization: `Bearer ${state.accessToken}` }),
       },
     })
@@ -267,7 +268,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     createUser: async (user: UserCreate) => {
       dispatch(startLoading())
       try {
-        const response = await userService?.create({ body: { ...user } })
+        const response = await userService?.create({
+          body: { ...user, appUrl: window.location.origin },
+        })
         return response?.status
       } finally {
         dispatch(stopLoading())
@@ -276,7 +279,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     resendConfirmation: async (email: string) => {
       dispatch(startLoading())
       try {
-        const response = await userService?.resendConfirmation({ body: { email } })
+        const response = await userService?.resendConfirmation({
+          body: { email, appUrl: window.location.origin },
+        })
         return response?.status
       } finally {
         dispatch(stopLoading())
@@ -285,7 +290,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     forgotPassword: async (email) => {
       dispatch(startLoading())
       try {
-        const response = await userService?.forgotPassword({ body: { email } })
+        const response = await userService?.forgotPassword({
+          body: { email, appUrl: window.location.origin },
+        })
         return response?.message
       } finally {
         dispatch(stopLoading())
