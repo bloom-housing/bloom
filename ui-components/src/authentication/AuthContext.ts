@@ -21,7 +21,6 @@ import { ConfigContext } from "../config/ConfigContext"
 import { useRouter } from "next/router"
 import { createAction, createReducer } from "typesafe-actions"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
-import { scheduleTokenRefresh } from "./api_requests"
 
 type ContextProps = {
   applicationsService: ApplicationsService
@@ -69,6 +68,26 @@ const startLoading = createAction("START_LOADING")()
 const stopLoading = createAction("STOP_LOADING")()
 const signOut = createAction("SIGN_OUT")()
 
+const scheduleTokenRefresh = (accessToken: string, onRefresh: (accessToken: string) => void) => {
+  const ttl = getTokenTtl(accessToken)
+
+  if (ttl < 0) {
+    // If ttl is negative, then our token is already expired, we'll have to re-login to get a new token.
+    //dispatch(signOut())
+    return null
+  } else {
+    // Queue up a refresh for ~1 minute before the token expires
+    return (setTimeout(() => {
+      const run = async () => {
+        const reposne = await new AuthService().token()
+        if (reposne) {
+          onRefresh(reposne.accessToken)
+        }
+      }
+      void run()
+    }, Math.max(ttl - 60000, 0)) as unknown) as number
+  }
+}
 const reducer = createReducer(
   {
     loading: false,
@@ -89,7 +108,7 @@ const reducer = createReducer(
       // Save off the token in local storage for persistence across reloads.
       setToken(state.storageType, accessToken)
 
-      const refreshTimer = scheduleTokenRefresh(apiUrl, accessToken, (newAccessToken) =>
+      const refreshTimer = scheduleTokenRefresh(accessToken, (newAccessToken) =>
         dispatch(saveToken({ apiUrl, accessToken: newAccessToken, dispatch }))
       )
       serviceOptions.axios = axiosStatic.create({
