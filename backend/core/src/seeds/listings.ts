@@ -94,9 +94,9 @@ export async function seedListing(
   return await listingsRepo.save(listingCreateDto)
 }
 
-const getDate = (daysInFuture: number) => {
+const getDate = (days: number) => {
   const someDate = new Date()
-  someDate.setDate(someDate.getDate() + daysInFuture)
+  someDate.setDate(someDate.getDate() + days)
   return someDate
 }
 
@@ -501,14 +501,8 @@ const defaultProperty: Omit<
   | "householdSizeMin"
   | "householdSizeMax"
 > = {
-  smokingPolicy: "Custom smoking text",
-  unitsAvailable: 2,
-  unitAmenities: "Custom unit amenities text",
-  developer: "Developer",
-  yearBuilt: 2021,
   accessibility: "Custom accessibility text",
   amenities: "Custom property amenities text",
-  buildingTotalUnits: 100,
   buildingAddress: {
     city: "San Francisco",
     state: "CA",
@@ -518,20 +512,29 @@ const defaultProperty: Omit<
     latitude: 37.789673,
     longitude: -122.40151,
   },
+  buildingTotalUnits: 100,
+  developer: "Developer",
   neighborhood: null,
   petPolicy: "Custom pet text",
+  smokingPolicy: "Custom smoking text",
+  unitAmenities: "Custom unit amenities text",
+  unitsAvailable: 2,
+  yearBuilt: 2021,
 }
 
 const defaultUnits: Array<Omit<UnitCreateDto, "property">> = [
   {
+    amiChart: defaultAmiChart as AmiChart,
     amiPercentage: "30",
-    annualIncomeMin: "36168",
-    monthlyIncomeMin: "3014",
-    floor: 1,
     annualIncomeMax: "45600",
+    annualIncomeMin: "36168",
+    bmrProgramChart: false,
+    floor: 1,
     maxOccupancy: 3,
     minOccupancy: 1,
+    monthlyIncomeMin: "3014",
     monthlyRent: "1219",
+    monthlyRentAsPercentOfIncome: null,
     numBathrooms: 1,
     numBedrooms: 1,
     number: null,
@@ -540,19 +543,19 @@ const defaultUnits: Array<Omit<UnitCreateDto, "property">> = [
     sqFeet: "635",
     status: "available",
     unitType: "oneBdrm",
-    bmrProgramChart: false,
-    amiChart: defaultAmiChart as AmiChart,
-    monthlyRentAsPercentOfIncome: null,
   },
   {
+    amiChart: defaultAmiChart as AmiChart,
     amiPercentage: "30",
-    annualIncomeMin: "41616",
-    monthlyIncomeMin: "3468",
-    floor: 2,
     annualIncomeMax: "66600",
+    annualIncomeMin: "41616",
+    bmrProgramChart: false,
+    floor: 2,
     maxOccupancy: 5,
     minOccupancy: 2,
+    monthlyIncomeMin: "3468",
     monthlyRent: "1387",
+    monthlyRentAsPercentOfIncome: null,
     numBathrooms: 1,
     numBedrooms: 2,
     number: null,
@@ -561,9 +564,6 @@ const defaultUnits: Array<Omit<UnitCreateDto, "property">> = [
     sqFeet: "748",
     status: "available",
     unitType: "twoBdrm",
-    bmrProgramChart: false,
-    amiChart: defaultAmiChart as AmiChart,
-    monthlyRentAsPercentOfIncome: null,
   },
 ]
 
@@ -613,8 +613,6 @@ const defaultListing: Omit<
   | "leasingAgents"
   | "showWaitlist"
 > = {
-  applicationOpenDate: getDate(-10),
-  postmarkedApplicationsReceivedByDate: null,
   applicationAddress: {
     city: "San Francisco",
     state: "CA",
@@ -624,6 +622,10 @@ const defaultListing: Omit<
     latitude: 37.789673,
     longitude: -122.40151,
   },
+  applicationDueDate: getDate(10),
+  applicationFee: "20",
+  applicationOpenDate: getDate(-10),
+  applicationOrganization: "Application Organization",
   applicationPickUpAddress: {
     city: "San Francisco",
     state: "CA",
@@ -633,33 +635,17 @@ const defaultListing: Omit<
     latitude: 37.789673,
     longitude: -122.40151,
   },
-  countyCode: CountyCode.alameda,
-  displayWaitlistSize: false,
-  whatToExpect: {
-    applicantsWillBeContacted: "Custom applicant will be contacted text",
-    allInfoWillBeVerified: "Custom all info will be verified text",
-    bePreparedIfChosen: "Custom be prepared if chosen text",
-  },
   applicationPickUpAddressOfficeHours: "",
-  applicationDueDate: null,
-  applicationOrganization: "Application Organization",
   buildingSelectionCriteria: null,
   costsNotIncluded: "Custom costs not included text",
+  countyCode: CountyCode.alameda,
   creditHistory: "",
+  criminalBackground: "Custom criminal background text",
   CSVFormattingType: CSVFormattingType.basic,
   depositMax: "500",
   depositMin: "500",
-  programRules: "Custom program rules text",
-  waitlistMaxSize: null,
-  name: "Default Listing Seed",
-  waitlistCurrentSize: null,
-  requiredDocuments: "Custom required documents text",
-  status: ListingStatus.active,
   disableUnitsAccordion: true,
-  applicationFee: "0",
-  criminalBackground: "Custom criminal background text",
-  leasingAgentEmail: "hello@exygy.com",
-  leasingAgentName: "Leasing Agent Name",
+  displayWaitlistSize: false,
   leasingAgentAddress: {
     city: "San Francisco",
     state: "CA",
@@ -669,21 +655,35 @@ const defaultListing: Omit<
     latitude: 37.789673,
     longitude: -122.40151,
   },
+  leasingAgentEmail: "hello@exygy.com",
+  leasingAgentName: "Leasing Agent Name",
   leasingAgentOfficeHours: "Custom office hours",
   leasingAgentPhone: "(415) 992-7251",
   leasingAgentTitle: "Leasing Agent Title",
+  name: "Default Listing Seed",
+  postmarkedApplicationsReceivedByDate: null,
+  programRules: "Custom program rules text",
   rentalAssistance: "Custom rental assistance text",
   rentalHistory: "",
+  requiredDocuments: "Custom required documents text",
+  status: ListingStatus.active,
+  waitlistCurrentSize: null,
+  waitlistMaxSize: null,
+  whatToExpect: {
+    applicantsWillBeContacted: "Custom applicant will be contacted text",
+    allInfoWillBeVerified: "Custom all info will be verified text",
+    bePreparedIfChosen: "Custom be prepared if chosen text",
+  },
 }
 
 export const defaultListingSeed: ListingSeed = {
   amiChart: defaultAmiChart,
-  units: defaultUnits,
   applicationMethods: defaultApplicationMethods,
-  property: defaultProperty,
-  preferences: defaultPreferences,
-  listingEvents: defaultListingEvents,
   assets: defaultAssets,
-  listing: defaultListing,
   leasingAgents: defaultListingAgents,
+  listing: defaultListing,
+  listingEvents: defaultListingEvents,
+  preferences: defaultPreferences,
+  property: defaultProperty,
+  units: defaultUnits,
 }
