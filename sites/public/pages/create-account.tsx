@@ -39,14 +39,11 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
-      await createUser(
-        {
-          ...rest,
-          dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
-          language,
-        },
-        language
-      )
+      await createUser({
+        ...rest,
+        dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        language,
+      })
 
       setOpenModal(true)
     } catch (err) {
@@ -247,7 +244,7 @@ export default () => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setConfirmationResent(true)
-              void resendConfirmation(email.current.toString(), language)
+              void resendConfirmation(email.current.toString())
             }}
           >
             {t("authentication.createAccount.resendTheEmail")}
