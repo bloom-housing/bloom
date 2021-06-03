@@ -10,7 +10,6 @@ import { ApplicationMethodType, AssetDto, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { User } from "../user/entities/user.entity"
-import { UserService } from "../user/user.service"
 import { UserCreateDto } from "../user/dto/user.dto"
 import { ListingStatus } from "../listings/types/listing-status-enum"
 import { ListingEventDto } from "../listings/dto/listing-event.dto"
@@ -19,6 +18,8 @@ import { CSVFormattingType } from "../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../shared/types/county-code"
 import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { InputType } from "../shared/types/input-type"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { IdDto } from "../shared/dto/id.dto"
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
@@ -52,17 +53,17 @@ export interface ListingSeed {
   leasingAgents: UserCreateDto[]
 }
 
-export async function seedListing(app: INestApplicationContext, seed: ListingSeed) {
+export async function seedListing(
+  app: INestApplicationContext,
+  seed: ListingSeed,
+  leasingAgents: IdDto[]
+) {
   const amiChartRepo = app.get<Repository<AmiChart>>(getRepositoryToken(AmiChart))
   const propertyRepo = app.get<Repository<Property>>(getRepositoryToken(Property))
   const unitsRepo = app.get<Repository<Unit>>(getRepositoryToken(Unit))
   const listingsRepo = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
-  const usersService = app.get<UserService>(UserService)
   app.get<Repository<User>>(getRepositoryToken(User))
-  const leasingAgents = await Promise.all(
-    seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
-  )
 
   const amiChart = await amiChartRepo.save(seed.amiChart)
 
@@ -91,6 +92,12 @@ export async function seedListing(app: INestApplicationContext, seed: ListingSee
     events: seed.listingEvents,
   }
   return await listingsRepo.save(listingCreateDto)
+}
+
+const getDate = (daysInFuture: number) => {
+  const someDate = new Date()
+  someDate.setDate(someDate.getDate() + daysInFuture)
+  return someDate
 }
 
 const defaultAmiChart: AmiChartCreateDto = {
@@ -382,10 +389,9 @@ const defaultAmiChart: AmiChartCreateDto = {
 const defaultPreferences: Array<Omit<PreferenceCreateDto, "listing">> = [
   {
     ordinal: 1,
-    title: "Live or Work in Hayward",
+    title: "Custom preference title (1)",
     subtitle: "",
-    description:
-      "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
+    description: "Custom preference description (1)",
     links: [
       {
         title: "example.com",
@@ -397,14 +403,14 @@ const defaultPreferences: Array<Omit<PreferenceCreateDto, "listing">> = [
       },
     ],
     formMetadata: {
-      key: "liveWork",
+      key: "customPreference1",
       options: [
         {
-          key: "live",
+          key: "customOption1",
           extraData: [],
         },
         {
-          key: "work",
+          key: "customOption2",
           extraData: [],
         },
       ],
@@ -413,10 +419,9 @@ const defaultPreferences: Array<Omit<PreferenceCreateDto, "listing">> = [
   },
   {
     ordinal: 2,
-    title: "Displaced Tenant Housing Preference",
+    title: "Custom preference title (2)",
     subtitle: "",
-    description:
-      "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+    description: "Custom preference description (2)",
     links: [
       {
         title: "example.com",
@@ -428,10 +433,10 @@ const defaultPreferences: Array<Omit<PreferenceCreateDto, "listing">> = [
       },
     ],
     formMetadata: {
-      key: "displacedTenant",
+      key: "customPreference2",
       options: [
         {
-          key: "general",
+          key: "customOption1",
           extraData: [
             {
               key: "name",
@@ -444,7 +449,7 @@ const defaultPreferences: Array<Omit<PreferenceCreateDto, "listing">> = [
           ],
         },
         {
-          key: "missionCorridor",
+          key: "customOption2",
           extraData: [
             {
               key: "name",
@@ -464,18 +469,18 @@ const defaultPreferences: Array<Omit<PreferenceCreateDto, "listing">> = [
 
 const defaultListingEvents: Array<Omit<ListingEventDto, "listing">> = [
   {
-    startTime: new Date("2020-12-12T20:00:00.000Z"),
-    endTime: new Date("2020-12-12T20:00:00.000Z"),
-    note: "Note",
+    startTime: getDate(10),
+    endTime: getDate(10),
+    note: "Custom open house event note",
     type: ListingEventType.openHouse,
-    url: "",
+    url: "example.com",
   },
   {
-    startTime: new Date("2020-12-12T20:00:00.000Z"),
-    endTime: new Date("2020-12-12T20:00:00.000Z"),
-    note: "Note",
+    startTime: getDate(10),
+    endTime: getDate(10),
+    note: "Custom public lottery event note",
     type: ListingEventType.publicLottery,
-    url: "",
+    url: "example2.com",
   },
 ]
 
@@ -588,19 +593,13 @@ const defaultListingAgents: UserCreateDto[] = [
     firstName: "First",
     lastName: "Last",
     middleName: "Middle",
-    email: "leasing-agent-1@example.com",
-    emailConfirmation: "leasing-agent-1@example.com",
+    email: "leasing-agent@example.com",
+    emailConfirmation: "leasing-agent@example.com",
     password: "Abcdef1",
     passwordConfirmation: "Abcdef1",
     dob: new Date(),
   },
 ]
-
-const getFutureDate = (daysInFuture: number) => {
-  const someDate = new Date()
-  someDate.setDate(someDate.getDate() + daysInFuture)
-  return someDate
-}
 
 const defaultListing: Omit<
   ListingCreateDto,
@@ -614,7 +613,7 @@ const defaultListing: Omit<
   | "leasingAgents"
   | "showWaitlist"
 > = {
-  applicationOpenDate: getFutureDate(10),
+  applicationOpenDate: getDate(-10),
   postmarkedApplicationsReceivedByDate: null,
   applicationAddress: {
     city: "San Francisco",
@@ -637,9 +636,9 @@ const defaultListing: Omit<
   countyCode: CountyCode.alameda,
   displayWaitlistSize: false,
   whatToExpect: {
-    applicantsWillBeContacted: "Applicant will be contacted text",
-    allInfoWillBeVerified: "All info will be verified text",
-    bePreparedIfChosen: "Be prepared if chosen text",
+    applicantsWillBeContacted: "Custom applicant will be contacted text",
+    allInfoWillBeVerified: "Custom all info will be verified text",
+    bePreparedIfChosen: "Custom be prepared if chosen text",
   },
   applicationPickUpAddressOfficeHours: "",
   applicationDueDate: null,
@@ -670,7 +669,7 @@ const defaultListing: Omit<
     latitude: 37.789673,
     longitude: -122.40151,
   },
-  leasingAgentOfficeHours: "Monday - Friday, 8:00AM - 5:00PM",
+  leasingAgentOfficeHours: "Custom office hours",
   leasingAgentPhone: "(415) 992-7251",
   leasingAgentTitle: "Leasing Agent Title",
   rentalAssistance: "Custom rental assistance text",

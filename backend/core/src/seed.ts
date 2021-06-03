@@ -19,21 +19,32 @@ const newDefaultListingSeed = (): ListingSeed => {
   return JSON.parse(JSON.stringify(defaultListingSeed)) as ListingSeed
 }
 
-const seedListings = async (app: INestApplicationContext) => {
-  // Two preferences
-  let listingSeed = newDefaultListingSeed()
-  listingSeed.listing.name = "Two Preferences"
-  const twoPreferencesListing = await seedListing(app, listingSeed)
-  const userService = app.get<UserService>(UserService)
+export async function getDefaultLeasingAgents(app: INestApplicationContext, seed: ListingSeed) {
+  const usersService = app.get<UserService>(UserService)
+  const leasingAgents = await Promise.all(
+    seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+  )
   await Promise.all([
-    twoPreferencesListing.leasingAgents.map(async (agent: User) => {
-      await userService.confirm({ token: agent.confirmationToken })
+    leasingAgents.map(async (agent: User) => {
+      await usersService.confirm({ token: agent.confirmationToken })
     }),
   ])
+  return leasingAgents
+}
+
+const seedListings = async (app: INestApplicationContext) => {
+  const seeds = []
+  const leasingAgents = await getDefaultLeasingAgents(app, newDefaultListingSeed())
+
+  // Two preferences
+  let listingSeed = newDefaultListingSeed()
+  listingSeed.listing.name = "Test: Two Preferences"
+  const twoPreferencesListing = await seedListing(app, listingSeed, leasingAgents)
+  seeds.push(twoPreferencesListing)
 
   // One preference
   listingSeed = newDefaultListingSeed()
-  listingSeed.listing.name = "One preference"
+  listingSeed.listing.name = "Test: One preference"
   listingSeed.preferences = [
     {
       ordinal: 1,
@@ -57,37 +68,19 @@ const seedListings = async (app: INestApplicationContext) => {
       page: 1,
     },
   ]
-  listingSeed.leasingAgents = [
-    {
-      ...listingSeed.leasingAgents[0],
-      email: "leasing-agent-2@example.com",
-    },
-  ]
-  const onePreferenceListing = await seedListing(app, listingSeed)
-  await Promise.all([
-    onePreferenceListing.leasingAgents.map(async (agent: User) => {
-      await userService.confirm({ token: agent.confirmationToken })
-    }),
-  ])
+  const onePreferenceListing = await seedListing(app, listingSeed, leasingAgents)
+  seeds.push(onePreferenceListing)
 
   // No preferences
   listingSeed = newDefaultListingSeed()
-  listingSeed.listing.name = "No preferences"
-  listingSeed.leasingAgents = [
-    {
-      ...listingSeed.leasingAgents[0],
-      email: "leasing-agent-3@example.com",
-    },
-  ]
+  listingSeed.listing.name = "Test: No preferences"
   listingSeed.preferences = []
-  const noPreferencesListing = await seedListing(app, listingSeed)
-  await Promise.all([
-    noPreferencesListing.leasingAgents.map(async (agent: User) => {
-      await userService.confirm({ token: agent.confirmationToken })
-    }),
-  ])
+  const noPreferencesListing = await seedListing(app, listingSeed, leasingAgents)
+  seeds.push(noPreferencesListing)
 
-  return [twoPreferencesListing, onePreferenceListing, noPreferencesListing]
+  // setupLeasingAgents(seeds, userService)
+
+  return seeds
 }
 
 async function seed() {
