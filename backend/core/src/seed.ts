@@ -32,14 +32,22 @@ export async function getDefaultLeasingAgents(app: INestApplicationContext, seed
   return leasingAgents
 }
 
+const getListing = async (
+  app: INestApplicationContext,
+  leasingAgents: User[],
+  seed: ListingSeed
+) => {
+  const thisSeed = parseSeed(seed)
+  const thisListing = await seedListing(app, thisSeed, leasingAgents)
+  return thisListing
+}
+
 const seedListings = async (app: INestApplicationContext) => {
   const seeds = []
   const leasingAgents = await getDefaultLeasingAgents(app, parseSeed(defaultListingSeed))
 
-  allSeeds.forEach(async (seed) => {
-    const thisSeed = parseSeed(seed)
-    const thisListing = await seedListing(app, thisSeed, leasingAgents)
-    seeds.push(thisListing)
+  allSeeds.forEach((seed) => {
+    seeds.push(getListing(app, leasingAgents, seed))
   })
 
   return seeds
