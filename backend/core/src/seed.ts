@@ -1,7 +1,7 @@
 import { SeederModule } from "./seeder/seeder.module"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
-import { ListingSeed, defaultListingSeed, seedListing } from "./seeds/listings"
+import { ListingSeed, seedListing, defaultListingSeed, allSeeds } from "./seeds/listings"
 import { UserService } from "./user/user.service"
 import { plainToClass } from "class-transformer"
 import { UserCreateDto } from "./user/dto/user.dto"
@@ -15,8 +15,8 @@ const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
-const newDefaultListingSeed = (): ListingSeed => {
-  return JSON.parse(JSON.stringify(defaultListingSeed)) as ListingSeed
+const parseSeed = (seedData: ListingSeed): ListingSeed => {
+  return JSON.parse(JSON.stringify(seedData)) as ListingSeed
 }
 
 export async function getDefaultLeasingAgents(app: INestApplicationContext, seed: ListingSeed) {
@@ -34,51 +34,13 @@ export async function getDefaultLeasingAgents(app: INestApplicationContext, seed
 
 const seedListings = async (app: INestApplicationContext) => {
   const seeds = []
-  const leasingAgents = await getDefaultLeasingAgents(app, newDefaultListingSeed())
+  const leasingAgents = await getDefaultLeasingAgents(app, parseSeed(defaultListingSeed))
 
-  // Two preferences
-  let listingSeed = newDefaultListingSeed()
-  listingSeed.listing.name = "Test: Two Preferences"
-  const twoPreferencesListing = await seedListing(app, listingSeed, leasingAgents)
-  seeds.push(twoPreferencesListing)
-
-  // One preference
-  listingSeed = newDefaultListingSeed()
-  listingSeed.listing.name = "Test: One preference"
-  listingSeed.preferences = [
-    {
-      ordinal: 1,
-      title: "Yet another preference for live or work",
-      subtitle: "",
-      description: "Description",
-      links: [],
-      formMetadata: {
-        key: "liveWork",
-        options: [
-          {
-            key: "live",
-            extraData: [],
-          },
-          {
-            key: "work",
-            extraData: [],
-          },
-        ],
-      },
-      page: 1,
-    },
-  ]
-  const onePreferenceListing = await seedListing(app, listingSeed, leasingAgents)
-  seeds.push(onePreferenceListing)
-
-  // No preferences
-  listingSeed = newDefaultListingSeed()
-  listingSeed.listing.name = "Test: No preferences"
-  listingSeed.preferences = []
-  const noPreferencesListing = await seedListing(app, listingSeed, leasingAgents)
-  seeds.push(noPreferencesListing)
-
-  // setupLeasingAgents(seeds, userService)
+  allSeeds.forEach(async (seed) => {
+    const thisSeed = parseSeed(seed)
+    const thisListing = await seedListing(app, thisSeed, leasingAgents)
+    seeds.push(thisListing)
+  })
 
   return seeds
 }
