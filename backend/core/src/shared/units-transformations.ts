@@ -111,7 +111,7 @@ const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string
   return { columns: hmiHeaders, rows: hmiRows }
 }
 
-const getCurrenyString = (initialValue: string) => {
+const getCurrencyString = (initialValue: string) => {
   return usd.format(getRoundedNumber(initialValue))
 }
 
@@ -123,13 +123,13 @@ const getDefaultSummaryRanges = (unit: Unit) => {
   return {
     areaRange: { min: parseFloat(unit.sqFeet), max: parseFloat(unit.sqFeet) },
     minIncomeRange: {
-      min: getCurrenyString(unit.monthlyIncomeMin),
-      max: getCurrenyString(unit.monthlyIncomeMin),
+      min: getCurrencyString(unit.monthlyIncomeMin),
+      max: getCurrencyString(unit.monthlyIncomeMin),
     },
     occupancyRange: { min: unit.minOccupancy, max: unit.maxOccupancy },
     rentRange: {
-      min: getCurrenyString(unit.monthlyRent),
-      max: getCurrenyString(unit.monthlyRent),
+      min: getCurrencyString(unit.monthlyRent),
+      max: getCurrencyString(unit.monthlyRent),
     },
     rentAsPercentIncomeRange: {
       min: parseFloat(unit.monthlyRentAsPercentOfIncome),
