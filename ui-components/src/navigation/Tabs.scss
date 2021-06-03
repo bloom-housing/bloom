@@ -1,6 +1,9 @@
 .tabs {
   ul {
-    @apply flex;
+    @apply block;
+    @screen md {
+      @apply flex;
+    }
     @apply items-center;
     @apply font-alt-sans;
     @apply text-sm;
@@ -15,7 +18,9 @@
   @apply border;
   @apply border-gray-450;
   @apply border-b-2;
-  @apply border-l-0;
+  @screen md {
+    @apply border-l-0;
+  }
   @apply block;
   border-bottom-color: transparent;
   cursor: pointer;
@@ -23,9 +28,15 @@
   &:first-of-type {
     @apply border-l;
     @apply rounded-tl-lg;
+    @apply rounded-tr-lg;
+    @screen md {
+      @apply rounded-tr-none;
+    }
   }
   &:last-of-type {
-    @apply rounded-tr-lg;
+    @screen md {
+      @apply rounded-tr-lg;
+    }
   }
   &:hover {
     border-bottom-color: map-get($tailwind-gray, 400);
