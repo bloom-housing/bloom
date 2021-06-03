@@ -9,7 +9,6 @@ import {
   Form,
   FormCard,
   ProgressNav,
-  AuthContext,
   t,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
@@ -21,8 +20,7 @@ import AutofillCleaner from "../../../lib/appAutofill"
 export default () => {
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
-  const { initialStateLoaded, profile } = useContext(AuthContext)
-  const { applicationsService } = useContext(AuthContext)
+  const { initialStateLoaded, profile, applicationsService } = useContext(AuthContext)
   const [submitted, setSubmitted] = useState(false)
   const [previousApplication, setPreviousApplication] = useState<Application>(null)
 

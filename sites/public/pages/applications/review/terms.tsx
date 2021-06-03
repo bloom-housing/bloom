@@ -10,7 +10,6 @@ import {
   ProgressNav,
   t,
   AuthContext,
-  AuthContext,
   FieldGroup,
   Form,
   AlertBox,
@@ -24,8 +23,7 @@ import { useFormConductor } from "../../../lib/hooks"
 const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
-  const { applicationsService } = useContext(AuthContext)
-  const { profile } = useContext(AuthContext)
+  const { applicationsService, profile } = useContext(AuthContext)
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 

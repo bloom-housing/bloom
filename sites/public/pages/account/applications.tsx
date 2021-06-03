@@ -8,7 +8,6 @@ import {
   LinkButton,
   RequireLogin,
   t,
-  AuthContext,
   LoadingOverlay,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
@@ -17,8 +16,7 @@ import { AppStatusItemWrapper } from "./AppStatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
 
 export default () => {
-  const { applicationsService } = useContext(AuthContext)
-  const { profile } = useContext(AuthContext)
+  const { applicationsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<PaginatedApplication>()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
