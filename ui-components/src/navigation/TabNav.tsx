@@ -3,14 +3,14 @@ import { LocalizedLink } from "../actions/LocalizedLink"
 import { Tag } from "../text/Tag"
 import "./TabNav.scss"
 
-export interface TabProps {
+export interface TabNavItemProps {
   href: string
   current?: boolean
   tagContent?: React.ReactNode
   children: React.ReactNode
 }
 
-const Tab = (props: TabProps) => {
+const TabNavItem = (props: TabNavItemProps) => {
   const tabRef = React.useRef<HTMLLIElement>(null)
 
   const handleKeyboard = (event: React.KeyboardEvent) => {
@@ -54,4 +54,4 @@ const TabNav = (props: { children: React.ReactNode }) => {
   )
 }
 
-export { TabNav as default, TabNav, Tab }
+export { TabNav as default, TabNav, TabNavItem }
