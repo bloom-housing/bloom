@@ -34,7 +34,7 @@ describe("Listings", () => {
     const query =
       "/?jsonpath=%24%5B%3F%28%40.applicationAddress.city%3D%3D%22Foster%20City%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.length).toEqual(allSeeds.length)
+    expect(res.body.length).toEqual(1)
     expect(res.body[0].applicationAddress.city).toEqual("Foster City")
   })
 
