@@ -45,7 +45,7 @@ export const Tab: FunctionComponent<TabProps> = ({ children, ...props }: TabProp
   const className = ["tabs__tab"]
   if (props.className) className.push(props.className)
   return (
-    <ReactTab {...props} className={className}>
+    <ReactTab selectedClassName="is-active" {...props} className={className}>
       {children}
     </ReactTab>
   )
@@ -82,7 +82,7 @@ export const TabPanel: FunctionComponent<TabPanelProps> = ({
   const className = ["tabs__panel"]
   if (props.className) className.push(props.className)
   return (
-    <ReactTabPanel {...props} className={className}>
+    <ReactTabPanel selectedClassName="is-active" {...props} className={className}>
       {children}
     </ReactTabPanel>
   )

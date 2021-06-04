@@ -5,22 +5,27 @@ import { Tabs, TabList, Tab, TabPanel } from "../../src/navigation/Tabs"
 afterEach(cleanup)
 
 describe("<Tabs>", () => {
-  it("displays the right CSS", () => {
+  it("outputs the right class names", () => {
     const { container, getByText } = render(
       <Tabs defaultIndex={1}>
         <TabList>
           <Tab className="other-tab">Other</Tab>
           <Tab className="default-tab">Default</Tab>
         </TabList>
-        <TabPanel>OtherPanel</TabPanel>
-        <TabPanel>DefaultPanel</TabPanel>
+        <TabPanel className="other-panel">OtherPanel</TabPanel>
+        <TabPanel className="default-panel">DefaultPanel</TabPanel>
       </Tabs>
     )
+
     expect(getByText("Other")).toBeTruthy()
-    expect(getByText("Other").getAttribute("class")).toBe("tabs__tab other-tab")
+    expect(container.getElementsByClassName("other-tab").length).toBe(1)
+    expect(container.getElementsByClassName("other-panel").length).toBe(1)
+
     expect(getByText("Default")).toBeTruthy()
-    expect(getByText("Default").getAttribute("class")).toBe(
-      "tabs__tab default-tab react-tabs__tab--selected"
-    )
+    expect(container.getElementsByClassName("default-tab").length).toBe(1)
+    expect(container.getElementsByClassName("default-panel").length).toBe(1)
+
+    expect(container.querySelectorAll(".tabs__tab.is-active").length).toBe(1)
+    expect(container.querySelectorAll(".tabs__panel.is-active").length).toBe(1)
   })
 })

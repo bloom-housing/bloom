@@ -57,7 +57,7 @@
   @apply border;
   @apply border-gray-450;
 
-  &:not(.react-tabs__tab-panel--selected) {
+  &:not(.is-active) {
     display: none;
   }
 }
