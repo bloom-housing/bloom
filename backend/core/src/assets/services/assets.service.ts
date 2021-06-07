@@ -24,10 +24,7 @@ export class AssetsService {
     createUploadUrlDto: CreatePresignedUploadMetadataDto
   ): Promise<CreatePresignedUploadMetadataResponseDto> {
     return Promise.resolve(
-      this.uploadService.createPresignedUploadMetadata(
-        createUploadUrlDto.publicId,
-        createUploadUrlDto.eager
-      )
+      this.uploadService.createPresignedUploadMetadata(createUploadUrlDto.parametersToSign)
     )
   }
 }

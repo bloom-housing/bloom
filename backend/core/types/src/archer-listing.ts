@@ -630,6 +630,9 @@ export const ArcherListing: Listing = {
   // applicationPhone: "(408) 217-8562",
   assets: [
     {
+      id: "das",
+      createdAt: new Date(),
+      updatedAt: new Date(),
       label: "building",
       fileId:
         "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",

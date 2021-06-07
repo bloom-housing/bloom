@@ -41,6 +41,9 @@ export class AssetsController {
   async createPresignedUploadMetadata(
     @Body() createPresignedUploadMetadataDto: CreatePresignedUploadMetadataDto
   ): Promise<CreatePresignedUploadMetadataResponseDto> {
-    return await this.assetsService.createPresignedUploadMetadata(createPresignedUploadMetadataDto)
+    return mapTo(
+      CreatePresignedUploadMetadataResponseDto,
+      await this.assetsService.createPresignedUploadMetadata(createPresignedUploadMetadataDto)
+    )
   }
 }
