@@ -47,7 +47,7 @@ export class UserCreateQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
-  noConfirmationEmail?: boolean
+  noWelcomeEmail?: boolean
 }
 
 @Controller("user")
@@ -77,7 +77,7 @@ export class UserController {
     @Query() queryParams: UserCreateQueryParams
   ): Promise<UserBasicDto> {
     const user = await this.userService.createUser(dto)
-    if (!queryParams.noConfirmationEmail) {
+    if (!queryParams.noWelcomeEmail) {
       await this.emailService.welcome(user, dto.appUrl)
     }
     return mapTo(UserBasicDto, user)
