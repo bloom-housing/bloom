@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
+import { EmailDto, UserBasicDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email/email.service"
@@ -59,10 +59,10 @@ export class UserController {
   @Post("resend-confirmation")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
-  async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
+  async confirmation(@Body() dto: EmailDto): Promise<UserBasicDto> {
     const user = await this.userService.resendConfirmation(dto)
     await this.emailService.welcome(user, dto.appUrl)
-    return mapTo(StatusDto, { status: "ok" })
+    return mapTo(UserBasicDto, user)
   }
 
   @Put("confirm")
