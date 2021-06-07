@@ -11,14 +11,20 @@ All notable changes to this project will be documented in this file. The format 
 ### Backend
 
 - Fixed:
+
   - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
 
 - Added:
+
   - Added "closed" to ListingStatus enum
   - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
   - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)
   - `/assets` endpoints (create and createPresignedUploadMetadata)
+
+- Changed:
+
+  - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
 
 ### Frontend
 
