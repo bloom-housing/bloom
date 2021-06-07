@@ -46,8 +46,9 @@ const seedListings = async (app: INestApplicationContext) => {
   const seeds = []
   const leasingAgents = await getDefaultLeasingAgents(app, parseSeed(defaultListingSeed))
 
-  allSeeds.forEach((seed) => {
-    seeds.push(getListing(app, leasingAgents, seed))
+  allSeeds.forEach((seed, index) => {
+    const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
+    seeds.push(getListing(app, [everyOtherAgent], seed))
   })
 
   return seeds
