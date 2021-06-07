@@ -210,7 +210,7 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
 
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitType[0]) - UnitTypeSort.indexOf(b.unitType[0]) ||
+      UnitTypeSort.indexOf(a.unitType) - UnitTypeSort.indexOf(b.unitType) ||
       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     )
   })
@@ -237,7 +237,7 @@ const summarizeUnitsByType = (
   )
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitType[0]) - UnitTypeSort.indexOf(b.unitType[0]) ||
+      UnitTypeSort.indexOf(a.unitType) - UnitTypeSort.indexOf(b.unitType) ||
       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     )
   })
