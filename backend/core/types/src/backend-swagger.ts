@@ -1513,6 +1513,12 @@ export interface FormMetadataOptions {
 
   /**  */
   extraData?: FormMetadataExtraData[];
+
+  /**  */
+  description: boolean;
+
+  /**  */
+  exclusive: boolean;
 }
 
 export interface FormMetadata {
@@ -1521,6 +1527,15 @@ export interface FormMetadata {
 
   /**  */
   options: FormMetadataOptions[];
+
+  /**  */
+  hideGenericDecline: boolean;
+
+  /**  */
+  customSelectText: string;
+
+  /**  */
+  hideFromListing: boolean;
 }
 
 export interface Preference {
