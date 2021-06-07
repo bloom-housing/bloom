@@ -34,3 +34,10 @@ while (i > 0) {
 }
 
 export const Default = () => <StandardTable headers={headers} data={data} />
+
+const headersWithImage = { image: "Image", ...headers }
+const dataWithImage = [...data] as any
+dataWithImage[0].image = <img src="/images/listing.jpg" />
+dataWithImage[1].image = <img src="/images/logo_glyph.svg" />
+
+export const ImageCells = () => <StandardTable headers={headersWithImage} data={dataWithImage} />

@@ -24,6 +24,11 @@ const data = [
   },
 ]
 
+const headersWithImage = { image: "t.text", ...headers }
+const dataWithImage = [...data] as any
+dataWithImage[0].image = <img src="/images/listing.jpg" className="extra-image-class" />
+dataWithImage[1].image = <img src="/images/logo_glyph.svg" />
+
 describe("<StandardTable>", () => {
   it("renders default state", () => {
     const { getByText } = render(<StandardTable headers={headers} data={data} />)
@@ -34,6 +39,13 @@ describe("<StandardTable>", () => {
     expect(getByText(data[1].sqFeet))
     expect(getByText(data[1].numBathrooms))
   })
+
+  it("renders with image thumbnails", () => {
+    const { container } = render(<StandardTable headers={headersWithImage} data={dataWithImage} />)
+    expect(container.getElementsByClassName("table__thumbnail").length).toBe(2)
+    expect(container.getElementsByClassName("extra-image-class").length).toBe(1)
+  })
+
   it("renders with custom props", () => {
     const { getByText, container } = render(
       <StandardTable

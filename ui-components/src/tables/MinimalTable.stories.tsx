@@ -34,3 +34,17 @@ while (i > 0) {
 }
 
 export const Default = () => <MinimalTable headers={headers} data={data} />
+
+const headersWithImage = { image: "Image", ...headers }
+const dataWithImage = [...data] as any
+dataWithImage[0].image = <img src="/images/listing.jpg" />
+dataWithImage[1].image = <img src="/images/logo_glyph.svg" />
+
+export const ImageCells = () => (
+  <MinimalTable
+    headers={headersWithImage}
+    data={dataWithImage}
+    flushLeft={true}
+    flushRight={true}
+  />
+)

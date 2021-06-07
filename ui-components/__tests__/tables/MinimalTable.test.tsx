@@ -33,4 +33,13 @@ describe("<MinimalTable>", () => {
     expect(getByText(data[1].relationship))
     expect(getByText(data[1].dob))
   })
+
+  it("supports flush column styling", () => {
+    const { container } = render(
+      <MinimalTable headers={headers} data={data} flushLeft flushRight />
+    )
+
+    expect(container.querySelector("table.is-flush-left")).toBeTruthy()
+    expect(container.querySelector("table.is-flush-right")).toBeTruthy()
+  })
 })
