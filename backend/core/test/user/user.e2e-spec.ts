@@ -27,12 +27,18 @@ describe("Applications", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
 
+  const testEmailService = {
+    confirmation: async () => {},
+    welcome: async () => {},
+  }
+
+  beforeEach(async () => {
+    jest.clearAllMocks()
+  })
+
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    const testEmailService = {
-      confirmation: async () => {},
-      welcome: async () => {},
-    }
+
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, UserModule],
@@ -66,6 +72,24 @@ describe("Applications", () => {
       dob: new Date(),
     }
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+  })
+
+  it("should allow anonymous user to create an account", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "a@b.com",
+      emailConfirmation: "a@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    const mockConfirmation = jest.spyOn(testEmailService, "confirmation")
+    const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto)
+    expect(mockConfirmation.mock.calls.length).toBe(1)
+    expect(res.body).toHaveProperty("status")
+    expect(res.body).not.toHaveProperty("passwordHash")
   })
 
   it("should not allow user to sign in before confirming the account", async () => {
@@ -213,5 +237,24 @@ describe("Applications", () => {
       .post("/user/resend-confirmation")
       .send({ email: "unknown@email.com" })
       .expect(404)
+  })
+
+  it("should not send confirmation email when noConfirmationEmail query param is specified", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "b3@b.com",
+      emailConfirmation: "b3@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    const mockConfirmation = jest.spyOn(testEmailService, "confirmation")
+    await supertest(app.getHttpServer())
+      .post(`/user?noConfirmationEmail=true`)
+      .send(userCreateDto)
+      .expect(201)
+    expect(mockConfirmation.mock.calls.length).toBe(0)
   })
 })
