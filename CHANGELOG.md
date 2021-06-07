@@ -42,6 +42,10 @@ All notable changes to this project will be documented in this file. The format 
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
   - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
 
+- Fixed:
+
+  - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
+
 ## 1.0.0 / 2021-05-21
 
 ### General
