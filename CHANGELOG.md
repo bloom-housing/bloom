@@ -12,12 +12,16 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
   -  Poor TypeORM performance in `/applications` endpoint [issue #1131](https://github.com/bloom-housing/bloom/issues/1131)
 - Added:
+  -  Added "closed" to ListingStatus enum
+  - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
   -  Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences)
 
 ### Frontend
 
 - Added:
-
+  - Listings Management pieces added to Parnter's app, including add and detail pages
+    - add accessible at `/listings/add`
+    - detail page accessible at `/listings/[id]`
   - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
   - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
   - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
