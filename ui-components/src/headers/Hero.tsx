@@ -44,18 +44,19 @@ const Hero = (props: HeroProps) => {
   if (props.centered) {
     classNames = "centered"
   }
-  const hasSecondary = props.secondaryButtonTitle && props.secondaryButtonLink
   return (
     <div className={`hero ${classNames}`} style={styles}>
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
       <div className="grid md:grid-cols-6 gap-5 ">
         <HeroButton
-          className={`md:col-start-3 ${hasSecondary ?? "col-span-2"}`}
+          className={`md:col-start-3 ${
+            (props.secondaryButtonTitle && props.secondaryButtonLink) ?? "col-span-2"
+          }`}
           href={props.buttonLink}
           title={props.buttonTitle}
         />
-        {hasSecondary && (
+        {props.secondaryButtonTitle && props.secondaryButtonLink && (
           <HeroButton href={props.secondaryButtonLink} title={props.secondaryButtonTitle} />
         )}
       </div>
