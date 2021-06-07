@@ -15,7 +15,7 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { useApplicationsData, useSingleListingData } from "../../../../lib/hooks"
-import Layout from "../../../../layouts/application"
+import Layout from "../../../../layouts"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"

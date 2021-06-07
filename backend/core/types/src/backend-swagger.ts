@@ -1774,7 +1774,7 @@ export interface Property {
   id: string;
 
   /**  */
-  createdAt: Date;
+  createdAt?: Date;
 
   /**  */
   updatedAt: Date;
@@ -2029,7 +2029,7 @@ export interface Listing {
   requiredDocuments: string;
 
   /**  */
-  specialNotes?: string;
+  specialNotes?: string
 
   /**  */
   waitlistCurrentSize: number;
@@ -2110,7 +2110,7 @@ export interface ListingCreate {
   countyCode: CountyCode;
 
   /**  */
-  preferences: PreferenceCreate[];
+  preferences?: PreferenceCreate[];
 
   /**  */
   property: Id;
@@ -2308,7 +2308,7 @@ export interface ListingUpdate {
   updatedAt?: Date;
 
   /**  */
-  preferences: PreferenceUpdate[];
+  preferences?: PreferenceUpdate[];
 
   /**  */
   property: Id;
@@ -3730,7 +3730,8 @@ export enum Language {
 
 export enum ListingStatus {
   'active' = 'active',
-  'pending' = 'pending'
+  'pending' = 'pending',
+  'closed' = 'closed'
 }
 
 export enum CSVFormattingType {

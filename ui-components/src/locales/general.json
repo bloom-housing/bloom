@@ -699,10 +699,20 @@
   "listings": {
     "active": "Accepting Applications",
     "pending": "Coming Soon",
+    "closed": "Closed",
+    "actions": {
+      "publish": "Publish",
+      "draft": "Save as Draft",
+      "preview": "Preview",
+      "clone": "Clone"
+    },
+    "addListing": "Add Listing",
     "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
+    "applicationTitle": "Application Data",
+    "applicationAddress": "Address",
     "applicationDeadline": "Application Due Date",
     "applicationFCFS": "First Come First Serve",
     "applicationFee": "Application Fee",
@@ -736,8 +746,16 @@
     "confirmedPreferenceList": "Confirmed %{preference} List",
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
+    "deleteListingDescription": "Deleting this listing means you will lose all the information you've entered.",
     "depositOrMonthsRent": "or one month's rent",
     "depositMayBeHigherForLowerCredit": "May be higher for lower credit scores",
+    "details": {
+      "listingData": "Listing Data",
+      "createdDate": "Date Created",
+      "updatedDate": "Date Updated",
+      "id": "Listing ID"
+    },
+    "developer": "Housing Developer",
     "developmentalDisabilities": "Persons with developmental disabilities",
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
     "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for %{units} units.",
@@ -748,6 +766,13 @@
     "householdSize": "Household Size",
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
+    "listingStatus": {
+      "active": "Open",
+      "pending": "Draft",
+      "closed": "Closed"
+    },
+    "listingSubmitted": "Listing Submitted",
+    "listingUpdated": "Listing Updated",
     "lotteryResults": {
       "completeResultsWillBePosted": "Complete lottery results will be posted soon.",
       "downloadResults": "Download Results",
@@ -756,6 +781,7 @@
     "maxIncomeMonth": "Maximum Income / Month",
     "maxIncomeYear": "Maximum Income / Year",
     "moreBuildingSelectionCriteria": "Find out more about Building Selection Criteria",
+    "newListing": "New Listing",
     "noAvailableUnits": "There are no available units at this time.",
     "noOpenListings": "No listings currently have open applications.",
     "occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
@@ -768,6 +794,12 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
+    "property": {
+      "id": "Property ID",
+      "title": "Property Data",
+      "developer": "Housing Developer",
+      "buildingAddress": "Address"
+    },
     "publicLottery": {
       "header": "Public Lottery",
       "seeVideo": "See Video"
@@ -850,7 +882,8 @@
     "additionalInformationEnvelope": "Additional Information Envelope",
     "listingName": "Listing Name",
     "applicationsSubmitted": "Applications Submitted",
-    "listingStatus": "Listing Status"
+    "listingStatusText": "Listing Status",
+    "applications": "Applications"
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",

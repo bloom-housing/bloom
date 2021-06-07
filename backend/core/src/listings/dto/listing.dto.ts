@@ -1,7 +1,7 @@
 import { Listing } from "../entities/listing.entity"
-import { Expose, Type } from "class-transformer"
+import { Expose, Transform, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
-
+import moment from "moment"
 import {
   PreferenceCreateDto,
   PreferenceDto,
@@ -13,6 +13,7 @@ import { PropertyDto } from "../../property/dto/property.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../user/dto/user.dto"
+import { ListingStatus } from "../types/listing-status-enum"
 
 export class ListingDto extends OmitType(Listing, [
   "preferences",
@@ -60,6 +61,16 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UserBasicDto)
   leasingAgents?: UserBasicDto[] | null
+
+  @Expose()
+  @Transform((_value, listing) => {
+    if (moment(listing.applicationDueDate).isBefore()) {
+      listing.status = ListingStatus.closed
+    }
+
+    return listing.status
+  })
+  status: ListingStatus
 }
 
 export class ListingCreateDto extends OmitType(ListingDto, [
