@@ -28,18 +28,17 @@ describe("Applications", () => {
   let user2Profile: UserDto
 
   const testEmailService = {
+    /* eslint-disable @typescript-eslint/no-empty-function */
     confirmation: async () => {},
     welcome: async () => {},
+    /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
-  beforeEach(async () => {
+  beforeEach(() => {
     jest.clearAllMocks()
   })
 
   beforeAll(async () => {
-    /* eslint-disable @typescript-eslint/no-empty-function */
-
-    /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, UserModule],
     })
@@ -85,9 +84,9 @@ describe("Applications", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    const mockConfirmation = jest.spyOn(testEmailService, "confirmation")
+    const mockWelcome = jest.spyOn(testEmailService, "welcome")
     const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto)
-    expect(mockConfirmation.mock.calls.length).toBe(1)
+    expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("status")
     expect(res.body).not.toHaveProperty("passwordHash")
   })
@@ -250,11 +249,11 @@ describe("Applications", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    const mockConfirmation = jest.spyOn(testEmailService, "confirmation")
+    const mockWelcome = jest.spyOn(testEmailService, "welcome")
     await supertest(app.getHttpServer())
-      .post(`/user?noConfirmationEmail=true`)
+      .post(`/user?noWelcomeEmail=true`)
       .send(userCreateDto)
       .expect(201)
-    expect(mockConfirmation.mock.calls.length).toBe(0)
+    expect(mockWelcome.mock.calls.length).toBe(0)
   })
 })
