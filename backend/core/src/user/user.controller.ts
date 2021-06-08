@@ -50,19 +50,19 @@ export class UserController {
   @Post()
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
-  async create(@Body() dto: UserCreateDto): Promise<StatusDto> {
+  async create(@Body() dto: UserCreateDto): Promise<UserBasicDto> {
     const user = await this.userService.createUser(dto)
     await this.emailService.welcome(user, dto.appUrl)
-    return mapTo(StatusDto, { status: "ok" })
+    return mapTo(UserBasicDto, user)
   }
 
   @Post("resend-confirmation")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
-  async confirmation(@Body() dto: EmailDto): Promise<UserBasicDto> {
+  async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
     const user = await this.userService.resendConfirmation(dto)
     await this.emailService.welcome(user, dto.appUrl)
-    return mapTo(UserBasicDto, user)
+    return mapTo(StatusDto, { status: "ok" })
   }
 
   @Put("confirm")
