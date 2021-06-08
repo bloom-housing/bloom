@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData } from "../../../lib/hooks"
 
-import Layout from "../../../layouts/application"
+import Layout from "../../../layouts"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,

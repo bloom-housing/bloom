@@ -11,11 +11,17 @@ All notable changes to this project will be documented in this file. The format 
 ### Backend
 - Fixed:
   -  Poor TypeORM performance in `/applications` endpoint [issue #1131](https://github.com/bloom-housing/bloom/issues/1131)
+- Added:
+  -  Added "closed" to ListingStatus enum
+  - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
+  -  Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences)
 
 ### Frontend
 
 - Added:
-
+  - Listings Management pieces added to Parnter's app, including add and detail pages
+    - add accessible at `/listings/add`
+    - detail page accessible at `/listings/[id]`
   - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
   - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
   - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
@@ -26,6 +32,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) (Dominik Barcikowski)
   - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
   - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
+  - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
 
 - Changed:
 
@@ -35,7 +42,13 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
+  - Tabs component based on React Tabs ([#1305]https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
+    - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
   - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
+
+- Fixed:
+
+  - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
 
 ## 1.0.0 / 2021-05-21
 

@@ -1,4 +1,4 @@
-import Layout from "./application"
+import Layout from "."
 
 export default (props) => {
   return (
