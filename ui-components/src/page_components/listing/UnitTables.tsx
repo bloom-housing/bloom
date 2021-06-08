@@ -5,7 +5,6 @@ import { MinMax, UnitSummary, Unit } from "@bloom-housing/backend-core/types"
 import { StandardTable } from "../../tables/StandardTable"
 import { t } from "../../helpers/translator"
 import { numberOrdinal } from "../../helpers/numberOrdinal"
-import { capitalize } from "../../helpers/capitalize"
 
 const formatRange = (range: MinMax, ordinalize?: boolean) => {
   let min: string | number = range.min
@@ -77,7 +76,7 @@ const UnitTables = (props: UnitTablesProps) => {
           })
         })
 
-        if (unitSummary.floorRange) {
+        if (unitSummary.floorRange && unitSummary.floorRange.min) {
           floorSection = (
             <>
               ,&nbsp;{formatRange(unitSummary.floorRange, true)}{" "}
