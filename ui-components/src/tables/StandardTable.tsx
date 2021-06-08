@@ -25,6 +25,10 @@ export const Cell = (props: {
   </td>
 )
 
+export const TableThumbnail = (props: { children: React.ReactNode }) => {
+  return <span className="table__thumbnail">{props.children}</span>
+}
+
 export interface StandardTableProps {
   headers: TableHeaders
   data: Record<string, React.ReactNode>[]
@@ -42,16 +46,6 @@ export const StandardTable = (props: StandardTableProps) => {
   })
 
   const body = data.map((row: Record<string, React.ReactNode>, dataIndex) => {
-    // Inject thumbnail class into any images provided in the data
-    Object.entries(row).forEach(([key, node]) => {
-      if (React.isValidElement(node) && node?.type == "img") {
-        row[key] = React.cloneElement(node, {
-          ...node.props,
-          className: `${node.props.className} table__thumbnail`,
-        })
-      }
-    })
-
     const rowKey = row["id"]
       ? `row-${row["id"] as string}`
       : process.env.NODE_ENV === "test"

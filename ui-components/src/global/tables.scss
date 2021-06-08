@@ -141,14 +141,15 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
   }
 }
 
-.table__thumbnail {
+.table__thumbnail img {
   max-height: 80px;
-  max-width: 80x;
+  max-width: 142px;
   @apply -my-3;
+  @apply inline-block;
 }
 
 table.td-plain {
-  .table__thumbnail {
+  .table__thumbnail img {
     @apply -my-1;
   }
 }

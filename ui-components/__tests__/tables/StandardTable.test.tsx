@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { StandardTable } from "../../src/tables/StandardTable"
+import { StandardTable, TableThumbnail } from "../../src/tables/StandardTable"
 import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
@@ -26,8 +26,16 @@ const data = [
 
 const headersWithImage = { image: "t.text", ...headers }
 const dataWithImage = [...data] as any
-dataWithImage[0].image = <img src="/images/listing.jpg" className="extra-image-class" />
-dataWithImage[1].image = <img src="/images/logo_glyph.svg" />
+dataWithImage[0].image = (
+  <TableThumbnail>
+    <img src="/images/listing.jpg" />
+  </TableThumbnail>
+)
+dataWithImage[1].image = (
+  <TableThumbnail>
+    <img src="/images/logo_glyph.svg" />
+  </TableThumbnail>
+)
 
 describe("<StandardTable>", () => {
   it("renders default state", () => {
@@ -43,7 +51,6 @@ describe("<StandardTable>", () => {
   it("renders with image thumbnails", () => {
     const { container } = render(<StandardTable headers={headersWithImage} data={dataWithImage} />)
     expect(container.getElementsByClassName("table__thumbnail").length).toBe(2)
-    expect(container.getElementsByClassName("extra-image-class").length).toBe(1)
   })
 
   it("renders with custom props", () => {
