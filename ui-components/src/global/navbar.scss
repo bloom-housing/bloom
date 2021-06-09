@@ -58,6 +58,9 @@ nav.navbar {
   @apply items-center;
   @apply justify-center;
   @apply flex-col;
+}
+
+.navbar-image-only-container {
   height: 50px;
   @screen md {
     height: 120px;
