@@ -27,6 +27,8 @@ executors:
       REDIS_TLS_URL: "rediss://localhost:6379/0"
       REDIS_URL: "redis://localhost:6379/0"
       REDIS_USE_TLS: "0"
+      CLOUDINARY_SECRET: "fake_secret"
+      CLOUDINARY_KEY: "fake_key"
 
 jobs:
   setup:
@@ -76,6 +78,8 @@ jobs:
             REDIS_TLS_URL: "rediss://localhost:6379/0"
             REDIS_URL: "redis://localhost:6379/0"
             REDIS_USE_TLS: "0"
+            CLOUDINARY_SECRET: "fake_secret"
+            CLOUDINARY_KEY: "fake_key"
   build-public:
     executor: standard-node
     steps:
