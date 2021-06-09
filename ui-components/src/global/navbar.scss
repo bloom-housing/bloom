@@ -41,11 +41,7 @@ nav.navbar {
 
 .navbar-brand {
   @apply relative;
-  @apply justify-center;
-
-  @screen md {
-    @apply justify-start;
-  }
+  @apply justify-start;
 
   @screen print {
     @apply justify-center;
@@ -240,6 +236,16 @@ a.navbar-item {
   top: 50%;
   right: 0;
   transform: translateY(-50%);
+
+  &:before {
+    @apply absolute;
+    content: "Menu";
+    left: -22px;
+    top: calc(50% + 1px);
+    transform: translateY(-50%);
+    @apply uppercase;
+    @apply text-xs;
+  }
 
   span {
     height: 2px;
